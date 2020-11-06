@@ -3020,11 +3020,14 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            uint32_t regionCount,
                                            const VkBufferCopy *copyRegions)
 {
-    ANGLE_TRY(contextVk->onBufferTransferRead(srcBuffer));
-    ANGLE_TRY(contextVk->onBufferTransferWrite(this));
+    vk::CommandBufferAccess access;
+    access.onBufferTransferRead(srcBuffer);
+    access.onBufferTransferWrite(this);
 
-    CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
-    commandBuffer.copyBuffer(srcBuffer->getBuffer(), mBuffer, regionCount, copyRegions);
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(access, &commandBuffer));
+
+    commandBuffer->copyBuffer(srcBuffer->getBuffer(), mBuffer, regionCount, copyRegions);
 
     return angle::Result::Continue;
 }
@@ -4271,8 +4274,6 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         const gl::LevelIndex srcLevelGL = gl::LevelIndex(srcLevel);
         const gl::LevelIndex dstLevelGL = gl::LevelIndex(dstLevel);
 
-        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
-
         srcImage->retain(&contextVk->getResourceUseList());
         dstImage->retain(&contextVk->getResourceUseList());
 
@@ -4298,17 +4299,21 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         region.extent.height = srcHeight;
         region.extent.depth  = (isSrc3D || isDst3D) ? srcDepth : 1;
 
-        ANGLE_TRY(contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage));
-        ANGLE_TRY(contextVk->onImageTransferWrite(
-            dstLevelGL, 1, region.dstSubresource.baseArrayLayer, region.dstSubresource.layerCount,
-            VK_IMAGE_ASPECT_COLOR_BIT, dstImage));
+        vk::CommandBufferAccess access;
+        access.onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage);
+        access.onImageTransferWrite(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
+                                    region.dstSubresource.layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
+                                    dstImage);
 
-        ASSERT(commandBuffer.valid() && srcImage->valid() && dstImage->valid());
+        vk::CommandBuffer *commandBuffer;
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(access, &commandBuffer));
+
+        ASSERT(srcImage->valid() && dstImage->valid());
         ASSERT(srcImage->getCurrentLayout() == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         ASSERT(dstImage->getCurrentLayout() == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
-        commandBuffer.copyImage(srcImage->getImage(), srcImage->getCurrentLayout(),
-                                dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
+        commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(),
+                                 dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
     }
     else
     {
@@ -4325,10 +4330,12 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
 
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, LevelIndex maxLevel)
 {
-    ANGLE_TRY(contextVk->onImageTransferWrite(mBaseLevel + 1, maxLevel.get(), 0, mLayerCount,
-                                              VK_IMAGE_ASPECT_COLOR_BIT, this));
+    vk::CommandBufferAccess access;
+    access.onImageTransferWrite(mBaseLevel + 1, maxLevel.get(), 0, mLayerCount,
+                                VK_IMAGE_ASPECT_COLOR_BIT, this);
 
-    CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(access, &commandBuffer));
 
     // We are able to use blitImage since the image format we are using supports it.
     int32_t mipWidth  = mExtents.width;
@@ -4362,8 +4369,8 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, LevelIn
         barrier.dstAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
 
         // We can do it for all layers at once.
-        commandBuffer.imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                   barrier);
+        commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                    barrier);
         VkImageBlit blit                   = {};
         blit.srcOffsets[0]                 = {0, 0, 0};
         blit.srcOffsets[1]                 = {mipWidth, mipHeight, mipDepth};
@@ -4382,8 +4389,8 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, LevelIn
         mipHeight = nextMipHeight;
         mipDepth  = nextMipDepth;
 
-        commandBuffer.blitImage(mImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, mImage,
-                                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, filter);
+        commandBuffer->blitImage(mImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, mImage,
+                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, filter);
     }
 
     // Transition the last mip level to the same layout as all the other ones, so we can declare
@@ -4393,8 +4400,8 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, LevelIn
     barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
     // We can do it for all layers at once.
-    commandBuffer.imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                               barrier);
+    commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                barrier);
     // This is just changing the internal state of the image helper so that the next call
     // to changeLayout will use this layout as the "oldLayout" argument.
     mCurrentLayout = ImageLayout::TransferSrc;
@@ -5281,9 +5288,11 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     // Start in TransferDst.  Don't yet mark any subresource as having defined contents; that is
     // done with fine granularity as updates are applied.  This is achieved by specifying a layer
     // that is outside the tracking range.
-    ANGLE_TRY(contextVk->onImageTransferWrite(mBaseLevel, 1, kMaxContentDefinedLayerCount, 0,
-                                              aspectFlags, this));
-    CommandBuffer *commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
+    vk::CommandBufferAccess access;
+    access.onImageTransferWrite(mBaseLevel, 1, kMaxContentDefinedLayerCount, 0, aspectFlags, this);
+
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(access, &commandBuffer));
 
     for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
          ++updateMipLevelGL)
@@ -5389,8 +5398,10 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 BufferHelper *currentBuffer = bufferUpdate.bufferHelper;
                 ASSERT(currentBuffer && currentBuffer->valid());
 
-                ANGLE_TRY(contextVk->onBufferTransferRead(currentBuffer));
-                commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
+                vk::CommandBufferAccess bufferAccess;
+                bufferAccess.onBufferTransferRead(currentBuffer);
+                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(bufferAccess,
+                                                                                 &commandBuffer));
 
                 commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
                                                  getCurrentLayout(), 1, &update.buffer.copyRegion);
@@ -5399,8 +5410,10 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
             else
             {
-                ANGLE_TRY(contextVk->onImageTransferRead(aspectFlags, update.image.image));
-                commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
+                vk::CommandBufferAccess imageAccess;
+                imageAccess.onImageTransferRead(aspectFlags, update.image.image);
+                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(imageAccess,
+                                                                                 &commandBuffer));
 
                 commandBuffer->copyImage(update.image.image->getImage(),
                                          update.image.image->getCurrentLayout(), mImage,
@@ -5681,12 +5694,14 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
         regions[1].imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
     }
 
-    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
-    ANGLE_TRY(contextVk->onImageTransferRead(aspectFlags, this));
+    vk::CommandBufferAccess access;
+    access.onBufferTransferWrite(*bufferOut);
+    access.onImageTransferRead(aspectFlags, this);
 
-    CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(access, &commandBuffer));
 
-    commandBuffer.copyImageToBuffer(mImage, getCurrentLayout(), bufferHandle, 1, regions);
+    commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(), bufferHandle, 1, regions);
 
     return angle::Result::Continue;
 }
@@ -5829,14 +5844,16 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
 
     // Note that although we're reading from the image, we need to update the layout below.
+    vk::CommandBufferAccess access;
+    access.onImageTransferRead(layoutChangeAspectFlags, this);
     if (isMultisampled)
     {
-        ANGLE_TRY(contextVk->onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1,
-                                                  layoutChangeAspectFlags, &resolvedImage.get()));
+        access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
+                                    &resolvedImage.get());
     }
-    ANGLE_TRY(contextVk->onImageTransferRead(layoutChangeAspectFlags, this));
 
-    CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferWithAccess(access, &commandBuffer));
 
     const angle::Format *readFormat = &mFormat->actualImageFormat();
 
@@ -5878,9 +5895,12 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         resolveRegion.dstOffset                     = {};
         resolveRegion.extent                        = srcExtent;
 
-        resolve(&resolvedImage.get(), resolveRegion, &commandBuffer);
+        resolve(&resolvedImage.get(), resolveRegion, commandBuffer);
 
-        ANGLE_TRY(contextVk->onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get()));
+        vk::CommandBufferAccess readAccess;
+        readAccess.onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get());
+        ANGLE_TRY(
+            contextVk->getOutsideRenderPassCommandBufferWithAccess(readAccess, &commandBuffer));
 
         // Make the resolved image the target of buffer copy.
         src                           = &resolvedImage.get();
@@ -5906,8 +5926,8 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     region.imageOffset       = srcOffset;
     region.imageSubresource  = srcSubresource;
 
-    commandBuffer.copyImageToBuffer(src->getImage(), src->getCurrentLayout(), bufferHandle, 1,
-                                    &region);
+    commandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(), bufferHandle, 1,
+                                     &region);
 
     ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_HIGH,
                        "GPU stall due to ReadPixels");
@@ -6603,6 +6623,49 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
 ActiveHandleCounter::ActiveHandleCounter() : mActiveCounts{}, mAllocatedCounts{} {}
 
 ActiveHandleCounter::~ActiveHandleCounter() = default;
+
+// CommandBufferAccess implementation.
+CommandBufferAccess::CommandBufferAccess()  = default;
+CommandBufferAccess::~CommandBufferAccess() = default;
+
+void CommandBufferAccess::onBufferRead(VkAccessFlags readAccessType,
+                                       PipelineStage readStage,
+                                       BufferHelper *buffer)
+{
+    ASSERT(!buffer->isReleasedToExternal());
+    mReadBuffers.emplace_back(buffer, readAccessType, readStage);
+}
+
+void CommandBufferAccess::onBufferWrite(VkAccessFlags writeAccessType,
+                                        PipelineStage writeStage,
+                                        BufferHelper *buffer)
+{
+    ASSERT(!buffer->isReleasedToExternal());
+    mWriteBuffers.emplace_back(buffer, writeAccessType, writeStage);
+}
+
+void CommandBufferAccess::onImageRead(VkImageAspectFlags aspectFlags,
+                                      ImageLayout imageLayout,
+                                      ImageHelper *image)
+{
+    ASSERT(!image->isReleasedToExternal());
+    ASSERT(image->getImageSerial().valid());
+    mReadImages.emplace_back(image, aspectFlags, imageLayout);
+}
+
+void CommandBufferAccess::onImageWrite(gl::LevelIndex levelStart,
+                                       uint32_t levelCount,
+                                       uint32_t layerStart,
+                                       uint32_t layerCount,
+                                       VkImageAspectFlags aspectFlags,
+                                       ImageLayout imageLayout,
+                                       ImageHelper *image)
+{
+    ASSERT(!image->isReleasedToExternal());
+    ASSERT(image->getImageSerial().valid());
+    mWriteImages.emplace_back(CommandBufferImageAccess{image, aspectFlags, imageLayout}, levelStart,
+                              levelCount, layerStart, layerCount);
+}
 
 }  // namespace vk
 }  // namespace rx
