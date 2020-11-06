@@ -3031,8 +3031,13 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            uint32_t regionCount,
                                            const VkBufferCopy *copyRegions)
 {
-    ANGLE_TRY(contextVk->onBufferTransferRead(srcBuffer));
-    ANGLE_TRY(contextVk->onBufferTransferWrite(this));
+    OnResourceAccessResources resources;
+    resources.writeBuffers.push_back(this);
+    resources.readBuffers.push_back(srcBuffer);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferTransferRead(srcBuffer);
+    contextVk->onBufferTransferWrite(this);
 
     CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
     commandBuffer.copyBuffer(srcBuffer->getBuffer(), mBuffer, regionCount, copyRegions);
@@ -4287,10 +4292,15 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         region.extent.height = srcHeight;
         region.extent.depth  = (isSrc3D || isDst3D) ? srcDepth : 1;
 
-        ANGLE_TRY(contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage));
-        ANGLE_TRY(contextVk->onImageTransferWrite(
-            dstLevelGL, 1, region.dstSubresource.baseArrayLayer, region.dstSubresource.layerCount,
-            VK_IMAGE_ASPECT_COLOR_BIT, dstImage));
+        OnResourceAccessResources resources;
+        resources.writeImages.push_back(dstImage);
+        resources.readImages.push_back(srcImage);
+        ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+        contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage);
+        contextVk->onImageTransferWrite(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
+                                        region.dstSubresource.layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
+                                        dstImage);
 
         ASSERT(commandBuffer.valid() && srcImage->valid() && dstImage->valid());
         ASSERT(srcImage->getCurrentLayout() == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -4314,8 +4324,12 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
 
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, LevelIndex maxLevel)
 {
-    ANGLE_TRY(contextVk->onImageTransferWrite(mBaseLevel + 1, maxLevel.get(), 0, mLayerCount,
-                                              VK_IMAGE_ASPECT_COLOR_BIT, this));
+    OnResourceAccessResources resources;
+    resources.writeImages.push_back(this);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onImageTransferWrite(mBaseLevel + 1, maxLevel.get(), 0, mLayerCount,
+                                    VK_IMAGE_ASPECT_COLOR_BIT, this);
 
     CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -5270,8 +5284,12 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     // Start in TransferDst.  Don't yet mark any subresource as having defined contents; that is
     // done with fine granularity as updates are applied.  This is achieved by specifying a layer
     // that is outside the tracking range.
-    ANGLE_TRY(contextVk->onImageTransferWrite(mBaseLevel, 1, kMaxContentDefinedLayerCount, 0,
-                                              aspectFlags, this));
+    OnResourceAccessResources resources;
+    resources.writeImages.push_back(this);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onImageTransferWrite(mBaseLevel, 1, kMaxContentDefinedLayerCount, 0, aspectFlags,
+                                    this);
     CommandBuffer *commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
 
     for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
@@ -5378,7 +5396,11 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 BufferHelper *currentBuffer = bufferUpdate.bufferHelper;
                 ASSERT(currentBuffer && currentBuffer->valid());
 
-                ANGLE_TRY(contextVk->onBufferTransferRead(currentBuffer));
+                OnResourceAccessResources readBufferResource;
+                readBufferResource.readBuffers.push_back(currentBuffer);
+                ANGLE_TRY(contextVk->onResourceAccess(readBufferResource));
+
+                contextVk->onBufferTransferRead(currentBuffer);
                 commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
 
                 commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
@@ -5388,7 +5410,11 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
             else
             {
-                ANGLE_TRY(contextVk->onImageTransferRead(aspectFlags, update.image.image));
+                OnResourceAccessResources readImageResource;
+                readImageResource.readImages.push_back(update.image.image);
+                ANGLE_TRY(contextVk->onResourceAccess(readImageResource));
+
+                contextVk->onImageTransferRead(aspectFlags, update.image.image);
                 commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
 
                 commandBuffer->copyImage(update.image.image->getImage(),
@@ -5670,8 +5696,13 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
         regions[1].imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
     }
 
-    ANGLE_TRY(contextVk->onBufferTransferWrite(*bufferOut));
-    ANGLE_TRY(contextVk->onImageTransferRead(aspectFlags, this));
+    OnResourceAccessResources resources;
+    resources.writeBuffers.push_back(*bufferOut);
+    resources.readImages.push_back(this);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferTransferWrite(*bufferOut);
+    contextVk->onImageTransferRead(aspectFlags, this);
 
     CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -5817,13 +5848,21 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
 
+    OnResourceAccessResources resources;
+    if (isMultisampled)
+    {
+        resources.writeImages.push_back(&resolvedImage.get());
+    }
+    resources.readImages.push_back(this);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
     // Note that although we're reading from the image, we need to update the layout below.
     if (isMultisampled)
     {
-        ANGLE_TRY(contextVk->onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1,
-                                                  layoutChangeAspectFlags, &resolvedImage.get()));
+        contextVk->onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
+                                        &resolvedImage.get());
     }
-    ANGLE_TRY(contextVk->onImageTransferRead(layoutChangeAspectFlags, this));
+    contextVk->onImageTransferRead(layoutChangeAspectFlags, this);
 
     CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -5869,7 +5908,11 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
         resolve(&resolvedImage.get(), resolveRegion, &commandBuffer);
 
-        ANGLE_TRY(contextVk->onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get()));
+        OnResourceAccessResources readResource;
+        readResource.readImages.push_back(&resolvedImage.get());
+        ANGLE_TRY(contextVk->onResourceAccess(readResource));
+
+        contextVk->onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get());
 
         // Make the resolved image the target of buffer copy.
         src                           = &resolvedImage.get();

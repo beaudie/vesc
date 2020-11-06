@@ -343,12 +343,21 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
     // Check for self-dependency.
     if (sourceBuffer.getBufferSerial() == mBuffer->getBufferSerial())
     {
-        ANGLE_TRY(contextVk->onBufferSelfCopy(mBuffer));
+        OnResourceAccessResources resources;
+        resources.writeBuffers.push_back(mBuffer);
+        ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+        contextVk->onBufferSelfCopy(mBuffer);
     }
     else
     {
-        ANGLE_TRY(contextVk->onBufferTransferRead(&sourceBuffer));
-        ANGLE_TRY(contextVk->onBufferTransferWrite(mBuffer));
+        OnResourceAccessResources resources;
+        resources.writeBuffers.push_back(mBuffer);
+        resources.readBuffers.push_back(&sourceBuffer);
+        ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+        contextVk->onBufferTransferRead(&sourceBuffer);
+        contextVk->onBufferTransferWrite(mBuffer);
     }
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
@@ -667,8 +676,13 @@ angle::Result BufferVk::copyToBufferImpl(ContextVk *contextVk,
                                          const VkBufferCopy *copies)
 {
 
-    ANGLE_TRY(contextVk->onBufferTransferWrite(destBuffer));
-    ANGLE_TRY(contextVk->onBufferTransferRead(mBuffer));
+    OnResourceAccessResources resources;
+    resources.writeBuffers.push_back(destBuffer);
+    resources.readBuffers.push_back(mBuffer);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferTransferWrite(destBuffer);
+    contextVk->onBufferTransferRead(mBuffer);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 

@@ -1294,10 +1294,15 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 
     if (mColorImageMS.valid())
     {
+        OnResourceAccessResources resources;
+        resources.writeImages.push_back(&image.image);
+        resources.readImages.push_back(&mColorImageMS);
+        ANGLE_TRY(contextVk->onResourceAccess(resources));
+
         // Transition the multisampled image to TRANSFER_SRC for resolve.
-        ANGLE_TRY(contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, &mColorImageMS));
-        ANGLE_TRY(contextVk->onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1,
-                                                  VK_IMAGE_ASPECT_COLOR_BIT, &image.image));
+        contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, &mColorImageMS);
+        contextVk->onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
+                                        &image.image);
         commandBuffer = &contextVk->getOutsideRenderPassCommandBuffer();
 
         VkImageResolve resolveRegion                = {};

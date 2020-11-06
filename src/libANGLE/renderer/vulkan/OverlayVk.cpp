@@ -121,10 +121,15 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
                                        VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
                                        &mFontImageView, vk::LevelIndex(0), 1));
 
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(&fontDataBuffer.get());
+    resources.writeImages.push_back(&mFontImage);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
     // Copy font data from staging buffer.
-    ANGLE_TRY(contextVk->onBufferTransferRead(&fontDataBuffer.get()));
-    ANGLE_TRY(contextVk->onImageTransferWrite(gl::LevelIndex(0), 1, 0, gl::overlay::kFontCount,
-                                              VK_IMAGE_ASPECT_COLOR_BIT, &mFontImage));
+    contextVk->onBufferTransferRead(&fontDataBuffer.get());
+    contextVk->onImageTransferWrite(gl::LevelIndex(0), 1, 0, gl::overlay::kFontCount,
+                                    VK_IMAGE_ASPECT_COLOR_BIT, &mFontImage);
     vk::CommandBuffer &fontDataUpload = contextVk->getOutsideRenderPassCommandBuffer();
 
     VkBufferImageCopy copy           = {};
