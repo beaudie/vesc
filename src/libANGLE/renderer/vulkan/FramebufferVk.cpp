@@ -823,10 +823,15 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
         blitAspectMask &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
     }
 
-    ANGLE_TRY(contextVk->onImageTransferRead(imageAspectMask, srcImage));
-    ANGLE_TRY(contextVk->onImageTransferWrite(drawRenderTarget->getLevelIndex(), 1,
-                                              drawRenderTarget->getLayerIndex(), 1, imageAspectMask,
-                                              dstImage));
+    OnResourceAccessResources resources;
+    resources.writeImages.push_back(dstImage);
+    resources.readImages.push_back(srcImage);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onImageTransferRead(imageAspectMask, srcImage);
+    contextVk->onImageTransferWrite(drawRenderTarget->getLevelIndex(), 1,
+                                    drawRenderTarget->getLayerIndex(), 1, imageAspectMask,
+                                    dstImage);
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
     VkImageBlit blit               = {};
@@ -1339,7 +1344,11 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
                                                      const UtilsVk::BlitResolveParameters &params,
                                                      vk::ImageHelper *srcImage)
 {
-    ANGLE_TRY(contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage));
+    OnResourceAccessResources resources;
+    resources.readImages.push_back(srcImage);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage);
 
     VkImageResolve resolveRegion                = {};
     resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1362,14 +1371,19 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-        ANGLE_TRY(contextVk->onImageTransferWrite(
-            drawRenderTarget->getLevelIndex(), 1, drawRenderTarget->getLayerIndex(), 1,
-            VK_IMAGE_ASPECT_COLOR_BIT, &drawRenderTarget->getImageForWrite()));
+        vk::ImageHelper &dstImage        = drawRenderTarget->getImageForWrite();
+
+        OnResourceAccessResources writeResource;
+        writeResource.writeImages.push_back(&dstImage);
+        ANGLE_TRY(contextVk->onResourceAccess(writeResource));
+
+        contextVk->onImageTransferWrite(drawRenderTarget->getLevelIndex(), 1,
+                                        drawRenderTarget->getLayerIndex(), 1,
+                                        VK_IMAGE_ASPECT_COLOR_BIT, &dstImage);
 
         vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
-        vk::ImageHelper &dstImage = drawRenderTarget->getImageForWrite();
-        vk::LevelIndex levelVk    = dstImage.toVkLevel(drawRenderTarget->getLevelIndex());
+        vk::LevelIndex levelVk = dstImage.toVkLevel(drawRenderTarget->getLevelIndex());
         resolveRegion.dstSubresource.mipLevel       = levelVk.get();
         resolveRegion.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
 

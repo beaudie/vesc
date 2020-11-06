@@ -198,6 +198,12 @@ void ApplySampleCoverage(const gl::State &glState,
     *maskOut &= coverageMask;
 }
 
+bool IsRenderPassStartedAndUsesImage(const vk::CommandBufferHelper &renderPassCommands,
+                                     const vk::ImageHelper &image)
+{
+    return renderPassCommands.started() && renderPassCommands.usesImageInRenderPass(image);
+}
+
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
 // rotate gl_Position in the vertex shader and gl_FragCoord in the fragment shader.  The following
 // are the rotation matrices used.
@@ -4783,112 +4789,143 @@ bool ContextVk::shouldUseOldRewriteStructSamplers() const
     return mRenderer->getFeatures().forceOldRewriteStructSamplers.enabled;
 }
 
-angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
-                                      vk::PipelineStage readStage,
-                                      vk::BufferHelper *buffer)
+angle::Result ContextVk::onResourceAccess(const OnResourceAccessResources &resources)
 {
-    ASSERT(!buffer->isReleasedToExternal());
+    // Go over resources and decide whether the render pass needs to close, whether the outside
+    // render pass commands need to be flushed, or neither.  Note that closing the render pass
+    // implies flushing the outside render pass as well, so if that needs to be done, we can close
+    // the render pass and immediately return from this function.  Otherwise, this function keeps
+    // track of whether the outside render pass commands need to be closed, and if so, it will do
+    // that once at the end.
 
-    if (mRenderPassCommands->usesBufferForWrite(*buffer))
+    // Read images only need to close the render pass if they need a layout transition.
+    for (const vk::ImageHelper *image : resources.readImages)
     {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
-    }
-    else if (mOutsideRenderPassCommands->usesBufferForWrite(*buffer))
-    {
-        ANGLE_TRY(flushOutsideRenderPassCommands());
+        // Note that different read methods are not compatible. A shader read uses a different
+        // layout than a transfer read. So we cannot support simultaneous read usage as easily as
+        // for Buffers.  TODO: Don't close the render pass if the image was only used read-only in
+        // the render pass.  http://anglebug.com/4984
+        if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, *image))
+        {
+            return flushCommandsAndEndRenderPass();
+        }
     }
 
-    mOutsideRenderPassCommands->bufferRead(&mResourceUseList, readAccessType, readStage, buffer);
+    // Write images only need to close the render pass if they need a layout transition.
+    for (const vk::ImageHelper *image : resources.writeImages)
+    {
+        if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, *image))
+        {
+            return flushCommandsAndEndRenderPass();
+        }
+    }
+
+    bool shouldCloseOutsideRenderPassCommands = false;
+
+    // Read buffers only need a new command buffer if previously used for write.
+    for (const vk::BufferHelper *buffer : resources.readBuffers)
+    {
+        if (mRenderPassCommands->usesBufferForWrite(*buffer))
+        {
+            return flushCommandsAndEndRenderPass();
+        }
+        else if (mOutsideRenderPassCommands->usesBufferForWrite(*buffer))
+        {
+            shouldCloseOutsideRenderPassCommands = true;
+        }
+    }
+
+    // Write buffers always need a new command buffer if previously used.
+    for (const vk::BufferHelper *buffer : resources.writeBuffers)
+    {
+        if (mRenderPassCommands->usesBuffer(*buffer))
+        {
+            return flushCommandsAndEndRenderPass();
+        }
+        else if (mOutsideRenderPassCommands->usesBuffer(*buffer))
+        {
+            shouldCloseOutsideRenderPassCommands = true;
+        }
+    }
+
+    if (shouldCloseOutsideRenderPassCommands)
+    {
+        return flushOutsideRenderPassCommands();
+    }
 
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
-                                       vk::PipelineStage writeStage,
-                                       vk::BufferHelper *buffer)
+void ContextVk::onBufferRead(VkAccessFlags readAccessType,
+                             vk::PipelineStage readStage,
+                             vk::BufferHelper *buffer)
 {
     ASSERT(!buffer->isReleasedToExternal());
+    ASSERT(!mRenderPassCommands->usesBufferForWrite(*buffer));
+    ASSERT(!mOutsideRenderPassCommands->usesBufferForWrite(*buffer));
 
-    if (mRenderPassCommands->usesBuffer(*buffer))
-    {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
-    }
-    else if (mOutsideRenderPassCommands->usesBuffer(*buffer))
-    {
-        ANGLE_TRY(flushOutsideRenderPassCommands());
-    }
+    mOutsideRenderPassCommands->bufferRead(&mResourceUseList, readAccessType, readStage, buffer);
+}
+
+void ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
+                              vk::PipelineStage writeStage,
+                              vk::BufferHelper *buffer)
+{
+    ASSERT(!buffer->isReleasedToExternal());
+    ASSERT(!mRenderPassCommands->usesBuffer(*buffer));
+    ASSERT(!mOutsideRenderPassCommands->usesBuffer(*buffer));
 
     mOutsideRenderPassCommands->bufferWrite(&mResourceUseList, writeAccessType, writeStage,
                                             vk::AliasingMode::Disallowed, buffer);
-
-    return angle::Result::Continue;
 }
 
-angle::Result ContextVk::endRenderPassIfImageUsed(const vk::ImageHelper &image)
-{
-    if (mRenderPassCommands->started() && mRenderPassCommands->usesImageInRenderPass(image))
-    {
-        return flushCommandsAndEndRenderPass();
-    }
-    else
-    {
-        return angle::Result::Continue;
-    }
-}
-
-angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
-                                     vk::ImageLayout imageLayout,
-                                     vk::ImageHelper *image)
+void ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
+                            vk::ImageLayout imageLayout,
+                            vk::ImageHelper *image)
 {
     ASSERT(!image->isReleasedToExternal());
     ASSERT(image->getImageSerial().valid());
-
-    // Note that different read methods are not compatible. A shader read uses a different layout
-    // than a transfer read. So we cannot support simultaneous read usage as easily as for Buffers.
-    // TODO: Don't close the render pass if the image was only used read-only in the render pass.
-    // http://anglebug.com/4984
-    ANGLE_TRY(endRenderPassIfImageUsed(*image));
+    ASSERT(!IsRenderPassStartedAndUsesImage(*mRenderPassCommands, *image));
 
     image->recordReadBarrier(aspectFlags, imageLayout,
                              &mOutsideRenderPassCommands->getCommandBuffer());
     image->retain(&mResourceUseList);
-
-    return angle::Result::Continue;
 }
 
-angle::Result ContextVk::onImageWrite(gl::LevelIndex levelStart,
-                                      uint32_t levelCount,
-                                      uint32_t layerStart,
-                                      uint32_t layerCount,
-                                      VkImageAspectFlags aspectFlags,
-                                      vk::ImageLayout imageLayout,
-                                      vk::ImageHelper *image)
+void ContextVk::onImageWrite(gl::LevelIndex levelStart,
+                             uint32_t levelCount,
+                             uint32_t layerStart,
+                             uint32_t layerCount,
+                             VkImageAspectFlags aspectFlags,
+                             vk::ImageLayout imageLayout,
+                             vk::ImageHelper *image)
 {
     ASSERT(!image->isReleasedToExternal());
     ASSERT(image->getImageSerial().valid());
-
-    ANGLE_TRY(endRenderPassIfImageUsed(*image));
+    ASSERT(!IsRenderPassStartedAndUsesImage(*mRenderPassCommands, *image));
 
     image->recordWriteBarrier(aspectFlags, imageLayout,
                               &mOutsideRenderPassCommands->getCommandBuffer());
     image->retain(&mResourceUseList);
     image->onWrite(levelStart, levelCount, layerStart, layerCount, aspectFlags);
-
-    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::onBufferReleaseToExternal(const vk::BufferHelper &buffer)
 {
     if (mRenderPassCommands->usesBuffer(buffer))
     {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
+        return flushCommandsAndEndRenderPass();
     }
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
 {
-    return endRenderPassIfImageUsed(image);
+    if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
+    {
+        return flushCommandsAndEndRenderPass();
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::beginNewRenderPass(

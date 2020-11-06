@@ -39,12 +39,15 @@ If you need to record inside a RenderPass, use `flushAndBeginRenderPass`. Otherw
 
 The back-end (mostly) records Image and Buffer barriers through additional `ContextVk` APIs:
 
+ * `onResourceAccess` determines if use of any resource requires closing the render pass or flush
+   the outside render pass command buffer.
  * `onBufferTransferRead` and `onBufferComputeShaderRead` accumulate `VkBuffer` read barriers.
  * `onBufferTransferWrite` and `onBufferComputeShaderWrite` accumulate `VkBuffer` write barriers.
  * `onBuffferSelfCopy` is a special case for `VkBuffer` self copies. It behaves the same as write.
  * `onImageTransferRead` and `onImageComputerShadeRead` accumulate `VkImage` read barriers.
  * `onImageTransferWrite` and `onImageComputerShadeWrite` accumulate `VkImage` write barriers.
- * `onImageRenderPassRead` and `onImageRenderPassWrite` accumulate `VkImage` barriers inside a started RenderPass.
+ * `onImageRenderPassRead` and `onImageRenderPassWrite` accumulate `VkImage` barriers inside a
+   started RenderPass.
 
 After the back-end records commands to the primary buffer we flush (e.g. on swap) or when we call
 `ContextVk::finishToSerial`.
@@ -56,16 +59,22 @@ See the [code][CommandAPIs] for more details.
 In this example we'll be recording a buffer copy command:
 
 ```
-    # Ensure that ANGLE sets proper read and write barriers for the Buffers.
-    ANGLE_TRY(contextVk->onBufferTransferWrite(destBuffer));
-    ANGLE_TRY(contextVk->onBufferTransferRead(srcBuffer));
+    // Ensure that the barriers recorded by following commands end up on the correct command buffer,
+    // by closing ones they are used in.
+    OnResourceAccessResources resources;
+    resources.writeBuffers.push_back(destBuffer);
+    resources.readBuffers.push_back(srcBuffer);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
 
-    # Get a pointer to a secondary command buffer for command recording. May "flush" the RP.
-    vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    // Ensure that ANGLE sets proper read and write barriers for the Buffers.
+    contextVk->onBufferTransferWrite(destBuffer);
+    contextVk->onBufferTransferRead(srcBuffer);
 
-    # Record the copy command into the secondary buffer. We're done!
-    commandBuffer->copyBuffer(srcBuffer->getBuffer(), destBuffer->getBuffer(), copyCount, copies);
+    // Get a pointer to a secondary command buffer for command recording.
+    vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+
+    // Record the copy command into the secondary buffer. We're done!
+    commandBuffer.copyBuffer(srcBuffer->getBuffer(), destBuffer->getBuffer(), copyCount, copies);
 ```
 
 ## Additional Reading

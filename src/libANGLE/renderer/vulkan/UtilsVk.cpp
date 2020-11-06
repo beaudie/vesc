@@ -1027,8 +1027,13 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureConvertIndexResourcesInitialized(contextVk));
 
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(src));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dest));
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(src);
+    resources.writeBuffers.push_back(dest);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferComputeShaderRead(src);
+    contextVk->onBufferComputeShaderWrite(dest);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -1089,10 +1094,17 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureConvertIndexIndirectResourcesInitialized(contextVk));
 
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndirectBuf));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndexBuf));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndirectBuf));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndexBuf));
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(srcIndirectBuf);
+    resources.readBuffers.push_back(srcIndexBuf);
+    resources.writeBuffers.push_back(dstIndirectBuf);
+    resources.writeBuffers.push_back(dstIndexBuf);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferComputeShaderRead(srcIndirectBuf);
+    contextVk->onBufferComputeShaderRead(srcIndexBuf);
+    contextVk->onBufferComputeShaderWrite(dstIndirectBuf);
+    contextVk->onBufferComputeShaderWrite(dstIndexBuf);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -1157,10 +1169,17 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
 {
     ANGLE_TRY(ensureConvertIndexIndirectLineLoopResourcesInitialized(contextVk));
 
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndexBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dstIndexBuffer));
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(srcIndirectBuffer);
+    resources.readBuffers.push_back(srcIndexBuffer);
+    resources.writeBuffers.push_back(dstIndirectBuffer);
+    resources.writeBuffers.push_back(dstIndexBuffer);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferComputeShaderRead(srcIndirectBuffer);
+    contextVk->onBufferComputeShaderRead(srcIndexBuffer);
+    contextVk->onBufferComputeShaderWrite(dstIndirectBuffer);
+    contextVk->onBufferComputeShaderWrite(dstIndexBuffer);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -1217,9 +1236,15 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
 {
     ANGLE_TRY(ensureConvertIndirectLineLoopResourcesInitialized(contextVk));
 
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(srcIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(destIndirectBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(destIndexBuffer));
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(srcIndirectBuffer);
+    resources.writeBuffers.push_back(destIndirectBuffer);
+    resources.writeBuffers.push_back(destIndexBuffer);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferComputeShaderRead(srcIndirectBuffer);
+    contextVk->onBufferComputeShaderWrite(destIndirectBuffer);
+    contextVk->onBufferComputeShaderWrite(destIndexBuffer);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -1273,8 +1298,13 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureConvertVertexResourcesInitialized(contextVk));
 
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(src));
-    ANGLE_TRY(contextVk->onBufferComputeShaderWrite(dest));
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(src);
+    resources.writeBuffers.push_back(dest);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
+    contextVk->onBufferComputeShaderRead(src);
+    contextVk->onBufferComputeShaderWrite(dest);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -1921,11 +1951,16 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     ASSERT(depthStencilRenderTarget != nullptr);
     vk::ImageHelper *depthStencilImage = &depthStencilRenderTarget->getImageForWrite();
 
+    OnResourceAccessResources resources;
+    resources.readImages.push_back(src);
+    resources.writeImages.push_back(depthStencilImage);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
     // Change source layout prior to computation.
-    ANGLE_TRY(contextVk->onImageComputeShaderRead(src->getAspectFlags(), src));
-    ANGLE_TRY(contextVk->onImageTransferWrite(
-        depthStencilRenderTarget->getLevelIndex(), 1, depthStencilRenderTarget->getLayerIndex(), 1,
-        depthStencilImage->getAspectFlags(), depthStencilImage));
+    contextVk->onImageComputeShaderRead(src->getAspectFlags(), src);
+    contextVk->onImageTransferWrite(depthStencilRenderTarget->getLevelIndex(), 1,
+                                    depthStencilRenderTarget->getLayerIndex(), 1,
+                                    depthStencilImage->getAspectFlags(), depthStencilImage);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -2469,11 +2504,16 @@ angle::Result UtilsVk::cullOverlayWidgets(ContextVk *contextVk,
     ANGLE_TRY(allocateDescriptorSet(contextVk, Function::OverlayCull, &descriptorPoolBinding,
                                     &descriptorSet));
 
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(enabledWidgetsBuffer);
+    resources.writeImages.push_back(dest);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
     ASSERT(dest->getLevelCount() == 1 && dest->getLayerCount() == 1 &&
            dest->getBaseLevel() == gl::LevelIndex(0));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(enabledWidgetsBuffer));
-    ANGLE_TRY(contextVk->onImageComputeShaderWrite(gl::LevelIndex(0), 1, 0, 1,
-                                                   VK_IMAGE_ASPECT_COLOR_BIT, dest));
+    contextVk->onBufferComputeShaderRead(enabledWidgetsBuffer);
+    contextVk->onImageComputeShaderWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
+                                         dest);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
@@ -2542,14 +2582,22 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
     ANGLE_TRY(allocateDescriptorSet(contextVk, Function::OverlayDraw, &descriptorPoolBinding,
                                     &descriptorSet));
 
+    OnResourceAccessResources resources;
+    resources.readBuffers.push_back(textWidgetsBuffer);
+    resources.readBuffers.push_back(graphWidgetsBuffer);
+    resources.readImages.push_back(culledWidgets);
+    resources.readImages.push_back(font);
+    resources.writeImages.push_back(dest);
+    ANGLE_TRY(contextVk->onResourceAccess(resources));
+
     ASSERT(dest->getLevelCount() == 1 && dest->getLayerCount() == 1 &&
            dest->getBaseLevel() == gl::LevelIndex(0));
-    ANGLE_TRY(contextVk->onImageComputeShaderWrite(gl::LevelIndex(0), 1, 0, 1,
-                                                   VK_IMAGE_ASPECT_COLOR_BIT, dest));
-    ANGLE_TRY(contextVk->onImageComputeShaderRead(VK_IMAGE_ASPECT_COLOR_BIT, culledWidgets));
-    ANGLE_TRY(contextVk->onImageComputeShaderRead(VK_IMAGE_ASPECT_COLOR_BIT, font));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(textWidgetsBuffer));
-    ANGLE_TRY(contextVk->onBufferComputeShaderRead(graphWidgetsBuffer));
+    contextVk->onImageComputeShaderWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
+                                         dest);
+    contextVk->onImageComputeShaderRead(VK_IMAGE_ASPECT_COLOR_BIT, culledWidgets);
+    contextVk->onImageComputeShaderRead(VK_IMAGE_ASPECT_COLOR_BIT, font);
+    contextVk->onBufferComputeShaderRead(textWidgetsBuffer);
+    contextVk->onBufferComputeShaderRead(graphWidgetsBuffer);
 
     vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
 
