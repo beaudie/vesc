@@ -22,6 +22,7 @@
 #include "platform/PlatformMethods.h"
 #include "util/EGLWindow.h"
 #include "util/shader_utils.h"
+#include "util/test_utils.h"
 #include "util/util_gl.h"
 
 namespace angle
@@ -212,6 +213,9 @@ constexpr std::array<GLenum, 6> kCubeFaces = {
      GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}};
 
 void LoadEntryPointsWithUtilLoader(angle::GLESDriverType driver);
+
+int GetTestStartDelaySeconds();
+void SetTestStartDelay(const char *testStartDelay);
 
 }  // namespace angle
 
