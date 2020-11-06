@@ -263,6 +263,12 @@ std::vector<std::string> GetAvailableTestPlatformNames();
 void SetSelectedConfig(const char *selectedConfig);
 bool IsConfigSelected();
 
+int GetTestStartDelaySeconds();
+void SetTestStartDelay(const char *testStartDelay);
+
+int GetSwapBuffers();
+void SetSwapBuffers(bool swapBuffers);
+
 // Check whether texture swizzle is natively supported on Metal device.
 bool IsMetalTextureSwizzleAvailable();
 

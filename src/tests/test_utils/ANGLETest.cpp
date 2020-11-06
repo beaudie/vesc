@@ -316,6 +316,8 @@ constexpr char kUseConfig[]                      = "--use-config=";
 constexpr char kReuseDisplays[]                  = "--reuse-displays";
 constexpr char kEnableANGLEPerTestCaptureLabel[] = "--angle-per-test-capture-label";
 constexpr char kBatchId[]                        = "--batch-id=";
+constexpr char kDelayTestStart[]                 = "--delay-test-start=";
+constexpr char kSwapBuffers[]                    = "--swap-buffers";
 
 void SetupEnvironmentVarsForCaptureReplay()
 {
@@ -1395,6 +1397,14 @@ void ANGLEProcessTestArgs(int *argc, char *argv[])
                          strlen(kEnableANGLEPerTestCaptureLabel)) == 0)
         {
             gEnableANGLEPerTestCaptureLabel = true;
+        }
+        else if (strncmp(argv[argIndex], kDelayTestStart, strlen(kDelayTestStart)) == 0)
+        {
+            SetTestStartDelay(argv[argIndex] + strlen(kDelayTestStart));
+        }
+        else if (strncmp(argv[argIndex], kSwapBuffers, strlen(kSwapBuffers)) == 0)
+        {
+            SetSwapBuffers(true);
         }
     }
 }

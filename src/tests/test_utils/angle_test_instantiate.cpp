@@ -155,6 +155,9 @@ bool IsConfigSelected()
     return gSelectedConfig[0] != 0;
 }
 
+int gTestStartDelaySeconds = 0;
+bool gSwapBuffers          = false;
+
 #if !defined(ANGLE_PLATFORM_APPLE)
 // For Apple platform, see angle_test_instantiate_apple.mm
 bool IsMetalTextureSwizzleAvailable()
@@ -720,5 +723,25 @@ void SetSelectedConfig(const char *selectedConfig)
 {
     gSelectedConfig.fill(0);
     strncpy(gSelectedConfig.data(), selectedConfig, kMaxConfigNameLen - 1);
+}
+
+int GetTestStartDelaySeconds()
+{
+    return gTestStartDelaySeconds;
+}
+
+void SetTestStartDelay(const char *testStartDelay)
+{
+    gTestStartDelaySeconds = std::stoi(testStartDelay);
+}
+
+int GetSwapBuffers()
+{
+    return gTestStartDelaySeconds;
+}
+
+void SetSwapBuffers(bool swapBuffers)
+{
+    gSwapBuffers = swapBuffers;
 }
 }  // namespace angle

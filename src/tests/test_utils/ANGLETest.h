@@ -598,10 +598,18 @@ class ANGLETestWithParam : public ANGLETestBase, public ::testing::TestWithParam
     {
         ANGLETestBase::ANGLETestSetUp();
         testSetUp();
+        // Delay test startup to allow a debugger to attach.
+        usleep(angle::GetTestStartDelaySeconds() * 1000000);
     }
 
     void TearDown() final
     {
+        // Perform a swapBuffers() to delineate a frame while tracing.
+        if (angle::GetSwapBuffers())
+        {
+            swapBuffers();
+        }
+
         testTearDown();
         ANGLETestBase::ANGLETestTearDown();
     }
