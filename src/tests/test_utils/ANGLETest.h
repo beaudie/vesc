@@ -22,6 +22,7 @@
 #include "platform/PlatformMethods.h"
 #include "util/EGLWindow.h"
 #include "util/shader_utils.h"
+#include "util/test_utils.h"
 #include "util/util_gl.h"
 
 namespace angle
