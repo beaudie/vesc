@@ -1190,8 +1190,18 @@ if (build_angle_deqp_tests && !is_fuchsia) {
         "deqp_support/angle_deqp_gtest.cpp",
       ]
 
+      # Rotation targets use a common expectations file:
+      #
+      #   _api = gles3*_rotateNNN uses deqp_gles3*_rotate_test_expectations.txt
+      expectations_suffix = "${_api}"
+      expectations_suffix =
+          string_replace(expectations_suffix, "rotate90", "rotate")
+      expectations_suffix =
+          string_replace(expectations_suffix, "rotate180", "rotate")
+      expectations_suffix =
+          string_replace(expectations_suffix, "rotate270", "rotate")
       data = [
-        "deqp_support/deqp_${_api}_test_expectations.txt",
+        "deqp_support/deqp_${expectations_suffix}_test_expectations.txt",
         "${invoker.mustpass_dir}/${invoker.mustpass_name}",
       ]
     }
