@@ -933,8 +933,7 @@ class ContextVk : public ContextImpl, public vk::Context
 
     void writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOut, size_t offsetsSize);
 
-    angle::Result submitFrame(const vk::Semaphore *signalSemaphore,
-                              vk::ResourceUseList *resourceList);
+    angle::Result submitFrame(const vk::Semaphore *signalSemaphore);
     angle::Result memoryBarrierImpl(GLbitfield barriers, VkPipelineStageFlags stageMask);
 
     angle::Result synchronizeCpuGpuTime();
@@ -944,7 +943,6 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result checkCompletedGpuEvents();
     void flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuTimestampS);
     void handleDeviceLost();
-    void waitForSwapchainImageIfNecessary();
     bool shouldEmulateSeamfulCubeMapSampling() const;
     bool shouldUseOldRewriteStructSamplers() const;
     void clearAllGarbage();
