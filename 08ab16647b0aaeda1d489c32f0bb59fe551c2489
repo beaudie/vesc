@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f6275dc_a8c31453",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-07T02:11:13Z",
+      "side": 1,
+      "message": "Replacing CL: https://chromium-review.googlesource.com/c/angle/angle/+/2520106",
+      "revId": "08ab16647b0aaeda1d489c32f0bb59fe551c2489",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
