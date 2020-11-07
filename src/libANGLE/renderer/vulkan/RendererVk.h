@@ -50,6 +50,9 @@ class FramebufferVk;
 namespace vk
 {
 struct Format;
+
+static constexpr size_t kMaxExtensionNames = 200;
+using ExtensionNameList                    = angle::FixedVector<const char *, kMaxExtensionNames>;
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -172,7 +175,7 @@ class RendererVk : angle::NonCopyable
     angle::Result queueSubmit(vk::Context *context,
                               egl::ContextPriority priority,
                               const VkSubmitInfo &submitInfo,
-                              vk::ResourceUseList *resourceList,
+                              vk::ResourceUseList &&resourceList,
                               const vk::Fence *fence,
                               Serial *serialOut);
     angle::Result queueWaitIdle(vk::Context *context, egl::ContextPriority priority);
@@ -231,10 +234,6 @@ class RendererVk : angle::NonCopyable
     {
         return mCommandProcessor.getLastSubmittedFence(context);
     }
-    void handleDeviceLost() { mCommandProcessor.handleDeviceLost(); }
-
-    static constexpr size_t kMaxExtensionNames = 200;
-    using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
 
     angle::Result getPipelineCache(vk::PipelineCache **pipelineCache);
     void onNewGraphicsPipeline()
@@ -298,16 +297,6 @@ class RendererVk : angle::NonCopyable
         mCommandProcessor.waitForWorkComplete(context);
     }
 
-    void finishToSerial(vk::Context *context, Serial serial)
-    {
-        mCommandProcessor.finishToSerial(context, serial);
-    }
-
-    void checkCompletedCommands(vk::Context *context)
-    {
-        mCommandProcessor.checkCompletedCommands(context);
-    }
-
     void finishAllWork(vk::Context *context) { mCommandProcessor.finishAllWork(context); }
     VkQueue getVkQueue(egl::ContextPriority priority) const { return mQueues[priority]; }
 
@@ -321,13 +310,39 @@ class RendererVk : angle::NonCopyable
 
     angle::Result cleanupGarbage(bool block);
 
+    angle::Result submitFrame(vk::Context *context,
+                              egl::ContextPriority contextPriority,
+                              std::vector<VkSemaphore> &&waitSemaphores,
+                              std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
+                              const vk::Semaphore *signalSemaphore,
+                              vk::ResourceUseList &&resourceUseList,
+                              vk::GarbageList &&currentGarbage,
+                              vk::CommandPool *commandPool);
+
+    void clearAllGarbage(vk::Context *context);
+    void handleDeviceLost();
+    angle::Result finishToSerial(vk::Context *context, Serial serial);
+    angle::Result waitForSerialWithUserTimeout(vk::Context *context,
+                                               Serial serial,
+                                               uint64_t timeout,
+                                               VkResult *result);
+    angle::Result finish(vk::Context *context);
+    angle::Result checkCompletedCommands(vk::Context *context);
+
+    // TODO(jmadill): Use vk::Context instead of ContextVk. b/172678125
+    angle::Result flushRenderPassCommands(ContextVk *contextVk,
+                                          const vk::RenderPass &renderPass,
+                                          vk::CommandBufferHelper **renderPassCommands);
+    angle::Result flushOutsideRPCommands(ContextVk *contextVk,
+                                         vk::CommandBufferHelper **outsideRPCommands);
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
 
-    void queryDeviceExtensionFeatures(const ExtensionNameList &deviceExtensionNames);
+    void queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceExtensionNames);
 
-    void initFeatures(DisplayVk *display, const ExtensionNameList &extensions);
+    void initFeatures(DisplayVk *display, const vk::ExtensionNameList &extensions);
     void initPipelineCacheVkKey();
     angle::Result initPipelineCache(DisplayVk *display,
                                     vk::PipelineCache *pipelineCache,
@@ -339,6 +354,12 @@ class RendererVk : angle::NonCopyable
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     bool hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits) const;
+
+    // Sync any errors from the command processor
+    void commandProcessorSyncErrors(vk::Context *context);
+    // Sync any error from worker thread and queue up next command for processing
+    void commandProcessorSyncErrorsAndQueueCommand(vk::Context *context,
+                                                   vk::CommandProcessorTask *command);
 
     egl::Display *mDisplay;
 
@@ -433,6 +454,8 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
+
+    vk::CommandQueue mCommandQueue;
 
     // Command Processor Thread
     vk::CommandProcessor mCommandProcessor;

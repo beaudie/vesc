@@ -65,7 +65,7 @@ class CommandProcessorTask
 
     void initProcessCommands(ContextVk *contextVk,
                              CommandBufferHelper *commandBuffer,
-                             RenderPass *renderPass);
+                             const RenderPass *renderPass);
 
     void initPresent(egl::ContextPriority priority, VkPresentInfoKHR &presentInfo);
 
@@ -104,7 +104,7 @@ class CommandProcessorTask
     const VkCommandBuffer &getOneOffCommandBufferVk() const { return mOneOffCommandBufferVk; }
     const Fence *getOneOffFence() { return mOneOffFence; }
     const VkPresentInfoKHR &getPresentInfo() const { return mPresentInfo; }
-    RenderPass *getRenderPass() const { return mRenderPass; }
+    const RenderPass *getRenderPass() const { return mRenderPass; }
     CommandBufferHelper *getCommandBuffer() const { return mCommandBuffer; }
     ContextVk *getContextVk() const { return mContextVk; }
 
@@ -115,7 +115,7 @@ class CommandProcessorTask
 
     // ProcessCommands
     ContextVk *mContextVk;
-    RenderPass *mRenderPass;
+    const RenderPass *mRenderPass;
     CommandBufferHelper *mCommandBuffer;
 
     // Flush data
@@ -180,15 +180,18 @@ class CommandQueue final : angle::NonCopyable
 
     angle::Result submitFrame(Context *context,
                               egl::ContextPriority priority,
-                              const std::vector<VkSemaphore> &waitSemaphores,
-                              const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
+                              std::vector<VkSemaphore> &&waitSemaphores,
+                              std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                               const Semaphore *signalSemaphore,
-                              const Shared<Fence> &sharedFence,
-                              ResourceUseList *resourceList,
-                              GarbageList *currentGarbage,
+                              Shared<Fence> &&sharedFence,
+                              ResourceUseList &&resourceList,
+                              GarbageList &&currentGarbage,
                               CommandPool *commandPool);
 
-    Shared<Fence> getLastSubmittedFence(const Context *context) const;
+    angle::Result waitForSerialWithUserTimeout(vk::Context *context,
+                                               Serial serial,
+                                               uint64_t timeout,
+                                               VkResult *result);
 
     // Check to see which batches have finished completion (forward progress for
     // mLastCompletedQueueSerial, for example for when the application busy waits on a query
