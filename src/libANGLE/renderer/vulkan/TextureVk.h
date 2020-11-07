@@ -398,6 +398,10 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     void releaseStagingBuffer(ContextVk *contextVk);
     uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;
     uint32_t getMaxLevelCount() const;
+    angle::Result CopyAndStageImageData(ContextVk *contextVk,
+                                        gl::LevelIndex previousBaseLevel,
+                                        vk::ImageHelper *srcImage,
+                                        vk::ImageHelper *dstImage);
     // Used when the image is being redefined (for example to add mips or change base level) to copy
     // each subresource of the image and stage it for another subresource.  When all subresources
     // are taken care of, the image is recreated.
@@ -405,7 +409,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                                bool ignoreLayerCount,
                                                uint32_t currentLayer,
                                                vk::LevelIndex srcLevelVk,
-                                               gl::LevelIndex dstLevelGL);
+                                               gl::LevelIndex dstLevelGL,
+                                               vk::ImageHelper *srcImage,
+                                               vk::ImageHelper *dstImage);
     angle::Result initImageViews(ContextVk *contextVk,
                                  const vk::Format &format,
                                  const bool sized,
