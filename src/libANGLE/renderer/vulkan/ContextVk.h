@@ -374,7 +374,6 @@ class ContextVk : public ContextImpl, public vk::Context
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onFramebufferChange(FramebufferVk *framebufferVk);
     void onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk);
-    void onHostVisibleBufferWrite() { mIsAnyHostVisibleBufferWritten = true; }
 
     void invalidateCurrentTransformFeedbackBuffers();
     void onTransformFeedbackStateChanged();
@@ -1072,10 +1071,6 @@ class ContextVk : public ContextImpl, public vk::Context
     bool mFlipYForCurrentSurface;
     bool mFlipViewportForDrawFramebuffer;
     bool mFlipViewportForReadFramebuffer;
-
-    // If any host-visible buffer is written by the GPU since last submission, a barrier is inserted
-    // at the end of the command buffer to make that write available to the host.
-    bool mIsAnyHostVisibleBufferWritten;
 
     // Whether this context should do seamful cube map sampling emulation.
     bool mEmulateSeamfulCubeMapSampling;
