@@ -752,7 +752,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mXfbVertexCountPerInstance(0),
       mClearColorMasks(0),
       mFlipYForCurrentSurface(false),
-      mIsAnyHostVisibleBufferWritten(false),
       mEmulateSeamfulCubeMapSampling(false),
       mUseOldRewriteStructSamplers(false),
       mOutsideRenderPassCommands(nullptr),
@@ -4438,28 +4437,13 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
-    if (mIsAnyHostVisibleBufferWritten)
-    {
-        // Make sure all writes to host-visible buffers are flushed.  We have no way of knowing
-        // whether any buffer will be mapped for readback in the future, and we can't afford to
-        // flush and wait on a one-pipeline-barrier command buffer on every map().
-        VkMemoryBarrier memoryBarrier = {};
-        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
-        memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
-
-        mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_HOST_BIT, &memoryBarrier);
-        mIsAnyHostVisibleBufferWritten = false;
-    }
-
     if (mGpuEventsEnabled)
     {
         EventName eventName = GetTraceEventName("Primary", mPerfCounters.primaryBuffers);
         ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
                                 TRACE_EVENT_PHASE_END, eventName));
+        ANGLE_TRY(flushOutsideRenderPassCommands());
     }
-    ANGLE_TRY(flushOutsideRenderPassCommands());
 
     // We must add the per context dynamic buffers into mResourceUseList before submission so that
     // they get retained properly until GPU completes. We do not add current buffer into
