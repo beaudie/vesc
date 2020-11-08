@@ -550,6 +550,12 @@ void RendererVk::onDestroy(vk::Context *context)
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
 
+    for (vk::CommandBufferHelper *commandBufferHelper : mCommandBufferHelperFreeList)
+    {
+        SafeDelete(commandBufferHelper);
+    }
+    mCommandBufferHelperFreeList.clear();
+
     mAllocator.destroy();
 
     if (mGlslangInitialized)
@@ -2679,7 +2685,7 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::flushRenderPassCommands(ContextVk *contextVk,
+angle::Result RendererVk::flushRenderPassCommands(vk::Context *context,
                                                   const vk::RenderPass &renderPass,
                                                   vk::CommandBufferHelper **renderPassCommands)
 {
@@ -2688,20 +2694,20 @@ angle::Result RendererVk::flushRenderPassCommands(ContextVk *contextVk,
     {
         (*renderPassCommands)->markClosed();
         vk::CommandProcessorTask flushToPrimary;
-        flushToPrimary.initProcessCommands(contextVk, *renderPassCommands, &renderPass);
-        commandProcessorSyncErrorsAndQueueCommand(contextVk, &flushToPrimary);
+        flushToPrimary.initProcessCommands(*renderPassCommands, &renderPass);
+        commandProcessorSyncErrorsAndQueueCommand(context, &flushToPrimary);
+        *renderPassCommands = getCommandBufferHelper(true);
     }
     else
     {
         std::lock_guard<std::mutex> lock(mCommandQueueMutex);
-        ANGLE_TRY(
-            mCommandQueue.flushRenderPassCommands(contextVk, renderPass, *renderPassCommands));
+        ANGLE_TRY(mCommandQueue.flushRenderPassCommands(context, renderPass, *renderPassCommands));
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::flushOutsideRPCommands(ContextVk *contextVk,
+angle::Result RendererVk::flushOutsideRPCommands(vk::Context *context,
                                                  vk::CommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
@@ -2709,16 +2715,46 @@ angle::Result RendererVk::flushOutsideRPCommands(ContextVk *contextVk,
     {
         (*outsideRPCommands)->markClosed();
         vk::CommandProcessorTask flushToPrimary;
-        flushToPrimary.initProcessCommands(contextVk, *outsideRPCommands, nullptr);
-        commandProcessorSyncErrorsAndQueueCommand(contextVk, &flushToPrimary);
+        flushToPrimary.initProcessCommands(*outsideRPCommands, nullptr);
+        commandProcessorSyncErrorsAndQueueCommand(context, &flushToPrimary);
+        *outsideRPCommands = getCommandBufferHelper(false);
     }
     else
     {
         std::lock_guard<std::mutex> lock(mCommandQueueMutex);
-        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(contextVk, *outsideRPCommands));
+        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(context, *outsideRPCommands));
     }
 
     return angle::Result::Continue;
 }
 
+vk::CommandBufferHelper *RendererVk::getCommandBufferHelper(bool hasRenderPass)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getCommandBufferHelper");
+    std::unique_lock<std::mutex> lock(mCommandBufferHelperFreeListMutex);
+
+    if (mCommandBufferHelperFreeList.empty())
+    {
+        vk::CommandBufferHelper *commandBuffer = new vk::CommandBufferHelper();
+        commandBuffer->initialize(hasRenderPass);
+        return commandBuffer;
+    }
+    else
+    {
+        vk::CommandBufferHelper *commandBuffer = mCommandBufferHelperFreeList.back();
+        mCommandBufferHelperFreeList.pop_back();
+        commandBuffer->setHasRenderPass(hasRenderPass);
+        return commandBuffer;
+    }
+}
+
+void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleCommandBufferHelper");
+    std::lock_guard<std::mutex> lock(mCommandBufferHelperFreeListMutex);
+
+    ASSERT(commandBuffer->empty());
+    commandBuffer->markOpen();
+    mCommandBufferHelperFreeList.push_back(commandBuffer);
+}
 }  // namespace rx
