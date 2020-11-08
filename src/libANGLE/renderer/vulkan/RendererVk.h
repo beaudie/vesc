@@ -329,12 +329,14 @@ class RendererVk : angle::NonCopyable
     angle::Result finish(vk::Context *context);
     angle::Result checkCompletedCommands(vk::Context *context);
 
-    // TODO(jmadill): Use vk::Context instead of ContextVk. b/172704839
-    angle::Result flushRenderPassCommands(ContextVk *contextVk,
+    angle::Result flushRenderPassCommands(vk::Context *context,
                                           const vk::RenderPass &renderPass,
                                           vk::CommandBufferHelper **renderPassCommands);
-    angle::Result flushOutsideRPCommands(ContextVk *contextVk,
+    angle::Result flushOutsideRPCommands(vk::Context *context,
                                          vk::CommandBufferHelper **outsideRPCommands);
+
+    void getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer, bool hasRenderPass);
+    void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
@@ -451,6 +453,13 @@ class RendererVk : angle::NonCopyable
 
     std::mutex mCommandQueueMutex;
     vk::CommandQueue mCommandQueue;
+
+    // Command buffer pool management.
+    constexpr static size_t kNumCommandBuffers = 50;
+    std::array<vk::CommandBufferHelper, kNumCommandBuffers> mCommandBuffers;
+    std::mutex mCommandBufferQueueMutex;
+    std::queue<vk::CommandBufferHelper *> mAvailableCommandBuffers;
+    std::condition_variable mAvailableCommandBufferCondition;
 
     // Command Processor Thread
     vk::CommandProcessor mCommandProcessor;

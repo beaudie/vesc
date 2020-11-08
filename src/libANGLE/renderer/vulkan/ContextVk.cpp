@@ -505,6 +505,10 @@ void ContextVk::onDestroy(const gl::Context *context)
         queryPool.destroy(device);
     }
 
+    // Recycle current commands buffers.
+    mRenderer->recycleCommandBuffer(mOutsideRenderPassCommands);
+    mRenderer->recycleCommandBuffer(mRenderPassCommands);
+
     ASSERT(mCurrentGarbage.empty());
 
     mRenderer->releaseSharedResources(&mResourceUseList);
@@ -612,17 +616,9 @@ angle::Result ContextVk::initialize()
 
     mUseOldRewriteStructSamplers = shouldUseOldRewriteStructSamplers();
 
-    // Prepare command buffer queue by:
-    //  1. Initializing each command buffer (as non-renderpass initially)
-    //  2. Put a pointer to each command buffer into queue
-    for (vk::CommandBufferHelper &commandBuffer : mCommandBuffers)
-    {
-        commandBuffer.initialize(false);
-        recycleCommandBuffer(&commandBuffer);
-    }
-    // Now assign initial command buffers from queue
-    getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
-    getNextAvailableCommandBuffer(&mRenderPassCommands, true);
+    // Assign initial command buffers from queue
+    mRenderer->getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
+    mRenderer->getNextAvailableCommandBuffer(&mRenderPassCommands, true);
 
     if (mGpuEventsEnabled)
     {
@@ -4529,12 +4525,6 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, *renderPass, &mRenderPassCommands));
 
-    // TODO(jmadill): Manage in RendererVk. b/172678125
-    if (getFeatures().commandProcessor.enabled)
-    {
-        getNextAvailableCommandBuffer(&mRenderPassCommands, true);
-    }
-
     if (mGpuEventsEnabled)
     {
         EventName eventName = GetTraceEventName("RP", mPerfCounters.renderPasses);
@@ -4550,31 +4540,6 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
     }
 
     return angle::Result::Continue;
-}
-
-void ContextVk::getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer,
-                                              bool hasRenderPass)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::getNextAvailableCommandBuffer");
-    std::unique_lock<std::mutex> lock(mCommandBufferQueueMutex);
-    // Only wake if notified and command queue is not empty
-    mAvailableCommandBufferCondition.wait(lock,
-                                          [this] { return !mAvailableCommandBuffers.empty(); });
-    *commandBuffer = mAvailableCommandBuffers.front();
-    ASSERT((*commandBuffer)->empty());
-    mAvailableCommandBuffers.pop();
-    lock.unlock();
-    (*commandBuffer)->setHasRenderPass(hasRenderPass);
-    (*commandBuffer)->markOpen();
-}
-
-void ContextVk::recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::recycleCommandBuffer");
-    std::lock_guard<std::mutex> queueLock(mCommandBufferQueueMutex);
-    ASSERT(commandBuffer->empty());
-    mAvailableCommandBuffers.push(commandBuffer);
-    mAvailableCommandBufferCondition.notify_one();
 }
 
 angle::Result ContextVk::syncExternalMemory()
@@ -4667,12 +4632,6 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     }
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, &mOutsideRenderPassCommands));
-
-    // TODO(jmadill): Manage in RendererVk. b/172678125
-    if (getFeatures().commandProcessor.enabled)
-    {
-        getNextAvailableCommandBuffer(&mRenderPassCommands, true);
-    }
 
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
     return angle::Result::Continue;
