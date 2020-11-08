@@ -224,65 +224,11 @@ class CommandQueue final : angle::NonCopyable
     PersistentCommandPool mPrimaryCommandPool;
 };
 
-class TaskProcessor : angle::NonCopyable
-{
-  public:
-    TaskProcessor();
-    ~TaskProcessor();
-
-    angle::Result init(Context *context, std::thread::id threadId);
-    void destroy(VkDevice device);
-
-    angle::Result finishToSerial(Context *context, Serial serial);
-
-    angle::Result submitFrame(Context *context,
-                              egl::ContextPriority priority,
-                              const std::vector<VkSemaphore> &waitSemaphores,
-                              const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
-                              const Semaphore *signalSemaphore,
-                              const Shared<Fence> &sharedFence,
-                              GarbageList *currentGarbage,
-                              CommandPool *commandPool,
-                              Serial queueSerial);
-    angle::Result queueSubmit(Context *context,
-                              egl::ContextPriority priority,
-                              const VkSubmitInfo &submitInfo,
-                              const Fence *fence);
-
-    void handleDeviceLost(Context *context);
-
-    angle::Result checkCompletedCommands(Context *context);
-
-    angle::Result flushOutsideRPCommands(Context *context, CommandBufferHelper *outsideRPCommands);
-    angle::Result flushRenderPassCommands(Context *context,
-                                          const RenderPass &renderPass,
-                                          CommandBufferHelper *renderPassCommands);
-
-  private:
-    bool isValidWorkerThread(Context *context) const;
-
-    angle::Result releaseToCommandBatch(Context *context,
-                                        PrimaryCommandBuffer &&commandBuffer,
-                                        CommandPool *commandPool,
-                                        CommandBatch *batch);
-    angle::Result ensurePrimaryCommandBufferValid(Context *context);
-
-    GarbageQueue mGarbageQueue;
-    std::vector<CommandBatch> mInFlightCommands;
-
-    // Keeps a free list of reusable primary command buffers.
-    PrimaryCommandBuffer mPrimaryCommandBuffer;
-    PersistentCommandPool mPrimaryCommandPool;
-    std::thread::id mThreadId;
-};
-
 class CommandProcessor : public Context
 {
   public:
     CommandProcessor(RendererVk *renderer);
     ~CommandProcessor() override;
-
-    angle::Result initTaskProcessor(Context *context);
 
     void handleError(VkResult result,
                      const char *file,
@@ -347,7 +293,7 @@ class CommandProcessor : public Context
     bool mWorkerThreadIdle;
     // Command pool to allocate processor thread primary command buffers from
     CommandPool mCommandPool;
-    TaskProcessor mTaskProcessor;
+    CommandQueue mCommandQueue;
 
     AtomicSerialFactory mQueueSerialFactory;
     std::mutex mCommandProcessorQueueSerialMutex;
