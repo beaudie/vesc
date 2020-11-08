@@ -172,12 +172,6 @@ class RendererVk : angle::NonCopyable
     }
 
     // Queue submit that originates from the main thread
-    angle::Result queueSubmit(vk::Context *context,
-                              egl::ContextPriority priority,
-                              const VkSubmitInfo &submitInfo,
-                              vk::ResourceUseList &&resourceList,
-                              const vk::Fence *fence,
-                              Serial *serialOut);
     angle::Result queueWaitIdle(vk::Context *context, egl::ContextPriority priority);
     angle::Result deviceWaitIdle(vk::Context *context);
     VkResult queuePresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
