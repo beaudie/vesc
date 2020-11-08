@@ -65,7 +65,7 @@ class CommandProcessorTask
 
     void initProcessCommands(CommandBufferHelper *commandBuffer, const RenderPass *renderPass);
 
-    void initPresent(egl::ContextPriority priority, VkPresentInfoKHR &presentInfo);
+    void initPresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
     void initFinishToSerial(Serial serial);
 
@@ -158,13 +158,15 @@ struct CommandBatch final : angle::NonCopyable
     Serial serial;
 };
 
+using DeviceQueueMap = angle::PackedEnumMap<egl::ContextPriority, VkQueue>;
+
 class CommandQueue final : angle::NonCopyable
 {
   public:
     CommandQueue();
     ~CommandQueue();
 
-    angle::Result init(Context *context);
+    angle::Result init(Context *context, const DeviceQueueMap &queueMap);
     void destroy(VkDevice device);
     void handleDeviceLost(RendererVk *renderer);
 
@@ -188,6 +190,8 @@ class CommandQueue final : angle::NonCopyable
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
                               const Fence *fence);
+    VkResult queuePresent(egl::ContextPriority contextPriority,
+                          const VkPresentInfoKHR &presentInfo);
 
     angle::Result waitForSerialWithUserTimeout(vk::Context *context,
                                                Serial serial,
@@ -218,6 +222,9 @@ class CommandQueue final : angle::NonCopyable
     // Keeps a free list of reusable primary command buffers.
     PrimaryCommandBuffer mPrimaryCommands;
     PersistentCommandPool mPrimaryCommandPool;
+
+    // Devices queues.
+    DeviceQueueMap mQueues;
 };
 
 class CommandProcessor : public Context
@@ -233,7 +240,7 @@ class CommandProcessor : public Context
 
     // Entry point for command processor thread, calls processTasksImpl to do the
     // work. called by Rendererinitialization on main thread
-    void processTasks();
+    void processTasks(const DeviceQueueMap &queueMap);
 
     // Called asynchronously from main thread to queue work that is then processed by the worker
     // thread
@@ -277,7 +284,7 @@ class CommandProcessor : public Context
     angle::Result processTask(CommandProcessorTask *task);
 
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
-    VkResult present(VkQueue queue, const VkPresentInfoKHR &presentInfo);
+    VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
     std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;

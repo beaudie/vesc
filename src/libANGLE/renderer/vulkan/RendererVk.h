@@ -171,11 +171,6 @@ class RendererVk : angle::NonCopyable
         return mPriorities[priority];
     }
 
-    // Queue submit that originates from the main thread
-    angle::Result queueWaitIdle(vk::Context *context, egl::ContextPriority priority);
-    angle::Result deviceWaitIdle(vk::Context *context);
-    VkResult queuePresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
-
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
                                          vk::PrimaryCommandBuffer *commandBufferOut);
@@ -287,7 +282,6 @@ class RendererVk : angle::NonCopyable
     }
 
     void finishAllWork(vk::Context *context) { mCommandProcessor.finishAllWork(context); }
-    VkQueue getVkQueue(egl::ContextPriority priority) const { return mQueues[priority]; }
 
     bool getEnableValidationLayers() const { return mEnableValidationLayers; }
 
@@ -323,6 +317,10 @@ class RendererVk : angle::NonCopyable
                                           vk::CommandBufferHelper **renderPassCommands);
     angle::Result flushOutsideRPCommands(vk::Context *context,
                                          vk::CommandBufferHelper **outsideRPCommands);
+
+    VkResult queuePresent(vk::Context *context,
+                          egl::ContextPriority priority,
+                          const VkPresentInfoKHR &presentInfo);
 
     void getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer, bool hasRenderPass);
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
@@ -385,8 +383,6 @@ class RendererVk : angle::NonCopyable
     VkExternalSemaphoreProperties mExternalSemaphoreProperties;
     VkPhysicalDeviceSamplerYcbcrConversionFeatures mSamplerYcbcrConversionFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
-    std::mutex mQueueMutex;
-    angle::PackedEnumMap<egl::ContextPriority, VkQueue> mQueues;
     angle::PackedEnumMap<egl::ContextPriority, egl::ContextPriority> mPriorities;
     uint32_t mCurrentQueueFamilyIndex;
     uint32_t mMaxVertexAttribDivisor;

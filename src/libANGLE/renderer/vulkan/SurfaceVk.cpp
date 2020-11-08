@@ -496,7 +496,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // flush the pipe.
-    (void)renderer->deviceWaitIdle(displayVk);
+    (void)renderer->finish(displayVk);
 
     destroySwapChainImages(displayVk);
 
@@ -772,7 +772,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         static constexpr size_t kMaxOldSwapchains = 5;
         if (mOldSwapchains.size() > kMaxOldSwapchains)
         {
-            ANGLE_TRY(contextVk->getRenderer()->queueWaitIdle(contextVk, contextVk->getPriority()));
+            ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
             for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
             {
                 oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
@@ -952,7 +952,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // that case as a workaround.
     if (lastSwapchain && renderer->getFeatures().waitIdleBeforeSwapchainRecreation.enabled)
     {
-        ANGLE_TRY(renderer->deviceWaitIdle(context));
+        ANGLE_TRY(renderer->finish(context));
     }
 
     // TODO(syoussefi): Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old
@@ -1374,23 +1374,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
-    VkResult result;
-    if (renderer->getFeatures().asyncCommandQueue.enabled)
-    {
-        vk::CommandProcessorTask present;
-        present.initPresent(contextVk->getPriority(), presentInfo);
-
-        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
-        renderer->queueCommand(contextVk, &present);
-        // Always return success, when we call acquireNextImage we'll check the return code. This
-        // allows the app to continue working until we really need to know the return code from
-        // present.
-        result = VK_SUCCESS;
-    }
-    else
-    {
-        result = renderer->queuePresent(contextVk->getPriority(), presentInfo);
-    }
+    VkResult result = renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo);
 
     ANGLE_TRY(computePresentOutOfDate(contextVk, result, presentOutOfDate));
 
