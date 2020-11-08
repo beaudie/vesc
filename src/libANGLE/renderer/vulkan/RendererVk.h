@@ -238,7 +238,7 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE Serial getCurrentQueueSerial()
     {
-        if (getFeatures().commandProcessor.enabled)
+        if (getFeatures().asyncCommandQueue.enabled)
         {
             return mCommandProcessor.getCurrentQueueSerial();
         }
@@ -247,7 +247,7 @@ class RendererVk : angle::NonCopyable
     }
     ANGLE_INLINE Serial getLastSubmittedQueueSerial()
     {
-        if (getFeatures().commandProcessor.enabled)
+        if (getFeatures().asyncCommandQueue.enabled)
         {
             return mCommandProcessor.getLastSubmittedSerial();
         }
@@ -282,7 +282,7 @@ class RendererVk : angle::NonCopyable
     vk::Error getAndClearPendingError() { return mCommandProcessor.getAndClearPendingError(); }
     void waitForCommandProcessorIdle(vk::Context *context)
     {
-        ASSERT(getFeatures().asynchronousCommandProcessing.enabled);
+        ASSERT(getFeatures().asyncCommandQueue.enabled);
         mCommandProcessor.waitForWorkComplete(context);
     }
 
