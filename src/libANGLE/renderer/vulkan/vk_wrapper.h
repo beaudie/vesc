@@ -461,6 +461,14 @@ class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
                  VkMemoryMapFlags flags,
                  uint8_t **mapPointer) const;
     void unmap(VkDevice device) const;
+    void flush(VkDevice device,
+               VkMemoryMapFlags memoryPropertyFlags,
+               VkDeviceSize offset,
+               VkDeviceSize size);
+    void invalidate(VkDevice device,
+                    VkMemoryMapFlags memoryPropertyFlags,
+                    VkDeviceSize offset,
+                    VkDeviceSize size);
 };
 
 class Allocator : public WrappedObject<Allocator, VmaAllocator>
@@ -1401,6 +1409,41 @@ ANGLE_INLINE void DeviceMemory::unmap(VkDevice device) const
 {
     ASSERT(valid());
     vkUnmapMemory(device, mHandle);
+}
+
+ANGLE_INLINE void DeviceMemory::flush(VkDevice device,
+                                      VkMemoryMapFlags memoryPropertyFlags,
+                                      VkDeviceSize offset,
+                                      VkDeviceSize size)
+{
+    // if the memory type is not host coherent, we perform an explicit flush
+    if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
+    {
+        VkMappedMemoryRange mappedRange = {};
+        mappedRange.sType               = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+        mappedRange.memory              = getHandle();
+        mappedRange.offset              = offset;
+        mappedRange.size                = size;
+        vkFlushMappedMemoryRanges(device, 1, &mappedRange);
+    }
+}
+
+ANGLE_INLINE void DeviceMemory::invalidate(VkDevice device,
+                                           VkMemoryMapFlags memoryPropertyFlags,
+                                           VkDeviceSize offset,
+                                           VkDeviceSize size)
+{
+    // if the memory type is not device coherent, we perform an explicit invalidate
+    if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD) == 0)
+    {
+        VkMappedMemoryRange memoryRanges = {};
+        memoryRanges.sType               = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+        memoryRanges.memory              = getHandle();
+        memoryRanges.offset              = offset;
+        memoryRanges.size                = size;
+
+        vkInvalidateMappedMemoryRanges(device, 1, &memoryRanges);
+    }
 }
 
 // Allocator implementation.

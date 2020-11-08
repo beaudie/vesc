@@ -48,8 +48,15 @@ class BufferVk : public BufferImpl
     ~BufferVk() override;
     void destroy(const gl::Context *context) override;
 
+    angle::Result setExternalBufferData(const gl::Context *context,
+                                        gl::BufferBinding target,
+                                        GLeglClientBufferEXT clientBuffer,
+                                        const void *data,
+                                        size_t size,
+                                        VkMemoryPropertyFlags memoryPropertyFlags);
     angle::Result setDataWithUsageFlags(const gl::Context *context,
                                         gl::BufferBinding target,
+                                        GLeglClientBufferEXT clientBuffer,
                                         const void *data,
                                         size_t size,
                                         gl::BufferUsage usage,
