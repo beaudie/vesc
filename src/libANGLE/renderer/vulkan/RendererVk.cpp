@@ -2620,10 +2620,12 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
         vk::Shared<vk::Fence> submitFence;
         ANGLE_TRY(newSharedFence(context, &submitFence));
-        ANGLE_TRY(mCommandQueue.submitFrame(context, contextPriority, std::move(waitSemaphores),
-                                            std::move(waitSemaphoreStageMasks), signalSemaphore,
-                                            std::move(submitFence), std::move(currentGarbage),
-                                            commandPool, mCurrentQueueSerial));
+        ANGLE_TRY(mCommandQueue.submitFrame(
+            context, contextPriority, waitSemaphores, waitSemaphoreStageMasks, signalSemaphore,
+            std::move(submitFence), std::move(currentGarbage), commandPool, mCurrentQueueSerial));
+
+        waitSemaphores.clear();
+        waitSemaphoreStageMasks.clear();
 
         resourceUseList.releaseResourceUsesAndUpdateSerials(mCurrentQueueSerial);
         mLastSubmittedQueueSerial = mCurrentQueueSerial;
