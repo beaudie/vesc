@@ -1165,15 +1165,16 @@ angle::Result CommandQueue::finishToSerial(Context *context, Serial finishSerial
     return retireFinishedCommands(context, finishedCount);
 }
 
-angle::Result CommandQueue::submitFrame(Context *context,
-                                        egl::ContextPriority priority,
-                                        const std::vector<VkSemaphore> &waitSemaphores,
-                                        const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
-                                        const Semaphore *signalSemaphore,
-                                        Shared<Fence> &&sharedFence,
-                                        ResourceUseList &&resourceList,
-                                        GarbageList &&currentGarbage,
-                                        CommandPool *commandPool)
+angle::Result CommandQueue::submitFrame(
+    Context *context,
+    egl::ContextPriority priority,
+    const std::vector<VkSemaphore> &waitSemaphores,
+    const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
+    const Semaphore *signalSemaphore,
+    Shared<Fence> &&sharedFence,
+    ResourceUseList &&resourceList,
+    GarbageList &&currentGarbage,
+    CommandPool *commandPool)
 {
     // Start an empty primary buffer if we have an empty submit.
     ANGLE_TRY(ensurePrimaryCommandBufferValid(context));
