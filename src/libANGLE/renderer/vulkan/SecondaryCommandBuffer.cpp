@@ -136,6 +136,9 @@ ANGLE_INLINE const CommandHeader *NextCommand(const CommandHeader *command)
                                                    command->size);
 }
 
+SecondaryCommandBuffer::SecondaryCommandBuffer()  = default;
+SecondaryCommandBuffer::~SecondaryCommandBuffer() = default;
+
 // Add any queued resetQueryPool commands to the given cmdBuffer
 void SecondaryCommandBuffer::executeQueuedResetQueryPoolCommands(VkCommandBuffer cmdBuffer)
 {

@@ -811,16 +811,16 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         return writePointer + sizeInBytes;
     }
 
-    // flag to indicate that commandBuffer is open for new commands
-    bool mIsOpen;
+    // Flag to indicate that commandBuffer is open for new commands. Initially open.
+    bool mIsOpen = true;
 
     std::vector<CommandHeader *> mCommands;
 
     // Allocator used by this class. If non-null then the class is valid.
-    angle::PoolAllocator *mAllocator;
+    angle::PoolAllocator *mAllocator = nullptr;
 
-    uint8_t *mCurrentWritePointer;
-    size_t mCurrentBytesRemaining;
+    uint8_t *mCurrentWritePointer = nullptr;
+    size_t mCurrentBytesRemaining = 0;
     // resetQueryPool command must be executed outside RP so we queue them up for
     //  an inside RenderPass command buffer and pre-prend them to the commands
     std::vector<ResetQueryPoolParams> mResetQueryQueue;
