@@ -918,6 +918,15 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     setGlobalDebugAnnotator();
 
+    // Prepare command buffer queue by:
+    //  1. Initializing each command buffer (as non-renderpass initially)
+    //  2. Put a pointer to each command buffer into queue
+    for (vk::CommandBufferHelper &commandBuffer : mCommandBuffers)
+    {
+        commandBuffer.initialize(false);
+        recycleCommandBuffer(&commandBuffer);
+    }
+
     if (getFeatures().commandProcessor.enabled)
     {
         // TODO(jmadill): Clean up. b/170312581
@@ -2725,7 +2734,7 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::flushRenderPassCommands(ContextVk *contextVk,
+angle::Result RendererVk::flushRenderPassCommands(vk::Context *context,
                                                   const vk::RenderPass &renderPass,
                                                   vk::CommandBufferHelper **renderPassCommands)
 {
@@ -2734,20 +2743,20 @@ angle::Result RendererVk::flushRenderPassCommands(ContextVk *contextVk,
     {
         (*renderPassCommands)->markClosed();
         vk::CommandProcessorTask flushToPrimary;
-        flushToPrimary.initProcessCommands(contextVk, *renderPassCommands, &renderPass);
-        commandProcessorSyncErrorsAndQueueCommand(contextVk, &flushToPrimary);
+        flushToPrimary.initProcessCommands(*renderPassCommands, &renderPass);
+        commandProcessorSyncErrorsAndQueueCommand(context, &flushToPrimary);
+        getNextAvailableCommandBuffer(renderPassCommands, true);
     }
     else
     {
         std::lock_guard<std::mutex> lock(mCommandQueueMutex);
-        ANGLE_TRY(
-            mCommandQueue.flushRenderPassCommands(contextVk, renderPass, *renderPassCommands));
+        ANGLE_TRY(mCommandQueue.flushRenderPassCommands(context, renderPass, *renderPassCommands));
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::flushOutsideRPCommands(ContextVk *contextVk,
+angle::Result RendererVk::flushOutsideRPCommands(vk::Context *context,
                                                  vk::CommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
@@ -2755,16 +2764,41 @@ angle::Result RendererVk::flushOutsideRPCommands(ContextVk *contextVk,
     {
         (*outsideRPCommands)->markClosed();
         vk::CommandProcessorTask flushToPrimary;
-        flushToPrimary.initProcessCommands(contextVk, *outsideRPCommands, nullptr);
-        commandProcessorSyncErrorsAndQueueCommand(contextVk, &flushToPrimary);
+        flushToPrimary.initProcessCommands(*outsideRPCommands, nullptr);
+        commandProcessorSyncErrorsAndQueueCommand(context, &flushToPrimary);
+        getNextAvailableCommandBuffer(outsideRPCommands, false);
     }
     else
     {
         std::lock_guard<std::mutex> lock(mCommandQueueMutex);
-        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(contextVk, *outsideRPCommands));
+        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(context, *outsideRPCommands));
     }
 
     return angle::Result::Continue;
 }
 
+void RendererVk::getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer,
+                                               bool hasRenderPass)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getNextAvailableCommandBuffer");
+    std::unique_lock<std::mutex> lock(mCommandBufferQueueMutex);
+    // Only wake if notified and command queue is not empty
+    mAvailableCommandBufferCondition.wait(lock,
+                                          [this] { return !mAvailableCommandBuffers.empty(); });
+    *commandBuffer = mAvailableCommandBuffers.front();
+    ASSERT((*commandBuffer)->empty());
+    mAvailableCommandBuffers.pop();
+    lock.unlock();
+    (*commandBuffer)->setHasRenderPass(hasRenderPass);
+    (*commandBuffer)->markOpen();
+}
+
+void RendererVk::recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleCommandBuffer");
+    std::lock_guard<std::mutex> lock(mCommandBufferQueueMutex);
+    ASSERT(commandBuffer->empty());
+    mAvailableCommandBuffers.push(commandBuffer);
+    mAvailableCommandBufferCondition.notify_one();
+}
 }  // namespace rx
