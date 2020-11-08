@@ -506,16 +506,7 @@ void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
 
 void RendererVk::onDestroy(vk::Context *context)
 {
-    // Force all commands to finish by flushing all queues.
-    for (VkQueue queue : mQueues)
-    {
-        if (queue != VK_NULL_HANDLE)
-        {
-            vkQueueWaitIdle(queue);
-        }
-    }
-
-    if (getFeatures().asyncCommandQueue.enabled)
+    if (mFeatures.asyncCommandQueue.enabled)
     {
         // Shutdown worker thread
         mCommandProcessor.shutdown(&mCommandProcessorThread);
@@ -916,17 +907,6 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
 
     setGlobalDebugAnnotator();
-
-    if (mFeatures.asyncCommandQueue.enabled)
-    {
-        mCommandProcessorThread =
-            std::thread(&vk::CommandProcessor::processTasks, &mCommandProcessor);
-        waitForCommandProcessorIdle(displayVk);
-    }
-    else
-    {
-        ANGLE_TRY(mCommandQueue.init(displayVk));
-    }
 
     return angle::Result::Continue;
 }
@@ -1482,11 +1462,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 
     // When only 1 Queue, use same for all, Low index. Identify as Medium, since it's default.
+    vk::DeviceQueueMap queueMap;
+
     VkQueue queue;
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexLow, &queue);
-    mQueues[egl::ContextPriority::Low]        = queue;
-    mQueues[egl::ContextPriority::Medium]     = queue;
-    mQueues[egl::ContextPriority::High]       = queue;
+    queueMap[egl::ContextPriority::Low]       = queue;
+    queueMap[egl::ContextPriority::Medium]    = queue;
+    queueMap[egl::ContextPriority::High]      = queue;
     mPriorities[egl::ContextPriority::Low]    = egl::ContextPriority::Medium;
     mPriorities[egl::ContextPriority::Medium] = egl::ContextPriority::Medium;
     mPriorities[egl::ContextPriority::High]   = egl::ContextPriority::Medium;
@@ -1495,15 +1477,26 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     if (queueCount > 1)
     {
         vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexHigh,
-                         &mQueues[egl::ContextPriority::High]);
+                         &queueMap[egl::ContextPriority::High]);
         mPriorities[egl::ContextPriority::High] = egl::ContextPriority::High;
     }
     // If at least 3 queues, Medium has its own queue. Adjust Low priority.
     if (queueCount > 2)
     {
         vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexMedium,
-                         &mQueues[egl::ContextPriority::Medium]);
+                         &queueMap[egl::ContextPriority::Medium]);
         mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Low;
+    }
+
+    if (mFeatures.asyncCommandQueue.enabled)
+    {
+        mCommandProcessorThread =
+            std::thread(&vk::CommandProcessor::processTasks, &mCommandProcessor, queueMap);
+        waitForCommandProcessorIdle(displayVk);
+    }
+    else
+    {
+        ANGLE_TRY(mCommandQueue.init(displayVk, queueMap));
     }
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
@@ -2257,7 +2250,6 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     else
     {
         std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
-        std::lock_guard<std::mutex> queueLock(mQueueMutex);
 
         VkSubmitInfo submitInfo = {};
         submitInfo.sType        = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -2281,21 +2273,6 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     }
 
     return angle::Result::Continue;
-}
-
-VkResult RendererVk::queuePresent(egl::ContextPriority priority,
-                                  const VkPresentInfoKHR &presentInfo)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
-
-    ASSERT(!mFeatures.asyncCommandQueue.enabled);
-
-    std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
-
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "vkQueuePresentKHR");
-        return vkQueuePresentKHR(mQueues[priority], &presentInfo);
-    }
 }
 
 angle::Result RendererVk::newSharedFence(vk::Context *context,
@@ -2561,7 +2538,6 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     else
     {
         std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
-        std::lock_guard<std::mutex> queueLock(mQueueMutex);
 
         submitQueueSerial = mCommandQueue.reserveSubmitSerial();
 
@@ -2707,6 +2683,32 @@ angle::Result RendererVk::flushOutsideRPCommands(vk::Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+VkResult RendererVk::queuePresent(vk::Context *context,
+                                  egl::ContextPriority priority,
+                                  const VkPresentInfoKHR &presentInfo)
+{
+    VkResult result = VK_SUCCESS;
+    if (mFeatures.asyncCommandQueue.enabled)
+    {
+        vk::CommandProcessorTask present;
+        present.initPresent(priority, presentInfo);
+
+        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
+        queueCommand(context, &present);
+
+        // Always return success, when we call acquireNextImage we'll check the return code. This
+        // allows the app to continue working until we really need to know the return code from
+        // present.
+    }
+    else
+    {
+        std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+        result = mCommandQueue.queuePresent(priority, presentInfo);
+    }
+
+    return result;
 }
 
 vk::CommandBufferHelper *RendererVk::getCommandBufferHelper(bool hasRenderPass)
