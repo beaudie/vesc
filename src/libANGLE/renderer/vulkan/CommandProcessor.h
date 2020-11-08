@@ -180,8 +180,8 @@ class CommandQueue final : angle::NonCopyable
 
     angle::Result submitFrame(Context *context,
                               egl::ContextPriority priority,
-                              std::vector<VkSemaphore> &&waitSemaphores,
-                              std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
+                              const std::vector<VkSemaphore> &waitSemaphores,
+                              const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                               const Semaphore *signalSemaphore,
                               Shared<Fence> &&sharedFence,
                               GarbageList &&currentGarbage,
@@ -204,7 +204,6 @@ class CommandQueue final : angle::NonCopyable
     angle::Result checkCompletedCommands(Context *context);
 
     angle::Result flushOutsideRPCommands(Context *context, CommandBufferHelper *outsideRPCommands);
-
     angle::Result flushRenderPassCommands(Context *context,
                                           const RenderPass &renderPass,
                                           CommandBufferHelper *renderPassCommands);
@@ -216,10 +215,6 @@ class CommandQueue final : angle::NonCopyable
                                         CommandBatch *batch);
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context);
-    angle::Result allocatePrimaryCommandBuffer(Context *context,
-                                               PrimaryCommandBuffer *commandBufferOut);
-    angle::Result releasePrimaryCommandBuffer(Context *context,
-                                              PrimaryCommandBuffer &&commandBuffer);
 
     GarbageQueue mGarbageQueue;
     std::vector<CommandBatch> mInFlightCommands;
@@ -238,25 +233,19 @@ class TaskProcessor : angle::NonCopyable
     angle::Result init(Context *context, std::thread::id threadId);
     void destroy(VkDevice device);
 
-    angle::Result allocatePrimaryCommandBuffer(Context *context,
-                                               PrimaryCommandBuffer *commandBufferOut);
-    angle::Result releasePrimaryCommandBuffer(Context *context,
-                                              PrimaryCommandBuffer &&commandBuffer);
-
     angle::Result finishToSerial(Context *context, Serial serial);
 
-    VkResult present(VkQueue queue, const VkPresentInfoKHR &presentInfo);
-
     angle::Result submitFrame(Context *context,
-                              VkQueue queue,
-                              const VkSubmitInfo &submitInfo,
+                              egl::ContextPriority priority,
+                              const std::vector<VkSemaphore> &waitSemaphores,
+                              const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
+                              const Semaphore *signalSemaphore,
                               const Shared<Fence> &sharedFence,
                               GarbageList *currentGarbage,
                               CommandPool *commandPool,
-                              PrimaryCommandBuffer &&commandBuffer,
-                              const Serial &queueSerial);
+                              Serial queueSerial);
     angle::Result queueSubmit(Context *context,
-                              VkQueue queue,
+                              egl::ContextPriority priority,
                               const VkSubmitInfo &submitInfo,
                               const Fence *fence);
 
@@ -264,7 +253,10 @@ class TaskProcessor : angle::NonCopyable
 
     angle::Result checkCompletedCommands(Context *context);
 
-    VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
+    angle::Result flushOutsideRPCommands(Context *context, CommandBufferHelper *outsideRPCommands);
+    angle::Result flushRenderPassCommands(Context *context,
+                                          const RenderPass &renderPass,
+                                          CommandBufferHelper *renderPassCommands);
 
   private:
     bool isValidWorkerThread(Context *context) const;
@@ -273,18 +265,15 @@ class TaskProcessor : angle::NonCopyable
                                         PrimaryCommandBuffer &&commandBuffer,
                                         CommandPool *commandPool,
                                         CommandBatch *batch);
+    angle::Result ensurePrimaryCommandBufferValid(Context *context);
 
     GarbageQueue mGarbageQueue;
     std::vector<CommandBatch> mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
+    PrimaryCommandBuffer mPrimaryCommandBuffer;
     PersistentCommandPool mPrimaryCommandPool;
     std::thread::id mThreadId;
-
-    // Track present info
-    std::mutex mSwapchainStatusMutex;
-    std::condition_variable mSwapchainStatusCondition;
-    std::map<VkSwapchainKHR, VkResult> mSwapchainStatus;
 };
 
 class CommandProcessor : public Context
@@ -334,7 +323,7 @@ class CommandProcessor : public Context
 
     VkResult getLastPresentResult(VkSwapchainKHR swapchain)
     {
-        return mTaskProcessor.getLastAndClearPresentResult(swapchain);
+        return getLastAndClearPresentResult(swapchain);
     }
 
   private:
@@ -343,7 +332,10 @@ class CommandProcessor : public Context
     angle::Result processTasksImpl(bool *exitThread);
 
     // Command processor thread, process a task
-    angle::Result processTask(Context *context, CommandProcessorTask *task);
+    angle::Result processTask(CommandProcessorTask *task);
+
+    VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
+    VkResult present(VkQueue queue, const VkPresentInfoKHR &presentInfo);
 
     std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
@@ -355,7 +347,6 @@ class CommandProcessor : public Context
     bool mWorkerThreadIdle;
     // Command pool to allocate processor thread primary command buffers from
     CommandPool mCommandPool;
-    PrimaryCommandBuffer mPrimaryCommandBuffer;
     TaskProcessor mTaskProcessor;
 
     AtomicSerialFactory mQueueSerialFactory;
@@ -365,6 +356,11 @@ class CommandProcessor : public Context
 
     mutable std::mutex mErrorMutex;
     std::queue<Error> mErrors;
+
+    // Track present info
+    std::mutex mSwapchainStatusMutex;
+    std::condition_variable mSwapchainStatusCondition;
+    std::map<VkSwapchainKHR, VkResult> mSwapchainStatus;
 };
 
 }  // namespace vk
