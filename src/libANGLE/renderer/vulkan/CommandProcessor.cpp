@@ -1171,9 +1171,9 @@ angle::Result CommandQueue::submitFrame(Context *context,
                                         std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                         const Semaphore *signalSemaphore,
                                         Shared<Fence> &&sharedFence,
-                                        ResourceUseList &&resourceList,
                                         GarbageList &&currentGarbage,
-                                        CommandPool *commandPool)
+                                        CommandPool *commandPool,
+                                        Serial queueSerial)
 {
     // Start an empty primary buffer if we have an empty submit.
     ANGLE_TRY(ensurePrimaryCommandBufferValid(context));
@@ -1192,9 +1192,9 @@ angle::Result CommandQueue::submitFrame(Context *context,
     DeviceScoped<CommandBatch> scopedBatch(device);
     CommandBatch &batch = scopedBatch.get();
     batch.fence         = std::move(sharedFence);
+    batch.serial        = queueSerial;
 
-    ANGLE_TRY(renderer->queueSubmit(context, priority, submitInfo, std::move(resourceList),
-                                    &batch.fence.get(), &batch.serial));
+    ANGLE_TRY(queueSubmit(context, priority, submitInfo, &batch.fence.get()));
 
     if (!currentGarbage.empty())
     {
@@ -1303,6 +1303,26 @@ angle::Result CommandQueue::flushRenderPassCommands(Context *context,
     ANGLE_TRY(ensurePrimaryCommandBufferValid(context));
     return renderPassCommands->flushToPrimary(context->getRenderer()->getFeatures(),
                                               &mPrimaryCommands, &renderPass);
+}
+
+angle::Result CommandQueue::queueSubmit(Context *context,
+                                        egl::ContextPriority contextPriority,
+                                        const VkSubmitInfo &submitInfo,
+                                        const Fence *fence)
+{
+    RendererVk *renderer = context->getRenderer();
+
+    if (kOutputVmaStatsString)
+    {
+        renderer->outputVmaStatString();
+    }
+
+    VkQueue queue       = renderer->getVkQueue(contextPriority);
+    VkFence fenceHandle = fence ? fence->getHandle() : VK_NULL_HANDLE;
+    ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fenceHandle));
+
+    // Now that we've submitted work, clean up RendererVk garbage
+    return renderer->cleanupGarbage(false);
 }
 }  // namespace vk
 }  // namespace rx

@@ -184,9 +184,14 @@ class CommandQueue final : angle::NonCopyable
                               std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                               const Semaphore *signalSemaphore,
                               Shared<Fence> &&sharedFence,
-                              ResourceUseList &&resourceList,
                               GarbageList &&currentGarbage,
-                              CommandPool *commandPool);
+                              CommandPool *commandPool,
+                              Serial queueSerial);
+
+    angle::Result queueSubmit(Context *context,
+                              egl::ContextPriority contextPriority,
+                              const VkSubmitInfo &submitInfo,
+                              const Fence *fence);
 
     angle::Result waitForSerialWithUserTimeout(vk::Context *context,
                                                Serial serial,
