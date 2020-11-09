@@ -336,6 +336,8 @@ def main():
     args, extra_flags = parser.parse_known_args()
     env = os.environ.copy()
 
+    logging.basicConfig(level='INFO')
+
     if 'GTEST_TOTAL_SHARDS' in env and int(env['GTEST_TOTAL_SHARDS']) != 1:
         logging.error('Sharding not yet implemented.')
         sys.exit(1)
