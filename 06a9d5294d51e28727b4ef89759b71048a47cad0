@@ -52,6 +52,24 @@
       "parentUuid": "25e1ca47_1485f3aa",
       "revId": "06a9d5294d51e28727b4ef89759b71048a47cad0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93b4cfe9_34ffa910",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-11-09T16:17:34Z",
+      "side": 1,
+      "message": "To credit me, you can include a line in the commit message like:\n\n\"Based on a CL by Jamie Madill\"\n\nThat\u0027s what I do to credit the original author.",
+      "parentUuid": "e61b3675_467e0249",
+      "revId": "06a9d5294d51e28727b4ef89759b71048a47cad0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
