@@ -171,6 +171,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     void onErrorMessage(const char *errorMessage);
 
     uint32_t getCurrentThreadSerial();
+    std::mutex &getTraceEventMutex() { return mTraceEventMutex; }
 
   protected:
     const RenderTestParams &mTestParams;
@@ -224,6 +225,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     std::unique_ptr<angle::Library> mEntryPointsLib;
 
     std::vector<std::thread::id> mThreadIDs;
+    std::mutex mTraceEventMutex;
 };
 
 // Mixins.
