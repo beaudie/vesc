@@ -1725,10 +1725,10 @@ angle::Result TextureGL::setSwizzle(const gl::Context *context, GLint swizzle[4]
 angle::Result TextureGL::setBuffer(const gl::Context *context, GLenum internalFormat)
 {
     const FunctionsGL *functions = GetFunctionsGL(context);
-    const BufferGL *bufferGL     = GetImplAs<BufferGL>(mState.mBuffer.get());
+    const BufferGL *bufferGL     = GetImplAs<BufferGL>(mState.getBuffer().get());
     ANGLE_GL_TRY(context, functions->texBufferRange(
                               GL_TEXTURE_BUFFER, internalFormat, bufferGL->getBufferID(),
-                              mState.mBuffer.getOffset(), mState.mBuffer.getSize()));
+                              mState.getBuffer().getOffset(), mState.getBuffer().getSize()));
 
     return angle::Result::Continue;
 }
@@ -1931,7 +1931,7 @@ const LevelInfoGL &TextureGL::getBaseLevelInfo() const
 
 gl::TextureType TextureGL::getType() const
 {
-    return mState.mType;
+    return mState.getType();
 }
 
 angle::Result TextureGL::initializeContents(const gl::Context *context,

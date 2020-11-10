@@ -31,7 +31,7 @@ namespace rx
 //   have needed to invalidateGraphicsDriverUniforms().
 // - Set 1 contains uniform blocks created to encompass default uniforms.  1 binding is used per
 //   pipeline stage.  Additionally, transform feedback buffers are bound from binding 2 and up.
-// - Set 2 contains all textures.
+// - Set 2 contains all textures (including texture buffers).
 // - Set 3 contains all other shader resources, such as uniform and storage blocks, atomic counter
 //   buffers and images.
 
