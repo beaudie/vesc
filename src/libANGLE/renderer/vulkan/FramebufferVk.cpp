@@ -429,7 +429,11 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                                        const VkClearColorValue &clearColorValue,
                                        const VkClearDepthStencilValue &clearDepthStencilValue)
 {
+
+#if 1
     ContextVk *contextVk = vk::GetImpl(context);
+    return flushDeferredClears(contextVk);
+#else
 
     const gl::Rectangle scissoredRenderArea = getRotatedScissoredRenderArea(contextVk);
     ASSERT(scissoredRenderArea.width != 0 && scissoredRenderArea.height != 0);
@@ -570,6 +574,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     return clearWithDraw(contextVk, scissoredRenderArea, clearColorBuffers, clearDepthWithDraw,
                          clearStencilWithDraw, colorMasks, stencilMask, clearColorValue,
                          clearDepthStencilValue);
+#endif
 }
 
 angle::Result FramebufferVk::clearBufferfv(const gl::Context *context,
