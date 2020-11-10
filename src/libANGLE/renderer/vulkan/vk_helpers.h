@@ -614,6 +614,8 @@ enum class PipelineStage : uint16_t
 };
 using PipelineStagesMask = angle::PackedEnumBitSet<PipelineStage, uint16_t>;
 
+PipelineStage GetPipelineStage(gl::ShaderType stage);
+
 // This wraps data and API for vkCmdPipelineBarrier call
 class PipelineBarrier : angle::NonCopyable
 {
@@ -774,22 +776,6 @@ class BufferHelper final : public Resource
                                  uint32_t regionCount,
                                  const VkBufferCopy *copyRegions);
 
-    // Note: currently only one view is allowed.  If needs be, multiple views can be created
-    // based on format.
-    angle::Result initBufferView(ContextVk *contextVk, const Format &format);
-
-    const BufferView &getBufferView() const
-    {
-        ASSERT(mBufferView.valid());
-        return mBufferView;
-    }
-
-    const Format &getViewFormat() const
-    {
-        ASSERT(mViewFormat);
-        return *mViewFormat;
-    }
-
     angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
     {
         if (!mMappedMemory)
@@ -847,14 +833,12 @@ class BufferHelper final : public Resource
 
     // Vulkan objects.
     Buffer mBuffer;
-    BufferView mBufferView;
     Allocation mAllocation;
 
     // Cached properties.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
     VkDeviceSize mSize;
     uint8_t *mMappedMemory;
-    const Format *mViewFormat;
     uint32_t mCurrentQueueFamilyIndex;
 
     // For memory barriers.
@@ -1989,7 +1973,7 @@ class ImageViewHelper : angle::NonCopyable
         }
     }
 
-    // Store reference to usage in graph.
+    // Store reference to usage.
     void retain(ResourceUseList *resourceUseList) const { resourceUseList->add(mUse); }
 
     // For applications that frequently switch a texture's max level, and make no other changes to
@@ -2122,6 +2106,42 @@ class ImageViewHelper : angle::NonCopyable
 
     // Serial for the image view set. getSubresourceSerial combines it with subresource info.
     ImageViewSerial mImageViewSerial;
+};
+
+class BufferViewHelper : angle::NonCopyable
+{
+  public:
+    BufferViewHelper();
+    BufferViewHelper(BufferViewHelper &&other);
+    ~BufferViewHelper();
+
+    void init(RendererVk *renderer);
+    void release(RendererVk *renderer);
+    void destroy(VkDevice device);
+
+    const BufferView &getView() const { return mView; }
+
+    // Store reference to usage.
+    void retain(ResourceUseList *resourceUseList) const { resourceUseList->add(mUse); }
+
+    angle::Result initView(ContextVk *contextVk,
+                           const BufferHelper &buffer,
+                           const Format &format,
+                           VkDeviceSize offset,
+                           VkDeviceSize size);
+
+    // Return unique Serial for a bufferView.
+    ImageViewSubresourceSerial getSerial() const;
+
+  private:
+    // Lifetime.
+    SharedResourceUse mUse;
+
+    BufferView mView;
+
+    // Serial for the buffer view.  An ImageViewSerial is used for texture buffers so that they fit
+    // together with the other texture types.
+    ImageViewSerial mViewSerial;
 };
 
 class FramebufferHelper : public Resource
