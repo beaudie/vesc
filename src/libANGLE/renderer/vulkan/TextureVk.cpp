@@ -1297,6 +1297,16 @@ angle::Result TextureVk::setImageExternal(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+angle::Result TextureVk::setBuffer(const gl::Context *context, GLenum internalFormat)
+{
+    // No longer an image
+    releaseAndDeleteImage(vk::GetImpl(context));
+    mSampler.reset();
+
+    // There's nothing else to do here.
+    return angle::Result::Continue;
+}
+
 gl::ImageIndex TextureVk::getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const
 {
     // The input index can be a specific layer (for cube maps, 2d arrays, etc) or mImageLayerOffset
@@ -1339,6 +1349,7 @@ void TextureVk::releaseAndDeleteImage(ContextVk *contextVk)
         mImageCreateFlags       = 0;
         SafeDelete(mImage);
     }
+    mBufferView.release(contextVk->getRenderer());
     mRedefinedLevels.reset();
 }
 
@@ -2210,6 +2221,26 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
+    // If this is a texture buffer, create the buffer view.  There's nothing else to sync.  The
+    // image must already be deleted, and the sampler reset.
+    if (mState.getBuffer().get() != nullptr)
+    {
+        ASSERT(mImage == nullptr);
+
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
+        const vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+
+        const gl::ImageDesc &desc  = mState.getBaseLevelDesc();
+        const vk::Format &vkFormat = renderer->getFormat(desc.format.info->sizedInternalFormat);
+
+        const VkDeviceSize offset = bufferBinding.getOffset();
+        const VkDeviceSize size =
+            std::min<VkDeviceSize>(bufferBinding.getSize(), buffer.getSize() - offset);
+
+        mBufferView.release(renderer);
+        return mBufferView.initView(contextVk, buffer, vkFormat, offset, size);
+    }
+
     VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
     VkImageCreateFlags oldCreateFlags = mImageCreateFlags;
 
@@ -2484,6 +2515,15 @@ angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
         contextVk, mState.getType(), *mImage, nativeLevelVk, nativeLayer,
         VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT, format.vkImageFormat,
         imageViewOut);
+}
+
+const vk::BufferView &TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk) const
+{
+    ASSERT(mState.getBuffer().get() != nullptr);
+    ASSERT(mBufferView.getView().valid());
+
+    mBufferView.retain(&contextVk->getResourceUseList());
+    return mBufferView.getView();
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
@@ -2785,6 +2825,11 @@ vk::ImageViewSubresourceSerial TextureVk::getImageViewSubresourceSerial(
 
     return getImageViews().getSubresourceSerial(baseLevel, levelCount, 0, vk::LayerMode::All,
                                                 srgbDecodeMode, srgbOverrideMode);
+}
+
+vk::ImageViewSubresourceSerial TextureVk::getBufferViewSerial() const
+{
+    return mBufferView.getSerial();
 }
 
 angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
