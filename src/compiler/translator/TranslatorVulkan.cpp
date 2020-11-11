@@ -35,6 +35,7 @@
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/ReplaceClipDistanceVariable.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
+#include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
 #include "compiler/translator/tree_util/RunAtTheEndOfShader.h"
 #include "compiler/translator/util.h"
 
@@ -953,14 +954,21 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
     // if it's core profile shaders and they are used.
     if (getShaderType() == GL_FRAGMENT_SHADER)
     {
-        bool usesPointCoord = false;
-        bool usesFragCoord  = false;
+        bool usesPointCoord   = false;
+        bool usesFragCoord    = false;
+        bool usesSampleMaskIn = false;
 
         // Search for the gl_PointCoord usage, if its used, we need to flip the y coordinate.
         for (const ShaderVariable &inputVarying : mInputVaryings)
         {
             if (!inputVarying.isBuiltIn())
             {
+                continue;
+            }
+
+            if (inputVarying.name == "gl_SampleMaskIn")
+            {
+                usesSampleMaskIn = true;
                 continue;
             }
 
@@ -986,9 +994,10 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             }
         }
 
-        bool hasGLFragColor = false;
-        bool hasGLFragData  = false;
-        bool usePreRotation = compileOptions & SH_ADD_PRE_ROTATION;
+        bool hasGLFragColor  = false;
+        bool hasGLFragData   = false;
+        bool usePreRotation  = compileOptions & SH_ADD_PRE_ROTATION;
+        bool hasGLSampleMask = false;
 
         for (const ShaderVariable &outputVar : mOutputVariables)
         {
@@ -1002,6 +1011,12 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             {
                 ASSERT(!hasGLFragData);
                 hasGLFragData = true;
+                continue;
+            }
+            else if (outputVar.name == "gl_SampleMask")
+            {
+                ASSERT(!hasGLSampleMask);
+                hasGLSampleMask = true;
                 continue;
             }
         }
@@ -1052,6 +1067,16 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
 
         if (!RewriteDfdy(this, compileOptions, root, getSymbolTable(), getShaderVersion(),
                          &surfaceRotationSpecConst, driverUniforms))
+        {
+            return false;
+        }
+
+        if (usesSampleMaskIn && !RewriteSampleMaskIn(this, root, &getSymbolTable()))
+        {
+            return false;
+        }
+
+        if (hasGLSampleMask && !RewriteSampleMask(this, root, &getSymbolTable()))
         {
             return false;
         }
