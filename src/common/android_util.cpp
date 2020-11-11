@@ -11,12 +11,6 @@
 
 #include <cstdint>
 
-#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
-#    define ANGLE_AHARDWARE_BUFFER_SUPPORT
-// NDK header file for access to Android Hardware Buffers
-#    include <android/hardware_buffer.h>
-#endif
-
 // Taken from cutils/native_handle.h:
 // https://android.googlesource.com/platform/system/core/+/master/libcutils/include/cutils/native_handle.h
 typedef struct native_handle
@@ -392,5 +386,10 @@ EGLClientBuffer AHardwareBufferToClientBuffer(const AHardwareBuffer *hardwareBuf
                                           kAHardwareBufferToANativeWindowBufferOffset);
 }
 
+AHardwareBuffer *ClientBufferToAHardwareBuffer(EGLClientBuffer clientBuffer)
+{
+    return offsetPointer<AHardwareBuffer>(clientBuffer,
+                                          -kAHardwareBufferToANativeWindowBufferOffset);
+}
 }  // namespace android
 }  // namespace angle
