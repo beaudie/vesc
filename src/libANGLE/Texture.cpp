@@ -24,6 +24,8 @@ namespace gl
 
 namespace
 {
+constexpr angle::SubjectIndex kBufferSubjectIndex = rx::kTextureImageImplObserverMessageIndex + 1;
+
 bool IsPointSampled(const SamplerState &samplerState)
 {
     return (samplerState.getMagFilter() == GL_NEAREST &&
@@ -713,6 +715,7 @@ Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
       mState(type),
       mTexture(factory->createTexture(mState)),
       mImplObserver(this, rx::kTextureImageImplObserverMessageIndex),
+      mBufferObserver(this, kBufferSubjectIndex),
       mLabel(),
       mBoundSurface(nullptr),
       mBoundStream(nullptr)
@@ -1916,8 +1919,11 @@ angle::Result Texture::setBufferRange(const gl::Context *context,
     mState.clearImageDescs();
     if (buffer == nullptr)
     {
+        mBufferObserver.reset();
         return angle::Result::Continue;
     }
+
+    size = std::min(size, buffer->getSize());
 
     mState.mImmutableLevels           = static_cast<GLuint>(1);
     InternalFormat internalFormatInfo = GetSizedInternalFormatInfo(internalFormat);
@@ -1927,6 +1933,9 @@ angle::Result Texture::setBufferRange(const gl::Context *context,
                         ImageDesc(extents, format, InitState::MayNeedInit));
 
     signalDirtyStorage(InitState::MayNeedInit);
+
+    // Observe modifications to the buffer, so that extents can be updated.
+    mBufferObserver.bind(buffer);
 
     return angle::Result::Continue;
 }
@@ -2163,6 +2172,20 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             if (index == rx::kTextureImageImplObserverMessageIndex)
             {
                 notifySiblings(message);
+            }
+            else if (index == kBufferSubjectIndex)
+            {
+                const gl::Buffer *buffer = mState.mBuffer.get();
+                ASSERT(buffer != nullptr);
+
+                // Update cached image desc based on buffer size.
+                GLsizeiptr size = std::min(mState.mBuffer.getSize(), buffer->getSize());
+
+                ImageDesc desc          = mState.getImageDesc(TextureTarget::Buffer, 0);
+                const GLuint pixelBytes = desc.format.info->pixelBytes;
+                desc.size.width         = static_cast<GLuint>(size / pixelBytes);
+
+                mState.setImageDesc(TextureTarget::Buffer, 0, desc);
             }
             break;
         default:
