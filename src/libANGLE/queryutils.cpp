@@ -226,9 +226,19 @@ void QueryTexLevelParameterBase(const Texture *texture,
                 pname, static_cast<GLint>(texture->getBuffer().getOffset()));
             break;
         case GL_TEXTURE_BUFFER_SIZE:
-            *params = CastFromStateValue<ParamType>(
-                pname, static_cast<GLint>(texture->getBuffer().getSize()));
-            break;
+        {
+            Buffer *buffer        = texture->getBuffer().get();
+            GLsizeiptr size       = texture->getBuffer().getSize();
+            const GLintptr offset = texture->getBuffer().getOffset();
+
+            if (texture->getBuffer().get() != nullptr)
+            {
+                size = std::min(size, buffer->getSize() - offset);
+            }
+
+            *params = CastFromStateValue<ParamType>(pname, static_cast<GLint>(size));
+        }
+        break;
         default:
             UNREACHABLE();
             break;

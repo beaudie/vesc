@@ -1904,8 +1904,13 @@ angle::Result Texture::setBuffer(const gl::Context *context,
     mState.mBuffer.set(context, buffer, offset, size);
     ANGLE_TRY(mTexture->setBuffer(context, internalFormat));
 
-    mState.mImmutableLevels = static_cast<GLuint>(1);
     mState.clearImageDescs();
+    if (buffer == nullptr)
+    {
+        return angle::Result::Continue;
+    }
+
+    mState.mImmutableLevels           = static_cast<GLuint>(1);
     InternalFormat internalFormatInfo = GetSizedInternalFormatInfo(internalFormat);
     Format format(internalFormat);
     Extents extents(static_cast<GLuint>(size / internalFormatInfo.pixelBytes), 1, 1);
