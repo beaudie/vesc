@@ -1910,6 +1910,10 @@ angle::Result Texture::setBuffer(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+    // TODO: extents should account for the buffer being non-mutable.  A change in buffer size
+    // should update the extents.  http://anglebug.com/5334
+    size = std::min(size, buffer->getSize());
+
     mState.mImmutableLevels           = static_cast<GLuint>(1);
     InternalFormat internalFormatInfo = GetSizedInternalFormatInfo(internalFormat);
     Format format(internalFormat);
