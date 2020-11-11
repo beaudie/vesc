@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c972b12f_7201d5f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-11-11T17:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa8d3af_8691e7b1",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 19
+      },
+      "revId": "c6a9e611e6724dda92af0bca569b2428e125212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f3de1297_c9558b32",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2020-10-26T13:56:37Z",
       "side": 1,
       "message": "nit: static is redundant here as you\u0027re already in a namespace {} block.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 7
+      },
+      "revId": "c6a9e611e6724dda92af0bca569b2428e125212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c90d29_3fe06691",
+        "filename": "src/compiler/translator/tree_util/ReplaceSampleMaskVariables.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-11-11T17:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "504035c5_a11df227",
       "range": {
         "startLine": 26,
         "startChar": 0,
