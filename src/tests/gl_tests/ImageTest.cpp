@@ -13,12 +13,6 @@
 
 #include "common/android_util.h"
 
-#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
-#    define ANGLE_AHARDWARE_BUFFER_SUPPORT
-// NDK header file for access to Android Hardware Buffers
-#    include <android/hardware_buffer.h>
-#endif
-
 namespace angle
 {
 namespace
