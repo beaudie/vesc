@@ -19,6 +19,7 @@
 #include "common/angle_version.h"
 #include "common/matrix_utils.h"
 #include "common/platform.h"
+#include "common/system_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Compiler.h"
@@ -2940,9 +2941,22 @@ void Context::programParameteri(ShaderProgramID program, GLenum pname, GLint val
 void Context::initRendererString()
 {
     std::ostringstream rendererString;
-    rendererString << "ANGLE (";
-    rendererString << mImplementation->getRendererDescription();
-    rendererString << ")";
+
+    constexpr char kRendererString[]        = "ANGLE_GL_RENDERER";
+    constexpr char kAndroidRendererString[] = "debug.angle.gl_renderer";
+
+    std::string overrideRenderer =
+        angle::GetEnvironmentVarOrAndroidProperty(kRendererString, kAndroidRendererString);
+    if (!overrideRenderer.empty())
+    {
+        rendererString << overrideRenderer;
+    }
+    else
+    {
+        rendererString << "ANGLE (";
+        rendererString << mImplementation->getRendererDescription();
+        rendererString << ")";
+    }
 
     mRendererString = MakeStaticString(rendererString.str());
 }
@@ -3020,7 +3034,22 @@ const GLubyte *Context::getString(GLenum name) const
     switch (name)
     {
         case GL_VENDOR:
-            return reinterpret_cast<const GLubyte *>("Google Inc.");
+        {
+            constexpr char kVendorString[]        = "ANGLE_GL_VENDOR";
+            constexpr char kAndroidVendorString[] = "debug.angle.gl_vendor";
+
+            std::string overrideVendor =
+                angle::GetEnvironmentVarOrAndroidProperty(kVendorString, kAndroidVendorString);
+            if (!overrideVendor.empty())
+            {
+                const char *vendorString = overrideVendor.c_str();
+                return reinterpret_cast<const GLubyte *>(vendorString);
+            }
+            else
+            {
+                return reinterpret_cast<const GLubyte *>("Google Inc.");
+            }
+        }
 
         case GL_RENDERER:
             return reinterpret_cast<const GLubyte *>(mRendererString);
