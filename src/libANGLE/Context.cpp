@@ -2099,8 +2099,9 @@ void Context::getRenderbufferParameterivRobust(GLenum target,
 
 void Context::texBuffer(TextureType target, GLenum internalformat, BufferID buffer)
 {
-    Buffer *bufferObj = mState.mBufferManager->getBuffer(buffer);
-    texBufferRange(target, internalformat, buffer, 0, clampCast<GLintptr>(bufferObj->getSize()));
+    // Use UINT_MAX to indicate that the size is taken from whatever size the buffer has when the
+    // texture buffer is used.
+    texBufferRange(target, internalformat, buffer, 0, std::numeric_limits<uint32_t>::max());
 }
 
 void Context::texBufferRange(TextureType target,
