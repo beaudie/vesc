@@ -33,6 +33,7 @@
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/FlipRotateSpecConst.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
+#include "compiler/translator/tree_util/RedeclareVaryingWithSample.h"
 #include "compiler/translator/tree_util/ReplaceClipDistanceVariable.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 #include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
@@ -1104,6 +1105,12 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             {
                 return false;
             }
+        }
+
+        if (!getResources().OES_shader_multisample_interpolation &&
+            !RedeclareVaryingWithSample(this, root, &getSymbolTable()))
+        {
+            return false;
         }
 
         EmitEarlyFragmentTestsGLSL(*this, sink);
