@@ -17,6 +17,12 @@
 
 #include "angle_gl.h"
 
+#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
+#    define ANGLE_AHARDWARE_BUFFER_SUPPORT
+// NDK header file for access to Android Hardware Buffers
+#    include <android/hardware_buffer.h>
+#endif
+
 struct ANativeWindowBuffer;
 struct AHardwareBuffer;
 
@@ -30,6 +36,7 @@ constexpr std::array<GLenum, 3> kSupportedSizedInternalFormats = {GL_RGBA8, GL_R
 
 ANativeWindowBuffer *ClientBufferToANativeWindowBuffer(EGLClientBuffer clientBuffer);
 EGLClientBuffer AHardwareBufferToClientBuffer(const AHardwareBuffer *hardwareBuffer);
+AHardwareBuffer *ClientBufferToAHardwareBuffer(EGLClientBuffer clientBuffer);
 
 EGLClientBuffer CreateEGLClientBufferFromAHardwareBuffer(int width,
                                                          int height,
