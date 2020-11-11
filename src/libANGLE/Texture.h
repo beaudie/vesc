@@ -637,6 +637,8 @@ class Texture final : public RefCountObject<TextureID>,
     DirtyBits mDirtyBits;
     rx::TextureImpl *mTexture;
     angle::ObserverBinding mImplObserver;
+    // For EXT_texture_buffer, observes buffer changes.
+    angle::ObserverBinding mBufferObserver;
 
     std::string mLabel;
 
