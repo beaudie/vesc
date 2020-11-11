@@ -82,6 +82,7 @@ if (enable_java_templates) {
             }
           }
         }
+        secondary_abi_loadable_modules += [ "/home/courtneygo/build/VulkanTools/build-android/libs/armeabi-v7a/libVkLayer_api_dump.so" ]
       }
 
       if (symbol_level == 0) {
@@ -109,6 +110,7 @@ if (enable_java_templates) {
           }
         }
       }
+      loadable_modules += [ "/home/courtneygo/build/VulkanTools/build-android/libs/arm64-v8a/libVkLayer_api_dump.so" ]
     }
   }
 }
