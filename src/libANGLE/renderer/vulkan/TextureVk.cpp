@@ -2228,14 +2228,15 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         ASSERT(mImage == nullptr);
 
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
-        const vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+        const gl::Buffer *bufferGL                                = bufferBinding.get();
+        const vk::BufferHelper &buffer = vk::GetImpl(bufferGL)->getBuffer();
 
         const gl::ImageDesc &desc  = mState.getBaseLevelDesc();
         const vk::Format &vkFormat = renderer->getFormat(desc.format.info->sizedInternalFormat);
 
         const VkDeviceSize offset = bufferBinding.getOffset();
         const VkDeviceSize size =
-            std::min<VkDeviceSize>(bufferBinding.getSize(), buffer.getSize() - offset);
+            std::min<VkDeviceSize>(bufferBinding.getSize(), bufferGL->getSize() - offset);
 
         mBufferView.release(renderer);
         return mBufferView.initView(contextVk, buffer, vkFormat, offset, size);
