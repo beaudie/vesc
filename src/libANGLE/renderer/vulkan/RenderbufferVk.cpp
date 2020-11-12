@@ -382,4 +382,16 @@ void RenderbufferVk::onSubjectStateChange(angle::SubjectIndex index, angle::Subj
     // Forward the notification to the parent class that the staging buffer changed.
     onStateChange(angle::SubjectMessage::SubjectChanged);
 }
+
+void RenderbufferVk::setDebugObjectLabel(const gl::Context *context, const std::string &label)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mImage && mImage->valid())
+    {
+        VkImage handle = mImage->getImage().getHandle();
+
+        contextVk->setDebugObjectLabel(context, VK_OBJECT_TYPE_IMAGE,
+                                       reinterpret_cast<uint64_t>(handle), label);
+    }
+}
 }  // namespace rx

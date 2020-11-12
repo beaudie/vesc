@@ -90,6 +90,8 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
     // Override if accurate native memory size information is available
     virtual GLint getMemorySize() const;
 
+    virtual void setDebugObjectLabel(const gl::Context *context, const std::string &label) {}
+
   protected:
     const gl::RenderbufferState &mState;
 };

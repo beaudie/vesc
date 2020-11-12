@@ -89,6 +89,8 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
 
     angle::Result ensureImageInitialized(const gl::Context *context);
 
+    void setDebugObjectLabel(const gl::Context *context, const std::string &label) override;
+
   private:
     void releaseAndDeleteImage(ContextVk *contextVk);
     void releaseImage(ContextVk *contextVk);

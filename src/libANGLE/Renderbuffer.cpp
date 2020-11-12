@@ -110,6 +110,7 @@ Renderbuffer::~Renderbuffer() {}
 void Renderbuffer::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
+    getImplementation()->setDebugObjectLabel(context, label);
 }
 
 const std::string &Renderbuffer::getLabel() const

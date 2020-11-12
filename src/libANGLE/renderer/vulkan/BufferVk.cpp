@@ -732,4 +732,16 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+void BufferVk::setDebugObjectLabel(const gl::Context *context, const std::string &label)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mBuffer && mBuffer->valid())
+    {
+        VkBuffer handle = mBuffer->getBuffer().getHandle();
+
+        contextVk->setDebugObjectLabel(context, VK_OBJECT_TYPE_BUFFER,
+                                       reinterpret_cast<uint64_t>(handle), label);
+    }
+}
+
 }  // namespace rx
