@@ -15,6 +15,7 @@
 #include <limits>
 #include <map>
 
+#include "GLSLANG/ShaderLang.h"
 #include "common/angleutils.h"
 #include "common/utilities.h"
 #include "libANGLE/angletypes.h"
@@ -44,8 +45,9 @@ namespace rx
 class ContextImpl;
 
 // The possible rotations of the surface/draw framebuffer, particularly for the Vulkan back-end on
-// Android.
-enum class SurfaceRotation
+// Android. This is duplicate of ShaderLang.h declaration to avoid have to liter the renderer code
+// with sh::vk namespace string.
+enum class SurfaceRotation : uint32_t
 {
     Identity,
     Rotated90Degrees,
@@ -59,6 +61,38 @@ enum class SurfaceRotation
     InvalidEnum,
     EnumCount = InvalidEnum,
 };
+
+template <typename TypeA, typename TypeB>
+constexpr bool SameUnderlying(TypeA a, TypeB b)
+{
+    return ToUnderlying(a) == ToUnderlying(b);
+}
+// Ensure that this declarations and ShaderLang.h declarations are exact match
+static_assert(SameUnderlying(SurfaceRotation::Identity, sh::vk::SurfaceRotation::Identity),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::Rotated90Degrees,
+                             sh::vk::SurfaceRotation::Rotated90Degrees),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::Rotated180Degrees,
+                             sh::vk::SurfaceRotation::Rotated180Degrees),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::Rotated270Degrees,
+                             sh::vk::SurfaceRotation::Rotated270Degrees),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::FlippedIdentity,
+                             sh::vk::SurfaceRotation::FlippedIdentity),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::FlippedRotated90Degrees,
+                             sh::vk::SurfaceRotation::FlippedRotated90Degrees),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::FlippedRotated180Degrees,
+                             sh::vk::SurfaceRotation::FlippedRotated180Degrees),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::FlippedRotated270Degrees,
+                             sh::vk::SurfaceRotation::FlippedRotated270Degrees),
+              "SurfaceRotation definition mismatch");
+static_assert(SameUnderlying(SurfaceRotation::EnumCount, sh::vk::SurfaceRotation::EnumCount),
+              "SurfaceRotation definition mismatch");
 
 void RotateRectangle(const SurfaceRotation rotation,
                      const bool flipY,
