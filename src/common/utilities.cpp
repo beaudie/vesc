@@ -11,6 +11,7 @@
 #include "common/mathutil.h"
 #include "common/platform.h"
 #include "common/string_utils.h"
+#include "common/system_utils.h"
 
 #include <set>
 
@@ -1384,9 +1385,11 @@ std::string getTempPath()
     }
 
     return path;
-#    else
-    UNIMPLEMENTED();
-    return "";
+#    elif ANGLE_PLATFORM_LINUX
+    return "/tmp";
+#    elif ANGLE_PLATFORM_ANDROID
+    std::string tmpPath = "/sdcard/Android/data/" + angle::GetExecutableName();
+    return tmpPath;
 #    endif
 }
 

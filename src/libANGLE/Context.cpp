@@ -3703,6 +3703,9 @@ Extensions Context::generateSupportedExtensions() const
     // Always enabled. Will return a default string if capture is not enabled.
     supportedExtensions.getSerializedContextStringANGLE = true;
 
+    // Explicitly disable parallel compiles
+    supportedExtensions.parallelShaderCompileKHR = false;
+
     return supportedExtensions;
 }
 
