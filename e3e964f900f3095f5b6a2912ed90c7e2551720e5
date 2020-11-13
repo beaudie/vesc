@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e73a4b9a_335b6d91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-11-13T14:28:35Z",
+      "side": 1,
+      "message": "Hi Tim\n\nCourtney reported the segfault which is inside this merge\nhttps://github.com/KhronosGroup/glslang/issues/2452\n\nI have commented on that page",
+      "revId": "e3e964f900f3095f5b6a2912ed90c7e2551720e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
