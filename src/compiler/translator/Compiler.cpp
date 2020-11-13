@@ -41,6 +41,7 @@
 #include "compiler/translator/tree_ops/RemovePow.h"
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
 #include "compiler/translator/tree_ops/RewriteDoWhile.h"
+#include "compiler/translator/tree_ops/RewritePrecisionQualifier.h"
 #include "compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.h"
 #include "compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.h"
 #include "compiler/translator/tree_ops/SeparateDeclarations.h"
@@ -785,6 +786,15 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     {
         if (!ScalarizeVecAndMatConstructorArgs(this, root, mShaderType, highPrecisionSupported,
                                                &mSymbolTable))
+        {
+            return false;
+        }
+    }
+
+    if (mShaderType == GL_FRAGMENT_SHADER &&
+        (compileOptions & SH_FORCE_FRAGMENT_SHADER_DROP_HIGHP_TO_MEDIUMP))
+    {
+        if (!RewriteFragmentShaderPrecisionQualifiers(root, &mSymbolTable))
         {
             return false;
         }
