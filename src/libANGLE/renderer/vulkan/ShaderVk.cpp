@@ -68,6 +68,9 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         compileOptions |= SH_IGNORE_PRECISION_QUALIFIERS;
     }
 
+    compileOptions &= ~SH_IGNORE_PRECISION_QUALIFIERS;
+    compileOptions |= SH_FORCE_FRAGMENT_SHADER_DROP_HIGHP_TO_MEDIUMP;
+
     // Let compiler detect and emit early fragment test execution mode. We will remove it if
     // context state does not allow it
     compileOptions |= SH_EARLY_FRAGMENT_TESTS_OPTIMIZATION;

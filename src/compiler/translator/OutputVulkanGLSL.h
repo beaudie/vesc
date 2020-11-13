@@ -63,6 +63,8 @@ class TOutputVulkanGLSL : public TOutputGLSL
 
   private:
     bool mForceHighp;
+    // If true, will force downgrading highp to mediump
+    bool mForceMediump;
     bool mEnablePrecision;
 };
 

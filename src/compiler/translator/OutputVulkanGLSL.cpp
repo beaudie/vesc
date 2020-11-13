@@ -43,8 +43,18 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TInfoSinkBase &objSink,
       mNextUnusedInputLocation(0),
       mNextUnusedOutputLocation(0),
       mForceHighp(forceHighp),
+      mForceMediump(false),
       mEnablePrecision(enablePrecision)
-{}
+{
+    if (shaderType == GL_FRAGMENT_SHADER &&
+        (compileOptions & SH_FORCE_FRAGMENT_SHADER_DROP_HIGHP_TO_MEDIUMP))
+    {
+        mForceMediump = true;
+        ASSERT(mEnablePrecision);
+        // You can not do both forceHighp and forceMediump at the same time
+        ASSERT(!mForceHighp);
+    }
+}
 
 void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
 {
@@ -180,6 +190,8 @@ bool TOutputVulkanGLSL::writeVariablePrecision(TPrecision precision)
     TInfoSinkBase &out = objSink();
     if (mForceHighp)
         out << getPrecisionString(EbpHigh);
+    else if (precision == EbpHigh && mForceMediump)
+        out << getPrecisionString(EbpMedium);
     else
         out << getPrecisionString(precision);
     return true;
