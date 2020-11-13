@@ -374,9 +374,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.multisampleInterpolationOES = false;
 
     mNativeExtensions.shaderImageAtomicOES =
-        ((mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics == VK_TRUE) &&
-         (mPhysicalDeviceFeatures.fragmentStoresAndAtomics == VK_TRUE) &&
-         getFeatures().supportsShaderImageFloat32Atomics.enabled);
+        getFeatures().supportsShaderImageFloat32Atomics.enabled;
 
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
