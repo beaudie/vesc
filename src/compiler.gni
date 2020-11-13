@@ -180,6 +180,8 @@ angle_translator_sources = [
   "src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.h",
   "src/compiler/translator/tree_ops/RewriteInterpolateAtOffset.cpp",
   "src/compiler/translator/tree_ops/RewriteInterpolateAtOffset.h",
+  "src/compiler/translator/tree_ops/RewritePrecisionQualifier.cpp",
+  "src/compiler/translator/tree_ops/RewritePrecisionQualifier.h",
   "src/compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.cpp",
   "src/compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.h",
   "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",

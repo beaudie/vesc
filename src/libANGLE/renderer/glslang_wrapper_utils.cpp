@@ -933,6 +933,7 @@ angle::Result CompileShader(const GlslangErrorCallback &callback,
     shader->setEntryPoint("main");
 
     bool result = shader->parse(&builtInResources, 450, ECoreProfile, false, false, messages);
+    WARN() << "shaderString:\n" << shaderString << "\n";
     if (!result)
     {
         ERR() << "Internal error parsing Vulkan shader corresponding to " << shaderType << ":\n"
