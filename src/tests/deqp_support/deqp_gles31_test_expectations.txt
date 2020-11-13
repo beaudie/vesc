@@ -266,11 +266,6 @@
 4822 VULKAN ANDROID : dEQP-GLES31.functional.draw_buffers_indexed.random.max_required_draw_buffers.11 = SKIP
 4822 VULKAN ANDROID : dEQP-GLES31.functional.draw_buffers_indexed.random.max_required_draw_buffers.17 = SKIP
 
-// There is an issue with renderbuffers where the test fails verification before the copy.
-3593 VULKAN : dEQP-GLES31.functional.copy_image.non_compressed*renderbuffer* = FAIL
-3593 SWIFTSHADER : dEQP-GLES31.functional.copy_image.mixed*renderbuffer* = FAIL
-3593 VULKAN ANDROID : dEQP-GLES31.functional.copy_image.mixed*renderbuffer* = FAIL
-
 // Swiftshader fails to create a correct source/destination srgb8_alpha8_astc image before copy, however 5x4 is correct
 5275 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*rgba*srgb8_alpha8_astc_*_khr.*_to_texture2d* = FAIL
 5275 SWIFTSHADER : dEQP-GLES31.functional.copy_image.*rgba*srgb8_alpha8_astc_*_khr.*_to_cubemap* = FAIL
