@@ -1756,7 +1756,7 @@ angle::Result ContextVk::checkCompletedGpuEvents()
     for (GpuEventQuery &eventQuery : mInFlightGpuEventQueries)
     {
         // Only check the timestamp query if the submission has finished.
-        if (eventQuery.queryHelper.getStoredQueueSerial() > lastCompletedSerial)
+        if (eventQuery.queryHelper.usedInRunningCommands(lastCompletedSerial))
         {
             break;
         }
@@ -4216,12 +4216,13 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     submitInfo.pSignalSemaphores    = nullptr;
 
     Serial throwAwaySerial;
+
     ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), mContextPriority,
                                            &fence.get(), &throwAwaySerial));
-
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
     ANGLE_VK_TRY(this, fence.get().wait(device, mRenderer->getMaxFenceWaitTimeNs()));
+    timestampQuery.updateSerialOneOff(throwAwaySerial);
 
     // Get the query results
     ANGLE_TRY(timestampQuery.getUint64Result(this, timestampOut));

@@ -415,16 +415,23 @@ class DynamicQueryPool final : public DynamicallyGrowingPool<QueryPool>
 // of a fixed size as needed and allocates indices within those pools.
 //
 // The QueryHelper class below keeps the pool and index pair together.
-class QueryHelper final
+class QueryHelper final : public vk::Resource
 {
   public:
     QueryHelper();
-    ~QueryHelper();
-
+    ~QueryHelper() override;
+    QueryHelper(QueryHelper &&rhs);
+    QueryHelper &operator=(QueryHelper &&rhs)
+    {
+        std::swap(mDynamicQueryPool, rhs.mDynamicQueryPool);
+        std::swap(mQueryPoolIndex, rhs.mQueryPoolIndex);
+        std::swap(mQuery, rhs.mQuery);
+        return *this;
+    }
     void init(const DynamicQueryPool *dynamicQueryPool,
               const size_t queryPoolIndex,
               uint32_t query);
-    void deinit();
+    void deinit(ContextVk *contextVk);
 
     bool valid() const { return mDynamicQueryPool != nullptr; }
 
@@ -443,8 +450,8 @@ class QueryHelper final
     // All other timestamp accesses should be made on outsideRenderPassCommandBuffer
     void writeTimestamp(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
 
-    Serial getStoredQueueSerial() { return mMostRecentSerial; }
     bool hasPendingWork(ContextVk *contextVk);
+    void updateSerialOneOff(Serial serial);
 
     angle::Result getUint64ResultNonBlocking(ContextVk *contextVk,
                                              uint64_t *resultOut,
@@ -462,7 +469,6 @@ class QueryHelper final
     const DynamicQueryPool *mDynamicQueryPool;
     size_t mQueryPoolIndex;
     uint32_t mQuery;
-    Serial mMostRecentSerial;
 };
 
 // DynamicSemaphorePool allocates semaphores as needed.  It uses a std::vector
