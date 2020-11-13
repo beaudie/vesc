@@ -67,11 +67,6 @@
 // Incompatible between incomplete texture and sampler format (isampler2D or usampler2D):
 3588 VULKAN : KHR-GLES31.core.sample_variables.mask.rgba8*i.* = SKIP
 
-// Cannot support a non-const indexing for gl_SampleMask or gl_SampleMaskIn variables:
-3588 VULKAN : KHR-GLES31.core.sample_variables.verification.extension = FAIL
-3588 VULKAN : KHR-GLES31.core.sample_variables.mask.rgba8.samples_* = FAIL
-3588 VULKAN : KHR-GLES31.core.sample_variables.mask.rgba32f.samples_* = FAIL
-
 ////
 //// Desktop Vulkan expectations
 ////
