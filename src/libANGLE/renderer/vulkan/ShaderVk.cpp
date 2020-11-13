@@ -92,6 +92,14 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         compileOptions |= SH_ADD_VULKAN_XFB_EMULATION_SUPPORT_CODE;
     }
 
+    // Write it to a file
+    std::stringstream fileName;
+    static uint32_t shaderID = 0;
+    fileName << getTempPath() << "/" << mState.getShaderType() << "Shader_" << shaderID++ << ".txt";
+    writeFile(fileName.str().c_str(), mState.getSource().c_str(), mState.getSource().size());
+
+    INFO() << "Compiling " << fileName.str();
+
     return compileImpl(context, compilerInstance, mState.getSource(), compileOptions | options);
 }
 
