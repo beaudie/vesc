@@ -2258,7 +2258,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         const VkDeviceSize size   = gl::GetBoundBufferAvailableSize(bufferBinding);
 
         mBufferView.release(renderer);
-        return mBufferView.initView(contextVk, buffer, vkFormat, offset, size);
+        return mBufferView.initDefaultView(contextVk, buffer, vkFormat, offset, size);
     }
 
     VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
@@ -2537,13 +2537,26 @@ angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
         imageViewOut);
 }
 
-const vk::BufferView &TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk) const
+angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
+                                                   const vk::Format *format,
+                                                   const vk::BufferView **viewOut)
 {
     ASSERT(mState.getBuffer().get() != nullptr);
-    ASSERT(mBufferView.getView().valid());
+    ASSERT(mBufferView.getDefaultView().valid());
 
     mBufferView.retain(&contextVk->getResourceUseList());
-    return mBufferView.getView();
+
+    // Use the default view, with the format specified by glTexBuffer.
+    if (format == nullptr)
+    {
+        *viewOut = &mBufferView.getDefaultView();
+        return angle::Result::Continue;
+    }
+
+    // Otherwise create a view that reinterprets the one specified by glTexBuffer.
+    const vk::BufferHelper &buffer = vk::GetImpl(mState.getBuffer().get())->getBuffer();
+
+    return mBufferView.getView(contextVk, buffer, *format, viewOut);
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
