@@ -1315,6 +1315,12 @@ angle::CallCapture CaptureImportSemaphoreFdEXT(const State &glState,
                                                HandleType handleTypePacked,
                                                GLint fd);
 
+// GL_EXT_tessellation_shader
+angle::CallCapture CapturePatchParameteriEXT(const State &glState,
+                                             bool isCallValid,
+                                             GLenum pname,
+                                             GLint value);
+
 // GL_EXT_texture_buffer
 angle::CallCapture CaptureTexBufferEXT(const State &glState,
                                        bool isCallValid,

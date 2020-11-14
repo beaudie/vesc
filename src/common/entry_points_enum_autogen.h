@@ -841,6 +841,7 @@ enum class EntryPoint
     PassThrough,
     PatchParameterfv,
     PatchParameteri,
+    PatchParameteriEXT,
     PauseTransformFeedback,
     PixelMapfv,
     PixelMapuiv,

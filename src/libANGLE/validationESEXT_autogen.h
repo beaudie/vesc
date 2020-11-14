@@ -1086,6 +1086,9 @@ bool ValidateImportSemaphoreFdEXT(const Context *context,
                                   HandleType handleTypePacked,
                                   GLint fd);
 
+// GL_EXT_tessellation_shader
+bool ValidatePatchParameteriEXT(const Context *context, GLenum pname, GLint value);
+
 // GL_EXT_texture_buffer
 bool ValidateTexBufferEXT(const Context *context,
                           TextureType targetPacked,

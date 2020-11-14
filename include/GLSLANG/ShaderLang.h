@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 240
+#define ANGLE_SH_VERSION 241
 
 enum ShShaderSpec
 {
@@ -410,6 +410,7 @@ struct ShBuiltInResources
     int EXT_shadow_samplers;
     int OES_shader_multisample_interpolation;
     int OES_shader_image_atomic;
+    int EXT_tessellation_shader;
     int OES_texture_buffer;
     int EXT_texture_buffer;
 
@@ -550,6 +551,28 @@ struct ShBuiltInResources
     int MaxGeometryShaderStorageBlocks;
     int MaxGeometryShaderInvocations;
     int MaxGeometryImageUniforms;
+
+    // EXT_tessellation_shader constants
+    int MaxTessControlInputComponents;
+    int MaxTessControlOutputComponents;
+    int MaxTessControlTextureImageUnits;
+    int MaxTessControlUniformComponents;
+    int MaxTessControlTotalOutputComponents;
+    int MaxTessControlImageUniforms;
+    int MaxTessControlAtomicCounters;
+    int MaxTessControlAtomicCounterBuffers;
+
+    int MaxTessPatchComponents;
+    int MaxPatchVertices;
+    int MaxTessGenLevel;
+
+    int MaxTessEvaluationInputComponents;
+    int MaxTessEvaluationOutputComponents;
+    int MaxTessEvaluationTextureImageUnits;
+    int MaxTessEvaluationUniformComponents;
+    int MaxTessEvaluationImageUniforms;
+    int MaxTessEvaluationAtomicCounters;
+    int MaxTessEvaluationAtomicCounterBuffers;
 
     // Subpixel bits used in rasterization.
     int SubPixelBits;

@@ -6249,6 +6249,19 @@ CallCapture CaptureImportSemaphoreFdEXT(const State &glState,
     return CallCapture(gl::EntryPoint::ImportSemaphoreFdEXT, std::move(paramBuffer));
 }
 
+CallCapture CapturePatchParameteriEXT(const State &glState,
+                                      bool isCallValid,
+                                      GLenum pname,
+                                      GLint value)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("pname", GLenumGroup::PatchParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addValueParam("value", ParamType::TGLint, value);
+
+    return CallCapture(gl::EntryPoint::PatchParameteriEXT, std::move(paramBuffer));
+}
+
 CallCapture CaptureTexBufferEXT(const State &glState,
                                 bool isCallValid,
                                 TextureType targetPacked,
