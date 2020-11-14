@@ -758,6 +758,27 @@ void RendererVk::ensureCapsInitialized() const
             LimitToInt(limitsVk.maxGeometryShaderInvocations);
     }
 
+    if (mPhysicalDeviceFeatures.tessellationShader)
+    {
+        // TODO : Enable tessellationShader when http://anglebug.com/3572 is complete
+        // mNativeExtensions.tessellationShader = true;
+        mNativeCaps.maxPatchVertices = LimitToInt(limitsVk.maxTessellationPatchSize);
+        mNativeCaps.maxTessPatchComponents =
+            LimitToInt(limitsVk.maxTessellationControlPerPatchOutputComponents);
+        mNativeCaps.maxTessGenLevel = LimitToInt(limitsVk.maxTessellationGenerationLevel);
+
+        mNativeCaps.maxTessControlInputComponents =
+            LimitToInt(limitsVk.maxTessellationControlPerVertexInputComponents);
+        mNativeCaps.maxTessControlOutputComponents =
+            LimitToInt(limitsVk.maxTessellationControlPerVertexOutputComponents);
+        mNativeCaps.maxTessControlTotalOutputComponents =
+            LimitToInt(limitsVk.maxTessellationControlTotalOutputComponents);
+        mNativeCaps.maxTessEvaluationInputComponents =
+            LimitToInt(limitsVk.maxTessellationEvaluationInputComponents);
+        mNativeCaps.maxTessEvaluationOutputComponents =
+            LimitToInt(limitsVk.maxTessellationEvaluationOutputComponents);
+    }
+
     // GL_APPLE_clip_distance/GL_EXT_clip_cull_distance
     if (mPhysicalDeviceFeatures.shaderClipDistance && limitsVk.maxClipDistances >= 8)
     {

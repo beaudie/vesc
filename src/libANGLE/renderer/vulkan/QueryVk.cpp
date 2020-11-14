@@ -73,7 +73,10 @@ angle::Result QueryVk::begin(const gl::Context *context)
     {
         mTransformFeedbackPrimitivesDrawn = 0;
         // We could consider using VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT.
-        return angle::Result::Continue;
+        if (!context->getExtensions().tessellationShader)
+        {
+            return angle::Result::Continue;
+        }
     }
 
     if (!mQueryHelper.valid())
@@ -122,6 +125,12 @@ angle::Result QueryVk::end(const gl::Context *context)
 
     if (getType() == gl::QueryType::TransformFeedbackPrimitivesWritten)
     {
+        if (context->getExtensions().tessellationShader)
+        {
+            // We could consider using VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT.
+            ANGLE_TRY(mQueryHelper.endQuery(contextVk));
+            return angle::Result::Continue;
+        }
         mCachedResult = mTransformFeedbackPrimitivesDrawn;
 
         // There could be transform feedback in progress, so add the primitives drawn so far from
@@ -133,7 +142,6 @@ angle::Result QueryVk::end(const gl::Context *context)
             mCachedResult += transformFeedback->getPrimitivesDrawn();
         }
         mCachedResultValid = true;
-        // We could consider using VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT.
     }
     else if (isOcclusionQuery())
     {
@@ -261,6 +269,8 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
 
             break;
         }
+        case gl::QueryType::TransformFeedbackPrimitivesWritten:
+            break;
         default:
             UNREACHABLE();
             break;

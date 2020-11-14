@@ -727,7 +727,7 @@ bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
 {
     ASSERT(context);
 
-    if (!context->getExtensions().geometryShader)
+    if (!context->getExtensions().geometryShader || !context->getExtensions().tessellationShader)
     {
         // It is an invalid operation to call DrawArrays or DrawArraysInstanced with a draw mode
         // that does not match the current transform feedback object's draw mode (if transform
@@ -748,6 +748,8 @@ bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
         case PrimitiveMode::TriangleFan:
         case PrimitiveMode::TriangleStrip:
             return transformFeedbackPrimitiveMode == PrimitiveMode::Triangles;
+        case PrimitiveMode::Patches:
+            return transformFeedbackPrimitiveMode == PrimitiveMode::Patches;
         default:
             UNREACHABLE();
             return false;
@@ -3652,6 +3654,7 @@ void RecordDrawModeError(const Context *context, PrimitiveMode mode)
         case PrimitiveMode::Triangles:
         case PrimitiveMode::TriangleStrip:
         case PrimitiveMode::TriangleFan:
+        case PrimitiveMode::Patches:
             break;
 
         case PrimitiveMode::LinesAdjacency:
@@ -5194,7 +5197,17 @@ bool ValidateGetProgramivBase(const Context *context,
                 return false;
             }
             break;
-
+        case GL_TESS_CONTROL_OUTPUT_VERTICES_EXT:
+        case GL_TESS_GEN_MODE_EXT:
+        case GL_TESS_GEN_SPACING_EXT:
+        case GL_TESS_GEN_VERTEX_ORDER_EXT:
+        case GL_TESS_GEN_POINT_MODE_EXT:
+            if (!context->getExtensions().tessellationShader)
+            {
+                context->validationError(GL_INVALID_ENUM, kTessellationShaderExtensionNotEnabled);
+                return false;
+            }
+            break;
         default:
             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             return false;

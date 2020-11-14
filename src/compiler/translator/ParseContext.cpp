@@ -240,6 +240,12 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mGeometryShaderMaxVertices(-1),
       mMaxGeometryShaderInvocations(resources.MaxGeometryShaderInvocations),
       mMaxGeometryShaderMaxVertices(resources.MaxGeometryOutputVertices),
+      mMaxPatchVertices(resources.MaxPatchVertices),
+      mTessControlShaderOutputVertices(0),
+      mTessEvaluationShaderInputPrimitiveType(EtetUndefined),
+      mTessEvaluationShaderInputVertexSpacingType(EtetUndefined),
+      mTessEvaluationShaderInputOrderingType(EtetUndefined),
+      mTessEvaluationShaderInputPointType(EtetUndefined),
       mFunctionBodyNewScope(false),
       mOutputType(outputType)
 {}
@@ -550,6 +556,8 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
         case EvqFragmentIn:
         case EvqVertexIn:
         case EvqGeometryIn:
+        case EvqTessControlIn:
+        case EvqTessEvaluationIn:
         case EvqFlatIn:
         case EvqNoPerspectiveIn:
         case EvqSmoothIn:
@@ -1177,9 +1185,13 @@ void TParseContext::checkCanBeDeclaredWithoutInitializer(const TSourceLoc &line,
             error(line, "variables with qualifier 'const' must be initialized", identifier);
         }
     }
-    // This will make the type sized if it isn't sized yet.
-    checkIsNotUnsizedArray(line, "implicitly sized arrays need to be initialized", identifier,
-                           type);
+    // tessellation input array size must be gl_MaxPatchVertices or implicitly sized
+    if (mShaderType != GL_TESS_CONTROL_SHADER_EXT && mShaderType != GL_TESS_EVALUATION_SHADER_EXT)
+    {
+        // This will make the type sized if it isn't sized yet.
+        checkIsNotUnsizedArray(line, "implicitly sized arrays need to be initialized", identifier,
+                               type);
+    }
 }
 
 // Do some simple checks that are shared between all variable declarations,
@@ -2435,7 +2447,10 @@ void TParseContext::checkInputOutputTypeIsValidES3(const TQualifier qualifier,
     bool typeContainsIntegers =
         (type.getBasicType() == EbtInt || type.getBasicType() == EbtUInt ||
          type.isStructureContainingType(EbtInt) || type.isStructureContainingType(EbtUInt));
-    if (typeContainsIntegers && qualifier != EvqFlatIn && qualifier != EvqFlatOut)
+    // The auxiliary storage qualifier patch is not used for interpolation
+    // it is a compile-time error to use interpolation qualifiers with patch.
+    if (typeContainsIntegers && qualifier != EvqFlatIn && qualifier != EvqFlatOut &&
+        qualifier != EvqPatchIn && qualifier != EvqPatchOut)
     {
         error(qualifierLocation, "must use 'flat' interpolation here",
               getQualifierString(qualifier));
@@ -3171,6 +3186,89 @@ bool TParseContext::parseGeometryShaderOutputLayoutQualifier(const TTypeQualifie
     return true;
 }
 
+bool TParseContext::parseTessControlShaderOutputLayoutQualifier(const TTypeQualifier &typeQualifier)
+{
+    ASSERT(typeQualifier.qualifier == EvqTessControlOut);
+
+    const TLayoutQualifier &layoutQualifier = typeQualifier.layoutQualifier;
+
+    if (layoutQualifier.vertices == 0)
+    {
+        error(typeQualifier.line, "No vertices specified", "layout");
+        return false;
+    }
+
+    // Set mTessControlShaderOutputVertices if exists
+    if (mTessControlShaderOutputVertices == 0)
+    {
+        mTessControlShaderOutputVertices = layoutQualifier.vertices;
+    }
+    else
+    {
+        error(typeQualifier.line, "Duplicated vertices specified", "layout");
+    }
+    return true;
+}
+
+bool TParseContext::parseTessEvaluationShaderInputLayoutQualifier(
+    const TTypeQualifier &typeQualifier)
+{
+    ASSERT(typeQualifier.qualifier == EvqTessEvaluationIn);
+
+    const TLayoutQualifier &layoutQualifier = typeQualifier.layoutQualifier;
+
+    // Set mTessEvaluationShaderInputPrimitiveType if exists
+    if (layoutQualifier.tesPrimitiveType != EtetUndefined)
+    {
+        if (mTessEvaluationShaderInputPrimitiveType == EtetUndefined)
+        {
+            mTessEvaluationShaderInputPrimitiveType = layoutQualifier.tesPrimitiveType;
+        }
+        else
+        {
+            error(typeQualifier.line, "Duplicated primitive type declaration", "layout");
+        }
+    }
+    // Set mTessEvaluationShaderVertexSpacingType if exists
+    if (layoutQualifier.tesVertexSpacingType != EtetUndefined)
+    {
+        if (mTessEvaluationShaderInputVertexSpacingType == EtetUndefined)
+        {
+            mTessEvaluationShaderInputVertexSpacingType = layoutQualifier.tesVertexSpacingType;
+        }
+        else
+        {
+            error(typeQualifier.line, "Duplicated vertex spacing declaration", "layout");
+        }
+    }
+    // Set mTessEvaluationShaderInputOrderingType if exists
+    if (layoutQualifier.tesOrderingType != EtetUndefined)
+    {
+        if (mTessEvaluationShaderInputOrderingType == EtetUndefined)
+        {
+            mTessEvaluationShaderInputOrderingType = layoutQualifier.tesOrderingType;
+        }
+        else
+        {
+            error(typeQualifier.line, "Duplicated ordering declaration", "layout");
+        }
+    }
+    // Set mTessEvaluationShaderInputPointType if exists
+    if (layoutQualifier.tesPointType != EtetUndefined)
+    {
+        if (mTessEvaluationShaderInputPointType == EtetUndefined)
+        {
+            mTessEvaluationShaderInputPointType = layoutQualifier.tesPointType;
+        }
+        else
+        {
+            error(typeQualifier.line, "Duplicated point type declaration", "layout");
+        }
+    }
+
+    return true;
+}
+
 void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &typeQualifierBuilder)
 {
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
@@ -3336,6 +3434,33 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
         }
 
         mEarlyFragmentTestsSpecified = true;
+    }
+    else if (typeQualifier.qualifier == EvqTessControlOut)
+    {
+        if (mShaderVersion < 310)
+        {
+            error(typeQualifier.line, "out type qualifier supported in GLSL ES 3.10 only",
+                  "layout");
+            return;
+        }
+
+        if (!parseTessControlShaderOutputLayoutQualifier(typeQualifier))
+        {
+            return;
+        }
+    }
+    else if (typeQualifier.qualifier == EvqTessEvaluationIn)
+    {
+        if (mShaderVersion < 310)
+        {
+            error(typeQualifier.line, "in type qualifier supported in GLSL ES 3.10 only", "layout");
+            return;
+        }
+
+        if (!parseTessEvaluationShaderInputLayoutQualifier(typeQualifier))
+        {
+            return;
+        }
     }
     else
     {
@@ -4629,7 +4754,62 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptTriangleStrip;
     }
-
+    else if (qualifierType == "triangles" && mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesPrimitiveType = EtetTriangles;
+    }
+    else if (qualifierType == "quads" && mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesPrimitiveType = EtetQuads;
+    }
+    else if (qualifierType == "isolines" && mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesPrimitiveType = Etetisolines;
+    }
+    else if (qualifierType == "equal_spacing" && mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesVertexSpacingType = EtetEqualSpacing;
+    }
+    else if (qualifierType == "fractional_even_spacing" &&
+             mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesVertexSpacingType = EtetFractionalEvenSpacing;
+    }
+    else if (qualifierType == "fractional_odd_spacing" &&
+             mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesVertexSpacingType = EtetFractionalOddSpacing;
+    }
+    else if (qualifierType == "cw" && mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesOrderingType = EtetCw;
+    }
+    else if (qualifierType == "ccw" && mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesOrderingType = EtetCcw;
+    }
+    else if (qualifierType == "point_mode" && mShaderType == GL_TESS_EVALUATION_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        qualifier.tesPointType = EtetPointMode;
+    }
     else
     {
         error(qualifierTypeLine, "invalid layout qualifier", qualifierType);
@@ -4708,6 +4888,23 @@ void TParseContext::parseMaxVertices(int intValue,
     else
     {
         *maxVertices = intValue;
+    }
+}
+
+void TParseContext::parseVertices(int intValue,
+                                  const TSourceLoc &intValueLine,
+                                  const std::string &intValueString,
+                                  int *vertices)
+{
+    if (intValue < 1 || intValue > mMaxPatchVertices)
+    {
+        error(intValueLine,
+              "out of range : vertices must be in the range of [1, gl_MaxPatchVertices]",
+              intValueString.c_str());
+    }
+    else
+    {
+        *vertices = intValue;
     }
 }
 
@@ -4819,6 +5016,11 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
     {
         parseIndexLayoutQualifier(intValue, intValueLine, intValueString, &qualifier.index);
     }
+    else if (qualifierType == "vertices" && mShaderType == GL_TESS_CONTROL_SHADER_EXT &&
+             checkCanUseExtension(qualifierTypeLine, TExtension::EXT_tessellation_shader))
+    {
+        parseVertices(intValue, intValueLine, intValueString, &qualifier.vertices);
+    }
     else
     {
         error(qualifierTypeLine, "invalid layout qualifier", qualifierType);
@@ -4884,6 +5086,14 @@ TStorageQualifierWrapper *TParseContext::parseInQualifier(const TSourceLoc &loc)
         {
             return new TStorageQualifierWrapper(EvqGeometryIn, loc);
         }
+        case GL_TESS_CONTROL_SHADER_EXT:
+        {
+            return new TStorageQualifierWrapper(EvqTessControlIn, loc);
+        }
+        case GL_TESS_EVALUATION_SHADER_EXT:
+        {
+            return new TStorageQualifierWrapper(EvqTessEvaluationIn, loc);
+        }
         default:
         {
             UNREACHABLE();
@@ -4924,6 +5134,14 @@ TStorageQualifierWrapper *TParseContext::parseOutQualifier(const TSourceLoc &loc
         case GL_GEOMETRY_SHADER_EXT:
         {
             return new TStorageQualifierWrapper(EvqGeometryOut, loc);
+        }
+        case GL_TESS_CONTROL_SHADER_EXT:
+        {
+            return new TStorageQualifierWrapper(EvqTessControlOut, loc);
+        }
+        case GL_TESS_EVALUATION_SHADER_EXT:
+        {
+            return new TStorageQualifierWrapper(EvqTessEvaluationOut, loc);
         }
         default:
         {

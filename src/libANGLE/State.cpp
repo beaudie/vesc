@@ -358,6 +358,7 @@ State::State(const State *shareContextState,
       mProgramBinaryCacheEnabled(programBinaryCacheEnabled),
       mTextureRectangleEnabled(true),
       mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
+      mPatchVertices(3),
       mOverlay(overlay),
       mNoSimultaneousConstantColorAndAlphaBlendFunc(false)
 {}
@@ -1142,6 +1143,9 @@ void State::setEnableFeature(GLenum feature, bool enabled)
             setDither(enabled);
             return;
         case GL_PRIMITIVE_RESTART_FIXED_INDEX:
+            setPrimitiveRestart(enabled);
+            return;
+        case GL_PRIMITIVE_RESTART_FOR_PATCHES_SUPPORTED:
             setPrimitiveRestart(enabled);
             return;
         case GL_RASTERIZER_DISCARD:
@@ -2194,6 +2198,12 @@ void State::setMaxShaderCompilerThreads(GLuint count)
     mMaxShaderCompilerThreads = count;
 }
 
+void State::setPatchVertices(GLuint value)
+{
+    mPatchVertices = value;
+    mDirtyBits.set(DIRTY_BIT_PATCH_VERTICES);
+}
+
 void State::getBooleanv(GLenum pname, GLboolean *params) const
 {
     switch (pname)
@@ -2872,6 +2882,12 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             }
             break;
         }
+        case GL_PATCH_VERTICES:
+            *params = mPatchVertices;
+            break;
+        case GL_PRIMITIVE_RESTART_FOR_PATCHES_SUPPORTED:
+            *params = mPrimitiveRestart;
+            break;
 
         default:
             UNREACHABLE();

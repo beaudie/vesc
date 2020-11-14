@@ -171,6 +171,8 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Geometry, vk::kDefaultUniformsNameGS},
     {gl::ShaderType::Fragment, vk::kDefaultUniformsNameFS},
     {gl::ShaderType::Compute, vk::kDefaultUniformsNameCS},
+    {gl::ShaderType::TessControl, vk::kDefaultUniformsNameTCS},
+    {gl::ShaderType::TessEvaluation, vk::kDefaultUniformsNameTES},
 };
 
 // Specialization constant names
@@ -964,9 +966,15 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         {
             return false;
         }
-        if (!AppendVertexShaderDepthCorrectionToMain(this, root, &getSymbolTable()))
+
+        // When Tessellation shader is used, DepthCorrection should be at tessellation evaluation
+        // shader.
+        if (getTessEvaluationShaderInputPrimitiveType() != EtetUndefined)
         {
-            return false;
+            if (!AppendVertexShaderDepthCorrectionToMain(this, root, &getSymbolTable()))
+            {
+                return false;
+            }
         }
         if ((compileOptions & SH_ADD_PRE_ROTATION) != 0 &&
             !AppendPreRotation(this, root, &getSymbolTable(), &surfaceRotationSpecConst,
@@ -980,6 +988,22 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         WriteGeometryShaderLayoutQualifiers(
             sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
             getGeometryShaderOutputPrimitiveType(), getGeometryShaderMaxVertices());
+    }
+    else if (getShaderType() == GL_TESS_CONTROL_SHADER_EXT)
+    {
+        WriteTessControlShaderLayoutQualifiers(sink, getTessControlShaderOutputVertices());
+    }
+    else if (getShaderType() == GL_TESS_EVALUATION_SHADER_EXT)
+    {
+        WriteTessEvaluationShaderLayoutQualifiers(sink, getTessEvaluationShaderInputPrimitiveType(),
+                                                  getTessEvaluationShaderInputVertexSpacingType(),
+                                                  getTessEvaluationShaderInputOrderingType(),
+                                                  getTessEvaluationShaderInputPointType());
+
+        if (!AppendVertexShaderDepthCorrectionToMain(this, root, &getSymbolTable()))
+        {
+            return false;
+        }
     }
     else
     {

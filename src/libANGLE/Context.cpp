@@ -1808,6 +1808,81 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
         case GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT:
             *params = mState.mCaps.maxShaderStorageBlocks[ShaderType::Geometry];
             break;
+        // GL_EXT_tessellation_shader
+        case GL_MAX_PATCH_VERTICES_EXT:
+            *params = mState.mCaps.maxPatchVertices;
+            break;
+        case GL_MAX_TESS_GEN_LEVEL_EXT:
+            *params = mState.mCaps.maxTessGenLevel;
+            break;
+        case GL_MAX_TESS_CONTROL_UNIFORM_COMPONENTS_EXT:
+            *params = mState.mCaps.maxShaderUniformComponents[ShaderType::TessControl];
+            break;
+        case GL_MAX_TESS_EVALUATION_UNIFORM_COMPONENTS_EXT:
+            *params = mState.mCaps.maxShaderUniformComponents[ShaderType::TessEvaluation];
+            break;
+        case GL_MAX_TESS_CONTROL_TEXTURE_IMAGE_UNITS_EXT:
+            *params = mState.mCaps.maxShaderTextureImageUnits[ShaderType::TessControl];
+            break;
+        case GL_MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS_EXT:
+            *params = mState.mCaps.maxShaderTextureImageUnits[ShaderType::TessEvaluation];
+            break;
+        case GL_MAX_TESS_CONTROL_OUTPUT_COMPONENTS_EXT:
+            *params = mState.mCaps.maxTessControlOutputComponents;
+            break;
+        case GL_MAX_TESS_PATCH_COMPONENTS_EXT:
+            *params = mState.mCaps.maxTessPatchComponents;
+            break;
+        case GL_MAX_TESS_CONTROL_TOTAL_OUTPUT_COMPONENTS_EXT:
+            *params = mState.mCaps.maxTessControlTotalOutputComponents;
+            break;
+        case GL_MAX_TESS_EVALUATION_OUTPUT_COMPONENTS_EXT:
+            *params = mState.mCaps.maxTessEvaluationOutputComponents;
+            break;
+        case GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS_EXT:
+            *params = mState.mCaps.maxShaderUniformBlocks[ShaderType::TessControl];
+            break;
+        case GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS_EXT:
+            *params = mState.mCaps.maxShaderUniformBlocks[ShaderType::TessEvaluation];
+            break;
+        case GL_MAX_TESS_CONTROL_INPUT_COMPONENTS_EXT:
+            *params = mState.mCaps.maxTessControlInputComponents;
+            break;
+        case GL_MAX_TESS_EVALUATION_INPUT_COMPONENTS_EXT:
+            *params = mState.mCaps.maxTessEvaluationInputComponents;
+            break;
+        case GL_MAX_COMBINED_TESS_CONTROL_UNIFORM_COMPONENTS_EXT:
+            *params = static_cast<GLint>(
+                mState.mCaps.maxCombinedShaderUniformComponents[ShaderType::TessControl]);
+            break;
+        case GL_MAX_COMBINED_TESS_EVALUATION_UNIFORM_COMPONENTS_EXT:
+            *params = static_cast<GLint>(
+                mState.mCaps.maxCombinedShaderUniformComponents[ShaderType::TessEvaluation]);
+            break;
+        case GL_MAX_TESS_CONTROL_ATOMIC_COUNTER_BUFFERS_EXT:
+            *params = mState.mCaps.maxShaderAtomicCounterBuffers[ShaderType::TessControl];
+            break;
+        case GL_MAX_TESS_EVALUATION_ATOMIC_COUNTER_BUFFERS_EXT:
+            *params = mState.mCaps.maxShaderAtomicCounterBuffers[ShaderType::TessEvaluation];
+            break;
+        case GL_MAX_TESS_CONTROL_ATOMIC_COUNTERS_EXT:
+            *params = mState.mCaps.maxShaderAtomicCounters[ShaderType::TessControl];
+            break;
+        case GL_MAX_TESS_EVALUATION_ATOMIC_COUNTERS_EXT:
+            *params = mState.mCaps.maxShaderAtomicCounters[ShaderType::TessEvaluation];
+            break;
+        case GL_MAX_TESS_CONTROL_IMAGE_UNIFORMS_EXT:
+            *params = mState.mCaps.maxShaderImageUniforms[ShaderType::TessControl];
+            break;
+        case GL_MAX_TESS_EVALUATION_IMAGE_UNIFORMS_EXT:
+            *params = mState.mCaps.maxShaderImageUniforms[ShaderType::TessEvaluation];
+            break;
+        case GL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS_EXT:
+            *params = mState.mCaps.maxShaderStorageBlocks[ShaderType::TessControl];
+            break;
+        case GL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS_EXT:
+            *params = mState.mCaps.maxShaderStorageBlocks[ShaderType::TessEvaluation];
+            break;
         // GLES1 emulation: Caps queries
         case GL_MAX_TEXTURE_UNITS:
             *params = mState.mCaps.maxMultitextureUnits;
@@ -6743,7 +6818,14 @@ void Context::stencilOp(GLenum fail, GLenum zfail, GLenum zpass)
 
 void Context::patchParameteri(GLenum pname, GLint value)
 {
-    UNIMPLEMENTED();
+    switch (pname)
+    {
+        case GL_PATCH_VERTICES:
+            mState.setPatchVertices(value);
+            break;
+        default:
+            break;
+    }
 }
 
 Program *Context::getActiveLinkedProgram() const
@@ -8969,7 +9051,8 @@ void StateCache::setValidDrawModes(bool pointsOK,
                                    bool linesOK,
                                    bool trisOK,
                                    bool lineAdjOK,
-                                   bool triAdjOK)
+                                   bool triAdjOK,
+                                   bool patchOK)
 {
     mCachedValidDrawModes[PrimitiveMode::Points]                 = pointsOK;
     mCachedValidDrawModes[PrimitiveMode::Lines]                  = linesOK;
@@ -8982,6 +9065,7 @@ void StateCache::setValidDrawModes(bool pointsOK,
     mCachedValidDrawModes[PrimitiveMode::LineStripAdjacency]     = lineAdjOK;
     mCachedValidDrawModes[PrimitiveMode::TrianglesAdjacency]     = triAdjOK;
     mCachedValidDrawModes[PrimitiveMode::TriangleStripAdjacency] = triAdjOK;
+    mCachedValidDrawModes[PrimitiveMode::Patches]                = patchOK;
 }
 
 void StateCache::updateValidDrawModes(Context *context)
@@ -9001,7 +9085,8 @@ void StateCache::updateValidDrawModes(Context *context)
         // DrawElements, DrawElementsInstanced, and DrawRangeElements while transform feedback is
         // active and not paused, regardless of mode. Any primitive type may be used while transform
         // feedback is paused.
-        if (!context->getExtensions().geometryShader)
+        if (!context->getExtensions().geometryShader &&
+            !context->getExtensions().tessellationShader)
         {
             mCachedValidDrawModes.fill(false);
             mCachedValidDrawModes[curTransformFeedback->getPrimitiveMode()] = true;
@@ -9018,18 +9103,28 @@ void StateCache::updateValidDrawModes(Context *context)
         bool linesOK  = curTransformFeedback->getPrimitiveMode() == PrimitiveMode::Lines;
         bool trisOK   = curTransformFeedback->getPrimitiveMode() == PrimitiveMode::Triangles;
 
-        setValidDrawModes(pointsOK, linesOK, trisOK, false, false);
+        const ProgramExecutable *programExecutable = context->getState().getProgramExecutable();
+        bool patchOK = (programExecutable->hasLinkedShaderStage(ShaderType::TessControl) &&
+                        programExecutable->hasLinkedShaderStage(ShaderType::TessEvaluation))
+                           ? true
+                           : false;
+
+        setValidDrawModes(pointsOK, linesOK, trisOK, false, false, patchOK);
         return;
     }
 
     const ProgramExecutable *programExecutable = context->getState().getProgramExecutable();
-    if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
+    if (!programExecutable ||
+        (!programExecutable->hasLinkedShaderStage(ShaderType::Geometry) &&
+         !programExecutable->hasLinkedShaderStage(ShaderType::TessControl) &&
+         !programExecutable->hasLinkedShaderStage(ShaderType::TessEvaluation)))
     {
         mCachedValidDrawModes = kValidBasicDrawModes;
         return;
     }
 
-    ASSERT(programExecutable->hasLinkedShaderStage(ShaderType::Geometry));
+    ASSERT(programExecutable->hasLinkedShaderStage(ShaderType::Geometry) ||
+           programExecutable->hasLinkedShaderStage(ShaderType::TessEvaluation));
     PrimitiveMode gsMode = program->getGeometryShaderInputPrimitiveType();
 
     bool pointsOK  = gsMode == PrimitiveMode::Points;
@@ -9037,8 +9132,12 @@ void StateCache::updateValidDrawModes(Context *context)
     bool trisOK    = gsMode == PrimitiveMode::Triangles;
     bool lineAdjOK = gsMode == PrimitiveMode::LinesAdjacency;
     bool triAdjOK  = gsMode == PrimitiveMode::TrianglesAdjacency;
+    bool patchOK   = (programExecutable->hasLinkedShaderStage(ShaderType::TessEvaluation) ||
+                    programExecutable->hasLinkedShaderStage(ShaderType::TessEvaluation))
+                       ? true
+                       : false;
 
-    setValidDrawModes(pointsOK, linesOK, trisOK, lineAdjOK, triAdjOK);
+    setValidDrawModes(pointsOK, linesOK, trisOK, lineAdjOK, triAdjOK, patchOK);
 }
 
 void StateCache::updateValidBindTextureTypes(Context *context)

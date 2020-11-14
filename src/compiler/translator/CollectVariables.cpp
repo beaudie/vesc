@@ -215,6 +215,12 @@ class CollectVariablesTraverser : public TIntermTraverser
     // Shared memory variables
     bool mSharedVariableAdded;
 
+    // Tessellation Shader builtins
+    bool mPatchVerticesInAdded;
+    bool mTessLevelOuterAdded;
+    bool mTessLevelInnerAdded;
+    bool mTessCoordAdded;
+
     ShHashFunction64 mHashFunction;
 
     GLenum mShaderType;
@@ -276,6 +282,10 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mPrimitiveIDAdded(false),
       mLayerAdded(false),
       mSharedVariableAdded(false),
+      mPatchVerticesInAdded(false),
+      mTessLevelOuterAdded(false),
+      mTessLevelInnerAdded(false),
+      mTessCoordAdded(false),
       mHashFunction(hashFunction),
       mShaderType(shaderType),
       mExtensionBehavior(extensionBehavior)
@@ -583,7 +593,9 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                 }
                 else
                 {
-                    ASSERT(mShaderType == GL_FRAGMENT_SHADER);
+                    ASSERT(mShaderType == GL_FRAGMENT_SHADER ||
+                           mShaderType == GL_TESS_CONTROL_SHADER_EXT ||
+                           mShaderType == GL_TESS_EVALUATION_SHADER_EXT);
                     recordBuiltInVaryingUsed(symbol->variable(), &mPrimitiveIDAdded,
                                              mInputVaryings);
                 }
@@ -614,6 +626,37 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             case EvqClipDistance:
                 recordBuiltInVaryingUsed(symbol->variable(), &mClipDistanceAdded, mOutputVaryings);
                 return;
+            case EvqPatchVerticesIn:
+                recordBuiltInVaryingUsed(symbol->variable(), &mPatchVerticesInAdded,
+                                         mInputVaryings);
+                break;
+            case EvqTessCoord:
+                recordBuiltInVaryingUsed(symbol->variable(), &mTessCoordAdded, mInputVaryings);
+                break;
+            case EvqTessLevelOuter:
+                if (mShaderType == GL_TESS_CONTROL_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelOuterAdded,
+                                             mOutputVaryings);
+                }
+                else if (mShaderType == GL_TESS_EVALUATION_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelOuterAdded,
+                                             mInputVaryings);
+                }
+                break;
+            case EvqTessLevelInner:
+                if (mShaderType == GL_TESS_CONTROL_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelInnerAdded,
+                                             mOutputVaryings);
+                }
+                else if (mShaderType == GL_TESS_EVALUATION_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelInnerAdded,
+                                             mInputVaryings);
+                }
+                break;
             default:
                 break;
         }
@@ -737,6 +780,10 @@ ShaderVariable CollectVariablesTraverser::recordVarying(const TIntermSymbol &var
             {
                 varying.isInvariant = true;
             }
+            break;
+        case EvqPatchIn:
+        case EvqPatchOut:
+            varying.isPatch = true;
             break;
         default:
             break;

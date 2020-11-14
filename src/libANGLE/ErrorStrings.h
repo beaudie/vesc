@@ -451,6 +451,7 @@ MSG kStrideExceedsWebGLLimit = "Stride is over the maximum stride allowed by Web
 MSG kStrideMustBeMultipleOfType = "Stride must be a multiple of the passed in datatype.";
 MSG kSyncMissing = "Sync object does not exist.";
 MSG kTargetMustBeTexture2DMultisampleArrayOES = "Target must be TEXTURE_2D_MULTISAMPLE_ARRAY_OES.";
+MSG kTessellationShaderExtensionNotEnabled = "GL_EXT_tessellation_shader extension not enabled.";
 MSG kTextureBufferExtensionNotAvailable = "Texture buffer extension not available.";
 MSG kTextureBufferOffsetAlignment = "Offset must be multiple of value of TEXTURE_BUFFER_OFFSET_ALIGNMENT.";
 MSG kTextureBufferSize = "Texture buffer size must be a positive integer.";
