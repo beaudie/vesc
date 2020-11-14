@@ -231,7 +231,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return mSampler.get();
     }
 
-    const vk::BufferView &getBufferViewAndRecordUse(ContextVk *contextVk) const;
+    angle::Result getBufferViewAndRecordUse(ContextVk *contextVk,
+                                            const vk::Format *format,
+                                            const vk::BufferView **viewOut);
 
     // Normally, initialize the image with enabled mipmap level counts.
     angle::Result ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels);
