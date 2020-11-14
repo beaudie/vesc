@@ -6529,11 +6529,14 @@ ImageOrBufferViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
 }
 
 // BufferViewHelper implementation.
-BufferViewHelper::BufferViewHelper() {}
+BufferViewHelper::BufferViewHelper() : mDefaultFormat(nullptr), mOffset(0), mSize(0) {}
 
 BufferViewHelper::BufferViewHelper(BufferViewHelper &&other) : Resource(std::move(other))
 {
-    std::swap(mView, other.mView);
+    std::swap(mDefaultFormat, other.mDefaultFormat);
+    std::swap(mOffset, other.mOffset);
+    std::swap(mSize, other.mSize);
+    std::swap(mViews, other.mViews);
     std::swap(mViewSerial, other.mViewSerial);
 }
 
@@ -6549,16 +6552,25 @@ void BufferViewHelper::init(RendererVk *renderer)
 
 void BufferViewHelper::release(RendererVk *renderer)
 {
-    if (mView.valid())
-    {
-        std::vector<GarbageObject> garbage;
-        garbage.emplace_back(GetGarbage(&mView));
+    std::vector<GarbageObject> garbage;
 
+    for (auto &formatAndView : mViews)
+    {
+        BufferView &view = formatAndView.second;
+        ASSERT(view.valid());
+
+        garbage.emplace_back(GetGarbage(&view));
+    }
+
+    if (!garbage.empty())
+    {
         renderer->collectGarbage(std::move(mUse), std::move(garbage));
 
         // Ensure the resource use is always valid.
         mUse.init();
     }
+
+    mViews.clear();
 
     // Update image view serial.
     mViewSerial = renderer->getResourceSerialFactory().generateImageOrBufferViewSerial();
@@ -6566,36 +6578,75 @@ void BufferViewHelper::release(RendererVk *renderer)
 
 void BufferViewHelper::destroy(VkDevice device)
 {
-    mView.destroy(device);
+    for (auto &formatAndView : mViews)
+    {
+        BufferView &view = formatAndView.second;
+        view.destroy(device);
+    }
+
+    mViews.clear();
     mViewSerial = kInvalidImageOrBufferViewSerial;
 }
 
-angle::Result BufferViewHelper::initView(ContextVk *contextVk,
-                                         const BufferHelper &buffer,
-                                         const Format &format,
-                                         VkDeviceSize offset,
-                                         VkDeviceSize size)
+const BufferView &BufferViewHelper::getDefaultView() const
+{
+    ASSERT(mViews.find(mDefaultFormat->vkBufferFormat) != mViews.end());
+    return mViews.at(mDefaultFormat->vkBufferFormat);
+}
+
+angle::Result BufferViewHelper::getView(ContextVk *contextVk,
+                                        const BufferHelper &buffer,
+                                        const Format &format,
+                                        const BufferView **viewOut)
 {
     ASSERT(format.valid());
-    ASSERT(!mView.valid());
+
+    auto iter = mViews.find(format.vkBufferFormat);
+    if (iter != mViews.end())
+    {
+        *viewOut = &iter->second;
+        return angle::Result::Continue;
+    }
 
     // If the size is not a multiple of pixelBytes, remove the extra bytes.  The last element cannot
     // be read anyway, and this is a requirement of Vulkan (for size to be a multiple of format
     // texel block size).
     const angle::Format &bufferFormat = format.actualBufferFormat(false);
     const GLuint pixelBytes           = bufferFormat.pixelBytes;
-    size -= size % pixelBytes;
+    VkDeviceSize size                 = mSize - mSize % pixelBytes;
 
     VkBufferViewCreateInfo viewCreateInfo = {};
     viewCreateInfo.sType                  = VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
     viewCreateInfo.buffer                 = buffer.getBuffer().getHandle();
     viewCreateInfo.format                 = format.vkBufferFormat;
-    viewCreateInfo.offset                 = offset;
+    viewCreateInfo.offset                 = mOffset;
     viewCreateInfo.range                  = size;
 
-    ANGLE_VK_TRY(contextVk, mView.init(contextVk->getDevice(), viewCreateInfo));
+    BufferView view;
+    ANGLE_VK_TRY(contextVk, view.init(contextVk->getDevice(), viewCreateInfo));
+
+    // Cache the view
+    auto insertIter = mViews.insert({format.vkBufferFormat, std::move(view)});
+    *viewOut        = &insertIter.first->second;
+    ASSERT(insertIter.second);
 
     return angle::Result::Continue;
+}
+
+angle::Result BufferViewHelper::initDefaultView(ContextVk *contextVk,
+                                                const BufferHelper &buffer,
+                                                const Format &format,
+                                                VkDeviceSize offset,
+                                                VkDeviceSize size)
+{
+    ASSERT(mViews.empty());
+
+    mDefaultFormat = &format;
+    mOffset        = offset;
+    mSize          = size;
+
+    const BufferView *defaultView = nullptr;
+    return getView(contextVk, buffer, format, &defaultView);
 }
 
 ImageOrBufferViewSubresourceSerial BufferViewHelper::getSerial() const
