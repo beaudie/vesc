@@ -2019,9 +2019,9 @@ bool ValidateProgramParameteri(const Context *context,
                                GLenum pname,
                                GLint value)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (context->getClientMajorVersion() < 3 && !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES3Required);
+        context->validationError(GL_INVALID_OPERATION, kES3orExtRequired);
         return false;
     }
 
