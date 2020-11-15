@@ -12,6 +12,8 @@
 #include "libANGLE/MemoryObject.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES2.h"
+#include "libANGLE/validationES3.h"
+#include "libANGLE/validationES31.h"
 #include "libANGLE/validationES32.h"
 
 namespace gl
@@ -1191,14 +1193,12 @@ bool ValidateActiveShaderProgramEXT(const Context *context,
                                     ProgramPipelineID pipelinePacked,
                                     ShaderProgramID programPacked)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateActiveShaderProgram(context, pipelinePacked, programPacked);
 }
 
 bool ValidateBindProgramPipelineEXT(const Context *context, ProgramPipelineID pipelinePacked)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateBindProgramPipeline(context, pipelinePacked);
 }
 
 bool ValidateCreateShaderProgramvEXT(const Context *context,
@@ -1206,24 +1206,21 @@ bool ValidateCreateShaderProgramvEXT(const Context *context,
                                      GLsizei count,
                                      const GLchar **strings)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateCreateShaderProgramv(context, typePacked, count, strings);
 }
 
 bool ValidateDeleteProgramPipelinesEXT(const Context *context,
                                        GLsizei n,
                                        const ProgramPipelineID *pipelinesPacked)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateDeleteProgramPipelines(context, n, pipelinesPacked);
 }
 
 bool ValidateGenProgramPipelinesEXT(const Context *context,
                                     GLsizei n,
                                     const ProgramPipelineID *pipelinesPacked)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateGenProgramPipelines(context, n, pipelinesPacked);
 }
 
 bool ValidateGetProgramPipelineInfoLogEXT(const Context *context,
@@ -1232,8 +1229,7 @@ bool ValidateGetProgramPipelineInfoLogEXT(const Context *context,
                                           const GLsizei *length,
                                           const GLchar *infoLog)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateGetProgramPipelineInfoLog(context, pipelinePacked, bufSize, length, infoLog);
 }
 
 bool ValidateGetProgramPipelineivEXT(const Context *context,
@@ -1241,14 +1237,12 @@ bool ValidateGetProgramPipelineivEXT(const Context *context,
                                      GLenum pname,
                                      const GLint *params)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateGetProgramPipelineiv(context, pipelinePacked, pname, params);
 }
 
 bool ValidateIsProgramPipelineEXT(const Context *context, ProgramPipelineID pipelinePacked)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateIsProgramPipeline(context, pipelinePacked);
 }
 
 bool ValidateProgramParameteriEXT(const Context *context,
@@ -1256,8 +1250,7 @@ bool ValidateProgramParameteriEXT(const Context *context,
                                   GLenum pname,
                                   GLint value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramParameteri(context, programPacked, pname, value);
 }
 
 bool ValidateProgramUniform1fEXT(const Context *context,
@@ -1265,8 +1258,7 @@ bool ValidateProgramUniform1fEXT(const Context *context,
                                  UniformLocation locationPacked,
                                  GLfloat v0)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform1f(context, programPacked, locationPacked, v0);
 }
 
 bool ValidateProgramUniform1fvEXT(const Context *context,
@@ -1275,8 +1267,7 @@ bool ValidateProgramUniform1fvEXT(const Context *context,
                                   GLsizei count,
                                   const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform1fv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform1iEXT(const Context *context,
@@ -1284,8 +1275,7 @@ bool ValidateProgramUniform1iEXT(const Context *context,
                                  UniformLocation locationPacked,
                                  GLint v0)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform1i(context, programPacked, locationPacked, v0);
 }
 
 bool ValidateProgramUniform1ivEXT(const Context *context,
@@ -1294,8 +1284,7 @@ bool ValidateProgramUniform1ivEXT(const Context *context,
                                   GLsizei count,
                                   const GLint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform1iv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform1uiEXT(const Context *context,
@@ -1303,8 +1292,7 @@ bool ValidateProgramUniform1uiEXT(const Context *context,
                                   UniformLocation locationPacked,
                                   GLuint v0)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform1ui(context, programPacked, locationPacked, v0);
 }
 
 bool ValidateProgramUniform1uivEXT(const Context *context,
@@ -1313,8 +1301,7 @@ bool ValidateProgramUniform1uivEXT(const Context *context,
                                    GLsizei count,
                                    const GLuint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform1uiv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform2fEXT(const Context *context,
@@ -1323,8 +1310,7 @@ bool ValidateProgramUniform2fEXT(const Context *context,
                                  GLfloat v0,
                                  GLfloat v1)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform2f(context, programPacked, locationPacked, v0, v1);
 }
 
 bool ValidateProgramUniform2fvEXT(const Context *context,
@@ -1333,8 +1319,7 @@ bool ValidateProgramUniform2fvEXT(const Context *context,
                                   GLsizei count,
                                   const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform2fv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform2iEXT(const Context *context,
@@ -1343,8 +1328,7 @@ bool ValidateProgramUniform2iEXT(const Context *context,
                                  GLint v0,
                                  GLint v1)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform2i(context, programPacked, locationPacked, v0, v1);
 }
 
 bool ValidateProgramUniform2ivEXT(const Context *context,
@@ -1353,8 +1337,7 @@ bool ValidateProgramUniform2ivEXT(const Context *context,
                                   GLsizei count,
                                   const GLint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform2iv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform2uiEXT(const Context *context,
@@ -1363,8 +1346,7 @@ bool ValidateProgramUniform2uiEXT(const Context *context,
                                   GLuint v0,
                                   GLuint v1)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform2ui(context, programPacked, locationPacked, v0, v1);
 }
 
 bool ValidateProgramUniform2uivEXT(const Context *context,
@@ -1373,8 +1355,7 @@ bool ValidateProgramUniform2uivEXT(const Context *context,
                                    GLsizei count,
                                    const GLuint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform2uiv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform3fEXT(const Context *context,
@@ -1384,8 +1365,7 @@ bool ValidateProgramUniform3fEXT(const Context *context,
                                  GLfloat v1,
                                  GLfloat v2)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform3f(context, programPacked, locationPacked, v0, v1, v2);
 }
 
 bool ValidateProgramUniform3fvEXT(const Context *context,
@@ -1394,8 +1374,7 @@ bool ValidateProgramUniform3fvEXT(const Context *context,
                                   GLsizei count,
                                   const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform3fv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform3iEXT(const Context *context,
@@ -1405,8 +1384,7 @@ bool ValidateProgramUniform3iEXT(const Context *context,
                                  GLint v1,
                                  GLint v2)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform3i(context, programPacked, locationPacked, v0, v1, v2);
 }
 
 bool ValidateProgramUniform3ivEXT(const Context *context,
@@ -1415,8 +1393,7 @@ bool ValidateProgramUniform3ivEXT(const Context *context,
                                   GLsizei count,
                                   const GLint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform3iv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform3uiEXT(const Context *context,
@@ -1426,8 +1403,7 @@ bool ValidateProgramUniform3uiEXT(const Context *context,
                                   GLuint v1,
                                   GLuint v2)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform3ui(context, programPacked, locationPacked, v0, v1, v2);
 }
 
 bool ValidateProgramUniform3uivEXT(const Context *context,
@@ -1436,8 +1412,7 @@ bool ValidateProgramUniform3uivEXT(const Context *context,
                                    GLsizei count,
                                    const GLuint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform3uiv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform4fEXT(const Context *context,
@@ -1448,8 +1423,7 @@ bool ValidateProgramUniform4fEXT(const Context *context,
                                  GLfloat v2,
                                  GLfloat v3)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform4f(context, programPacked, locationPacked, v0, v1, v2, v3);
 }
 
 bool ValidateProgramUniform4fvEXT(const Context *context,
@@ -1458,8 +1432,7 @@ bool ValidateProgramUniform4fvEXT(const Context *context,
                                   GLsizei count,
                                   const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform4fv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform4iEXT(const Context *context,
@@ -1470,8 +1443,7 @@ bool ValidateProgramUniform4iEXT(const Context *context,
                                  GLint v2,
                                  GLint v3)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform4i(context, programPacked, locationPacked, v0, v1, v2, v3);
 }
 
 bool ValidateProgramUniform4ivEXT(const Context *context,
@@ -1480,8 +1452,7 @@ bool ValidateProgramUniform4ivEXT(const Context *context,
                                   GLsizei count,
                                   const GLint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform4iv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniform4uiEXT(const Context *context,
@@ -1492,8 +1463,7 @@ bool ValidateProgramUniform4uiEXT(const Context *context,
                                   GLuint v2,
                                   GLuint v3)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform4ui(context, programPacked, locationPacked, v0, v1, v2, v3);
 }
 
 bool ValidateProgramUniform4uivEXT(const Context *context,
@@ -1502,8 +1472,7 @@ bool ValidateProgramUniform4uivEXT(const Context *context,
                                    GLsizei count,
                                    const GLuint *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniform4uiv(context, programPacked, locationPacked, count, value);
 }
 
 bool ValidateProgramUniformMatrix2fvEXT(const Context *context,
@@ -1513,8 +1482,8 @@ bool ValidateProgramUniformMatrix2fvEXT(const Context *context,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix2fv(context, programPacked, locationPacked, count, transpose,
+                                           value);
 }
 
 bool ValidateProgramUniformMatrix2x3fvEXT(const Context *context,
@@ -1524,8 +1493,8 @@ bool ValidateProgramUniformMatrix2x3fvEXT(const Context *context,
                                           GLboolean transpose,
                                           const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix2x3fv(context, programPacked, locationPacked, count,
+                                             transpose, value);
 }
 
 bool ValidateProgramUniformMatrix2x4fvEXT(const Context *context,
@@ -1535,8 +1504,8 @@ bool ValidateProgramUniformMatrix2x4fvEXT(const Context *context,
                                           GLboolean transpose,
                                           const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix2x4fv(context, programPacked, locationPacked, count,
+                                             transpose, value);
 }
 
 bool ValidateProgramUniformMatrix3fvEXT(const Context *context,
@@ -1546,8 +1515,8 @@ bool ValidateProgramUniformMatrix3fvEXT(const Context *context,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix3fv(context, programPacked, locationPacked, count, transpose,
+                                           value);
 }
 
 bool ValidateProgramUniformMatrix3x2fvEXT(const Context *context,
@@ -1557,8 +1526,8 @@ bool ValidateProgramUniformMatrix3x2fvEXT(const Context *context,
                                           GLboolean transpose,
                                           const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix3x2fv(context, programPacked, locationPacked, count,
+                                             transpose, value);
 }
 
 bool ValidateProgramUniformMatrix3x4fvEXT(const Context *context,
@@ -1568,8 +1537,8 @@ bool ValidateProgramUniformMatrix3x4fvEXT(const Context *context,
                                           GLboolean transpose,
                                           const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix3x4fv(context, programPacked, locationPacked, count,
+                                             transpose, value);
 }
 
 bool ValidateProgramUniformMatrix4fvEXT(const Context *context,
@@ -1579,8 +1548,8 @@ bool ValidateProgramUniformMatrix4fvEXT(const Context *context,
                                         GLboolean transpose,
                                         const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix4fv(context, programPacked, locationPacked, count, transpose,
+                                           value);
 }
 
 bool ValidateProgramUniformMatrix4x2fvEXT(const Context *context,
@@ -1590,8 +1559,8 @@ bool ValidateProgramUniformMatrix4x2fvEXT(const Context *context,
                                           GLboolean transpose,
                                           const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix4x2fv(context, programPacked, locationPacked, count,
+                                             transpose, value);
 }
 
 bool ValidateProgramUniformMatrix4x3fvEXT(const Context *context,
@@ -1601,8 +1570,8 @@ bool ValidateProgramUniformMatrix4x3fvEXT(const Context *context,
                                           GLboolean transpose,
                                           const GLfloat *value)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateProgramUniformMatrix4x3fv(context, programPacked, locationPacked, count,
+                                             transpose, value);
 }
 
 bool ValidateUseProgramStagesEXT(const Context *context,
@@ -1610,13 +1579,11 @@ bool ValidateUseProgramStagesEXT(const Context *context,
                                  GLbitfield stages,
                                  ShaderProgramID programPacked)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateUseProgramStages(context, pipelinePacked, stages, programPacked);
 }
 
 bool ValidateValidateProgramPipelineEXT(const Context *context, ProgramPipelineID pipelinePacked)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateValidateProgramPipeline(context, pipelinePacked);
 }
 }  // namespace gl
