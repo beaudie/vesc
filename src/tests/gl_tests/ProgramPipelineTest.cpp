@@ -36,7 +36,8 @@ TEST_P(ProgramPipelineTest, GenerateProgramPipelineObject)
 
     GLuint pipeline;
     glGenProgramPipelines(1, &pipeline);
-    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    if ((getClientMajorVersion() < 3 || getClientMinorVersion() < 1) &&
+        !IsGLExtensionEnabled("GL_EXT_separate_shader_objects"))
     {
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
     }
