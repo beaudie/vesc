@@ -49,6 +49,26 @@ TEST_P(ProgramPipelineTest, GenerateProgramPipelineObject)
     }
 }
 
+// Verify that program pipeline errors out without GL_EXT_separate_shader_objects extension.
+TEST_P(ProgramPipelineTest, GenerateProgramPipelineObjectEXT)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    GLuint pipeline;
+    glGenProgramPipelinesEXT(1, &pipeline);
+    if (!IsGLExtensionEnabled("GL_EXT_separate_shader_objects"))
+    {
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    }
+    else
+    {
+        EXPECT_GL_NO_ERROR();
+
+        glDeleteProgramPipelinesEXT(1, &pipeline);
+        EXPECT_GL_NO_ERROR();
+    }
+}
+
 class ProgramPipelineTest31 : public ProgramPipelineTest
 {
   protected:
