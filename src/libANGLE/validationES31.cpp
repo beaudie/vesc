@@ -305,10 +305,11 @@ bool ValidateProgramUniform(const Context *context,
                             UniformLocation location,
                             GLsizei count)
 {
-    // Check for ES31 program uniform entry points
-    if (context->getClientVersion() < Version(3, 1))
+    // Check for ES31 or extension program uniform entry points
+    if (context->getClientVersion() < Version(3, 1) &&
+        !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
@@ -325,10 +326,11 @@ bool ValidateProgramUniformMatrix(const Context *context,
                                   GLsizei count,
                                   GLboolean transpose)
 {
-    // Check for ES31 program uniform entry points
-    if (context->getClientVersion() < Version(3, 1))
+    // Check for ES31 or extension program uniform entry points
+    if (context->getClientVersion() < Version(3, 1) &&
+        !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
@@ -683,9 +685,10 @@ bool ValidateProgramUniform1iv(const Context *context,
                                const GLint *value)
 {
     // Check for ES31 program uniform entry points
-    if (context->getClientVersion() < Version(3, 1))
+    if (context->getClientVersion() < Version(3, 1) &&
+        !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
@@ -1683,9 +1686,9 @@ bool ValidateGetProgramInterfaceivRobustANGLE(const Context *context,
 
 static bool ValidateGenOrDeleteES31(const Context *context, GLint n)
 {
-    if (context->getClientVersion() < ES_3_1)
+    if (context->getClientVersion() < ES_3_1 && !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
@@ -1708,9 +1711,9 @@ bool ValidateDeleteProgramPipelines(const Context *context,
 
 bool ValidateBindProgramPipeline(const Context *context, ProgramPipelineID pipeline)
 {
-    if (context->getClientVersion() < ES_3_1)
+    if (context->getClientVersion() < ES_3_1 && !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
@@ -1725,9 +1728,9 @@ bool ValidateBindProgramPipeline(const Context *context, ProgramPipelineID pipel
 
 bool ValidateIsProgramPipeline(const Context *context, ProgramPipelineID pipeline)
 {
-    if (context->getClientVersion() < ES_3_1)
+    if (context->getClientVersion() < ES_3_1 && !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
@@ -1739,9 +1742,9 @@ bool ValidateUseProgramStages(const Context *context,
                               GLbitfield stages,
                               ShaderProgramID programId)
 {
-    if (context->getClientVersion() < ES_3_1)
+    if (context->getClientVersion() < ES_3_1 && !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
@@ -1846,9 +1849,9 @@ bool ValidateCreateShaderProgramv(const Context *context,
                                   GLsizei count,
                                   const GLchar *const *strings)
 {
-    if (context->getClientVersion() < ES_3_1)
+    if (context->getClientVersion() < ES_3_1 && !context->getExtensions().separateShaderObjects)
     {
-        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        context->validationError(GL_INVALID_OPERATION, kES31orExtRequired);
         return false;
     }
 
