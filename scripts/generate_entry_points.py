@@ -2172,8 +2172,8 @@ def main():
     # Entry point enum
     cmd_names = ["Invalid"] + [cmd[2:] for cmd in xml.all_cmd_names.get_all_commands()]
     gl_cmd_names = [cmd[2:] for cmd in glxml.all_cmd_names.get_all_commands()]
-    cmd_names.extend([cmd for cmd in gl_cmd_names if cmd not in cmd_names])
-    sorted_cmd_names = sorted(cmd_names)
+    cmd_names.extend([cmd for cmd in gl_cmd_names])
+    sorted_cmd_names = list(sorted(set(cmd_names)))
 
     entry_points_enum_header = template_entry_points_enum_header.format(
         script_name=os.path.basename(sys.argv[0]),
