@@ -1765,19 +1765,33 @@ void ProgramState::updateProgramInterfaceInputs()
     {
         for (const sh::ShaderVariable &varying : shader->getInputVaryings())
         {
-            if (varying.isStruct())
+            sh::ShaderVariable var = sh::ShaderVariable(varying);
+            if (varying.memberVariableType == sh::MemberVariableType::DUPLICATED_MEMBER)
             {
-                for (const sh::ShaderVariable &field : varying.fields)
-                {
-                    sh::ShaderVariable fieldVarying = sh::ShaderVariable(field);
-                    fieldVarying.location           = varying.location;
-                    fieldVarying.name               = varying.name + "." + field.name;
-                    mExecutable->mProgramInputs.emplace_back(fieldVarying);
-                }
+                continue;
             }
-            else
+
+            if (!var.isStruct())
             {
-                mExecutable->mProgramInputs.emplace_back(varying);
+                var.updateImplicitLocation();
+                mExecutable->mProgramInputs.emplace_back(var);
+            }
+
+            for (sh::ShaderVariable &field : var.fields)
+            {
+                if (!field.isStruct())
+                {
+                    field.updateImplicitLocation(var);
+                    field.name = var.name + "." + field.name;
+                    mExecutable->mProgramInputs.emplace_back(field);
+                }
+
+                for (sh::ShaderVariable &nested : field.fields)
+                {
+                    nested.updateImplicitLocation(field);
+                    nested.name = var.name + "." + field.name + "." + nested.name;
+                    mExecutable->mProgramInputs.emplace_back(nested);
+                }
             }
         }
     }
@@ -1801,22 +1815,36 @@ void ProgramState::updateProgramInterfaceOutputs()
     Shader *shader = getAttachedShader(lastAttachedShaderType);
     ASSERT(shader);
 
-    // Copy over each output varying, since the Shader could go away
     for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
     {
-        if (varying.isStruct())
+        // Copy over each output varying, since the Shader could go away
+        sh::ShaderVariable var = sh::ShaderVariable(varying);
+        if (var.memberVariableType == sh::MemberVariableType::DUPLICATED_MEMBER)
         {
-            for (const sh::ShaderVariable &field : varying.fields)
-            {
-                sh::ShaderVariable fieldVarying = sh::ShaderVariable(field);
-                fieldVarying.location           = varying.location;
-                fieldVarying.name               = varying.name + "." + field.name;
-                mExecutable->mOutputVariables.emplace_back(fieldVarying);
-            }
+            continue;
         }
-        else
+
+        if (!var.isStruct())
         {
-            mExecutable->mOutputVariables.emplace_back(varying);
+            var.updateImplicitLocation();
+            mExecutable->mOutputVariables.emplace_back(var);
+        }
+
+        for (sh::ShaderVariable &field : var.fields)
+        {
+            if (!field.isStruct())
+            {
+                field.updateImplicitLocation(var);
+                field.name = var.name + "." + field.name;
+                mExecutable->mOutputVariables.emplace_back(field);
+            }
+
+            for (sh::ShaderVariable &nested : field.fields)
+            {
+                nested.updateImplicitLocation(field);
+                nested.name = var.name + "." + field.name + "." + nested.name;
+                mExecutable->mOutputVariables.emplace_back(nested);
+            }
         }
     }
 }
@@ -3529,6 +3557,11 @@ void Program::getFilteredVaryings(const std::vector<sh::ShaderVariable> &varying
         {
             continue;
         }
+        // Instance name can be different but the size of array of struct should be matched.
+        if (varying.ignoreAtLinkTime && !varying.isArray())
+        {
+            continue;
+        }
 
         filteredVaryingsOut->push_back(&varying);
     }
@@ -4149,6 +4182,15 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::ShaderVariable &output
         {
             return LinkMismatchError::ARRAY_SIZE_MISMATCH;
         }
+    }
+
+    // [Shader Interface matching] Section 9.1 in the OpenGL ES Shading Language
+    // When linking shaders, the type of declared vertex outputs and fragment inputs with the same
+    // name must match, otherwise the link command will fail.
+    if (inputVarying.memberVariableType != sh::MemberVariableType::DEFAULT_VARIABLE &&
+        inputVarying.location == outputVarying.location && inputVarying.name != outputVarying.name)
+    {
+        return LinkMismatchError::FIELD_NAME_MISMATCH;
     }
 
     // Skip the validation on the array sizes between a vertex output varying and a geometry input

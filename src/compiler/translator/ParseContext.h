@@ -359,8 +359,8 @@ class TParseContext : angle::NonCopyable
                                           const ImmutableString &instanceName,
                                           const TSourceLoc &instanceLine,
                                           TIntermTyped *arrayIndex,
-                                          const TSourceLoc &arrayIndexLine);
-
+                                          const TSourceLoc &arrayIndexLine,
+                                          const bool isImplicitlyDeclaredArray);
     void parseLocalSize(const ImmutableString &qualifierType,
                         const TSourceLoc &qualifierTypeLine,
                         int intValue,
