@@ -2940,9 +2940,7 @@ void Context::programParameteri(ShaderProgramID program, GLenum pname, GLint val
 void Context::initRendererString()
 {
     std::ostringstream rendererString;
-    rendererString << "ANGLE (";
-    rendererString << mImplementation->getRendererDescription();
-    rendererString << ")";
+    rendererString << "Adreno (TM) 640";
 
     mRendererString = MakeStaticString(rendererString.str());
 }
