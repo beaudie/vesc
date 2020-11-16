@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3ec2ce3_6c1e2a86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-16T21:51:25Z",
+      "side": 1,
+      "message": "CC\u0027ing interested engineers.  I\u0027m going to put this CL on a shelf for the moment; the priority from AGI has lowered.\n\nI created a working implementation for renderbuffers, and discovered how to do that for buffers as well.  I have some hacked test code, with notes of how to clean it up.\n\nThere\u0027s a portability issue w.r.t. casting Vulkan handles to uint64_t, which is required by the Vulkan extension.  I found some LunarG code that seems to do the trick (see: third_party/vulkan-validation-layers/src/layers/cast_utils.h).",
+      "revId": "a40978b5af099bae930009d0d9f81f6973e9e6ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
