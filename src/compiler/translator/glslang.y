@@ -612,15 +612,19 @@ declaration
     }
     | type_qualifier enter_struct struct_declaration_list RIGHT_BRACE SEMICOLON {
         ES3_OR_NEWER(ImmutableString($2.string), @1, "interface blocks");
-        $$ = context->addInterfaceBlock(*$1, @2, ImmutableString($2.string), $3, kEmptyImmutableString, @$, NULL, @$);
+        $$ = context->addInterfaceBlock(*$1, @2, ImmutableString($2.string), $3, kEmptyImmutableString, @$, NULL, @$, false);
     }
     | type_qualifier enter_struct struct_declaration_list RIGHT_BRACE IDENTIFIER SEMICOLON {
         ES3_OR_NEWER(ImmutableString($2.string), @1, "interface blocks");
-        $$ = context->addInterfaceBlock(*$1, @2, ImmutableString($2.string), $3, ImmutableString($5.string), @5, NULL, @$);
+        $$ = context->addInterfaceBlock(*$1, @2, ImmutableString($2.string), $3, ImmutableString($5.string), @5, NULL, @$, false);
+    }
+    | type_qualifier enter_struct struct_declaration_list RIGHT_BRACE IDENTIFIER LEFT_BRACKET RIGHT_BRACKET SEMICOLON {
+        ES3_OR_NEWER(ImmutableString($2.string), @1, "interface blocks");
+        $$ = context->addInterfaceBlock(*$1, @2, ImmutableString($2.string), $3, ImmutableString($5.string), @5, NULL, @6, true);
     }
     | type_qualifier enter_struct struct_declaration_list RIGHT_BRACE IDENTIFIER LEFT_BRACKET constant_expression RIGHT_BRACKET SEMICOLON {
         ES3_OR_NEWER(ImmutableString($2.string), @1, "interface blocks");
-        $$ = context->addInterfaceBlock(*$1, @2, ImmutableString($2.string), $3, ImmutableString($5.string), @5, $7, @6);
+        $$ = context->addInterfaceBlock(*$1, @2, ImmutableString($2.string), $3, ImmutableString($5.string), @5, $7, @6, false);
     }
     | type_qualifier SEMICOLON {
         context->parseGlobalLayoutQualifier(*$1);

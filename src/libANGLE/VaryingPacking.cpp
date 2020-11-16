@@ -69,8 +69,35 @@ VaryingInShaderRef &VaryingInShaderRef::operator=(VaryingInShaderRef &&other)
     std::swap(stage, other.stage);
     std::swap(parentStructName, other.parentStructName);
     std::swap(parentStructMappedName, other.parentStructMappedName);
+    std::swap(rootStructName, other.rootStructName);
+    std::swap(rootStructMappedName, other.rootStructMappedName);
 
     return *this;
+}
+
+void VaryingInShaderRef::copyNamesFrom(const VaryingInShaderRef &other)
+{
+    parentStructName       = other.parentStructName;
+    parentStructMappedName = other.parentStructMappedName;
+
+    rootStructName       = other.rootStructName;
+    rootStructMappedName = other.rootStructMappedName;
+}
+
+void VaryingInShaderRef::copyNamesFrom(const sh::ShaderVariable *parent,
+                                       const sh::ShaderVariable *root)
+{
+    if (parent)
+    {
+        parentStructName       = parent->name;
+        parentStructMappedName = parent->mappedName;
+    }
+
+    if (root)
+    {
+        rootStructName       = root->name;
+        rootStructMappedName = root->mappedName;
+    }
 }
 
 // Implementation of PackedVarying
@@ -88,7 +115,23 @@ PackedVarying::PackedVarying(VaryingInShaderRef &&frontVaryingIn,
       backVarying(std::move(backVaryingIn)),
       interpolation(interpolationIn),
       arrayIndex(GL_INVALID_INDEX),
-      fieldIndex(fieldIndexIn)
+      parentArrayIndex(GL_INVALID_INDEX),
+      fieldIndex(fieldIndexIn),
+      parentFieldIndex(GL_INVALID_INDEX)
+{}
+
+PackedVarying::PackedVarying(VaryingInShaderRef &&frontVaryingIn,
+                             VaryingInShaderRef &&backVaryingIn,
+                             sh::InterpolationType interpolationIn,
+                             GLuint fieldIndexIn,
+                             GLuint parentFieldIndex)
+    : frontVarying(std::move(frontVaryingIn)),
+      backVarying(std::move(backVaryingIn)),
+      interpolation(interpolationIn),
+      arrayIndex(GL_INVALID_INDEX),
+      parentArrayIndex(GL_INVALID_INDEX),
+      fieldIndex(fieldIndexIn),
+      parentFieldIndex(parentFieldIndex)
 {}
 
 PackedVarying::~PackedVarying() = default;
@@ -106,7 +149,9 @@ PackedVarying &PackedVarying::operator=(PackedVarying &&other)
     std::swap(backVarying, other.backVarying);
     std::swap(interpolation, other.interpolation);
     std::swap(arrayIndex, other.arrayIndex);
+    std::swap(parentArrayIndex, other.parentArrayIndex);
     std::swap(fieldIndex, other.fieldIndex);
+    std::swap(parentFieldIndex, other.parentFieldIndex);
 
     return *this;
 }
@@ -378,45 +423,114 @@ void VaryingPacking::packUserVarying(const ProgramVaryingRef &ref,
 
 void VaryingPacking::packUserVaryingField(const ProgramVaryingRef &ref,
                                           GLuint fieldIndex,
-                                          VaryingUniqueFullNames *uniqueFullNames)
+                                          VaryingUniqueFullNames *uniqueFullNames,
+                                          GLuint parentFieldIndex,
+                                          GLuint parentArrayIndex)
 {
     const sh::ShaderVariable *input  = ref.frontShader;
     const sh::ShaderVariable *output = ref.backShader;
 
     // Will get the vertex shader interpolation by default.
     sh::InterpolationType interpolation = input ? input->interpolation : output->interpolation;
-
-    const sh::ShaderVariable *frontField = input ? &input->fields[fieldIndex] : nullptr;
-    const sh::ShaderVariable *backField  = output ? &output->fields[fieldIndex] : nullptr;
+    // parentFieldIndex
+    GLuint childFieldIndex      = GL_INVALID_INDEX;
+    GLuint grandChildFieldIndex = GL_INVALID_INDEX;
+    if (parentFieldIndex == GL_INVALID_INDEX)
+    {
+        childFieldIndex = fieldIndex;
+    }
+    else
+    {
+        childFieldIndex      = parentFieldIndex;
+        grandChildFieldIndex = fieldIndex;
+    }
+    const sh::ShaderVariable *frontField = input ? &input->fields[childFieldIndex] : nullptr;
+    const sh::ShaderVariable *backField  = output ? &output->fields[childFieldIndex] : nullptr;
 
     VaryingInShaderRef frontVarying(ref.frontShaderStage, frontField);
     VaryingInShaderRef backVarying(ref.backShaderStage, backField);
+    if (parentFieldIndex != GL_INVALID_INDEX)
+    {
+        const sh::ShaderVariable *front =
+            input ? &frontField->fields[grandChildFieldIndex] : nullptr;
+        const sh::ShaderVariable *back =
+            output ? &backField->fields[grandChildFieldIndex] : nullptr;
 
-    if (input)
-    {
-        ASSERT(!frontField->isStruct() && !frontField->isArray());
-        frontVarying.parentStructName       = input->name;
-        frontVarying.parentStructMappedName = input->mappedName;
-    }
-    if (output)
-    {
-        ASSERT(!backField->isStruct() && !backField->isArray());
-        backVarying.parentStructName       = output->name;
-        backVarying.parentStructMappedName = output->mappedName;
-    }
+        VaryingInShaderRef frontVarying(ref.frontShaderStage, front);
+        VaryingInShaderRef backVarying(ref.backShaderStage, back);
 
-    mPackedVaryings.emplace_back(std::move(frontVarying), std::move(backVarying), interpolation,
-                                 fieldIndex);
+        frontVarying.copyNamesFrom(front, input);
+        backVarying.copyNamesFrom(back, output);
 
-    if (input)
-    {
-        (*uniqueFullNames)[ref.frontShaderStage].insert(
-            mPackedVaryings.back().fullName(ref.frontShaderStage));
+        if (front != nullptr && front->isArray())
+        {
+            for (int i = 0; i < static_cast<int>(front->getArraySizeProduct()); i++)
+            {
+                VaryingInShaderRef fieldFrontVarying(ref.frontShaderStage, front);
+                VaryingInShaderRef fieldBackVarying(ref.backShaderStage, back);
+                fieldFrontVarying.copyNamesFrom(frontVarying);
+                fieldBackVarying.copyNamesFrom(backVarying);
+
+                mPackedVaryings.emplace_back(std::move(fieldFrontVarying),
+                                             std::move(fieldBackVarying), interpolation, fieldIndex,
+                                             grandChildFieldIndex);
+                mPackedVaryings.back().arrayIndex       = i;
+                mPackedVaryings.back().parentArrayIndex = parentArrayIndex;
+            }
+        }
+        else
+        {
+            mPackedVaryings.emplace_back(std::move(frontVarying), std::move(backVarying),
+                                         interpolation, fieldIndex, grandChildFieldIndex);
+            mPackedVaryings.back().parentArrayIndex = parentArrayIndex;
+        }
+        return;
     }
-    if (output)
+    else
     {
-        (*uniqueFullNames)[ref.backShaderStage].insert(
-            mPackedVaryings.back().fullName(ref.backShaderStage));
+        VaryingInShaderRef frontVarying(ref.frontShaderStage, frontField);
+        VaryingInShaderRef backVarying(ref.backShaderStage, backField);
+        if (input)
+        {
+            ASSERT(!frontField->isStruct());
+        }
+        if (output)
+        {
+            ASSERT(!backField->isStruct());
+        }
+
+        frontVarying.copyNamesFrom(input, nullptr);
+        backVarying.copyNamesFrom(output, nullptr);
+
+        if (frontField != nullptr && frontField->isArray())
+        {
+            for (int i = 0; i < static_cast<int>(frontField->getBasicTypeElementCount()); i++)
+            {
+                VaryingInShaderRef frontVarying(ref.frontShaderStage, frontField);
+                VaryingInShaderRef backVarying(ref.backShaderStage, backField);
+
+                frontVarying.copyNamesFrom(input, nullptr);
+                backVarying.copyNamesFrom(output, nullptr);
+                mPackedVaryings.emplace_back(std::move(frontVarying), std::move(backVarying),
+                                             interpolation, fieldIndex);
+                mPackedVaryings.back().arrayIndex = i;
+            }
+        }
+        else
+        {
+            mPackedVaryings.emplace_back(std::move(frontVarying), std::move(backVarying),
+                                         interpolation, fieldIndex);
+            if (input)
+            {
+                (*uniqueFullNames)[ref.frontShaderStage].insert(
+                    mPackedVaryings.back().fullName(ref.frontShaderStage));
+            }
+            if (output)
+            {
+                (*uniqueFullNames)[ref.backShaderStage].insert(
+                    mPackedVaryings.back().fullName(ref.backShaderStage));
+            }
+        }
     }
 }
 
@@ -473,7 +587,6 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
             (isSeparableProgram && ((input && input->active) || (output && output->active))))
         {
             const sh::ShaderVariable *varying = output ? output : input;
-
             // Don't count gl_Position. Also don't count gl_PointSize for D3D9.
             if (varying->name != "gl_Position" &&
                 !(varying->name == "gl_PointSize" &&
@@ -482,10 +595,69 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
                 if (varying->isStruct())
                 {
                     ASSERT(!(varying->isArray() && varying == input));
-
                     for (GLuint fieldIndex = 0; fieldIndex < varying->fields.size(); ++fieldIndex)
                     {
-                        packUserVaryingField(ref, fieldIndex, &uniqueFullNames);
+                        if (varying->fields[fieldIndex].isArray())
+                        {
+                            for (int n = 0;
+                                 n < static_cast<int>(
+                                         varying->fields[fieldIndex].getArraySizeProduct());
+                                 n++)
+                                if (varying->fields[fieldIndex].isStruct())
+                                {
+                                    for (GLuint nestedIndex = 0;
+                                         nestedIndex < varying->fields[fieldIndex].fields.size();
+                                         nestedIndex++)
+                                    {
+                                        packUserVaryingField(ref, nestedIndex, &uniqueFullNames,
+                                                             fieldIndex, n);
+                                    }
+                                    if (input)
+                                    {
+                                        uniqueFullNames[ref.frontShaderStage].insert(
+                                            input->fields[fieldIndex].name);
+                                    }
+                                    if (output)
+                                    {
+                                        uniqueFullNames[ref.backShaderStage].insert(
+                                            output->fields[fieldIndex].name);
+                                    }
+                                }
+                                else
+                                {
+                                    packUserVaryingField(ref, fieldIndex, &uniqueFullNames,
+                                                         GL_INVALID_INDEX, n);
+                                }
+                        }
+                        else
+                        {
+                            if (varying->fields[fieldIndex].isStruct())
+                            {
+
+                                for (GLuint nestedIndex = 0;
+                                     nestedIndex < varying->fields[fieldIndex].fields.size();
+                                     nestedIndex++)
+                                {
+                                    packUserVaryingField(ref, nestedIndex, &uniqueFullNames,
+                                                         fieldIndex, GL_INVALID_INDEX);
+                                }
+                                if (input)
+                                {
+                                    uniqueFullNames[ref.frontShaderStage].insert(
+                                        input->fields[fieldIndex].name);
+                                }
+                                if (output)
+                                {
+                                    uniqueFullNames[ref.backShaderStage].insert(
+                                        output->fields[fieldIndex].name);
+                                }
+                            }
+                            else
+                            {
+                                packUserVaryingField(ref, fieldIndex, &uniqueFullNames,
+                                                     GL_INVALID_INDEX, GL_INVALID_INDEX);
+                            }
+                        }
                     }
                     if (input)
                     {
@@ -500,7 +672,6 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
                 {
                     packUserVarying(ref, &uniqueFullNames);
                 }
-                continue;
             }
         }
 
@@ -559,7 +730,6 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
                 }
             }
         }
-
         if (input && uniqueFullNames[ref.frontShaderStage].count(input->name) == 0)
         {
             mInactiveVaryingMappedNames[ref.frontShaderStage].push_back(input->mappedName);

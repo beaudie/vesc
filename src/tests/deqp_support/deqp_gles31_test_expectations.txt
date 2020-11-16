@@ -185,6 +185,13 @@
 // Cannot create 2D (array) view of 3D texture.
 3886 VULKAN : dEQP-GLES31.functional.image_load_store.3d.*layer = FAIL
 
+// Shader io block : failed by glslang errors (matrix or packing qualifiers can only be used on a uniform or buffer)
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.type.interface_blocks.in.*.mat3x2 = FAIL
+3580 VULKAN : dEQP-GLES31.functional.program_interface_query.program_output.type.interface_blocks.out.*.mat3x2 = FAIL
+
+// Shader io block : SSBO failure wiht GL_OES_shader_io_blocks
+3580 VULKAN : dEQP-GLES31.functional.shaders.linkage.es31.shader_storage_block.ambiguous_variable_name_3 = FAIL
+
 ////
 //// Android (i.e. Pixel*) Vulkan expectations
 ////
