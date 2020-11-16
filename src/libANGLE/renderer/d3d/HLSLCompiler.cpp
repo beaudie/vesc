@@ -219,14 +219,6 @@ angle::Result HLSLCompiler::compileToBinary(d3d::Context *context,
 #endif
     ASSERT(mD3DCompileFunc);
 
-#if !defined(ANGLE_ENABLE_WINDOWS_UWP) && defined(ANGLE_ENABLE_DEBUG_TRACE)
-    std::string sourcePath = getTempPath();
-    std::ostringstream stream;
-    stream << "#line 2 \"" << sourcePath << "\"\n\n" << hlsl;
-    std::string sourceText = stream.str();
-    writeFile(sourcePath.c_str(), sourceText.c_str(), sourceText.size());
-#endif
-
     const D3D_SHADER_MACRO *macros = overrideMacros ? overrideMacros : nullptr;
 
     for (size_t i = 0; i < configs.size(); ++i)

@@ -1274,46 +1274,6 @@ EGLClientBuffer GLObjectHandleToEGLClientBuffer(GLuint handle)
 
 }  // namespace gl_egl
 
-#if !defined(ANGLE_ENABLE_WINDOWS_UWP)
-std::string getTempPath()
-{
-#    ifdef ANGLE_PLATFORM_WINDOWS
-    char path[MAX_PATH];
-    DWORD pathLen = GetTempPathA(sizeof(path) / sizeof(path[0]), path);
-    if (pathLen == 0)
-    {
-        UNREACHABLE();
-        return std::string();
-    }
-
-    UINT unique = GetTempFileNameA(path, "sh", 0, path);
-    if (unique == 0)
-    {
-        UNREACHABLE();
-        return std::string();
-    }
-
-    return path;
-#    else
-    UNIMPLEMENTED();
-    return "";
-#    endif
-}
-
-void writeFile(const char *path, const void *content, size_t size)
-{
-    FILE *file = fopen(path, "w");
-    if (!file)
-    {
-        UNREACHABLE();
-        return;
-    }
-
-    fwrite(content, sizeof(char), size, file);
-    fclose(file);
-}
-#endif  // !ANGLE_ENABLE_WINDOWS_UWP
-
 #if defined(ANGLE_PLATFORM_WINDOWS)
 
 // Causes the thread to relinquish the remainder of its time slice to any

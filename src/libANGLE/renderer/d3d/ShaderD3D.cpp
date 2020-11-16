@@ -265,15 +265,6 @@ std::shared_ptr<WaitableCompileEvent> ShaderD3D::compile(const gl::Context *cont
 
     const std::string &source = mState.getSource();
 
-#if !defined(ANGLE_ENABLE_WINDOWS_UWP)
-    if (gl::DebugAnnotationsActive())
-    {
-        sourcePath = getTempPath();
-        writeFile(sourcePath.c_str(), source.c_str(), source.length());
-        additionalOptions |= SH_LINE_DIRECTIVES | SH_SOURCE_PATH;
-    }
-#endif
-
     additionalOptions |= mAdditionalOptions;
 
     options |= additionalOptions;
