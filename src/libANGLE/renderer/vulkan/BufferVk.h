@@ -126,6 +126,8 @@ class BufferVk : public BufferImpl
                                                 size_t offset,
                                                 bool hostVisible);
 
+    void setDebugObjectLabel(const gl::Context *context, const std::string &label) override;
+
   private:
     angle::Result initializeShadowBuffer(ContextVk *contextVk,
                                          gl::BufferBinding target,

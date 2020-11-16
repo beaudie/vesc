@@ -63,8 +63,21 @@ class VulkanPerformanceCounterTest : public ANGLETest
                      GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *texture, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, *renderbuffer);
+#define NEW_TEST_CODE_PATH
+#ifdef NEW_TEST_CODE_PATH
+        // TODO BEFORE LANDING THIS CL: Create a new test in DebugTest.cpp that properly tests
+        // setting an object label with an object that is actually created (DebugTest does not).
+        const std::string &label1 = "renderbuffer1";
+        glObjectLabelKHR(GL_RENDERBUFFER, *renderbuffer, -1, label1.c_str());
+#endif  // NEW_TEST_CODE_PATH
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, kInvalidateTestSize,
                               kInvalidateTestSize);
+#ifdef NEW_TEST_CODE_PATH
+        // TODO BEFORE LANDING THIS CL: Create a new test in DebugTest.cpp that properly tests
+        // setting an object label with an object that is actually created (DebugTest does not).
+        const std::string &label2 = "renderbuffer2";
+        glObjectLabelKHR(GL_RENDERBUFFER, *renderbuffer, -1, label2.c_str());
+#endif  // NEW_TEST_CODE_PATH
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
                                   *renderbuffer);
         ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
@@ -368,7 +381,19 @@ TEST_P(VulkanPerformanceCounterTest, IndependentBufferCopiesShareSingleBarrier)
 
     GLBuffer dstA;
     glBindBuffer(GL_COPY_WRITE_BUFFER, dstA);
+#ifdef NEW_TEST_CODE_PATH
+    // TODO BEFORE LANDING THIS CL: Create a new test in DebugTest.cpp that properly tests
+    // setting an object label with an object that is actually created (DebugTest does not).
+    const std::string &label1 = "buffer1";
+    glObjectLabelKHR(GL_BUFFER, dstA, -1, label1.c_str());
+#endif  // NEW_TEST_CODE_PATH
     glBufferData(GL_COPY_WRITE_BUFFER, sizeof(srcDataA[0]) * 2, nullptr, GL_STATIC_COPY);
+#ifdef NEW_TEST_CODE_PATH
+    // TODO BEFORE LANDING THIS CL: Create a new test in DebugTest.cpp that properly tests
+    // setting an object label with an object that is actually created (DebugTest does not).
+    const std::string &label2 = "buffer2";
+    glObjectLabelKHR(GL_BUFFER, dstA, -1, label2.c_str());
+#endif  // NEW_TEST_CODE_PATH
 
     GLBuffer srcB;
     glBindBuffer(GL_COPY_READ_BUFFER, srcB);

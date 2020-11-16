@@ -81,6 +81,8 @@ class BufferImpl : public angle::Subject
 
     virtual void onDataChanged() {}
 
+    virtual void setDebugObjectLabel(const gl::Context *context, const std::string &label) {}
+
   protected:
     const gl::BufferState &mState;
 };

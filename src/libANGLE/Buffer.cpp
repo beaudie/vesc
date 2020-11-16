@@ -63,6 +63,7 @@ void Buffer::onDestroy(const Context *context)
 void Buffer::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    getImplementation()->setDebugObjectLabel(context, label);
 }
 
 const std::string &Buffer::getLabel() const

@@ -26,6 +26,7 @@ angle::SubjectIndex kRenderbufferImageSubjectIndex = 0;
 RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
     : RenderbufferImpl(state),
       mOwnsImage(false),
+      mSetDebugObjectLabel(false),
       mImage(nullptr),
       mImageObserverBinding(this, kRenderbufferImageSubjectIndex)
 {}
@@ -150,6 +151,13 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
     {
         mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, gl::LevelIndex(0), 0,
                            RenderTargetTransience::Default);
+    }
+    if (mSetDebugObjectLabel && mImage && mImage->valid())
+    {
+        VkImage handle = mImage->getImage().getHandle();
+        contextVk->setDebugObjectLabel(context, VK_OBJECT_TYPE_IMAGE,
+                                       reinterpret_cast<uint64_t>(handle), mLabel);
+        mSetDebugObjectLabel = false;
     }
 
     return angle::Result::Continue;
@@ -381,5 +389,26 @@ void RenderbufferVk::onSubjectStateChange(angle::SubjectIndex index, angle::Subj
 
     // Forward the notification to the parent class that the staging buffer changed.
     onStateChange(angle::SubjectMessage::SubjectChanged);
+}
+
+void RenderbufferVk::setDebugObjectLabel(const gl::Context *context, const std::string &label)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mImage && mImage->valid())
+    {
+        VkImage handle = mImage->getImage().getHandle();
+
+        contextVk->setDebugObjectLabel(context, VK_OBJECT_TYPE_IMAGE,
+                                       // TODO BEFORE THIS CL LANDS: Find a more-portable way to
+                                       // cast the handle, since this struct wants the handle passed
+                                       // as uint64_t on all 32/64-bit OS's.
+                                       reinterpret_cast<uint64_t>(handle), label);
+    }
+    else
+    {
+        // Defer setting the label until the image is created
+        mSetDebugObjectLabel = true;
+        mLabel               = label;
+    }
 }
 }  // namespace rx

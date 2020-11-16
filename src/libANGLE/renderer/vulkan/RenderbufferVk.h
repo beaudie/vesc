@@ -89,6 +89,8 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
 
     angle::Result ensureImageInitialized(const gl::Context *context);
 
+    void setDebugObjectLabel(const gl::Context *context, const std::string &label) override;
+
   private:
     void releaseAndDeleteImage(ContextVk *contextVk);
     void releaseImage(ContextVk *contextVk);
@@ -106,6 +108,8 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
     bool mOwnsImage;
+    bool mSetDebugObjectLabel;
+    std::string mLabel;
 
     // |mOwnsImage| indicates that |RenderbufferVk| owns the image.  Otherwise, this is a weak
     // pointer shared with another class.  Due to this sharing, for example through EGL images, the

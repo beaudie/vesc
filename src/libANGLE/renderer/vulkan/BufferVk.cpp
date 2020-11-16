@@ -729,7 +729,22 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     *bufferHelperOut = mBufferPool.getCurrentBuffer();
     ASSERT(*bufferHelperOut);
 
+    // TBD/TODO BEFORE LANDING THIS CL: This may be a good spot to do a deferred setting of the
+    // glObjectLabel because at this point, there is a new this::mBuffer, which has a valid handle.
+
     return angle::Result::Continue;
+}
+
+void BufferVk::setDebugObjectLabel(const gl::Context *context, const std::string &label)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mBuffer && mBuffer->valid())
+    {
+        VkBuffer handle = mBuffer->getBuffer().getHandle();
+
+        contextVk->setDebugObjectLabel(context, VK_OBJECT_TYPE_BUFFER,
+                                       reinterpret_cast<uint64_t>(handle), label);
+    }
 }
 
 }  // namespace rx
