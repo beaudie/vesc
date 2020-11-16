@@ -834,30 +834,26 @@ bool ValidateComponentTypeMasks(unsigned long outputTypes,
 GLsizeiptr GetBoundBufferAvailableSize(const OffsetBindingPointer<Buffer> &binding)
 {
     Buffer *buffer = binding.get();
-    if (buffer)
-    {
-        if (binding.getSize() == 0)
-            return static_cast<GLsizeiptr>(buffer->getSize());
-        angle::CheckedNumeric<GLintptr> offset       = binding.getOffset();
-        angle::CheckedNumeric<GLsizeiptr> size       = binding.getSize();
-        angle::CheckedNumeric<GLsizeiptr> bufferSize = buffer->getSize();
-        auto end                                     = offset + size;
-        auto clampedSize                             = size;
-        auto difference                              = end - bufferSize;
-        if (!difference.IsValid())
-        {
-            return 0;
-        }
-        if (difference.ValueOrDie() > 0)
-        {
-            clampedSize = size - difference;
-        }
-        return clampedSize.ValueOrDefault(0);
-    }
-    else
+    if (buffer == nullptr)
     {
         return 0;
     }
+
+    if (binding.getSize() == 0)
+    {
+        return static_cast<GLsizeiptr>(buffer->getSize());
+    }
+
+    const GLintptr offset       = binding.getOffset();
+    const GLsizeiptr size       = binding.getSize();
+    const GLsizeiptr bufferSize = buffer->getSize();
+
+    if (bufferSize < offset)
+    {
+        return 0;
+    }
+
+    return std::min<GLsizeiptr>(size, bufferSize - offset);
 }
 
 }  // namespace gl
