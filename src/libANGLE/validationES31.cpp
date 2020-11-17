@@ -104,6 +104,11 @@ bool ValidateProgramResourceProperty(const Context *context, GLenum prop)
         case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
             return context->getExtensions().geometryShader;
 
+        case GL_REFERENCED_BY_TESS_CONTROL_SHADER_EXT:
+        case GL_REFERENCED_BY_TESS_EVALUATION_SHADER_EXT:
+        case GL_IS_PER_PATCH_EXT:
+            return context->getExtensions().tessellationShader;
+
         case GL_LOCATION_INDEX_EXT:
             return context->getExtensions().blendFuncExtended;
 
@@ -216,6 +221,8 @@ bool ValidateProgramResourcePropertyByInterface(GLenum prop, GLenum programInter
         case GL_REFERENCED_BY_FRAGMENT_SHADER:
         case GL_REFERENCED_BY_COMPUTE_SHADER:
         case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
+        case GL_REFERENCED_BY_TESS_CONTROL_SHADER_EXT:
+        case GL_REFERENCED_BY_TESS_EVALUATION_SHADER_EXT:
         {
             switch (programInterface)
             {
@@ -256,6 +263,14 @@ bool ValidateProgramResourcePropertyByInterface(GLenum prop, GLenum programInter
                     return false;
             }
         }
+        case GL_IS_PER_PATCH_EXT:
+            switch (programInterface)
+            {
+                case GL_PROGRAM_INPUT:
+                case GL_PROGRAM_OUTPUT:
+                    return true;
+            }
+            return false;
 
         default:
             return false;
