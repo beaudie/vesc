@@ -53,9 +53,19 @@ enum class BlockType
     BLOCK_BUFFER,
 
     // Required in OpenGL ES 3.1 extension GL_OES_shader_io_blocks.
-    // TODO(jiawei.shao@intel.com): add BLOCK_OUT.
-    // Also used in GLSL
+    BLOCK_OUT,
     BLOCK_IN
+};
+
+// Member type of Interface Blocks for link
+// SpirvTransformer::transform uses a map of ShaderVariables, it needs member variables and instance
+// name as ShaderVariable, not InterfaceBlock. and link or link validation will be done with
+// ShaderVariable and InterfaceBlock. the duplicated will be ignored at link validation.
+enum MemberVariableType
+{
+    DEFAULT_VARIABLE,
+    INTERFACE_MEMBER,
+    DUPLICATED_MEMBER
 };
 
 // Base class for all variables defined in shaders, including Varyings, Uniforms, etc
@@ -165,6 +175,9 @@ struct ShaderVariable
 
     // VariableWithLocation
     int location;
+    bool hasImplicitLocation;
+    void updateImplicitLocation(const sh::ShaderVariable &parent);
+    void updateImplicitLocation();
 
     // Uniform
     int binding;
@@ -191,6 +204,8 @@ struct ShaderVariable
     // fragment shader.
     // See GLSL ES Spec 3.00.3, sec 4.3.7.
     bool isSameInterfaceBlockFieldAtLinkTime(const ShaderVariable &other) const;
+    bool ignoreAtLinkTime;
+    MemberVariableType memberVariableType;
 
     // Varying
     InterpolationType interpolation;

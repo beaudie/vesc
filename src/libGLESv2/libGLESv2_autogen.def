@@ -774,6 +774,8 @@ EXPORTS
     glUseProgramStagesEXT
     glValidateProgramPipelineEXT
 
+    ; GL_EXT_shader_io_blocks
+
     ; GL_EXT_texture_buffer
     glTexBufferEXT
     glTexBufferRangeEXT
@@ -902,6 +904,8 @@ EXPORTS
 
     ; GL_OES_sample_shading
     glMinSampleShadingOES
+
+    ; GL_OES_shader_io_blocks
 
     ; GL_OES_texture_3D
     glCompressedTexImage3DOES
