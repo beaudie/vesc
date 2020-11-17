@@ -220,7 +220,6 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
       mStepsToRun(std::max(gStepsPerTrial, gMaxStepsPerformed)),
       mTrialNumStepsPerformed(0),
       mTotalNumStepsPerformed(0),
-      mStepsPerRunLoopStep(1),
       mIterationsPerStep(iterationsPerStep),
       mRunning(true)
 {
@@ -295,12 +294,6 @@ void ANGLEPerfTest::run()
     }
 }
 
-void ANGLEPerfTest::setStepsPerRunLoopStep(int stepsPerRunLoop)
-{
-    ASSERT(stepsPerRunLoop >= 1);
-    mStepsPerRunLoopStep = stepsPerRunLoop;
-}
-
 void ANGLEPerfTest::doRunLoop(double maxRunTime, int maxStepsToRun, RunLoopPolicy runPolicy)
 {
     mTrialNumStepsPerformed = 0;
@@ -320,9 +313,13 @@ void ANGLEPerfTest::doRunLoop(double maxRunTime, int maxStepsToRun, RunLoopPolic
 
         if (mRunning)
         {
-            mTrialNumStepsPerformed += mStepsPerRunLoopStep;
-            mTotalNumStepsPerformed += mStepsPerRunLoopStep;
-            if (mTimer.getElapsedTime() > maxRunTime)
+            mTrialNumStepsPerformed++;
+            mTotalNumStepsPerformed++;
+            if (gMaxStepsPerformed > 0 && mTotalNumStepsPerformed >= gMaxStepsPerformed)
+            {
+                mRunning = false;
+            }
+            else if (mTimer.getElapsedTime() > maxRunTime)
             {
                 mRunning = false;
             }
