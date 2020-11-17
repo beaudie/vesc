@@ -60,6 +60,8 @@ enum class SurfaceRotation
     EnumCount = InvalidEnum,
 };
 
+using SpecConstUsageBits = angle::PackedEnumBitSet<sh::vk::SpecConstUsage, uint32_t>;
+
 void RotateRectangle(const SurfaceRotation rotation,
                      const bool flipY,
                      const int framebufferWidth,

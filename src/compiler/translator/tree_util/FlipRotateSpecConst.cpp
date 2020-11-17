@@ -220,7 +220,10 @@ TIntermTyped *CreateFloatArrayWithRotationIndex(const Vec2EnumMap &valuesEnumMap
 }
 }  // anonymous namespace
 
-FlipRotateSpecConst::FlipRotateSpecConst() : mSpecConstSymbol(nullptr), mReferenced(false) {}
+FlipRotateSpecConst::FlipRotateSpecConst() : mSpecConstSymbol(nullptr)
+{
+    mReferenced.reset();
+}
 
 FlipRotateSpecConst::~FlipRotateSpecConst()
 {
@@ -241,7 +244,7 @@ void FlipRotateSpecConst::generateSymbol(TSymbolTable *symbolTable)
 void FlipRotateSpecConst::outputLayoutString(TInfoSinkBase &sink) const
 {
     // Only emit specialized const layout string if it has been referenced.
-    if (mReferenced)
+    if (mReferenced.any())
     {
         sink << "layout(constant_id="
              << static_cast<uint32_t>(vk::SpecializationConstantId::SurfaceRotation)
@@ -255,7 +258,8 @@ TIntermTyped *FlipRotateSpecConst::getMultiplierXForDFdx()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
+    mReferenced.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdx, 0, 1, mSpecConstSymbol);
 }
 
@@ -265,7 +269,8 @@ TIntermTyped *FlipRotateSpecConst::getMultiplierYForDFdx()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
+    mReferenced.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdx, 1, 1, mSpecConstSymbol);
 }
 
@@ -275,7 +280,8 @@ TIntermTyped *FlipRotateSpecConst::getMultiplierXForDFdy()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
+    mReferenced.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdy, 0, 1, mSpecConstSymbol);
 }
 
@@ -285,7 +291,8 @@ TIntermTyped *FlipRotateSpecConst::getMultiplierYForDFdy()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
+    mReferenced.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdy, 1, 1, mSpecConstSymbol);
 }
 
@@ -295,7 +302,7 @@ TIntermTyped *FlipRotateSpecConst::getPreRotationMatrix()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::Rotation);
     return GenerateMat2x2ArrayWithIndex(kPreRotationMatrices, mSpecConstSymbol);
 }
 
@@ -305,7 +312,7 @@ TIntermTyped *FlipRotateSpecConst::getFragRotationMatrix()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::Rotation);
     return GenerateMat2x2ArrayWithIndex(kFragRotationMatrices, mSpecConstSymbol);
 }
 
@@ -315,7 +322,7 @@ TIntermTyped *FlipRotateSpecConst::getFlipXY()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
     return CreateVec2ArrayWithIndex(kFlipXYValue, 1.0, mSpecConstSymbol);
 }
 
@@ -325,7 +332,7 @@ TIntermTyped *FlipRotateSpecConst::getNegFlipXY()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
     return CreateVec2ArrayWithIndex(kFlipXYValue, -1.0, mSpecConstSymbol);
 }
 
@@ -335,7 +342,7 @@ TIntermTyped *FlipRotateSpecConst::getFlipY()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
     return CreateFloatArrayWithRotationIndex(kFlipXYValue, 1, 1, mSpecConstSymbol);
 }
 
@@ -345,7 +352,7 @@ TIntermTyped *FlipRotateSpecConst::getNegFlipY()
     {
         return nullptr;
     }
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
     return CreateFloatArrayWithRotationIndex(kFlipXYValue, 1, -1, mSpecConstSymbol);
 }
 
@@ -374,7 +381,8 @@ TIntermTyped *FlipRotateSpecConst::getFragRotationMultiplyFlipXY()
          {vk::SurfaceRotation::FlippedRotated270Degrees,
           CalcFragRotationMultiplyFlipXY(vk::SurfaceRotation::FlippedRotated270Degrees)}}};
 
-    mReferenced = true;
+    mReferenced.set(vk::SpecConstUsage::YFlip);
+    mReferenced.set(vk::SpecConstUsage::Rotation);
     return CreateVec2ArrayWithIndex(kFragRotationMultiplyFlipXY, 1.0, mSpecConstSymbol);
 }
 

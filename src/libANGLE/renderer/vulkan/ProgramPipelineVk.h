@@ -53,6 +53,9 @@ class ProgramPipelineVk : public ProgramPipelineImpl
     bool dirtyUniforms(const gl::State &glState);
     void onProgramBind(ContextVk *contextVk);
 
+    rx::SpecConstUsageBits getSpecConstUsageBits(const gl::State &glState,
+                                                 const gl::ProgramExecutable &glExecutable) const;
+
   private:
     size_t calcUniformUpdateRequiredSpace(ContextVk *contextVk,
                                           const gl::ProgramExecutable &glExecutable,
