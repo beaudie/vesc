@@ -95,6 +95,22 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
     return mExecutable.createPipelineLayout(glContext, nullptr);
 }
 
+rx::SpecConstUsageBits ProgramPipelineVk::getSpecConstUsageBits(
+    const gl::State &glState,
+    const gl::ProgramExecutable &glExecutable) const
+{
+    rx::SpecConstUsageBits usageBits;
+    for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+    {
+        ProgramVk *programVk = getShaderProgram(glState, shaderType);
+        if (programVk)
+        {
+            usageBits |= programVk->getState().getSpecConstUsageBits();
+        }
+    }
+    return usageBits;
+}
+
 size_t ProgramPipelineVk::calcUniformUpdateRequiredSpace(
     ContextVk *contextVk,
     const gl::ProgramExecutable &glExecutable,
