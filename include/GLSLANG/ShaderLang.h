@@ -39,6 +39,8 @@ enum ShShaderSpec
     SH_GLES3_1_SPEC,
     SH_WEBGL3_SPEC,
 
+    SH_GLES3_2_SPEC,
+
     SH_GL_CORE_SPEC,
     SH_GL_COMPATIBILITY_SPEC,
 };
