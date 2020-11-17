@@ -645,6 +645,7 @@ void SerializeShaderState(gl::BinaryOutputStream *bos, const gl::ShaderState &sh
     SerializeShaderVariablesVector(bos, shaderState.getActiveOutputVariables());
     bos->writeBool(shaderState.getEarlyFragmentTestsOptimization());
     bos->writeInt(shaderState.getNumViews());
+    bos->writeInt(shaderState.getSpecConstUsageBits());
     if (shaderState.getGeometryShaderInputPrimitiveType().valid())
     {
         bos->writeEnum(shaderState.getGeometryShaderInputPrimitiveType().value());
