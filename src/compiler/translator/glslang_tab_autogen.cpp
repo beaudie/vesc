@@ -460,13 +460,13 @@ extern void yyerror(YYLTYPE *yylloc, TParseContext *context, void *scanner, cons
         }                                                                                    \
     } while (0)
 
-#define ES3_1_ONLY(TOKEN, LINE, REASON)                                            \
-    do                                                                             \
-    {                                                                              \
-        if (context->getShaderVersion() != 310)                                    \
-        {                                                                          \
-            context->error(LINE, REASON " supported in GLSL ES 3.10 only", TOKEN); \
-        }                                                                          \
+#define ES3_1_OR_NEWER(TOKEN, LINE, REASON)                                                  \
+    do                                                                                       \
+    {                                                                                        \
+        if (context->getShaderVersion() < 310)                                               \
+        {                                                                                    \
+            context->error(LINE, REASON " supported in GLSL ES 3.10 and above only", TOKEN); \
+        }                                                                                    \
     } while (0)
 
 #ifdef short
@@ -3675,7 +3675,7 @@ yyreduce:
         case 143:
 
         {
-            ES3_1_ONLY("buffer", (yylsp[0]), "storage qualifier");
+            ES3_1_OR_NEWER("buffer", (yylsp[0]), "storage qualifier");
             (yyval.interm.qualifierWrapper) =
                 context->parseGlobalStorageQualifier(EvqBuffer, (yylsp[0]));
         }
@@ -3885,7 +3885,7 @@ yyreduce:
         case 166:
 
         {
-            ES3_1_ONLY("[]", (yylsp[-1]), "arrays of arrays");
+            ES3_1_OR_NEWER("[]", (yylsp[-1]), "arrays of arrays");
             (yyval.interm.arraySizes) = (yyvsp[-2].interm.arraySizes);
             (yyval.interm.arraySizes)->insert((yyval.interm.arraySizes)->begin(), 0u);
         }
@@ -3895,7 +3895,7 @@ yyreduce:
         case 167:
 
         {
-            ES3_1_ONLY("[]", (yylsp[-2]), "arrays of arrays");
+            ES3_1_OR_NEWER("[]", (yylsp[-2]), "arrays of arrays");
             (yyval.interm.arraySizes) = (yyvsp[-3].interm.arraySizes);
             unsigned int size =
                 context->checkIsValidArraySize((yylsp[-2]), (yyvsp[-1].interm.intermTypedNode));
