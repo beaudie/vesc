@@ -97,8 +97,6 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
 
     int getNumStepsPerformed() const { return mTrialNumStepsPerformed; }
 
-    // Defaults to one step per run loop. Can be changed in any test.
-    void setStepsPerRunLoopStep(int stepsPerRunLoop);
     void doRunLoop(double maxRunTime, int maxStepsToRun, RunLoopPolicy runPolicy);
 
     // Overriden in trace perf tests.
@@ -118,7 +116,6 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     int mStepsToRun;
     int mTrialNumStepsPerformed;
     int mTotalNumStepsPerformed;
-    int mStepsPerRunLoopStep;
     int mIterationsPerStep;
     bool mRunning;
     std::vector<double> mTestTrialResults;

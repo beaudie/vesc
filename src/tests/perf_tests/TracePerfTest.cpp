@@ -293,8 +293,6 @@ void TracePerfTest::initializeBenchmark()
     mEndFrame                  = traceInfo.endFrame;
     SetBinaryDataDecompressCallback(params.testID, DecompressBinaryData);
 
-    setStepsPerRunLoopStep(mEndFrame - mStartFrame + 1);
-
     std::stringstream testDataDirStr;
     testDataDirStr << ANGLE_TRACE_DATA_DIR << "/" << traceInfo.name;
     std::string testDataDir = testDataDirStr.str();
@@ -426,88 +424,79 @@ void TracePerfTest::drawBenchmark()
     const TracePerfParams &params = GetParam();
 
     // Add a time sample from GL and the host.
-    sampleTime();
-
-    uint32_t endFrame = mEndFrame;
-    if (gMaxStepsPerformed > 0)
+    uint32_t numFrames = mEndFrame - mStartFrame + 1;
+    uint32_t frame     = (static_cast<uint32_t>(getNumStepsPerformed()) % numFrames) + mStartFrame;
+    if (frame == mStartFrame)
     {
-        endFrame =
-            std::min(endFrame, gMaxStepsPerformed - mTotalNumStepsPerformed - 1 + mStartFrame);
-        mStepsPerRunLoopStep = endFrame - mStartFrame + 1;
+        sampleTime();
     }
 
-    for (uint32_t frame = mStartFrame; frame <= mEndFrame; ++frame)
+    char frameName[32];
+    sprintf(frameName, "Frame %u", frame);
+    beginInternalTraceEvent(frameName);
+
+    startGpuTimer();
+    ReplayFrame(params.testID, frame);
+    stopGpuTimer();
+
+    if (params.surfaceType != SurfaceType::Offscreen)
     {
-        char frameName[32];
-        sprintf(frameName, "Frame %u", frame);
-        beginInternalTraceEvent(frameName);
+        getGLWindow()->swap();
+    }
+    else
+    {
+        GLint currentDrawFBO, currentReadFBO;
+        glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
+        glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
 
-        startGpuTimer();
-        ReplayFrame(params.testID, frame);
-        stopGpuTimer();
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, mOffscreenFramebuffer);
 
-        if (params.surfaceType != SurfaceType::Offscreen)
+        uint32_t frames  = getNumStepsPerformed() + (frame - mStartFrame);
+        uint32_t frameX  = (frames % kFramesPerXY) % kFramesPerX;
+        uint32_t frameY  = (frames % kFramesPerXY) / kFramesPerX;
+        uint32_t windowX = kOffscreenOffsetX + frameX * kOffscreenFrameWidth;
+        uint32_t windowY = kOffscreenOffsetY + frameY * kOffscreenFrameHeight;
+
+        if (angle::gVerboseLogging)
+        {
+            printf("Frame %d: x %d y %d (screen x %d, screen y %d)\n", frames, frameX, frameY,
+                   windowX, windowY);
+        }
+
+        GLboolean scissorTest = GL_FALSE;
+        glGetBooleanv(GL_SCISSOR_TEST, &scissorTest);
+
+        if (scissorTest)
+        {
+            glDisable(GL_SCISSOR_TEST);
+        }
+
+        glBlitFramebuffer(0, 0, mWindowWidth, mWindowHeight, windowX, windowY,
+                          windowX + kOffscreenFrameWidth, windowY + kOffscreenFrameHeight,
+                          GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+        if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
         {
             getGLWindow()->swap();
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glClear(GL_COLOR_BUFFER_BIT);
         }
-        else
+
+        if (scissorTest)
         {
-            GLint currentDrawFBO, currentReadFBO;
-            glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
-            glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
-
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, mOffscreenFramebuffer);
-
-            uint32_t frames  = getNumStepsPerformed() + (frame - mStartFrame);
-            uint32_t frameX  = (frames % kFramesPerXY) % kFramesPerX;
-            uint32_t frameY  = (frames % kFramesPerXY) / kFramesPerX;
-            uint32_t windowX = kOffscreenOffsetX + frameX * kOffscreenFrameWidth;
-            uint32_t windowY = kOffscreenOffsetY + frameY * kOffscreenFrameHeight;
-
-            if (angle::gVerboseLogging)
-            {
-                printf("Frame %d: x %d y %d (screen x %d, screen y %d)\n", frames, frameX, frameY,
-                       windowX, windowY);
-            }
-
-            GLboolean scissorTest = GL_FALSE;
-            glGetBooleanv(GL_SCISSOR_TEST, &scissorTest);
-
-            if (scissorTest)
-            {
-                glDisable(GL_SCISSOR_TEST);
-            }
-
-            glBlitFramebuffer(0, 0, mWindowWidth, mWindowHeight, windowX, windowY,
-                              windowX + kOffscreenFrameWidth, windowY + kOffscreenFrameHeight,
-                              GL_COLOR_BUFFER_BIT, GL_NEAREST);
-
-            if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
-            {
-                getGLWindow()->swap();
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                glClear(GL_COLOR_BUFFER_BIT);
-            }
-
-            if (scissorTest)
-            {
-                glEnable(GL_SCISSOR_TEST);
-            }
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
+            glEnable(GL_SCISSOR_TEST);
         }
-
-        endInternalTraceEvent(frameName);
-
-        // Check for abnormal exit.
-        if (!mRunning)
-        {
-            return;
-        }
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
     }
 
-    ResetReplay(params.testID);
+    endInternalTraceEvent(frameName);
+
+    if (frame == mEndFrame)
+    {
+        ResetReplay(params.testID);
+    }
 
     // Process any running queries once per iteration.
     for (size_t queryIndex = 0; queryIndex < mRunningQueries.size();)
