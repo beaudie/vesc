@@ -239,6 +239,7 @@ class ProgramExecutableVk
 
     void outputCumulativePerfCounters();
 
+    rx::SpecConstUsageBits getSpecConstUsageBits(const gl::State &glState) const;
     // Descriptor sets for uniform blocks and textures for this program.
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
