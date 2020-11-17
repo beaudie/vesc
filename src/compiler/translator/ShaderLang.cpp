@@ -184,6 +184,7 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->OES_shader_image_atomic                     = 0;
     resources->OES_texture_buffer                          = 0;
     resources->EXT_texture_buffer                          = 0;
+    resources->OES_sample_variables                        = 0;
 
     resources->MaxClipDistances = 0;
 
@@ -268,6 +269,8 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->MaxGeometryImageUniforms         = 0;
 
     resources->SubPixelBits = 8;
+
+    resources->MaxSamples = 4;
 }
 
 //
