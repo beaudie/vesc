@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8448e3f7_f291da8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-17T23:34:55Z",
+      "side": 1,
+      "message": "CC\u0027ing the Android folks in case you want to look at memory, and so that we can discuss where to take things.\n\nThis is a very-rudimentary CL that works with the pre-release Pixel 4 driver (which provides the extension).  It logs one logcat message every time the callback is called.  For each Vulkan object type, it keeps track of how much GPU memory has been allocated and imported.\n\nI have found I can do some memory analysis by turning on API command logging via:\n\n  angle_enable_trace \u003d true\n  angle_enable_trace_android_logcat \u003d true\n",
+      "revId": "09bbf63ae48c0970be4ed960d218eb7379e3bdaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
