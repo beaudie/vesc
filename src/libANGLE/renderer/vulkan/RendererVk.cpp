@@ -36,6 +36,12 @@
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include <android/log.h>
+#    include <unistd.h>
+#endif
+#define VERBOSE(...) __android_log_print(ANDROID_LOG_VERBOSE, "ANGLE", __VA_ARGS__)
+
 // Consts
 namespace
 {
@@ -385,6 +391,37 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
     }
 
     return VK_FALSE;
+}
+
+VKAPI_ATTR void VKAPI_CALL
+MemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, void *userData)
+{
+    std::string reportType;
+    switch (callbackData->type)
+    {
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATE_EXT:
+            reportType = " Allocate";
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_FREE_EXT:
+            reportType = "     Free";
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_IMPORT_EXT:
+            reportType = "   Import";
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_UNIMPORT_EXT:
+            reportType = "Un-Import";
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATION_FAILED_EXT:
+            reportType = "allocFail";
+            break;
+        default:
+            reportType = "UNSUPPORT";
+            break;
+    }
+    VERBOSE("%s: size= %9" PRIu64 "; type= %-15s; heapIndex= %u; objectID = %" PRIu64
+            "; handle = %" PRIu64,
+            reportType.c_str(), callbackData->size, GetVkObjectTypeName(callbackData->objectType),
+            callbackData->heapIndex, callbackData->memoryObjectId, callbackData->objectHandle);
 }
 
 bool ShouldUseValidationLayers(const egl::AttributeMap &attribs)
@@ -817,6 +854,12 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         ANGLE_VK_TRY(displayVk, vkCreateDebugReportCallbackEXT(mInstance, &debugReportInfo, nullptr,
                                                                &mDebugReportCallback));
     }
+    // FIXME/TODO(ianelliott): Put this in the correct spot:
+    INFO() << "GOT TO HERE 3" << std::endl;
+    mMemoryReportCallback       = {};
+    mMemoryReportCallback.sType = VK_STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT;
+    mMemoryReportCallback.pfnUserCallback = &MemoryReportCallback;
+    mMemoryReportCallback.pUserData       = this;
 
     if (std::find(enabledInstanceExtensions.begin(), enabledInstanceExtensions.end(),
                   VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) !=
@@ -920,6 +963,11 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mLineRasterizationFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT;
 
+    // FIXME/TODO(ianelliott): Put this in the correct spot:
+    mMemoryReportFeatures = {};
+    mMemoryReportFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_MEMORY_REPORT_FEATURES_EXT;
+
     mProvokingVertexFeatures = {};
     mProvokingVertexFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT;
@@ -984,6 +1032,15 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     if (ExtensionFound(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(&deviceFeatures, &mLineRasterizationFeatures);
+    }
+
+    // FIXME/TODO(ianelliott): Put this in the correct spot:
+    // Query memory report features
+    INFO() << "GOT TO HERE 0" << std::endl;
+    if (ExtensionFound(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME, deviceExtensionNames))
+    {
+        INFO() << "GOT TO HERE 0a" << std::endl;
+        vk::AddToPNextChain(&deviceFeatures, &mMemoryReportFeatures);
     }
 
     // Query provoking vertex features
@@ -1071,6 +1128,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
 
     // Clean up pNext chains
     mLineRasterizationFeatures.pNext        = nullptr;
+    mMemoryReportFeatures.pNext             = nullptr;
     mProvokingVertexFeatures.pNext          = nullptr;
     mVertexAttributeDivisorFeatures.pNext   = nullptr;
     mVertexAttributeDivisorProperties.pNext = nullptr;
@@ -1193,6 +1251,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         enabledDeviceExtensions.push_back(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     }
+    INFO() << "GOT TO HERE 1" << std::endl;
+    if (ExtensionFound(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME, deviceExtensionNames))
+    {
+        INFO() << "GOT TO HERE 1a" << std::endl;
+        // enabledDeviceExtensions.push_back(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME);
+    }
+    INFO() << "GOT TO HERE 2" << std::endl;
 
     // Enable KHR_MAINTENANCE1 to support viewport flipping.
     if (mPhysicalDeviceProperties.apiVersion < VK_MAKE_VERSION(1, 1, 0))
@@ -1377,6 +1442,14 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         enabledDeviceExtensions.push_back(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME);
         vk::AddToPNextChain(&createInfo, &mLineRasterizationFeatures);
+    }
+
+    // FIXME/TODO(ianelliott): Put this in the correct spot:
+    if (mMemoryReportFeatures.deviceMemoryReport)
+    {
+        INFO() << "GOT TO HERE 2a" << std::endl;
+        enabledDeviceExtensions.push_back(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME);
+        vk::AddToPNextChain(&createInfo, &mMemoryReportCallback);
     }
 
     if (mProvokingVertexFeatures.provokingVertexLast)
