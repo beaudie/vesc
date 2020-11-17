@@ -310,6 +310,21 @@ ProgramVk *ProgramExecutableVk::getShaderProgram(const gl::State &glState,
     return nullptr;
 }
 
+rx::SpecConstUsageBits ProgramExecutableVk::getSpecConstUsageBits(const gl::State &glState) const
+{
+    if (mProgram)
+    {
+        return mProgram->getState().getSpecConstUsageBits();
+    }
+    else if (mProgramPipeline)
+    {
+        return mProgramPipeline->getSpecConstUsageBits(
+            glState, mProgramPipeline->getState().getProgramExecutable());
+    }
+
+    return rx::SpecConstUsageBits();
+}
+
 // TODO: http://anglebug.com/3570: Move/Copy all of the necessary information into
 // the ProgramExecutable, so this function can be removed.
 void ProgramExecutableVk::fillProgramStateMap(
@@ -679,7 +694,30 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     ASSERT(glExecutable && !glExecutable->isCompute());
 
     mTransformOptions.enableLineRasterEmulation = contextVk->isBresenhamEmulationEnabled(mode);
-    mTransformOptions.surfaceRotation           = static_cast<uint8_t>(desc.getSurfaceRotation());
+
+    rx::SpecConstUsageBits usageBits  = getSpecConstUsageBits(glState);
+    mTransformOptions.surfaceRotation = ToUnderlying(desc.getSurfaceRotation());
+    // If program is not using rotation at all, we force it to use the Identity or FlippedIdentity
+    // slot to improve the program cache hit rate
+    if (!usageBits.test(sh::vk::SpecConstUsage::Rotation))
+    {
+        if (mTransformOptions.surfaceRotation >= ToUnderlying(SurfaceRotation::FlippedIdentity))
+        {
+            mTransformOptions.surfaceRotation = ToUnderlying(SurfaceRotation::FlippedIdentity);
+        }
+        else
+        {
+            mTransformOptions.surfaceRotation = ToUnderlying(SurfaceRotation::Identity);
+        }
+    }
+    // If program is not using yflip, we force it into non-flipped slot.
+    if (!usageBits.test(sh::vk::SpecConstUsage::YFlip))
+    {
+        if (mTransformOptions.surfaceRotation >= ToUnderlying(SurfaceRotation::FlippedIdentity))
+        {
+            mTransformOptions.surfaceRotation -= ToUnderlying(SurfaceRotation::FlippedIdentity);
+        }
+    }
 
     // This must be called after mTransformOptions have been set.
     ProgramInfo &programInfo = getGraphicsProgramInfo(mTransformOptions);
