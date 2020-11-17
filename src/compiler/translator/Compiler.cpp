@@ -302,7 +302,9 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mGeometryShaderInputPrimitiveType(EptUndefined),
       mGeometryShaderOutputPrimitiveType(EptUndefined),
       mCompileOptions(0)
-{}
+{
+    mSpecConstUsageBits.reset();
+}
 
 TCompiler::~TCompiler() {}
 
