@@ -685,6 +685,9 @@ int GetVertexShaderNumViews(const ShHandle handle);
 // Returns true if compiler has injected instructions for early fragment tests as an optimization
 bool HasEarlyFragmentTestsOptimization(const ShHandle handle);
 
+// Returns specialization constant usage bits
+uint32_t GetShaderSpecConstUsageBits(const ShHandle handle);
+
 // Returns true if the passed in variables pack in maxVectors followingthe packing rules from the
 // GLSL 1.017 spec, Appendix A, section 7.
 // Returns false otherwise. Also look at the SH_ENFORCE_PACKING_RESTRICTIONS
@@ -793,6 +796,16 @@ enum class SurfaceRotation : uint32_t
 
     InvalidEnum,
     EnumCount = InvalidEnum,
+};
+
+enum class SpecConstUsage : uint32_t
+{
+    LineRasterEmulation = 0,
+    YFlip               = 1,
+    Rotation            = 2,
+
+    InvalidEnum = 3,
+    EnumCount   = InvalidEnum,
 };
 
 // Interface block name containing the aggregate default uniforms

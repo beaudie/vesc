@@ -826,6 +826,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             {
                 return false;
             }
+            mSpecConstUsageBits.set(vk::SpecConstUsage::LineRasterEmulation);
         }
 
         bool hasGLFragColor = false;
@@ -902,6 +903,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             {
                 return false;
             }
+            mSpecConstUsageBits.set(vk::SpecConstUsage::LineRasterEmulation);
         }
 
         // Add a macro to declare transform feedback buffers.
@@ -958,6 +960,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
     }
 
     flipRotateSpecConst->outputLayoutString(sink);
+    mSpecConstUsageBits |= flipRotateSpecConst->getSpecConstUsageBits();
 
     if (!validateAST(root))
     {
