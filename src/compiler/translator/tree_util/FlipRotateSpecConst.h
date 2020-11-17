@@ -11,6 +11,7 @@
 #define COMPILER_TRANSLATOR_TREEUTIL_FLIPROTATESPECCONST_H_
 
 #include "common/angleutils.h"
+#include "compiler/translator/Compiler.h"
 #include "compiler/translator/SymbolTable.h"
 
 class TIntermTyped;
@@ -42,11 +43,12 @@ class FlipRotateSpecConst
 
     virtual void generateSymbol(TSymbolTable *symbolTable);
     virtual void outputLayoutString(TInfoSinkBase &sink) const;
+    SpecConstUsageBits getSpecConstUsageBits() const { return mReferenced; }
 
   private:
     TIntermSymbol *mSpecConstSymbol;
-    // True if mSpecConstSymbol has been used
-    bool mReferenced;
+    // Bit is set if YFlip or Rotation has been used
+    SpecConstUsageBits mReferenced;
 };
 }  // namespace sh
 
