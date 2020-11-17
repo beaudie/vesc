@@ -348,12 +348,8 @@ template("angle_test") {
 
     if (is_android) {
       public_configs += [ "$angle_root:build_id_config" ]
-      if (build_with_chromium) {
-        use_native_activity = true
-        configs -= [ "//build/config/android:hide_all_but_jni" ]
-      } else {
-        use_raw_android_executable = true
-      }
+      use_native_activity = true
+      configs -= [ "//build/config/android:hide_all_but_jni" ]
     }
   }
 }
