@@ -258,7 +258,7 @@ TracePerfTest::TracePerfTest()
 
     if (param.testID == RestrictedTraceID::free_fire)
     {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
+        // addExtensionPrerequisite("GL_OES_EGL_image_external");
     }
 
     if (param.testID == RestrictedTraceID::marvel_contest_of_champions)
