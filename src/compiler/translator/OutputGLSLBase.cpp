@@ -1430,6 +1430,42 @@ void WriteGeometryShaderLayoutQualifiers(TInfoSinkBase &out,
     }
 }
 
+void WriteTessControlShaderLayoutQualifiers(TInfoSinkBase &out, int inputVertices)
+{
+    if (inputVertices != 0)
+    {
+        out << "layout (";
+        out << "vertices = " << inputVertices;
+        out << ") out;\n";
+    }
+}
+
+void WriteTessEvaluationShaderLayoutQualifiers(TInfoSinkBase &out,
+                                               sh::TLayoutTessEvaluationType inputPrimitive,
+                                               sh::TLayoutTessEvaluationType inputVertexSpacing,
+                                               sh::TLayoutTessEvaluationType inputOrdering,
+                                               sh::TLayoutTessEvaluationType inputPoint)
+{
+    if (inputPrimitive != EtetUndefined)
+    {
+        out << "layout (";
+        out << getTessEvaluationShaderTypeString(inputPrimitive);
+        if (inputVertexSpacing != EtetUndefined)
+        {
+            out << ", " << getTessEvaluationShaderTypeString(inputVertexSpacing);
+        }
+        if (inputOrdering != EtetUndefined)
+        {
+            out << ", " << getTessEvaluationShaderTypeString(inputOrdering);
+        }
+        if (inputPoint != EtetUndefined)
+        {
+            out << ", " << getTessEvaluationShaderTypeString(inputPoint);
+        }
+        out << ") in;\n";
+    }
+}
+
 // If SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS is enabled, layout qualifiers are spilled whenever
 // variables with specified layout qualifiers are copied. Additional checks are needed against the
 // type and storage qualifier of the variable to verify that layout qualifiers have to be outputted.

@@ -510,7 +510,8 @@ static_assert(kPackedColorBlendAttachmentStateSize == 4, "Size check failed");
 
 struct PrimitiveState final
 {
-    uint16_t topology : 15;
+    uint16_t topology : 9;
+    uint16_t patchVertices : 6;
     uint16_t restartEnable : 1;
 };
 
@@ -582,6 +583,8 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
+                                     const ShaderModule *tessControlModule,
+                                     const ShaderModule *tessEvaluationModule,
                                      const vk::SpecializationConstants specConsts,
                                      Pipeline *pipelineOut) const;
 
@@ -701,6 +704,9 @@ class GraphicsPipelineDesc final
     void setDynamicScissor();
     void setScissor(const VkRect2D &scissor);
     void updateScissor(GraphicsPipelineTransitionBits *transition, const VkRect2D &scissor);
+
+    // Tessellation
+    void updatePatchVertices(GraphicsPipelineTransitionBits *transition, const GLuint value);
 
     // Subpass
     void resetSubpass(GraphicsPipelineTransitionBits *transition);
@@ -1355,6 +1361,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
+                                           const vk::ShaderModule *tessControlModule,
+                                           const vk::ShaderModule *tessEvaluationModule,
                                            const vk::SpecializationConstants specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
@@ -1370,8 +1378,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
 
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
-                              fragmentModule, geometryModule, specConsts, desc, descPtrOut,
-                              pipelineOut);
+                              fragmentModule, geometryModule, tessControlModule,
+                              tessEvaluationModule, specConsts, desc, descPtrOut, pipelineOut);
     }
 
   private:
@@ -1384,6 +1392,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
+                                 const vk::ShaderModule *tessControlModule,
+                                 const vk::ShaderModule *tessEvaluationModule,
                                  const vk::SpecializationConstants specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
@@ -1464,10 +1474,10 @@ class SamplerYcbcrConversionCache final : angle::NonCopyable
 
 // Only 1 driver uniform binding is used.
 constexpr uint32_t kReservedDriverUniformBindingCount = 1;
-// There is 1 default uniform binding used per stage.  Currently, a maxium of three stages are
+// There is 1 default uniform binding used per stage.  Currently, a maxium of five stages are
 // supported.
 constexpr uint32_t kReservedPerStageDefaultUniformBindingCount = 1;
-constexpr uint32_t kReservedDefaultUniformBindingCount         = 3;
+constexpr uint32_t kReservedDefaultUniformBindingCount         = 5;
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_

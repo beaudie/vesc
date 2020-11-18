@@ -532,6 +532,12 @@ unsigned int TType::getArraySizeProduct() const
 {
     unsigned int product = 1u;
 
+    if (isUnsizedArray())
+    {
+        // if implicit sized array, give it at least 1
+        return product;
+    }
+
     for (unsigned int arraySize : mArraySizes)
     {
         product *= arraySize;
