@@ -1143,6 +1143,133 @@ TEST_P(SimpleOperationTest, RenderToTexture)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Emulate image rotate pass of application (e.g. landscape rendering to portrait image)
+TEST_P(SimpleOperationTest, DrawRotatedTexture)
+{
+    constexpr char kVertexShader[] =
+        R"(
+precision highp float;
+attribute vec4 vertex;
+uniform vec4 uvOffsetAndScale;
+varying vec2 texCoord;
+void main()
+{
+    gl_Position = vec4(vertex.xy, 0.0, 1.0);
+    texCoord = vertex.zw * uvOffsetAndScale.zw + uvOffsetAndScale.xy;
+}
+)";
+
+    constexpr char kTextureFragmentShader[] =
+        R"(
+precision mediump float;
+varying vec2 texCoord;
+uniform sampler2D tex;
+void main()
+{
+    vec4 c = texture2D(tex, texCoord);
+    gl_FragColor = vec4(c.rgb, 1.0);
+}
+)";
+
+    constexpr int kWidth      = 2149;
+    constexpr int kHeight     = 1018;
+    constexpr int kIterations = 20;
+
+    // Define screen size texture
+    GLTexture landscapeTexture;
+    glBindTexture(GL_TEXTURE_2D, landscapeTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer landscapeFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, landscapeFramebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, landscapeTexture,
+                           0);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    GLTexture portraitTexture;
+    glBindTexture(GL_TEXTURE_2D, portraitTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kHeight, kWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer portraitFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, portraitFramebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, portraitTexture, 0);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    ANGLE_GL_PROGRAM(program, kVertexShader, kTextureFragmentShader);
+    glUseProgram(program);
+    glBindAttribLocation(program, 0, "vertex");
+    GLint uvOffsetAndScaleLocation = glGetAttribLocation(program, "uvOffsetAndScale");
+    GLint texLocation              = glGetAttribLocation(program, "tex");
+
+    GLBuffer vertexBuffer;
+    float vertices[] = {-1.0f, 3.0f, 0.0f, 2.0f, -1.0f, -1.0f, 0.0f, 0.0f, 3.0f, -1.0f, 2.0f, 0.0f};
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 48, vertices, GL_STATIC_DRAW);
+
+    GLBuffer indexBuffer;
+    // Element indices
+    uint16_t data2[] = {0, 1, 2};
+    glBindBuffer(GL_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 6, data2, GL_STATIC_DRAW);
+    glUniform4fv(uvOffsetAndScaleLocation, 1, reinterpret_cast<const GLfloat *>(data2));
+    glUniform1i(texLocation, 0);
+
+    for (int frame = 0; frame < 500; frame++)
+    {
+        for (int iteration = 0; iteration < kIterations; iteration++)
+        {
+            // clear texture
+            glBindTexture(GL_TEXTURE_2D, landscapeTexture);
+            glBindFramebuffer(GL_FRAMEBUFFER, landscapeFramebuffer);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                   landscapeTexture, 0);
+            ASSERT_GL_NO_ERROR();
+            ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+            glViewport(0, 0, kWidth, kHeight);
+            glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Draw with texture
+            glBindFramebuffer(GL_FRAMEBUFFER, portraitFramebuffer);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                   portraitTexture, 0);
+            glViewport(0, 0, kHeight, kWidth);
+            glBindTexture(GL_TEXTURE_2D, landscapeTexture);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+            glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+            glEnableVertexAttribArray(0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+            glActiveTexture(GL_TEXTURE0);
+            glUniform1i(texLocation, 0);
+            float offsetAndScale[] = {0.0f, 0.0f, 1.0f, 1.0f};
+            glUniform4fv(uvOffsetAndScaleLocation, 1, offsetAndScale);
+            glDisable(GL_BLEND);
+            glDepthFunc(GL_ALWAYS);
+            glPolygonOffset(0, 0);
+            glDisable(GL_POLYGON_OFFSET_FILL);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, portraitTexture);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+        // reset to default framebuffer
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glClearColor(0.0f, (float)((frame % 256) / 256.0), 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        swapBuffers();
+    }
+}
+
 // Create a simple basic Renderbuffer.
 TEST_P(SimpleOperationTest, CreateRenderbuffer)
 {
@@ -1212,7 +1339,8 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     WithMetalForcedBufferGPUStorage(ES3_METAL()),
     WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                              /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false));
+                                             /* cheapRenderPass */ false),
+    ES2_EGL());
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     TriangleFanDrawTest,
