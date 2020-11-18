@@ -1948,6 +1948,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsShaderImageFloat32Atomics,
                             mShaderAtomicFloatFeature.shaderImageFloat32Atomics == VK_TRUE);
 
+    // http://b/173636783 Qualcomm driver appears having issues with specialization constant
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, preferDriverUniformOverSpecConst,
+        isQualcomm && this->mPhysicalDeviceProperties.driverVersion < 2149584896);
+
     // The compute shader used to generate mipmaps uses a 256-wide workgroup.  This path is only
     // enabled on devices that meet this minimum requirement.  Furthermore,
     // VK_IMAGE_USAGE_STORAGE_BIT is detrimental to performance on many platforms, on which this
