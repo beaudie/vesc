@@ -1091,6 +1091,8 @@ VkPrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode)
             return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
         case gl::PrimitiveMode::LineLoop:
             return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
+        case gl::PrimitiveMode::Patches:
+            return VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
         default:
             UNREACHABLE();
             return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;

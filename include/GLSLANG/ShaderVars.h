@@ -195,6 +195,7 @@ struct ShaderVariable
     // Varying
     InterpolationType interpolation;
     bool isInvariant;
+    bool isPatch;
     // Decide whether two varyings are the same at shader link time,
     // assuming one from vertex shader and the other from fragment shader.
     // Invariance needs to match only in ESSL1. Relevant spec sections:

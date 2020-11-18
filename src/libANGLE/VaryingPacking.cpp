@@ -169,7 +169,8 @@ bool VaryingPacking::packVarying(const PackedVarying &packedVarying)
     // "Arrays of size N are assumed to take N times the size of the base type"
     // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
     // structures, so we may use getBasicTypeElementCount().
-    const unsigned int elementCount = varying.getBasicTypeElementCount();
+    const unsigned int elementCount =
+        varying.getBasicTypeElementCount() == 0 ? 1 : varying.getBasicTypeElementCount();
     varyingRows *= (packedVarying.isArrayElement() ? 1 : elementCount);
 
     unsigned int maxVaryingVectors = static_cast<unsigned int>(mRegisterMap.size());
@@ -324,7 +325,8 @@ void VaryingPacking::insert(unsigned int registerRow,
 
     // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
     // structures, so we may use getBasicTypeElementCount().
-    const unsigned int arrayElementCount = varying.getBasicTypeElementCount();
+    const unsigned int arrayElementCount =
+        varying.getBasicTypeElementCount() == 0 ? 1 : varying.getBasicTypeElementCount();
     for (unsigned int arrayElement = 0; arrayElement < arrayElementCount; ++arrayElement)
     {
         if (packedVarying.isArrayElement() && arrayElement != packedVarying.arrayIndex)
