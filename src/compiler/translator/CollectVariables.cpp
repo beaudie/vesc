@@ -38,7 +38,6 @@ BlockLayoutType GetBlockLayoutType(TLayoutBlockStorage blockStorage)
     }
 }
 
-// TODO(jiawei.shao@intel.com): implement GL_EXT_shader_io_blocks.
 BlockType GetBlockType(TQualifier qualifier)
 {
     switch (qualifier)
@@ -48,7 +47,10 @@ BlockType GetBlockType(TQualifier qualifier)
         case EvqBuffer:
             return BlockType::BLOCK_BUFFER;
         case EvqPerVertexIn:
+        case EvqFragmentIn:
             return BlockType::BLOCK_IN;
+        case EvqVertexOut:
+            return BlockType::BLOCK_OUT;
         default:
             UNREACHABLE();
             return BlockType::BLOCK_UNIFORM;
@@ -113,6 +115,7 @@ class CollectVariablesTraverser : public TIntermTraverser
                               std::vector<InterfaceBlock> *uniformBlocks,
                               std::vector<InterfaceBlock> *shaderStorageBlocks,
                               std::vector<InterfaceBlock> *inBlocks,
+                              std::vector<InterfaceBlock> *outBlocks,
                               ShHashFunction64 hashFunction,
                               TSymbolTable *symbolTable,
                               GLenum shaderType,
@@ -165,6 +168,7 @@ class CollectVariablesTraverser : public TIntermTraverser
     std::vector<InterfaceBlock> *mUniformBlocks;
     std::vector<InterfaceBlock> *mShaderStorageBlocks;
     std::vector<InterfaceBlock> *mInBlocks;
+    std::vector<InterfaceBlock> *mOutBlocks;
 
     std::map<std::string, ShaderVariable *> mInterfaceBlockFields;
 
@@ -231,6 +235,7 @@ CollectVariablesTraverser::CollectVariablesTraverser(
     std::vector<sh::InterfaceBlock> *uniformBlocks,
     std::vector<sh::InterfaceBlock> *shaderStorageBlocks,
     std::vector<sh::InterfaceBlock> *inBlocks,
+    std::vector<sh::InterfaceBlock> *outBlocks,
     ShHashFunction64 hashFunction,
     TSymbolTable *symbolTable,
     GLenum shaderType,
@@ -245,6 +250,7 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mUniformBlocks(uniformBlocks),
       mShaderStorageBlocks(shaderStorageBlocks),
       mInBlocks(inBlocks),
+      mOutBlocks(outBlocks),
       mDepthRangeAdded(false),
       mNumWorkGroupsAdded(false),
       mWorkGroupIDAdded(false),
@@ -632,22 +638,16 @@ void CollectVariablesTraverser::setFieldOrVariableProperties(const TType &type,
 
     variableOut->staticUse = staticUse;
 
-    const TStructure *structure = type.getStruct();
-    if (!structure)
-    {
-        variableOut->type      = GLVariableType(type);
-        variableOut->precision = GLVariablePrecision(type);
-    }
-    else
+    if (type.getStruct())
     {
         // Structures use a NONE type that isn't exposed outside ANGLE.
         variableOut->type = GL_NONE;
-        if (structure->symbolType() != SymbolType::Empty)
+        if (type.getStruct()->symbolType() != SymbolType::Empty)
         {
-            variableOut->structName = structure->name().data();
+            variableOut->structName = type.getStruct()->name().data();
         }
 
-        const TFieldList &fields = structure->fields();
+        const TFieldList &fields = type.getStruct()->fields();
 
         for (const TField *field : fields)
         {
@@ -658,6 +658,28 @@ void CollectVariablesTraverser::setFieldOrVariableProperties(const TType &type,
             variableOut->fields.push_back(fieldVariable);
         }
     }
+    else if (type.getInterfaceBlock() &&
+             type.getInterfaceBlock()->symbolType() != SymbolType::BuiltIn)
+    {
+        variableOut->type = GL_NONE;
+        if (type.getInterfaceBlock()->symbolType() != SymbolType::Empty)
+        {
+            variableOut->structName = type.getInterfaceBlock()->name().data();
+        }
+        const TFieldList &fields = type.getInterfaceBlock()->fields();
+        for (const TField *field : fields)
+        {
+            ShaderVariable fieldVariable;
+            setFieldProperties(*field->type(), field->name(), staticUse, &fieldVariable);
+            variableOut->fields.push_back(fieldVariable);
+        }
+    }
+    else
+    {
+        variableOut->type      = GLVariableType(type);
+        variableOut->precision = GLVariablePrecision(type);
+    }
+
     const TSpan<const unsigned int> &arraySizes = type.getArraySizes();
     if (!arraySizes.empty())
     {
@@ -747,7 +769,6 @@ ShaderVariable CollectVariablesTraverser::recordVarying(const TIntermSymbol &var
     return varying;
 }
 
-// TODO(jiawei.shao@intel.com): implement GL_EXT_shader_io_blocks.
 void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
                                                      const TType &interfaceBlockType,
                                                      InterfaceBlock *interfaceBlock) const
@@ -760,11 +781,13 @@ void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
 
     interfaceBlock->name       = blockType->name().data();
     interfaceBlock->mappedName = getMappedName(blockType);
+
+    const bool isGlInBuiltin = (instanceName != nullptr) && strncmp(instanceName, "gl_in", 5u) == 0;
     if (instanceName != nullptr)
     {
         interfaceBlock->instanceName = instanceName;
         const TSymbol *blockSymbol   = nullptr;
-        if (strncmp(instanceName, "gl_in", 5u) == 0)
+        if (isGlInBuiltin)
         {
             blockSymbol = mSymbolTable->getGlInVariableWithArraySize();
         }
@@ -776,13 +799,15 @@ void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
         interfaceBlock->staticUse =
             mSymbolTable->isStaticallyUsed(*static_cast<const TVariable *>(blockSymbol));
     }
+
     ASSERT(!interfaceBlockType.isArrayOfArrays());  // Disallowed by GLSL ES 3.10 section 4.3.9
     interfaceBlock->arraySize =
         interfaceBlockType.isArray() ? interfaceBlockType.getOutermostArraySize() : 0;
 
     interfaceBlock->blockType = GetBlockType(interfaceBlockType.getQualifier());
-    if (interfaceBlock->blockType == BlockType::BLOCK_UNIFORM ||
-        interfaceBlock->blockType == BlockType::BLOCK_BUFFER)
+    bool isInOutBlock         = interfaceBlock->blockType == BlockType::BLOCK_IN ||
+                        interfaceBlock->blockType == BlockType::BLOCK_OUT;
+    if (!isInOutBlock)
     {
         // TODO(oetuaho): Remove setting isRowMajorLayout.
         interfaceBlock->isRowMajorLayout = false;
@@ -791,7 +816,17 @@ void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
     }
 
     // Gather field information
-    bool anyFieldStaticallyUsed = false;
+    bool anyFieldStaticallyUsed  = false;
+    bool isBlockImplicitLocation = false;
+    int location                 = interfaceBlockType.getLayoutQualifier().location;
+
+    // when a interface has not location in layout, assign to the zero.
+    if (location < 0)
+    {
+        location                = 0;
+        isBlockImplicitLocation = true;
+    }
+
     for (const TField *field : blockType->fields())
     {
         const TType &fieldType = *field->type();
@@ -813,6 +848,33 @@ void CollectVariablesTraverser::recordInterfaceBlock(const char *instanceName,
 
         ShaderVariable fieldVariable;
         setFieldProperties(fieldType, field->name(), staticUse, &fieldVariable);
+        if (!isBlockImplicitLocation)
+        {
+            fieldVariable.hasImplicitLocation = false;
+        }
+
+        int fieldLocation = field->type()->getLayoutQualifier().location;
+        if (fieldLocation >= 0)
+        {
+            fieldVariable.location = fieldLocation;
+            location               = fieldLocation;
+        }
+        else
+        {
+            if (isBlockImplicitLocation)
+            {
+                fieldVariable.hasImplicitLocation = true;
+            }
+            fieldVariable.location = location;
+            location += field->type()->getLocationCount();
+        }
+
+        fieldVariable.memberVariableType = MemberVariableType::INTERFACE_MEMBER;
+
+        if (isInOutBlock && !isGlInBuiltin && fieldType.getQualifier() != EvqGlobal)
+        {
+            fieldVariable.interpolation = GetFieldInterpolationType(fieldType.getQualifier());
+        }
         fieldVariable.isRowMajorLayout =
             (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
         interfaceBlock->fields.push_back(fieldVariable);
@@ -867,7 +929,6 @@ bool CollectVariablesTraverser::visitDeclaration(Visit, TIntermDeclaration *node
             continue;
         }
 
-        // TODO(jiawei.shao@intel.com): implement GL_EXT_shader_io_blocks.
         if (typedNode.getBasicType() == EbtInterfaceBlock)
         {
             InterfaceBlock interfaceBlock;
@@ -876,8 +937,59 @@ bool CollectVariablesTraverser::visitDeclaration(Visit, TIntermDeclaration *node
                                      : nullptr,
                                  variable.getType(), &interfaceBlock);
 
+            GLuint interfaceLocation = variable.getType().getLayoutQualifier().location;
+            ShaderVariable structVariable;
+
+            // the instance name of interface block is a variable for SPIR-V transformation.
+            if (interfaceBlock.instanceName.empty())
+            {
+                structVariable.fields.insert(structVariable.fields.end(),
+                                             interfaceBlock.fields.begin(),
+                                             interfaceBlock.fields.end());
+                // The SPIR-V transformer uses the interface block name instead of the instance name
+                // (which could be empty).
+                structVariable.mappedName         = interfaceBlock.mappedName;
+                structVariable.memberVariableType = MemberVariableType::DUPLICATED_MEMBER;
+            }
+            else
+            {
+                setCommonVariableProperties(variable.getType(), variable.variable(),
+                                            &structVariable);
+                // in case of the named io block, a structure and its members will be used in
+                // interface matching.
+                for (size_t i = 0; i < interfaceBlock.fields.size(); i++)
+                {
+                    structVariable.fields[i].location = interfaceBlock.fields[i].location;
+                    structVariable.fields[i].hasImplicitLocation =
+                        interfaceBlock.fields[i].hasImplicitLocation;
+                    structVariable.fields[i].memberVariableType =
+                        MemberVariableType::INTERFACE_MEMBER;
+                    interfaceBlock.fields[i].memberVariableType =
+                        MemberVariableType::DUPLICATED_MEMBER;
+                }
+            }
+
+            // instance name will not be used in interface matching.
+            structVariable.ignoreAtLinkTime = true;
+            // name also is needed in SPIR-V transformation.
+            structVariable.name      = interfaceBlock.name;
+            structVariable.location  = interfaceLocation;
+            structVariable.staticUse = interfaceBlock.staticUse;
+
             switch (qualifier)
             {
+                case EvqFragmentIn:
+                    mInputVaryings->push_back(structVariable);
+                    mInputVaryings->insert(mInputVaryings->end(), interfaceBlock.fields.begin(),
+                                           interfaceBlock.fields.end());
+                    mInBlocks->push_back(interfaceBlock);
+                    break;
+                case EvqVertexOut:
+                    mOutputVaryings->push_back(structVariable);
+                    mOutputVaryings->insert(mOutputVaryings->end(), interfaceBlock.fields.begin(),
+                                            interfaceBlock.fields.end());
+                    mOutBlocks->push_back(interfaceBlock);
+                    break;
                 case EvqUniform:
                     mUniformBlocks->push_back(interfaceBlock);
                     break;
@@ -923,8 +1035,6 @@ bool CollectVariablesTraverser::visitDeclaration(Visit, TIntermDeclaration *node
     return false;
 }
 
-// TODO(jiawei.shao@intel.com): add search on mInBlocks and mOutBlocks when implementing
-// GL_EXT_shader_io_blocks.
 InterfaceBlock *CollectVariablesTraverser::findNamedInterfaceBlock(
     const ImmutableString &blockName) const
 {
@@ -932,6 +1042,14 @@ InterfaceBlock *CollectVariablesTraverser::findNamedInterfaceBlock(
     if (!namedBlock)
     {
         namedBlock = FindVariable(blockName, mShaderStorageBlocks);
+    }
+    if (!namedBlock)
+    {
+        namedBlock = FindVariable(blockName, mInBlocks);
+    }
+    if (!namedBlock)
+    {
+        namedBlock = FindVariable(blockName, mOutBlocks);
     }
     return namedBlock;
 }
@@ -1007,6 +1125,7 @@ void CollectVariables(TIntermBlock *root,
                       std::vector<InterfaceBlock> *uniformBlocks,
                       std::vector<InterfaceBlock> *shaderStorageBlocks,
                       std::vector<InterfaceBlock> *inBlocks,
+                      std::vector<InterfaceBlock> *outBlocks,
                       ShHashFunction64 hashFunction,
                       TSymbolTable *symbolTable,
                       GLenum shaderType,
@@ -1014,8 +1133,8 @@ void CollectVariables(TIntermBlock *root,
 {
     CollectVariablesTraverser collect(attributes, outputVariables, uniforms, inputVaryings,
                                       outputVaryings, sharedVariables, uniformBlocks,
-                                      shaderStorageBlocks, inBlocks, hashFunction, symbolTable,
-                                      shaderType, extensionBehavior);
+                                      shaderStorageBlocks, inBlocks, outBlocks, hashFunction,
+                                      symbolTable, shaderType, extensionBehavior);
     root->traverse(&collect);
 }
 

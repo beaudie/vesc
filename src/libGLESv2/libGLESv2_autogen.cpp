@@ -4594,6 +4594,8 @@ void GL_APIENTRY glValidateProgramPipelineEXT(GLuint pipeline)
     return gl::ValidateProgramPipelineEXT(pipeline);
 }
 
+// GL_EXT_shader_io_blocks
+
 // GL_EXT_texture_buffer
 void GL_APIENTRY glTexBufferEXT(GLenum target, GLenum internalformat, GLuint buffer)
 {
@@ -5097,6 +5099,8 @@ void GL_APIENTRY glMinSampleShadingOES(GLfloat value)
 {
     return gl::MinSampleShadingOES(value);
 }
+
+// GL_OES_shader_io_blocks
 
 // GL_OES_texture_3D
 void GL_APIENTRY glCompressedTexImage3DOES(GLenum target,

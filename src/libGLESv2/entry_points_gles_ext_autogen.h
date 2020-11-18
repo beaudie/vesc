@@ -1054,6 +1054,8 @@ ANGLE_EXPORT void GL_APIENTRY UseProgramStagesEXT(GLuint pipeline,
                                                   GLuint program);
 ANGLE_EXPORT void GL_APIENTRY ValidateProgramPipelineEXT(GLuint pipeline);
 
+// GL_EXT_shader_io_blocks
+
 // GL_EXT_texture_buffer
 ANGLE_EXPORT void GL_APIENTRY TexBufferEXT(GLenum target, GLenum internalformat, GLuint buffer);
 ANGLE_EXPORT void GL_APIENTRY TexBufferRangeEXT(GLenum target,
@@ -1293,6 +1295,8 @@ ANGLE_EXPORT GLbitfield GL_APIENTRY QueryMatrixxOES(GLfixed *mantissa, GLint *ex
 
 // GL_OES_sample_shading
 ANGLE_EXPORT void GL_APIENTRY MinSampleShadingOES(GLfloat value);
+
+// GL_OES_shader_io_blocks
 
 // GL_OES_texture_3D
 ANGLE_EXPORT void GL_APIENTRY CompressedTexImage3DOES(GLenum target,
