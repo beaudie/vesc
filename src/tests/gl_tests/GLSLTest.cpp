@@ -2333,6 +2333,134 @@ TEST_P(GLSLTest, ArrayOfStructContainingArrayOfSamplers)
     EXPECT_PIXEL_COLOR_EQ(0, 0, expected);
 }
 
+TEST_P(GLSLTest, LegoShaders)
+{
+    constexpr const char *kFS = R"(#define GLITCH_ALPHA_REF_UNIFORM
+#define GLITCH_ALPHA_TEST(inAlpha)
+#line 1
+#ifdef USE_SHADER_FRAMEBUFFER_FETCH
+    #if !defined GLITCH_METAL_MACOS && defined(GL_EXT_shader_framebuffer_fetch)
+        #extension GL_EXT_shader_framebuffer_fetch : enable
+        #define USE_LAST_FRAG_DATA
+    #elif defined GLITCH_METAL_IOS || defined GLITCH_METAL_TVOS
+        #define USE_LAST_FRAG_DATA
+    #endif
+#endif
+
+#if defined GL_ES && __VERSION__ >= 300
+    #ifndef MAX_DRAW_BUFFERS
+        #if defined USE_SHADER_FRAMEBUFFER_FETCH
+            #define MAX_DRAW_BUFFERS 1        
+        #elif defined WIN32 || defined GLSL2METAL
+            #define MAX_DRAW_BUFFERS 8
+        #else
+            #define MAX_DRAW_BUFFERS 4
+        #endif
+    #endif
+    #define varying in
+    #define texture2D texture
+    #define texture3D texture
+    #ifdef USE_LAST_FRAG_DATA
+        #if MAX_DRAW_BUFFERS == 1
+            inout mediump vec4 fragData;
+            #define gl_FragColor fragData
+        #else
+            inout mediump vec4 fragData[MAX_DRAW_BUFFERS];
+            #define gl_FragColor fragData[0]
+        #endif
+    #else
+        out mediump vec4 fragData[MAX_DRAW_BUFFERS];
+        #define gl_FragColor fragData[0]
+    #endif
+    #define texture2DLod textureLod
+    #define textureCubeLod textureLod
+    #define shadow2D texture
+    #define textureCube texture
+    #ifdef DISABLE_USE_TEXTURE_ARRAY
+        #define sampler2DArray sampler2D
+    #else
+        #define USE_TEXTURE_ARRAY
+    #endif
+#elif defined GL_ES // Must be OpenGL ES 2.0 (__VERSION__ == 100). See https://github.com/mattdesl/lwjgl-basics/wiki/GLSL-Versions
+
+    #ifdef GL_EXT_shader_texture_lod
+
+    #extension GL_EXT_shader_texture_lod :enable
+    #define texture2DLod texture2DLodEXT
+    #define textureCubeLod textureCubeLodEXT
+    
+    #endif
+    
+    #ifdef GL_EXT_shadow_samplers
+    
+    #extension GL_EXT_shadow_samplers :enable
+    #define shadow2D shadow2DEXT
+    
+    #endif
+    
+    #ifdef GL_OES_texture_3D
+    
+    #extension GL_OES_texture_3D :enable
+    #define sampler2DArray sampler2D
+    
+    #endif
+#elif !defined(GL_ES) && __VERSION__ > 120
+    #ifndef MAX_DRAW_BUFFERS
+        #if defined USE_SHADER_FRAMEBUFFER_FETCH
+            #define MAX_DRAW_BUFFERS 1        
+        #elif defined WIN32 || defined GLSL2METAL
+            #define MAX_DRAW_BUFFERS 8
+        #else
+            #define MAX_DRAW_BUFFERS 4
+        #endif
+    #endif
+    #define varying in
+    #define texture2D texture
+    #define texture2DLod textureLod
+    #define textureCubeLod textureLod
+    #define shadow2D texture
+    #define textureCube texture
+    #define texture3D texture
+    #ifdef USE_LAST_FRAG_DATA
+        #if MAX_DRAW_BUFFERS == 1
+            inout mediump vec4 fragData;
+            #define gl_FragColor fragData
+        #else
+            inout mediump vec4 fragData[MAX_DRAW_BUFFERS];
+            #define gl_FragColor fragData[0]
+        #endif
+    #else
+        out mediump vec4 fragData[MAX_DRAW_BUFFERS];
+        #define gl_FragColor fragData[0]
+    #endif
+    #ifdef DISABLE_USE_TEXTURE_ARRAY
+        #define sampler2DArray sampler2D
+    #else
+        #define USE_TEXTURE_ARRAY
+    #endif
+#elif __VERSION__ < 130
+    #extension GL_ARB_shader_texture_lod :enable
+#else
+    #define shadow2D texture
+    #define texture3D texture
+#endif
+
+
+varying mediump vec2 vScreen;
+
+
+uniform mediump sampler2D texture0;
+
+void main()
+{
+    gl_FragColor = texture2D(texture0, vScreen);
+}
+    )";
+
+    GLuint shader = CompileShader(GL_FRAGMENT_SHADER, kFS);
+    EXPECT_NE(0u, shader);
+}
+
 // Test that two constructors which have vec4 and mat2 parameters get disambiguated (issue in
 // HLSL).
 TEST_P(GLSLTest_ES3, AmbiguousConstructorCall2x2)
@@ -8758,13 +8886,13 @@ void main()
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(GLSLTest);
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTestNoValidation);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(GLSLTestNoValidation);
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST_ES3(GLSLTest_ES3);
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(GLSLTest_ES3);
 
 ANGLE_INSTANTIATE_TEST_ES2(WebGLGLSLTest);
 
