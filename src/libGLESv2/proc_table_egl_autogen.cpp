@@ -1171,6 +1171,8 @@ const ProcEntry g_procTable[] = {
     {"glOrthoxContextANGLE", P(gl::OrthoxContextANGLE)},
     {"glPatchParameteri", P(gl::PatchParameteri)},
     {"glPatchParameteriContextANGLE", P(gl::PatchParameteriContextANGLE)},
+    {"glPatchParameteriEXT", P(gl::PatchParameteriEXT)},
+    {"glPatchParameteriEXTContextANGLE", P(gl::PatchParameteriEXTContextANGLE)},
     {"glPauseTransformFeedback", P(gl::PauseTransformFeedback)},
     {"glPauseTransformFeedbackContextANGLE", P(gl::PauseTransformFeedbackContextANGLE)},
     {"glPixelStorei", P(gl::PixelStorei)},
