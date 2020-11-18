@@ -224,6 +224,15 @@ TracePerfTest::TracePerfTest()
         mSkipTest = true;
     }
 
+    // TODO: http://anglebug.com/5373 Generates an error on Nvidia bots, passes locally.
+    // TODO: http://anglebug.com/5374 Also gets incorrect pixels on older Intel Windows driver.
+    if (((IsLinux() && IsNVIDIA() && param.driver != GLESDriverType::AngleEGL) ||
+         (IsWindows() && IsIntel() && param.driver == GLESDriverType::AngleEGL)) &&
+        param.testID == RestrictedTraceID::lego_legacy)
+    {
+        mSkipTest = true;
+    }
+
     if (param.surfaceType != SurfaceType::Window && !gEnableAllTraceTests)
     {
         printf("Test skipped. Use --enable-all-trace-tests to run.\n");
@@ -274,6 +283,11 @@ TracePerfTest::TracePerfTest()
     if (param.testID == RestrictedTraceID::dragon_ball_legends)
     {
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+    }
+
+    if (param.testID == RestrictedTraceID::lego_legacy)
+    {
+        addExtensionPrerequisite("GL_EXT_shadow_samplers");
     }
 
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
