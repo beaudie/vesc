@@ -334,6 +334,17 @@ class RendererVk : angle::NonCopyable
     vk::CommandBufferHelper *getCommandBufferHelper(bool hasRenderPass);
     void recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer);
 
+    // Tracks GPU memory usage
+    void logMemoryReportStats();
+    VkDeviceSize mCurrentTotalAllocatedMemory;
+    VkDeviceSize mMaxTotalAllocatedMemory;
+    std::map<VkObjectType, VkDeviceSize> mAllocatedMemory;
+    std::map<VkObjectType, VkDeviceSize> mAllocatedMemoryMax;
+    VkDeviceSize mCurrentTotalImportedMemory;
+    VkDeviceSize mMaxTotalImportedMemory;
+    std::map<VkObjectType, VkDeviceSize> mImportedMemory;
+    std::map<VkObjectType, VkDeviceSize> mImportedMemoryMax;
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -368,6 +379,8 @@ class RendererVk : angle::NonCopyable
     angle::vk::ICD mEnabledICD;
     VkDebugUtilsMessengerEXT mDebugUtilsMessenger;
     VkDebugReportCallbackEXT mDebugReportCallback;
+    VkDeviceDeviceMemoryReportCreateInfoEXT mMemoryReportCallback;
+    VkPhysicalDeviceDeviceMemoryReportFeaturesEXT mMemoryReportFeatures;
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
