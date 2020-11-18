@@ -32,11 +32,12 @@ constexpr const char kXfbVerticesPerDraw[]   = "xfbVerticesPerDraw";
 constexpr const char kXfbBufferOffsets[]     = "xfbBufferOffsets";
 constexpr const char kAcbBufferOffsets[]     = "acbBufferOffsets";
 constexpr const char kDepthRange[]           = "depthRange";
+constexpr const char kNumSamples[]           = "numSamples";
 
-constexpr size_t kNumGraphicsDriverUniforms                                                = 8;
+constexpr size_t kNumGraphicsDriverUniforms                                                = 9;
 constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames = {
     {kViewport, kHalfRenderArea, kClipDistancesEnabled, kXfbActiveUnpaused, kXfbVerticesPerDraw,
-     kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange}};
+     kNumSamples, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange}};
 
 constexpr size_t kNumComputeDriverUniforms                                               = 1;
 constexpr std::array<const char *, kNumComputeDriverUniforms> kComputeDriverUniformNames = {
@@ -78,8 +79,8 @@ TFieldList *DriverUniform::createUniformFields(TSymbolTable *symbolTable) const
     const std::array<TType *, kNumGraphicsDriverUniforms> kDriverUniformTypes = {
         {new TType(EbtFloat, 4), new TType(EbtFloat, 2),
          new TType(EbtUInt),  // uint clipDistancesEnabled;  // 32 bits for 32 clip distances max
-         new TType(EbtUInt), new TType(EbtUInt),
-         // NOTE: There's a vec3 gap here that can be used in the future
+         new TType(EbtUInt), new TType(EbtUInt), new TType(EbtInt),
+         // NOTE: There's a vec2 gap here that can be used in the future
          new TType(EbtInt, 4), new TType(EbtUInt, 4), createEmulatedDepthRangeType(symbolTable)}};
 
     for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniforms; ++uniformIndex)
@@ -189,6 +190,11 @@ TIntermBinary *DriverUniform::getDepthRangeReservedFieldRef() const
     TIntermBinary *depthRange = createDriverUniformRef(kDepthRange);
 
     return new TIntermBinary(EOpIndexDirectStruct, depthRange, CreateIndexNode(3));
+}
+
+TIntermBinary *DriverUniform::getNumSamplesRef() const
+{
+    return createDriverUniformRef(kNumSamples);
 }
 
 }  // namespace sh
