@@ -1731,5 +1731,5 @@ const ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-const size_t g_numProcs = 1631;
+const size_t g_numProcs = 1633;
 }  // namespace egl
