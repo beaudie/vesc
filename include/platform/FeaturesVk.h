@@ -447,6 +447,13 @@ struct FeaturesVk : FeatureSetBase
     Feature emulatedPrerotation270 = {"emulatedPrerotation270", FeatureCategory::VulkanFeatures,
                                       "Emulate 270-degree prerotation.", &members,
                                       "http://anglebug.com/4901"};
+
+    // Whether we should use driver uniform over specialization constant for some shader
+    // modifications like yflip and rotation.
+    Feature preferDriverUniformOverSpecConst = {
+        "preferDriverUniformOverSpecConst", FeatureCategory::VulkanWorkarounds,
+        "Forces using driver uniform instead of specialization constant.", &members,
+        "http://b/173636783"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
