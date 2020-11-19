@@ -140,8 +140,12 @@ void GenerateContextLostErrorOnCurrentGlobalContext();
 
 ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetShareGroupLock(const Context *context)
 {
+#if 0  // TIMTIM
     return context->isShared() ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex())
                                : std::unique_lock<angle::GlobalMutex>();
+#else
+    return std::unique_lock<angle::GlobalMutex>();
+#endif
 }
 
 }  // namespace gl
