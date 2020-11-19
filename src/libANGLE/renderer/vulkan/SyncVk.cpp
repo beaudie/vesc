@@ -270,6 +270,7 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
         ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::clientWait");
         ANGLE_TRY(contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk));
     }
+    // finishRunningCommands(contextVk);
 
     // Wait for mFenceWithFd to be signaled.
     VkResult status = mFenceWithFd.wait(renderer->getDevice(), timeout);
