@@ -678,11 +678,24 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     ASSERT(glExecutable && !glExecutable->isCompute());
 
     mTransformOptions.enableLineRasterEmulation = contextVk->isBresenhamEmulationEnabled(mode);
-    mTransformOptions.surfaceRotation           = static_cast<uint8_t>(desc.getSurfaceRotation());
+
+    rx::SpecConstUsageBits usageBits  = getSpecConstUsageBits(glState);
+    mTransformOptions.surfaceRotation = ToUnderlying(desc.getSurfaceRotation());
+    // Vertex shader always uses rotation.
+    ASSERT(usageBits.test(sh::vk::SpecConstUsage::Rotation))
+    // If program is not using yflip, we force it into non-flipped slot to increase the chance of
+    // pipeline program cache hit.
+    if (!usageBits.test(sh::vk::SpecConstUsage::YFlip))
+    {
+        if (mTransformOptions.surfaceRotation >= ToUnderlying(SurfaceRotation::FlippedIdentity))
+        {
+            mTransformOptions.surfaceRotation -=
+                static_cast<uint8_t>(SurfaceRotation::FlippedIdentity);
+        }
+    }
 
     // This must be called after mTransformOptions have been set.
     ProgramInfo &programInfo = getGraphicsProgramInfo(mTransformOptions);
-
     for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
     {
         ProgramVk *programVk = getShaderProgram(glState, shaderType);
