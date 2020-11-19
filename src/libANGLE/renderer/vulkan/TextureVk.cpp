@@ -88,12 +88,45 @@ bool CanCopyWithTransferForCopyTexture(RendererVk *renderer,
                                        const vk::Format &destFormat,
                                        VkImageTiling destTilingMode)
 {
-    // NOTE(syoussefi): technically, you can transfer between formats as long as they have the same
-    // size and are compatible, but for now, let's just support same-format copies with transfer.
-    bool isFormatCompatible = srcFormat.internalFormat == destFormat.internalFormat;
+    if (!vk::CanCopyWithTransfer(renderer, srcFormat, srcTilingMode, destFormat, destTilingMode))
+    {
+        return false;
+    }
 
-    return isFormatCompatible &&
-           vk::CanCopyWithTransfer(renderer, srcFormat, srcTilingMode, destFormat, destTilingMode);
+    // If the formats are identical, we can always transfer between them.
+    if (srcFormat.internalFormat == destFormat.internalFormat)
+    {
+        return true;
+    }
+
+    // If either format is emulated, cannot transfer.
+    if (srcFormat.hasEmulatedImageFormat() || destFormat.hasEmulatedImageFormat())
+    {
+        return false;
+    }
+
+    // Otherwise, allow transfer between compatible formats.  This is derived from the specification
+    // of CHROMIUM_copy_texture.
+    const angle::Format &srcAngleFormat  = srcFormat.actualImageFormat();
+    const angle::Format &destAngleFormat = destFormat.actualImageFormat();
+
+    const bool srcIsBGRA = srcAngleFormat.isBGRA();
+    const bool srcHasR8  = srcAngleFormat.redBits == 8;
+    const bool srcHasG8  = srcAngleFormat.greenBits == 8;
+    const bool srcHasB8  = srcAngleFormat.blueBits == 8;
+    const bool srcHasA8  = srcAngleFormat.alphaBits == 8;
+
+    const bool destIsBGRA = destAngleFormat.isBGRA();
+    const bool destHasR8  = destAngleFormat.redBits == 8;
+    const bool destHasG8  = destAngleFormat.greenBits == 8;
+    const bool destHasB8  = destAngleFormat.blueBits == 8;
+    const bool destHasA8  = destAngleFormat.alphaBits == 8;
+
+    // Copy is allowed as long as they have the same number and ordering of (8-bit) channels.
+    // CHROMIUM_copy_texture expects verbatim copy between these format, so this copy is done
+    // regardless of sRGB, normalized, etc.
+    return srcIsBGRA == destIsBGRA && srcHasR8 == destHasR8 && srcHasG8 == destHasG8 &&
+           srcHasB8 == destHasB8 && srcHasA8 == destHasA8;
 }
 
 bool CanCopyWithDraw(RendererVk *renderer,
