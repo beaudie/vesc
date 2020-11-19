@@ -1425,6 +1425,12 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::swapImpl");
 
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (renderer->getFeatures().logMemoryReportStats.enabled)
+    {
+        renderer->logMemoryReportStats();
+    }
 
     if (mNeedToAcquireNextSwapchainImage)
     {

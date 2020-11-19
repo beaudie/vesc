@@ -334,6 +334,18 @@ class RendererVk : angle::NonCopyable
     vk::CommandBufferHelper *getCommandBufferHelper(bool hasRenderPass);
     void recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer);
 
+    // Tracks GPU memory usage
+    void logMemoryReportStats();
+    VkDeviceSize mCurrentTotalAllocatedMemory;
+    VkDeviceSize mMaxTotalAllocatedMemory;
+    std::unordered_map<VkObjectType, VkDeviceSize> mAllocatedMemory;
+    std::unordered_map<VkObjectType, VkDeviceSize> mAllocatedMemoryMax;
+    VkDeviceSize mCurrentTotalImportedMemory;
+    VkDeviceSize mMaxTotalImportedMemory;
+    std::unordered_map<VkObjectType, VkDeviceSize> mImportedMemory;
+    std::unordered_map<VkObjectType, VkDeviceSize> mImportedMemoryMax;
+    std::unordered_map<uint64_t, int> mUniqueIDCounts;
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -378,6 +390,8 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceTransformFeedbackFeaturesEXT mTransformFeedbackFeatures;
     VkPhysicalDeviceIndexTypeUint8FeaturesEXT mIndexTypeUint8Features;
     VkPhysicalDeviceSubgroupProperties mSubgroupProperties;
+    VkPhysicalDeviceDeviceMemoryReportFeaturesEXT mMemoryReportFeatures;
+    VkDeviceDeviceMemoryReportCreateInfoEXT mMemoryReportCallback;
     VkPhysicalDeviceExternalMemoryHostPropertiesEXT mExternalMemoryHostProperties;
     VkPhysicalDeviceShaderFloat16Int8FeaturesKHR mShaderFloat16Int8Features;
     VkPhysicalDeviceShaderAtomicFloatFeaturesEXT mShaderAtomicFloatFeature;
