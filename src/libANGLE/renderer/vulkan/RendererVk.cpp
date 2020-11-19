@@ -2464,8 +2464,6 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
 
     vk::Shared<vk::Fence> submitFence;
-    ANGLE_TRY(newSharedFence(context, &submitFence));
-
     Serial submitQueueSerial;
 
     if (mFeatures.asyncCommandQueue.enabled)
@@ -2478,6 +2476,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     }
     else
     {
+        ANGLE_TRY(newSharedFence(context, &submitFence));
         submitQueueSerial = mCommandQueue.reserveSubmitSerial();
 
         ANGLE_TRY(mCommandQueue.submitFrame(
