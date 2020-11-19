@@ -237,14 +237,14 @@ bool Stream::isConsumerBoundToContext(const gl::Context *context) const
     return (context == mContext);
 }
 
-Error Stream::validateD3D11Texture(void *texture, const AttributeMap &attributes) const
+Error Stream::validateD3D11Texture(const void *texture, const AttributeMap &attributes) const
 {
     ASSERT(mConsumerType == ConsumerType::GLTextureRGB ||
            mConsumerType == ConsumerType::GLTextureYUV);
     ASSERT(mProducerType == ProducerType::D3D11Texture);
     ASSERT(mProducerImplementation != nullptr);
 
-    return mProducerImplementation->validateD3DTexture(texture, attributes);
+    return mProducerImplementation->validateD3DTexture(const_cast<void *>(texture), attributes);
 }
 
 Error Stream::postD3D11Texture(void *texture, const AttributeMap &attributes)
