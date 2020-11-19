@@ -556,6 +556,13 @@ angle::Result ContextVk::initialize()
                                                                vk::kDefaultTimestampQueryPoolSize));
     }
 
+    if (getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        ANGLE_TRY(mQueryPools[gl::QueryType::TransformFeedbackPrimitivesWritten].init(
+            this, VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT,
+            vk::kDefaultTransformFeedbackQueryPoolSize));
+    }
+
     // Init gles to vulkan index type map
     initIndexTypeMap();
 
@@ -2988,6 +2995,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // hint.
                 invalidateGraphicsDriverUniforms();
                 break;
+            case gl::State::DIRTY_BIT_PATCH_VERTICES:
+                mGraphicsPipelineDesc->updatePatchVertices(&mGraphicsPipelineTransition,
+                                                           glState.getPatchVertices());
+                break;
             default:
                 UNREACHABLE();
                 break;
@@ -3527,6 +3538,7 @@ vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||
            queryType == gl::QueryType::AnySamplesConservative ||
+           queryType == gl::QueryType::TransformFeedbackPrimitivesWritten ||
            queryType == gl::QueryType::Timestamp || queryType == gl::QueryType::TimeElapsed);
 
     // Assert that timestamp extension is available if needed.
