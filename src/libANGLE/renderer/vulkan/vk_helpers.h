@@ -1695,6 +1695,10 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasImmutableSampler() { return mExternalFormat != 0; }
     uint64_t getExternalFormat() const { return mExternalFormat; }
 
+    // If storeOp=NONE is not supported, read-only depth/stencil attachment would still generate a
+    // write.  Note that storeOp=DONT_CARE is still a write for synchronization purposes.
+    void onReadOnlyAttachmentWrite(VkAccessFlags flags);
+
     // Used by framebuffer and render pass functions to decide loadOps and invalidate/un-invalidate
     // render target contents.
     bool hasSubresourceDefinedContent(gl::LevelIndex level, uint32_t layerIndex) const;
@@ -1875,6 +1879,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // For optimizing transition between different shader readonly layouts
     ImageLayout mLastNonShaderReadOnlyLayout;
     VkPipelineStageFlags mCurrentShaderReadStageMask;
+    // For handling storeOp!=NONE when a read-only depth/stencil attachment is used.
+    VkAccessFlags mReadOnlyAttachmentWriteFlag;
 
     // For imported images
     BindingPointer<SamplerYcbcrConversion> mYuvConversionSampler;

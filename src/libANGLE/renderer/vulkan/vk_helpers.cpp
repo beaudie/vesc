@@ -147,9 +147,14 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
-            // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
-            // Transition from: RAR and WAR don't need memory barrier.
+            // Transition to: all reads must happen after barrier.  Note that if storeOp=NONE is not
+            // supported, this layout can also incur an attachment write.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT
+                | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.  If storeOp=NONE is not
+            // supported, ImageHelper::mReadOnlyAttachmentWriteFlag is used to add a write flag if
+            // necessary.  The flag is not added conservatively to avoid breaking the render pass
+            // unnecessarily when a depth/stencil image is used as a sampler.
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
@@ -1033,6 +1038,9 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(mDepthStencilImage);
 
+    ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
+    const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
+
     // Do depth stencil layout change.
     ImageLayout imageLayout;
     bool barrierRequired;
@@ -1067,18 +1075,23 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
         }
     }
 
+    // If read-only depth/stencil is using storeOp!=NONE, make sure transitioning out of its layout
+    // includes DEPTH_STENCIL_ATTACHMENT_WRITE.
+    if (mReadOnlyDepthStencilMode && (dsOps.storeOp != RenderPassStoreOp::NoneQCOM ||
+                                      dsOps.stencilStoreOp != RenderPassStoreOp::NoneQCOM))
+    {
+        mDepthStencilImage->onReadOnlyAttachmentWrite(VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT);
+    }
+
     if (!mReadOnlyDepthStencilMode)
     {
-        ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
-        const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
-
         // If the image is being written to, mark its contents defined.
         VkImageAspectFlags definedAspects = 0;
-        if (dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE)
+        if (dsOps.storeOp == RenderPassStoreOp::Store)
         {
             definedAspects |= VK_IMAGE_ASPECT_DEPTH_BIT;
         }
-        if (dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE)
+        if (dsOps.stencilStoreOp == RenderPassStoreOp::Store)
         {
             definedAspects |= VK_IMAGE_ASPECT_STENCIL_BIT;
         }
@@ -3408,6 +3421,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
       mLastNonShaderReadOnlyLayout(other.mLastNonShaderReadOnlyLayout),
       mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
+      mReadOnlyAttachmentWriteFlag(other.mReadOnlyAttachmentWriteFlag),
       mYuvConversionSampler(std::move(other.mYuvConversionSampler)),
       mExternalFormat(other.mExternalFormat),
       mBaseLevel(other.mBaseLevel),
@@ -3442,6 +3456,7 @@ void ImageHelper::resetCachedProperties()
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
+    mReadOnlyAttachmentWriteFlag = 0;
     mBaseLevel                   = gl::LevelIndex(0);
     mMaxLevel                    = gl::LevelIndex(0);
     mLayerCount                  = 0;
@@ -4123,7 +4138,7 @@ bool ImageHelper::isDepthOrStencil() const
 
 bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
 {
-    // If transitioning to a different layout, we need always need a barrier.
+    // If transitioning to a different layout, we always need a barrier.
     if (mCurrentLayout != newLayout)
     {
         return true;
@@ -4135,7 +4150,7 @@ bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
     // layout (same as new layout) is writable which in turn is only possible if the image is
     // simultaneously bound for shader write (i.e. the layout is GENERAL).
     const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
-    return layoutData.type == ResourceAccess::Write;
+    return layoutData.type == ResourceAccess::Write || mReadOnlyAttachmentWriteFlag != 0;
 }
 
 void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -4222,11 +4237,11 @@ ANGLE_INLINE void ImageHelper::initImageMemoryBarrierStruct(
     const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
     const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
 
-    imageMemoryBarrier->sType               = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    imageMemoryBarrier->srcAccessMask       = transitionFrom.srcAccessMask;
-    imageMemoryBarrier->dstAccessMask       = transitionTo.dstAccessMask;
-    imageMemoryBarrier->oldLayout           = transitionFrom.layout;
-    imageMemoryBarrier->newLayout           = transitionTo.layout;
+    imageMemoryBarrier->sType         = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    imageMemoryBarrier->srcAccessMask = transitionFrom.srcAccessMask | mReadOnlyAttachmentWriteFlag;
+    imageMemoryBarrier->dstAccessMask = transitionTo.dstAccessMask;
+    imageMemoryBarrier->oldLayout     = transitionFrom.layout;
+    imageMemoryBarrier->newLayout     = transitionTo.layout;
     imageMemoryBarrier->srcQueueFamilyIndex = mCurrentQueueFamilyIndex;
     imageMemoryBarrier->dstQueueFamilyIndex = newQueueFamilyIndex;
     imageMemoryBarrier->image               = mImage.getHandle();
@@ -4262,8 +4277,9 @@ void ImageHelper::barrierImpl(VkImageAspectFlags aspectMask,
     }
     commandBuffer->imageBarrier(srcStageMask, transitionTo.dstStageMask, imageMemoryBarrier);
 
-    mCurrentLayout           = newLayout;
-    mCurrentQueueFamilyIndex = newQueueFamilyIndex;
+    mCurrentLayout               = newLayout;
+    mCurrentQueueFamilyIndex     = newQueueFamilyIndex;
+    mReadOnlyAttachmentWriteFlag = 0;
 }
 
 template void ImageHelper::barrierImpl<rx::vk::priv::SecondaryCommandBuffer>(
@@ -4282,10 +4298,11 @@ bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
         const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
         // RAR is not a hazard and doesn't require a barrier, especially as the image layout hasn't
         // changed.  The following asserts that such a barrier is not attempted.
-        ASSERT(layoutData.type == ResourceAccess::Write);
+        ASSERT(layoutData.type == ResourceAccess::Write || mReadOnlyAttachmentWriteFlag);
         // No layout change, only memory barrier is required
         barrier->mergeMemoryBarrier(layoutData.srcStageMask, layoutData.dstStageMask,
-                                    layoutData.srcAccessMask, layoutData.dstAccessMask);
+                                    layoutData.srcAccessMask | mReadOnlyAttachmentWriteFlag,
+                                    layoutData.dstAccessMask);
         barrierModified = true;
     }
     else
@@ -4295,7 +4312,8 @@ bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
         VkPipelineStageFlags srcStageMask            = transitionFrom.srcStageMask;
         VkPipelineStageFlags dstStageMask            = transitionTo.dstStageMask;
 
-        if (IsShaderReadOnlyLayout(transitionTo) && IsShaderReadOnlyLayout(transitionFrom))
+        if (IsShaderReadOnlyLayout(transitionTo) && IsShaderReadOnlyLayout(transitionFrom) &&
+            mReadOnlyAttachmentWriteFlag == 0)
         {
             // If we are switching between different shader stage reads, then there is no actual
             // layout change or access type change. We only need a barrier if we are making a read
@@ -4341,6 +4359,7 @@ bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
         }
         mCurrentLayout = newLayout;
     }
+    mReadOnlyAttachmentWriteFlag = 0;
     return barrierModified;
 }
 
@@ -4915,6 +4934,11 @@ void ImageHelper::onWrite(gl::LevelIndex levelStart,
     setContentDefined(toVkLevel(levelStart), levelCount, layerStart, layerCount, aspectFlags);
 }
 
+void ImageHelper::onReadOnlyAttachmentWrite(VkAccessFlags flags)
+{
+    mReadOnlyAttachmentWriteFlag |= flags;
+}
+
 bool ImageHelper::hasSubresourceDefinedContent(gl::LevelIndex level, uint32_t layerIndex) const
 {
     return layerIndex >= kMaxContentDefinedLayerCount
@@ -5355,6 +5379,7 @@ void ImageHelper::stageSelfForBaseLevel()
     prevImage->mCurrentQueueFamilyIndex     = mCurrentQueueFamilyIndex;
     prevImage->mLastNonShaderReadOnlyLayout = mLastNonShaderReadOnlyLayout;
     prevImage->mCurrentShaderReadStageMask  = mCurrentShaderReadStageMask;
+    prevImage->mReadOnlyAttachmentWriteFlag = mReadOnlyAttachmentWriteFlag;
     prevImage->mLevelCount                  = 1;
     prevImage->mLayerCount                  = mLayerCount;
     prevImage->mImageSerial                 = mImageSerial;
@@ -5364,6 +5389,7 @@ void ImageHelper::stageSelfForBaseLevel()
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
+    mReadOnlyAttachmentWriteFlag = 0;
     mImageSerial                 = kInvalidImageSerial;
 
     setEntireContentUndefined();
