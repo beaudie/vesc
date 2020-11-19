@@ -888,7 +888,6 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
     // defer the image layout changes until endRenderPass time or when images going away so that we
     // only insert layout change barrier once.
     image->retain(resourceUseList);
-    image->onWrite(level, 1, layer, 1, kDepthStencilAspects);
     mRenderPassUsedImages.insert(image->getImageSerial().getValue());
     mDepthStencilImage      = image;
     mDepthStencilLevelIndex = level;
@@ -900,7 +899,6 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
         // depth/stencil image as currently it can only ever come from
         // multisampled-render-to-texture renderbuffers.
         resolveImage->retain(resourceUseList);
-        resolveImage->onWrite(level, 1, layer, 1, kDepthStencilAspects);
         mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
         mDepthStencilResolveImage = resolveImage;
     }
@@ -1030,7 +1028,7 @@ void CommandBufferHelper::executeBarriers(const angle::FeaturesVk &features,
     mPipelineBarrierMask.reset();
 }
 
-void CommandBufferHelper::finalizeDepthStencilImageLayout()
+void CommandBufferHelper::finalizeDepthStencilImageLayout(const PackedAttachmentOpsDesc &dsOps)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(mDepthStencilImage);
@@ -1068,9 +1066,26 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
             mPipelineBarrierMask.set(barrierIndex);
         }
     }
+
+    // If the image is being written to, mark its contents defined.
+    VkImageAspectFlags definedAspects = 0;
+    if (dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE)
+    {
+        definedAspects |= VK_IMAGE_ASPECT_DEPTH_BIT;
+    }
+    if (dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE)
+    {
+        definedAspects |= VK_IMAGE_ASPECT_STENCIL_BIT;
+    }
+    if (definedAspects != 0)
+    {
+        mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex, 1,
+                                    definedAspects);
+    }
 }
 
-void CommandBufferHelper::finalizeDepthStencilResolveImageLayout()
+void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(
+    const PackedAttachmentOpsDesc &dsOps)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(mDepthStencilImage);
@@ -1089,6 +1104,22 @@ void CommandBufferHelper::finalizeDepthStencilResolveImageLayout()
     {
         mPipelineBarrierMask.set(barrierIndex);
     }
+
+    // If the image is being written to, mark its contents defined.
+    VkImageAspectFlags definedAspects = 0;
+    if (!dsOps.isInvalidated)
+    {
+        definedAspects |= VK_IMAGE_ASPECT_DEPTH_BIT;
+    }
+    if (!dsOps.isStencilInvalidated)
+    {
+        definedAspects |= VK_IMAGE_ASPECT_STENCIL_BIT;
+    }
+    if (definedAspects != 0)
+    {
+        mDepthStencilResolveImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex, 1,
+                                           definedAspects);
+    }
 }
 
 void CommandBufferHelper::onImageHelperRelease(const vk::ImageHelper *image)
@@ -1097,13 +1128,15 @@ void CommandBufferHelper::onImageHelperRelease(const vk::ImageHelper *image)
 
     if (mDepthStencilImage == image)
     {
-        finalizeDepthStencilImageLayout();
+        ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
+        finalizeDepthStencilImageLayout(mAttachmentOps[mDepthStencilAttachmentIndex]);
         mDepthStencilImage = nullptr;
     }
 
     if (mDepthStencilResolveImage == image)
     {
-        finalizeDepthStencilResolveImageLayout();
+        ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
+        finalizeDepthStencilResolveImageLayout(mAttachmentOps[mDepthStencilAttachmentIndex]);
         mDepthStencilResolveImage = nullptr;
     }
 }
@@ -1136,16 +1169,6 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
     {
         return;
-    }
-
-    // Do depth stencil layout change.
-    if (mDepthStencilImage)
-    {
-        finalizeDepthStencilImageLayout();
-    }
-    if (mDepthStencilResolveImage)
-    {
-        finalizeDepthStencilResolveImageLayout();
     }
 
     PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
@@ -1213,6 +1236,16 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
     ASSERT(!mReadOnlyDepthStencilMode ||
            (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
+
+    // Do depth stencil layout change.
+    if (mDepthStencilImage)
+    {
+        finalizeDepthStencilImageLayout(dsOps);
+    }
+    if (mDepthStencilResolveImage)
+    {
+        finalizeDepthStencilResolveImageLayout(dsOps);
+    }
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,

@@ -1137,8 +1137,8 @@ class CommandBufferHelper : angle::NonCopyable
     void restoreDepthContent();
     void restoreStencilContent();
 
-    void finalizeDepthStencilImageLayout();
-    void finalizeDepthStencilResolveImageLayout();
+    void finalizeDepthStencilImageLayout(const PackedAttachmentOpsDesc &dsOps);
+    void finalizeDepthStencilResolveImageLayout(const PackedAttachmentOpsDesc &dsOps);
 
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
     //  that occur w/ shared allocator between multiple CBHs.
