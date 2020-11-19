@@ -603,19 +603,70 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
         // being "_ufield".  In such a case, use |parentStructMappedName|.
         if (varying.frontVarying.varying && (varying.frontVarying.stage == shaderType))
         {
-            const std::string &name = varying.isStructField()
-                                          ? varying.frontVarying.parentStructMappedName
-                                          : varying.frontVarying.varying->mappedName;
-            AddLocationInfo(&(*variableInfoMapOut)[varying.frontVarying.stage], name, location,
-                            component, varying.frontVarying.stage, 0, 0);
+            ShaderInterfaceVariableInfoMap &infoMap =
+                (*variableInfoMapOut)[varying.frontVarying.stage];
+            if (varying.frontVarying.rootStructMappedName.length() > 0)
+            {
+                const std::string &rootName = varying.frontVarying.rootStructMappedName;
+                if (infoMap.find(rootName) == infoMap.end())
+                {
+                    AddLocationInfo(&infoMap, rootName, location, component,
+                                    varying.frontVarying.stage, 0, 0);
+                }
+            }
+
+            if (varying.isStructField())
+            {
+                const std::string &structName = varying.frontVarying.parentStructMappedName;
+                if (infoMap.find(structName) == infoMap.end())
+                {
+                    AddLocationInfo(&infoMap, structName, location, component,
+                                    varying.frontVarying.stage, 0, 0);
+                }
+            }
+            else
+            {
+                const std::string &name = varying.frontVarying.varying->mappedName;
+                if (infoMap.find(name) == infoMap.end())
+                {
+                    AddLocationInfo(&infoMap, name, location, component, varying.frontVarying.stage,
+                                    0, 0);
+                }
+            }
         }
+
         if (varying.backVarying.varying && (varying.backVarying.stage == shaderType))
         {
-            const std::string &name = varying.isStructField()
-                                          ? varying.backVarying.parentStructMappedName
-                                          : varying.backVarying.varying->mappedName;
-            AddLocationInfo(&(*variableInfoMapOut)[varying.backVarying.stage], name, location,
-                            component, varying.backVarying.stage, 0, 0);
+            ShaderInterfaceVariableInfoMap &infoMap =
+                (*variableInfoMapOut)[varying.backVarying.stage];
+            if (varying.backVarying.rootStructMappedName.length() > 0)
+            {
+                const std::string &rootName = varying.backVarying.rootStructMappedName;
+                if (infoMap.find(rootName) == infoMap.end())
+                {
+                    AddLocationInfo(&infoMap, rootName, location, component,
+                                    varying.backVarying.stage, 0, 0);
+                }
+            }
+
+            if (varying.isStructField())
+            {
+                const std::string &structName = varying.backVarying.parentStructMappedName;
+                if (infoMap.find(structName) == infoMap.end())
+                {
+                    AddLocationInfo(&infoMap, structName, location, component,
+                                    varying.backVarying.stage, 0, 0);
+                }
+            }
+            else
+            {
+                const std::string &name = varying.backVarying.varying->mappedName;
+                if (infoMap.find(name) == infoMap.end())
+                {
+                    AddLocationInfo(&infoMap, name, location, component, varying.backVarying.stage,
+                                    0, 0);
+                }
+            }
         }
     }
 
@@ -1513,7 +1564,10 @@ void SpirvTransformer::visitVariable(const uint32_t *instruction)
 
     // For interface block variables, the name that's used to associate info is the block name
     // rather than the variable name.
-    const char *name = mNamesById[isInterfaceBlockVariable ? typeId : id];
+    // the empty string is generated for unnamed instface block.
+    const char *name =
+        mNamesById[(isInterfaceBlockVariable || strcmp(mNamesById[id], "") == 0) ? typeId : id];
+
     ASSERT(name != nullptr);
 
     // Handle builtins, which all start with "gl_".  Either the variable name could be an indication
@@ -1907,7 +1961,6 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
 
     // Furthermore, if it's not an inactive varying output, there's nothing to do.  Note that
     // inactive varying inputs are already pruned by the translator.
-    ASSERT(storageClass != spv::StorageClassInput || info->activeStages[mShaderType]);
     if (info->activeStages[mShaderType])
     {
         if (info->useRelaxedPrecision &&
@@ -1927,8 +1980,7 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
         }
         return false;
     }
-
-    ASSERT(storageClass == spv::StorageClassOutput);
+    // When a shader is separately compiled, inactive varying input will be come.
 
     // Copy the variable declaration for modification.  Change its type to the corresponding type
     // with the Private storage class, as well as changing the storage class respecified in this
