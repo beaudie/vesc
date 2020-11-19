@@ -677,11 +677,10 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     ASSERT(glExecutable && !glExecutable->isCompute());
 
     mTransformOptions.enableLineRasterEmulation = contextVk->isBresenhamEmulationEnabled(mode);
-    mTransformOptions.surfaceRotation           = static_cast<uint8_t>(desc.getSurfaceRotation());
+    mTransformOptions.surfaceRotation           = ToUnderlying(desc.getSurfaceRotation());
 
     // This must be called after mTransformOptions have been set.
     ProgramInfo &programInfo = getGraphicsProgramInfo(mTransformOptions);
-
     for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
     {
         ProgramVk *programVk = getShaderProgram(glState, shaderType);
