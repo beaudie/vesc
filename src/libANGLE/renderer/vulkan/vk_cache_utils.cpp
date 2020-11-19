@@ -2499,6 +2499,39 @@ void GraphicsPipelineDesc::updateRenderPassDesc(GraphicsPipelineTransitionBits *
     }
 }
 
+void GraphicsPipelineDesc::updateWithSpecConstUsageBits(GraphicsPipelineTransitionBits *transition,
+                                                        rx::SpecConstUsageBits usageBits)
+{
+    SurfaceRotation rotation = getSurfaceRotation();
+    // If program is not using rotation at all, we force it to use the Identity or FlippedIdentity
+    // slot to improve the program cache hit rate
+    if (!usageBits.test(sh::vk::SpecConstUsage::Rotation))
+    {
+        if (ToUnderlying(rotation) >= ToUnderlying(SurfaceRotation::FlippedIdentity))
+        {
+            rotation = SurfaceRotation::FlippedIdentity;
+        }
+        else
+        {
+            rotation = SurfaceRotation::Identity;
+        }
+    }
+    // If program is not using yflip, we force it into non-flipped slot to increase the chance of
+    // pipeline program cache hit.
+    if (!usageBits.test(sh::vk::SpecConstUsage::YFlip))
+    {
+        if (ToUnderlying(rotation) >= ToUnderlying(SurfaceRotation::FlippedIdentity))
+        {
+            rotation = static_cast<SurfaceRotation>(ToUnderlying(rotation) -
+                                                    ToUnderlying(SurfaceRotation::FlippedIdentity));
+        }
+    }
+    if (rotation != getSurfaceRotation())
+    {
+        updateSurfaceRotation(transition, rotation);
+    }
+}
+
 // AttachmentOpsArray implementation.
 AttachmentOpsArray::AttachmentOpsArray()
 {
