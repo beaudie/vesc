@@ -248,6 +248,7 @@ std::ostream &FmtHex(std::ostream &os, T value)
 #    define ANGLE_ENABLE_ASSERTS
 #endif
 
+#define VERBOSE() ANGLE_LOG(EVENT)
 #define INFO() ANGLE_LOG(INFO)
 #define WARN() ANGLE_LOG(WARN)
 #define ERR() ANGLE_LOG(ERR)

@@ -387,6 +387,95 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
     return VK_FALSE;
 }
 
+VKAPI_ATTR void VKAPI_CALL
+MemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, void *userData)
+{
+    setlocale(LC_NUMERIC, "");
+    RendererVk *rendererVk = static_cast<RendererVk *>(userData);
+    VkDeviceSize size      = 0;
+    std::string reportType;
+    std::lock_guard<std::mutex> lock(rendererVk->mMemoryReportMutex);
+    switch (callbackData->type)
+    {
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATE_EXT:
+            reportType = " Alloc";
+            if ((rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] += 1) > 1)
+            {
+                break;
+            }
+            size = rendererVk->mAllocatedMemory[callbackData->objectType] + callbackData->size;
+            rendererVk->mAllocatedMemory[callbackData->objectType] = size;
+            if (rendererVk->mAllocatedMemoryMax[callbackData->objectType] < size)
+            {
+                rendererVk->mAllocatedMemoryMax[callbackData->objectType] = size;
+            }
+            rendererVk->mCurrentTotalAllocatedMemory += callbackData->size;
+            if (rendererVk->mMaxTotalAllocatedMemory < rendererVk->mCurrentTotalAllocatedMemory)
+            {
+                rendererVk->mMaxTotalAllocatedMemory = rendererVk->mCurrentTotalAllocatedMemory;
+            }
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_FREE_EXT:
+            reportType = "  Free";
+            ASSERT(rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] > 0);
+            rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] -= 1;
+            size = rendererVk->mAllocatedMemory[callbackData->objectType] - callbackData->size;
+            rendererVk->mAllocatedMemory[callbackData->objectType] = size;
+            rendererVk->mCurrentTotalAllocatedMemory -= callbackData->size;
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_IMPORT_EXT:
+            reportType = "Import";
+            if ((rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] += 1) > 1)
+            {
+                break;
+            }
+            size = rendererVk->mImportedMemory[callbackData->objectType] + callbackData->size;
+            rendererVk->mImportedMemory[callbackData->objectType] = size;
+            if (rendererVk->mImportedMemoryMax[callbackData->objectType] < size)
+            {
+                rendererVk->mImportedMemoryMax[callbackData->objectType] = size;
+            }
+            rendererVk->mCurrentTotalImportedMemory += callbackData->size;
+            if (rendererVk->mMaxTotalImportedMemory < rendererVk->mCurrentTotalImportedMemory)
+            {
+                rendererVk->mMaxTotalImportedMemory = rendererVk->mCurrentTotalImportedMemory;
+            }
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_UNIMPORT_EXT:
+            reportType = "Un-Imp";
+            ASSERT(rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] > 0);
+            rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] -= 1;
+            size = rendererVk->mImportedMemory[callbackData->objectType] - callbackData->size;
+            rendererVk->mImportedMemory[callbackData->objectType] = size;
+            rendererVk->mCurrentTotalImportedMemory -= callbackData->size;
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATION_FAILED_EXT:
+            reportType = "allocF";
+            break;
+        default:
+            UNREACHABLE();
+            return;
+    }
+    if (rendererVk->getFeatures().logMemoryReportCallbacks.enabled)
+    {
+        char buffer[256];
+        snprintf(buffer, 256,
+                 "%s: size=%9" PRIu64 "; type= %-15s; heapIdx= %u; id= %" PRIu64
+                 "; handle= %" PRIu64 "; Total= %9" PRIu64,
+                 reportType.c_str(), callbackData->size,
+                 GetVkObjectTypeName(callbackData->objectType), callbackData->heapIndex,
+                 callbackData->memoryObjectId, callbackData->objectHandle, size);
+        VERBOSE() << buffer;
+        if (rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] > 1)
+        {
+            snprintf(buffer, 256,
+                     "\t Avoided double-counting this object with non-unique id= %" PRIu64,
+                     callbackData->memoryObjectId);
+            VERBOSE() << buffer;
+        }
+    }
+}
+
 bool ShouldUseValidationLayers(const egl::AttributeMap &attribs)
 {
 #if defined(ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS_BY_DEFAULT)
@@ -457,7 +546,11 @@ constexpr char kEnableDebugMarkersPropertyName[] = "debug.angle.markers";
 
 // RendererVk implementation.
 RendererVk::RendererVk()
-    : mDisplay(nullptr),
+    : mCurrentTotalAllocatedMemory(0),
+      mMaxTotalAllocatedMemory(0),
+      mCurrentTotalImportedMemory(0),
+      mMaxTotalImportedMemory(0),
+      mDisplay(nullptr),
       mCapsInitialized(false),
       mInstance(VK_NULL_HANDLE),
       mEnableValidationLayers(false),
@@ -942,6 +1035,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mSubgroupProperties       = {};
     mSubgroupProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES;
 
+    mMemoryReportFeatures = {};
+    mMemoryReportFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_MEMORY_REPORT_FEATURES_EXT;
+
     mExternalMemoryHostProperties = {};
     mExternalMemoryHostProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT;
@@ -1011,6 +1108,12 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mIndexTypeUint8Features);
     }
 
+    // Query memory report features
+    if (ExtensionFound(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mMemoryReportFeatures);
+    }
+
     // Query external memory host properties
     if (ExtensionFound(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME, deviceExtensionNames))
     {
@@ -1071,6 +1174,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
 
     // Clean up pNext chains
     mLineRasterizationFeatures.pNext        = nullptr;
+    mMemoryReportFeatures.pNext             = nullptr;
     mProvokingVertexFeatures.pNext          = nullptr;
     mVertexAttributeDivisorFeatures.pNext   = nullptr;
     mVertexAttributeDivisorProperties.pNext = nullptr;
@@ -1412,6 +1516,19 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     if (getFeatures().supportsDepthStencilResolve.enabled)
     {
         enabledDeviceExtensions.push_back(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME);
+    }
+
+    if (mMemoryReportFeatures.deviceMemoryReport &&
+        (getFeatures().logMemoryReportCallbacks.enabled ||
+         getFeatures().logMemoryReportStats.enabled))
+    {
+        enabledDeviceExtensions.push_back(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME);
+
+        mMemoryReportCallback       = {};
+        mMemoryReportCallback.sType = VK_STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT;
+        mMemoryReportCallback.pfnUserCallback = &MemoryReportCallback;
+        mMemoryReportCallback.pUserData       = this;
+        vk::AddToPNextChain(&createInfo, &mMemoryReportCallback);
     }
 
     if (getFeatures().supportsExternalMemoryHost.enabled)
@@ -1917,6 +2034,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, shadowBuffers, true);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, persistentlyMappedBuffers, true);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportCallbacks, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportStats, false);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsExternalMemoryHost,
@@ -2650,5 +2770,31 @@ void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuff
     ASSERT(commandBuffer->empty());
     commandBuffer->markOpen();
     mCommandBufferHelperFreeList.push_back(commandBuffer);
+}
+
+void RendererVk::logMemoryReportStats()
+{
+    char buffer[256];
+    std::lock_guard<std::mutex> lock(mMemoryReportMutex);
+
+    snprintf(buffer, 256,
+             "GPU Memory: allocated=%9" PRIu64 " (max=%9" PRIu64
+             "); "
+             "imported=%9" PRIu64 " (max=%9" PRIu64 ")",
+             mCurrentTotalAllocatedMemory, mMaxTotalAllocatedMemory, mCurrentTotalImportedMemory,
+             mMaxTotalImportedMemory);
+    VERBOSE() << buffer;
+    for (auto &it : mAllocatedMemory)
+    {
+        snprintf(buffer, 256, "- type= %-15s: allocated=%9" PRIu64 " (max=%9" PRIu64 "); ",
+                 GetVkObjectTypeName(it.first), it.second, mAllocatedMemoryMax[it.first]);
+        VERBOSE() << buffer;
+    }
+    for (auto &it : mImportedMemory)
+    {
+        snprintf(buffer, 256, "- type= %-15s:  imported=%9" PRIu64 " (max=%9" PRIu64 "); ",
+                 GetVkObjectTypeName(it.first), it.second, mImportedMemoryMax[it.first]);
+        VERBOSE() << buffer;
+    }
 }
 }  // namespace rx

@@ -234,8 +234,10 @@ void Trace(LogSeverity severity, const char *message)
         android_LogPriority android_priority = ANDROID_LOG_ERROR;
         switch (severity)
         {
-            case LOG_INFO:
             case LOG_EVENT:
+                android_priority = ANDROID_LOG_VERBOSE;
+                break;
+            case LOG_INFO:
                 android_priority = ANDROID_LOG_INFO;
                 break;
             case LOG_WARN:
