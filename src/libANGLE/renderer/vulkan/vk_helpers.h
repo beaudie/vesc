@@ -1235,6 +1235,7 @@ enum class ImageLayout
     // PackedAttachmentOpsDesc.
     ColorAttachment,
     DepthStencilReadOnly,
+    DepthStencilReadOnlyWithStore,
     DepthStencilAttachment,
     DepthStencilResolveAttachment,
     Present,

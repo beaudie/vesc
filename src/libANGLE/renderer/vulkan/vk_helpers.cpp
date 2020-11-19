@@ -156,6 +156,23 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::DepthStencilReadOnlyWithStore,
+        ImageMemoryBarrierData{
+            "DepthStencilReadOnlyWithStore",
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
+            kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            // Transition from: even though this layout is read-only, the render pass that has used
+            // this depth/stencil attachment has used storeOp=STORE (due to NONE being unavailable).
+            // The STORE operation is a write operation, and it must finish before barrier.
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            ResourceAccess::ReadOnly,
+            PipelineStage::VertexShader,
+        },
+    },
+    {
         ImageLayout::DepthStencilAttachment,
         ImageMemoryBarrierData{
             "DepthStencilAttachment",
@@ -1033,13 +1050,19 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(mDepthStencilImage);
 
+    ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
+    const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
+
     // Do depth stencil layout change.
     ImageLayout imageLayout;
     bool barrierRequired;
 
     if (mReadOnlyDepthStencilMode)
     {
-        imageLayout     = ImageLayout::DepthStencilReadOnly;
+        imageLayout = dsOps.storeOp == RenderPassStoreOp::Store ||
+                              dsOps.stencilStoreOp == RenderPassStoreOp::Store
+                          ? ImageLayout::DepthStencilReadOnlyWithStore
+                          : ImageLayout::DepthStencilReadOnly;
         barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
     }
     else
@@ -1069,16 +1092,13 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout()
 
     if (!mReadOnlyDepthStencilMode)
     {
-        ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
-        const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
-
         // If the image is being written to, mark its contents defined.
         VkImageAspectFlags definedAspects = 0;
-        if (dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE)
+        if (dsOps.storeOp == RenderPassStoreOp::Store)
         {
             definedAspects |= VK_IMAGE_ASPECT_DEPTH_BIT;
         }
-        if (dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE)
+        if (dsOps.stencilStoreOp == RenderPassStoreOp::Store)
         {
             definedAspects |= VK_IMAGE_ASPECT_STENCIL_BIT;
         }
