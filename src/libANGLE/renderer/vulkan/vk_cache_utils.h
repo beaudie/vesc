@@ -716,6 +716,9 @@ class GraphicsPipelineDesc final
             mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation);
     }
 
+    void updateWithSpecConstUsageBits(GraphicsPipelineTransitionBits *transition,
+                                      rx::SpecConstUsageBits usageBits);
+
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
 

@@ -1085,6 +1085,12 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
     {
         const vk::GraphicsPipelineDesc *descPtr;
 
+        // If program is not using a specific specialization constant, we should set it to a fixed
+        // number so that we will not miss the pipeline cache because of the specConst difference.
+        SpecConstUsageBits specConstUsageBits = mExecutable->getSpecConstUsageBits();
+        mGraphicsPipelineDesc->updateWithSpecConstUsageBits(&mGraphicsPipelineTransition,
+                                                            specConstUsageBits);
+
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mExecutable->getGraphicsPipeline(
             this, mCurrentDrawMode, *mGraphicsPipelineDesc,
