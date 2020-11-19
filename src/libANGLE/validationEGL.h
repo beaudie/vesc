@@ -36,14 +36,29 @@ class Sync;
 class Thread;
 class LabeledObject;
 
+struct ValidationContext
+{
+    ValidationContext(Thread *threadIn, const char *entryPointIn, const LabeledObject *objectIn)
+        : eglThread(threadIn), entryPoint(entryPointIn), labeledObject(objectIn)
+    {}
+
+    // We should remove the message-less overload once we have messages for all EGL errors.
+    void setError(EGLint error);
+    void setError(EGLint error, const char *message...);
+
+    Thread *eglThread;
+    const char *entryPoint;
+    const LabeledObject *labeledObject;
+};
+
 // Object validation
-Error ValidateDisplay(const Display *display);
-Error ValidateSurface(const Display *display, const Surface *surface);
-Error ValidateConfig(const Display *display, const Config *config);
-Error ValidateContext(const Display *display, const gl::Context *context);
-Error ValidateImage(const Display *display, const Image *image);
-Error ValidateDevice(const Device *device);
-Error ValidateSync(const Display *display, const Sync *sync);
+bool ValidateDisplay(ValidationContext *val, const Display *display);
+bool ValidateSurface(ValidationContext *val, const Display *display, const Surface *surface);
+bool ValidateConfig(ValidationContext *val, const Display *display, const Config *config);
+bool ValidateContext(ValidationContext *val, const Display *display, const gl::Context *context);
+bool ValidateImage(ValidationContext *val, const Display *display, const Image *image);
+bool ValidateDevice(ValidationContext *val, const Device *device);
+bool ValidateSync(ValidationContext *val, const Display *display, const Sync *sync);
 
 // Return the requested object only if it is valid (otherwise nullptr)
 const Thread *GetThreadIfValid(const Thread *thread);
@@ -60,315 +75,461 @@ LabeledObject *GetLabeledObjectIfValid(Thread *thread,
                                        EGLObjectKHR object);
 
 // Entry point validation
-Error ValidateInitialize(const Display *display);
+bool ValidateInitialize(ValidationContext *val, const Display *display);
 
-Error ValidateTerminate(const Display *display);
+bool ValidateTerminate(ValidationContext *val, const Display *display);
 
-Error ValidateCreateContext(Display *display,
-                            Config *configuration,
-                            gl::Context *shareContext,
+bool ValidateCreateContext(ValidationContext *val,
+                           Display *display,
+                           Config *configuration,
+                           gl::Context *shareContext,
+                           const AttributeMap &attributes);
+
+bool ValidateCreateWindowSurface(ValidationContext *val,
+                                 Display *display,
+                                 Config *config,
+                                 EGLNativeWindowType window,
+                                 const AttributeMap &attributes);
+
+bool ValidateCreatePbufferSurface(ValidationContext *val,
+                                  Display *display,
+                                  Config *config,
+                                  const AttributeMap &attributes);
+bool ValidateCreatePbufferFromClientBuffer(ValidationContext *val,
+                                           Display *display,
+                                           EGLenum buftype,
+                                           EGLClientBuffer buffer,
+                                           Config *config,
+                                           const AttributeMap &attributes);
+
+bool ValidateCreatePixmapSurface(ValidationContext *val,
+                                 Display *display,
+                                 Config *config,
+                                 EGLNativePixmapType pixmap,
+                                 const AttributeMap &attributes);
+
+bool ValidateMakeCurrent(ValidationContext *val,
+                         Display *display,
+                         Surface *draw,
+                         Surface *read,
+                         gl::Context *context);
+
+bool ValidateCreateImage(ValidationContext *val,
+                         const Display *display,
+                         gl::Context *context,
+                         EGLenum target,
+                         EGLClientBuffer buffer,
+                         const AttributeMap &attributes);
+bool ValidateDestroyImage(ValidationContext *val, const Display *display, const Image *image);
+bool ValidateCreateImageKHR(ValidationContext *val,
+                            const Display *display,
+                            gl::Context *context,
+                            EGLenum target,
+                            EGLClientBuffer buffer,
                             const AttributeMap &attributes);
+bool ValidateDestroyImageKHR(ValidationContext *val, const Display *display, const Image *image);
 
-Error ValidateCreateWindowSurface(Display *display,
-                                  Config *config,
-                                  EGLNativeWindowType window,
-                                  const AttributeMap &attributes);
+bool ValidateCreateDeviceANGLE(ValidationContext *val,
+                               EGLint device_type,
+                               void *native_device,
+                               const EGLAttrib *attrib_list);
+bool ValidateReleaseDeviceANGLE(ValidationContext *val, Device *device);
 
-Error ValidateCreatePbufferSurface(Display *display,
-                                   Config *config,
-                                   const AttributeMap &attributes);
-Error ValidateCreatePbufferFromClientBuffer(Display *display,
-                                            EGLenum buftype,
-                                            EGLClientBuffer buffer,
-                                            Config *config,
-                                            const AttributeMap &attributes);
-
-Error ValidateCreatePixmapSurface(Display *display,
-                                  Config *config,
-                                  EGLNativePixmapType pixmap,
-                                  const AttributeMap &attributes);
-
-Error ValidateMakeCurrent(Display *display, Surface *draw, Surface *read, gl::Context *context);
-
-Error ValidateCreateImage(const Display *display,
-                          gl::Context *context,
-                          EGLenum target,
-                          EGLClientBuffer buffer,
-                          const AttributeMap &attributes);
-Error ValidateDestroyImage(const Display *display, const Image *image);
-Error ValidateCreateImageKHR(const Display *display,
-                             gl::Context *context,
-                             EGLenum target,
-                             EGLClientBuffer buffer,
-                             const AttributeMap &attributes);
-Error ValidateDestroyImageKHR(const Display *display, const Image *image);
-
-Error ValidateCreateDeviceANGLE(EGLint device_type,
-                                void *native_device,
-                                const EGLAttrib *attrib_list);
-Error ValidateReleaseDeviceANGLE(Device *device);
-
-Error ValidateCreateSyncBase(const Display *display,
-                             EGLenum type,
-                             const AttributeMap &attribs,
-                             const Display *currentDisplay,
-                             const gl::Context *currentContext,
-                             bool isExt);
-Error ValidateGetSyncAttribBase(const Display *display, const Sync *sync, EGLint attribute);
-
-Error ValidateCreateSyncKHR(const Display *display,
+bool ValidateCreateSyncBase(ValidationContext *val,
+                            const Display *display,
                             EGLenum type,
                             const AttributeMap &attribs,
                             const Display *currentDisplay,
-                            const gl::Context *currentContext);
-Error ValidateCreateSync(const Display *display,
-                         EGLenum type,
-                         const AttributeMap &attribs,
-                         const Display *currentDisplay,
-                         const gl::Context *currentContext);
-Error ValidateDestroySync(const Display *display, const Sync *sync);
-Error ValidateClientWaitSync(const Display *display,
-                             const Sync *sync,
-                             EGLint flags,
-                             EGLTime timeout);
-Error ValidateWaitSync(const Display *display,
-                       const gl::Context *context,
-                       const Sync *sync,
-                       EGLint flags);
-Error ValidateGetSyncAttribKHR(const Display *display,
+                            const gl::Context *currentContext,
+                            bool isExt);
+bool ValidateGetSyncAttribBase(ValidationContext *val,
+                               const Display *display,
                                const Sync *sync,
-                               EGLint attribute,
-                               EGLint *value);
-Error ValidateGetSyncAttrib(const Display *display,
-                            const Sync *sync,
-                            EGLint attribute,
-                            EGLAttrib *value);
+                               EGLint attribute);
 
-Error ValidateCreateStreamKHR(const Display *display, const AttributeMap &attributes);
-Error ValidateDestroyStreamKHR(const Display *display, const Stream *stream);
-Error ValidateStreamAttribKHR(const Display *display,
-                              const Stream *stream,
-                              EGLint attribute,
-                              EGLint value);
-Error ValidateQueryStreamKHR(const Display *display,
-                             const Stream *stream,
-                             EGLenum attribute,
-                             EGLint *value);
-Error ValidateQueryStreamu64KHR(const Display *display,
-                                const Stream *stream,
-                                EGLenum attribute,
-                                EGLuint64KHR *value);
-Error ValidateStreamConsumerGLTextureExternalKHR(const Display *display,
-                                                 gl::Context *context,
-                                                 const Stream *stream);
-Error ValidateStreamConsumerAcquireKHR(const Display *display,
-                                       gl::Context *context,
-                                       const Stream *stream);
-Error ValidateStreamConsumerReleaseKHR(const Display *display,
-                                       gl::Context *context,
-                                       const Stream *stream);
-Error ValidateStreamConsumerGLTextureExternalAttribsNV(const Display *display,
-                                                       gl::Context *context,
-                                                       const Stream *stream,
-                                                       const AttributeMap &attribs);
-Error ValidateCreateStreamProducerD3DTextureANGLE(const Display *display,
-                                                  const Stream *stream,
-                                                  const AttributeMap &attribs);
-Error ValidateStreamPostD3DTextureANGLE(const Display *display,
-                                        const Stream *stream,
-                                        void *texture,
-                                        const AttributeMap &attribs);
-
-Error ValidateGetMscRateANGLE(const Display *display,
-                              const Surface *surface,
-                              const EGLint *numerator,
-                              const EGLint *denominator);
-Error ValidateGetSyncValuesCHROMIUM(const Display *display,
-                                    const Surface *surface,
-                                    const EGLuint64KHR *ust,
-                                    const EGLuint64KHR *msc,
-                                    const EGLuint64KHR *sbc);
-
-Error ValidateDestroySurface(const Display *display,
-                             const Surface *surface,
-                             const EGLSurface eglSurface);
-
-Error ValidateDestroyContext(const Display *display,
-                             const gl::Context *glCtx,
-                             const EGLContext eglCtx);
-
-Error ValidateSwapBuffers(Thread *thread, const Display *display, const Surface *surface);
-
-Error ValidateWaitNative(const Display *display, const EGLint engine);
-
-Error ValidateCopyBuffers(Display *display, const Surface *surface);
-
-Error ValidateSwapBuffersWithDamageKHR(const Display *display,
-                                       const Surface *surface,
-                                       EGLint *rects,
-                                       EGLint n_rects);
-
-Error ValidateBindTexImage(const Display *display,
-                           const Surface *surface,
-                           const EGLSurface eglSurface,
-                           const EGLint buffer,
-                           const gl::Context *context,
-                           gl::Texture **textureObject);
-
-Error ValidateReleaseTexImage(const Display *display,
-                              const Surface *surface,
-                              const EGLSurface eglSurface,
-                              const EGLint buffer);
-
-Error ValidateSwapInterval(const Display *display,
-                           const Surface *draw_surface,
-                           const gl::Context *context);
-
-Error ValidateBindAPI(const EGLenum api);
-
-Error ValidatePresentationTimeANDROID(const Display *display,
-                                      const Surface *surface,
-                                      EGLnsecsANDROID time);
-
-Error ValidateSetBlobCacheANDROID(const Display *display,
-                                  EGLSetBlobFuncANDROID set,
-                                  EGLGetBlobFuncANDROID get);
-
-Error ValidateGetConfigAttrib(const Display *display, const Config *config, EGLint attribute);
-Error ValidateChooseConfig(const Display *display,
+bool ValidateCreateSyncKHR(ValidationContext *val,
+                           const Display *display,
+                           EGLenum type,
                            const AttributeMap &attribs,
-                           EGLint configSize,
-                           EGLint *numConfig);
-Error ValidateGetConfigs(const Display *display, EGLint configSize, EGLint *numConfig);
+                           const Display *currentDisplay,
+                           const gl::Context *currentContext);
+bool ValidateCreateSync(ValidationContext *val,
+                        const Display *display,
+                        EGLenum type,
+                        const AttributeMap &attribs,
+                        const Display *currentDisplay,
+                        const gl::Context *currentContext);
+bool ValidateDestroySync(ValidationContext *val, const Display *display, const Sync *sync);
+bool ValidateClientWaitSync(ValidationContext *val,
+                            const Display *display,
+                            const Sync *sync,
+                            EGLint flags,
+                            EGLTime timeout);
+bool ValidateWaitSync(ValidationContext *val,
+                      const Display *display,
+                      const gl::Context *context,
+                      const Sync *sync,
+                      EGLint flags);
+bool ValidateGetSyncAttribKHR(ValidationContext *val,
+                              const Display *display,
+                              const Sync *sync,
+                              EGLint attribute,
+                              EGLint *value);
+bool ValidateGetSyncAttrib(ValidationContext *val,
+                           const Display *display,
+                           const Sync *sync,
+                           EGLint attribute,
+                           EGLAttrib *value);
+
+bool ValidateCreateStreamKHR(ValidationContext *val,
+                             const Display *display,
+                             const AttributeMap &attributes);
+bool ValidateDestroyStreamKHR(ValidationContext *val, const Display *display, const Stream *stream);
+bool ValidateStreamAttribKHR(ValidationContext *val,
+                             const Display *display,
+                             const Stream *stream,
+                             EGLint attribute,
+                             EGLint value);
+bool ValidateQueryStreamKHR(ValidationContext *val,
+                            const Display *display,
+                            const Stream *stream,
+                            EGLenum attribute,
+                            EGLint *value);
+bool ValidateQueryStreamu64KHR(ValidationContext *val,
+                               const Display *display,
+                               const Stream *stream,
+                               EGLenum attribute,
+                               EGLuint64KHR *value);
+bool ValidateStreamConsumerGLTextureExternalKHR(ValidationContext *val,
+                                                const Display *display,
+                                                gl::Context *context,
+                                                const Stream *stream);
+bool ValidateStreamConsumerAcquireKHR(ValidationContext *val,
+                                      const Display *display,
+                                      gl::Context *context,
+                                      const Stream *stream);
+bool ValidateStreamConsumerReleaseKHR(ValidationContext *val,
+                                      const Display *display,
+                                      gl::Context *context,
+                                      const Stream *stream);
+bool ValidateStreamConsumerGLTextureExternalAttribsNV(ValidationContext *val,
+                                                      const Display *display,
+                                                      gl::Context *context,
+                                                      const Stream *stream,
+                                                      const AttributeMap &attribs);
+bool ValidateCreateStreamProducerD3DTextureANGLE(ValidationContext *val,
+                                                 const Display *display,
+                                                 const Stream *stream,
+                                                 const AttributeMap &attribs);
+bool ValidateStreamPostD3DTextureANGLE(ValidationContext *val,
+                                       const Display *display,
+                                       const Stream *stream,
+                                       void *texture,
+                                       const AttributeMap &attribs);
+
+bool ValidateGetMscRateANGLE(ValidationContext *val,
+                             const Display *display,
+                             const Surface *surface,
+                             const EGLint *numerator,
+                             const EGLint *denominator);
+bool ValidateGetSyncValuesCHROMIUM(ValidationContext *val,
+                                   const Display *display,
+                                   const Surface *surface,
+                                   const EGLuint64KHR *ust,
+                                   const EGLuint64KHR *msc,
+                                   const EGLuint64KHR *sbc);
+
+bool ValidateDestroySurface(ValidationContext *val,
+                            const Display *display,
+                            const Surface *surface,
+                            const EGLSurface eglSurface);
+
+bool ValidateDestroyContext(ValidationContext *val,
+                            const Display *display,
+                            const gl::Context *glCtx,
+                            const EGLContext eglCtx);
+
+bool ValidateSwapBuffers(ValidationContext *val,
+                         Thread *thread,
+                         const Display *display,
+                         const Surface *surface);
+
+bool ValidateWaitNative(ValidationContext *val, const Display *display, const EGLint engine);
+
+bool ValidateCopyBuffers(ValidationContext *val, Display *display, const Surface *surface);
+
+bool ValidateSwapBuffersWithDamageKHR(ValidationContext *val,
+                                      const Display *display,
+                                      const Surface *surface,
+                                      EGLint *rects,
+                                      EGLint n_rects);
+
+bool ValidateBindTexImage(ValidationContext *val,
+                          const Display *display,
+                          const Surface *surface,
+                          const EGLSurface eglSurface,
+                          const EGLint buffer,
+                          const gl::Context *context,
+                          gl::Texture **textureObject);
+
+bool ValidateReleaseTexImage(ValidationContext *val,
+                             const Display *display,
+                             const Surface *surface,
+                             const EGLSurface eglSurface,
+                             const EGLint buffer);
+
+bool ValidateSwapInterval(ValidationContext *val,
+                          const Display *display,
+                          const Surface *draw_surface,
+                          const gl::Context *context);
+
+bool ValidateBindAPI(ValidationContext *val, const EGLenum api);
+
+bool ValidatePresentationTimeANDROID(ValidationContext *val,
+                                     const Display *display,
+                                     const Surface *surface,
+                                     EGLnsecsANDROID time);
+
+bool ValidateSetBlobCacheANDROID(ValidationContext *val,
+                                 const Display *display,
+                                 EGLSetBlobFuncANDROID set,
+                                 EGLGetBlobFuncANDROID get);
+
+bool ValidateGetConfigAttrib(ValidationContext *val,
+                             const Display *display,
+                             const Config *config,
+                             EGLint attribute);
+bool ValidateChooseConfig(ValidationContext *val,
+                          const Display *display,
+                          const AttributeMap &attribs,
+                          EGLint configSize,
+                          EGLint *numConfig);
+bool ValidateGetConfigs(ValidationContext *val,
+                        const Display *display,
+                        EGLint configSize,
+                        EGLint *numConfig);
 
 // Other validation
-Error ValidateCompatibleSurface(const Display *display,
-                                gl::Context *context,
-                                const Surface *surface);
+bool ValidateCompatibleSurface(ValidationContext *val,
+                               const Display *display,
+                               gl::Context *context,
+                               const Surface *surface);
 
-Error ValidateGetPlatformDisplay(EGLenum platform,
-                                 void *native_display,
-                                 const EGLAttrib *attrib_list);
-Error ValidateGetPlatformDisplayEXT(EGLenum platform,
-                                    void *native_display,
-                                    const EGLint *attrib_list);
-Error ValidateCreatePlatformWindowSurfaceEXT(const Display *display,
-                                             const Config *configuration,
-                                             void *nativeWindow,
-                                             const AttributeMap &attributes);
-Error ValidateCreatePlatformPixmapSurfaceEXT(const Display *display,
-                                             const Config *configuration,
-                                             void *nativePixmap,
-                                             const AttributeMap &attributes);
+bool ValidateGetPlatformDisplay(ValidationContext *val,
+                                EGLenum platform,
+                                void *native_display,
+                                const EGLAttrib *attrib_list);
+bool ValidateGetPlatformDisplayEXT(ValidationContext *val,
+                                   EGLenum platform,
+                                   void *native_display,
+                                   const EGLint *attrib_list);
+bool ValidateCreatePlatformWindowSurfaceEXT(ValidationContext *val,
+                                            const Display *display,
+                                            const Config *configuration,
+                                            void *nativeWindow,
+                                            const AttributeMap &attributes);
+bool ValidateCreatePlatformPixmapSurfaceEXT(ValidationContext *val,
+                                            const Display *display,
+                                            const Config *configuration,
+                                            void *nativePixmap,
+                                            const AttributeMap &attributes);
 
-Error ValidateProgramCacheGetAttribANGLE(const Display *display, EGLenum attrib);
+bool ValidateProgramCacheGetAttribANGLE(ValidationContext *val,
+                                        const Display *display,
+                                        EGLenum attrib);
 
-Error ValidateProgramCacheQueryANGLE(const Display *display,
-                                     EGLint index,
-                                     void *key,
-                                     EGLint *keysize,
-                                     void *binary,
-                                     EGLint *binarysize);
+bool ValidateProgramCacheQueryANGLE(ValidationContext *val,
+                                    const Display *display,
+                                    EGLint index,
+                                    void *key,
+                                    EGLint *keysize,
+                                    void *binary,
+                                    EGLint *binarysize);
 
-Error ValidateProgramCachePopulateANGLE(const Display *display,
-                                        const void *key,
-                                        EGLint keysize,
-                                        const void *binary,
-                                        EGLint binarysize);
+bool ValidateProgramCachePopulateANGLE(ValidationContext *val,
+                                       const Display *display,
+                                       const void *key,
+                                       EGLint keysize,
+                                       const void *binary,
+                                       EGLint binarysize);
 
-Error ValidateProgramCacheResizeANGLE(const Display *display, EGLint limit, EGLenum mode);
+bool ValidateProgramCacheResizeANGLE(ValidationContext *val,
+                                     const Display *display,
+                                     EGLint limit,
+                                     EGLenum mode);
 
-Error ValidateSurfaceAttrib(const Display *display,
-                            const Surface *surface,
-                            EGLint attribute,
-                            EGLint value);
-Error ValidateQuerySurface(const Display *display,
+bool ValidateSurfaceAttrib(ValidationContext *val,
+                           const Display *display,
                            const Surface *surface,
                            EGLint attribute,
-                           EGLint *value);
-Error ValidateQueryContext(const Display *display,
-                           const gl::Context *context,
-                           EGLint attribute,
-                           EGLint *value);
+                           EGLint value);
+bool ValidateQuerySurface(ValidationContext *val,
+                          const Display *display,
+                          const Surface *surface,
+                          EGLint attribute,
+                          EGLint *value);
+bool ValidateQueryContext(ValidationContext *val,
+                          const Display *display,
+                          const gl::Context *context,
+                          EGLint attribute,
+                          EGLint *value);
 
 // EGL_KHR_debug
-Error ValidateDebugMessageControlKHR(EGLDEBUGPROCKHR callback, const AttributeMap &attribs);
+bool ValidateDebugMessageControlKHR(ValidationContext *val,
+                                    EGLDEBUGPROCKHR callback,
+                                    const AttributeMap &attribs);
 
-Error ValidateQueryDebugKHR(EGLint attribute, EGLAttrib *value);
+bool ValidateQueryDebugKHR(ValidationContext *val, EGLint attribute, EGLAttrib *value);
 
-Error ValidateLabelObjectKHR(Thread *thread,
-                             const Display *display,
-                             ObjectType objectType,
-                             EGLObjectKHR object,
-                             EGLLabelKHR label);
+bool ValidateLabelObjectKHR(ValidationContext *val,
+                            Thread *thread,
+                            const Display *display,
+                            ObjectType objectType,
+                            EGLObjectKHR object,
+                            EGLLabelKHR label);
 
 // ANDROID_get_frame_timestamps
-Error ValidateGetCompositorTimingSupportedANDROID(const Display *display,
-                                                  const Surface *surface,
-                                                  CompositorTiming name);
+bool ValidateGetCompositorTimingSupportedANDROID(ValidationContext *val,
+                                                 const Display *display,
+                                                 const Surface *surface,
+                                                 CompositorTiming name);
 
-Error ValidateGetCompositorTimingANDROID(const Display *display,
-                                         const Surface *surface,
-                                         EGLint numTimestamps,
-                                         const EGLint *names,
-                                         EGLnsecsANDROID *values);
-
-Error ValidateGetNextFrameIdANDROID(const Display *display,
-                                    const Surface *surface,
-                                    EGLuint64KHR *frameId);
-
-Error ValidateGetFrameTimestampSupportedANDROID(const Display *display,
-                                                const Surface *surface,
-                                                Timestamp timestamp);
-
-Error ValidateGetFrameTimestampsANDROID(const Display *display,
+bool ValidateGetCompositorTimingANDROID(ValidationContext *val,
+                                        const Display *display,
                                         const Surface *surface,
-                                        EGLuint64KHR frameId,
                                         EGLint numTimestamps,
-                                        const EGLint *timestamps,
+                                        const EGLint *names,
                                         EGLnsecsANDROID *values);
 
-Error ValidateQueryStringiANGLE(const Display *display, EGLint name, EGLint index);
+bool ValidateGetNextFrameIdANDROID(ValidationContext *val,
+                                   const Display *display,
+                                   const Surface *surface,
+                                   EGLuint64KHR *frameId);
 
-Error ValidateQueryDisplayAttribEXT(const Display *display, const EGLint attribute);
-Error ValidateQueryDisplayAttribANGLE(const Display *display, const EGLint attribute);
+bool ValidateGetFrameTimestampSupportedANDROID(ValidationContext *val,
+                                               const Display *display,
+                                               const Surface *surface,
+                                               Timestamp timestamp);
+
+bool ValidateGetFrameTimestampsANDROID(ValidationContext *val,
+                                       const Display *display,
+                                       const Surface *surface,
+                                       EGLuint64KHR frameId,
+                                       EGLint numTimestamps,
+                                       const EGLint *timestamps,
+                                       EGLnsecsANDROID *values);
+
+bool ValidateQueryStringiANGLE(ValidationContext *val,
+                               const Display *display,
+                               EGLint name,
+                               EGLint index);
+
+bool ValidateQueryDisplayAttribEXT(ValidationContext *val,
+                                   const Display *display,
+                                   const EGLint attribute);
+bool ValidateQueryDisplayAttribANGLE(ValidationContext *val,
+                                     const Display *display,
+                                     const EGLint attribute);
 
 // EGL_ANDROID_get_native_client_buffer
-Error ValidateGetNativeClientBufferANDROID(const struct AHardwareBuffer *buffer);
+bool ValidateGetNativeClientBufferANDROID(ValidationContext *val,
+                                          const struct AHardwareBuffer *buffer);
 
 // EGL_ANDROID_create_native_client_buffer
-Error ValidateCreateNativeClientBufferANDROID(const egl::AttributeMap &attribMap);
+bool ValidateCreateNativeClientBufferANDROID(ValidationContext *val,
+                                             const egl::AttributeMap &attribMap);
 
 // EGL_ANDROID_native_fence_sync
-Error ValidateDupNativeFenceFDANDROID(const Display *display, const Sync *sync);
+bool ValidateDupNativeFenceFDANDROID(ValidationContext *val,
+                                     const Display *display,
+                                     const Sync *sync);
 
 // EGL_ANGLE_swap_with_frame_token
-Error ValidateSwapBuffersWithFrameTokenANGLE(const Display *display,
-                                             const Surface *surface,
-                                             EGLFrameTokenANGLE frametoken);
+bool ValidateSwapBuffersWithFrameTokenANGLE(ValidationContext *val,
+                                            const Display *display,
+                                            const Surface *surface,
+                                            EGLFrameTokenANGLE frametoken);
 
 // EGL_KHR_reusable_sync
-Error ValidateSignalSyncKHR(const Display *display, const Sync *sync, EGLint mode);
+bool ValidateSignalSyncKHR(ValidationContext *val,
+                           const Display *display,
+                           const Sync *sync,
+                           EGLint mode);
+
+// EGL_ANGLE_query_surface_pointer
+bool ValidateQuerySurfacePointerANGLE(ValidationContext *val,
+                                      const Display *display,
+                                      Surface *eglSurface,
+                                      EGLint attribute,
+                                      void **value);
+
+// EGL_NV_post_sub_buffer
+bool ValidatePostSubBufferNV(ValidationContext *val,
+                             Display *display,
+                             Surface *eglSurface,
+                             EGLint x,
+                             EGLint y,
+                             EGLint width,
+                             EGLint height);
+
+// EGL_EXT_device_query
+bool ValidateQueryDeviceAttribEXT(ValidationContext *val,
+                                  Device *device,
+                                  EGLint attribute,
+                                  EGLAttrib *value);
+bool ValidateQueryDeviceStringEXT(ValidationContext *val, Device *device, EGLint name);
+
+bool ValidateReleaseHighPowerGPUANGLE(ValidationContext *val,
+                                      Display *display,
+                                      gl::Context *context);
+bool ValidateReacquireHighPowerGPUANGLE(ValidationContext *val,
+                                        Display *display,
+                                        gl::Context *context);
+bool ValidateHandleGPUSwitchANGLE(ValidationContext *val, Display *display);
 
 }  // namespace egl
 
-#define ANGLE_EGL_TRY(THREAD, EXPR, FUNCNAME, LABELOBJECT)                               \
-    do                                                                                   \
-    {                                                                                    \
-        auto ANGLE_LOCAL_VAR = (EXPR);                                                   \
-        if (ANGLE_LOCAL_VAR.isError())                                                   \
-            return THREAD->setError(ANGLE_LOCAL_VAR, GetDebug(), FUNCNAME, LABELOBJECT); \
+#define ANGLE_EGL_VALIDATE(THREAD, EP, OBJ, RETVAL, ...)           \
+    do                                                             \
+    {                                                              \
+        const char *epname = "egl" #EP;                            \
+        ValidationContext vctx(THREAD, epname, OBJ);               \
+        auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, __VA_ARGS__)); \
+        if (!ANGLE_LOCAL_VAR)                                      \
+        {                                                          \
+            return RETVAL;                                         \
+        }                                                          \
     } while (0)
 
-#define ANGLE_EGL_TRY_RETURN(THREAD, EXPR, FUNCNAME, LABELOBJECT, RETVAL)         \
-    do                                                                            \
-    {                                                                             \
-        auto ANGLE_LOCAL_VAR = (EXPR);                                            \
-        if (ANGLE_LOCAL_VAR.isError())                                            \
-        {                                                                         \
-            THREAD->setError(ANGLE_LOCAL_VAR, GetDebug(), FUNCNAME, LABELOBJECT); \
-            return RETVAL;                                                        \
-        }                                                                         \
+#define ANGLE_EGL_VALIDATE_VOID(THREAD, EP, OBJ, ...)              \
+    do                                                             \
+    {                                                              \
+        const char *epname = "egl" #EP;                            \
+        ValidationContext vctx(THREAD, epname, OBJ);               \
+        auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, __VA_ARGS__)); \
+        if (!ANGLE_LOCAL_VAR)                                      \
+        {                                                          \
+            return;                                                \
+        }                                                          \
+    } while (0)
+
+#define ANGLE_EGL_TRY(THREAD, EXPR, FUNCNAME, LABELOBJECT)                   \
+    do                                                                       \
+    {                                                                        \
+        auto ANGLE_LOCAL_VAR = (EXPR);                                       \
+        if (ANGLE_LOCAL_VAR.isError())                                       \
+            return THREAD->setError(ANGLE_LOCAL_VAR, FUNCNAME, LABELOBJECT); \
+    } while (0)
+
+#define ANGLE_EGL_TRY_RETURN(THREAD, EXPR, FUNCNAME, LABELOBJECT, RETVAL) \
+    do                                                                    \
+    {                                                                     \
+        auto ANGLE_LOCAL_VAR = (EXPR);                                    \
+        if (ANGLE_LOCAL_VAR.isError())                                    \
+        {                                                                 \
+            THREAD->setError(ANGLE_LOCAL_VAR, FUNCNAME, LABELOBJECT);     \
+            return RETVAL;                                                \
+        }                                                                 \
     } while (0)
 
 #endif  // LIBANGLE_VALIDATIONEGL_H_

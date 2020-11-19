@@ -486,7 +486,12 @@ void Debug::insertMessage(EGLenum error,
         // output all messages to the debug log
         const char *messageTypeString = EGLMessageTypeToString(messageType);
         std::ostringstream messageStream;
-        messageStream << "EGL " << messageTypeString << ": " << command << ": " << message;
+        messageStream << "EGL " << messageTypeString;
+        if (command)
+        {
+            messageStream << ": " << command;
+        }
+        messageStream << ": " << message;
         INFO() << messageStream.str();
     }
 
