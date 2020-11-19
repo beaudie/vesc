@@ -34,11 +34,7 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer)
     renderer->collectGarbageAndReinit(&mUse, &mEvent);
     // TODO: https://issuetracker.google.com/170312581 - Currently just stalling on worker thread
     // here to try and avoid race condition. If this works, need some alternate solution
-    if (renderer->getFeatures().asyncCommandQueue.enabled)
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelper::releaseToRenderer");
-        (void)renderer->waitForCommandProcessorIdle(nullptr);
-    }
+    // finishRunningCommands(renderer);
 }
 
 angle::Result SyncHelper::initialize(ContextVk *contextVk)
