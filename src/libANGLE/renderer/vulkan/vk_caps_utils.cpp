@@ -31,6 +31,10 @@ namespace vk
 {
 namespace
 {
+
+// Checks to see if each format can be reinterpreted to an equivalent format in a different
+// colorspace. If all supported formats can be reinterpreted, it returns true. Formats which are not
+// supported at all are ignored and not counted as failures.
 bool FormatReinterpretationSupported(const std::vector<GLenum> &optionalSizedFormats,
                                      const RendererVk *rendererVk,
                                      bool checkLinearColorspace)
@@ -51,9 +55,21 @@ bool FormatReinterpretationSupported(const std::vector<GLenum> &optionalSizedFor
                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT |
                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
 
-            if (!rendererVk->hasImageFormatFeatureBits(reinterpretedFormat, kBitsSampleFilter))
+            if (baseCaps.textureAttachment)
             {
-                return false;
+                if (!rendererVk->hasImageFormatFeatureBits(
+                        reinterpretedFormat,
+                        kBitsSampleFilter | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (!rendererVk->hasImageFormatFeatureBits(reinterpretedFormat, kBitsSampleFilter))
+                {
+                    return false;
+                }
             }
         }
     }
