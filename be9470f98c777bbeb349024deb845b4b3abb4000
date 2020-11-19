@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef470c7c_f1dce50e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-19T01:03:23Z",
+      "side": 1,
+      "message": "Almost ready for initial review.  I\u0027ll clean-up the TODO\u0027s Thursday.  Then, I\u0027ll pick reviewers.  Anybody interested?\n\nBTW, I\u0027ve not dealt with threading at all yet.  I\u0027m not sure if the drivers will call the callback from multiple threads.  I\u0027ve asked Yiwei for feedback, and I\u0027m open for suggestions.",
+      "revId": "be9470f98c777bbeb349024deb845b4b3abb4000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3387dd9a_f68be1f0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-19T01:03:23Z",
+      "side": 1,
+      "message": "ANGLE\u0027s INFO() message on Android adds a lot of characters, and since the output I\u0027m logging is so wide, I created this macro to do 2 things:\n\n1) Make the severity VERBOSE instead of an INFO\n\n2) Not need such a wide window to look at the output",
+      "revId": "be9470f98c777bbeb349024deb845b4b3abb4000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "924eb5cb_99aebb5f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-19T01:03:23Z",
+      "side": 1,
+      "message": "This looks for double-counting possibilities.  That is, whenever two outstanding allocations or imports use the same callbackData-\u003ememoryObjectId, the object is a duplicate.",
+      "range": {
+        "startLine": 408,
+        "startChar": 12,
+        "endLine": 411,
+        "endChar": 13
+      },
+      "revId": "be9470f98c777bbeb349024deb845b4b3abb4000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9479d0df_57c271b5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-19T01:03:23Z",
+      "side": 1,
+      "message": "I\u0027ll work on these TODO\u0027s Thursday.  I\u0027m happy to get suggestions.",
+      "range": {
+        "startLine": 912,
+        "startChar": 4,
+        "endLine": 912,
+        "endChar": 60
+      },
+      "revId": "be9470f98c777bbeb349024deb845b4b3abb4000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec7860b5_077ff367",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-11-19T01:03:23Z",
+      "side": 1,
+      "message": "I\u0027m logging statistics before actually doing the swap.  If the swapchain needs to be re-created, it won\u0027t be counted until the next swap.  Any disagreement with this approach?",
+      "range": {
+        "startLine": 1430,
+        "startChar": 0,
+        "endLine": 1433,
+        "endChar": 5
+      },
+      "revId": "be9470f98c777bbeb349024deb845b4b3abb4000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
