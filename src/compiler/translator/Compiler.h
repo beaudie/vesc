@@ -120,6 +120,7 @@ class TCompiler : public TShHandleBase
         return mShaderStorageBlocks;
     }
     const std::vector<sh::InterfaceBlock> &getInBlocks() const { return mInBlocks; }
+    const std::vector<sh::InterfaceBlock> &getOutBlocks() const { return mOutBlocks; }
 
     ShHashFunction64 getHashFunction() const { return mResources.HashFunction; }
     NameMap &getNameMap() { return mNameMap; }
@@ -192,6 +193,7 @@ class TCompiler : public TShHandleBase
     std::vector<sh::InterfaceBlock> mUniformBlocks;
     std::vector<sh::InterfaceBlock> mShaderStorageBlocks;
     std::vector<sh::InterfaceBlock> mInBlocks;
+    std::vector<sh::InterfaceBlock> mOutBlocks;
 
   private:
     // Initialize symbol-table with built-in symbols.
