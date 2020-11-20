@@ -1427,11 +1427,6 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    if (renderer->getFeatures().logMemoryReportStats.enabled)
-    {
-        renderer->logMemoryReportStats();
-    }
-
     if (mNeedToAcquireNextSwapchainImage)
     {
         // Acquire the next image (previously deferred).  The image may not have been already
@@ -1442,6 +1437,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
+
+    if (renderer->getFeatures().logMemoryReportStats.enabled)
+    {
+        renderer->logMemoryReportStats();
+    }
 
     if (!presentOutOfDate)
     {

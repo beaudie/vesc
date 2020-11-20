@@ -398,7 +398,7 @@ MemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, vo
     switch (callbackData->type)
     {
         case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATE_EXT:
-            reportType = " Alloc";
+            reportType = "Alloc";
             if ((rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] += 1) > 1)
             {
                 break;
@@ -416,7 +416,7 @@ MemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, vo
             }
             break;
         case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_FREE_EXT:
-            reportType = "  Free";
+            reportType = "Free";
             ASSERT(rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] > 0);
             rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] -= 1;
             size = rendererVk->mAllocatedMemory[callbackData->objectType] - callbackData->size;
@@ -460,19 +460,12 @@ MemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, vo
     {
         char buffer[256];
         snprintf(buffer, 256,
-                 "%s: size=%9" PRIu64 "; type= %-15s; heapIdx= %u; id= %" PRIu64
+                 "%6s: size=%9" PRIu64 "; type= %-15s; heapIdx= %u; id= %" PRIu64
                  "; handle= %" PRIu64 "; Total= %9" PRIu64,
                  reportType.c_str(), callbackData->size,
                  GetVkObjectTypeName(callbackData->objectType), callbackData->heapIndex,
                  callbackData->memoryObjectId, callbackData->objectHandle, size);
         VERBOSE() << buffer;
-        if (rendererVk->mUniqueIDCounts[callbackData->memoryObjectId] > 1)
-        {
-            snprintf(buffer, 256,
-                     "\t Avoided double-counting this object with non-unique id= %" PRIu64,
-                     callbackData->memoryObjectId);
-            VERBOSE() << buffer;
-        }
     }
 }
 
