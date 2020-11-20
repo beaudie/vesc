@@ -82,7 +82,7 @@ class D3DTextureTest : public ANGLETest
 
         EGLWindow *window  = getEGLWindow();
         EGLDisplay display = window->getDisplay();
-        if (IsEGLDisplayExtensionEnabled(display, "EGL_EXT_device_query"))
+        if (IsEGLClientExtensionEnabled("EGL_EXT_device_query"))
         {
             PFNEGLQUERYDISPLAYATTRIBEXTPROC eglQueryDisplayAttribEXT =
                 reinterpret_cast<PFNEGLQUERYDISPLAYATTRIBEXTPROC>(

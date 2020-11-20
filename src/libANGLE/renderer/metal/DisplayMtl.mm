@@ -153,12 +153,6 @@ std::string DisplayMtl::getVendorString() const
     }
 }
 
-DeviceImpl *DisplayMtl::createDevice()
-{
-    UNIMPLEMENTED();
-    return nullptr;
-}
-
 egl::Error DisplayMtl::waitClient(const gl::Context *context)
 {
     auto contextMtl      = GetImplAs<ContextMtl>(context);

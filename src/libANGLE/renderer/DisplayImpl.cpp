@@ -86,4 +86,8 @@ const egl::Caps &DisplayImpl::getCaps() const
     return mCaps;
 }
 
+DeviceImpl *DisplayImpl::createDevice()
+{
+    return nullptr;
+}
 }  // namespace rx

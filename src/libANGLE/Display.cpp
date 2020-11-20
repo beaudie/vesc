@@ -864,12 +864,17 @@ Error Display::initialize()
     initVendorString();
 
     // Populate the Display's EGLDeviceEXT if the Display wasn't created using one
-    if (mPlatform != EGL_PLATFORM_DEVICE_EXT)
+    if (mPlatform == EGL_PLATFORM_DEVICE_EXT)
     {
-        if (mDisplayExtensions.deviceQuery)
+        // For EGL_PLATFORM_DEVICE_EXT, mDevice should always be populated using
+        // an external device
+        ASSERT(mDevice != nullptr);
+    }
+    else if (GetClientExtensions().deviceQueryEXT)
+    {
+        std::unique_ptr<rx::DeviceImpl> impl(mImplementation->createDevice());
+        if (impl)
         {
-            std::unique_ptr<rx::DeviceImpl> impl(mImplementation->createDevice());
-            ASSERT(impl != nullptr);
             error = impl->initialize();
             if (error.isError())
             {
@@ -887,9 +892,7 @@ Error Display::initialize()
     }
     else
     {
-        // For EGL_PLATFORM_DEVICE_EXT, mDevice should always be populated using
-        // an external device
-        ASSERT(mDevice != nullptr);
+        mDevice = nullptr;
     }
 
     mInitialized = true;
@@ -1666,6 +1669,7 @@ static ClientExtensions GenerateClientExtensions()
     extensions.debug                     = true;
     extensions.explicitContext           = true;
     extensions.featureControlANGLE       = true;
+    extensions.deviceQueryEXT            = true;
 
     return extensions;
 }
