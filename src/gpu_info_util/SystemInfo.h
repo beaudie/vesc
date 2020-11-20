@@ -123,6 +123,7 @@ bool IsSwiftshader(VendorID vendorId);
 bool IsVeriSilicon(VendorID vendorId);
 bool IsVMWare(VendorID vendorId);
 bool IsVivante(VendorID vendorId);
+bool IsApple(VendorID vendorId);
 
 // Use a heuristic to attempt to find the GPU used for 3D graphics. Sets activeGPUIndex,
 // isOptimus, and isAMDSwitchable.
