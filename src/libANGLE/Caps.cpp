@@ -10,6 +10,7 @@
 #include "common/angleutils.h"
 #include "common/debug.h"
 
+#include "libANGLE/Context.h"
 #include "libANGLE/formatutils.h"
 
 #include "angle_gl.h"
@@ -860,6 +861,14 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     stencilIndex8                       = DetermineStencilIndex8Support(textureCaps);
 }
 
+bool Extensions::textureBorderClampAny(const Context *context) const
+{
+    // Note: accept GL_TEXTURE_BORDER_COLOR in ES3.2 without textureBorderClampOES support.
+    // TODO: remove this when the Vulkan backend implements this extension.
+    // http://anglebug.com/3577.  See also http://anglebug.com/5375
+    return textureBorderClampOES || textureBorderClampEXT ||
+           (context->getClientMajorVersion() == 3 && context->getClientMinorVersion() >= 2);
+}
 const ExtensionInfoMap &GetExtensionInfoMap()
 {
     auto buildExtensionInfoMap = []() {
