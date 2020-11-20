@@ -217,24 +217,18 @@ TEST_P(EGLSyncTest, BasicOperations)
     EGLint value           = 0;
     unsigned int loopCount = 0;
 
+    glClear(GL_COLOR_BUFFER_BIT);
+
     // Use 'loopCount' to make sure the test doesn't get stuck in an infinite loop
-    while (value != EGL_SIGNALED_KHR && loopCount <= 1000000)
+    constexpr GLuint64 kTimeout = 1000000;  // 1msec
+    while (value != EGL_CONDITION_SATISFIED_KHR && ++loopCount <= 100)
     {
-        loopCount++;
-        EXPECT_EGL_TRUE(eglGetSyncAttribKHR(display, sync, EGL_SYNC_STATUS_KHR, &value));
+        value = eglClientWaitSyncKHR(display, sync, EGL_SYNC_FLUSH_COMMANDS_BIT_KHR, kTimeout);
     }
 
-    ASSERT_EQ(value, EGL_SIGNALED_KHR);
-
-    for (size_t i = 0; i < 20; i++)
-    {
-        glClear(GL_COLOR_BUFFER_BIT);
-        EXPECT_EQ(
-            EGL_CONDITION_SATISFIED_KHR,
-            eglClientWaitSyncKHR(display, sync, EGL_SYNC_FLUSH_COMMANDS_BIT_KHR, EGL_FOREVER_KHR));
-        EXPECT_EGL_TRUE(eglGetSyncAttribKHR(display, sync, EGL_SYNC_STATUS_KHR, &value));
-        EXPECT_EQ(value, EGL_SIGNALED_KHR);
-    }
+    ASSERT_EQ(value, EGL_CONDITION_SATISFIED_KHR);
+    EXPECT_EGL_TRUE(eglGetSyncAttribKHR(display, sync, EGL_SYNC_STATUS_KHR, &value));
+    EXPECT_EQ(value, EGL_SIGNALED_KHR);
 
     EXPECT_EGL_TRUE(eglDestroySyncKHR(display, sync));
 }
