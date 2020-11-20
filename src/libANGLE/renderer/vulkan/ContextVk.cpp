@@ -3324,6 +3324,12 @@ void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebuffer
     invalidateCurrentGraphicsPipeline();
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
                                                 framebufferVk->getRenderPassDesc());
+    if (mDrawFramebuffer)
+    {
+        mGraphicsPipelineDesc->updateDrawableSize(
+            mDrawFramebuffer->getState().getDimensions().width,
+            mDrawFramebuffer->getState().getDimensions().height);
+    }
 }
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
