@@ -1638,6 +1638,7 @@ void GenerateCaps(ID3D11Device *device,
                                         extensions->textureStorageMultisample2DArrayOES);
     extensions->copyTexture3d            = true;
     extensions->textureBorderClampOES    = true;
+    extensions->textureBorderClampEXT    = true;
     extensions->textureMultisample       = true;
     extensions->provokingVertex          = true;
     extensions->blendFuncExtended        = true;

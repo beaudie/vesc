@@ -316,6 +316,7 @@ void RendererVk::ensureCapsInitialized() const
         !IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) &&
         !IsARM(mPhysicalDeviceProperties.vendorID);
     mNativeExtensions.textureBorderClampOES  = false;  // not implemented yet
+    mNativeExtensions.textureBorderClampEXT  = false;  // not implemented yet
     mNativeExtensions.translatedShaderSource = true;
     mNativeExtensions.discardFramebuffer     = true;
 
