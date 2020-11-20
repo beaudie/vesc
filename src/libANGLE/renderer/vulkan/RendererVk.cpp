@@ -2462,7 +2462,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
                                       std::vector<VkSemaphore> &&waitSemaphores,
                                       std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                       const vk::Semaphore *signalSemaphore,
-                                      vk::ResourceUseList &&resourceUseList,
+                                      std::vector<vk::ResourceUseList> &&shareGroupResourceUseList,
                                       vk::GarbageList &&currentGarbage,
                                       vk::CommandPool *commandPool)
 {
@@ -2489,7 +2489,10 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     waitSemaphores.clear();
     waitSemaphoreStageMasks.clear();
-    resourceUseList.releaseResourceUsesAndUpdateSerials(submitQueueSerial);
+    for (vk::ResourceUseList &it : shareGroupResourceUseList)
+    {
+        it.releaseResourceUsesAndUpdateSerials(submitQueueSerial);
+    }
 
     return angle::Result::Continue;
 }

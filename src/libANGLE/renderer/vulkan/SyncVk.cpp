@@ -91,17 +91,11 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    if (flushCommands && contextVk)
+    // We defer (ignore) flushes, so it's possible that the glFence's signal operation is pending
+    // submission.
+    if ((flushCommands && contextVk) || usedInRecordedCommands())
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
-    }
-
-    // Undefined behaviour. Early exit.
-    if (usedInRecordedCommands())
-    {
-        WARN() << "Waiting on a sync that is not flushed";
-        *outResult = VK_TIMEOUT;
-        return angle::Result::Continue;
     }
 
     ASSERT(mUse.getSerial().valid());
@@ -269,10 +263,10 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
 
     // TODO: https://issuetracker.google.com/170312581 - If we are using worker need to wait for the
     // commands to be issued before waiting on the fence.
-    if (contextVk->getRenderer()->getFeatures().asyncCommandQueue.enabled)
+    if (renderer->getFeatures().asyncCommandQueue.enabled)
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::clientWait");
-        ANGLE_TRY(contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk));
+        ANGLE_TRY(renderer->waitForCommandProcessorIdle(contextVk));
     }
 
     // Wait for mFenceWithFd to be signaled.
