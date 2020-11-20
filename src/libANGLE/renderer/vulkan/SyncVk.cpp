@@ -91,17 +91,22 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    if (flushCommands && contextVk)
+    // We defer (ignore) flushes, so it's possible the glFence is still stuck in the command stream.
+    if ((flushCommands && contextVk) || usedInRecordedCommands())
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }
 
-    // Undefined behaviour. Early exit.
-    if (usedInRecordedCommands())
+    // If the context is shared, we need to flush all of the other contexts' also, in case there are
+    // any Fences (Events) in their command streams.
+    // Due to the global lock, this is assumed to be safe, since the other contexts in the share
+    // group can't be doing anything while this context holds the lock.
+    if (contextVk && contextVk->getState().isShared())
     {
-        WARN() << "Waiting on a sync that is not flushed";
-        *outResult = VK_TIMEOUT;
-        return angle::Result::Continue;
+        for (auto &it : *contextVk->getShareGroupVk()->getShareContextSet())
+        {
+            ANGLE_TRY(it->flushImpl(nullptr));
+        }
     }
 
     ASSERT(mUse.getSerial().valid());
@@ -269,10 +274,10 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
 
     // TODO: https://issuetracker.google.com/170312581 - If we are using worker need to wait for the
     // commands to be issued before waiting on the fence.
-    if (contextVk->getRenderer()->getFeatures().asyncCommandQueue.enabled)
+    if (renderer->getFeatures().asyncCommandQueue.enabled)
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::clientWait");
-        ANGLE_TRY(contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk));
+        ANGLE_TRY(renderer->waitForCommandProcessorIdle(contextVk));
     }
 
     // Wait for mFenceWithFd to be signaled.
