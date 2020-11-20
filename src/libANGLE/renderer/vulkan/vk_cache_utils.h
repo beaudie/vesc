@@ -531,7 +531,7 @@ constexpr size_t kPackedInputAssemblyAndColorBlendStateSize =
     sizeof(PackedInputAssemblyAndColorBlendStateInfo);
 static_assert(kPackedInputAssemblyAndColorBlendStateSize == 56, "Size check failed");
 
-constexpr size_t kGraphicsPipelineDescSumOfSizes =
+constexpr size_t kGraphicsPipelineDescSumOfTrantionBitTrackedSizes =
     kVertexInputAttributesSize + kRenderPassDescSize + kPackedRasterizationAndMultisampleStateSize +
     kPackedDepthStencilStateSize + kPackedInputAssemblyAndColorBlendStateSize + sizeof(VkViewport) +
     sizeof(VkRect2D);
@@ -539,7 +539,7 @@ constexpr size_t kGraphicsPipelineDescSumOfSizes =
 // Number of dirty bits in the dirty bit set.
 constexpr size_t kGraphicsPipelineDirtyBitBytes = 4;
 constexpr static size_t kNumGraphicsPipelineDirtyBits =
-    kGraphicsPipelineDescSumOfSizes / kGraphicsPipelineDirtyBitBytes;
+    kGraphicsPipelineDescSumOfTrantionBitTrackedSizes / kGraphicsPipelineDirtyBitBytes;
 static_assert(kNumGraphicsPipelineDirtyBits <= 64, "Too many pipeline dirty bits");
 
 // Set of dirty bits. Each bit represents kGraphicsPipelineDirtyBitBytes in the desc.
@@ -582,7 +582,7 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
-                                     const vk::SpecializationConstants specConsts,
+                                     const vk::SpecializationConstants &specConsts,
                                      Pipeline *pipelineOut) const;
 
     // Vertex input state. For ES 3.1 this should be separated into binding and attribute.
@@ -716,6 +716,13 @@ class GraphicsPipelineDesc final
             mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation);
     }
 
+    void updateDrawableSize(int w, int h)
+    {
+        mDrawableSize.width  = w;
+        mDrawableSize.height = h;
+    }
+    const VkExtent2D &getDrawableSize() const { return mDrawableSize; }
+
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
 
@@ -728,14 +735,21 @@ class GraphicsPipelineDesc final
     // The special value of .offset.x == INT_MIN for scissor implies dynamic scissor that needs to
     // be set through vkCmdSetScissor.
     VkRect2D mScissor;
+
+    // Everything goes bellow this is not tracked by transition bit. The expectation is that
+    // whenever it changes, invalidateCurrentGraphicsPipeline() will be called
+    VkExtent2D mDrawableSize;
 };
 
 // Verify the packed pipeline description has no gaps in the packing.
 // This is not guaranteed by the spec, but is validated by a compile-time check.
 // No gaps or padding at the end ensures that hashing and memcmp checks will not run
 // into uninitialized memory regions.
-constexpr size_t kGraphicsPipelineDescSize = sizeof(GraphicsPipelineDesc);
-static_assert(kGraphicsPipelineDescSize == kGraphicsPipelineDescSumOfSizes, "Size mismatch");
+constexpr size_t kGraphicsPipelineDescSize                        = sizeof(GraphicsPipelineDesc);
+constexpr size_t kGraphicsPipelineDescNonTransitionBitTrackedSize = sizeof(VkExtent2D);
+static_assert(kGraphicsPipelineDescSize == kGraphicsPipelineDescSumOfTrantionBitTrackedSizes +
+                                               kGraphicsPipelineDescNonTransitionBitTrackedSize,
+              "Size mismatch");
 
 constexpr uint32_t kMaxDescriptorSetLayoutBindings =
     std::max(gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES,
@@ -1355,7 +1369,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
-                                           const vk::SpecializationConstants specConsts,
+                                           const vk::SpecializationConstants &specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
                                            vk::PipelineHelper **pipelineOut)
@@ -1384,7 +1398,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
-                                 const vk::SpecializationConstants specConsts,
+                                 const vk::SpecializationConstants &specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
