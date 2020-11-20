@@ -2448,6 +2448,24 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     return angle::Result::Continue;
 }
 
+void RendererVk::releaseResourcesToCurrentSerial(vk::ResourceUseList &&resourceUseList)
+{
+    std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
+
+    Serial currentQueueSerial;
+
+    if (mFeatures.asyncCommandQueue.enabled)
+    {
+        currentQueueSerial = mCommandProcessor.getCurrentQueueSerial();
+    }
+    else
+    {
+        currentQueueSerial = mCommandQueue.getCurrentQueueSerial();
+    }
+
+    resourceUseList.releaseResourceUsesAndUpdateSerials(currentQueueSerial);
+}
+
 void RendererVk::handleDeviceLost()
 {
     std::lock_guard<std::mutex> lock(mCommandQueueMutex);

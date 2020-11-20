@@ -283,6 +283,8 @@ class CommandQueue final : public CommandQueueInterface
                               const Fence *fence,
                               Serial submitQueueSerial);
 
+    Serial getCurrentQueueSerial() { return mCurrentQueueSerial; }
+
   private:
     angle::Result releaseToCommandBatch(Context *context,
                                         PrimaryCommandBuffer &&commandBuffer,
@@ -349,6 +351,7 @@ class CommandProcessor : public Context, public CommandQueueInterface
     angle::Result finishToSerial(Context *context, Serial finishSerial, uint64_t timeout) override;
 
     Serial reserveSubmitSerial() override;
+    Serial getCurrentQueueSerial() { return mCommandQueue.getCurrentQueueSerial(); }
 
     angle::Result submitFrame(Context *context,
                               egl::ContextPriority priority,

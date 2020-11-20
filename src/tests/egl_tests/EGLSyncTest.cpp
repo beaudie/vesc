@@ -217,14 +217,20 @@ TEST_P(EGLSyncTest, BasicOperations)
     EGLint value           = 0;
     unsigned int loopCount = 0;
 
-    // Use 'loopCount' to make sure the test doesn't get stuck in an infinite loop
-    while (value != EGL_SIGNALED_KHR && loopCount <= 1000000)
+    // Issuing a glFlush() doesn't guarantee the commands will complete.
+    // Vulkan defers (ignores) flushes, so the fence will never be sync'ed until real work or a
+    // ClientWaitSync() is performed.
+    if (!IsVulkan())
     {
-        loopCount++;
-        EXPECT_EGL_TRUE(eglGetSyncAttribKHR(display, sync, EGL_SYNC_STATUS_KHR, &value));
-    }
+        // Use 'loopCount' to make sure the test doesn't get stuck in an infinite loop
+        while (value != EGL_SIGNALED_KHR && loopCount <= 1000000)
+        {
+            loopCount++;
+            EXPECT_EGL_TRUE(eglGetSyncAttribKHR(display, sync, EGL_SYNC_STATUS_KHR, &value));
+        }
 
-    ASSERT_EQ(value, EGL_SIGNALED_KHR);
+        ASSERT_EQ(value, EGL_SIGNALED_KHR);
+    }
 
     for (size_t i = 0; i < 20; i++)
     {
