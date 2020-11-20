@@ -68,11 +68,12 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
 }
 
 angle::Result SyncHelper::clientWait(Context *context,
-                                     ContextVk *contextVk,
+                                     gl::Context *glContext,
                                      bool flushCommands,
                                      uint64_t timeout,
                                      VkResult *outResult)
 {
+    ContextVk *contextVk = glContext ? vk::GetImpl(glContext) : nullptr;
     RendererVk *renderer = context->getRenderer();
 
     // If the event is already set, don't wait
@@ -91,17 +92,22 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    if (flushCommands && contextVk)
+    // We defer (ignore) flushes, so it's possible the glFence is still stuck in the command stream.
+    if ((flushCommands && glContext) || usedInRecordedCommands())
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }
 
-    // Undefined behaviour. Early exit.
-    if (usedInRecordedCommands())
+    // If the context is shared, we need to flush all of the other context's also, in case there are
+    // any Fences (Events) in their command streams.
+    // Due to the global lock, this is assumed to be safe, since the other contexts in the share
+    // group can't be doing anything while this context holds the lock.
+    if (glContext && glContext->isShared())
     {
-        WARN() << "Waiting on a sync that is not flushed";
-        *outResult = VK_TIMEOUT;
-        return angle::Result::Continue;
+        for (auto &it : *contextVk->getShareGroupVk()->getShareContextSet())
+        {
+            ANGLE_TRY(it->flushImpl(nullptr));
+        }
     }
 
     ASSERT(mUse.getSerial().valid());
@@ -239,11 +245,12 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
 }
 
 angle::Result SyncHelperNativeFence::clientWait(Context *context,
-                                                ContextVk *contextVk,
+                                                gl::Context *glContext,
                                                 bool flushCommands,
                                                 uint64_t timeout,
                                                 VkResult *outResult)
 {
+    ContextVk *contextVk = glContext ? vk::GetImpl(glContext) : nullptr;
     RendererVk *renderer = context->getRenderer();
 
     // If already signaled, don't wait
@@ -262,17 +269,17 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    if (flushCommands && contextVk)
+    if (flushCommands && glContext)
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }
 
     // TODO: https://issuetracker.google.com/170312581 - If we are using worker need to wait for the
     // commands to be issued before waiting on the fence.
-    if (contextVk->getRenderer()->getFeatures().asyncCommandQueue.enabled)
+    if (renderer->getFeatures().asyncCommandQueue.enabled)
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::clientWait");
-        ANGLE_TRY(contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk));
+        ANGLE_TRY(renderer->waitForCommandProcessorIdle(contextVk));
     }
 
     // Wait for mFenceWithFd to be signaled.
@@ -368,15 +375,13 @@ angle::Result SyncVk::clientWait(const gl::Context *context,
                                  GLuint64 timeout,
                                  GLenum *outResult)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-
     ASSERT((flags & ~GL_SYNC_FLUSH_COMMANDS_BIT) == 0);
 
     bool flush = (flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0;
     VkResult result;
 
-    ANGLE_TRY(mSyncHelper.clientWait(contextVk, contextVk, flush, static_cast<uint64_t>(timeout),
-                                     &result));
+    ANGLE_TRY(mSyncHelper.clientWait(vk::GetImpl(context), const_cast<gl::Context *>(context),
+                                     flush, static_cast<uint64_t>(timeout), &result));
 
     switch (result)
     {
@@ -474,8 +479,7 @@ egl::Error EGLSyncVk::clientWait(const egl::Display *display,
     bool flush = (flags & EGL_SYNC_FLUSH_COMMANDS_BIT_KHR) != 0;
     VkResult result;
 
-    ContextVk *contextVk = context ? vk::GetImpl(context) : nullptr;
-    if (mSyncHelper->clientWait(vk::GetImpl(display), contextVk, flush,
+    if (mSyncHelper->clientWait(vk::GetImpl(display), const_cast<gl::Context *>(context), flush,
                                 static_cast<uint64_t>(timeout), &result) == angle::Result::Stop)
     {
         return egl::Error(EGL_BAD_ALLOC);
