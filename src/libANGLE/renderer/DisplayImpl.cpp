@@ -10,6 +10,7 @@
 
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
+#include "libANGLe/renderer/DeviceImpl.h"
 
 namespace rx
 {
@@ -86,4 +87,8 @@ const egl::Caps &DisplayImpl::getCaps() const
     return mCaps;
 }
 
+DeviceImpl *DisplayImpl::createDevice()
+{
+    return new MockDevice();
+}
 }  // namespace rx

@@ -16,7 +16,7 @@
 namespace egl
 {
 class Display;
-}
+}  // namespace egl
 
 namespace rx
 {
@@ -37,6 +37,18 @@ class DeviceImpl : angle::NonCopyable
     virtual void generateExtensions(egl::DeviceExtensions *outExtensions) const = 0;
 };
 
+// For back-ends that do not implement EGLDevice.
+class MockDevice : public DeviceImpl
+{
+  public:
+    MockDevice();
+    egl::Error initialize() override;
+    egl::Error getAttribute(const egl::Display *display,
+                            EGLint attribute,
+                            void **outValue) override;
+    EGLint getType() override;
+    void generateExtensions(egl::DeviceExtensions *outExtensions) const override;
+};
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_DEVICEIMPL_H_
