@@ -515,6 +515,20 @@ class GLSLTest_ES3 : public GLSLTest
 class GLSLTest_ES31 : public GLSLTest
 {};
 
+class GLSLTest_WithPreRotation : public GLSLTest
+{
+  public:
+    GLSLTest_WithPreRotation()
+    {
+        setWindowWidth(128);
+        setWindowHeight(256);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+};
+
 std::string BuillBigInitialStackShader(int length)
 {
     std::string result;
@@ -7272,6 +7286,42 @@ void main()
                               kQuarterSize, kQuarterSize * 2));
 }
 
+// Tests that FragCoord behaves correctly with rotation.
+TEST_P(GLSLTest_WithPreRotation, FragCoord)
+{
+    constexpr char kFragCoordShader[] = R"(uniform mediump vec2 viewportSize;
+void main()
+{
+    gl_FragColor = vec4(gl_FragCoord.xy / viewportSize, 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFragCoordShader);
+    glUseProgram(program);
+
+    // Scale with max of both dimension. Because the window width and height are different, the
+    // color will be wrong if rotation is wrong.
+    GLuint w             = getWindowWidth();
+    GLuint h             = getWindowHeight();
+    GLfloat maxFragCoord = std::max(w, h);
+    GLint uniLoc         = glGetUniformLocation(program, "viewportSize");
+    ASSERT_NE(-1, uniLoc);
+    glUniform2f(uniLoc, maxFragCoord, maxFragCoord);
+
+    // Draw to backbuffer.
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<GLColor> backbufferData(w * h);
+    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, backbufferData.data());
+    ASSERT_GL_NO_ERROR();
+
+    // Check color of four corners
+    EXPECT_EQ(backbufferData[0], GLColor::black);
+    EXPECT_EQ(backbufferData[w - 1], GLColor(w - 1, 0u, 0u, 255u));
+    EXPECT_EQ(backbufferData[w * (h - 1)], GLColor(0u, h - 1, 0u, 255u));
+    EXPECT_EQ(backbufferData[w * h - 1], GLColor(w - 1, h - 1, 0u, 255u));
+}
+
 // Ensure that using defined in a macro works in this simple case. This mirrors a dEQP test.
 TEST_P(GLSLTest, DefinedInMacroSucceeds)
 {
@@ -8779,6 +8829,12 @@ void main()
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTest);
+
+ANGLE_INSTANTIATE_TEST(GLSLTest_WithPreRotation,
+                       ANGLE_ALL_TEST_PLATFORMS_ES3,
+                       WithEmulatedPrerotation(ES3_VULKAN(), 90),
+                       WithEmulatedPrerotation(ES3_VULKAN(), 180),
+                       WithEmulatedPrerotation(ES3_VULKAN(), 270));
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTestNoValidation);
 
