@@ -22,6 +22,8 @@ namespace
 {
 constexpr ImmutableString kSurfaceRotationSpecConstVarName =
     ImmutableString("ANGLESurfaceRotation");
+constexpr ImmutableString kDrawableWidthSpecConstVarName  = ImmutableString("ANGLEDrawableWidth");
+constexpr ImmutableString kDrawableHeightSpecConstVarName = ImmutableString("ANGLEDrawableHeight");
 
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
 // rotate gl_Position in the vertex shader and gl_FragCoord in the fragment shader.  The following
@@ -220,7 +222,8 @@ TIntermTyped *CreateFloatArrayWithRotationIndex(const Vec2EnumMap &valuesEnumMap
 }
 }  // anonymous namespace
 
-FlipRotateSpecConst::FlipRotateSpecConst() : mSpecConstSymbol(nullptr)
+FlipRotateSpecConst::FlipRotateSpecConst()
+    : mSpecConstSymbol(nullptr), mWidthSpecConstSymbol(nullptr), mHeightSpecConstSymbol(nullptr)
 {
     mUsageBits.reset();
 }
@@ -231,6 +234,14 @@ FlipRotateSpecConst::~FlipRotateSpecConst()
     {
         delete mSpecConstSymbol;
     }
+    if (mWidthSpecConstSymbol)
+    {
+        delete mWidthSpecConstSymbol;
+    }
+    if (mHeightSpecConstSymbol)
+    {
+        delete mHeightSpecConstSymbol;
+    }
 }
 
 void FlipRotateSpecConst::generateSymbol(TSymbolTable *symbolTable)
@@ -239,16 +250,36 @@ void FlipRotateSpecConst::generateSymbol(TSymbolTable *symbolTable)
         new TVariable(symbolTable, kSurfaceRotationSpecConstVarName,
                       StaticType::GetBasic<EbtUInt>(), SymbolType::AngleInternal);
     mSpecConstSymbol = new TIntermSymbol(specConstVar);
+
+    TVariable *widthSpecConstVar =
+        new TVariable(symbolTable, kDrawableWidthSpecConstVarName, StaticType::GetBasic<EbtFloat>(),
+                      SymbolType::AngleInternal);
+    mWidthSpecConstSymbol = new TIntermSymbol(widthSpecConstVar);
+
+    TVariable *heightSpecConstVar =
+        new TVariable(symbolTable, kDrawableHeightSpecConstVarName,
+                      StaticType::GetBasic<EbtFloat>(), SymbolType::AngleInternal);
+    mHeightSpecConstSymbol = new TIntermSymbol(heightSpecConstVar);
 }
 
 void FlipRotateSpecConst::outputLayoutString(TInfoSinkBase &sink) const
 {
     // Only emit specialized const layout string if it has been referenced.
-    if (mUsageBits.any())
+    if (mUsageBits.test(vk::SpecConstUsage::YFlip) || mUsageBits.test(vk::SpecConstUsage::Rotation))
     {
         sink << "layout(constant_id="
              << static_cast<uint32_t>(vk::SpecializationConstantId::SurfaceRotation)
              << ") const uint " << kSurfaceRotationSpecConstVarName << " = 0;\n\n";
+    }
+
+    if (mUsageBits.test(vk::SpecConstUsage::DrawableSize))
+    {
+        sink << "layout(constant_id="
+             << static_cast<uint32_t>(vk::SpecializationConstantId::DrawableWidth)
+             << ") const uint " << kDrawableWidthSpecConstVarName << " = 0;\n\n";
+        sink << "layout(constant_id="
+             << static_cast<uint32_t>(vk::SpecializationConstantId::DrawableHeight)
+             << ") const uint " << kDrawableHeightSpecConstVarName << " = 0;\n\n";
     }
 }
 
@@ -386,4 +417,25 @@ TIntermTyped *FlipRotateSpecConst::getFragRotationMultiplyFlipXY()
     return CreateVec2ArrayWithIndex(kFragRotationMultiplyFlipXY, 1.0, mSpecConstSymbol);
 }
 
+TIntermBinary *FlipRotateSpecConst::getHalfRenderArea()
+{
+    if (!mWidthSpecConstSymbol || !mHeightSpecConstSymbol)
+    {
+        return nullptr;
+    }
+
+    auto vec2Type                    = new TType(EbtFloat, 2);
+    TIntermSequence *widthHeightArgs = new TIntermSequence();
+    widthHeightArgs->push_back(mWidthSpecConstSymbol->deepCopy());
+    widthHeightArgs->push_back(mHeightSpecConstSymbol->deepCopy());
+    TIntermAggregate *drawableSize =
+        TIntermAggregate::CreateConstructor(*vec2Type, widthHeightArgs);
+
+    // drawableSize * 0.5f
+    TIntermBinary *halfRenderArea =
+        new TIntermBinary(EOpVectorTimesScalar, drawableSize, CreateFloatNode(0.5));
+    mUsageBits.set(vk::SpecConstUsage::DrawableSize);
+
+    return halfRenderArea;
+}
 }  // namespace sh
