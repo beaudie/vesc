@@ -157,8 +157,6 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/5304
     "VUID-vkCmdDraw-magFilter-04553",
     "VUID-vkCmdDrawIndexed-magFilter-04553",
-    // http://anglebug.com/5309
-    "VUID-VkImageViewCreateInfo-usage-02652",
     // http://anglebug.com/5336
     "UNASSIGNED-BestPractices-vkCreateDevice-specialuse-extension",
     // http://anglebug.com/5331
@@ -2185,6 +2183,13 @@ bool RendererVk::hasLinearImageFormatFeatureBits(VkFormat format,
                                                  const VkFormatFeatureFlags featureBits) const
 {
     return hasFormatFeatureBits<&VkFormatProperties::linearTilingFeatures>(format, featureBits);
+}
+
+VkFormatFeatureFlags RendererVk::getLinearImageFormatFeatureBits(
+    VkFormat format,
+    const VkFormatFeatureFlags featureBits) const
+{
+    return getFormatFeatureBits<&VkFormatProperties::linearTilingFeatures>(format, featureBits);
 }
 
 VkFormatFeatureFlags RendererVk::getImageFormatFeatureBits(
