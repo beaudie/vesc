@@ -993,7 +993,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Track SyncHelper object been added into secondary command buffer that has not been flushed to
     // vulkan.
     bool mSyncObjectPendingFlush;
-    uint32_t mDeferredFlushCount;
+    bool mHasDeferredFlush;
 
     // Semaphores that must be waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;
