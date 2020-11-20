@@ -496,6 +496,10 @@ struct Extensions
 
     // GL_OES_texture_border_clamp
     bool textureBorderClampOES = false;
+    // GL_EXT_texture_border_clamp
+    bool textureBorderClampEXT = false;
+    // Any version of the texture border clamp extension
+    bool textureBorderClampAny() const { return textureBorderClampOES || textureBorderClampEXT; }
 
     // GL_EXT_texture_sRGB_decode
     bool textureSRGBDecode = false;

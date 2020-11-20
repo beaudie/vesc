@@ -747,6 +747,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
     extensions->syncQuery             = extensions->fenceNV;
     extensions->copyTexture           = true;
     extensions->textureBorderClampOES = true;
+    extensions->textureBorderClampEXT = true;
     extensions->webglVideoTexture     = true;
 
     // D3D9 has no concept of separate masks and refs for front and back faces in the depth stencil

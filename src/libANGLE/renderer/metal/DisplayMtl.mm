@@ -638,6 +638,7 @@ void DisplayMtl::initializeExtensions() const
 
     mNativeExtensions.robustness             = true;
     mNativeExtensions.textureBorderClampOES  = false;  // not implemented yet
+    mNativeExtensions.textureBorderClampEXT  = false;  // not implemented yet
     mNativeExtensions.translatedShaderSource = true;
     mNativeExtensions.discardFramebuffer     = true;
 
