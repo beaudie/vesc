@@ -14,6 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/features.h"
+#include "libANGLE/renderer/d3d/ContextD3D.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/trace.h"
@@ -240,11 +241,23 @@ bool ShaderD3D::useImage2DFunction(const std::string &functionName) const
     return mUsedImage2DFunctionNames.find(functionName) != mUsedImage2DFunctionNames.end();
 }
 
+const std::set<std::string> &ShaderD3D::getUniformBlockHasLargeArrayFieldNotOptimizedSet() const
+{
+    return mUniformBlockHasLargeArrayFieldNotOptimizedSet;
+}
+
 const std::map<std::string, unsigned int> &GetUniformRegisterMap(
     const std::map<std::string, unsigned int> *uniformRegisterMap)
 {
     ASSERT(uniformRegisterMap);
     return *uniformRegisterMap;
+}
+
+const std::set<std::string> &GetUniformBlockHasLargeArrayFieldNotOptimizedSet(
+    const std::set<std::string> *uniformBlockHasLargeArrayFieldNotOptimizedSet)
+{
+    ASSERT(uniformBlockHasLargeArrayFieldNotOptimizedSet);
+    return *uniformBlockHasLargeArrayFieldNotOptimizedSet;
 }
 
 const std::set<std::string> &GetUsedImage2DFunctionNames(
@@ -329,6 +342,10 @@ std::shared_ptr<WaitableCompileEvent> ShaderD3D::compile(const gl::Context *cont
                 mUniformBlockUseStructuredBufferMap[interfaceBlock.name] = useStructuredBuffer;
             }
         }
+
+        mUniformBlockHasLargeArrayFieldNotOptimizedSet =
+            GetUniformBlockHasLargeArrayFieldNotOptimizedSet(
+                sh::GetUniformBlockHasLargeArrayFieldNotOptimizedSet(compilerHandle));
 
         for (const sh::InterfaceBlock &interfaceBlock : mState.getShaderStorageBlocks())
         {

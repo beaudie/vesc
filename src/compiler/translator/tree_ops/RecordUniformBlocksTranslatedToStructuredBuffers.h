@@ -19,7 +19,8 @@ class TIntermNode;
 
 ANGLE_NO_DISCARD bool RecordUniformBlocksTranslatedToStructuredBuffers(
     TIntermNode *root,
-    std::map<int, const TInterfaceBlock *> &uniformBlockTranslatedToStructuredBuffer);
+    std::map<int, const TInterfaceBlock *> &uniformBlockTranslatedToStructuredBuffer,
+    std::set<std::string> &uniformBlockHasLargeArrayFieldNotOptimizedSet);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEOPS_RECORDACCESSUNIFORMBLOCKENTIREARRAYMEMBER_H_

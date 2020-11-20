@@ -24,6 +24,7 @@ class TranslatorHLSL : public TCompiler
     bool hasUniformBlock(const std::string &interfaceBlockName) const;
     unsigned int getUniformBlockRegister(const std::string &interfaceBlockName) const;
     bool shouldUniformBlockUseStructuredBuffer(const std::string &uniformBlockName) const;
+    const std::set<std::string> *getUniformBlockHasLargeArrayFieldNotOptimizedSet() const;
 
     const std::map<std::string, unsigned int> *getUniformRegisterMap() const;
     unsigned int getReadonlyImage2DRegisterIndex() const;
@@ -47,6 +48,7 @@ class TranslatorHLSL : public TCompiler
     unsigned int mImage2DRegisterIndex;
     std::set<std::string> mUsedImage2DFunctionNames;
     std::map<int, const TInterfaceBlock *> mUniformBlocksTranslatedToStructuredBuffers;
+    std::set<std::string> mUniformBlockHasLargeArrayFieldNotOptimizedSet;
 };
 
 }  // namespace sh
