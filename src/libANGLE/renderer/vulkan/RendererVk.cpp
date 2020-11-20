@@ -1992,7 +1992,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // Defer glFLush call causes manhattan 3.0 perf regression. Let Qualcomm driver opt out from
     // this optimization.
-    ANGLE_FEATURE_CONDITION(&mFeatures, deferFlushUntilEndRenderPass, !isQualcomm);
+    ANGLE_FEATURE_CONDITION(&mFeatures, deferFlushUntilEndRenderPass, true);
 
     // Android mistakenly destroys the old swapchain when creating a new one.
     ANGLE_FEATURE_CONDITION(&mFeatures, waitIdleBeforeSwapchainRecreation, IsAndroid() && isARM);
@@ -2490,6 +2490,24 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     resourceUseList.releaseResourceUsesAndUpdateSerials(submitQueueSerial);
 
     return angle::Result::Continue;
+}
+
+void RendererVk::freeResources(vk::ResourceUseList &&resourceUseList)
+{
+    std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
+
+    Serial submitQueueSerial;
+
+    if (mFeatures.asyncCommandQueue.enabled)
+    {
+        submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
+    }
+    else
+    {
+        submitQueueSerial = mCommandQueue.reserveSubmitSerial();
+    }
+
+    resourceUseList.releaseResourceUsesAndUpdateSerials(submitQueueSerial);
 }
 
 void RendererVk::handleDeviceLost()
