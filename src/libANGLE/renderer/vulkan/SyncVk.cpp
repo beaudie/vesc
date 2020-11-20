@@ -67,17 +67,17 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
-angle::Result SyncHelper::clientWait(Context *context,
+angle::Result SyncHelper::clientWait(gl::Context *context,
                                      ContextVk *contextVk,
                                      bool flushCommands,
                                      uint64_t timeout,
                                      VkResult *outResult)
 {
-    RendererVk *renderer = context->getRenderer();
+    RendererVk *renderer = contextVk->getRenderer();
 
     // If the event is already set, don't wait
     bool alreadySignaled = false;
-    ANGLE_TRY(getStatus(context, &alreadySignaled));
+    ANGLE_TRY(getStatus(contextVk, &alreadySignaled));
     if (alreadySignaled)
     {
         *outResult = VK_EVENT_SET;
@@ -91,28 +91,34 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    if (flushCommands && contextVk)
+    // We defer (ignore) flushes, so it's possible the glFence is still stuck in the command stream.
+    if ((flushCommands && contextVk) || usedInRecordedCommands())
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }
 
-    // Undefined behaviour. Early exit.
-    if (usedInRecordedCommands())
+    // If the context is shared, we need to flush all of the other context's also, in case there are
+    // any Fences (Events) in their command streams.
+    // Due to the global lock, this is assumed to be safe, since the other contexts in the share
+    // group can't be doing anything while this context holds the lock.
+    if (context->isShared())
     {
-        WARN() << "Waiting on a sync that is not flushed";
-        *outResult = VK_TIMEOUT;
-        return angle::Result::Continue;
+        for (auto &it : *contextVk->getShareGroupVk()->getShareContextSet())
+        {
+            ANGLE_TRY(it->flushImpl(nullptr));
+        }
     }
 
     ASSERT(mUse.getSerial().valid());
 
     VkResult status = VK_SUCCESS;
-    ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+    ANGLE_TRY(
+        renderer->waitForSerialWithUserTimeout(contextVk, mUse.getSerial(), timeout, &status));
 
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
     {
-        ANGLE_VK_TRY(context, status);
+        ANGLE_VK_TRY(contextVk, status);
     }
 
     *outResult = status;
@@ -238,17 +244,17 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     return angle::Result::Continue;
 }
 
-angle::Result SyncHelperNativeFence::clientWait(Context *context,
+angle::Result SyncHelperNativeFence::clientWait(gl::Context *context,
                                                 ContextVk *contextVk,
                                                 bool flushCommands,
                                                 uint64_t timeout,
                                                 VkResult *outResult)
 {
-    RendererVk *renderer = context->getRenderer();
+    RendererVk *renderer = contextVk->getRenderer();
 
     // If already signaled, don't wait
     bool alreadySignaled = false;
-    ANGLE_TRY(getStatus(context, &alreadySignaled));
+    ANGLE_TRY(getStatus(contextVk, &alreadySignaled));
     if (alreadySignaled)
     {
         *outResult = VK_SUCCESS;
@@ -272,7 +278,7 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     if (contextVk->getRenderer()->getFeatures().asyncCommandQueue.enabled)
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::clientWait");
-        ANGLE_TRY(contextVk->getRenderer()->waitForCommandProcessorIdle(contextVk));
+        ANGLE_TRY(renderer->waitForCommandProcessorIdle(contextVk));
     }
 
     // Wait for mFenceWithFd to be signaled.
@@ -281,7 +287,7 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
     {
-        ANGLE_VK_TRY(context, status);
+        ANGLE_VK_TRY(contextVk, status);
     }
 
     *outResult = status;
@@ -375,8 +381,8 @@ angle::Result SyncVk::clientWait(const gl::Context *context,
     bool flush = (flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0;
     VkResult result;
 
-    ANGLE_TRY(mSyncHelper.clientWait(contextVk, contextVk, flush, static_cast<uint64_t>(timeout),
-                                     &result));
+    ANGLE_TRY(mSyncHelper.clientWait(const_cast<gl::Context *>(context), contextVk, flush,
+                                     static_cast<uint64_t>(timeout), &result));
 
     switch (result)
     {
@@ -475,7 +481,7 @@ egl::Error EGLSyncVk::clientWait(const egl::Display *display,
     VkResult result;
 
     ContextVk *contextVk = context ? vk::GetImpl(context) : nullptr;
-    if (mSyncHelper->clientWait(vk::GetImpl(display), contextVk, flush,
+    if (mSyncHelper->clientWait(const_cast<gl::Context *>(context), contextVk, flush,
                                 static_cast<uint64_t>(timeout), &result) == angle::Result::Stop)
     {
         return egl::Error(EGL_BAD_ALLOC);
