@@ -141,9 +141,15 @@ class ResourceUseList final : angle::NonCopyable
     ResourceUseList &operator=(ResourceUseList &&rhs);
 
     void add(const SharedResourceUse &resourceUse);
+    void append(SharedResourceUse &&resourceUse)
+    {
+        mResourceUses.emplace_back(std::move(resourceUse));
+    }
 
     void releaseResourceUses();
     void releaseResourceUsesAndUpdateSerials(Serial serial);
+
+    std::vector<SharedResourceUse> &getResourceUses() { return mResourceUses; }
 
   private:
     std::vector<SharedResourceUse> mResourceUses;
