@@ -91,17 +91,10 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    if (flushCommands && contextVk)
+    // We defer (ignore) flushes, so it's possible the glFence is still stuck in the command stream.
+    if ((flushCommands && contextVk) || usedInRecordedCommands())
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
-    }
-
-    // Undefined behaviour. Early exit.
-    if (usedInRecordedCommands())
-    {
-        WARN() << "Waiting on a sync that is not flushed";
-        *outResult = VK_TIMEOUT;
-        return angle::Result::Continue;
     }
 
     ASSERT(mUse.getSerial().valid());

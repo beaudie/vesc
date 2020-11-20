@@ -244,16 +244,22 @@ TEST_P(FenceSyncTest, BasicOperations)
 
     glFlush();
 
-    // Use 'loopCount' to make sure the test doesn't get stuck in an infinite loop
-    while (value != GL_SIGNALED && loopCount <= 1000000)
+    // Issuing a glFlush() doesn't guarantee the commands will complete.
+    // Vulkan defers (ignores) flushes, so the fence will never be sync'ed until real work or a
+    // ClientWaitSync() is performed.
+    if (!IsVulkan())
     {
-        loopCount++;
+        // Use 'loopCount' to make sure the test doesn't get stuck in an infinite loop
+        while (value != GL_SIGNALED && loopCount <= 1000000)
+        {
+            loopCount++;
 
-        glGetSynciv(sync, GL_SYNC_STATUS, 1, &length, &value);
-        ASSERT_GL_NO_ERROR();
+            glGetSynciv(sync, GL_SYNC_STATUS, 1, &length, &value);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        ASSERT_GLENUM_EQ(GL_SIGNALED, value);
     }
-
-    ASSERT_GLENUM_EQ(GL_SIGNALED, value);
 
     for (size_t i = 0; i < 20; i++)
     {
