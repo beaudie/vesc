@@ -176,6 +176,9 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
     std::vector<const char *> disabledFeatureOverrides;
     std::vector<const char *> enabledFeatureOverrides;
 
+    // Always enable exposeNonConformantExtensionsAndVersions in ANGLE tests.
+    enabledFeatureOverrides.push_back("exposeNonConformantExtensionsAndVersions");
+
     if (params.transformFeedbackFeature == EGL_FALSE)
     {
         disabledFeatureOverrides.push_back("supportsTransformFeedbackExtension");
