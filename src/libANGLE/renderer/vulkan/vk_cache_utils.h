@@ -534,10 +534,10 @@ static_assert(kPackedInputAssemblyAndColorBlendStateSize == 56, "Size check fail
 constexpr size_t kGraphicsPipelineDescSumOfSizes =
     kVertexInputAttributesSize + kRenderPassDescSize + kPackedRasterizationAndMultisampleStateSize +
     kPackedDepthStencilStateSize + kPackedInputAssemblyAndColorBlendStateSize + sizeof(VkViewport) +
-    sizeof(VkRect2D);
+    sizeof(VkRect2D) + sizeof(VkExtent2D);
 
 // Number of dirty bits in the dirty bit set.
-constexpr size_t kGraphicsPipelineDirtyBitBytes = 4;
+constexpr size_t kGraphicsPipelineDirtyBitBytes = 8;
 constexpr static size_t kNumGraphicsPipelineDirtyBits =
     kGraphicsPipelineDescSumOfSizes / kGraphicsPipelineDirtyBitBytes;
 static_assert(kNumGraphicsPipelineDirtyBits <= 64, "Too many pipeline dirty bits");
@@ -582,7 +582,7 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
-                                     const vk::SpecializationConstants specConsts,
+                                     const vk::SpecializationConstants &specConsts,
                                      Pipeline *pipelineOut) const;
 
     // Vertex input state. For ES 3.1 this should be separated into binding and attribute.
@@ -716,6 +716,9 @@ class GraphicsPipelineDesc final
             mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation);
     }
 
+    void updateDrawableSize(GraphicsPipelineTransitionBits *transition, int w, int h);
+    const VkExtent2D &getDrawableSize() const { return mDrawableSize; }
+
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
 
@@ -728,6 +731,7 @@ class GraphicsPipelineDesc final
     // The special value of .offset.x == INT_MIN for scissor implies dynamic scissor that needs to
     // be set through vkCmdSetScissor.
     VkRect2D mScissor;
+    VkExtent2D mDrawableSize;
 };
 
 // Verify the packed pipeline description has no gaps in the packing.
@@ -950,10 +954,10 @@ ANGLE_INLINE bool GraphicsPipelineTransitionMatch(GraphicsPipelineTransitionBits
     // But there may be more collisions between the same dirty bit masks leading to different
     // transitions. Thus there may be additional cost when applications use many transitions.
     // We should revisit this in the future and investigate using different bit widths.
-    static_assert(sizeof(uint32_t) == kGraphicsPipelineDirtyBitBytes, "Size mismatch");
+    static_assert(sizeof(uint64_t) == kGraphicsPipelineDirtyBitBytes, "Size mismatch");
 
-    const uint32_t *rawPtrA = descA.getPtr<uint32_t>();
-    const uint32_t *rawPtrB = descB.getPtr<uint32_t>();
+    const uint64_t *rawPtrA = descA.getPtr<uint64_t>();
+    const uint64_t *rawPtrB = descB.getPtr<uint64_t>();
 
     for (size_t dirtyBit : bitsA)
     {
@@ -1355,7 +1359,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
-                                           const vk::SpecializationConstants specConsts,
+                                           const vk::SpecializationConstants &specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
                                            vk::PipelineHelper **pipelineOut)
@@ -1384,7 +1388,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
-                                 const vk::SpecializationConstants specConsts,
+                                 const vk::SpecializationConstants &specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
