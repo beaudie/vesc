@@ -45,8 +45,8 @@ angle::Result FenceNVVk::test(const gl::Context *context, GLboolean *outFinished
 angle::Result FenceNVVk::finish(const gl::Context *context)
 {
     VkResult outResult;
-    ContextVk *contextVk = vk::GetImpl(context);
-    return mFenceSync.clientWait(contextVk, contextVk, true, UINT64_MAX, &outResult);
+    return mFenceSync.clientWait(vk::GetImpl(context), const_cast<gl::Context *>(context), true,
+                                 UINT64_MAX, &outResult);
 }
 
 }  // namespace rx

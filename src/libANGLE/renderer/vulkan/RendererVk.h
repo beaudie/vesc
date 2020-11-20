@@ -312,6 +312,8 @@ class RendererVk : angle::NonCopyable
                               vk::GarbageList &&currentGarbage,
                               vk::CommandPool *commandPool);
 
+    void releaseResourcesToCurrentSerial(vk::ResourceUseList &&resourceUseList);
+
     void handleDeviceLost();
     angle::Result finishToSerial(vk::Context *context, Serial serial);
     angle::Result waitForSerialWithUserTimeout(vk::Context *context,

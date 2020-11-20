@@ -40,7 +40,7 @@ class SyncHelper : public vk::Resource
 
     virtual angle::Result initialize(ContextVk *contextVk);
     virtual angle::Result clientWait(Context *context,
-                                     ContextVk *contextVk,
+                                     gl::Context *glContext,
                                      bool flushCommands,
                                      uint64_t timeout,
                                      VkResult *outResult);
@@ -68,7 +68,7 @@ class SyncHelperNativeFence : public SyncHelper
 
     angle::Result initializeWithFd(ContextVk *contextVk, int inFd);
     angle::Result clientWait(Context *context,
-                             ContextVk *contextVk,
+                             gl::Context *glContext,
                              bool flushCommands,
                              uint64_t timeout,
                              VkResult *outResult) override;
