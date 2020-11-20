@@ -624,12 +624,21 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
+    if (mSyncObjectPendingFlush)
+    {
+        // End the render pass to create a sync point in the command stream.
+        ANGLE_TRY(flushCommandsAndEndRenderPass());
+        mRenderer->freeResources(std::move(mResourceUseList));
+        mDeferredFlushCount++;
+
+        return angle::Result::Continue;
+    }
+
     // If we are in middle of renderpass and it is not a shared context, then we will defer the
     // glFlush call here until the renderpass ends. If sync object has been used, we must respect
     // glFlush call, otherwise we a wait for sync object without GL_SYNC_FLUSH_COMMANDS_BIT may
     // never come back.
-    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && !context->isShared() &&
-        !mSyncObjectPendingFlush && hasStartedRenderPass())
+    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled)
     {
         mDeferredFlushCount++;
         return angle::Result::Continue;
@@ -4391,7 +4400,6 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     if (!mRenderPassCommands->started())
     {
-        ASSERT(!mDeferredFlushCount);
         onRenderPassFinished();
         return angle::Result::Continue;
     }
@@ -4447,12 +4455,6 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
         ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
                                 TRACE_EVENT_PHASE_END, eventName));
         ANGLE_TRY(flushOutsideRenderPassCommands());
-    }
-
-    if (mDeferredFlushCount > 0)
-    {
-        // If we have deferred glFlush call in the middle of renderpass, flush them now.
-        ANGLE_TRY(flushImpl(nullptr));
     }
 
     return angle::Result::Continue;
