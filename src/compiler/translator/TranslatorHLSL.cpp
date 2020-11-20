@@ -192,7 +192,8 @@ bool TranslatorHLSL::translate(TIntermBlock *root,
         (compileOptions & SH_ALLOW_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) != 0)
     {
         if (!sh::RecordUniformBlocksTranslatedToStructuredBuffers(
-                root, mUniformBlocksTranslatedToStructuredBuffers))
+                root, mUniformBlocksTranslatedToStructuredBuffers,
+                mUniformBlockHasLargeArrayFieldNotOptimizedSet))
         {
             return false;
         }
@@ -249,6 +250,12 @@ unsigned int TranslatorHLSL::getUniformBlockRegister(const std::string &uniformB
 const std::map<std::string, unsigned int> *TranslatorHLSL::getUniformRegisterMap() const
 {
     return &mUniformRegisterMap;
+}
+
+const std::set<std::string> *TranslatorHLSL::getUniformBlockHasLargeArrayFieldNotOptimizedSet()
+    const
+{
+    return &mUniformBlockHasLargeArrayFieldNotOptimizedSet;
 }
 
 unsigned int TranslatorHLSL::getReadonlyImage2DRegisterIndex() const

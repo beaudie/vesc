@@ -2078,6 +2078,46 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
                 shadersD3D[shaderType]->generateWorkarounds(&mShaderWorkarounds[shaderType]);
 
                 mShaderUniformsDirty.set(shaderType);
+
+                const std::set<std::string> &uniformBlockHasLargeArrayFieldNotOptimizedSet =
+                    shadersD3D[shaderType]->getUniformBlockHasLargeArrayFieldNotOptimizedSet();
+                if (uniformBlockHasLargeArrayFieldNotOptimizedSet.size() > 0)
+                {
+                    std::ostringstream stream;
+                    stream << "You could get a better shader compiling performance if you re-write"
+                           << "the uniform block";
+
+                    if (uniformBlockHasLargeArrayFieldNotOptimizedSet.size() > 1)
+                    {
+                        stream << "s";
+                    }
+
+                    stream << "\n(";
+                    for (const std::string &str : uniformBlockHasLargeArrayFieldNotOptimizedSet)
+                    {
+                        stream << str << " ";
+                    }
+                    stream << ")\nin the " << gl::GetShaderTypeString(shaderType) << " shader.\n";
+
+                    stream << "If a field of uniform block with std140 layout qualifier is\n"
+                           << "array and the array size is equal to or greater than 50,\n"
+                           << "and you follow below rules to write uniform block in\n"
+                           << "shader you could get a compiling performance on windows\n"
+                           << "10 or greater platforms.\n";
+
+                    stream << "(1) Encapsulate the field into a single uniform block.\n"
+                           << "(2) Only indexing operator is allowed to operate on this field.\n"
+                           << "(3) The field's type could be scalars or vectors. It could also be\n"
+                           << "    matrices,but there are restrictions, if uniform block layout\n"
+                           << "    qualifier is column_major, the field type must be mat2x4,\n"
+                           << "    mat3x4 and mat4x4; if uniform block layout qualifier is\n"
+                           << "    row_major, the field type must be mat4x2, mat4x3and mat4x4.\n"
+                           << "(4) The field's type could be structure, the structure fields'\n"
+                           << "    types also follow to rule (3), any field's type cannot a\n"
+                           << "    structure type.\n";
+                    ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_MEDIUM,
+                                       stream.str().c_str());
+                }
             }
         }
 
@@ -2538,8 +2578,8 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
         {
             // In the program state, array uniform names include [0] as in the program resource
             // spec. Here we don't include it.
-            // TODO(oetuaho@nvidia.com): consider using the same uniform naming here as in the GL
-            // layer.
+            // TODO(oetuaho@nvidia.com): consider using the same uniform naming here as in the
+            // GL layer.
             ASSERT(angle::EndsWith(name, "[0]"));
             name.resize(name.length() - 3);
         }
@@ -2744,8 +2784,8 @@ void ProgramD3D::assignSamplerRegisters(size_t uniformIndex)
 {
     D3DUniform *d3dUniform = mD3DUniforms[uniformIndex];
     ASSERT(d3dUniform->isSampler());
-    // If the uniform is an array of arrays, then we have separate entries for each inner array in
-    // mD3DUniforms. However, the sampler register info is stored in the shader only for the
+    // If the uniform is an array of arrays, then we have separate entries for each inner array
+    // in mD3DUniforms. However, the sampler register info is stored in the shader only for the
     // outermost array.
     std::vector<unsigned int> subscripts;
     const std::string baseName = gl::ParseResourceName(d3dUniform->name, &subscripts);
@@ -2858,8 +2898,8 @@ void ProgramD3D::assignImageRegisters(size_t uniformIndex)
 {
     D3DUniform *d3dUniform = mD3DUniforms[uniformIndex];
     ASSERT(d3dUniform->isImage());
-    // If the uniform is an array of arrays, then we have separate entries for each inner array in
-    // mD3DUniforms. However, the image register info is stored in the shader only for the
+    // If the uniform is an array of arrays, then we have separate entries for each inner array
+    // in mD3DUniforms. However, the image register info is stored in the shader only for the
     // outermost array.
     std::vector<unsigned int> subscripts;
     const std::string baseName = gl::ParseResourceName(d3dUniform->name, &subscripts);
@@ -2896,7 +2936,8 @@ void ProgramD3D::assignImageRegisters(size_t uniformIndex)
     }
     else
     {
-        // TODO(xinghua.cao@intel.com): Implement image variables in vertex shader and pixel shader.
+        // TODO(xinghua.cao@intel.com): Implement image variables in vertex shader and pixel
+        // shader.
         UNIMPLEMENTED();
     }
 }
@@ -2912,8 +2953,8 @@ void ProgramD3D::AssignImages(unsigned int startImageIndex,
     unsigned int low        = outUsedRange->low();
     unsigned int high       = outUsedRange->high();
 
-    // If declare without a binding qualifier, any uniform image variable (include all elements of
-    // unbound image array) shoud be bound to unit zero.
+    // If declare without a binding qualifier, any uniform image variable (include all elements
+    // of unbound image array) shoud be bound to unit zero.
     if (startLogicalImageUnit == -1)
     {
         ASSERT(imageIndex < outImages.size());
@@ -3181,8 +3222,8 @@ void ProgramD3D::gatherTransformFeedbackVaryings(const gl::VaryingPacking &varyi
                 int componentCount       = gl::VariableColumnCount(transposedType);
                 ASSERT(!varying.isBuiltIn() && !varying.isStruct());
 
-                // There can be more than one register assigned to a particular varying, and each
-                // register needs its own stream out entry.
+                // There can be more than one register assigned to a particular varying, and
+                // each register needs its own stream out entry.
                 if (registerInfo.tfVaryingName() == tfVaryingName)
                 {
                     mStreamOutVaryings.emplace_back(varyingSemantic, registerIndex, componentCount,
