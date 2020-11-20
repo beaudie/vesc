@@ -1425,6 +1425,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::swapImpl");
 
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
 
     if (mNeedToAcquireNextSwapchainImage)
     {
@@ -1436,6 +1437,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
+
+    if (renderer->getFeatures().logMemoryReportStats.enabled)
+    {
+        renderer->logMemoryReportStats();
+    }
 
     if (!presentOutOfDate)
     {

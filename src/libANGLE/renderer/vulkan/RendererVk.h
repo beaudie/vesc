@@ -71,6 +71,25 @@ void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut, ArgT object, Arg
     CollectGarbage(garbageOut, objectsIn...);
 }
 
+// Tracks GPU memory usage
+struct MemoryReportVk : angle::NonCopyable
+{
+    MemoryReportVk();
+    void processCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, bool logCallback);
+    void logMemoryReportStats();
+
+    std::mutex mMemoryReportMutex;
+    VkDeviceSize mCurrentTotalAllocatedMemory;
+    VkDeviceSize mMaxTotalAllocatedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mAllocatedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mAllocatedMemoryMax;
+    VkDeviceSize mCurrentTotalImportedMemory;
+    VkDeviceSize mMaxTotalImportedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mImportedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mImportedMemoryMax;
+    angle::HashMap<uint64_t, int> mUniqueIDCounts;
+};
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -334,6 +353,10 @@ class RendererVk : angle::NonCopyable
     vk::CommandBufferHelper *getCommandBufferHelper(bool hasRenderPass);
     void recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer);
 
+    // Tracks GPU memory usage
+    void logMemoryReportStats() { mMemoryReport.logMemoryReportStats(); }
+    MemoryReportVk mMemoryReport;
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -378,6 +401,8 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceTransformFeedbackFeaturesEXT mTransformFeedbackFeatures;
     VkPhysicalDeviceIndexTypeUint8FeaturesEXT mIndexTypeUint8Features;
     VkPhysicalDeviceSubgroupProperties mSubgroupProperties;
+    VkPhysicalDeviceDeviceMemoryReportFeaturesEXT mMemoryReportFeatures;
+    VkDeviceDeviceMemoryReportCreateInfoEXT mMemoryReportCallback;
     VkPhysicalDeviceExternalMemoryHostPropertiesEXT mExternalMemoryHostProperties;
     VkPhysicalDeviceShaderFloat16Int8FeaturesKHR mShaderFloat16Int8Features;
     VkPhysicalDeviceShaderAtomicFloatFeaturesEXT mShaderAtomicFloatFeature;

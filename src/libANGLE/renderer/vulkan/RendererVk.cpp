@@ -387,6 +387,14 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
     return VK_FALSE;
 }
 
+VKAPI_ATTR void VKAPI_CALL
+MemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, void *userData)
+{
+    RendererVk *rendererVk = static_cast<RendererVk *>(userData);
+    bool logCallback       = rendererVk->getFeatures().logMemoryReportCallbacks.enabled;
+    rendererVk->mMemoryReport.processCallback(callbackData, logCallback);
+}
+
 bool ShouldUseValidationLayers(const egl::AttributeMap &attribs)
 {
 #if defined(ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS_BY_DEFAULT)
@@ -942,6 +950,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mSubgroupProperties       = {};
     mSubgroupProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES;
 
+    mMemoryReportFeatures = {};
+    mMemoryReportFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_MEMORY_REPORT_FEATURES_EXT;
+
     mExternalMemoryHostProperties = {};
     mExternalMemoryHostProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT;
@@ -1011,6 +1023,12 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mIndexTypeUint8Features);
     }
 
+    // Query memory report features
+    if (ExtensionFound(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mMemoryReportFeatures);
+    }
+
     // Query external memory host properties
     if (ExtensionFound(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME, deviceExtensionNames))
     {
@@ -1071,6 +1089,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
 
     // Clean up pNext chains
     mLineRasterizationFeatures.pNext        = nullptr;
+    mMemoryReportFeatures.pNext             = nullptr;
     mProvokingVertexFeatures.pNext          = nullptr;
     mVertexAttributeDivisorFeatures.pNext   = nullptr;
     mVertexAttributeDivisorProperties.pNext = nullptr;
@@ -1412,6 +1431,19 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     if (getFeatures().supportsDepthStencilResolve.enabled)
     {
         enabledDeviceExtensions.push_back(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME);
+    }
+
+    if (mMemoryReportFeatures.deviceMemoryReport &&
+        (getFeatures().logMemoryReportCallbacks.enabled ||
+         getFeatures().logMemoryReportStats.enabled))
+    {
+        enabledDeviceExtensions.push_back(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME);
+
+        mMemoryReportCallback       = {};
+        mMemoryReportCallback.sType = VK_STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT;
+        mMemoryReportCallback.pfnUserCallback = &MemoryReportCallback;
+        mMemoryReportCallback.pUserData       = this;
+        vk::AddToPNextChain(&createInfo, &mMemoryReportCallback);
     }
 
     if (getFeatures().supportsExternalMemoryHost.enabled)
@@ -1917,6 +1949,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, shadowBuffers, true);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, persistentlyMappedBuffers, true);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportCallbacks, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportStats, false);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsExternalMemoryHost,
@@ -2650,5 +2685,120 @@ void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuff
     ASSERT(commandBuffer->empty());
     commandBuffer->markOpen();
     mCommandBufferHelperFreeList.push_back(commandBuffer);
+}
+
+MemoryReportVk::MemoryReportVk()
+    : mCurrentTotalAllocatedMemory(0),
+      mMaxTotalAllocatedMemory(0),
+      mCurrentTotalImportedMemory(0),
+      mMaxTotalImportedMemory(0)
+{}
+
+void MemoryReportVk::processCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData,
+                                     bool logCallback)
+{
+    std::lock_guard<std::mutex> lock(mMemoryReportMutex);
+    VkDeviceSize size = 0;
+    std::string reportType;
+    switch (callbackData->type)
+    {
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATE_EXT:
+            reportType = "Allocate";
+            if ((mUniqueIDCounts[callbackData->memoryObjectId] += 1) > 1)
+            {
+                break;
+            }
+            size = mAllocatedMemory[callbackData->objectType] + callbackData->size;
+            mAllocatedMemory[callbackData->objectType] = size;
+            if (mAllocatedMemoryMax[callbackData->objectType] < size)
+            {
+                mAllocatedMemoryMax[callbackData->objectType] = size;
+            }
+            mCurrentTotalAllocatedMemory += callbackData->size;
+            if (mMaxTotalAllocatedMemory < mCurrentTotalAllocatedMemory)
+            {
+                mMaxTotalAllocatedMemory = mCurrentTotalAllocatedMemory;
+            }
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_FREE_EXT:
+            reportType = "Free";
+            ASSERT(mUniqueIDCounts[callbackData->memoryObjectId] > 0);
+            mUniqueIDCounts[callbackData->memoryObjectId] -= 1;
+            size = mAllocatedMemory[callbackData->objectType] - callbackData->size;
+            mAllocatedMemory[callbackData->objectType] = size;
+            mCurrentTotalAllocatedMemory -= callbackData->size;
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_IMPORT_EXT:
+            reportType = "Import";
+            if ((mUniqueIDCounts[callbackData->memoryObjectId] += 1) > 1)
+            {
+                break;
+            }
+            size = mImportedMemory[callbackData->objectType] + callbackData->size;
+            mImportedMemory[callbackData->objectType] = size;
+            if (mImportedMemoryMax[callbackData->objectType] < size)
+            {
+                mImportedMemoryMax[callbackData->objectType] = size;
+            }
+            mCurrentTotalImportedMemory += callbackData->size;
+            if (mMaxTotalImportedMemory < mCurrentTotalImportedMemory)
+            {
+                mMaxTotalImportedMemory = mCurrentTotalImportedMemory;
+            }
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_UNIMPORT_EXT:
+            reportType = "Un-Import";
+            ASSERT(mUniqueIDCounts[callbackData->memoryObjectId] > 0);
+            mUniqueIDCounts[callbackData->memoryObjectId] -= 1;
+            size = mImportedMemory[callbackData->objectType] - callbackData->size;
+            mImportedMemory[callbackData->objectType] = size;
+            mCurrentTotalImportedMemory -= callbackData->size;
+            break;
+        case VK_DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATION_FAILED_EXT:
+            reportType = "allocFail";
+            break;
+        default:
+            UNREACHABLE();
+            return;
+    }
+    if (logCallback)
+    {
+        VERBOSE() << std::right << std::setw(9) << reportType << ": size=" << std::setw(10)
+                  << callbackData->size << "; type=" << std::setw(15) << std::left
+                  << GetVkObjectTypeName(callbackData->objectType)
+                  << "; heapIdx=" << callbackData->heapIndex << "; id=" << std::hex
+                  << callbackData->memoryObjectId << "; handle=" << std::hex
+                  << callbackData->objectHandle << ": Total=" << std::right << std::setw(10)
+                  << std::dec << size;
+    }
+}
+
+void MemoryReportVk::logMemoryReportStats()
+{
+    std::lock_guard<std::mutex> lock(mMemoryReportMutex);
+
+    VERBOSE() << std::right << "GPU Memory: allocated=" << std::setw(10)
+              << mCurrentTotalAllocatedMemory << " (max=" << std::setw(10)
+              << mMaxTotalAllocatedMemory << "); imported=" << std::setw(10)
+              << mCurrentTotalImportedMemory << " (max=" << std::setw(10) << mMaxTotalImportedMemory
+              << ")";
+    for (auto &it : mAllocatedMemory)
+    {
+        VkObjectType objectType  = it.first;
+        VkDeviceSize currentSize = it.second;
+        VkDeviceSize maxSize     = mAllocatedMemoryMax[objectType];
+        VERBOSE() << std::right << "- type=" << std::setw(15) << GetVkObjectTypeName(objectType)
+                  << ": allocated=" << std::setw(10) << currentSize << " (max=" << std::setw(10)
+                  << maxSize << ")";
+    }
+    for (auto &it : mImportedMemory)
+    {
+        VkObjectType objectType  = it.first;
+        VkDeviceSize currentSize = it.second;
+        VkDeviceSize maxSize     = mImportedMemoryMax[objectType];
+        VERBOSE() << std::right << "- type=" << std::setw(15) << GetVkObjectTypeName(objectType)
+                  << ":  imported=" << std::setw(10) << currentSize << " (max=" << std::setw(10)
+                  << maxSize << ")";
+    }
 }
 }  // namespace rx
