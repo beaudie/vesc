@@ -27,6 +27,25 @@ class CommandProcessor;
 
 namespace vk
 {
+class SharedFenceManager
+{
+  public:
+    SharedFenceManager() {}
+    ~SharedFenceManager() {}
+    void destroy(vk::Context *context);
+
+    angle::Result newSharedFence(vk::Context *context, vk::Shared<vk::Fence> *sharedFenceOut);
+    inline void resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn)
+    {
+        std::lock_guard<std::mutex> lock(mFenceRecyclerMutex);
+        sharedFenceIn->resetAndRecycle(&mFenceRecycler);
+    }
+
+  private:
+    std::mutex mFenceRecyclerMutex;
+    vk::Recycler<vk::Fence> mFenceRecycler;
+};
+
 enum class CustomTask
 {
     Invalid = 0,
@@ -175,7 +194,6 @@ class CommandQueueInterface : angle::NonCopyable
         const std::vector<VkSemaphore> &waitSemaphores,
         const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
         const Semaphore *signalSemaphore,
-        Shared<Fence> &&sharedFence,
         GarbageList &&currentGarbage,
         CommandPool *commandPool,
         Serial submitQueueSerial)                                      = 0;
@@ -229,7 +247,6 @@ class CommandQueue final : public CommandQueueInterface
                               const std::vector<VkSemaphore> &waitSemaphores,
                               const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                               const Semaphore *signalSemaphore,
-                              Shared<Fence> &&sharedFence,
                               GarbageList &&currentGarbage,
                               CommandPool *commandPool,
                               Serial submitQueueSerial) override;
@@ -267,6 +284,8 @@ class CommandQueue final : public CommandQueueInterface
                               Serial submitQueueSerial);
 
   private:
+    SharedFenceManager sharedFences;
+
     angle::Result releaseToCommandBatch(Context *context,
                                         PrimaryCommandBuffer &&commandBuffer,
                                         CommandPool *commandPool,
@@ -336,7 +355,6 @@ class CommandProcessor : public Context, public CommandQueueInterface
                               const std::vector<VkSemaphore> &waitSemaphores,
                               const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                               const Semaphore *signalSemaphore,
-                              Shared<Fence> &&sharedFence,
                               GarbageList &&currentGarbage,
                               CommandPool *commandPool,
                               Serial submitQueueSerial) override;
