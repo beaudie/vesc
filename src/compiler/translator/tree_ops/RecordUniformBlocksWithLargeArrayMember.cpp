@@ -3,12 +3,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// RecordUniformBlocksTranslatedToStructuredBuffers.cpp:
-// Collect all uniform blocks which will been translated to StructuredBuffers on Direct3D
-// backend.
+// RecordUniformBlocksWithLargeArrayMember.h:
+// Collect all uniform blocks which have one or more large array members,
+// and the array sizes are greater than or equal to 50. If some of them
+// satify some conditions, we will translate them to StructuredBuffers
+// on Direct3D backend.
 //
 
-#include "compiler/translator/tree_ops/RecordUniformBlocksTranslatedToStructuredBuffers.h"
+#include "compiler/translator/tree_ops/RecordUniformBlocksWithLargeArrayMember.h"
 
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
@@ -24,18 +26,18 @@ namespace
 // to a StructuredBuffer on Direct3D backend.
 const unsigned int kMinArraySizeUseStructuredBuffer = 50u;
 
-// There is a maximum of D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT(128) slots that are available
-// for shader resources on Direct3D 11. When shader version is 300, we only use
-// D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT(16) slots for texture units. We allow StructuredBuffer to
-// use the maximum of 60 slots, that is enough here.
+// There is a maximum of D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT(128) slots that are
+// available for shader resources on Direct3D 11. When shader version is 300, we only use
+// D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT(16) slots for texture units. We allow StructuredBuffer
+// to use the maximum of 60 slots, that is enough here.
 const unsigned int kMaxAllowToUseRegisterCount = 60u;
 
-// Traverser that collects all uniform blocks which will been translated to StructuredBuffer on
-// Direct3D backend.
-class UniformBlockTranslatedToStructuredBufferTraverser : public TIntermTraverser
+// Traverser that all uniform blocks which have one or more large array members, and the array
+// sizes are greater than or equal to 50.
+class UniformBlocksWithLargeArrayMemberTraverser : public TIntermTraverser
 {
   public:
-    UniformBlockTranslatedToStructuredBufferTraverser();
+    UniformBlocksWithLargeArrayMemberTraverser();
 
     void visitSymbol(TIntermSymbol *node) override;
     bool visitBinary(Visit visit, TIntermBinary *node) override;
@@ -51,16 +53,20 @@ class UniformBlockTranslatedToStructuredBufferTraverser : public TIntermTraverse
     {
         return mUniformBlockUsedRegisterCount;
     }
+    std::map<int, const TInterfaceBlock *> &getUniformBlockWithLargeArrayMember()
+    {
+        return mUniformBlockWithLargeArrayMember;
+    }
 
   private:
     void parseAccessWholeUniformBlock(TIntermTyped *node);
     std::map<int, const TInterfaceBlock *> mUniformBlockMayTranslation;
     std::map<int, const TInterfaceBlock *> mUniformBlockNotAllowTranslation;
     std::map<int, unsigned int> mUniformBlockUsedRegisterCount;
+    std::map<int, const TInterfaceBlock *> mUniformBlockWithLargeArrayMember;
 };
 
-UniformBlockTranslatedToStructuredBufferTraverser::
-    UniformBlockTranslatedToStructuredBufferTraverser()
+UniformBlocksWithLargeArrayMemberTraverser::UniformBlocksWithLargeArrayMemberTraverser()
     : TIntermTraverser(true, true, false)
 {}
 
@@ -112,7 +118,50 @@ static bool CanTranslateUniformBlockToStructuredBuffer(const TInterfaceBlock &in
     return false;
 }
 
-void UniformBlockTranslatedToStructuredBufferTraverser::visitSymbol(TIntermSymbol *node)
+static bool FieldIsOrHasLargeArrayField(const TField *field)
+{
+    const TType *type = field->type();
+    if (type->getArraySizeProduct() >= kMinArraySizeUseStructuredBuffer)
+    {
+        return true;
+    }
+
+    const TStructure *structure = type->getStruct();
+    if (structure)
+    {
+        const TFieldList &fields = structure->fields();
+        bool hasLargeArrayField  = false;
+        for (size_t i = 0; i < fields.size(); i++)
+        {
+            hasLargeArrayField = FieldIsOrHasLargeArrayField(fields[i]);
+            if (hasLargeArrayField)
+            {
+                break;
+            }
+        }
+        return hasLargeArrayField;
+    }
+
+    return false;
+}
+
+static bool IsInterfaceBlockWithLargeArrayField(const TInterfaceBlock &interfaceBlock)
+{
+    const TFieldList &fields = interfaceBlock.fields();
+    bool isLargeArrayField   = false;
+    for (size_t i = 0; i < fields.size(); i++)
+    {
+        isLargeArrayField = FieldIsOrHasLargeArrayField(fields[i]);
+        if (isLargeArrayField)
+        {
+            break;
+        }
+    }
+
+    return isLargeArrayField;
+}
+
+void UniformBlocksWithLargeArrayMemberTraverser::visitSymbol(TIntermSymbol *node)
 {
     const TVariable &variable = node->variable();
     const TType &variableType = variable.getType();
@@ -121,56 +170,70 @@ void UniformBlockTranslatedToStructuredBufferTraverser::visitSymbol(TIntermSymbo
     if (qualifier == EvqUniform)
     {
         const TInterfaceBlock *interfaceBlock = variableType.getInterfaceBlock();
-        if (interfaceBlock && CanTranslateUniformBlockToStructuredBuffer(*interfaceBlock))
+        if (interfaceBlock)
         {
-            if (mUniformBlockMayTranslation.count(interfaceBlock->uniqueId().get()) == 0)
+            if (CanTranslateUniformBlockToStructuredBuffer(*interfaceBlock))
             {
-                mUniformBlockMayTranslation[interfaceBlock->uniqueId().get()] = interfaceBlock;
-            }
-
-            if (!variableType.isInterfaceBlock())
-            {
-                TIntermNode *accessor           = getAncestorNode(0);
-                TIntermBinary *accessorAsBinary = accessor->getAsBinaryNode();
-                // The uniform block variable is array type, only indexing operator is allowed to
-                // operate on the variable, otherwise do not translate the uniform block to HLSL
-                // StructuredBuffer.
-                if (!accessorAsBinary ||
-                    !(accessorAsBinary && (accessorAsBinary->getOp() == EOpIndexDirect ||
-                                           accessorAsBinary->getOp() == EOpIndexIndirect)))
+                if (mUniformBlockMayTranslation.count(interfaceBlock->uniqueId().get()) == 0)
                 {
-                    if (mUniformBlockNotAllowTranslation.count(interfaceBlock->uniqueId().get()) ==
-                        0)
+                    mUniformBlockMayTranslation[interfaceBlock->uniqueId().get()] = interfaceBlock;
+                }
+
+                if (!variableType.isInterfaceBlock())
+                {
+                    TIntermNode *accessor           = getAncestorNode(0);
+                    TIntermBinary *accessorAsBinary = accessor->getAsBinaryNode();
+                    // The uniform block variable is array type, only indexing operator is allowed
+                    // to operate on the variable, otherwise do not translate the uniform block to
+                    // HLSL StructuredBuffer.
+                    if (!accessorAsBinary ||
+                        !(accessorAsBinary && (accessorAsBinary->getOp() == EOpIndexDirect ||
+                                               accessorAsBinary->getOp() == EOpIndexIndirect)))
                     {
-                        mUniformBlockNotAllowTranslation[interfaceBlock->uniqueId().get()] =
-                            interfaceBlock;
+                        if (mUniformBlockNotAllowTranslation.count(
+                                interfaceBlock->uniqueId().get()) == 0)
+                        {
+                            mUniformBlockNotAllowTranslation[interfaceBlock->uniqueId().get()] =
+                                interfaceBlock;
+                        }
+                    }
+                    else
+                    {
+                        if (mUniformBlockUsedRegisterCount.count(
+                                interfaceBlock->uniqueId().get()) == 0)
+                        {
+                            // The uniform block is not an instanced one, so it only uses one
+                            // register.
+                            mUniformBlockUsedRegisterCount[interfaceBlock->uniqueId().get()] = 1;
+                        }
                     }
                 }
                 else
                 {
                     if (mUniformBlockUsedRegisterCount.count(interfaceBlock->uniqueId().get()) == 0)
                     {
-                        // The uniform block is not an instanced one, so it only uses one register.
-                        mUniformBlockUsedRegisterCount[interfaceBlock->uniqueId().get()] = 1;
+                        // The uniform block is an instanced one, the count of used registers
+                        // depends on the array size of variable.
+                        mUniformBlockUsedRegisterCount[interfaceBlock->uniqueId().get()] =
+                            variableType.isArray() ? variableType.getOutermostArraySize() : 1;
                     }
                 }
             }
-            else
+
+            if (interfaceBlock->blockStorage() == EbsStd140 &&
+                IsInterfaceBlockWithLargeArrayField(*interfaceBlock))
             {
-                if (mUniformBlockUsedRegisterCount.count(interfaceBlock->uniqueId().get()) == 0)
+                if (mUniformBlockWithLargeArrayMember.count(interfaceBlock->uniqueId().get()) == 0)
                 {
-                    // The uniform block is an instanced one, the count of used registers depends on
-                    // the array size of variable.
-                    mUniformBlockUsedRegisterCount[interfaceBlock->uniqueId().get()] =
-                        variableType.isArray() ? variableType.getOutermostArraySize() : 1;
+                    mUniformBlockWithLargeArrayMember[interfaceBlock->uniqueId().get()] =
+                        interfaceBlock;
                 }
             }
         }
     }
 }
 
-bool UniformBlockTranslatedToStructuredBufferTraverser::visitBinary(Visit visit,
-                                                                    TIntermBinary *node)
+bool UniformBlocksWithLargeArrayMemberTraverser::visitBinary(Visit visit, TIntermBinary *node)
 {
     switch (node->getOp())
     {
@@ -197,6 +260,17 @@ bool UniformBlockTranslatedToStructuredBufferTraverser::visitBinary(Visit visit,
                         }
                         return false;
                     }
+
+                    if (interfaceBlock->blockStorage() == EbsStd140 &&
+                        IsInterfaceBlockWithLargeArrayField(*interfaceBlock))
+                    {
+                        if (mUniformBlockWithLargeArrayMember.count(
+                                interfaceBlock->uniqueId().get()) == 0)
+                        {
+                            mUniformBlockWithLargeArrayMember[interfaceBlock->uniqueId().get()] =
+                                interfaceBlock;
+                        }
+                    }
                 }
             }
             break;
@@ -212,9 +286,8 @@ bool UniformBlockTranslatedToStructuredBufferTraverser::visitBinary(Visit visit,
                     TIntermNode *accessor           = getAncestorNode(0);
                     TIntermBinary *accessorAsBinary = accessor->getAsBinaryNode();
                     // The uniform block variable is array type, only indexing operator is allowed
-                    // to operate on the
-                    // variable, otherwise do not translate the uniform block to HLSL
-                    // StructuredBuffer.
+                    // to operate on the variable, otherwise do not translate the uniform block to
+                    // HLSL StructuredBuffer.
                     if ((!accessorAsBinary ||
                          !(accessorAsBinary && (accessorAsBinary->getOp() == EOpIndexDirect ||
                                                 accessorAsBinary->getOp() == EOpIndexIndirect))) &&
@@ -224,6 +297,17 @@ bool UniformBlockTranslatedToStructuredBufferTraverser::visitBinary(Visit visit,
                         mUniformBlockNotAllowTranslation[interfaceBlock->uniqueId().get()] =
                             interfaceBlock;
                         return false;
+                    }
+                }
+
+                if (interfaceBlock->blockStorage() == EbsStd140 &&
+                    IsInterfaceBlockWithLargeArrayField(*interfaceBlock))
+                {
+                    if (mUniformBlockWithLargeArrayMember.count(interfaceBlock->uniqueId().get()) ==
+                        0)
+                    {
+                        mUniformBlockWithLargeArrayMember[interfaceBlock->uniqueId().get()] =
+                            interfaceBlock;
                     }
                 }
             }
@@ -237,11 +321,12 @@ bool UniformBlockTranslatedToStructuredBufferTraverser::visitBinary(Visit visit,
 }
 }  // namespace
 
-bool RecordUniformBlocksTranslatedToStructuredBuffers(
+bool RecordUniformBlocksWithLargeArrayMember(
     TIntermNode *root,
-    std::map<int, const TInterfaceBlock *> &uniformBlockTranslatedToStructuredBuffer)
+    std::map<int, const TInterfaceBlock *> &uniformBlockOptimizedMap,
+    std::set<std::string> &uniformBlockNotOptimizedNameSet)
 {
-    UniformBlockTranslatedToStructuredBufferTraverser traverser;
+    UniformBlocksWithLargeArrayMemberTraverser traverser;
     root->traverse(&traverser);
     std::map<int, const TInterfaceBlock *> &uniformBlockMayTranslation =
         traverser.getUniformBlockMayTranslation();
@@ -249,6 +334,8 @@ bool RecordUniformBlocksTranslatedToStructuredBuffers(
         traverser.getUniformBlockNotAllowTranslation();
     std::map<int, unsigned int> &uniformBlockUsedRegisterCount =
         traverser.getUniformBlockUsedRegisterCount();
+    std::map<int, const TInterfaceBlock *> &uniformBlockWithLargeArrayMember =
+        traverser.getUniformBlockWithLargeArrayMember();
 
     unsigned int usedRegisterCount = 0;
     for (auto &uniformBlock : uniformBlockMayTranslation)
@@ -260,9 +347,18 @@ bool RecordUniformBlocksTranslatedToStructuredBuffers(
             {
                 break;
             }
-            uniformBlockTranslatedToStructuredBuffer[uniformBlock.first] = uniformBlock.second;
+            uniformBlockOptimizedMap[uniformBlock.first] = uniformBlock.second;
         }
     }
+
+    for (auto &uniformBlock : uniformBlockWithLargeArrayMember)
+    {
+        if (uniformBlockOptimizedMap.count(uniformBlock.first) == 0)
+        {
+            uniformBlockNotOptimizedNameSet.insert(uniformBlock.second->name().data());
+        }
+    }
+
     return true;
 }
 

@@ -240,11 +240,23 @@ bool ShaderD3D::useImage2DFunction(const std::string &functionName) const
     return mUsedImage2DFunctionNames.find(functionName) != mUsedImage2DFunctionNames.end();
 }
 
+const std::set<std::string> &ShaderD3D::getUniformBlockNotOptimizedNameSet() const
+{
+    return mUniformBlockNotOptimizedNameSet;
+}
+
 const std::map<std::string, unsigned int> &GetUniformRegisterMap(
     const std::map<std::string, unsigned int> *uniformRegisterMap)
 {
     ASSERT(uniformRegisterMap);
     return *uniformRegisterMap;
+}
+
+const std::set<std::string> &GetUniformBlockNotOptimizedNameSet(
+    const std::set<std::string> *uniformBlockHasLargeArrayFieldNotOptimizedSet)
+{
+    ASSERT(uniformBlockHasLargeArrayFieldNotOptimizedSet);
+    return *uniformBlockHasLargeArrayFieldNotOptimizedSet;
 }
 
 const std::set<std::string> &GetUsedImage2DFunctionNames(
@@ -329,6 +341,9 @@ std::shared_ptr<WaitableCompileEvent> ShaderD3D::compile(const gl::Context *cont
                 mUniformBlockUseStructuredBufferMap[interfaceBlock.name] = useStructuredBuffer;
             }
         }
+
+        mUniformBlockNotOptimizedNameSet = GetUniformBlockNotOptimizedNameSet(
+            sh::GetUniformBlockNotOptimizedNameSet(compilerHandle));
 
         for (const sh::InterfaceBlock &interfaceBlock : mState.getShaderStorageBlocks())
         {
