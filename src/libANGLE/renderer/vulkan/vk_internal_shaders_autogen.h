@@ -163,6 +163,23 @@ enum SrcType
 constexpr size_t kArrayLen = 0x0000002B;
 }  // namespace ImageCopy_frag
 
+namespace ImageCopyBits_comp
+{
+enum ChannelWidth
+{
+    kIs8BitChannels  = 0x00000000,
+    kIs16BitChannels = 0x00000001,
+    kIs32BitChannels = 0x00000002,
+};
+enum SrcType
+{
+    kSrcIs2D      = 0x00000000,
+    kSrcIs2DArray = 0x00000004,
+    kSrcIs3D      = 0x00000008,
+};
+constexpr size_t kArrayLen = 0x0000000B;
+}  // namespace ImageCopyBits_comp
+
 namespace OverlayCull_comp
 {
 enum SubgroupSize
@@ -229,6 +246,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getImageCopy_frag(Context *context,
                                     uint32_t shaderFlags,
                                     RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getImageCopyBits_comp(Context *context,
+                                        uint32_t shaderFlags,
+                                        RefCounted<ShaderAndSerial> **shaderOut);
     angle::Result getOverlayCull_comp(Context *context,
                                       uint32_t shaderFlags,
                                       RefCounted<ShaderAndSerial> **shaderOut);
@@ -256,6 +276,8 @@ class ShaderLibrary final : angle::NonCopyable
     RefCounted<ShaderAndSerial>
         mImageClear_frag_shaders[InternalShader::ImageClear_frag::kArrayLen];
     RefCounted<ShaderAndSerial> mImageCopy_frag_shaders[InternalShader::ImageCopy_frag::kArrayLen];
+    RefCounted<ShaderAndSerial>
+        mImageCopyBits_comp_shaders[InternalShader::ImageCopyBits_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mOverlayCull_comp_shaders[InternalShader::OverlayCull_comp::kArrayLen];
     RefCounted<ShaderAndSerial>

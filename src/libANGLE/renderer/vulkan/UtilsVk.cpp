@@ -23,6 +23,7 @@ namespace rx
 namespace ConvertVertex_comp                = vk::InternalShader::ConvertVertex_comp;
 namespace ImageClear_frag                   = vk::InternalShader::ImageClear_frag;
 namespace ImageCopy_frag                    = vk::InternalShader::ImageCopy_frag;
+namespace ImageCopyBits_comp                = vk::InternalShader::ImageCopyBits_comp;
 namespace BlitResolve_frag                  = vk::InternalShader::BlitResolve_frag;
 namespace BlitResolveStencilNoExport_comp   = vk::InternalShader::BlitResolveStencilNoExport_comp;
 namespace OverlayCull_comp                  = vk::InternalShader::OverlayCull_comp;
@@ -32,25 +33,35 @@ namespace GenerateMipmap_comp               = vk::InternalShader::GenerateMipmap
 
 namespace
 {
-constexpr uint32_t kConvertIndexDestinationBinding           = 0;
-constexpr uint32_t kConvertVertexDestinationBinding          = 0;
-constexpr uint32_t kConvertVertexSourceBinding               = 1;
-constexpr uint32_t kImageCopySourceBinding                   = 0;
-constexpr uint32_t kBlitResolveColorOrDepthBinding           = 0;
-constexpr uint32_t kBlitResolveStencilBinding                = 1;
-constexpr uint32_t kBlitResolveSamplerBinding                = 2;
+constexpr uint32_t kConvertIndexDestinationBinding = 0;
+
+constexpr uint32_t kConvertVertexDestinationBinding = 0;
+constexpr uint32_t kConvertVertexSourceBinding      = 1;
+
+constexpr uint32_t kImageCopySourceBinding = 0;
+
+constexpr uint32_t kImageCopyBitsDestinationBinding = 0;
+constexpr uint32_t kImageCopyBitsSourceBinding      = 1;
+
+constexpr uint32_t kBlitResolveColorOrDepthBinding = 0;
+constexpr uint32_t kBlitResolveStencilBinding      = 1;
+constexpr uint32_t kBlitResolveSamplerBinding      = 2;
+
 constexpr uint32_t kBlitResolveStencilNoExportDestBinding    = 0;
 constexpr uint32_t kBlitResolveStencilNoExportSrcBinding     = 1;
 constexpr uint32_t kBlitResolveStencilNoExportSamplerBinding = 2;
-constexpr uint32_t kOverlayCullCulledWidgetsBinding          = 0;
-constexpr uint32_t kOverlayCullWidgetCoordsBinding           = 1;
-constexpr uint32_t kOverlayDrawOutputBinding                 = 0;
-constexpr uint32_t kOverlayDrawTextWidgetsBinding            = 1;
-constexpr uint32_t kOverlayDrawGraphWidgetsBinding           = 2;
-constexpr uint32_t kOverlayDrawCulledWidgetsBinding          = 3;
-constexpr uint32_t kOverlayDrawFontBinding                   = 4;
-constexpr uint32_t kGenerateMipmapDestinationBinding         = 0;
-constexpr uint32_t kGenerateMipmapSourceBinding              = 1;
+
+constexpr uint32_t kOverlayCullCulledWidgetsBinding = 0;
+constexpr uint32_t kOverlayCullWidgetCoordsBinding  = 1;
+
+constexpr uint32_t kOverlayDrawOutputBinding        = 0;
+constexpr uint32_t kOverlayDrawTextWidgetsBinding   = 1;
+constexpr uint32_t kOverlayDrawGraphWidgetsBinding  = 2;
+constexpr uint32_t kOverlayDrawCulledWidgetsBinding = 3;
+constexpr uint32_t kOverlayDrawFontBinding          = 4;
+
+constexpr uint32_t kGenerateMipmapDestinationBinding = 0;
+constexpr uint32_t kGenerateMipmapSourceBinding      = 1;
 
 constexpr uint32_t kFloatOneAsUint = 0x3F80'0000u;
 
@@ -589,6 +600,10 @@ void UtilsVk::destroy(RendererVk *renderer)
     {
         program.destroy(device);
     }
+    for (vk::ShaderProgramHelper &program : mImageCopyBitsPrograms)
+    {
+        program.destroy(device);
+    }
     for (vk::ShaderProgramHelper &program : mBlitResolvePrograms)
     {
         program.destroy(device);
@@ -810,6 +825,22 @@ angle::Result UtilsVk::ensureImageCopyResourcesInitialized(ContextVk *contextVk)
 
     return ensureResourcesInitialized(contextVk, Function::ImageCopy, setSizes, ArraySize(setSizes),
                                       sizeof(ImageCopyShaderParams));
+}
+
+angle::Result UtilsVk::ensureImageCopyBitsResourcesInitialized(ContextVk *contextVk)
+{
+    if (mPipelineLayouts[Function::ImageCopyBits].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[2] = {
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
+        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
+    };
+
+    return ensureResourcesInitialized(contextVk, Function::ImageCopyBits, setSizes,
+                                      ArraySize(setSizes), sizeof(ImageCopyBitsShaderParams));
 }
 
 angle::Result UtilsVk::ensureBlitResolveResourcesInitialized(ContextVk *contextVk)
@@ -1985,7 +2016,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     ASSERT(depthStencilRenderTarget != nullptr);
     vk::ImageHelper *depthStencilImage = &depthStencilRenderTarget->getImageForWrite();
 
-    // Change source layout prior to computation.
+    // Change layouts prior to computation.
     vk::CommandBufferAccess access;
     access.onImageComputeShaderRead(src->getAspectFlags(), src);
     access.onImageTransferWrite(depthStencilRenderTarget->getLevelIndex(), 1,
@@ -2049,10 +2080,8 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
     memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
 
-    // Use the all pipe stage to keep the state management simple.
-    commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                                   VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1, &memoryBarrier, 0, nullptr,
-                                   0, nullptr);
+    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                 VK_PIPELINE_STAGE_TRANSFER_BIT, &memoryBarrier);
 
     // Copy the resulting buffer into dest.
     VkBufferImageCopy region           = {};
@@ -2061,8 +2090,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     region.bufferImageHeight           = params.blitArea.height;
     region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
     region.imageSubresource.mipLevel =
-        depthStencilImage->toVkLevel(gl::LevelIndex(depthStencilRenderTarget->getLevelIndex()))
-            .get();
+        depthStencilImage->toVkLevel(depthStencilRenderTarget->getLevelIndex()).get();
     region.imageSubresource.baseArrayLayer = depthStencilRenderTarget->getLayerIndex();
     region.imageSubresource.layerCount     = 1;
     region.imageOffset.x                   = params.blitArea.x;
@@ -2261,6 +2289,195 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
+                                     vk::ImageHelper *dest,
+                                     vk::ImageHelper *src,
+                                     const vk::ImageView *srcView,
+                                     const CopyImageBitsParameters &params)
+{
+    ANGLE_TRY(ensureImageCopyBitsResourcesInitialized(contextVk));
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ImageCopyBits, &descriptorPoolBinding,
+                                    &descriptorSet));
+
+    // This path should only be necessary for when RGBA is used as fallback for RGB.  No other
+    // format which can be used with EXT_copy_image has a fallback.
+    const vk::Format &srcFormat = src->getFormat();
+    const vk::Format &dstFormat = dest->getFormat();
+
+    ASSERT(srcFormat.intendedFormat().blueBits > 0 && srcFormat.intendedFormat().alphaBits == 0);
+    ASSERT(dstFormat.intendedFormat().blueBits > 0 && dstFormat.intendedFormat().alphaBits == 0);
+
+    const angle::Format &srcImageFormat = srcFormat.actualImageFormat();
+    const angle::Format &dstImageFormat = dstFormat.actualImageFormat();
+    const bool isSrcRGBA                = srcImageFormat.alphaBits > 0;
+    const bool isDstRGBA                = dstImageFormat.alphaBits > 0;
+
+    // Create a temporary buffer to copy into.
+    vk::RendererScoped<vk::BufferHelper> stagingBuffer(contextVk->getRenderer());
+
+    const uint32_t dstChannelCount = isDstRGBA ? 4 : 3;
+    const uint32_t dstPixelBytes   = dstImageFormat.pixelBytes;
+
+    uint32_t bufferRowPitch   = roundUpPow2(dstPixelBytes * params.copyExtents[0], 4);
+    uint32_t bufferDepthPitch = bufferRowPitch * params.copyExtents[1];
+    VkDeviceSize bufferSize   = bufferDepthPitch * params.copyExtents[2];
+
+    VkBufferCreateInfo stagingBufferInfo = {};
+    stagingBufferInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    stagingBufferInfo.flags              = 0;
+    stagingBufferInfo.size               = bufferSize;
+    stagingBufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+    stagingBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    stagingBufferInfo.queueFamilyIndexCount = 0;
+    stagingBufferInfo.pQueueFamilyIndices   = nullptr;
+
+    ANGLE_TRY(stagingBuffer.get().init(contextVk, stagingBufferInfo,
+                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    stagingBuffer.get().retain(&contextVk->getResourceUseList());
+
+    ImageCopyBitsShaderParams shaderParams;
+    shaderParams.extents[0]         = params.copyExtents[0];
+    shaderParams.extents[1]         = params.copyExtents[1];
+    shaderParams.extents[2]         = params.copyExtents[2];
+    shaderParams.emulatedAlphaValue = GetEmulatedAlphaValue(dstImageFormat);
+    shaderParams.srcOffset[0]       = params.srcOffset[0];
+    shaderParams.srcOffset[1]       = params.srcOffset[1];
+    shaderParams.srcOffset[2]       = params.srcOffset[2];
+    shaderParams.srcMip             = params.srcMip;
+    shaderParams.destChannelCount   = destChannelCount;
+    shaderParams.destRowPitch       = bufferRowPitch;
+    shaderParams.destDepthPitch     = bufferDepthPitch;
+
+    // TODO: move to helper, but may be able to remove the variations.
+    uint32_t flags = srcImageFormat.redBits == 8
+                         ? ImageCopyBits_comp::kIs8BitChannels
+                         : srcImageFormat.redBits == 16 ? ImageCopyBits_comp::kIs16BitChannels
+                                                        : ImageCopyBits_comp::kIs32BitChannels;
+    if (src->getType() == VK_IMAGE_TYPE_3D)
+    {
+        flags |= ImageCopyBits_comp::kSrcIs3D;
+    }
+    else if (src->getLayerCount() > 1)
+    {
+        flags |= ImageCopyBits_comp::kSrcIs2DArray;
+    }
+    else
+    {
+        flags |= ImageCopyBits_comp::kSrcIs2D;
+    }
+
+    // Change layouts prior to computation.
+    vk::CommandBufferAccess access;
+    access.onImageComputeShaderRead(src->getAspectFlags(), src);
+    access.onImageTransferWrite(params.dstLevel, 1, params.dstOffset[2],
+                                params.copyExtents[2],  // TODO: check layer count for 3D
+                                VK_IMAGE_ASPECT_COLOR_BIT, dest);
+
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    // Create a view over source that reinterprets its data as UINT.
+    vk::DeviceScoped<vk::ImageView> srcView(contextVk->getDevice());
+
+    // TODO: if src is RGB, the UINT variant may not have SAMPLED bit.  For example if native driver
+    // supports RGB16_SFLOAT, but not RGB16_UINT.  Then the reinterpretation won't work.
+    ANGLE_TRY(src->initReinterpretedLayerImageView(
+        contextVk, src->getType(), VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(), &srcView.get(),
+        src->toVkLevel(params.srcMip), 1, params.srcOffset[2], params.copyExtents[2],
+        VK_IMAGE_USAGE_SAMPLED_BIT,
+        srcImageFormat.alphaBits > 0
+            ? srcImageFormat.redBits == 8
+                  ? VK_FORMAT_R8G8B8A8_UINT
+                  : srcImageFormat.redBits == 16 ? VK_FORMAT_R16G16B16A16_UINT
+                                                 : VK_FORMAT_R32G32B32A32_UINT
+            : srcImageFormat.redBits == 8 ? VK_FORMAT_R8G8B8_UINT
+                                          : srcImageFormat.redBits == 16 ? VK_FORMAT_R16G16B16_UINT
+                                                                         : VK_FORMAT_R32G32B32_UINT;
+
+        VK_FORMAT_R8G8B8_UINT));  // TODO: check layer count for 3D
+
+    // Copy into the staging buffer.
+    VkDescriptorImageInfo imageInfo = {};
+    imageInfo.imageView             = srcView.get().getHandle();
+    imageInfo.imageLayout           = src->getCurrentLayout();
+
+    VkDescriptorBufferInfo bufferInfo = {};
+    bufferInfo.buffer                 = stagingBuffer.get().getBuffer().getHandle();
+    bufferInfo.offset                 = 0;
+    bufferInfo.range                  = VK_WHOLE_SIZE;
+
+    VkWriteDescriptorSet writeInfos[2] = {};
+    writeInfos[0].sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfos[0].dstSet               = descriptorSet;
+    writeInfos[0].dstBinding           = kImageCopyBitsDestinationBinding;
+    writeInfos[0].descriptorCount      = 1;
+    writeInfos[0].descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    writeInfos[0].pBufferInfo          = &bufferInfo;
+
+    writeInfos[1].sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfos[1].dstSet          = descriptorSet;
+    writeInfos[1].dstBinding      = kImageCopyBitsSourceBinding;
+    writeInfos[1].descriptorCount = 1;
+    writeInfos[1].descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+    writeInfos[1].pImageInfo      = &imageInfo;
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 2, writeInfos, 0, nullptr);
+
+    vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
+    ANGLE_TRY(contextVk->getShaderLibrary().getImageCopyBits_comp(contextVk, flags, &shader));
+
+    ANGLE_TRY(setupProgram(contextVk, Function::ImageCopyBits, shader, nullptr,
+                           &mImageCopyBitsPrograms[flags], nullptr, descriptorSet, &shaderParams,
+                           sizeof(shaderParams), commandBuffer));
+    if (src->getType() == VK_IMAGE_TYPE_3D)
+    {
+        commandBuffer->dispatch(UnsignedCeilDivide(params.copyExtents[0], 4),
+                                UnsignedCeilDivide(params.copyExtents[1], 4),
+                                UnsignedCeilDivide(params.copyExtents[2], 4));
+    }
+    else
+    {
+        commandBuffer->dispatch(UnsignedCeilDivide(params.copyExtents[0], 8),
+                                UnsignedCeilDivide(params.copyExtents[1], 8), 1);
+    }
+    descriptorPoolBinding.reset();
+
+    // Add a barrier prior to copy.
+    VkMemoryBarrier memoryBarrier = {};
+    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
+    memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
+
+    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                 VK_PIPELINE_STAGE_TRANSFER_BIT, &memoryBarrier);
+
+    // Copy the resulting buffer into dest.
+    VkBufferImageCopy region               = {};
+    region.bufferOffset                    = 0;
+    region.bufferRowLength                 = bufferRowPitch;
+    region.bufferImageHeight               = params.copyExtents[1];
+    region.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.imageSubresource.mipLevel       = dest->toVkLevel(params.dstMip).get();
+    region.imageSubresource.baseArrayLayer = params.dstOffset[2];
+    region.imageSubresource.layerCount     = params.copyExtents[2];
+    region.imageOffset.x                   = params.dstOffset[0];
+    region.imageOffset.y                   = params.dstOffset[1];
+    region.imageOffset.z                   = params.dstOffset[2];
+    region.imageExtent.width               = params.copyExtents[0];
+    region.imageExtent.height              = params.copyExtents[1];
+    region.imageExtent.depth               = params.copyExtents[2];
+
+    // TODO: if 3d or 2d layer, adjust layer, z, depth stuff
+
+    commandBuffer->copyBufferToImage(stagingBuffer.get().getBuffer().getHandle(), dest->getImage(),
+                                     dest->getCurrentLayout(), 1, &region);
+
+    return angle::Result::Continue;
+}
+
 angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
                                       vk::ImageHelper *src,
                                       const vk::ImageView *srcLevelZeroView,
@@ -2384,8 +2601,8 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         ASSERT(depthStencilSrc->getSamples() == 1);
         gl::TextureType textureType = vk::Get2DTextureType(depthStencilSrc->getLayerCount(), 1);
 
-        const vk::LevelIndex levelIndex = gl_vk::GetLevelIndex(
-            depthStencilRenderTarget->getLevelIndex(), depthStencilSrc->getBaseLevel());
+        const vk::LevelIndex levelIndex =
+            depthStencilSrc->toVkLevel(depthStencilRenderTarget->getLevelIndex());
         const uint32_t layerIndex = depthStencilRenderTarget->getLayerIndex();
 
         if (params.unresolveDepth)

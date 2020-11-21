@@ -1,0 +1,19 @@
+{
+    "Description": [
+        "Copyright 2020 The ANGLE Project Authors. All rights reserved.",
+        "Use of this source code is governed by a BSD-style license that can be",
+        "found in the LICENSE file.",
+        "",
+        "ImageCopyBits.comp.json: Build parameters for ImageCopyBits.comp."
+    ],
+    "SrcType": [
+        "SrcIs2D",
+        "SrcIs2DArray",
+        "SrcIs3D"
+    ],
+    "ChannelWidth": [
+        "Is8BitChannels",
+        "Is16BitChannels",
+        "Is32BitChannels"
+    ]
+}
