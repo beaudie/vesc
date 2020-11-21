@@ -1,0 +1,336 @@
+//
+// Copyright 2020 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// ImageCopyBits.comp: Copy bit representation of an image to another.  Used to support
+// EXT_copy_image when a format is emulated.  Currently, only RGB->RGBA emulation is possible, and
+// so this shader is tailored to this specific kind of emulation.
+//
+// If the destination is RGB, chances are the format doesn't support storage images so we have to
+// output to a temporary buffer which then gets copied over the image.
+//
+// If the destination is RGBA, the format always supports storage images so we can directly output
+// to the destination image.  However, that would increase the number of variations of this shader 6
+// fold (x3 for 2D/2DArray/3D selection, x2 for buffer vs image output selection), so this shader
+// outputs to a temp buffer in all cases.
+//
+// This shader assumes a little endian architecture.
+
+#version 450 core
+
+#extension GL_EXT_samplerless_texture_functions : require
+
+#if SrcIs2D || SrcIs2DArray
+#define WORKGROUP_WIDTH 8
+#define WORKGROUP_HEIGHT 8
+#define WORKGROUP_DEPTH 1
+#elif SrcIs3D
+#define WORKGROUP_WIDTH 4
+#define WORKGROUP_HEIGHT 4
+#define WORKGROUP_DEPTH 4
+#else
+#error "Not all source types are accounted for"
+#endif
+
+#if SrcIs2D
+#define SRC_RESOURCE utexture2D
+#elif SrcIs2DArray
+#define SRC_RESOURCE utexture2DArray
+#elif SrcIs3D
+#define SRC_RESOURCE utexture3D
+#else
+#error "Not all source types are accounted for"
+#endif
+
+#if Is8BitChannels
+#define SRC_FORMAT rgba8ui
+#elif Is16BitChannels
+#define SRC_FORMAT rgba16ui
+#elif Is32BitChannels
+#define SRC_FORMAT rgba32ui
+#else
+#error "Not all channel widths are accounted for"
+#endif
+
+layout (local_size_x = WORKGROUP_WIDTH, local_size_y = WORKGROUP_HEIGHT, local_size_z = WORKGROUP_DEPTH) in;
+
+layout(set = 0, binding = 0) buffer dest
+{
+    uint destData[];
+};
+// TODO: remove SRC_FORMAT, and make pixelBytes a push constant, removing variations
+layout(set = 0, binding = 1, SRC_FORMAT) uniform SRC_RESOURCE src;
+
+layout (push_constant) uniform PushConstants
+{
+    // Copy dimensions
+    vec3 extents;
+    // Bit representation of 1 in destination format.  Only used if destination has emulated alpha.
+    // Note that the only uses of this shader is RGB[A]->RGBA copy (where this is used) and
+    // RGBA->RGB copy.
+    uint emulatedAlphaValue;
+
+    // Offset in src to read from.
+    ivec3 srcOffset;
+    // Mip in src to read from. TODO: used in the view, so no need here
+    uint srcMip;
+
+    // Number of channels in destination buffer.
+    uint destChannelCount;
+    // Row and depth pitch of the destination buffer in uints.
+    uint destRowPitch;
+    uint destDepthPitch;
+
+    // Not used in the shader. Kept to pad "PushConstants" to a multiple of a vec4.
+    uint _padding;
+} params;
+
+uint getDestOffset(uint pixelBytes)
+{
+    uvec3 srcCoord = gl_GlobalInvocationID;
+
+#if SrcIs2D
+    uint depthOffset = 0;
+#elif SrcIs2DArray || SrcIs3D
+    uint depthOffset = srcCoord.z * params.destDepthPitch;
+#else
+#error "Not all source types are accounted for"
+#endif
+
+    uint rowOffset = srcCoord.y * params.destRowPitch;
+
+    // See comment on copyRGBAToRGB for the reason ceiling is taken.
+    uint colOffset = (srcCoord.x * pixelBytes + 3) / 4;
+
+    return depthOffset + rowOffset + colOffset;
+}
+
+uvec3 fetchSrc(ivec3 srcCoord)
+{
+    srcCoord += params.srcOffset;
+
+#if SrcIs2D
+    return texelFetch(src, srcCoord.xy, params.srcMip).rgb;
+#elif SrcIs2DArray || SrcIs3D
+    return texelFetch(src, srcCoord, params.srcMip).rgb;
+#else
+#error "Not all source types are accounted for"
+#endif
+}
+
+// Note: here's where little-endian is assumed.
+#if Is8BitChannels
+uint makeUint(uvec4 v)
+{
+    return v.a * 0x1000000u + v.b * 0x10000u + v.g * 0x100u + v.r;
+}
+#elif Is16BitChannels
+uint makeUint(uvec2 v)
+{
+    return v.g * 0x10000u + v.r;
+}
+#endif
+
+// Assume the following:
+//
+//     d = getDestOffset(pixelBytes)  // 4, 8 or 16
+//     c = gl_GlobalInvocationID
+//     v = fetchSrc(c)
+//
+// - If dest is RGBA8:
+//
+//     destData[d] = A << 24 | v.b << 16 | v.g << 8 | v.r
+//
+// - If dest is RGBA16:
+//
+//     destData[d    ] = v.g << 16 | v.r
+//     destData[d + 1] =   A << 16 | v.b
+//
+// - If dest is RGBA32:
+//
+//     destData[d    ] = v.r
+//     destData[d + 1] = v.g
+//     destData[d + 2] = v.b
+//     destData[d + 3] = A
+//
+void copyRGBToRGBA()
+{
+    ivec3 srcCoord = ivec3(gl_GlobalInvocationID);
+
+#if Is8BitChannels
+    uint pixelBytes = 4;
+#elif Is16BitChannels
+    uint pixelBytes = 8;
+#elif Is32BitChannels
+    uint pixelBytes = 16;
+#else
+#error "Not all channel widths are accounted for"
+#endif
+
+    uint destOffset = getDestOffset(pixelBytes);
+
+    uvec4 v = uvec4(fetchSrc(srcCoord), params.emulatedAlphaValue);
+
+#if Is8BitChannels
+    destData[destOffset] = makeUint(v);
+#elif Is16BitChannels
+    destData[destOffset] = makeUint(v.rg);
+    destData[destOffset + 1] = makeUint(v.ba);
+#elif Is32BitChannels
+    destData[destOffset] = v.r;
+    destData[destOffset + 1] = v.g;
+    destData[destOffset + 2] = v.b;
+    destData[destOffset + 3] = v.a;
+#else
+#error "Not all channel widths are accounted for"
+#endif
+}
+
+// Assume the following:
+//
+//     d = getDestOffset(pixelBytes)   // 3, 6 or 12
+//     c0 = gl_GlobalInvocationID
+//     c1 = ivec3(c0.x + 1, x0.yz)
+//     v0 = fetchSrc(c0)
+//     v1 = fetchSrc(c1)
+//
+// If data from two pixels are packed in such a way that each partially occupy the same destData[d],
+// then the second pixel is necessarily the next column in the same row and depth as the first one.
+// This is because the buffer row and depth pitch ensure that padding is used otherwise.
+//
+// (Note little-endian notation in the diagrams)
+//
+// - If dest is RGB8:
+//
+//             0           1           2           3           4           5           6
+//       +-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+//       | R| G| B| R| G| B| R| G| B| R| G| B| R| G| B| R| G| B| R| G| B| R| G| B| R| G| B| R| ...
+//       +-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+//        \___ ___/\___ ___/\___ ___/\___ ___/\___ ___/\___ ___/\___ ___/\___ ___/\___ ___/ ...
+//            V        V        V        V        V        V        V        V        V
+//    c0.x =  0        1        2        3        4        5        6        7        8
+//       d =  0        1        2     3 (noop)    3        4        5     6 (noop)    6
+//
+//     Note that when c0.x % 4 == 3, d is the same as next invocation, so those invocations are
+//     nooped.  Taking c1 into account, invocation with c0.x == 0 reads both pixels 0 and 1,
+//     invocation with c0.x == 1 reads both pixels 1 and 2 and invocation with c0.x == 2 reads both
+//     pixels 2 and 3. Invocation with c0.x == 3 doesn't need to read or output anything and is
+//     wasted.  This waste is still worth it as the shader's fetch pattern matches the image tiling,
+//     and the coordinate transformations are simpler, i.e. there's both fewer ALU operations and
+//     better cache usage.
+//
+//     c0.x % 4 == 0: destData[d] = v1.r << 24 | v0.b << 16 | v0.g << 8 | v0.r
+//     c0.x % 4 == 1: destData[d] = v1.g << 24 | v1.r << 16 | v0.b << 8 | v0.g
+//     c0.x % 4 == 2: destData[d] = v1.b << 24 | v1.g << 16 | v1.r << 8 | v0.b
+//     c0.x % 4 == 3: noop
+//
+// - If dest is RGB16:
+//
+//             0           1           2           3           4           5           6
+//       +-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+//       |  R  |  G  |  B  |  R  |  G  |  B  |  R  |  G  |  B  |  R  |  G  |  B  |  R  |  G  | ...
+//       +-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+//        \_______ _______/ \_______ _______/ \_______ _______/ \_______ _______/ ...
+//                V                 V                 V                 V
+//    c0.x =      0                 1                 2                 3
+//       d =      0                 2                 3                 5
+//
+//     c0.x % 2 == 0: destData[d    ] = v0.g << 16 | v0.r
+//                    destData[d + 1] = v1.r << 16 | v0.b
+//     c0.x % 2 == 1: destData[d    ] = v0.b << 16 | v0.g
+//
+// - If dest is RGB32:
+//
+//             0           1           2           3           4           5           6
+//       +-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+//       |     R     |     G     |     B     |     R     |     G     |     B     |     R     | ...
+//       +-----------+-----------+-----------+-----------+-----------+-----------+-----------+
+//        \________________ ________________/ \________________ ________________/ ...
+//                         V                                   V
+//    c0.x =               0                                   1
+//       d =               0                                   3
+//
+//     destData[d    ] = v.r
+//     destData[d + 1] = v.g
+//     destData[d + 2] = v.b
+//
+void copyRGBAToRGB()
+{
+    ivec3 srcCoord0 = ivec3(gl_GlobalInvocationID);
+    ivec3 srcCoord1 = ivec3(srcCoord0.x + 1, srcCoord0.yz);
+
+#if Is8BitChannels
+    uint remainder = gl_GlobalInvocationID.x % 4;
+    uint pixelBytes = 3;
+
+    // Skip every 4 pixels, it's filled by the other invocations.
+    if (remainder == 3)
+    {
+        return;
+    }
+#elif Is16BitChannels
+    uint remainder = gl_GlobalInvocationID.x % 2;
+    uint pixelBytes = 6;
+#elif Is32BitChannels
+    uint pixelBytes = 12;
+#else
+#error "Not all channel widths are accounted for"
+#endif
+
+    uint destOffset = getDestOffset(pixelBytes);
+
+    uvec3 v0 = fetchSrc(srcCoord0);
+
+#if Is8BitChannels
+    uvec3 v1 = fetchSrc(srcCoord1);
+
+    if (remainder == 0)
+    {
+        destData[destOffset] = makeUint(uvec4(v0.rgb, v1.r));
+    }
+    else if (remainder == 1)
+    {
+        destData[destOffset] = makeUint(uvec4(v0.gb, v1.rg));
+    }
+    else
+    {
+        destData[destOffset] = makeUint(uvec4(v0.b, v1.rgb));
+    }
+#elif Is16BitChannels
+    if (remainder == 0)
+    {
+        uvec3 v1 = fetchSrc(srcCoord1);
+
+        destData[destOffset] = makeUint(v0.rg);
+        destData[destOffset + 1] = makeUint(uvec2(v0.b, v1.r));
+    }
+    else
+    {
+        destData[destOffset] = makeUint(v0.gb);
+    }
+#elif Is32BitChannels
+    destData[destOffset] = v0.r;
+    destData[destOffset + 1] = v0.g;
+    destData[destOffset + 2] = v0.b;
+#else
+#error "Not all channel widths are accounted for"
+#endif
+}
+
+void main()
+{
+    if (any(greaterThanEqual(gl_GlobalInvocationID, params.extents)))
+    {
+        return;
+    }
+
+    if (params.destChannelCount == 4)
+    {
+        copyRGBToRGBA();
+    }
+    else
+    {
+        copyRGBAToRGB();
+    }
+}

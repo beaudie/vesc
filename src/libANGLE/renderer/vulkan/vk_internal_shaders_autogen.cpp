@@ -150,6 +150,15 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000028.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000029.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.0000002A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000002.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000004.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000005.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000006.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000008.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.00000009.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ImageCopyBits.comp.0000000A.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000002.inc"
@@ -336,6 +345,19 @@ constexpr CompressedShaderBlob kImageCopy_frag_shaders[] = {
     {kImageCopy_frag_00000029, sizeof(kImageCopy_frag_00000029)},
     {kImageCopy_frag_0000002A, sizeof(kImageCopy_frag_0000002A)},
 };
+constexpr CompressedShaderBlob kImageCopyBits_comp_shaders[] = {
+    {kImageCopyBits_comp_00000000, sizeof(kImageCopyBits_comp_00000000)},
+    {kImageCopyBits_comp_00000001, sizeof(kImageCopyBits_comp_00000001)},
+    {kImageCopyBits_comp_00000002, sizeof(kImageCopyBits_comp_00000002)},
+    {nullptr, 0},  // 0x00000003
+    {kImageCopyBits_comp_00000004, sizeof(kImageCopyBits_comp_00000004)},
+    {kImageCopyBits_comp_00000005, sizeof(kImageCopyBits_comp_00000005)},
+    {kImageCopyBits_comp_00000006, sizeof(kImageCopyBits_comp_00000006)},
+    {nullptr, 0},  // 0x00000007
+    {kImageCopyBits_comp_00000008, sizeof(kImageCopyBits_comp_00000008)},
+    {kImageCopyBits_comp_00000009, sizeof(kImageCopyBits_comp_00000009)},
+    {kImageCopyBits_comp_0000000A, sizeof(kImageCopyBits_comp_0000000A)},
+};
 constexpr CompressedShaderBlob kOverlayCull_comp_shaders[] = {
     {kOverlayCull_comp_00000000, sizeof(kOverlayCull_comp_00000000)},
     {kOverlayCull_comp_00000001, sizeof(kOverlayCull_comp_00000001)},
@@ -434,6 +456,10 @@ void ShaderLibrary::destroy(VkDevice device)
     {
         shader.get().destroy(device);
     }
+    for (RefCounted<ShaderAndSerial> &shader : mImageCopyBits_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
     for (RefCounted<ShaderAndSerial> &shader : mOverlayCull_comp_shaders)
     {
         shader.get().destroy(device);
@@ -528,6 +554,14 @@ angle::Result ShaderLibrary::getImageCopy_frag(Context *context,
 {
     return GetShader(context, mImageCopy_frag_shaders, kImageCopy_frag_shaders,
                      ArraySize(kImageCopy_frag_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getImageCopyBits_comp(Context *context,
+                                                   uint32_t shaderFlags,
+                                                   RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mImageCopyBits_comp_shaders, kImageCopyBits_comp_shaders,
+                     ArraySize(kImageCopyBits_comp_shaders), shaderFlags, shaderOut);
 }
 
 angle::Result ShaderLibrary::getOverlayCull_comp(Context *context,

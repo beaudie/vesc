@@ -14,6 +14,8 @@
 //        unsupported formats to their fallbacks.
 //    - Image clear: Used by FramebufferVk::clearWithDraw().
 //    - Image copy: Used by TextureVk::copySubImageImplWithDraw().
+//    - Image copy bits: Used by ImageHelper::CopyImageSubData() to perform bitwise copies between
+//      RGB formats where at least one of src and dest use RGBA as fallback.
 //    - Color blit/resolve: Used by FramebufferVk::blit() to implement blit or multisample resolve
 //      on color images.
 //    - Depth/Stencil blit/resolve: Used by FramebufferVk::blit() to implement blit or multisample
@@ -141,6 +143,15 @@ class UtilsVk : angle::NonCopyable
         SurfaceRotation srcRotation;
     };
 
+    struct CopyImageBitsParameters
+    {
+        int srcOffset[3];
+        gl::LevelIndex srcMip;
+        int dstOffset[3];
+        gl::LevelIndex dstMip;
+        uint32_t copyExtents[3];
+    };
+
     struct OverlayCullParameters
     {
         uint32_t subgroupSize[2];
@@ -235,6 +246,12 @@ class UtilsVk : angle::NonCopyable
                             vk::ImageHelper *src,
                             const vk::ImageView *srcView,
                             const CopyImageParameters &params);
+
+    angle::Result copyImageBits(ContextVk *contextVk,
+                                vk::ImageHelper *dest,
+                                vk::ImageHelper *src,
+                                const vk::ImageView *srcView,
+                                const CopyImageBitsParameters &params);
 
     using GenerateMipmapDestLevelViews =
         std::array<const vk::ImageView *, kGenerateMipmapMaxLevels>;
@@ -355,6 +372,19 @@ class UtilsVk : angle::NonCopyable
         uint32_t rotateXY                = 0;
     };
 
+    struct ImageCopyBitsShaderParams
+    {
+        // Structure matching PushConstants in ImageCopyBits.comp
+        int32_t extents[3]          = {};
+        uint32_t emulatedAlphaValue = 0;
+        int32_t srcOffset[3]        = {};
+        int32_t srcMip              = {};
+        uint32_t destChannelCount   = 0;
+        uint32_t destRowPitch       = 0;
+        uint32_t destDepthPitch     = 0;
+        uint32_t _padding           = 0;
+    };
+
     union BlitResolveOffset
     {
         int32_t resolve[2];
@@ -437,9 +467,10 @@ class UtilsVk : angle::NonCopyable
         ConvertIndexIndirectLineLoopBuffer = 19,
         ConvertIndirectLineLoopBuffer      = 20,
         GenerateMipmap                     = 21,
+        ImageCopyBits                      = 22,
 
-        InvalidEnum = 22,
-        EnumCount   = 22,
+        InvalidEnum = 23,
+        EnumCount   = 23,
     };
 
     // Common function that creates the pipeline for the specified function, binds it and prepares
@@ -478,6 +509,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureConvertVertexResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureImageClearResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureImageCopyResourcesInitialized(ContextVk *contextVk);
+    angle::Result ensureImageCopyBitsResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureBlitResolveResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureBlitResolveStencilNoExportResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureOverlayCullResourcesInitialized(ContextVk *contextVk);
@@ -527,6 +559,8 @@ class UtilsVk : angle::NonCopyable
     vk::ShaderProgramHelper mImageClearProgramVSOnly;
     vk::ShaderProgramHelper mImageClearProgram[vk::InternalShader::ImageClear_frag::kArrayLen];
     vk::ShaderProgramHelper mImageCopyPrograms[vk::InternalShader::ImageCopy_frag::kArrayLen];
+    vk::ShaderProgramHelper
+        mImageCopyBitsPrograms[vk::InternalShader::ImageCopyBits_comp::kArrayLen];
     vk::ShaderProgramHelper mBlitResolvePrograms[vk::InternalShader::BlitResolve_frag::kArrayLen];
     vk::ShaderProgramHelper mBlitResolveStencilNoExportPrograms
         [vk::InternalShader::BlitResolveStencilNoExport_comp::kArrayLen];
