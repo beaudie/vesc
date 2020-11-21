@@ -103,6 +103,9 @@ struct Format final : private angle::NonCopyable
     // Returns true if the Image format has more channels than the ANGLE format.
     bool hasEmulatedImageChannels() const;
 
+    // Returns true if the image has a different image format than intended.
+    bool hasEmulatedImageFormat() const { return actualImageFormatID != intendedFormatID; }
+
     // This is an auto-generated method in vk_format_table_autogen.cpp.
     void initialize(RendererVk *renderer, const angle::Format &angleFormat);
 
