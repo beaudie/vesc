@@ -3,12 +3,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// FlipRotationSpecConst.h: Add code to generate AST node for flip and rotation matrices and
-// vectors.
+// SpecializationConst.h: Add code to generate AST node for specialization constant.
 //
 
-#ifndef COMPILER_TRANSLATOR_TREEUTIL_FLIPROTATESPECCONST_H_
-#define COMPILER_TRANSLATOR_TREEUTIL_FLIPROTATESPECCONST_H_
+#ifndef COMPILER_TRANSLATOR_TREEUTIL_SPECIALIZATIONCONST_H_
+#define COMPILER_TRANSLATOR_TREEUTIL_SPECIALIZATIONCONST_H_
 
 #include "common/angleutils.h"
 #include "compiler/translator/Compiler.h"
@@ -21,12 +20,17 @@ class TVariable;
 namespace sh
 {
 
-class FlipRotateSpecConst
+class SpecConst
 {
   public:
-    FlipRotateSpecConst();
-    ~FlipRotateSpecConst();
+    SpecConst();
+    virtual ~SpecConst();
 
+    // Line rasterizaton emulation
+    TIntermSymbol *getLineRasterEmulation();
+
+    // Flip/rotation
+    TIntermSymbol *getFlipRotation();
     TIntermTyped *getMultiplierXForDFdx();
     TIntermTyped *getMultiplierYForDFdx();
     TIntermTyped *getMultiplierXForDFdy();
@@ -38,22 +42,24 @@ class FlipRotateSpecConst
     TIntermTyped *getFlipY();
     TIntermTyped *getNegFlipY();
     TIntermTyped *getFragRotationMultiplyFlipXY();
-    TIntermBinary *getHalfRenderArea();
-    TIntermTyped *getHalfRenderAreaRotationMatrix();
 
-    void generateSymbol(TSymbolTable *symbolTable);
+    // Half render area
+    TIntermBinary *getHalfRenderArea();
+
+    virtual void initWithSymbolTable(TSymbolTable *symbolTable);
     void outputLayoutString(TInfoSinkBase &sink) const;
     SpecConstUsageBits getSpecConstUsageBits() const { return mUsageBits; }
 
   private:
     TIntermSymbol *getDrawableWidth();
     TIntermSymbol *getDrawableHeight();
+    TIntermTyped *getHalfRenderAreaRotationMatrix();
 
+    // If unsupported, this should be set to null.
     TSymbolTable *mSymbolTable;
-    TIntermSymbol *mSpecConstSymbol;
     // Bit is set if YFlip or Rotation has been used
     SpecConstUsageBits mUsageBits;
 };
 }  // namespace sh
 
-#endif  // COMPILER_TRANSLATOR_TREEUTIL_FLIPROTATESPECCONST_H_
+#endif  // COMPILER_TRANSLATOR_TREEUTIL_SPECIALIZATIONCONST_H_
