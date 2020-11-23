@@ -76,18 +76,53 @@ LabeledObject *GetLabeledObjectIfValid(Thread *thread,
                                        ObjectType objectType,
                                        EGLObjectKHR object);
 
+// A template struct for determining the default value to return for each entry point.
+template <angle::EntryPoint EP, typename ReturnType>
+struct DefaultReturnValue
+{
+    static constexpr ReturnType kValue = static_cast<ReturnType>(0);
+};
+
+template <angle::EntryPoint EP, typename ReturnType>
+constexpr ANGLE_INLINE ReturnType GetDefaultReturnValue()
+{
+    return DefaultReturnValue<EP, ReturnType>::kValue;
+}
+
+// Second case: handling non-pointer resource ids.
+template <typename PackedT, typename FromT>
+typename std::remove_reference<PackedT>::type PackParam(FromT from);
+
+template <>
+inline const AttributeMap PackParam<const AttributeMap &, const EGLint *>(const EGLint *attribs)
+{
+    return AttributeMap::CreateFromIntArray(attribs);
+}
+
+template <>
+inline const AttributeMap PackParam<const AttributeMap &, const EGLAttrib *>(
+    const EGLAttrib *attribs)
+{
+    return AttributeMap::CreateFromAttribArray(attribs);
+}
+
+template <typename PackedT, typename FromT>
+inline typename std::remove_reference<PackedT>::type PackParam(FromT from)
+{
+    return static_cast<PackedT>(from);
+}
 }  // namespace egl
 
-#define ANGLE_EGL_VALIDATE(THREAD, EP, OBJ, RETVAL, ...)             \
-    do                                                               \
-    {                                                                \
-        const char *epname = "egl" #EP;                              \
-        ValidationContext vctx(THREAD, epname, OBJ);                 \
-        auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, ##__VA_ARGS__)); \
-        if (!ANGLE_LOCAL_VAR)                                        \
-        {                                                            \
-            return RETVAL;                                           \
-        }                                                            \
+#define ANGLE_EGL_VALIDATE(THREAD, EP, OBJ, RETURN_TYPE, ...)                        \
+    do                                                                               \
+    {                                                                                \
+        const char *epname = "egl" #EP;                                              \
+        ValidationContext vctx(THREAD, epname, OBJ);                                 \
+        auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, ##__VA_ARGS__));                 \
+        if (!ANGLE_LOCAL_VAR)                                                        \
+        {                                                                            \
+            return GetDefaultReturnValue<angle::EntryPoint::EGL##EP, RETURN_TYPE>(); \
+        }                                                                            \
     } while (0)
 
 #define ANGLE_EGL_VALIDATE_VOID(THREAD, EP, OBJ, ...)                \
