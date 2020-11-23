@@ -5296,6 +5296,12 @@ bool ValidateGetNativeClientBufferANDROID(const ValidationContext *val,
 bool ValidateCreateNativeClientBufferANDROID(const ValidationContext *val,
                                              const egl::AttributeMap &attribMap)
 {
+    if (attribMap.isEmpty() || attribMap.begin()->second == EGL_NONE)
+    {
+        val->setError(EGL_BAD_PARAMETER, "invalid attribute list.");
+        return false;
+    }
+
     int width     = attribMap.getAsInt(EGL_WIDTH, 0);
     int height    = attribMap.getAsInt(EGL_HEIGHT, 0);
     int redSize   = attribMap.getAsInt(EGL_RED_SIZE, 0);
