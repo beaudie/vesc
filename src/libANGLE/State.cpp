@@ -1190,6 +1190,10 @@ void State::setEnableFeature(GLenum feature, bool enabled)
                 setClipDistanceEnable(feature - GL_CLIP_DISTANCE0_EXT, enabled);
                 return;
             }
+            break;
+        case GL_BINNING_CONTROL_HINT_QCOM:
+            // TODO: Ignore this hint for now
+            return;
     }
 
     ASSERT(mClientVersion.major == 1);

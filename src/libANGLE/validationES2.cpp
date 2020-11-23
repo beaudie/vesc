@@ -719,6 +719,10 @@ bool ValidCap(const Context *context, GLenum cap, bool queryOnly)
             break;
         case GL_SAMPLE_SHADING:
             return context->getExtensions().sampleShadingOES;
+
+        case GL_BINNING_CONTROL_HINT_QCOM:
+            // TODO: Ignore this hint for now
+            return true;
     }
 
     // GLES1 emulation: GLES1-specific caps after this point
@@ -4708,6 +4712,12 @@ bool ValidateHint(const Context *context, GLenum target, GLenum mode)
         case GL_DONT_CARE:
             break;
 
+        case GL_CPU_OPTIMIZED_QCOM:
+        case GL_GPU_OPTIMIZED_QCOM:
+        case GL_RENDER_DIRECT_TO_FRAMEBUFFER_QCOM:
+            // TODO: Ignore this hint for now
+            break;
+
         default:
             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             return false;
@@ -4744,6 +4754,10 @@ bool ValidateHint(const Context *context, GLenum target, GLenum mode)
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                 return false;
             }
+            break;
+
+        case GL_BINNING_CONTROL_HINT_QCOM:
+            // TODO: Ignore this hint for now
             break;
 
         default:

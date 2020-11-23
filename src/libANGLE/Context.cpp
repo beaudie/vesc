@@ -5201,6 +5201,9 @@ void Context::hint(GLenum target, GLenum mode)
         case GL_TEXTURE_FILTERING_HINT_CHROMIUM:
             mState.setTextureFilteringHint(mode);
             break;
+        case GL_BINNING_CONTROL_HINT_QCOM:
+            // TODO: Ignore this hint for now
+            break;
         default:
             UNREACHABLE();
             return;
