@@ -7083,6 +7083,8 @@ void GL_APIENTRY ValidateProgramPipelineEXT(GLuint pipeline)
     }
 }
 
+// GL_EXT_shader_io_blocks
+
 // GL_EXT_tessellation_shader
 void GL_APIENTRY PatchParameteriEXT(GLenum pname, GLint value)
 {
@@ -9177,6 +9179,8 @@ void GL_APIENTRY MinSampleShadingOES(GLfloat value)
         GenerateContextLostErrorOnCurrentGlobalContext();
     }
 }
+
+// GL_OES_shader_io_blocks
 
 // GL_OES_texture_3D
 void GL_APIENTRY CompressedTexImage3DOES(GLenum target,

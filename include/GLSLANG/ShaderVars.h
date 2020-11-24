@@ -53,9 +53,22 @@ enum class BlockType
     BLOCK_BUFFER,
 
     // Required in OpenGL ES 3.1 extension GL_OES_shader_io_blocks.
-    // TODO(jiawei.shao@intel.com): add BLOCK_OUT.
-    // Also used in GLSL
+    BLOCK_OUT,
     BLOCK_IN
+};
+
+// Member type of Interface Blocks for interface query
+// SpirvTransformer::transform uses a map of ShaderVariables, it needs member variables and (named
+// or unnamed) structure as ShaderVariable. at link between two shaders, validation between of named
+// and unnamed, needs the same structure, its members, and members order except instance name.
+// However, a variable will have two names from interface query. one is name with its parent and
+// grandparent if exist, and the another is name without instance name. the duplicated member will
+// be ignored from interface query because its name is incorrect.
+enum class MemberVariableType
+{
+    DEFAULT_VARIABLE,
+    INTERFACE_MEMBER,
+    DUPLICATED_MEMBER
 };
 
 // Base class for all variables defined in shaders, including Varyings, Uniforms, etc
@@ -166,6 +179,14 @@ struct ShaderVariable
     // VariableWithLocation
     int location;
 
+    // The location of inputs or outputs without location layout quailifer will be updated to '-1'.
+    // GLES Spec 3.1, Section 7.3. PROGRAM OBJECTS
+    // Not all active variables are assigned valid locations;
+    // the following variables will have an effective location of -1:
+    bool hasImplicitLocation;
+    void updateEffectiveLocation();
+    void updateEffectiveLocation(const sh::ShaderVariable &parent);
+
     // Uniform
     int binding;
     // Decide whether two uniforms are the same at shader link time,
@@ -191,6 +212,8 @@ struct ShaderVariable
     // fragment shader.
     // See GLSL ES Spec 3.00.3, sec 4.3.7.
     bool isSameInterfaceBlockFieldAtLinkTime(const ShaderVariable &other) const;
+    bool ignoreAtLinkTime;
+    MemberVariableType memberVariableType;
 
     // Varying
     InterpolationType interpolation;
