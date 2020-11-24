@@ -470,6 +470,15 @@ void RendererVk::ensureCapsInitialized() const
     bool supportSampleRateShading      = (mPhysicalDeviceFeatures.sampleRateShading == VK_TRUE);
     mNativeExtensions.sampleShadingOES = supportSampleRateShading;
 
+    // From the SPIR-V spec at 3.21. BuiltIn, SampleId and SamplePosition needs
+    // SampleRateShading. https://www.khronos.org/registry/spir-v/specs/unified1/SPIRV.html
+    // To replace non-constant index to constant 0 index, this extension assumes that ANGLE only
+    // supports the number of samples less than or equal to 32.
+    constexpr unsigned int kNotSupportedSampleCounts = VK_SAMPLE_COUNT_64_BIT;
+    mNativeExtensions.sampleVariablesOES =
+        supportSampleRateShading && (vk_gl::GetMaxSampleCount(kNotSupportedSampleCounts) == 0);
+    ASSERT(mNativeExtensions.sampleVariablesOES);
+
     mNativeCaps.minInterpolationOffset          = limitsVk.minInterpolationOffset;
     mNativeCaps.maxInterpolationOffset          = limitsVk.maxInterpolationOffset;
     mNativeCaps.subPixelInterpolationOffsetBits = limitsVk.subPixelInterpolationOffsetBits;
@@ -485,21 +494,11 @@ void RendererVk::ensureCapsInitialized() const
     // OES_shader_multisample_interpolation requires a maximum value of -0.5 for
     // MIN_FRAGMENT_INTERPOLATION_OFFSET_OES and minimum 0.5 for
     // MAX_FRAGMENT_INTERPOLATION_OFFSET_OES.  Vulkan has an identical limit for
-    // minInterpolationOffset, but it's limit for maxInterpolationOffset is 0.5-(1/ULP).
+    // minInterpolationOffset, but its limit for maxInterpolationOffset is 0.5-(1/ULP).
     // OES_shader_multisample_interpolation is therefore only supported if
     // maxInterpolationOffset is at least 0.5.
     mNativeExtensions.multisampleInterpolationOES =
-        supportSampleRateShading && (mNativeCaps.maxInterpolationOffset >= 0.5);
-    // OES_shader_multisample_interpolation requires OES_sample_variables, disable for now
-    mNativeExtensions.multisampleInterpolationOES = false;
-
-    // From the SPIR-V spec at 3.21. BuiltIn, SampleId and SamplePosition needs
-    // SampleRateShading. https://www.khronos.org/registry/spir-v/specs/unified1/SPIRV.html
-    // To replace non-constant index to constant 0 index, this extension assumes that ANGLE only
-    // supports the number of samples less than or equal to 32.
-    constexpr unsigned int kNotSupportedSampleCounts = VK_SAMPLE_COUNT_64_BIT;
-    mNativeExtensions.sampleVariablesOES =
-        supportSampleRateShading && (vk_gl::GetMaxSampleCount(kNotSupportedSampleCounts) == 0);
+        mNativeExtensions.sampleVariablesOES && mNativeCaps.maxInterpolationOffset >= 0.5;
 
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
