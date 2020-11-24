@@ -3005,7 +3005,7 @@ TEST_P(UniformBlockWithOneLargeArrayMemberTest, MemberAsActualParameter)
     constexpr char kVS[] = R"(#version 300 es
 layout(location=0) in vec3 a_position;
 
-uniform UBO{
+layout(std140) uniform UBO{
     mat4x4 buf[90];
 } instance;
 
