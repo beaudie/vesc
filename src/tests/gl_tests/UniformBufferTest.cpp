@@ -3005,16 +3005,20 @@ TEST_P(UniformBlockWithOneLargeArrayMemberTest, MemberAsActualParameter)
     constexpr char kVS[] = R"(#version 300 es
 layout(location=0) in vec3 a_position;
 
-uniform UBO{
-    mat4x4 buf[90];
+layout(std140) uniform UBO1{
+    mat4x4 buf1[90];
 } instance;
 
-vec4 test(mat4x4[90] para, vec3 pos){
-    return para[0] * vec4(pos, 1.0);
+layout(std140) uniform UBO2{
+    mat4x4 buf2[90];
+};
+
+vec4 test(mat4x4[90] para1, mat4x4[90] para2, vec3 pos){
+    return para1[0] * para2[0] * vec4(pos, 1.0);
 }
 
 void main(void){
-    gl_Position = test(instance.buf, a_position);
+    gl_Position = test(instance.buf1, buf2, a_position);
 })";
 
     constexpr char kFS[] = R"(#version 300 es
