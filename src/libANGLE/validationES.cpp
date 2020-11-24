@@ -2948,8 +2948,12 @@ bool ValidateCompressedRegion(const Context *context,
     {
         // INVALID_VALUE is generated if the image format is compressed and the dimensions of the
         // subregion fail to meet the alignment constraints of the format.
-        if ((width % formatInfo.compressedBlockWidth != 0) ||
-            (height % formatInfo.compressedBlockHeight != 0))
+        bool widthInvalid  = ((static_cast<GLuint>(width) >= formatInfo.compressedBlockWidth) &&
+                             (width % formatInfo.compressedBlockWidth != 0));
+        bool heightInvalid = ((static_cast<GLuint>(height) >= formatInfo.compressedBlockHeight) &&
+                              (height % formatInfo.compressedBlockHeight != 0));
+
+        if (widthInvalid || heightInvalid)
         {
             context->validationError(GL_INVALID_VALUE, kInvalidCompressedRegionSize);
             return false;
