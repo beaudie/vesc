@@ -255,6 +255,17 @@ GLint LimitToInt(const LargerInt physicalDeviceValue)
         physicalDeviceValue, static_cast<LargerInt>(std::numeric_limits<int32_t>::max() / 2)));
 }
 
+template <typename LargerInt>
+uint16_t LimitToUInt16MinusOne(const LargerInt physicalDeviceValue)
+{
+    static_assert(sizeof(LargerInt) >= sizeof(int32_t), "Incorrect usage of LimitToInt");
+
+    // Limit to UINT16_MAX-1. This is used to pack drawable offset/dimension to uint16_t for space
+    // conservation. The UINT16_MAX is reserved for special value like kDynamicScissorSentinel.
+    return static_cast<GLint>(std::min(
+        physicalDeviceValue, static_cast<LargerInt>(std::numeric_limits<uint16_t>::max() - 1)));
+}
+
 void RendererVk::ensureCapsInitialized() const
 {
     if (mCapsInitialized)
@@ -497,11 +508,11 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeCaps.maxDrawBuffers =
         std::min(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
-    mNativeCaps.maxFramebufferWidth  = LimitToInt(limitsVk.maxFramebufferWidth);
-    mNativeCaps.maxFramebufferHeight = LimitToInt(limitsVk.maxFramebufferHeight);
+    mNativeCaps.maxFramebufferWidth  = LimitToUInt16MinusOne(limitsVk.maxFramebufferWidth);
+    mNativeCaps.maxFramebufferHeight = LimitToUInt16MinusOne(limitsVk.maxFramebufferHeight);
     mNativeCaps.maxColorAttachments  = LimitToInt(limitsVk.maxColorAttachments);
-    mNativeCaps.maxViewportWidth     = LimitToInt(limitsVk.maxViewportDimensions[0]);
-    mNativeCaps.maxViewportHeight    = LimitToInt(limitsVk.maxViewportDimensions[1]);
+    mNativeCaps.maxViewportWidth     = LimitToUInt16MinusOne(limitsVk.maxViewportDimensions[0]);
+    mNativeCaps.maxViewportHeight    = LimitToUInt16MinusOne(limitsVk.maxViewportDimensions[1]);
     mNativeCaps.maxSampleMaskWords   = LimitToInt(limitsVk.maxSampleMaskWords);
     mNativeCaps.maxColorTextureSamples =
         limitsVk.sampledImageColorSampleCounts & vk_gl::kSupportedSampleCounts;
