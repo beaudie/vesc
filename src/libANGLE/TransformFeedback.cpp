@@ -206,6 +206,11 @@ bool TransformFeedback::checkBufferSpaceForDraw(GLsizei count, GLsizei primcount
 {
     auto vertices =
         mState.mVerticesDrawn + GetVerticesNeededForDraw(mState.mPrimitiveMode, count, primcount);
+    // In case of tessellation, primitives can be discarded by invalid relevant outer levels
+    if (mState.getBoundProgram()->getAttachedShader(ShaderType::TessEvaluation))
+    {
+        return vertices.IsValid() && vertices.ValueOrDie();
+    }
     return vertices.IsValid() && vertices.ValueOrDie() <= mState.mVertexCapacity;
 }
 

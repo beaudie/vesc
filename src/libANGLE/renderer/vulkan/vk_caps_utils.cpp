@@ -908,6 +908,35 @@ void RendererVk::ensureCapsInitialized() const
             LimitToInt(limitsVk.maxGeometryShaderInvocations);
     }
 
+    if (mPhysicalDeviceFeatures.tessellationShader)
+    {
+        constexpr uint32_t kReservedTessellationDefaultUniformBindingCount = 2;
+
+        // TODO : Enable tessellationShader when http://anglebug.com/3572 is complete
+        // mNativeExtensions.tessellationShaderEXT = true;
+        mNativeCaps.maxPatchVertices = LimitToInt(limitsVk.maxTessellationPatchSize);
+        mNativeCaps.maxTessPatchComponents =
+            LimitToInt(limitsVk.maxTessellationControlPerPatchOutputComponents);
+        mNativeCaps.maxTessGenLevel = LimitToInt(limitsVk.maxTessellationGenerationLevel);
+
+        mNativeCaps.maxTessControlInputComponents =
+            LimitToInt(limitsVk.maxTessellationControlPerVertexInputComponents);
+        mNativeCaps.maxTessControlOutputComponents =
+            LimitToInt(limitsVk.maxTessellationControlPerVertexOutputComponents);
+        mNativeCaps.maxTessControlTotalOutputComponents =
+            LimitToInt(limitsVk.maxTessellationControlTotalOutputComponents);
+        mNativeCaps.maxTessEvaluationInputComponents =
+            LimitToInt(limitsVk.maxTessellationEvaluationInputComponents);
+        mNativeCaps.maxTessEvaluationOutputComponents =
+            LimitToInt(limitsVk.maxTessellationEvaluationOutputComponents);
+
+        // There is 1 default uniform binding used per tessellation stages.
+        mNativeCaps.maxCombinedUniformBlocks = LimitToInt(
+            mNativeCaps.maxCombinedUniformBlocks + kReservedTessellationDefaultUniformBindingCount);
+        mNativeCaps.maxUniformBufferBindings = LimitToInt(
+            mNativeCaps.maxUniformBufferBindings + kReservedTessellationDefaultUniformBindingCount);
+    }
+
     // GL_APPLE_clip_distance/GL_EXT_clip_cull_distance
     if (mPhysicalDeviceFeatures.shaderClipDistance && limitsVk.maxClipDistances >= 8)
     {
@@ -925,6 +954,7 @@ bool CanSupportGPUShader5EXT(const VkPhysicalDeviceFeatures &features)
     // We use the following Vulkan features to implement EXT_gpu_shader5:
     // - shaderImageGatherExtended: textureGatherOffset with non-constant offset and
     //   textureGatherOffsets family of functions.
+
     // - shaderSampledImageArrayDynamicIndexing and shaderUniformBufferArrayDynamicIndexing:
     //   dynamically uniform indices for samplers and uniform buffers.
     // - shaderStorageBufferArrayDynamicIndexing: While EXT_gpu_shader5 doesn't require dynamically
