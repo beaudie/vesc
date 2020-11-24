@@ -552,6 +552,9 @@ bool IsVaryingOut(TQualifier qualifier)
         case EvqVertexOut:
         case EvqGeometryOut:
         case EvqSampleOut:
+        case EvqTessControlOut:
+        case EvqTessEvaluationOut:
+        case EvqPatchOut:
             return true;
 
         default:
@@ -573,6 +576,9 @@ bool IsVaryingIn(TQualifier qualifier)
         case EvqFragmentIn:
         case EvqGeometryIn:
         case EvqSampleIn:
+        case EvqTessControlIn:
+        case EvqTessEvaluationIn:
+        case EvqPatchIn:
             return true;
 
         default:
@@ -599,6 +605,10 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
     {
         case EvqFlatIn:
         case EvqFlatOut:
+        // The auxiliary storage qualifier patch is not used for interpolation
+        // it is a compile-time error to use interpolation qualifiers with patch
+        case EvqPatchIn:
+        case EvqPatchOut:
             return INTERPOLATION_FLAT;
 
         case EvqNoPerspectiveIn:
@@ -613,6 +623,10 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
         case EvqVaryingOut:
         case EvqGeometryIn:
         case EvqGeometryOut:
+        case EvqTessControlIn:
+        case EvqTessControlOut:
+        case EvqTessEvaluationIn:
+        case EvqTessEvaluationOut:
             return INTERPOLATION_SMOOTH;
 
         case EvqCentroidIn:
