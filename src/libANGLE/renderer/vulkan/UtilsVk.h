@@ -536,7 +536,7 @@ class UtilsVk : angle::NonCopyable
 
     // Unresolve shaders are special as they are generated on the fly due to the large number of
     // combinations.
-    std::unordered_map<uint32_t, vk::RefCounted<vk::ShaderAndSerial>> mUnresolveFragShaders;
+    angle::HashMap<uint32_t, vk::RefCounted<vk::ShaderAndSerial>> mUnresolveFragShaders;
     std::unordered_map<uint32_t, vk::ShaderProgramHelper> mUnresolvePrograms;
 
     vk::Sampler mPointSampler;

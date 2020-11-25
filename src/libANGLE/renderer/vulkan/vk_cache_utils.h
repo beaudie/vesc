@@ -1328,8 +1328,8 @@ class RenderPassCache final : angle::NonCopyable
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
     // The second layer caches the attachment load/store ops and initial/final layout.
-    using InnerCache = std::unordered_map<vk::AttachmentOpsArray, vk::RenderPassHelper>;
-    using OuterCache = std::unordered_map<vk::RenderPassDesc, InnerCache>;
+    using InnerCache = angle::HashMap<vk::AttachmentOpsArray, vk::RenderPassHelper>;
+    using OuterCache = angle::HashMap<vk::RenderPassDesc, InnerCache>;
 
     OuterCache mPayload;
 };
@@ -1423,7 +1423,7 @@ class PipelineLayoutCache final : angle::NonCopyable
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
   private:
-    std::unordered_map<vk::PipelineLayoutDesc, vk::RefCountedPipelineLayout> mPayload;
+    angle::HashMap<vk::PipelineLayoutDesc, vk::RefCountedPipelineLayout> mPayload;
 };
 
 class SamplerCache final : angle::NonCopyable
@@ -1439,7 +1439,7 @@ class SamplerCache final : angle::NonCopyable
                              vk::SamplerBinding *samplerOut);
 
   private:
-    std::unordered_map<vk::SamplerDesc, vk::RefCountedSampler> mPayload;
+    angle::HashMap<vk::SamplerDesc, vk::RefCountedSampler> mPayload;
 };
 
 // YuvConversion Cache
@@ -1459,7 +1459,7 @@ class SamplerYcbcrConversionCache final : angle::NonCopyable
     VkSamplerYcbcrConversion getYuvConversionFromExternalFormat(uint64_t externalFormat) const;
 
   private:
-    std::unordered_map<uint64_t, vk::RefCountedSamplerYcbcrConversion> mPayload;
+    angle::HashMap<uint64_t, vk::RefCountedSamplerYcbcrConversion> mPayload;
 };
 
 // Only 1 driver uniform binding is used.

@@ -55,7 +55,7 @@ class PerfResultReporter
 
     std::string metric_basename_;
     std::string story_name_;
-    std::unordered_map<std::string, MetricInfo> metric_map_;
+    angle::HashMap<std::string, MetricInfo> metric_map_;
 };
 
 }  // namespace perf_test
