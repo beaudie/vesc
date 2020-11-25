@@ -172,6 +172,8 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Geometry, vk::kDefaultUniformsNameGS},
     {gl::ShaderType::Fragment, vk::kDefaultUniformsNameFS},
     {gl::ShaderType::Compute, vk::kDefaultUniformsNameCS},
+    {gl::ShaderType::TessControl, vk::kDefaultUniformsNameTCS},
+    {gl::ShaderType::TessEvaluation, vk::kDefaultUniformsNameTES},
 };
 
 // Specialization constant names
@@ -999,12 +1001,12 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         {
             return false;
         }
-
         // Append depth range translation to main.
         if (!transformDepthBeforeCorrection(root, driverUniforms))
         {
             return false;
         }
+
         if (!AppendVertexShaderDepthCorrectionToMain(this, root, &getSymbolTable()))
         {
             return false;
@@ -1021,6 +1023,17 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         WriteGeometryShaderLayoutQualifiers(
             sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
             getGeometryShaderOutputPrimitiveType(), getGeometryShaderMaxVertices());
+    }
+    else if (getShaderType() == GL_TESS_CONTROL_SHADER_EXT)
+    {
+        WriteTessControlShaderLayoutQualifiers(sink, getTessControlShaderOutputVertices());
+    }
+    else if (getShaderType() == GL_TESS_EVALUATION_SHADER_EXT)
+    {
+        WriteTessEvaluationShaderLayoutQualifiers(sink, getTessEvaluationShaderInputPrimitiveType(),
+                                                  getTessEvaluationShaderInputVertexSpacingType(),
+                                                  getTessEvaluationShaderInputOrderingType(),
+                                                  getTessEvaluationShaderInputPointType());
     }
     else
     {
