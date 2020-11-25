@@ -1225,8 +1225,7 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "// End Exported Methods\n";
     header << "\n";
     header << "// Maps from <captured Program ID, captured location> to run-time location.\n";
-    header
-        << "using LocationsMap = std::unordered_map<GLuint, std::unordered_map<GLint, GLint>>;\n";
+    header << "using LocationsMap = angle::HashMap<GLuint, angle::HashMap<GLint, GLint>>;\n";
     header << "extern LocationsMap gUniformLocations;\n";
     header << "extern GLuint gCurrentProgram;\n";
     header << "void UpdateUniformLocation(GLuint program, const char *name, GLint location);\n";
@@ -1322,7 +1321,7 @@ void WriteCppReplayIndexFiles(bool compression,
         source << "ResourceMap g" << name << "Map;\n";
     }
 
-    header << "using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;\n";
+    header << "using SyncResourceMap = angle::HashMap<uintptr_t, GLsync>;\n";
     header << "extern SyncResourceMap gSyncMap;\n";
     source << "SyncResourceMap gSyncMap;\n";
 
@@ -1440,7 +1439,7 @@ void WriteCppReplayIndexFiles(bool compression,
     }
 
     // Data types and functions for tracking contents of mapped buffers
-    header << "using BufferHandleMap = std::unordered_map<GLuint, void*>;\n";
+    header << "using BufferHandleMap = angle::HashMap<GLuint, void*>;\n";
     header << "extern BufferHandleMap gMappedBufferData;\n";
     header << "void UpdateClientBufferData(GLuint bufferID, const void *source, GLsizei size);\n";
     source << "BufferHandleMap gMappedBufferData;\n";
