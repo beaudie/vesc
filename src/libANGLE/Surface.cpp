@@ -292,6 +292,9 @@ Error Surface::swap(const gl::Context *context)
 
 Error Surface::swapWithDamage(const gl::Context *context, EGLint *rects, EGLint n_rects)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "egl::Surface::swapWithDamage");
+    context->onPreSwap();
+
     context->getState().getOverlay()->onSwap();
 
     ANGLE_TRY(mImplementation->swapWithDamage(context, rects, n_rects));
@@ -301,6 +304,9 @@ Error Surface::swapWithDamage(const gl::Context *context, EGLint *rects, EGLint 
 
 Error Surface::swapWithFrameToken(const gl::Context *context, EGLFrameTokenANGLE frameToken)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "egl::Surface::swapWithFrameToken");
+    context->onPreSwap();
+
     context->getState().getOverlay()->onSwap();
 
     ANGLE_TRY(mImplementation->swapWithFrameToken(context, frameToken));
