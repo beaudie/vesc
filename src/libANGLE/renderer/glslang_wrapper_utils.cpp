@@ -258,6 +258,38 @@ ShaderInterfaceVariableInfo *AddLocationInfo(ShaderInterfaceVariableInfoMap *inf
     return info;
 }
 
+// Add location information for an in/out variable of structure member.
+void AddVaryingLocationInfo(ShaderInterfaceVariableInfoMap &infoMap,
+                            const gl::VaryingInShaderRef &ref,
+                            const bool isStructure,
+                            const uint32_t location,
+                            const uint32_t component)
+{
+    const std::string &rootName = ref.rootStructMappedName;
+    // Do not add duplicated location for parent or grandparent of a variable.
+    if (rootName.length() > 0 && infoMap.find(rootName) == infoMap.end())
+    {
+        AddLocationInfo(&infoMap, rootName, location, component, ref.stage, 0, 0);
+    }
+
+    if (isStructure)
+    {
+        const std::string &parentName = ref.parentStructMappedName;
+        if (infoMap.find(parentName) == infoMap.end())
+        {
+            AddLocationInfo(&infoMap, parentName, location, component, ref.stage, 0, 0);
+        }
+    }
+    else
+    {
+        const std::string &name = ref.varying->mappedName;
+        if (infoMap.find(name) == infoMap.end())
+        {
+            AddLocationInfo(&infoMap, name, location, component, ref.stage, 0, 0);
+        }
+    }
+}
+
 // Modify an existing out variable and add transform feedback information.
 ShaderInterfaceVariableInfo *SetXfbInfo(ShaderInterfaceVariableInfoMap *infoMap,
                                         const std::string &varName,
@@ -604,19 +636,18 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
         // being "_ufield".  In such a case, use |parentStructMappedName|.
         if (varying.frontVarying.varying && (varying.frontVarying.stage == shaderType))
         {
-            const std::string &name = varying.isStructField()
-                                          ? varying.frontVarying.parentStructMappedName
-                                          : varying.frontVarying.varying->mappedName;
-            AddLocationInfo(&(*variableInfoMapOut)[varying.frontVarying.stage], name, location,
-                            component, varying.frontVarying.stage, 0, 0);
+            ShaderInterfaceVariableInfoMap &infoMap =
+                (*variableInfoMapOut)[varying.frontVarying.stage];
+            AddVaryingLocationInfo(infoMap, varying.frontVarying, varying.isStructField(), location,
+                                   component);
         }
+
         if (varying.backVarying.varying && (varying.backVarying.stage == shaderType))
         {
-            const std::string &name = varying.isStructField()
-                                          ? varying.backVarying.parentStructMappedName
-                                          : varying.backVarying.varying->mappedName;
-            AddLocationInfo(&(*variableInfoMapOut)[varying.backVarying.stage], name, location,
-                            component, varying.backVarying.stage, 0, 0);
+            ShaderInterfaceVariableInfoMap &infoMap =
+                (*variableInfoMapOut)[varying.backVarying.stage];
+            AddVaryingLocationInfo(infoMap, varying.backVarying, varying.isStructField(), location,
+                                   component);
         }
     }
 
@@ -1514,7 +1545,12 @@ void SpirvTransformer::visitVariable(const uint32_t *instruction)
 
     // For interface block variables, the name that's used to associate info is the block name
     // rather than the variable name.
-    const char *name = mNamesById[isInterfaceBlockVariable ? typeId : id];
+    // named in/out block or in/out varying will use id. but unnamed in/out block will have empty
+    // string as instance name. it will use typeId.
+    const bool isUnnamedInterfaceVariable = isInOut && strcmp(mNamesById[id], "") == 0;
+    const char *name =
+        mNamesById[(isInterfaceBlockVariable || isUnnamedInterfaceVariable) ? typeId : id];
+
     ASSERT(name != nullptr);
 
     // Handle builtins, which all start with "gl_".  Either the variable name could be an indication
@@ -1908,7 +1944,8 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
 
     // Furthermore, if it's not an inactive varying output, there's nothing to do.  Note that
     // inactive varying inputs are already pruned by the translator.
-    ASSERT(storageClass != spv::StorageClassInput || info->activeStages[mShaderType]);
+    // However, input or output storage class for interface block will not be pruned when a shader
+    // is compiled separately.
     if (info->activeStages[mShaderType])
     {
         if (info->useRelaxedPrecision &&
@@ -1929,7 +1966,8 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
         return false;
     }
 
-    ASSERT(storageClass == spv::StorageClassOutput);
+    // Copy the declaration even though the variable is inactive for the separately compiled shader.
+    ASSERT(storageClass == spv::StorageClassOutput || storageClass == spv::StorageClassInput);
 
     // Copy the variable declaration for modification.  Change its type to the corresponding type
     // with the Private storage class, as well as changing the storage class respecified in this

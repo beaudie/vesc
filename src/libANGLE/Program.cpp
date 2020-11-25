@@ -1737,6 +1737,38 @@ void ProgramState::updateActiveSamplers()
     mExecutable->updateActiveSamplers(*this);
 }
 
+using ProgramInterfaceBlock = std::vector<sh::ShaderVariable>;
+void updateInterfaceVariable(ProgramInterfaceBlock &block, sh::ShaderVariable &var)
+{
+    if (var.isTemporalVariable)
+    {
+        return;
+    }
+
+    if (!var.isStruct())
+    {
+        var.resetEffectiveLocation();
+        block.emplace_back(var);
+    }
+
+    for (sh::ShaderVariable &field : var.fields)
+    {
+        if (!field.isStruct())
+        {
+            field.updateEffectiveLocation(var);
+            field.name = var.name + "." + field.name;
+            block.emplace_back(field);
+        }
+
+        for (sh::ShaderVariable &nested : field.fields)
+        {
+            nested.updateEffectiveLocation(field);
+            nested.name = var.name + "." + field.name + "." + nested.name;
+            block.emplace_back(nested);
+        }
+    }
+}
+
 void ProgramState::updateProgramInterfaceInputs()
 {
     const ShaderType firstAttachedShaderType = getFirstAttachedShaderStageType();
@@ -1770,20 +1802,8 @@ void ProgramState::updateProgramInterfaceInputs()
     {
         for (const sh::ShaderVariable &varying : shader->getInputVaryings())
         {
-            if (varying.isStruct())
-            {
-                for (const sh::ShaderVariable &field : varying.fields)
-                {
-                    sh::ShaderVariable fieldVarying = sh::ShaderVariable(field);
-                    fieldVarying.location           = varying.location;
-                    fieldVarying.name               = varying.name + "." + field.name;
-                    mExecutable->mProgramInputs.emplace_back(fieldVarying);
-                }
-            }
-            else
-            {
-                mExecutable->mProgramInputs.emplace_back(varying);
-            }
+            sh::ShaderVariable var = sh::ShaderVariable(varying);
+            updateInterfaceVariable(mExecutable->mProgramInputs, var);
         }
     }
 }
@@ -1809,20 +1829,8 @@ void ProgramState::updateProgramInterfaceOutputs()
     // Copy over each output varying, since the Shader could go away
     for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
     {
-        if (varying.isStruct())
-        {
-            for (const sh::ShaderVariable &field : varying.fields)
-            {
-                sh::ShaderVariable fieldVarying = sh::ShaderVariable(field);
-                fieldVarying.location           = varying.location;
-                fieldVarying.name               = varying.name + "." + field.name;
-                mExecutable->mOutputVariables.emplace_back(fieldVarying);
-            }
-        }
-        else
-        {
-            mExecutable->mOutputVariables.emplace_back(varying);
-        }
+        sh::ShaderVariable var = sh::ShaderVariable(varying);
+        updateInterfaceVariable(mExecutable->mOutputVariables, var);
     }
 }
 
@@ -3535,6 +3543,11 @@ void Program::getFilteredVaryings(const std::vector<sh::ShaderVariable> &varying
         {
             continue;
         }
+        // Instance name can be different but the size of array of struct should be matched.
+        if (varying.ignoreAtLinkTime && !varying.isArray())
+        {
+            continue;
+        }
 
         filteredVaryingsOut->push_back(&varying);
     }
@@ -4097,7 +4110,8 @@ LinkMismatchError Program::LinkValidateVariablesBase(const sh::ShaderVariable &v
     {
         return LinkMismatchError::PRECISION_MISMATCH;
     }
-    if (variable1.structName != variable2.structName)
+    if (!variable1.isTemporalVariable && !variable2.isTemporalVariable &&
+        variable1.structName != variable2.structName)
     {
         return LinkMismatchError::STRUCT_NAME_MISMATCH;
     }
@@ -4119,6 +4133,11 @@ LinkMismatchError Program::LinkValidateVariablesBase(const sh::ShaderVariable &v
         if (member1.name != member2.name)
         {
             return LinkMismatchError::FIELD_NAME_MISMATCH;
+        }
+
+        if (member1.interpolation != member2.interpolation)
+        {
+            return LinkMismatchError::INTERPOLATION_TYPE_MISMATCH;
         }
 
         LinkMismatchError linkErrorOnField = LinkValidateVariablesBase(
@@ -4158,6 +4177,14 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::ShaderVariable &output
         {
             return LinkMismatchError::ARRAY_SIZE_MISMATCH;
         }
+    }
+
+    // [Shader Interface matching] Section 9.1 in the OpenGL ES Shading Language 3.1, 3.2.
+    // When linking shaders, the type of declared vertex outputs and fragment inputs with the same
+    // name must match, otherwise the link command will fail.
+    if (inputVarying.location == outputVarying.location && inputVarying.name != outputVarying.name)
+    {
+        return LinkMismatchError::FIELD_NAME_MISMATCH;
     }
 
     // Skip the validation on the array sizes between a vertex output varying and a geometry input
