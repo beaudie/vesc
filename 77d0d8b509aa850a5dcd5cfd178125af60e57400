@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8125c1ca_10b88264",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-11-25T03:52:14Z",
+      "side": 1,
+      "message": "I never got around to completing this. Keeping it around in case it could be useful one day.",
+      "revId": "77d0d8b509aa850a5dcd5cfd178125af60e57400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
