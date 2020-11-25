@@ -2044,6 +2044,8 @@ void Display::returnScratchBufferImpl(angle::ScratchBuffer scratchBuffer,
 
 egl::Error Display::handleGPUSwitch()
 {
-    return mImplementation->handleGPUSwitch();
+    egl::Error ret = mImplementation->handleGPUSwitch();
+    initVendorString();
+    return ret;
 }
 }  // namespace egl
