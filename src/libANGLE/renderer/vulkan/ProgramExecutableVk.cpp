@@ -1193,7 +1193,7 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
     const gl::ActiveTextureArray<TextureVk *> &activeImages = contextVk->getActiveImages();
 
     bool useOldRewriteStructSamplers = contextVk->useOldRewriteStructSamplers();
-    std::unordered_map<std::string, uint32_t> mappedImageNameToArrayOffset;
+    angle::HashMap<std::string, uint32_t> mappedImageNameToArrayOffset;
 
     // Write images.
     for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
@@ -1449,7 +1449,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
 
     for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
-        std::unordered_map<std::string, uint32_t> mappedSamplerNameToArrayOffset;
+        angle::HashMap<std::string, uint32_t> mappedSamplerNameToArrayOffset;
         const gl::ProgramState *programState = programStates[shaderType];
         ASSERT(programState);
         for (uint32_t textureIndex = 0; textureIndex < programState->getSamplerBindings().size();
