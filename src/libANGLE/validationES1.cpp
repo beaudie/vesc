@@ -1551,49 +1551,74 @@ bool ValidateGenFramebuffersOES(const Context *context,
                                 GLsizei n,
                                 const FramebufferID *framebuffers)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateGenOrDelete(context, n);
 }
 
 bool ValidateDeleteFramebuffersOES(const Context *context,
                                    GLsizei n,
                                    const FramebufferID *framebuffers)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateGenOrDelete(context, n);
 }
 
 bool ValidateGenRenderbuffersOES(const Context *context,
                                  GLsizei n,
                                  const RenderbufferID *renderbuffers)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateGenOrDelete(context, n);
 }
 
 bool ValidateDeleteRenderbuffersOES(const Context *context,
                                     GLsizei n,
                                     const RenderbufferID *renderbuffers)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateGenOrDelete(context, n);
 }
 
 bool ValidateBindFramebufferOES(const Context *context, GLenum target, FramebufferID framebuffer)
 {
-    UNIMPLEMENTED();
+    if (!ValidFramebufferTarget(context, target))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidFramebufferTarget);
+        return false;
+    }
+
+    if (!context->getState().isBindGeneratesResourceEnabled() &&
+        !context->isFramebufferGenerated(framebuffer))
+    {
+        context->validationError(GL_INVALID_OPERATION, kObjectNotGenerated);
+        return false;
+    }
+
     return true;
 }
 
 bool ValidateBindRenderbufferOES(const Context *context, GLenum target, RenderbufferID renderbuffer)
 {
-    UNIMPLEMENTED();
+    if (target != GL_RENDERBUFFER)
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidRenderbufferTarget);
+        return false;
+    }
+
+    if (!context->getState().isBindGeneratesResourceEnabled() &&
+        !context->isRenderbufferGenerated(renderbuffer))
+    {
+        context->validationError(GL_INVALID_OPERATION, kObjectNotGenerated);
+        return false;
+    }
+
     return true;
 }
 
 bool ValidateCheckFramebufferStatusOES(const Context *context, GLenum target)
 {
-    UNIMPLEMENTED();
+    if (!ValidFramebufferTarget(context, target))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidFramebufferTarget);
+        return false;
+    }
+
     return true;
 }
 
@@ -1603,8 +1628,20 @@ bool ValidateFramebufferRenderbufferOES(const Context *context,
                                         GLenum rbtarget,
                                         RenderbufferID renderbuffer)
 {
-    UNIMPLEMENTED();
-    return true;
+    if (!ValidFramebufferTarget(context, target))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidFramebufferTarget);
+        return false;
+    }
+
+    if (rbtarget != GL_RENDERBUFFER && renderbuffer.value != 0)
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidRenderbufferTarget);
+        return false;
+    }
+
+    return ValidateFramebufferRenderbufferParameters(context, target, attachment, rbtarget,
+                                                     renderbuffer);
 }
 
 bool ValidateFramebufferTexture2DOES(const Context *context,
@@ -1614,13 +1651,223 @@ bool ValidateFramebufferTexture2DOES(const Context *context,
                                      TextureID texture,
                                      GLint level)
 {
-    UNIMPLEMENTED();
+    // Attachments are required to be bound to level 0 without ES3 or the GL_OES_fbo_render_mipmap
+    // extension
+    if (context->getClientMajorVersion() < 3 && !context->getExtensions().fboRenderMipmapOES &&
+        level != 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidFramebufferTextureLevel);
+        return false;
+    }
+
+    if (!ValidateFramebufferTextureBase(context, target, attachment, texture, level))
+    {
+        return false;
+    }
+
+    if (texture.value != 0)
+    {
+        Texture *tex = context->getTexture(texture);
+        ASSERT(tex);
+
+        const Caps &caps = context->getCaps();
+
+        switch (textarget)
+        {
+            case TextureTarget::_2D:
+            {
+                if (level > log2(caps.max2DTextureSize))
+                {
+                    context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+                    return false;
+                }
+                if (tex->getType() != TextureType::_2D)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
+                    return false;
+                }
+            }
+            break;
+
+            case TextureTarget::Rectangle:
+            {
+                if (level != 0)
+                {
+                    context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+                    return false;
+                }
+                if (tex->getType() != TextureType::Rectangle)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kTextureTargetMismatch);
+                    return false;
+                }
+            }
+            break;
+
+            case TextureTarget::CubeMapNegativeX:
+            case TextureTarget::CubeMapNegativeY:
+            case TextureTarget::CubeMapNegativeZ:
+            case TextureTarget::CubeMapPositiveX:
+            case TextureTarget::CubeMapPositiveY:
+            case TextureTarget::CubeMapPositiveZ:
+            {
+                if (level > log2(caps.maxCubeMapTextureSize))
+                {
+                    context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+                    return false;
+                }
+                if (tex->getType() != TextureType::CubeMap)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kTextureTargetMismatch);
+                    return false;
+                }
+            }
+            break;
+
+            case TextureTarget::_2DMultisample:
+            {
+                if (context->getClientVersion() < ES_3_1 &&
+                    !context->getExtensions().textureMultisample)
+                {
+                    context->validationError(GL_INVALID_OPERATION,
+                                             kMultisampleTextureExtensionOrES31Required);
+                    return false;
+                }
+
+                if (level != 0)
+                {
+                    context->validationError(GL_INVALID_VALUE, kLevelNotZero);
+                    return false;
+                }
+                if (tex->getType() != TextureType::_2DMultisample)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kTextureTargetMismatch);
+                    return false;
+                }
+            }
+            break;
+
+            case TextureTarget::External:
+            {
+                if (!context->getExtensions().yuvTargetEXT)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kYUVTargetExtensionRequired);
+                    return false;
+                }
+
+                if (attachment != GL_COLOR_ATTACHMENT0)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kInvalidAttachment);
+                    return false;
+                }
+
+                if (tex->getType() != TextureType::External)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kTextureTargetMismatch);
+                    return false;
+                }
+            }
+            break;
+
+            default:
+                context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+                return false;
+        }
+    }
+
     return true;
 }
 
 bool ValidateGenerateMipmapOES(const Context *context, TextureType target)
 {
-    UNIMPLEMENTED();
+    if (!ValidTextureTarget(context, target))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+        return false;
+    }
+
+    Texture *texture = context->getTextureByType(target);
+
+    if (texture == nullptr)
+    {
+        context->validationError(GL_INVALID_OPERATION, kTextureNotBound);
+        return false;
+    }
+
+    const GLuint effectiveBaseLevel = texture->getTextureState().getEffectiveBaseLevel();
+
+    // This error isn't spelled out in the spec in a very explicit way, but we interpret the spec so
+    // that out-of-range base level has a non-color-renderable / non-texture-filterable format.
+    if (effectiveBaseLevel >= IMPLEMENTATION_MAX_TEXTURE_LEVELS)
+    {
+        context->validationError(GL_INVALID_OPERATION, kBaseLevelOutOfRange);
+        return false;
+    }
+
+    TextureTarget baseTarget = (target == TextureType::CubeMap)
+                                   ? TextureTarget::CubeMapPositiveX
+                                   : NonCubeTextureTypeToTarget(target);
+    const auto &format = *(texture->getFormat(baseTarget, effectiveBaseLevel).info);
+    if (format.sizedInternalFormat == GL_NONE || format.compressed || format.depthBits > 0 ||
+        format.stencilBits > 0)
+    {
+        context->validationError(GL_INVALID_OPERATION, kGenerateMipmapNotAllowed);
+        return false;
+    }
+
+    // GenerateMipmap accepts formats that are unsized or both color renderable and filterable.
+    bool formatUnsized = !format.sized;
+    bool formatColorRenderableAndFilterable =
+        format.filterSupport(context->getClientVersion(), context->getExtensions()) &&
+        format.textureAttachmentSupport(context->getClientVersion(), context->getExtensions());
+    if (!formatUnsized && !formatColorRenderableAndFilterable)
+    {
+        context->validationError(GL_INVALID_OPERATION, kGenerateMipmapNotAllowed);
+        return false;
+    }
+
+    // GL_EXT_sRGB adds an unsized SRGB (no alpha) format which has explicitly disabled mipmap
+    // generation
+    if (format.colorEncoding == GL_SRGB && format.format == GL_RGB)
+    {
+        context->validationError(GL_INVALID_OPERATION, kGenerateMipmapNotAllowed);
+        return false;
+    }
+
+    // According to the OpenGL extension spec EXT_sRGB.txt, EXT_SRGB is based on ES 2.0 and
+    // generateMipmap is not allowed if texture format is SRGB_EXT or SRGB_ALPHA_EXT.
+    if (context->getClientVersion() < Version(3, 0) && format.colorEncoding == GL_SRGB)
+    {
+        context->validationError(GL_INVALID_OPERATION, kGenerateMipmapNotAllowed);
+        return false;
+    }
+
+    // Non-power of 2 ES2 check
+    if (context->getClientVersion() < Version(3, 0) && !context->getExtensions().textureNPOTOES &&
+        (!isPow2(static_cast<int>(texture->getWidth(baseTarget, 0))) ||
+         !isPow2(static_cast<int>(texture->getHeight(baseTarget, 0)))))
+    {
+        ASSERT(target == TextureType::_2D || target == TextureType::Rectangle ||
+               target == TextureType::CubeMap);
+        context->validationError(GL_INVALID_OPERATION, kTextureNotPow2);
+        return false;
+    }
+
+    // Cube completeness check
+    if (target == TextureType::CubeMap && !texture->getTextureState().isCubeComplete())
+    {
+        context->validationError(GL_INVALID_OPERATION, kCubemapIncomplete);
+        return false;
+    }
+
+    if (context->getExtensions().webglCompatibility &&
+        (texture->getWidth(baseTarget, effectiveBaseLevel) == 0 ||
+         texture->getHeight(baseTarget, effectiveBaseLevel) == 0))
+    {
+        context->validationError(GL_INVALID_OPERATION, kGenerateMipmapZeroSize);
+        return false;
+    }
+
     return true;
 }
 
@@ -1630,8 +1877,8 @@ bool ValidateGetFramebufferAttachmentParameterivOES(const Context *context,
                                                     GLenum pname,
                                                     const GLint *params)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateGetFramebufferAttachmentParameterivBase(context, target, attachment, pname,
+                                                           nullptr);
 }
 
 bool ValidateGetRenderbufferParameterivOES(const Context *context,
@@ -1639,19 +1886,16 @@ bool ValidateGetRenderbufferParameterivOES(const Context *context,
                                            GLenum pname,
                                            const GLint *params)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateGetRenderbufferParameterivBase(context, target, pname, nullptr);
 }
 
 bool ValidateIsFramebufferOES(const Context *context, FramebufferID framebuffer)
 {
-    UNIMPLEMENTED();
     return true;
 }
 
 bool ValidateIsRenderbufferOES(const Context *context, RenderbufferID renderbuffer)
 {
-    UNIMPLEMENTED();
     return true;
 }
 
@@ -1661,8 +1905,8 @@ bool ValidateRenderbufferStorageOES(const Context *context,
                                     GLsizei width,
                                     GLsizei height)
 {
-    UNIMPLEMENTED();
-    return true;
+    return ValidateRenderbufferStorageParametersBase(context, target, 0, internalformat, width,
+                                                     height);
 }
 
 // GL_OES_texture_cube_map
