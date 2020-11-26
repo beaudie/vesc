@@ -28,6 +28,7 @@ namespace rx
 struct FeaturesVk;
 
 class DisplayVk;
+class RendererVk;
 
 namespace egl_vk
 {
@@ -73,7 +74,8 @@ namespace vk
 {
 // Functions that determine support for a feature or extension, used both to advertise support for
 // an extension, and to determine if a context version can be supported.
-bool CanSupportGPUShader5EXT(const VkPhysicalDeviceFeatures &features);
+bool CanSupportGPUShader5EXT(const RendererVk *renderer);
+bool CanSupportGeometryShader(const RendererVk *renderer);
 }  // namespace vk
 
 }  // namespace rx
