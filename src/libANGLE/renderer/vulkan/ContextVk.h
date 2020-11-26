@@ -535,12 +535,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool isRobustResourceInitEnabled() const;
 
-    // occlusion query
-    void beginOcclusionQuery(QueryVk *queryVk);
-    void endOcclusionQuery(QueryVk *queryVk);
+    // Queries that are scoped to render passes.
+    angle::Result beginInRenderPassQuery(QueryVk *queryVk);
+    void endInRenderPassQuery(QueryVk *queryVk);
 
-    angle::Result pauseOcclusionQueryIfActive();
-    angle::Result resumeOcclusionQueryIfActive();
+    angle::Result pauseQueriesIfActive();
+    angle::Result resumeQueriesIfActive();
 
     void updateOverlayOnPresent();
     void addOverlayUsedBuffersCount(vk::CommandBufferHelper *commandBuffer);
@@ -910,9 +910,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     ProgramPipelineVk *mProgramPipeline;
     ProgramExecutableVk *mExecutable;
 
-    // occlusion query
-    QueryVk *mActiveQueryAnySamples;
-    QueryVk *mActiveQueryAnySamplesConservative;
+    // Queries that need to be closed and reopened with the render pass:
+    //
+    // - Occlusion queries
+    angle::PackedEnumMap<gl::QueryType, QueryVk *> mActiveQueries;
 
     // The offset we had the last time we bound the index buffer.
     const GLvoid *mLastIndexBufferOffset;

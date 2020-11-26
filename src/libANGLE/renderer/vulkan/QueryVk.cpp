@@ -41,7 +41,6 @@ void QueryVk::onDestroy(const gl::Context *context)
 
 angle::Result QueryVk::stashQueryHelper(ContextVk *contextVk)
 {
-    ASSERT(isOcclusionQuery());
     mStashedQueryHelpers.emplace_back(std::move(mQueryHelper));
     mQueryHelper.deinit();
     ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(contextVk, &mQueryHelper));
@@ -81,36 +80,41 @@ angle::Result QueryVk::begin(const gl::Context *context)
         ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(contextVk, &mQueryHelper));
     }
 
-    if (isOcclusionQuery())
+    switch (getType())
     {
-        // For pathological usage case where begin/end is called back to back without flush and get
-        // result, we have to force flush so that the same mQueryHelper will not encoded in the same
-        // renderpass twice without resetting it.
-        if (mQueryHelper.usedInRecordedCommands())
-        {
-            ANGLE_TRY(contextVk->flushImpl(nullptr));
-            // As soon as beginQuery is called, previous query's result will not retrievable by API.
-            // We must clear it so that it will not count against current beginQuery call.
-            mStashedQueryHelpers.clear();
-            mQueryHelper.deinit();
-            ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(contextVk, &mQueryHelper));
-        }
-        contextVk->beginOcclusionQuery(this);
-    }
-    else if (getType() == gl::QueryType::TimeElapsed)
-    {
-        // Note: TimeElapsed is implemented by using two Timestamp queries and taking the diff.
-        if (!mQueryHelperTimeElapsedBegin.valid())
-        {
-            ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(
-                contextVk, &mQueryHelperTimeElapsedBegin));
-        }
+        case gl::QueryType::AnySamples:
+        case gl::QueryType::AnySamplesConservative:
+            // For pathological usage case where begin/end is called back to back without flush and
+            // get result, we have to force flush so that the same mQueryHelper will not encoded in
+            // the same renderpass twice without resetting it.
+            if (mQueryHelper.usedInRecordedCommands())
+            {
+                ANGLE_TRY(contextVk->flushImpl(nullptr));
+                // As soon as beginQuery is called, previous query's result will not retrievable by
+                // API. We must clear it so that it will not count against current beginQuery call.
+                mStashedQueryHelpers.clear();
+                mQueryHelper.deinit();
+                ANGLE_TRY(
+                    contextVk->getQueryPool(getType())->allocateQuery(contextVk, &mQueryHelper));
+            }
+            ANGLE_TRY(contextVk->beginInRenderPassQuery(this));
+            break;
+        case gl::QueryType::Timestamp:
+            ANGLE_TRY(mQueryHelper.beginQuery(contextVk));
+            break;
+        case gl::QueryType::TimeElapsed:
+            // Note: TimeElapsed is implemented by using two Timestamp queries and taking the diff.
+            if (!mQueryHelperTimeElapsedBegin.valid())
+            {
+                ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(
+                    contextVk, &mQueryHelperTimeElapsedBegin));
+            }
 
-        ANGLE_TRY(mQueryHelperTimeElapsedBegin.flushAndWriteTimestamp(contextVk));
-    }
-    else
-    {
-        ANGLE_TRY(mQueryHelper.beginQuery(contextVk));
+            ANGLE_TRY(mQueryHelperTimeElapsedBegin.flushAndWriteTimestamp(contextVk));
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 
     return angle::Result::Continue;
@@ -134,18 +138,25 @@ angle::Result QueryVk::end(const gl::Context *context)
         }
         mCachedResultValid = true;
         // We could consider using VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT.
+
+        return angle::Result::Continue;
     }
-    else if (isOcclusionQuery())
+
+    switch (getType())
     {
-        contextVk->endOcclusionQuery(this);
-    }
-    else if (getType() == gl::QueryType::TimeElapsed)
-    {
-        ANGLE_TRY(mQueryHelper.flushAndWriteTimestamp(contextVk));
-    }
-    else
-    {
-        ANGLE_TRY(mQueryHelper.endQuery(contextVk));
+        case gl::QueryType::AnySamples:
+        case gl::QueryType::AnySamplesConservative:
+            contextVk->endInRenderPassQuery(this);
+            break;
+        case gl::QueryType::Timestamp:
+            ANGLE_TRY(mQueryHelper.endQuery(contextVk));
+            break;
+        case gl::QueryType::TimeElapsed:
+            ANGLE_TRY(mQueryHelper.flushAndWriteTimestamp(contextVk));
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 
     return angle::Result::Continue;

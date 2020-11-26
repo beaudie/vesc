@@ -46,9 +46,10 @@ class QueryVk : public QueryImpl
     bool isCurrentlyInUse(Serial lastCompletedSerial) const;
     angle::Result finishRunningCommands(ContextVk *contextVk);
 
-    // Used for AnySamples, AnySamplesConservative, Timestamp and TimeElapsed (end).
+    // Used for all queries, except TimeElapsed (begin) or those that are emulated.
     vk::QueryHelper mQueryHelper;
-    // Used for occlusion query that we may end up with multiple outstanding query helper objects.
+    // Used for queries that may end up with multiple outstanding query helper objects as they end
+    // and begin again with render passes.
     std::vector<vk::QueryHelper> mStashedQueryHelpers;
     // An additional query used for TimeElapsed (begin), as it is implemented using Timestamp.
     vk::QueryHelper mQueryHelperTimeElapsedBegin;

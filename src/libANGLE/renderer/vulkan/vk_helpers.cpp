@@ -1335,7 +1335,6 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
 
     if (mIsRenderPassCommandBuffer)
     {
-        mCommandBuffer.executeQueuedResetQueryPoolCommands(primary->getHandle());
         ASSERT(renderPass != nullptr);
 
         VkRenderPassBeginInfo beginInfo    = {};
@@ -2446,11 +2445,22 @@ void QueryHelper::deinit()
     mUse.init();
 }
 
-void QueryHelper::resetQueryPool(ContextVk *contextVk,
-                                 CommandBuffer *outsideRenderPassCommandBuffer)
+void QueryHelper::beginQueryImpl(ContextVk *contextVk,
+                                 CommandBuffer *resetCommandBuffer,
+                                 CommandBuffer *commandBuffer)
 {
     const QueryPool &queryPool = getQueryPool();
-    outsideRenderPassCommandBuffer->resetQueryPool(queryPool.getHandle(), mQuery, 1);
+    resetCommandBuffer->resetQueryPool(queryPool.getHandle(), mQuery, 1);
+    commandBuffer->beginQuery(queryPool.getHandle(), mQuery, 0);
+}
+
+void QueryHelper::endQueryImpl(ContextVk *contextVk, CommandBuffer *commandBuffer)
+{
+    commandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
+
+    // Query results are available after endQuery, retain this query so that we get its serial
+    // updated which is used to indicate that query results are (or will be) available.
+    retain(&contextVk->getResourceUseList());
 }
 
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
@@ -2460,11 +2470,10 @@ angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
     }
 
-    vk::CommandBuffer *commandBuffer;
+    CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
-    const QueryPool &queryPool = getQueryPool();
-    commandBuffer->resetQueryPool(queryPool.getHandle(), mQuery, 1);
-    commandBuffer->beginQuery(queryPool.getHandle(), mQuery, 0);
+
+    beginQueryImpl(contextVk, commandBuffer, commandBuffer);
 
     return angle::Result::Continue;
 }
@@ -2476,31 +2485,30 @@ angle::Result QueryHelper::endQuery(ContextVk *contextVk)
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
     }
 
-    vk::CommandBuffer *commandBuffer;
+    CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
-    commandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
 
-    // Query results are available after endQuery, retain this query so that we get its serial
-    // updated which is used to indicate that query results are (or will be) available.
-    retain(&contextVk->getResourceUseList());
+    endQueryImpl(contextVk, commandBuffer);
 
     return angle::Result::Continue;
 }
 
-void QueryHelper::beginOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer)
+angle::Result QueryHelper::beginInRenderPassQuery(ContextVk *contextVk)
 {
-    const QueryPool &queryPool = getQueryPool();
-    renderPassCommandBuffer->queueResetQueryPool(queryPool.getHandle(), mQuery, 1);
-    renderPassCommandBuffer->beginQuery(queryPool.getHandle(), mQuery, 0);
+    CommandBuffer *outsideRenderPassCommandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &outsideRenderPassCommandBuffer));
+
+    CommandBuffer *renderPassCommandBuffer =
+        &contextVk->getStartedRenderPassCommands().getCommandBuffer();
+
+    beginQueryImpl(contextVk, outsideRenderPassCommandBuffer, renderPassCommandBuffer);
+
+    return angle::Result::Continue;
 }
 
-void QueryHelper::endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer)
+void QueryHelper::endInRenderPassQuery(ContextVk *contextVk)
 {
-    renderPassCommandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
-
-    // Query results are available after endQuery, retain this query so that we get its serial
-    // updated which is used to indicate that query results are (or will be) available.
-    retain(&contextVk->getResourceUseList());
+    endQueryImpl(contextVk, &contextVk->getStartedRenderPassCommands().getCommandBuffer());
 }
 
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
@@ -2510,7 +2518,7 @@ angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
     }
 
-    vk::CommandBuffer *commandBuffer;
+    CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
     writeTimestamp(contextVk, commandBuffer);
     return angle::Result::Continue;
