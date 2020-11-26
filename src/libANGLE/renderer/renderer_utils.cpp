@@ -629,8 +629,10 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
     }
     else if (type == gl::TextureType::_2DMultisample)
     {
-        // Call a specialized clear function to init a multisample texture.
-        ANGLE_TRY(multisampleInitializer->initializeMultisampleTextureToBlack(context, t.get()));
+        // TODO Call a specialized clear function to init a multisample texture.
+        // http://anglebug.com/3588#c11
+        gl::ImageIndex index = gl::ImageIndex::MakeFromType(type, 0, 0, 1);
+        ANGLE_TRY(t->initializeContents(context, index));
     }
     else if (type == gl::TextureType::Buffer)
     {
