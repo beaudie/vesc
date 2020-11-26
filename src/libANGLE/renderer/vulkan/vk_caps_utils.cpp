@@ -461,7 +461,7 @@ void RendererVk::ensureCapsInitialized() const
         vk::GetTextureSRGBOverrideSupport(this, mNativeExtensions);
     mNativeExtensions.textureSRGBDecode = vk::GetTextureSRGBDecodeSupport(this);
 
-    mNativeExtensions.gpuShader5EXT = vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures);
+    mNativeExtensions.gpuShader5EXT = vk::CanSupportGPUShader5EXT(this);
 
     mNativeExtensions.textureFilteringCHROMIUM = getFeatures().supportsFilteringPrecision.enabled;
 
@@ -906,9 +906,8 @@ void RendererVk::ensureCapsInitialized() const
     // Geometry shader is optional.
     if (mPhysicalDeviceFeatures.geometryShader)
     {
-        // TODO: geometry shader support is incomplete.  http://anglebug.com/3571
-        mNativeExtensions.geometryShader =
-            getFeatures().exposeNonConformantExtensionsAndVersions.enabled;
+        mNativeExtensions.geometryShader = vk::CanSupportGeometryShader(this);
+
         mNativeCaps.maxFramebufferLayers = LimitToInt(limitsVk.maxFramebufferLayers);
         mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
 
@@ -937,8 +936,10 @@ void RendererVk::ensureCapsInitialized() const
 namespace vk
 {
 
-bool CanSupportGPUShader5EXT(const VkPhysicalDeviceFeatures &features)
+bool CanSupportGPUShader5EXT(RendererVk *renderer)
 {
+    const VkPhysicalDeviceFeatures &features = renderer->getPhysicalDeviceFeatures();
+
     // We use the following Vulkan features to implement EXT_gpu_shader5:
     // - shaderImageGatherExtended: textureGatherOffset with non-constant offset and
     //   textureGatherOffsets family of functions.
@@ -950,6 +951,16 @@ bool CanSupportGPUShader5EXT(const VkPhysicalDeviceFeatures &features)
     return features.shaderImageGatherExtended && features.shaderSampledImageArrayDynamicIndexing &&
            features.shaderUniformBufferArrayDynamicIndexing &&
            features.shaderStorageBufferArrayDynamicIndexing;
+}
+
+bool CanSupportGeometryShader(RendererVk *renderer)
+{
+    const VkPhysicalDeviceFeatures &features = renderer->getPhysicalDeviceFeatures();
+
+    // TODO: geometry shader support is incomplete.  http://anglebug.com/3571
+    mNativeExtensions.geometryShader =
+        features.geometryShader &&
+        renderer->getFeatures().exposeNonConformantExtensionsAndVersions.enabled;
 }
 
 }  // namespace vk

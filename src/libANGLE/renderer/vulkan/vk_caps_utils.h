@@ -73,7 +73,8 @@ namespace vk
 {
 // Functions that determine support for a feature or extension, used both to advertise support for
 // an extension, and to determine if a context version can be supported.
-bool CanSupportGPUShader5EXT(const VkPhysicalDeviceFeatures &features);
+bool CanSupportGPUShader5EXT(RendererVk *renderer);
+bool CanSupportGeometryShader(RendererVk *renderer);
 }  // namespace vk
 
 }  // namespace rx
