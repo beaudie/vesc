@@ -39,6 +39,7 @@ struct VaryingInShaderRef : angle::NonCopyable
     ~VaryingInShaderRef();
 
     VaryingInShaderRef &operator=(VaryingInShaderRef &&other);
+    void copyNamesFrom(const sh::ShaderVariable *parent, const sh::ShaderVariable *root);
 
     const sh::ShaderVariable *varying;
 
@@ -47,6 +48,9 @@ struct VaryingInShaderRef : angle::NonCopyable
     // Struct name
     std::string parentStructName;
     std::string parentStructMappedName;
+
+    std::string rootStructName;
+    std::string rootStructMappedName;
 };
 
 struct PackedVarying : angle::NonCopyable
@@ -67,6 +71,11 @@ struct PackedVarying : angle::NonCopyable
                   VaryingInShaderRef &&backVaryingIn,
                   sh::InterpolationType interpolationIn,
                   GLuint fieldIndexIn);
+    PackedVarying(VaryingInShaderRef &&frontVaryingIn,
+                  VaryingInShaderRef &&backVaryingIn,
+                  sh::InterpolationType interpolationIn,
+                  GLuint fieldIndexIn,
+                  GLuint parentFieldIndex);
     PackedVarying(PackedVarying &&other);
     ~PackedVarying();
 
@@ -76,6 +85,12 @@ struct PackedVarying : angle::NonCopyable
     {
         return frontVarying.varying ? !frontVarying.parentStructName.empty()
                                     : !backVarying.parentStructName.empty();
+    }
+
+    bool isNestedField() const
+    {
+        return frontVarying.varying ? !frontVarying.rootStructName.empty()
+                                    : !backVarying.rootStructName.empty();
     }
 
     bool isArrayElement() const { return arrayIndex != GL_INVALID_INDEX; }
@@ -94,6 +109,11 @@ struct PackedVarying : angle::NonCopyable
             stage == frontVarying.stage ? frontVarying : backVarying;
 
         std::stringstream fullNameStr;
+        if (isNestedField())
+        {
+            fullNameStr << varying.rootStructMappedName << ".";
+        }
+
         if (isStructField())
         {
             fullNameStr << varying.parentStructName << ".";
@@ -124,6 +144,7 @@ struct PackedVarying : angle::NonCopyable
     // Field index in the struct.  In Vulkan, this is used to assign a
     // struct-typed varying location to the location of its first field.
     GLuint fieldIndex;
+    GLuint parentFieldIndex;
 };
 
 struct PackedVaryingRegister final
@@ -237,7 +258,8 @@ class VaryingPacking final : angle::NonCopyable
     void packUserVarying(const ProgramVaryingRef &ref, VaryingUniqueFullNames *uniqueFullNames);
     void packUserVaryingField(const ProgramVaryingRef &ref,
                               GLuint fieldIndex,
-                              VaryingUniqueFullNames *uniqueFullNames);
+                              VaryingUniqueFullNames *uniqueFullNames,
+                              GLuint parentFieldIndex);
     void packUserVaryingTF(const ProgramVaryingRef &ref, size_t subscript);
     void packUserVaryingFieldTF(const ProgramVaryingRef &ref,
                                 const sh::ShaderVariable &field,
