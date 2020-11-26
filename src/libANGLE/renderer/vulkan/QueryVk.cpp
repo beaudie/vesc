@@ -84,6 +84,7 @@ angle::Result QueryVk::begin(const gl::Context *context)
     {
         case gl::QueryType::AnySamples:
         case gl::QueryType::AnySamplesConservative:
+        case gl::QueryType::PrimitivesGenerated:
             // For pathological usage case where begin/end is called back to back without flush and
             // get result, we have to force flush so that the same mQueryHelper will not encoded in
             // the same renderpass twice without resetting it.
@@ -146,6 +147,7 @@ angle::Result QueryVk::end(const gl::Context *context)
     {
         case gl::QueryType::AnySamples:
         case gl::QueryType::AnySamplesConservative:
+        case gl::QueryType::PrimitivesGenerated:
             contextVk->endInRenderPassQuery(this);
             break;
         case gl::QueryType::Timestamp:
@@ -326,6 +328,8 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
 
             break;
         }
+        case gl::QueryType::PrimitivesGenerated:
+            break;
         default:
             UNREACHABLE();
             break;

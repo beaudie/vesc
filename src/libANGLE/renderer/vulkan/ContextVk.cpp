@@ -557,6 +557,14 @@ angle::Result ContextVk::initialize()
                                                                vk::kDefaultTimestampQueryPoolSize));
     }
 
+    // Only initialize the primitives generated query pools if the extension is available.
+    if (vk::CanSupportGeometryShader(mRenderer))
+    {
+        // TODO: there's no such thing as VK_QUERY_TYPE_PRIMTIVES_GENERATED!!
+        ANGLE_TRY(mQueryPools[gl::QueryType::PrimitivesGenerated].init(
+            this, VK_QUERY_TYPE_PRIMTIVES_GENERATED, vk::kDefaultOcclusionQueryPoolSize));
+    }
+
     // Init gles to vulkan index type map
     initIndexTypeMap();
 
@@ -3588,6 +3596,7 @@ vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||
            queryType == gl::QueryType::AnySamplesConservative ||
+           queryType == gl::QueryType::PrimitivesGenerated ||
            queryType == gl::QueryType::Timestamp || queryType == gl::QueryType::TimeElapsed);
 
     // Assert that timestamp extension is available if needed.

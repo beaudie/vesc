@@ -913,6 +913,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Queries that need to be closed and reopened with the render pass:
     //
     // - Occlusion queries
+    // - Primitives generated query
     angle::PackedEnumMap<gl::QueryType, QueryVk *> mActiveQueries;
 
     // The offset we had the last time we bound the index buffer.
