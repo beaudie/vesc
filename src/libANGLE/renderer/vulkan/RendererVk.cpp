@@ -1619,7 +1619,12 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     }
 
     // Limit to ES3.1 if there are any blockers for 3.2.
-    if (!vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures))
+    if (!vk::CanSupportGPUShader5EXT(this))
+    {
+        maxVersion = LimitVersionTo(maxVersion, {3, 1});
+    }
+
+    if (!vk::CanSupportGeometryShader(this))
     {
         maxVersion = LimitVersionTo(maxVersion, {3, 1});
     }
