@@ -429,14 +429,12 @@ class QueryHelper final : public Resource
 
     bool valid() const { return mDynamicQueryPool != nullptr; }
 
+    // Begin/end queries.  These functions break the render pass.
     angle::Result beginQuery(ContextVk *contextVk);
     angle::Result endQuery(ContextVk *contextVk);
-
-    // for occlusion query
-    // Must resetQueryPool outside of RenderPass before beginning occlusion query.
-    void resetQueryPool(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
-    void beginOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
-    void endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
+    // Begin/end queries within a started render pass.
+    angle::Result beginInRenderPassQuery(ContextVk *contextVk);
+    void endInRenderPassQuery(ContextVk *contextVk);
 
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
     // When syncing gpu/cpu time, main thread accesses primary directly
@@ -456,6 +454,13 @@ class QueryHelper final : public Resource
         ASSERT(valid());
         return mDynamicQueryPool->getQueryPool(mQueryPoolIndex);
     }
+
+    // Reset needs to always be done outside a render pass, which may be different from the
+    // passed-in command buffer (which could be the render pass').
+    void beginQueryImpl(ContextVk *contextVk,
+                        CommandBuffer *resetCommandBuffer,
+                        CommandBuffer *commandBuffer);
+    void endQueryImpl(ContextVk *contextVk, CommandBuffer *commandBuffer);
 
     const DynamicQueryPool *mDynamicQueryPool;
     size_t mQueryPoolIndex;

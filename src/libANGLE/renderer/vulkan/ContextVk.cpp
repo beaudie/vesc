@@ -368,8 +368,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
       mExecutable(nullptr),
-      mActiveQueryAnySamples(nullptr),
-      mActiveQueryAnySamplesConservative(nullptr),
+      mActiveQueries{},
       mLastIndexBufferOffset(0),
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mXfbBaseVertex(0),
@@ -4490,7 +4489,7 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
     ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
 
-    ANGLE_TRY(resumeOcclusionQueryIfActive());
+    ANGLE_TRY(resumeQueriesIfActive());
 
     const gl::DepthStencilState &dsState = mState.getDepthStencilState();
     vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
@@ -4557,7 +4556,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
         return angle::Result::Continue;
     }
 
-    ANGLE_TRY(pauseOcclusionQueryIfActive());
+    ANGLE_TRY(pauseQueriesIfActive());
 
     mCurrentTransformFeedbackBuffers.clear();
     mCurrentIndirectBuffer = nullptr;
@@ -4714,85 +4713,67 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     return angle::Result::Continue;
 }
 
-void ContextVk::beginOcclusionQuery(QueryVk *queryVk)
+angle::Result ContextVk::beginInRenderPassQuery(QueryVk *queryVk)
 {
-    // To avoid complexity, we always start and end occlusion query inside renderpass. if renderpass
-    // not yet started, we just remember it and defer the start call.
-    if (mRenderPassCommands->started())
+    // To avoid complexity, we always start and end these queries inside the render pass.  If the
+    // render pass has not yet started, the query is deferred until it does.
+    // TODO:
+    if (mRenderPassCommandBuffer)
+    // if (mRenderPassCommands->started())
     {
-        queryVk->getQueryHelper()->beginOcclusionQuery(this, mRenderPassCommandBuffer);
+        ANGLE_TRY(queryVk->getQueryHelper()->beginInRenderPassQuery(this));
     }
-    if (queryVk->isAnySamplesQuery())
-    {
-        ASSERT(mActiveQueryAnySamples == nullptr);
-        mActiveQueryAnySamples = queryVk;
-    }
-    else if (queryVk->isAnySamplesConservativeQuery())
-    {
-        ASSERT(mActiveQueryAnySamplesConservative == nullptr);
-        mActiveQueryAnySamplesConservative = queryVk;
-    }
-    else
-    {
-        UNREACHABLE();
-    }
+
+    gl::QueryType type = queryVk->getType();
+
+    ASSERT(mActiveQueries[type] == nullptr);
+    mActiveQueries[type] = queryVk;
+
+    return angle::Result::Continue;
 }
 
-void ContextVk::endOcclusionQuery(QueryVk *queryVk)
+void ContextVk::endInRenderPassQuery(QueryVk *queryVk)
 {
-    if (mRenderPassCommands->started() && mRenderPassCommandBuffer)
+    // TODO:
+    if (mRenderPassCommandBuffer)
+    // if (mRenderPassCommands->started() && mRenderPassCommandBuffer)
     {
-        queryVk->getQueryHelper()->endOcclusionQuery(this, mRenderPassCommandBuffer);
+        queryVk->getQueryHelper()->endInRenderPassQuery(this);
     }
-    if (queryVk->isAnySamplesQuery())
-    {
-        ASSERT(mActiveQueryAnySamples == queryVk);
-        mActiveQueryAnySamples = nullptr;
-    }
-    else if (queryVk->isAnySamplesConservativeQuery())
-    {
-        ASSERT(mActiveQueryAnySamplesConservative == queryVk);
-        mActiveQueryAnySamplesConservative = nullptr;
-    }
-    else
-    {
-        UNREACHABLE();
-    }
+
+    gl::QueryType type = queryVk->getType();
+
+    ASSERT(mActiveQueries[type] == queryVk);
+    mActiveQueries[type] = nullptr;
 }
 
-angle::Result ContextVk::pauseOcclusionQueryIfActive()
+angle::Result ContextVk::pauseQueriesIfActive()
 {
     if (mRenderPassCommandBuffer == nullptr)
     {
         return angle::Result::Continue;
     }
 
-    if (mActiveQueryAnySamples)
+    for (QueryVk *activeQuery : mActiveQueries)
     {
-        mActiveQueryAnySamples->getQueryHelper()->endOcclusionQuery(this, mRenderPassCommandBuffer);
-        ANGLE_TRY(mActiveQueryAnySamples->stashQueryHelper(this));
-    }
-    if (mActiveQueryAnySamplesConservative)
-    {
-        mActiveQueryAnySamplesConservative->getQueryHelper()->endOcclusionQuery(
-            this, mRenderPassCommandBuffer);
-        ANGLE_TRY(mActiveQueryAnySamplesConservative->stashQueryHelper(this));
+        if (activeQuery)
+        {
+            activeQuery->getQueryHelper()->endInRenderPassQuery(this);
+            ANGLE_TRY(activeQuery->stashQueryHelper(this));
+        }
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::resumeOcclusionQueryIfActive()
+angle::Result ContextVk::resumeQueriesIfActive()
 {
-    if (mActiveQueryAnySamples)
+    for (QueryVk *activeQuery : mActiveQueries)
     {
-        mActiveQueryAnySamples->getQueryHelper()->beginOcclusionQuery(this,
-                                                                      mRenderPassCommandBuffer);
-    }
-    if (mActiveQueryAnySamplesConservative)
-    {
-        mActiveQueryAnySamplesConservative->getQueryHelper()->beginOcclusionQuery(
-            this, mRenderPassCommandBuffer);
+        if (activeQuery)
+        {
+            ANGLE_TRY(activeQuery->getQueryHelper()->beginInRenderPassQuery(this));
+        }
     }
 
     return angle::Result::Continue;
