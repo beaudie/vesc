@@ -221,6 +221,8 @@ class VaryingPacking final : angle::NonCopyable
         return mInactiveVaryingMappedNames;
     }
 
+    const std::vector<std::string> &getActiveBuiltIns() const { return mActiveBuiltIns; }
+
     void reset();
 
   private:
@@ -249,6 +251,7 @@ class VaryingPacking final : angle::NonCopyable
     std::vector<PackedVaryingRegister> mRegisterList;
     std::vector<PackedVarying> mPackedVaryings;
     ShaderMap<std::vector<std::string>> mInactiveVaryingMappedNames;
+    std::vector<std::string> mActiveBuiltIns;
 
     PackMode mPackMode;
 };

@@ -625,11 +625,7 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
         programExecutable.getResources().varyingPacking.getInactiveVaryingMappedNames();
     for (const std::string &varyingName : inactiveVaryingMappedNames[shaderType])
     {
-        bool isBuiltin = angle::BeginsWith(varyingName, "gl_");
-        if (isBuiltin)
-        {
-            continue;
-        }
+        ASSERT(!angle::BeginsWith(varyingName, "gl_"));
 
         // If name is already in the map, it will automatically have marked all other stages
         // inactive.
@@ -642,6 +638,24 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
         // Otherwise, add an entry for it with all locations inactive.
         ShaderInterfaceVariableInfo *info = &(*variableInfoMapOut)[shaderType][varyingName];
         ASSERT(info->location == ShaderInterfaceVariableInfo::kInvalid);
+    }
+
+    // Add an entry for active builtins, as well as one for gl_PerVertex.  This will allow inactive
+    // builtins to be removed.
+    const std::vector<std::string> &activeBuiltIns =
+        programExecutable.getResources().varyingPacking.getActiveBuiltIns();
+    for (const std::string &builtInName : activeBuiltIns)
+    {
+        ASSERT(angle::BeginsWith(builtInName, "gl_"));
+
+        ShaderInterfaceVariableInfo *info = &(*variableInfoMapOut)[shaderType][builtInName];
+        info->activeStages.set(shaderType);
+    }
+
+    if (shaderType != gl::ShaderType::Fragment && shaderType != gl::ShaderType::Compute)
+    {
+        ShaderInterfaceVariableInfo *info = &(*variableInfoMapOut)[shaderType]["gl_PerVertex"];
+        info->activeStages.set(shaderType);
     }
 }
 
@@ -1038,7 +1052,6 @@ class SpirvTransformerBase : angle::NonCopyable
     {
         gl::ShaderBitSet allStages;
         allStages.set();
-        mBuiltinVariableInfo.activeStages = allStages;
     }
 
     std::vector<const ShaderInterfaceVariableInfo *> &getVariableInfoByIdMap()
@@ -1086,7 +1099,6 @@ class SpirvTransformerBase : angle::NonCopyable
 
     // Input shader variable info map:
     const ShaderInterfaceVariableInfoMap &mVariableInfoMap;
-    ShaderInterfaceVariableInfo mBuiltinVariableInfo;
 
     // Transformed SPIR-V:
     SpirvBlob *mSpirvBlobOut;
@@ -1353,7 +1365,9 @@ class SpirvTransformer final : public SpirvTransformerBase
         : SpirvTransformerBase(spirvBlobIn, variableInfoMap, shaderType, spirvBlobOut),
           mHasTransformFeedbackOutput(false),
           mRemoveEarlyFragmentTestsOptimization(removeEarlyFragmentTestsOptimization),
-          mRemoveDebugInfo(removeDebugInfo)
+          mRemoveDebugInfo(removeDebugInfo),
+          mPerVertexTypeId(0),
+          mPerVertexMaxActiveMember(0)
     {}
 
     bool transform();
@@ -1367,6 +1381,7 @@ class SpirvTransformer final : public SpirvTransformerBase
 
     // Instructions that are purely informational:
     void visitName(const uint32_t *instruction);
+    void visitMemberName(const uint32_t *instruction);
     void visitTypeHelper(const uint32_t *instruction, size_t idIndex, size_t typeIdIndex);
     void visitTypeArray(const uint32_t *instruction);
     void visitTypePointer(const uint32_t *instruction);
@@ -1376,10 +1391,13 @@ class SpirvTransformer final : public SpirvTransformerBase
     // transformed.  If false is returned, the instruction should be copied as-is.
     bool transformAccessChain(const uint32_t *instruction, size_t wordCount);
     bool transformCapability(const uint32_t *instruction, size_t wordCount);
+    bool transformDebugInfo(const uint32_t *instruction, size_t wordCount);
     bool transformEmitVertex(const uint32_t *instruction, size_t wordCount);
     bool transformEntryPoint(const uint32_t *instruction, size_t wordCount);
     bool transformDecorate(const uint32_t *instruction, size_t wordCount);
+    bool transformMemberDecorate(const uint32_t *instruction, size_t wordCount);
     bool transformTypePointer(const uint32_t *instruction, size_t wordCount);
+    bool transformTypeStruct(const uint32_t *instruction, size_t wordCount);
     bool transformReturn(const uint32_t *instruction, size_t wordCount);
     bool transformVariable(const uint32_t *instruction, size_t wordCount);
     bool transformExecutionMode(const uint32_t *instruction, size_t wordCount);
@@ -1418,6 +1436,12 @@ class SpirvTransformer final : public SpirvTransformerBase
     std::vector<TransformedIDs> mTypePointerTransformedId;
     std::vector<uint32_t> mFixedVaryingId;
     std::vector<uint32_t> mFixedVaryingTypeId;
+
+    // gl_PerVertex is unique in that it's the only builtin of struct type.  This struct is pruned
+    // by removing trailing inactive members.  We therefore need to keep track of what's its type id
+    // as well as which is the last active member.
+    uint32_t mPerVertexTypeId;
+    uint32_t mPerVertexMaxActiveMember;
 };
 
 bool SpirvTransformer::transform()
@@ -1470,6 +1494,9 @@ void SpirvTransformer::resolveVariableIds()
         {
             case spv::OpName:
                 visitName(instruction);
+                break;
+            case spv::OpMemberName:
+                visitMemberName(instruction);
                 break;
             case spv::OpTypeArray:
                 visitTypeArray(instruction);
@@ -1566,11 +1593,7 @@ void SpirvTransformer::transformInstruction()
             case spv::OpLine:
             case spv::OpNoLine:
             case spv::OpModuleProcessed:
-                if (mRemoveDebugInfo)
-                {
-                    // Strip debug info to reduce binary size.
-                    transformed = true;
-                }
+                transformed = transformDebugInfo(instruction, wordCount);
                 break;
             case spv::OpCapability:
                 transformed = transformCapability(instruction, wordCount);
@@ -1581,8 +1604,14 @@ void SpirvTransformer::transformInstruction()
             case spv::OpDecorate:
                 transformed = transformDecorate(instruction, wordCount);
                 break;
+            case spv::OpMemberDecorate:
+                transformed = transformMemberDecorate(instruction, wordCount);
+                break;
             case spv::OpTypePointer:
                 transformed = transformTypePointer(instruction, wordCount);
+                break;
+            case spv::OpTypeStruct:
+                transformed = transformTypeStruct(instruction, wordCount);
                 break;
             case spv::OpVariable:
                 transformed = transformVariable(instruction, wordCount);
@@ -1655,6 +1684,7 @@ void SpirvTransformer::writeOutputPrologue()
         }
     }
 }
+
 void SpirvTransformer::visitName(const uint32_t *instruction)
 {
     // We currently don't have any big-endian devices in the list of supported platforms.  Literal
@@ -1674,6 +1704,40 @@ void SpirvTransformer::visitName(const uint32_t *instruction)
     ASSERT(mNamesById[id] == nullptr);
 
     mNamesById[id] = name;
+}
+
+void SpirvTransformer::visitMemberName(const uint32_t *instruction)
+{
+    ASSERT(IsLittleEndian());
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpMemberName
+    constexpr size_t kIdIndex     = 1;
+    constexpr size_t kMemberIndex = 2;
+    constexpr size_t kNameIndex   = 3;
+
+    const uint32_t id     = instruction[kIdIndex];
+    const uint32_t member = instruction[kMemberIndex];
+    const char *name      = reinterpret_cast<const char *>(&instruction[kNameIndex]);
+
+    // The names and ids are unique
+    ASSERT(id < mNamesById.size());
+    ASSERT(mNamesById[id] != nullptr);
+
+    if (strcmp(mNamesById[id], "gl_PerVertex") != 0)
+    {
+        return;
+    }
+
+    ASSERT(mPerVertexTypeId == 0 || mPerVertexTypeId == id);
+    mPerVertexTypeId = id;
+
+    // Keep track of the range of members that are active.
+    const bool isActive = mVariableInfoMap.find(name) != mVariableInfoMap.end();
+
+    if (isActive && member > mPerVertexMaxActiveMember)
+    {
+        mPerVertexMaxActiveMember = member;
+    }
 }
 
 void SpirvTransformer::visitTypeHelper(const uint32_t *instruction,
@@ -1746,24 +1810,18 @@ void SpirvTransformer::visitVariable(const uint32_t *instruction)
     ASSERT(id < mVariableInfoById.size());
     ASSERT(mVariableInfoById[id] == nullptr);
 
-    // For interface block variables, the name that's used to associate info is the block name
-    // rather than the variable name.
+    // For interface block variables, as well as gl_PerVertex, the name that's used to associate
+    // info is the block name rather than the variable name.
     const char *name = mNamesById[isInterfaceBlockVariable ? typeId : id];
     ASSERT(name != nullptr);
 
-    // Handle builtins, which all start with "gl_".  Either the variable name could be an indication
-    // of a builtin variable (such as with gl_FragCoord) or the type name (such as with
-    // gl_PerVertex).
-    const bool isNameBuiltin = isInOut && angle::BeginsWith(name, "gl_");
-    const bool isTypeBuiltin =
-        isInOut && mNamesById[typeId] != nullptr && angle::BeginsWith(mNamesById[typeId], "gl_");
-    if (isNameBuiltin || isTypeBuiltin)
+    if (name[0] == '\0')
     {
-        // Make all builtins point to this no-op info.  Adding this entry allows us to ASSERT that
-        // every shader interface variable is processed during the SPIR-V transformation.  This is
-        // done when iterating the ids provided by OpEntryPoint.
-        mVariableInfoById[id] = &mBuiltinVariableInfo;
-        return;
+        ASSERT(!isInterfaceBlockVariable);
+        ASSERT(strcmp(mNamesById[typeId], "gl_PerVertex") == 0);
+
+        name = mNamesById[typeId];
+        ASSERT(name != nullptr);
     }
 
     // Every shader interface variable should have an associated data.
@@ -1925,6 +1983,29 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     return true;
 }
 
+bool SpirvTransformer::transformMemberDecorate(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpMemberDecorate
+    constexpr size_t kTypeIdIndex     = 1;
+    constexpr size_t kMemberIndex     = 2;
+    constexpr size_t kDecorationIndex = 3;
+
+    uint32_t typeId     = instruction[kTypeIdIndex];
+    uint32_t member     = instruction[kMemberIndex];
+    uint32_t decoration = instruction[kDecorationIndex];
+
+    // Transform only OpMemberDecorate %gl_PerVertex N BuiltIn B
+    if (typeId != mPerVertexTypeId)
+    {
+        return false;
+    }
+
+    ASSERT(decoration == spv::DecorationBuiltIn);
+
+    // Drop stripped fields.
+    return member > mPerVertexMaxActiveMember;
+}
+
 bool SpirvTransformer::transformCapability(const uint32_t *instruction, size_t wordCount)
 {
     if (!mHasTransformFeedbackOutput)
@@ -1965,6 +2046,31 @@ bool SpirvTransformer::transformCapability(const uint32_t *instruction, size_t w
     copyInstruction(newCapabilityDeclaration.data(), kCapabilityInstructionLength);
 
     return true;
+}
+
+bool SpirvTransformer::transformDebugInfo(const uint32_t *instruction, size_t wordCount)
+{
+    if (mRemoveDebugInfo)
+    {
+        // Strip debug info to reduce binary size.
+        return true;
+    }
+
+    // In the case of OpMemberName, unconditionally remove stripped gl_PerVertex members.
+    if (GetSpirvInstructionOp(instruction) == spv::OpMemberName)
+    {
+        // SPIR-V 1.0 Section 3.32 Instructions, OpMemberName
+        constexpr size_t kIdIndex     = 1;
+        constexpr size_t kMemberIndex = 2;
+
+        const uint32_t id     = instruction[kIdIndex];
+        const uint32_t member = instruction[kMemberIndex];
+
+        // Remove the instruction if it's a stripped member of gl_PerVertex.
+        return id == mPerVertexTypeId && member > mPerVertexMaxActiveMember;
+    }
+
+    return false;
 }
 
 bool SpirvTransformer::transformEmitVertex(const uint32_t *instruction, size_t wordCount)
@@ -2104,6 +2210,29 @@ bool SpirvTransformer::transformTypePointer(const uint32_t *instruction, size_t 
     // The original instruction should still be present as well.  At this point, we don't know
     // whether we will need the Output or Private type.
     return false;
+}
+
+bool SpirvTransformer::transformTypeStruct(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpTypeStruct
+    constexpr size_t kIdIndex                         = 1;
+    constexpr size_t kTypeStructInstructionBaseLength = 2;
+
+    const uint32_t id = instruction[kIdIndex];
+
+    if (id != mPerVertexTypeId)
+    {
+        return false;
+    }
+
+    // Change the definition of the gl_PerVertex struct by stripping unused fields at the end.
+    const size_t newLength = kTypeStructInstructionBaseLength + mPerVertexMaxActiveMember + 1;
+    ASSERT(wordCount >= newLength);
+
+    const size_t instructionOffset = copyInstruction(instruction, newLength);
+    SetSpirvInstructionLength(&(*mSpirvBlobOut)[instructionOffset], newLength);
+
+    return true;
 }
 
 bool SpirvTransformer::transformReturn(const uint32_t *instruction, size_t wordCount)

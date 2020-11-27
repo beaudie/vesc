@@ -123,6 +123,7 @@ void VaryingPacking::reset()
     clearRegisterMap();
     mRegisterList.clear();
     mPackedVaryings.clear();
+    mActiveBuiltIns.clear();
 
     for (std::vector<std::string> inactiveVaryingMappedNames : mInactiveVaryingMappedNames)
     {
@@ -364,12 +365,12 @@ void VaryingPacking::packUserVarying(const ProgramVaryingRef &ref,
     VaryingInShaderRef backVarying(ref.backShaderStage, output);
 
     mPackedVaryings.emplace_back(std::move(frontVarying), std::move(backVarying), interpolation);
-    if (input)
+    if (input && !input->isBuiltIn())
     {
         (*uniqueFullNames)[ref.frontShaderStage].insert(
             mPackedVaryings.back().fullName(ref.frontShaderStage));
     }
-    if (output)
+    if (output && !output->isBuiltIn())
     {
         (*uniqueFullNames)[ref.backShaderStage].insert(
             mPackedVaryings.back().fullName(ref.backShaderStage));
@@ -454,22 +455,34 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
                                                 const bool isSeparableProgram)
 {
     VaryingUniqueFullNames uniqueFullNames;
-    mPackedVaryings.clear();
-    clearRegisterMap();
+
+    reset();
 
     for (const ProgramVaryingRef &ref : mergedVaryings)
     {
         const sh::ShaderVariable *input  = ref.frontShader;
         const sh::ShaderVariable *output = ref.backShader;
 
+        const bool isActiveBuiltInInput  = input && input->isBuiltIn() && input->active;
+        const bool isActiveBuiltInOutput = output && output->isBuiltIn() && output->active;
+
+        // Keep track of builtins that are used by the shader.
+        if (isActiveBuiltInInput)
+        {
+            mActiveBuiltIns.push_back(input->name);
+        }
+        if (isActiveBuiltInOutput)
+        {
+            mActiveBuiltIns.push_back(output->name);
+        }
+
         // Only pack statically used varyings that have a matched input or output, plus special
         // builtins. Note that we pack all statically used user-defined varyings even if they are
         // not active. GLES specs are a bit vague on whether it's allowed to only pack active
         // varyings, though GLES 3.1 spec section 11.1.2.1 says that "device-dependent
         // optimizations" may be used to make vertex shader outputs fit.
-        if ((input && output && output->staticUse) ||
-            (input && input->isBuiltIn() && input->active) ||
-            (output && output->isBuiltIn() && output->active) ||
+        if ((input && output && output->staticUse) || isActiveBuiltInInput ||
+            isActiveBuiltInOutput ||
             (isSeparableProgram && ((input && input->active) || (output && output->active))))
         {
             const sh::ShaderVariable *varying = output ? output : input;
@@ -508,7 +521,10 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
         // program, in which case the input shader may not exist in this program.
         if (!input && !isSeparableProgram)
         {
-            mInactiveVaryingMappedNames[ref.backShaderStage].push_back(output->mappedName);
+            if (!output->isBuiltIn())
+            {
+                mInactiveVaryingMappedNames[ref.backShaderStage].push_back(output->mappedName);
+            }
             continue;
         }
 
@@ -560,11 +576,13 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
             }
         }
 
-        if (input && uniqueFullNames[ref.frontShaderStage].count(input->name) == 0)
+        if (input && !input->isBuiltIn() &&
+            uniqueFullNames[ref.frontShaderStage].count(input->name) == 0)
         {
             mInactiveVaryingMappedNames[ref.frontShaderStage].push_back(input->mappedName);
         }
-        if (output && uniqueFullNames[ref.backShaderStage].count(output->name) == 0)
+        if (output && !output->isBuiltIn() &&
+            uniqueFullNames[ref.backShaderStage].count(output->name) == 0)
         {
             mInactiveVaryingMappedNames[ref.backShaderStage].push_back(output->mappedName);
         }
