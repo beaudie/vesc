@@ -16,6 +16,7 @@
 #include "compiler/translator/IsASTDepthBelowLimit.h"
 #include "compiler/translator/OutputTree.h"
 #include "compiler/translator/ParseContext.h"
+#include "compiler/translator/ValidateBarrierFunctionCall.h"
 #include "compiler/translator/ValidateLimitations.h"
 #include "compiler/translator/ValidateMaxParameters.h"
 #include "compiler/translator/ValidateOutputs.h"
@@ -304,6 +305,11 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mGeometryShaderInvocations(0),
       mGeometryShaderInputPrimitiveType(EptUndefined),
       mGeometryShaderOutputPrimitiveType(EptUndefined),
+      mTessControlShaderOutputVertices(0),
+      mTessEvaluationShaderInputPrimitiveType(EtetUndefined),
+      mTessEvaluationShaderInputVertexSpacingType(EtetUndefined),
+      mTessEvaluationShaderInputOrderingType(EtetUndefined),
+      mTessEvaluationShaderInputPointType(EtetUndefined),
       mCompileOptions(0)
 {}
 
@@ -491,6 +497,20 @@ void TCompiler::setASTMetadata(const TParseContext &parseContext)
         mGeometryShaderMaxVertices         = parseContext.getGeometryShaderMaxVertices();
         mGeometryShaderInvocations         = parseContext.getGeometryShaderInvocations();
     }
+    if (mShaderType == GL_TESS_CONTROL_SHADER_EXT)
+    {
+        mTessControlShaderOutputVertices = parseContext.getTessControlShaderOutputVertices();
+    }
+    if (mShaderType == GL_TESS_EVALUATION_SHADER_EXT)
+    {
+        mTessEvaluationShaderInputPrimitiveType =
+            parseContext.getTessEvaluationShaderInputPrimitiveType();
+        mTessEvaluationShaderInputVertexSpacingType =
+            parseContext.getTessEvaluationShaderInputVertexSpacingType();
+        mTessEvaluationShaderInputOrderingType =
+            parseContext.getTessEvaluationShaderInputOrderingType();
+        mTessEvaluationShaderInputPointType = parseContext.getTessEvaluationShaderInputPointType();
+    }
 }
 
 unsigned int TCompiler::getSharedMemorySize() const
@@ -614,6 +634,11 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
 
     if (mShaderVersion >= 300 && mShaderType == GL_FRAGMENT_SHADER &&
         !ValidateOutputs(root, getExtensionBehavior(), mResources.MaxDrawBuffers, &mDiagnostics))
+    {
+        return false;
+    }
+
+    if (mShaderType == GL_TESS_CONTROL_SHADER && !ValidateBarrierFunctionCall(root, &mDiagnostics))
     {
         return false;
     }
@@ -805,7 +830,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         CollectVariables(root, &mAttributes, &mOutputVariables, &mUniforms, &mInputVaryings,
                          &mOutputVaryings, &mSharedVariables, &mUniformBlocks,
                          &mShaderStorageBlocks, mResources.HashFunction, &mSymbolTable, mShaderType,
-                         mExtensionBehavior);
+                         mExtensionBehavior, mResources, mTessControlShaderOutputVertices);
         collectInterfaceBlocks();
         mVariablesCollected = true;
         if (compileOptions & SH_USE_UNUSED_STANDARD_SHARED_BLOCKS)
@@ -1103,6 +1128,7 @@ void TCompiler::setResourceString()
         << ":EXT_shadow_samplers:" << mResources.EXT_shadow_samplers
         << ":OES_shader_multisample_interpolation:" << mResources.OES_shader_multisample_interpolation
         << ":OES_shader_image_atomic:" << mResources.OES_shader_image_atomic
+        << ":EXT_tessellation_shader:" << mResources.EXT_tessellation_shader
         << ":OES_texture_buffer:" << mResources.OES_texture_buffer
         << ":EXT_texture_buffer:" << mResources.EXT_texture_buffer
         << ":OES_sample_variables:" << mResources.OES_sample_variables
@@ -1145,7 +1171,25 @@ void TCompiler::setResourceString()
         << ":MaxGeometryShaderStorageBlocks:" << mResources.MaxGeometryShaderStorageBlocks
         << ":MaxGeometryShaderInvocations:" << mResources.MaxGeometryShaderInvocations
         << ":MaxGeometryImageUniforms:" << mResources.MaxGeometryImageUniforms
-        << ":MaxClipDistances" << mResources.MaxClipDistances;
+        << ":MaxTessControlInputComponents:" << mResources.MaxTessControlInputComponents
+        << ":MaxTessControlOutputComponents:" << mResources.MaxTessControlOutputComponents
+        << ":MaxTessControlTextureImageUnits:" << mResources.MaxTessControlTextureImageUnits
+        << ":MaxTessControlUniformComponents:" << mResources.MaxTessControlUniformComponents
+        << ":MaxTessControlTotalOutputComponents:" << mResources.MaxTessControlTotalOutputComponents
+        << ":MaxTessControlImageUniforms:" << mResources.MaxTessControlImageUniforms
+        << ":MaxTessControlAtomicCounters:" << mResources.MaxTessControlAtomicCounters
+        << ":MaxTessControlAtomicCounterBuffers:" << mResources.MaxTessControlAtomicCounterBuffers
+        << ":MaxTessPatchComponents:" << mResources.MaxTessPatchComponents
+        << ":MaxPatchVertices:" << mResources.MaxPatchVertices
+        << ":MaxTessGenLevel:" << mResources.MaxTessGenLevel
+        << ":MaxTessEvaluationInputComponents:" << mResources.MaxTessEvaluationInputComponents
+        << ":MaxTessEvaluationOutputComponents:" << mResources.MaxTessEvaluationOutputComponents
+        << ":MaxTessEvaluationTextureImageUnits:" << mResources.MaxTessEvaluationTextureImageUnits
+        << ":MaxTessEvaluationUniformComponents:" << mResources.MaxTessEvaluationUniformComponents
+        << ":MaxTessEvaluationImageUniforms:" << mResources.MaxTessEvaluationImageUniforms
+        << ":MaxTessEvaluationAtomicCounters:" << mResources.MaxTessEvaluationAtomicCounters
+        << ":MaxTessEvaluationAtomicCounterBuffers:" << mResources.MaxTessEvaluationAtomicCounterBuffers
+        << ":MaxClipDistances:" << mResources.MaxClipDistances;
     // clang-format on
 
     mBuiltInResourcesString = strstream.str();
@@ -1206,6 +1250,12 @@ void TCompiler::clearResults()
     mGeometryShaderOutputPrimitiveType = EptUndefined;
     mGeometryShaderInvocations         = 0;
     mGeometryShaderMaxVertices         = -1;
+
+    mTessControlShaderOutputVertices            = 0;
+    mTessEvaluationShaderInputPrimitiveType     = EtetUndefined;
+    mTessEvaluationShaderInputVertexSpacingType = EtetUndefined;
+    mTessEvaluationShaderInputOrderingType      = EtetUndefined;
+    mTessEvaluationShaderInputPointType         = EtetUndefined;
 
     mBuiltInFunctionEmulator.cleanup();
 
