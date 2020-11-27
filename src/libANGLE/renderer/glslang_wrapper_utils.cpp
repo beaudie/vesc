@@ -559,6 +559,7 @@ void AssignOutputLocations(const gl::ProgramExecutable &programExecutable,
 void AssignVaryingLocations(const GlslangSourceOptions &options,
                             const gl::ProgramExecutable &programExecutable,
                             const gl::ShaderType shaderType,
+                            const gl::ShaderType previousShaderType,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
                             ShaderMapInterfaceVariableInfoMap *variableInfoMapOut)
 {
@@ -625,11 +626,7 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
         programExecutable.getResources().varyingPacking.getInactiveVaryingMappedNames();
     for (const std::string &varyingName : inactiveVaryingMappedNames[shaderType])
     {
-        bool isBuiltin = angle::BeginsWith(varyingName, "gl_");
-        if (isBuiltin)
-        {
-            continue;
-        }
+        ASSERT(!angle::BeginsWith(varyingName, "gl_"));
 
         // If name is already in the map, it will automatically have marked all other stages
         // inactive.
@@ -642,6 +639,33 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
         // Otherwise, add an entry for it with all locations inactive.
         ShaderInterfaceVariableInfo *info = &(*variableInfoMapOut)[shaderType][varyingName];
         ASSERT(info->location == ShaderInterfaceVariableInfo::kInvalid);
+    }
+
+    // Add an entry for active builtins varyings.  This will allow inactive builtins, such as
+    // gl_PointSize, gl_ClipDistance etc to be removed.
+    const gl::ShaderMap<std::vector<std::string>> &activeOutputBuiltIns =
+        programExecutable.getResources().varyingPacking.getActiveOutputBuiltIns();
+    for (const std::string &builtInName : activeOutputBuiltIns[shaderType])
+    {
+        ASSERT(angle::BeginsWith(builtInName, "gl_"));
+
+        ShaderInterfaceVariableInfo *info = &(*variableInfoMapOut)[shaderType][builtInName];
+        info->activeStages.set(shaderType);
+        info->varyingIsOutput = true;
+    }
+
+    // If an output builtin is active in the previous stage, assume it's active in the input of the
+    // current stage as well.
+    if (previousShaderType != gl::ShaderType::InvalidEnum)
+    {
+        for (const std::string &builtInName : activeOutputBuiltIns[previousShaderType])
+        {
+            ASSERT(angle::BeginsWith(builtInName, "gl_"));
+
+            ShaderInterfaceVariableInfo *info = &(*variableInfoMapOut)[shaderType][builtInName];
+            info->activeStages.set(shaderType);
+            info->varyingIsInput = true;
+        }
     }
 }
 
@@ -1086,7 +1110,6 @@ class SpirvTransformerBase : angle::NonCopyable
 
     // Input shader variable info map:
     const ShaderInterfaceVariableInfoMap &mVariableInfoMap;
-    ShaderInterfaceVariableInfo mBuiltinVariableInfo;
 
     // Transformed SPIR-V:
     SpirvBlob *mSpirvBlobOut;
@@ -1099,6 +1122,7 @@ class SpirvTransformerBase : angle::NonCopyable
 
     // Shader variable info per id, if id is a shader variable.
     std::vector<const ShaderInterfaceVariableInfo *> mVariableInfoById;
+    ShaderInterfaceVariableInfo mBuiltinVariableInfo;
 };
 
 void SpirvTransformerBase::onTransformBegin()
@@ -1353,7 +1377,11 @@ class SpirvTransformer final : public SpirvTransformerBase
         : SpirvTransformerBase(spirvBlobIn, variableInfoMap, shaderType, spirvBlobOut),
           mHasTransformFeedbackOutput(false),
           mRemoveEarlyFragmentTestsOptimization(removeEarlyFragmentTestsOptimization),
-          mRemoveDebugInfo(removeDebugInfo)
+          mRemoveDebugInfo(removeDebugInfo),
+          mOutputPerVertexTypeId(0),
+          mOutputPerVertexMaxActiveMember(0),
+          mInputPerVertexTypeId(0),
+          mInputPerVertexMaxActiveMember(0)
     {}
 
     bool transform();
@@ -1367,6 +1395,7 @@ class SpirvTransformer final : public SpirvTransformerBase
 
     // Instructions that are purely informational:
     void visitName(const uint32_t *instruction);
+    void visitMemberName(const uint32_t *instruction);
     void visitTypeHelper(const uint32_t *instruction, size_t idIndex, size_t typeIdIndex);
     void visitTypeArray(const uint32_t *instruction);
     void visitTypePointer(const uint32_t *instruction);
@@ -1376,10 +1405,13 @@ class SpirvTransformer final : public SpirvTransformerBase
     // transformed.  If false is returned, the instruction should be copied as-is.
     bool transformAccessChain(const uint32_t *instruction, size_t wordCount);
     bool transformCapability(const uint32_t *instruction, size_t wordCount);
+    bool transformDebugInfo(const uint32_t *instruction, size_t wordCount);
     bool transformEmitVertex(const uint32_t *instruction, size_t wordCount);
     bool transformEntryPoint(const uint32_t *instruction, size_t wordCount);
     bool transformDecorate(const uint32_t *instruction, size_t wordCount);
+    bool transformMemberDecorate(const uint32_t *instruction, size_t wordCount);
     bool transformTypePointer(const uint32_t *instruction, size_t wordCount);
+    bool transformTypeStruct(const uint32_t *instruction, size_t wordCount);
     bool transformReturn(const uint32_t *instruction, size_t wordCount);
     bool transformVariable(const uint32_t *instruction, size_t wordCount);
     bool transformExecutionMode(const uint32_t *instruction, size_t wordCount);
@@ -1418,6 +1450,15 @@ class SpirvTransformer final : public SpirvTransformerBase
     std::vector<TransformedIDs> mTypePointerTransformedId;
     std::vector<uint32_t> mFixedVaryingId;
     std::vector<uint32_t> mFixedVaryingTypeId;
+
+    // gl_PerVertex is unique in that it's the only builtin of struct type.  This struct is pruned
+    // by removing trailing inactive members.  We therefore need to keep track of what's its type id
+    // as well as which is the last active member.  Note that intermediate stages, i.e. geometry and
+    // tessellation have two gl_PerVertex declarations, one for input and one for output.
+    uint32_t mOutputPerVertexTypeId;
+    uint32_t mOutputPerVertexMaxActiveMember;
+    uint32_t mInputPerVertexTypeId;
+    uint32_t mInputPerVertexMaxActiveMember;
 };
 
 bool SpirvTransformer::transform()
@@ -1470,6 +1511,9 @@ void SpirvTransformer::resolveVariableIds()
         {
             case spv::OpName:
                 visitName(instruction);
+                break;
+            case spv::OpMemberName:
+                visitMemberName(instruction);
                 break;
             case spv::OpTypeArray:
                 visitTypeArray(instruction);
@@ -1566,11 +1610,7 @@ void SpirvTransformer::transformInstruction()
             case spv::OpLine:
             case spv::OpNoLine:
             case spv::OpModuleProcessed:
-                if (mRemoveDebugInfo)
-                {
-                    // Strip debug info to reduce binary size.
-                    transformed = true;
-                }
+                transformed = transformDebugInfo(instruction, wordCount);
                 break;
             case spv::OpCapability:
                 transformed = transformCapability(instruction, wordCount);
@@ -1581,8 +1621,14 @@ void SpirvTransformer::transformInstruction()
             case spv::OpDecorate:
                 transformed = transformDecorate(instruction, wordCount);
                 break;
+            case spv::OpMemberDecorate:
+                transformed = transformMemberDecorate(instruction, wordCount);
+                break;
             case spv::OpTypePointer:
                 transformed = transformTypePointer(instruction, wordCount);
+                break;
+            case spv::OpTypeStruct:
+                transformed = transformTypeStruct(instruction, wordCount);
                 break;
             case spv::OpVariable:
                 transformed = transformVariable(instruction, wordCount);
@@ -1612,7 +1658,7 @@ void SpirvTransformer::writeInputPreamble()
     {
         const ShaderInterfaceVariableInfo *info = mVariableInfoById[id];
         if (info && info->useRelaxedPrecision && info->activeStages[mShaderType] &&
-            !info->varyingIsOutput)
+            info->varyingIsInput)
         {
             // This is an input varying, need to cast the mediump value that came from
             // the previous stage into a highp value that the code wants to work with.
@@ -1655,6 +1701,7 @@ void SpirvTransformer::writeOutputPrologue()
         }
     }
 }
+
 void SpirvTransformer::visitName(const uint32_t *instruction)
 {
     // We currently don't have any big-endian devices in the list of supported platforms.  Literal
@@ -1674,6 +1721,62 @@ void SpirvTransformer::visitName(const uint32_t *instruction)
     ASSERT(mNamesById[id] == nullptr);
 
     mNamesById[id] = name;
+}
+
+void SpirvTransformer::visitMemberName(const uint32_t *instruction)
+{
+    ASSERT(IsLittleEndian());
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpMemberName
+    constexpr size_t kIdIndex     = 1;
+    constexpr size_t kMemberIndex = 2;
+    constexpr size_t kNameIndex   = 3;
+
+    const uint32_t id     = instruction[kIdIndex];
+    const uint32_t member = instruction[kMemberIndex];
+    const char *name      = reinterpret_cast<const char *>(&instruction[kNameIndex]);
+
+    // The names and ids are unique
+    ASSERT(id < mNamesById.size());
+    ASSERT(mNamesById[id] != nullptr);
+
+    if (strcmp(mNamesById[id], "gl_PerVertex") != 0)
+    {
+        return;
+    }
+
+    auto infoIter = mVariableInfoMap.find(name);
+
+    // Note that glslang generates the output gl_PerVertex first.  This is ASSERTed later on.
+    if (mOutputPerVertexTypeId == 0 || id == mOutputPerVertexTypeId)
+    {
+        mOutputPerVertexTypeId = id;
+
+        // Keep track of the range of members that are active.
+        const bool isActive =
+            infoIter != mVariableInfoMap.end() && infoIter->second.varyingIsOutput;
+
+        if (isActive && member > mOutputPerVertexMaxActiveMember)
+        {
+            mOutputPerVertexMaxActiveMember = member;
+        }
+    }
+    else if (mInputPerVertexTypeId == 0 || id == mInputPerVertexTypeId)
+    {
+        mInputPerVertexTypeId = id;
+
+        // Keep track of the range of members that are active.
+        const bool isActive = infoIter != mVariableInfoMap.end() && infoIter->second.varyingIsInput;
+
+        if (isActive && member > mInputPerVertexMaxActiveMember)
+        {
+            mInputPerVertexMaxActiveMember = member;
+        }
+    }
+    else
+    {
+        UNREACHABLE();
+    }
 }
 
 void SpirvTransformer::visitTypeHelper(const uint32_t *instruction,
@@ -1709,10 +1812,19 @@ void SpirvTransformer::visitTypeArray(const uint32_t *instruction)
 void SpirvTransformer::visitTypePointer(const uint32_t *instruction)
 {
     // SPIR-V 1.0 Section 3.32 Instructions, OpTypePointer
-    constexpr size_t kIdIndex     = 1;
-    constexpr size_t kTypeIdIndex = 3;
+    constexpr size_t kIdIndex           = 1;
+    constexpr size_t kStorageClassIndex = 2;
+    constexpr size_t kTypeIdIndex       = 3;
 
     visitTypeHelper(instruction, kIdIndex, kTypeIdIndex);
+
+    const uint32_t typeId       = instruction[kTypeIdIndex];
+    const uint32_t storageClass = instruction[kStorageClassIndex];
+
+    // Verify that the ids associated with input and output gl_PerVertex are correct.
+    ASSERT((typeId != mOutputPerVertexTypeId && typeId != mInputPerVertexTypeId) ||
+           (typeId == mOutputPerVertexTypeId && storageClass == spv::StorageClassOutput) ||
+           (typeId == mInputPerVertexTypeId && storageClass == spv::StorageClassInput));
 }
 
 void SpirvTransformer::visitVariable(const uint32_t *instruction)
@@ -1925,6 +2037,29 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     return true;
 }
 
+bool SpirvTransformer::transformMemberDecorate(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpMemberDecorate
+    constexpr size_t kTypeIdIndex     = 1;
+    constexpr size_t kMemberIndex     = 2;
+    constexpr size_t kDecorationIndex = 3;
+
+    uint32_t typeId     = instruction[kTypeIdIndex];
+    uint32_t member     = instruction[kMemberIndex];
+    uint32_t decoration = instruction[kDecorationIndex];
+
+    // Transform only OpMemberDecorate %gl_PerVertex N BuiltIn B
+    if ((typeId != mOutputPerVertexTypeId && typeId != mInputPerVertexTypeId) ||
+        decoration != spv::DecorationBuiltIn)
+    {
+        return false;
+    }
+
+    // Drop stripped fields.
+    return typeId == mOutputPerVertexTypeId ? member > mOutputPerVertexMaxActiveMember
+                                            : member > mInputPerVertexMaxActiveMember;
+}
+
 bool SpirvTransformer::transformCapability(const uint32_t *instruction, size_t wordCount)
 {
     if (!mHasTransformFeedbackOutput)
@@ -1965,6 +2100,32 @@ bool SpirvTransformer::transformCapability(const uint32_t *instruction, size_t w
     copyInstruction(newCapabilityDeclaration.data(), kCapabilityInstructionLength);
 
     return true;
+}
+
+bool SpirvTransformer::transformDebugInfo(const uint32_t *instruction, size_t wordCount)
+{
+    if (mRemoveDebugInfo)
+    {
+        // Strip debug info to reduce binary size.
+        return true;
+    }
+
+    // In the case of OpMemberName, unconditionally remove stripped gl_PerVertex members.
+    if (GetSpirvInstructionOp(instruction) == spv::OpMemberName)
+    {
+        // SPIR-V 1.0 Section 3.32 Instructions, OpMemberName
+        constexpr size_t kIdIndex     = 1;
+        constexpr size_t kMemberIndex = 2;
+
+        const uint32_t id     = instruction[kIdIndex];
+        const uint32_t member = instruction[kMemberIndex];
+
+        // Remove the instruction if it's a stripped member of gl_PerVertex.
+        return (id == mOutputPerVertexTypeId && member > mOutputPerVertexMaxActiveMember) ||
+               (id == mInputPerVertexTypeId && member > mInputPerVertexMaxActiveMember);
+    }
+
+    return false;
 }
 
 bool SpirvTransformer::transformEmitVertex(const uint32_t *instruction, size_t wordCount)
@@ -2104,6 +2265,32 @@ bool SpirvTransformer::transformTypePointer(const uint32_t *instruction, size_t 
     // The original instruction should still be present as well.  At this point, we don't know
     // whether we will need the Output or Private type.
     return false;
+}
+
+bool SpirvTransformer::transformTypeStruct(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpTypeStruct
+    constexpr size_t kIdIndex                         = 1;
+    constexpr size_t kTypeStructInstructionBaseLength = 2;
+
+    const uint32_t id = instruction[kIdIndex];
+
+    if (id != mOutputPerVertexTypeId && id != mInputPerVertexTypeId)
+    {
+        return false;
+    }
+
+    const uint32_t maxMembers = id == mOutputPerVertexTypeId ? mOutputPerVertexMaxActiveMember
+                                                             : mInputPerVertexMaxActiveMember;
+
+    // Change the definition of the gl_PerVertex struct by stripping unused fields at the end.
+    const size_t newLength = kTypeStructInstructionBaseLength + maxMembers + 1;
+    ASSERT(wordCount >= newLength);
+
+    const size_t instructionOffset = copyInstruction(instruction, newLength);
+    SetSpirvInstructionLength(&(*mSpirvBlobOut)[instructionOffset], newLength);
+
+    return true;
 }
 
 bool SpirvTransformer::transformReturn(const uint32_t *instruction, size_t wordCount)
@@ -3385,6 +3572,7 @@ void GlslangGenTransformFeedbackEmulationOutputs(const GlslangSourceOptions &opt
 void GlslangAssignLocations(const GlslangSourceOptions &options,
                             const gl::ProgramExecutable &programExecutable,
                             const gl::ShaderType shaderType,
+                            const gl::ShaderType previousShaderType,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
                             ShaderMapInterfaceVariableInfoMap *variableInfoMapOut)
 {
@@ -3407,8 +3595,8 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
     if (!programExecutable.hasLinkedShaderStage(gl::ShaderType::Compute))
     {
         // Assign varying locations.
-        AssignVaryingLocations(options, programExecutable, shaderType, programInterfaceInfo,
-                               variableInfoMapOut);
+        AssignVaryingLocations(options, programExecutable, shaderType, previousShaderType,
+                               programInterfaceInfo, variableInfoMapOut);
 
         if (!programExecutable.getLinkedTransformFeedbackVaryings().empty() &&
             options.supportsTransformFeedbackExtension && (shaderType == gl::ShaderType::Vertex))
@@ -3470,10 +3658,14 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         }
     }
 
+    gl::ShaderType previousShaderType = gl::ShaderType::InvalidEnum;
+
     for (const gl::ShaderType shaderType : programState.getExecutable().getLinkedShaderStages())
     {
         GlslangAssignLocations(options, programState.getExecutable(), shaderType,
-                               programInterfaceInfo, variableInfoMapOut);
+                               previousShaderType, programInterfaceInfo, variableInfoMapOut);
+
+        previousShaderType = shaderType;
     }
 }
 
