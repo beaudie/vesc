@@ -157,6 +157,13 @@ class ProgramExecutable final : public angle::Subject
         return isCompute() ? mLinkedComputeShaderStages.count()
                            : mLinkedGraphicsShaderStages.count();
     }
+    bool hasLinkedTessellationShader() const
+    {
+        return mLinkedGraphicsShaderStages[ShaderType::TessControl] ||
+               mLinkedGraphicsShaderStages[ShaderType::TessEvaluation];
+    }
+
+    ShaderType getTransformFeedbackStage() const;
 
     ShaderType getLinkedTransformFeedbackStage() const;
 
