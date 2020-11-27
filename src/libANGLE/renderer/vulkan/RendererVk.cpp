@@ -36,6 +36,10 @@
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
 
+#if defined(ANGLE_WITH_ASAN)
+#    include <sanitizer/lsan_interface.h>
+#endif
+
 // Consts
 namespace
 {
@@ -450,6 +454,27 @@ ANGLE_MAYBE_UNUSED bool SemaphorePropertiesCompatibleWithAndroid(
     return true;
 }
 
+inline VkResult scopedEnumerateInstanceLayerProperties(uint32_t *pPropertyCount,
+                                                       VkLayerProperties *pProperties)
+{
+#if defined(ANGLE_WITH_ASAN)
+    // Leak detected in dlopen, see http://crbug.com/972686
+    __lsan::ScopedDisabler lsanDisabler;
+#endif
+    return vkEnumerateInstanceLayerProperties(pPropertyCount, pProperties);
+}
+
+inline VkResult scopedEnumerateInstanceExtensionProperties(const char *pLayerName,
+                                                           uint32_t *pPropertyCount,
+                                                           VkExtensionProperties *pProperties)
+{
+#if defined(ANGLE_WITH_ASAN)
+    // Leak detected in dlopen, see http://crbug.com/972686
+    __lsan::ScopedDisabler lsanDisabler;
+#endif
+    return vkEnumerateInstanceExtensionProperties(pLayerName, pPropertyCount, pProperties);
+}
+
 // Environment variable (and associated Android property) to enable Vulkan debug-utils markers
 constexpr char kEnableDebugMarkersVarName[]      = "ANGLE_ENABLE_DEBUG_MARKERS";
 constexpr char kEnableDebugMarkersPropertyName[] = "debug.angle.markers";
@@ -609,13 +634,13 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
-    ANGLE_VK_TRY(displayVk, vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
+    ANGLE_VK_TRY(displayVk, scopedEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
 
     std::vector<VkLayerProperties> instanceLayerProps(instanceLayerCount);
     if (instanceLayerCount > 0)
     {
-        ANGLE_VK_TRY(displayVk, vkEnumerateInstanceLayerProperties(&instanceLayerCount,
-                                                                   instanceLayerProps.data()));
+        ANGLE_VK_TRY(displayVk, scopedEnumerateInstanceLayerProperties(&instanceLayerCount,
+                                                                       instanceLayerProps.data()));
     }
 
     VulkanLayerVector enabledInstanceLayerNames;
@@ -635,15 +660,15 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Enumerate instance extensions that are provided by the vulkan
     // implementation and implicit layers.
     uint32_t instanceExtensionCount = 0;
-    ANGLE_VK_TRY(displayVk,
-                 vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount, nullptr));
+    ANGLE_VK_TRY(displayVk, scopedEnumerateInstanceExtensionProperties(
+                                nullptr, &instanceExtensionCount, nullptr));
 
     std::vector<VkExtensionProperties> instanceExtensionProps(instanceExtensionCount);
     if (instanceExtensionCount > 0)
     {
         ANGLE_VK_TRY(displayVk,
-                     vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount,
-                                                            instanceExtensionProps.data()));
+                     scopedEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount,
+                                                                instanceExtensionProps.data()));
     }
 
     // Enumerate instance extensions that are provided by explicit layers.
@@ -651,10 +676,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         uint32_t previousExtensionCount      = static_cast<uint32_t>(instanceExtensionProps.size());
         uint32_t instanceLayerExtensionCount = 0;
-        ANGLE_VK_TRY(displayVk, vkEnumerateInstanceExtensionProperties(
+        ANGLE_VK_TRY(displayVk, scopedEnumerateInstanceExtensionProperties(
                                     layerName, &instanceLayerExtensionCount, nullptr));
         instanceExtensionProps.resize(previousExtensionCount + instanceLayerExtensionCount);
-        ANGLE_VK_TRY(displayVk, vkEnumerateInstanceExtensionProperties(
+        ANGLE_VK_TRY(displayVk, scopedEnumerateInstanceExtensionProperties(
                                     layerName, &instanceLayerExtensionCount,
                                     instanceExtensionProps.data() + previousExtensionCount));
     }
@@ -723,7 +748,13 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     else
     {
         uint32_t apiVersion = VK_API_VERSION_1_0;
-        ANGLE_VK_TRY(displayVk, enumerateInstanceVersion(&apiVersion));
+        {
+#if defined(ANGLE_WITH_ASAN)
+            // Leak detected in dlopen, see http://crbug.com/972686
+            __lsan::ScopedDisabler lsanDisabler;
+#endif
+            ANGLE_VK_TRY(displayVk, enumerateInstanceVersion(&apiVersion));
+        }
         if ((VK_VERSION_MAJOR(apiVersion) > 1) || (VK_VERSION_MINOR(apiVersion) >= 1))
         {
             // This is the highest version of core Vulkan functionality that ANGLE uses.
