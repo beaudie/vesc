@@ -124,6 +124,9 @@ struct PackedVarying : angle::NonCopyable
         return frontVarying.stage == ShaderType::Vertex && backVarying.varying == nullptr;
     }
 
+    // Special handling for GS/TS array inputs.
+    unsigned int getBasicTypeElementCount() const;
+
     VaryingInShaderRef frontVarying;
     VaryingInShaderRef backVarying;
 
