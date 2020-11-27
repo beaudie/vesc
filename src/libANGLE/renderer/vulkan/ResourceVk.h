@@ -48,7 +48,8 @@ class SharedResourceUse final : angle::NonCopyable
     void init()
     {
         ASSERT(!mUse);
-        mUse = new ResourceUse;
+        // Leak detected, see http://anglebug.com/5377
+        ANGLE_DISABLE_LSAN(mUse = new ResourceUse)
         mUse->counter++;
     }
 

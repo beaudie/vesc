@@ -1667,7 +1667,9 @@ DynamicBuffer::~DynamicBuffer()
 
 angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
 {
-    std::unique_ptr<BufferHelper> buffer = std::make_unique<BufferHelper>();
+    std::unique_ptr<BufferHelper> buffer;
+    // Leak detected, see http://anglebug.com/5377
+    ANGLE_DISABLE_LSAN(buffer = std::make_unique<BufferHelper>())
 
     VkBufferCreateInfo createInfo    = {};
     createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

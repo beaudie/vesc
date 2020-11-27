@@ -972,6 +972,18 @@ gl::LevelIndex GetLevelIndex(vk::LevelIndex levelVk, gl::LevelIndex baseLevel);
         }                                                                                \
     } while (0)
 
+#define ANGLE_VK_TRY_NO_LSAN(context, command)                                           \
+    do                                                                                   \
+    {                                                                                    \
+        VkResult ANGLE_LOCAL_VAR;                                                        \
+        ANGLE_DISABLE_LSAN(ANGLE_LOCAL_VAR = command)                                    \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                               \
+        {                                                                                \
+            (context)->handleError(ANGLE_LOCAL_VAR, __FILE__, ANGLE_FUNCTION, __LINE__); \
+            return angle::Result::Stop;                                                  \
+        }                                                                                \
+    } while (0)
+
 #define ANGLE_VK_CHECK(context, test, error) ANGLE_VK_TRY(context, test ? VK_SUCCESS : error)
 
 #define ANGLE_VK_CHECK_MATH(context, result) \

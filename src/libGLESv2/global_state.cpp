@@ -37,7 +37,8 @@ void SetContextToAndroidOpenGLTLSSlot(gl::Context *value)
 
 Thread *AllocateCurrentThread()
 {
-    gCurrentThread = new Thread();
+    // Global thread intentionally leaked
+    ANGLE_DISABLE_LSAN(gCurrentThread = new Thread())
 
     // Initialize fast TLS slot
     SetContextToAndroidOpenGLTLSSlot(nullptr);
