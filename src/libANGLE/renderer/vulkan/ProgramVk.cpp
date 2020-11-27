@@ -826,4 +826,9 @@ void ProgramVk::onProgramBind()
     // program bind anyway, so not really worth it to add more tracking logic here.
     setAllDefaultUniformsDirty();
 }
+
+gl::PackMode ProgramVk::getVaryingPackingMode() const
+{
+    return gl::PackMode::VULKAN;
+}
 }  // namespace rx
