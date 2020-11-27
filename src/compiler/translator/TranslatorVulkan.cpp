@@ -172,6 +172,8 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Geometry, vk::kDefaultUniformsNameGS},
     {gl::ShaderType::Fragment, vk::kDefaultUniformsNameFS},
     {gl::ShaderType::Compute, vk::kDefaultUniformsNameCS},
+    {gl::ShaderType::TessControl, vk::kDefaultUniformsNameTCS},
+    {gl::ShaderType::TessEvaluation, vk::kDefaultUniformsNameTES},
 };
 
 // Specialization constant names
@@ -1026,6 +1028,17 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         WriteGeometryShaderLayoutQualifiers(sink, getGeometryShaderInputPrimitiveType(),
                                             getGeometryShaderInvocations(),
                                             getGeometryShaderOutputPrimitiveType(), maxVertices);
+    }
+    else if (getShaderType() == GL_TESS_CONTROL_SHADER_EXT)
+    {
+        WriteTessControlShaderLayoutQualifiers(sink, getTessControlShaderOutputVertices());
+    }
+    else if (getShaderType() == GL_TESS_EVALUATION_SHADER_EXT)
+    {
+        WriteTessEvaluationShaderLayoutQualifiers(sink, getTessEvaluationShaderInputPrimitiveType(),
+                                                  getTessEvaluationShaderInputVertexSpacingType(),
+                                                  getTessEvaluationShaderInputOrderingType(),
+                                                  getTessEvaluationShaderInputPointType());
     }
     else
     {
