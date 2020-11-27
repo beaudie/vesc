@@ -380,8 +380,9 @@ class DynamicallyGrowingPool : angle::NonCopyable
 // another is created.  The query pools live permanently, but are recycled as indices get freed.
 
 // These are arbitrary default sizes for query pools.
-constexpr uint32_t kDefaultOcclusionQueryPoolSize = 64;
-constexpr uint32_t kDefaultTimestampQueryPoolSize = 64;
+constexpr uint32_t kDefaultOcclusionQueryPoolSize         = 64;
+constexpr uint32_t kDefaultTimestampQueryPoolSize         = 64;
+constexpr uint32_t kDefaultTransformFeedbackQueryPoolSize = 128;
 
 class QueryHelper;
 
@@ -404,6 +405,27 @@ class DynamicQueryPool final : public DynamicallyGrowingPool<QueryPool>
 
     // Information required to create new query pools
     VkQueryType mQueryType;
+};
+
+// Stores the result of a Vulkan query call. XFB queries in particular store two result values.
+class QueryResult final
+{
+  public:
+    QueryResult(uint32_t count) : mCount(count), mData{} {}
+
+    void operator+=(const QueryResult &rhs)
+    {
+        mData[0] += rhs.mData[0];
+        mData[1] += rhs.mData[1];
+    }
+
+    size_t getDataSize() const { return mCount * sizeof(uint64_t); }
+    uint64_t getResult() const { return mData[0]; }
+    uint64_t *data() { return mData.data(); }
+
+  private:
+    uint32_t mCount;
+    std::array<uint64_t, 2> mData;
 };
 
 // Queries in vulkan are identified by the query pool and an index for a query within that pool.
@@ -435,8 +457,8 @@ class QueryHelper final : public Resource
     // for occlusion query
     // Must resetQueryPool outside of RenderPass before beginning occlusion query.
     void resetQueryPool(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
-    void beginOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
-    void endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
+    void beginRenderPassQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
+    void endRenderPassQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
 
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
     // When syncing gpu/cpu time, main thread accesses primary directly
@@ -445,9 +467,9 @@ class QueryHelper final : public Resource
     void writeTimestamp(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
 
     angle::Result getUint64ResultNonBlocking(ContextVk *contextVk,
-                                             uint64_t *resultOut,
+                                             QueryResult *resultOut,
                                              bool *availableOut);
-    angle::Result getUint64Result(ContextVk *contextVk, uint64_t *resultOut);
+    angle::Result getUint64Result(ContextVk *contextVk, QueryResult *resultOut);
 
   private:
     friend class DynamicQueryPool;
