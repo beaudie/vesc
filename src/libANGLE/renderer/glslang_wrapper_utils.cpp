@@ -1781,9 +1781,7 @@ void SpirvTransformer::visitVariable(const uint32_t *instruction)
     // rather than the variable name.
     // named in/out block or in/out varying will use id. but unnamed in/out block will have empty
     // string as instance name. it will use typeId.
-    const bool isUnnamedInterfaceVariable = isInOut && strcmp(mNamesById[id], "") == 0;
-    const char *name =
-        mNamesById[(isInterfaceBlockVariable || isUnnamedInterfaceVariable) ? typeId : id];
+    const char *name = mNamesById[typeId] ? mNamesById[typeId] : mNamesById[id];
 
     ASSERT(name != nullptr);
 

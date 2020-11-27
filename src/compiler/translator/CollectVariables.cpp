@@ -975,78 +975,14 @@ bool CollectVariablesTraverser::visitDeclaration(Visit, TIntermDeclaration *node
             recordInterfaceBlock(isUnnamed ? nullptr : variable.getName().data(), type,
                                  &interfaceBlock);
 
-            GLuint interfaceLocation = type.getLayoutQualifier().location;
-            ShaderVariable blockVariable;
-
-            // create a shader variable for interface block. it will be used for SPIR-V
-            // transformation, interface matching, and resource list. 1) blockVariable has name of
-            // interface block for SPIR-V transformation. tranformation wil try to find out the
-            // name. 2) interface matching will be done between blockVariable. in case of the
-            // following example, 'v1' will be ignored at link. if not, there is no matching varying
-            // in fragment shader. 3) the temporal variable for interface block will not be used
-            // when generates resource list.
-
-            // There could be unnamed output in vertex shader and named input in fragment shader.
-            // ==== Vertex shader =====
-            // out IoBlockName { float v1; };
-            // varyings are IoBlockName (blockVariable, temporal) and v1 (fields)
-            // resource list is { "v1" }
-            // ==== Fragment shader =====
-            // in IoBlockName { float v1; } instanceName;
-            // varyings is IoBlockName (blockVariable)
-            // resource list is { "IoBlockName.v1" }
-            if (isUnnamed)
-            {
-                blockVariable.fields.insert(blockVariable.fields.end(),
-                                            interfaceBlock.fields.begin(),
-                                            interfaceBlock.fields.end());
-                // The SPIR-V transformer uses the interface block name instead of the instance name
-                blockVariable.mappedName         = interfaceBlock.mappedName;
-                blockVariable.isTemporalVariable = true;
-                // at link time, this temporal variable will be used. so fields will be ignored.
-                for (size_t i = 0; i < interfaceBlock.fields.size(); i++)
-                {
-                    interfaceBlock.fields[i].ignoreAtLinkTime = true;
-                }
-            }
-            else
-            {
-                setCommonVariableProperties(variable.getType(), variable.variable(),
-                                            &blockVariable);
-                for (size_t i = 0; i < interfaceBlock.fields.size(); i++)
-                {
-                    blockVariable.fields[i].location = interfaceBlock.fields[i].location;
-                    blockVariable.fields[i].hasImplicitLocation =
-                        interfaceBlock.fields[i].hasImplicitLocation;
-                }
-            }
-
-            // name also is needed in SPIR-V transformation.
-            blockVariable.name      = interfaceBlock.name;
-            blockVariable.location  = interfaceLocation;
-            blockVariable.staticUse = interfaceBlock.staticUse;
-
             // all fields in interface block will be added for updating interface variables because
             // the temporal structure variable will be ignored.
             switch (qualifier)
             {
                 case EvqFragmentIn:
-                    mInputVaryings->push_back(blockVariable);
-                    if (isUnnamed)
-                    {
-                        mInputVaryings->insert(mInputVaryings->end(), interfaceBlock.fields.begin(),
-                                               interfaceBlock.fields.end());
-                    }
                     mInBlocks->push_back(interfaceBlock);
                     break;
                 case EvqVertexOut:
-                    mOutputVaryings->push_back(blockVariable);
-                    if (isUnnamed)
-                    {
-                        mOutputVaryings->insert(mOutputVaryings->end(),
-                                                interfaceBlock.fields.begin(),
-                                                interfaceBlock.fields.end());
-                    }
                     mOutBlocks->push_back(interfaceBlock);
                     break;
                 case EvqUniform:
