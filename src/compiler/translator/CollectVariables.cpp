@@ -216,8 +216,11 @@ class CollectVariablesTraverser : public TIntermTraverser
     bool mSampleMaskAdded;
     bool mSampleMaskInAdded;
 
-    // Geometry Shader builtins
+    // Geometry and Tessellation Shader builtins
     bool mPerVertexInAdded;
+    bool mPerVertexOutAdded;
+
+    // Geometry Shader builtins
     bool mPrimitiveIDInAdded;
     bool mInvocationIDAdded;
 
@@ -227,6 +230,12 @@ class CollectVariablesTraverser : public TIntermTraverser
 
     // Shared memory variables
     bool mSharedVariableAdded;
+
+    // Tessellation Shader builtins
+    bool mPatchVerticesInAdded;
+    bool mTessLevelOuterAdded;
+    bool mTessLevelInnerAdded;
+    bool mTessCoordAdded;
 
     ShHashFunction64 mHashFunction;
 
@@ -287,11 +296,16 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mSampleMaskAdded(false),
       mSampleMaskInAdded(false),
       mPerVertexInAdded(false),
+      mPerVertexOutAdded(false),
       mPrimitiveIDInAdded(false),
       mInvocationIDAdded(false),
       mPrimitiveIDAdded(false),
       mLayerAdded(false),
       mSharedVariableAdded(false),
+      mPatchVerticesInAdded(false),
+      mTessLevelOuterAdded(false),
+      mTessLevelInnerAdded(false),
+      mTessCoordAdded(false),
       mHashFunction(hashFunction),
       mShaderType(shaderType),
       mExtensionBehavior(extensionBehavior)
@@ -616,7 +630,9 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                 }
                 else
                 {
-                    ASSERT(mShaderType == GL_FRAGMENT_SHADER);
+                    ASSERT(mShaderType == GL_FRAGMENT_SHADER ||
+                           mShaderType == GL_TESS_CONTROL_SHADER_EXT ||
+                           mShaderType == GL_TESS_EVALUATION_SHADER_EXT);
                     recordBuiltInVaryingUsed(symbol->variable(), &mPrimitiveIDAdded,
                                              mInputVaryings);
                 }
@@ -659,6 +675,37 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
             case EvqSampleMask:
                 recordBuiltInFragmentOutputUsed(symbol->variable(), &mSampleMaskAdded);
                 return;
+            case EvqPatchVerticesIn:
+                recordBuiltInVaryingUsed(symbol->variable(), &mPatchVerticesInAdded,
+                                         mInputVaryings);
+                break;
+            case EvqTessCoord:
+                recordBuiltInVaryingUsed(symbol->variable(), &mTessCoordAdded, mInputVaryings);
+                break;
+            case EvqTessLevelOuter:
+                if (mShaderType == GL_TESS_CONTROL_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelOuterAdded,
+                                             mOutputVaryings);
+                }
+                else if (mShaderType == GL_TESS_EVALUATION_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelOuterAdded,
+                                             mInputVaryings);
+                }
+                break;
+            case EvqTessLevelInner:
+                if (mShaderType == GL_TESS_CONTROL_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelInnerAdded,
+                                             mOutputVaryings);
+                }
+                else if (mShaderType == GL_TESS_EVALUATION_SHADER_EXT)
+                {
+                    recordBuiltInVaryingUsed(symbol->variable(), &mTessLevelInnerAdded,
+                                             mInputVaryings);
+                }
+                break;
             default:
                 break;
         }
@@ -750,10 +797,11 @@ void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
                                                             ShaderVariable *variableOut) const
 {
     ASSERT(variableOut);
+    ASSERT(type.getInterfaceBlock() == nullptr || IsShaderIoBlock(type.getQualifier()) ||
+           type.getQualifier() == EvqPatchIn);
 
-    const bool staticUse = mSymbolTable->isStaticallyUsed(variable);
-    const bool isShaderIOBlock =
-        IsShaderIoBlock(type.getQualifier()) && type.getInterfaceBlock() != nullptr;
+    const bool staticUse       = mSymbolTable->isStaticallyUsed(variable);
+    const bool isShaderIOBlock = type.getInterfaceBlock() != nullptr;
 
     setFieldOrVariableProperties(type, staticUse, isShaderIOBlock, variableOut);
 
@@ -830,6 +878,10 @@ ShaderVariable CollectVariablesTraverser::recordVarying(const TIntermSymbol &var
             {
                 varying.isInvariant = true;
             }
+            break;
+        case EvqPatchIn:
+        case EvqPatchOut:
+            varying.isPatch = true;
             break;
         default:
             break;
@@ -1011,7 +1063,8 @@ bool CollectVariablesTraverser::visitDeclaration(Visit, TIntermDeclaration *node
         // (named or unnamed) structure as ShaderVariable. at link between two shaders, validation
         // between of named and unnamed, needs the same structure, its members, and members order
         // except instance name.
-        if (typedNode.getBasicType() == EbtInterfaceBlock && !IsShaderIoBlock(qualifier))
+        if (typedNode.getBasicType() == EbtInterfaceBlock && !IsShaderIoBlock(qualifier) &&
+            qualifier != EvqPatchIn)
         {
             InterfaceBlock interfaceBlock;
             bool isUnnamed    = variable.variable().symbolType() == SymbolType::Empty;
@@ -1119,6 +1172,13 @@ bool CollectVariablesTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
         else if (IsVaryingIn(qualifier))
         {
             ioBlockVar = FindShaderIOBlockVariable(interfaceBlock->name(), mInputVaryings);
+        }
+        else if (qualifier == EvqPerVertexOut)
+        {
+            TIntermSymbol *symbolNode = blockNode->getAsSymbolNode();
+            ASSERT(symbolNode);
+            recordBuiltInVaryingUsed(symbolNode->variable(), &mPerVertexOutAdded, mOutputVaryings);
+            ioBlockVar = FindShaderIOBlockVariable(interfaceBlock->name(), mOutputVaryings);
         }
         else if (IsVaryingOut(qualifier))
         {
