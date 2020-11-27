@@ -3028,6 +3028,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // hint.
                 invalidateGraphicsDriverUniforms();
                 break;
+            case gl::State::DIRTY_BIT_PATCH_VERTICES:
+                mGraphicsPipelineDesc->updatePatchVertices(&mGraphicsPipelineTransition,
+                                                           glState.getPatchVertices());
+                break;
             default:
                 UNREACHABLE();
                 break;
