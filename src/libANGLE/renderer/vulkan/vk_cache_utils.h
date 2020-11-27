@@ -511,7 +511,8 @@ static_assert(kPackedColorBlendAttachmentStateSize == 4, "Size check failed");
 
 struct PrimitiveState final
 {
-    uint16_t topology : 15;
+    uint16_t topology : 9;
+    uint16_t patchVertices : 6;
     uint16_t restartEnable : 1;
 };
 
@@ -599,6 +600,8 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
+                                     const ShaderModule *tessControlModule,
+                                     const ShaderModule *tessEvaluationModule,
                                      const SpecializationConstants &specConsts,
                                      Pipeline *pipelineOut) const;
 
@@ -718,6 +721,9 @@ class GraphicsPipelineDesc final
     void setDynamicScissor();
     void setScissor(const VkRect2D &scissor);
     void updateScissor(GraphicsPipelineTransitionBits *transition, const VkRect2D &scissor);
+
+    // Tessellation
+    void updatePatchVertices(GraphicsPipelineTransitionBits *transition, GLuint value);
 
     // Subpass
     void resetSubpass(GraphicsPipelineTransitionBits *transition);
@@ -1437,6 +1443,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
+                                           const vk::ShaderModule *tessControlModule,
+                                           const vk::ShaderModule *tessEvaluationModule,
                                            const vk::SpecializationConstants &specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
@@ -1454,8 +1462,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
         mCacheStats.miss();
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
-                              fragmentModule, geometryModule, specConsts, desc, descPtrOut,
-                              pipelineOut);
+                              fragmentModule, geometryModule, tessControlModule,
+                              tessEvaluationModule, specConsts, desc, descPtrOut, pipelineOut);
     }
 
   private:
@@ -1468,6 +1476,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
+                                 const vk::ShaderModule *tessControlModule,
+                                 const vk::ShaderModule *tessEvaluationModule,
                                  const vk::SpecializationConstants &specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,

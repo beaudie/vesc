@@ -172,6 +172,8 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Geometry, vk::kDefaultUniformsNameGS},
     {gl::ShaderType::Fragment, vk::kDefaultUniformsNameFS},
     {gl::ShaderType::Compute, vk::kDefaultUniformsNameCS},
+    {gl::ShaderType::TessControl, vk::kDefaultUniformsNameTCS},
+    {gl::ShaderType::TessEvaluation, vk::kDefaultUniformsNameTES},
 };
 
 // Replaces a builtin variable with a version that is rotated and corrects the X and Y coordinates.
@@ -1015,6 +1017,22 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             WriteGeometryShaderLayoutQualifiers(
                 sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
                 getGeometryShaderOutputPrimitiveType(), maxVertices);
+            break;
+        }
+
+        case gl::ShaderType::TessControl:
+        {
+            WriteTessControlShaderLayoutQualifiers(sink, getTessControlShaderOutputVertices());
+            break;
+        }
+
+        case gl::ShaderType::TessEvaluation:
+        {
+            WriteTessEvaluationShaderLayoutQualifiers(
+                sink, getTessEvaluationShaderInputPrimitiveType(),
+                getTessEvaluationShaderInputVertexSpacingType(),
+                getTessEvaluationShaderInputOrderingType(),
+                getTessEvaluationShaderInputPointType());
             break;
         }
 
