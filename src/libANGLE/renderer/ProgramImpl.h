@@ -159,6 +159,8 @@ class ProgramImpl : angle::NonCopyable
     virtual angle::Result syncState(const gl::Context *context,
                                     const gl::Program::DirtyBits &dirtyBits);
 
+    virtual gl::PackMode getVaryingPackingMode() const;
+
   protected:
     const gl::ProgramState &mState;
 };
@@ -169,6 +171,10 @@ inline angle::Result ProgramImpl::syncState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+inline gl::PackMode ProgramImpl::getVaryingPackingMode() const
+{
+    return gl::PackMode::ANGLE_RELAXED;
+}
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_PROGRAMIMPL_H_
