@@ -116,6 +116,20 @@ int GetLocationCount(const TIntermSymbol *varying, bool ignoreVaryingArraySize)
     return elementLocationCount * varyingType.getArraySizeProduct();
 }
 
+bool ShouldIgnoreInputArraySize(bool isInput, bool isOutput, GLenum shaderType)
+{
+    switch (shaderType)
+    {
+        case GL_GEOMETRY_SHADER:
+        case GL_TESS_EVALUATION_SHADER:
+            return isInput;
+        case GL_TESS_CONTROL_SHADER:
+            return isInput || isOutput;
+        default:
+            return false;
+    }
+}
+
 struct SymbolAndField
 {
     const TIntermSymbol *symbol;
@@ -159,9 +173,9 @@ void MarkVaryingLocations(TDiagnostics *diagnostics,
 
 using VaryingVector = std::vector<const TIntermSymbol *>;
 
-void ValidateShaderInterface(TDiagnostics *diagnostics,
-                             VaryingVector &varyingVector,
-                             bool ignoreVaryingArraySize)
+void ValidateShaderInterfaceAndAssignLocations(TDiagnostics *diagnostics,
+                                               VaryingVector &varyingVector,
+                                               bool ignoreVaryingArraySize)
 {
     // Location conflicts can only happen when there are two or more varyings in varyingVector.
     if (varyingVector.size() <= 1)
@@ -318,19 +332,22 @@ void ValidateVaryingLocationsTraverser::validate(TDiagnostics *diagnostics)
 {
     ASSERT(diagnostics);
 
-    ValidateShaderInterface(diagnostics, mInputVaryingsWithLocation,
-                            mShaderType == GL_GEOMETRY_SHADER_EXT);
-    ValidateShaderInterface(diagnostics, mOutputVaryingsWithLocation, false);
+    ValidateShaderInterfaceAndAssignLocations(diagnostics, mInputVaryingsWithLocation,
+                                              ShouldIgnoreInputArraySize(true, false, mShaderType));
+    ValidateShaderInterfaceAndAssignLocations(diagnostics, mOutputVaryingsWithLocation,
+                                              ShouldIgnoreInputArraySize(false, true, mShaderType));
 }
 
 }  // anonymous namespace
 
 unsigned int CalculateVaryingLocationCount(TIntermSymbol *varying, GLenum shaderType)
 {
-    const TType &varyingType          = varying->getType();
-    const TQualifier qualifier        = varyingType.getQualifier();
-    const bool isShaderIn             = IsShaderIn(qualifier);
-    const bool ignoreVaryingArraySize = isShaderIn && shaderType == GL_GEOMETRY_SHADER_EXT;
+    const TType &varyingType   = varying->getType();
+    const TQualifier qualifier = varyingType.getQualifier();
+    const bool isShaderIn      = IsShaderIn(qualifier);
+    const bool isShaderOut     = IsShaderOut(qualifier);
+    const bool ignoreVaryingArraySize =
+        ShouldIgnoreInputArraySize(isShaderIn, isShaderOut, shaderType);
 
     if (varyingType.isInterfaceBlock())
     {
