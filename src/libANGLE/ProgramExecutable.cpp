@@ -500,9 +500,7 @@ bool ProgramExecutable::linkMergedVaryings(
     bool isSeparable,
     ProgramVaryingPacking *varyingPacking)
 {
-    ShaderType tfStage = programOrPipeline.getAttachedShader(ShaderType::Geometry)
-                             ? ShaderType::Geometry
-                             : ShaderType::Vertex;
+    ShaderType tfStage = programOrPipeline.getTransformFeedbackStage();
 
     if (!linkValidateTransformFeedback(context, mergedVaryings, tfStage,
                                        transformFeedbackVaryingNames))
