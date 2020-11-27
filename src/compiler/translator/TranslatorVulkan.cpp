@@ -172,6 +172,8 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Geometry, vk::kDefaultUniformsNameGS},
     {gl::ShaderType::Fragment, vk::kDefaultUniformsNameFS},
     {gl::ShaderType::Compute, vk::kDefaultUniformsNameCS},
+    {gl::ShaderType::TessControl, vk::kDefaultUniformsNameTCS},
+    {gl::ShaderType::TessEvaluation, vk::kDefaultUniformsNameTES},
 };
 
 // Specialization constant names
@@ -801,7 +803,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
 
         // Add specialization constant declarations.  The default value of the specialization
         // constant is irrelevant, as it will be set when creating the pipeline.
-        if (compileOptions & SH_ADD_BRESENHAM_LINE_RASTER_EMULATION)
+        if ((compileOptions & SH_ADD_BRESENHAM_LINE_RASTER_EMULATION) != 0)
         {
             sink << "layout(constant_id="
                  << static_cast<uint32_t>(vk::SpecializationConstantId::LineRasterEmulation)
@@ -1040,6 +1042,22 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             WriteGeometryShaderLayoutQualifiers(
                 sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
                 getGeometryShaderOutputPrimitiveType(), maxVertices);
+            break;
+        }
+
+        case gl::ShaderType::TessControl:
+        {
+            WriteTessControlShaderLayoutQualifiers(sink, getTessControlShaderOutputVertices());
+            break;
+        }
+
+        case gl::ShaderType::TessEvaluation:
+        {
+            WriteTessEvaluationShaderLayoutQualifiers(
+                sink, getTessEvaluationShaderInputPrimitiveType(),
+                getTessEvaluationShaderInputVertexSpacingType(),
+                getTessEvaluationShaderInputOrderingType(),
+                getTessEvaluationShaderInputPointType());
             break;
         }
 
