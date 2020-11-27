@@ -380,8 +380,9 @@ class DynamicallyGrowingPool : angle::NonCopyable
 // another is created.  The query pools live permanently, but are recycled as indices get freed.
 
 // These are arbitrary default sizes for query pools.
-constexpr uint32_t kDefaultOcclusionQueryPoolSize = 64;
-constexpr uint32_t kDefaultTimestampQueryPoolSize = 64;
+constexpr uint32_t kDefaultOcclusionQueryPoolSize         = 64;
+constexpr uint32_t kDefaultTimestampQueryPoolSize         = 64;
+constexpr uint32_t kDefaultTransformFeedbackQueryPoolSize = 128;
 
 class QueryHelper;
 
@@ -435,8 +436,8 @@ class QueryHelper final : public Resource
     // for occlusion query
     // Must resetQueryPool outside of RenderPass before beginning occlusion query.
     void resetQueryPool(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
-    void beginOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
-    void endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
+    void beginRenderPassQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
+    void endRenderPassQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
 
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
     // When syncing gpu/cpu time, main thread accesses primary directly

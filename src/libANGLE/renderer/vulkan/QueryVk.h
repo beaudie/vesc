@@ -39,6 +39,8 @@ class QueryVk : public QueryImpl
     angle::Result stashQueryHelper(ContextVk *contextVk);
     angle::Result retrieveStashedQueryResult(ContextVk *contextVk, uint64_t *result);
 
+    bool isRenderPassQuery(ContextVk *contextVk) const;
+
   private:
     angle::Result getResult(const gl::Context *context, bool wait);
 
