@@ -55,6 +55,7 @@ bool IsVaryingIn(TQualifier qualifier);
 bool IsVaryingOut(TQualifier qualifier);
 bool IsVarying(TQualifier qualifier);
 bool IsGeometryShaderInput(GLenum shaderType, TQualifier qualifier);
+bool IsTessellationInterfaceVar(GLenum shaderType, TQualifier qualifier);
 InterpolationType GetInterpolationType(TQualifier qualifier);
 InterpolationType GetFieldInterpolationType(TQualifier qualifier);
 

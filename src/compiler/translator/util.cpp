@@ -554,6 +554,7 @@ bool IsVaryingOut(TQualifier qualifier)
         case EvqTessControlOut:
         case EvqTessEvaluationOut:
         case EvqSampleOut:
+        case EvqPatchOut:
             return true;
 
         default:
@@ -577,6 +578,7 @@ bool IsVaryingIn(TQualifier qualifier)
         case EvqTessControlIn:
         case EvqTessEvaluationIn:
         case EvqSampleIn:
+        case EvqPatchIn:
             return true;
 
         default:
@@ -597,12 +599,31 @@ bool IsGeometryShaderInput(GLenum shaderType, TQualifier qualifier)
            ((shaderType == GL_GEOMETRY_SHADER_EXT) && IsInterpolationIn(qualifier));
 }
 
+bool IsTessellationInterfaceVar(GLenum shaderType, TQualifier qualifier)
+{
+    if (shaderType == GL_TESS_CONTROL_SHADER)
+    {
+        return qualifier == EvqTessControlIn || qualifier == EvqTessControlOut;
+    }
+
+    if (shaderType == GL_TESS_EVALUATION_SHADER)
+    {
+        return qualifier == EvqTessEvaluationIn;
+    }
+
+    return false;
+}
+
 InterpolationType GetInterpolationType(TQualifier qualifier)
 {
     switch (qualifier)
     {
         case EvqFlatIn:
         case EvqFlatOut:
+        // The auxiliary storage qualifier patch is not used for interpolation
+        // it is a compile-time error to use interpolation qualifiers with patch
+        case EvqPatchIn:
+        case EvqPatchOut:
             return INTERPOLATION_FLAT;
 
         case EvqNoPerspectiveIn:
@@ -617,6 +638,10 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
         case EvqVaryingOut:
         case EvqGeometryIn:
         case EvqGeometryOut:
+        case EvqTessControlIn:
+        case EvqTessControlOut:
+        case EvqTessEvaluationIn:
+        case EvqTessEvaluationOut:
             return INTERPOLATION_SMOOTH;
 
         case EvqCentroidIn:
