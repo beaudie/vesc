@@ -430,6 +430,13 @@ class ProgramState final : angle::NonCopyable
     int mGeometryShaderInvocations;
     int mGeometryShaderMaxVertices;
 
+    // GL_EXT_tessellation_shader
+    int mTessControlShaderVertices;
+    GLenum mTessGenMode;
+    GLenum mTessGenSpacing;
+    GLenum mTessGenVertexOrder;
+    GLenum mTessGenPointMode;
+
     // GL_ANGLE_multi_draw
     int mDrawIDLocation;
 
@@ -758,6 +765,12 @@ class Program final : public LabeledObject, public angle::Subject
     GLint getGeometryShaderInvocations() const;
     GLint getGeometryShaderMaxVertices() const;
 
+    GLint getTessControlShaderVertices() const;
+    GLenum getTessGenMode() const;
+    GLenum getTessGenPointMode() const;
+    GLenum getTessGenSpacing() const;
+    GLenum getTessGenVertexOrder() const;
+
     const ProgramState &getState() const
     {
         ASSERT(!mLinkingState);
@@ -858,6 +871,7 @@ class Program final : public LabeledObject, public angle::Subject
                                        const sh::ShaderVariable &input,
                                        const sh::ShaderVariable &output,
                                        bool validateGeometryShaderInputs,
+                                       bool validateTessellationShaderInputs,
                                        bool isSeparable,
                                        gl::InfoLog &infoLog);
     static bool linkValidateShaderInterfaceMatching(
@@ -913,6 +927,7 @@ class Program final : public LabeledObject, public angle::Subject
                                                   const sh::ShaderVariable &inputVarying,
                                                   int shaderVersion,
                                                   bool validateGeometryShaderInputVarying,
+                                                  bool validateTessellationShaderInputs,
                                                   bool isSeparable,
                                                   std::string *mismatchedStructFieldName);
 
