@@ -1059,6 +1059,8 @@ inline bool IsShaderIn(TQualifier qualifier)
     switch (qualifier)
     {
         case EvqVertexIn:
+        case EvqTessControlIn:
+        case EvqTessEvaluationIn:
         case EvqGeometryIn:
         case EvqFragmentIn:
         case EvqAttribute:
@@ -1068,6 +1070,7 @@ inline bool IsShaderIn(TQualifier qualifier)
         case EvqNoPerspectiveIn:
         case EvqCentroidIn:
         case EvqSampleIn:
+        case EvqPatchIn:
             return true;
         default:
             return false;
@@ -1079,6 +1082,8 @@ inline bool IsShaderOut(TQualifier qualifier)
     switch (qualifier)
     {
         case EvqVertexOut:
+        case EvqTessControlOut:
+        case EvqTessEvaluationOut:
         case EvqGeometryOut:
         case EvqFragmentOut:
         case EvqVaryingOut:
@@ -1087,6 +1092,7 @@ inline bool IsShaderOut(TQualifier qualifier)
         case EvqNoPerspectiveOut:
         case EvqCentroidOut:
         case EvqSampleOut:
+        case EvqPatchOut:
             return true;
         default:
             return false;
@@ -1167,6 +1173,20 @@ enum TLayoutPrimitiveType
     EptTriangleStrip
 };
 
+enum TLayoutTessEvaluationType
+{
+    EtetUndefined,
+    EtetTriangles,
+    EtetQuads,
+    EtetIsolines,
+    EtetEqualSpacing,
+    EtetFractionalEvenSpacing,
+    EtetFractionalOddSpacing,
+    EtetCw,
+    EtetCcw,
+    EtetPointMode
+};
+
 struct TLayoutQualifier
 {
     // Must have a trivial default constructor since it is used in YYSTYPE.
@@ -1180,7 +1200,9 @@ struct TLayoutQualifier
                earlyFragmentTests == false && matrixPacking == EmpUnspecified &&
                blockStorage == EbsUnspecified && !localSize.isAnyValueSet() &&
                imageInternalFormat == EiifUnspecified && primitiveType == EptUndefined &&
-               invocations == 0 && maxVertices == -1 && index == -1;
+               invocations == 0 && maxVertices == -1 && vertices == 0 &&
+               tesPrimitiveType == EtetUndefined && tesVertexSpacingType == EtetUndefined &&
+               tesOrderingType == EtetUndefined && tesPointType == EtetUndefined && index == -1;
     }
 
     bool isCombinationValid() const
@@ -1235,6 +1257,13 @@ struct TLayoutQualifier
     int invocations;
     int maxVertices;
 
+    // EXT_tessellation_control shader layout qualifiers
+    int vertices;
+    TLayoutTessEvaluationType tesPrimitiveType;
+    TLayoutTessEvaluationType tesVertexSpacingType;
+    TLayoutTessEvaluationType tesOrderingType;
+    TLayoutTessEvaluationType tesPointType;
+
     // EXT_blend_func_extended fragment output layout qualifier
     int index;
 
@@ -1254,6 +1283,11 @@ struct TLayoutQualifier
           primitiveType(EptUndefined),
           invocations(0),
           maxVertices(-1),
+          vertices(0),
+          tesPrimitiveType(EtetUndefined),
+          tesVertexSpacingType(EtetUndefined),
+          tesOrderingType(EtetUndefined),
+          tesPointType(EtetUndefined),
           index(-1)
     {}
 };
@@ -1323,6 +1357,7 @@ inline const char *getQualifierString(TQualifier q)
     case EvqVaryingOut:             return "varying";
     case EvqUniform:                return "uniform";
     case EvqBuffer:                 return "buffer";
+    case EvqPatch:                  return "patch";
     case EvqVertexIn:               return "in";
     case EvqFragmentOut:            return "out";
     case EvqVertexOut:              return "out";
@@ -1388,6 +1423,17 @@ inline const char *getQualifierString(TQualifier q)
     case EvqSampleMaskIn:           return "SampleMaskIn";
     case EvqSampleMask:             return "SampleMask";
     case EvqNumSamples:             return "NumSamples";
+    case EvqPatchIn:                return "patch in";
+    case EvqPatchOut:               return "patch out";
+    case EvqTessControlIn:          return "in";
+    case EvqTessControlOut:         return "out";
+    case EvqPerVertexOut:           return "gl_out";
+    case EvqPatchVerticesIn:        return "PatchVerticesIn";
+    case EvqTessLevelOuter:         return "TessLevelOuter";
+    case EvqTessLevelInner:         return "TessLevelInner";
+    case EvqTessEvaluationIn:       return "in";
+    case EvqTessEvaluationOut:      return "out";
+    case EvqTessCoord:              return "TessCoord";
     default: UNREACHABLE();         return "unknown qualifier";
     }
     // clang-format on
@@ -1513,6 +1559,34 @@ inline const char *getGeometryShaderPrimitiveTypeString(TLayoutPrimitiveType pri
         default:
             UNREACHABLE();
             return "unknown geometry shader primitive type";
+    }
+}
+
+inline const char *getTessEvaluationShaderTypeString(TLayoutTessEvaluationType type)
+{
+    switch (type)
+    {
+        case EtetTriangles:
+            return "triangles";
+        case EtetQuads:
+            return "quads";
+        case EtetIsolines:
+            return "isolines";
+        case EtetEqualSpacing:
+            return "equal_spacing";
+        case EtetFractionalEvenSpacing:
+            return "fractional_even_spacing";
+        case EtetFractionalOddSpacing:
+            return "fractional_odd_spacing";
+        case EtetCw:
+            return "cw";
+        case EtetCcw:
+            return "ccw";
+        case EtetPointMode:
+            return "point_mode";
+        default:
+            UNREACHABLE();
+            return "unknown tessellation evaluation shader variable type";
     }
 }
 
