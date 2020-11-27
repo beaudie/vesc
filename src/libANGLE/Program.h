@@ -65,6 +65,7 @@ enum class LinkMismatchError
     // Shared
     NO_MISMATCH,
     TYPE_MISMATCH,
+    ARRAYNESS_MISMATCH,
     ARRAY_SIZE_MISMATCH,
     PRECISION_MISMATCH,
     STRUCT_NAME_MISMATCH,
@@ -413,6 +414,14 @@ class ProgramState final : angle::NonCopyable
     // ANGLE_multiview.
     int mNumViews;
 
+    // GL_EXT_tessellation_shader
+    // FIXME: move to executable.
+    int mTessControlShaderVertices;
+    GLenum mTessGenMode;
+    GLenum mTessGenSpacing;
+    GLenum mTessGenVertexOrder;
+    GLenum mTessGenPointMode;
+
     // GL_ANGLE_multi_draw
     int mDrawIDLocation;
 
@@ -454,6 +463,8 @@ class HasAttachedShaders
 {
   public:
     virtual Shader *getAttachedShader(ShaderType shaderType) const = 0;
+
+    ShaderType getTransformFeedbackStage() const;
 
   protected:
     virtual ~HasAttachedShaders() {}
@@ -747,6 +758,12 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
     GLint getGeometryShaderInvocations() const;
     GLint getGeometryShaderMaxVertices() const;
 
+    GLint getTessControlShaderVertices() const;
+    GLenum getTessGenMode() const;
+    GLenum getTessGenPointMode() const;
+    GLenum getTessGenSpacing() const;
+    GLenum getTessGenVertexOrder() const;
+
     const ProgramState &getState() const
     {
         ASSERT(!mLinkingState);
@@ -918,6 +935,8 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
     void resolveLinkImpl(const gl::Context *context);
 
     void postResolveLink(const gl::Context *context);
+
+    PackMode getVaryingPackingMode(const Context *context) const;
 
     rx::Serial mSerial;
     ProgramState mState;
