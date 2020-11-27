@@ -97,6 +97,7 @@ void GetBuiltInResourcesFromCaps(const gl::Caps &caps, TBuiltInResource *outBuil
     outBuiltInResources->maxGeometryOutputComponents      = caps.maxGeometryOutputComponents;
     outBuiltInResources->maxGeometryOutputVertices        = caps.maxGeometryOutputVertices;
     outBuiltInResources->maxGeometryTotalOutputComponents = caps.maxGeometryTotalOutputComponents;
+    outBuiltInResources->maxPatchVertices                 = caps.maxPatchVertices;
     outBuiltInResources->maxLights                        = caps.maxLights;
     outBuiltInResources->maxProgramTexelOffset            = caps.maxProgramTexelOffset;
     outBuiltInResources->maxVaryingComponents             = caps.maxVaryingComponents;
@@ -949,6 +950,8 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
 
 constexpr gl::ShaderMap<EShLanguage> kShLanguageMap = {
     {gl::ShaderType::Vertex, EShLangVertex},
+    {gl::ShaderType::TessControl, EShLangTessControl},
+    {gl::ShaderType::TessEvaluation, EShLangTessEvaluation},
     {gl::ShaderType::Geometry, EShLangGeometry},
     {gl::ShaderType::Fragment, EShLangFragment},
     {gl::ShaderType::Compute, EShLangCompute},
@@ -3663,11 +3666,21 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                                programInterfaceInfo, variableInfoMapOut);
 
         if (!programExecutable.getLinkedTransformFeedbackVaryings().empty() &&
-            options.supportsTransformFeedbackExtension && (shaderType == gl::ShaderType::Vertex))
+            options.supportsTransformFeedbackExtension && (shaderType == gl::ShaderType::Vertex) &&
+            !programExecutable.hasLinkedShaderStage(gl::ShaderType::TessEvaluation))
         {
             AssignTransformFeedbackExtensionQualifiers(
                 programExecutable, programInterfaceInfo->locationsUsedForXfbExtension,
                 gl::ShaderType::Vertex, &(*variableInfoMapOut)[gl::ShaderType::Vertex]);
+        }
+        else if (!programExecutable.getLinkedTransformFeedbackVaryings().empty() &&
+                 options.supportsTransformFeedbackExtension &&
+                 (shaderType == gl::ShaderType::TessEvaluation))
+        {
+            AssignTransformFeedbackExtensionQualifiers(
+                programExecutable, programInterfaceInfo->locationsUsedForXfbExtension,
+                gl::ShaderType::TessEvaluation,
+                &(*variableInfoMapOut)[gl::ShaderType::TessEvaluation]);
         }
     }
 
@@ -3786,12 +3799,16 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     glslang::TShader vertexShader(EShLangVertex);
     glslang::TShader fragmentShader(EShLangFragment);
     glslang::TShader geometryShader(EShLangGeometry);
+    glslang::TShader tessControlShader(EShLangTessControl);
+    glslang::TShader tessEvaluationShader(EShLangTessEvaluation);
     glslang::TShader computeShader(EShLangCompute);
 
     gl::ShaderMap<glslang::TShader *> shaders = {
         {gl::ShaderType::Vertex, &vertexShader},
         {gl::ShaderType::Fragment, &fragmentShader},
         {gl::ShaderType::Geometry, &geometryShader},
+        {gl::ShaderType::TessControl, &tessControlShader},
+        {gl::ShaderType::TessEvaluation, &tessEvaluationShader},
         {gl::ShaderType::Compute, &computeShader},
     };
     glslang::TProgram program;

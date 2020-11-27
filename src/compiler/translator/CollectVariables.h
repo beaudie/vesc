@@ -30,7 +30,8 @@ void CollectVariables(TIntermBlock *root,
                       ShHashFunction64 hashFunction,
                       TSymbolTable *symbolTable,
                       GLenum shaderType,
-                      const TExtensionBehavior &extensionBehavior);
+                      const TExtensionBehavior &extensionBehavior,
+                      const ShBuiltInResources &resources);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_COLLECTVARIABLES_H_
