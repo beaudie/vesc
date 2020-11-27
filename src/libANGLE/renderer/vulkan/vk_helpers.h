@@ -398,6 +398,7 @@ class DynamicQueryPool final : public DynamicallyGrowingPool<QueryPool>
     angle::Result allocateQuery(ContextVk *contextVk, QueryHelper *queryOut);
     void freeQuery(ContextVk *contextVk, QueryHelper *query);
 
+    VkQueryType getQueryType() const { return mQueryType; }
     const QueryPool &getQueryPool(size_t index) const { return mPools[index]; }
 
   private:
@@ -477,6 +478,11 @@ class QueryHelper final : public Resource
     {
         ASSERT(valid());
         return mDynamicQueryPool->getQueryPool(mQueryPoolIndex);
+    }
+    VkQueryType getQueryType() const
+    {
+        ASSERT(valid());
+        return mDynamicQueryPool->getQueryType();
     }
 
     const DynamicQueryPool *mDynamicQueryPool;
@@ -2283,11 +2289,19 @@ class ShaderProgramHelper : angle::NonCopyable
         ShaderModule *geometryShader = mShaders[gl::ShaderType::Geometry].valid()
                                            ? &mShaders[gl::ShaderType::Geometry].get().get()
                                            : nullptr;
+        ShaderModule *tessControlShader = mShaders[gl::ShaderType::TessControl].valid()
+                                              ? &mShaders[gl::ShaderType::TessControl].get().get()
+                                              : nullptr;
+        ShaderModule *tessEvaluationShader =
+            mShaders[gl::ShaderType::TessEvaluation].valid()
+                ? &mShaders[gl::ShaderType::TessEvaluation].get().get()
+                : nullptr;
 
         return mGraphicsPipelines.getPipeline(
             contextVk, pipelineCache, *compatibleRenderPass, pipelineLayout,
             activeAttribLocationsMask, programAttribsTypeMask, vertexShader, fragmentShader,
-            geometryShader, mSpecializationConstants, pipelineDesc, descPtrOut, pipelineOut);
+            geometryShader, tessControlShader, tessEvaluationShader, mSpecializationConstants,
+            pipelineDesc, descPtrOut, pipelineOut);
     }
 
     angle::Result getComputePipeline(Context *context,

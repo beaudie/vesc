@@ -1095,6 +1095,11 @@ ProgramState::ProgramState()
       mGeometryShaderOutputPrimitiveType(PrimitiveMode::TriangleStrip),
       mGeometryShaderInvocations(1),
       mGeometryShaderMaxVertices(0),
+      mTessControlShaderVertices(0),
+      mTessGenMode(0),
+      mTessGenSpacing(0),
+      mTessGenVertexOrder(0),
+      mTessGenPointMode(0),
       mDrawIDLocation(-1),
       mBaseVertexLocation(-1),
       mBaseInstanceLocation(-1),
@@ -1377,8 +1382,16 @@ angle::Result Program::linkMergedVaryings(const Context *context,
                                           const ProgramExecutable &executable,
                                           const ProgramMergedVaryings &mergedVaryings)
 {
-    ShaderType tfStage =
-        mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
+    ShaderType tfStage = ShaderType::Vertex;
+    if (mState.mAttachedShaders[ShaderType::Geometry])
+    {
+        tfStage = ShaderType::Geometry;
+    }
+    else if (mState.mAttachedShaders[ShaderType::TessEvaluation])
+    {
+        tfStage = ShaderType::TessEvaluation;
+    }
+
     InfoLog &infoLog = getExecutable().getInfoLog();
 
     if (!linkValidateTransformFeedback(context->getClientVersion(), infoLog, mergedVaryings,
@@ -1851,6 +1864,7 @@ void Program::unlink()
     mState.mGeometryShaderOutputPrimitiveType = PrimitiveMode::TriangleStrip;
     mState.mGeometryShaderInvocations         = 1;
     mState.mGeometryShaderMaxVertices         = 0;
+    mState.mTessControlShaderVertices         = 0;
     mState.mDrawIDLocation                    = -1;
     mState.mBaseVertexLocation                = -1;
     mState.mBaseInstanceLocation              = -1;
@@ -2165,6 +2179,36 @@ GLint Program::getGeometryShaderMaxVertices() const
 {
     ASSERT(!mLinkingState);
     return mState.mGeometryShaderMaxVertices;
+}
+
+GLint Program::getTessControlShaderVertices() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessControlShaderVertices;
+}
+
+GLenum Program::getTessGenMode() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenMode;
+}
+
+GLenum Program::getTessGenPointMode() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenPointMode;
+}
+
+GLenum Program::getTessGenSpacing() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenSpacing;
+}
+
+GLenum Program::getTessGenVertexOrder() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenVertexOrder;
 }
 
 const sh::ShaderVariable &Program::getInputResource(size_t index) const
@@ -3262,10 +3306,12 @@ GLenum Program::getTransformFeedbackBufferMode() const
 
 bool Program::linkValidateShaders(InfoLog &infoLog)
 {
-    Shader *vertexShader   = mState.mAttachedShaders[ShaderType::Vertex];
-    Shader *fragmentShader = mState.mAttachedShaders[ShaderType::Fragment];
-    Shader *computeShader  = mState.mAttachedShaders[ShaderType::Compute];
-    Shader *geometryShader = mState.mAttachedShaders[ShaderType::Geometry];
+    Shader *vertexShader         = mState.mAttachedShaders[ShaderType::Vertex];
+    Shader *fragmentShader       = mState.mAttachedShaders[ShaderType::Fragment];
+    Shader *computeShader        = mState.mAttachedShaders[ShaderType::Compute];
+    Shader *geometryShader       = mState.mAttachedShaders[ShaderType::Geometry];
+    Shader *tessControlShader    = mState.mAttachedShaders[ShaderType::TessControl];
+    Shader *tessEvaluationShader = mState.mAttachedShaders[ShaderType::TessEvaluation];
 
     bool isComputeShaderAttached = (computeShader != nullptr);
     bool isGraphicsShaderAttached =
@@ -3304,8 +3350,11 @@ bool Program::linkValidateShaders(InfoLog &infoLog)
         {
             if (!fragmentShader && !vertexShader)
             {
-                infoLog << "No compiled shaders.";
-                return false;
+                if (!tessControlShader && !tessEvaluationShader)
+                {
+                    infoLog << "No compiled shaders.";
+                    return false;
+                }
             }
 
             ASSERT(!fragmentShader || fragmentShader->getType() == ShaderType::Fragment);
@@ -3406,6 +3455,29 @@ bool Program::linkValidateShaders(InfoLog &infoLog)
             mState.mGeometryShaderOutputPrimitiveType = outputPrimitive.value();
             mState.mGeometryShaderMaxVertices         = maxVertices.value();
             mState.mGeometryShaderInvocations = geometryShader->getGeometryShaderInvocations();
+        }
+
+        if (tessControlShader)
+        {
+            if (!tessControlShader->isCompiled())
+            {
+                infoLog << "The attached tessellation constrol shader isn't compiled.";
+                return false;
+            }
+            mState.mTessControlShaderVertices = tessControlShader->getTessControlShaderVertices();
+        }
+
+        if (tessEvaluationShader)
+        {
+            if (!tessEvaluationShader->isCompiled())
+            {
+                infoLog << "The attached tessellation evaluation shader isn't compiled.";
+                return false;
+            }
+            mState.mTessGenMode        = tessEvaluationShader->getTessGenMode();
+            mState.mTessGenSpacing     = tessEvaluationShader->getTessGenSpacing();
+            mState.mTessGenVertexOrder = tessEvaluationShader->getTessGenVertexOrder();
+            mState.mTessGenPointMode   = tessEvaluationShader->getTessGenPointMode();
         }
     }
 
@@ -3546,6 +3618,7 @@ bool Program::doShaderVariablesMatch(int outputShaderVersion,
                                      const sh::ShaderVariable &input,
                                      const sh::ShaderVariable &output,
                                      bool validateGeometryShaderInputs,
+                                     bool validateTessellationShaderInputs,
                                      bool isSeparable,
                                      gl::InfoLog &infoLog)
 {
@@ -3561,9 +3634,9 @@ bool Program::doShaderVariablesMatch(int outputShaderVersion,
     if (namesMatch || locationsMatch)
     {
         std::string mismatchedStructFieldName;
-        LinkMismatchError linkError =
-            LinkValidateVaryings(output, input, outputShaderVersion, validateGeometryShaderInputs,
-                                 isSeparable, &mismatchedStructFieldName);
+        LinkMismatchError linkError = LinkValidateVaryings(
+            output, input, outputShaderVersion, validateGeometryShaderInputs,
+            validateTessellationShaderInputs, isSeparable, &mismatchedStructFieldName);
         if (linkError != LinkMismatchError::NO_MISMATCH)
         {
             LogLinkMismatch(infoLog, input.name, "varying", linkError, mismatchedStructFieldName,
@@ -3594,6 +3667,8 @@ bool Program::linkValidateShaderInterfaceMatching(
     std::vector<const sh::ShaderVariable *> filteredInputVaryings;
     std::vector<const sh::ShaderVariable *> filteredOutputVaryings;
     bool validateGeometryShaderInputs = inputShaderType == ShaderType::Geometry;
+    bool validateTessellationShaderInputs =
+        inputShaderType == ShaderType::TessControl || inputShaderType == ShaderType::TessEvaluation;
 
     getFilteredVaryings(inputVaryings, &filteredInputVaryings);
     getFilteredVaryings(outputVaryings, &filteredOutputVaryings);
@@ -3621,8 +3696,8 @@ bool Program::linkValidateShaderInterfaceMatching(
         for (const sh::ShaderVariable *output : filteredOutputVaryings)
         {
             if (doShaderVariablesMatch(outputShaderVersion, outputShaderType, inputShaderType,
-                                       *input, *output, validateGeometryShaderInputs, isSeparable,
-                                       infoLog))
+                                       *input, *output, validateGeometryShaderInputs,
+                                       validateTessellationShaderInputs, isSeparable, infoLog))
             {
                 match = true;
                 break;
@@ -4137,6 +4212,7 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::ShaderVariable &output
                                                 const sh::ShaderVariable &inputVarying,
                                                 int shaderVersion,
                                                 bool validateGeometryShaderInputVarying,
+                                                bool validateTessellationShaderInputVarying,
                                                 bool isSeparable,
                                                 std::string *mismatchedStructFieldName)
 {
@@ -4163,9 +4239,11 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::ShaderVariable &output
     // Skip the validation on the array sizes between a vertex output varying and a geometry input
     // varying as it has been done before.
     bool validatePrecision = isSeparable && (shaderVersion > 100);
+    bool validateArraySize =
+        !validateGeometryShaderInputVarying && !validateTessellationShaderInputVarying;
     LinkMismatchError linkError =
-        LinkValidateVariablesBase(outputVarying, inputVarying, validatePrecision,
-                                  !validateGeometryShaderInputVarying, mismatchedStructFieldName);
+        LinkValidateVariablesBase(outputVarying, inputVarying, validatePrecision, validateArraySize,
+                                  mismatchedStructFieldName);
     if (linkError != LinkMismatchError::NO_MISMATCH)
     {
         return linkError;
@@ -5175,6 +5253,12 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     stream.writeInt(mState.mGeometryShaderInvocations);
     stream.writeInt(mState.mGeometryShaderMaxVertices);
 
+    stream.writeInt(mState.mTessControlShaderVertices);
+    stream.writeInt(mState.mTessGenMode);
+    stream.writeInt(mState.mTessGenSpacing);
+    stream.writeInt(mState.mTessGenVertexOrder);
+    stream.writeInt(mState.mTessGenPointMode);
+
     stream.writeInt(mState.mNumViews);
     stream.writeBool(mState.mEarlyFramentTestsOptimization);
     stream.writeInt(mState.mSpecConstUsageBits.bits());
@@ -5373,6 +5457,12 @@ angle::Result Program::deserialize(const Context *context,
     mState.mGeometryShaderOutputPrimitiveType = stream.readEnum<PrimitiveMode>();
     mState.mGeometryShaderInvocations         = stream.readInt<int>();
     mState.mGeometryShaderMaxVertices         = stream.readInt<int>();
+
+    mState.mTessControlShaderVertices = stream.readInt<int>();
+    mState.mTessGenMode               = stream.readInt<GLenum>();
+    mState.mTessGenSpacing            = stream.readInt<GLenum>();
+    mState.mTessGenVertexOrder        = stream.readInt<GLenum>();
+    mState.mTessGenPointMode          = stream.readInt<GLenum>();
 
     mState.mNumViews                      = stream.readInt<int>();
     mState.mEarlyFramentTestsOptimization = stream.readBool();
