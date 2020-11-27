@@ -1387,6 +1387,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     enabledFeatures.features.sampleRateShading = mPhysicalDeviceFeatures.sampleRateShading;
     // Used to support depth clears through draw calls.
     enabledFeatures.features.depthClamp = mPhysicalDeviceFeatures.depthClamp;
+    // Used to support tessellation Shader:
+    enabledFeatures.features.tessellationShader = mPhysicalDeviceFeatures.tessellationShader;
 
     if (!vk::CommandBuffer::ExecutesInline())
     {
@@ -1782,22 +1784,24 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     bool isNvidia   = IsNvidia(mPhysicalDeviceProperties.vendorID);
     bool isQualcomm = IsQualcomm(mPhysicalDeviceProperties.vendorID);
     bool isARM      = IsARM(mPhysicalDeviceProperties.vendorID);
-    bool isPowerVR  = IsPowerVR(mPhysicalDeviceProperties.vendorID);
+    // bool isPowerVR  = IsPowerVR(mPhysicalDeviceProperties.vendorID);
     bool isSwiftShader =
         IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
 
-    if (mLineRasterizationFeatures.bresenhamLines == VK_TRUE)
-    {
-        ASSERT(mLineRasterizationFeatures.sType ==
-               VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT);
-        ANGLE_FEATURE_CONDITION(&mFeatures, bresenhamLineRasterization, true);
-    }
-    else
-    {
-        // Use OpenGL line rasterization rules if extension not available by default.
-        // TODO(jmadill): Fix Android support. http://anglebug.com/2830
-        ANGLE_FEATURE_CONDITION(&mFeatures, basicGLLineRasterization, !IsAndroid() && !isPowerVR);
-    }
+    ANGLE_FEATURE_CONDITION(&mFeatures, basicGLLineRasterization, true);
+
+    // if (mLineRasterizationFeatures.bresenhamLines == VK_TRUE)
+    //{
+    //    ASSERT(mLineRasterizationFeatures.sType ==
+    //           VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT);
+    //    ANGLE_FEATURE_CONDITION(&mFeatures, bresenhamLineRasterization, true);
+    //}
+    // else
+    //{
+    //    // Use OpenGL line rasterization rules if extension not available by default.
+    //    // TODO(jmadill): Fix Android support. http://anglebug.com/2830
+    //    ANGLE_FEATURE_CONDITION(&mFeatures, basicGLLineRasterization, !IsAndroid() && !isPowerVR);
+    //}
 
     if (mProvokingVertexFeatures.provokingVertexLast == VK_TRUE)
     {
