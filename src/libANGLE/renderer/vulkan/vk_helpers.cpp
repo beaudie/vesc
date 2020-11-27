@@ -2549,8 +2549,18 @@ angle::Result QueryHelper::getUint64ResultNonBlocking(ContextVk *contextVk,
     {
         VkDevice device                     = contextVk->getDevice();
         constexpr VkQueryResultFlags kFlags = VK_QUERY_RESULT_64_BIT;
-        result = getQueryPool().getResults(device, mQuery, 1, sizeof(uint64_t), resultOut,
-                                           sizeof(uint64_t), kFlags);
+        if (getQueryType() == VkQueryType::VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT)
+        {
+            uint64_t transformFeedbackOut[2];
+            result     = getQueryPool().getResults(device, mQuery, 1, sizeof(transformFeedbackOut),
+                                               transformFeedbackOut, sizeof(uint64_t), kFlags);
+            *resultOut = transformFeedbackOut[0];
+        }
+        else
+        {
+            result = getQueryPool().getResults(device, mQuery, 1, sizeof(uint64_t), resultOut,
+                                               sizeof(uint64_t), kFlags);
+        }
     }
     else
     {
@@ -2578,8 +2588,20 @@ angle::Result QueryHelper::getUint64Result(ContextVk *contextVk, uint64_t *resul
     {
         VkDevice device                     = contextVk->getDevice();
         constexpr VkQueryResultFlags kFlags = VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT;
-        ANGLE_VK_TRY(contextVk, getQueryPool().getResults(device, mQuery, 1, sizeof(uint64_t),
-                                                          resultOut, sizeof(uint64_t), kFlags));
+
+        if (getQueryType() == VkQueryType::VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT)
+        {
+            uint64_t transformFeedbackOut[2];
+            ANGLE_VK_TRY(contextVk,
+                         getQueryPool().getResults(device, mQuery, 1, sizeof(transformFeedbackOut),
+                                                   transformFeedbackOut, sizeof(uint64_t), kFlags));
+            *resultOut = transformFeedbackOut[0];
+        }
+        else
+        {
+            ANGLE_VK_TRY(contextVk, getQueryPool().getResults(device, mQuery, 1, sizeof(resultOut),
+                                                              resultOut, sizeof(uint64_t), kFlags));
+        }
     }
     else
     {

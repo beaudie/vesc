@@ -913,6 +913,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // occlusion query
     QueryVk *mActiveQueryAnySamples;
     QueryVk *mActiveQueryAnySamplesConservative;
+    QueryVk *mActiveQueryTransformFeedback;
 
     // The offset we had the last time we bound the index buffer.
     const GLvoid *mLastIndexBufferOffset;

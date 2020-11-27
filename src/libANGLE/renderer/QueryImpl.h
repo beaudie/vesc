@@ -42,10 +42,13 @@ class QueryImpl : angle::NonCopyable
     // Convenient functions
     bool isOcclusionQuery() const { return isAnySamplesQuery() || isAnySamplesConservativeQuery(); }
     bool isAnySamplesQuery() const { return getType() == gl::QueryType::AnySamples; }
-
     bool isAnySamplesConservativeQuery() const
     {
         return getType() == gl::QueryType::AnySamplesConservative;
+    }
+    bool isTransformFeedbackQuery() const
+    {
+        return getType() == gl::QueryType::TransformFeedbackPrimitivesWritten;
     }
 
   private:

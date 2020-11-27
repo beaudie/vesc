@@ -370,6 +370,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mExecutable(nullptr),
       mActiveQueryAnySamples(nullptr),
       mActiveQueryAnySamplesConservative(nullptr),
+      mActiveQueryTransformFeedback(nullptr),
       mLastIndexBufferOffset(0),
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mXfbBaseVertex(0),
@@ -556,6 +557,13 @@ angle::Result ContextVk::initialize()
                                                              vk::kDefaultTimestampQueryPoolSize));
         ANGLE_TRY(mQueryPools[gl::QueryType::TimeElapsed].init(this, VK_QUERY_TYPE_TIMESTAMP,
                                                                vk::kDefaultTimestampQueryPoolSize));
+    }
+
+    if (getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        ANGLE_TRY(mQueryPools[gl::QueryType::TransformFeedbackPrimitivesWritten].init(
+            this, VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT,
+            vk::kDefaultTransformFeedbackQueryPoolSize));
     }
 
     // Init gles to vulkan index type map
@@ -3017,6 +3025,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // hint.
                 invalidateGraphicsDriverUniforms();
                 break;
+            case gl::State::DIRTY_BIT_PATCH_VERTICES:
+                mGraphicsPipelineDesc->updatePatchVertices(&mGraphicsPipelineTransition,
+                                                           glState.getPatchVertices());
+                break;
             default:
                 UNREACHABLE();
                 break;
@@ -3589,6 +3601,7 @@ vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||
            queryType == gl::QueryType::AnySamplesConservative ||
+           queryType == gl::QueryType::TransformFeedbackPrimitivesWritten ||
            queryType == gl::QueryType::Timestamp || queryType == gl::QueryType::TimeElapsed);
 
     // Assert that timestamp extension is available if needed.
@@ -4732,6 +4745,13 @@ void ContextVk::beginOcclusionQuery(QueryVk *queryVk)
         ASSERT(mActiveQueryAnySamplesConservative == nullptr);
         mActiveQueryAnySamplesConservative = queryVk;
     }
+    // The occlusion query logic is used for transform feedback query to pause and resume.
+    else if (queryVk->isTransformFeedbackQuery() &&
+             getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        ASSERT(mActiveQueryTransformFeedback == nullptr);
+        mActiveQueryTransformFeedback = queryVk;
+    }
     else
     {
         UNREACHABLE();
@@ -4753,6 +4773,12 @@ void ContextVk::endOcclusionQuery(QueryVk *queryVk)
     {
         ASSERT(mActiveQueryAnySamplesConservative == queryVk);
         mActiveQueryAnySamplesConservative = nullptr;
+    }
+    else if (queryVk->isTransformFeedbackQuery() &&
+             getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        ASSERT(mActiveQueryTransformFeedback == queryVk);
+        mActiveQueryTransformFeedback = nullptr;
     }
     else
     {
@@ -4778,6 +4804,12 @@ angle::Result ContextVk::pauseOcclusionQueryIfActive()
             this, mRenderPassCommandBuffer);
         ANGLE_TRY(mActiveQueryAnySamplesConservative->stashQueryHelper(this));
     }
+    if (mActiveQueryTransformFeedback)
+    {
+        mActiveQueryTransformFeedback->getQueryHelper()->endOcclusionQuery(
+            this, mRenderPassCommandBuffer);
+        ANGLE_TRY(mActiveQueryTransformFeedback->stashQueryHelper(this));
+    }
 
     return angle::Result::Continue;
 }
@@ -4792,6 +4824,11 @@ angle::Result ContextVk::resumeOcclusionQueryIfActive()
     if (mActiveQueryAnySamplesConservative)
     {
         mActiveQueryAnySamplesConservative->getQueryHelper()->beginOcclusionQuery(
+            this, mRenderPassCommandBuffer);
+    }
+    if (mActiveQueryTransformFeedback)
+    {
+        mActiveQueryTransformFeedback->getQueryHelper()->beginOcclusionQuery(
             this, mRenderPassCommandBuffer);
     }
 

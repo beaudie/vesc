@@ -131,6 +131,8 @@ GLuint GetMaximumShaderUniformVectors(ShaderType shaderType, const Caps &caps)
 
         case ShaderType::Compute:
         case ShaderType::Geometry:
+        case ShaderType::TessControl:
+        case ShaderType::TessEvaluation:
             return static_cast<GLuint>(caps.maxShaderUniformComponents[shaderType]) / 4;
 
         default:
@@ -496,7 +498,6 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         }
 
         unsigned int elementCount = variable.getBasicTypeElementCount();
-
         // Samplers and images aren't "real" uniforms, so they don't count towards register usage.
         // Likewise, don't count "real" uniforms towards opaque count.
 
