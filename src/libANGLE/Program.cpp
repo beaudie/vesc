@@ -659,15 +659,15 @@ bool ValidateInterfaceBlocksMatch(
     return true;
 }
 
-void UpdateInterfaceVariable(std::vector<sh::ShaderVariable> &block, sh::ShaderVariable &var)
+void UpdateInterfaceVariable(std::vector<sh::ShaderVariable> *block, const sh::ShaderVariable &var)
 {
     if (!var.isStruct())
     {
-        var.resetEffectiveLocation();
-        block.emplace_back(var);
+        block->emplace_back(var);
+        block->back().resetEffectiveLocation();
     }
 
-    for (sh::ShaderVariable &field : var.fields)
+    for (const sh::ShaderVariable &field : var.fields)
     {
         ASSERT(!var.name.empty() || var.isShaderIOBlock);
 
@@ -688,16 +688,18 @@ void UpdateInterfaceVariable(std::vector<sh::ShaderVariable> &block, sh::ShaderV
 
         if (!field.isStruct())
         {
-            field.updateEffectiveLocation(var);
-            field.name = prefix + field.name;
-            block.emplace_back(field);
+            sh::ShaderVariable fieldCopy = field;
+            fieldCopy.updateEffectiveLocation(var);
+            fieldCopy.name = prefix + field.name;
+            block->emplace_back(fieldCopy);
         }
 
-        for (sh::ShaderVariable &nested : field.fields)
+        for (const sh::ShaderVariable &nested : field.fields)
         {
-            nested.updateEffectiveLocation(field);
-            nested.name = prefix + field.name + "." + nested.name;
-            block.emplace_back(nested);
+            sh::ShaderVariable nestedCopy = nested;
+            nestedCopy.updateEffectiveLocation(field);
+            nestedCopy.name = prefix + field.name + "." + nested.name;
+            block->emplace_back(nestedCopy);
         }
     }
 }
@@ -1142,6 +1144,11 @@ ProgramState::ProgramState()
       mBinaryRetrieveableHint(false),
       mSeparable(false),
       mNumViews(-1),
+      mTessControlShaderVertices(0),
+      mTessGenMode(0),
+      mTessGenSpacing(0),
+      mTessGenVertexOrder(0),
+      mTessGenPointMode(0),
       mDrawIDLocation(-1),
       mBaseVertexLocation(-1),
       mBaseInstanceLocation(-1),
@@ -1431,6 +1438,22 @@ void Program::bindFragmentOutputLocation(GLuint index, const char *name)
 void Program::bindFragmentOutputIndex(GLuint index, const char *name)
 {
     mFragmentOutputIndexes.bindLocation(index, name);
+}
+
+PackMode Program::getVaryingPackingMode(const Context *context) const
+{
+    if (context->getLimitations().noFlexibleVaryingPacking)
+    {
+        // D3D9 pack mode is strictly more strict than WebGL, so takes priority.
+        return PackMode::ANGLE_NON_CONFORMANT_D3D9;
+    }
+
+    if (context->getExtensions().webglCompatibility)
+    {
+        return PackMode::WEBGL_STRICT;
+    }
+
+    return mProgram->getVaryingPackingMode();
 }
 
 angle::Result Program::link(const Context *context)
@@ -1755,8 +1778,7 @@ void ProgramState::updateProgramInterfaceInputs()
     {
         for (const sh::ShaderVariable &varying : shader->getInputVaryings())
         {
-            sh::ShaderVariable var = sh::ShaderVariable(varying);
-            UpdateInterfaceVariable(mExecutable->mProgramInputs, var);
+            UpdateInterfaceVariable(&mExecutable->mProgramInputs, varying);
         }
     }
 }
@@ -1782,8 +1804,7 @@ void ProgramState::updateProgramInterfaceOutputs()
     // Copy over each output varying, since the Shader could go away
     for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
     {
-        sh::ShaderVariable var = sh::ShaderVariable(varying);
-        UpdateInterfaceVariable(mExecutable->mOutputVariables, var);
+        UpdateInterfaceVariable(&mExecutable->mOutputVariables, varying);
     }
 }
 
@@ -1808,6 +1829,13 @@ void Program::unlink()
     mState.mActiveOutputVariables.reset();
     mState.mComputeShaderLocalSize.fill(1);
     mState.mNumViews                      = -1;
+    mState.mDrawIDLocation                = -1;
+    mState.mBaseVertexLocation            = -1;
+    mState.mBaseInstanceLocation          = -1;
+    mState.mCachedBaseVertex              = 0;
+    mState.mCachedBaseInstance            = 0;
+    mState.mEarlyFramentTestsOptimization = false;
+    mState.mTessControlShaderVertices     = 0;
     mState.mDrawIDLocation                = -1;
     mState.mBaseVertexLocation            = -1;
     mState.mBaseInstanceLocation          = -1;
@@ -2122,6 +2150,36 @@ GLint Program::getGeometryShaderMaxVertices() const
 {
     ASSERT(!mLinkingState && mState.mExecutable);
     return mState.mExecutable->getGeometryShaderMaxVertices();
+}
+
+GLint Program::getTessControlShaderVertices() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessControlShaderVertices;
+}
+
+GLenum Program::getTessGenMode() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenMode;
+}
+
+GLenum Program::getTessGenPointMode() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenPointMode;
+}
+
+GLenum Program::getTessGenSpacing() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenSpacing;
+}
+
+GLenum Program::getTessGenVertexOrder() const
+{
+    ASSERT(!mLinkingState);
+    return mState.mTessGenVertexOrder;
 }
 
 const sh::ShaderVariable &Program::getInputResource(size_t index) const
@@ -3219,33 +3277,55 @@ GLenum Program::getTransformFeedbackBufferMode() const
 
 bool Program::linkValidateShaders(InfoLog &infoLog)
 {
-    Shader *vertexShader   = mState.mAttachedShaders[ShaderType::Vertex];
-    Shader *fragmentShader = mState.mAttachedShaders[ShaderType::Fragment];
-    Shader *computeShader  = mState.mAttachedShaders[ShaderType::Compute];
-    Shader *geometryShader = mState.mAttachedShaders[ShaderType::Geometry];
+    const ShaderMap<Shader *> &shaders = mState.mAttachedShaders;
 
-    bool isComputeShaderAttached = (computeShader != nullptr);
-    bool isGraphicsShaderAttached =
-        (vertexShader != nullptr || fragmentShader != nullptr || geometryShader != nullptr);
+    bool isComputeShaderAttached  = shaders[ShaderType::Compute] != nullptr;
+    bool isGraphicsShaderAttached = shaders[ShaderType::Vertex] ||
+                                    shaders[ShaderType::TessControl] ||
+                                    shaders[ShaderType::TessEvaluation] ||
+                                    shaders[ShaderType::Geometry] || shaders[ShaderType::Fragment];
     // Check whether we both have a compute and non-compute shaders attached.
     // If there are of both types attached, then linking should fail.
     // OpenGL ES 3.10, 7.3 Program Objects, under LinkProgram
-    if (isComputeShaderAttached == true && isGraphicsShaderAttached == true)
+    if (isComputeShaderAttached && isGraphicsShaderAttached)
     {
         infoLog << "Both compute and graphics shaders are attached to the same program.";
         return false;
     }
 
-    if (computeShader)
+    Optional<int> version;
+    for (ShaderType shaderType : kAllGraphicsShaderTypes)
     {
-        if (!computeShader->isCompiled())
+        Shader *shader = shaders[shaderType];
+        ASSERT(!shader || shader->getType() == shaderType);
+        if (!shader)
         {
-            infoLog << "Attached compute shader is not compiled.";
+            continue;
+        }
+
+        if (!shader->isCompiled())
+        {
+            infoLog << ShaderTypeToString(shaderType) << " shader is not compiled.";
             return false;
         }
-        ASSERT(computeShader->getType() == ShaderType::Compute);
 
-        mState.mComputeShaderLocalSize = computeShader->getWorkGroupSize();
+        if (!version.valid())
+        {
+            version = shader->getShaderVersion();
+        }
+        else if (version != shader->getShaderVersion())
+        {
+            infoLog << ShaderTypeToString(shaderType)
+                    << " shader version does not match other shader versions.";
+            return false;
+        }
+    }
+
+    if (isComputeShaderAttached)
+    {
+        ASSERT(shaders[ShaderType::Compute]->getType() == ShaderType::Compute);
+
+        mState.mComputeShaderLocalSize = shaders[ShaderType::Compute]->getWorkGroupSize();
 
         // GLSL ES 3.10, 4.4.1.1 Compute Shader Inputs
         // If the work group size is not specified, a link time error should occur.
@@ -3257,67 +3337,31 @@ bool Program::linkValidateShaders(InfoLog &infoLog)
     }
     else
     {
-        if (isSeparable())
+        if (!isGraphicsShaderAttached)
         {
-            if (!fragmentShader && !vertexShader && !geometryShader)
-            {
-                infoLog << "No compiled shaders.";
-                return false;
-            }
-
-            ASSERT(!fragmentShader || fragmentShader->getType() == ShaderType::Fragment);
-            if (fragmentShader && !fragmentShader->isCompiled())
-            {
-                infoLog << "Fragment shader is not compiled.";
-                return false;
-            }
-
-            ASSERT(!vertexShader || vertexShader->getType() == ShaderType::Vertex);
-            if (vertexShader && !vertexShader->isCompiled())
-            {
-                infoLog << "Vertex shader is not compiled.";
-                return false;
-            }
-
-            ASSERT(!geometryShader || geometryShader->getType() == ShaderType::Geometry);
-            if (geometryShader && !geometryShader->isCompiled())
-            {
-                infoLog << "Geometry shader is not compiled.";
-                return false;
-            }
-        }
-        else
-        {
-            if (!fragmentShader || !fragmentShader->isCompiled())
-            {
-                infoLog
-                    << "No compiled fragment shader when at least one graphics shader is attached.";
-                return false;
-            }
-            ASSERT(fragmentShader->getType() == ShaderType::Fragment);
-
-            if (!vertexShader || !vertexShader->isCompiled())
-            {
-                infoLog
-                    << "No compiled vertex shader when at least one graphics shader is attached.";
-                return false;
-            }
-            ASSERT(vertexShader->getType() == ShaderType::Vertex);
+            infoLog << "No compiled shaders.";
+            return false;
         }
 
-        if (vertexShader && fragmentShader)
+        bool hasVertex   = shaders[ShaderType::Vertex] != nullptr;
+        bool hasFragment = shaders[ShaderType::Fragment] != nullptr;
+        if (!isSeparable() && (!hasVertex || !hasFragment))
         {
-            int vertexShaderVersion   = vertexShader->getShaderVersion();
-            int fragmentShaderVersion = fragmentShader->getShaderVersion();
-
-            if (fragmentShaderVersion != vertexShaderVersion)
-            {
-                infoLog << "Fragment shader version does not match vertex shader version.";
-                return false;
-            }
+            infoLog
+                << "The program must contain objects to form both a vertex and fragment shader.";
+            return false;
         }
 
-        if (geometryShader)
+        bool hasTessControl    = shaders[ShaderType::TessControl] != nullptr;
+        bool hasTessEvaluation = shaders[ShaderType::TessEvaluation] != nullptr;
+        if (!isSeparable() && (hasTessControl != hasTessEvaluation))
+        {
+            infoLog << "Tessellation control and evaluation shaders must be specified together.";
+            return false;
+        }
+
+        Shader *geometryShader = shaders[ShaderType::Geometry];
+        if (shaders[ShaderType::Geometry])
         {
             // [GL_EXT_geometry_shader] Chapter 7
             // Linking can fail for a variety of reasons as specified in the OpenGL ES Shading
@@ -3329,18 +3373,6 @@ bool Program::linkValidateShaders(InfoLog &infoLog)
             //   - <program> is not separable and contains no objects to form a vertex shader; or
             //   - the input primitive type, output primitive type, or maximum output vertex count
             //     is not specified in the compiled geometry shader object.
-            if (!geometryShader->isCompiled())
-            {
-                infoLog << "The attached geometry shader isn't compiled.";
-                return false;
-            }
-
-            if (vertexShader &&
-                (geometryShader->getShaderVersion() != vertexShader->getShaderVersion()))
-            {
-                infoLog << "Geometry shader version does not match vertex shader version.";
-                return false;
-            }
             ASSERT(geometryShader->getType() == ShaderType::Geometry);
 
             Optional<PrimitiveMode> inputPrimitive =
@@ -3371,6 +3403,21 @@ bool Program::linkValidateShaders(InfoLog &infoLog)
             mState.mExecutable->mGeometryShaderMaxVertices         = maxVertices.value();
             mState.mExecutable->mGeometryShaderInvocations =
                 geometryShader->getGeometryShaderInvocations();
+        }
+
+        Shader *tessControlShader = shaders[ShaderType::TessControl];
+        if (tessControlShader)
+        {
+            mState.mTessControlShaderVertices = tessControlShader->getTessControlShaderVertices();
+        }
+
+        Shader *tessEvaluationShader = shaders[ShaderType::TessEvaluation];
+        if (tessEvaluationShader)
+        {
+            mState.mTessGenMode        = tessEvaluationShader->getTessGenMode();
+            mState.mTessGenSpacing     = tessEvaluationShader->getTessGenSpacing();
+            mState.mTessGenVertexOrder = tessEvaluationShader->getTessGenVertexOrder();
+            mState.mTessGenPointMode   = tessEvaluationShader->getTessGenPointMode();
         }
     }
 
@@ -4560,6 +4607,12 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     stream.writeInt(computeLocalSize[1]);
     stream.writeInt(computeLocalSize[2]);
 
+    stream.writeInt(mState.mTessControlShaderVertices);
+    stream.writeInt(mState.mTessGenMode);
+    stream.writeInt(mState.mTessGenSpacing);
+    stream.writeInt(mState.mTessGenVertexOrder);
+    stream.writeInt(mState.mTessGenPointMode);
+
     stream.writeInt(mState.mNumViews);
     stream.writeBool(mState.mEarlyFramentTestsOptimization);
     stream.writeInt(mState.mSpecConstUsageBits.bits());
@@ -4753,6 +4806,12 @@ angle::Result Program::deserialize(const Context *context,
     mState.mComputeShaderLocalSize[0] = stream.readInt<int>();
     mState.mComputeShaderLocalSize[1] = stream.readInt<int>();
     mState.mComputeShaderLocalSize[2] = stream.readInt<int>();
+
+    mState.mTessControlShaderVertices = stream.readInt<int>();
+    mState.mTessGenMode               = stream.readInt<GLenum>();
+    mState.mTessGenSpacing            = stream.readInt<GLenum>();
+    mState.mTessGenVertexOrder        = stream.readInt<GLenum>();
+    mState.mTessGenPointMode          = stream.readInt<GLenum>();
 
     mState.mNumViews                      = stream.readInt<int>();
     mState.mEarlyFramentTestsOptimization = stream.readBool();

@@ -170,6 +170,8 @@ class ProgramVk : public ProgramImpl
         return mGlslangProgramInterfaceInfo;
     }
 
+    gl::PackMode getVaryingPackingMode() const override;
+
   private:
     template <int cols, int rows>
     void setUniformMatrixfv(GLint location,
