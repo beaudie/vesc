@@ -859,7 +859,8 @@ ANGLE_INLINE bool ValidateDrawArraysCommon(const Context *context,
         return false;
     }
 
-    if (context->getStateCache().isTransformFeedbackActiveUnpaused())
+    if (context->getStateCache().isTransformFeedbackActiveUnpaused() &&
+        !context->supportsGeometryOrTesselation())
     {
         const State &state                      = context->getState();
         TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
