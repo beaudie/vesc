@@ -151,6 +151,11 @@ class ProgramExecutable final : public angle::Subject
         return isCompute() ? mLinkedComputeShaderStages.count()
                            : mLinkedGraphicsShaderStages.count();
     }
+    bool hasLinkedTessellationShader() const
+    {
+        return mLinkedGraphicsShaderStages[ShaderType::TessControl] ||
+               mLinkedGraphicsShaderStages[ShaderType::TessEvaluation];
+    }
 
     // A PPO can have both graphics and compute programs attached, so
     // we don't know if the PPO is a 'graphics' or 'compute' PPO until the

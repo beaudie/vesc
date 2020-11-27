@@ -92,41 +92,14 @@ void ProgramPipelineState::useProgramStages(
     Program *shaderProgram,
     std::vector<angle::ObserverBinding> *programObserverBindings)
 {
-    if (stages == GL_ALL_SHADER_BITS)
+    for (size_t singleShaderBit : angle::BitSet16<16>(stages))
     {
-        for (const ShaderType shaderType : gl::AllShaderTypes())
-        {
-            size_t index = static_cast<size_t>(shaderType);
-            ASSERT(index < programObserverBindings->size());
-            useProgramStage(context, shaderType, shaderProgram,
-                            &programObserverBindings->at(index));
-        }
-    }
-    else
-    {
-        if (stages & GL_VERTEX_SHADER_BIT)
-        {
-            size_t index = static_cast<size_t>(ShaderType::Vertex);
-            ASSERT(index < programObserverBindings->size());
-            useProgramStage(context, ShaderType::Vertex, shaderProgram,
-                            &programObserverBindings->at(index));
-        }
-
-        if (stages & GL_FRAGMENT_SHADER_BIT)
-        {
-            size_t index = static_cast<size_t>(ShaderType::Fragment);
-            ASSERT(index < programObserverBindings->size());
-            useProgramStage(context, ShaderType::Fragment, shaderProgram,
-                            &programObserverBindings->at(index));
-        }
-
-        if (stages & GL_COMPUTE_SHADER_BIT)
-        {
-            size_t index = static_cast<size_t>(ShaderType::Compute);
-            ASSERT(index < programObserverBindings->size());
-            useProgramStage(context, ShaderType::Compute, shaderProgram,
-                            &programObserverBindings->at(index));
-        }
+        // Cast back to a bit after the iterator returns an index.
+        ShaderType shaderType = GetShaderTypeFromBitfield(angle::Bit<size_t>(singleShaderBit));
+        if (shaderType == ShaderType::InvalidEnum)
+            break;
+        useProgramStage(context, shaderType, shaderProgram,
+                        &programObserverBindings->at(static_cast<size_t>(shaderType)));
     }
 }
 
