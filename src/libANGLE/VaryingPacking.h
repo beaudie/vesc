@@ -126,6 +126,9 @@ struct PackedVarying : angle::NonCopyable
         return frontVarying.stage == ShaderType::Vertex && backVarying.varying == nullptr;
     }
 
+    // Special handling for GS/TS array inputs.
+    unsigned int getBasicTypeElementCount() const;
+
     VaryingInShaderRef frontVarying;
     VaryingInShaderRef backVarying;
 
@@ -199,6 +202,10 @@ enum class PackMode
 
     // Each varying takes a separate register. No register sharing.
     ANGLE_NON_CONFORMANT_D3D9,
+
+    // Vulkan packing rules:
+    // https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#interfaces-iointerfaces-locations
+    VULKAN,
 };
 
 class VaryingPacking final : angle::NonCopyable
@@ -262,6 +269,7 @@ class VaryingPacking final : angle::NonCopyable
                              unsigned int varyingColumns) const;
     void insertVaryingIntoRegisterMap(unsigned int registerRow,
                                       unsigned int registerColumn,
+                                      unsigned int varyingColumns,
                                       const PackedVarying &packedVarying);
     void clearRegisterMap();
 
@@ -279,6 +287,7 @@ class VaryingPacking final : angle::NonCopyable
                                    GLuint secondaryFieldIndex);
     void collectVarying(const sh::ShaderVariable &varying,
                         const ProgramVaryingRef &ref,
+                        PackMode packMode,
                         VaryingUniqueFullNames *uniqueFullNames);
     void collectTFVarying(const std::string &tfVarying,
                           const ProgramVaryingRef &ref,
