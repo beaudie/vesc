@@ -125,6 +125,9 @@ struct PackedVarying : angle::NonCopyable
         return frontVarying.stage == ShaderType::Vertex && backVarying.varying == nullptr;
     }
 
+    // Special handling for GS/TS array inputs.
+    unsigned int getBasicTypeElementCount() const;
+
     VaryingInShaderRef frontVarying;
     VaryingInShaderRef backVarying;
 
@@ -278,6 +281,7 @@ class VaryingPacking final : angle::NonCopyable
                                    GLuint secondaryFieldIndex);
     void collectVarying(const sh::ShaderVariable &varying,
                         const ProgramVaryingRef &ref,
+                        PackMode packMode,
                         VaryingUniqueFullNames *uniqueFullNames);
     void collectTFVarying(const std::string &tfVarying,
                           const ProgramVaryingRef &ref,
