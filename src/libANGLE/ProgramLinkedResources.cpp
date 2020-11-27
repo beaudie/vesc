@@ -131,6 +131,8 @@ GLuint GetMaximumShaderUniformVectors(ShaderType shaderType, const Caps &caps)
 
         case ShaderType::Compute:
         case ShaderType::Geometry:
+        case ShaderType::TessControl:
+        case ShaderType::TessEvaluation:
             return static_cast<GLuint>(caps.maxShaderUniformComponents[shaderType]) / 4;
 
         default:
