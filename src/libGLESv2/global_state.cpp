@@ -17,6 +17,10 @@
 
 #include <atomic>
 
+#if defined(ANGLE_WITH_ASAN)
+#    include <sanitizer/lsan_interface.h>
+#endif
+
 namespace egl
 {
 namespace
@@ -37,7 +41,13 @@ void SetContextToAndroidOpenGLTLSSlot(gl::Context *value)
 
 Thread *AllocateCurrentThread()
 {
-    gCurrentThread = new Thread();
+    {
+#if defined(ANGLE_WITH_ASAN)
+        // Global thread intentionally leaked
+        __lsan::ScopedDisabler lsanDisabler;
+#endif
+        gCurrentThread = new Thread();
+    }
 
     // Initialize fast TLS slot
     SetContextToAndroidOpenGLTLSSlot(nullptr);

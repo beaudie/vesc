@@ -12,6 +12,10 @@
 
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#if defined(ANGLE_WITH_ASAN)
+#    include <sanitizer/lsan_interface.h>
+#endif
+
 namespace rx
 {
 namespace vk
@@ -48,7 +52,13 @@ class SharedResourceUse final : angle::NonCopyable
     void init()
     {
         ASSERT(!mUse);
-        mUse = new ResourceUse;
+        {
+#if defined(ANGLE_WITH_ASAN)
+            // Leak detected in dlopen, see http://anglebug.com/5377
+            __lsan::ScopedDisabler lsanDisabler;
+#endif
+            mUse = new ResourceUse;
+        }
         mUse->counter++;
     }
 

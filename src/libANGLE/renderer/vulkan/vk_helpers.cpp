@@ -23,6 +23,10 @@
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/trace.h"
 
+#if defined(ANGLE_WITH_ASAN)
+#    include <sanitizer/lsan_interface.h>
+#endif
+
 namespace rx
 {
 namespace vk
@@ -1667,7 +1671,14 @@ DynamicBuffer::~DynamicBuffer()
 
 angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
 {
-    std::unique_ptr<BufferHelper> buffer = std::make_unique<BufferHelper>();
+    std::unique_ptr<BufferHelper> buffer;
+    {
+#if defined(ANGLE_WITH_ASAN)
+        // Leak detected in dlopen, see http://anglebug.com/5377
+        __lsan::ScopedDisabler lsanDisabler;
+#endif
+        buffer = std::make_unique<BufferHelper>();
+    }
 
     VkBufferCreateInfo createInfo    = {};
     createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
