@@ -116,6 +116,19 @@ int GetLocationCount(const TIntermSymbol *varying, bool ignoreVaryingArraySize)
     return elementLocationCount * varyingType.getArraySizeProduct();
 }
 
+bool ShouldIgnoreInputArraySizeForShaderType(GLenum shaderType)
+{
+    switch (shaderType)
+    {
+        case GL_GEOMETRY_SHADER:
+        case GL_TESS_CONTROL_SHADER:
+        case GL_TESS_EVALUATION_SHADER:
+            return true;
+        default:
+            return false;
+    }
+}
+
 struct SymbolAndField
 {
     const TIntermSymbol *symbol;
@@ -319,7 +332,7 @@ void ValidateVaryingLocationsTraverser::validate(TDiagnostics *diagnostics)
     ASSERT(diagnostics);
 
     ValidateShaderInterface(diagnostics, mInputVaryingsWithLocation,
-                            mShaderType == GL_GEOMETRY_SHADER_EXT);
+                            ShouldIgnoreInputArraySizeForShaderType(mShaderType));
     ValidateShaderInterface(diagnostics, mOutputVaryingsWithLocation, false);
 }
 
@@ -327,10 +340,11 @@ void ValidateVaryingLocationsTraverser::validate(TDiagnostics *diagnostics)
 
 unsigned int CalculateVaryingLocationCount(TIntermSymbol *varying, GLenum shaderType)
 {
-    const TType &varyingType          = varying->getType();
-    const TQualifier qualifier        = varyingType.getQualifier();
-    const bool isShaderIn             = IsShaderIn(qualifier);
-    const bool ignoreVaryingArraySize = isShaderIn && shaderType == GL_GEOMETRY_SHADER_EXT;
+    const TType &varyingType   = varying->getType();
+    const TQualifier qualifier = varyingType.getQualifier();
+    const bool isShaderIn      = IsShaderIn(qualifier);
+    const bool ignoreVaryingArraySize =
+        isShaderIn && ShouldIgnoreInputArraySizeForShaderType(shaderType);
 
     if (varyingType.isInterfaceBlock())
     {
