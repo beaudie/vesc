@@ -37,7 +37,11 @@ class QueryVk : public QueryImpl
     void onTransformFeedbackEnd(GLsizeiptr primitivesDrawn);
     vk::QueryHelper *getQueryHelper() { return &mQueryHelper; }
     angle::Result stashQueryHelper(ContextVk *contextVk);
-    angle::Result retrieveStashedQueryResult(ContextVk *contextVk, uint64_t *result);
+    angle::Result retrieveStashedQueryResult(ContextVk *contextVk,
+                                             size_t resultSize,
+                                             uint64_t *result);
+
+    bool isRenderPassQuery(ContextVk *contextVk) const;
 
   private:
     angle::Result getResult(const gl::Context *context, bool wait);
