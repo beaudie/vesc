@@ -32,6 +32,7 @@
 #include "real_commando_secret_mission/real_commando_secret_mission_capture_context1.h"
 #include "temple_run_300/temple_run_300_capture_context1.h"
 #include "trex_200/trex_200_capture_context1.h"
+#include "whatsapp_scroll_trace/whatsapp_scroll_trace_capture_context1.h"
 #include "world_of_tanks_blitz/world_of_tanks_blitz_capture_context1.h"
 
 namespace angle
@@ -119,7 +120,11 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
     {RestrictedTraceID::world_of_tanks_blitz,
      {world_of_tanks_blitz::kReplayFrameStart, world_of_tanks_blitz::kReplayFrameEnd,
       world_of_tanks_blitz::kReplayDrawSurfaceWidth, world_of_tanks_blitz::kReplayDrawSurfaceHeight,
-      "world_of_tanks_blitz"}}};
+      "world_of_tanks_blitz"}},
+    {RestrictedTraceID::whatsapp_scroll_trace,
+     {whatsapp_scroll_trace::kReplayFrameStart, whatsapp_scroll_trace::kReplayFrameEnd,
+      whatsapp_scroll_trace::kReplayDrawSurfaceWidth,
+      whatsapp_scroll_trace::kReplayDrawSurfaceHeight, "whatsapp_scroll_trace"}}};
 }
 
 const TraceInfo &GetTraceInfo(RestrictedTraceID traceID)
@@ -196,6 +201,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ReplayContext1Frame(frameIndex);
+            break;
+        case RestrictedTraceID::whatsapp_scroll_trace:
+            whatsapp_scroll_trace::ReplayContext1Frame(frameIndex);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -274,6 +282,9 @@ void ResetReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ResetContext1Replay();
             break;
+        case RestrictedTraceID::whatsapp_scroll_trace:
+            whatsapp_scroll_trace::ResetContext1Replay();
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -350,6 +361,9 @@ void SetupReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetupContext1Replay();
+            break;
+        case RestrictedTraceID::whatsapp_scroll_trace:
+            whatsapp_scroll_trace::SetupContext1Replay();
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -428,6 +442,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::whatsapp_scroll_trace:
+            whatsapp_scroll_trace::SetBinaryDataDir(dataDir);
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -504,6 +521,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::whatsapp_scroll_trace:
+            whatsapp_scroll_trace::SetBinaryDataDecompressCallback(callback);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
