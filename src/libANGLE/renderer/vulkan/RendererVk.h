@@ -53,6 +53,27 @@ struct Format;
 
 static constexpr size_t kMaxExtensionNames = 200;
 using ExtensionNameList                    = angle::FixedVector<const char *, kMaxExtensionNames>;
+
+// Process GPU memory reports
+class MemoryReport : angle::NonCopyable
+{
+  public:
+    MemoryReport();
+    void processCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, bool logCallback);
+    void logMemoryReportStats();
+
+  private:
+    std::mutex mMemoryReportMutex;
+    VkDeviceSize mCurrentTotalAllocatedMemory;
+    VkDeviceSize mMaxTotalAllocatedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mAllocatedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mAllocatedMemoryMax;
+    VkDeviceSize mCurrentTotalImportedMemory;
+    VkDeviceSize mMaxTotalImportedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mImportedMemory;
+    angle::HashMap<VkObjectType, VkDeviceSize> mImportedMemoryMax;
+    angle::HashMap<uint64_t, int> mUniqueIDCounts;
+};
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -327,6 +348,13 @@ class RendererVk : angle::NonCopyable
     vk::CommandBufferHelper *getCommandBufferHelper(bool hasRenderPass);
     void recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer);
 
+    // Process GPU memory reports
+    void logMemoryReportStats() { mMemoryReport.logMemoryReportStats(); }
+    void processCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, bool logCallback)
+    {
+        mMemoryReport.processCallback(callbackData, logCallback);
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -371,6 +399,8 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceTransformFeedbackFeaturesEXT mTransformFeedbackFeatures;
     VkPhysicalDeviceIndexTypeUint8FeaturesEXT mIndexTypeUint8Features;
     VkPhysicalDeviceSubgroupProperties mSubgroupProperties;
+    VkPhysicalDeviceDeviceMemoryReportFeaturesEXT mMemoryReportFeatures;
+    VkDeviceDeviceMemoryReportCreateInfoEXT mMemoryReportCallback;
     VkPhysicalDeviceExternalMemoryHostPropertiesEXT mExternalMemoryHostProperties;
     VkPhysicalDeviceShaderFloat16Int8FeaturesKHR mShaderFloat16Int8Features;
     VkPhysicalDeviceDepthStencilResolvePropertiesKHR mDepthStencilResolveProperties;
@@ -448,6 +478,9 @@ class RendererVk : angle::NonCopyable
 
     // Tracks resource serials.
     vk::ResourceSerialFactory mResourceSerialFactory;
+
+    // Process GPU memory reports
+    vk::MemoryReport mMemoryReport;
 };
 
 }  // namespace rx
