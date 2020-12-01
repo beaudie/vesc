@@ -100,7 +100,7 @@ struct ShaderVariable
     unsigned int getExternalSize() const;
 
     bool isStruct() const { return !fields.empty(); }
-    const std::string &getStructName() const { return structName; }
+    const std::string &getStructName() const { return structOrBlockName; }
 
     // All of the shader's variables are described using nested data
     // structures. This is needed in order to disambiguate similar looking
@@ -154,10 +154,12 @@ struct ShaderVariable
     // necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1 section 7.3.1.
     bool active;
     std::vector<ShaderVariable> fields;
-    // Struct name is used for varyings of struct type.  Additionally, it's used with shader I/O
-    // blocks, in which case it contains the block name.
-    std::string structName;
-    std::string mappedStructName;
+    // structOrBlockName is used for:
+    //
+    // - varyings of struct type, in which case it contains the struct name.
+    // - shader I/O blocks, in which case it contains the block name.
+    std::string structOrBlockName;
+    std::string mappedStructOrBlockName;
 
     // Only applies to interface block fields. Kept here for simplicity.
     bool isRowMajorLayout;

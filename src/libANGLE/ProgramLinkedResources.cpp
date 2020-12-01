@@ -1660,7 +1660,8 @@ bool LinkValidateShaderInterfaceMatching(const std::vector<sh::ShaderVariable> &
         // if it is not active. GLSL ES 3.00.6 section 4.3.10.
         if (!match && input->staticUse)
         {
-            const std::string &name = input->isShaderIOBlock ? input->structName : input->name;
+            const std::string &name =
+                input->isShaderIOBlock ? input->structOrBlockName : input->name;
             infoLog << GetShaderTypeString(inputShaderType) << " varying " << name
                     << " does not match any " << GetShaderTypeString(outputShaderType)
                     << " varying";
@@ -1690,7 +1691,7 @@ LinkMismatchError LinkValidateProgramVariables(const sh::ShaderVariable &variabl
         return LinkMismatchError::PRECISION_MISMATCH;
     }
     if (!variable1.isShaderIOBlock && !variable2.isShaderIOBlock &&
-        variable1.structName != variable2.structName)
+        variable1.structOrBlockName != variable2.structOrBlockName)
     {
         return LinkMismatchError::STRUCT_NAME_MISMATCH;
     }
@@ -1726,7 +1727,7 @@ LinkMismatchError LinkValidateProgramVariables(const sh::ShaderVariable &variabl
                 return LinkMismatchError::FIELD_LOCATION_MISMATCH;
             }
 
-            if (member1.structName != member2.structName)
+            if (member1.structOrBlockName != member2.structOrBlockName)
             {
                 return LinkMismatchError::FIELD_STRUCT_NAME_MISMATCH;
             }

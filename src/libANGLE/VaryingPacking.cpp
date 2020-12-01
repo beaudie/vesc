@@ -105,8 +105,8 @@ bool InterfaceVariablesMatch(const sh::ShaderVariable &front, const sh::ShaderVa
     }
 
     // Compare names, or if shader I/O blocks, block names.
-    const std::string &backName  = back.isShaderIOBlock ? back.structName : back.name;
-    const std::string &frontName = front.isShaderIOBlock ? front.structName : front.name;
+    const std::string &backName  = back.isShaderIOBlock ? back.structOrBlockName : back.name;
+    const std::string &frontName = front.isShaderIOBlock ? front.structOrBlockName : front.name;
     return backName == frontName;
 }
 
@@ -512,8 +512,8 @@ void VaryingPacking::collectUserVaryingField(const ProgramVaryingRef &ref,
     {
         if (frontField->isShaderIOBlock)
         {
-            frontVarying.parentStructName       = input->structName;
-            frontVarying.parentStructMappedName = input->mappedStructName;
+            frontVarying.parentStructName       = input->structOrBlockName;
+            frontVarying.parentStructMappedName = input->mappedStructOrBlockName;
         }
         else
         {
@@ -526,8 +526,8 @@ void VaryingPacking::collectUserVaryingField(const ProgramVaryingRef &ref,
     {
         if (backField->isShaderIOBlock)
         {
-            backVarying.parentStructName       = output->structName;
-            backVarying.parentStructMappedName = output->mappedStructName;
+            backVarying.parentStructName       = output->structOrBlockName;
+            backVarying.parentStructMappedName = output->mappedStructOrBlockName;
         }
         else
         {
@@ -584,8 +584,8 @@ void VaryingPacking::collectUserVaryingFieldTF(const ProgramVaryingRef &ref,
 
     if (frontField->isShaderIOBlock)
     {
-        frontVarying.parentStructName       = input->structName;
-        frontVarying.parentStructMappedName = input->mappedStructName;
+        frontVarying.parentStructName       = input->structOrBlockName;
+        frontVarying.parentStructMappedName = input->mappedStructOrBlockName;
     }
     else
     {
@@ -650,7 +650,7 @@ void VaryingPacking::collectVarying(const sh::ShaderVariable &varying,
             (*uniqueFullNames)[ref.frontShaderStage].insert(input->name);
             if (input->isShaderIOBlock)
             {
-                (*uniqueFullNames)[ref.frontShaderStage].insert(input->structName);
+                (*uniqueFullNames)[ref.frontShaderStage].insert(input->structOrBlockName);
             }
         }
         if (output)
@@ -677,7 +677,7 @@ void VaryingPacking::collectTFVarying(const std::string &tfVarying,
     if ((*uniqueFullNames)[ref.frontShaderStage].count(tfVarying) > 0 ||
         (*uniqueFullNames)[ref.frontShaderStage].count(baseName) > 0 ||
         (input->isShaderIOBlock &&
-         (*uniqueFullNames)[ref.frontShaderStage].count(input->structName) > 0))
+         (*uniqueFullNames)[ref.frontShaderStage].count(input->structOrBlockName) > 0))
     {
         return;
     }
@@ -713,7 +713,7 @@ void VaryingPacking::collectTFVarying(const std::string &tfVarying,
                     }
                 }
 
-                (*uniqueFullNames)[ref.frontShaderStage].insert(input->structName);
+                (*uniqueFullNames)[ref.frontShaderStage].insert(input->structOrBlockName);
             }
             else
             {
