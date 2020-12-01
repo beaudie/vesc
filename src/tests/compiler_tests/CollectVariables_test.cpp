@@ -863,7 +863,7 @@ TEST_F(CollectHashedVertexVariablesTest, StructUniform)
     EXPECT_FALSE(uniform.isArray());
     EXPECT_EQ("u", uniform.name);
     EXPECT_EQ("webgl_1", uniform.mappedName);
-    EXPECT_EQ("sType", uniform.structName);
+    EXPECT_EQ("sType", uniform.structOrBlockName);
     EXPECT_TRUE(uniform.staticUse);
     EXPECT_TRUE(uniform.active);
 
@@ -907,7 +907,7 @@ TEST_F(CollectHashedVertexVariablesTest, NamelessStructUniform)
     EXPECT_FALSE(uniform.isArray());
     EXPECT_EQ("u", uniform.name);
     EXPECT_EQ("webgl_1", uniform.mappedName);
-    EXPECT_EQ("", uniform.structName);
+    EXPECT_EQ("", uniform.structOrBlockName);
     EXPECT_TRUE(uniform.staticUse);
     EXPECT_TRUE(uniform.active);
 
