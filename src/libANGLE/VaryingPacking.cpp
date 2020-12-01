@@ -418,8 +418,8 @@ void VaryingPacking::packUserVaryingField(const ProgramVaryingRef &ref,
     {
         if (frontField->isShaderIOBlock)
         {
-            frontVarying.parentStructName       = input->structName;
-            frontVarying.parentStructMappedName = input->mappedStructName;
+            frontVarying.parentStructName       = input->structOrBlockName;
+            frontVarying.parentStructMappedName = input->mappedStructOrBlockName;
         }
         else
         {
@@ -432,8 +432,8 @@ void VaryingPacking::packUserVaryingField(const ProgramVaryingRef &ref,
     {
         if (backField->isShaderIOBlock)
         {
-            backVarying.parentStructName       = output->structName;
-            backVarying.parentStructMappedName = output->mappedStructName;
+            backVarying.parentStructName       = output->structOrBlockName;
+            backVarying.parentStructMappedName = output->mappedStructOrBlockName;
         }
         else
         {
