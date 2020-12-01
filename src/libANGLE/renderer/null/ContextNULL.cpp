@@ -80,6 +80,7 @@ ContextNULL::ContextNULL(const gl::State &state,
     mExtensions.textureUsage           = true;
     mExtensions.vertexArrayObjectOES   = true;
     mExtensions.debugMarker            = true;
+    mExtensions.debugLabel             = true;
     mExtensions.translatedShaderSource = true;
 
     mExtensions.textureStorage               = true;

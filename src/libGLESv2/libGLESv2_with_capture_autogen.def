@@ -626,6 +626,10 @@ EXPORTS
     ; GL_EXT_copy_image
     glCopyImageSubDataEXT
 
+    ; GL_EXT_debug_label
+    glGetObjectLabelEXT
+    glLabelObjectEXT
+
     ; GL_EXT_debug_marker
     glInsertEventMarkerEXT
     glPopGroupMarkerEXT
@@ -1253,6 +1257,7 @@ EXPORTS
     glGetMultisamplefvANGLEContextANGLE
     glGetMultisamplefvRobustANGLEContextANGLE
     glGetObjectLabelContextANGLE
+    glGetObjectLabelEXTContextANGLE
     glGetObjectLabelKHRContextANGLE
     glGetObjectPtrLabelContextANGLE
     glGetObjectPtrLabelKHRContextANGLE
@@ -1398,6 +1403,7 @@ EXPORTS
     glIsTransformFeedbackContextANGLE
     glIsVertexArrayContextANGLE
     glIsVertexArrayOESContextANGLE
+    glLabelObjectEXTContextANGLE
     glLightModelfContextANGLE
     glLightModelfvContextANGLE
     glLightModelxContextANGLE
