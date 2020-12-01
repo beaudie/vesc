@@ -1010,7 +1010,8 @@ EGL_PACKED_TYPES = {
     "EGLContext": "gl::Context *",
     "EGLConfig": "Config *",
     "EGLDeviceEXT": "Device *",
-    "EGLDisplay": "Display *",
+    # Needs an explicit namespace to avoid an X11 namespace collision.
+    "EGLDisplay": "egl::Display *",
     "EGLImage": "Image *",
     "EGLImageKHR": "Image *",
     "EGLStreamKHR": "Stream *",
