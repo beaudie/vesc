@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6713768c_e13300c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-12-01T20:42:59Z",
+      "side": 1,
+      "message": "Charlie: sorry to revert. Feel free to re-land ASAP if this doesn\u0027t clear up the bots.",
+      "revId": "08b402c951ca66b0dfb71d116de86bfd9d6cd2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
