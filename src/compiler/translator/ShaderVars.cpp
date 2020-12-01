@@ -72,8 +72,8 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       staticUse(other.staticUse),
       active(other.active),
       fields(other.fields),
-      structName(other.structName),
-      mappedStructName(other.mappedStructName),
+      blockName(other.blockName),
+      mappedBlockName(other.mappedBlockName),
       isRowMajorLayout(other.isRowMajorLayout),
       location(other.location),
       hasImplicitLocation(other.hasImplicitLocation),
@@ -101,8 +101,8 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     staticUse                     = other.staticUse;
     active                        = other.active;
     fields                        = other.fields;
-    structName                    = other.structName;
-    mappedStructName              = other.mappedStructName;
+    blockName                     = other.blockName;
+    mappedBlockName               = other.mappedBlockName;
     isRowMajorLayout              = other.isRowMajorLayout;
     flattenedOffsetInParentArrays = other.flattenedOffsetInParentArrays;
     location                      = other.location;
@@ -126,8 +126,8 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
     if (type != other.type || precision != other.precision || name != other.name ||
         mappedName != other.mappedName || arraySizes != other.arraySizes ||
         staticUse != other.staticUse || active != other.active ||
-        fields.size() != other.fields.size() || structName != other.structName ||
-        mappedStructName != other.mappedStructName || isRowMajorLayout != other.isRowMajorLayout ||
+        fields.size() != other.fields.size() || blockName != other.blockName ||
+        mappedBlockName != other.mappedBlockName || isRowMajorLayout != other.isRowMajorLayout ||
         location != other.location || hasImplicitLocation != other.hasImplicitLocation ||
         binding != other.binding || imageUnitFormat != other.imageUnitFormat ||
         offset != other.offset || readonly != other.readonly || writeonly != other.writeonly ||
@@ -369,7 +369,7 @@ bool ShaderVariable::isSameVariableAtLinkTime(const ShaderVariable &other,
             return false;
         }
     }
-    if (structName != other.structName || mappedStructName != other.mappedStructName)
+    if (blockName != other.blockName || mappedBlockName != other.mappedBlockName)
         return false;
     return true;
 }
@@ -446,7 +446,7 @@ bool ShaderVariable::isSameNameAtLinkTime(const ShaderVariable &other) const
     if (isShaderIOBlock)
     {
         // Shader I/O blocks match by block name.
-        return structName == other.structName;
+        return blockName == other.blockName;
     }
 
     // Otherwise match by name.
