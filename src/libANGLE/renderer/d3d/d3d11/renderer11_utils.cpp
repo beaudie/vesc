@@ -1622,6 +1622,7 @@ void GenerateCaps(ID3D11Device *device,
     extensions->translatedShaderSource              = true;
     extensions->fboRenderMipmapOES                  = true;
     extensions->debugMarker                         = true;
+    extensions->debugLabel                          = true;
     extensions->eglImageOES                         = true;
     extensions->eglImageExternalOES                 = true;
     extensions->eglImageExternalWrapModesEXT        = true;

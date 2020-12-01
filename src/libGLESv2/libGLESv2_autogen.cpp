@@ -3832,6 +3832,18 @@ void GL_APIENTRY glCopyImageSubDataEXT(GLuint srcName,
                                    srcDepth);
 }
 
+// GL_EXT_debug_label
+void GL_APIENTRY
+glGetObjectLabelEXT(GLenum type, GLuint object, GLsizei bufSize, GLsizei *length, GLchar *label)
+{
+    return gl::GetObjectLabelEXT(type, object, bufSize, length, label);
+}
+
+void GL_APIENTRY glLabelObjectEXT(GLenum type, GLuint object, GLsizei length, const GLchar *label)
+{
+    return gl::LabelObjectEXT(type, object, length, label);
+}
+
 // GL_EXT_debug_marker
 void GL_APIENTRY glInsertEventMarkerEXT(GLsizei length, const GLchar *marker)
 {
@@ -7368,6 +7380,16 @@ void GL_APIENTRY glGetObjectLabelContextANGLE(GLeglContext ctx,
     return gl::GetObjectLabelContextANGLE(ctx, identifier, name, bufSize, length, label);
 }
 
+void GL_APIENTRY glGetObjectLabelEXTContextANGLE(GLeglContext ctx,
+                                                 GLenum type,
+                                                 GLuint object,
+                                                 GLsizei bufSize,
+                                                 GLsizei *length,
+                                                 GLchar *label)
+{
+    return gl::GetObjectLabelEXTContextANGLE(ctx, type, object, bufSize, length, label);
+}
+
 void GL_APIENTRY glGetObjectLabelKHRContextANGLE(GLeglContext ctx,
                                                  GLenum identifier,
                                                  GLuint name,
@@ -8178,6 +8200,15 @@ GLboolean GL_APIENTRY glIsVertexArrayContextANGLE(GLeglContext ctx, GLuint array
 GLboolean GL_APIENTRY glIsVertexArrayOESContextANGLE(GLeglContext ctx, GLuint array)
 {
     return gl::IsVertexArrayOESContextANGLE(ctx, array);
+}
+
+void GL_APIENTRY glLabelObjectEXTContextANGLE(GLeglContext ctx,
+                                              GLenum type,
+                                              GLuint object,
+                                              GLsizei length,
+                                              const GLchar *label)
+{
+    return gl::LabelObjectEXTContextANGLE(ctx, type, object, length, label);
 }
 
 void GL_APIENTRY glLightModelfContextANGLE(GLeglContext ctx, GLenum pname, GLfloat param)

@@ -347,6 +347,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.copyTexture3d         = true;
     mNativeExtensions.copyCompressedTexture = true;
     mNativeExtensions.debugMarker           = true;
+    mNativeExtensions.debugLabel            = true;
     mNativeExtensions.robustness =
         !IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) &&
         !IsARM(mPhysicalDeviceProperties.vendorID);

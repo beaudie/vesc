@@ -1860,4 +1860,183 @@ bool ValidateValidateProgramPipelineEXT(const Context *context, ProgramPipelineI
 
     return ValidateValidateProgramPipelineBase(context, pipelinePacked);
 }
+
+static bool ValidateObjectIdentifierAndNameEXT(const Context *context,
+                                               GLenum identifier,
+                                               GLuint name)
+{
+    switch (identifier)
+    {
+        case GL_BUFFER_OBJECT_EXT:
+            if (context->getBuffer({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidBufferName);
+                return false;
+            }
+            return true;
+
+        case GL_SHADER_OBJECT_EXT:
+            if (context->getClientVersion() == gl::Version(1, 1))
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidType);
+                return false;
+            }
+            if (context->getShader({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidShaderName);
+                return false;
+            }
+            return true;
+
+        case GL_PROGRAM_OBJECT_EXT:
+            if (context->getClientVersion() == gl::Version(1, 1))
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidType);
+                return false;
+            }
+            if (context->getProgramNoResolveLink({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidProgramName);
+                return false;
+            }
+            return true;
+
+        case GL_VERTEX_ARRAY_OBJECT_EXT:
+            if (!context->getExtensions().vertexArrayObjectOES)
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidType);
+                return false;
+            }
+            if (context->getVertexArray({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidVertexArrayName);
+                return false;
+            }
+            return true;
+
+        case GL_QUERY_OBJECT_EXT:
+            if (!context->getExtensions().occlusionQueryBoolean)
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidType);
+                return false;
+            }
+            if (context->getQuery({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidQueryName);
+                return false;
+            }
+            return true;
+
+        case GL_TRANSFORM_FEEDBACK:
+            if (context->getClientVersion() < gl::Version(3, 0))
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidType);
+                return false;
+            }
+            if (context->getTransformFeedback({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidTransformFeedbackName);
+                return false;
+            }
+            return true;
+
+        case GL_SAMPLER:
+            if (context->getClientVersion() < gl::Version(3, 0))
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidType);
+                return false;
+            }
+            if (context->getSampler({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidSamplerName);
+                return false;
+            }
+            return true;
+
+        case GL_TEXTURE:
+            if (context->getTexture({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidTextureName);
+                return false;
+            }
+            return true;
+
+        case GL_RENDERBUFFER:
+            if (!context->isRenderbuffer({name}))
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidRenderbufferName);
+                return false;
+            }
+            return true;
+
+        case GL_FRAMEBUFFER:
+            if (context->getFramebuffer({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidFramebufferName);
+                return false;
+            }
+            return true;
+
+        case GL_PROGRAM_PIPELINE_OBJECT_EXT:
+            if (!context->getExtensions().separateShaderObjects)
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidType);
+                return false;
+            }
+            if (context->getProgramPipeline({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_OPERATION, kInvalidProgramPipelineName);
+                return false;
+            }
+            return true;
+
+        default:
+            context->validationError(GL_INVALID_ENUM, kInvalidIndentifier);
+            return false;
+    }
+}
+
+// GL_EXT_debug_label
+bool ValidateGetObjectLabelEXT(const Context *context,
+                               GLenum type,
+                               GLuint object,
+                               GLsizei bufSize,
+                               const GLsizei *length,
+                               const GLchar *label)
+{
+    if (!context->getExtensions().debugLabel)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kNegativeBufferSize);
+        return false;
+    }
+
+    return ValidateObjectIdentifierAndNameEXT(context, type, object);
+}
+
+bool ValidateLabelObjectEXT(const Context *context,
+                            GLenum type,
+                            GLuint object,
+                            GLsizei length,
+                            const GLchar *label)
+{
+    if (!context->getExtensions().debugLabel)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    if (length < 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kNegativeLength);
+        return false;
+    }
+
+    return ValidateObjectIdentifierAndNameEXT(context, type, object);
+}
 }  // namespace gl

@@ -1283,6 +1283,10 @@ void GenerateCaps(const FunctionsGL *functions,
                               functions->isAtLeastGLES(gl::Version(3, 2)) ||
                               functions->hasGLESExtension("GL_KHR_debug") ||
                               functions->hasGLESExtension("GL_EXT_debug_marker");
+    extensions->debugLabel = functions->isAtLeastGL(gl::Version(4, 3)) ||
+                             functions->hasGLExtension("GL_EXT_debug_label") ||
+                             functions->isAtLeastGLES(gl::Version(3, 2)) ||
+                             functions->hasGLESExtension("GL_EXT_debug_label");
     extensions->eglImageOES         = functions->hasGLESExtension("GL_OES_EGL_image");
     extensions->eglImageExternalOES = functions->hasGLESExtension("GL_OES_EGL_image_external");
     extensions->eglImageExternalWrapModesEXT =
