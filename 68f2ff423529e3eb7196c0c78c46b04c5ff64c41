@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a134b4_b448e5bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-12-01T03:06:23Z",
+      "side": 1,
+      "message": "This is probably not sufficient as is. For one, ANGLE calls ApplyFeatureOverrides twice, once with renderer features and a second time with mFrontEndFeatures.\nMay only want to log backend features?",
+      "revId": "68f2ff423529e3eb7196c0c78c46b04c5ff64c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
