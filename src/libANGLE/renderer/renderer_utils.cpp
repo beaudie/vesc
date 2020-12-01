@@ -943,6 +943,7 @@ void LogFeatureStatus(const angle::FeatureSetBase &features,
 void ApplyFeatureOverrides(angle::FeatureSetBase *features, const egl::DisplayState &state)
 {
     features->overrideFeatures(state.featureOverridesEnabled, true);
+    LogFeatureStatus(*features, state.featureOverridesEnabled, true);
     features->overrideFeatures(state.featureOverridesDisabled, false);
 
     // Override with environment as well.
