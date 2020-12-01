@@ -323,7 +323,7 @@ const sh::ShaderVariable *ShaderVariable::findField(const std::string &fullName,
 
 bool ShaderVariable::isBuiltIn() const
 {
-    return (name.size() >= 4 && name[0] == 'g' && name[1] == 'l' && name[2] == '_');
+    return angle::IsBuiltInName(name);
 }
 
 bool ShaderVariable::isEmulatedBuiltIn() const
@@ -485,7 +485,7 @@ bool InterfaceBlock::isSameInterfaceBlockAtLinkTime(const InterfaceBlock &other)
 
 bool InterfaceBlock::isBuiltIn() const
 {
-    return (name.size() >= 4 && name[0] == 'g' && name[1] == 'l' && name[2] == '_');
+    return angle::IsBuiltInName(name);
 }
 
 void WorkGroupSize::fill(int fillValue)
