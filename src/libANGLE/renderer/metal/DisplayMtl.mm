@@ -635,6 +635,7 @@ void DisplayMtl::initializeExtensions() const
     // EXT_debug_marker is not implemented yet, but the entry points must be exposed for the Metal
     // backend to be used in Chrome (http://anglebug.com/4946)
     mNativeExtensions.debugMarker = true;
+    mNativeExtensions.debugLabel  = true;
 
     mNativeExtensions.robustness             = true;
     mNativeExtensions.textureBorderClampOES  = false;  // not implemented yet

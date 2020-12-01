@@ -740,6 +740,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
                                                  // glDiscardFramebufferEXT is just a hint
     extensions->colorBufferFloat      = false;
     extensions->debugMarker           = true;
+    extensions->debugLabel            = true;
     extensions->eglImageOES           = true;
     extensions->eglImageExternalOES   = true;
     extensions->unpackSubimage        = true;
