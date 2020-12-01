@@ -690,7 +690,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
     // glFlush call here until the renderpass ends. If sync object has been used, we must respect
     // glFlush call, otherwise we a wait for sync object without GL_SYNC_FLUSH_COMMANDS_BIT may
     // never come back.
-    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && !context->isShared() &&
+    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && !getState().isShared() &&
         !mSyncObjectPendingFlush && hasStartedRenderPass())
     {
         mDeferredFlushCount++;

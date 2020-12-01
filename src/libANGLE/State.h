@@ -856,6 +856,8 @@ class State : angle::NonCopyable
 
     const std::vector<ImageUnit> getImageUnits() const { return mImageUnits; }
 
+    bool isShared() const { return mShared; }
+
   private:
     friend class Context;
 
@@ -1084,6 +1086,8 @@ class State : angle::NonCopyable
     DrawBufferMask mBlendFuncConstantAlphaDrawBuffers;
     DrawBufferMask mBlendFuncConstantColorDrawBuffers;
     bool mNoSimultaneousConstantColorAndAlphaBlendFunc;
+
+    bool mShared;
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,

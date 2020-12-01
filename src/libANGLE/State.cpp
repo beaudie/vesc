@@ -359,7 +359,8 @@ State::State(const State *shareContextState,
       mTextureRectangleEnabled(true),
       mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
       mOverlay(overlay),
-      mNoSimultaneousConstantColorAndAlphaBlendFunc(false)
+      mNoSimultaneousConstantColorAndAlphaBlendFunc(false),
+      mShared(shareContextState != nullptr)
 {}
 
 State::~State() {}

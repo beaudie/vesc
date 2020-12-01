@@ -494,9 +494,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
         return mState.isCurrentVertexArray(va);
     }
 
-    bool isShared() const { return mShared; }
     // Once a context is setShared() it cannot be undone
-    void setShared() { mShared = true; }
+    void setShared() { mState.mShared = true; }
 
     const State &getState() const { return mState; }
     GLint getClientMajorVersion() const { return mState.getClientMajorVersion(); }
@@ -667,7 +666,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void convertPpoToComputeOrDraw(bool isCompute);
 
     State mState;
-    bool mShared;
     bool mSkipValidation;
     bool mDisplayTextureShareGroup;
     bool mDisplaySemaphoreShareGroup;
