@@ -905,6 +905,7 @@ void RendererVk::ensureCapsInitialized() const
     // imageAtomicExchange supports r32f.  Exposing this extension is thus restricted to this format
     // having support for the aforementioned features.
     mNativeExtensions.shaderImageAtomicOES =
+        getFeatures().exposeNonConformantExtensionsAndVersions.enabled ||
         vk::HasShaderImageAtomicsSupport(this, mNativeExtensions);
 
     // Geometry shader is optional.
