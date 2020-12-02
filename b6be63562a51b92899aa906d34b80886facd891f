@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d90ea9a_69f7d378",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-12-02T18:39:30Z",
+      "side": 1,
+      "message": "This wasn\u0027t the culprit CL, it was this: https://chromium-review.googlesource.com/c/chromium/src/+/2569782",
+      "revId": "b6be63562a51b92899aa906d34b80886facd891f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
