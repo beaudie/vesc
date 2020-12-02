@@ -835,6 +835,8 @@ GLenum Texture::getMagFilter() const
 
 void Texture::setWrapS(const Context *context, GLenum wrapS)
 {
+    if (mState.mSamplerState.getWrapS() == wrapS)
+        return;
     mState.mSamplerState.setWrapS(wrapS);
     signalDirtyState(DIRTY_BIT_WRAP_S);
 }
@@ -846,6 +848,8 @@ GLenum Texture::getWrapS() const
 
 void Texture::setWrapT(const Context *context, GLenum wrapT)
 {
+    if (mState.mSamplerState.getWrapT() == wrapT)
+        return;
     mState.mSamplerState.setWrapT(wrapT);
     signalDirtyState(DIRTY_BIT_WRAP_T);
 }
@@ -857,6 +861,8 @@ GLenum Texture::getWrapT() const
 
 void Texture::setWrapR(const Context *context, GLenum wrapR)
 {
+    if (mState.mSamplerState.getWrapR() == wrapR)
+        return;
     mState.mSamplerState.setWrapR(wrapR);
     signalDirtyState(DIRTY_BIT_WRAP_R);
 }
@@ -868,6 +874,8 @@ GLenum Texture::getWrapR() const
 
 void Texture::setMaxAnisotropy(const Context *context, float maxAnisotropy)
 {
+    if (mState.mSamplerState.getMaxAnisotropy() == maxAnisotropy)
+        return;
     mState.mSamplerState.setMaxAnisotropy(maxAnisotropy);
     signalDirtyState(DIRTY_BIT_MAX_ANISOTROPY);
 }
@@ -879,6 +887,8 @@ float Texture::getMaxAnisotropy() const
 
 void Texture::setMinLod(const Context *context, GLfloat minLod)
 {
+    if (mState.mSamplerState.getMinLod() == minLod)
+        return;
     mState.mSamplerState.setMinLod(minLod);
     signalDirtyState(DIRTY_BIT_MIN_LOD);
 }
@@ -890,6 +900,8 @@ GLfloat Texture::getMinLod() const
 
 void Texture::setMaxLod(const Context *context, GLfloat maxLod)
 {
+    if (mState.mSamplerState.getMaxLod() == maxLod)
+        return;
     mState.mSamplerState.setMaxLod(maxLod);
     signalDirtyState(DIRTY_BIT_MAX_LOD);
 }
@@ -901,6 +913,8 @@ GLfloat Texture::getMaxLod() const
 
 void Texture::setCompareMode(const Context *context, GLenum compareMode)
 {
+    if (mState.mSamplerState.getCompareMode() == compareMode)
+        return;
     mState.mSamplerState.setCompareMode(compareMode);
     signalDirtyState(DIRTY_BIT_COMPARE_MODE);
 }
@@ -912,6 +926,8 @@ GLenum Texture::getCompareMode() const
 
 void Texture::setCompareFunc(const Context *context, GLenum compareFunc)
 {
+    if (mState.mSamplerState.getCompareFunc() == compareFunc)
+        return;
     mState.mSamplerState.setCompareFunc(compareFunc);
     signalDirtyState(DIRTY_BIT_COMPARE_FUNC);
 }
@@ -923,6 +939,8 @@ GLenum Texture::getCompareFunc() const
 
 void Texture::setSRGBDecode(const Context *context, GLenum sRGBDecode)
 {
+    if (mState.mSamplerState.getSRGBDecode() == sRGBDecode)
+        return;
     mState.mSamplerState.setSRGBDecode(sRGBDecode);
     signalDirtyState(DIRTY_BIT_SRGB_DECODE);
 }
