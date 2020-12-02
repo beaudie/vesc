@@ -1706,11 +1706,11 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
     GLenum filter = CalculateGenerateMipmapFilter(contextVk, mImage->getFormat());
 
     gl::SamplerState samplerState;
-    samplerState.setMinFilter(filter);
-    samplerState.setMagFilter(filter);
-    samplerState.setWrapS(GL_CLAMP_TO_EDGE);
-    samplerState.setWrapT(GL_CLAMP_TO_EDGE);
-    samplerState.setWrapR(GL_CLAMP_TO_EDGE);
+    (void)samplerState.setMinFilter(filter);
+    (void)samplerState.setMagFilter(filter);
+    (void)samplerState.setWrapS(GL_CLAMP_TO_EDGE);
+    (void)samplerState.setWrapT(GL_CLAMP_TO_EDGE);
+    (void)samplerState.setWrapR(GL_CLAMP_TO_EDGE);
 
     vk::BindingPointer<vk::SamplerHelper> sampler;
     vk::SamplerDesc samplerDesc(contextVk->getFeatures(), samplerState, false, 0);
