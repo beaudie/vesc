@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_VK_UTILS_H_
 
 #include <atomic>
+#include <functional>
 #include <limits>
 
 #include "GLSLANG/ShaderLang.h"
@@ -607,12 +608,23 @@ class Shared final : angle::NonCopyable
         }
     }
 
+    void setUnreferenced(RefCounted<T> *refCounted)
+    {
+        ASSERT(!mRefCounted);
+        ASSERT(refCounted);
+
+        mRefCounted = refCounted;
+        mRefCounted->addRef();
+    }
+
     void assign(VkDevice device, T &&newObject)
     {
         set(device, new RefCounted<T>(std::move(newObject)));
     }
 
     void copy(VkDevice device, const Shared<T> &other) { set(device, other.mRefCounted); }
+
+    void copyUnreferenced(const Shared<T> &other) { setUnreferenced(other.mRefCounted); }
 
     void reset(VkDevice device) { set(device, nullptr); }
 
@@ -626,6 +638,22 @@ class Shared final : angle::NonCopyable
             {
                 ASSERT(mRefCounted->get().valid());
                 recycler->recycle(std::move(mRefCounted->get()));
+                SafeDelete(mRefCounted);
+            }
+
+            mRefCounted = nullptr;
+        }
+    }
+
+    void resetAndRelease(std::function<void(T &&)> onRelease)
+    {
+        if (mRefCounted)
+        {
+            mRefCounted->releaseRef();
+            if (!mRefCounted->isReferenced())
+            {
+                ASSERT(mRefCounted->get().valid());
+                onRelease(std::move(mRefCounted->get()));
                 SafeDelete(mRefCounted);
             }
 
