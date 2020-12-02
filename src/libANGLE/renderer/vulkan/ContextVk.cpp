@@ -3597,8 +3597,16 @@ vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||
            queryType == gl::QueryType::AnySamplesConservative ||
+           queryType == gl::QueryType::PrimitivesGenerated ||
            queryType == gl::QueryType::TransformFeedbackPrimitivesWritten ||
            queryType == gl::QueryType::Timestamp || queryType == gl::QueryType::TimeElapsed);
+
+    // For PrimitivesGenerated queries, use the same pool as TransformFeedbackPrimitivesWritten.
+    // They are served with the same Vulkan query.
+    if (queryType == gl::QueryType::PrimitivesGenerated)
+    {
+        queryType = gl::QueryType::TransformFeedbackPrimitivesWritten;
+    }
 
     // Assert that timestamp extension is available if needed.
     ASSERT(queryType != gl::QueryType::Timestamp && queryType != gl::QueryType::TimeElapsed ||
@@ -4579,7 +4587,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
         return angle::Result::Continue;
     }
 
-    ANGLE_TRY(pauseRenderPassQueriesIfActive());
+    pauseRenderPassQueriesIfActive();
 
     mCurrentTransformFeedbackBuffers.clear();
     mCurrentIndirectBuffer = nullptr;
@@ -4766,36 +4774,41 @@ void ContextVk::endRenderPassQuery(QueryVk *queryVk)
     mActiveRenderPassQueries[type] = nullptr;
 }
 
-angle::Result ContextVk::pauseRenderPassQueriesIfActive()
+void ContextVk::pauseRenderPassQueriesIfActive()
 {
     if (mRenderPassCommandBuffer == nullptr)
     {
-        return angle::Result::Continue;
+        return;
     }
 
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
         if (activeQuery)
         {
-            activeQuery->getQueryHelper()->endRenderPassQuery(this);
-            ANGLE_TRY(activeQuery->stashQueryHelper(this));
+            activeQuery->onRenderPassEnd(this);
+        }
+    }
+}
+
+angle::Result ContextVk::resumeRenderPassQueriesIfActive()
+{
+    ASSERT(mRenderPassCommandBuffer);
+
+    // Note: these queries should be processed in order.  See comment in QueryVk::onRenderPassStart.
+    for (QueryVk *activeQuery : mActiveRenderPassQueries)
+    {
+        if (activeQuery)
+        {
+            ANGLE_TRY(activeQuery->onRenderPassStart(this));
         }
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::resumeRenderPassQueriesIfActive()
+QueryVk *ContextVk::getActiveRenderPassQuery(gl::QueryType queryType) const
 {
-    for (QueryVk *activeQuery : mActiveRenderPassQueries)
-    {
-        if (activeQuery)
-        {
-            ANGLE_TRY(activeQuery->getQueryHelper()->beginRenderPassQuery(this));
-        }
-    }
-
-    return angle::Result::Continue;
+    return mActiveRenderPassQueries[queryType];
 }
 
 bool ContextVk::isRobustResourceInitEnabled() const
