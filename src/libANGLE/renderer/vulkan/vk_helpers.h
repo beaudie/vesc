@@ -421,6 +421,11 @@ class QueryResult final
 
     size_t getDataSize() const { return mIntsPerResult * sizeof(uint64_t); }
     uint64_t getResult() const { return mResults[0]; }
+    uint64_t getSecondaryResult() const
+    {
+        ASSERT(mIntsPerResult > 1);
+        return mResults[1];
+    }
     uint64_t *getPointerToResults() { return mResults.data(); }
 
   private:
@@ -464,6 +469,9 @@ class QueryHelper final : public Resource
     // All other timestamp accesses should be made on outsideRenderPassCommandBuffer
     void writeTimestamp(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
 
+    // Whether this query helper has generated any commands.
+    bool hasCommands() const;
+
     angle::Result getUint64ResultNonBlocking(ContextVk *contextVk,
                                              QueryResult *resultOut,
                                              bool *availableOut);
@@ -488,6 +496,8 @@ class QueryHelper final : public Resource
     size_t mQueryPoolIndex;
     uint32_t mQuery;
 };
+
+using RefCountedQueryHelper = RefCounted<QueryHelper>;
 
 // DynamicSemaphorePool allocates semaphores as needed.  It uses a std::vector
 // as a pool to allocate many semaphores at once.  The pools live permanently,
