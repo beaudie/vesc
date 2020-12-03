@@ -84,7 +84,7 @@ if (is_linux || is_chromeos || is_android || is_fuchsia) {
   ]
 }
 
-if (is_mac) {
+if (is_mac || is_ios) {
   angle_system_utils_sources += [
     "src/common/apple/SoftLinking.h",
     "src/common/gl/cgl/FunctionsCGL.cpp",
@@ -150,6 +150,11 @@ libangle_gpu_info_util_x11_sources = [ "src/gpu_info_util/SystemInfo_x11.cpp" ]
 libangle_gpu_info_util_mac_sources = [
   "src/gpu_info_util/SystemInfo_apple.mm",
   "src/gpu_info_util/SystemInfo_macos.mm",
+]
+
+libangle_gpu_info_util_ios_sources = [
+  "src/gpu_info_util/SystemInfo_apple.mm",
+  "src/gpu_info_util/SystemInfo_ios.cpp",
 ]
 
 libangle_includes = [

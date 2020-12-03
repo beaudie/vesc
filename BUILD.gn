@@ -435,14 +435,20 @@ angle_static_library("angle_gpu_info_util") {
     libs += [ "pci" ]
   }
 
-  if (is_mac) {
-    sources += libangle_gpu_info_util_mac_sources
+  if (is_mac || is_ios) {
     frameworks = [
       "IOKit.framework",
       "CoreFoundation.framework",
       "CoreGraphics.framework",
-      "OpenGL.framework",
     ]
+    if (is_mac) {
+      sources += libangle_gpu_info_util_mac_sources
+      frameworks += [ "OpenGL.framework" ]
+    }
+    if (is_ios) {
+      sources += libangle_gpu_info_util_ios_sources
+      frameworks += [ "OpenGLES.framework" ]
+    }
   }
 }
 
@@ -736,7 +742,7 @@ angle_source_set("libANGLE_base") {
     suppressed_configs -= [ "//build/config/clang:find_bad_constructs" ]
   }
 
-  if (is_mac) {
+  if (is_mac || is_ios) {
     sources += libangle_mac_sources
   }
 
@@ -835,7 +841,7 @@ angle_source_set("libANGLE_with_capture") {
 }
 
 config("shared_library_public_config") {
-  if (is_mac && !is_component_build) {
+  if ((is_ios || is_mac) && !is_component_build) {
     # Executable targets that depend on the shared libraries below need to have
     # the rpath setup in non-component build configurations.
     ldflags = [
@@ -1126,7 +1132,7 @@ if (angle_has_build) {
       "${angle_jsoncpp_dir}:jsoncpp_config",
     ]
 
-    if (is_mac && !is_component_build) {
+    if ((is_ios || is_mac) && !is_component_build) {
       ldflags = [
         "-install_name",
         "@rpath/${target_name}.dylib",
