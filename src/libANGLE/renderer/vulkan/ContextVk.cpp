@@ -778,7 +778,9 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
     if (dirtyBits.none())
+    {
         return angle::Result::Continue;
+    }
 
     // Flush any relevant dirty bits.
     for (size_t dirtyBit : dirtyBits)
@@ -3675,7 +3677,10 @@ void ContextVk::writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOu
 
 ANGLE_INLINE void ContextVk::pauseTransformFeedbackIfStarted(bool rebindBuffersOnResume)
 {
-    if (mRenderPassCommands->isTransformFeedbackStarted())
+    // Note that UtilsVk may have already pause transform feedback, so don't pause it again if it's
+    // already paused.
+    if (mRenderPassCommands->isTransformFeedbackStarted() &&
+        !mGraphicsDirtyBits.test(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME))
     {
         ASSERT(getFeatures().supportsTransformFeedbackExtension.enabled);
         mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
