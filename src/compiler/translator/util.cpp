@@ -544,16 +544,16 @@ bool IsVaryingOut(TQualifier qualifier)
 {
     switch (qualifier)
     {
-        case EvqVaryingOut:
-        case EvqSmoothOut:
-        case EvqFlatOut:
-        case EvqNoPerspectiveOut:
         case EvqCentroidOut:
-        case EvqVertexOut:
+        case EvqFlatOut:
         case EvqGeometryOut:
+        case EvqNoPerspectiveOut:
+        case EvqSampleOut:
+        case EvqSmoothOut:
         case EvqTessControlOut:
         case EvqTessEvaluationOut:
-        case EvqSampleOut:
+        case EvqVaryingOut:
+        case EvqVertexOut:
             return true;
 
         default:
@@ -567,16 +567,16 @@ bool IsVaryingIn(TQualifier qualifier)
 {
     switch (qualifier)
     {
-        case EvqVaryingIn:
-        case EvqSmoothIn:
-        case EvqFlatIn:
-        case EvqNoPerspectiveIn:
         case EvqCentroidIn:
+        case EvqFlatIn:
         case EvqFragmentIn:
         case EvqGeometryIn:
+        case EvqNoPerspectiveIn:
+        case EvqSampleIn:
+        case EvqSmoothIn:
         case EvqTessControlIn:
         case EvqTessEvaluationIn:
-        case EvqSampleIn:
+        case EvqVaryingIn:
             return true;
 
         default:

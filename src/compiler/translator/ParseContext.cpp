@@ -4415,6 +4415,7 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
 
             TIntermBinary *node =
                 new TIntermBinary(EOpIndexDirect, baseExpression, indexExpression);
+
             node->setLine(location);
             return expressionOrFoldedResult(node);
         }
