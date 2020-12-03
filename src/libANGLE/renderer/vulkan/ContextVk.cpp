@@ -1121,7 +1121,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
         mGraphicsPipelineTransition.reset();
     }
 
-    resumeTransformFeedbackIfStarted();
+    pauseTransformFeedbackIfStarted(false);
 
     commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
@@ -3673,12 +3673,16 @@ void ContextVk::writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOu
     }
 }
 
-ANGLE_INLINE void ContextVk::resumeTransformFeedbackIfStarted()
+ANGLE_INLINE void ContextVk::pauseTransformFeedbackIfStarted(bool rebindBuffersOnResume)
 {
     if (mRenderPassCommands->isTransformFeedbackStarted())
     {
         ASSERT(getFeatures().supportsTransformFeedbackExtension.enabled);
         mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
+        if (rebindBuffersOnResume)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_STATE);
+        }
         mRenderPassCommands->pauseTransformFeedback();
     }
 }
@@ -4612,7 +4616,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     addOverlayUsedBuffersCount(mRenderPassCommands);
 
-    resumeTransformFeedbackIfStarted();
+    pauseTransformFeedbackIfStarted(true);
 
     mRenderPassCommands->endRenderPass(this);
 
