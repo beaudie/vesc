@@ -29,6 +29,8 @@ template_table_autogen_cpp = """// GENERATED FILE - DO NOT EDIT.
 
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
+#include "common/angleutils.h"
+
 using namespace angle;
 
 namespace rx
@@ -37,18 +39,21 @@ namespace rx
 namespace vk
 {{
 
-namespace
-{{
-static_assert({num_formats} == kNumVkFormats, "Update kNumVkFormats");
-constexpr std::array<VkFormatProperties, kNumVkFormats> kFormatProperties = {{{{
-    {format_case_data}
-}}}};
-}}  // anonymous namespace
-
 const VkFormatProperties& GetMandatoryFormatSupport(VkFormat vkFormat)
 {{
-    ASSERT(static_cast<uint64_t>(vkFormat) < sizeof(kFormatProperties));
-    return kFormatProperties[vkFormat];
+    static const auto* const kDefaultFormatProperties =
+        new VkFormatProperties{{0, 0, 0}};
+
+    static const auto* const kFormatPropertiesMap =
+        new angle::HashMap<uint64_t, VkFormatProperties>{{
+{format_case_data}
+    }};
+
+    auto it = kFormatPropertiesMap->find(vkFormat);
+    if (it == kFormatPropertiesMap->end()) {{
+        return *kDefaultFormatProperties;
+    }}
+    return it->second;
 }}
 
 }}  // namespace vk
@@ -57,9 +62,8 @@ const VkFormatProperties& GetMandatoryFormatSupport(VkFormat vkFormat)
 
 """
 
-template_format_property = """
-/* {vk_format} */
-{{0, {optimal_features}, {buffer_features}}}"""
+template_format_property = """    /* {vk_format} */
+    {{{vk_format}, {{0, {optimal_features}, {buffer_features}}}}}"""
 
 
 def script_relative(path):
@@ -127,8 +131,7 @@ def main():
 
     output_cpp = template_table_autogen_cpp.format(
         copyright_year=date.today().year,
-        num_formats=num_formats,
-        format_case_data="\n,".join(vk_cases),
+        format_case_data=",\n".join(vk_cases),
         script_name=__file__,
         out_file_name=out_file_name,
         input_file_name=input_file_name)
