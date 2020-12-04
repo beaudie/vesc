@@ -600,7 +600,10 @@ constexpr std::array<VkFormatProperties, kNumVkFormats> kFormatProperties = {{
 
 const VkFormatProperties &GetMandatoryFormatSupport(VkFormat vkFormat)
 {
-    ASSERT(static_cast<uint64_t>(vkFormat) < sizeof(kFormatProperties));
+    if (static_cast<uint64_t>(vkFormat) >= kNumVkFormats)
+    {
+        vkFormat = VK_FORMAT_UNDEFINED;
+    }
     return kFormatProperties[vkFormat];
 }
 

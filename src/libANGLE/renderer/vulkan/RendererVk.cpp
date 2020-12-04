@@ -486,9 +486,6 @@ RendererVk::RendererVk()
       mCommandProcessor(this),
       mGlslangInitialized(false)
 {
-    VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
-    mFormatProperties.fill(invalid);
-
     // We currently don't have any big-endian devices in the list of supported platforms.  There are
     // a number of places in the Vulkan backend that make this assumption.  This assertion is made
     // early to fail immediately on big-endian platforms.
@@ -2310,8 +2307,9 @@ template <VkFormatFeatureFlags VkFormatProperties::*features>
 VkFormatFeatureFlags RendererVk::getFormatFeatureBits(VkFormat format,
                                                       const VkFormatFeatureFlags featureBits) const
 {
-    ASSERT(static_cast<uint32_t>(format) < vk::kNumVkFormats);
-    VkFormatProperties &deviceProperties = mFormatProperties[format];
+    auto emplaceResult =
+        mFormatProperties.emplace(format, VkFormatProperties{0, 0, kInvalidFormatFeatureFlags});
+    VkFormatProperties &deviceProperties = emplaceResult.first->second;
 
     if (deviceProperties.bufferFeatures == kInvalidFormatFeatureFlags)
     {
