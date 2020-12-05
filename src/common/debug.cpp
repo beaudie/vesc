@@ -279,8 +279,7 @@ void Trace(LogSeverity severity, const char *message)
         }
 #else
         // Note: we use fprintf because <iostream> includes static initializers.
-        fprintf((severity >= LOG_ERR) ? stderr : stdout, "%s: %s\n", LogSeverityName(severity),
-                str.c_str());
+        fprintf(stderr, "%s: %s\n", LogSeverityName(severity), str.c_str());
 #endif
     }
 
