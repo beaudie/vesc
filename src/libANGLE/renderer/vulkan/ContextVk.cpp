@@ -3181,9 +3181,18 @@ void ContextVk::updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageB
         mGraphicsPipelineDesc->updateSurfaceRotation(&mGraphicsPipelineTransition, rotationAndFlip);
     }
 
-    const gl::Box &dimensions = getState().getDrawFramebuffer()->getDimensions();
-    mGraphicsPipelineDesc->updateDrawableSize(&mGraphicsPipelineTransition, dimensions.width,
-                                              dimensions.height);
+    if (usageBits.test(sh::vk::SpecConstUsage::DrawableSize))
+    {
+        const gl::Box &dimensions = getState().getDrawFramebuffer()->getDimensions();
+        mGraphicsPipelineDesc->updateDrawableSize(&mGraphicsPipelineTransition, dimensions.width,
+                                                  dimensions.height);
+    }
+    else
+    {
+        // Always set specialization constant to 1x1 if it is not used so that pipeline program with
+        // only drawable size difference will be able to be reused.
+        mGraphicsPipelineDesc->updateDrawableSize(&mGraphicsPipelineTransition, 1, 1);
+    }
 }
 
 void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState)
