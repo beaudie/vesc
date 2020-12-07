@@ -1181,8 +1181,13 @@ if (build_angle_deqp_tests && !is_fuchsia) {
         ":${shared_library_name}",
         ":angle_test_expectations",
         "$angle_root:angle_common",
+        "$angle_root/src/libANGLE/renderer/metal/file_hooking:metal_shader_cache_file_hooking",
         "$angle_root/util:angle_util",
       ]
+
+      if (is_mac && angle_enable_metal) {
+        deps += [ "$angle_root/src/libANGLE/renderer/metal/file_hooking:metal_shader_cache_file_hooking" ]
+      }
 
       # Must be included outside of the source set for the define
       sources = [
