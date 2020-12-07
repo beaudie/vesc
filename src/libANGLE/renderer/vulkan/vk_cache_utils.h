@@ -551,7 +551,7 @@ static_assert(kPackedInputAssemblyAndColorBlendStateSize == 56, "Size check fail
 constexpr size_t kGraphicsPipelineDescSumOfSizes =
     kVertexInputAttributesSize + kRenderPassDescSize + kPackedRasterizationAndMultisampleStateSize +
     kPackedDepthStencilStateSize + kPackedInputAssemblyAndColorBlendStateSize + sizeof(VkViewport) +
-    sizeof(PackedScissor) + sizeof(PackedExtent);
+    sizeof(PackedScissor) + sizeof(PackedExtent) + sizeof(uint32_t);
 
 // Number of dirty bits in the dirty bit set.
 constexpr size_t kGraphicsPipelineDirtyBitBytes = 4;
@@ -751,6 +751,7 @@ class GraphicsPipelineDesc final
     // be set through vkCmdSetScissor.
     PackedScissor mScissor;
     PackedExtent mDrawableSize;
+    uint32_t mPad;
 };
 
 // Verify the packed pipeline description has no gaps in the packing.
