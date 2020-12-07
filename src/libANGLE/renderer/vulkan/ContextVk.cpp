@@ -3180,6 +3180,10 @@ void ContextVk::updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageB
         // program object will be retrieved.
         mGraphicsPipelineDesc->updateSurfaceRotation(&mGraphicsPipelineTransition, rotationAndFlip);
     }
+
+    const gl::Box &dimensions = getState().getDrawFramebuffer()->getDimensions();
+    mGraphicsPipelineDesc->updateDrawableSize(&mGraphicsPipelineTransition, dimensions.width,
+                                              dimensions.height);
 }
 
 void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState)
@@ -3390,6 +3394,10 @@ void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebuffer
     invalidateCurrentGraphicsPipeline();
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
                                                 framebufferVk->getRenderPassDesc());
+
+    const gl::Box &dimensions = framebufferVk->getState().getDimensions();
+    mGraphicsPipelineDesc->updateDrawableSize(&mGraphicsPipelineTransition, dimensions.width,
+                                              dimensions.height);
 }
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
