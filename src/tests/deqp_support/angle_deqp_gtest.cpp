@@ -7,10 +7,6 @@
 //   dEQP and GoogleTest integration logic. Calls through to the random
 //   order executor.
 
-#if defined(__APPLE__)
-#    include <crt_externs.h>
-#endif
-
 #include <stdint.h>
 #include <array>
 #include <fstream>
@@ -120,7 +116,6 @@ constexpr char kANGLEEGLString[]   = "--use-angle=";
 constexpr char kANGLEPreRotation[] = "--emulated-pre-rotation=";
 constexpr char kdEQPCaseString[]   = "--deqp-case=";
 constexpr char kBatchIdString[]    = "--batch-id=";
-constexpr char kFileAPIHooked[]    = "--file-hooked";  // argument to skip the file hooking step
 
 std::array<char, 500> gCaseStringBuffer;
 
@@ -724,72 +719,11 @@ void HandleBatchId(const char *batchIdString)
     std::stringstream batchIdStream(batchIdString);
     batchIdStream >> gBatchId;
 }
-
-#if defined(ANGLE_PLATFORM_APPLE)
-void HandleFileAPIHooking(int *argc, char **argv)
-{
-    constexpr char kInjectLibVarName[]    = "DYLD_INSERT_LIBRARIES";
-    constexpr size_t kInjectLibVarNameLen = sizeof(kInjectLibVarName) - 1;
-
-    // Intercept Metal shader cache access and return as if the cache doesn't exist.
-    // This is to avoid slow shader cache mechanism that caused the test timeout in the past.
-    std::string injectLibsVar = "DYLD_INSERT_LIBRARIES=libmetal_shader_cache_file_hooking.dylib";
-    char hookedOption[sizeof(kFileAPIHooked)];
-    memcpy(hookedOption, kFileAPIHooked, sizeof(kFileAPIHooked));
-
-    // Construct environment variables
-    std::vector<char *> newEnv;
-    char **environ = *_NSGetEnviron();
-    for (int i = 0; environ[i]; ++i)
-    {
-        if (strncmp(environ[i], kInjectLibVarName, kInjectLibVarNameLen) == 0)
-        {
-            injectLibsVar += ':';
-            injectLibsVar += environ[i] + kInjectLibVarNameLen + 1;
-        }
-        else
-        {
-            newEnv.push_back(environ[i]);
-        }
-    }
-    newEnv.push_back(strdup(injectLibsVar.data()));
-    newEnv.push_back(nullptr);
-
-    // Construct arguments with kFileAPIHooked flag
-    std::vector<char *> newArgs;
-    for (int i = 0; i < *argc; ++i)
-    {
-        newArgs.push_back(argv[i]);
-    }
-    newArgs.push_back(hookedOption);
-    newArgs.push_back(nullptr);
-
-    execve(argv[0], newArgs.data(), newEnv.data());
-}
-#endif
 }  // anonymous namespace
 
 // Called from main() to process command-line arguments.
 void InitTestHarness(int *argc, char **argv)
 {
-#if defined(ANGLE_PLATFORM_APPLE)
-    // By default, we should hook file API functions on macOS to avoid slow Metal shader caching
-    // file access. The hooking will be skipped if there is kFileAPIHooked passed to the command
-    // line.
-    bool needHook = true;
-    for (int i = 0; i < *argc; ++i)
-    {
-        if (strncmp(argv[i], kFileAPIHooked, strlen(kFileAPIHooked)) == 0)
-        {
-            needHook = false;
-        }
-    }
-
-    if (needHook)
-    {
-        HandleFileAPIHooking(argc, argv);
-    }
-#endif
     int argIndex = 0;
     while (argIndex < *argc)
     {
@@ -826,6 +760,7 @@ void InitTestHarness(int *argc, char **argv)
     {
         api = gInitAPI->second;
     }
+
     if (gPreRotation != 0 && api != GPUTestConfig::kAPIVulkan &&
         api != GPUTestConfig::kAPISwiftShader)
     {
