@@ -1472,9 +1472,13 @@ void GraphicsPipelineDesc::operator delete(void *ptr)
 GraphicsPipelineDesc::GraphicsPipelineDesc()
 {
     memset(this, 0, sizeof(GraphicsPipelineDesc));
+    mPad = 0x55555555;
 }
 
-GraphicsPipelineDesc::~GraphicsPipelineDesc() = default;
+GraphicsPipelineDesc::~GraphicsPipelineDesc()
+{
+    mPad = 0xdeadbeef;
+}
 
 GraphicsPipelineDesc::GraphicsPipelineDesc(const GraphicsPipelineDesc &other)
 {
@@ -1611,6 +1615,8 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
 
     mDrawableSize.width  = 1;
     mDrawableSize.height = 1;
+
+    mPad = 0;
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
