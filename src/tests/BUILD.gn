@@ -1184,6 +1184,10 @@ if (build_angle_deqp_tests && !is_fuchsia) {
         "$angle_root/util:angle_util",
       ]
 
+      if (is_mac && angle_enable_metal) {
+        deps += [ "$angle_root/src/libANGLE/renderer/metal/file_hooking:metal_shader_cache_file_hooking" ]
+      }
+
       # Must be included outside of the source set for the define
       sources = [
         "angle_deqp_tests_main.cpp",
