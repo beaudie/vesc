@@ -2923,6 +2923,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mDrawFramebuffer->setReadOnlyDepthFeedbackLoopMode(false);
                 updateFlipViewportDrawFramebuffer(glState);
                 updateSurfaceRotationDrawFramebuffer(glState);
+                SpecConstUsageBits usageBits = getCurrentProgramSpecConstUsageBits();
+                updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 updateColorMasks(glState.getBlendStateExt());
@@ -3081,7 +3083,16 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     updateFlipViewportReadFramebuffer(glState);
     updateSurfaceRotationDrawFramebuffer(glState);
     updateSurfaceRotationReadFramebuffer(glState);
-    invalidateDriverUniforms();
+
+    if (getFeatures().forceDriverUniformOverSpecConst.enabled)
+    {
+        invalidateDriverUniforms();
+    }
+    else
+    {
+        mCurrentGraphicsPipeline = nullptr;
+        invalidateCurrentGraphicsPipeline();
+    }
 
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     if (executable && executable->hasTransformFeedbackOutput() &&
@@ -3210,9 +3221,6 @@ void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState)
     gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
     mCurrentRotationDrawFramebuffer =
         DetermineSurfaceRotation(drawFramebuffer, mCurrentWindowSurface);
-
-    SpecConstUsageBits usageBits = getCurrentProgramSpecConstUsageBits();
-    updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
 }
 
 void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
