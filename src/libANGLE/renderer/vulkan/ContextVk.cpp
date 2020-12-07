@@ -3081,7 +3081,15 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     updateFlipViewportReadFramebuffer(glState);
     updateSurfaceRotationDrawFramebuffer(glState);
     updateSurfaceRotationReadFramebuffer(glState);
-    invalidateDriverUniforms();
+
+    if (getFeatures().forceDriverUniformOverSpecConst.enabled)
+    {
+        invalidateDriverUniforms();
+    }
+    else
+    {
+        ANGLE_TRY(invalidateProgramExecutableHelper(context));
+    }
 
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     if (executable && executable->hasTransformFeedbackOutput() &&
@@ -3210,9 +3218,6 @@ void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState)
     gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
     mCurrentRotationDrawFramebuffer =
         DetermineSurfaceRotation(drawFramebuffer, mCurrentWindowSurface);
-
-    SpecConstUsageBits usageBits = getCurrentProgramSpecConstUsageBits();
-    updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
 }
 
 void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
