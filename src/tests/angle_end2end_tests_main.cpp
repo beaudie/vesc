@@ -20,6 +20,12 @@ void RegisterContextCompatibilityTests();
 
 int main(int argc, char **argv)
 {
+#if defined(ANGLE_PLATFORM_MACOS)
+    // By default, we should hook file API functions on macOS to avoid slow Metal shader caching
+    // file access.
+    angle::InitMetalFileAPIHooking(argc, argv);
+#endif
+
     angle::TestSuite testSuite(&argc, argv);
     ANGLEProcessTestArgs(&argc, argv);
     RegisterContextCompatibilityTests();
