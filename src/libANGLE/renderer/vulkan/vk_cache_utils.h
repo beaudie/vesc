@@ -599,7 +599,7 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
-                                     const SpecializationConstants specConsts,
+                                     const SpecializationConstants &specConsts,
                                      Pipeline *pipelineOut) const;
 
     // Vertex input state. For ES 3.1 this should be separated into binding and attribute.
@@ -1380,7 +1380,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
-                                           const vk::SpecializationConstants specConsts,
+                                           const vk::SpecializationConstants &specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
                                            vk::PipelineHelper **pipelineOut)
@@ -1409,7 +1409,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
-                                 const vk::SpecializationConstants specConsts,
+                                 const vk::SpecializationConstants &specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
