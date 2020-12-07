@@ -1598,6 +1598,9 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
     mScissor.y      = 0;
     mScissor.width  = 0;
     mScissor.height = 0;
+
+    mDrawableSize.width  = 1;
+    mDrawableSize.height = 1;
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
@@ -2485,6 +2488,16 @@ void GraphicsPipelineDesc::updateScissor(GraphicsPipelineTransitionBits *transit
     transition->set(ANGLE_GET_TRANSITION_BIT(mScissor, y));
     transition->set(ANGLE_GET_TRANSITION_BIT(mScissor, width));
     transition->set(ANGLE_GET_TRANSITION_BIT(mScissor, height));
+}
+
+void GraphicsPipelineDesc::updateDrawableSize(GraphicsPipelineTransitionBits *transition,
+                                              uint32_t width,
+                                              uint32_t height)
+{
+    SetBitField(mDrawableSize.width, width);
+    SetBitField(mDrawableSize.height, height);
+    transition->set(ANGLE_GET_TRANSITION_BIT(mDrawableSize, width));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mDrawableSize, height));
 }
 
 void GraphicsPipelineDesc::updateSubpass(GraphicsPipelineTransitionBits *transition,
