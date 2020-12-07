@@ -1472,7 +1472,7 @@ void GraphicsPipelineDesc::operator delete(void *ptr)
 GraphicsPipelineDesc::GraphicsPipelineDesc()
 {
     memset(this, 0, sizeof(GraphicsPipelineDesc));
-    mPad = 0x55555555;
+    mPad = 0x11111111;
 }
 
 GraphicsPipelineDesc::~GraphicsPipelineDesc()
@@ -1616,7 +1616,7 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
     mDrawableSize.width  = 1;
     mDrawableSize.height = 1;
 
-    mPad = 0;
+    mPad = 0x55555555;
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
@@ -1629,7 +1629,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     const ShaderModule *vertexModule,
     const ShaderModule *fragmentModule,
     const ShaderModule *geometryModule,
-    const SpecializationConstants specConsts,
+    const SpecializationConstants &specConsts,
     Pipeline *pipelineOut) const
 {
     angle::FixedVector<VkPipelineShaderStageCreateInfo, 3> shaderStages;
@@ -3335,7 +3335,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     const vk::ShaderModule *vertexModule,
     const vk::ShaderModule *fragmentModule,
     const vk::ShaderModule *geometryModule,
-    const vk::SpecializationConstants specConsts,
+    const vk::SpecializationConstants &specConsts,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
