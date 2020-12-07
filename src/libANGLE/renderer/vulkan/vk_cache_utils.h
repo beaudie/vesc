@@ -534,6 +534,13 @@ struct PackedScissor final
     uint16_t width;
     uint16_t height;
 };
+
+struct PackedExtent final
+{
+    uint16_t width;
+    uint16_t height;
+};
+
 // This is invalid value for PackedScissor.x. It is used to indicate scissor is a dynamic state
 constexpr int32_t kDynamicScissorSentinel = std::numeric_limits<decltype(PackedScissor::x)>::max();
 
@@ -544,7 +551,7 @@ static_assert(kPackedInputAssemblyAndColorBlendStateSize == 56, "Size check fail
 constexpr size_t kGraphicsPipelineDescSumOfSizes =
     kVertexInputAttributesSize + kRenderPassDescSize + kPackedRasterizationAndMultisampleStateSize +
     kPackedDepthStencilStateSize + kPackedInputAssemblyAndColorBlendStateSize + sizeof(VkViewport) +
-    sizeof(PackedScissor);
+    sizeof(PackedScissor) + sizeof(PackedExtent);
 
 // Number of dirty bits in the dirty bit set.
 constexpr size_t kGraphicsPipelineDirtyBitBytes = 4;
@@ -726,6 +733,11 @@ class GraphicsPipelineDesc final
             mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation);
     }
 
+    void updateDrawableSize(GraphicsPipelineTransitionBits *transition,
+                            uint32_t width,
+                            uint32_t height);
+    const PackedExtent &getDrawableSize() const { return mDrawableSize; }
+
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
 
@@ -738,6 +750,7 @@ class GraphicsPipelineDesc final
     // The special value of .offset.x == INT_MIN for scissor implies dynamic scissor that needs to
     // be set through vkCmdSetScissor.
     PackedScissor mScissor;
+    PackedExtent mDrawableSize;
 };
 
 // Verify the packed pipeline description has no gaps in the packing.
