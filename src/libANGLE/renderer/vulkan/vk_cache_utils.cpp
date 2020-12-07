@@ -1611,6 +1611,8 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
 
     mDrawableSize.width  = 1;
     mDrawableSize.height = 1;
+
+    mPad = 0;
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
