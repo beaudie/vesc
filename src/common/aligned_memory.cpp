@@ -55,8 +55,14 @@ void *AlignedAlloc(size_t size, size_t alignment)
 void AlignedFree(void *ptr)
 {
 #if defined(_MSC_VER)
+#    if !defined(ANGLE_PLATFORM_WINDOWS)
+#        error "AlignedFree is using _aligned_free (expect to use free)"
+#    endif
     _aligned_free(ptr);
 #else
+#    if defined(ANGLE_PLATFORM_WINDOWS)
+#        error "AlignedFree is using free (expect to use _aligned_free)"
+#    endif
     free(ptr);
 #endif
 }
