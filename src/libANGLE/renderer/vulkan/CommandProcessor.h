@@ -201,6 +201,7 @@ class CommandQueueInterface : angle::NonCopyable
                                             egl::ContextPriority contextPriority,
                                             VkCommandBuffer commandBufferHandle,
                                             const Fence *fence,
+                                            bool ensureSubmission,
                                             Serial submitQueueSerial)  = 0;
     virtual VkResult queuePresent(egl::ContextPriority contextPriority,
                                   const VkPresentInfoKHR &presentInfo) = 0;
@@ -255,6 +256,7 @@ class CommandQueue final : public CommandQueueInterface
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Fence *fence,
+                                    bool ensureSubmission,
                                     Serial submitQueueSerial) override;
 
     VkResult queuePresent(egl::ContextPriority contextPriority,
@@ -363,6 +365,7 @@ class CommandProcessor : public Context, public CommandQueueInterface
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Fence *fence,
+                                    bool ensureSubmission,
                                     Serial submitQueueSerial) override;
     VkResult queuePresent(egl::ContextPriority contextPriority,
                           const VkPresentInfoKHR &presentInfo) override;
