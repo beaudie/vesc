@@ -2293,7 +2293,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             vk::PrimaryCommandBuffer &&primary,
                                             egl::ContextPriority priority,
                                             const vk::Fence *fence,
-                                            bool ensureSubmission,
+                                            vk::SubmitPolicy submitPolicy,
                                             Serial *serialOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueSubmitOneOff");
@@ -2305,13 +2305,13 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     {
         submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
         ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(context, priority, primary.getHandle(), fence,
-                                                      ensureSubmission, submitQueueSerial));
+                                                      submitPolicy, submitQueueSerial));
     }
     else
     {
         submitQueueSerial = mCommandQueue.reserveSubmitSerial();
         ANGLE_TRY(mCommandQueue.queueSubmitOneOff(context, priority, primary.getHandle(), fence,
-                                                  ensureSubmission, submitQueueSerial));
+                                                  submitPolicy, submitQueueSerial));
     }
 
     *serialOut = submitQueueSerial;

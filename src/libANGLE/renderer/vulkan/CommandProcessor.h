@@ -27,6 +27,12 @@ class CommandProcessor;
 
 namespace vk
 {
+enum class SubmitPolicy
+{
+    AllowDeferred,
+    EnsureSubmitted,
+};
+
 class FenceRecycler
 {
   public:
@@ -201,7 +207,7 @@ class CommandQueueInterface : angle::NonCopyable
                                             egl::ContextPriority contextPriority,
                                             VkCommandBuffer commandBufferHandle,
                                             const Fence *fence,
-                                            bool ensureSubmission,
+                                            SubmitPolicy submitPolicy,
                                             Serial submitQueueSerial)  = 0;
     virtual VkResult queuePresent(egl::ContextPriority contextPriority,
                                   const VkPresentInfoKHR &presentInfo) = 0;
@@ -256,7 +262,7 @@ class CommandQueue final : public CommandQueueInterface
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Fence *fence,
-                                    bool ensureSubmission,
+                                    SubmitPolicy submitPolicy,
                                     Serial submitQueueSerial) override;
 
     VkResult queuePresent(egl::ContextPriority contextPriority,
@@ -365,7 +371,7 @@ class CommandProcessor : public Context, public CommandQueueInterface
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Fence *fence,
-                                    bool ensureSubmission,
+                                    SubmitPolicy submitPolicy,
                                     Serial submitQueueSerial) override;
     VkResult queuePresent(egl::ContextPriority contextPriority,
                           const VkPresentInfoKHR &presentInfo) override;

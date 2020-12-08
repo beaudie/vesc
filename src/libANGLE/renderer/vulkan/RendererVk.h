@@ -209,7 +209,7 @@ class RendererVk : angle::NonCopyable
                                     vk::PrimaryCommandBuffer &&primary,
                                     egl::ContextPriority priority,
                                     const vk::Fence *fence,
-                                    bool ensureSubmission,
+                                    vk::SubmitPolicy submitPolicy,
                                     Serial *serialOut);
 
     template <typename... ArgsT>

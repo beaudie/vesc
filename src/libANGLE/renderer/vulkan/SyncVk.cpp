@@ -210,8 +210,8 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
         // signal in the graphics pipeline at the time we export the fd. Thus we need to
         // ensureSubmission here.
         ANGLE_TRY(renderer->queueSubmitOneOff(contextVk, vk::PrimaryCommandBuffer(),
-                                              contextVk->getPriority(), &fence.get(), true,
-                                              &serialOut));
+                                              contextVk->getPriority(), &fence.get(),
+                                              vk::SubmitPolicy::EnsureSubmitted, &serialOut));
 
         VkFenceGetFdInfoKHR fenceGetFdInfo = {};
         fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
