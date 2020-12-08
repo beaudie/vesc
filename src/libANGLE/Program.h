@@ -250,7 +250,7 @@ class ProgramState final : angle::NonCopyable
     }
     const std::vector<VariableLocation> &getSecondaryOutputLocations() const
     {
-        return mSecondaryOutputLocations;
+        return mExecutable->getSecondaryOutputLocations();
     }
     const std::vector<LinkedUniform> &getUniforms() const { return mExecutable->getUniforms(); }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
@@ -392,9 +392,6 @@ class ProgramState final : angle::NonCopyable
     std::vector<VariableLocation> mUniformLocations;
     std::vector<BufferVariable> mBufferVariables;
     RangeUI mAtomicCounterUniformRange;
-
-    // EXT_blend_func_extended secondary outputs (ones with index 1) in ESSL 3.00 shaders.
-    std::vector<VariableLocation> mSecondaryOutputLocations;
 
     DrawBufferMask mActiveOutputVariables;
 

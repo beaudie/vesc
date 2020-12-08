@@ -233,6 +233,10 @@ class ProgramExecutable final : public angle::Subject
     const std::vector<sh::ShaderVariable> &getProgramInputs() const { return mProgramInputs; }
     const std::vector<sh::ShaderVariable> &getOutputVariables() const { return mOutputVariables; }
     const std::vector<VariableLocation> &getOutputLocations() const { return mOutputLocations; }
+    const std::vector<VariableLocation> &getSecondaryOutputLocations() const
+    {
+        return mSecondaryOutputLocations;
+    }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<InterfaceBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
@@ -390,6 +394,8 @@ class ProgramExecutable final : public angle::Subject
     // to uniforms.
     std::vector<sh::ShaderVariable> mOutputVariables;
     std::vector<VariableLocation> mOutputLocations;
+    // EXT_blend_func_extended secondary outputs (ones with index 1)
+    std::vector<VariableLocation> mSecondaryOutputLocations;
     bool mYUVOutput;
     // Vertex attributes, Fragment input varyings, etc.
     std::vector<sh::ShaderVariable> mProgramInputs;

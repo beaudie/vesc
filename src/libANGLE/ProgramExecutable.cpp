@@ -122,6 +122,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mCanDrawWith(other.mCanDrawWith),
       mOutputVariables(other.mOutputVariables),
       mOutputLocations(other.mOutputLocations),
+      mSecondaryOutputLocations(other.mSecondaryOutputLocations),
       mYUVOutput(other.mYUVOutput),
       mProgramInputs(other.mProgramInputs),
       mLinkedTransformFeedbackVaryings(other.mLinkedTransformFeedbackVaryings),
@@ -179,6 +180,7 @@ void ProgramExecutable::reset()
     mAtomicCounterBuffers.clear();
     mOutputVariables.clear();
     mOutputLocations.clear();
+    mSecondaryOutputLocations.clear();
     mYUVOutput = false;
     mSamplerBindings.clear();
     mComputeImageBindings.clear();

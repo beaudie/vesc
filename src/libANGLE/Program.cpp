@@ -1795,7 +1795,6 @@ void Program::unlink()
     mState.mUniformLocations.clear();
     mState.mBufferVariables.clear();
     mState.mActiveUniformBlockBindings.reset();
-    mState.mSecondaryOutputLocations.clear();
     mState.mOutputVariableTypes.clear();
     mState.mDrawBufferTypeMask.reset();
     mState.mYUVOutput = false;
@@ -2434,7 +2433,7 @@ GLint Program::getFragDataLocation(const std::string &name) const
         return primaryLocation;
     }
     return GetVariableLocation(mState.mExecutable->getOutputVariables(),
-                               mState.mSecondaryOutputLocations, name);
+                               mState.mExecutable->getSecondaryOutputLocations(), name);
 }
 
 GLint Program::getFragDataIndex(const std::string &name) const
@@ -2446,7 +2445,7 @@ GLint Program::getFragDataIndex(const std::string &name) const
         return 0;
     }
     if (GetVariableLocation(mState.mExecutable->getOutputVariables(),
-                            mState.mSecondaryOutputLocations, name) != -1)
+                            mState.mExecutable->getSecondaryOutputLocations(), name) != -1)
     {
         return 1;
     }
@@ -4174,7 +4173,7 @@ bool Program::linkOutputVariables(const Caps &caps,
             // Get the API index that corresponds to this exact binding.
             // This index may differ from the index used for the array's base.
             auto &outputLocations = mFragmentOutputIndexes.getBindingByName(binding.first) == 1
-                                        ? mState.mSecondaryOutputLocations
+                                        ? mState.mExecutable->mSecondaryOutputLocations
                                         : mState.mExecutable->mOutputLocations;
             unsigned int location = binding.second.location;
             VariableLocation locationInfo(arrayIndex, outputVariableIndex);
@@ -4217,7 +4216,7 @@ bool Program::linkOutputVariables(const Caps &caps,
         unsigned int baseLocation = static_cast<unsigned int>(fixedLocation);
 
         auto &outputLocations = isOutputSecondaryForLink(outputVariable)
-                                    ? mState.mSecondaryOutputLocations
+                                    ? mState.mExecutable->mSecondaryOutputLocations
                                     : mState.mExecutable->mOutputLocations;
 
         // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
@@ -4241,7 +4240,7 @@ bool Program::linkOutputVariables(const Caps &caps,
     // we got the output variables. The spec isn't clear on what kind of algorithm is required for
     // finding locations for the output variables, so this should be acceptable at least for now.
     GLuint maxLocation = static_cast<GLuint>(caps.maxDrawBuffers);
-    if (!mState.mSecondaryOutputLocations.empty())
+    if (!mState.mExecutable->getSecondaryOutputLocations().empty())
     {
         // EXT_blend_func_extended: Program outputs will be validated against
         // MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT if there's even one output with index one.
@@ -4261,7 +4260,7 @@ bool Program::linkOutputVariables(const Caps &caps,
 
         int fixedLocation     = getOutputLocationForLink(outputVariable);
         auto &outputLocations = isOutputSecondaryForLink(outputVariable)
-                                    ? mState.mSecondaryOutputLocations
+                                    ? mState.mExecutable->mSecondaryOutputLocations
                                     : mState.mExecutable->mOutputLocations;
         unsigned int baseLocation = 0;
         unsigned int elementCount = outputVariable.getBasicTypeElementCount();
@@ -4917,14 +4916,14 @@ angle::Result Program::deserialize(const Context *context,
     }
 
     size_t secondaryOutputVarCount = stream.readInt<size_t>();
-    ASSERT(mState.mSecondaryOutputLocations.empty());
+    ASSERT(mState.mExecutable->getSecondaryOutputLocations().empty());
     for (size_t outputIndex = 0; outputIndex < secondaryOutputVarCount; ++outputIndex)
     {
         VariableLocation locationData;
         stream.readInt(&locationData.arrayIndex);
         stream.readInt(&locationData.index);
         stream.readBool(&locationData.ignored);
-        mState.mSecondaryOutputLocations.push_back(locationData);
+        mState.mExecutable->mSecondaryOutputLocations.push_back(locationData);
     }
 
     size_t outputTypeCount = stream.readInt<size_t>();
