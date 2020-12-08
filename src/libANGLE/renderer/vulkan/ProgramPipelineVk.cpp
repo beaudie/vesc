@@ -83,8 +83,8 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
             glslangProgramInterfaceInfo.locationsUsedForXfbExtension =
                 programProgramInterfaceInfo.locationsUsedForXfbExtension;
 
-            GlslangAssignLocations(options, glProgram->getState().getExecutable(), varyingPacking,
-                                   shaderType, frontShaderType, &glslangProgramInterfaceInfo,
+            GlslangAssignLocations(options, glProgram->getState(), varyingPacking, shaderType,
+                                   frontShaderType, &glslangProgramInterfaceInfo,
                                    &mExecutable.mVariableInfoMap);
             frontShaderType = shaderType;
         }

@@ -287,6 +287,9 @@ TEST_P(EXTBlendFuncExtendedDrawTest, FragData)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_blend_func_extended"));
 
+    // Suspected VK driver bug http://anglebug.com/5531
+    ANGLE_SKIP_TEST_IF(IsNVIDIA() || IsPixel2());
+
     const char *kFragColorShader =
         "#extension GL_EXT_blend_func_extended : require\n"
         "precision mediump float;\n"
@@ -395,6 +398,9 @@ TEST_P(EXTBlendFuncExtendedDrawTestES3, FragmentArrayOutputLocationsAPI)
 
     // TODO: Investigate this mac-only failure.  http://angleproject.com/1085
     ANGLE_SKIP_TEST_IF(IsOSX());
+
+    // Suspected VK driver bug http://anglebug.com/5531
+    ANGLE_SKIP_TEST_IF(IsNVIDIA() || IsPixel2());
 
     constexpr char kFS[] = R"(#version 300 es
 #extension GL_EXT_blend_func_extended : require
