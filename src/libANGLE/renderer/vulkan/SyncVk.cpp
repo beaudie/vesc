@@ -206,7 +206,8 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
 
         Serial serialOut;
         ANGLE_TRY(renderer->queueSubmitOneOff(contextVk, vk::PrimaryCommandBuffer(),
-                                              contextVk->getPriority(), &fence.get(), &serialOut));
+                                              contextVk->getPriority(), &fence.get(), true,
+                                              &serialOut));
 
         VkFenceGetFdInfoKHR fenceGetFdInfo = {};
         fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
@@ -219,7 +220,7 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // descriptor from the application to the Vulkan implementation. The application must not
     // perform any operations on the file descriptor after a successful import.
 
-    // Make a dup of importFenceFd before tranfering ownership to created fence.
+    // Make a dup of importFenceFd before transferring ownership to created fence.
     mNativeFenceFd = dup(importFenceFd);
 
     // Import FD - after creating fence.
