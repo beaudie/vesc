@@ -1534,6 +1534,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     enabledFeatures.features.shaderCullDistance = mPhysicalDeviceFeatures.shaderCullDistance;
     // Used to support tessellation Shader:
     enabledFeatures.features.tessellationShader = mPhysicalDeviceFeatures.tessellationShader;
+    // Used to support EXT_blend_func_extended
+    enabledFeatures.features.dualSrcBlend = mPhysicalDeviceFeatures.dualSrcBlend;
 
     if (!vk::CommandBuffer::ExecutesInline())
     {
