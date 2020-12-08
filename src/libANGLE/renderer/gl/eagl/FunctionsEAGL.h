@@ -13,6 +13,8 @@
 
 #if defined(ANGLE_ENABLE_EAGL)
 
+#    define GLES_SILENCE_DEPRECATION
+
 #    import <OpenGLES/EAGL.h>
 #    import <OpenGLES/EAGLDrawable.h>
 #    import <OpenGLES/EAGLIOSurface.h>
