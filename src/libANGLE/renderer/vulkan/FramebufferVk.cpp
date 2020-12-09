@@ -325,12 +325,7 @@ FramebufferVk::~FramebufferVk() = default;
 
 void FramebufferVk::clearCache(ContextVk *contextVk)
 {
-    for (auto &entry : mFramebufferCache)
-    {
-        vk::FramebufferHelper &tmpFB = entry.second;
-        tmpFB.release(contextVk);
-    }
-    mFramebufferCache.clear();
+    mFramebufferCache.clearCache(contextVk);
 }
 
 void FramebufferVk::destroy(const gl::Context *context)
@@ -1838,19 +1833,10 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         return angle::Result::Continue;
     }
     // No current FB, so now check for previously cached Framebuffer
-    auto iter = mFramebufferCache.find(mCurrentFramebufferDesc);
-    if (iter != mFramebufferCache.end())
+    vk::FramebufferHelper *framebufferHelper = nullptr;
+    if (mFramebufferCache.getFramebuffer(contextVk, mCurrentFramebufferDesc, &framebufferHelper))
     {
-        if (contextVk->getRenderer()->getFeatures().enableFramebufferVkCache.enabled)
-        {
-            *framebufferOut = &iter->second.getFramebuffer();
-            return angle::Result::Continue;
-        }
-        else
-        {
-            // When cache is off just release previous entry, it will be recreated below
-            iter->second.release(contextVk);
-        }
+        *framebufferOut = &framebufferHelper->getFramebuffer();
     }
 
     vk::RenderPass *compatibleRenderPass = nullptr;
@@ -1960,9 +1946,12 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // Check that our description matches our attachments. Can catch implementation bugs.
     ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
 
-    mFramebufferCache[mCurrentFramebufferDesc] = std::move(newFramebuffer);
-    mFramebuffer                               = &mFramebufferCache[mCurrentFramebufferDesc];
-    *framebufferOut                            = &mFramebuffer->getFramebuffer();
+    mFramebufferCache.insertFramebuffer(mCurrentFramebufferDesc, std::move(newFramebuffer));
+    bool result =
+        mFramebufferCache.getFramebuffer(contextVk, mCurrentFramebufferDesc, &mFramebuffer);
+    ASSERT(result);
+
+    *framebufferOut = &mFramebuffer->getFramebuffer();
     return angle::Result::Continue;
 }
 
