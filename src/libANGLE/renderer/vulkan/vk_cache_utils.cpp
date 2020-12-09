@@ -3245,6 +3245,7 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
             // TODO(jmadill): Could possibly use an MRU cache here.
             vk::GetRenderPassAndUpdateCounters(contextVk, updatePerfCounters, &innerIt->second,
                                                renderPassOut);
+            onCacheHit();
             return angle::Result::Continue;
         }
     }
@@ -3254,6 +3255,7 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
         outerIt            = emplaceResult.first;
     }
 
+    onCacheMiss();
     vk::RenderPassHelper newRenderPass;
     ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps, &newRenderPass));
 
@@ -3372,9 +3374,11 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     {
         vk::RefCountedDescriptorSetLayout &layout = iter->second;
         descriptorSetLayoutOut->set(&layout);
+        onCacheHit();
         return angle::Result::Continue;
     }
 
+    onCacheMiss();
     // We must unpack the descriptor set layout description.
     vk::DescriptorSetLayoutBindingVector bindingVector;
     std::vector<VkSampler> immutableSamplers;
@@ -3427,9 +3431,11 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     {
         vk::RefCountedPipelineLayout &layout = iter->second;
         pipelineLayoutOut->set(&layout);
+        onCacheHit();
         return angle::Result::Continue;
     }
 
+    onCacheMiss();
     // Note this does not handle gaps in descriptor set layouts gracefully.
     angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
     for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
@@ -3517,9 +3523,11 @@ angle::Result SamplerYcbcrConversionCache::getYuvConversion(
     {
         vk::RefCountedSamplerYcbcrConversion &yuvConversion = iter->second;
         yuvConversionOut->set(&yuvConversion);
+        onCacheHit();
         return angle::Result::Continue;
     }
 
+    onCacheMiss();
     vk::SamplerYcbcrConversion wrappedYuvConversion;
     ANGLE_VK_TRY(context, wrappedYuvConversion.init(context->getDevice(), yuvConversionCreateInfo));
 
@@ -3582,9 +3590,11 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     {
         vk::RefCountedSampler &sampler = iter->second;
         samplerOut->set(&sampler);
+        onCacheHit();
         return angle::Result::Continue;
     }
 
+    onCacheMiss();
     vk::SamplerHelper samplerHelper(contextVk);
     ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
 
@@ -3596,5 +3606,53 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     contextVk->getRenderer()->getActiveHandleCounts().onAllocate(vk::HandleType::Sampler);
 
     return angle::Result::Continue;
+}
+
+// FramebufferCache implementation.
+FramebufferCache::FramebufferCache() = default;
+
+FramebufferCache::~FramebufferCache()
+{
+    ASSERT(mPayload.empty());
+}
+
+bool FramebufferCache::getFramebuffer(ContextVk *contextVk,
+                                      const vk::FramebufferDesc &desc,
+                                      vk::FramebufferHelper **framebufferHelperOut)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        if (contextVk->getRenderer()->getFeatures().enableFramebufferVkCache.enabled)
+        {
+            *framebufferHelperOut = &iter->second;
+            onCacheHit();
+            return true;
+        }
+        else
+        {
+            // When cache is off just release previous entry, it will be recreated below
+            iter->second.release(contextVk);
+        }
+    }
+
+    onCacheMiss();
+    return false;
+}
+
+void FramebufferCache::insertFramebuffer(const vk::FramebufferDesc &desc,
+                                         vk::FramebufferHelper &&framebufferHelper)
+{
+    mPayload.emplace(desc, std::move(framebufferHelper));
+}
+
+void FramebufferCache::clearCache(ContextVk *contextVk)
+{
+    for (auto &entry : mPayload)
+    {
+        vk::FramebufferHelper &tmpFB = entry.second;
+        tmpFB.release(contextVk);
+    }
+    mPayload.clear();
 }
 }  // namespace rx
