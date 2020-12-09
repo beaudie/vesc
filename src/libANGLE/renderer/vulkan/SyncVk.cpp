@@ -63,6 +63,7 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
     retain(&contextVk->getResourceUseList());
 
     contextVk->onSyncHelperInitialize();
+    ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
 
     return angle::Result::Continue;
 }
