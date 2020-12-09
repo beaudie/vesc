@@ -245,8 +245,8 @@ class ProgramExecutableVk
     size_t mNumDefaultUniformDescriptors;
     vk::BufferSerial mCurrentDefaultUniformBufferSerial;
 
-    angle::HashMap<vk::UniformsAndXfbDesc, VkDescriptorSet> mUniformsAndXfbDescriptorSetCache;
-    angle::HashMap<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
+    UniformsAndXfbDescriptorSetCache mUniformsAndXfbDescriptorSetCache;
+    TextureDescriptorsCache mTextureDescriptorsCache;
 
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.

@@ -53,6 +53,7 @@ enum DescriptorSetIndex : uint32_t
 namespace vk
 {
 class DynamicDescriptorPool;
+class FramebufferHelper;
 class ImageHelper;
 enum class ImageLayout;
 
@@ -1305,8 +1306,30 @@ ANGLE_VK_SERIAL_OP(ANGLE_HASH_VK_SERIAL)
 
 namespace rx
 {
+// Base class for all caches. Provides cache hit and miss counters.
+class CacheBase : angle::NonCopyable
+{
+  public:
+    CacheBase() {}
+    ~CacheBase() {}
+
+  protected:
+    ANGLE_INLINE void onCacheHit() { mCacheHitCount++; }
+    ANGLE_INLINE void onCacheMiss() { mCacheMissCount++; }
+    ANGLE_INLINE double getCacheHitRatio()
+    {
+        return (mCacheHitCount + mCacheMissCount == 0)
+                   ? 0
+                   : (1.0 * mCacheHitCount) / (mCacheHitCount + mCacheMissCount);
+    }
+
+  private:
+    std::atomic<uint64_t> mCacheHitCount;
+    std::atomic<uint64_t> mCacheMissCount;
+};
+
 // TODO(jmadill): Add cache trimming/eviction.
-class RenderPassCache final : angle::NonCopyable
+class RenderPassCache final : public CacheBase
 {
   public:
     RenderPassCache();
@@ -1326,9 +1349,11 @@ class RenderPassCache final : angle::NonCopyable
 
             // Find the first element and return it.
             *renderPassOut = &innerCache.begin()->second.getRenderPass();
+            onCacheHit();
             return angle::Result::Continue;
         }
 
+        onCacheMiss();
         return addRenderPass(contextVk, desc, renderPassOut);
     }
 
@@ -1357,7 +1382,7 @@ class RenderPassCache final : angle::NonCopyable
 };
 
 // TODO(jmadill): Add cache trimming/eviction.
-class GraphicsPipelineCache final : angle::NonCopyable
+class GraphicsPipelineCache final : public CacheBase
 {
   public:
     GraphicsPipelineCache();
@@ -1387,9 +1412,11 @@ class GraphicsPipelineCache final : angle::NonCopyable
         {
             *descPtrOut  = &item->first;
             *pipelineOut = &item->second;
+            onCacheHit();
             return angle::Result::Continue;
         }
 
+        onCacheMiss();
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
                               fragmentModule, geometryModule, specConsts, desc, descPtrOut,
@@ -1414,7 +1441,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
     std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper> mPayload;
 };
 
-class DescriptorSetLayoutCache final : angle::NonCopyable
+class DescriptorSetLayoutCache final : public CacheBase
 {
   public:
     DescriptorSetLayoutCache();
@@ -1431,7 +1458,7 @@ class DescriptorSetLayoutCache final : angle::NonCopyable
     std::unordered_map<vk::DescriptorSetLayoutDesc, vk::RefCountedDescriptorSetLayout> mPayload;
 };
 
-class PipelineLayoutCache final : angle::NonCopyable
+class PipelineLayoutCache final : public CacheBase
 {
   public:
     PipelineLayoutCache();
@@ -1448,7 +1475,7 @@ class PipelineLayoutCache final : angle::NonCopyable
     std::unordered_map<vk::PipelineLayoutDesc, vk::RefCountedPipelineLayout> mPayload;
 };
 
-class SamplerCache final : angle::NonCopyable
+class SamplerCache final : public CacheBase
 {
   public:
     SamplerCache();
@@ -1465,7 +1492,7 @@ class SamplerCache final : angle::NonCopyable
 };
 
 // YuvConversion Cache
-class SamplerYcbcrConversionCache final : angle::NonCopyable
+class SamplerYcbcrConversionCache final : public CacheBase
 {
   public:
     SamplerYcbcrConversionCache();
@@ -1482,6 +1509,115 @@ class SamplerYcbcrConversionCache final : angle::NonCopyable
 
   private:
     std::unordered_map<uint64_t, vk::RefCountedSamplerYcbcrConversion> mPayload;
+};
+
+// FramebufferVk Cache
+class FramebufferCache final : public CacheBase
+{
+  public:
+    FramebufferCache();
+    ~FramebufferCache();
+
+    bool getFramebuffer(ContextVk *contextVk,
+                        const vk::FramebufferDesc &desc,
+                        vk::FramebufferHelper **framebufferOut);
+    void insertFramebuffer(const vk::FramebufferDesc &desc,
+                           vk::FramebufferHelper &&framebufferHelper);
+    void clearCache(ContextVk *contextVk);
+
+  private:
+    angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
+};
+
+// DescriptorSet Cache
+class DescriptorSetCache final : public CacheBase
+{
+  public:
+    DescriptorSetCache() = default;
+    ~DescriptorSetCache() { ASSERT(mPayload.empty()); }
+
+    ANGLE_INLINE bool get(uint32_t serial, VkDescriptorSet *descriptorSet)
+    {
+        if (mPayload.get(serial, descriptorSet))
+        {
+            onCacheHit();
+            return true;
+        }
+        onCacheMiss();
+        return false;
+    }
+
+    ANGLE_INLINE void insert(uint32_t serial, VkDescriptorSet descriptorSet)
+    {
+        mPayload.insert(serial, descriptorSet);
+    }
+
+    ANGLE_INLINE void clear() { mPayload.clear(); }
+
+  private:
+    angle::FastIntegerMap<VkDescriptorSet> mPayload;
+};
+
+// TextureDescriptors Cache
+class TextureDescriptorsCache final : public CacheBase
+{
+  public:
+    TextureDescriptorsCache() = default;
+    ~TextureDescriptorsCache() { ASSERT(mPayload.empty()); }
+
+    ANGLE_INLINE bool get(const vk::TextureDescriptorDesc &desc, VkDescriptorSet *descriptorSet)
+    {
+        auto iter = mPayload.find(desc);
+        if (iter != mPayload.end())
+        {
+            *descriptorSet = iter->second;
+            onCacheHit();
+            return true;
+        }
+        onCacheMiss();
+        return false;
+    }
+
+    ANGLE_INLINE void insert(const vk::TextureDescriptorDesc &desc, VkDescriptorSet descriptorSet)
+    {
+        mPayload.emplace(desc, descriptorSet);
+    }
+
+    ANGLE_INLINE void clear() { mPayload.clear(); }
+
+  private:
+    angle::HashMap<vk::TextureDescriptorDesc, VkDescriptorSet> mPayload;
+};
+
+// UniformsAndXfbDescriptorSet Cache
+class UniformsAndXfbDescriptorSetCache final : public CacheBase
+{
+  public:
+    UniformsAndXfbDescriptorSetCache() = default;
+    ~UniformsAndXfbDescriptorSetCache() { ASSERT(mPayload.empty()); }
+
+    ANGLE_INLINE bool get(const vk::UniformsAndXfbDesc &desc, VkDescriptorSet *descriptorSet)
+    {
+        auto iter = mPayload.find(desc);
+        if (iter != mPayload.end())
+        {
+            *descriptorSet = iter->second;
+            onCacheHit();
+            return true;
+        }
+        onCacheMiss();
+        return false;
+    }
+
+    ANGLE_INLINE void insert(const vk::UniformsAndXfbDesc &desc, VkDescriptorSet descriptorSet)
+    {
+        mPayload.emplace(desc, descriptorSet);
+    }
+
+    ANGLE_INLINE void clear() { mPayload.clear(); }
+
+  private:
+    angle::HashMap<vk::UniformsAndXfbDesc, VkDescriptorSet> mPayload;
 };
 
 // Only 1 driver uniform binding is used.
