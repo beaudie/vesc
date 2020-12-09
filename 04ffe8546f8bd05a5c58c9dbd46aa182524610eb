@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d91d5927_d219c51e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-12-09T04:37:46Z",
+      "side": 1,
+      "message": "This is the only change added on top of reland. This change does not fix any known bug, but I think is the right thing to do anyway. The real fix for bot failures are crrev.com/c/2580914 ( the CL before this)",
+      "range": {
+        "startLine": 1611,
+        "startChar": 0,
+        "endLine": 1613,
+        "endChar": 29
+      },
+      "revId": "04ffe8546f8bd05a5c58c9dbd46aa182524610eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
