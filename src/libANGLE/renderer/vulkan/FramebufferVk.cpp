@@ -1844,6 +1844,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         if (contextVk->getRenderer()->getFeatures().enableFramebufferVkCache.enabled)
         {
             *framebufferOut = &iter->second.getFramebuffer();
+            vk::OnCacheHit(contextVk, vk::InternalCaches::FramBufferCache);
             return angle::Result::Continue;
         }
         else
@@ -1852,6 +1853,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
             iter->second.release(contextVk);
         }
     }
+
+    vk::OnCacheMiss(contextVk, vk::InternalCaches::FramBufferCache);
 
     vk::RenderPass *compatibleRenderPass = nullptr;
     ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
