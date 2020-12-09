@@ -52,6 +52,10 @@ enum DescriptorSetIndex : uint32_t
 
 namespace vk
 {
+// Utilty functions for cache hit and cache miss book keeping
+void OnCacheHit(ContextVk *contextVk, vk::InternalCaches cache);
+void OnCacheMiss(ContextVk *contextVk, vk::InternalCaches cache);
+
 class DynamicDescriptorPool;
 class ImageHelper;
 enum class ImageLayout;
@@ -1314,9 +1318,11 @@ class RenderPassCache final : angle::NonCopyable
 
             // Find the first element and return it.
             *renderPassOut = &innerCache.begin()->second.getRenderPass();
+            OnCacheHit(contextVk, vk::InternalCaches::RenderPassCache);
             return angle::Result::Continue;
         }
 
+        OnCacheMiss(contextVk, vk::InternalCaches::RenderPassCache);
         return addRenderPass(contextVk, desc, renderPassOut);
     }
 
@@ -1375,9 +1381,11 @@ class GraphicsPipelineCache final : angle::NonCopyable
         {
             *descPtrOut  = &item->first;
             *pipelineOut = &item->second;
+            OnCacheHit(contextVk, vk::InternalCaches::GraphicsPipelineCache);
             return angle::Result::Continue;
         }
 
+        OnCacheMiss(contextVk, vk::InternalCaches::GraphicsPipelineCache);
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
                               fragmentModule, geometryModule, specConsts, desc, descPtrOut,
@@ -1411,7 +1419,7 @@ class DescriptorSetLayoutCache final : angle::NonCopyable
     void destroy(VkDevice device);
 
     angle::Result getDescriptorSetLayout(
-        vk::Context *context,
+        ContextVk *contextVk,
         const vk::DescriptorSetLayoutDesc &desc,
         vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
 
@@ -1427,7 +1435,7 @@ class PipelineLayoutCache final : angle::NonCopyable
 
     void destroy(VkDevice device);
 
-    angle::Result getPipelineLayout(vk::Context *context,
+    angle::Result getPipelineLayout(ContextVk *contextVk,
                                     const vk::PipelineLayoutDesc &desc,
                                     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
@@ -1462,7 +1470,7 @@ class SamplerYcbcrConversionCache final : angle::NonCopyable
     void destroy(RendererVk *render);
 
     angle::Result getYuvConversion(
-        vk::Context *context,
+        ContextVk *contextVk,
         uint64_t externalFormat,
         const VkSamplerYcbcrConversionCreateInfo &yuvConversionCreateInfo,
         vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut);

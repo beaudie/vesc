@@ -567,6 +567,24 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     const vk::PerfCounters &getPerfCounters() const { return mPerfCounters; }
     vk::PerfCounters &getPerfCounters() { return mPerfCounters; }
 
+    void updateInternalCacheCounters(vk::InternalCaches cache,
+                                     vk::CacheQueryResult cacheQueryResult)
+    {
+        if (!mInternalCacheCounts.contains(cache))
+        {
+            vk::CacheCounts cacheCounts(2, 0);
+            mInternalCacheCounts.emplace(cache, cacheCounts);
+        }
+
+        vk::CacheCounts &cacheCounts       = mInternalCacheCounts[cache];
+        constexpr uint32_t kCacheHitIndex  = 0;
+        constexpr uint32_t kCacheMissIndex = 1;
+        uint32_t index =
+            cacheQueryResult == vk::CacheQueryResult::CacheHit ? kCacheHitIndex : kCacheMissIndex;
+
+        cacheCounts[index]++;
+    }
+
     void onSyncHelperInitialize() { mSyncObjectPendingFlush = true; }
 
     // When UtilsVk issues a draw call on the currently running render pass, the pipelines and
@@ -1016,6 +1034,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // A mix of per-frame and per-run counters.
     vk::PerfCounters mPerfCounters;
     PerfCounters mObjectPerfCounters;
+    // Internal cache counts per-context.
+    vk::InternalCacheCounts mInternalCacheCounts;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
 

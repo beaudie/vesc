@@ -14,6 +14,7 @@
 #include "common/vulkan/vk_google_filtering_precision.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
@@ -1275,6 +1276,17 @@ constexpr angle::PackedEnumMap<gl::ComponentType, VkFormat> kMismatchedComponent
     {gl::ComponentType::UnsignedInt, VK_FORMAT_R32G32B32A32_UINT},
 }};
 }  // anonymous namespace
+
+// Implementation of cache hit and cache miss book keeping utilty functions.
+void OnCacheHit(ContextVk *contextVk, vk::InternalCaches cache)
+{
+    contextVk->updateInternalCacheCounters(cache, vk::CacheQueryResult::CacheHit);
+}
+
+void OnCacheMiss(ContextVk *contextVk, vk::InternalCaches cache)
+{
+    contextVk->updateInternalCacheCounters(cache, vk::CacheQueryResult::CacheMiss);
+}
 
 // RenderPassDesc implementation.
 RenderPassDesc::RenderPassDesc()
@@ -3245,6 +3257,7 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
             // TODO(jmadill): Could possibly use an MRU cache here.
             vk::GetRenderPassAndUpdateCounters(contextVk, updatePerfCounters, &innerIt->second,
                                                renderPassOut);
+            OnCacheHit(contextVk, vk::InternalCaches::RenderPassCache);
             return angle::Result::Continue;
         }
     }
@@ -3252,6 +3265,7 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
     {
         auto emplaceResult = mPayload.emplace(desc, InnerCache());
         outerIt            = emplaceResult.first;
+        OnCacheMiss(contextVk, vk::InternalCaches::RenderPassCache);
     }
 
     vk::RenderPassHelper newRenderPass;
@@ -3363,7 +3377,7 @@ void DescriptorSetLayoutCache::destroy(VkDevice device)
 }
 
 angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
-    vk::Context *context,
+    ContextVk *contextVk,
     const vk::DescriptorSetLayoutDesc &desc,
     vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
 {
@@ -3372,8 +3386,11 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     {
         vk::RefCountedDescriptorSetLayout &layout = iter->second;
         descriptorSetLayoutOut->set(&layout);
+        OnCacheHit(contextVk, vk::InternalCaches::DescriptorSetLayoutCache);
         return angle::Result::Continue;
     }
+
+    OnCacheMiss(contextVk, vk::InternalCaches::DescriptorSetLayoutCache);
 
     // We must unpack the descriptor set layout description.
     vk::DescriptorSetLayoutBindingVector bindingVector;
@@ -3387,7 +3404,7 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     createInfo.pBindings    = bindingVector.data();
 
     vk::DescriptorSetLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    ANGLE_VK_TRY(contextVk, newLayout.init(contextVk->getDevice(), createInfo));
 
     auto insertedItem =
         mPayload.emplace(desc, vk::RefCountedDescriptorSetLayout(std::move(newLayout)));
@@ -3417,7 +3434,7 @@ void PipelineLayoutCache::destroy(VkDevice device)
 }
 
 angle::Result PipelineLayoutCache::getPipelineLayout(
-    vk::Context *context,
+    ContextVk *contextVk,
     const vk::PipelineLayoutDesc &desc,
     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
@@ -3427,8 +3444,11 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     {
         vk::RefCountedPipelineLayout &layout = iter->second;
         pipelineLayoutOut->set(&layout);
+        OnCacheHit(contextVk, vk::InternalCaches::PipelineLayoutCache);
         return angle::Result::Continue;
     }
+
+    OnCacheMiss(contextVk, vk::InternalCaches::PipelineLayoutCache);
 
     // Note this does not handle gaps in descriptor set layouts gracefully.
     angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
@@ -3473,7 +3493,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     createInfo.pPushConstantRanges        = pushConstantRanges.data();
 
     vk::PipelineLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    ANGLE_VK_TRY(contextVk, newLayout.init(contextVk->getDevice(), createInfo));
 
     auto insertedItem = mPayload.emplace(desc, vk::RefCountedPipelineLayout(std::move(newLayout)));
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
@@ -3507,7 +3527,7 @@ void SamplerYcbcrConversionCache::destroy(RendererVk *renderer)
 }
 
 angle::Result SamplerYcbcrConversionCache::getYuvConversion(
-    vk::Context *context,
+    ContextVk *contextVk,
     uint64_t externalFormat,
     const VkSamplerYcbcrConversionCreateInfo &yuvConversionCreateInfo,
     vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut)
@@ -3517,18 +3537,22 @@ angle::Result SamplerYcbcrConversionCache::getYuvConversion(
     {
         vk::RefCountedSamplerYcbcrConversion &yuvConversion = iter->second;
         yuvConversionOut->set(&yuvConversion);
+        OnCacheHit(contextVk, vk::InternalCaches::SamplerYcbcrConversionCache);
         return angle::Result::Continue;
     }
 
+    OnCacheMiss(contextVk, vk::InternalCaches::SamplerYcbcrConversionCache);
+
     vk::SamplerYcbcrConversion wrappedYuvConversion;
-    ANGLE_VK_TRY(context, wrappedYuvConversion.init(context->getDevice(), yuvConversionCreateInfo));
+    ANGLE_VK_TRY(contextVk,
+                 wrappedYuvConversion.init(contextVk->getDevice(), yuvConversionCreateInfo));
 
     auto insertedItem = mPayload.emplace(
         externalFormat, vk::RefCountedSamplerYcbcrConversion(std::move(wrappedYuvConversion)));
     vk::RefCountedSamplerYcbcrConversion &insertedYuvConversion = insertedItem.first->second;
     yuvConversionOut->set(&insertedYuvConversion);
 
-    context->getRenderer()->getActiveHandleCounts().onAllocate(
+    contextVk->getRenderer()->getActiveHandleCounts().onAllocate(
         vk::HandleType::SamplerYcbcrConversion);
 
     return angle::Result::Continue;
@@ -3582,8 +3606,11 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     {
         vk::RefCountedSampler &sampler = iter->second;
         samplerOut->set(&sampler);
+        OnCacheHit(contextVk, vk::InternalCaches::SamplerCache);
         return angle::Result::Continue;
     }
+
+    OnCacheMiss(contextVk, vk::InternalCaches::SamplerCache);
 
     vk::SamplerHelper samplerHelper(contextVk);
     ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));

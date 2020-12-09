@@ -871,6 +871,31 @@ struct PerfCounters
     uint32_t descriptorSetAllocations;
 };
 
+// Cache hit and cache miss counters for internal caches
+// All internal caches
+enum class InternalCaches
+{
+    RenderPassCache,
+    GraphicsPipelineCache,
+    DescriptorSetLayoutCache,
+    PipelineLayoutCache,
+    SamplerCache,
+    SamplerYcbcrConversionCache,
+    FramBufferCache,
+};
+
+// Cache query result
+enum class CacheQueryResult
+{
+    CacheHit,
+    CacheMiss
+};
+
+// The cache hit ratio can be obtained using -
+// CacheHitRatio = (1.0 * CacheCounts[0]) / (CacheCounts[0] + CacheCounts[1])
+using CacheCounts         = angle::FixedVector<uint64_t, 2>;
+using InternalCacheCounts = angle::HashMap<InternalCaches, CacheCounts>;
+
 // A Vulkan image level index.
 using LevelIndex = gl::LevelIndexWrapper<uint32_t>;
 }  // namespace vk
