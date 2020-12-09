@@ -453,8 +453,6 @@ void MultithreadingTestES3::textureThreadFunction(bool useDraw)
 
     mSecondThreadSyncObj = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
     ASSERT_GL_NO_ERROR();
-    // Force the fence to be created
-    glFlush();
 
     // Draw something
     while (!mExitThread)
@@ -509,8 +507,6 @@ void MultithreadingTestES3::textureThreadFunction(bool useDraw)
         ASSERT_EQ(mSecondThreadSyncObj.load(), nullptr);
         mSecondThreadSyncObj = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
         ASSERT_GL_NO_ERROR();
-        // Force the fence to be created
-        glFlush();
 
         mDrawGreen = !mDrawGreen;
     }
@@ -569,8 +565,6 @@ void MultithreadingTestES3::mainThreadDraw(bool useDraw)
             ASSERT_EQ(mMainThreadSyncObj.load(), nullptr);
             mMainThreadSyncObj = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
             ASSERT_GL_NO_ERROR();
-            // Force the fence to be created
-            glFlush();
 
             ++draws;
         }
