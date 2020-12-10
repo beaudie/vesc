@@ -53,6 +53,8 @@ bool IsLUMAFormat(GLenum format)
 
 LUMAWorkaroundGL GetLUMAWorkaroundInfo(GLenum originalFormat, GLenum destinationFormat)
 {
+    printf("GetLUMAWorkarondInfo originalFormat %d\n", originalFormat);
+    printf("GetLUMAWorkarondInfo destinationFormat %d\n", originalFormat);
     if (IsLUMAFormat(originalFormat))
     {
         return LUMAWorkaroundGL(!IsLUMAFormat(destinationFormat), destinationFormat);
