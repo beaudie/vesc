@@ -268,9 +268,9 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     //                       | Format              | OpenGL texture support                                       | Filter           | OpenGL render support                                                                  | OpenGL ES texture support                                         | Filter                                                 | OpenGL ES texture attachment support                                                                                                      | OpenGL ES renderbuffer support                                                                                    |
     InsertFormatMapping(&map, GL_R11F_G11F_B10F,    VersionOrExts(3, 0, "GL_EXT_packed_float"),                    AlwaysSupported(), VersionOrExts(3, 0, "GL_EXT_packed_float GL_ARB_color_buffer_float"),                    VersionOnly(3, 0),                                                  AlwaysSupported(),                                       ExtsOnly("GL_EXT_color_buffer_float"),                                                                                                      ExtsOnly("GL_EXT_color_buffer_float")                                                                              );
     InsertFormatMapping(&map, GL_RGB9_E5,           VersionOrExts(3, 0, "GL_EXT_texture_shared_exponent"),         AlwaysSupported(), NeverSupported(),                                                                        VersionOnly(3, 0),                                                  AlwaysSupported(),                                       NeverSupported(),                                                                                                                           NeverSupported()                                                                                                   );
-    InsertFormatMapping(&map, GL_R16F,              VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), ExtsOnly("GL_EXT_texture_storage GL_OES_texture_half_float GL_EXT_texture_rg GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float"), ExtsOnly("GL_EXT_texture_rg GL_OES_texture_half_float GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float"));
-    InsertFormatMapping(&map, GL_RG16F,             VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), ExtsOnly("GL_EXT_texture_storage GL_OES_texture_half_float GL_EXT_texture_rg GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float"), ExtsOnly("GL_EXT_texture_rg GL_OES_texture_half_float GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float"));
-    InsertFormatMapping(&map, GL_RGB16F,            VersionOrExts(3, 0, "GL_ARB_texture_float"),                   AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), ExtsOnly("GL_EXT_texture_storage GL_OES_texture_half_float GL_EXT_color_buffer_half_float"),                                                ExtsOnly("GL_OES_texture_half_float GL_EXT_color_buffer_half_float")                                               );
+    InsertFormatMapping(&map, GL_R16F,              VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExts(3, 0, "GL_EXT_texture_storage GL_OES_texture_half_float GL_EXT_texture_rg GL_EXT_color_buffer_half_float GL_EXT_color_buffer_float"), ExtsOnly("GL_EXT_texture_rg GL_OES_texture_half_float GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float"));
+    InsertFormatMapping(&map, GL_RG16F,             VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExts(3, 0, "GL_EXT_texture_storage GL_OES_texture_half_float GL_EXT_texture_rg GL_EXT_color_buffer_half_float GL_EXT_color_buffer_float"), ExtsOnly("GL_EXT_texture_rg GL_OES_texture_half_float GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float"));
+    InsertFormatMapping(&map, GL_RGB16F,            VersionOrExts(3, 0, "GL_ARB_texture_float"),                   AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExts(3, 0, "GL_EXT_texture_storage GL_OES_texture_half_float GL_EXT_color_buffer_half_float"),                                                ExtsOnly("GL_OES_texture_half_float GL_EXT_color_buffer_half_float")                                               );
     InsertFormatMapping(&map, GL_RGBA16F,           VersionOrExts(3, 0, "GL_ARB_texture_float"),                   AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), ExtsOnly("GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float"),                                                                    ExtsOnly("GL_EXT_color_buffer_half_float", "GL_EXT_color_buffer_float")                                            );
     InsertFormatMapping(&map, GL_R32F,              VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float"), AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg"),      ExtsOnly("GL_OES_texture_float_linear"),                 ExtsOnly("GL_EXT_color_buffer_float"),                                                                                                      ExtsOnly("GL_EXT_color_buffer_float")                                                                              );
     InsertFormatMapping(&map, GL_RG32F,             VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float"), AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg"),      ExtsOnly("GL_OES_texture_float_linear"),                 ExtsOnly("GL_EXT_color_buffer_float"),                                                                                                      ExtsOnly("GL_EXT_color_buffer_float")                                                                              );
@@ -451,7 +451,45 @@ const InternalFormat &GetInternalFormatInfo(GLenum internalFormat, StandardGL st
 
 static bool IsLUMAFormat(GLenum format)
 {
-    return (format == GL_LUMINANCE || format == GL_ALPHA || format == GL_LUMINANCE_ALPHA);
+    switch (format)
+    {
+        case GL_LUMINANCE:
+        case GL_LUMINANCE8_EXT:
+        case GL_LUMINANCE16F_EXT:
+        case GL_LUMINANCE32F_EXT:
+        case GL_ALPHA:
+        case GL_ALPHA8_EXT:
+        case GL_ALPHA16F_EXT:
+        case GL_ALPHA32F_EXT:
+        case GL_LUMINANCE_ALPHA:
+        case GL_LUMINANCE8_ALPHA8_EXT:
+        case GL_LUMINANCE_ALPHA16F_EXT:
+        case GL_LUMINANCE_ALPHA32F_EXT:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+static bool IsSizedLUMAFormat(GLenum format)
+{
+    switch (format)
+    {
+        case GL_LUMINANCE8_EXT:
+        case GL_LUMINANCE16F_EXT:
+        case GL_LUMINANCE32F_EXT:
+        case GL_ALPHA8_EXT:
+        case GL_ALPHA16F_EXT:
+        case GL_ALPHA32F_EXT:
+        case GL_LUMINANCE8_ALPHA8_EXT:
+        case GL_LUMINANCE_ALPHA16F_EXT:
+        case GL_LUMINANCE_ALPHA32F_EXT:
+            return true;
+
+        default:
+            return false;
+    }
 }
 
 static GLenum EmulateLUMAFormat(const GLenum format)
@@ -461,10 +499,40 @@ static GLenum EmulateLUMAFormat(const GLenum format)
 
     ASSERT(IsLUMAFormat(format));
 
-    if (format == GL_LUMINANCE || format == GL_ALPHA)
-        return GL_RED;
+    switch (format)
+    {
+        case GL_LUMINANCE:
+        case GL_ALPHA:
+            return GL_RED;
 
-    return GL_RG;
+        case GL_LUMINANCE8_EXT:
+        case GL_ALPHA8_EXT:
+            return GL_R8;
+
+        case GL_LUMINANCE16F_EXT:
+        case GL_ALPHA16F_EXT:
+            return GL_R16F;
+
+        case GL_LUMINANCE32F_EXT:
+        case GL_ALPHA32F_EXT:
+            return GL_R32F;
+
+        case GL_LUMINANCE_ALPHA:
+            return GL_RG;
+
+        case GL_LUMINANCE8_ALPHA8_EXT:
+            return GL_RG8;
+
+        case GL_LUMINANCE_ALPHA16F_EXT:
+            return GL_RG16F;
+
+        case GL_LUMINANCE_ALPHA32F_EXT:
+            return GL_RG32F;
+
+        default:
+            UNREACHABLE();
+            return GL_NONE;
+    }
 }
 
 static const gl::InternalFormat &EmulateLUMA(const gl::InternalFormat &internalFormat)
@@ -537,15 +605,19 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
                 // EXT_color_buffer_float require the sized formats to be renderable.
                 result = internalFormat.sizedInternalFormat;
             }
-            else if ((internalFormat.type == GL_FLOAT &&
-                      !functions->hasGLESExtension("GL_OES_texture_float")) ||
-                     (internalFormat.type == GL_HALF_FLOAT_OES &&
-                      !functions->hasGLESExtension("GL_OES_texture_half_float")))
+            else
             {
-                // The legacy luminance/alpha formats from OES_texture_float are emulated with R/RG
-                // textures.
-                if (IsLUMAFormat(internalFormat.format))
+                if (internalFormat.sized && features.emulateSizedLUMAFormats.enabled)
                 {
+                    result = EmulateLUMA(internalFormat).sizedInternalFormat;
+                }
+                else if ((internalFormat.type == GL_FLOAT &&
+                          !functions->hasGLESExtension("GL_OES_texture_float")) ||
+                         (internalFormat.type == GL_HALF_FLOAT_OES &&
+                          !functions->hasGLESExtension("GL_OES_texture_half_float")))
+                {
+                    // The legacy luminance/alpha formats from OES_texture_float are emulated with
+                    // R/RG textures.
                     result = EmulateLUMA(internalFormat).sizedInternalFormat;
                 }
             }
@@ -647,6 +719,11 @@ static GLenum GetNativeFormat(const FunctionsGL *functions,
             {
                 result = GL_RGBA;
             }
+        }
+
+        if (IsSizedLUMAFormat(format) && features.emulateSizedLUMAFormats.enabled)
+        {
+            result = EmulateLUMAFormat(format);
         }
 
         if ((type == GL_FLOAT && !functions->hasGLESExtension("GL_OES_texture_float")) ||
