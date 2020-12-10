@@ -148,7 +148,8 @@ static bool SizedRGSupport(const Version &clientVersion, const Extensions &exten
 // R16F, RG16F with HALF_FLOAT_OES type
 static bool SizedHalfFloatOESRGSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    return extensions.textureStorage && extensions.textureHalfFloat && extensions.textureRG;
+    return clientVersion >= Version(3, 0) ||
+           (extensions.textureStorage && extensions.textureHalfFloat && extensions.textureRG);
 }
 
 static bool SizedHalfFloatOESRGTextureAttachmentSupport(const Version &clientVersion,
@@ -200,7 +201,8 @@ static bool SizedHalfFloatRGRenderbufferSupport(const Version &clientVersion,
 // RGB16F, RGBA16F with HALF_FLOAT_OES type
 static bool SizedHalfFloatOESSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    return extensions.textureStorage && extensions.textureHalfFloat;
+    return clientVersion >= Version(3, 0) ||
+           (extensions.textureStorage && extensions.textureHalfFloat);
 }
 
 static bool SizedHalfFloatOESTextureAttachmentSupport(const Version &clientVersion,
@@ -1233,6 +1235,7 @@ uint32_t GetPackedTypeInfo(GLenum type)
 
 const InternalFormat &GetSizedInternalFormatInfo(GLenum internalFormat)
 {
+    printf("GetSizedInternalFormatInfo internalFormat: %d\n", internalFormat);
     static const InternalFormat defaultInternalFormat;
     const InternalFormatInfoMap &formatMap = GetInternalFormatMap();
     auto iter                              = formatMap.find(internalFormat);
@@ -1248,7 +1251,7 @@ const InternalFormat &GetSizedInternalFormatInfo(GLenum internalFormat)
     {
         return defaultInternalFormat;
     }
-
+    printf("internalFormatInfo: %d\n", internalFormatInfo.format);
     return internalFormatInfo;
 }
 
