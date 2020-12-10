@@ -2198,8 +2198,8 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 
 angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 {
+    WARN() << " enter";
     RendererVk *renderer = contextVk->getRenderer();
-
     // Requires that the image:
     //
     // - is not sRGB
@@ -2302,6 +2302,7 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    WARN() << "generateMipmapsWithCPU";
 
     gl::LevelIndex baseLevelGL(mState.getEffectiveBaseLevel());
     vk::LevelIndex baseLevelVk         = mImage->toVkLevel(baseLevelGL);

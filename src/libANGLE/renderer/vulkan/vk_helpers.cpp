@@ -1651,6 +1651,13 @@ void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &feature
 
     PrimaryCommandBuffer &primary = commandsState->primaryCommands;
 
+    std::ostringstream out;
+    for (PipelineStage pipelineStage : mask)
+    {
+        mPipelineBarriers[pipelineStage].addDiagnosticsString(out);
+    }
+    WARN() << "Barriers:" << out.str().c_str();
+
     if (features.preferAggregateBarrierCalls.enabled)
     {
         PipelineStagesMask::Iterator iter = mask.begin();
@@ -4775,10 +4782,14 @@ PipelineStage GetPipelineStage(gl::ShaderType stage)
 // PipelineBarrier implementation.
 void PipelineBarrier::addDiagnosticsString(std::ostringstream &out) const
 {
-    if (mMemoryBarrierSrcAccess != 0 || mMemoryBarrierDstAccess != 0)
+    out << " memory[" << std::hex << mSrcStageMask << ":" << std::hex << mDstStageMask << "]";
+    for (const VkImageMemoryBarrier &imageBarrier : mImageMemoryBarriers)
     {
-        out << "Src: 0x" << std::hex << mMemoryBarrierSrcAccess << " &rarr; Dst: 0x" << std::hex
-            << mMemoryBarrierDstAccess << std::endl;
+        out << " image:" << std::hex << imageBarrier.image;
+        out << "(" << std::hex << imageBarrier.srcAccessMask << ", " << imageBarrier.oldLayout
+            << ")" << ":";
+        out << "(" << std::hex << imageBarrier.dstAccessMask << "," << imageBarrier.newLayout
+            << ")";
     }
 }
 
@@ -7178,6 +7189,8 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
                                                    LevelIndex baseLevel,
                                                    LevelIndex maxLevel)
 {
+    WARN() << " image:" << std::hex << mImage.getHandle();
+
     CommandBufferAccess access;
     gl::LevelIndex baseLevelGL = toGLLevel(baseLevel);
     access.onImageTransferWrite(baseLevelGL + 1, maxLevel.get(), 0, mLayerCount,
