@@ -1206,6 +1206,7 @@ void GenerateCaps(const FunctionsGL *functions,
          functions->hasGLESExtension("GL_EXT_draw_buffers_indexed"));
     extensions->drawBuffersIndexedOES = extensions->drawBuffersIndexedEXT;
     extensions->textureStorage        = functions->standard == STANDARD_GL_DESKTOP ||
+                                 functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                  functions->hasGLESExtension("GL_EXT_texture_storage");
     extensions->textureFilterAnisotropic =
         functions->hasGLExtension("GL_EXT_texture_filter_anisotropic") ||
