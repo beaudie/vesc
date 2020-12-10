@@ -53,12 +53,17 @@ bool IsLUMAFormat(GLenum format)
 
 LUMAWorkaroundGL GetLUMAWorkaroundInfo(GLenum originalFormat, GLenum destinationFormat)
 {
+    printf("GetLUMAWorkarondInfo originalFormat %d\n", originalFormat);
+    printf("GetLUMAWorkarondInfo destinationFormat %d\n", originalFormat);
     if (IsLUMAFormat(originalFormat))
     {
+        printf("if IsLumaFormat %d\n", originalFormat);
+        printf("IsLUMAFormat(dest) %d\n", destinationFormat);
         return LUMAWorkaroundGL(!IsLUMAFormat(destinationFormat), destinationFormat);
     }
     else
     {
+        printf("else\n");
         return LUMAWorkaroundGL(false, GL_NONE);
     }
 }
@@ -78,8 +83,10 @@ LevelInfoGL GetLevelInfo(const angle::FeaturesGL &features,
                          GLenum originalInternalFormat,
                          GLenum destinationInternalFormat)
 {
+    printf("GetLevelInfo %d %d\n", originalInternalFormat, destinationInternalFormat);
     GLenum originalFormat    = gl::GetUnsizedFormat(originalInternalFormat);
     GLenum destinationFormat = gl::GetUnsizedFormat(destinationInternalFormat);
+    printf("GLI %d %d\n", originalFormat, destinationFormat);
     return LevelInfoGL(originalFormat, destinationInternalFormat,
                        GetDepthStencilWorkaround(originalFormat),
                        GetLUMAWorkaroundInfo(originalFormat, destinationFormat),
@@ -327,6 +334,9 @@ angle::Result TextureGL::setSubImage(const gl::Context *context,
     gl::TextureTarget target = index.getTarget();
     size_t level             = static_cast<size_t>(index.getLevelIndex());
 
+    printf("setSubImage getLevelInfo %d\n", getLevelInfo(target, level).lumaWorkaround.enabled);
+    printf("setSubImage GetLevelInfo %d\n",
+           GetLevelInfo(features, format, texSubImageFormat.format).lumaWorkaround.enabled);
     ASSERT(getLevelInfo(target, level).lumaWorkaround.enabled ==
            GetLevelInfo(features, format, texSubImageFormat.format).lumaWorkaround.enabled);
 
@@ -993,6 +1003,11 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
     StateManagerGL *stateManager      = GetStateManagerGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
+    GLenum storageInternalFormat = internalFormat;
+    if (nativegl::IsSizedLUMAFormat(internalFormat) && features.emulateSizedLUMAFormats.enabled)
+    {
+        storageInternalFormat = nativegl::EmulateLUMAFormat(internalFormat);
+    }
     nativegl::TexStorageFormat texStorageFormat =
         nativegl::GetTexStorageFormat(functions, features, internalFormat);
 
@@ -1154,8 +1169,12 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
         }
     }
 
+    nativegl::TexStorageFormat levelInfoTexStorageFormat =
+        nativegl::GetTexStorageFormat(functions, features, internalFormat);
+    printf("Calling setLevelInfo from setStorage with %d %d\n", internalFormat,
+           levelInfoTexStorageFormat.internalFormat);
     setLevelInfo(context, type, 0, levels,
-                 GetLevelInfo(features, internalFormat, texStorageFormat.internalFormat));
+                 GetLevelInfo(features, internalFormat, levelInfoTexStorageFormat.internalFormat));
 
     return angle::Result::Continue;
 }
@@ -1191,6 +1210,10 @@ angle::Result TextureGL::setStorageMultisample(const gl::Context *context,
     StateManagerGL *stateManager      = GetStateManagerGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
+    if (nativegl::IsSizedLUMAFormat(internalformat) && features.emulateSizedLUMAFormats.enabled)
+    {
+        internalformat = nativegl::EmulateLUMAFormat(internalformat);
+    }
     nativegl::TexStorageFormat texStorageFormat =
         nativegl::GetTexStorageFormat(functions, features, internalformat);
 
@@ -1252,6 +1275,10 @@ angle::Result TextureGL::setStorageExternalMemory(const gl::Context *context,
 
     MemoryObjectGL *memoryObjectGL = GetImplAs<MemoryObjectGL>(memoryObject);
 
+    if (nativegl::IsSizedLUMAFormat(internalFormat) && features.emulateSizedLUMAFormats.enabled)
+    {
+        internalFormat = nativegl::EmulateLUMAFormat(internalFormat);
+    }
     nativegl::TexStorageFormat texStorageFormat =
         nativegl::GetTexStorageFormat(functions, features, internalFormat);
 
@@ -1884,6 +1911,7 @@ void TextureGL::setLevelInfo(const gl::Context *context,
                              size_t levelCount,
                              const LevelInfoGL &levelInfo)
 {
+    printf("setLevelInfo workaround enabled: %d\n", levelInfo.lumaWorkaround.enabled);
     ASSERT(levelCount > 0);
 
     bool updateWorkarounds = levelInfo.depthStencilWorkaround || levelInfo.lumaWorkaround.enabled ||
