@@ -1411,6 +1411,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
     VkResult result = renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo);
+    WARN() << "queuePresent" << std::endl;
 
     ANGLE_TRY(computePresentOutOfDate(contextVk, result, presentOutOfDate));
 

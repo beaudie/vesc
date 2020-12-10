@@ -4199,6 +4199,7 @@ bool ContextVk::hasRecordedCommands()
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
+    WARN() << "flushImpl enter" << std::endl;
 
     // We must set this to zero before calling flushCommandsAndEndRenderPass to prevent it from
     // calling back to flushImpl.
@@ -4600,6 +4601,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
         return angle::Result::Continue;
     }
 
+    WARN() << "flushCommandsAndEndRenderPass enter" << std::endl;
     mCurrentTransformFeedbackBuffers.clear();
     mCurrentIndirectBuffer = nullptr;
 
