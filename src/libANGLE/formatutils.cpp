@@ -148,7 +148,8 @@ static bool SizedRGSupport(const Version &clientVersion, const Extensions &exten
 // R16F, RG16F with HALF_FLOAT_OES type
 static bool SizedHalfFloatOESRGSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    return extensions.textureStorage && extensions.textureHalfFloat && extensions.textureRG;
+    return clientVersion >= Version(3, 0) ||
+           (extensions.textureStorage && extensions.textureHalfFloat && extensions.textureRG);
 }
 
 static bool SizedHalfFloatOESRGTextureAttachmentSupport(const Version &clientVersion,
@@ -200,7 +201,8 @@ static bool SizedHalfFloatRGRenderbufferSupport(const Version &clientVersion,
 // RGB16F, RGBA16F with HALF_FLOAT_OES type
 static bool SizedHalfFloatOESSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    return extensions.textureStorage && extensions.textureHalfFloat;
+    return clientVersion >= Version(3, 0) ||
+           (extensions.textureStorage && extensions.textureHalfFloat);
 }
 
 static bool SizedHalfFloatOESTextureAttachmentSupport(const Version &clientVersion,
@@ -1248,7 +1250,6 @@ const InternalFormat &GetSizedInternalFormatInfo(GLenum internalFormat)
     {
         return defaultInternalFormat;
     }
-
     return internalFormatInfo;
 }
 
