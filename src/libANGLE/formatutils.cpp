@@ -148,7 +148,8 @@ static bool SizedRGSupport(const Version &clientVersion, const Extensions &exten
 // R16F, RG16F with HALF_FLOAT_OES type
 static bool SizedHalfFloatOESRGSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    return extensions.textureStorage && extensions.textureHalfFloat && extensions.textureRG;
+    return clientVersion >= Version(3, 0) ||
+           (extensions.textureStorage && extensions.textureHalfFloat && extensions.textureRG);
 }
 
 static bool SizedHalfFloatOESRGTextureAttachmentSupport(const Version &clientVersion,
@@ -200,7 +201,8 @@ static bool SizedHalfFloatRGRenderbufferSupport(const Version &clientVersion,
 // RGB16F, RGBA16F with HALF_FLOAT_OES type
 static bool SizedHalfFloatOESSupport(const Version &clientVersion, const Extensions &extensions)
 {
-    return extensions.textureStorage && extensions.textureHalfFloat;
+    return clientVersion >= Version(3, 0) ||
+           (extensions.textureStorage && extensions.textureHalfFloat);
 }
 
 static bool SizedHalfFloatOESTextureAttachmentSupport(const Version &clientVersion,
@@ -854,15 +856,15 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
 
     // Luminance alpha formats
     //                | Internal format           |sized| L | A | Format            | Type             | Component type        | Texture supported                                                           | Filterable                                     | Texture attachment | Renderbuffer | Blend
-    AddLUMAFormat(&map, GL_ALPHA8_EXT,             true,  0,  8, GL_ALPHA,           GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireExt<&Extensions::textureStorage>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_LUMINANCE8_EXT,         true,  8,  0, GL_LUMINANCE,       GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireExt<&Extensions::textureStorage>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_LUMINANCE8_ALPHA8_EXT,  true,  8,  8, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireExt<&Extensions::textureStorage>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_ALPHA16F_EXT,           true,  0, 16, GL_ALPHA,           GL_HALF_FLOAT_OES, GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorage, &Extensions::textureHalfFloat>, RequireExt<&Extensions::textureHalfFloatLinear>, NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_LUMINANCE16F_EXT,       true, 16,  0, GL_LUMINANCE,       GL_HALF_FLOAT_OES, GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorage, &Extensions::textureHalfFloat>, RequireExt<&Extensions::textureHalfFloatLinear>, NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_LUMINANCE_ALPHA16F_EXT, true, 16, 16, GL_LUMINANCE_ALPHA, GL_HALF_FLOAT_OES, GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorage, &Extensions::textureHalfFloat>, RequireExt<&Extensions::textureHalfFloatLinear>, NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_ALPHA32F_EXT,           true,  0, 32, GL_ALPHA,           GL_FLOAT,          GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorage, &Extensions::textureFloatOES>,  RequireExt<&Extensions::textureFloatLinearOES>,  NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_LUMINANCE32F_EXT,       true, 32,  0, GL_LUMINANCE,       GL_FLOAT,          GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorage, &Extensions::textureFloatOES>,  RequireExt<&Extensions::textureFloatLinearOES>,  NeverSupported,      NeverSupported, NeverSupported);
-    AddLUMAFormat(&map, GL_LUMINANCE_ALPHA32F_EXT, true, 32, 32, GL_LUMINANCE_ALPHA, GL_FLOAT,          GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorage, &Extensions::textureFloatOES>,  RequireExt<&Extensions::textureFloatLinearOES>,  NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_ALPHA8_EXT,             true,  0,  8, GL_ALPHA,           GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireESOrExt<3, 0, &Extensions::textureStorage>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_LUMINANCE8_EXT,         true,  8,  0, GL_LUMINANCE,       GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireESOrExt<3, 0, &Extensions::textureStorage>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_LUMINANCE8_ALPHA8_EXT,  true,  8,  8, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireESOrExt<3, 0, &Extensions::textureStorage>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_ALPHA16F_EXT,           true,  0, 16, GL_ALPHA,           GL_HALF_FLOAT_OES, GL_FLOAT,               RequireESOrExtAndExt<3, 0, &Extensions::textureStorage, &Extensions::textureHalfFloat>, RequireExt<&Extensions::textureHalfFloatLinear>, NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_LUMINANCE16F_EXT,       true, 16,  0, GL_LUMINANCE,       GL_HALF_FLOAT_OES, GL_FLOAT,               RequireESOrExtAndExt<3, 0, &Extensions::textureStorage, &Extensions::textureHalfFloat>, RequireExt<&Extensions::textureHalfFloatLinear>, NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_LUMINANCE_ALPHA16F_EXT, true, 16, 16, GL_LUMINANCE_ALPHA, GL_HALF_FLOAT_OES, GL_FLOAT,               RequireESOrExtAndExt<3, 0, &Extensions::textureStorage, &Extensions::textureHalfFloat>, RequireExt<&Extensions::textureHalfFloatLinear>, NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_ALPHA32F_EXT,           true,  0, 32, GL_ALPHA,           GL_FLOAT,          GL_FLOAT,               RequireESOrExtAndExt<3, 0, &Extensions::textureStorage, &Extensions::textureFloatOES>,  RequireExt<&Extensions::textureFloatLinearOES>,  NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_LUMINANCE32F_EXT,       true, 32,  0, GL_LUMINANCE,       GL_FLOAT,          GL_FLOAT,               RequireESOrExtAndExt<3, 0, &Extensions::textureStorage, &Extensions::textureFloatOES>,  RequireExt<&Extensions::textureFloatLinearOES>,  NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_LUMINANCE_ALPHA32F_EXT, true, 32, 32, GL_LUMINANCE_ALPHA, GL_FLOAT,          GL_FLOAT,               RequireESOrExtAndExt<3, 0, &Extensions::textureStorage, &Extensions::textureFloatOES>,  RequireExt<&Extensions::textureFloatLinearOES>,  NeverSupported,      NeverSupported, NeverSupported);
 
     // Compressed formats, From ES 3.0.1 spec, table 3.16
     //                       | Internal format                             |W |H |D | BS |CC| SRGB | Texture supported                                                                                                         | Filterable     | Texture attachment | Renderbuffer  | Blend
