@@ -1459,6 +1459,7 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
+    WARN() << " enter";
     // Skip the flush if there's nothing recorded.
     //
     // Don't skip flushes for single-buffered windows with staged updates. It is expected that a
@@ -1471,6 +1472,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
     if (!mHasAnyCommandsPendingSubmission && !hasActiveRenderPass() &&
         mOutsideRenderPassCommands->empty() && !isSingleBufferedWindowWithStagedUpdates)
     {
+        WARN() << " exit";
         return angle::Result::Continue;
     }
 
@@ -1488,6 +1490,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
         !frontBufferRenderingEnabled)
     {
         mHasDeferredFlush = true;
+        WARN() << " exit";
         return angle::Result::Continue;
     }
 
@@ -1497,7 +1500,9 @@ angle::Result ContextVk::flush(const gl::Context *context)
         return mCurrentWindowSurface->onSharedPresentContextFlush(context);
     }
 
-    return flushImpl(nullptr, nullptr, RenderPassClosureReason::GLFlush);
+    ANGLE_TRY(flushImpl(nullptr, nullptr, RenderPassClosureReason::GLFlush));
+    WARN() << " exit";
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
@@ -7819,6 +7824,7 @@ uint32_t ContextVk::getCurrentViewCount() const
 
 angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassClosureReason reason)
 {
+    WARN() << "enter";
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
     ASSERT(mOutsideRenderPassCommands->empty());
@@ -7826,6 +7832,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     if (!mRenderPassCommands->started())
     {
         onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
+        WARN() << "exit" << std::endl;
         return angle::Result::Continue;
     }
 
@@ -7887,6 +7894,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
                                 TRACE_EVENT_PHASE_END, eventName));
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
+    WARN() << "exit" << std::endl;
 
     mHasAnyCommandsPendingSubmission = true;
     return angle::Result::Continue;
