@@ -1153,7 +1153,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             //  this hack to 'restore' the finished render pass.
             contextVk->restoreFinishedRenderPass(srcVkFramebuffer);
 
-            if ((mState.getEnabledDrawBuffers().count() == 1) &&
+            if (mState.getEnabledDrawBuffers().count() == 1 &&
+                mRenderTargetCache.getColors()[mState.getEnabledDrawBuffers().first()]
+                        ->getLayerCount() == 1 &&
                 contextVk->hasStartedRenderPassWithFramebuffer(srcVkFramebuffer))
             {
                 // glBlitFramebuffer() needs to copy the read color attachment to all enabled
@@ -1865,6 +1867,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // Gather VkImageViews over all FBO attachments, also size of attached region.
     std::vector<VkImageView> attachments;
     gl::Extents attachmentsSize;
+    uint32_t layerCount = std::numeric_limits<uint32_t>::max();
 
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
@@ -1880,6 +1883,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
         ASSERT(attachmentsSize.empty() || attachmentsSize == colorRenderTarget->getExtents());
         attachmentsSize = colorRenderTarget->getExtents();
+
+        layerCount = std::min(layerCount, colorRenderTarget->getLayerCount());
     }
 
     // Depth/stencil attachment.
@@ -1894,6 +1899,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         ASSERT(attachmentsSize.empty() ||
                attachmentsSize == depthStencilRenderTarget->getExtents());
         attachmentsSize = depthStencilRenderTarget->getExtents();
+
+        layerCount = std::min(layerCount, depthStencilRenderTarget->getLayerCount());
     }
 
     // Color resolve attachments.
@@ -1921,6 +1928,9 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
                 attachments.push_back(resolveImageView->getHandle());
 
                 ASSERT(!attachmentsSize.empty());
+
+                // Multisampled render to texture render targets cannot be layered.
+                ASSERT(layerCount == 1);
             }
         }
     }
@@ -1934,6 +1944,9 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         attachments.push_back(imageView->getHandle());
 
         ASSERT(!attachmentsSize.empty());
+
+        // Multisampled render to texture render targets cannot be layered.
+        ASSERT(layerCount == 1);
     }
 
     if (attachmentsSize.empty())
@@ -1942,6 +1955,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         attachmentsSize.height = mState.getDefaultHeight();
         attachmentsSize.width  = mState.getDefaultWidth();
         attachmentsSize.depth  = 0;
+        layerCount             = 1;
     }
     VkFramebufferCreateInfo framebufferInfo = {};
 
@@ -1952,7 +1966,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     framebufferInfo.pAttachments    = attachments.data();
     framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
     framebufferInfo.height          = static_cast<uint32_t>(attachmentsSize.height);
-    framebufferInfo.layers          = 1;
+    framebufferInfo.layers          = layerCount;
 
     vk::FramebufferHelper newFramebuffer;
     ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
@@ -2041,6 +2055,13 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
         {
             params.colorMaskFlags &= ~VK_COLOR_COMPONENT_A_BIT;
         }
+
+        // TODO: implement clear of layered framebuffers.  UtilsVk::clearFramebuffer should add a
+        // geometry shader that is instanced layerCount times (or loops layerCount times), each time
+        // selecting a different layer.  This should also take into account mismatching layer counts
+        // between the color and depth/stencil attachments.
+        // http://anglebug.com/5453
+        ASSERT(colorRenderTarget->getLayerCount() == 1);
 
         ANGLE_TRY(contextVk->getUtils().clearFramebuffer(contextVk, this, params));
 
@@ -2147,6 +2168,8 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     contextVk->getStartedRenderPassCommands().growRenderArea(contextVk, scissoredRenderArea);
 
     gl::AttachmentVector<VkClearAttachment> attachments;
+    gl::AttachmentVector<uint32_t> attachmentLayerCounts;
+    bool anyAttachmentIsLayered = false;
 
     // Go through deferred clears and add them to the list of attachments to clear.
     for (size_t colorIndexGL : mDeferredClears.getColorMask())
@@ -2157,6 +2180,11 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
         attachments.emplace_back(VkClearAttachment{VK_IMAGE_ASPECT_COLOR_BIT,
                                                    static_cast<uint32_t>(colorIndexGL),
                                                    mDeferredClears[colorIndexGL]});
+        attachmentLayerCounts.push_back(getColorDrawRenderTarget(colorIndexGL)->getLayerCount());
+        if (attachmentLayerCounts.back() > 1)
+        {
+            anyAttachmentIsLayered = true;
+        }
         mDeferredClears.reset(colorIndexGL);
     }
 
@@ -2184,6 +2212,11 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     if (dsAspectFlags != 0)
     {
         attachments.emplace_back(VkClearAttachment{dsAspectFlags, 0, dsClearValue});
+        attachmentLayerCounts.push_back(getDepthStencilRenderTarget()->getLayerCount());
+        if (attachmentLayerCounts.back() > 1)
+        {
+            anyAttachmentIsLayered = true;
+        }
         // Because we may have changed the depth stencil access mode, update read only depth mode
         // now.
         updateRenderPassReadOnlyDepthMode(contextVk, renderpassCommands);
@@ -2194,8 +2227,21 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     rect.rect.extent.height                    = scissoredRenderArea.height;
     rect.layerCount                            = 1;
     vk::CommandBuffer *renderPassCommandBuffer = &renderpassCommands->getCommandBuffer();
-    renderPassCommandBuffer->clearAttachments(static_cast<uint32_t>(attachments.size()),
-                                              attachments.data(), 1, &rect);
+
+    if (!anyAttachmentIsLayered)
+    {
+        renderPassCommandBuffer->clearAttachments(static_cast<uint32_t>(attachments.size()),
+                                                  attachments.data(), 1, &rect);
+    }
+    else
+    {
+        // For layered attachments, clear them one by one.  They may have a different layer count.
+        for (size_t attachmentIndex = 0; attachmentIndex < attachments.size(); ++attachmentIndex)
+        {
+            rect.layerCount = attachmentLayerCounts[attachmentIndex];
+            renderPassCommandBuffer->clearAttachments(1, &attachments[attachmentIndex], 1, &rect);
+        }
+    }
     return angle::Result::Continue;
 }
 
