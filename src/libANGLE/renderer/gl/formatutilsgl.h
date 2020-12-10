@@ -75,13 +75,19 @@ TexImageFormat GetTexImageFormat(const FunctionsGL *functions,
 
 struct TexSubImageFormat
 {
-    GLenum format = GL_NONE;
-    GLenum type   = GL_NONE;
+    GLenum format         = GL_NONE;
+    GLenum type           = GL_NONE;
+    GLenum originalFormat = GL_NONE;
 };
 TexSubImageFormat GetTexSubImageFormat(const FunctionsGL *functions,
                                        const angle::FeaturesGL &features,
                                        GLenum format,
                                        GLenum type);
+TexSubImageFormat GetTexSubImageFormat(const FunctionsGL *functions,
+                                       const angle::FeaturesGL &features,
+                                       GLenum format,
+                                       GLenum type,
+                                       bool emulateLUMAFormat);
 
 struct CompressedTexImageFormat
 {
@@ -111,6 +117,7 @@ CopyTexImageImageFormat GetCopyTexImageImageFormat(const FunctionsGL *functions,
 struct TexStorageFormat
 {
     GLenum internalFormat = GL_NONE;
+    GLenum format         = GL_NONE;
 };
 TexStorageFormat GetTexStorageFormat(const FunctionsGL *functions,
                                      const angle::FeaturesGL &features,
@@ -134,6 +141,7 @@ ReadPixelsFormat GetReadPixelsFormat(const FunctionsGL *functions,
                                      GLenum readAttachmentFormat,
                                      GLenum format,
                                      GLenum type);
+
 }  // namespace nativegl
 
 }  // namespace rx
