@@ -53,12 +53,17 @@ bool IsLUMAFormat(GLenum format)
 
 LUMAWorkaroundGL GetLUMAWorkaroundInfo(GLenum originalFormat, GLenum destinationFormat)
 {
+    printf("GetLUMAWorkarondInfo originalFormat %d\n", originalFormat);
+    printf("GetLUMAWorkarondInfo destinationFormat %d\n", destinationFormat);
     if (IsLUMAFormat(originalFormat))
     {
+        printf("if IsLumaFormat %d\n", originalFormat);
+        printf("IsLUMAFormat(dest) %d\n", destinationFormat);
         return LUMAWorkaroundGL(!IsLUMAFormat(destinationFormat), destinationFormat);
     }
     else
     {
+        printf("else\n");
         return LUMAWorkaroundGL(false, GL_NONE);
     }
 }
@@ -78,8 +83,10 @@ LevelInfoGL GetLevelInfo(const angle::FeaturesGL &features,
                          GLenum originalInternalFormat,
                          GLenum destinationInternalFormat)
 {
+    printf("GetLevelInfo %d %d\n", originalInternalFormat, destinationInternalFormat);
     GLenum originalFormat    = gl::GetUnsizedFormat(originalInternalFormat);
     GLenum destinationFormat = gl::GetUnsizedFormat(destinationInternalFormat);
+    printf("GLI %d %d\n", originalFormat, destinationFormat);
     return LevelInfoGL(originalFormat, destinationInternalFormat,
                        GetDepthStencilWorkaround(originalFormat),
                        GetLUMAWorkaroundInfo(originalFormat, destinationFormat),
@@ -236,7 +243,8 @@ angle::Result TextureGL::setImageHelper(const gl::Context *context,
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     nativegl::TexImageFormat texImageFormat =
-        nativegl::GetTexImageFormat(functions, features, internalFormat, format, type);
+        nativegl::GetTexImageFormat(functions, features, internalFormat, format, type,
+                                    getLevelInfo(target, level).lumaWorkaround.enabled);
 
     stateManager->bindTexture(getType(), mTextureID);
 
@@ -273,7 +281,7 @@ angle::Result TextureGL::setImageHelper(const gl::Context *context,
     {
         // Only fill level zero if it's possible that mipmaps can be generated with this format
         const gl::InternalFormat &internalFormatInfo =
-            gl::GetInternalFormatInfo(internalFormat, type);
+            gl::GetInternalFormatInfo(texImageFormat.originalFormat, type);
         if (!internalFormatInfo.sized ||
             (internalFormatInfo.filterSupport(context->getClientVersion(),
                                               context->getExtensions()) &&
@@ -321,12 +329,17 @@ angle::Result TextureGL::setSubImage(const gl::Context *context,
     StateManagerGL *stateManager      = GetStateManagerGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
-    nativegl::TexSubImageFormat texSubImageFormat =
-        nativegl::GetTexSubImageFormat(functions, features, format, type);
-
     gl::TextureTarget target = index.getTarget();
     size_t level             = static_cast<size_t>(index.getLevelIndex());
 
+    nativegl::TexSubImageFormat texSubImageFormat = nativegl::GetTexSubImageFormat(
+        functions, features, format, type, getLevelInfo(target, level).lumaWorkaround.enabled);
+
+    printf("setSubImage %d %d %d\n", format, texSubImageFormat.format,
+           texSubImageFormat.originalFormat);
+    printf("setSubImage getLevelInfo %d\n", getLevelInfo(target, level).lumaWorkaround.enabled);
+    printf("setSubImage GetLevelInfo %d\n",
+           GetLevelInfo(features, format, texSubImageFormat.format).lumaWorkaround.enabled);
     ASSERT(getLevelInfo(target, level).lumaWorkaround.enabled ==
            GetLevelInfo(features, format, texSubImageFormat.format).lumaWorkaround.enabled);
 
@@ -334,7 +347,8 @@ angle::Result TextureGL::setSubImage(const gl::Context *context,
     if (features.unpackOverlappingRowsSeparatelyUnpackBuffer.enabled && unpackBuffer &&
         unpack.rowLength != 0 && unpack.rowLength < area.width)
     {
-        return setSubImageRowByRowWorkaround(context, target, level, area, format, type, unpack,
+        return setSubImageRowByRowWorkaround(context, target, level, area,
+                                             texSubImageFormat.originalFormat, type, unpack,
                                              unpackBuffer, pixels);
     }
 
@@ -344,20 +358,23 @@ angle::Result TextureGL::setSubImage(const gl::Context *context,
 
         bool apply = false;
         ANGLE_TRY(ShouldApplyLastRowPaddingWorkaround(
-            GetImplAs<ContextGL>(context), size, unpack, unpackBuffer, format, type,
-            nativegl::UseTexImage3D(getType()), pixels, &apply));
+            GetImplAs<ContextGL>(context), size, unpack, unpackBuffer,
+            texSubImageFormat.originalFormat, type, nativegl::UseTexImage3D(getType()), pixels,
+            &apply));
 
         // The driver will think the pixel buffer doesn't have enough data, work around this bug
         // by uploading the last row (and last level if 3D) separately.
         if (apply)
         {
-            return setSubImagePaddingWorkaround(context, target, level, area, format, type, unpack,
+            return setSubImagePaddingWorkaround(context, target, level, area,
+                                                texSubImageFormat.originalFormat, type, unpack,
                                                 unpackBuffer, pixels);
         }
     }
 
     if (nativegl::UseTexImage2D(getType()))
     {
+        printf("texSubImageFormat.format %d\n", texSubImageFormat.format);
         ASSERT(area.z == 0 && area.depth == 1);
         ANGLE_GL_TRY(context,
                      functions->texSubImage2D(nativegl::GetTextureBindingTarget(target),
@@ -996,6 +1013,8 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
     nativegl::TexStorageFormat texStorageFormat =
         nativegl::GetTexStorageFormat(functions, features, internalFormat);
 
+    printf("setStorage %d %d %d\n", internalFormat, texStorageFormat.format,
+           texStorageFormat.internalFormat);
     stateManager->bindTexture(getType(), mTextureID);
     if (nativegl::UseTexImage2D(getType()))
     {
@@ -1013,7 +1032,7 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
             stateManager->bindBuffer(gl::BufferBinding::PixelUnpack, 0);
 
             const gl::InternalFormat &internalFormatInfo =
-                gl::GetSizedInternalFormatInfo(internalFormat);
+                gl::GetSizedInternalFormatInfo(texStorageFormat.format);
 
             // Internal format must be sized
             ASSERT(internalFormatInfo.sized);
@@ -1029,7 +1048,7 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
                     {
                         nativegl::CompressedTexSubImageFormat compressedTexImageFormat =
                             nativegl::GetCompressedSubTexImageFormat(functions, features,
-                                                                     internalFormat);
+                                                                     texStorageFormat.format);
 
                         GLuint dataSize = 0;
                         ANGLE_CHECK_GL_MATH(
@@ -1045,7 +1064,7 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
                     else
                     {
                         nativegl::TexImageFormat texImageFormat = nativegl::GetTexImageFormat(
-                            functions, features, internalFormat, internalFormatInfo.format,
+                            functions, features, texStorageFormat.format, internalFormatInfo.format,
                             internalFormatInfo.type);
 
                         ANGLE_GL_TRY_ALWAYS_CHECK(
@@ -1065,7 +1084,7 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
                         {
                             nativegl::CompressedTexSubImageFormat compressedTexImageFormat =
                                 nativegl::GetCompressedSubTexImageFormat(functions, features,
-                                                                         internalFormat);
+                                                                         texStorageFormat.format);
 
                             GLuint dataSize = 0;
                             ANGLE_CHECK_GL_MATH(contextGL,
@@ -1081,8 +1100,8 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
                         else
                         {
                             nativegl::TexImageFormat texImageFormat = nativegl::GetTexImageFormat(
-                                functions, features, internalFormat, internalFormatInfo.format,
-                                internalFormatInfo.type);
+                                functions, features, texStorageFormat.format,
+                                internalFormatInfo.format, internalFormatInfo.type);
 
                             ANGLE_GL_TRY_ALWAYS_CHECK(
                                 context, functions->texImage2D(
@@ -1112,7 +1131,7 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
             stateManager->bindBuffer(gl::BufferBinding::PixelUnpack, 0);
 
             const gl::InternalFormat &internalFormatInfo =
-                gl::GetSizedInternalFormatInfo(internalFormat);
+                gl::GetSizedInternalFormatInfo(texStorageFormat.format);
 
             // Internal format must be sized
             ASSERT(internalFormatInfo.sized);
@@ -1127,7 +1146,7 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
                 {
                     nativegl::CompressedTexSubImageFormat compressedTexImageFormat =
                         nativegl::GetCompressedSubTexImageFormat(functions, features,
-                                                                 internalFormat);
+                                                                 texStorageFormat.format);
 
                     GLuint dataSize = 0;
                     ANGLE_CHECK_GL_MATH(contextGL, internalFormatInfo.computeCompressedImageSize(
@@ -1141,7 +1160,7 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
                 else
                 {
                     nativegl::TexImageFormat texImageFormat = nativegl::GetTexImageFormat(
-                        functions, features, internalFormat, internalFormatInfo.format,
+                        functions, features, texStorageFormat.format, internalFormatInfo.format,
                         internalFormatInfo.type);
 
                     ANGLE_GL_TRY_ALWAYS_CHECK(
@@ -1154,6 +1173,8 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
         }
     }
 
+    printf("Calling setLevelInfo from setStorage with %d %d %d\n", internalFormat,
+           texStorageFormat.format, texStorageFormat.internalFormat);
     setLevelInfo(context, type, 0, levels,
                  GetLevelInfo(features, internalFormat, texStorageFormat.internalFormat));
 
@@ -1884,6 +1905,7 @@ void TextureGL::setLevelInfo(const gl::Context *context,
                              size_t levelCount,
                              const LevelInfoGL &levelInfo)
 {
+    printf("setLevelInfo workaround enabled: %d\n", levelInfo.lumaWorkaround.enabled);
     ASSERT(levelCount > 0);
 
     bool updateWorkarounds = levelInfo.depthStencilWorkaround || levelInfo.lumaWorkaround.enabled ||
@@ -2022,7 +2044,7 @@ angle::Result TextureGL::initializeContents(const gl::Context *context,
     else
     {
         nativegl::TexSubImageFormat nativeSubImageFormat = nativegl::GetTexSubImageFormat(
-            functions, features, internalFormatInfo.format, internalFormatInfo.type);
+            functions, features, internalFormatInfo.format, internalFormatInfo.type, false);
 
         GLuint imageSize = 0;
         ANGLE_CHECK_GL_MATH(contextGL, internalFormatInfo.computePackUnpackEndByte(
