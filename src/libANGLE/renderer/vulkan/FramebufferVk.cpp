@@ -1153,7 +1153,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             //  this hack to 'restore' the finished render pass.
             contextVk->restoreFinishedRenderPass(srcVkFramebuffer);
 
-            if ((mState.getEnabledDrawBuffers().count() == 1) &&
+            if (mState.getEnabledDrawBuffers().count() == 1 &&
+                mRenderTargetCache.getColors()[mState.getEnabledDrawBuffers().first()]
+                        ->getLayerCount() == 1 &&
                 contextVk->hasStartedRenderPassWithFramebuffer(srcVkFramebuffer))
             {
                 // glBlitFramebuffer() needs to copy the read color attachment to all enabled
@@ -1865,6 +1867,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // Gather VkImageViews over all FBO attachments, also size of attached region.
     std::vector<VkImageView> attachments;
     gl::Extents attachmentsSize;
+    uint32_t layerCount = std::numeric_limits<uint32_t>::max();
 
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
@@ -1880,6 +1883,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
         ASSERT(attachmentsSize.empty() || attachmentsSize == colorRenderTarget->getExtents());
         attachmentsSize = colorRenderTarget->getExtents();
+
+        layerCount = std::min(layerCount, colorRenderTarget->getLayerCount());
     }
 
     // Depth/stencil attachment.
@@ -1894,6 +1899,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         ASSERT(attachmentsSize.empty() ||
                attachmentsSize == depthStencilRenderTarget->getExtents());
         attachmentsSize = depthStencilRenderTarget->getExtents();
+
+        layerCount = std::min(layerCount, depthStencilRenderTarget->getLayerCount());
     }
 
     // Color resolve attachments.
@@ -1921,6 +1928,9 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
                 attachments.push_back(resolveImageView->getHandle());
 
                 ASSERT(!attachmentsSize.empty());
+
+                // Multisampled render to texture render targets cannot be layered.
+                ASSERT(layerCount == 1);
             }
         }
     }
@@ -1934,6 +1944,9 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         attachments.push_back(imageView->getHandle());
 
         ASSERT(!attachmentsSize.empty());
+
+        // Multisampled render to texture render targets cannot be layered.
+        ASSERT(layerCount == 1);
     }
 
     if (attachmentsSize.empty())
@@ -1942,6 +1955,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         attachmentsSize.height = mState.getDefaultHeight();
         attachmentsSize.width  = mState.getDefaultWidth();
         attachmentsSize.depth  = 0;
+        layerCount             = 1;
     }
     VkFramebufferCreateInfo framebufferInfo = {};
 
@@ -1952,7 +1966,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     framebufferInfo.pAttachments    = attachments.data();
     framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
     framebufferInfo.height          = static_cast<uint32_t>(attachmentsSize.height);
-    framebufferInfo.layers          = 1;
+    framebufferInfo.layers          = layerCount;
 
     vk::FramebufferHelper newFramebuffer;
     ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
