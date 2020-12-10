@@ -505,6 +505,15 @@ struct FeaturesGL : FeatureSetBase
         "set_zero_level_before_generating_mipmap", FeatureCategory::OpenGLWorkarounds,
         "glGenerateMipmap fails if the zero texture level is not set on some Mac drivers.",
         &members};
+
+    // Sized luminance/alpha formats are unavailable in the core ES3 spec. To expose
+    // EXT_texture_storage
+    //  we must emulate these formats when unavailable.
+    Feature emulateSizedLUMAFormats = {"emulate_sized_luma_formats",
+                                       FeatureCategory::OpenGLWorkarounds,
+                                       "Sized luminance/alpha formats are not available for some "
+                                       "ES3 functions when EXT_texture_storage is unavailable.",
+                                       &members};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
