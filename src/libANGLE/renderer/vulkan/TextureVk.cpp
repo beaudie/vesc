@@ -1673,7 +1673,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
-
+    WARN() << " ";
     // Requires that the image:
     //
     // - is not sRGB

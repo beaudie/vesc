@@ -789,6 +789,7 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
+    WARN() << " enter";
     // If a sync object has been used or this is a shared context, then we need to flush the
     // commands and end the render pass to make sure the sync object (and any preceding commands)
     // lands in the correct place within the command stream.
@@ -804,6 +805,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
         // mutex to guarantee that no two contexts are modifying the lists at the same time.
         getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
         mHasDeferredFlush = true;
+        WARN() << " exit";
         return angle::Result::Continue;
     }
 
@@ -813,10 +815,13 @@ angle::Result ContextVk::flush(const gl::Context *context)
         mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass())
     {
         mHasDeferredFlush = true;
+        WARN() << " exit";
         return angle::Result::Continue;
     }
 
-    return flushImpl(nullptr);
+    ANGLE_TRY(flushImpl(nullptr));
+    WARN() << " exit";
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
@@ -5408,6 +5413,13 @@ uint32_t ContextVk::getCurrentSubpassIndex() const
 
 angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
 {
+    if (mOutsideRenderPassCommands->empty() && !mRenderPassCommands->started())
+    {
+        onRenderPassFinished();
+        return angle::Result::Continue;
+    }
+
+    WARN() << "enter";
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
     ASSERT(mOutsideRenderPassCommands->empty());
@@ -5415,6 +5427,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
     if (!mRenderPassCommands->started())
     {
         onRenderPassFinished();
+        WARN() << "exit" << std::endl;
         return angle::Result::Continue;
     }
 
@@ -5467,6 +5480,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
                                 TRACE_EVENT_PHASE_END, eventName));
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
+    WARN() << "exit" << std::endl;
 
     if (mHasDeferredFlush)
     {
