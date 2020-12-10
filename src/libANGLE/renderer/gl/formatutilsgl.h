@@ -134,6 +134,10 @@ ReadPixelsFormat GetReadPixelsFormat(const FunctionsGL *functions,
                                      GLenum readAttachmentFormat,
                                      GLenum format,
                                      GLenum type);
+
+bool IsSizedLUMAFormat(GLenum format);
+GLenum EmulateLUMAFormat(const GLenum format);
+
 }  // namespace nativegl
 
 }  // namespace rx
