@@ -1442,6 +1442,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
     VkResult result = renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo);
+    WARN() << "queuePresent" << std::endl;
 
     // Set FrameNumber for the presented image.
     mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;

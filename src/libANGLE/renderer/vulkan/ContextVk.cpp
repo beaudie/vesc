@@ -5021,6 +5021,7 @@ bool ContextVk::hasRecordedCommands()
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
+    WARN() << "enter";
 
     // We must set this to false before calling flushCommandsAndEndRenderPass to prevent it from
     // calling back to flushImpl.
@@ -5408,6 +5409,13 @@ uint32_t ContextVk::getCurrentSubpassIndex() const
 
 angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
 {
+    if (mOutsideRenderPassCommands->empty() && !mRenderPassCommands->started())
+    {
+        onRenderPassFinished();
+        return angle::Result::Continue;
+    }
+
+    WARN() << "enter";
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
     ASSERT(mOutsideRenderPassCommands->empty());
@@ -5415,6 +5423,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
     if (!mRenderPassCommands->started())
     {
         onRenderPassFinished();
+        WARN() << "exit" << std::endl;
         return angle::Result::Continue;
     }
 
@@ -5467,6 +5476,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
                                 TRACE_EVENT_PHASE_END, eventName));
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
+    WARN() << "exit" << std::endl;
 
     if (mHasDeferredFlush)
     {

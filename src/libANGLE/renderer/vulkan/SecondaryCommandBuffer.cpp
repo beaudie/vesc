@@ -227,6 +227,7 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         Offset<VkDeviceSize>(buffers, sizeof(VkBuffer) * params->bindingCount);
                     const VkDeviceSize *sizes =
                         Offset<VkDeviceSize>(offsets, sizeof(VkDeviceSize) * params->bindingCount);
+                    WARN() << "\tBindTransformFeedbackBuffers:";
                     vkCmdBindTransformFeedbackBuffersEXT(cmdBuffer, 0, params->bindingCount,
                                                          buffers, offsets, sizes);
                     break;
@@ -245,6 +246,8 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 case CommandID::BlitImage:
                 {
                     const BlitImageParams *params = getParamPtr<BlitImageParams>(currentCommand);
+                    WARN() << "\tBlitImage:" << std::hex << params->srcImage << " to "
+                           << params->dstImage;
                     vkCmdBlitImage(cmdBuffer, params->srcImage,
                                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, params->dstImage,
                                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &params->region,
@@ -255,6 +258,9 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const BufferBarrierParams *params =
                         getParamPtr<BufferBarrierParams>(currentCommand);
+                    WARN() << "\tBufferBarrier:"
+                           << "[" << params->srcStageMask << ":" << std::hex << params->dstStageMask
+                           << "]";
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          0, nullptr, 1, &params->bufferMemoryBarrier, 0, nullptr);
                     break;
@@ -290,6 +296,8 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                     const CopyBufferParams *params = getParamPtr<CopyBufferParams>(currentCommand);
                     const VkBufferCopy *regions =
                         Offset<VkBufferCopy>(params, sizeof(CopyBufferParams));
+                    WARN() << "\tCopyBuffer:" << std::hex << params->srcBuffer << " to "
+                           << params->destBuffer;
                     vkCmdCopyBuffer(cmdBuffer, params->srcBuffer, params->destBuffer,
                                     params->regionCount, regions);
                     break;
@@ -298,6 +306,8 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const CopyBufferToImageParams *params =
                         getParamPtr<CopyBufferToImageParams>(currentCommand);
+                    WARN() << "\tCopyBufferToImage:" << std::hex << params->srcBuffer << " to "
+                           << params->dstImage;
                     vkCmdCopyBufferToImage(cmdBuffer, params->srcBuffer, params->dstImage,
                                            params->dstImageLayout, 1, &params->region);
                     break;
@@ -305,6 +315,8 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 case CommandID::CopyImage:
                 {
                     const CopyImageParams *params = getParamPtr<CopyImageParams>(currentCommand);
+                    WARN() << "\tCopyImage:" << std::hex << params->srcImage << " to "
+                           << params->dstImage;
                     vkCmdCopyImage(cmdBuffer, params->srcImage, params->srcImageLayout,
                                    params->dstImage, params->dstImageLayout, 1, &params->region);
                     break;
@@ -313,6 +325,8 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const CopyImageToBufferParams *params =
                         getParamPtr<CopyImageToBufferParams>(currentCommand);
+                    WARN() << "\tCopyImageToBuffer:" << std::hex << params->srcImage << " to "
+                           << params->dstBuffer;
                     vkCmdCopyImageToBuffer(cmdBuffer, params->srcImage, params->srcImageLayout,
                                            params->dstBuffer, 1, &params->region);
                     break;
@@ -320,6 +334,7 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 case CommandID::Dispatch:
                 {
                     const DispatchParams *params = getParamPtr<DispatchParams>(currentCommand);
+                    WARN() << "\tDispatch";
                     vkCmdDispatch(cmdBuffer, params->groupCountX, params->groupCountY,
                                   params->groupCountZ);
                     break;
@@ -436,6 +451,9 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const ExecutionBarrierParams *params =
                         getParamPtr<ExecutionBarrierParams>(currentCommand);
+                    WARN() << " ExecutionBarrier:"
+                           << "[" << params->stageMask << ":" << std::hex << params->stageMask
+                           << "]";
                     vkCmdPipelineBarrier(cmdBuffer, params->stageMask, params->stageMask, 0, 0,
                                          nullptr, 0, nullptr, 0, nullptr);
                     break;
@@ -451,6 +469,14 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const ImageBarrierParams *params =
                         getParamPtr<ImageBarrierParams>(currentCommand);
+                    WARN() << " ImageBarrier:" << std::hex << params->imageMemoryBarrier.image
+                           << "[" << params->srcStageMask << ":" << std::hex << params->dstStageMask
+                           << "]"
+                           << "(" << params->imageMemoryBarrier.srcAccessMask << "," << std::hex
+                           << params->imageMemoryBarrier.oldLayout << ")"
+                           << ":"
+                           << "(" << params->imageMemoryBarrier.dstAccessMask << "," << std::hex
+                           << params->imageMemoryBarrier.newLayout << ")";
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          0, nullptr, 0, nullptr, 1, &params->imageMemoryBarrier);
                     break;
@@ -473,6 +499,9 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const MemoryBarrierParams *params =
                         getParamPtr<MemoryBarrierParams>(currentCommand);
+                    WARN() << "\tMemoryBarrier:"
+                           << "[" << params->srcStageMask << ":" << std::hex << params->dstStageMask
+                           << "]";
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          1, &params->memoryBarrier, 0, nullptr, 0, nullptr);
                     break;
