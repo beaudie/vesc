@@ -4374,7 +4374,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         mPhysicalDeviceProperties.limits.maxComputeWorkGroupInvocations;
 
     ANGLE_FEATURE_CONDITION(&mFeatures, allowGenerateMipmapWithCompute,
-                            supportsSubgroupQuadOpsInComputeShader &&
+                            supportsSubgroupQuadOpsInComputeShader && false &&
                                 mSubgroupExtendedTypesFeatures.shaderSubgroupExtendedTypes &&
                                 maxComputeWorkGroupInvocations >= 256 &&
                                 ((isAMD && !IsWindows()) || isNvidia || isSamsung));
