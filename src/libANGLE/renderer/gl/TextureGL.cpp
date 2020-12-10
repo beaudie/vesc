@@ -53,6 +53,8 @@ bool IsLUMAFormat(GLenum format)
 
 LUMAWorkaroundGL GetLUMAWorkaroundInfo(GLenum originalFormat, GLenum destinationFormat)
 {
+    printf("GetLUMAWorkarondInfo originalFormat %d\n", originalFormat);
+    printf("GetLUMAWorkarondInfo destinationFormat %d\n", originalFormat);
     if (IsLUMAFormat(originalFormat))
     {
         return LUMAWorkaroundGL(!IsLUMAFormat(destinationFormat), destinationFormat);
@@ -78,6 +80,7 @@ LevelInfoGL GetLevelInfo(const angle::FeaturesGL &features,
                          GLenum originalInternalFormat,
                          GLenum destinationInternalFormat)
 {
+    printf("GetLevelInfo %d %d\n", originalInternalFormat, destinationInternalFormat);
     GLenum originalFormat    = gl::GetUnsizedFormat(originalInternalFormat);
     GLenum destinationFormat = gl::GetUnsizedFormat(destinationInternalFormat);
     return LevelInfoGL(originalFormat, destinationInternalFormat,
@@ -327,6 +330,9 @@ angle::Result TextureGL::setSubImage(const gl::Context *context,
     gl::TextureTarget target = index.getTarget();
     size_t level             = static_cast<size_t>(index.getLevelIndex());
 
+    printf("setSubImage getLevelInfo %d\n", getLevelInfo(target, level).lumaWorkaround.enabled);
+    printf("setSubImage GetLevelInfo %d\n",
+           GetLevelInfo(features, format, texSubImageFormat.format).lumaWorkaround.enabled);
     ASSERT(getLevelInfo(target, level).lumaWorkaround.enabled ==
            GetLevelInfo(features, format, texSubImageFormat.format).lumaWorkaround.enabled);
 
@@ -1153,7 +1159,8 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
             }
         }
     }
-
+    printf("Calling setLevelInfo from setStorage with %d %d\n", internalFormat,
+           texStorageFormat.internalFormat);
     setLevelInfo(context, type, 0, levels,
                  GetLevelInfo(features, internalFormat, texStorageFormat.internalFormat));
 
@@ -1884,6 +1891,7 @@ void TextureGL::setLevelInfo(const gl::Context *context,
                              size_t levelCount,
                              const LevelInfoGL &levelInfo)
 {
+    printf("setLevelInfo workaround enabled: %d\n", levelInfo.lumaWorkaround.enabled);
     ASSERT(levelCount > 0);
 
     bool updateWorkarounds = levelInfo.depthStencilWorkaround || levelInfo.lumaWorkaround.enabled ||
