@@ -733,6 +733,15 @@
                     "basic":"Bool",
                     "qualifier":"HelperInvocation"
                 }
+            },
+            "gl_Layer":{
+                "suffix":"FS",
+                "essl_level":"ESSL3_1_BUILTINS",
+                "type":{
+                    "basic":"Int",
+                    "precision":"High",
+                    "qualifier":"Layer"
+                }
             }
         },
         "subgroups":{
