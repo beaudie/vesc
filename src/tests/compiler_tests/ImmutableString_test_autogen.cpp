@@ -2208,6 +2208,7 @@ TEST(ImmutableStringTest, ScriptGeneratedHashesMatch)
     ASSERT_EQ(0x0000081fu, ImmutableString("gl_FragData").mangledNameHash());
     ASSERT_EQ(0x000003d9u, ImmutableString("gl_FragDepth").mangledNameHash());
     ASSERT_EQ(0x00000583u, ImmutableString("gl_HelperInvocation").mangledNameHash());
+    ASSERT_EQ(0x00000680u, ImmutableString("gl_Layer").mangledNameHash());
     ASSERT_EQ(0x000001b8u, ImmutableString("gl_SecondaryFragColorEXT").mangledNameHash());
     ASSERT_EQ(0x0000076bu, ImmutableString("gl_SecondaryFragDataEXT").mangledNameHash());
     ASSERT_EQ(0x000002f4u, ImmutableString("gl_FragDepthEXT").mangledNameHash());
@@ -2215,7 +2216,6 @@ TEST(ImmutableStringTest, ScriptGeneratedHashesMatch)
     ASSERT_EQ(0x00000686u, ImmutableString("gl_LastFragColor").mangledNameHash());
     ASSERT_EQ(0x000001b0u, ImmutableString("gl_LastFragColorARM").mangledNameHash());
     ASSERT_EQ(0x0000067du, ImmutableString("gl_PrimitiveID").mangledNameHash());
-    ASSERT_EQ(0x00000680u, ImmutableString("gl_Layer").mangledNameHash());
     ASSERT_EQ(0x000006ccu, ImmutableString("gl_SampleID").mangledNameHash());
     ASSERT_EQ(0x00000240u, ImmutableString("gl_SamplePosition").mangledNameHash());
     ASSERT_EQ(0x00000094u, ImmutableString("gl_SampleMaskIn").mangledNameHash());
