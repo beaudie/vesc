@@ -9164,6 +9164,41 @@ void main()
     EXPECT_EQ(0u, program);
 }
 
+// Validate that link fails with different nameless I/O blocks with same member name
+TEST_P(GLSLTest_ES31, NegativeIOBlocksLinkDifferentNamelessBlocksWithSameMemberName)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_io_blocks"));
+
+    constexpr char kVS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+in highp vec4 position;
+out VSBlock { vec4 a; vec4 b[2]; };
+out FSBlock { vec4 a; vec4 b[2]; } fsBlock;
+void main()
+{
+    a = vec4(0);
+    b[0] = vec4(0);
+    b[1] = vec4(0);
+    fsBlock.a = vec4(0);
+    fsBlock.b[0] = vec4(0);
+    fsBlock.b[1] = vec4(0);
+    gl_Position = position;
+})";
+
+    constexpr char kFS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+precision mediump float;
+layout(location = 0) out mediump vec4 color;
+in FSBlock { vec4 a; vec4 b[2]; };
+void main()
+{
+    color = vec4(a.x, b[0].y, b[1].z, 1.0);
+})";
+
+    GLuint program = CompileProgram(kVS, kFS);
+    EXPECT_EQ(0u, program);
+}
+
 // Validate that link fails with I/O block member struct name mismatches.
 TEST_P(GLSLTest_ES31, NegativeIOBlocksLinkMemberStructNameMismatch)
 {
