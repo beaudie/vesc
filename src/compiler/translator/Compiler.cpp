@@ -49,6 +49,7 @@
 #include "compiler/translator/tree_ops/SplitSequenceOperator.h"
 #include "compiler/translator/tree_ops/UnfoldShortCircuitAST.h"
 #include "compiler/translator/tree_ops/UseInterfaceBlockFields.h"
+#include "compiler/translator/tree_ops/ValidateClipCullDistance.h"
 #include "compiler/translator/tree_ops/VectorizeVectorScalarArithmetic.h"
 #include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/tree_util/IntermNodePatternMatcher.h"
@@ -626,6 +627,17 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    if (mShaderVersion >= 300 &&
+        parseContext.isExtensionEnabled(TExtension::EXT_clip_cull_distance))
+    {
+        if (!ValidateClipCullDistance(root, &mDiagnostics, mResources.MaxClipDistances,
+                                      mResources.MaxCullDistances,
+                                      mResources.MaxCombinedClipAndCullDistances))
+        {
+            return false;
+        }
+    }
+
     // Clamping uniform array bounds needs to happen after validateLimitations pass.
     if (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS)
     {
@@ -1108,6 +1120,7 @@ void TCompiler::setResourceString()
         << ":OES_texture_buffer:" << mResources.OES_texture_buffer
         << ":EXT_texture_buffer:" << mResources.EXT_texture_buffer
         << ":OES_sample_variables:" << mResources.OES_sample_variables
+        << ":EXT_clip_cull_distance:" << mResources.EXT_clip_cull_distance
         << ":MinProgramTextureGatherOffset:" << mResources.MinProgramTextureGatherOffset
         << ":MaxProgramTextureGatherOffset:" << mResources.MaxProgramTextureGatherOffset
         << ":MaxImageUnits:" << mResources.MaxImageUnits
@@ -1147,7 +1160,9 @@ void TCompiler::setResourceString()
         << ":MaxGeometryShaderStorageBlocks:" << mResources.MaxGeometryShaderStorageBlocks
         << ":MaxGeometryShaderInvocations:" << mResources.MaxGeometryShaderInvocations
         << ":MaxGeometryImageUniforms:" << mResources.MaxGeometryImageUniforms
-        << ":MaxClipDistances" << mResources.MaxClipDistances;
+        << ":MaxClipDistances" << mResources.MaxClipDistances
+        << ":MaxCullDistances" << mResources.MaxCullDistances
+        << ":MaxCombinedClipAndCullDistances" << mResources.MaxCombinedClipAndCullDistances;
     // clang-format on
 
     mBuiltInResourcesString = strstream.str();

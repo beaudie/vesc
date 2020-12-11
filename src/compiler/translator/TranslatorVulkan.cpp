@@ -34,7 +34,7 @@
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/FlipRotateSpecConst.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
-#include "compiler/translator/tree_util/ReplaceClipDistanceVariable.h"
+#include "compiler/translator/tree_util/ReplaceClipCullDistanceVariable.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 #include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
 #include "compiler/translator/tree_util/RunAtTheEndOfShader.h"
@@ -806,6 +806,50 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                  << static_cast<uint32_t>(vk::SpecializationConstantId::LineRasterEmulation)
                  << ") const bool " << kLineRasterEmulationSpecConstVarName << " = false;\n\n";
         }
+
+        // Search for the gl_ClipDistance/gl_CullDistance usage, if its used, we need to do some
+        // replacements.
+        bool useClipDistance = false;
+        bool useCullDistance = false;
+        for (const ShaderVariable &outputVarying : mOutputVaryings)
+        {
+            if (outputVarying.name == "gl_ClipDistance")
+            {
+                useClipDistance = true;
+                break;
+            }
+            if (outputVarying.name == "gl_CullDistance")
+            {
+                useCullDistance = true;
+                break;
+            }
+        }
+        for (const ShaderVariable &inputVarying : mInputVaryings)
+        {
+            if (inputVarying.name == "gl_ClipDistance")
+            {
+                useClipDistance = true;
+                break;
+            }
+            if (inputVarying.name == "gl_CullDistance")
+            {
+                useCullDistance = true;
+                break;
+            }
+        }
+
+        if (useClipDistance && !ReplaceClipDistanceAssignments(
+                                   this, root, &getSymbolTable(), getShaderType(),
+                                   driverUniforms->getClipDistancesEnabled(), getInterfaceBlocks()))
+        {
+            return false;
+        }
+        if (useCullDistance &&
+            !ReplaceCullDistanceAssignments(this, root, &getSymbolTable(), getShaderType(),
+                                            getInterfaceBlocks()))
+        {
+            return false;
+        }
     }
 
     // Declare gl_FragColor and glFragData as webgl_FragColor and webgl_FragData
@@ -979,23 +1023,6 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
 
         // Append a macro for transform feedback substitution prior to modifying depth.
         if (!AppendVertexShaderTransformFeedbackOutputToMain(this, root, &getSymbolTable()))
-        {
-            return false;
-        }
-
-        // Search for the gl_ClipDistance usage, if its used, we need to do some replacements.
-        bool useClipDistance = false;
-        for (const ShaderVariable &outputVarying : mOutputVaryings)
-        {
-            if (outputVarying.name == "gl_ClipDistance")
-            {
-                useClipDistance = true;
-                break;
-            }
-        }
-        if (useClipDistance &&
-            !ReplaceClipDistanceAssignments(this, root, &getSymbolTable(),
-                                            driverUniforms->getClipDistancesEnabled()))
         {
             return false;
         }
