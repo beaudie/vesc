@@ -349,12 +349,7 @@ FramebufferVk::~FramebufferVk() = default;
 
 void FramebufferVk::clearCache(ContextVk *contextVk)
 {
-    for (auto &entry : mFramebufferCache)
-    {
-        vk::FramebufferHelper &tmpFB = entry.second;
-        tmpFB.release(contextVk);
-    }
-    mFramebufferCache.clear();
+    mFramebufferCache.clear(contextVk);
 }
 
 void FramebufferVk::destroy(const gl::Context *context)
@@ -1951,10 +1946,10 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         return angle::Result::Continue;
     }
     // No current FB, so now check for previously cached Framebuffer
-    auto iter = mFramebufferCache.find(mCurrentFramebufferDesc);
-    if (iter != mFramebufferCache.end())
+    vk::FramebufferHelper *framebufferHelper = nullptr;
+    if (mFramebufferCache.get(contextVk, mCurrentFramebufferDesc, &framebufferHelper))
     {
-        *framebufferOut = &iter->second.getFramebuffer();
+        *framebufferOut = &framebufferHelper->getFramebuffer();
         return angle::Result::Continue;
     }
 
@@ -2065,9 +2060,11 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // Check that our description matches our attachments. Can catch implementation bugs.
     ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
 
-    mFramebufferCache[mCurrentFramebufferDesc] = std::move(newFramebuffer);
-    mFramebuffer                               = &mFramebufferCache[mCurrentFramebufferDesc];
-    *framebufferOut                            = &mFramebuffer->getFramebuffer();
+    mFramebufferCache.insert(mCurrentFramebufferDesc, std::move(newFramebuffer));
+    bool result = mFramebufferCache.get(contextVk, mCurrentFramebufferDesc, &mFramebuffer);
+    ASSERT(result);
+
+    *framebufferOut = &mFramebuffer->getFramebuffer();
     return angle::Result::Continue;
 }
 
