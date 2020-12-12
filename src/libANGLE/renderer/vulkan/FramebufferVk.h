@@ -238,7 +238,7 @@ class FramebufferVk : public FramebufferImpl
     gl::DrawBufferMask mEmulatedAlphaAttachmentMask;
 
     vk::FramebufferDesc mCurrentFramebufferDesc;
-    angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mFramebufferCache;
+    FramebufferCache mFramebufferCache;
 
     vk::ClearValuesArray mDeferredClears;
 
