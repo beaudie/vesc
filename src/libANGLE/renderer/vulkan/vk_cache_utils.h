@@ -1312,6 +1312,23 @@ ANGLE_VK_SERIAL_OP(ANGLE_HASH_VK_SERIAL)
 
 namespace rx
 {
+// Cache types for various Vulkan objects
+enum class VulkanCacheType
+{
+    CompatibleRenderPass,
+    RenderPassWithOps,
+    GraphicsPipeline,
+    PipelineLayout,
+    Sampler,
+    SamplerYcbcrConversion,
+    DescriptorSet,
+    DescriptorSetLayout,
+    TextureDescriptors,
+    UniformsAndXfbDescriptorSet,
+    Framebuffer,
+    EnumCount
+};
+
 // Base class for all caches. Provides cache hit and miss counters.
 class CacheStats final : angle::NonCopyable
 {
@@ -1345,7 +1362,7 @@ class RenderPassCache final : angle::NonCopyable
     RenderPassCache();
     ~RenderPassCache();
 
-    void destroy(VkDevice device);
+    void destroy(RendererVk *rendererVk);
 
     ANGLE_INLINE angle::Result getCompatibleRenderPass(ContextVk *contextVk,
                                                        const vk::RenderPassDesc &desc,
@@ -1400,7 +1417,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
     GraphicsPipelineCache();
     ~GraphicsPipelineCache();
 
-    void destroy(VkDevice device);
+    void destroy(RendererVk *rendererVk);
     void release(ContextVk *context);
 
     void populate(const vk::GraphicsPipelineDesc &desc, vk::Pipeline &&pipeline);
@@ -1460,7 +1477,7 @@ class DescriptorSetLayoutCache final : angle::NonCopyable
     DescriptorSetLayoutCache();
     ~DescriptorSetLayoutCache();
 
-    void destroy(VkDevice device);
+    void destroy(RendererVk *rendererVk);
 
     angle::Result getDescriptorSetLayout(
         vk::Context *context,
@@ -1478,7 +1495,7 @@ class PipelineLayoutCache final : angle::NonCopyable
     PipelineLayoutCache();
     ~PipelineLayoutCache();
 
-    void destroy(VkDevice device);
+    void destroy(RendererVk *rendererVk);
 
     angle::Result getPipelineLayout(vk::Context *context,
                                     const vk::PipelineLayoutDesc &desc,
@@ -1496,7 +1513,7 @@ class SamplerCache final : angle::NonCopyable
     SamplerCache();
     ~SamplerCache();
 
-    void destroy(RendererVk *renderer);
+    void destroy(RendererVk *rendererVk);
 
     angle::Result getSampler(ContextVk *contextVk,
                              const vk::SamplerDesc &desc,
@@ -1514,7 +1531,7 @@ class SamplerYcbcrConversionCache final : angle::NonCopyable
     SamplerYcbcrConversionCache();
     ~SamplerYcbcrConversionCache();
 
-    void destroy(RendererVk *render);
+    void destroy(RendererVk *rendererVk);
 
     angle::Result getYuvConversion(
         vk::Context *context,
@@ -1535,6 +1552,8 @@ class FramebufferCache final : angle::NonCopyable
     FramebufferCache() = default;
     ~FramebufferCache() { ASSERT(mPayload.empty()); }
 
+    void destroy(RendererVk *rendererVk);
+
     bool get(ContextVk *contextVk,
              const vk::FramebufferDesc &desc,
              vk::FramebufferHelper **framebufferOut);
@@ -1552,6 +1571,8 @@ class DescriptorSetCache final : angle::NonCopyable
   public:
     DescriptorSetCache() = default;
     ~DescriptorSetCache() { ASSERT(mPayload.empty()); }
+
+    void destroy(RendererVk *rendererVk);
 
     ANGLE_INLINE bool get(uint32_t serial, VkDescriptorSet *descriptorSet)
     {
@@ -1577,7 +1598,7 @@ class DescriptorSetCache final : angle::NonCopyable
 };
 
 // Templated Descriptors Cache
-template <typename key>
+template <typename key, VulkanCacheType cacheType>
 class BaseDescriptorsCache final : angle::NonCopyable
 {
   public:
@@ -1602,7 +1623,7 @@ class BaseDescriptorsCache final : angle::NonCopyable
         mPayload.emplace(desc, descriptorSet);
     }
 
-    ANGLE_INLINE void clear() { mPayload.clear(); }
+    void reset(RendererVk *rendererVk);
 
   private:
     angle::HashMap<key, VkDescriptorSet> mPayload;
@@ -1610,9 +1631,11 @@ class BaseDescriptorsCache final : angle::NonCopyable
 };
 
 // TextureDescriptors Cache
-using TextureDescriptorsCache = BaseDescriptorsCache<vk::TextureDescriptorDesc>;
+using TextureDescriptorsCache =
+    BaseDescriptorsCache<vk::TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>;
 // UniformsAndXfbDescriptorSet Cache
-using UniformsAndXfbDescriptorSetCache = BaseDescriptorsCache<vk::UniformsAndXfbDesc>;
+using UniformsAndXfbDescriptorSetCache =
+    BaseDescriptorsCache<vk::UniformsAndXfbDesc, VulkanCacheType::UniformsAndXfbDescriptorSet>;
 
 // Only 1 driver uniform binding is used.
 constexpr uint32_t kReservedDriverUniformBindingCount = 1;
