@@ -330,10 +330,12 @@ void FramebufferVk::clearCache(ContextVk *contextVk)
 
 void FramebufferVk::destroy(const gl::Context *context)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk   = vk::GetImpl(context);
+    RendererVk *rendererVk = contextVk->getRenderer();
 
-    mReadPixelBuffer.release(contextVk->getRenderer());
+    mReadPixelBuffer.release(rendererVk);
     clearCache(contextVk);
+    mFramebufferCache.destroy(rendererVk);
 }
 
 angle::Result FramebufferVk::discard(const gl::Context *context,
