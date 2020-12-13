@@ -3199,8 +3199,15 @@ RenderPassCache::~RenderPassCache()
     ASSERT(mPayload.empty());
 }
 
-void RenderPassCache::destroy(VkDevice device)
+void RenderPassCache::destroy(RendererVk *rendererVk)
 {
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::CompatibleRenderPass,
+                                         mCompatibleRenderPassCacheStats);
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::RenderPassWithOps,
+                                         mRenderPassWithOpsCacheStats);
+
+    VkDevice device = rendererVk->getDevice();
+
     for (auto &outerIt : mPayload)
     {
         for (auto &innerIt : outerIt.second)
@@ -3306,8 +3313,12 @@ GraphicsPipelineCache::~GraphicsPipelineCache()
     ASSERT(mPayload.empty());
 }
 
-void GraphicsPipelineCache::destroy(VkDevice device)
+void GraphicsPipelineCache::destroy(RendererVk *rendererVk)
 {
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::GraphicsPipeline, mCacheStats);
+
+    VkDevice device = rendererVk->getDevice();
+
     for (auto &item : mPayload)
     {
         vk::PipelineHelper &pipeline = item.second;
@@ -3382,8 +3393,12 @@ DescriptorSetLayoutCache::~DescriptorSetLayoutCache()
     ASSERT(mPayload.empty());
 }
 
-void DescriptorSetLayoutCache::destroy(VkDevice device)
+void DescriptorSetLayoutCache::destroy(RendererVk *rendererVk)
 {
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::DescriptorSetLayout, mCacheStats);
+
+    VkDevice device = rendererVk->getDevice();
+
     for (auto &item : mPayload)
     {
         vk::RefCountedDescriptorSetLayout &layout = item.second;
@@ -3439,8 +3454,12 @@ PipelineLayoutCache::~PipelineLayoutCache()
     ASSERT(mPayload.empty());
 }
 
-void PipelineLayoutCache::destroy(VkDevice device)
+void PipelineLayoutCache::destroy(RendererVk *rendererVk)
 {
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::PipelineLayout, mCacheStats);
+
+    VkDevice device = rendererVk->getDevice();
+
     for (auto &item : mPayload)
     {
         vk::RefCountedPipelineLayout &layout = item.second;
@@ -3526,9 +3545,11 @@ SamplerYcbcrConversionCache::~SamplerYcbcrConversionCache()
     ASSERT(mPayload.empty());
 }
 
-void SamplerYcbcrConversionCache::destroy(RendererVk *renderer)
+void SamplerYcbcrConversionCache::destroy(RendererVk *rendererVk)
 {
-    VkDevice device = renderer->getDevice();
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::SamplerYcbcrConversion, mCacheStats);
+
+    VkDevice device = rendererVk->getDevice();
 
     for (auto &iter : mPayload)
     {
@@ -3536,7 +3557,7 @@ void SamplerYcbcrConversionCache::destroy(RendererVk *renderer)
         ASSERT(!yuvSampler.isReferenced());
         yuvSampler.get().destroy(device);
 
-        renderer->getActiveHandleCounts().onDeallocate(vk::HandleType::SamplerYcbcrConversion);
+        rendererVk->getActiveHandleCounts().onDeallocate(vk::HandleType::SamplerYcbcrConversion);
     }
 
     mPayload.clear();
@@ -3595,9 +3616,11 @@ SamplerCache::~SamplerCache()
     ASSERT(mPayload.empty());
 }
 
-void SamplerCache::destroy(RendererVk *renderer)
+void SamplerCache::destroy(RendererVk *rendererVk)
 {
-    VkDevice device = renderer->getDevice();
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::Sampler, mCacheStats);
+
+    VkDevice device = rendererVk->getDevice();
 
     for (auto &iter : mPayload)
     {
@@ -3605,7 +3628,7 @@ void SamplerCache::destroy(RendererVk *renderer)
         ASSERT(!sampler.isReferenced());
         sampler.get().get().destroy(device);
 
-        renderer->getActiveHandleCounts().onDeallocate(vk::HandleType::Sampler);
+        rendererVk->getActiveHandleCounts().onDeallocate(vk::HandleType::Sampler);
     }
 
     mPayload.clear();
@@ -3639,6 +3662,11 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
 }
 
 // FramebufferCache implementation.
+void FramebufferCache::destroy(RendererVk *rendererVk)
+{
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::Framebuffer, mCacheStats);
+}
+
 bool FramebufferCache::getFramebuffer(ContextVk *contextVk,
                                       const vk::FramebufferDesc &desc,
                                       vk::FramebufferHelper **framebufferHelperOut)
@@ -3670,4 +3698,26 @@ void FramebufferCache::clearCache(ContextVk *contextVk)
     }
     mPayload.clear();
 }
+
+// DescriptorSetCache implementation.
+void DescriptorSetCache::destroy(RendererVk *rendererVk)
+{
+    rendererVk->updateInternalCacheStats(InternalCacheTypes::DescriptorSet, mCacheStats);
+}
+
+// BaseDescriptorsCache implementation.
+template <typename key, InternalCacheTypes cacheType>
+void BaseDescriptorsCache<key, cacheType>::reset(RendererVk *rendererVk)
+{
+    rendererVk->updateInternalCacheStats(cacheType, mCacheStats);
+    mPayload.clear();
+}
+
+// RendererVk's methods are not accessible in the header file.
+// Below declarations are needed to avoid linker errors.
+template class BaseDescriptorsCache<vk::TextureDescriptorDesc,
+                                    InternalCacheTypes::TextureDescriptors>;
+
+template class BaseDescriptorsCache<vk::UniformsAndXfbDesc,
+                                    InternalCacheTypes::UniformsAndXfbDescriptorSet>;
 }  // namespace rx

@@ -365,6 +365,11 @@ class RendererVk : angle::NonCopyable
         mMemoryReport.processCallback(callbackData, logCallback);
     }
 
+    // Update cache stats
+    void updateInternalCacheStats(InternalCacheTypes cache, const CacheStats &stats);
+    // Log cache stats
+    void logInternalCacheStats();
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -491,6 +496,10 @@ class RendererVk : angle::NonCopyable
 
     // Process GPU memory reports
     vk::MemoryReport mMemoryReport;
+
+    // Stats about all internal caches
+    using InternalCacheHitRatios = std::array<double, ToUnderlying(InternalCacheTypes::EnumCount)>;
+    InternalCacheHitRatios mInternalCacheHitRatios;
 };
 
 }  // namespace rx

@@ -489,6 +489,8 @@ RendererVk::RendererVk()
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
 
+    mInternalCacheHitRatios.fill(0);
+
     // We currently don't have any big-endian devices in the list of supported platforms.  There are
     // a number of places in the Vulkan backend that make this assumption.  This assertion is made
     // early to fail immediately on big-endian platforms.
@@ -575,6 +577,8 @@ void RendererVk::onDestroy(vk::Context *context)
     {
         vkDestroyDebugReportCallbackEXT(mInstance, mDebugReportCallback, nullptr);
     }
+
+    logInternalCacheStats();
 
     if (mInstance)
     {
@@ -2706,6 +2710,41 @@ void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuff
     ASSERT(commandBuffer->empty());
     commandBuffer->markOpen();
     mCommandBufferHelperFreeList.push_back(commandBuffer);
+}
+
+void RendererVk::updateInternalCacheStats(InternalCacheTypes cache, const CacheStats &stats)
+{
+    int cacheIndex      = ToUnderlying(cache);
+    double hitRatio     = stats.getHitRatio();
+    double currentValue = mInternalCacheHitRatios[cacheIndex];
+    if (hitRatio > 0)
+    {
+        if (currentValue > 0)
+        {
+            // Calculate the average
+            mInternalCacheHitRatios[cacheIndex] = (currentValue + hitRatio) / 2;
+        }
+        else
+        {
+            mInternalCacheHitRatios[cacheIndex] = hitRatio;
+        }
+    }
+}
+
+void RendererVk::logInternalCacheStats()
+{
+    if (!vk::kOutputCumulativePerfCounters)
+    {
+        return;
+    }
+    {
+        INFO() << "Internal cache hit ratios: ";
+        for (int cacheType = 0; cacheType < ToUnderlying(InternalCacheTypes::EnumCount);
+             cacheType++)
+        {
+            INFO() << "    CacheType " << cacheType << ": " << mInternalCacheHitRatios[cacheType];
+        }
+    }
 }
 
 vk::MemoryReport::MemoryReport()
