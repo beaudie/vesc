@@ -356,6 +356,7 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
     descriptorPoolBinding.reset();
     dynamicBuffer.destroy(renderer);
     descriptorSetCache.clear();
+    descriptorSetCache.destroy(renderer);
 }
 
 // ContextVk implementation.
@@ -533,7 +534,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mUtils.destroy(mRenderer);
 
-    mRenderPassCache.destroy(device);
+    mRenderPassCache.destroy(mRenderer);
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
     mCommandPool.destroy(device);
