@@ -576,6 +576,8 @@ void RendererVk::onDestroy(vk::Context *context)
         vkDestroyDebugReportCallbackEXT(mInstance, mDebugReportCallback, nullptr);
     }
 
+    logCacheStats();
+
     if (mInstance)
     {
         vkDestroyInstance(mInstance, nullptr);
@@ -2706,6 +2708,22 @@ void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuff
     ASSERT(commandBuffer->empty());
     commandBuffer->markOpen();
     mCommandBufferHelperFreeList.push_back(commandBuffer);
+}
+
+void RendererVk::logCacheStats() const
+{
+    if (!vk::kOutputCumulativePerfCounters)
+    {
+        return;
+    }
+    {
+        int cacheType = 0;
+        INFO() << "Vulkan object cache hit ratios: ";
+        for (const CacheStats &stats : mVulkanCacheStats)
+        {
+            INFO() << "    CacheType " << cacheType++ << ": " << stats.getHitRatio();
+        }
+    }
 }
 
 vk::MemoryReport::MemoryReport()
