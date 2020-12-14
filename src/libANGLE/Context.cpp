@@ -1858,6 +1858,12 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
                 *params = mState.mCaps.maxClipPlanes;
             }
             break;
+        case GL_MAX_CULL_DISTANCES_EXT:
+            *params = mState.mCaps.maxCullDistances;
+            break;
+        case GL_MAX_COMBINED_CLIP_AND_CULL_DISTANCES_EXT:
+            *params = mState.mCaps.maxCombinedClipAndCullDistances;
+            break;
         // GLES1 emulation: Vertex attribute queries
         case GL_VERTEX_ARRAY_BUFFER_BINDING:
         case GL_NORMAL_ARRAY_BUFFER_BINDING:
