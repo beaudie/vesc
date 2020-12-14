@@ -185,6 +185,17 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
                 iter->second = behaviorVal;
             }
         }
+        // GL_APPLE_clip_distance is implicitly enabled when GL_EXT_clip_cull_distance is enabled
+        else if (name == "GL_EXT_clip_cull_distance")
+        {
+            const std::string clipDistance = "GL_APPLE_clip_distance";
+            TExtensionBehavior::iterator iterClipDistance =
+                mExtensionBehavior.find(GetExtensionByName(clipDistance.c_str()));
+            if (iterClipDistance != mExtensionBehavior.end())
+            {
+                iterClipDistance->second = behaviorVal;
+            }
+        }
         return;
     }
 
