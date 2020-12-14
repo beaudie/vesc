@@ -661,6 +661,11 @@ class TParseContext : angle::NonCopyable
     int mMaxAtomicCounterBindings;
     int mMaxShaderStorageBufferBindings;
 
+    // keep track of the sum of the clip and cull distance size
+    int mSizeClipDistances;
+    int mSizeCullDistances;
+    int mSizeCombinedClipAndCullDistances;
+
     // keeps track whether we are declaring / defining a function
     bool mDeclaringFunction;
 
