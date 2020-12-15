@@ -189,6 +189,7 @@ void AdjustDimensionsAndFlipForPreRotation(SurfaceRotation framebufferAngle,
 // have an offset of 63.
 void AdjustBlitResolveParametersForResolve(const gl::Rectangle &sourceArea,
                                            const gl::Rectangle &destArea,
+                                           SurfaceRotation framebufferAngle,
                                            UtilsVk::BlitResolveParameters *params)
 {
     params->srcOffset[0]  = sourceArea.x;
@@ -215,6 +216,25 @@ void AdjustBlitResolveParametersForResolve(const gl::Rectangle &sourceArea,
     {
         ASSERT(destArea.y > 0);
         --params->destOffset[1];
+    }
+
+    switch (framebufferAngle)
+    {
+        case SurfaceRotation::Identity:
+        case SurfaceRotation::Rotated90Degrees:
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            // Align the offset.
+            --params->srcOffset[0];
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            // Align the offset, or the sample position near the edge will be wrong.
+            --params->srcOffset[0];
+            --params->srcOffset[1];
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 }
 
@@ -256,7 +276,6 @@ void AdjustBlitResolveParametersForPreRotation(SurfaceRotation framebufferAngle,
             params->flipX = !params->flipX;
             params->flipY = !params->flipY;
             std::swap(params->flipX, params->flipY);
-
             break;
         default:
             UNREACHABLE();
@@ -1147,9 +1166,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         }
 
         // Now that all flipping is done, adjust the offsets for resolve and prerotation
-        if (isColorResolve)
+        if (isResolve)
         {
-            AdjustBlitResolveParametersForResolve(sourceArea, destArea, &params);
+            AdjustBlitResolveParametersForResolve(sourceArea, destArea, rotation, &params);
         }
         AdjustBlitResolveParametersForPreRotation(rotation, srcFramebufferRotation, &params);
 
@@ -1244,9 +1263,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         else
         {
             // Now that all flipping is done, adjust the offsets for resolve and prerotation
-            if (isDepthStencilResolve)
+            if (isResolve)
             {
-                AdjustBlitResolveParametersForResolve(sourceArea, destArea, &params);
+                AdjustBlitResolveParametersForResolve(sourceArea, destArea, rotation, &params);
             }
             AdjustBlitResolveParametersForPreRotation(rotation, srcFramebufferRotation, &params);
 
