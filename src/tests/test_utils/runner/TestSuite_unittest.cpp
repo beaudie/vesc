@@ -107,6 +107,10 @@ class TestSuiteTest : public testing::Test
 // Verifies that Pass, Fail, Crash and Timeout are all handled correctly.
 TEST_F(TestSuiteTest, RunMockTests)
 {
+    // TODO(https://anglebug.com/5467) The code disabling the Metal shader cache writes to stderr
+    // and causes this test to fail.
+    ANGLE_SKIP_TEST_IF(IsOSX());
+
     std::vector<std::string> extraArgs = {"--gtest_filter=MockTestSuiteTest.DISABLED_*"};
 
     TestResults actual;
@@ -124,6 +128,10 @@ TEST_F(TestSuiteTest, RunMockTests)
 // Verifies the flaky retry feature works as expected.
 TEST_F(TestSuiteTest, RunFlakyTests)
 {
+    // TODO(https://anglebug.com/5467) The code disabling the Metal shader cache writes to stderr
+    // and causes this test to fail.
+    ANGLE_SKIP_TEST_IF(IsOSX());
+
     std::vector<std::string> extraArgs = {"--gtest_filter=MockFlakyTestSuiteTest.DISABLED_Flaky",
                                           "--flaky-retries=" + std::to_string(kFlakyRetries)};
 
