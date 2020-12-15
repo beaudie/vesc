@@ -6714,7 +6714,9 @@ bool ValidateReadPixelsBase(const Context *context,
     bool validFormatTypeCombination =
         ValidReadPixelsFormatType(context, readBuffer->getFormat().info, format, type);
 
-    if (!(currentFormat == format && currentType == type) && !validFormatTypeCombination)
+    if (!(currentFormat == format && currentType == type) && !validFormatTypeCombination &&
+        !(currentFormat == GL_RGBA && format == GL_RGB &&
+          readBuffer->getFormat().info->internalFormat == GL_RGB8))
     {
         context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
         return false;
