@@ -1019,7 +1019,6 @@ egl::Config GenerateDefaultConfig(DisplayVk *display,
     config.bindToTextureRGBA  = colorFormat.format == GL_RGBA || colorFormat.format == GL_BGRA_EXT;
     config.colorBufferType    = EGL_RGB_BUFFER;
     config.configCaveat       = GetConfigCaveat(colorFormat.internalFormat);
-    config.conformant         = es1Support | es2Support | es3Support;
     config.depthSize          = depthStencilFormat.depthBits;
     config.stencilSize        = depthStencilFormat.stencilBits;
     config.level              = 0;
@@ -1045,6 +1044,16 @@ egl::Config GenerateDefaultConfig(DisplayVk *display,
     config.transparentBlueValue  = 0;
     config.colorComponentType =
         gl_egl::GLComponentTypeToEGLColorComponentType(colorFormat.componentType);
+
+    // Current ANGLE doesn't support GL_RGB8 format,set it to non-conformant.
+    if (GL_RGB8 == colorFormat.internalFormat)
+    {
+        config.conformant = 0;
+    }
+    else
+    {
+        config.conformant = es1Support | es2Support | es3Support;
+    }
 
     // Vulkan always supports off-screen rendering.  Check the config with display to see if it can
     // also have window support.  If not, the following call should automatically remove
