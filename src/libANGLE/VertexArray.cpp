@@ -90,7 +90,20 @@ void VertexArrayState::setAttribBinding(const Context *context,
 
     bool isMapped = newBinding.getBuffer().get() && newBinding.getBuffer()->isMapped();
     mCachedMappedArrayBuffers.set(attribIndex, isMapped);
-    mCachedEnabledMappedArrayBuffers.set(attribIndex, isMapped && attrib.enabled);
+    mEnabledAttributesMask.set(attribIndex, attrib.enabled);
+    updateCachedMutableOrNonPersistentArrayBuffers(attribIndex);
+    mCachedInvalidMappedArrayBuffer = mCachedMappedArrayBuffers & mEnabledAttributesMask &
+                                      mCachedMutableOrNonPersistentArrayBuffers;
+}
+
+void VertexArrayState::updateCachedMutableOrNonPersistentArrayBuffers(size_t index)
+{
+    const VertexBinding &vertexBinding   = mVertexBindings[index];
+    const BindingPointer<Buffer> &buffer = vertexBinding.getBuffer();
+    bool isMutableOrNonPersistentArrayBuffer =
+        buffer.get() &&
+        (!buffer->isImmutable() || (buffer->getAccessFlags() & GL_MAP_PERSISTENT_BIT_EXT) == 0);
+    mCachedMutableOrNonPersistentArrayBuffers.set(index, isMutableOrNonPersistentArrayBuffer);
 }
 
 // VertexArray implementation.
@@ -250,8 +263,13 @@ ANGLE_INLINE void VertexArray::updateCachedMappedArrayBuffers(
         mState.mCachedMappedArrayBuffers &= ~boundAttributesMask;
     }
 
-    mState.mCachedEnabledMappedArrayBuffers =
-        mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
+    mState.mCachedMutableOrNonPersistentArrayBuffers.reset();
+    for (const auto index : mState.mCachedMappedArrayBuffers &mState.mEnabledAttributesMask)
+    {
+        mState.updateCachedMutableOrNonPersistentArrayBuffers(index);
+    }
+
+    mState.mCachedInvalidMappedArrayBuffer = mState.mCachedMutableOrNonPersistentArrayBuffers;
 }
 
 ANGLE_INLINE void VertexArray::updateCachedMappedArrayBuffersBinding(const VertexBinding &binding)
@@ -441,8 +459,10 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 
     // Update state cache
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
-    mState.mCachedEnabledMappedArrayBuffers =
-        mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
+    mState.updateCachedMutableOrNonPersistentArrayBuffers(attribIndex);
+    mState.mCachedInvalidMappedArrayBuffer = mState.mCachedMappedArrayBuffers &
+                                             mState.mEnabledAttributesMask &
+                                             mState.mCachedMutableOrNonPersistentArrayBuffers;
 }
 
 ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context,
