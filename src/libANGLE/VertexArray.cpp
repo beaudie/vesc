@@ -90,7 +90,13 @@ void VertexArrayState::setAttribBinding(const Context *context,
 
     bool isMapped = newBinding.getBuffer().get() && newBinding.getBuffer()->isMapped();
     mCachedMappedArrayBuffers.set(attribIndex, isMapped);
-    mCachedEnabledMappedArrayBuffers.set(attribIndex, isMapped && attrib.enabled);
+
+    const VertexBinding &vertexBinding   = mVertexBindings[attribIndex];
+    const BindingPointer<Buffer> &buffer = vertexBinding.getBuffer();
+    bool isEnabledMappedMutableNonPersistentArrayBuffer =
+        !buffer->isImmutable() || (buffer->getAccessFlags() & GL_MAP_PERSISTENT_BIT_EXT) == 0;
+    mCachedEnabledMappedMutableNonPersistentArrayBuffers.set(
+        attribIndex, isEnabledMappedMutableNonPersistentArrayBuffer);
 }
 
 // VertexArray implementation.
@@ -250,8 +256,16 @@ ANGLE_INLINE void VertexArray::updateCachedMappedArrayBuffers(
         mState.mCachedMappedArrayBuffers &= ~boundAttributesMask;
     }
 
-    mState.mCachedEnabledMappedArrayBuffers =
-        mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
+    mState.mCachedEnabledMappedMutableNonPersistentArrayBuffers.reset();
+    for (const auto index : mState.mCachedMappedArrayBuffers &mState.mEnabledAttributesMask)
+    {
+        const VertexBinding &vertexBinding   = mState.mVertexBindings[index];
+        const BindingPointer<Buffer> &buffer = vertexBinding.getBuffer();
+        bool isEnabledMappedMutableNonPersistentArrayBuffer =
+            !buffer->isImmutable() || (buffer->getAccessFlags() & GL_MAP_PERSISTENT_BIT_EXT) == 0;
+        mState.mCachedEnabledMappedMutableNonPersistentArrayBuffers.set(
+            index, isEnabledMappedMutableNonPersistentArrayBuffer);
+    }
 }
 
 ANGLE_INLINE void VertexArray::updateCachedMappedArrayBuffersBinding(const VertexBinding &binding)
@@ -441,8 +455,16 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 
     // Update state cache
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
-    mState.mCachedEnabledMappedArrayBuffers =
-        mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
+    mState.mCachedEnabledMappedMutableNonPersistentArrayBuffers.reset();
+    for (const auto index : mState.mCachedMappedArrayBuffers &mState.mEnabledAttributesMask)
+    {
+        const VertexBinding &vertexBinding   = mState.mVertexBindings[index];
+        const BindingPointer<Buffer> &buffer = vertexBinding.getBuffer();
+        bool isEnabledMappedMutableNonPersistentArrayBuffer =
+            !buffer->isImmutable() || (buffer->getAccessFlags() & GL_MAP_PERSISTENT_BIT_EXT) == 0;
+        mState.mCachedEnabledMappedMutableNonPersistentArrayBuffers.set(
+            index, isEnabledMappedMutableNonPersistentArrayBuffer);
+    }
 }
 
 ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context,
