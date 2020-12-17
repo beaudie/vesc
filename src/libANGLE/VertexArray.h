@@ -81,6 +81,8 @@ class VertexArrayState final : angle::NonCopyable
     }
 
   private:
+    void updateCachedMutableOrNonPersistentArrayBuffers(size_t index);
+
     friend class VertexArray;
     std::string mLabel;
     std::vector<VertexAttribute> mVertexAttributes;
@@ -102,6 +104,8 @@ class VertexArrayState final : angle::NonCopyable
     // Used for validation cache. Indexed by attribute.
     AttributesMask mCachedMappedArrayBuffers;
     AttributesMask mCachedEnabledMappedArrayBuffers;
+    AttributesMask mCachedMutableOrNonPersistentArrayBuffers;
+    AttributesMask mCachedInvalidMappedArrayBuffer;
 };
 
 class VertexArray final : public angle::ObserverInterface,
@@ -251,9 +255,9 @@ class VertexArray final : public angle::ObserverInterface,
         return mState.hasEnabledNullPointerClientArray();
     }
 
-    bool hasMappedEnabledArrayBuffer() const
+    bool hasInvalidMappedArrayBuffer() const
     {
-        return mState.mCachedEnabledMappedArrayBuffers.any();
+        return mState.mCachedInvalidMappedArrayBuffer.any();
     }
 
     const VertexArrayState &getState() const { return mState; }
