@@ -251,9 +251,20 @@ class VertexArray final : public angle::ObserverInterface,
         return mState.hasEnabledNullPointerClientArray();
     }
 
-    bool hasMappedEnabledArrayBuffer() const
+    bool hasMappedMutableNonPersistentEnabledArrayBuffer() const
     {
-        return mState.mCachedEnabledMappedArrayBuffers.any();
+        for (const auto index : mState.mCachedEnabledMappedArrayBuffers)
+        {
+            const VertexBinding &vertexBinding   = mState.mVertexBindings[index];
+            const BindingPointer<Buffer> &buffer = vertexBinding.getBuffer();
+            if (buffer->isImmutable() &&
+                (buffer->getAccessFlags() & GL_MAP_PERSISTENT_BIT_EXT) == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     const VertexArrayState &getState() const { return mState; }
