@@ -210,6 +210,7 @@ class ProgramExecutable final : public angle::Subject
     {
         return !getLinkedTransformFeedbackVaryings().empty();
     }
+    bool hasFramebufferFetch() const;
 
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
     size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
@@ -237,6 +238,7 @@ class ProgramExecutable final : public angle::Subject
     const RangeUI &getDefaultUniformRange() const { return mDefaultUniformRange; }
     const RangeUI &getSamplerUniformRange() const { return mSamplerUniformRange; }
     const RangeUI &getImageUniformRange() const { return mImageUniformRange; }
+    const RangeUI &getInputAttachmentUniformRange() const { return mInputAttachmentUniformRange; }
     const std::vector<TransformFeedbackVarying> &getLinkedTransformFeedbackVaryings() const
     {
         return mLinkedTransformFeedbackVaryings;
@@ -378,6 +380,7 @@ class ProgramExecutable final : public angle::Subject
     RangeUI mImageUniformRange;
     std::vector<InterfaceBlock> mComputeShaderStorageBlocks;
     std::vector<InterfaceBlock> mGraphicsShaderStorageBlocks;
+    RangeUI mInputAttachmentUniformRange;
 
     // An array of the samplers that are used by the program
     std::vector<SamplerBinding> mSamplerBindings;

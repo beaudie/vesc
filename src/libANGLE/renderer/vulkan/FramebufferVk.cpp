@@ -1631,6 +1631,7 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
             colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
 
         contextVk->updateColorMasks(context->getState().getBlendStateExt());
+        contextVk->invalidateCurrentShaderResources();
     }
     else
     {
