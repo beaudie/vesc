@@ -148,14 +148,17 @@ enum TBasicType
     EbtUImageBuffer,
     EbtGuardImageEnd = EbtUImageBuffer,
 
-    EbtSubpassInput,
+    // Subpass Input
+    EbtGuardSubpassInputBegin,
+    EbtSubpassInput = EbtGuardSubpassInputBegin,
     EbtISubpassInput,
     EbtUSubpassInput,
     EbtSubpassInputMS,
     EbtISubpassInputMS,
     EbtUSubpassInputMS,
+    EbtGuardSubpassInputEnd = EbtUSubpassInputMS,
 
-    EbtLastSimpleType = EbtUSubpassInputMS,
+    EbtLastSimpleType = EbtGuardSubpassInputEnd,
 
     EbtStruct,
     EbtInterfaceBlock,
@@ -221,9 +224,14 @@ inline bool IsAtomicCounter(TBasicType type)
     return type == EbtAtomicCounter;
 }
 
+inline bool IsSubpassInputType(TBasicType type)
+{
+    return type >= EbtGuardSubpassInputBegin && type <= EbtGuardSubpassInputEnd;
+}
+
 inline bool IsOpaqueType(TBasicType type)
 {
-    return IsSampler(type) || IsImage(type) || IsAtomicCounter(type);
+    return IsSampler(type) || IsImage(type) || IsAtomicCounter(type) || IsSubpassInputType(type);
 }
 
 inline bool IsIntegerSampler(TBasicType type)
@@ -972,6 +980,7 @@ enum TQualifier
     // built-ins written by the shader_framebuffer_fetch extension(s)
     EvqLastFragColor,
     EvqLastFragData,
+    EvqFragmentInOut,
 
     // GLSL ES 3.0 vertex output and fragment input
     EvqSmooth,         // Incomplete qualifier, smooth is the default
@@ -1088,6 +1097,7 @@ inline bool IsShaderOut(TQualifier qualifier)
         case EvqNoPerspectiveOut:
         case EvqCentroidOut:
         case EvqSampleOut:
+        case EvqFragmentInOut:
             return true;
         default:
             return false;
@@ -1181,7 +1191,8 @@ struct TLayoutQualifier
                earlyFragmentTests == false && matrixPacking == EmpUnspecified &&
                blockStorage == EbsUnspecified && !localSize.isAnyValueSet() &&
                imageInternalFormat == EiifUnspecified && primitiveType == EptUndefined &&
-               invocations == 0 && maxVertices == -1 && index == -1;
+               invocations == 0 && maxVertices == -1 && index == -1 && inputAttachmentIndex == -1 &&
+               noncoherent == false;
     }
 
     bool isCombinationValid() const
@@ -1190,6 +1201,7 @@ struct TLayoutQualifier
         bool numViewsSet            = (numViews != -1);
         bool geometryShaderSpecified =
             (primitiveType != EptUndefined) || (invocations != 0) || (maxVertices != -1);
+        bool subpassInputSpecified = (inputAttachmentIndex != -1);
         bool otherLayoutQualifiersSpecified =
             (location != -1 || binding != -1 || index != -1 || matrixPacking != EmpUnspecified ||
              blockStorage != EbsUnspecified || imageInternalFormat != EiifUnspecified);
@@ -1199,7 +1211,8 @@ struct TLayoutQualifier
         // qualifiers.
         return (workGroupSizeSpecified ? 1 : 0) + (numViewsSet ? 1 : 0) + (yuv ? 1 : 0) +
                    (earlyFragmentTests ? 1 : 0) + (otherLayoutQualifiersSpecified ? 1 : 0) +
-                   (geometryShaderSpecified ? 1 : 0) <=
+                   (geometryShaderSpecified ? 1 : 0) + (subpassInputSpecified ? 1 : 0) +
+                   (noncoherent ? 1 : 0) <=
                1;
     }
 
@@ -1239,6 +1252,10 @@ struct TLayoutQualifier
     // EXT_blend_func_extended fragment output layout qualifier
     int index;
 
+    // EXT_shader_framebuffer_fetch layout qualifiers.
+    int inputAttachmentIndex;
+    bool noncoherent;
+
   private:
     explicit constexpr TLayoutQualifier(int /*placeholder*/)
         : location(-1),
@@ -1255,7 +1272,9 @@ struct TLayoutQualifier
           primitiveType(EptUndefined),
           invocations(0),
           maxVertices(-1),
-          index(-1)
+          index(-1),
+          inputAttachmentIndex(-1),
+          noncoherent(false)
     {}
 };
 
@@ -1354,6 +1373,7 @@ inline const char *getQualifierString(TQualifier q)
     case EvqLayer:                  return "Layer";
     case EvqLastFragColor:          return "LastFragColor";
     case EvqLastFragData:           return "LastFragData";
+    case EvqFragmentInOut:          return "inout";
     case EvqSmoothOut:              return "smooth out";
     case EvqCentroidOut:            return "smooth centroid out";
     case EvqFlatOut:                return "flat out";
