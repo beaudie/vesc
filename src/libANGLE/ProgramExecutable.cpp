@@ -29,6 +29,7 @@ ProgramExecutable::ProgramExecutable()
       mDefaultUniformRange(0, 0),
       mSamplerUniformRange(0, 0),
       mImageUniformRange(0, 0),
+      mInputAttachmentUniformRange(0, 0),
       mPipelineHasGraphicsUniformBuffers(false),
       mPipelineHasComputeUniformBuffers(false),
       mPipelineHasGraphicsStorageBuffers(false),
@@ -77,6 +78,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mImageUniformRange(other.mImageUniformRange),
       mComputeShaderStorageBlocks(other.mComputeShaderStorageBlocks),
       mGraphicsShaderStorageBlocks(other.mGraphicsShaderStorageBlocks),
+      mInputAttachmentUniformRange(other.mInputAttachmentUniformRange),
       mPipelineHasGraphicsUniformBuffers(other.mPipelineHasGraphicsUniformBuffers),
       mPipelineHasComputeUniformBuffers(other.mPipelineHasComputeUniformBuffers),
       mPipelineHasGraphicsStorageBuffers(other.mPipelineHasGraphicsStorageBuffers),
@@ -274,6 +276,11 @@ bool ProgramExecutable::hasGraphicsImages() const
 bool ProgramExecutable::hasComputeImages() const
 {
     return !mComputeImageBindings.empty() || mPipelineHasComputeImages;
+}
+
+bool ProgramExecutable::hasFramebufferFetch() const
+{
+    return (mInputAttachmentUniformRange.length() > 0) ? true : false;
 }
 
 GLuint ProgramExecutable::getUniformIndexFromImageIndex(GLuint imageIndex) const
