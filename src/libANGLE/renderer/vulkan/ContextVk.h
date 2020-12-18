@@ -285,6 +285,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     ANGLE_INLINE void invalidateTexture(gl::TextureType target) override {}
 
+    // EXT_shader_framebuffer_fetch_non_coherent
+    void framebufferFetchBarrier() override;
+
     VkDevice getDevice() const;
     egl::ContextPriority getPriority() const { return mContextPriority; }
 
@@ -575,6 +578,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // descriptor sets it binds need to be undone.
     void invalidateGraphicsPipelineAndDescriptorSets();
 
+    void invalidateCurrentShaderResources();
+
     // Implementation of MultisampleTextureInitializer
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,
                                                       gl::Texture *glTexture) override;
@@ -596,6 +601,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         DIRTY_BIT_TRANSFORM_FEEDBACK_STATE,
         DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME,
         DIRTY_BIT_DESCRIPTOR_SETS,
+        DIRTY_BIT_FRAMEBUFFER_FETCH,
         DIRTY_BIT_MAX,
     };
 
@@ -758,7 +764,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void invalidateCurrentDefaultUniforms();
     angle::Result invalidateCurrentTextures(const gl::Context *context);
-    void invalidateCurrentShaderResources();
     void invalidateGraphicsDriverUniforms();
     void invalidateDriverUniforms();
 
@@ -781,6 +786,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                            vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsShaderResources(const gl::Context *context,
                                                      vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsFramebufferFetchBarrier(const gl::Context *context,
+                                                             vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackBuffersEmulation(
         const gl::Context *context,
         vk::CommandBuffer *commandBuffer);
