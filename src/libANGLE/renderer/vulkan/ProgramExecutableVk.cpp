@@ -11,6 +11,7 @@
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
+#include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapperVk.h"
 #include "libANGLE/renderer/vulkan/ProgramPipelineVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
@@ -520,6 +521,32 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramExecutable 
     }
 }
 
+void ProgramExecutableVk::addInputAttachmentDescriptorSetDesc(
+    const gl::ProgramExecutable &executable,
+    const gl::ShaderType shaderType,
+    vk::DescriptorSetLayoutDesc *descOut)
+{
+    const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
+
+    for (unsigned int uniformIndex : executable.getInputAttachmentUniformRange())
+    {
+        std::string mappedImageName;
+        const gl::LinkedUniform &inputAttachmentUniform = uniforms[uniformIndex];
+        mappedImageName                                 = inputAttachmentUniform.mappedName;
+
+        if (!inputAttachmentUniform.isActive(shaderType))
+        {
+            continue;
+        }
+
+        ShaderInterfaceVariableInfo &info = mVariableInfoMap[shaderType][mappedImageName];
+        VkShaderStageFlags activeStages   = gl_vk::kShaderStageMap[shaderType];
+
+        descOut->update(info.binding, VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1, activeStages,
+                        nullptr);
+    }
+}
+
 void ProgramExecutableVk::addTextureDescriptorSetDesc(
     const gl::ProgramState &programState,
     bool useOldRewriteStructSamplers,
@@ -838,6 +865,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         ASSERT(programState);
         addImageDescriptorSetDesc(programState->getExecutable(),
                                   contextVk->useOldRewriteStructSamplers(), &resourcesSetDesc);
+        addInputAttachmentDescriptorSetDesc(programState->getExecutable(), shaderType,
+                                            &resourcesSetDesc);
     }
 
     ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
@@ -1321,6 +1350,7 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
 
 angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     ContextVk *contextVk,
+    FramebufferVk *framebufferVk,
     vk::ResourceUseList *resourceUseList,
     vk::CommandBufferHelper *commandBufferHelper)
 {
@@ -1352,6 +1382,83 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
         {
             return status;
         }
+
+        ANGLE_TRY(updateInputAttachmentDescriptorSet(programState->getExecutable(), shaderType,
+                                                     contextVk, framebufferVk));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ProgramExecutableVk::updateInputAttachmentDescriptorSet(
+    const gl::ProgramExecutable &executable,
+    const gl::ShaderType shaderType,
+    ContextVk *contextVk,
+    FramebufferVk *framebufferVk)
+{
+    const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
+
+    if (!executable.hasFramebufferFetch())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorSet descriptorSet =
+        mDescriptorSets[ToUnderlying(DescriptorSetIndex::ShaderResource)];
+
+    unsigned int uniformBaseIndex = executable.getInputAttachmentUniformRange().low();
+
+    for (unsigned int uniformIndex : executable.getInputAttachmentUniformRange())
+    {
+        const gl::LinkedUniform &inputAttachmentUniform = uniforms[uniformIndex];
+
+        if (!inputAttachmentUniform.isActive(shaderType))
+        {
+            continue;
+        }
+
+        // Lazily allocate the descriptor set, since we may not need one if all of the image
+        // uniforms are inactive.
+        if (descriptorSet == VK_NULL_HANDLE)
+        {
+            ANGLE_TRY(allocateDescriptorSet(contextVk, DescriptorSetIndex::ShaderResource));
+            descriptorSet = mDescriptorSets[ToUnderlying(DescriptorSetIndex::ShaderResource)];
+        }
+        ASSERT(descriptorSet != VK_NULL_HANDLE);
+
+        std::string mappedImageName;
+        mappedImageName = inputAttachmentUniform.mappedName;
+
+        VkWriteDescriptorSet *writeInfos = contextVk->allocWriteDescriptorSets(1);
+
+        VkDescriptorImageInfo *imageInfos = contextVk->allocDescriptorImageInfos(1);
+
+        RenderTargetVk *renderTargetVk =
+            framebufferVk->getColorDrawRenderTarget(uniformIndex - uniformBaseIndex);
+
+        const vk::ImageView *imageView = nullptr;
+
+        ANGLE_TRY(renderTargetVk->getImageView(contextVk, &imageView));
+
+        // Note: binding.access is unused because it is implied by the shader.
+
+        imageInfos[0].sampler     = VK_NULL_HANDLE;
+        imageInfos[0].imageView   = imageView->getHandle();
+        imageInfos[0].imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+
+        ShaderInterfaceVariableInfoMap &variableInfoMap = mVariableInfoMap[shaderType];
+        ShaderInterfaceVariableInfo &info               = variableInfoMap[mappedImageName];
+
+        writeInfos[0].sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writeInfos[0].pNext            = nullptr;
+        writeInfos[0].dstSet           = descriptorSet;
+        writeInfos[0].dstBinding       = info.binding;
+        writeInfos[0].dstArrayElement  = 0;
+        writeInfos[0].descriptorCount  = 1;
+        writeInfos[0].descriptorType   = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+        writeInfos[0].pImageInfo       = &imageInfos[0];
+        writeInfos[0].pBufferInfo      = nullptr;
+        writeInfos[0].pTexelBufferView = nullptr;
     }
 
     return angle::Result::Continue;
