@@ -66,7 +66,7 @@ vars = {
   'patched_yasm_revision': '720b70524a4424b15fc57e82263568c8ba0496ad',
 
   # Current revision of spirv-cross, the Khronos SPIRV cross compiler.
-  'spirv_cross_revision': 'be527632a6c80291ab012a79758e0e41224ad5e2',
+  'spirv_cross_revision': 'e50f7d1ce8e162d0c826e84168cfa234e4de4ec9',
 
   # Current revision fo the SPIRV-Headers Vulkan support library.
   'spirv_headers_revision': '05836bdba63e7debce9fa9feaed42f20cd43af9d',
