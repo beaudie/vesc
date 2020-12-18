@@ -184,6 +184,9 @@ struct ShaderVariable
     bool readonly;
     bool writeonly;
 
+    // From EXT_shader_framebuffer_fetch
+    int inputAttachmentIndex;
+
     // OutputVariable
     // From EXT_blend_func_extended.
     int index;

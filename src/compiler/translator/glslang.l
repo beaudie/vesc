@@ -102,6 +102,7 @@ static int ES3_keyword(TParseContext *context, int token);
 static int ES3_reserved_ES3_1_keyword(TParseContext *context, int token);
 static int ES2_reserved_ES3_1_keyword(TParseContext *context, int token);
 static int ES3_1_keyword(TParseContext *context, int token);
+static int ES2_extension_ES3_keyword_2(TParseContext *context, TExtension extension1, TExtension extension2, int token);
 static int ES2_reserved_ES2_extension_ES3_keyword(TParseContext *context, TExtension extension, int token);
 static int ES3_extension(TParseContext *context, TExtension extension, int token);
 static int ES3_reserved_ES3_1_extension_ES3_2_keyword(TParseContext *context, TExtension extension, int token);
@@ -246,7 +247,7 @@ O           [0-7]
 "samplerVideoWEBGL"    { return WEBGL_video_texture_extension(context, SAMPLERVIDEOWEBGL); }
 "struct"       { return STRUCT; }
 
-"layout"  { return ES3_keyword(context, LAYOUT); }
+"layout"  { return ES2_extension_ES3_keyword_2(context, TExtension::EXT_shader_framebuffer_fetch, TExtension::EXT_shader_framebuffer_fetch_non_coherent, LAYOUT); }
 
 "yuvCscStandardEXT"    { return ES3_extension(context, TExtension::EXT_YUV_target, YUVCSCSTANDARDEXT); }
 "itu_601"              { return yuvcscstandardext_constant(context); }
@@ -607,6 +608,26 @@ int WEBGL_video_texture_extension(TParseContext *context, int token)
     struct yyguts_t* yyg = (struct yyguts_t*) context->getScanner();
     yyscan_t yyscanner = (yyscan_t) context->getScanner();
 
+    yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+    return check_type(yyscanner);
+}
+
+int ES2_extension_ES3_keyword_2(TParseContext *context, TExtension extension1, TExtension extension2, int token)
+{
+    struct yyguts_t* yyg = (struct yyguts_t*) context->getScanner();
+    yyscan_t yyscanner = (yyscan_t) context->getScanner();
+
+    // A keyword in GLSL ES 3.00 or GLSL ES 1.00 with enabled extension.
+    if (is_extension_enabled_or_is_core(context, 100, extension1, 300))
+    {
+        return token;
+    }
+    else if (is_extension_enabled_or_is_core(context, 100, extension2, 300))
+    {
+        return token;
+    }
+
+    // not a reserved word in GLSL ES 1.00, so could be used as an identifier/type name
     yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
     return check_type(yyscanner);
 }
