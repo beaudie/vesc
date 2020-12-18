@@ -233,6 +233,9 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxVertexAttribs(resources.MaxVertexAttribs),
       mMaxAtomicCounterBindings(resources.MaxAtomicCounterBindings),
       mMaxShaderStorageBufferBindings(resources.MaxShaderStorageBufferBindings),
+      mSizeClipDistances(-1),
+      mSizeCullDistances(-1),
+      mSizeCombinedClipAndCullDistances(-1),
       mDeclaringFunction(false),
       mGeometryShaderInputPrimitiveType(EptUndefined),
       mGeometryShaderOutputPrimitiveType(EptUndefined),
@@ -629,6 +632,18 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
             break;
         case EvqSamplePosition:
             message = "can't modify gl_SamplePosition";
+            break;
+        case EvqClipDistance:
+            if (mShaderType == GL_FRAGMENT_SHADER)
+            {
+                message = "can't modify gl_ClipDistance in a fragment shader";
+            }
+            break;
+        case EvqCullDistance:
+            if (mShaderType == GL_FRAGMENT_SHADER)
+            {
+                message = "can't modify gl_CullDistance in a fragment shader";
+            }
             break;
         default:
             //
@@ -1272,6 +1287,38 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
         else if (static_cast<int>(type->getOutermostArraySize()) <=
                  maxClipDistances->getConstPointer()->getIConst())
         {
+            mSizeClipDistances = static_cast<int>(type->getOutermostArraySize());
+
+            if (mSizeCombinedClipAndCullDistances == -1)
+            {
+                mSizeCombinedClipAndCullDistances = mSizeClipDistances;
+            }
+            else
+            {
+                mSizeCombinedClipAndCullDistances += mSizeClipDistances;
+
+                // The size of gl_ClipDistance is compared to gl_MaxCombinedClipAndCullDistances
+                // when GL_EXT_clip_cull_distance is enabled
+                const TExtensionBehavior &extBehavior = extensionBehavior();
+                auto extIter = extBehavior.find(TExtension::EXT_clip_cull_distance);
+                if (extIter != extBehavior.end() &&
+                    (extIter->second == EBhWarn || extIter->second == EBhEnable ||
+                     extIter->second == EBhRequire))
+                {
+                    const TVariable *maxCombinedClipAndCullDistances =
+                        static_cast<const TVariable *>(symbolTable.findBuiltIn(
+                            ImmutableString("gl_MaxCombinedClipAndCullDistances"), mShaderVersion));
+                    if (mSizeCombinedClipAndCullDistances >
+                        maxCombinedClipAndCullDistances->getConstPointer()->getIConst())
+                    {
+                        error(line,
+                              "redeclaration of gl_ClipDistance with size is greater than "
+                              "gl_MaxCombinedClipAndCullDistances - the size of gl_CullDistance",
+                              identifier);
+                    }
+                }
+            }
+
             if (const TSymbol *builtInSymbol = symbolTable.findBuiltIn(identifier, mShaderVersion))
             {
                 needsReservedCheck = !checkCanUseExtension(line, builtInSymbol->extension());
@@ -1280,6 +1327,59 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
         else
         {
             error(line, "redeclaration of gl_ClipDistance with size > gl_MaxClipDistances",
+                  identifier);
+            return false;
+        }
+    }
+    else if (type->isArray() && identifier == "gl_CullDistance")
+    {
+        // gl_CullDistance can be redeclared with smaller size than gl_MaxCullDistances
+        const TVariable *maxCullDistances = static_cast<const TVariable *>(
+            symbolTable.findBuiltIn(ImmutableString("gl_MaxCullDistances"), mShaderVersion));
+        if (!maxCullDistances)
+        {
+            // Unsupported extension
+            needsReservedCheck = true;
+        }
+        else if (type->isArrayOfArrays())
+        {
+            error(line, "redeclaration of gl_CullDistance as an array of arrays", identifier);
+            return false;
+        }
+        else if (static_cast<int>(type->getOutermostArraySize()) <=
+                 maxCullDistances->getConstPointer()->getIConst())
+        {
+            mSizeCullDistances = static_cast<int>(type->getOutermostArraySize());
+
+            if (mSizeCombinedClipAndCullDistances == -1)
+            {
+                mSizeCombinedClipAndCullDistances = mSizeCullDistances;
+            }
+            else
+            {
+                mSizeCombinedClipAndCullDistances += mSizeCullDistances;
+
+                const TVariable *maxCombinedClipAndCullDistances =
+                    static_cast<const TVariable *>(symbolTable.findBuiltIn(
+                        ImmutableString("gl_MaxCombinedClipAndCullDistances"), mShaderVersion));
+                if (mSizeCombinedClipAndCullDistances >
+                    maxCombinedClipAndCullDistances->getConstPointer()->getIConst())
+                {
+                    error(line,
+                          "redeclaration of gl_CullDistance with size is greater than "
+                          "gl_MaxCombinedClipAndCullDistances - the size of gl_ClipDistance",
+                          identifier);
+                }
+            }
+
+            if (const TSymbol *builtInSymbol = symbolTable.findBuiltIn(identifier, mShaderVersion))
+            {
+                needsReservedCheck = !checkCanUseExtension(line, builtInSymbol->extension());
+            }
+        }
+        else
+        {
+            error(line, "redeclaration of gl_CullDistance with size > gl_MaxCullDistances",
                   identifier);
             return false;
         }
