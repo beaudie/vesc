@@ -1076,6 +1076,7 @@ bool TParseContext::checkIsValidQualifierForArray(const TSourceLoc &line,
 {
     if ((elementQualifier.qualifier == EvqAttribute) ||
         (elementQualifier.qualifier == EvqVertexIn) ||
+        (elementQualifier.qualifier == EvqFragmentInOut) ||
         (elementQualifier.qualifier == EvqConst && mShaderVersion < 300))
     {
         error(line, "cannot declare arrays of this qualifier",
@@ -1119,7 +1120,7 @@ bool TParseContext::checkArrayOfArraysInOut(const TSourceLoc &line,
                   TType(elementType).getQualifierString());
             return false;
         }
-        if (elementType.qualifier == EvqFragmentOut)
+        if (elementType.qualifier == EvqFragmentOut || elementType.qualifier == EvqFragmentInOut)
         {
             error(line, "fragment shader output cannot be an array of arrays",
                   TType(elementType).getQualifierString());
@@ -1223,6 +1224,17 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     else
     {
         checkIndexIsNotSpecified(line, type->getLayoutQualifier().index);
+    }
+
+    if (!((identifier.beginsWith("gl_LastFragData") || type->getQualifier() == EvqFragmentInOut) &&
+          (isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch) ||
+           isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch_non_coherent))))
+    {
+        checkNoncoherentIsNotSpecified(line, type->getLayoutQualifier().noncoherent);
+    }
+    else if (isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch_non_coherent))
+    {
+        checkNoncoherentIsSpecified(line, type->getLayoutQualifier().noncoherent);
     }
 
     checkBindingIsValid(line, *type);
@@ -1466,6 +1478,14 @@ void TParseContext::declarationQualifierErrorCheck(const sh::TQualifier qualifie
     }
 
     bool canHaveLocation = qualifier == EvqVertexIn || qualifier == EvqFragmentOut;
+    if (mShaderVersion >= 300 &&
+        (isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch) ||
+         isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch_non_coherent)))
+    {
+        // In the case of EXT_shader_framebuffer_fetch or EXT_shader_framebuffer_fetch_non_coherent
+        // extension, the location of inout qualifier is used to set the input attachment index
+        canHaveLocation = canHaveLocation || qualifier == EvqFragmentInOut;
+    }
     if (mShaderVersion >= 310)
     {
         canHaveLocation = canHaveLocation || qualifier == EvqUniform || IsVarying(qualifier);
@@ -1525,6 +1545,7 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
         case EvqVertexIn:
         case EvqFragmentOut:
         case EvqComputeIn:
+        case EvqFragmentInOut:
             if (publicType.getBasicType() == EbtStruct)
             {
                 error(identifierLocation, "cannot be used with a structure",
@@ -1875,6 +1896,28 @@ void TParseContext::checkEarlyFragmentTestsIsNotSpecified(const TSourceLoc &loca
         error(location,
               "invalid layout qualifier: only valid when used with 'in' in a fragment shader",
               "early_fragment_tests");
+    }
+}
+
+void TParseContext::checkNoncoherentIsSpecified(const TSourceLoc &location, bool noncoherent)
+{
+    if (noncoherent == false)
+    {
+        error(location,
+              "'noncoherent' qualifier must be used when "
+              "GL_EXT_shader_framebuffer_fetch_non_coherent extension is used",
+              "noncoherent");
+    }
+}
+
+void TParseContext::checkNoncoherentIsNotSpecified(const TSourceLoc &location, bool noncoherent)
+{
+    if (noncoherent != false)
+    {
+        error(location,
+              "invalid layout qualifier: only valid when used with 'gl_LastFragData' or the "
+              "variable decorated with 'inout' in a fragment shader",
+              "noncoherent");
     }
 }
 
@@ -2392,7 +2435,7 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
             checkIsAtGlobalLevel(typeSpecifier.getLine(), "layout");
         }
         if (sh::IsVarying(returnType.qualifier) || returnType.qualifier == EvqVertexIn ||
-            returnType.qualifier == EvqFragmentOut)
+            returnType.qualifier == EvqFragmentOut || returnType.qualifier == EvqFragmentInOut)
         {
             checkInputOutputTypeIsValidES3(returnType.qualifier, typeSpecifier,
                                            typeSpecifier.getLine());
@@ -2429,6 +2472,7 @@ void TParseContext::checkInputOutputTypeIsValidES3(const TQualifier qualifier,
             // Vertex inputs with a struct type are disallowed in nonEmptyDeclarationErrorCheck
             return;
         case EvqFragmentOut:
+        case EvqFragmentInOut:
             // ESSL 3.00 section 4.3.6
             if (type.typeSpecifierNonArray.isMatrix())
             {
@@ -3955,6 +3999,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     checkYuvIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.yuv);
     checkEarlyFragmentTestsIsNotSpecified(typeQualifier.line,
                                           typeQualifier.layoutQualifier.earlyFragmentTests);
+    checkNoncoherentIsNotSpecified(typeQualifier.line, typeQualifier.layoutQualifier.noncoherent);
 
     TLayoutQualifier blockLayoutQualifier = typeQualifier.layoutQualifier;
     if (!IsShaderIoBlock(typeQualifier.qualifier))
@@ -4729,6 +4774,17 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
         checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
         qualifier.primitiveType = EptTriangleStrip;
     }
+    else if (qualifierType == "noncoherent" && mShaderType == GL_FRAGMENT_SHADER)
+    {
+        if (checkCanUseOneOfExtensions(
+                qualifierTypeLine, std::array<TExtension, 2u>{
+                                       {TExtension::EXT_shader_framebuffer_fetch,
+                                        TExtension::EXT_shader_framebuffer_fetch_non_coherent}}))
+        {
+            checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 100);
+            qualifier.noncoherent = true;
+        }
+    }
 
     else
     {
@@ -5037,7 +5093,16 @@ TStorageQualifierWrapper *TParseContext::parseInOutQualifier(const TSourceLoc &l
 {
     if (!declaringFunction())
     {
-        error(loc, "invalid qualifier: can be only used with function parameters", "inout");
+        if (isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch) ||
+            isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch_non_coherent))
+        {
+            return new TStorageQualifierWrapper(EvqFragmentInOut, loc);
+        }
+
+        error(loc,
+              "invalid qualifier: can be used with either function parameters or the variables for "
+              "fetching input attachment data",
+              "inout");
     }
     return new TStorageQualifierWrapper(EvqInOut, loc);
 }
@@ -5134,6 +5199,8 @@ TFieldList *TParseContext::addStructDeclaratorList(const TPublicType &typeSpecif
     checkWorkGroupSizeIsNotSpecified(typeSpecifier.getLine(), typeSpecifier.layoutQualifier);
     checkEarlyFragmentTestsIsNotSpecified(typeSpecifier.getLine(),
                                           typeSpecifier.layoutQualifier.earlyFragmentTests);
+    checkNoncoherentIsNotSpecified(typeSpecifier.getLine(),
+                                   typeSpecifier.layoutQualifier.noncoherent);
 
     TFieldList *fieldList = new TFieldList();
 

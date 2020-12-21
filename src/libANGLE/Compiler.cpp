@@ -151,6 +151,9 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     // GL_EXT_YUV_target
     mResources.EXT_YUV_target = extensions.yuvTargetEXT;
 
+    mResources.EXT_shader_framebuffer_fetch_non_coherent =
+        extensions.shaderFramebufferFetchNonCoherentEXT;
+
     // GLSL ES 3.0 constants
     mResources.MaxVertexOutputVectors  = caps.maxVertexOutputComponents / 4;
     mResources.MaxFragmentInputVectors = caps.maxFragmentInputComponents / 4;
