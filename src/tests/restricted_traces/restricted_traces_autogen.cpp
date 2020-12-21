@@ -20,6 +20,7 @@
 #include "dragon_ball_legends/dragon_ball_legends_capture_context1.h"
 #include "egypt_1500/egypt_1500_capture_context1.h"
 #include "fate_grand_order/fate_grand_order_capture_context1.h"
+#include "fifa_mobile/fifa_mobile_capture_context2.h"
 #include "free_fire/free_fire_capture_context1.h"
 #include "google_maps/google_maps_capture_context3.h"
 #include "kartrider_rush/kartrider_rush_capture_context1.h"
@@ -123,7 +124,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
     {RestrictedTraceID::world_of_tanks_blitz,
      {world_of_tanks_blitz::kReplayFrameStart, world_of_tanks_blitz::kReplayFrameEnd,
       world_of_tanks_blitz::kReplayDrawSurfaceWidth, world_of_tanks_blitz::kReplayDrawSurfaceHeight,
-      "world_of_tanks_blitz"}}};
+      "world_of_tanks_blitz"}},
+    {RestrictedTraceID::fifa_mobile,
+     {fifa_mobile::kReplayFrameStart, fifa_mobile::kReplayFrameEnd,
+      fifa_mobile::kReplayDrawSurfaceWidth, fifa_mobile::kReplayDrawSurfaceHeight, "fifa_mobile"}}};
 }
 
 const TraceInfo &GetTraceInfo(RestrictedTraceID traceID)
@@ -203,6 +207,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ReplayContext1Frame(frameIndex);
+            break;
+        case RestrictedTraceID::fifa_mobile:
+            fifa_mobile::ReplayContext2Frame(frameIndex);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -284,6 +291,9 @@ void ResetReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ResetContext1Replay();
             break;
+        case RestrictedTraceID::fifa_mobile:
+            fifa_mobile::ResetContext2Replay();
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -363,6 +373,9 @@ void SetupReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetupContext1Replay();
+            break;
+        case RestrictedTraceID::fifa_mobile:
+            fifa_mobile::SetupContext2Replay();
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -444,6 +457,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::fifa_mobile:
+            fifa_mobile::SetBinaryDataDir(dataDir);
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -523,6 +539,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::fifa_mobile:
+            fifa_mobile::SetBinaryDataDecompressCallback(callback);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
