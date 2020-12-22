@@ -113,6 +113,17 @@ bool ValidateBlitFramebufferParameters(const Context *context,
                                        GLint dstY1,
                                        GLbitfield mask,
                                        GLenum filter);
+bool ValidateBlitFramebufferParametersBase(const Context *context,
+                                           GLint srcX0,
+                                           GLint srcY0,
+                                           GLint srcX1,
+                                           GLint srcY1,
+                                           GLint dstX0,
+                                           GLint dstY0,
+                                           GLint dstX1,
+                                           GLint dstY1,
+                                           GLbitfield mask,
+                                           GLenum filter);
 
 bool ValidateBindFramebufferBase(const Context *context, GLenum target, FramebufferID framebuffer);
 bool ValidateBindRenderbufferBase(const Context *context,
