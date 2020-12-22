@@ -456,7 +456,8 @@ angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
     for (const gl::ShaderType shaderType : linkedShaderStages)
     {
         GlslangSpirvOptions options;
-        options.shaderType = shaderType;
+        options.shaderType                         = shaderType;
+        options.transformPositionToVulkanClipSpace = true;
 
         angle::Result status = GlslangTransformSpirvCode(
             [context](GlslangError error) { return HandleError(context, error); }, options,
