@@ -902,7 +902,7 @@ bool ValidFramebufferTarget(const Context *context, GLenum target)
 
         case GL_READ_FRAMEBUFFER:
         case GL_DRAW_FRAMEBUFFER:
-            return (context->getExtensions().framebufferBlit ||
+            return (context->getExtensions().framebufferBlitAny() ||
                     context->getClientMajorVersion() >= 3);
 
         default:
@@ -1483,7 +1483,7 @@ bool ValidateBlitFramebufferParameters(const Context *context,
                     // as well
                     // 3) If the read buffer is a signed integer format, the draw buffer must be as
                     // well
-                    // Changes with EXT_color_buffer_float:
+                    // Changes with EXT_color_buffer_float and NV_framebuffer_blit:
                     // Case 1) is changed to fixed point OR floating point
                     GLenum readComponentType = readFormat.info->componentType;
                     GLenum drawComponentType = drawFormat.info->componentType;
@@ -1492,7 +1492,7 @@ bool ValidateBlitFramebufferParameters(const Context *context,
                     bool drawFixedPoint      = (drawComponentType == GL_UNSIGNED_NORMALIZED ||
                                            drawComponentType == GL_SIGNED_NORMALIZED);
 
-                    if (extensions.colorBufferFloat)
+                    if (extensions.colorBufferFloat || extensions.framebufferBlitNV)
                     {
                         bool readFixedOrFloat = (readFixedPoint || readComponentType == GL_FLOAT);
                         bool drawFixedOrFloat = (drawFixedPoint || drawComponentType == GL_FLOAT);
@@ -1542,7 +1542,8 @@ bool ValidateBlitFramebufferParameters(const Context *context,
                 }
             }
 
-            if (readFormat.info->isInt() && filter == GL_LINEAR)
+            // Linear filtering is allowed with integer formats with NV_framebuffer_blit
+            if (!extensions.framebufferBlitNV && readFormat.info->isInt() && filter == GL_LINEAR)
             {
                 context->validationError(GL_INVALID_OPERATION, kBlitIntegerWithLinearFilter);
                 return false;
