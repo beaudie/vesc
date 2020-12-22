@@ -67,6 +67,7 @@ struct LinkedUniform : public sh::ShaderVariable, public ActiveVariable
     bool isAtomicCounter() const { return IsAtomicCounterType(type); }
     bool isInDefaultBlock() const { return bufferIndex == -1; }
     bool isField() const { return name.find('.') != std::string::npos; }
+    bool isSubpassInput() const { return IsSubpassInputType(inputAttachmentIndex); }
     size_t getElementSize() const { return typeInfo->externalSize; }
     size_t getElementComponents() const { return typeInfo->componentCount; }
 
