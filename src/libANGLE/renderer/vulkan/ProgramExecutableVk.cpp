@@ -28,18 +28,23 @@ bool ValidateTransformedSpirV(ContextVk *contextVk,
                               ProgramExecutableVk *executableVk,
                               const gl::ShaderMap<SpirvBlob> &spirvBlobs)
 {
-    for (gl::ShaderType shaderType : linkedShaderStages)
+    for (SurfaceRotation preRotation : angle::AllEnums<SurfaceRotation>())
     {
-        GlslangSpirvOptions options;
-        options.shaderType      = shaderType;
-        options.removeDebugInfo = true;
-
-        SpirvBlob transformed;
-        if (GlslangWrapperVk::TransformSpirV(
-                contextVk, options, executableVk->getShaderInterfaceVariableInfoMap()[shaderType],
-                spirvBlobs[shaderType], &transformed) != angle::Result::Continue)
+        for (gl::ShaderType shaderType : linkedShaderStages)
         {
-            return false;
+            GlslangSpirvOptions options;
+            options.shaderType      = shaderType;
+            options.preRotation     = preRotation;
+            options.removeDebugInfo = true;
+
+            SpirvBlob transformed;
+            if (GlslangWrapperVk::TransformSpirV(
+                    contextVk, options,
+                    executableVk->getShaderInterfaceVariableInfoMap()[shaderType],
+                    spirvBlobs[shaderType], &transformed) != angle::Result::Continue)
+            {
+                return false;
+            }
         }
     }
     return true;
@@ -116,6 +121,7 @@ ProgramInfo::~ProgramInfo() = default;
 
 angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                        const gl::ShaderType shaderType,
+                                       bool isLastGeometryStage,
                                        const ShaderInfo &shaderInfo,
                                        ProgramTransformOptions optionBits,
                                        ProgramExecutableVk *executableVk)
@@ -132,6 +138,11 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     options.removeEarlyFragmentTestsOptimization =
         shaderType == gl::ShaderType::Fragment && optionBits.removeEarlyFragmentTestsOptimization;
     options.removeDebugInfo = !contextVk->getRenderer()->getEnableValidationLayers();
+
+    if (isLastGeometryStage)
+    {
+        options.preRotation = static_cast<SurfaceRotation>(optionBits.surfaceRotation);
+    }
 
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(contextVk, options, variableInfoMap[shaderType],
                                                originalSpirvBlob, &transformedSpirvBlob));
@@ -675,14 +686,22 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     mTransformOptions.surfaceRotation           = ToUnderlying(desc.getSurfaceRotation());
 
     // This must be called after mTransformOptions have been set.
-    ProgramInfo &programInfo = getGraphicsProgramInfo(mTransformOptions);
-    for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
+    ProgramInfo &programInfo                  = getGraphicsProgramInfo(mTransformOptions);
+    const gl::ShaderBitSet linkedShaderStages = glExecutable->getLinkedShaderStages();
+
+    gl::ShaderBitSet geometryShaderStages = linkedShaderStages;
+    geometryShaderStages.reset(gl::ShaderType::Fragment);
+    ASSERT(geometryShaderStages.any());
+    const gl::ShaderType lastGeometryStage = geometryShaderStages.last();
+
+    for (const gl::ShaderType shaderType : linkedShaderStages)
     {
         ProgramVk *programVk = getShaderProgram(glState, shaderType);
         if (programVk)
         {
-            ANGLE_TRY(programVk->initGraphicsShaderProgram(contextVk, shaderType, mTransformOptions,
-                                                           &programInfo, this));
+            ANGLE_TRY(programVk->initGraphicsShaderProgram(contextVk, shaderType,
+                                                           shaderType == lastGeometryStage,
+                                                           mTransformOptions, &programInfo, this));
         }
     }
 
