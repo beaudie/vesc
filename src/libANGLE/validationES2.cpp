@@ -2741,7 +2741,7 @@ bool ValidateBlitFramebufferANGLE(const Context *context,
                                   GLbitfield mask,
                                   GLenum filter)
 {
-    if (!context->getExtensions().framebufferBlit)
+    if (!context->getExtensions().framebufferBlitAny())
     {
         context->validationError(GL_INVALID_OPERATION, kBlitExtensionNotAvailable);
         return false;
@@ -2860,6 +2860,71 @@ bool ValidateBlitFramebufferANGLE(const Context *context,
 
     return ValidateBlitFramebufferParameters(context, srcX0, srcY0, srcX1, srcY1, dstX0, dstY0,
                                              dstX1, dstY1, mask, filter);
+}
+
+bool ValidateBlitFramebufferNV(const Context *context,
+                               GLint srcX0,
+                               GLint srcY0,
+                               GLint srcX1,
+                               GLint srcY1,
+                               GLint dstX0,
+                               GLint dstY0,
+                               GLint dstX1,
+                               GLint dstY1,
+                               GLbitfield mask,
+                               GLenum filter)
+{
+    const auto &glState          = context->getState();
+    Framebuffer *readFramebuffer = glState.getReadFramebuffer();
+    Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
+
+    if (mask & GL_COLOR_BUFFER_BIT)
+    {
+        const FramebufferAttachment *readColorBuffer = readFramebuffer->getReadColorAttachment();
+
+        if (readColorBuffer)
+        {
+            const Format &readFormat = readColorBuffer->getFormat();
+
+            for (size_t drawbufferIdx = 0;
+                 drawbufferIdx < drawFramebuffer->getDrawbufferStateCount(); ++drawbufferIdx)
+            {
+                const FramebufferAttachment *attachment =
+                    drawFramebuffer->getDrawBuffer(drawbufferIdx);
+                if (attachment)
+                {
+                    const Format &drawFormat = attachment->getFormat();
+
+                    // The GL ES 3.0.2 spec (pg 193) states that:
+                    // 1) If the read buffer is fixed point format, the draw buffer must be as well
+                    // 2) If the read buffer is an unsigned integer format, the draw buffer must be
+                    // as well
+                    // 3) If the read buffer is a signed integer format, the draw buffer must be as
+                    // well
+                    // Changes with EXT_color_buffer_float:
+                    // Case 1) is changed to fixed point OR floating point
+                    GLenum readComponentType = readFormat.info->componentType;
+                    GLenum drawComponentType = drawFormat.info->componentType;
+                    bool readFixedPoint      = (readComponentType == GL_UNSIGNED_NORMALIZED ||
+                                           readComponentType == GL_SIGNED_NORMALIZED);
+                    bool drawFixedPoint      = (drawComponentType == GL_UNSIGNED_NORMALIZED ||
+                                           drawComponentType == GL_SIGNED_NORMALIZED);
+                    bool readFixedOrFloat    = (readFixedPoint || readComponentType == GL_FLOAT);
+                    bool drawFixedOrFloat    = (drawFixedPoint || drawComponentType == GL_FLOAT);
+
+                    if (readFixedOrFloat != drawFixedOrFloat)
+                    {
+                        context->validationError(GL_INVALID_OPERATION,
+                                                 kBlitTypeMismatchFixedOrFloat);
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    return ValidateBlitFramebufferParametersBase(context, srcX0, srcY0, srcX1, srcY1, dstX0, dstY0,
+                                                 dstX1, dstY1, mask, filter);
 }
 
 bool ValidateClear(const Context *context, GLbitfield mask)
