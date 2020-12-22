@@ -554,6 +554,10 @@ class TParseContext : angle::NonCopyable
 
     void checkEarlyFragmentTestsIsNotSpecified(const TSourceLoc &location, bool earlyFragmentTests);
 
+    void checkNoncoherentIsSpecified(const TSourceLoc &location, bool noncoherent);
+
+    void checkNoncoherentIsNotSpecified(const TSourceLoc &location, bool noncoherent);
+
     bool checkUnsizedArrayConstructorArgumentDimensionality(const TIntermSequence &arguments,
                                                             TType type,
                                                             const TSourceLoc &line);

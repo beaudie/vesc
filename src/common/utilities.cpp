@@ -614,6 +614,11 @@ bool IsMatrixType(GLenum type)
     return VariableRowCount(type) > 1;
 }
 
+bool IsSubpassInputType(int inputAttachmentIndex)
+{
+    return inputAttachmentIndex != -1;
+}
+
 GLenum TransposeMatrixType(GLenum type)
 {
     if (!IsMatrixType(type))

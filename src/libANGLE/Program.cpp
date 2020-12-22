@@ -1001,6 +1001,7 @@ void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
     stream->writeInt(var.offset);
     stream->writeBool(var.readonly);
     stream->writeBool(var.writeonly);
+    stream->writeInt(var.inputAttachmentIndex);
     stream->writeBool(var.texelFetchStaticUse);
 
     ASSERT(var.fields.empty());
@@ -1020,11 +1021,12 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->mappedStructName = stream->readString();
     var->setParentArrayIndex(stream->readInt<int>());
 
-    var->imageUnitFormat     = stream->readInt<GLenum>();
-    var->offset              = stream->readInt<int>();
-    var->readonly            = stream->readBool();
-    var->writeonly           = stream->readBool();
-    var->texelFetchStaticUse = stream->readBool();
+    var->imageUnitFormat      = stream->readInt<GLenum>();
+    var->offset               = stream->readInt<int>();
+    var->readonly             = stream->readBool();
+    var->writeonly            = stream->readBool();
+    var->inputAttachmentIndex = stream->readInt<int>();
+    var->texelFetchStaticUse  = stream->readBool();
 }
 
 // VariableLocation implementation.
@@ -3806,8 +3808,8 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
 {
     ASSERT(combinedImageUniforms);
 
-    // Iterate over mExecutable->mUniforms from the back, and find the range of atomic counters,
-    // images and samplers in that order.
+    // Iterate over mExecutable->mUniforms from the back, and find the range of subpass inputs,
+    // atomic counters, images and samplers in that order.
     auto highIter = mState.mExecutable->getUniforms().rbegin();
     auto lowIter  = highIter;
 
@@ -3816,7 +3818,19 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
 
     // Note that uniform block uniforms are not yet appended to this list.
     ASSERT(mState.mExecutable->getUniforms().size() == 0 || highIter->isAtomicCounter() ||
-           highIter->isImage() || highIter->isSampler() || highIter->isInDefaultBlock());
+           highIter->isImage() || highIter->isSampler() || highIter->isInDefaultBlock() ||
+           highIter->isSubpassInput());
+
+    for (; lowIter != mState.mExecutable->getUniforms().rend() && lowIter->isSubpassInput();
+         ++lowIter)
+    {
+        --low;
+    }
+
+    mState.mExecutable->mInputAttachmentUniformRange = RangeUI(low, high);
+
+    highIter = lowIter;
+    high     = low;
 
     for (; lowIter != mState.mExecutable->getUniforms().rend() && lowIter->isAtomicCounter();
          ++lowIter)

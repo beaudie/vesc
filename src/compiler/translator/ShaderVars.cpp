@@ -46,6 +46,7 @@ ShaderVariable::ShaderVariable(GLenum typeIn)
       offset(-1),
       readonly(false),
       writeonly(false),
+      inputAttachmentIndex(-1),
       index(-1),
       yuv(false),
       interpolation(INTERPOLATION_SMOOTH),
@@ -82,6 +83,7 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       offset(other.offset),
       readonly(other.readonly),
       writeonly(other.writeonly),
+      inputAttachmentIndex(other.inputAttachmentIndex),
       index(other.index),
       yuv(other.yuv),
       interpolation(other.interpolation),
@@ -112,6 +114,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     offset                        = other.offset;
     readonly                      = other.readonly;
     writeonly                     = other.writeonly;
+    inputAttachmentIndex          = other.inputAttachmentIndex;
     index                         = other.index;
     yuv                           = other.yuv;
     interpolation                 = other.interpolation;
@@ -131,7 +134,8 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
         location != other.location || hasImplicitLocation != other.hasImplicitLocation ||
         binding != other.binding || imageUnitFormat != other.imageUnitFormat ||
         offset != other.offset || readonly != other.readonly || writeonly != other.writeonly ||
-        index != other.index || yuv != other.yuv || interpolation != other.interpolation ||
+        inputAttachmentIndex != other.inputAttachmentIndex || index != other.index ||
+        yuv != other.yuv || interpolation != other.interpolation ||
         isInvariant != other.isInvariant || isShaderIOBlock != other.isShaderIOBlock ||
         texelFetchStaticUse != other.texelFetchStaticUse)
     {

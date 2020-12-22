@@ -924,7 +924,13 @@ precision_qualifier
 
 layout_qualifier
     : LAYOUT LEFT_PAREN layout_qualifier_id_list RIGHT_PAREN {
-        ES3_OR_NEWER("layout", @1, "qualifier");
+        constexpr std::array<TExtension, 2u> extensions{ { TExtension::EXT_shader_framebuffer_fetch,
+                                                           TExtension::EXT_shader_framebuffer_fetch_non_coherent } };
+        if (context->getShaderVersion() < 300
+        && !context->checkCanUseOneOfExtensions(@1, extensions))
+        {
+            context->error(@1, "qualifier" " supported in GLSL ES 3.00 and above only", "layout");
+        }
         $$ = $3;
     }
     ;
