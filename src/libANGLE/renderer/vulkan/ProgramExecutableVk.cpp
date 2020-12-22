@@ -33,9 +33,10 @@ bool ValidateTransformedSpirV(ContextVk *contextVk,
         for (gl::ShaderType shaderType : linkedShaderStages)
         {
             GlslangSpirvOptions options;
-            options.shaderType      = shaderType;
-            options.preRotation     = preRotation;
-            options.removeDebugInfo = true;
+            options.shaderType                         = shaderType;
+            options.preRotation                        = preRotation;
+            options.transformPositionToVulkanClipSpace = true;
+            options.removeDebugInfo                    = true;
 
             SpirvBlob transformed;
             if (GlslangWrapperVk::TransformSpirV(
@@ -142,6 +143,7 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     if (isLastGeometryStage)
     {
         options.preRotation = static_cast<SurfaceRotation>(optionBits.surfaceRotation);
+        options.transformPositionToVulkanClipSpace = true;
     }
 
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(contextVk, options, variableInfoMap[shaderType],
