@@ -810,7 +810,6 @@ class DispatchTableGL : angle::NonCopyable
 
   protected:
     virtual void *loadProcAddress(const std::string &function) const = 0;
-
     void initProcsDesktopGL(const gl::Version &version, const std::set<std::string> &extensions);
     void initProcsGLES(const gl::Version &version, const std::set<std::string> &extensions);
     void initProcsSharedExtensions(const std::set<std::string> &extensions);
