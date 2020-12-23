@@ -410,7 +410,7 @@ def main():
     dispatch_table_header = dispatch_table_header_template.format(
         script_name=os.path.basename(sys.argv[0]),
         data_source_name=data_source_name,
-        year=date.today().year,
+        year=2020,  # Hard-code year so generated files don't change every year
         file_name=dispatch_header_path,
         table_data="\n\n".join(table_data))
 
