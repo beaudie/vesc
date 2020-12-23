@@ -2806,9 +2806,6 @@ TEST_P(TransformFeedbackTestES31, IOBlocksInterleaved)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_io_blocks"));
 
-    // Not supported in Vulkan yet.  http://anglebug.com/3606
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr char kVS[] = R"(#version 310 es
 #extension GL_EXT_shader_io_blocks : require
 
@@ -2917,9 +2914,6 @@ TEST_P(TransformFeedbackTestES31, IOBlocksSeparate)
 
     // http://anglebug.com/5488
     ANGLE_SKIP_TEST_IF(IsPixel2() && IsOpenGL());
-
-    // Not supported in Vulkan yet.  http://anglebug.com/3606
-    ANGLE_SKIP_TEST_IF(IsVulkan());
 
     constexpr char kVS[] = R"(#version 310 es
 #extension GL_EXT_shader_io_blocks : require
