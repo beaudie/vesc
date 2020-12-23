@@ -64,13 +64,16 @@ class DispatchTableGL : angle::NonCopyable
 
   protected:
     virtual void *loadProcAddress(const std::string &function) const = 0;
-
+#if defined(ANGLE_ENABLE_OPENGL_DESKTOP)
     void initProcsDesktopGL(const gl::Version &version, const std::set<std::string> &extensions);
+#endif  // defined(ANGLE_ENABLE_OPENGL_DESKTOP)
     void initProcsGLES(const gl::Version &version, const std::set<std::string> &extensions);
     void initProcsSharedExtensions(const std::set<std::string> &extensions);
 
 #if defined(ANGLE_ENABLE_OPENGL_NULL)
+#if defined(ANGLE_ENABLE_OPENGL_DESKTOP)
     void initProcsDesktopGLNULL(const gl::Version &version, const std::set<std::string> &extensions);
+#endif  // defined(ANGLE_ENABLE_OPENGL_DESKTOP)
     void initProcsGLESNULL(const gl::Version &version, const std::set<std::string> &extensions);
     void initProcsSharedExtensionsNULL(const std::set<std::string> &extensions);
 #endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
@@ -117,12 +120,14 @@ namespace rx
 {{
 DispatchTableGL::DispatchTableGL() = default;
 
+#if defined(ANGLE_ENABLE_OPENGL_DESKTOP)
 void DispatchTableGL::initProcsDesktopGL(const gl::Version &version, const std::set<std::string> &extensions)
 {{
 {gl_data}
 
 {gl_extensions_data}
 }}
+#endif  // defined(ANGLE_ENABLE_OPENGL_DESKTOP)
 
 void DispatchTableGL::initProcsGLES(const gl::Version &version, const std::set<std::string> &extensions)
 {{
@@ -137,12 +142,14 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
 }}
 
 #if defined(ANGLE_ENABLE_OPENGL_NULL)
+#if defined(ANGLE_ENABLE_OPENGL_DESKTOP)
 void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version, const std::set<std::string> &extensions)
 {{
 {gl_null_data}
 
 {gl_null_extensions_data}
 }}
+#endif  // defined(ANGLE_ENABLE_OPENGL_DESKTOP)
 
 void DispatchTableGL::initProcsGLESNULL(const gl::Version &version, const std::set<std::string> &extensions)
 {{
