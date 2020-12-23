@@ -47,6 +47,8 @@ struct GPUTestConfig
         kConditionMacHighSierra,
         kConditionMacMojave,
         kConditionMac,
+        kConditionApple,
+        kConditionIOS,
         kConditionLinux,
         kConditionAndroid,
         kConditionNVIDIA,
