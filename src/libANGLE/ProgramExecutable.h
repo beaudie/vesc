@@ -297,12 +297,6 @@ class ProgramExecutable final : public angle::Subject
 
     GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
 
-    gl::ProgramLinkedResources &getResources() const
-    {
-        ASSERT(mResources);
-        return *mResources;
-    }
-
     void saveLinkedStateInfo(const ProgramState &state);
     std::vector<sh::ShaderVariable> getLinkedOutputVaryings(ShaderType shaderType)
     {
@@ -315,6 +309,8 @@ class ProgramExecutable final : public angle::Subject
     int getLinkedShaderVersion(ShaderType shaderType) { return mLinkedShaderVersions[shaderType]; }
 
     bool isYUVOutput() const;
+
+    const VaryingPacking &getVaryingPacking() const { return mLinkedVaryingPacking; }
 
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
@@ -412,8 +408,7 @@ class ProgramExecutable final : public angle::Subject
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;
     ShaderMap<int> mLinkedShaderVersions;
-    // TODO: http://anglebug.com/4514: Remove
-    std::unique_ptr<gl::ProgramLinkedResources> mResources;
+    VaryingPacking mLinkedVaryingPacking;
 };
 
 }  // namespace gl

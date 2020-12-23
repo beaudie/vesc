@@ -537,6 +537,7 @@ angle::Result ProgramPipeline::link(const Context *context)
     }
 
     ProgramMergedVaryings mergedVaryings;
+    VaryingPacking varyingPacking;
 
     if (!getExecutable().isCompute())
     {
@@ -571,22 +572,24 @@ angle::Result ProgramPipeline::link(const Context *context)
 
         GLuint maxVaryingVectors =
             static_cast<GLuint>(context->getState().getCaps().maxVaryingVectors);
-        VaryingPacking varyingPacking(maxVaryingVectors, packMode);
+        varyingPacking.init(maxVaryingVectors, packMode);
 
         mergedVaryings = getMergedVaryings();
         for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
         {
             Program *program = mState.mPrograms[shaderType];
             ASSERT(program);
-            program->getExecutable().getResources().varyingPacking.reset();
-            ANGLE_TRY(
-                program->linkMergedVaryings(context, program->getExecutable(), mergedVaryings));
+            if (!program->linkMergedVaryings(context, mergedVaryings, &varyingPacking))
+            {
+                return angle::Result::Stop;
+            }
         }
     }
 
     ANGLE_TRY(getImplementation()->link(context, mergedVaryings));
 
-    mState.mIsLinked = true;
+    mState.mIsLinked                          = true;
+    mState.mExecutable->mLinkedVaryingPacking = std::move(varyingPacking);
 
     return angle::Result::Continue;
 }

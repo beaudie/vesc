@@ -1499,9 +1499,9 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
     mFragmentOutputIndexes.bindLocation(index, name);
 }
 
-angle::Result Program::linkMergedVaryings(const Context *context,
-                                          const ProgramExecutable &executable,
-                                          const ProgramMergedVaryings &mergedVaryings)
+bool Program::linkMergedVaryings(const Context *context,
+                                 const ProgramMergedVaryings &mergedVaryings,
+                                 VaryingPacking *varyingPacking)
 {
     ShaderType tfStage =
         mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
@@ -1510,19 +1510,19 @@ angle::Result Program::linkMergedVaryings(const Context *context,
     if (!linkValidateTransformFeedback(context->getClientVersion(), infoLog, mergedVaryings,
                                        tfStage, context->getCaps()))
     {
-        return angle::Result::Stop;
+        return false;
     }
 
-    if (!executable.mResources->varyingPacking.collectAndPackUserVaryings(
+    if (!varyingPacking->collectAndPackUserVaryings(
             infoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames(), isSeparable()))
     {
-        return angle::Result::Stop;
+        return false;
     }
 
     gatherTransformFeedbackVaryings(mergedVaryings, tfStage);
     mState.updateTransformFeedbackStrides();
 
-    return angle::Result::Continue;
+    return true;
 }
 
 angle::Result Program::link(const Context *context)
@@ -1594,18 +1594,19 @@ angle::Result Program::linkImpl(const Context *context)
     ASSERT(result);
 
     ProgramMergedVaryings mergedVaryings;
+    ProgramLinkedResources resources;
 
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        mState.mExecutable->mResources.reset(new ProgramLinkedResources(
-            0, PackMode::ANGLE_RELAXED, &mState.mExecutable->mUniformBlocks,
-            &mState.mExecutable->mUniforms, &mState.mExecutable->mComputeShaderStorageBlocks,
-            &mState.mBufferVariables, &mState.mExecutable->mAtomicCounterBuffers));
+        mState.mExecutable->mLinkedVaryingPacking.init(0, PackMode::ANGLE_RELAXED);
+        resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
+                       &mState.mExecutable->mComputeShaderStorageBlocks, &mState.mBufferVariables,
+                       &mState.mExecutable->mAtomicCounterBuffers);
 
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &mState.mExecutable->getResources().unusedUniforms))
+                          &resources.unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1634,9 +1635,8 @@ angle::Result Program::linkImpl(const Context *context)
             return angle::Result::Continue;
         }
 
-        InitUniformBlockLinker(mState, &mState.mExecutable->getResources().uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState,
-                                     &mState.mExecutable->getResources().shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &resources.uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &resources.shaderStorageBlockLinker);
     }
     else
     {
@@ -1653,11 +1653,11 @@ angle::Result Program::linkImpl(const Context *context)
             packMode = PackMode::WEBGL_STRICT;
         }
 
-        mState.mExecutable->mResources.reset(new ProgramLinkedResources(
-            static_cast<GLuint>(data.getCaps().maxVaryingVectors), packMode,
-            &mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
-            &mState.mExecutable->mGraphicsShaderStorageBlocks, &mState.mBufferVariables,
-            &mState.mExecutable->mAtomicCounterBuffers));
+        mState.mExecutable->mLinkedVaryingPacking.init(
+            static_cast<GLuint>(data.getCaps().maxVaryingVectors), packMode);
+        resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
+                       &mState.mExecutable->mGraphicsShaderStorageBlocks, &mState.mBufferVariables,
+                       &mState.mExecutable->mAtomicCounterBuffers);
 
         if (!linkAttributes(context, infoLog))
         {
@@ -1672,7 +1672,7 @@ angle::Result Program::linkImpl(const Context *context)
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &mState.mExecutable->getResources().unusedUniforms))
+                          &resources.unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1714,9 +1714,8 @@ angle::Result Program::linkImpl(const Context *context)
             mState.mSpecConstUsageBits |= fragmentShader->getSpecConstUsageBits();
         }
 
-        InitUniformBlockLinker(mState, &mState.mExecutable->getResources().uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState,
-                                     &mState.mExecutable->getResources().shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &resources.uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &resources.shaderStorageBlockLinker);
 
         ProgramPipeline *programPipeline = context->getState().getProgramPipeline();
         if (programPipeline && programPipeline->usesShaderProgram(id()))
@@ -1727,7 +1726,11 @@ angle::Result Program::linkImpl(const Context *context)
         {
             mergedVaryings = getMergedVaryings();
         }
-        ANGLE_TRY(linkMergedVaryings(context, *mState.mExecutable, mergedVaryings));
+        if (!linkMergedVaryings(context, mergedVaryings,
+                                &mState.mExecutable->mLinkedVaryingPacking))
+        {
+            return angle::Result::Continue;
+        }
     }
 
     updateLinkedShaderStages();
@@ -1735,8 +1738,7 @@ angle::Result Program::linkImpl(const Context *context)
     mLinkingState.reset(new LinkingState());
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
-    mLinkingState->linkEvent =
-        mProgram->link(context, mState.mExecutable->getResources(), infoLog, mergedVaryings);
+    mLinkingState->linkEvent         = mProgram->link(context, resources, infoLog, mergedVaryings);
 
     // Must be after mProgram->link() to avoid misleading the linker about output variables.
     mState.updateProgramInterfaceInputs();

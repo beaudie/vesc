@@ -167,11 +167,31 @@ PackedVarying &PackedVarying::operator=(PackedVarying &&other)
 }
 
 // Implementation of VaryingPacking
-VaryingPacking::VaryingPacking(GLuint maxVaryingVectors, PackMode packMode)
-    : mRegisterMap(maxVaryingVectors), mPackMode(packMode)
-{}
+VaryingPacking::VaryingPacking() = default;
 
 VaryingPacking::~VaryingPacking() = default;
+
+VaryingPacking::VaryingPacking(VaryingPacking &&rhs) : VaryingPacking()
+{
+    *this = std::move(rhs);
+}
+
+VaryingPacking &VaryingPacking::operator=(VaryingPacking &&rhs)
+{
+    std::swap(mRegisterMap, rhs.mRegisterMap);
+    std::swap(mRegisterList, rhs.mRegisterList);
+    std::swap(mPackedVaryings, rhs.mPackedVaryings);
+    std::swap(mInactiveVaryingMappedNames, rhs.mInactiveVaryingMappedNames);
+    std::swap(mActiveOutputBuiltIns, rhs.mActiveOutputBuiltIns);
+    std::swap(mPackMode, rhs.mPackMode);
+    return *this;
+}
+
+void VaryingPacking::init(GLuint maxVaryingVectors, PackMode packMode)
+{
+    mRegisterMap.resize(maxVaryingVectors);
+    mPackMode = packMode;
+}
 
 void VaryingPacking::reset()
 {
