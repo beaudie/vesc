@@ -214,7 +214,16 @@ bool IsLinux()
 
 bool IsOSX()
 {
-#if defined(ANGLE_PLATFORM_APPLE)
+#if defined(ANGLE_PLATFORM_MACOS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool IsIOS()
+{
+#if defined(ANGLE_PLATFORM_IOS)
     return true;
 #else
     return false;
