@@ -110,8 +110,7 @@ dispatch_table_source_template = """// GENERATED FILE - DO NOT EDIT.
 #include "libANGLE/renderer/gl/null_functions.h"
 #endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
-// Check for nullptr so extensions do not overwrite core imports.
-#define ASSIGN(NAME, FP) if (!FP) FP = reinterpret_cast<decltype(FP)>(loadProcAddress(NAME))
+#define ASSIGN(NAME, FP) FP = reinterpret_cast<decltype(FP)>(loadProcAddress(NAME))
 
 namespace rx
 {{
