@@ -13,6 +13,7 @@ if (angle_has_build && ozone_platform_gbm) {
 assert(angle_enable_gl)
 
 declare_args() {
+  angle_disable_gl_desktop = false
   angle_enable_gl_null = true
 }
 
@@ -227,6 +228,9 @@ if (angle_enable_gl_null) {
 
 config("angle_gl_backend_config") {
   defines = [ "ANGLE_ENABLE_OPENGL" ]
+  if (angle_disable_gl_desktop) {
+    defines += [ "ANGLE_DISABLE_OPENGL_DESKTOP" ]
+  }
   if (angle_enable_gl_null) {
     defines += [ "ANGLE_ENABLE_OPENGL_NULL" ]
   }

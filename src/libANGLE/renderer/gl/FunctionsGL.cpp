@@ -138,6 +138,7 @@ void FunctionsGL::initialize(const egl::AttributeMap &displayAttributes)
 
     switch (standard)
     {
+#if !defined(ANGLE_DISABLE_OPENGL_DESKTOP)
         case STANDARD_GL_DESKTOP:
         {
             // Check the context profile
@@ -147,18 +148,19 @@ void FunctionsGL::initialize(const egl::AttributeMap &displayAttributes)
                 getIntegerv(GL_CONTEXT_PROFILE_MASK, &profile);
             }
 
-#if defined(ANGLE_ENABLE_OPENGL_NULL)
+#    if defined(ANGLE_ENABLE_OPENGL_NULL)
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
             {
                 initProcsDesktopGLNULL(version, extensionSet);
             }
             else
-#endif  // defined(ANGLE_ENABLE_GL_NULL)
+#    endif  // defined(ANGLE_ENABLE_GL_NULL)
             {
                 initProcsDesktopGL(version, extensionSet);
             }
             break;
         }
+#endif  // !defined(ANGLE_DISABLE_OPENGL_DESKTOP)
 
         case STANDARD_GL_ES:
         {

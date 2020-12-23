@@ -27,6 +27,7 @@ namespace rx
 {
 DispatchTableGL::DispatchTableGL() = default;
 
+#if !defined(ANGLE_DISABLE_OPENGL_DESKTOP)
 void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
                                          const std::set<std::string> &extensions)
 {
@@ -1917,6 +1918,7 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glVertexArrayVertexBuffers", vertexArrayVertexBuffers);
     }
 }
+#endif  // !defined(ANGLE_DISABLE_OPENGL_DESKTOP)
 
 void DispatchTableGL::initProcsGLES(const gl::Version &version,
                                     const std::set<std::string> &extensions)
@@ -2799,6 +2801,7 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
 }
 
 #if defined(ANGLE_ENABLE_OPENGL_NULL)
+#    if !defined(ANGLE_DISABLE_OPENGL_DESKTOP)
 void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
                                              const std::set<std::string> &extensions)
 {
@@ -4686,6 +4689,7 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         vertexArrayVertexBuffers                 = &glVertexArrayVertexBuffersNULL;
     }
 }
+#    endif  // !defined(ANGLE_DISABLE_OPENGL_DESKTOP)
 
 void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
                                         const std::set<std::string> &extensions)
