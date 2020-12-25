@@ -117,8 +117,6 @@ declare_args() {
         !is_chromeos) || (is_android && ndk_api_level_at_least_26) ||
        is_fuchsia || is_ggp || is_mac)
   angle_enable_null = true
-  angle_enable_essl = true
-  angle_enable_glsl = true
 
   # http://anglebug.com/2634
   angle_enable_metal = is_mac
@@ -132,6 +130,8 @@ declare_args() {
       angle_enable_vulkan && !is_android && !is_fuchsia && !is_ggp
 
   angle_enable_hlsl = angle_enable_d3d9 || angle_enable_d3d11
+  angle_enable_essl = angle_enable_gl || use_ozone
+  angle_enable_glsl = angle_enable_gl || use_ozone
   angle_enable_trace = false
   angle_enable_trace_android_logcat = false
 
