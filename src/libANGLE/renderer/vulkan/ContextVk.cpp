@@ -1469,10 +1469,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
     const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBufferHandles =
         transformFeedbackVk->getCounterBufferHandles();
 
-    bool rebindBuffers = transformFeedbackVk->getAndResetBufferRebindState();
-
-    mRenderPassCommands->beginTransformFeedback(bufferCount, counterBufferHandles.data(),
-                                                rebindBuffers);
+    mRenderPassCommands->beginTransformFeedback(bufferCount, counterBufferHandles.data());
 
     return angle::Result::Continue;
 }
