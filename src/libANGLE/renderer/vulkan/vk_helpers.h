@@ -1072,9 +1072,7 @@ class CommandBufferHelper : angle::NonCopyable
         mReadOnlyDepthStencilMode = readOnlyDepthStencilMode;
     }
 
-    void beginTransformFeedback(size_t validBufferCount,
-                                const VkBuffer *counterBuffers,
-                                bool rebindBuffers);
+    void beginTransformFeedback(size_t validBufferCount, const VkBuffer *counterBuffers);
 
     void endTransformFeedback();
 
@@ -1200,7 +1198,6 @@ class CommandBufferHelper : angle::NonCopyable
     // Transform feedback state
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
     uint32_t mValidTransformFeedbackBufferCount;
-    bool mRebindTransformFeedbackBuffers;
 
     bool mIsRenderPassCommandBuffer;
     bool mReadOnlyDepthStencilMode;

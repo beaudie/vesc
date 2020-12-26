@@ -25,7 +25,6 @@ namespace rx
 
 TransformFeedbackVk::TransformFeedbackVk(const gl::TransformFeedbackState &state)
     : TransformFeedbackImpl(state),
-      mRebindTransformFeedbackBuffer(false),
       mBufferHelpers{},
       mBufferHandles{},
       mBufferOffsets{},
@@ -38,12 +37,17 @@ TransformFeedbackVk::~TransformFeedbackVk() {}
 
 void TransformFeedbackVk::onDestroy(const gl::Context *context)
 {
-    RendererVk *rendererVk = vk::GetImpl(context)->getRenderer();
+    ASSERT(std::all_of(mCounterBufferHelpers.begin(), mCounterBufferHelpers.end(),
+                       [](vk::BufferHelper &counterBuffer) { return !counterBuffer.valid(); }));
+}
 
+void TransformFeedbackVk::releaseCounterBuffers(RendererVk *renderer)
+{
     for (vk::BufferHelper &bufferHelper : mCounterBufferHelpers)
     {
-        bufferHelper.release(rendererVk);
+        bufferHelper.release(renderer);
     }
+    std::fill(mCounterBufferHandles.begin(), mCounterBufferHandles.end(), nullptr);
 }
 
 void TransformFeedbackVk::initializeXFBBuffersDesc(ContextVk *contextVk, size_t xfbBufferCount)
@@ -80,6 +84,7 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
                                          gl::PrimitiveMode primitiveMode)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
 
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
@@ -95,17 +100,26 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
         {
             if (mCounterBufferHandles[bufferIndex] == VK_NULL_HANDLE)
             {
+                constexpr VkDeviceSize kCounterBufferSize = 16;
+
                 VkBufferCreateInfo createInfo = {};
                 createInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-                createInfo.size               = 16;
+                createInfo.size               = kCounterBufferSize;
                 createInfo.usage       = VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT;
                 createInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
                 vk::BufferHelper &bufferHelper = mCounterBufferHelpers[bufferIndex];
                 ANGLE_TRY(
-                    bufferHelper.init(contextVk, createInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+                    bufferHelper.init(contextVk, createInfo, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
 
                 mCounterBufferHandles[bufferIndex] = bufferHelper.getBuffer().getHandle();
+
+                // Initialize the counter buffer
+                uint8_t *ptr = nullptr;
+                ANGLE_TRY(bufferHelper.map(contextVk, &ptr));
+                memset(ptr, 0, kCounterBufferSize);
+                bufferHelper.unmap(renderer);
+                ANGLE_TRY(bufferHelper.flush(renderer, 0, kCounterBufferSize));
             }
         }
         else
@@ -123,11 +137,6 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
             mAlignedBufferOffsets[bufferIndex] =
                 (mBufferOffsets[bufferIndex] / offsetAlignment) * offsetAlignment;
         }
-    }
-
-    if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
-    {
-        mRebindTransformFeedbackBuffer = true;
     }
 
     return contextVk->onBeginTransformFeedback(xfbBufferCount, mBufferHelpers);
@@ -148,6 +157,9 @@ angle::Result TransformFeedbackVk::end(const gl::Context *context)
     }
 
     contextVk->onEndTransformFeedback();
+
+    releaseCounterBuffers(contextVk->getRenderer());
+
     return angle::Result::Continue;
 }
 
