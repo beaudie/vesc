@@ -752,7 +752,6 @@ CommandBufferHelper::CommandBufferHelper()
       mRenderPassStarted(false),
       mTransformFeedbackCounterBuffers{},
       mValidTransformFeedbackBufferCount(0),
-      mRebindTransformFeedbackBuffers(false),
       mIsRenderPassCommandBuffer(false),
       mReadOnlyDepthStencilMode(false),
       mDepthAccess(ResourceAccess::Unused),
@@ -1294,12 +1293,10 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
-                                                 const VkBuffer *counterBuffers,
-                                                 bool rebindBuffers)
+                                                 const VkBuffer *counterBuffers)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     mValidTransformFeedbackBufferCount = static_cast<uint32_t>(validBufferCount);
-    mRebindTransformFeedbackBuffers    = rebindBuffers;
 
     for (size_t index = 0; index < validBufferCount; index++)
     {
@@ -1525,7 +1522,6 @@ void CommandBufferHelper::reset()
     {
         mRenderPassStarted                 = false;
         mValidTransformFeedbackBufferCount = 0;
-        mRebindTransformFeedbackBuffers    = false;
         mDepthAccess                       = ResourceAccess::Unused;
         mStencilAccess                     = ResourceAccess::Unused;
         mDepthCmdSizeInvalidated           = kInfiniteCmdSize;
@@ -1543,7 +1539,6 @@ void CommandBufferHelper::reset()
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
     ASSERT(mValidTransformFeedbackBufferCount == 0);
-    ASSERT(mRebindTransformFeedbackBuffers == false);
     ASSERT(mRenderPassUsedImages.empty());
 }
 
@@ -1552,12 +1547,7 @@ void CommandBufferHelper::resumeTransformFeedback()
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(isTransformFeedbackStarted());
 
-    uint32_t numCounterBuffers =
-        mRebindTransformFeedbackBuffers ? 0 : mValidTransformFeedbackBufferCount;
-
-    mRebindTransformFeedbackBuffers = false;
-
-    mCommandBuffer.beginTransformFeedback(numCounterBuffers,
+    mCommandBuffer.beginTransformFeedback(mValidTransformFeedbackBufferCount,
                                           mTransformFeedbackCounterBuffers.data());
 }
 

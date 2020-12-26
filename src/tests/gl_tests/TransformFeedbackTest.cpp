@@ -2566,6 +2566,62 @@ TEST_P(TransformFeedbackTest, RecordAndDrawWithScissorTest)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that recording transform feedback twice works.
+TEST_P(TransformFeedbackTest, RecordTwice)
+{
+    constexpr char kVS[] = R"(#version 300 es
+out vec4 xfbOut;
+uniform float value;
+void main(void)
+{
+    xfbOut = vec4(value, value, value, value);
+})";
+    constexpr char kFS[] = R"(#version 300 es
+out mediump vec4 color;
+void main(void)
+{
+    color = vec4(1.0, 1.0, 1.0, 1.0);
+})";
+
+    // Setup transform feedback program
+    std::vector<std::string> tfVaryings = {"xfbOut"};
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(program, kVS, kFS, tfVaryings, GL_INTERLEAVED_ATTRIBS);
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(program);
+    GLint valueLoc = glGetUniformLocation(program, "value");
+    ASSERT_NE(valueLoc, -1);
+
+    // Bind the buffer for transform feedback output and start transform feedback
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+    glBeginTransformFeedback(GL_POINTS);
+
+    // Draw once, and end transform feedback.
+    glUniform1f(valueLoc, 0.5);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glEndTransformFeedback();
+    EXPECT_GL_NO_ERROR();
+
+    // Begin transform feedback again, draw once with a different value and end it
+    glBeginTransformFeedback(GL_POINTS);
+    glUniform1f(valueLoc, 1.0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glEndTransformFeedback();
+    EXPECT_GL_NO_ERROR();
+
+    // Transform feedback capture from the second draw should have overwritten the first one.
+    const float *bufferData = static_cast<float *>(
+        glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 4 * sizeof(float), GL_MAP_READ_BIT));
+
+    EXPECT_NEAR(bufferData[0], 1.0, 0.001);
+    EXPECT_NEAR(bufferData[1], 1.0, 0.001);
+    EXPECT_NEAR(bufferData[2], 1.0, 0.001);
+    EXPECT_NEAR(bufferData[3], 1.0, 0.001);
+
+    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test XFB with depth write enabled.
 class TransformFeedbackWithDepthBufferTest : public TransformFeedbackTest
 {
