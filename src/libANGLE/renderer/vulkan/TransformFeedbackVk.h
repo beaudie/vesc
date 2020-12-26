@@ -58,13 +58,6 @@ class TransformFeedbackVk : public TransformFeedbackImpl
                           int32_t *offsetsOut,
                           size_t offsetsSize) const;
 
-    bool getAndResetBufferRebindState()
-    {
-        bool retVal                    = mRebindTransformFeedbackBuffer;
-        mRebindTransformFeedbackBuffer = false;
-        return retVal;
-    }
-
     const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &getBufferHelpers() const
     {
         return mBufferHelpers;
@@ -99,12 +92,7 @@ class TransformFeedbackVk : public TransformFeedbackImpl
                             VkDescriptorSet descSet) const;
 
     void initializeXFBBuffersDesc(ContextVk *contextVk, size_t xfbBufferCount);
-
-    // This member variable is set when glBindTransformFeedbackBuffers/glBeginTransformFeedback
-    // is called and unset in dirty bit handler for transform feedback state change. If this
-    // value is true, vertex shader will record transform feedback varyings from the beginning
-    // of the buffer.
-    bool mRebindTransformFeedbackBuffer;
+    void releaseCounterBuffers(RendererVk *renderer);
 
     gl::TransformFeedbackBuffersArray<vk::BufferHelper *> mBufferHelpers;
     gl::TransformFeedbackBuffersArray<VkBuffer> mBufferHandles;
