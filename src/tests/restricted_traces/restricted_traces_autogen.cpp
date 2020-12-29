@@ -34,6 +34,7 @@
 #include "trex_200/trex_200_capture_context1.h"
 #include "whatsapp/whatsapp_capture_context1.h"
 #include "world_of_tanks_blitz/world_of_tanks_blitz_capture_context1.h"
+#include "world_war_doh/world_war_doh_capture_context2.h"
 
 namespace angle
 {
@@ -123,7 +124,11 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
     {RestrictedTraceID::world_of_tanks_blitz,
      {world_of_tanks_blitz::kReplayFrameStart, world_of_tanks_blitz::kReplayFrameEnd,
       world_of_tanks_blitz::kReplayDrawSurfaceWidth, world_of_tanks_blitz::kReplayDrawSurfaceHeight,
-      "world_of_tanks_blitz"}}};
+      "world_of_tanks_blitz"}},
+    {RestrictedTraceID::world_war_doh,
+     {world_war_doh::kReplayFrameStart, world_war_doh::kReplayFrameEnd,
+      world_war_doh::kReplayDrawSurfaceWidth, world_war_doh::kReplayDrawSurfaceHeight,
+      "world_war_doh"}}};
 }
 
 const TraceInfo &GetTraceInfo(RestrictedTraceID traceID)
@@ -203,6 +208,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ReplayContext1Frame(frameIndex);
+            break;
+        case RestrictedTraceID::world_war_doh:
+            world_war_doh::ReplayContext2Frame(frameIndex);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -284,6 +292,9 @@ void ResetReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::ResetContext1Replay();
             break;
+        case RestrictedTraceID::world_war_doh:
+            world_war_doh::ResetContext2Replay();
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -363,6 +374,9 @@ void SetupReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetupContext1Replay();
+            break;
+        case RestrictedTraceID::world_war_doh:
+            world_war_doh::SetupContext2Replay();
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -444,6 +458,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::world_war_doh:
+            world_war_doh::SetBinaryDataDir(dataDir);
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -523,6 +540,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::world_of_tanks_blitz:
             world_of_tanks_blitz::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::world_war_doh:
+            world_war_doh::SetBinaryDataDecompressCallback(callback);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
