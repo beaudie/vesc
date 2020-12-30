@@ -14,8 +14,8 @@ import subprocess
 import sys
 import tempfile
 
-# Fragment of a regular expression that matches C++ and Objective-C++ implementation files and headers.
-_IMPLEMENTATION_AND_HEADER_EXTENSIONS = r'\.(cc|cpp|cxx|mm|h|hpp|hxx)$'
+# Fragment of a regular expression that matches C/C++ and Objective-C++ implementation files and headers.
+_IMPLEMENTATION_AND_HEADER_EXTENSIONS = r'\.(c|cc|cpp|cxx|mm|h|hpp|hxx)$'
 
 # Fragment of a regular expression that matches C++ and Objective-C++ header files.
 _HEADER_EXTENSIONS = r'\.(h|hpp|hxx)$'
