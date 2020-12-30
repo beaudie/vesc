@@ -470,7 +470,16 @@ struct ProgramVaryingRef
 
 using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
 
-class Program final : public LabeledObject, public angle::Subject
+class HasAttachedShaders
+{
+  public:
+    virtual Shader *getAttachedShader(ShaderType shaderType) const = 0;
+
+  protected:
+    virtual ~HasAttachedShaders() {}
+};
+
+class Program final : public LabeledObject, public angle::Subject, public HasAttachedShaders
 {
   public:
     Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, ShaderProgramID handle);
@@ -491,7 +500,7 @@ class Program final : public LabeledObject, public angle::Subject
     void detachShader(const Context *context, Shader *shader);
     int getAttachedShadersCount() const;
 
-    const Shader *getAttachedShader(ShaderType shaderType) const;
+    Shader *getAttachedShader(ShaderType shaderType) const override;
 
     void bindAttributeLocation(GLuint index, const char *name);
     void bindUniformLocation(UniformLocation location, const char *name);
@@ -928,7 +937,6 @@ class Program final : public LabeledObject, public angle::Subject
 
     void gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings, ShaderType stage);
 
-    ProgramMergedVaryings getMergedVaryings() const;
     int getOutputLocationForLink(const sh::ShaderVariable &outputVariable) const;
     bool isOutputSecondaryForLink(const sh::ShaderVariable &outputVariable) const;
     bool linkOutputVariables(const Caps &caps,
