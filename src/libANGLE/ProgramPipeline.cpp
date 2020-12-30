@@ -420,7 +420,7 @@ angle::Result ProgramPipeline::link(const Context *context)
     }
 
     ProgramMergedVaryings mergedVaryings;
-    VaryingPacking varyingPacking;
+    ProgramVaryingPacking varyingPacking;
 
     if (!getExecutable().isCompute())
     {
