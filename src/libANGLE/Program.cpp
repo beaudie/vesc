@@ -1501,7 +1501,7 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
 
 bool Program::linkMergedVaryings(const Context *context,
                                  const ProgramMergedVaryings &mergedVaryings,
-                                 VaryingPacking *varyingPacking)
+                                 ProgramVaryingPacking *varyingPacking)
 {
     ShaderType tfStage =
         mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
@@ -1526,8 +1526,18 @@ bool Program::linkMergedVaryings(const Context *context,
         packMode = PackMode::WEBGL_STRICT;
     }
 
+    // Build active shader stage map.
+    ShaderBitSet attachedShadersMask;
+    for (Shader *shader : mState.mAttachedShaders)
+    {
+        if (shader)
+        {
+            attachedShadersMask[shader->getType()] = true;
+        }
+    }
+
     if (!varyingPacking->collectAndPackUserVaryings(
-            infoLog, context->getCaps().maxVaryingVectors, packMode, mergedVaryings,
+            infoLog, context->getCaps(), packMode, attachedShadersMask, mergedVaryings,
             mState.getTransformFeedbackVaryingNames(), isSeparable()))
     {
         return false;
