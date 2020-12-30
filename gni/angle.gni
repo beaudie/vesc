@@ -116,7 +116,7 @@ declare_args() {
        (is_linux && (angle_use_x11 || angle_use_vulkan_display) &&
         !is_chromeos) || (is_android && ndk_api_level_at_least_26) ||
        is_fuchsia || is_ggp || is_mac)
-  angle_enable_null = true
+  angle_enable_null = !is_android
   angle_enable_essl = true
   angle_enable_glsl = true
   angle_enable_gl_desktop = !is_android && !is_ios
