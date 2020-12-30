@@ -468,7 +468,7 @@ bool IsFirstRegisterOfVarying(const gl::PackedVaryingRegister &varyingReg, bool 
 // Calculates XFB layout qualifier arguments for each tranform feedback varying.  Stores calculated
 // values for the SPIR-V transformation.
 void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programState,
-                                               const gl::ProgramLinkedResources &resources,
+                                               const gl::VaryingPacking &varyingPacking,
                                                std::string *xfbShaderSource,
                                                uint32_t *locationsUsedForXfbExtensionOut)
 {
@@ -492,8 +492,8 @@ void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programSt
             // main.  Capturing the rest of the built-ins are niche enough that the inefficiency
             // involved in doing this is not a concern.
 
-            uint32_t xfbVaryingLocation = resources.varyingPacking.getMaxSemanticIndex() +
-                                          ++(*locationsUsedForXfbExtensionOut);
+            uint32_t xfbVaryingLocation =
+                varyingPacking.getMaxSemanticIndex() + ++(*locationsUsedForXfbExtensionOut);
 
             std::string xfbVaryingName = kXfbBuiltInPrefix + tfVaryingName;
 
@@ -3844,8 +3844,9 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
             if (options.supportsTransformFeedbackExtension)
             {
                 GenerateTransformFeedbackExtensionOutputs(
-                    programState, resources, xfbSource,
-                    &programInterfaceInfo->locationsUsedForXfbExtension);
+                    programState,
+                    resources.varyingPacking.getPacking(xfbStage, gl::ShaderType::Fragment),
+                    xfbSource, &programInterfaceInfo->locationsUsedForXfbExtension);
             }
             else if (options.emulateTransformFeedback)
             {
@@ -3881,7 +3882,8 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : programState.getExecutable().getLinkedShaderStages())
     {
-        GlslangAssignLocations(options, programState.getExecutable(), resources.varyingPacking,
+        GlslangAssignLocations(options, programState.getExecutable(),
+                               resources.varyingPacking.getPacking(frontShaderType, shaderType),
                                shaderType, frontShaderType, programInterfaceInfo,
                                variableInfoMapOut);
 

@@ -502,7 +502,7 @@ class Program final : public LabeledObject, public angle::Subject
 
     bool linkMergedVaryings(const Context *context,
                             const ProgramMergedVaryings &mergedVaryings,
-                            VaryingPacking *varyingPacking);
+                            ProgramVaryingPacking *varyingPacking);
 
     // KHR_parallel_shader_compile
     // Try to link the program asynchrously. As a result, background threads may be launched to

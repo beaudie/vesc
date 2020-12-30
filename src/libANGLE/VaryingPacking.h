@@ -23,6 +23,7 @@
 namespace gl
 {
 class InfoLog;
+struct Caps;
 struct ProgramVaryingRef;
 
 using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
@@ -205,12 +206,14 @@ class VaryingPacking final : angle::NonCopyable
     VaryingPacking();
     ~VaryingPacking();
 
-    bool collectAndPackUserVaryings(InfoLog &infoLog,
-                                    GLint maxVaryingVectors,
-                                    PackMode packMode,
-                                    const ProgramMergedVaryings &mergedVaryings,
-                                    const std::vector<std::string> &tfVaryings,
-                                    const bool isSeparableProgram);
+    ANGLE_NO_DISCARD bool collectAndPackUserVaryings(InfoLog &infoLog,
+                                                     GLint maxVaryingVectors,
+                                                     PackMode packMode,
+                                                     ShaderType frontShader,
+                                                     ShaderType backShader,
+                                                     const ProgramMergedVaryings &mergedVaryings,
+                                                     const std::vector<std::string> &tfVaryings,
+                                                     const bool isSeparableProgram);
 
     struct Register
     {
@@ -285,6 +288,26 @@ class VaryingPacking final : angle::NonCopyable
     std::vector<PackedVarying> mPackedVaryings;
     ShaderMap<std::vector<std::string>> mInactiveVaryingMappedNames;
     ShaderMap<std::vector<std::string>> mActiveOutputBuiltIns;
+};
+
+class ProgramVaryingPacking final : angle::NonCopyable
+{
+  public:
+    ProgramVaryingPacking();
+    ~ProgramVaryingPacking();
+
+    const VaryingPacking &getPacking(ShaderType frontShader, ShaderType backShader) const;
+
+    ANGLE_NO_DISCARD bool collectAndPackUserVaryings(InfoLog &infoLog,
+                                                     const Caps &caps,
+                                                     PackMode packMode,
+                                                     const ProgramMergedVaryings &mergedVaryings,
+                                                     const std::vector<std::string> &tfVaryings,
+                                                     bool isSeparableProgram);
+
+  private:
+    // Indexed by the front shader.
+    ShaderMap<VaryingPacking> mVaryingPackings;
 };
 
 }  // namespace gl

@@ -1501,7 +1501,7 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
 
 bool Program::linkMergedVaryings(const Context *context,
                                  const ProgramMergedVaryings &mergedVaryings,
-                                 VaryingPacking *varyingPacking)
+                                 ProgramVaryingPacking *varyingPacking)
 {
     ShaderType tfStage =
         mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
@@ -1527,7 +1527,7 @@ bool Program::linkMergedVaryings(const Context *context,
     }
 
     if (!varyingPacking->collectAndPackUserVaryings(
-            infoLog, context->getCaps().maxVaryingVectors, packMode, mergedVaryings,
+            infoLog, context->getCaps(), packMode, mergedVaryings,
             mState.getTransformFeedbackVaryingNames(), isSeparable()))
     {
         return false;
