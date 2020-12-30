@@ -2228,6 +2228,24 @@ void CaptureBufferBindingResetCalls(const gl::State &replayState,
     Capture(&bufferBindingCalls, CaptureBindBuffer(replayState, true, binding, id));
 }
 
+void CaptureIndexedBuffer(const gl::State &glState,
+                          gl::BufferBinding binding,
+                          const gl::BufferVector &indexedBuffers,
+                          const gl::BufferID bufferID,
+                          std::vector<CallCapture> *setupCalls)
+{
+    // Small helper function to make the code more readable.
+    auto cap = [setupCalls](CallCapture &&call) { setupCalls->emplace_back(std::move(call)); };
+
+    for (unsigned int index = 0; index < indexedBuffers.size(); ++index)
+    {
+        if (bufferID.value == indexedBuffers[index].id().value)
+        {
+            cap(CaptureBindBufferBase(glState, true, binding, index, bufferID));
+        }
+    }
+}
+
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
                               ResourceTracker *resourceTracker,
@@ -2245,9 +2263,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     // TODO(jmadill): Use handle mapping for captured objects. http://anglebug.com/3662
 
     // Capture Buffer data.
-    const gl::BufferManager &buffers       = apiState.getBufferManagerForCapture();
-    const gl::BoundBufferMap &boundBuffers = apiState.getBoundBuffersForCapture();
-
+    const gl::BufferManager &buffers = apiState.getBufferManagerForCapture();
     for (const auto &bufferIter : buffers)
     {
         gl::BufferID id    = {bufferIter.first};
@@ -2374,6 +2390,15 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     }
 
     // Capture Buffer bindings.
+    const gl::BufferVector &transformFeedbackIndexedBuffers =
+        apiState.getCurrentTransformFeedback()->getIndexedBuffers();
+    const gl::BufferVector &uniformIndexedBuffers =
+        apiState.getOffsetBindingPointerUniformBuffers();
+    const gl::BufferVector &atomicCounterIndexedBuffers =
+        apiState.getOffsetBindingPointerAtomicCounterBuffers();
+    const gl::BufferVector &shaderStorageIndexedBuffers =
+        apiState.getOffsetBindingPointerShaderStorageBuffers();
+    const gl::BoundBufferMap &boundBuffers = apiState.getBoundBuffersForCapture();
     for (gl::BufferBinding binding : angle::AllEnums<gl::BufferBinding>())
     {
         gl::BufferID bufferID = boundBuffers[binding].id();
@@ -2387,6 +2412,36 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             (!isArray && bufferID.value != 0))
         {
             cap(CaptureBindBuffer(replayState, true, binding, bufferID));
+
+            // Only the following buffer targets can be indexed:
+            // - GL_TRANSFORM_FEEDBACK_BUFFER
+            // - GL_UNIFORM_BUFFER
+            // - GL_ATOMIC_COUNTER_BUFFER
+            // - GL_SHADER_STORAGE_BUFFER
+            // Ignore all other binding types.
+            switch (binding)
+            {
+                case gl::BufferBinding::TransformFeedback:
+                    CaptureIndexedBuffer(replayState, binding, transformFeedbackIndexedBuffers,
+                                         bufferID, setupCalls);
+                    break;
+                case gl::BufferBinding::Uniform:
+                {
+                    CaptureIndexedBuffer(replayState, binding, uniformIndexedBuffers, bufferID,
+                                         setupCalls);
+                    break;
+                }
+                case gl::BufferBinding::AtomicCounter:
+                    CaptureIndexedBuffer(replayState, binding, atomicCounterIndexedBuffers,
+                                         bufferID, setupCalls);
+                    break;
+                case gl::BufferBinding::ShaderStorage:
+                    CaptureIndexedBuffer(replayState, binding, shaderStorageIndexedBuffers,
+                                         bufferID, setupCalls);
+                    break;
+                default:
+                    break;
+            }
         }
 
         // Restore all buffer bindings for Reset
