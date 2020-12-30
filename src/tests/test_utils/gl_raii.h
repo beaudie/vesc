@@ -166,10 +166,7 @@ class GLProgram
   public:
     GLProgram() : mHandle(0) {}
 
-    ~GLProgram()
-    {
-        reset();
-    }
+    ~GLProgram() { reset(); }
 
     void makeEmpty() { mHandle = glCreateProgram(); }
 
