@@ -77,6 +77,7 @@ enum class RestrictedTraceID
     trex_200,
     whatsapp,
     world_of_tanks_blitz,
+    saint_seiya_awakening,
     InvalidEnum,
     EnumCount = InvalidEnum
 };
