@@ -284,6 +284,16 @@ TracePerfTest::TracePerfTest()
         addExtensionPrerequisite("GL_EXT_shadow_samplers");
     }
 
+    if (param.testID == RestrictedTraceID::saint_seiya_awakening)
+    {
+        addExtensionPrerequisite("GL_EXT_shadow_samplers");
+
+        if (IsLinux() && IsIntel() && param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+        {
+            mSkipTest = true;
+        }
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
