@@ -610,9 +610,8 @@ void RendererVk::ensureCapsInitialized() const
 
     // Uniforms are implemented using a uniform buffer, so the max number of uniforms we can
     // support is the max buffer range divided by the size of a single uniform (4X float).
-    mNativeCaps.maxVertexUniformVectors    = maxUniformVectors;
-    mNativeCaps.maxFragmentUniformVectors  = maxUniformVectors;
-    mNativeCaps.maxFragmentInputComponents = maxUniformComponents;
+    mNativeCaps.maxVertexUniformVectors   = maxUniformVectors;
+    mNativeCaps.maxFragmentUniformVectors = maxUniformVectors;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mNativeCaps.maxShaderUniformComponents[shaderType] = maxUniformComponents;
@@ -826,7 +825,7 @@ void RendererVk::ensureCapsInitialized() const
     GLint reservedVaryingVectorCount = 1;
 
     // reserve 1 extra for ANGLEPosition when GLLineRasterization is enabled
-    constexpr GLint kRservedVaryingForGLLineRasterization = 1;
+    constexpr GLint kReservedVaryingForGLLineRasterization = 1;
     // reserve 2 extra for builtin varables when feedback is enabled
     // possible capturable out varable: gl_Position, gl_PointSize
     // https://www.khronos.org/registry/OpenGL/specs/es/3.1/GLSL_ES_Specification_3.10.withchanges.pdf
@@ -835,7 +834,7 @@ void RendererVk::ensureCapsInitialized() const
 
     if (getFeatures().basicGLLineRasterization.enabled)
     {
-        reservedVaryingVectorCount += kRservedVaryingForGLLineRasterization;
+        reservedVaryingVectorCount += kReservedVaryingForGLLineRasterization;
     }
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
@@ -846,7 +845,10 @@ void RendererVk::ensureCapsInitialized() const
         std::min(limitsVk.maxVertexOutputComponents, limitsVk.maxFragmentInputComponents);
     mNativeCaps.maxVaryingVectors =
         LimitToInt((maxVaryingCount / kComponentsPerVector) - reservedVaryingVectorCount);
-    mNativeCaps.maxVertexOutputComponents = LimitToInt(limitsVk.maxVertexOutputComponents);
+    mNativeCaps.maxVertexOutputComponents =
+        LimitToInt(limitsVk.maxVertexOutputComponents) - reservedVaryingVectorCount * 4;
+    mNativeCaps.maxFragmentInputComponents =
+        LimitToInt(limitsVk.maxFragmentInputComponents) - reservedVaryingVectorCount * 4;
 
     mNativeCaps.maxTransformFeedbackInterleavedComponents =
         gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS;
@@ -916,9 +918,11 @@ void RendererVk::ensureCapsInitialized() const
         mNativeCaps.maxFramebufferLayers = LimitToInt(limitsVk.maxFramebufferLayers);
         mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
 
-        mNativeCaps.maxGeometryInputComponents  = LimitToInt(limitsVk.maxGeometryInputComponents);
-        mNativeCaps.maxGeometryOutputComponents = LimitToInt(limitsVk.maxGeometryOutputComponents);
-        mNativeCaps.maxGeometryOutputVertices   = LimitToInt(limitsVk.maxGeometryOutputVertices);
+        mNativeCaps.maxGeometryInputComponents =
+            LimitToInt(limitsVk.maxGeometryInputComponents) - reservedVaryingVectorCount * 4;
+        mNativeCaps.maxGeometryOutputComponents =
+            LimitToInt(limitsVk.maxGeometryOutputComponents) - reservedVaryingVectorCount * 4;
+        mNativeCaps.maxGeometryOutputVertices = LimitToInt(limitsVk.maxGeometryOutputVertices);
         mNativeCaps.maxGeometryTotalOutputComponents =
             LimitToInt(limitsVk.maxGeometryTotalOutputComponents);
         mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Geometry] =
