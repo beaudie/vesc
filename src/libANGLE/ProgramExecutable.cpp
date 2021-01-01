@@ -491,9 +491,14 @@ bool ProgramExecutable::linkValidateGlobalNames(
         Shader *vertexShader = programState->getAttachedShader(ShaderType::Vertex);
         if (vertexShader)
         {
+            std::unordered_set<std::string> uniforms;
+            for (const sh::ShaderVariable &uniform : vertexShader->getUniforms())
+            {
+                uniforms.insert(uniform.name);
+            }
             for (const auto &attrib : vertexShader->getActiveAttributes())
             {
-                if (uniformMap.count(attrib.name))
+                if (uniforms.count(attrib.name))
                 {
                     infoLog << "Name conflicts between a uniform and an attribute: " << attrib.name;
                     return false;
