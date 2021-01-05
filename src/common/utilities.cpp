@@ -1163,6 +1163,12 @@ bool ShaderTypeSupportsTransformFeedback(ShaderType shaderType)
             return false;
     }
 }
+
+ShaderType GetLastPreRasterizationStage(ShaderBitSet shaderTypes)
+{
+    shaderTypes.reset(ShaderType::Fragment);
+    return shaderTypes.any() ? shaderTypes.last() : ShaderType::InvalidEnum;
+}
 }  // namespace gl
 
 namespace egl
