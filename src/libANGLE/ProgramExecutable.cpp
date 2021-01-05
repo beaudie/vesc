@@ -396,8 +396,9 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
 }
 
 bool ProgramExecutable::linkValidateGlobalNames(
-    InfoLog &infoLog,
-    const ShaderMap<const ProgramState *> &programStates) const
+    bool isWebGL,
+    const ShaderMap<const ProgramState *> &programStates,
+    InfoLog &infoLog) const
 {
     angle::HashMap<std::string, const sh::ShaderVariable *> uniformMap;
     using BlockAndFieldPair = std::pair<const sh::InterfaceBlock *, const sh::ShaderVariable *>;
@@ -491,12 +492,42 @@ bool ProgramExecutable::linkValidateGlobalNames(
         Shader *vertexShader = programState->getAttachedShader(ShaderType::Vertex);
         if (vertexShader)
         {
-            for (const auto &attrib : vertexShader->getActiveAttributes())
+            if (!isWebGL)
             {
-                if (uniformMap.count(attrib.name))
+                // ESSL 3.00.6 section 4.3.5:
+                // If a uniform variable name is declared in one stage (e.g., a vertex shader)
+                // but not in another (e.g., a fragment shader), then that name is still
+                // available in the other stage for a different use.
+                std::unordered_set<std::string> uniforms;
+                for (const sh::ShaderVariable &uniform : vertexShader->getUniforms())
                 {
-                    infoLog << "Name conflicts between a uniform and an attribute: " << attrib.name;
-                    return false;
+                    uniforms.insert(uniform.name);
+                }
+                for (const auto &attrib : vertexShader->getActiveAttributes())
+                {
+                    if (uniforms.count(attrib.name))
+                    {
+                        infoLog << "Name conflicts between a uniform and an attribute: "
+                                << attrib.name;
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                // WebGL 1.0 [Section 6.41] Uniform and attribute name collisions
+                // If any of the shaders attached to a WebGL program declare a uniform that has
+                // the same name as a statically used vertex attribute, program linking should
+                // fail.
+                // TODO(anglebug.com/5499): Resolve differences with WebGL
+                for (const auto &attrib : vertexShader->getActiveAttributes())
+                {
+                    if (uniformMap.count(attrib.name))
+                    {
+                        infoLog << "Name conflicts between a uniform and an attribute: "
+                                << attrib.name;
+                        return false;
+                    }
                 }
             }
         }
