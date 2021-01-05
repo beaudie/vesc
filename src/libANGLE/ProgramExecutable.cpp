@@ -541,14 +541,6 @@ bool ProgramExecutable::isYUVOutput() const
 
 ShaderType ProgramExecutable::getLinkedTransformFeedbackStage() const
 {
-    if (mLinkedGraphicsShaderStages[ShaderType::Geometry])
-    {
-        return ShaderType::Geometry;
-    }
-    if (mLinkedGraphicsShaderStages[ShaderType::TessEvaluation])
-    {
-        return ShaderType::TessEvaluation;
-    }
-    return ShaderType::Vertex;
+    return GetLastPreRasterizationStage(mLinkedGraphicsShaderStages);
 }
 }  // namespace gl

@@ -432,8 +432,8 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
             options, programState, &xfbOnlyInterfaceInfo, xfbOnlyShaderSourceOut,
             xfbOnlyVSVariableInfoMapOut);
 
-        GlslangAssignLocations(options, programState.getExecutable(), resources.varyingPacking,
-                               gl::ShaderType::Vertex, gl::ShaderType::InvalidEnum,
+        GlslangAssignLocations(options, programState, resources.varyingPacking,
+                               gl::ShaderType::Vertex, gl::ShaderType::InvalidEnum, true,
                                &xfbOnlyInterfaceInfo, xfbOnlyVSVariableInfoMapOut);
     }
 }
