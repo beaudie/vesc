@@ -64,7 +64,7 @@ struct GraphicsDriverUniforms
     uint32_t enabledClipPlanes;
 
     uint32_t xfbActiveUnpaused;
-    uint32_t xfbVerticesPerDraw;
+    int32_t xfbVerticesPerInstance;
 
     // Used to replace gl_NumSamples. Because gl_NumSamples cannot be recognized in SPIR-V.
     int32_t numSamples;
