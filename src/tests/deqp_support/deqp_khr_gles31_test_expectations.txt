@@ -126,3 +126,6 @@
 
 // New failures with latest dEQP roll (2020-04-28)
 4593 SWIFTSHADER : KHR-GLES31.core.nearest_edge.offset_left = FAIL
+
+// Started failing on SwANGLE and Pixel 2 Vulkan after clang roll
+5500 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input-case5 = FAIL
