@@ -460,7 +460,9 @@ ANGLE_NO_DISCARD bool AddXfbEmulationSupport(TCompiler *compiler,
     //         return ANGLEUniforms.xfbBufferOffsets + xfbIndex * strides;
     //     }
 
-    const TType *ivec4Type = StaticType::GetBasic<EbtInt, 4>();
+    constexpr uint32_t kMaxXfbBuffers = 4;
+
+    const TType *ivec4Type = StaticType::GetBasic<EbtInt, kMaxXfbBuffers>();
 
     // Create the parameter variable.
     TVariable *stridesVar        = new TVariable(symbolTable, ImmutableString("strides"), ivec4Type,
@@ -503,8 +505,29 @@ ANGLE_NO_DISCARD bool AddXfbEmulationSupport(TCompiler *compiler,
         CreateInternalFunctionDefinitionNode(*getOffsetsFunction, body);
 
     // Insert the function declaration before main().
-    size_t mainIndex = FindMainIndex(root);
+    const size_t mainIndex = FindMainIndex(root);
     root->insertChildNodes(mainIndex, {functionDef});
+
+    // Additionally, generate the following storage buffer declaration used to capture transform
+    // feedback output.  Again, there's a maximum of four buffers.
+    //
+    //     buffer ANGLEXfbBuffer
+    //     {
+    //         float xfbOut[];
+    //     } ANGLEXfbBuffers[4];
+
+    TFieldList *fieldList = new TFieldList;
+    TType *xfbOutType     = new TType(EbtFloat);
+    xfbOutType->makeArray(0);
+
+    TField *field = new TField(xfbOutType, ImmutableString(vk::kXfbEmulationBufferFieldName),
+                               TSourceLoc(), SymbolType::AngleInternal);
+
+    fieldList->push_back(field);
+
+    DeclareInterfaceBlock(root, symbolTable, fieldList, EvqBuffer, TMemoryQualifier::Create(),
+                          kMaxXfbBuffers, ImmutableString(vk::kXfbEmulationBufferBlockName),
+                          ImmutableString(vk::kXfbEmulationBuffersName));
 
     return compiler->validateAST(root);
 }

@@ -824,11 +824,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
          !programStates[gl::ShaderType::Vertex]->getLinkedTransformFeedbackVaryings().empty());
     if (hasVertexShader && transformFeedback && hasXfbVaryings)
     {
-        const gl::ProgramExecutable &executable =
-            programStates[gl::ShaderType::Vertex]->getExecutable();
-        size_t xfbBufferCount                    = executable.getTransformFeedbackBufferCount();
         TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(transformFeedback);
-        transformFeedbackVk->updateDescriptorSetLayout(contextVk, mVariableInfoMap, xfbBufferCount,
+        transformFeedbackVk->updateDescriptorSetLayout(contextVk, mVariableInfoMap,
                                                        &uniformsAndXfbSetDesc);
     }
 
