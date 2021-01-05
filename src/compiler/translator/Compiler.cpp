@@ -31,7 +31,6 @@
 #include "compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.h"
 #include "compiler/translator/tree_ops/EmulatePrecision.h"
 #include "compiler/translator/tree_ops/FoldExpressions.h"
-#include "compiler/translator/tree_ops/ForcePrecisionQualifier.h"
 #include "compiler/translator/tree_ops/InitializeVariables.h"
 #include "compiler/translator/tree_ops/PruneEmptyCases.h"
 #include "compiler/translator/tree_ops/PruneNoOps.h"
@@ -39,7 +38,6 @@
 #include "compiler/translator/tree_ops/RemoveArrayLengthMethod.h"
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RemoveInvariantDeclaration.h"
-#include "compiler/translator/tree_ops/RemovePow.h"
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
 #include "compiler/translator/tree_ops/RewriteDoWhile.h"
 #include "compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.h"
@@ -595,10 +593,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
-    if (!(compileOptions & SH_DONT_PRUNE_UNUSED_FUNCTIONS))
-    {
-        pruneUnusedFunctions(root);
-    }
+    pruneUnusedFunctions(root);
     if (IsSpecWithFunctionBodyNewScope(mShaderSpec, mShaderVersion))
     {
         if (!ReplaceShadowingVariables(this, root, &mSymbolTable))
@@ -664,14 +659,6 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     if (compileOptions & SH_UNFOLD_SHORT_CIRCUIT)
     {
         if (!UnfoldShortCircuitAST(this, root))
-        {
-            return false;
-        }
-    }
-
-    if (compileOptions & SH_REMOVE_POW_WITH_CONSTANT_EXPONENT)
-    {
-        if (!RemovePow(this, root, &mSymbolTable))
         {
             return false;
         }
@@ -788,14 +775,6 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     {
         if (!ScalarizeVecAndMatConstructorArgs(this, root, mShaderType, highPrecisionSupported,
                                                &mSymbolTable))
-        {
-            return false;
-        }
-    }
-
-    if (compileOptions & SH_FORCE_SHADER_PRECISION_HIGHP_TO_MEDIUMP)
-    {
-        if (!ForceShaderPrecisionToMediump(root, &mSymbolTable, mShaderType))
         {
             return false;
         }
