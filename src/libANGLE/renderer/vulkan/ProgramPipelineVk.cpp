@@ -82,9 +82,13 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
             glslangProgramInterfaceInfo.locationsUsedForXfbExtension =
                 programProgramInterfaceInfo.locationsUsedForXfbExtension;
 
+            const bool isTransformFeedbackStage =
+                shaderType == gl::ShaderType::Vertex &&
+                glProgram->getState().getLinkedTransformFeedbackVaryings().empty();
+
             GlslangAssignLocations(options, glProgram->getState().getExecutable(), shaderType,
-                                   frontShaderType, &glslangProgramInterfaceInfo,
-                                   &mExecutable.mVariableInfoMap);
+                                   frontShaderType, isTransformFeedbackStage,
+                                   &glslangProgramInterfaceInfo, &mExecutable.mVariableInfoMap);
             frontShaderType = shaderType;
         }
     }

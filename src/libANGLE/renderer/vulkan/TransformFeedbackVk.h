@@ -45,7 +45,6 @@ class TransformFeedbackVk : public TransformFeedbackImpl
 
     void updateDescriptorSetLayout(ContextVk *contextVk,
                                    const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                   size_t xfbBufferCount,
                                    vk::DescriptorSetLayoutDesc *descSetLayoutOut) const;
     void initDescriptorSet(ContextVk *contextVk,
                            const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -97,8 +96,7 @@ class TransformFeedbackVk : public TransformFeedbackImpl
   private:
     void writeDescriptorSet(ContextVk *contextVk,
                             const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                            size_t xfbBufferCount,
-                            VkDescriptorBufferInfo *pBufferInfo,
+                            VkDescriptorBufferInfo *bufferInfo,
                             VkDescriptorSet descSet) const;
 
     void initializeXFBBuffersDesc(ContextVk *contextVk, size_t xfbBufferCount);

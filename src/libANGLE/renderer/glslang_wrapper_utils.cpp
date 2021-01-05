@@ -338,8 +338,10 @@ void GenerateTransformFeedbackVaryingOutput(const gl::TransformFeedbackVarying &
         {
             for (int row = 0; row < info.rowCount; ++row)
             {
-                *xfbOut << "xfbOut" << bufferIndex << "[xfbOffsets[" << bufferIndex << "] + "
-                        << offset << "] = " << info.glslAsFloat << "(" << varying.mappedName;
+                *xfbOut << sh::vk::kXfbEmulationBuffersName << "[" << bufferIndex << "]."
+                        << sh::vk::kXfbEmulationBufferFieldName << "[xfbOffsets[" << bufferIndex
+                        << "] + " << offset << "] = " << info.glslAsFloat << "("
+                        << varying.mappedName;
 
                 if (varying.isArray())
                 {
@@ -363,6 +365,28 @@ void GenerateTransformFeedbackVaryingOutput(const gl::TransformFeedbackVarying &
     }
 }
 
+void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
+                                              bool isTransformFeedbackStage,
+                                              GlslangProgramInterfaceInfo *programInterfaceInfo,
+                                              ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+{
+    // If transform feedback is not active, make sure the buffer declarations are removed.
+    if (!isTransformFeedbackStage)
+    {
+        // Note: transform feedback emulation is only done in the vertex stage.
+        variableInfoMapOut->add(shaderType, sh::vk::kXfbEmulationBufferBlockName);
+        return;
+    }
+
+    // Add an entry for the transform feedback buffers to the info map, so either it can be removed
+    // (as unused) or it can have correct set/binding.  Note that this resource is an array of fixed
+    // size (gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS).
+    AddResourceInfo(variableInfoMapOut, shaderType, sh::vk::kXfbEmulationBufferBlockName,
+                    programInterfaceInfo->uniformsAndXfbDescriptorSetIndex,
+                    programInterfaceInfo->currentUniformBindingIndex);
+    ++programInterfaceInfo->currentUniformBindingIndex;
+}
+
 void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &options,
                                                gl::ShaderType shaderType,
                                                const gl::ProgramState &programState,
@@ -379,27 +403,6 @@ void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &optio
     ASSERT(bufferCount > 0);
 
     const std::string xfbSet = Str(programInterfaceInfo->uniformsAndXfbDescriptorSetIndex);
-    std::vector<std::string> xfbIndices(bufferCount);
-
-    std::string xfbDecl;
-
-    for (uint32_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
-    {
-        const std::string xfbBinding = Str(programInterfaceInfo->currentUniformBindingIndex);
-        xfbIndices[bufferIndex]      = Str(bufferIndex);
-
-        std::string bufferName = GetXfbBufferName(bufferIndex);
-
-        xfbDecl += "layout(set = " + xfbSet + ", binding = " + xfbBinding + ") buffer " +
-                   bufferName + " { float xfbOut" + Str(bufferIndex) + "[]; };\n";
-
-        // Add this entry to the info map, so we can easily assert that every resource has an entry
-        // in this map.
-        AddResourceInfo(variableInfoMapOut, shaderType, bufferName,
-                        programInterfaceInfo->uniformsAndXfbDescriptorSetIndex,
-                        programInterfaceInfo->currentUniformBindingIndex);
-        ++programInterfaceInfo->currentUniformBindingIndex;
-    }
 
     const std::string driverUniforms = std::string(sh::vk::kDriverUniformsVarName);
     std::ostringstream xfbOut;
@@ -430,7 +433,7 @@ void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &optio
         // For every varying, output to the respective buffer packed.  If interleaved, the output is
         // always to the same buffer, but at different offsets.
         const gl::UniformTypeInfo &info = gl::GetUniformTypeInfo(varying.type);
-        GenerateTransformFeedbackVaryingOutput(varying, info, outputOffset, xfbIndices[bufferIndex],
+        GenerateTransformFeedbackVaryingOutput(varying, info, outputOffset, Str(bufferIndex),
                                                &xfbOut);
 
         if (isInterleaved)
@@ -440,7 +443,7 @@ void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &optio
     }
     xfbOut << "}\n";
 
-    *vertexShader = SubstituteTransformFeedbackMarkers(*vertexShader, xfbDecl, xfbOut.str());
+    *vertexShader = SubstituteTransformFeedbackMarkers(*vertexShader, "", xfbOut.str());
 }
 
 bool IsFirstRegisterOfVarying(const gl::PackedVaryingRegister &varyingReg, bool allowFields)
@@ -2310,6 +2313,19 @@ bool SpirvTransformer::transformDebugInfo(const uint32_t *instruction, size_t wo
                (id == mInputPerVertex.typeId && member > mInputPerVertex.maxActiveMember);
     }
 
+    // In the case of ANGLEXfbBuffers, unconditionally remove the variable name.  If transform
+    // feedback is not active, the corresponding variable will be removed.
+    if (GetSpirvInstructionOp(instruction) == spv::OpName)
+    {
+        // SPIR-V 1.0 Section 3.32 Instructions, OpName
+        constexpr size_t kNameIndex = 2;
+        const char *name            = reinterpret_cast<const char *>(&instruction[kNameIndex]);
+        if (strcmp(name, sh::vk::kXfbEmulationBuffersName) == 0)
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -2543,6 +2559,17 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
             return true;
         }
         return false;
+    }
+
+    if (mOptions.isTransformFeedbackStage && storageClass == spv::StorageClassUniform)
+    {
+        // Exceptionally, the ANGLEXfbBuffers variable is unconditionally generated and may be
+        // inactive.  Remove the variable in that case.
+        ASSERT(mShaderType == gl::ShaderType::Vertex);
+        ASSERT(info == &mVariableInfoMap.get(mShaderType, sh::vk::kXfbEmulationBufferBlockName));
+
+        // Drop the declaration.
+        return true;
     }
 
     // Copy the declaration even though the variable is inactive for the separately compiled shader.
@@ -3811,6 +3838,8 @@ void GlslangGenTransformFeedbackEmulationOutputs(const GlslangSourceOptions &opt
                                                  std::string *vertexShader,
                                                  ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
+    AssignTransformFeedbackEmulationBindings(gl::ShaderType::Vertex, true, programInterfaceInfo,
+                                             variableInfoMapOut);
     GenerateTransformFeedbackEmulationOutputs(options, gl::ShaderType::Vertex, programState,
                                               programInterfaceInfo, vertexShader,
                                               variableInfoMapOut);
@@ -3820,6 +3849,7 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                             const gl::ProgramExecutable &programExecutable,
                             const gl::ShaderType shaderType,
                             const gl::ShaderType frontShaderType,
+                            bool isTransformFeedbackStage,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
@@ -3859,6 +3889,12 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                           variableInfoMapOut);
     AssignNonTextureBindings(options, programExecutable, shaderType, programInterfaceInfo,
                              variableInfoMapOut);
+
+    if (options.emulateTransformFeedback)
+    {
+        AssignTransformFeedbackEmulationBindings(shaderType, isTransformFeedbackStage,
+                                                 programInterfaceInfo, variableInfoMapOut);
+    }
 }
 
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
@@ -3922,8 +3958,10 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : programState.getExecutable().getLinkedShaderStages())
     {
+        const bool isXfbStage =
+            shaderType == xfbStage && !programState.getLinkedTransformFeedbackVaryings().empty();
         GlslangAssignLocations(options, programState.getExecutable(), shaderType, frontShaderType,
-                               programInterfaceInfo, variableInfoMapOut);
+                               isXfbStage, programInterfaceInfo, variableInfoMapOut);
 
         frontShaderType = shaderType;
     }

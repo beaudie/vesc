@@ -161,7 +161,6 @@ bool GetImageNameWithoutIndices(std::string *name);
 // Get the mapped sampler name after the soure is transformed by GlslangGetShaderSource()
 std::string GetMappedSamplerNameOld(const std::string &originalName);
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
-std::string GetXfbBufferName(const uint32_t bufferIndex);
 
 // NOTE: options.emulateTransformFeedback is ignored in this case. It is assumed to be always true.
 void GlslangGenTransformFeedbackEmulationOutputs(
@@ -175,6 +174,7 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                             const gl::ProgramExecutable &programExecutable,
                             const gl::ShaderType shaderType,
                             const gl::ShaderType frontShaderType,
+                            bool isTransformFeedbackStage,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
