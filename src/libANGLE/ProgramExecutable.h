@@ -220,8 +220,9 @@ class ProgramExecutable final : public angle::Subject
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
     size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
 
-    bool linkValidateGlobalNames(InfoLog &infoLog,
-                                 const ShaderMap<const ProgramState *> &programStates) const;
+    bool linkValidateGlobalNames(bool isWebGL,
+                                 const ShaderMap<const ProgramState *> &programStates,
+                                 InfoLog &infoLog) const;
 
     void updateCanDrawWith();
     bool hasVertexAndFragmentShader() const { return mCanDrawWith; }

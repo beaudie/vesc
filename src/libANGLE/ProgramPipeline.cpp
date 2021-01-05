@@ -564,7 +564,8 @@ angle::Result ProgramPipeline::link(const Context *context)
 
         gl::ShaderMap<const gl::ProgramState *> programStates;
         fillProgramStateMap(&programStates);
-        if (!mState.mExecutable->linkValidateGlobalNames(infoLog, programStates))
+        if (!mState.mExecutable->linkValidateGlobalNames(context->isWebGL(), programStates,
+                                                         infoLog))
         {
             return angle::Result::Stop;
         }
