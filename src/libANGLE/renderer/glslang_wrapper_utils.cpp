@@ -821,6 +821,33 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
 
 // TODO: http://anglebug.com/4512: Need to combine descriptor set bindings across
 // shader stages.
+void AssignInputAttachmentBindings(const GlslangSourceOptions &options,
+                                   const gl::ProgramExecutable &programExecutable,
+                                   const std::vector<gl::LinkedUniform> &uniforms,
+                                   const gl::RangeUI &inputAttachmentUniformRange,
+                                   const gl::ShaderType shaderType,
+                                   GlslangProgramInterfaceInfo *programInterfaceInfo,
+                                   ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+{
+    for (unsigned int uniformIndex : inputAttachmentUniformRange)
+    {
+        std::string mappedSubpassInputName;
+        const gl::LinkedUniform &inputAttachmentUniform = uniforms[uniformIndex];
+        mappedSubpassInputName                          = inputAttachmentUniform.mappedName;
+
+        if (programExecutable.hasLinkedShaderStage(shaderType) &&
+            inputAttachmentUniform.isActive(shaderType))
+        {
+            AddResourceInfo(variableInfoMapOut, shaderType, mappedSubpassInputName,
+                            programInterfaceInfo->shaderResourceDescriptorSetIndex,
+                            programInterfaceInfo->currentShaderResourceBindingIndex);
+            ++programInterfaceInfo->currentShaderResourceBindingIndex;
+        }
+    }
+}
+
+// TODO: http://anglebug.com/4512: Need to combine descriptor set bindings across
+// shader stages.
 void AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
                                   const gl::ProgramExecutable &programExecutable,
                                   const std::vector<gl::InterfaceBlock> &blocks,
@@ -901,6 +928,12 @@ void AssignNonTextureBindings(const GlslangSourceOptions &options,
                               GlslangProgramInterfaceInfo *programInterfaceInfo,
                               ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
+    const std::vector<gl::LinkedUniform> &uniforms = programExecutable.getUniforms();
+    const gl::RangeUI &inputAttachmentUniformRange =
+        programExecutable.getInputAttachmentUniformRange();
+    AssignInputAttachmentBindings(options, programExecutable, uniforms, inputAttachmentUniformRange,
+                                  shaderType, programInterfaceInfo, variableInfoMapOut);
+
     const std::vector<gl::InterfaceBlock> &uniformBlocks = programExecutable.getUniformBlocks();
     AssignInterfaceBlockBindings(options, programExecutable, uniformBlocks, shaderType,
                                  programInterfaceInfo, variableInfoMapOut);
@@ -915,8 +948,7 @@ void AssignNonTextureBindings(const GlslangSourceOptions &options,
     AssignAtomicCounterBufferBindings(options, programExecutable, atomicCounterBuffers, shaderType,
                                       programInterfaceInfo, variableInfoMapOut);
 
-    const std::vector<gl::LinkedUniform> &uniforms = programExecutable.getUniforms();
-    const gl::RangeUI &imageUniformRange           = programExecutable.getImageUniformRange();
+    const gl::RangeUI &imageUniformRange = programExecutable.getImageUniformRange();
     AssignImageBindings(options, programExecutable, uniforms, imageUniformRange, shaderType,
                         programInterfaceInfo, variableInfoMapOut);
 }

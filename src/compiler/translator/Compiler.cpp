@@ -18,6 +18,7 @@
 #include "compiler/translator/ParseContext.h"
 #include "compiler/translator/ValidateLimitations.h"
 #include "compiler/translator/ValidateMaxParameters.h"
+#include "compiler/translator/ValidateNoncoherentQualifier.h"
 #include "compiler/translator/ValidateOutputs.h"
 #include "compiler/translator/ValidateVaryingLocations.h"
 #include "compiler/translator/VariablePacker.h"
@@ -626,6 +627,14 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    // Check that gl_LastFragData has 'noncoherent' qualifier when
+    // EXT_shader_framebuffer_fetch_non_coherent extension is used.
+    if (mShaderVersion < 300 && mShaderType == GL_FRAGMENT_SHADER &&
+        !ValidateNoncoherentQualifier(root, getExtensionBehavior(), &mDiagnostics))
+    {
+        return false;
+    }
+
     // Clamping uniform array bounds needs to happen after validateLimitations pass.
     if (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS)
     {
@@ -1079,6 +1088,7 @@ void TCompiler::setResourceString()
         << ":EXT_frag_depth:" << mResources.EXT_frag_depth
         << ":EXT_shader_texture_lod:" << mResources.EXT_shader_texture_lod
         << ":EXT_shader_framebuffer_fetch:" << mResources.EXT_shader_framebuffer_fetch
+        << ":EXT_shader_framebuffer_fetch_non_coherent:" << mResources.EXT_shader_framebuffer_fetch_non_coherent
         << ":NV_shader_framebuffer_fetch:" << mResources.NV_shader_framebuffer_fetch
         << ":ARM_shader_framebuffer_fetch:" << mResources.ARM_shader_framebuffer_fetch
         << ":OVR_multiview2:" << mResources.OVR_multiview2

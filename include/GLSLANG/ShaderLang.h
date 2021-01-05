@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 247
+#define ANGLE_SH_VERSION 248
 
 enum ShShaderSpec
 {
@@ -391,6 +391,7 @@ struct ShBuiltInResources
     int EXT_shader_texture_lod;
     int WEBGL_debug_shader_precision;
     int EXT_shader_framebuffer_fetch;
+    int EXT_shader_framebuffer_fetch_non_coherent;
     int NV_shader_framebuffer_fetch;
     int NV_shader_noperspective_interpolation;
     int ARM_shader_framebuffer_fetch;
@@ -869,6 +870,9 @@ extern const char kAtomicCountersBlockName[];
 
 // Line raster emulation varying
 extern const char kLineRasterEmulationPosition[];
+
+// EXT_shader_framebuffer_fetch and EXT_shader_framebuffer_fetch_non_coherent
+extern const char kInputAttachmentName[];
 
 }  // namespace vk
 
