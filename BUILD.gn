@@ -448,6 +448,7 @@ angle_static_library("angle_gpu_info_util") {
       "IOKit.framework",
       "CoreFoundation.framework",
       "CoreGraphics.framework",
+      "Foundation.framework",
     ]
     if (angle_enable_eagl) {
       frameworks += [ "OpenGLES.framework" ]
@@ -754,7 +755,7 @@ angle_source_set("libANGLE_base") {
   }
 
   if (is_mac || is_ios) {
-    sources += libangle_mac_sources
+    sources += libangle_apple_sources
   }
 
   if (is_debug) {

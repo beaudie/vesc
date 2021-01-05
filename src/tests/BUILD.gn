@@ -147,10 +147,6 @@ if (is_win || is_linux || is_chromeos || is_mac || is_android || is_fuchsia ||
 
     if (is_mac || (is_ios && target_environment != "simulator")) {
       sources += angle_end2end_tests_mac_sources
-      frameworks = [
-        "CoreFoundation.framework",
-        "IOSurface.framework",
-      ]
     }
     if (is_win) {
       sources += angle_end2end_tests_win_sources

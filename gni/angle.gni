@@ -121,7 +121,7 @@ declare_args() {
   angle_enable_glsl = true
 
   # http://anglebug.com/2634
-  angle_enable_metal = is_mac
+  angle_enable_metal = is_mac || is_ios
 }
 
 declare_args() {
