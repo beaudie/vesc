@@ -882,9 +882,14 @@ void DisplayGLX::setSwapInterval(glx::Drawable drawable, SwapControlData *data)
     }
 }
 
-bool DisplayGLX::isValidWindowVisualId(unsigned long visualId) const
+bool DisplayGLX::isWindowVisualIdSpecified() const
 {
-    return mRequestedVisual == -1 || static_cast<unsigned long>(mRequestedVisual) == visualId;
+    return mRequestedVisual != -1;
+}
+
+bool DisplayGLX::isMatchingWindowVisualId(unsigned long visualId) const
+{
+    return isWindowVisualIdSpecified() && static_cast<unsigned long>(mRequestedVisual) == visualId;
 }
 
 void DisplayGLX::generateExtensions(egl::DisplayExtensions *outExtensions) const
