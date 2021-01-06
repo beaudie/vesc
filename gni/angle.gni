@@ -122,7 +122,7 @@ declare_args() {
   angle_enable_gl_desktop = !is_android && !is_ios
 
   # http://anglebug.com/2634
-  angle_enable_metal = is_mac
+  angle_enable_metal = is_mac || is_ios
 }
 
 declare_args() {
@@ -249,6 +249,13 @@ template("angle_executable") {
 
     configs += invoker.configs
     configs -= invoker.suppressed_configs
+
+    if (is_mac || is_ios) {
+      if (!defined(frameworks)) {
+        frameworks = []
+      }
+      frameworks += [ "Foundation.framework" ]
+    }
   }
 }
 
@@ -282,6 +289,13 @@ template("angle_shared_library") {
     if (is_android) {
       configs += [ angle_root + ":build_id_config" ]
       configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    }
+
+    if (is_apple) {
+      if (!defined(frameworks)) {
+        frameworks = []
+      }
+      frameworks += [ "Foundation.framework" ]
     }
     if (is_ios) {
       info_plist = "$angle_root/util/ios/Info.plist"

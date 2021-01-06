@@ -22,7 +22,7 @@ namespace sh
 
 namespace
 {
-constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDepthRangeParams");
+constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLE_DepthRangeParams");
 
 constexpr const char kViewport[]               = "viewport";
 constexpr const char kClipDistancesEnabled[]   = "clipDistancesEnabled";
