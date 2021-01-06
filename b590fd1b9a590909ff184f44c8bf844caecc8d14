@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14ba5713_dce9d2aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-01-06T15:16:20Z",
+      "side": 1,
+      "message": "LGTM - fyi you can use the auto-roller to trigger manual rolls for this.",
+      "revId": "b590fd1b9a590909ff184f44c8bf844caecc8d14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
