@@ -59,68 +59,93 @@ WindowSurfaceGLX::~WindowSurfaceGLX()
     mGLXDisplay->syncXCommands();
 }
 
+Window WindowSurfaceGLX::getActiveWindow() const
+{
+    if (mWindow)
+    {
+        return mWindow;
+    }
+    return mParent;
+}
+
 egl::Error WindowSurfaceGLX::initialize(const egl::Display *display)
 {
-    // Check that the window's visual ID is valid, as part of the AMGLE_x11_visual
-    // extension.
+    XVisualInfo *visualInfo = nullptr;
+    Colormap colormap       = 0;
+    if (mGLXDisplay->isWindowVisualIdSpecified())
     {
         XWindowAttributes windowAttributes;
         XGetWindowAttributes(mDisplay, mParent, &windowAttributes);
         unsigned long visualId = windowAttributes.visual->visualid;
-
-        if (!mGLXDisplay->isValidWindowVisualId(visualId))
+        // Check that the window's visual ID is valid, as part of the AMGLE_x11_visual
+        // extension.
+        if (!mGLXDisplay->isMatchingWindowVisualId(visualId))
         {
             return egl::EglBadMatch() << "The visual of native_window doesn't match the visual "
                                          "given with ANGLE_X11_VISUAL_ID";
         }
     }
-
-    // The visual of the X window, GLX window and GLX context must match,
-    // however we received a user-created window that can have any visual
-    // and wouldn't work with our GLX context. To work in all cases, we
-    // create a child window with the right visual that covers all of its
-    // parent.
-    XVisualInfo *visualInfo = mGLX.getVisualFromFBConfig(mFBConfig);
-    if (!visualInfo)
+    else
     {
-        return egl::EglBadNativeWindow() << "Failed to get the XVisualInfo for the child window.";
-    }
-    Visual *visual = visualInfo->visual;
+        // The visual of the X window, GLX window and GLX context must match,
+        // however we received a user-created window that can have any visual
+        // and wouldn't work with our GLX context. To work in all cases, we
+        // create a child window with the right visual that covers all of its
+        // parent.
+        visualInfo = mGLX.getVisualFromFBConfig(mFBConfig);
+        if (!visualInfo)
+        {
+            return egl::EglBadNativeWindow()
+                   << "Failed to get the XVisualInfo for the child window.";
+        }
+        Visual *visual = visualInfo->visual;
 
-    if (!getWindowDimensions(mParent, &mParentWidth, &mParentHeight))
+        if (!getWindowDimensions(mParent, &mParentWidth, &mParentHeight))
+        {
+            return egl::EglBadNativeWindow() << "Failed to get the parent window's dimensions.";
+        }
+
+        // The depth, colormap and visual must match otherwise we get a X error
+        // so we specify the colormap attribute. Also we do not want the window
+        // to be taken into account for input so we specify the event and
+        // do-not-propagate masks to 0 (the defaults). Finally we specify the
+        // border pixel attribute so that we can use a different visual depth
+        // than our parent (seems like X uses that as a condition to render
+        // the subwindow in a different buffer)
+        XSetWindowAttributes attributes;
+        unsigned long attributeMask = CWColormap | CWBorderPixel;
+
+        colormap = XCreateColormap(mDisplay, mParent, visual, AllocNone);
+        if (!colormap)
+        {
+            XFree(visualInfo);
+            return egl::EglBadNativeWindow()
+                   << "Failed to create the Colormap for the child window.";
+        }
+        attributes.colormap     = colormap;
+        attributes.border_pixel = 0;
+
+        // TODO(cwallez) set up our own error handler to see if the call failed
+        mWindow = XCreateWindow(mDisplay, mParent, 0, 0, mParentWidth, mParentHeight, 0,
+                                visualInfo->depth, InputOutput, visual, attributeMask, &attributes);
+    }
+
+    mGLXWindow = mGLX.createWindow(mFBConfig, getActiveWindow(), nullptr);
+
+    if (mWindow)
     {
-        return egl::EglBadNativeWindow() << "Failed to get the parent window's dimensions.";
+        XMapWindow(mDisplay, mWindow);
     }
-
-    // The depth, colormap and visual must match otherwise we get a X error
-    // so we specify the colormap attribute. Also we do not want the window
-    // to be taken into account for input so we specify the event and
-    // do-not-propagate masks to 0 (the defaults). Finally we specify the
-    // border pixel attribute so that we can use a different visual depth
-    // than our parent (seems like X uses that as a condition to render
-    // the subwindow in a different buffer)
-    XSetWindowAttributes attributes;
-    unsigned long attributeMask = CWColormap | CWBorderPixel;
-
-    Colormap colormap = XCreateColormap(mDisplay, mParent, visual, AllocNone);
-    if (!colormap)
-    {
-        XFree(visualInfo);
-        return egl::EglBadNativeWindow() << "Failed to create the Colormap for the child window.";
-    }
-    attributes.colormap     = colormap;
-    attributes.border_pixel = 0;
-
-    // TODO(cwallez) set up our own error handler to see if the call failed
-    mWindow    = XCreateWindow(mDisplay, mParent, 0, 0, mParentWidth, mParentHeight, 0,
-                            visualInfo->depth, InputOutput, visual, attributeMask, &attributes);
-    mGLXWindow = mGLX.createWindow(mFBConfig, mWindow, nullptr);
-
-    XMapWindow(mDisplay, mWindow);
     XFlush(mDisplay);
 
-    XFree(visualInfo);
-    XFreeColormap(mDisplay, colormap);
+    if (visualInfo)
+    {
+        XFree(visualInfo);
+    }
+    if (colormap)
+    {
+        XFreeColormap(mDisplay, colormap);
+    }
 
     mGLXDisplay->syncXCommands();
 
@@ -139,10 +164,14 @@ egl::Error WindowSurfaceGLX::swap(const gl::Context *context)
     mGLXDisplay->setSwapInterval(mGLXWindow, &mSwapControl);
     mGLX.swapBuffers(mGLXWindow);
 
-    egl::Error error = checkForResize();
-    if (error.isError())
+    // We only need to check for resize if there is a child window
+    if (mWindow)
     {
-        return error;
+        egl::Error error = checkForResize();
+        if (error.isError())
+        {
+            return error;
+        }
     }
 
     return egl::NoError();
@@ -185,14 +214,40 @@ void WindowSurfaceGLX::setSwapInterval(EGLint interval)
 
 EGLint WindowSurfaceGLX::getWidth() const
 {
-    // The size of the window is always the same as the cached size of its parent.
-    return mParentWidth;
+    if (mWindow)
+    {
+        // If there's a child window, the size of the window is always the same as the cached
+        // size of its parent.
+        return mParentWidth;
+    }
+    else
+    {
+        unsigned int parentWidth, parentHeight;
+        if (!getWindowDimensions(mParent, &parentWidth, &parentHeight))
+        {
+            return mParentWidth;
+        }
+        return parentWidth;
+    }
 }
 
 EGLint WindowSurfaceGLX::getHeight() const
 {
-    // The size of the window is always the same as the cached size of its parent.
-    return mParentHeight;
+    if (mWindow)
+    {
+        // If there's a child window, the size of the window is always the same as the cached
+        // size of its parent.
+        return mParentHeight;
+    }
+    else
+    {
+        unsigned int parentWidth, parentHeight;
+        if (!getWindowDimensions(mParent, &parentWidth, &parentHeight))
+        {
+            return mParentHeight;
+        }
+        return parentHeight;
+    }
 }
 
 EGLint WindowSurfaceGLX::isPostSubBufferSupported() const
