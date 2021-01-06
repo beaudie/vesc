@@ -425,7 +425,8 @@ libangle_sources = [
   "src/libANGLE/validationGL4.cpp",
 ]
 
-libangle_mac_sources = [
+libangle_apple_sources = [
+  "src/libANGLE/renderer/driver_utils_ios.mm",
   "src/libANGLE/renderer/driver_utils_mac.mm",
   "src/libANGLE/renderer/gl/apple/DisplayApple_api.cpp",
   "src/libANGLE/renderer/gl/apple/DisplayApple_api.h",
