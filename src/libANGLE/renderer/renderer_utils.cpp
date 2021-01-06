@@ -206,6 +206,28 @@ void SetFloatUniformMatrixFast(unsigned int arrayElementOffset,
 
     memcpy(targetData, valueData, matrixSize * count);
 }
+
+struct IncompleteTextureParameters
+{
+    GLenum sizedInternalFormat;
+    GLenum format;
+    GLenum type;
+    GLubyte clearColor[4];
+};
+
+IncompleteTextureParameters getIncompleteTextureParameters(const gl::SamplerFormat format)
+{
+    constexpr angle::PackedEnumMap<gl::SamplerFormat, IncompleteTextureParameters>
+        incompleteTextureParameters = {
+            {gl::SamplerFormat::Float, {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, {0, 0, 0, 255}}},
+            {gl::SamplerFormat::Unsigned,
+             {GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, {0, 0, 0, 255}}},
+            {gl::SamplerFormat::Signed, {GL_RGBA8I, GL_RGBA_INTEGER, GL_BYTE, {0, 0, 0, 127}}},
+            {gl::SamplerFormat::Shadow, {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, {0, 0, 0, 255}}}};
+
+    ASSERT(format < gl::SamplerFormat::EnumCount);
+    return incompleteTextureParameters[format];
+}
 }  // anonymous namespace
 
 void RotateRectangle(const SurfaceRotation rotation,
@@ -552,12 +574,15 @@ IncompleteTextureSet::~IncompleteTextureSet() {}
 void IncompleteTextureSet::onDestroy(const gl::Context *context)
 {
     // Clear incomplete textures.
-    for (auto &incompleteTexture : mIncompleteTextures)
+    for (auto &incompleteTextures : mIncompleteTextures)
     {
-        if (incompleteTexture.get() != nullptr)
+        for (auto &incompleteTexture : incompleteTextures)
         {
-            incompleteTexture->onDestroy(context);
-            incompleteTexture.set(context, nullptr);
+            if (incompleteTexture.get() != nullptr)
+            {
+                incompleteTexture->onDestroy(context);
+                incompleteTexture.set(context, nullptr);
+            }
         }
     }
     if (mIncompleteTextureBufferAttachment != nullptr)
@@ -573,7 +598,28 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
     MultisampleTextureInitializer *multisampleInitializer,
     gl::Texture **textureOut)
 {
-    *textureOut = mIncompleteTextures[type].get();
+    return getIncompleteTextureImpl(context, type, gl::SamplerFormat::Float, multisampleInitializer,
+                                    textureOut);
+}
+
+angle::Result IncompleteTextureSet::getIncompleteTextureWithFormat(
+    const gl::Context *context,
+    gl::TextureType type,
+    gl::SamplerFormat format,
+    MultisampleTextureInitializer *multisampleInitializer,
+    gl::Texture **textureOut)
+{
+    return getIncompleteTextureImpl(context, type, format, multisampleInitializer, textureOut);
+}
+
+angle::Result IncompleteTextureSet::getIncompleteTextureImpl(
+    const gl::Context *context,
+    gl::TextureType type,
+    gl::SamplerFormat format,
+    MultisampleTextureInitializer *multisampleInitializer,
+    gl::Texture **textureOut)
+{
+    *textureOut = mIncompleteTextures[format][type].get();
     if (*textureOut != nullptr)
     {
         return angle::Result::Continue;
@@ -581,11 +627,12 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
 
     ContextImpl *implFactory = context->getImplementation();
 
-    const GLubyte color[] = {0, 0, 0, 255};
     const gl::Extents colorSize(1, 1, 1);
     gl::PixelUnpackState unpack;
     unpack.alignment = 1;
     const gl::Box area(0, 0, 0, 1, 1, 1);
+    const IncompleteTextureParameters incompleteTextureMeta =
+        getIncompleteTextureParameters(format);
 
     // If a texture is external use a 2D texture for the incomplete texture
     gl::TextureType createType = (type == gl::TextureType::External) ? gl::TextureType::_2D : type;
@@ -611,20 +658,23 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
     }
     else if (createType == gl::TextureType::_2DMultisample)
     {
-        ANGLE_TRY(
-            t->setStorageMultisample(mutableContext, createType, 1, GL_RGBA8, colorSize, true));
+        ANGLE_TRY(t->setStorageMultisample(mutableContext, createType, 1,
+                                           incompleteTextureMeta.sizedInternalFormat, colorSize,
+                                           true));
     }
     else
     {
-        ANGLE_TRY(t->setStorage(mutableContext, createType, 1, GL_RGBA8, colorSize));
+        ANGLE_TRY(t->setStorage(mutableContext, createType, 1,
+                                incompleteTextureMeta.sizedInternalFormat, colorSize));
     }
 
     if (type == gl::TextureType::CubeMap)
     {
         for (gl::TextureTarget face : gl::AllCubeFaceTextureTargets())
         {
-            ANGLE_TRY(t->setSubImage(mutableContext, unpack, nullptr, face, 0, area, GL_RGBA,
-                                     GL_UNSIGNED_BYTE, color));
+            ANGLE_TRY(t->setSubImage(mutableContext, unpack, nullptr, face, 0, area,
+                                     incompleteTextureMeta.format, incompleteTextureMeta.type,
+                                     incompleteTextureMeta.clearColor));
         }
     }
     else if (type == gl::TextureType::_2DMultisample)
@@ -639,14 +689,15 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
     else
     {
         ANGLE_TRY(t->setSubImage(mutableContext, unpack, nullptr,
-                                 gl::NonCubeTextureTypeToTarget(createType), 0, area, GL_RGBA,
-                                 GL_UNSIGNED_BYTE, color));
+                                 gl::NonCubeTextureTypeToTarget(createType), 0, area,
+                                 incompleteTextureMeta.format, incompleteTextureMeta.type,
+                                 incompleteTextureMeta.clearColor));
     }
 
     ANGLE_TRY(t->syncState(context, gl::Command::Other));
 
-    mIncompleteTextures[type].set(context, t.release());
-    *textureOut = mIncompleteTextures[type].get();
+    mIncompleteTextures[format][type].set(context, t.release());
+    *textureOut = mIncompleteTextures[format][type].get();
     return angle::Result::Continue;
 }
 
