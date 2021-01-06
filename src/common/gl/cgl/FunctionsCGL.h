@@ -4,10 +4,10 @@
 // found in the LICENSE file.
 //
 
-// CGLFunctions.h: Exposing the soft-linked CGL interface.
+// FunctionsCGL.h: Exposing the soft-linked CGL interface.
 
-#ifndef CGL_FUNCTIONS_H_
-#define CGL_FUNCTIONS_H_
+#ifndef FUNCTIONS_CGL_H_
+#define FUNCTIONS_CGL_H_
 
 #include "common/platform.h"
 
@@ -82,4 +82,4 @@ SOFT_LINK_FUNCTION_HEADER(OpenGL, CGLUpdateContext, CGLError, (CGLContextObj ctx
 
 #endif  // defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
 
-#endif  // CGL_FUNCTIONS_H_
+#endif  // FUNCTIONS_CGL_H_
