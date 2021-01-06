@@ -773,7 +773,7 @@ angle_source_set("libANGLE_base") {
   }
 
   if (is_apple) {
-    sources += libangle_mac_sources
+    sources += libangle_apple_sources
   }
 
   if (is_debug) {
@@ -1033,6 +1033,10 @@ angle_shared_library("libGLESv1_CM") {
     ":includes",
     ":libGLESv2",
   ]
+
+  if (is_mac) {
+    frameworks = [ "Foundation.framework" ]
+  }
 
   if (is_win) {
     sources += [ "src/libGLESv1_CM/libGLESv1_CM.def" ]
