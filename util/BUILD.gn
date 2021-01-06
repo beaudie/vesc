@@ -193,16 +193,6 @@ foreach(is_shared_library,
       ]
     }
 
-    if (is_apple) {
-      frameworks = [ "QuartzCore.framework" ]
-      if (is_mac) {
-        frameworks += [ "AppKit.framework" ]
-      }
-      if (is_ios) {
-        frameworks += [ "UIKit.framework" ]
-      }
-    }
-
     if (is_android) {
       libs += [
         "android",
@@ -249,6 +239,20 @@ foreach(is_shared_library,
       public_configs += [
         "$angle_root:angle_static",
         "$angle_root:gl_prototypes",
+      ]
+    }
+
+    if (is_apple) {
+      frameworks = [
+        "CoreGraphics.framework",
+        "QuartzCore.framework",
+      ]
+    }
+
+    if (is_mac) {
+      frameworks += [
+        "Cocoa.framework",
+        "AppKit.framework",
       ]
     }
   }
