@@ -72,6 +72,27 @@ class IncompleteTextureTestES3 : public ANGLETest
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
     }
+
+  public:
+    void setRenderToRenderbuffer(const GLenum sizedInternalFormat, const GLint *clearColor)
+    {
+        glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, sizedInternalFormat, getWindowWidth(),
+                              getWindowHeight());
+        ASSERT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                  mRenderbuffer);
+        glViewport(0, 0, getWindowWidth(), getWindowHeight());
+        ASSERT_GL_NO_ERROR();
+
+        glClearBufferiv(GL_COLOR, 0, clearColor);
+    }
+
+  private:
+    GLRenderbuffer mRenderbuffer;
+    GLFramebuffer mFramebuffer;
 };
 
 class IncompleteTextureTestES31 : public ANGLETest
@@ -221,6 +242,92 @@ void main()
     ASSERT_GL_NO_ERROR();
 
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+}
+
+// Verifies that an incomplete integer texture has an integer type default value.
+TEST_P(IncompleteTextureTestES3, IntegerType)
+{
+    // On Vulkan backend, because of the validation layer, the test is failed.
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kVS[] = R"(#version 300 es
+in highp vec2 position;
+out highp vec2 texCoord;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    texCoord = (position * 0.5) + 0.5;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+in highp vec2 texCoord;
+out highp ivec4 color;
+uniform highp isampler2D tex;
+void main()
+{
+    ivec2 texSize = textureSize(tex, 0);
+    ivec2 texel = ivec2(vec2(texSize) * texCoord);
+    color = texelFetch(tex, texel, 0);
+})";
+
+    constexpr GLint redColori[4]   = {127, 0, 0, 127};
+    constexpr GLint blackColori[4] = {0, 0, 0, 127};
+
+    setRenderToRenderbuffer(GL_RGBA8I, redColori);
+    EXPECT_PIXEL_8I(0, 0, redColori[0], redColori[1], redColori[2], redColori[3]);
+
+    // Since no texture attachment has been specified, it is incomplete by definition
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+
+    drawQuad(program, "position", 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_8I(0, 0, blackColori[0], blackColori[1], blackColori[2], blackColori[3]);
+}
+
+// Verifies that an incomplete unsigned integer texture has an unsigned integer type default value.
+TEST_P(IncompleteTextureTestES3, UnsignedIntegerType)
+{
+    // On Vulkan backend, because of the validation layer, the test is failed.
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kVS[] = R"(#version 300 es
+in highp vec2 position;
+out highp vec2 texCoord;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    texCoord = (position * 0.5) + 0.5;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+in highp vec2 texCoord;
+out highp uvec4 color;
+uniform highp usampler2D tex;
+void main()
+{
+    ivec2 texSize = textureSize(tex, 0);
+    ivec2 texel = ivec2(vec2(texSize) * texCoord);
+    color = texelFetch(tex, texel, 0);
+})";
+
+    constexpr GLint redColorui[4]   = {255, 0, 0, 255};
+    constexpr GLint blackColorui[4] = {0, 0, 0, 255};
+
+    setRenderToRenderbuffer(GL_RGBA8UI, redColorui);
+    EXPECT_PIXEL_8UI(0, 0, redColorui[0], redColorui[1], redColorui[2], redColorui[3]);
+
+    // Since no texture attachment has been specified, it is incomplete by definition
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+
+    drawQuad(program, "position", 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_8UI(0, 0, blackColorui[0], blackColorui[1], blackColorui[2], blackColorui[3]);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
