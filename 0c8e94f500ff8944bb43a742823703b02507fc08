@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c85a94ff_4523534b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-01-06T03:43:19Z",
+      "side": 1,
+      "message": "Hey Quyen! I hope you are doing well and happy new year. I was hoping to get some pointers for this change, if you are available.\n\nI\u0027ve made a change here where the transform feedback buffers are turned into an array of 4 (fixed size), rather than having one buffer declared per attribute. I\u0027m having trouble figuring out what (blindly) change in the metal code to support this. In Vulkan, a buffer array gets a unique binding; my first question is, is that the same with metal? I\u0027m looking at mtl_glslang_utils.mm (BindBuffers), and the logic under `case kGlslangDefaultUniformAndXfbDescSet:` needs to change in ways I can\u0027t really tell how.\n\nBasically I need to replicate these changes in vulkan/ here in metal/, and I\u0027m having a hard time understanding the architecture:\n\n- Have one binding for the xfb buffers array\n- Always bind 4 xfb buffers (use dummy buffers if fewer xfb buffers used)\n  * This touches multiple pieces of code",
+      "revId": "0c8e94f500ff8944bb43a742823703b02507fc08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
