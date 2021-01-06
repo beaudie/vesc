@@ -448,7 +448,6 @@ angle_static_library("angle_gpu_info_util") {
       "IOKit.framework",
       "CoreFoundation.framework",
       "CoreGraphics.framework",
-      "Foundation.framework",
     ]
     if (angle_enable_eagl) {
       frameworks += [ "OpenGLES.framework" ]
@@ -1015,6 +1014,10 @@ angle_shared_library("libGLESv1_CM") {
     ":includes",
     ":libGLESv2",
   ]
+
+  if (is_mac) {
+    frameworks = [ "Foundation.framework" ]
+  }
 
   if (is_win) {
     sources += [ "src/libGLESv1_CM/libGLESv1_CM.def" ]

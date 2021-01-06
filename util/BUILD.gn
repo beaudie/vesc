@@ -236,13 +236,14 @@ foreach(is_shared_library,
     if (is_mac || is_ios) {
       frameworks = [
         "CoreGraphics.framework",
-        "Foundation.framework",
+        "QuartzCore.framework"
       ]
     }
 
     if (is_mac) {
       frameworks += [
         "Cocoa.framework",
+        "AppKit.framework",
       ]
     }
   }

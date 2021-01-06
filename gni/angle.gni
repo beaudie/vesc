@@ -243,6 +243,13 @@ template("angle_executable") {
 
     configs += invoker.configs
     configs -= invoker.suppressed_configs
+
+    if (is_mac || is_ios) {
+      if (!defined(frameworks)) {
+        frameworks = []
+      }
+      frameworks += [ "Foundation.framework" ]
+    }
   }
 }
 
@@ -267,6 +274,13 @@ template("angle_shared_library") {
     if (is_android) {
       configs += [ angle_root + ":build_id_config" ]
       configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    }
+
+    if (is_mac || is_ios) {
+      if (!defined(frameworks)) {
+        frameworks = []
+      }
+      frameworks += [ "Foundation.framework" ]
     }
   }
 }
