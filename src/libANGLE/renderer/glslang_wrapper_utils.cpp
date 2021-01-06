@@ -297,10 +297,12 @@ std::string SubstituteTransformFeedbackMarkers(const std::string &originalSource
                                                const std::string &xfbOut)
 {
     const size_t xfbDeclMarkerStart = originalSource.find(kXfbDeclMarker);
-    const size_t xfbDeclMarkerEnd   = xfbDeclMarkerStart + ConstStrLen(kXfbDeclMarker);
+    ASSERT(xfbDeclMarkerStart != std::string::npos);
+    const size_t xfbDeclMarkerEnd = xfbDeclMarkerStart + ConstStrLen(kXfbDeclMarker);
 
     const size_t xfbOutMarkerStart = originalSource.find(kXfbOutMarker, xfbDeclMarkerStart);
-    const size_t xfbOutMarkerEnd   = xfbOutMarkerStart + ConstStrLen(kXfbOutMarker);
+    ASSERT(xfbOutMarkerStart != std::string::npos);
+    const size_t xfbOutMarkerEnd = xfbOutMarkerStart + ConstStrLen(kXfbOutMarker);
 
     // The shader is the following form:
     //
@@ -368,7 +370,8 @@ void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &optio
                                                const gl::ProgramState &programState,
                                                GlslangProgramInterfaceInfo *programInterfaceInfo,
                                                std::string *vertexShader,
-                                               ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+                                               ShaderInterfaceVariableInfoMap *variableInfoMapOut,
+                                               bool earlyReturn)
 {
     const std::vector<gl::TransformFeedbackVarying> &varyings =
         programState.getLinkedTransformFeedbackVaryings();
@@ -437,6 +440,10 @@ void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &optio
         {
             outputOffset += info.columnCount * info.rowCount * varying.size();
         }
+    }
+    if (earlyReturn)
+    {
+        xfbOut << "return;";
     }
     xfbOut << "}\n";
 
@@ -3795,20 +3802,14 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName)
     return samplerName;
 }
 
-std::string GetXfbBufferName(const uint32_t bufferIndex)
-{
-    return "xfbBuffer" + Str(bufferIndex);
-}
-
 void GlslangGenTransformFeedbackEmulationOutputs(const GlslangSourceOptions &options,
                                                  const gl::ProgramState &programState,
                                                  GlslangProgramInterfaceInfo *programInterfaceInfo,
                                                  std::string *vertexShader,
                                                  ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    GenerateTransformFeedbackEmulationOutputs(options, gl::ShaderType::Vertex, programState,
-                                              programInterfaceInfo, vertexShader,
-                                              variableInfoMapOut);
+    GenerateTransformFeedbackEmulationOutputs(options, gl::ShaderType::Vertex, programState, programInterfaceInfo,
+                                              vertexShader, variableInfoMapOut, false);
 }
 
 void GlslangAssignLocations(const GlslangSourceOptions &options,
@@ -3857,6 +3858,11 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                              variableInfoMapOut);
 }
 
+std::string GetXfbBufferName(const uint32_t bufferIndex)
+{
+    return "xfbBuffer" + Str(bufferIndex);
+}
+
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
@@ -3887,9 +3893,9 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
             else if (options.emulateTransformFeedback)
             {
                 ASSERT(xfbStage == gl::ShaderType::Vertex);
-                GenerateTransformFeedbackEmulationOutputs(options, xfbStage, programState,
-                                                          programInterfaceInfo, xfbSource,
-                                                          variableInfoMapOut);
+                GenerateTransformFeedbackEmulationOutputs(
+                    options, xfbStage, programState, programInterfaceInfo, xfbSource,
+                    variableInfoMapOut, options.transformFeedbackEarlyReturn);
             }
             else
             {
