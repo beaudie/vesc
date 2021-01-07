@@ -1317,6 +1317,14 @@ GLuint FramebufferGL::getFramebufferID() const
     return mFramebufferID;
 }
 
+void FramebufferGL::updateFramebufferID(GLuint framebufferID)
+{
+    // We only update framebufferID for a default frambuffer, and the framebufferID is created
+    // externally. ANFLE doesn't owne it.
+    ASSERT(isDefault());
+    mFramebufferID = framebufferID;
+}
+
 bool FramebufferGL::isDefault() const
 {
     return mIsDefault;
