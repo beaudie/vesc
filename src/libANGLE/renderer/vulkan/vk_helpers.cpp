@@ -3141,8 +3141,18 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 
     VkMemoryPropertyFlags requiredFlags =
         (memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
-    VkMemoryPropertyFlags preferredFlags =
+    VkMemoryPropertyFlags preferredFlags;
+
+    // If we want host visible memory, also ask for cached.
+    // This can make a big difference if we e.g., upload geometry/buffer data
+    // to a UC memory type.
+    if (requiredFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) {
+        preferredFlags =
+            memoryPropertyFlags | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+    } else {
+        preferredFlags =
         (memoryPropertyFlags & (~VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+    }
 
     const Allocator &allocator = renderer->getAllocator();
     bool persistentlyMapped    = renderer->getFeatures().persistentlyMappedBuffers.enabled;
