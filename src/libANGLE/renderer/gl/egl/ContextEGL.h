@@ -20,13 +20,17 @@ class ContextEGL : public ContextGL
     ContextEGL(const gl::State &state,
                gl::ErrorSet *errorSet,
                const std::shared_ptr<RendererEGL> &renderer,
-               RobustnessVideoMemoryPurgeStatus robustnessVideoMemoryPurgeStatus);
+               RobustnessVideoMemoryPurgeStatus robustnessVideoMemoryPurgeStatus,
+               bool externalContext = false);
     ~ContextEGL() override;
 
     EGLContext getContext() const;
 
+    bool isExternalContext() const { return mExternalContext; }
+
   private:
     std::shared_ptr<RendererEGL> mRendererEGL;
+    bool mExternalContext = false;
 };
 }  // namespace rx
 

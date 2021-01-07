@@ -341,6 +341,7 @@ Context::Context(egl::Display *display,
       mRefCount(0),
       mOverlay(mImplementation.get())
 {
+    ERR() << "EEEE Context::Context()";
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
     {

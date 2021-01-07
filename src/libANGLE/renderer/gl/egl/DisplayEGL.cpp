@@ -601,6 +601,8 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
 
     if (newSurface != currentContext.surface || newContext != currentContext.context)
     {
+        ERR() << "EEE newSurface=" << newSurface;
+        ERR() << "EEE newContext=" << newContext;
         if (mEGL->makeCurrent(newSurface, newContext) == EGL_FALSE)
         {
             return egl::Error(mEGL->getError(), "eglMakeCurrent failed");

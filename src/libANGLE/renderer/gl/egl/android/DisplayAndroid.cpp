@@ -205,14 +205,25 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
                                            const egl::AttributeMap &attribs)
 {
     std::shared_ptr<RendererEGL> renderer;
-    if (mVirtualizedContexts)
+    bool usingExternalContext = attribs.get(EGL_EXTERNAL_CONTEXT_ANGLE, EGL_FALSE) == EGL_TRUE;
+    if (mVirtualizedContexts && !usingExternalContext)
     {
         renderer = mRenderer;
     }
     else
     {
         EGLContext nativeShareContext = EGL_NO_CONTEXT;
-        if (shareContext)
+        if (usingExternalContext)
+        {
+            ASSERT(!shareContext);
+            nativeShareContext = mEGL->getCurrentContext();
+            if (nativeShareContext == EGL_NO_CONTEXT)
+            {
+                ERR() << "Failed to get current EGLContext.";
+                return nullptr;
+            }
+        }
+        else if (shareContext)
         {
             ContextEGL *shareContextEGL = GetImplAs<ContextEGL>(shareContext);
             nativeShareContext          = shareContextEGL->getContext();
@@ -230,7 +241,7 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
     }
 
     return new ContextEGL(state, errorSet, renderer,
-                          RobustnessVideoMemoryPurgeStatus::NOT_REQUESTED);
+                          RobustnessVideoMemoryPurgeStatus::NOT_REQUESTED, usingExternalContext);
 }
 
 bool DisplayAndroid::isValidNativeWindow(EGLNativeWindowType window) const
@@ -283,16 +294,18 @@ egl::Error DisplayAndroid::makeCurrent(egl::Display *display,
         newSurface                 = drawSurfaceEGL->getSurface();
     }
 
-    EGLContext newContext = EGL_NO_CONTEXT;
+    EGLContext newContext  = EGL_NO_CONTEXT;
+    bool isExternalContext = false;
     if (context)
     {
         ContextEGL *contextEGL = GetImplAs<ContextEGL>(context);
+        isExternalContext      = contextEGL->isExternalContext();
         newContext             = contextEGL->getContext();
     }
 
     // The context should never change when context virtualization is being used, even when a null
     // context is being bound.
-    if (mVirtualizedContexts)
+    if (mVirtualizedContexts && !isExternalContext)
     {
         ASSERT(newContext == EGL_NO_CONTEXT || currentContext.context == EGL_NO_CONTEXT ||
                newContext == currentContext.context);
@@ -341,6 +354,8 @@ void DisplayAndroid::generateExtensions(egl::DisplayExtensions *outExtensions) c
     // Surfaceless can be support if the native driver supports it or we know that we are running on
     // a single thread (mVirtualizedContexts == true)
     outExtensions->surfacelessContext = mSupportsSurfaceless || mVirtualizedContexts;
+
+    outExtensions->externalContext = true;
 }
 
 egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,
