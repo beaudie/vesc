@@ -675,6 +675,8 @@ egl::Error Context::makeCurrent(egl::Display *display,
 
     if (!mHasBeenCurrent)
     {
+        ASSERT(!mIsCurrent);
+
         initialize();
         initRendererString();
         initVersionStrings();
@@ -2726,6 +2728,11 @@ bool Context::isTransformFeedbackGenerated(TransformFeedbackID transformFeedback
 {
     ASSERT(mTransformFeedbackMap.contains({0}));
     return mTransformFeedbackMap.contains(transformFeedback);
+}
+
+bool Context::isExternal() const
+{
+    return mImplementation->isExternal();
 }
 
 void Context::detachTexture(TextureID texture)
