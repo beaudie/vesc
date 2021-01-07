@@ -34,6 +34,103 @@ class TransformFeedbackGL;
 class VertexArrayGL;
 class QueryGL;
 
+struct ExternalContextState
+{
+    GLint packAlignment;
+    GLint unpackAlignment;
+
+    struct VertexAttributes
+    {
+        GLint enabled;
+        GLint size;
+        GLint type;
+        GLint normalized;
+        GLint stride;
+        GLvoid *pointer;
+        GLint vertexAttribArrayBufferBinding;
+        GLint divisor;
+        gl::VertexAttribCurrentValueData currentVertexAttrib;
+    };
+    std::vector<VertexAttributes> vertexAttrib;
+
+    GLint vertexArrayBufferBinding;
+    GLint elementArrayBufferBinding;
+
+    GLboolean depthTest;
+    GLboolean cullFace;
+    GLint cullFaceMode;
+    GLboolean colorMask[4];
+    gl::ColorF colorClear;
+    gl::ColorF blendColor;
+    GLfloat depthClear;
+    GLint currentProgram;
+    GLint depthFunc;
+    GLboolean depthMask;
+    GLfloat depthRage[2];
+    GLint frontFace;
+    GLint hintGenerateMipmap;
+    GLfloat lineWidth;
+    GLfloat polygonOffsetFactor;
+    GLfloat polygonOffsetUnits;
+    GLfloat sampleCoverageValue;
+    GLboolean sampleCoverageInvert;
+    GLint blendEquationRgb;
+    GLint blendEquationAlpha;
+
+    GLboolean enableDither;
+    GLboolean enablePolygonOffsetFill;
+    GLboolean enableSampleAlphaToCoverage;
+    GLboolean enableSampleCoverage;
+    GLboolean multisampleEnabled;
+
+    // ARM_shader_framebuffer_fetch
+    GLboolean fetchPerSampleArmEnabled;
+
+    GLboolean blendEnabled;
+    GLint blendSrcRgb;
+    GLint blendSrcAlpha;
+    GLint blendDestRgb;
+    GLint blendDestAlpha;
+    GLint activeTexture;
+    gl::Rectangle viewport;
+    GLboolean scissorTest;
+    gl::Rectangle scissorBox;
+
+    struct StencilState
+    {
+        GLboolean stencilTestEnabled;
+        GLint stencilFrontFunc;
+        GLint stencilFrontRef;
+        GLint stencilFrontMask;
+        GLint stencilBackFunc;
+        GLint stencilBackRef;
+        GLint stencilBackMask;
+        GLint stencilClear;
+        GLint stencilFrontWritemask;
+        GLint stencilBackWritemask;
+        GLint stencilFrontFailOp;
+        GLint stencilFrontZFailOp;
+        GLint stencilFrontZPassOp;
+        GLint stencilBackFailOp;
+        GLint stencilBackZFailOp;
+        GLint stencilBackZPassOp;
+    };
+    StencilState stencilState;
+
+    GLint framebufferBinding;
+
+    struct TextureBindings
+    {
+        GLint texture2d;
+        GLint textureCubeMap;
+        GLint textureExternalOES;
+        // TODO(boliu): TEXTURE_RECTANGLE_ARB
+    };
+    std::vector<TextureBindings> textureBindings;
+
+    GLint vertexArrayBinding;
+};
+
 class StateManagerGL final : angle::NonCopyable
 {
   public:
@@ -181,6 +278,9 @@ class StateManagerGL final : angle::NonCopyable
 
     void validateState() const;
 
+    void syncFromNativeContext(const gl::Extensions &extensions, ExternalContextState *state);
+    void restoreNativeContext(const gl::Extensions &extensions, const ExternalContextState *state);
+
   private:
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
@@ -201,6 +301,11 @@ class StateManagerGL final : angle::NonCopyable
     void updateMultiviewBaseViewLayerIndexUniformImpl(
         const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const;
+
+    void syncVertexArraysFromNativeContext(const gl::Extensions &extensions,
+                                           ExternalContextState *state);
+    void restoreVertexArraysNativeContext(const gl::Extensions &extensions,
+                                          const ExternalContextState *state);
 
     const FunctionsGL *mFunctions;
     const angle::FeaturesGL &mFeatures;
@@ -341,6 +446,8 @@ class StateManagerGL final : angle::NonCopyable
 
     gl::State::DirtyBits mLocalDirtyBits;
     gl::AttributesMask mLocalDirtyCurrentValues;
+
+    std::vector<ExternalContextState::VertexAttributes> mVertexAttribs;
 };
 }  // namespace rx
 
