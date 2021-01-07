@@ -1947,6 +1947,30 @@ bool ValidateCreateContext(const ValidationContext *val,
                     return false;
                 }
                 break;
+            
+            case EGL_EXTERNAL_CONTEXT_ANGLE:
+                if (!display->getExtensions().externalContext)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute "
+                                  "EGL_EXTERNAL_CONTEXT_ANGLE requires "
+                                  "EGL_ANGLE_external_context.");
+                    return false;
+                }
+                if (reinterpret_cast<EGLContext>(value) == EGL_NO_CONTEXT)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute "
+                                  "EGL_EXTERNAL_CONTEXT_ANGLE cannot be an external EGLContext.");
+                    return false;
+                }
+                if (shareContext)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_EXTERNAL_CONTEXT_ANGLE doesn't allow creating with sharedContext.");
+                    return false;
+                }
+                break;
 
             default:
                 val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute.");
