@@ -59,6 +59,8 @@ struct FunctionsEGL::EGLDispatchTable
           surfaceAttribPtr(nullptr),
           swapIntervalPtr(nullptr),
 
+          getCurrentContextPtr(nullptr),
+
           createImageKHRPtr(nullptr),
           destroyImageKHRPtr(nullptr),
 
@@ -107,6 +109,9 @@ struct FunctionsEGL::EGLDispatchTable
     PFNEGLRELEASETEXIMAGEPROC releaseTexImagePtr;
     PFNEGLSURFACEATTRIBPROC surfaceAttribPtr;
     PFNEGLSWAPINTERVALPROC swapIntervalPtr;
+
+    // 1.4
+    PFNEGLGETCURRENTCONTEXTPROC getCurrentContextPtr;
 
     // EGL_KHR_image
     PFNEGLCREATEIMAGEKHRPROC createImageKHRPtr;
@@ -200,6 +205,8 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
     {
         return egl::Error(mFnPtrs->getErrorPtr(), "Failed to bind API in system egl");
     }
+
+    ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->getCurrentContextPtr, eglGetCurrentContext);
 
     const char *extensions = queryString(EGL_EXTENSIONS);
     if (!extensions)
@@ -400,6 +407,11 @@ EGLBoolean FunctionsEGL::surfaceAttrib(EGLSurface surface, EGLint attribute, EGL
 EGLBoolean FunctionsEGL::swapInterval(EGLint interval) const
 {
     return mFnPtrs->swapIntervalPtr(mEGLDisplay, interval);
+}
+
+EGLContext FunctionsEGL::getCurrentContext() const
+{
+    return mFnPtrs->getCurrentContextPtr();
 }
 
 EGLImageKHR FunctionsEGL::createImageKHR(EGLContext context,

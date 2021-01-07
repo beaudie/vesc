@@ -368,7 +368,18 @@ ContextImpl *DisplayEGL::createContext(const gl::State &state,
 {
     std::shared_ptr<RendererEGL> renderer;
     EGLContext nativeShareContext = EGL_NO_CONTEXT;
-    if (shareContext)
+
+    if (attribs.get(EGL_EXTERNAL_CONTEXT_ANGLE, EGL_FALSE) == EGL_TRUE)
+    {
+        ASSERT(!shareContext);
+        nativeShareContext = mEGL->getCurrentContext();
+        if (nativeShareContext == EGL_NO_CONTEXT)
+        {
+            ERR() << "Failed to get current EGLContext.";
+            return nullptr;
+        }
+    }
+    else if (shareContext)
     {
         ContextEGL *shareContextEGL = GetImplAs<ContextEGL>(shareContext);
         nativeShareContext          = shareContextEGL->getContext();
@@ -705,6 +716,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
         mEGL->hasExtension("EGL_EXT_image_dma_buf_import_modifiers");
 
     outExtensions->robustnessVideoMemoryPurgeNV = mHasNVRobustnessVideoMemoryPurge;
+
+    outExtensions->externalContext = true;
 
     DisplayGL::generateExtensions(outExtensions);
 }
