@@ -238,6 +238,9 @@ class ContextImpl : public GLImplFactory
     virtual egl::Error releaseHighPowerGPU(gl::Context *context);
     virtual egl::Error reacquireHighPowerGPU(gl::Context *context);
 
+    // Returns true, if the context is created from an external native context.
+    virtual bool isExternalContext() const;
+
   protected:
     const gl::State &mState;
     gl::MemoryProgramCache *mMemoryProgramCache;

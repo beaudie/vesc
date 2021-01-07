@@ -152,7 +152,7 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
         mConfig           = configWithFormat;
     }
 
-    ANGLE_TRY(createRenderer(EGL_NO_CONTEXT, true, &mRenderer));
+    ANGLE_TRY(createRenderer(EGL_NO_CONTEXT, true, false, &mRenderer));
 
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
@@ -205,14 +205,25 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
                                            const egl::AttributeMap &attribs)
 {
     std::shared_ptr<RendererEGL> renderer;
-    if (mVirtualizedContexts)
+    bool usingExternalContext = attribs.get(EGL_EXTERNAL_CONTEXT_ANGLE, EGL_FALSE) == EGL_TRUE;
+    if (mVirtualizedContexts && !usingExternalContext)
     {
         renderer = mRenderer;
     }
     else
     {
         EGLContext nativeShareContext = EGL_NO_CONTEXT;
-        if (shareContext)
+        if (usingExternalContext)
+        {
+            ASSERT(!shareContext);
+            nativeShareContext = mEGL->getCurrentContext();
+            if (nativeShareContext == EGL_NO_CONTEXT)
+            {
+                ERR() << "Failed to get current EGLContext.";
+                return nullptr;
+            }
+        }
+        else if (shareContext)
         {
             ContextEGL *shareContextEGL = GetImplAs<ContextEGL>(shareContext);
             nativeShareContext          = shareContextEGL->getContext();
@@ -221,7 +232,7 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
         // Create a new renderer for this context.  It only needs to share with the user's requested
         // share context because there are no internal resources in DisplayAndroid that are shared
         // at the GL level.
-        egl::Error error = createRenderer(nativeShareContext, false, &renderer);
+        egl::Error error = createRenderer(nativeShareContext, false, true, &renderer);
         if (error.isError())
         {
             ERR() << "Failed to create a shared renderer: " << error.getMessage();
@@ -230,7 +241,7 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
     }
 
     return new ContextEGL(state, errorSet, renderer,
-                          RobustnessVideoMemoryPurgeStatus::NOT_REQUESTED);
+                          RobustnessVideoMemoryPurgeStatus::NOT_REQUESTED, usingExternalContext);
 }
 
 bool DisplayAndroid::isValidNativeWindow(EGLNativeWindowType window) const
@@ -283,11 +294,91 @@ egl::Error DisplayAndroid::makeCurrent(egl::Display *display,
         newSurface                 = drawSurfaceEGL->getSurface();
     }
 
-    EGLContext newContext = EGL_NO_CONTEXT;
+    bool isExternalContext = false;
+    EGLContext newContext  = EGL_NO_CONTEXT;
     if (context)
     {
         ContextEGL *contextEGL = GetImplAs<ContextEGL>(context);
+        isExternalContext      = contextEGL->isExternalContext();
         newContext             = contextEGL->getContext();
+    }
+
+    if (currentContext.isExternalContext || isExternalContext)
+    {
+        gl::Context *restoreContext = nullptr;
+        EGLSurface currentSurface   = EGL_NO_SURFACE;
+        if (!currentContext.isExternalContext)
+        {
+            // Switch to an ANGLE external context.
+            ASSERT(context);
+            ASSERT(currentContext.context == EGL_NO_CONTEXT);
+            ASSERT(currentContext.surface == EGL_NO_SURFACE);
+            ASSERT(currentContext.externalSurface == EGL_NO_SURFACE);
+
+            currentContext.context           = newContext;
+            currentContext.surface           = newSurface;
+            currentContext.isExternalContext = true;
+            currentContext.glContext         = context;
+            currentContext.externalSurface   = mEGL->getCurrentSurface(EGL_DRAW);
+            currentSurface                   = currentContext.externalSurface;
+
+            // TODO: we need to use surface created outside of ANGLE.
+            newSurface = mEGL->getCurrentSurface(EGL_DRAW);
+
+            // Save external context state.
+            GetImplAs<ContextEGL>(context)->syncWithExternalContext();
+        }
+        else if (!context)
+        {
+            // Release the ANGLE external context.
+            ASSERT(currentContext.isExternalContext);
+            ASSERT(newSurface == EGL_NO_CONTEXT);
+            ASSERT(newSurface == EGL_NO_SURFACE);
+
+            currentContext.isExternalContext = false;
+
+            // Restore saved external context state.
+            restoreContext           = currentContext.glContext;
+            currentContext.glContext = nullptr;
+
+            // For release the ANGLE external context, the original native context should not be
+            // changed.
+            newContext             = currentContext.context;
+            currentContext.context = EGL_NO_CONTEXT;
+
+            currentSurface         = currentContext.surface;
+            currentContext.surface = EGL_NO_SURFACE;
+
+            // For release the ANGLE external context, the original externalSurface should be
+            // restored.
+            newSurface                     = currentContext.externalSurface;
+            currentContext.externalSurface = EGL_NO_SURFACE;
+        }
+        else
+        {
+            // Switch surface with the ANGLE external context.
+            ASSERT(currentContext.isExternalContext);
+            ASSERT(currentContext.context == newContext);
+            ASSERT(currentContext.glContext == context);
+
+            currentSurface         = currentContext.surface;
+            currentContext.surface = newSurface;
+        }
+
+        if (newSurface != currentSurface)
+        {
+            if (mEGL->makeCurrent(newSurface, newContext) == EGL_FALSE)
+            {
+                return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
+            }
+        }
+
+        if (restoreContext)
+        {
+            GetImplAs<ContextEGL>(restoreContext)->restoreExternalContext();
+        }
+
+        return DisplayGL::makeCurrent(display, drawSurface, readSurface, context);
     }
 
     // The context should never change when context virtualization is being used, even when a null
@@ -341,20 +432,27 @@ void DisplayAndroid::generateExtensions(egl::DisplayExtensions *outExtensions) c
     // Surfaceless can be support if the native driver supports it or we know that we are running on
     // a single thread (mVirtualizedContexts == true)
     outExtensions->surfacelessContext = mSupportsSurfaceless || mVirtualizedContexts;
+
+    outExtensions->externalContext = true;
 }
 
 egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,
                                           bool makeNewContextCurrent,
+                                          bool isExternalContext,
                                           std::shared_ptr<RendererEGL> *outRenderer)
 {
     EGLContext context = EGL_NO_CONTEXT;
     native_egl::AttributeVector attribs;
     ANGLE_TRY(initializeContext(shareContext, mDisplayAttributes, &context, &attribs));
 
-    if (mEGL->makeCurrent(mMockPbuffer, context) == EGL_FALSE)
+    // If isExternalContext is true, the external context is current.
+    if (!isExternalContext)
     {
-        return egl::EglNotInitialized()
-               << "eglMakeCurrent failed with " << egl::Error(mEGL->getError());
+        if (mEGL->makeCurrent(mMockPbuffer, context) == EGL_FALSE)
+        {
+            return egl::EglNotInitialized()
+                   << "eglMakeCurrent failed with " << egl::Error(mEGL->getError());
+        }
     }
 
     std::unique_ptr<FunctionsGL> functionsGL(mEGL->makeFunctionsGL());
@@ -369,7 +467,7 @@ egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,
         currentContext.surface = mMockPbuffer;
         currentContext.context = context;
     }
-    else
+    else if (!isExternalContext)
     {
         // Reset the current context back to the previous state
         if (mEGL->makeCurrent(currentContext.surface, currentContext.context) == EGL_FALSE)

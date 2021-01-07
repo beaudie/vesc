@@ -20,6 +20,7 @@
 #include "libANGLE/Texture.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/ContextImpl.h"
 
 #include <EGL/eglext.h>
 
@@ -1627,7 +1628,10 @@ bool ValidateCreateContext(const ValidationContext *val,
     {
         ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
         const DisplayExtensions &displayExtensions = display->getExtensions();
-        if (!displayExtensions.noConfigContext)
+        bool usingExternalContext =
+            displayExtensions.externalContext &&
+            attributes.get(EGL_EXTERNAL_CONTEXT_ANGLE, EGL_FALSE) == EGL_TRUE;
+        if (!displayExtensions.noConfigContext && !usingExternalContext)
         {
             val->setError(EGL_BAD_CONFIG);
             return false;
@@ -1944,6 +1948,38 @@ bool ValidateCreateContext(const ValidationContext *val,
                     val->setError(EGL_BAD_ATTRIBUTE,
                                   "EGL_GENERATE_RESET_ON_VIDEO_MEMORY_PURGE_NV must "
                                   "be either EGL_TRUE or EGL_FALSE.");
+                    return false;
+                }
+                break;
+
+            case EGL_EXTERNAL_CONTEXT_ANGLE:
+                if (!display->getExtensions().externalContext)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute "
+                                  "EGL_EXTERNAL_CONTEXT_ANGLE requires "
+                                  "EGL_ANGLE_external_context.");
+                    return false;
+                }
+                if (value != EGL_TRUE && value != EGL_FALSE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_EXTERNAL_CONTEXT_ANGLE must "
+                                  "be either EGL_TRUE or EGL_FALSE.");
+                    return false;
+                }
+                if (value == EGL_TRUE && shareContext)
+                {
+                    val->setError(
+                        EGL_BAD_ATTRIBUTE,
+                        "EGL_EXTERNAL_CONTEXT_ANGLE doesn't allow creating with sharedContext.");
+                    return false;
+                }
+                if (value == EGL_TRUE && configuration)
+                {
+                    val->setError(
+                        EGL_BAD_ATTRIBUTE,
+                        "EGL_EXTERNAL_CONTEXT_ANGLE doesn't allow creating with configuration.");
                     return false;
                 }
                 break;
@@ -2790,6 +2826,20 @@ bool ValidateMakeCurrent(const ValidationContext *val,
             ANGLE_VALIDATION_TRY(ValidateCompatibleSurface(val, display, context, read));
         }
     }
+
+    gl::Context *previousContext = val->eglThread->getContext();
+    if ((previousContext && previousContext->isExternalContext()) ||
+        (context && context->isExternalContext()))
+    {
+        if (previousContext && context && previousContext != context)
+        {
+            val->setError(EGL_BAD_CONTEXT,
+                          "Cannot switch contexts if current context or the next current context "
+                          "is an external context.");
+            return false;
+        }
+    }
+
     return true;
 }
 

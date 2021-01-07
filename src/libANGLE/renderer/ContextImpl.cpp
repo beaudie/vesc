@@ -60,4 +60,9 @@ egl::Error ContextImpl::reacquireHighPowerGPU(gl::Context *)
     return egl::NoError();
 }
 
+bool ContextImpl::isExternalContext() const
+{
+    return false;
+}
+
 }  // namespace rx
