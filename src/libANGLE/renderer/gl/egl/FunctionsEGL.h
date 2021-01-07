@@ -65,6 +65,8 @@ class FunctionsEGL
     EGLBoolean surfaceAttrib(EGLSurface surface, EGLint attribute, EGLint value) const;
     EGLBoolean swapInterval(EGLint interval) const;
 
+    EGLContext getCurrentContext() const;
+
     EGLImageKHR createImageKHR(EGLContext context,
                                EGLenum target,
                                EGLClientBuffer buffer,

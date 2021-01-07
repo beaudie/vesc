@@ -46,7 +46,8 @@ DisplayAndroid::DisplayAndroid(const egl::DisplayState &state)
       mVirtualizedContexts(kDefaultEGLVirtualizedContexts),
       mSupportsSurfaceless(false),
       mMockPbuffer(EGL_NO_SURFACE)
-{}
+{
+}
 
 DisplayAndroid::~DisplayAndroid() {}
 
@@ -205,14 +206,25 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
                                            const egl::AttributeMap &attribs)
 {
     std::shared_ptr<RendererEGL> renderer;
-    if (mVirtualizedContexts)
+    bool usingExternalContext = attribs.get(EGL_EXTERNAL_CONTEXT_ANGLE, EGL_FALSE) == EGL_TRUE;
+    if (mVirtualizedContexts && !usingExternalContext)
     {
         renderer = mRenderer;
     }
     else
     {
         EGLContext nativeShareContext = EGL_NO_CONTEXT;
-        if (shareContext)
+        if (usingExternalContext)
+        {
+            ASSERT(!shareContext);
+            nativeShareContext = mEGL->getCurrentContext();
+            if (nativeShareContext == EGL_NO_CONTEXT)
+            {
+                ERR() << "Failed to get current EGLContext.";
+                return nullptr;
+            }
+        }
+        else if (shareContext)
         {
             ContextEGL *shareContextEGL = GetImplAs<ContextEGL>(shareContext);
             nativeShareContext          = shareContextEGL->getContext();

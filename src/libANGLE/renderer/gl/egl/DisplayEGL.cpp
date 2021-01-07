@@ -601,6 +601,8 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
 
     if (newSurface != currentContext.surface || newContext != currentContext.context)
     {
+        ERR() << "EEE newSurface=" << newSurface;
+        ERR() << "EEE newContext=" << newContext;
         if (mEGL->makeCurrent(newSurface, newContext) == EGL_FALSE)
         {
             return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
@@ -705,6 +707,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
         mEGL->hasExtension("EGL_EXT_image_dma_buf_import_modifiers");
 
     outExtensions->robustnessVideoMemoryPurgeNV = mHasNVRobustnessVideoMemoryPurge;
+
+    outExtensions->externalContext = true;
 
     DisplayGL::generateExtensions(outExtensions);
 }

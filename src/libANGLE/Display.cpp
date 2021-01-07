@@ -1165,6 +1165,7 @@ Error Display::createContext(const Config *configuration,
                              const AttributeMap &attribs,
                              gl::Context **outContext)
 {
+    ERR() << "EEEEE Display::createContext()";
     ASSERT(isInitialized());
 
     if (mImplementation->testDeviceLost())
