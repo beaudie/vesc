@@ -389,12 +389,12 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
 
         // Update the shadow buffer
         uint8_t *srcPtr;
-        ANGLE_TRY(sourceBuffer.mapWithOffset(contextVk, &srcPtr, sourceOffset));
+        ANGLE_TRY(sourceBuffer.mapWithOffsetAndInvalidate(contextVk, &srcPtr, sourceOffset));
 
         updateShadowBuffer(srcPtr, size, destOffset);
 
         // Unmap the source buffer
-        sourceBuffer.unmap(contextVk->getRenderer());
+        sourceBuffer.unmapWithFlush(contextVk->getRenderer());
     }
 
     // Check for self-dependency.
@@ -473,8 +473,8 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
                                            "GPU stall due to mapping buffer in use by the GPU"));
         }
 
-        ANGLE_TRY(mBuffer->mapWithOffset(contextVk, reinterpret_cast<uint8_t **>(mapPtr),
-                                         static_cast<size_t>(offset)));
+        ANGLE_TRY(mBuffer->mapWithOffsetAndInvalidate(
+            contextVk, reinterpret_cast<uint8_t **>(mapPtr), static_cast<size_t>(offset)));
     }
     else
     {
@@ -507,7 +507,7 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
 
     if (!mShadowBuffer.valid())
     {
-        mBuffer->unmap(contextVk->getRenderer());
+        mBuffer->unmapWithFlush(contextVk->getRenderer());
     }
     else
     {
@@ -552,9 +552,9 @@ angle::Result BufferVk::getSubData(const gl::Context *context,
         else
         {
             uint8_t *mappedPtr = nullptr;
-            ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &mappedPtr, offset));
+            ANGLE_TRY(mBuffer->mapWithOffsetAndInvalidate(contextVk, &mappedPtr, offset));
             memcpy(outData, mappedPtr, size);
-            mBuffer->unmap(contextVk->getRenderer());
+            mBuffer->unmapWithFlush(contextVk->getRenderer());
         }
     }
     else
@@ -597,7 +597,7 @@ angle::Result BufferVk::getIndexRange(const gl::Context *context,
 
         ASSERT(mBuffer && mBuffer->valid());
 
-        ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &mapPointer, offset));
+        ANGLE_TRY(mBuffer->mapWithOffsetAndInvalidate(contextVk, &mapPointer, offset));
     }
     else
     {
@@ -606,7 +606,7 @@ angle::Result BufferVk::getIndexRange(const gl::Context *context,
 
     *outRange = gl::ComputeIndexRange(type, mapPointer, count, primitiveRestartEnabled);
 
-    mBuffer->unmap(renderer);
+    mBuffer->unmapWithFlush(renderer);
     return angle::Result::Continue;
 }
 
@@ -617,11 +617,11 @@ angle::Result BufferVk::directUpdate(ContextVk *contextVk,
 {
     uint8_t *mapPointer = nullptr;
 
-    ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &mapPointer, offset));
+    ANGLE_TRY(mBuffer->mapWithOffsetAndInvalidate(contextVk, &mapPointer, offset));
     ASSERT(mapPointer);
 
     memcpy(mapPointer, data, size);
-    mBuffer->unmap(contextVk->getRenderer());
+    mBuffer->unmapWithFlush(contextVk->getRenderer());
     ASSERT(mBuffer->isCoherent());
 
     return angle::Result::Continue;
@@ -650,6 +650,7 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
     ANGLE_TRY(
         mBuffer->copyFromBuffer(contextVk, stagingBuffer->getCurrentBuffer(), 1, &copyRegion));
 
+    // TODO ??? Unmap |stagingBuffer|
     return angle::Result::Continue;
 }
 

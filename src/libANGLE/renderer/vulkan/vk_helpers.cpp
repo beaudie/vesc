@@ -3139,10 +3139,16 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
         createInfo = &modifiedCreateInfo;
     }
 
-    VkMemoryPropertyFlags requiredFlags =
-        (memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+    const VkMemoryPropertyFlags requiredFlags =
+        memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     VkMemoryPropertyFlags preferredFlags =
         (memoryPropertyFlags & (~VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+    // If we want host visible memory, also ask for cached.  This can make a big difference for data
+    // upload.
+    if (requiredFlags != 0)
+    {
+        preferredFlags |= VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+    }
 
     const Allocator &allocator = renderer->getAllocator();
     bool persistentlyMapped    = renderer->getFeatures().persistentlyMappedBuffers.enabled;
@@ -3291,8 +3297,52 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::map(ContextVk *contextVk, uint8_t **ptrOut)
+{
+    return mapAndInvalidate(contextVk, ptrOut);
+    // TODO: Decide whether to allow map without invalidate
+    // return mMemory.map(contextVk, mSize, ptrOut);
+}
+
+angle::Result BufferHelper::mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
+{
+    return mapWithOffsetAndInvalidate(contextVk, ptrOut, offset);
+    // TODO: Decide whether to allow map without invalidate
+    // uint8_t *mapBufPointer;
+    // ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
+    // *ptrOut = mapBufPointer + offset;
+    // return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::mapAndInvalidate(ContextVk *contextVk, uint8_t **ptrOut)
+{
+    ANGLE_TRY(mMemory.map(contextVk, mSize, ptrOut));
+    ANGLE_TRY(invalidate(contextVk->getRenderer()));
+    return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::mapWithOffsetAndInvalidate(ContextVk *contextVk,
+                                                       uint8_t **ptrOut,
+                                                       size_t offset)
+{
+    uint8_t *mapBufPointer;
+    ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
+    ANGLE_TRY(invalidate(contextVk->getRenderer(), offset));
+    *ptrOut = mapBufPointer + offset;
+    return angle::Result::Continue;
+}
+
 void BufferHelper::unmap(RendererVk *renderer)
 {
+    unmapWithFlush(renderer);
+    // TODO: Decide whether to allow unmap without flush
+    // mMemory.unmap(renderer);
+}
+
+void BufferHelper::unmapWithFlush(RendererVk *renderer)
+{
+    angle::Result unused = flush(renderer);
+    (void)unused;
     mMemory.unmap(renderer);
 }
 

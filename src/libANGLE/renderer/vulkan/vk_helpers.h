@@ -861,26 +861,29 @@ class BufferHelper final : public Resource
                                  uint32_t regionCount,
                                  const VkBufferCopy *copyRegions);
 
-    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
-    {
-        return mMemory.map(contextVk, mSize, ptrOut);
-    }
-
-    angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
-    {
-        uint8_t *mapBufPointer;
-        ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
-        *ptrOut = mapBufPointer + offset;
-        return angle::Result::Continue;
-    }
+    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut);
+    angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset);
+    angle::Result mapAndInvalidate(ContextVk *contextVk, uint8_t **ptrOut);
+    angle::Result mapWithOffsetAndInvalidate(ContextVk *contextVk, uint8_t **ptrOut, size_t offset);
 
     void unmap(RendererVk *renderer);
+    void unmapWithFlush(RendererVk *renderer);
 
     // After a sequence of writes, call flush to ensure the data is visible to the device.
     angle::Result flush(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
+    angle::Result flush(RendererVk *renderer) { return flush(renderer, 0, mSize); }
+    angle::Result flush(RendererVk *renderer, VkDeviceSize offset)
+    {
+        return flush(renderer, offset, mSize - offset);
+    }
 
     // After a sequence of writes, call invalidate to ensure the data is visible to the host.
     angle::Result invalidate(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
+    angle::Result invalidate(RendererVk *renderer) { return invalidate(renderer, 0, mSize); }
+    angle::Result invalidate(RendererVk *renderer, VkDeviceSize offset)
+    {
+        return invalidate(renderer, offset, mSize - offset);
+    }
 
     void changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *commandBuffer);
 
