@@ -3718,6 +3718,10 @@ const ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::get(
     const std::string &variableName) const
 {
     auto it = mData[shaderType].find(variableName);
+    if (it != mData[shaderType].end())
+    {
+        fprintf(stderr, "Going to fail for %hhu '%s'\n", shaderType, variableName.c_str());
+    }
     ASSERT(it != mData[shaderType].end());
     return it->second;
 }

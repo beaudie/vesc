@@ -414,6 +414,8 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
     GlslangProgramInterfaceInfo programInterfaceInfo;
     ResetGlslangProgramInterfaceInfo(&programInterfaceInfo);
 
+    options.emulateTransformFeedback = true;
+
     rx::GlslangGetShaderSource(options, programState, resources, &programInterfaceInfo,
                                shaderSourcesOut, variableInfoMapOut);
 
@@ -425,8 +427,6 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
 
         GlslangProgramInterfaceInfo xfbOnlyInterfaceInfo;
         ResetGlslangProgramInterfaceInfo(&xfbOnlyInterfaceInfo);
-
-        options.emulateTransformFeedback = true;
 
         rx::GlslangGenTransformFeedbackEmulationOutputs(
             options, programState, &xfbOnlyInterfaceInfo, xfbOnlyShaderSourceOut,
@@ -458,7 +458,8 @@ angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
     for (const gl::ShaderType shaderType : linkedShaderStages)
     {
         GlslangSpirvOptions options;
-        options.shaderType = shaderType;
+        options.shaderType               = shaderType;
+        options.isTransformFeedbackStage = shaderType == gl::ShaderType::Vertex;
 
         angle::Result status = GlslangTransformSpirvCode(
             [context](GlslangError error) { return HandleError(context, error); }, options,
