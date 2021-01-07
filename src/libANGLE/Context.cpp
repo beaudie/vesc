@@ -575,7 +575,10 @@ egl::Error Context::onDestroy(const egl::Display *display)
         mGLES1Renderer->onDestroy(this, &mState);
     }
 
-    ANGLE_TRY(unMakeCurrent(display));
+    if (mIsCurrent)
+    {
+        ANGLE_TRY(unMakeCurrent(display));
+    }
 
     for (auto fence : mFenceNVMap)
     {
@@ -672,6 +675,8 @@ egl::Error Context::makeCurrent(egl::Display *display,
 
     if (!mHasBeenCurrent)
     {
+        ASSERT(!mIsCurrent);
+
         initialize();
         initRendererString();
         initVersionStrings();
@@ -689,6 +694,11 @@ egl::Error Context::makeCurrent(egl::Display *display,
         mState.setScissorParams(0, 0, width, height);
 
         mHasBeenCurrent = true;
+    }
+
+    if (mIsCurrent)
+    {
+        ANGLE_TRY(unsetDefaultFramebuffer());
     }
 
     mFrameCapture->onMakeCurrent(this, drawSurface);
@@ -709,11 +719,16 @@ egl::Error Context::makeCurrent(egl::Display *display,
         return angle::ResultToEGL(implResult);
     }
 
+    mIsCurrent = true;
+
     return egl::NoError();
 }
 
 egl::Error Context::unMakeCurrent(const egl::Display *display)
 {
+    ASSERT(mIsCurrent);
+    mIsCurrent = false;
+
     ANGLE_TRY(angle::ResultToEGL(mImplementation->onUnMakeCurrent(this)));
 
     ANGLE_TRY(unsetDefaultFramebuffer());
@@ -2707,6 +2722,11 @@ bool Context::isTransformFeedbackGenerated(TransformFeedbackID transformFeedback
 {
     ASSERT(mTransformFeedbackMap.contains({0}));
     return mTransformFeedbackMap.contains(transformFeedback);
+}
+
+bool Context::isExternal() const
+{
+    return mImplementation->isExternal();
 }
 
 void Context::detachTexture(TextureID texture)
