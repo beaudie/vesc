@@ -3218,6 +3218,15 @@ bool GetQueryParameterInfo(const State &glState,
             *type      = GL_INT;
             *numParams = 1;
             return true;
+        case GL_CLIP_ORIGIN_EXT:
+        case GL_CLIP_DEPTH_MODE_EXT:
+            if (!extensions.clipControlEXT)
+            {
+                return false;
+            }
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
     }
 
     if (glState.getClientType() == EGL_OPENGL_API)

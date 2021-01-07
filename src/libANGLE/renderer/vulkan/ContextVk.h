@@ -208,6 +208,19 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     SurfaceRotation getRotationDrawFramebuffer() const;
     SurfaceRotation getRotationReadFramebuffer() const;
 
+    // View port (x, y, w, h) will be determined by a combination of -
+    // 1. clip space origin
+    // 2. isViewportFlipEnabledForDrawFBO
+    // For userdefined FBOs it will be based on the value of isViewportFlipEnabledForDrawFBO.
+    // For default FBOs it will be XOR of ClipOrigin and isViewportFlipEnabledForDrawFBO.
+    // isYFlipEnabledForDrawFBO indicates the rendered image is upside-down.
+    ANGLE_INLINE bool isYFlipEnabledForDrawFBO() const
+    {
+        return mClipSpaceOrigin == ClipSpaceOrigin::UpperLeft ? !isViewportFlipEnabledForDrawFBO()
+                                                              : isViewportFlipEnabledForDrawFBO();
+    }
+    ClipSpaceOrigin getClipSpaceOrigin() const;
+
     void invalidateProgramBindingHelper(const gl::State &glState);
     angle::Result invalidateProgramExecutableHelper(const gl::Context *context);
 
@@ -740,6 +753,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateSurfaceRotationDrawFramebuffer(const gl::State &glState);
     void updateSurfaceRotationReadFramebuffer(const gl::State &glState);
 
+    void updateClipSpaceOrigin(const gl::State &glState);
+
     angle::Result updateActiveTextures(const gl::Context *context);
     angle::Result updateActiveImages(const gl::Context *context,
                                      vk::CommandBufferHelper *commandBufferHelper);
@@ -946,6 +961,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     bool mFlipYForCurrentSurface;
     bool mFlipViewportForDrawFramebuffer;
     bool mFlipViewportForReadFramebuffer;
+
+    // Cache clip origin state, needed for viewport calculation.
+    ClipSpaceOrigin mClipSpaceOrigin;
 
     // If any host-visible buffer is written by the GPU since last submission, a barrier is inserted
     // at the end of the command buffer to make that write available to the host.

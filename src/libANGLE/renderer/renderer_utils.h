@@ -44,6 +44,12 @@ namespace rx
 {
 class ContextImpl;
 
+enum class ClipSpaceOrigin
+{
+    LowerLeft = 0,
+    UpperLeft = 1
+};
+
 // The possible rotations of the surface/draw framebuffer, particularly for the Vulkan back-end on
 // Android.
 enum class SurfaceRotation
