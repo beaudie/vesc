@@ -145,7 +145,8 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                              optionBits.enableLineRasterEmulation);
     mProgramHelper.setSpecializationConstant(sh::vk::SpecializationConstantId::SurfaceRotation,
                                              optionBits.surfaceRotation);
-
+    mProgramHelper.setSpecializationConstant(sh::vk::SpecializationConstantId::DepthCorrection,
+                                             optionBits.enableDepthCorrection);
     return angle::Result::Continue;
 }
 
@@ -687,6 +688,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
 
     mTransformOptions.enableLineRasterEmulation = contextVk->isBresenhamEmulationEnabled(mode);
     mTransformOptions.surfaceRotation           = ToUnderlying(desc.getSurfaceRotation());
+    mTransformOptions.enableDepthCorrection     = !glState.isClipControlDepthZeroToOne();
 
     // This must be called after mTransformOptions have been set.
     ProgramInfo &programInfo = getGraphicsProgramInfo(mTransformOptions);

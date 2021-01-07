@@ -278,6 +278,7 @@ ANGLE_NO_DISCARD bool ReplaceGLDepthRangeWithDriverUniform(TCompiler *compiler,
 // where z_vk is the depth output of a Vulkan vertex shader and z_gl is the same for GL.
 ANGLE_NO_DISCARD bool AppendVertexShaderDepthCorrectionToMain(TCompiler *compiler,
                                                               TIntermBlock *root,
+                                                              SpecConst *specConst,
                                                               TSymbolTable *symbolTable)
 {
     // Create a symbol reference to "gl_Position"
@@ -303,8 +304,16 @@ ANGLE_NO_DISCARD bool AppendVertexShaderDepthCorrectionToMain(TCompiler *compile
     TIntermTyped *positionZLHS = positionZ->deepCopy();
     TIntermBinary *assignment  = new TIntermBinary(TOperator::EOpAssign, positionZLHS, halfZPlusW);
 
+    // Create a block with the assignment
+    TIntermBlock *depthCorrectionBlock = new TIntermBlock;
+    depthCorrectionBlock->appendStatement(assignment);
+
+    // Create the if condition " if (ANGLEDepthCorrection) { depthCorrectionBlock; }"
+    TIntermIfElse *ifDepthCorrection =
+        new TIntermIfElse(specConst->getDepthCorrection(), depthCorrectionBlock, nullptr);
+
     // Append the assignment as a statement at the end of the shader.
-    return RunAtTheEndOfShader(compiler, root, assignment, symbolTable);
+    return RunAtTheEndOfShader(compiler, root, ifDepthCorrection, symbolTable);
 }
 
 // This operation performs Android pre-rotation and y-flip.  For Android (and potentially other
@@ -1073,7 +1082,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             {
                 return false;
             }
-            if (!AppendVertexShaderDepthCorrectionToMain(this, root, &getSymbolTable()))
+            if (!AppendVertexShaderDepthCorrectionToMain(this, root, specConst, &getSymbolTable()))
             {
                 return false;
             }

@@ -1212,6 +1212,11 @@ void InitializeSpecializationInfo(
                     offsetof(vk::SpecializationConstants, drawableHeight);
                 (*specializationEntriesOut)[id].size = sizeof(specConsts.drawableHeight);
                 break;
+            case sh::vk::SpecializationConstantId::DepthCorrection:
+                (*specializationEntriesOut)[id].offset =
+                    offsetof(SpecializationConstants, depthCorrection);
+                (*specializationEntriesOut)[id].size = sizeof(specConsts.depthCorrection);
+                break;
             default:
                 UNREACHABLE();
                 break;

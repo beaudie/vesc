@@ -44,6 +44,9 @@ class SpecConst
     // Half render area
     TIntermBinary *getHalfRenderArea();
 
+    // Depth correction
+    TIntermSymbol *getDepthCorrection();
+
     void outputLayoutString(TInfoSinkBase &sink) const;
     SpecConstUsageBits getSpecConstUsageBits() const { return mUsageBits; }
 

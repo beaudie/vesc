@@ -7103,6 +7103,9 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
         case sh::vk::SpecializationConstantId::DrawableHeight:
             mSpecializationConstants.drawableHeight = value;
             break;
+        case sh::vk::SpecializationConstantId::DepthCorrection:
+            mSpecializationConstants.depthCorrection = value;
+            break;
         default:
             UNREACHABLE();
             break;

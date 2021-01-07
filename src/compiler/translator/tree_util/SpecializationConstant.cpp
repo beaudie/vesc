@@ -25,6 +25,8 @@ constexpr ImmutableString kSurfaceRotationSpecConstVarName =
     ImmutableString("ANGLESurfaceRotation");
 constexpr ImmutableString kDrawableWidthSpecConstVarName  = ImmutableString("ANGLEDrawableWidth");
 constexpr ImmutableString kDrawableHeightSpecConstVarName = ImmutableString("ANGLEDrawableHeight");
+constexpr ImmutableString kDepthCorrectionSpecConstVarName =
+    ImmutableString("ANGLEDepthCorrection");
 
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
 // rotate gl_Position in the vertex shader and gl_FragCoord in the fragment shader.  The following
@@ -270,6 +272,13 @@ void SpecConst::outputLayoutString(TInfoSinkBase &sink) const
              << static_cast<uint32_t>(vk::SpecializationConstantId::DrawableHeight)
              << ") const uint " << kDrawableHeightSpecConstVarName << " = 0;\n\n";
     }
+
+    if (mUsageBits.test(vk::SpecConstUsage::DepthCorrection))
+    {
+        sink << "layout(constant_id="
+             << static_cast<uint32_t>(vk::SpecializationConstantId::DepthCorrection)
+             << ") const bool " << kDepthCorrectionSpecConstVarName << " = false;\n\n";
+    }
 }
 
 TIntermSymbol *SpecConst::getLineRasterEmulation()
@@ -482,4 +491,14 @@ TIntermBinary *SpecConst::getHalfRenderArea()
 
     return rotatedHalfRenderArea;
 }
+
+TIntermSymbol *SpecConst::getDepthCorrection()
+{
+    TVariable *specConstVar =
+        new TVariable(mSymbolTable, kDepthCorrectionSpecConstVarName,
+                      StaticType::GetBasic<EbtBool>(), SymbolType::AngleInternal);
+    mUsageBits.set(vk::SpecConstUsage::DepthCorrection);
+    return new TIntermSymbol(specConstVar);
+}
+
 }  // namespace sh
