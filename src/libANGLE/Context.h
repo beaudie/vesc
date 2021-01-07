@@ -406,6 +406,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool isVertexArrayGenerated(VertexArrayID vertexArray) const;
     bool isTransformFeedbackGenerated(TransformFeedbackID transformFeedback) const;
 
+    bool isExternalContext() const;
+
     void getBooleanvImpl(GLenum pname, GLboolean *params) const;
     void getFloatvImpl(GLenum pname, GLfloat *params) const;
     void getIntegervImpl(GLenum pname, GLint *params) const;
