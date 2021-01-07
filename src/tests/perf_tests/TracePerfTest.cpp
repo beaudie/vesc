@@ -284,6 +284,12 @@ TracePerfTest::TracePerfTest()
         addExtensionPrerequisite("GL_EXT_shadow_samplers");
     }
 
+    if (param.testID == RestrictedTraceID::world_war_doh)
+    {
+        addExtensionPrerequisite("GL_EXT_shader_texture_lod");
+        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
