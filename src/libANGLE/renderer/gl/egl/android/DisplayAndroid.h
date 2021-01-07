@@ -62,6 +62,7 @@ class DisplayAndroid : public DisplayEGL
 
     egl::Error createRenderer(EGLContext shareContext,
                               bool makeNewContextCurrent,
+                              bool isExternalContext,
                               std::shared_ptr<RendererEGL> *outRenderer);
 
     bool mVirtualizedContexts;

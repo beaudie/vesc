@@ -336,6 +336,11 @@ EGLAPI EGLBoolean EGLAPIENTRY eglSwapBuffersWithFrameTokenANGLE(EGLDisplay dpy, 
 #define EGL_DISPLAY_SEMAPHORE_SHARE_GROUP_ANGLE 0x348D
 #endif /* EGL_ANGLE_display_semaphore_share_group */
 
+#ifndef EGL_ANGLE_external_context
+#define EGL_ANGLE_external_context 1
+#define EGL_EXTERNAL_CONTEXT_ANGLE 0x348E
+#endif /* EGL_ANGLE_external_context */
+
 // clang-format on
 
 #endif  // INCLUDE_EGL_EGLEXT_ANGLE_

@@ -2709,6 +2709,11 @@ bool Context::isTransformFeedbackGenerated(TransformFeedbackID transformFeedback
     return mTransformFeedbackMap.contains(transformFeedback);
 }
 
+bool Context::isExternalContext() const
+{
+    return mImplementation->isExternalContext();
+}
+
 void Context::detachTexture(TextureID texture)
 {
     // The State cannot unbind image observers itself, they are owned by the Context
