@@ -3291,8 +3291,26 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::map(ContextVk *contextVk, uint8_t **ptrOut)
+{
+    ANGLE_TRY(mMemory.map(contextVk, mSize, ptrOut));
+    ANGLE_TRY(invalidate(contextVk->getRenderer(), 0, mSize));
+    return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
+{
+    uint8_t *mapBufPointer;
+    ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
+    ANGLE_TRY(invalidate(contextVk->getRenderer(), 0, mSize));
+    *ptrOut = mapBufPointer + offset;
+    return angle::Result::Continue;
+}
+
 void BufferHelper::unmap(RendererVk *renderer)
 {
+    angle::Result unused = flush(renderer, 0, mSize);
+    (void)unused;
     mMemory.unmap(renderer);
 }
 
