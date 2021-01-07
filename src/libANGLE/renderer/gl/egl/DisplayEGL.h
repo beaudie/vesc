@@ -130,8 +130,9 @@ class DisplayEGL : public DisplayGL
 
     struct CurrentNativeContext
     {
-        EGLSurface surface = EGL_NO_SURFACE;
-        EGLContext context = EGL_NO_CONTEXT;
+        EGLSurface surface     = EGL_NO_SURFACE;
+        EGLContext context     = EGL_NO_CONTEXT;
+        bool isExternalContext = false;
     };
     angle::HashMap<std::thread::id, CurrentNativeContext> mCurrentNativeContexts;
 
