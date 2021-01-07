@@ -1188,6 +1188,9 @@ struct DisplayExtensions
 
     // EGL_KHR_reusable_sync
     bool reusableSyncKHR = false;
+
+    // EGL_ANGLE_external_context_and_surface
+    bool externalContextAndSurface = false;
 };
 
 struct DeviceExtensions
