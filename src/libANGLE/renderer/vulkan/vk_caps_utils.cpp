@@ -910,6 +910,7 @@ void RendererVk::ensureCapsInitialized() const
     {
         // TODO: geometry shader support is incomplete.  http://anglebug.com/3571
         mNativeExtensions.geometryShader =
+            getFeatures().supportsTransformFeedbackExtension.enabled &&
             getFeatures().exposeNonConformantExtensionsAndVersions.enabled;
         mNativeCaps.maxFramebufferLayers = LimitToInt(limitsVk.maxFramebufferLayers);
         mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
