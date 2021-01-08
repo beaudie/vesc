@@ -863,9 +863,17 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
         int inputShaderVersion,
         bool isSeparable,
         InfoLog &infoLog);
-    static bool linkValidateBuiltInVaryings(const std::vector<sh::ShaderVariable> &vertexVaryings,
-                                            const std::vector<sh::ShaderVariable> &fragmentVaryings,
-                                            int vertexShaderVersion,
+    static bool linkValidateBuiltInVaryingsInvariant(
+        const std::vector<sh::ShaderVariable> &vertexVaryings,
+        const std::vector<sh::ShaderVariable> &fragmentVaryings,
+        int vertexShaderVersion,
+        InfoLog &infoLog);
+    static bool linkValidateBuiltInVaryings(const std::vector<sh::ShaderVariable> &inputVaryings,
+                                            const std::vector<sh::ShaderVariable> &outputVaryings,
+                                            ShaderType inputShaderType,
+                                            ShaderType outputShaderType,
+                                            int inputShaderVersion,
+                                            int outputShaderVersion,
                                             InfoLog &infoLog);
 
     void fillProgramStateMap(ShaderMap<const ProgramState *> *programStatesOut);

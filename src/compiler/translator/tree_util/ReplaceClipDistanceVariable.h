@@ -3,18 +3,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ReplaceClipDistanceVariable.h: Find any references to gl_ClipDistance and
-// replace it with ANGLEClipDistance.
+// ReplaceClipDistanceVariable.h: Find any references to gl_ClipDistance or gl_CullDistance and
+// replace it with ANGLEClipDistance or ANGLECullDistance.
 //
 
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_REPLACECLIPDISTANCEVARIABLE_H_
 #define COMPILER_TRANSLATOR_TREEUTIL_REPLACECLIPDISTANCEVARIABLE_H_
 
+#include "GLSLANG/ShaderLang.h"
 #include "common/angleutils.h"
 
 namespace sh
 {
 
+struct InterfaceBlock;
 class TCompiler;
 class TIntermBlock;
 class TSymbolTable;
@@ -26,10 +28,20 @@ class TIntermTyped;
 // to a function.
 // Furthermore, at the end shader, some disabled gl_ClipDistance[i] can be skipped from the
 // assignment.
-ANGLE_NO_DISCARD bool ReplaceClipDistanceAssignments(TCompiler *compiler,
-                                                     TIntermBlock *root,
-                                                     TSymbolTable *symbolTable,
-                                                     const TIntermTyped *clipDistanceEnableFlags);
+ANGLE_NO_DISCARD bool ReplaceClipDistanceAssignments(
+    TCompiler *compiler,
+    TIntermBlock *root,
+    TSymbolTable *symbolTable,
+    const GLenum shaderType,
+    const TIntermTyped *clipDistanceEnableFlags,
+    const std::vector<sh::InterfaceBlock> &interfaceBlocks);
+
+ANGLE_NO_DISCARD bool ReplaceCullDistanceAssignments(
+    TCompiler *compiler,
+    TIntermBlock *root,
+    TSymbolTable *symbolTable,
+    const GLenum shaderType,
+    const std::vector<sh::InterfaceBlock> &interfaceBlocks);
 }  // namespace sh
 
 #endif

@@ -485,6 +485,10 @@ bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
         previousShaderType = shaderType;
     }
 
+    // TODO: http://anglebug.com/3571 and http://anglebug.com/3572
+    // Need to move logic of validating builtin varyings inside the for-loop above.
+    // This is because the built-in symbols `gl_ClipDistance` and `gl_CullDistance`
+    // can be redeclared in Geometry or Tessellation shaders as well.
     Program *vertexProgram   = mState.mPrograms[ShaderType::Vertex];
     Program *fragmentProgram = mState.mPrograms[ShaderType::Fragment];
     if (!vertexProgram || !fragmentProgram)
@@ -495,8 +499,9 @@ bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
     ProgramExecutable &fragmentExecutable = fragmentProgram->getExecutable();
     return Program::linkValidateBuiltInVaryings(
         vertexExecutable.getLinkedOutputVaryings(ShaderType::Vertex),
-        fragmentExecutable.getLinkedInputVaryings(ShaderType::Fragment),
-        vertexExecutable.getLinkedShaderVersion(ShaderType::Vertex), infoLog);
+        fragmentExecutable.getLinkedInputVaryings(ShaderType::Fragment), ShaderType::Vertex,
+        ShaderType::Fragment, vertexExecutable.getLinkedShaderVersion(ShaderType::Vertex),
+        fragmentExecutable.getLinkedShaderVersion(ShaderType::Fragment), infoLog);
 }
 
 void ProgramPipeline::validate(const gl::Context *context)

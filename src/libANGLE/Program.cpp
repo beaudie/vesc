@@ -3604,12 +3604,17 @@ bool Program::linkVaryings(InfoLog &infoLog) const
         previousShaderType = currentShader->getType();
     }
 
+    // TODO: http://anglebug.com/3571 and http://anglebug.com/3572
+    // Need to move logic of validating builtin varyings inside the for-loop above.
+    // This is because the built-in symbols `gl_ClipDistance` and `gl_CullDistance`
+    // can be redeclared in Geometry or Tessellation shaders as well.
     Shader *vertexShader   = mState.mAttachedShaders[ShaderType::Vertex];
     Shader *fragmentShader = mState.mAttachedShaders[ShaderType::Fragment];
     if (vertexShader && fragmentShader &&
         !linkValidateBuiltInVaryings(vertexShader->getOutputVaryings(),
-                                     fragmentShader->getInputVaryings(),
-                                     vertexShader->getShaderVersion(), infoLog))
+                                     fragmentShader->getInputVaryings(), vertexShader->getType(),
+                                     fragmentShader->getType(), vertexShader->getShaderVersion(),
+                                     fragmentShader->getShaderVersion(), infoLog))
     {
         return false;
     }
@@ -4318,17 +4323,12 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::ShaderVariable &output
     return LinkMismatchError::NO_MISMATCH;
 }
 
-bool Program::linkValidateBuiltInVaryings(const std::vector<sh::ShaderVariable> &vertexVaryings,
-                                          const std::vector<sh::ShaderVariable> &fragmentVaryings,
-                                          int vertexShaderVersion,
-                                          InfoLog &infoLog)
+bool Program::linkValidateBuiltInVaryingsInvariant(
+    const std::vector<sh::ShaderVariable> &vertexVaryings,
+    const std::vector<sh::ShaderVariable> &fragmentVaryings,
+    int vertexShaderVersion,
+    InfoLog &infoLog)
 {
-    if (vertexShaderVersion != 100)
-    {
-        // Only ESSL 1.0 has restrictions on matching input and output invariance
-        return true;
-    }
-
     bool glPositionIsInvariant   = false;
     bool glPointSizeIsInvariant  = false;
     bool glFragCoordIsInvariant  = false;
@@ -4381,6 +4381,72 @@ bool Program::linkValidateBuiltInVaryings(const std::vector<sh::ShaderVariable> 
         infoLog << "gl_PointCoord can only be declared invariant if and only if gl_PointSize is "
                    "declared invariant.";
         return false;
+    }
+
+    return true;
+}
+
+bool Program::linkValidateBuiltInVaryings(const std::vector<sh::ShaderVariable> &outputVaryings,
+                                          const std::vector<sh::ShaderVariable> &inputVaryings,
+                                          ShaderType outputShaderType,
+                                          ShaderType inputShaderType,
+                                          int outputShaderVersion,
+                                          int inputShaderVersion,
+                                          InfoLog &infoLog)
+{
+    ASSERT(outputShaderVersion == inputShaderVersion);
+
+    // Only ESSL 1.0 has restrictions on matching input and output invariance
+    if (inputShaderVersion == 100 && outputShaderType == ShaderType::Vertex &&
+        inputShaderType == ShaderType::Fragment)
+    {
+        return linkValidateBuiltInVaryingsInvariant(outputVaryings, inputVaryings,
+                                                    outputShaderVersion, infoLog);
+    }
+
+    uint32_t sizeClipDistance = 0;
+    uint32_t sizeCullDistance = 0;
+
+    for (const sh::ShaderVariable &varying : outputVaryings)
+    {
+        if (!varying.isBuiltIn())
+        {
+            continue;
+        }
+        if (varying.name.compare("gl_ClipDistance") == 0)
+        {
+            sizeClipDistance = varying.getOutermostArraySize();
+        }
+        else if (varying.name.compare("gl_CullDistance") == 0)
+        {
+            sizeCullDistance = varying.getOutermostArraySize();
+        }
+    }
+
+    for (const sh::ShaderVariable &varying : inputVaryings)
+    {
+        if (!varying.isBuiltIn())
+        {
+            continue;
+        }
+        if (varying.name.compare("gl_ClipDistance") == 0)
+        {
+            if (sizeClipDistance != varying.getOutermostArraySize())
+            {
+                infoLog << "If either shader redeclares the built-in arrays gl_ClipDistance[] the "
+                           "array must have the same size in both shaders.";
+                return false;
+            }
+        }
+        else if (varying.name.compare("gl_CullDistance") == 0)
+        {
+            if (sizeCullDistance != varying.getOutermostArraySize())
+            {
+                infoLog << "If either shader redeclares the built-in arrays gl_CullDistance[] the "
+                           "array must have the same size in both shaders.";
+                return false;
+            }
+        }
     }
 
     return true;
