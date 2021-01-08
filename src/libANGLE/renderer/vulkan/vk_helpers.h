@@ -1056,6 +1056,9 @@ class CommandBufferHelper : angle::NonCopyable
     void onImageHelperRelease(const ImageHelper *image);
 
     void beginRenderPass(const Framebuffer &framebuffer,
+                         bool imagelessFramebuffer,
+                         const FramebufferVk *imagelessFramebufferVk,
+                         const vk::FramebufferDesc &imagelessDesc,
                          const gl::Rectangle &renderArea,
                          const RenderPassDesc &renderPassDesc,
                          const AttachmentOpsArray &renderPassAttachmentOps,
@@ -1236,6 +1239,9 @@ class CommandBufferHelper : angle::NonCopyable
     gl::LevelIndex mDepthStencilLevelIndex;
     uint32_t mDepthStencilLayerIndex;
     uint32_t mDepthStencilLayerCount;
+    bool mImagelessFramebuffer;
+    const FramebufferVk *mImagelessFramebufferVk;
+    vk::FramebufferDesc mImagelessDesc;
 };
 
 // Imagine an image going through a few layout transitions:
@@ -1445,6 +1451,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void setTilingMode(VkImageTiling tilingMode) { mTilingMode = tilingMode; }
     VkImageTiling getTilingMode() const { return mTilingMode; }
     VkImageUsageFlags getUsage() const { return mUsage; }
+    VkImageUsageFlags getCreateFlags() const { return mCreateFlags; }
     VkImageType getType() const { return mImageType; }
     const VkExtent3D &getExtents() const { return mExtents; }
     uint32_t getLayerCount() const { return mLayerCount; }
@@ -1917,6 +1924,7 @@ class ImageHelper final : public Resource, public angle::Subject
     VkImageType mImageType;
     VkImageTiling mTilingMode;
     VkImageUsageFlags mUsage;
+    VkImageCreateFlags mCreateFlags;
     VkExtent3D mExtents;
     const Format *mFormat;
     GLint mSamples;

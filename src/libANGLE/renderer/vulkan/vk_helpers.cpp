@@ -767,7 +767,10 @@ CommandBufferHelper::CommandBufferHelper()
       mDepthStencilResolveImage(nullptr),
       mDepthStencilLevelIndex(0),
       mDepthStencilLayerIndex(0),
-      mDepthStencilLayerCount(0)
+      mDepthStencilLayerCount(0),
+      mImagelessFramebuffer(false),
+      mImagelessFramebufferVk(nullptr),
+      mImagelessDesc()
 {}
 
 CommandBufferHelper::~CommandBufferHelper()
@@ -1188,6 +1191,9 @@ void CommandBufferHelper::onImageHelperRelease(const ImageHelper *image)
 }
 
 void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
+                                          bool imagelessFramebuffer,
+                                          const FramebufferVk *imagelessFramebufferVk,
+                                          const vk::FramebufferDesc &imagelessDesc,
                                           const gl::Rectangle &renderArea,
                                           const RenderPassDesc &renderPassDesc,
                                           const AttachmentOpsArray &renderPassAttachmentOps,
@@ -1202,9 +1208,12 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mFramebuffer.setHandle(framebuffer.getHandle());
-    mRenderArea       = renderArea;
-    mClearValues      = clearValues;
-    *commandBufferOut = &mCommandBuffer;
+    mImagelessFramebuffer   = imagelessFramebuffer;
+    mImagelessFramebufferVk = imagelessFramebufferVk;
+    mImagelessDesc          = imagelessDesc;
+    mRenderArea             = renderArea;
+    mClearValues            = clearValues;
+    *commandBufferOut       = &mCommandBuffer;
 
     mRenderPassStarted = true;
     mCounter++;
@@ -1380,6 +1389,21 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
         beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
         beginInfo.clearValueCount = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
         beginInfo.pClearValues    = mClearValues.data();
+
+        VkRenderPassAttachmentBeginInfo attachmentBeginInfoKHR = {};
+        if (mImagelessFramebuffer)
+        {
+            ASSERT(mImagelessFramebufferVk != nullptr);
+            const std::vector<VkImageView> *imageViews;
+            bool hasImageViews = mImagelessFramebufferVk->getImagelessFramebufferImageViews(
+                mImagelessDesc, &imageViews);
+            ASSERT(hasImageViews);
+
+            beginInfo.pNext              = &attachmentBeginInfoKHR;
+            attachmentBeginInfoKHR.sType = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO;
+            attachmentBeginInfoKHR.attachmentCount = static_cast<uint32_t>(imageViews->size());
+            attachmentBeginInfoKHR.pAttachments    = imageViews->data();
+        }
 
         // Run commands inside the RenderPass.
         primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -3424,6 +3448,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mImageType(other.mImageType),
       mTilingMode(other.mTilingMode),
       mUsage(other.mUsage),
+      mCreateFlags(other.mCreateFlags),
       mExtents(other.mExtents),
       mFormat(other.mFormat),
       mSamples(other.mSamples),
@@ -3458,6 +3483,7 @@ void ImageHelper::resetCachedProperties()
     mImageType                   = VK_IMAGE_TYPE_2D;
     mTilingMode                  = VK_IMAGE_TILING_OPTIMAL;
     mUsage                       = 0;
+    mCreateFlags                 = 0;
     mExtents                     = {};
     mFormat                      = nullptr;
     mSamples                     = 1;
@@ -3607,6 +3633,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mLevelCount  = mipLevels;
     mLayerCount  = layerCount;
     mUsage       = usage;
+    mCreateFlags = GetImageCreateFlags(textureType) | additionalCreateFlags;
 
     // Validate that mLayerCount is compatible with the texture type
     ASSERT(textureType != gl::TextureType::_3D || mLayerCount == 1);
@@ -3618,7 +3645,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.pNext                 = externalImageCreateInfo;
-    imageInfo.flags                 = GetImageCreateFlags(textureType) | additionalCreateFlags;
+    imageInfo.flags                 = mCreateFlags;
     imageInfo.imageType             = mImageType;
     imageInfo.format                = format.actualImageVkFormat;
     imageInfo.extent                = mExtents;

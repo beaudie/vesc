@@ -485,6 +485,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                      const vk::PackedClearValuesArray &clearValues,
                                      vk::CommandBuffer **commandBufferOut);
 
+    angle::Result beginNewImagelessFramebufferRenderPass(
+        const vk::Framebuffer &framebuffer,
+        const FramebufferVk *imagelessFramebufferVk,
+        const vk::FramebufferDesc &imagelessDesc,
+        const gl::Rectangle &renderArea,
+        const vk::RenderPassDesc &renderPassDesc,
+        const vk::AttachmentOpsArray &renderPassAttachmentOps,
+        const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
+        const vk::PackedClearValuesArray &clearValues,
+        vk::CommandBuffer **commandBufferOut);
+
     // Only returns true if we have a started RP and we've run setupDraw.
     bool hasStartedRenderPass() const
     {
@@ -842,6 +853,18 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void flushDescriptorSetUpdates();
 
     void onRenderPassFinished();
+
+    angle::Result beginNewRenderPassImpl(
+        const vk::Framebuffer &framebuffer,
+        bool imagelessFramebuffer,
+        const FramebufferVk *imagelessFramebufferVk,
+        const vk::FramebufferDesc &imagelessDesc,
+        const gl::Rectangle &renderArea,
+        const vk::RenderPassDesc &renderPassDesc,
+        const vk::AttachmentOpsArray &renderPassAttachmentOps,
+        const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
+        const vk::PackedClearValuesArray &clearValues,
+        vk::CommandBuffer **commandBufferOut);
 
     void initIndexTypeMap();
 
