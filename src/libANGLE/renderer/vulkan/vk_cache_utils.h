@@ -1560,15 +1560,31 @@ class FramebufferCache final : angle::NonCopyable
 
     void destroy(RendererVk *rendererVk);
 
-    bool get(ContextVk *contextVk,
-             const vk::FramebufferDesc &desc,
-             vk::FramebufferHelper **framebufferOut);
+    bool get(const vk::FramebufferDesc &desc, vk::FramebufferHelper **framebufferOut);
     void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
     void clear(ContextVk *contextVk);
 
   private:
     angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
     CacheStats mCacheStats;
+};
+
+// FramebufferVk Cache for imageless framebuffer imageviews
+class ImagelessFramebufferCache final : angle::NonCopyable
+{
+  public:
+    ImagelessFramebufferCache() = default;
+    ~ImagelessFramebufferCache() {}
+
+    void destroy(RendererVk *rendererVk);
+
+    bool get(const vk::FramebufferDesc &desc, const std::vector<VkImageView> **imageviewsOut) const;
+    void insert(const vk::FramebufferDesc &desc, std::vector<VkImageView> &&imageviews);
+    void clear(ContextVk *contextVk);
+
+  private:
+    angle::HashMap<vk::FramebufferDesc, std::vector<VkImageView>> mPayload;
+    mutable CacheStats mCacheStats;
 };
 
 // DescriptorSet Cache

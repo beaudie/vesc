@@ -2918,8 +2918,12 @@ void FramebufferDesc::updateDepthStencilResolve(ImageOrBufferViewSubresourceSeri
 
 size_t FramebufferDesc::hash() const
 {
+    constexpr int kUnresolveAttachmentMaskBits = 16;
+    size_t hashSpecialization =
+        (mLayerCount << kUnresolveAttachmentMaskBits) ^ mUnresolveAttachmentMask.bits();
+
     return angle::ComputeGenericHash(&mSerials, sizeof(mSerials[0]) * mMaxIndex) ^
-           mLayerCount << 16 ^ mUnresolveAttachmentMask.bits();
+           hashSpecialization;
 }
 
 void FramebufferDesc::reset()
@@ -3668,8 +3672,7 @@ void FramebufferCache::destroy(RendererVk *rendererVk)
     mPayload.clear();
 }
 
-bool FramebufferCache::get(ContextVk *contextVk,
-                           const vk::FramebufferDesc &desc,
+bool FramebufferCache::get(const vk::FramebufferDesc &desc,
                            vk::FramebufferHelper **framebufferHelperOut)
 {
     auto iter = mPayload.find(desc);
@@ -3697,6 +3700,37 @@ void FramebufferCache::clear(ContextVk *contextVk)
         vk::FramebufferHelper &tmpFB = entry.second;
         tmpFB.release(contextVk);
     }
+    mPayload.clear();
+}
+
+// ImagelessFramebufferCache implementation.
+bool ImagelessFramebufferCache::get(const vk::FramebufferDesc &desc,
+                                    const std::vector<VkImageView> **imageviewsOut) const
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *imageviewsOut = &iter->second;
+        mCacheStats.hit();
+        return true;
+    }
+
+    mCacheStats.miss();
+    return false;
+}
+
+void ImagelessFramebufferCache::insert(const vk::FramebufferDesc &desc,
+                                       std::vector<VkImageView> &&imageviews)
+{
+    mPayload.emplace(desc, std::move(imageviews));
+}
+void ImagelessFramebufferCache::destroy(RendererVk *rendererVk)
+{
+    rendererVk->accumulateCacheStats(VulkanCacheType::Framebuffer, mCacheStats);
+    mPayload.clear();
+}
+void ImagelessFramebufferCache::clear(ContextVk *contextVk)
+{
     mPayload.clear();
 }
 
