@@ -82,10 +82,10 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
     // causing it to be interpreted in a different colorspace. Create the VkImage accordingly.
     VkImageCreateFlags imageCreateFlags                  = vk::kVkImageCreateFlagsNone;
     VkImageFormatListCreateInfoKHR *additionalCreateInfo = nullptr;
-    VkFormat vkImageFormat                               = vkFormat.actualImageVkFormat;
-    VkFormat vkImageListFormat                           = vkFormat.actualImageFormat().isSRGB
-                                     ? vk::ConvertToLinear(vkImageFormat)
-                                     : vk::ConvertToSRGB(vkImageFormat);
+    angle::FormatID imageFormat                          = vkFormat.actualImageFormatID;
+    angle::FormatID imageListFormat                      = vkFormat.actualImageFormat().isSRGB
+                                          ? ConvertToLinear(imageFormat)
+                                          : ConvertToSRGB(imageFormat);
 
     VkImageFormatListCreateInfoKHR formatListInfo = {};
     if (renderer->getFeatures().supportsImageFormatList.enabled)
@@ -93,11 +93,13 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         // Add VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT to VkImage create flag
         imageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
 
+        VkFormat vkFormat = vk::GetVkFormatFromFormatID(imageListFormat);
+
         // There is just 1 additional format we might use to create a VkImageView for this VkImage
         formatListInfo.sType           = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
         formatListInfo.pNext           = nullptr;
         formatListInfo.viewFormatCount = 1;
-        formatListInfo.pViewFormats    = &vkImageListFormat;
+        formatListInfo.pViewFormats    = &vkFormat;
         additionalCreateInfo           = &formatListInfo;
     }
 
