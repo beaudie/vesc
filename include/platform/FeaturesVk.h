@@ -393,6 +393,14 @@ struct FeaturesVk : FeatureSetBase
         "that support VK_KHR_image_format_list",
         &members, "http://anglebug.com/5281"};
 
+    // Enable imageless framebuffers on platforms that support it
+    // http://anglebug.com/5477
+    Feature supportsImagelessFramebuffer = {
+        "supportsImagelessFramebuffer", FeatureCategory::VulkanFeatures,
+        "Enable use of imageless framebuffers for ICDs that support "
+        "VK_KHR_imageless_framebuffer",
+        &members, "http://anglebug.com/5477"};
+
     // Swiftshader on mac fails to initialize WebGL context when EXT_multisampled_render_to_texture
     // is used by Chromium.
     // http://anglebug.com/4937

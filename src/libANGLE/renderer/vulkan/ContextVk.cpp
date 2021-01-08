@@ -4602,10 +4602,42 @@ angle::Result ContextVk::beginNewRenderPass(
     const vk::PackedClearValuesArray &clearValues,
     vk::CommandBuffer **commandBufferOut)
 {
+    return beginNewRenderPassImpl(framebuffer, false, nullptr, {}, renderArea, renderPassDesc,
+                                  renderPassAttachmentOps, depthStencilAttachmentIndex, clearValues,
+                                  commandBufferOut);
+}
+angle::Result ContextVk::beginNewImagelessFramebufferRenderPass(
+    const vk::Framebuffer &imagelessFramebuffer,
+    const FramebufferVk *imagelessFramebufferVk,
+    const vk::FramebufferDesc &imagelessDesc,
+    const gl::Rectangle &renderArea,
+    const vk::RenderPassDesc &renderPassDesc,
+    const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
+    const vk::PackedClearValuesArray &clearValues,
+    vk::CommandBuffer **commandBufferOut)
+{
+    return beginNewRenderPassImpl(imagelessFramebuffer, true, imagelessFramebufferVk, imagelessDesc,
+                                  renderArea, renderPassDesc, renderPassAttachmentOps,
+                                  depthStencilAttachmentIndex, clearValues, commandBufferOut);
+}
+angle::Result ContextVk::beginNewRenderPassImpl(
+    const vk::Framebuffer &framebuffer,
+    bool imagelessFramebuffer,
+    const FramebufferVk *imagelessFramebufferVk,
+    const vk::FramebufferDesc &imagelessDesc,
+    const gl::Rectangle &renderArea,
+    const vk::RenderPassDesc &renderPassDesc,
+    const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
+    const vk::PackedClearValuesArray &clearValues,
+    vk::CommandBuffer **commandBufferOut)
+{
     // Next end any currently outstanding renderPass
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
-    mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
+    mRenderPassCommands->beginRenderPass(framebuffer, imagelessFramebuffer, imagelessFramebufferVk,
+                                         imagelessDesc, renderArea, renderPassDesc,
                                          renderPassAttachmentOps, depthStencilAttachmentIndex,
                                          clearValues, commandBufferOut);
     // Restart at subpass 0.

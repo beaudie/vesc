@@ -199,10 +199,16 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     // With the introduction of sRGB related GLES extensions any texture could be respecified
     // causing it to be interpreted in a different colorspace. Create the VkImage accordingly.
     VkImageCreateFlags imageCreateFlags = vk::kVkImageCreateFlagsNone;
-    VkFormat vkImageFormat              = vkFormat.actualImageVkFormat;
-    VkFormat vkImageListFormat          = vkFormat.actualImageFormat().isSRGB
-                                     ? vk::ConvertToLinear(vkImageFormat)
-                                     : vk::ConvertToSRGB(vkImageFormat);
+
+    constexpr size_t kBaseFormatIndex       = 0;
+    constexpr size_t kAdditionalFormatIndex = 1;
+    constexpr size_t kMaxFormatCount        = 2;
+
+    VkFormat imageListFormats[kMaxFormatCount];
+    imageListFormats[kBaseFormatIndex] = vkFormat.actualImageVkFormat;
+    imageListFormats[kAdditionalFormatIndex] =
+        vkFormat.actualImageFormat().isSRGB ? vk::ConvertToLinear(vkFormat.actualImageVkFormat)
+                                            : vk::ConvertToSRGB(vkFormat.actualImageVkFormat);
 
     VkImageFormatListCreateInfoKHR formatListInfo = {};
     if (renderer->getFeatures().supportsImageFormatList.enabled)
@@ -212,8 +218,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
 
         // There is just 1 additional format we might use to create a VkImageView for this VkImage
         formatListInfo.sType           = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
-        formatListInfo.viewFormatCount = 1;
-        formatListInfo.pViewFormats    = &vkImageListFormat;
+        formatListInfo.viewFormatCount = kMaxFormatCount;
+        formatListInfo.pViewFormats    = imageListFormats;
         externalFormat.pNext           = &formatListInfo;
     }
 

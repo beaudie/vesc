@@ -979,6 +979,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mDepthStencilResolveProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES;
 
+    mDeviceImagelessFramebufferProperties = {};
+    mDeviceImagelessFramebufferProperties.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES;
+
     mExternalFenceProperties       = {};
     mExternalFenceProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES;
 
@@ -1062,6 +1066,12 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceProperties, &mDepthStencilResolveProperties);
     }
 
+    // Query imageless framebuffer features
+    if (ExtensionFound(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mDeviceImagelessFramebufferProperties);
+    }
+
     // Query subgroup properties
     vk::AddToPNextChain(&deviceProperties, &mSubgroupProperties);
 
@@ -1091,18 +1101,19 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     }
 
     // Clean up pNext chains
-    mLineRasterizationFeatures.pNext        = nullptr;
-    mMemoryReportFeatures.pNext             = nullptr;
-    mProvokingVertexFeatures.pNext          = nullptr;
-    mVertexAttributeDivisorFeatures.pNext   = nullptr;
-    mVertexAttributeDivisorProperties.pNext = nullptr;
-    mTransformFeedbackFeatures.pNext        = nullptr;
-    mIndexTypeUint8Features.pNext           = nullptr;
-    mSubgroupProperties.pNext               = nullptr;
-    mExternalMemoryHostProperties.pNext     = nullptr;
-    mShaderFloat16Int8Features.pNext        = nullptr;
-    mDepthStencilResolveProperties.pNext    = nullptr;
-    mSamplerYcbcrConversionFeatures.pNext   = nullptr;
+    mLineRasterizationFeatures.pNext            = nullptr;
+    mMemoryReportFeatures.pNext                 = nullptr;
+    mProvokingVertexFeatures.pNext              = nullptr;
+    mVertexAttributeDivisorFeatures.pNext       = nullptr;
+    mVertexAttributeDivisorProperties.pNext     = nullptr;
+    mTransformFeedbackFeatures.pNext            = nullptr;
+    mIndexTypeUint8Features.pNext               = nullptr;
+    mSubgroupProperties.pNext                   = nullptr;
+    mExternalMemoryHostProperties.pNext         = nullptr;
+    mShaderFloat16Int8Features.pNext            = nullptr;
+    mDepthStencilResolveProperties.pNext        = nullptr;
+    mDeviceImagelessFramebufferProperties.pNext = nullptr;
+    mSamplerYcbcrConversionFeatures.pNext       = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
@@ -1347,6 +1358,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
     }
 
+    if (getFeatures().supportsImagelessFramebuffer.enabled)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME);
+    }
+
     std::sort(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), StrLess);
     ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionNames, enabledDeviceExtensions));
 
@@ -1477,6 +1493,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         enabledDeviceExtensions.push_back(VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME);
         vk::AddToPNextChain(&createInfo, &mShaderFloat16Int8Features);
+    }
+
+    if (getFeatures().supportsImagelessFramebuffer.enabled)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME);
+        vk::AddToPNextChain(&createInfo, &mDeviceImagelessFramebufferProperties);
     }
 
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -2025,7 +2047,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsImageFormatList,
-        (ExtensionFound(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME, deviceExtensionNames)) && isAMD);
+        (ExtensionFound(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME, deviceExtensionNames)));
+
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsImagelessFramebuffer,
+        (ExtensionFound(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME, deviceExtensionNames) &&
+         mDeviceImagelessFramebufferProperties.imagelessFramebuffer == VK_TRUE));
 
     // Feature disabled due to driver bugs:
     //

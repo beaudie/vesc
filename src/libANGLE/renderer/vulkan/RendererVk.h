@@ -422,6 +422,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceExternalMemoryHostPropertiesEXT mExternalMemoryHostProperties;
     VkPhysicalDeviceShaderFloat16Int8FeaturesKHR mShaderFloat16Int8Features;
     VkPhysicalDeviceDepthStencilResolvePropertiesKHR mDepthStencilResolveProperties;
+    VkPhysicalDeviceImagelessFramebufferFeaturesKHR mDeviceImagelessFramebufferProperties;
     VkExternalFenceProperties mExternalFenceProperties;
     VkExternalSemaphoreProperties mExternalSemaphoreProperties;
     VkPhysicalDeviceSamplerYcbcrConversionFeatures mSamplerYcbcrConversionFeatures;
