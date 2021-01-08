@@ -2648,13 +2648,23 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     // With the introduction of sRGB related GLES extensions any texture could be respecified
     // causing it to be interpreted in a different colorspace. Create the VkImage accordingly.
     VkImageFormatListCreateInfoKHR *additionalCreateInfo = nullptr;
-    VkFormat imageFormat                                 = format.actualImageVkFormat;
-    VkFormat imageListFormat = format.actualImageFormat().isSRGB ? vk::ConvertToLinear(imageFormat)
-                                                                 : vk::ConvertToSRGB(imageFormat);
+
+    constexpr size_t kBaseFormatIndex       = 0;
+    constexpr size_t kAdditionalFormatIndex = 1;
+    constexpr size_t kMaxFormatCount        = 2;
+
+    VkFormat imageListFormats[kMaxFormatCount];
+    imageListFormats[kBaseFormatIndex]       = format.actualImageVkFormat;
+    imageListFormats[kAdditionalFormatIndex] = format.actualImageFormat().isSRGB
+                                                   ? vk::ConvertToLinear(format.actualImageVkFormat)
+                                                   : vk::ConvertToSRGB(format.actualImageVkFormat);
+
+    mRequiresMutableStorage = false;
 
     VkImageFormatListCreateInfoKHR formatListInfo = {};
     if (renderer->getFeatures().supportsImageFormatList.enabled &&
-        renderer->haveSameFormatFeatureBits(imageFormat, imageListFormat))
+        renderer->haveSameFormatFeatureBits(imageListFormats[kBaseFormatIndex],
+                                            imageListFormats[kAdditionalFormatIndex]))
     {
         mRequiresMutableStorage = true;
 
@@ -2664,8 +2674,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         // There is just 1 additional format we might use to create a VkImageView for this VkImage
         formatListInfo.sType           = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
         formatListInfo.pNext           = nullptr;
-        formatListInfo.viewFormatCount = 1;
-        formatListInfo.pViewFormats    = &imageListFormat;
+        formatListInfo.viewFormatCount = kMaxFormatCount;
+        formatListInfo.pViewFormats    = &imageListFormats[0];
         additionalCreateInfo           = &formatListInfo;
     }
 

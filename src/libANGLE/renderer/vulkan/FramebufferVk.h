@@ -138,6 +138,9 @@ class FramebufferVk : public FramebufferImpl
     void updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
                                            vk::CommandBufferHelper *renderPass);
 
+    bool getImagelessFramebufferImageViews(const vk::FramebufferDesc &descriptor,
+                                           const std::vector<VkImageView> **pImageViewsOut) const;
+
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,
@@ -237,6 +240,7 @@ class FramebufferVk : public FramebufferImpl
 
     vk::FramebufferDesc mCurrentFramebufferDesc;
     FramebufferCache mFramebufferCache;
+    ImagelessFramebufferCache mImagelessFramebufferCache;
 
     vk::ClearValuesArray mDeferredClears;
 
