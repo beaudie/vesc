@@ -82,10 +82,14 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(RendererV
                    << bufferFormatProperties.externalFormat << " is unsupported ";
         }
     }
-    else if (!HasFullTextureFormatSupport(renderer, bufferFormatProperties.format))
+    else
     {
-        return egl::EglBadParameter()
-               << "AHardwareBuffer format does not support enough features to use as a texture.";
+        angle::FormatID formatID = vk::GetFormatIDFromVkFormat(bufferFormatProperties.format);
+        if (!HasFullTextureFormatSupport(renderer, formatID))
+        {
+            return egl::EglBadParameter() << "AHardwareBuffer format does not support enough "
+                                             "features to use as a texture.";
+        }
     }
 
     return egl::NoError();
