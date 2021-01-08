@@ -168,6 +168,11 @@ class alignas(4) RenderPassDesc final
     void packDepthStencilUnresolveAttachment(bool unresolveDepth, bool unresolveStencil);
     void removeDepthStencilUnresolveAttachment();
 
+    ANGLE_INLINE void setWriteControlMode(gl::SrgbWriteControlMode srgbWriteControlMode)
+    {
+        mSrgbWriteControlMode = static_cast<uint8_t>(srgbWriteControlMode);
+    }
+
     size_t hash() const;
 
     // Color attachments are in [0, colorAttachmentRange()), with possible gaps.
@@ -212,6 +217,11 @@ class alignas(4) RenderPassDesc final
     {
         return (mAttachmentFormats.back() & kUnresolveStencilFlag) != 0;
     }
+    gl::SrgbWriteControlMode getSRGBWriteControlMode() const
+    {
+        return mSrgbWriteControlMode ? gl::SrgbWriteControlMode::Linear
+                                     : gl::SrgbWriteControlMode::Default;
+    }
 
     // Get the number of attachments in the Vulkan render pass, i.e. after removing disabled
     // color attachments.
@@ -238,6 +248,8 @@ class alignas(4) RenderPassDesc final
     uint8_t mLogSamples : 3;
     uint8_t mColorAttachmentRange : 4;
     uint8_t mHasDepthStencilAttachment : 1;
+    // SrgbWriteControlMode - 0: default, 1: force linear colorspace
+    uint8_t mSrgbWriteControlMode : 1;
 
     // Whether each color attachment has a corresponding resolve attachment.  Color resolve
     // attachments can be used to optimize resolve through glBlitFramebuffer() as well as support
@@ -296,7 +308,7 @@ class alignas(4) RenderPassDesc final
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs);
 
 constexpr size_t kRenderPassDescSize = sizeof(RenderPassDesc);
-static_assert(kRenderPassDescSize == 12, "Size check failed");
+static_assert(kRenderPassDescSize == 16, "Size check failed");
 
 struct PackedAttachmentOpsDesc final
 {
@@ -1155,6 +1167,10 @@ class FramebufferDesc
     void updateUnresolveMask(FramebufferNonResolveAttachmentMask unresolveMask);
     void updateDepthStencil(ImageOrBufferViewSubresourceSerial serial);
     void updateDepthStencilResolve(ImageOrBufferViewSubresourceSerial serial);
+    ANGLE_INLINE void setWriteControlMode(gl::SrgbWriteControlMode mode)
+    {
+        mSrgbWriteControlMode = static_cast<uint8_t>(mode);
+    }
     size_t hash() const;
 
     bool operator==(const FramebufferDesc &other) const;
@@ -1168,6 +1184,11 @@ class FramebufferDesc
     }
 
     FramebufferNonResolveAttachmentMask getUnresolveAttachmentMask() const;
+    ANGLE_INLINE gl::SrgbWriteControlMode getWriteControlMode() const
+    {
+        return (mSrgbWriteControlMode == 1) ? gl::SrgbWriteControlMode::Linear
+                                            : gl::SrgbWriteControlMode::Default;
+    }
 
     void updateLayerCount(uint32_t layerCount);
     uint32_t getLayerCount() const { return mLayerCount; }
@@ -1181,6 +1202,8 @@ class FramebufferDesc
     static_assert(gl::IMPLEMENTATION_MAX_FRAMEBUFFER_LAYERS < (1 << 9) - 1,
                   "Not enough bits for mLayerCount");
     uint16_t mLayerCount : 9;
+    // SrgbWriteControlMode - 0: default, 1: force linear colorspace
+    uint8_t mSrgbWriteControlMode : 1;
 
     // If the render pass contains an initial subpass to unresolve a number of attachments, the
     // subpass description is derived from the following mask, specifying which attachments need
