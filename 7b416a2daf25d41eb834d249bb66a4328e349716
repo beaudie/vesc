@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d9c244_2a6ba7ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-01-09T00:07:10Z",
+      "side": 1,
+      "message": "Patchset 1 was uploaded with \"--bypass-hooks\", so that there\u0027s a version that\u0027s just the cloned dEQP file with the fix.  The issue being tab\u0027s in the dEQP source.  I expect that I\u0027ll need to remove the tab\u0027s in a future Patchset.",
+      "revId": "7b416a2daf25d41eb834d249bb66a4328e349716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c043bf7d_18a2770f",
+        "filename": "src/tests/deqp_support/es31cVertexAttribBindingTests_override.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-01-09T00:07:10Z",
+      "side": 1,
+      "message": "I\u0027ll add a comment.",
+      "revId": "7b416a2daf25d41eb834d249bb66a4328e349716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
