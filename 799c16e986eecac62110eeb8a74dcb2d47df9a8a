@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b631944b_a7e38aca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-01-09T19:22:41Z",
+      "side": 1,
+      "message": "I\u0027ve tried \"manual trigger\" autoroll API this time, but it only went as far as creating the CL and then reported FAILURE 😞",
+      "revId": "799c16e986eecac62110eeb8a74dcb2d47df9a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
