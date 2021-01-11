@@ -16,6 +16,23 @@
       "message": "I don\u0027t have access to dry run and can\u0027t commit.",
       "revId": "2eea52fa0a08ee7fe015b13eb719cfc2be0266bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f338919_4e0ad37e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361388
+      },
+      "writtenOn": "2021-01-11T13:15:28Z",
+      "side": 1,
+      "message": "Oh and I could not select your @chromium.org email address.",
+      "revId": "2eea52fa0a08ee7fe015b13eb719cfc2be0266bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
