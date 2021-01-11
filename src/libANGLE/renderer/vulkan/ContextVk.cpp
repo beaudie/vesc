@@ -4985,6 +4985,12 @@ void ContextVk::invalidateGraphicsPipelineAndDescriptorSets()
     mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
 }
 
+void ContextVk::invalidateComputePipelineAndDescriptorSets()
+{
+    mComputeDirtyBits.set(DIRTY_BIT_PIPELINE);
+    mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+}
+
 angle::Result ContextVk::initializeMultisampleTextureToBlack(const gl::Context *context,
                                                              gl::Texture *glTexture)
 {

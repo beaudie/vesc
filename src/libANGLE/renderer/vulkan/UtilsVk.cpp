@@ -1097,6 +1097,9 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
         UnsignedCeilDivide(kIndexCount * kInvocationsPerIndex, kInvocationsPerGroup);
     commandBuffer->dispatch(kGroupCount, 1, 1);
 
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
+
     descriptorPoolBinding.reset();
 
     return angle::Result::Continue;
@@ -1166,6 +1169,9 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
         UnsignedCeilDivide(kIndexCount * kInvocationsPerIndex, kInvocationsPerGroup);
     commandBuffer->dispatch(kGroupCount, 1, 1);
 
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
+
     descriptorPoolBinding.reset();
 
     return angle::Result::Continue;
@@ -1229,6 +1235,9 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
 
     commandBuffer->dispatch(1, 1, 1);
 
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
+
     descriptorPoolBinding.reset();
 
     return angle::Result::Continue;
@@ -1288,6 +1297,9 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
                            commandBuffer));
 
     commandBuffer->dispatch(1, 1, 1);
+
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
 
     descriptorPoolBinding.reset();
 
@@ -1422,6 +1434,9 @@ angle::Result UtilsVk::convertVertexBufferImpl(ContextVk *contextVk,
                            sizeof(shaderParams), commandBuffer));
 
     commandBuffer->dispatch(UnsignedCeilDivide(shaderParams.outputCount, 64), 1, 1);
+
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
 
     descriptorPoolBinding.reset();
 
@@ -2101,6 +2116,9 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                      depthStencilImage->getImage(),
                                      depthStencilImage->getCurrentLayout(), 1, &region);
 
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
+
     return angle::Result::Continue;
 }
 
@@ -2591,6 +2609,9 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     commandBuffer->dispatch(workGroupX, workGroupY, 1);
     descriptorPoolBinding.reset();
 
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
+
     return angle::Result::Continue;
 }
 
@@ -2837,6 +2858,9 @@ angle::Result UtilsVk::cullOverlayWidgets(ContextVk *contextVk,
     commandBuffer->dispatch(dest->getExtents().width, dest->getExtents().height, 1);
     descriptorPoolBinding.reset();
 
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
+
     return angle::Result::Continue;
 }
 
@@ -2946,6 +2970,9 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
     const VkExtent3D &extents = culledWidgets->getExtents();
     commandBuffer->dispatch(extents.width, extents.height, 1);
     descriptorPoolBinding.reset();
+
+    // Make sure what's bound here is correctly reverted on the next dispatch.
+    contextVk->invalidateComputePipelineAndDescriptorSets();
 
     return angle::Result::Continue;
 }

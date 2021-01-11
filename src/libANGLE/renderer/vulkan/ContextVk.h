@@ -574,6 +574,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // When UtilsVk issues a draw call on the currently running render pass, the pipelines and
     // descriptor sets it binds need to be undone.
     void invalidateGraphicsPipelineAndDescriptorSets();
+    // Same with a dispatch call.
+    void invalidateComputePipelineAndDescriptorSets();
 
     // Implementation of MultisampleTextureInitializer
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,
