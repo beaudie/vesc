@@ -17,6 +17,7 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
@@ -234,6 +235,26 @@ class FramebufferVk : public FramebufferImpl
     // the framebuffer does not, we need to mask out the alpha channel. This DrawBufferMask will
     // contain the mask to apply to the alpha channel when drawing.
     gl::DrawBufferMask mEmulatedAlphaAttachmentMask;
+
+    // FramebufferVk Cache
+    class FramebufferCache final : angle::NonCopyable
+    {
+      public:
+        FramebufferCache() = default;
+        ~FramebufferCache() { ASSERT(mPayload.empty()); }
+
+        void destroy(RendererVk *rendererVk);
+
+        bool get(ContextVk *contextVk,
+                 const vk::FramebufferDesc &desc,
+                 vk::FramebufferHelper **framebufferOut);
+        void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
+        void clear(ContextVk *contextVk);
+
+      private:
+        angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
+        CacheStats mCacheStats;
+    };
 
     vk::FramebufferDesc mCurrentFramebufferDesc;
     FramebufferCache mFramebufferCache;
