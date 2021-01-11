@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc180ea9_300ff74c",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-01-11T16:02:40Z",
+      "side": 1,
+      "message": "When state-\u003evertexArrayBinding is not 0, this call get errors. Not sure why?",
+      "range": {
+        "startLine": 2994,
+        "startChar": 8,
+        "endLine": 2994,
+        "endChar": 23
+      },
+      "revId": "b8fce804486a4f3abda0fea752aed384e5b44622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
