@@ -22,12 +22,12 @@ GN_OUTPUT_DIRECTORY=out/Android
 
 deps=(
     "third_party/abseil-cpp"
-    "third_party/spirv-tools/src"
-    "third_party/glslang/src"
-    "third_party/spirv-headers/src"
-    "third_party/vulkan-headers/src"
     "third_party/jsoncpp"
     "third_party/jsoncpp/source"
+    "third_party/vulkan-deps/glslang/src"
+    "third_party/vulkan-deps/spirv-headers/src"
+    "third_party/vulkan-deps/spirv-tools/src"
+    "third_party/vulkan-deps/vulkan-headers/src"
     "third_party/vulkan_memory_allocator"
     "third_party/zlib"
 )
