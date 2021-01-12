@@ -80,6 +80,7 @@ enum class RestrictedTraceID
     whatsapp,
     world_of_tanks_blitz,
     world_war_doh,
+    magic_tiles_3,
     InvalidEnum,
     EnumCount = InvalidEnum
 };

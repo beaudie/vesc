@@ -25,6 +25,7 @@
 #include "google_maps/google_maps_capture_context3.h"
 #include "kartrider_rush/kartrider_rush_capture_context1.h"
 #include "lego_legacy/lego_legacy_capture_context2.h"
+#include "magic_tiles_3/magic_tiles_3_capture_context2.h"
 #include "manhattan_10/manhattan_10_capture_context1.h"
 #include "marvel_contest_of_champions/marvel_contest_of_champions_capture_context1.h"
 #include "mobile_legends/mobile_legends_capture_context1.h"
@@ -137,7 +138,11 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
     {RestrictedTraceID::world_war_doh,
      {world_war_doh::kReplayFrameStart, world_war_doh::kReplayFrameEnd,
       world_war_doh::kReplayDrawSurfaceWidth, world_war_doh::kReplayDrawSurfaceHeight,
-      "world_war_doh"}}};
+      "world_war_doh"}},
+    {RestrictedTraceID::magic_tiles_3,
+     {magic_tiles_3::kReplayFrameStart, magic_tiles_3::kReplayFrameEnd,
+      magic_tiles_3::kReplayDrawSurfaceWidth, magic_tiles_3::kReplayDrawSurfaceHeight,
+      "magic_tiles_3"}}};
 }
 
 const TraceInfo &GetTraceInfo(RestrictedTraceID traceID)
@@ -226,6 +231,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
             break;
         case RestrictedTraceID::world_war_doh:
             world_war_doh::ReplayContext2Frame(frameIndex);
+            break;
+        case RestrictedTraceID::magic_tiles_3:
+            magic_tiles_3::ReplayContext2Frame(frameIndex);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -316,6 +324,9 @@ void ResetReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::world_war_doh:
             world_war_doh::ResetContext2Replay();
             break;
+        case RestrictedTraceID::magic_tiles_3:
+            magic_tiles_3::ResetContext2Replay();
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -404,6 +415,9 @@ void SetupReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::world_war_doh:
             world_war_doh::SetupContext2Replay();
+            break;
+        case RestrictedTraceID::magic_tiles_3:
+            magic_tiles_3::SetupContext2Replay();
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
@@ -494,6 +508,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::world_war_doh:
             world_war_doh::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::magic_tiles_3:
+            magic_tiles_3::SetBinaryDataDir(dataDir);
+            break;
         default:
             fprintf(stderr, "Error in switch.\n");
             assert(0);
@@ -582,6 +599,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::world_war_doh:
             world_war_doh::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::magic_tiles_3:
+            magic_tiles_3::SetBinaryDataDecompressCallback(callback);
             break;
         default:
             fprintf(stderr, "Error in switch.\n");
