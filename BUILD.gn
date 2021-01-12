@@ -938,6 +938,18 @@ template("angle_libGLESv2") {
     if (is_win) {
       sources += [ "src/libGLESv2/${invoker.output_name}_autogen.def" ]
     }
+    if (is_mac && !is_component_build) {
+      inputs = [ "src/libGLESv2/${invoker.output_name}_autogen.exports" ]
+      ldflags = [ "-Wl,-exported_symbols_list," + rebase_path(
+                      "src/libGLESv2/${invoker.output_name}_autogen.exports",
+                      root_build_dir) ]
+    }
+    if (is_linux || is_chromeos) {
+      inputs = [ "src/libGLESv2/${invoker.output_name}_autogen.lds" ]
+      ldflags = [ "-Wl,--version-script=" + rebase_path(
+                      "src/libGLESv2/${invoker.output_name}_autogen.lds",
+                      root_build_dir) ]
+    }
 
     output_name = "${invoker.output_name}${angle_libs_suffix}"
 
@@ -1085,6 +1097,17 @@ angle_shared_library("libEGL") {
 
   if (is_win) {
     sources += [ "src/libEGL/libEGL_autogen.def" ]
+  }
+  if (is_mac && !is_component_build) {
+    inputs = [ "src/libEGL/libEGL_autogen.exports" ]
+    ldflags =
+        [ "-Wl,-exported_symbols_list," +
+          rebase_path("src/libEGL/libEGL_autogen.exports", root_build_dir) ]
+  }
+  if (is_linux || is_chromeos) {
+    inputs = [ "src/libEGL/libEGL_autogen.lds" ]
+    ldflags = [ "-Wl,--version-script=" +
+                rebase_path("src/libEGL/libEGL_autogen.lds", root_build_dir) ]
   }
 
   deps = [

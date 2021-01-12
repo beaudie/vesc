@@ -8,7 +8,7 @@
   "scripts/entry_point_packed_gl_enums.json":
     "846be5dc8cb36076207699b025633fcc",
   "scripts/generate_entry_points.py":
-    "5b3752c3e021d3a5cd76a6ccaf5263d7",
+    "13e51801ac4775505fc74e6999133946",
   "scripts/gl.xml":
     "f66967f3f3d696b5d8306fd80bbd49a8",
   "scripts/gl_angle_ext.xml":
@@ -159,8 +159,20 @@
     "fb2f77a0d2f378372917789e73779758",
   "src/libGLESv2/libGLESv2_autogen.def":
     "b190f97f311354cae04844fbeb8b0596",
+  "src/libGLESv2/libGLESv2_autogen.exports":
+    "1c6fa982f06edcda8e7e7ed78f61fdb7",
+  "src/libGLESv2/libGLESv2_autogen.lds":
+    "f97aa04f3f70b17569e60242117b86a5",
   "src/libGLESv2/libGLESv2_no_capture_autogen.def":
     "a29336a4763b0ed66b9ddfe4847f68da",
+  "src/libGLESv2/libGLESv2_no_capture_autogen.exports":
+    "1c6fa982f06edcda8e7e7ed78f61fdb7",
+  "src/libGLESv2/libGLESv2_no_capture_autogen.lds":
+    "f97aa04f3f70b17569e60242117b86a5",
   "src/libGLESv2/libGLESv2_with_capture_autogen.def":
-    "301a20588e14724b390409c71d5ccfcd"
+    "301a20588e14724b390409c71d5ccfcd",
+  "src/libGLESv2/libGLESv2_with_capture_autogen.exports":
+    "1c6fa982f06edcda8e7e7ed78f61fdb7",
+  "src/libGLESv2/libGLESv2_with_capture_autogen.lds":
+    "f97aa04f3f70b17569e60242117b86a5"
 }
