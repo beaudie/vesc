@@ -301,6 +301,19 @@ angle::Result CopyAndStageImageSubresource(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+
+const vk::Format *AdjustStorageViewFormatPerWorkarounds(ContextVk *contextVk,
+                                                        const vk::Format *intended)
+{
+    // r32f images are emulated with r32ui.
+    if (contextVk->getFeatures().emulateR32fImageAtomicExchange.enabled &&
+        intended->actualImageFormatID == angle::FormatID::R32_FLOAT)
+    {
+        return &contextVk->getRenderer()->getFormat(angle::FormatID::R32_UINT);
+    }
+
+    return intended;
+}
 }  // anonymous namespace
 
 // TextureVk implementation.
@@ -2586,7 +2599,9 @@ angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
                                              const vk::ImageView **imageViewOut)
 {
     angle::FormatID formatID = angle::Format::InternalFormatToID(binding.format);
-    const vk::Format &format = contextVk->getRenderer()->getFormat(formatID);
+    const vk::Format *format = &contextVk->getRenderer()->getFormat(formatID);
+
+    format = AdjustStorageViewFormatPerWorkarounds(contextVk, format);
 
     gl::LevelIndex nativeLevelGL =
         getNativeImageLevel(gl::LevelIndex(static_cast<uint32_t>(binding.level)));
@@ -2598,7 +2613,7 @@ angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
 
         return getImageViews().getLevelLayerStorageImageView(
             contextVk, *mImage, nativeLevelVk, nativeLayer,
-            VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT, format.actualImageFormatID,
+            VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT, format->actualImageFormatID,
             imageViewOut);
     }
 
@@ -2606,7 +2621,7 @@ angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
 
     return getImageViews().getLevelStorageImageView(
         contextVk, mState.getType(), *mImage, nativeLevelVk, nativeLayer,
-        VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT, format.actualImageFormatID,
+        VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT, format->actualImageFormatID,
         imageViewOut);
 }
 
@@ -2624,6 +2639,8 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
         imageUniformFormat = &renderer->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
     }
+
+    imageUniformFormat = AdjustStorageViewFormatPerWorkarounds(contextVk, imageUniformFormat);
 
     // Create a view for the required format.
     const vk::BufferHelper &buffer = vk::GetImpl(mState.getBuffer().get())->getBuffer();
