@@ -950,8 +950,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
 #if ANGLE_ENABLE_OVERLAY
     // We need storage image for compute writes (debug overlay output).
-    VkFormatFeatureFlags featureBits =
-        renderer->getImageFormatFeatureBits(nativeFormat, VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT);
+    VkFormatFeatureFlags featureBits = renderer->getImageFormatFeatureBits(
+        format.actualImageFormatID, VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT);
     if ((featureBits & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) != 0)
     {
         imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
