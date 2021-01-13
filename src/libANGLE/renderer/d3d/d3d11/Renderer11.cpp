@@ -1419,7 +1419,8 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
                                          EGLint *height,
                                          GLsizei *samples,
                                          gl::Format *glFormat,
-                                         const angle::Format **angleFormat) const
+                                         const angle::Format **angleFormat,
+                                         UINT *subresourceIndex) const
 {
     angle::ComPtr<ID3D11Texture2D> d3dTexture =
         d3d11::DynamicCastComObjectToComPtr<ID3D11Texture2D>(texture);
@@ -1557,6 +1558,14 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
         }
     }
 
+    UINT textureSubresourceIndex =
+        static_cast<UINT>(attribs.getAsInt(EGL_D3D11_SUBRESOURCE_INDEX_ANGLE, 0));
+    if (textureSubresourceIndex >= desc.ArraySize)
+    {
+        return egl::EglBadParameter()
+               << "Invalid client buffer subresource index: " << textureSubresourceIndex;
+    }
+
     if (width)
     {
         *width = imageWidth;
@@ -1580,6 +1589,11 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
     if (angleFormat)
     {
         *angleFormat = textureAngleFormat;
+    }
+
+    if (subresourceIndex)
+    {
+        *subresourceIndex = textureSubresourceIndex;
     }
 
     return egl::NoError();
