@@ -933,7 +933,8 @@ set_defaults("angle_libGLESv2") {
 
 template("angle_libGLESv2") {
   angle_shared_library(target_name) {
-    sources = libglesv2_sources + invoker.sources
+    public_headers = libglesv2_public_headers
+    sources = libglesv2_sources + public_headers + invoker.sources
 
     if (is_win) {
       sources += [ "src/libGLESv2/${invoker.output_name}_autogen.def" ]
@@ -1002,7 +1003,7 @@ if (is_win && !angle_is_winuwp) {
 }
 
 angle_static_library("libGLESv2_static") {
-  sources = libglesv2_sources
+  sources = libglesv2_sources + libglesv2_public_headers
   configs += [ ":debug_annotations_config" ]
   public_configs += [ ":angle_static" ]
   deps = [ ":includes" ]
@@ -1010,7 +1011,7 @@ angle_static_library("libGLESv2_static") {
 }
 
 angle_static_library("libGLESv2_with_capture_static") {
-  sources = libglesv2_sources
+  sources = libglesv2_sources + libglesv2_public_headers
   configs += [ ":debug_annotations_config" ]
   public_configs += [ ":angle_static" ]
   deps = [ ":includes" ]
@@ -1168,10 +1169,9 @@ if (angle_standalone || build_with_chromium) {
       ]
     }
 
-    sources = [
-      "src/feature_support_util/feature_support_util.cpp",
-      "src/feature_support_util/feature_support_util.h",
-    ]
+    public_headers = [ "src/feature_support_util/feature_support_util.h" ]
+    sources =
+        [ "src/feature_support_util/feature_support_util.cpp" ] + public_headers
 
     deps = [
       ":angle_gpu_info_util",

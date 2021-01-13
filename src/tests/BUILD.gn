@@ -1180,12 +1180,12 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       suppressed_configs += deqp_undefine_configs
       public_configs += [ ":$config_name" ]
 
+      public_headers = [ "deqp_support/angle_deqp_libtester.h" ]
       sources += [
-        "deqp_support/angle_deqp_libtester.h",
-        "deqp_support/angle_deqp_libtester_main.cpp",
-        "deqp_support/tcuANGLEPlatform.cpp",
-        "deqp_support/tcuANGLEPlatform.h",
-      ]
+                   "deqp_support/angle_deqp_libtester_main.cpp",
+                   "deqp_support/tcuANGLEPlatform.cpp",
+                   "deqp_support/tcuANGLEPlatform.h",
+                 ] + public_headers
     }
 
     if (!build_with_chromium) {

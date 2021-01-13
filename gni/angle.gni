@@ -302,6 +302,11 @@ template("angle_shared_library") {
         ":${internal_target_name}+bundle",
         ":${internal_target_name}+link",
       ]
+      _has_public_headers =
+          defined(invoker.public_headers) && invoker.public_headers != []
+      if (_has_public_headers) {
+        public_deps += [ ":${internal_target_name}_framework_headers" ]
+      }
     }
   }
 }

@@ -5,26 +5,29 @@
 import("../gni/angle.gni")
 
 _util_sources = [
-  "EGLPlatformParameters.h",
   "EGLWindow.cpp",
-  "EGLWindow.h",
   "Event.h",
   "Matrix.cpp",
-  "Matrix.h",
-  "OSPixmap.h",
   "OSWindow.cpp",
-  "OSWindow.h",
   "com_utils.h",
-  "frame_capture_test_utils.h",
   "geometry_utils.cpp",
   "geometry_utils.h",
   "keyboard.h",
   "mouse.h",
   "random_utils.cpp",
-  "random_utils.h",
   "shader_utils.cpp",
-  "shader_utils.h",
   "util_export.h",
+]
+
+_util_public_headers = [
+  "EGLPlatformParameters.h",
+  "EGLWindow.h",
+  "Matrix.h",
+  "OSPixmap.h",
+  "OSWindow.h",
+  "frame_capture_test_utils.h",
+  "random_utils.h",
+  "shader_utils.h",
   "util_gl.h",
 ]
 
@@ -179,7 +182,9 @@ foreach(is_shared_library,
 
   target(library_type, library_name) {
     testonly = true
-    sources = _util_sources
+    public_headers = _util_public_headers
+    sources = _util_sources + public_headers
+
     public_deps = [
       ":angle_test_utils",
       ":angle_util_loader_headers",
