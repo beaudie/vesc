@@ -461,6 +461,14 @@ bool TIntermDeclaration::replaceChildNode(TIntermNode *original, TIntermNode *re
     return replaceChildNodeInternal(original, replacement);
 }
 
+TIntermDeclaration::TIntermDeclaration(const TIntermDeclaration &node)
+{
+    for (TIntermNode *node : node.mDeclarators)
+    {
+        mDeclarators.push_back(node->deepCopy());
+    }
+}
+
 bool TIntermAggregateBase::replaceChildNodeInternal(TIntermNode *original, TIntermNode *replacement)
 {
     for (size_t ii = 0; ii < getSequence()->size(); ++ii)

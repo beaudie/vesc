@@ -793,14 +793,24 @@ class TIntermDeclaration : public TIntermNode, public TIntermAggregateBase
     TIntermSequence *getSequence() override { return &mDeclarators; }
     const TIntermSequence *getSequence() const override { return &mDeclarators; }
 
-    TIntermNode *deepCopy() const override
+    TIntermDeclaration *deepCopy() const override
     {
-        UNREACHABLE();
-        return nullptr;
+        // Note: This is only useful as support for deepCopy of TIntermBlock and TIntermLoop, but is
+        // not sufficient as it will be redeclaring the same TVariable.  If a function body is
+        // duplicated for example, it means that both functions reference the same TVariable pointer
+        // which works, but is technically not correct.  In particular, maps with TVariable * as key
+        // can get confused.
+        //
+        // After deepCopy() is issued, ReplaceVariables must be used to replace every declared
+        // variable with a duplicate.  This is NOT automatically done when deepCopy-ing TIntermBlock
+        // and TIntermLoop nodes.
+        return new TIntermDeclaration(*this);
     }
 
   protected:
     TIntermSequence mDeclarators;
+
+    TIntermDeclaration(const TIntermDeclaration &node);
 };
 
 // Specialized declarations for attributing invariance.
