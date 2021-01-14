@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb36dcee_a1115332",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2021-01-14T22:59:18Z",
+      "side": 1,
+      "message": "take lock before check",
+      "revId": "641cca9c68c9f583e816e820d474fe95567cc7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
