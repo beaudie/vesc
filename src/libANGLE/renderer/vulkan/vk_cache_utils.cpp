@@ -941,6 +941,19 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], format, desc.samples(),
                              ops[attachmentCount]);
 
+        angle::FormatID attachmentFormat = format.actualImageFormatID;
+        angle::FormatID linearFormat     = rx::ConvertToLinear(attachmentFormat);
+        if (linearFormat != angle::FormatID::NONE)
+        {
+            if (desc.getSRGBWriteControlMode() == gl::SrgbWriteControlMode::Linear)
+            {
+                attachmentFormat = linearFormat;
+            }
+        }
+        attachmentDescs[attachmentCount.get()].format =
+            contextVk->getRenderer()->getFormat(attachmentFormat).actualImageVkFormat();
+        ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
+
         isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
 
         ++attachmentCount;
@@ -2927,12 +2940,17 @@ void FramebufferDesc::reset()
     mLayerCount = 0;
     mUnresolveAttachmentMask.reset();
     memset(&mSerials, 0, sizeof(mSerials));
+    mSrgbWriteControlMode = 0;
+
+    mPadding0 = 0;
+    memset(&mPadding1, 0, sizeof(mPadding1));
 }
 
 bool FramebufferDesc::operator==(const FramebufferDesc &other) const
 {
     if (mMaxIndex != other.mMaxIndex || mLayerCount != other.mLayerCount ||
-        mUnresolveAttachmentMask != other.mUnresolveAttachmentMask)
+        mUnresolveAttachmentMask != other.mUnresolveAttachmentMask ||
+        mSrgbWriteControlMode != other.mSrgbWriteControlMode)
     {
         return false;
     }
