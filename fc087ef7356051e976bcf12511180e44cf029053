@@ -16,6 +16,24 @@
       "message": "OK, I\u0027m guessing we want COHERENT + CACHED if cached is there not just CACHED?",
       "revId": "fc087ef7356051e976bcf12511180e44cf029053",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "882e6619_74757f37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-01-14T17:39:34Z",
+      "side": 1,
+      "message": "If you think that would be portable to ARM + desktop use case then yeah. My memory of the flags on each platform is a little fuzzy ATM.",
+      "parentUuid": "f259a818_8d114e6a",
+      "revId": "fc087ef7356051e976bcf12511180e44cf029053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
