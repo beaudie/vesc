@@ -60,10 +60,9 @@ TEMPLATE_ENTRY_POINT_HEADER = """\
 
 {includes}
 
-{ns}
-{{
+extern "C" {{
 {entry_points}
-}}  // {ns}
+}} // extern "C"
 
 #endif  // {lib}_ENTRY_POINTS_{annotation_upper}_AUTOGEN_H_
 """
@@ -81,9 +80,9 @@ TEMPLATE_ENTRY_POINT_SOURCE = """\
 
 {includes}
 
-{ns}
-{{
-{entry_points}}}  // {ns}
+extern "C" {{
+{entry_points}
+}} // extern "C"
 """
 
 TEMPLATE_ENTRY_POINTS_ENUM_HEADER = """\
@@ -165,7 +164,7 @@ extern "C" {{
 TEMPLATE_ENTRY_POINT_DECL = """ANGLE_EXPORT {return_type}{api}APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params});"""
 
 TEMPLATE_GLES_ENTRY_POINT_NO_RETURN = """\
-void GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
+void GL_APIENTRY GL_{name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
 {{
     Context *context = {context_getter};
     {event_comment}EVENT(context, GL{name}, "context = %d{comma_if_needed}{format_params}", CID(context){comma_if_needed}{pass_params});
@@ -188,7 +187,7 @@ void GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explic
 """
 
 TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
-{return_type}GL_APIENTRY {name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
+{return_type}GL_APIENTRY GL_{name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
 {{
     Context *context = {context_getter};
     {event_comment}EVENT(context, GL{name}, "context = %d{comma_if_needed}{format_params}", CID(context){comma_if_needed}{pass_params});
@@ -313,7 +312,7 @@ CONTEXT_DECL_FORMAT = """    {return_type} {name_lower_no_suffix}({internal_para
 TEMPLATE_GL_ENTRY_POINT_EXPORT = """\
 {return_type}GL_APIENTRY gl{name}{explicit_context_suffix}({explicit_context_param}{explicit_context_comma}{params})
 {{
-    return gl::{name}{explicit_context_suffix}({explicit_context_internal_param}{explicit_context_comma}{internal_params});
+    return GL_{name}{explicit_context_suffix}({explicit_context_internal_param}{explicit_context_comma}{internal_params});
 }}
 """
 
@@ -620,6 +619,8 @@ TEMPLATE_SOURCES_INCLUDES = """\
 #include "libANGLE/validation{validation_header_version}.h"
 #include "libANGLE/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
+
+using namespace gl;
 """
 
 GLES_EXT_HEADER_INCLUDES = TEMPLATE_HEADER_INCLUDES.format(
@@ -1048,7 +1049,7 @@ def format_entry_point_decl(api, cmd_name, proto, params, is_explicit_context):
     stripped = strip_api_prefix(cmd_name)
     return TEMPLATE_ENTRY_POINT_DECL.format(
         api="EGL" if api == EGL else "GL_",
-        name="EGL_%s" % stripped if api == EGL else stripped,
+        name="EGL_%s" % stripped if api == EGL else "GL_%s" % stripped,
         return_type=proto[:-len(cmd_name)],
         params=", ".join(params),
         comma_if_needed=comma_if_needed,
@@ -2357,6 +2358,10 @@ def main():
         libgles_ep_defs += libgles_defs
         libgles_ep_exports += get_exports(gles_commands)
 
+        # For ES1 entry points, also export the internal GL_* symbols because they are linked directly from
+        # libGLESv1_CM. This can be removed once libGLESv1_CM has a proper loader like libEGL.
+        libgles_ep_exports += get_exports(gles_commands, lambda x: "GL_%s" % strip_api_prefix(x))
+
         major_if_not_one = major_version if major_version != 1 else ""
         minor_if_not_zero = minor_version if minor_version != 0 else ""
 
@@ -2372,9 +2377,9 @@ def main():
             header_version=annotation.lower(), validation_header_version="ES" + version_annotation)
 
         write_file(annotation, "GLES " + comment, TEMPLATE_ENTRY_POINT_HEADER, "\n".join(decls),
-                   "h", header_includes, "libGLESv2", "gl.xml", "namespace gl")
+                   "h", header_includes, "libGLESv2", "gl.xml", "extern \"C\"")
         write_file(annotation, "GLES " + comment, TEMPLATE_ENTRY_POINT_SOURCE, "\n".join(defs),
-                   "cpp", source_includes, "libGLESv2", "gl.xml", "namespace gl")
+                   "cpp", source_includes, "libGLESv2", "gl.xml", "extern \"C\"")
 
         glesdecls['core'][(major_version,
                            minor_version)] = get_decls(GLES, CONTEXT_DECL_FORMAT, all_commands,
@@ -2437,6 +2442,10 @@ def main():
 
         libgles_ep_defs += libgles_defs
         libgles_ep_exports += get_exports(ext_cmd_names)
+
+        # For ES1 entry points, also export the internal GL_* symbols because they are linked directly from
+        # libGLESv1_CM. This can be removed once libGLESv1_CM has a proper loader like libEGL.
+        libgles_ep_exports += get_exports(ext_cmd_names, lambda x: "GL_%s" % strip_api_prefix(x))
 
         if (extension_name in registry_xml.gles1_extensions and
                 extension_name not in GLES1_NO_CONTEXT_DECL_EXTENSIONS):
@@ -2578,9 +2587,9 @@ def main():
 
         # Entry point files
         write_file(annotation, name, TEMPLATE_ENTRY_POINT_HEADER, "\n".join(ver_decls), "h",
-                   DESKTOP_GL_HEADER_INCLUDES, "libGL", "gl.xml", "namespace gl")
+                   DESKTOP_GL_HEADER_INCLUDES, "libGL", "gl.xml", "extern \"C\"")
         write_file(annotation, name, TEMPLATE_ENTRY_POINT_SOURCE, "\n".join(ver_defs), "cpp",
-                   source_includes, "libGL", "gl.xml", "namespace gl")
+                   source_includes, "libGL", "gl.xml", "extern \"C\"")
 
         # Validation files
         write_gl_validation_header("GL%s" % major_version, name, validation_protos, "gl.xml")
@@ -2709,10 +2718,10 @@ def main():
 
     write_file("gles_ext", "GLES extension", TEMPLATE_ENTRY_POINT_HEADER,
                "\n".join([item for item in extension_decls]), "h", GLES_EXT_HEADER_INCLUDES,
-               "libGLESv2", "gl.xml and gl_angle_ext.xml", "namespace gl")
+               "libGLESv2", "gl.xml and gl_angle_ext.xml", "extern \"C\"")
     write_file("gles_ext", "GLES extension", TEMPLATE_ENTRY_POINT_SOURCE,
                "\n".join([item for item in extension_defs]), "cpp", GLES_EXT_SOURCE_INCLUDES,
-               "libGLESv2", "gl.xml and gl_angle_ext.xml", "namespace gl")
+               "libGLESv2", "gl.xml and gl_angle_ext.xml", "extern \"C\"")
 
     write_gl_validation_header("ESEXT", "ES extension", ext_validation_protos,
                                "gl.xml and gl_angle_ext.xml")

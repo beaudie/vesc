@@ -150,6 +150,148 @@ global:
     glVertexAttrib4fv;
     glVertexAttribPointer;
     glViewport;
+    GL_ActiveTexture;
+    GL_AttachShader;
+    GL_BindAttribLocation;
+    GL_BindBuffer;
+    GL_BindFramebuffer;
+    GL_BindRenderbuffer;
+    GL_BindTexture;
+    GL_BlendColor;
+    GL_BlendEquation;
+    GL_BlendEquationSeparate;
+    GL_BlendFunc;
+    GL_BlendFuncSeparate;
+    GL_BufferData;
+    GL_BufferSubData;
+    GL_CheckFramebufferStatus;
+    GL_Clear;
+    GL_ClearColor;
+    GL_ClearDepthf;
+    GL_ClearStencil;
+    GL_ColorMask;
+    GL_CompileShader;
+    GL_CompressedTexImage2D;
+    GL_CompressedTexSubImage2D;
+    GL_CopyTexImage2D;
+    GL_CopyTexSubImage2D;
+    GL_CreateProgram;
+    GL_CreateShader;
+    GL_CullFace;
+    GL_DeleteBuffers;
+    GL_DeleteFramebuffers;
+    GL_DeleteProgram;
+    GL_DeleteRenderbuffers;
+    GL_DeleteShader;
+    GL_DeleteTextures;
+    GL_DepthFunc;
+    GL_DepthMask;
+    GL_DepthRangef;
+    GL_DetachShader;
+    GL_Disable;
+    GL_DisableVertexAttribArray;
+    GL_DrawArrays;
+    GL_DrawElements;
+    GL_Enable;
+    GL_EnableVertexAttribArray;
+    GL_Finish;
+    GL_Flush;
+    GL_FramebufferRenderbuffer;
+    GL_FramebufferTexture2D;
+    GL_FrontFace;
+    GL_GenBuffers;
+    GL_GenFramebuffers;
+    GL_GenRenderbuffers;
+    GL_GenTextures;
+    GL_GenerateMipmap;
+    GL_GetActiveAttrib;
+    GL_GetActiveUniform;
+    GL_GetAttachedShaders;
+    GL_GetAttribLocation;
+    GL_GetBooleanv;
+    GL_GetBufferParameteriv;
+    GL_GetError;
+    GL_GetFloatv;
+    GL_GetFramebufferAttachmentParameteriv;
+    GL_GetIntegerv;
+    GL_GetProgramInfoLog;
+    GL_GetProgramiv;
+    GL_GetRenderbufferParameteriv;
+    GL_GetShaderInfoLog;
+    GL_GetShaderPrecisionFormat;
+    GL_GetShaderSource;
+    GL_GetShaderiv;
+    GL_GetString;
+    GL_GetTexParameterfv;
+    GL_GetTexParameteriv;
+    GL_GetUniformLocation;
+    GL_GetUniformfv;
+    GL_GetUniformiv;
+    GL_GetVertexAttribPointerv;
+    GL_GetVertexAttribfv;
+    GL_GetVertexAttribiv;
+    GL_Hint;
+    GL_IsBuffer;
+    GL_IsEnabled;
+    GL_IsFramebuffer;
+    GL_IsProgram;
+    GL_IsRenderbuffer;
+    GL_IsShader;
+    GL_IsTexture;
+    GL_LineWidth;
+    GL_LinkProgram;
+    GL_PixelStorei;
+    GL_PolygonOffset;
+    GL_ReadPixels;
+    GL_ReleaseShaderCompiler;
+    GL_RenderbufferStorage;
+    GL_SampleCoverage;
+    GL_Scissor;
+    GL_ShaderBinary;
+    GL_ShaderSource;
+    GL_StencilFunc;
+    GL_StencilFuncSeparate;
+    GL_StencilMask;
+    GL_StencilMaskSeparate;
+    GL_StencilOp;
+    GL_StencilOpSeparate;
+    GL_TexImage2D;
+    GL_TexParameterf;
+    GL_TexParameterfv;
+    GL_TexParameteri;
+    GL_TexParameteriv;
+    GL_TexSubImage2D;
+    GL_Uniform1f;
+    GL_Uniform1fv;
+    GL_Uniform1i;
+    GL_Uniform1iv;
+    GL_Uniform2f;
+    GL_Uniform2fv;
+    GL_Uniform2i;
+    GL_Uniform2iv;
+    GL_Uniform3f;
+    GL_Uniform3fv;
+    GL_Uniform3i;
+    GL_Uniform3iv;
+    GL_Uniform4f;
+    GL_Uniform4fv;
+    GL_Uniform4i;
+    GL_Uniform4iv;
+    GL_UniformMatrix2fv;
+    GL_UniformMatrix3fv;
+    GL_UniformMatrix4fv;
+    GL_UseProgram;
+    GL_ValidateProgram;
+    GL_VertexAttrib1f;
+    GL_VertexAttrib1fv;
+    GL_VertexAttrib2f;
+    GL_VertexAttrib2fv;
+    GL_VertexAttrib3f;
+    GL_VertexAttrib3fv;
+    GL_VertexAttrib4f;
+    GL_VertexAttrib4fv;
+    GL_VertexAttribPointer;
+    GL_Viewport;
 
     # OpenGL ES 3.0
     glBeginQuery;
@@ -256,6 +398,110 @@ global:
     glVertexAttribI4uiv;
     glVertexAttribIPointer;
     glWaitSync;
+    GL_BeginQuery;
+    GL_BeginTransformFeedback;
+    GL_BindBufferBase;
+    GL_BindBufferRange;
+    GL_BindSampler;
+    GL_BindTransformFeedback;
+    GL_BindVertexArray;
+    GL_BlitFramebuffer;
+    GL_ClearBufferfi;
+    GL_ClearBufferfv;
+    GL_ClearBufferiv;
+    GL_ClearBufferuiv;
+    GL_ClientWaitSync;
+    GL_CompressedTexImage3D;
+    GL_CompressedTexSubImage3D;
+    GL_CopyBufferSubData;
+    GL_CopyTexSubImage3D;
+    GL_DeleteQueries;
+    GL_DeleteSamplers;
+    GL_DeleteSync;
+    GL_DeleteTransformFeedbacks;
+    GL_DeleteVertexArrays;
+    GL_DrawArraysInstanced;
+    GL_DrawBuffers;
+    GL_DrawElementsInstanced;
+    GL_DrawRangeElements;
+    GL_EndQuery;
+    GL_EndTransformFeedback;
+    GL_FenceSync;
+    GL_FlushMappedBufferRange;
+    GL_FramebufferTextureLayer;
+    GL_GenQueries;
+    GL_GenSamplers;
+    GL_GenTransformFeedbacks;
+    GL_GenVertexArrays;
+    GL_GetActiveUniformBlockName;
+    GL_GetActiveUniformBlockiv;
+    GL_GetActiveUniformsiv;
+    GL_GetBufferParameteri64v;
+    GL_GetBufferPointerv;
+    GL_GetFragDataLocation;
+    GL_GetInteger64i_v;
+    GL_GetInteger64v;
+    GL_GetIntegeri_v;
+    GL_GetInternalformativ;
+    GL_GetProgramBinary;
+    GL_GetQueryObjectuiv;
+    GL_GetQueryiv;
+    GL_GetSamplerParameterfv;
+    GL_GetSamplerParameteriv;
+    GL_GetStringi;
+    GL_GetSynciv;
+    GL_GetTransformFeedbackVarying;
+    GL_GetUniformBlockIndex;
+    GL_GetUniformIndices;
+    GL_GetUniformuiv;
+    GL_GetVertexAttribIiv;
+    GL_GetVertexAttribIuiv;
+    GL_InvalidateFramebuffer;
+    GL_InvalidateSubFramebuffer;
+    GL_IsQuery;
+    GL_IsSampler;
+    GL_IsSync;
+    GL_IsTransformFeedback;
+    GL_IsVertexArray;
+    GL_MapBufferRange;
+    GL_PauseTransformFeedback;
+    GL_ProgramBinary;
+    GL_ProgramParameteri;
+    GL_ReadBuffer;
+    GL_RenderbufferStorageMultisample;
+    GL_ResumeTransformFeedback;
+    GL_SamplerParameterf;
+    GL_SamplerParameterfv;
+    GL_SamplerParameteri;
+    GL_SamplerParameteriv;
+    GL_TexImage3D;
+    GL_TexStorage2D;
+    GL_TexStorage3D;
+    GL_TexSubImage3D;
+    GL_TransformFeedbackVaryings;
+    GL_Uniform1ui;
+    GL_Uniform1uiv;
+    GL_Uniform2ui;
+    GL_Uniform2uiv;
+    GL_Uniform3ui;
+    GL_Uniform3uiv;
+    GL_Uniform4ui;
+    GL_Uniform4uiv;
+    GL_UniformBlockBinding;
+    GL_UniformMatrix2x3fv;
+    GL_UniformMatrix2x4fv;
+    GL_UniformMatrix3x2fv;
+    GL_UniformMatrix3x4fv;
+    GL_UniformMatrix4x2fv;
+    GL_UniformMatrix4x3fv;
+    GL_UnmapBuffer;
+    GL_VertexAttribDivisor;
+    GL_VertexAttribI4i;
+    GL_VertexAttribI4iv;
+    GL_VertexAttribI4ui;
+    GL_VertexAttribI4uiv;
+    GL_VertexAttribIPointer;
+    GL_WaitSync;
 
     # OpenGL ES 3.1
     glActiveShaderProgram;
@@ -326,6 +572,74 @@ global:
     glVertexAttribFormat;
     glVertexAttribIFormat;
     glVertexBindingDivisor;
+    GL_ActiveShaderProgram;
+    GL_BindImageTexture;
+    GL_BindProgramPipeline;
+    GL_BindVertexBuffer;
+    GL_CreateShaderProgramv;
+    GL_DeleteProgramPipelines;
+    GL_DispatchCompute;
+    GL_DispatchComputeIndirect;
+    GL_DrawArraysIndirect;
+    GL_DrawElementsIndirect;
+    GL_FramebufferParameteri;
+    GL_GenProgramPipelines;
+    GL_GetBooleani_v;
+    GL_GetFramebufferParameteriv;
+    GL_GetMultisamplefv;
+    GL_GetProgramInterfaceiv;
+    GL_GetProgramPipelineInfoLog;
+    GL_GetProgramPipelineiv;
+    GL_GetProgramResourceIndex;
+    GL_GetProgramResourceLocation;
+    GL_GetProgramResourceName;
+    GL_GetProgramResourceiv;
+    GL_GetTexLevelParameterfv;
+    GL_GetTexLevelParameteriv;
+    GL_IsProgramPipeline;
+    GL_MemoryBarrier;
+    GL_MemoryBarrierByRegion;
+    GL_ProgramUniform1f;
+    GL_ProgramUniform1fv;
+    GL_ProgramUniform1i;
+    GL_ProgramUniform1iv;
+    GL_ProgramUniform1ui;
+    GL_ProgramUniform1uiv;
+    GL_ProgramUniform2f;
+    GL_ProgramUniform2fv;
+    GL_ProgramUniform2i;
+    GL_ProgramUniform2iv;
+    GL_ProgramUniform2ui;
+    GL_ProgramUniform2uiv;
+    GL_ProgramUniform3f;
+    GL_ProgramUniform3fv;
+    GL_ProgramUniform3i;
+    GL_ProgramUniform3iv;
+    GL_ProgramUniform3ui;
+    GL_ProgramUniform3uiv;
+    GL_ProgramUniform4f;
+    GL_ProgramUniform4fv;
+    GL_ProgramUniform4i;
+    GL_ProgramUniform4iv;
+    GL_ProgramUniform4ui;
+    GL_ProgramUniform4uiv;
+    GL_ProgramUniformMatrix2fv;
+    GL_ProgramUniformMatrix2x3fv;
+    GL_ProgramUniformMatrix2x4fv;
+    GL_ProgramUniformMatrix3fv;
+    GL_ProgramUniformMatrix3x2fv;
+    GL_ProgramUniformMatrix3x4fv;
+    GL_ProgramUniformMatrix4fv;
+    GL_ProgramUniformMatrix4x2fv;
+    GL_ProgramUniformMatrix4x3fv;
+    GL_SampleMaski;
+    GL_TexStorage2DMultisample;
+    GL_UseProgramStages;
+    GL_ValidateProgramPipeline;
+    GL_VertexAttribBinding;
+    GL_VertexAttribFormat;
+    GL_VertexAttribIFormat;
+    GL_VertexBindingDivisor;
 
     # OpenGL ES 3.2
     glBlendBarrier;
@@ -372,6 +686,50 @@ global:
     glTexParameterIiv;
     glTexParameterIuiv;
     glTexStorage3DMultisample;
+    GL_BlendBarrier;
+    GL_BlendEquationSeparatei;
+    GL_BlendEquationi;
+    GL_BlendFuncSeparatei;
+    GL_BlendFunci;
+    GL_ColorMaski;
+    GL_CopyImageSubData;
+    GL_DebugMessageCallback;
+    GL_DebugMessageControl;
+    GL_DebugMessageInsert;
+    GL_Disablei;
+    GL_DrawElementsBaseVertex;
+    GL_DrawElementsInstancedBaseVertex;
+    GL_DrawRangeElementsBaseVertex;
+    GL_Enablei;
+    GL_FramebufferTexture;
+    GL_GetDebugMessageLog;
+    GL_GetGraphicsResetStatus;
+    GL_GetObjectLabel;
+    GL_GetObjectPtrLabel;
+    GL_GetPointerv;
+    GL_GetSamplerParameterIiv;
+    GL_GetSamplerParameterIuiv;
+    GL_GetTexParameterIiv;
+    GL_GetTexParameterIuiv;
+    GL_GetnUniformfv;
+    GL_GetnUniformiv;
+    GL_GetnUniformuiv;
+    GL_IsEnabledi;
+    GL_MinSampleShading;
+    GL_ObjectLabel;
+    GL_ObjectPtrLabel;
+    GL_PatchParameteri;
+    GL_PopDebugGroup;
+    GL_PrimitiveBoundingBox;
+    GL_PushDebugGroup;
+    GL_ReadnPixels;
+    GL_SamplerParameterIiv;
+    GL_SamplerParameterIuiv;
+    GL_TexBuffer;
+    GL_TexBufferRange;
+    GL_TexParameterIiv;
+    GL_TexParameterIuiv;
+    GL_TexStorage3DMultisample;
 
     # OpenGL ES 1.0
     glAlphaFunc;
@@ -459,59 +817,171 @@ global:
     glTranslatef;
     glTranslatex;
     glVertexPointer;
+    GL_AlphaFunc;
+    GL_AlphaFuncx;
+    GL_ClearColorx;
+    GL_ClearDepthx;
+    GL_ClientActiveTexture;
+    GL_ClipPlanef;
+    GL_ClipPlanex;
+    GL_Color4f;
+    GL_Color4ub;
+    GL_Color4x;
+    GL_ColorPointer;
+    GL_DepthRangex;
+    GL_DisableClientState;
+    GL_EnableClientState;
+    GL_Fogf;
+    GL_Fogfv;
+    GL_Fogx;
+    GL_Fogxv;
+    GL_Frustumf;
+    GL_Frustumx;
+    GL_GetClipPlanef;
+    GL_GetClipPlanex;
+    GL_GetFixedv;
+    GL_GetLightfv;
+    GL_GetLightxv;
+    GL_GetMaterialfv;
+    GL_GetMaterialxv;
+    GL_GetTexEnvfv;
+    GL_GetTexEnviv;
+    GL_GetTexEnvxv;
+    GL_GetTexParameterxv;
+    GL_LightModelf;
+    GL_LightModelfv;
+    GL_LightModelx;
+    GL_LightModelxv;
+    GL_Lightf;
+    GL_Lightfv;
+    GL_Lightx;
+    GL_Lightxv;
+    GL_LineWidthx;
+    GL_LoadIdentity;
+    GL_LoadMatrixf;
+    GL_LoadMatrixx;
+    GL_LogicOp;
+    GL_Materialf;
+    GL_Materialfv;
+    GL_Materialx;
+    GL_Materialxv;
+    GL_MatrixMode;
+    GL_MultMatrixf;
+    GL_MultMatrixx;
+    GL_MultiTexCoord4f;
+    GL_MultiTexCoord4x;
+    GL_Normal3f;
+    GL_Normal3x;
+    GL_NormalPointer;
+    GL_Orthof;
+    GL_Orthox;
+    GL_PointParameterf;
+    GL_PointParameterfv;
+    GL_PointParameterx;
+    GL_PointParameterxv;
+    GL_PointSize;
+    GL_PointSizex;
+    GL_PolygonOffsetx;
+    GL_PopMatrix;
+    GL_PushMatrix;
+    GL_Rotatef;
+    GL_Rotatex;
+    GL_SampleCoveragex;
+    GL_Scalef;
+    GL_Scalex;
+    GL_ShadeModel;
+    GL_TexCoordPointer;
+    GL_TexEnvf;
+    GL_TexEnvfv;
+    GL_TexEnvi;
+    GL_TexEnviv;
+    GL_TexEnvx;
+    GL_TexEnvxv;
+    GL_TexParameterx;
+    GL_TexParameterxv;
+    GL_Translatef;
+    GL_Translatex;
+    GL_VertexPointer;
 
     # GL_ANGLE_base_vertex_base_instance
     glDrawArraysInstancedBaseInstanceANGLE;
     glDrawElementsInstancedBaseVertexBaseInstanceANGLE;
     glMultiDrawArraysInstancedBaseInstanceANGLE;
     glMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE;
+    GL_DrawArraysInstancedBaseInstanceANGLE;
+    GL_DrawElementsInstancedBaseVertexBaseInstanceANGLE;
+    GL_MultiDrawArraysInstancedBaseInstanceANGLE;
+    GL_MultiDrawElementsInstancedBaseVertexBaseInstanceANGLE;
 
     # GL_ANGLE_copy_texture_3d
     glCopySubTexture3DANGLE;
     glCopyTexture3DANGLE;
+    GL_CopySubTexture3DANGLE;
+    GL_CopyTexture3DANGLE;
 
     # GL_ANGLE_framebuffer_blit
     glBlitFramebufferANGLE;
+    GL_BlitFramebufferANGLE;
 
     # GL_ANGLE_framebuffer_multisample
     glRenderbufferStorageMultisampleANGLE;
+    GL_RenderbufferStorageMultisampleANGLE;
 
     # GL_ANGLE_get_image
     glGetRenderbufferImageANGLE;
     glGetTexImageANGLE;
+    GL_GetRenderbufferImageANGLE;
+    GL_GetTexImageANGLE;
 
     # GL_ANGLE_get_tex_level_parameter
     glGetTexLevelParameterfvANGLE;
     glGetTexLevelParameterivANGLE;
+    GL_GetTexLevelParameterfvANGLE;
+    GL_GetTexLevelParameterivANGLE;
 
     # GL_ANGLE_instanced_arrays
     glDrawArraysInstancedANGLE;
     glDrawElementsInstancedANGLE;
     glVertexAttribDivisorANGLE;
+    GL_DrawArraysInstancedANGLE;
+    GL_DrawElementsInstancedANGLE;
+    GL_VertexAttribDivisorANGLE;
 
     # GL_ANGLE_memory_object_flags
     glTexStorageMemFlags2DANGLE;
     glTexStorageMemFlags2DMultisampleANGLE;
     glTexStorageMemFlags3DANGLE;
     glTexStorageMemFlags3DMultisampleANGLE;
+    GL_TexStorageMemFlags2DANGLE;
+    GL_TexStorageMemFlags2DMultisampleANGLE;
+    GL_TexStorageMemFlags3DANGLE;
+    GL_TexStorageMemFlags3DMultisampleANGLE;
 
     # GL_ANGLE_memory_object_fuchsia
     glImportMemoryZirconHandleANGLE;
+    GL_ImportMemoryZirconHandleANGLE;
 
     # GL_ANGLE_multi_draw
     glMultiDrawArraysANGLE;
     glMultiDrawArraysInstancedANGLE;
     glMultiDrawElementsANGLE;
     glMultiDrawElementsInstancedANGLE;
+    GL_MultiDrawArraysANGLE;
+    GL_MultiDrawArraysInstancedANGLE;
+    GL_MultiDrawElementsANGLE;
+    GL_MultiDrawElementsInstancedANGLE;
 
     # GL_ANGLE_program_binary
 
     # GL_ANGLE_provoking_vertex
     glProvokingVertexANGLE;
+    GL_ProvokingVertexANGLE;
 
     # GL_ANGLE_request_extension
     glDisableExtensionANGLE;
     glRequestExtensionANGLE;
+    GL_DisableExtensionANGLE;
+    GL_RequestExtensionANGLE;
 
     # GL_ANGLE_robust_client_memory
     glCompressedTexImage2DRobustANGLE;
@@ -578,37 +1048,114 @@ global:
     glTexParameterivRobustANGLE;
     glTexSubImage2DRobustANGLE;
     glTexSubImage3DRobustANGLE;
+    GL_CompressedTexImage2DRobustANGLE;
+    GL_CompressedTexImage3DRobustANGLE;
+    GL_CompressedTexSubImage2DRobustANGLE;
+    GL_CompressedTexSubImage3DRobustANGLE;
+    GL_GetActiveUniformBlockivRobustANGLE;
+    GL_GetBooleani_vRobustANGLE;
+    GL_GetBooleanvRobustANGLE;
+    GL_GetBufferParameteri64vRobustANGLE;
+    GL_GetBufferParameterivRobustANGLE;
+    GL_GetBufferPointervRobustANGLE;
+    GL_GetFloatvRobustANGLE;
+    GL_GetFramebufferAttachmentParameterivRobustANGLE;
+    GL_GetFramebufferParameterivRobustANGLE;
+    GL_GetInteger64i_vRobustANGLE;
+    GL_GetInteger64vRobustANGLE;
+    GL_GetIntegeri_vRobustANGLE;
+    GL_GetIntegervRobustANGLE;
+    GL_GetInternalformativRobustANGLE;
+    GL_GetMultisamplefvRobustANGLE;
+    GL_GetPointervRobustANGLERobustANGLE;
+    GL_GetProgramInterfaceivRobustANGLE;
+    GL_GetProgramivRobustANGLE;
+    GL_GetQueryObjecti64vRobustANGLE;
+    GL_GetQueryObjectivRobustANGLE;
+    GL_GetQueryObjectui64vRobustANGLE;
+    GL_GetQueryObjectuivRobustANGLE;
+    GL_GetQueryivRobustANGLE;
+    GL_GetRenderbufferParameterivRobustANGLE;
+    GL_GetSamplerParameterIivRobustANGLE;
+    GL_GetSamplerParameterIuivRobustANGLE;
+    GL_GetSamplerParameterfvRobustANGLE;
+    GL_GetSamplerParameterivRobustANGLE;
+    GL_GetShaderivRobustANGLE;
+    GL_GetTexLevelParameterfvRobustANGLE;
+    GL_GetTexLevelParameterivRobustANGLE;
+    GL_GetTexParameterIivRobustANGLE;
+    GL_GetTexParameterIuivRobustANGLE;
+    GL_GetTexParameterfvRobustANGLE;
+    GL_GetTexParameterivRobustANGLE;
+    GL_GetUniformfvRobustANGLE;
+    GL_GetUniformivRobustANGLE;
+    GL_GetUniformuivRobustANGLE;
+    GL_GetVertexAttribIivRobustANGLE;
+    GL_GetVertexAttribIuivRobustANGLE;
+    GL_GetVertexAttribPointervRobustANGLE;
+    GL_GetVertexAttribfvRobustANGLE;
+    GL_GetVertexAttribivRobustANGLE;
+    GL_GetnUniformfvRobustANGLE;
+    GL_GetnUniformivRobustANGLE;
+    GL_GetnUniformuivRobustANGLE;
+    GL_ReadPixelsRobustANGLE;
+    GL_ReadnPixelsRobustANGLE;
+    GL_SamplerParameterIivRobustANGLE;
+    GL_SamplerParameterIuivRobustANGLE;
+    GL_SamplerParameterfvRobustANGLE;
+    GL_SamplerParameterivRobustANGLE;
+    GL_TexImage2DRobustANGLE;
+    GL_TexImage3DRobustANGLE;
+    GL_TexParameterIivRobustANGLE;
+    GL_TexParameterIuivRobustANGLE;
+    GL_TexParameterfvRobustANGLE;
+    GL_TexParameterivRobustANGLE;
+    GL_TexSubImage2DRobustANGLE;
+    GL_TexSubImage3DRobustANGLE;
 
     # GL_ANGLE_semaphore_fuchsia
     glImportSemaphoreZirconHandleANGLE;
+    GL_ImportSemaphoreZirconHandleANGLE;
 
     # GL_ANGLE_texture_external_update
     glInvalidateTextureANGLE;
     glTexImage2DExternalANGLE;
+    GL_InvalidateTextureANGLE;
+    GL_TexImage2DExternalANGLE;
 
     # GL_ANGLE_texture_multisample
     glGetMultisamplefvANGLE;
     glSampleMaskiANGLE;
     glTexStorage2DMultisampleANGLE;
+    GL_GetMultisamplefvANGLE;
+    GL_SampleMaskiANGLE;
+    GL_TexStorage2DMultisampleANGLE;
 
     # GL_ANGLE_translated_shader_source
     glGetTranslatedShaderSourceANGLE;
+    GL_GetTranslatedShaderSourceANGLE;
 
     # GL_CHROMIUM_bind_uniform_location
     glBindUniformLocationCHROMIUM;
+    GL_BindUniformLocationCHROMIUM;
 
     # GL_CHROMIUM_copy_compressed_texture
     glCompressedCopyTextureCHROMIUM;
+    GL_CompressedCopyTextureCHROMIUM;
 
     # GL_CHROMIUM_copy_texture
     glCopySubTextureCHROMIUM;
     glCopyTextureCHROMIUM;
+    GL_CopySubTextureCHROMIUM;
+    GL_CopyTextureCHROMIUM;
 
     # GL_CHROMIUM_framebuffer_mixed_samples
     glCoverageModulationCHROMIUM;
+    GL_CoverageModulationCHROMIUM;
 
     # GL_CHROMIUM_lose_context
     glLoseContextCHROMIUM;
+    GL_LoseContextCHROMIUM;
 
     # GL_EXT_EGL_image_array
 
@@ -619,27 +1166,40 @@ global:
     glBindFragDataLocationIndexedEXT;
     glGetFragDataIndexEXT;
     glGetProgramResourceLocationIndexEXT;
+    GL_BindFragDataLocationEXT;
+    GL_BindFragDataLocationIndexedEXT;
+    GL_GetFragDataIndexEXT;
+    GL_GetProgramResourceLocationIndexEXT;
 
     # GL_EXT_buffer_storage
     glBufferStorageEXT;
+    GL_BufferStorageEXT;
 
     # GL_EXT_clip_control
     glClipControlEXT;
+    GL_ClipControlEXT;
 
     # GL_EXT_copy_image
     glCopyImageSubDataEXT;
+    GL_CopyImageSubDataEXT;
 
     # GL_EXT_debug_label
     glGetObjectLabelEXT;
     glLabelObjectEXT;
+    GL_GetObjectLabelEXT;
+    GL_LabelObjectEXT;
 
     # GL_EXT_debug_marker
     glInsertEventMarkerEXT;
     glPopGroupMarkerEXT;
     glPushGroupMarkerEXT;
+    GL_InsertEventMarkerEXT;
+    GL_PopGroupMarkerEXT;
+    GL_PushGroupMarkerEXT;
 
     # GL_EXT_discard_framebuffer
     glDiscardFramebufferEXT;
+    GL_DiscardFramebufferEXT;
 
     # GL_EXT_disjoint_timer_query
     glBeginQueryEXT;
@@ -654,9 +1214,22 @@ global:
     glGetQueryivEXT;
     glIsQueryEXT;
     glQueryCounterEXT;
+    GL_BeginQueryEXT;
+    GL_DeleteQueriesEXT;
+    GL_EndQueryEXT;
+    GL_GenQueriesEXT;
+    GL_GetInteger64vEXT;
+    GL_GetQueryObjecti64vEXT;
+    GL_GetQueryObjectivEXT;
+    GL_GetQueryObjectui64vEXT;
+    GL_GetQueryObjectuivEXT;
+    GL_GetQueryivEXT;
+    GL_IsQueryEXT;
+    GL_QueryCounterEXT;
 
     # GL_EXT_draw_buffers
     glDrawBuffersEXT;
+    GL_DrawBuffersEXT;
 
     # GL_EXT_draw_buffers_indexed
     glBlendEquationSeparateiEXT;
@@ -667,28 +1240,48 @@ global:
     glDisableiEXT;
     glEnableiEXT;
     glIsEnablediEXT;
+    GL_BlendEquationSeparateiEXT;
+    GL_BlendEquationiEXT;
+    GL_BlendFuncSeparateiEXT;
+    GL_BlendFunciEXT;
+    GL_ColorMaskiEXT;
+    GL_DisableiEXT;
+    GL_EnableiEXT;
+    GL_IsEnablediEXT;
 
     # GL_EXT_draw_elements_base_vertex
     glDrawElementsBaseVertexEXT;
     glDrawElementsInstancedBaseVertexEXT;
     glDrawRangeElementsBaseVertexEXT;
     glMultiDrawElementsBaseVertexEXT;
+    GL_DrawElementsBaseVertexEXT;
+    GL_DrawElementsInstancedBaseVertexEXT;
+    GL_DrawRangeElementsBaseVertexEXT;
+    GL_MultiDrawElementsBaseVertexEXT;
 
     # GL_EXT_external_buffer
     glBufferStorageExternalEXT;
     glNamedBufferStorageExternalEXT;
+    GL_BufferStorageExternalEXT;
+    GL_NamedBufferStorageExternalEXT;
 
     # GL_EXT_geometry_shader
     glFramebufferTextureEXT;
+    GL_FramebufferTextureEXT;
 
     # GL_EXT_instanced_arrays
     glDrawArraysInstancedEXT;
     glDrawElementsInstancedEXT;
     glVertexAttribDivisorEXT;
+    GL_DrawArraysInstancedEXT;
+    GL_DrawElementsInstancedEXT;
+    GL_VertexAttribDivisorEXT;
 
     # GL_EXT_map_buffer_range
     glFlushMappedBufferRangeEXT;
     glMapBufferRangeEXT;
+    GL_FlushMappedBufferRangeEXT;
+    GL_MapBufferRangeEXT;
 
     # GL_EXT_memory_object
     glBufferStorageMemEXT;
@@ -703,13 +1296,28 @@ global:
     glTexStorageMem2DMultisampleEXT;
     glTexStorageMem3DEXT;
     glTexStorageMem3DMultisampleEXT;
+    GL_BufferStorageMemEXT;
+    GL_CreateMemoryObjectsEXT;
+    GL_DeleteMemoryObjectsEXT;
+    GL_GetMemoryObjectParameterivEXT;
+    GL_GetUnsignedBytei_vEXT;
+    GL_GetUnsignedBytevEXT;
+    GL_IsMemoryObjectEXT;
+    GL_MemoryObjectParameterivEXT;
+    GL_TexStorageMem2DEXT;
+    GL_TexStorageMem2DMultisampleEXT;
+    GL_TexStorageMem3DEXT;
+    GL_TexStorageMem3DMultisampleEXT;
 
     # GL_EXT_memory_object_fd
     glImportMemoryFdEXT;
+    GL_ImportMemoryFdEXT;
 
     # GL_EXT_multisampled_render_to_texture
     glFramebufferTexture2DMultisampleEXT;
     glRenderbufferStorageMultisampleEXT;
+    GL_FramebufferTexture2DMultisampleEXT;
+    GL_RenderbufferStorageMultisampleEXT;
 
     # GL_EXT_occlusion_query_boolean
 
@@ -720,6 +1328,10 @@ global:
     glGetnUniformfvEXT;
     glGetnUniformivEXT;
     glReadnPixelsEXT;
+    GL_GetGraphicsResetStatusEXT;
+    GL_GetnUniformfvEXT;
+    GL_GetnUniformivEXT;
+    GL_ReadnPixelsEXT;
 
     # GL_EXT_sRGB
 
@@ -731,9 +1343,17 @@ global:
     glSemaphoreParameterui64vEXT;
     glSignalSemaphoreEXT;
     glWaitSemaphoreEXT;
+    GL_DeleteSemaphoresEXT;
+    GL_GenSemaphoresEXT;
+    GL_GetSemaphoreParameterui64vEXT;
+    GL_IsSemaphoreEXT;
+    GL_SemaphoreParameterui64vEXT;
+    GL_SignalSemaphoreEXT;
+    GL_WaitSemaphoreEXT;
 
     # GL_EXT_semaphore_fd
     glImportSemaphoreFdEXT;
+    GL_ImportSemaphoreFdEXT;
 
     # GL_EXT_separate_shader_objects
     glActiveShaderProgramEXT;
@@ -780,18 +1400,66 @@ global:
     glProgramUniformMatrix4x3fvEXT;
     glUseProgramStagesEXT;
     glValidateProgramPipelineEXT;
+    GL_ActiveShaderProgramEXT;
+    GL_BindProgramPipelineEXT;
+    GL_CreateShaderProgramvEXT;
+    GL_DeleteProgramPipelinesEXT;
+    GL_GenProgramPipelinesEXT;
+    GL_GetProgramPipelineInfoLogEXT;
+    GL_GetProgramPipelineivEXT;
+    GL_IsProgramPipelineEXT;
+    GL_ProgramParameteriEXT;
+    GL_ProgramUniform1fEXT;
+    GL_ProgramUniform1fvEXT;
+    GL_ProgramUniform1iEXT;
+    GL_ProgramUniform1ivEXT;
+    GL_ProgramUniform1uiEXT;
+    GL_ProgramUniform1uivEXT;
+    GL_ProgramUniform2fEXT;
+    GL_ProgramUniform2fvEXT;
+    GL_ProgramUniform2iEXT;
+    GL_ProgramUniform2ivEXT;
+    GL_ProgramUniform2uiEXT;
+    GL_ProgramUniform2uivEXT;
+    GL_ProgramUniform3fEXT;
+    GL_ProgramUniform3fvEXT;
+    GL_ProgramUniform3iEXT;
+    GL_ProgramUniform3ivEXT;
+    GL_ProgramUniform3uiEXT;
+    GL_ProgramUniform3uivEXT;
+    GL_ProgramUniform4fEXT;
+    GL_ProgramUniform4fvEXT;
+    GL_ProgramUniform4iEXT;
+    GL_ProgramUniform4ivEXT;
+    GL_ProgramUniform4uiEXT;
+    GL_ProgramUniform4uivEXT;
+    GL_ProgramUniformMatrix2fvEXT;
+    GL_ProgramUniformMatrix2x3fvEXT;
+    GL_ProgramUniformMatrix2x4fvEXT;
+    GL_ProgramUniformMatrix3fvEXT;
+    GL_ProgramUniformMatrix3x2fvEXT;
+    GL_ProgramUniformMatrix3x4fvEXT;
+    GL_ProgramUniformMatrix4fvEXT;
+    GL_ProgramUniformMatrix4x2fvEXT;
+    GL_ProgramUniformMatrix4x3fvEXT;
+    GL_UseProgramStagesEXT;
+    GL_ValidateProgramPipelineEXT;
 
     # GL_EXT_shader_framebuffer_fetch_non_coherent
     glFramebufferFetchBarrierEXT;
+    GL_FramebufferFetchBarrierEXT;
 
     # GL_EXT_shader_io_blocks
 
     # GL_EXT_tessellation_shader
     glPatchParameteriEXT;
+    GL_PatchParameteriEXT;
 
     # GL_EXT_texture_buffer
     glTexBufferEXT;
     glTexBufferRangeEXT;
+    GL_TexBufferEXT;
+    GL_TexBufferRangeEXT;
 
     # GL_EXT_texture_compression_bptc
 
@@ -815,6 +1483,9 @@ global:
     glTexStorage1DEXT;
     glTexStorage2DEXT;
     glTexStorage3DEXT;
+    GL_TexStorage1DEXT;
+    GL_TexStorage2DEXT;
+    GL_TexStorage3DEXT;
 
     # GL_KHR_debug
     glDebugMessageCallbackKHR;
@@ -828,9 +1499,21 @@ global:
     glObjectPtrLabelKHR;
     glPopDebugGroupKHR;
     glPushDebugGroupKHR;
+    GL_DebugMessageCallbackKHR;
+    GL_DebugMessageControlKHR;
+    GL_DebugMessageInsertKHR;
+    GL_GetDebugMessageLogKHR;
+    GL_GetObjectLabelKHR;
+    GL_GetObjectPtrLabelKHR;
+    GL_GetPointervKHR;
+    GL_ObjectLabelKHR;
+    GL_ObjectPtrLabelKHR;
+    GL_PopDebugGroupKHR;
+    GL_PushDebugGroupKHR;
 
     # GL_KHR_parallel_shader_compile
     glMaxShaderCompilerThreadsKHR;
+    GL_MaxShaderCompilerThreadsKHR;
 
     # GL_NV_fence
     glDeleteFencesNV;
@@ -840,18 +1523,29 @@ global:
     glIsFenceNV;
     glSetFenceNV;
     glTestFenceNV;
+    GL_DeleteFencesNV;
+    GL_FinishFenceNV;
+    GL_GenFencesNV;
+    GL_GetFenceivNV;
+    GL_IsFenceNV;
+    GL_SetFenceNV;
+    GL_TestFenceNV;
 
     # GL_NV_framebuffer_blit
     glBlitFramebufferNV;
+    GL_BlitFramebufferNV;
 
     # GL_OES_EGL_image
     glEGLImageTargetRenderbufferStorageOES;
     glEGLImageTargetTexture2DOES;
+    GL_EGLImageTargetRenderbufferStorageOES;
+    GL_EGLImageTargetTexture2DOES;
 
     # GL_OES_compressed_ETC1_RGB8_texture
 
     # GL_OES_copy_image
     glCopyImageSubDataOES;
+    GL_CopyImageSubDataOES;
 
     # GL_OES_depth32
 
@@ -864,11 +1558,22 @@ global:
     glDisableiOES;
     glEnableiOES;
     glIsEnablediOES;
+    GL_BlendEquationSeparateiOES;
+    GL_BlendEquationiOES;
+    GL_BlendFuncSeparateiOES;
+    GL_BlendFunciOES;
+    GL_ColorMaskiOES;
+    GL_DisableiOES;
+    GL_EnableiOES;
+    GL_IsEnablediOES;
 
     # GL_OES_draw_elements_base_vertex
     glDrawElementsBaseVertexOES;
     glDrawElementsInstancedBaseVertexOES;
     glDrawRangeElementsBaseVertexOES;
+    GL_DrawElementsBaseVertexOES;
+    GL_DrawElementsInstancedBaseVertexOES;
+    GL_DrawRangeElementsBaseVertexOES;
 
     # GL_OES_draw_texture
     glDrawTexfOES;
@@ -879,6 +1584,14 @@ global:
     glDrawTexsvOES;
     glDrawTexxOES;
     glDrawTexxvOES;
+    GL_DrawTexfOES;
+    GL_DrawTexfvOES;
+    GL_DrawTexiOES;
+    GL_DrawTexivOES;
+    GL_DrawTexsOES;
+    GL_DrawTexsvOES;
+    GL_DrawTexxOES;
+    GL_DrawTexxvOES;
 
     # GL_OES_framebuffer_object
     glBindFramebufferOES;
@@ -896,30 +1609,57 @@ global:
     glIsFramebufferOES;
     glIsRenderbufferOES;
     glRenderbufferStorageOES;
+    GL_BindFramebufferOES;
+    GL_BindRenderbufferOES;
+    GL_CheckFramebufferStatusOES;
+    GL_DeleteFramebuffersOES;
+    GL_DeleteRenderbuffersOES;
+    GL_FramebufferRenderbufferOES;
+    GL_FramebufferTexture2DOES;
+    GL_GenFramebuffersOES;
+    GL_GenRenderbuffersOES;
+    GL_GenerateMipmapOES;
+    GL_GetFramebufferAttachmentParameterivOES;
+    GL_GetRenderbufferParameterivOES;
+    GL_IsFramebufferOES;
+    GL_IsRenderbufferOES;
+    GL_RenderbufferStorageOES;
 
     # GL_OES_get_program_binary
     glGetProgramBinaryOES;
     glProgramBinaryOES;
+    GL_GetProgramBinaryOES;
+    GL_ProgramBinaryOES;
 
     # GL_OES_mapbuffer
     glGetBufferPointervOES;
     glMapBufferOES;
     glUnmapBufferOES;
+    GL_GetBufferPointervOES;
+    GL_MapBufferOES;
+    GL_UnmapBufferOES;
 
     # GL_OES_matrix_palette
     glCurrentPaletteMatrixOES;
     glLoadPaletteFromModelViewMatrixOES;
     glMatrixIndexPointerOES;
     glWeightPointerOES;
+    GL_CurrentPaletteMatrixOES;
+    GL_LoadPaletteFromModelViewMatrixOES;
+    GL_MatrixIndexPointerOES;
+    GL_WeightPointerOES;
 
     # GL_OES_point_size_array
     glPointSizePointerOES;
+    GL_PointSizePointerOES;
 
     # GL_OES_query_matrix
     glQueryMatrixxOES;
+    GL_QueryMatrixxOES;
 
     # GL_OES_sample_shading
     glMinSampleShadingOES;
+    GL_MinSampleShadingOES;
 
     # GL_OES_shader_io_blocks
 
@@ -930,6 +1670,12 @@ global:
     glFramebufferTexture3DOES;
     glTexImage3DOES;
     glTexSubImage3DOES;
+    GL_CompressedTexImage3DOES;
+    GL_CompressedTexSubImage3DOES;
+    GL_CopyTexSubImage3DOES;
+    GL_FramebufferTexture3DOES;
+    GL_TexImage3DOES;
+    GL_TexSubImage3DOES;
 
     # GL_OES_texture_border_clamp
     glGetSamplerParameterIivOES;
@@ -940,10 +1686,20 @@ global:
     glSamplerParameterIuivOES;
     glTexParameterIivOES;
     glTexParameterIuivOES;
+    GL_GetSamplerParameterIivOES;
+    GL_GetSamplerParameterIuivOES;
+    GL_GetTexParameterIivOES;
+    GL_GetTexParameterIuivOES;
+    GL_SamplerParameterIivOES;
+    GL_SamplerParameterIuivOES;
+    GL_TexParameterIivOES;
+    GL_TexParameterIuivOES;
 
     # GL_OES_texture_buffer
     glTexBufferOES;
     glTexBufferRangeOES;
+    GL_TexBufferOES;
+    GL_TexBufferRangeOES;
 
     # GL_OES_texture_cube_map
     glGetTexGenfvOES;
@@ -955,6 +1711,15 @@ global:
     glTexGenivOES;
     glTexGenxOES;
     glTexGenxvOES;
+    GL_GetTexGenfvOES;
+    GL_GetTexGenivOES;
+    GL_GetTexGenxvOES;
+    GL_TexGenfOES;
+    GL_TexGenfvOES;
+    GL_TexGeniOES;
+    GL_TexGenivOES;
+    GL_TexGenxOES;
+    GL_TexGenxvOES;
 
     # GL_OES_texture_cube_map_array
 
@@ -964,15 +1729,21 @@ global:
 
     # GL_OES_texture_storage_multisample_2d_array
     glTexStorage3DMultisampleOES;
+    GL_TexStorage3DMultisampleOES;
 
     # GL_OES_vertex_array_object
     glBindVertexArrayOES;
     glDeleteVertexArraysOES;
     glGenVertexArraysOES;
     glIsVertexArrayOES;
+    GL_BindVertexArrayOES;
+    GL_DeleteVertexArraysOES;
+    GL_GenVertexArraysOES;
+    GL_IsVertexArrayOES;
 
     # GL_OVR_multiview
     glFramebufferTextureMultiviewOVR;
+    GL_FramebufferTextureMultiviewOVR;
 
     # GL_OVR_multiview2
 
