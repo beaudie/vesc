@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f259a818_8d114e6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-01-14T17:09:09Z",
+      "side": 1,
+      "message": "OK, I\u0027m guessing we want COHERENT + CACHED if cached is there not just CACHED?",
+      "revId": "fc087ef7356051e976bcf12511180e44cf029053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
