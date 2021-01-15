@@ -36,6 +36,9 @@
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
 
+#define USE_SYSTEM_ZLIB
+#include "compression_utils_portable.h"
+
 // Consts
 namespace
 {
@@ -2062,7 +2065,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 }
 
-void RendererVk::initPipelineCacheVkKey()
+void RendererVk::computePipelineCacheVkChunkKey(const int chunkIndex, egl::BlobCache::Key *hashOut)
 {
     std::ostringstream hashStream("ANGLE Pipeline Cache: ", std::ios_base::ate);
     // Add the pipeline cache UUID to make sure the blob cache always gives a compatible pipeline
@@ -2072,25 +2075,23 @@ void RendererVk::initPipelineCacheVkKey()
     {
         hashStream << std::hex << c;
     }
-    // Add the vendor and device id too for good measure.
+    // Add the vendor id, device id, chunk index for good measure.
     hashStream << std::hex << mPhysicalDeviceProperties.vendorID;
     hashStream << std::hex << mPhysicalDeviceProperties.deviceID;
+    hashStream << std::hex << chunkIndex;
 
     const std::string &hashString = hashStream.str();
     angle::base::SHA1HashBytes(reinterpret_cast<const unsigned char *>(hashString.c_str()),
-                               hashString.length(), mPipelineCacheVkBlobKey.data());
+                               hashString.length(), hashOut->data());
 }
 
 angle::Result RendererVk::initPipelineCache(DisplayVk *display,
                                             vk::PipelineCache *pipelineCache,
                                             bool *success)
 {
-    initPipelineCacheVkKey();
-
     egl::BlobCache::Value initialData;
     size_t dataSize = 0;
-    *success = display->getBlobCache()->get(display->getScratchBuffer(), mPipelineCacheVkBlobKey,
-                                            &initialData, &dataSize);
+    *success        = getAndDecompressPipelineCacheVk(display, &initialData, &dataSize);
 
     VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
 
@@ -2165,6 +2166,174 @@ angle::Result RendererVk::getPipelineCacheSize(DisplayVk *displayVk, size_t *pip
     return angle::Result::Continue;
 }
 
+bool RendererVk::compressPipelineCacheVk(angle::MemoryBuffer *pipelineCacheData,
+                                         angle::MemoryBuffer *compressedData)
+{
+    uLong uncompressedSize       = static_cast<uLong>(pipelineCacheData->size());
+    uLong expectedCompressedSize = zlib_internal::GzipExpectedCompressedSize(uncompressedSize);
+
+    // Allocate memory.
+    if (!compressedData->resize(expectedCompressedSize))
+    {
+        return false;
+    }
+
+    int zResult = zlib_internal::GzipCompressHelper(compressedData->data(), &expectedCompressedSize,
+                                                    pipelineCacheData->data(), uncompressedSize,
+                                                    nullptr, nullptr);
+
+    if (zResult != Z_OK)
+    {
+        FATAL() << "Error compressing pipeline cache data: " << zResult;
+        return false;
+    }
+
+    // Resize it to expected size.
+    if (!compressedData->resize(expectedCompressedSize))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool RendererVk::compressAndStorePipelineCacheVk(DisplayVk *displayVk,
+                                                 angle::MemoryBuffer *pipelineCacheData)
+{
+    // Compress the whole pipelineCache.
+    angle::MemoryBuffer compressedData;
+    if (!compressPipelineCacheVk(pipelineCacheData, &compressedData))
+    {
+        return false;
+    }
+
+    // If the size of compressedData is lager than (64k - sizeof(chunkIndex) - sizeof(numChunks)),
+    // the pipelineCache still can't be stored in blob cache.
+    // Divide the large compressed pipelineCache into several parts to store seperately.
+    // There is no function to query the limit size in android.
+    const size_t maxValueSize = 64 * 1024;
+
+    // Store {chunkIndex, numChunks, chunkCompressedData} in keyData.
+    int chunkIndex          = 0;
+    int numChunks           = 0;
+    size_t compressedOffset = 0;
+
+    // For example, if the compressed size is 68841 bytes(67k), divide into {0,2,34421 bytes} and
+    // {1,2,34420 bytes}.
+    numChunks = static_cast<int>(
+        roundUp(compressedData.size(), maxValueSize - sizeof(numChunks) - sizeof(chunkIndex)) /
+        (maxValueSize - sizeof(numChunks) - sizeof(chunkIndex)));
+    size_t chunkSize = roundUp(compressedData.size(), static_cast<size_t>(numChunks)) /
+                       static_cast<size_t>(numChunks);
+
+    for (chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
+    {
+        if (chunkIndex == numChunks - 1)
+        {
+            chunkSize = compressedData.size() - chunkIndex * chunkSize;
+        }
+
+        angle::MemoryBuffer keyData;
+        if (keyData.resize(sizeof(chunkIndex) + sizeof(numChunks) + chunkSize))
+        {
+            memcpy(keyData.data(), &chunkIndex, sizeof(chunkIndex));
+            memcpy(keyData.data() + sizeof(chunkIndex), &numChunks, sizeof(numChunks));
+            memcpy(keyData.data() + sizeof(chunkIndex) + sizeof(numChunks),
+                   compressedData.data() + compressedOffset, chunkSize);
+            compressedOffset += chunkSize;
+        }
+        else
+        {
+            return false;
+        }
+
+        // Create unique hash key.
+        egl::BlobCache::Key chunkCacheHash;
+        computePipelineCacheVkChunkKey(chunkIndex, &chunkCacheHash);
+        displayVk->getBlobCache()->putApplication(chunkCacheHash, keyData);
+    }
+
+    return true;
+}
+
+bool RendererVk::getAndDecompressPipelineCacheVk(DisplayVk *display,
+                                                 egl::BlobCache::Value *initialData,
+                                                 size_t *dataSize)
+{
+    // Compute the hash key of chunkIndex 0 and find the first cache data in blob cache.
+    int chunkIndex = 0;
+    egl::BlobCache::Key chunkCacheHash;
+    computePipelineCacheVkChunkKey(chunkIndex, &chunkCacheHash);
+    egl::BlobCache::Value firstKeyData;
+    size_t keySize = 0;
+
+    if (display->getBlobCache()->get(display->getScratchBuffer(), chunkCacheHash, &firstKeyData,
+                                     &keySize))
+    {
+        // Get the number of chunks.
+        int numChunks         = *(firstKeyData.data() + sizeof(chunkIndex));
+        int dataOffset        = sizeof(chunkIndex) + sizeof(numChunks);
+        size_t chunkSize      = keySize - dataOffset;
+        size_t compressedSize = 0;
+
+        // Allocate enough memory.
+        angle::MemoryBuffer compressedData;
+        if (!compressedData.resize(chunkSize * numChunks))
+        {
+            return false;
+        }
+
+        // To combine the parts of the pipelineCache data.
+        for (chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
+        {
+            // Get the unique key by chunkIndex.
+            computePipelineCacheVkChunkKey(chunkIndex, &chunkCacheHash);
+            egl::BlobCache::Value keyData;
+
+            if (display->getBlobCache()->get(display->getScratchBuffer(), chunkCacheHash, &keyData,
+                                             &keySize))
+            {
+                int checkIndex  = *(keyData.data());
+                int checkNumber = *(keyData.data() + sizeof(chunkIndex));
+                chunkSize       = keySize - dataOffset;
+
+                if (checkIndex != chunkIndex || checkNumber != numChunks)
+                {
+                    // Wrong index value or number value, the data have been changed.
+                    return false;
+                }
+                memcpy(compressedData.data() + compressedSize, keyData.data() + dataOffset,
+                       chunkSize);
+                compressedSize += chunkSize;
+            }
+            else
+            {
+                // Can't find every part of the cache data.
+                return false;
+            }
+        }
+
+        // Call zlib function to decompress.
+        uint32_t uncompressedSize =
+            zlib_internal::GetGzipUncompressedSize(compressedData.data(), compressedSize);
+        std::vector<uint8_t> uncompressedData(uncompressedSize);
+        uLong destLen = uncompressedSize;
+        int zResult   = zlib_internal::GzipUncompressHelper(uncompressedData.data(), &destLen,
+                                                          compressedData.data(),
+                                                          static_cast<uLong>(compressedSize));
+        if (zResult != Z_OK)
+        {
+            return false;
+        }
+
+        *initialData = egl::BlobCache::Value(uncompressedData.data(), destLen);
+        *dataSize    = destLen;
+        return true;
+    }
+
+    return false;
+}
+
 angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
 {
     // TODO: Synchronize access to the pipeline/blob caches?
@@ -2231,8 +2400,10 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
                pipelineCacheData->size() - pipelineCacheSize);
     }
 
-    displayVk->getBlobCache()->putApplication(mPipelineCacheVkBlobKey, *pipelineCacheData);
-    mPipelineCacheDirty = false;
+    if (compressAndStorePipelineCacheVk(displayVk, pipelineCacheData))
+    {
+        mPipelineCacheDirty = false;
+    }
 
     return angle::Result::Continue;
 }

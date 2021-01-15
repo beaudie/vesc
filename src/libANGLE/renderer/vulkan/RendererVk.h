@@ -164,6 +164,16 @@ class RendererVk : angle::NonCopyable
     const vk::Format &getFormat(angle::FormatID formatID) const { return mFormatTable[formatID]; }
 
     angle::Result getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut);
+
+    // In oder to store more pipeline cache in blob cache, compress it before being stored.
+    bool compressPipelineCacheVk(angle::MemoryBuffer *pipelineCacheData,
+                                 angle::MemoryBuffer *compressedData);
+    bool compressAndStorePipelineCacheVk(DisplayVk *display,
+                                         angle::MemoryBuffer *pipelineCacheData);
+    bool getAndDecompressPipelineCacheVk(DisplayVk *display,
+                                         egl::BlobCache::Value *initialData,
+                                         size_t *dataSize);
+
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
 
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
@@ -382,7 +392,7 @@ class RendererVk : angle::NonCopyable
     void queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceExtensionNames);
 
     void initFeatures(DisplayVk *display, const vk::ExtensionNameList &extensions);
-    void initPipelineCacheVkKey();
+    void computePipelineCacheVkChunkKey(const int chunkIndex, egl::BlobCache::Key *hashOut);
     angle::Result initPipelineCache(DisplayVk *display,
                                     vk::PipelineCache *pipelineCache,
                                     bool *success);
@@ -450,7 +460,6 @@ class RendererVk : angle::NonCopyable
     // a lock.
     std::mutex mPipelineCacheMutex;
     vk::PipelineCache mPipelineCache;
-    egl::BlobCache::Key mPipelineCacheVkBlobKey;
     uint32_t mPipelineCacheVkUpdateTimeout;
     bool mPipelineCacheDirty;
     bool mPipelineCacheInitialized;
