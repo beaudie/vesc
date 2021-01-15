@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "4003908a2d8c910c80fc728b4053f11e",
+    "146e755613d141cb9615afb82f2e0574",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "2b5d6505d6a8b6f3bbfbad2c8405a89d",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -29,6 +29,8 @@
     "5d7001969619570e80e5a39b1ab8b0c4",
   "src/tests/restricted_traces/kartrider_rush.tar.gz.sha1":
     "c11aab56dcaba570a1993c1f8ebe4668",
+  "src/tests/restricted_traces/klondike_adventures.tar.gz.sha1":
+    "890b865672dc6ad04a21c0af90f4a384",
   "src/tests/restricted_traces/lego_legacy.tar.gz.sha1":
     "543b6beed660d7206c2839c6811aa9f4",
   "src/tests/restricted_traces/magic_tiles_3.tar.gz.sha1":
@@ -46,13 +48,13 @@
   "src/tests/restricted_traces/real_commando_secret_mission.tar.gz.sha1":
     "4b484dd9c53a79100ec13b6f1c86040d",
   "src/tests/restricted_traces/restricted_traces.json":
-    "78f508f059516f77db7944c00596a1d6",
+    "ee69a73a3d02a95219b7cd7362e5ab3b",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "7d8d99db13002f091b10738c70c2d79a",
+    "8322e9a7914ee59ffe001a4fd2c72396",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "aba82e135789d353da2a25ec4c2c09a0",
+    "305b8a2f20e7e9a58ca174c77c303e77",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "41985b9537e97dd7501c30aac4e4d023",
+    "7d8d68fdb842ae404699afafb1465511",
   "src/tests/restricted_traces/saint_seiya_awakening.tar.gz.sha1":
     "c9cde6bdfd9096a44d5f03d905a45a4f",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
