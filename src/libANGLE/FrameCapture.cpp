@@ -3871,6 +3871,7 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
             GLint y           = yindex + yoffset;
             GLint pixelOffset = zindex * pixelDepthPitch + yindex * pixelRowPitch;
             GLint levelOffset = z * levelDepthPitch + y * levelRowPitch + xoffset * pixelBytes;
+            ASSERT(static_cast<size_t>(levelOffset + pixelRowPitch) <= levelData.size());
             memcpy(&levelData[levelOffset], &pixelData[pixelOffset], pixelRowPitch);
         }
     }
@@ -4704,16 +4705,6 @@ std::vector<uint8_t> &FrameCaptureShared::getTextureLevelCacheLocation(gl::Textu
         foundTextureLevels = emplaceResult.first;
     }
 
-    TextureLevels &foundLevels         = foundTextureLevels->second;
-    TextureLevels::iterator foundLevel = foundLevels.find(level);
-    if (foundLevel != foundLevels.end())
-    {
-        // If we have a cache for this level, return it now
-        return foundLevel->second;
-    }
-
-    // Otherwise, create an appropriately sized cache for this level
-
     // Get the format of the texture for use with the compressed block size math.
     const gl::InternalFormat &format = *texture->getFormat(target, level).info;
 
@@ -4724,6 +4715,23 @@ std::vector<uint8_t> &FrameCaptureShared::getTextureLevelCacheLocation(gl::Textu
     GLuint sizeInBytes;
     bool result = format.computeCompressedImageSize(levelExtents, &sizeInBytes);
     ASSERT(result);
+
+    TextureLevels &foundLevels         = foundTextureLevels->second;
+    TextureLevels::iterator foundLevel = foundLevels.find(level);
+    if (foundLevel != foundLevels.end())
+    {
+        // The size must match exactly to return the previous level data. Otherwise, the caller may
+        // be redefining the texture with a different size.
+        if (foundLevel->second.size() == sizeInBytes)
+        {
+            // If we have a cache for this level, return it now
+            return foundLevel->second;
+        }
+        else
+        {
+            foundLevels.erase(level);
+        }
+    }
 
     // Initialize texture rectangle data. Default init to zero for stability.
     std::vector<uint8_t> newPixelData(sizeInBytes, 0);
