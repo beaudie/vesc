@@ -14,6 +14,9 @@
 #include "libANGLE/histogram_macros.h"
 #include "platform/PlatformMethods.h"
 
+#define USE_SYSTEM_ZLIB
+#include "compression_utils_portable.h"
+
 namespace egl
 {
 
@@ -164,6 +167,75 @@ bool BlobCache::areBlobCacheFuncsSet() const
     ASSERT((mSetBlobFunc != nullptr) == (mGetBlobFunc != nullptr));
 
     return mSetBlobFunc != nullptr && mGetBlobFunc != nullptr;
+}
+
+bool BlobCache::compressCache(angle::MemoryBuffer *cacheData, angle::MemoryBuffer *compressedData)
+{
+    uLong uncompressedSize       = static_cast<uLong>(cacheData->size());
+    uLong expectedCompressedSize = zlib_internal::GzipExpectedCompressedSize(uncompressedSize);
+
+    // Allocate memory.
+    if (!compressedData->resize(expectedCompressedSize))
+    {
+        ERR() << "Failed to allocate memory for compression";
+        return false;
+    }
+
+    int zResult =
+        zlib_internal::GzipCompressHelper(compressedData->data(), &expectedCompressedSize,
+                                          cacheData->data(), uncompressedSize, nullptr, nullptr);
+
+    if (zResult != Z_OK)
+    {
+        ERR() << "Failed to compress cache data: " << zResult;
+        return false;
+    }
+
+    // Resize it to expected size.
+    if (!compressedData->resize(expectedCompressedSize))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool BlobCache::decompressCache(angle::MemoryBuffer *compressedData,
+                                const size_t compressedSize,
+                                angle::MemoryBuffer *uncompressedData,
+                                size_t *dataSize)
+{
+    // Call zlib function to decompress.
+    uint32_t uncompressedSize =
+        zlib_internal::GetGzipUncompressedSize(compressedData->data(), compressedSize);
+
+    // Allocate enough memory.
+    if (!uncompressedData->resize(uncompressedSize))
+    {
+        ERR() << "Failed to allocate memory for decompression";
+        return false;
+    }
+
+    uLong destLen = uncompressedSize;
+    int zResult   = zlib_internal::GzipUncompressHelper(uncompressedData->data(), &destLen,
+                                                      compressedData->data(),
+                                                      static_cast<uLong>(compressedSize));
+
+    *dataSize = destLen;
+
+    if (zResult != Z_OK)
+    {
+        ERR() << "Failed to decompress data: " << zResult << "\n";
+        return false;
+    }
+
+    // Resize it to expected size.
+    if (!uncompressedData->resize(destLen))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 }  // namespace egl

@@ -140,6 +140,15 @@ class BlobCache final : angle::NonCopyable
 
     bool isCachingEnabled() const { return areBlobCacheFuncsSet() || maxSize() > 0; }
 
+    // In oder to store more cache in blob cache, compress cacheData to compressedData
+    // before being stored.
+    bool compressCache(angle::MemoryBuffer *cacheData, angle::MemoryBuffer *compressedData);
+
+    bool decompressCache(angle::MemoryBuffer *compressedData,
+                         const size_t compressedSize,
+                         angle::MemoryBuffer *uncompressedData,
+                         size_t *dataSize);
+
   private:
     // This internal cache is used only if the application is not providing caching callbacks
     using CacheEntry = std::pair<angle::MemoryBuffer, CacheSource>;
