@@ -405,7 +405,8 @@ class FrameCaptureShared final : angle::NonCopyable
     // Create the location that should be used to cache texture level data
     std::vector<uint8_t> &getTextureLevelCacheLocation(gl::Texture *texture,
                                                        gl::TextureTarget target,
-                                                       GLint level);
+                                                       GLint level,
+                                                       EntryPoint entryPoint);
 
     // Remove any cached texture levels on deletion
     void deleteCachedTextureLevelData(gl::TextureID id);
