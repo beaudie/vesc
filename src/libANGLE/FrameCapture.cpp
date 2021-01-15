@@ -3851,17 +3851,29 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
     int widthScale  = static_cast<int>(format.compressedBlockWidth);
     int heightScale = static_cast<int>(format.compressedBlockHeight);
     ASSERT(format.compressedBlockDepth == 1);
-    pixelWidth /= widthScale;
-    pixelHeight /= heightScale;
+
+    // Round the incoming width and height up to align with block size
+    pixelWidth  = rx::roundUp(pixelWidth, widthScale);
+    pixelHeight = rx::roundUp(pixelHeight, heightScale);
+
+    // Scale the width and height, clamped to a single compressed block
+    pixelWidth  = std::max(pixelWidth / widthScale, 1);
+    pixelHeight = std::max(pixelHeight / heightScale, 1);
     xoffset /= widthScale;
     yoffset /= heightScale;
 
     GLint pixelBytes = static_cast<GLint>(format.pixelBytes);
 
+    // Also round the texture's width and height up to reflect block size
+    int levelWidth  = rx::roundUp(levelExtents.width, widthScale);
+    int levelHeight = rx::roundUp(levelExtents.height, heightScale);
+
     GLint pixelRowPitch   = pixelWidth * pixelBytes;
     GLint pixelDepthPitch = pixelRowPitch * pixelHeight;
-    GLint levelRowPitch   = (levelExtents.width / widthScale) * pixelBytes;
-    GLint levelDepthPitch = levelRowPitch * (levelExtents.height / heightScale);
+
+    // And clamp the number of blocks to at least one for small mips
+    GLint levelRowPitch   = std::max(levelWidth / widthScale, 1) * pixelBytes;
+    GLint levelDepthPitch = levelRowPitch * std::max(levelHeight / heightScale, 1);
 
     for (GLint zindex = 0; zindex < pixelDepth; ++zindex)
     {
