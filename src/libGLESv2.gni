@@ -21,6 +21,7 @@ libangle_common_sources = [
   "src/common/PoolAlloc.h",
   "src/common/aligned_memory.cpp",
   "src/common/aligned_memory.h",
+  "src/common/android_tls.h",
   "src/common/android_util.cpp",
   "src/common/android_util.h",
   "src/common/angleutils.cpp",
