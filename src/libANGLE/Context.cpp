@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "common/PackedEnums.h"
+#include "common/android_tls.h"
 #include "common/angle_version.h"
 #include "common/matrix_utils.h"
 #include "common/platform.h"
@@ -37,6 +38,7 @@
 #include "libANGLE/Semaphore.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/Thread.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
@@ -2592,6 +2594,12 @@ void Context::setContextLost()
 
     // Make sure we update TLS.
     gCurrentValidContext = nullptr;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (angle::gUseAndroidOpenGLTlsSlot)
+    {
+        angle::android::SetTlsContextAndroid(nullptr);
+    }
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 }
 
 GLenum Context::getGraphicsResetStatus()
