@@ -237,7 +237,8 @@ angle::Result ContextMtl::ensureIncompleteTexturesCreated(const gl::Context *con
     for (gl::TextureType texType : supportedTextureTypes)
     {
         gl::Texture *texture;
-        ANGLE_TRY(mIncompleteTextures.getIncompleteTexture(context, texType, nullptr, &texture));
+        ANGLE_TRY(mIncompleteTextures.getIncompleteTexture(
+            context, texType, gl::SamplerFormat::Float, nullptr, &texture));
 
         TextureMtl *textureMtl                      = mtl::GetImpl(texture);
         textureMtl->getNativeTexture()->get().label = @"IncompleteTexture";

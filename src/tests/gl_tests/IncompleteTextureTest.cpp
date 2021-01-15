@@ -245,9 +245,6 @@ void main()
 // Verifies that an incomplete integer texture has an integer type default value.
 TEST_P(IncompleteTextureTestES3, IntegerType)
 {
-    // On Vulkan backend, because of the validation layer, the test is failed.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     // GLES backend on Adreno has a problem to create a incomplete texture, although it doesn't go
     // through the routine which creates a incomplete texture in the ANGLE driver.
     ANGLE_SKIP_TEST_IF(IsAdreno() && IsAndroid() && IsOpenGLES());
@@ -299,9 +296,6 @@ void main()
 // Verifies that an incomplete unsigned integer texture has an unsigned integer type default value.
 TEST_P(IncompleteTextureTestES3, UnsignedIntegerType)
 {
-    // On Vulkan backend, because of the validation layer, the test is failed.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     // GLES backend on Adreno has a problem to create a incomplete texture, although it doesn't go
     // through the routine which creates a incomplete texture in the ANGLE driver.
     ANGLE_SKIP_TEST_IF(IsAdreno() && IsAndroid() && IsOpenGLES());
