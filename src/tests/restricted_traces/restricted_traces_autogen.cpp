@@ -24,6 +24,7 @@
 #include "free_fire/free_fire_capture_context1.h"
 #include "google_maps/google_maps_capture_context3.h"
 #include "kartrider_rush/kartrider_rush_capture_context1.h"
+#include "klondike_adventures/klondike_adventures_capture_context2.h"
 #include "lego_legacy/lego_legacy_capture_context2.h"
 #include "manhattan_10/manhattan_10_capture_context1.h"
 #include "marvel_contest_of_champions/marvel_contest_of_champions_capture_context1.h"
@@ -89,6 +90,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {kartrider_rush::kReplayFrameStart, kartrider_rush::kReplayFrameEnd,
       kartrider_rush::kReplayDrawSurfaceWidth, kartrider_rush::kReplayDrawSurfaceHeight,
       "kartrider_rush"}},
+    {RestrictedTraceID::klondike_adventures,
+     {klondike_adventures::kReplayFrameStart, klondike_adventures::kReplayFrameEnd,
+      klondike_adventures::kReplayDrawSurfaceWidth, klondike_adventures::kReplayDrawSurfaceHeight,
+      "klondike_adventures"}},
     {RestrictedTraceID::lego_legacy,
      {lego_legacy::kReplayFrameStart, lego_legacy::kReplayFrameEnd,
       lego_legacy::kReplayDrawSurfaceWidth, lego_legacy::kReplayDrawSurfaceHeight, "lego_legacy"}},
@@ -188,6 +193,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::kartrider_rush:
             kartrider_rush::ReplayContext1Frame(frameIndex);
             break;
+        case RestrictedTraceID::klondike_adventures:
+            klondike_adventures::ReplayContext2Frame(frameIndex);
+            break;
         case RestrictedTraceID::lego_legacy:
             lego_legacy::ReplayContext2Frame(frameIndex);
             break;
@@ -276,6 +284,9 @@ void ResetReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::kartrider_rush:
             kartrider_rush::ResetContext1Replay();
+            break;
+        case RestrictedTraceID::klondike_adventures:
+            klondike_adventures::ResetContext2Replay();
             break;
         case RestrictedTraceID::lego_legacy:
             lego_legacy::ResetContext2Replay();
@@ -366,6 +377,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::kartrider_rush:
             kartrider_rush::SetupContext1Replay();
             break;
+        case RestrictedTraceID::klondike_adventures:
+            klondike_adventures::SetupContext2Replay();
+            break;
         case RestrictedTraceID::lego_legacy:
             lego_legacy::SetupContext2Replay();
             break;
@@ -455,6 +469,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::kartrider_rush:
             kartrider_rush::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::klondike_adventures:
+            klondike_adventures::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::lego_legacy:
             lego_legacy::SetBinaryDataDir(dataDir);
             break;
@@ -543,6 +560,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::kartrider_rush:
             kartrider_rush::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::klondike_adventures:
+            klondike_adventures::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::lego_legacy:
             lego_legacy::SetBinaryDataDecompressCallback(callback);

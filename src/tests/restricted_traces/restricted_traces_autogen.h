@@ -67,6 +67,7 @@ enum class RestrictedTraceID
     free_fire,
     google_maps,
     kartrider_rush,
+    klondike_adventures,
     lego_legacy,
     manhattan_10,
     marvel_contest_of_champions,
