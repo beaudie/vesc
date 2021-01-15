@@ -697,6 +697,9 @@ egl::Error Context::makeCurrent(egl::Display *display,
     mState.setAllDirtyBits();
     mState.setAllDirtyObjects();
 
+    if (mIsCurrent)
+        ANGLE_TRY(unsetDefaultFramebuffer());
+
     ANGLE_TRY(setDefaultFramebuffer(drawSurface, readSurface));
 
     // Notify the renderer of a context switch.
@@ -709,11 +712,16 @@ egl::Error Context::makeCurrent(egl::Display *display,
         return angle::ResultToEGL(implResult);
     }
 
+    mIsCurrent = true;
+
     return egl::NoError();
 }
 
 egl::Error Context::unMakeCurrent(const egl::Display *display)
 {
+    ASSERT(mIsCurrent);
+    mIsCurrent = false;
+
     ANGLE_TRY(angle::ResultToEGL(mImplementation->onUnMakeCurrent(this)));
 
     ANGLE_TRY(unsetDefaultFramebuffer());
