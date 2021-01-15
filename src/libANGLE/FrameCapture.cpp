@@ -3851,6 +3851,12 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
     int widthScale  = static_cast<int>(format.compressedBlockWidth);
     int heightScale = static_cast<int>(format.compressedBlockHeight);
     ASSERT(format.compressedBlockDepth == 1);
+
+    // Round the incoming width and height up to align with block size
+    pixelWidth  = rx::roundUp(pixelWidth, widthScale);
+    pixelHeight = rx::roundUp(pixelHeight, heightScale);
+
+    // Scale the width, height, and offsets
     pixelWidth /= widthScale;
     pixelHeight /= heightScale;
     xoffset /= widthScale;
@@ -3858,10 +3864,14 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
 
     GLint pixelBytes = static_cast<GLint>(format.pixelBytes);
 
+    // Also round the texture's width and height up to reflect block size
+    int levelWidth  = rx::roundUp(levelExtents.width, widthScale);
+    int levelHeight = rx::roundUp(levelExtents.height, heightScale);
+
     GLint pixelRowPitch   = pixelWidth * pixelBytes;
     GLint pixelDepthPitch = pixelRowPitch * pixelHeight;
-    GLint levelRowPitch   = (levelExtents.width / widthScale) * pixelBytes;
-    GLint levelDepthPitch = levelRowPitch * (levelExtents.height / heightScale);
+    GLint levelRowPitch   = (levelWidth / widthScale) * pixelBytes;
+    GLint levelDepthPitch = (levelHeight / heightScale) * levelRowPitch;
 
     for (GLint zindex = 0; zindex < pixelDepth; ++zindex)
     {
