@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "c446e4696290f8b9952833cb7db4d5cf",
+    "a5fc14d8c6e11a863a61a69e9076d301",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "2b5d6505d6a8b6f3bbfbad2c8405a89d",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -29,6 +29,8 @@
     "5d7001969619570e80e5a39b1ab8b0c4",
   "src/tests/restricted_traces/kartrider_rush.tar.gz.sha1":
     "c11aab56dcaba570a1993c1f8ebe4668",
+  "src/tests/restricted_traces/klondike_adventures.tar.gz.sha1":
+    "8f467e30dd52312c0a1c257d76db9589",
   "src/tests/restricted_traces/lego_legacy.tar.gz.sha1":
     "543b6beed660d7206c2839c6811aa9f4",
   "src/tests/restricted_traces/magic_tiles_3.tar.gz.sha1":
@@ -48,13 +50,13 @@
   "src/tests/restricted_traces/real_gangster_crime.tar.gz.sha1":
     "c85be329035a760edad673eb2ca7c3f1",
   "src/tests/restricted_traces/restricted_traces.json":
-    "8a4be53b19bb5199ede62bf34ec5528f",
+    "1e8da0ff58607214ce34872e0170be79",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "a9dc9213e1aca6126eea5bfe9efec808",
+    "1998c1dbb05e8bf2486961a312f4824d",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "463ec977962c8164a86ab64cb70ca8d2",
+    "e60225d6c270172e35de893550016603",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "5db394f1def7715bda2aa1523d681482",
+    "311230e3cc41f7405f696757b4108d61",
   "src/tests/restricted_traces/saint_seiya_awakening.tar.gz.sha1":
     "c9cde6bdfd9096a44d5f03d905a45a4f",
   "src/tests/restricted_traces/temple_run_300.tar.gz.sha1":
