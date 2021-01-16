@@ -13,6 +13,7 @@
 
 #include "angry_birds_2_1500/angry_birds_2_1500_capture_context1.h"
 #include "arena_of_valor/arena_of_valor_capture_context1.h"
+#include "aztec_ruins/aztec_ruins_capture_context6.h"
 #include "brawl_stars/brawl_stars_capture_context1.h"
 #include "candy_crush_500/candy_crush_500_capture_context1.h"
 #include "clash_of_clans/clash_of_clans_capture_context1.h"
@@ -53,6 +54,9 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {arena_of_valor::kReplayFrameStart, arena_of_valor::kReplayFrameEnd,
       arena_of_valor::kReplayDrawSurfaceWidth, arena_of_valor::kReplayDrawSurfaceHeight,
       "arena_of_valor"}},
+    {RestrictedTraceID::aztec_ruins,
+     {aztec_ruins::kReplayFrameStart, aztec_ruins::kReplayFrameEnd,
+      aztec_ruins::kReplayDrawSurfaceWidth, aztec_ruins::kReplayDrawSurfaceHeight, "aztec_ruins"}},
     {RestrictedTraceID::brawl_stars,
      {brawl_stars::kReplayFrameStart, brawl_stars::kReplayFrameEnd,
       brawl_stars::kReplayDrawSurfaceWidth, brawl_stars::kReplayDrawSurfaceHeight, "brawl_stars"}},
@@ -165,6 +169,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::arena_of_valor:
             arena_of_valor::ReplayContext1Frame(frameIndex);
             break;
+        case RestrictedTraceID::aztec_ruins:
+            aztec_ruins::ReplayContext6Frame(frameIndex);
+            break;
         case RestrictedTraceID::brawl_stars:
             brawl_stars::ReplayContext1Frame(frameIndex);
             break;
@@ -259,6 +266,9 @@ void ResetReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::arena_of_valor:
             arena_of_valor::ResetContext1Replay();
+            break;
+        case RestrictedTraceID::aztec_ruins:
+            aztec_ruins::ResetContext6Replay();
             break;
         case RestrictedTraceID::brawl_stars:
             brawl_stars::ResetContext1Replay();
@@ -355,6 +365,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::arena_of_valor:
             arena_of_valor::SetupContext1Replay();
             break;
+        case RestrictedTraceID::aztec_ruins:
+            aztec_ruins::SetupContext6Replay();
+            break;
         case RestrictedTraceID::brawl_stars:
             brawl_stars::SetupContext1Replay();
             break;
@@ -450,6 +463,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::arena_of_valor:
             arena_of_valor::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::aztec_ruins:
+            aztec_ruins::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::brawl_stars:
             brawl_stars::SetBinaryDataDir(dataDir);
             break;
@@ -544,6 +560,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::arena_of_valor:
             arena_of_valor::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::aztec_ruins:
+            aztec_ruins::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::brawl_stars:
             brawl_stars::SetBinaryDataDecompressCallback(callback);
