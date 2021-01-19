@@ -3066,9 +3066,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                        glState.getRasterizerState(),
                                                        isYFlipEnabledForDrawFBO());
                 updateScissor(glState);
+
                 // Nothing is needed for depth correction.
-                // a push constant will be used to toggle control path of depth correction code in
-                // shader source.
+                // glState will be used to toggle control path of depth correction code in SPIR-V
+                // tranform options
                 break;
             }
             case gl::State::DIRTY_BIT_EXTENDED:
