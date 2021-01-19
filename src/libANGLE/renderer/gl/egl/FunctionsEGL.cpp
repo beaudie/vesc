@@ -191,23 +191,29 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
     ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->surfaceAttribPtr, eglSurfaceAttrib);
     ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->swapIntervalPtr, eglSwapInterval);
 
+    ERR() << "A4";
+
     mEGLDisplay = mFnPtrs->getDisplayPtr(nativeDisplay);
     if (mEGLDisplay == EGL_NO_DISPLAY)
     {
         return egl::EglNotInitialized() << "Failed to get system egl display";
     }
+    ERR() << "A5";
     if (mFnPtrs->initializePtr(mEGLDisplay, &majorVersion, &minorVersion) != EGL_TRUE)
     {
         return egl::Error(mFnPtrs->getErrorPtr(), "Failed to initialize system egl");
     }
+    ERR() << "A6";
     if (majorVersion < 1 || (majorVersion == 1 && minorVersion < 4))
     {
         return egl::EglNotInitialized() << "Unsupported EGL version (require at least 1.4).";
     }
+    ERR() << "A7";
     if (mFnPtrs->bindAPIPtr(EGL_OPENGL_ES_API) != EGL_TRUE)
     {
         return egl::Error(mFnPtrs->getErrorPtr(), "Failed to bind API in system egl");
     }
+    ERR() << "A8";
 
     ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->getCurrentContextPtr, eglGetCurrentContext);
 
@@ -216,6 +222,7 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
     {
         return egl::Error(mFnPtrs->getErrorPtr(), "Faild to query extensions in system egl");
     }
+    ERR() << "A9";
     angle::SplitStringAlongWhitespace(extensions, &mExtensions);
 
     if (hasExtension("EGL_KHR_image_base"))
@@ -278,6 +285,7 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
             mExtensions.push_back("EGL_ANDROID_native_fence_sync");
         }
     }
+    ERR() << "A10";
 
 #undef ANGLE_GET_PROC_OR_ERROR
 

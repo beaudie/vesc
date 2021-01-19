@@ -40,6 +40,8 @@ egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay,
         nativeEGLHandle = eglHandle;
     }
 
+    ERR() << "A1";
+
     if (!nativeEGLHandle)
     {
         nativeEGLHandle = dlopen(libName, RTLD_NOW);
@@ -49,12 +51,16 @@ egl::Error FunctionsEGLDL::initialize(EGLNativeDisplayType nativeDisplay,
         }
     }
 
+    ERR() << "A2";
+
     mGetProcAddressPtr =
         reinterpret_cast<PFNEGLGETPROCADDRESSPROC>(dlsym(nativeEGLHandle, "eglGetProcAddress"));
     if (!mGetProcAddressPtr)
     {
         return egl::EglNotInitialized() << "Could not find eglGetProcAddress";
     }
+
+    ERR() << "A3";
 
     return FunctionsEGL::initialize(nativeDisplay);
 }
