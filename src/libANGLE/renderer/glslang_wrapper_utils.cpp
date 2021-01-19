@@ -4394,9 +4394,13 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
     AssignNonTextureBindings(options, programExecutable, shaderType, programInterfaceInfo,
                              variableInfoMapOut);
 
-    if (options.emulateTransformFeedback && gl::ShaderTypeSupportsTransformFeedback(shaderType))
+    if (gl::ShaderTypeSupportsTransformFeedback(shaderType))
     {
-        AssignTransformFeedbackEmulationBindings(shaderType, programState, isTransformFeedbackStage,
+        // If XFB emulation is not enabled, mark all XFB output buffers as inactive.
+        // i.e. isXfbStage = false.
+        bool isXfbStage = options.emulateTransformFeedback && isTransformFeedbackStage;
+
+        AssignTransformFeedbackEmulationBindings(shaderType, programState, isXfbStage,
                                                  programInterfaceInfo, variableInfoMapOut);
     }
 }
@@ -4431,6 +4435,10 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         {
             *xfbSource = SubstituteTransformFeedbackMarkers(*xfbSource, "");
         }
+    }
+    else
+    {
+        *xfbSource = SubstituteTransformFeedbackMarkers(*xfbSource, "");
     }
 
     gl::ShaderType frontShaderType = gl::ShaderType::InvalidEnum;
