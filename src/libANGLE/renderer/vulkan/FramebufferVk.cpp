@@ -1083,9 +1083,6 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     }
 
     bool noClip = blitArea == destArea && stretch[0] == 1.0f && stretch[1] == 1.0f;
-    bool noFlip = !flipX && !flipY;
-    bool disableFlippingBlitWithCommand =
-        contextVk->getRenderer()->getFeatures().disableFlippingBlitWithCommand.enabled;
 
     UtilsVk::BlitResolveParameters commonParams;
     commonParams.srcOffset[0]           = sourceArea.x;
@@ -1122,7 +1119,6 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         //
         // For simplicity, we either blit all render targets with a Vulkan command, or none.
         bool canBlitWithCommand = !isColorResolve && noClip &&
-                                  (noFlip || !disableFlippingBlitWithCommand) &&
                                   HasSrcBlitFeature(renderer, readRenderTarget) &&
                                   (rotation == SurfaceRotation::Identity);
         bool areChannelsBlitCompatible = true;
@@ -1217,7 +1213,6 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
         // Similarly, only blit if there's been no clipping or rotating.
         bool canBlitWithCommand = !isDepthStencilResolve && noClip &&
-                                  (noFlip || !disableFlippingBlitWithCommand) &&
                                   HasSrcBlitFeature(renderer, readRenderTarget) &&
                                   HasDstBlitFeature(renderer, drawRenderTarget) &&
                                   (rotation == SurfaceRotation::Identity);

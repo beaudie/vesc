@@ -1957,8 +1957,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, forceD16TexFilter, IsAndroid() && isQualcomm);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, disableFlippingBlitWithCommand, IsAndroid() && isQualcomm);
-
     // Allocation sanitization disabled by default because of a heaveyweight implementation
     // that can cause OOM and timeouts.
     ANGLE_FEATURE_CONDITION(&mFeatures, allocateNonZeroMemory, false);

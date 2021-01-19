@@ -233,13 +233,6 @@ struct FeaturesVk : FeatureSetBase
         "which prevents OES_depth_texture from being supported.",
         &members, "http://anglebug.com/3452"};
 
-    // On some android devices, vkCmdBlitImage with flipped coordinates blits incorrectly.  This
-    // workaround makes sure this path is avoided.  http://anglebug.com/3498
-    Feature disableFlippingBlitWithCommand = {
-        "disableFlippingBlitWithCommand", FeatureCategory::VulkanWorkarounds,
-        "vkCmdBlitImage with flipped coordinates blits incorrectly.", &members,
-        "http://anglebug.com/3498"};
-
     // On platform with Intel or AMD GPU, a window resizing would not trigger the vulkan driver to
     // return VK_ERROR_OUT_OF_DATE on swapchain present.  Work-around by query current window extent
     // every frame to detect a window resizing.
