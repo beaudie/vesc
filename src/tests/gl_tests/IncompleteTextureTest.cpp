@@ -245,10 +245,6 @@ void main()
 // Verifies that an incomplete integer texture has a signed integer type default value.
 TEST_P(IncompleteTextureTestES3, IntegerType)
 {
-    // On Vulkan, D3D, and Metal backend, creating the incomplete texture which has a signed integer
-    // type, isn't supported.
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D() || IsMetal());
-
     // GLES backend on Adreno has a problem to create a incomplete texture, although it doesn't go
     // through the routine which creates a incomplete texture in the ANGLE driver.
     ANGLE_SKIP_TEST_IF(IsAdreno() && IsAndroid() && IsOpenGLES());
@@ -300,10 +296,6 @@ void main()
 // Verifies that an incomplete unsigned integer texture has an unsigned integer type default value.
 TEST_P(IncompleteTextureTestES3, UnsignedIntegerType)
 {
-    // On Vulkan, D3D, and Metal backend, creating the incomplete texture which has a unsigned
-    // integer type, isn't supported.
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D() || IsMetal());
-
     // GLES backend on Adreno has a problem to create a incomplete texture, although it doesn't go
     // through the routine which creates a incomplete texture in the ANGLE driver.
     ANGLE_SKIP_TEST_IF(IsAdreno() && IsAndroid() && IsOpenGLES());
@@ -356,10 +348,6 @@ void main()
 // Verifies that we are able to create an incomplete shadow texture.
 TEST_P(IncompleteTextureTestES3, ShadowType)
 {
-    // On Vulkan, D3D, and Metal backend, creating the incomplete texture which has a shadow type,
-    // isn't supported.
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D() || IsMetal());
-
     // GLES backend on Adreno has a problem to create a incomplete texture, although it doesn't go
     // through the routine which creates a incomplete texture in the ANGLE driver.
     ANGLE_SKIP_TEST_IF(IsAdreno() && IsAndroid() && IsOpenGLES());
