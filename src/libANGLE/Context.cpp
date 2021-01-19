@@ -1945,6 +1945,14 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
             *params = mState.mCaps.textureBufferOffsetAlignment;
             break;
 
+        // GL_EXT_clip_control
+        case GL_CLIP_ORIGIN_EXT:
+            *params = mState.mClipControlOrigin;
+            break;
+        case GL_CLIP_DEPTH_MODE_EXT:
+            *params = mState.mClipControlDepth;
+            break;
+
         default:
             ANGLE_CONTEXT_TRY(mState.getIntegerv(this, pname, params));
             break;
@@ -5209,6 +5217,11 @@ void Context::depthMask(GLboolean flag)
 void Context::depthRangef(GLfloat zNear, GLfloat zFar)
 {
     mState.setDepthRange(clamp01(zNear), clamp01(zFar));
+}
+
+void Context::clipControl(GLenum origin, GLenum depth)
+{
+    mState.setClipControl(origin, depth);
 }
 
 void Context::disable(GLenum cap)
