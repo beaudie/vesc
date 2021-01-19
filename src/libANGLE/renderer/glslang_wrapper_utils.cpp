@@ -291,7 +291,13 @@ std::string SubstituteTransformFeedbackMarkers(const std::string &originalSource
                                                const std::string &xfbOut)
 {
     const size_t xfbOutMarkerStart = originalSource.find(kXfbOutMarker);
-    const size_t xfbOutMarkerEnd   = xfbOutMarkerStart + ConstStrLen(kXfbOutMarker);
+    if (xfbOutMarkerStart == std::string::npos)
+    {
+        // This can happen if the SH_ADD_VULKAN_XFB_EMULATION_SUPPORT_CODE flag is not passed
+        // to TranslatorVulkan and thus the marker is not inserted.
+        return originalSource;
+    }
+    const size_t xfbOutMarkerEnd = xfbOutMarkerStart + ConstStrLen(kXfbOutMarker);
 
     // The shader is the following form:
     //
@@ -3796,9 +3802,13 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
     AssignNonTextureBindings(options, programExecutable, shaderType, programInterfaceInfo,
                              variableInfoMapOut);
 
-    if (options.emulateTransformFeedback && gl::ShaderTypeSupportsTransformFeedback(shaderType))
+    if (gl::ShaderTypeSupportsTransformFeedback(shaderType))
     {
-        AssignTransformFeedbackEmulationBindings(shaderType, programState, isTransformFeedbackStage,
+        // If XFB emulation is not enabled, mark all XFB output buffers as inactive.
+        // i.e. isXfbStage = false.
+        bool isXfbStage = options.emulateTransformFeedback && isTransformFeedbackStage;
+
+        AssignTransformFeedbackEmulationBindings(shaderType, programState, isXfbStage,
                                                  programInterfaceInfo, variableInfoMapOut);
     }
 }
@@ -3820,10 +3830,10 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     std::string *xfbSource  = &(*shaderSourcesOut)[xfbStage];
 
     // Write transform feedback output code for emulation path
-    if (xfbStage == gl::ShaderType::Vertex && !xfbSource->empty() &&
-        options.emulateTransformFeedback)
+    if (xfbStage == gl::ShaderType::Vertex && !xfbSource->empty())
     {
-        if (!programState.getLinkedTransformFeedbackVaryings().empty())
+        if (options.emulateTransformFeedback &&
+            !programState.getLinkedTransformFeedbackVaryings().empty())
         {
             GenerateTransformFeedbackEmulationOutputs(options, xfbStage, programState,
                                                       programInterfaceInfo, xfbSource,
