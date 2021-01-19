@@ -1429,6 +1429,22 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
     mFragmentOutputIndexes.bindLocation(index, name);
 }
 
+PackMode Program::getVaryingPackingMode(const Context *context) const
+{
+    if (context->getLimitations().noFlexibleVaryingPacking)
+    {
+        // D3D9 pack mode is strictly more strict than WebGL, so takes priority.
+        return PackMode::ANGLE_NON_CONFORMANT_D3D9;
+    }
+
+    if (context->getExtensions().webglCompatibility)
+    {
+        return PackMode::WEBGL_STRICT;
+    }
+
+    return mProgram->getVaryingPackingMode();
+}
+
 angle::Result Program::link(const Context *context)
 {
     angle::Result result = linkImpl(context);

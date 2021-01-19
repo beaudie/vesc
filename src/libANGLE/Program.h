@@ -928,6 +928,8 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
 
     void postResolveLink(const gl::Context *context);
 
+    PackMode getVaryingPackingMode(const Context *context) const;
+
     rx::Serial mSerial;
     ProgramState mState;
     rx::ProgramImpl *mProgram;

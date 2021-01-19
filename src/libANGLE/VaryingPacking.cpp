@@ -323,6 +323,14 @@ bool VaryingPacking::packVaryingIntoRegisterMap(PackMode packMode,
         varyingColumns = 4;
     }
 
+    // Vulkan packing rules are defined here:
+    // https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#interfaces-iointerfaces-locations
+    // For simplicity we simply bump each varying into its own register.
+    else if (packMode == PackMode::VULKAN)
+    {
+        varyingColumns = 4;
+    }
+
     // "Variables of type mat2 occupies 2 complete rows."
     // For non-WebGL contexts, we allow mat2 to occupy only two columns per row.
     else if (packMode == PackMode::WEBGL_STRICT && varying.type == GL_FLOAT_MAT2)

@@ -202,6 +202,10 @@ enum class PackMode
 
     // Each varying takes a separate register. No register sharing.
     ANGLE_NON_CONFORMANT_D3D9,
+
+    // Vulkan packing rules:
+    // https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#interfaces-iointerfaces-locations
+    VULKAN,
 };
 
 class VaryingPacking final : angle::NonCopyable
