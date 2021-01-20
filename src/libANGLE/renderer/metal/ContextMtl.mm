@@ -1051,6 +1051,9 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_PATCH_VERTICES:
                 // Nothing to do until EXT_tessellation_shader is implemented.
                 break;
+            case gl::State::DIRTY_BIT_CLIP_CONTROL:
+                // Nothing to do until EXT_clip_control is implemented.
+                break;
             default:
                 UNREACHABLE();
                 break;
