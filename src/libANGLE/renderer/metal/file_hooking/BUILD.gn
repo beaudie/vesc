@@ -6,6 +6,6 @@
 
 import("../../../../../gni/angle.gni")
 
-angle_static_library("metal_shader_cache_file_hooking") {
+angle_shared_library("metal_shader_cache_file_hooking") {
   sources = [ "shader_cache_file_hooking.cpp" ]
 }
