@@ -163,7 +163,9 @@ struct Error
 };
 
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
-class Context : angle::NonCopyable
+class
+
+    Context : angle::NonCopyable
 {
   public:
     Context(RendererVk *renderer);
