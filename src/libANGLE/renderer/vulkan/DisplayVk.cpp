@@ -290,7 +290,5 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
 
     mPipelineLayoutCache.destroy(displayVk->getRenderer());
     mDescriptorSetLayoutCache.destroy(displayVk->getRenderer());
-
-    ASSERT(mResourceUseLists.empty());
 }
 }  // namespace rx

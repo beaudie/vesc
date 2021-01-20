@@ -145,8 +145,6 @@ class ResourceUseList final : angle::NonCopyable
     void releaseResourceUses();
     void releaseResourceUsesAndUpdateSerials(Serial serial);
 
-    bool empty() { return mResourceUses.empty(); }
-
   private:
     std::vector<SharedResourceUse> mResourceUses;
 };
