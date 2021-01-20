@@ -977,18 +977,24 @@ def main(args):
             "Passed: %d, Comparison Failed: %d, Crashed: %d, CompileFailed %d, Skipped: %d, Timeout: %d"
             % (passed_count, failed_count, crashed_count, compile_failed_count, skipped_count,
                timedout_count))
+
+        retval = 0
+
         if len(failed_tests):
             print("Comparison Failed tests:")
             for failed_test in sorted(failed_tests):
                 print("\t" + failed_test)
+            retval = 1
         if len(crashed_tests):
             print("Crashed tests:")
             for crashed_test in sorted(crashed_tests):
                 print("\t" + crashed_test)
+            retval = 1
         if len(compile_failed_tests):
             print("Compile failed tests:")
             for compile_failed_test in sorted(compile_failed_tests):
                 print("\t" + compile_failed_test)
+            retval = 1
         if len(skipped_tests):
             print("Skipped tests:")
             for skipped_test in sorted(skipped_tests):
@@ -997,6 +1003,7 @@ def main(args):
             print("Timeout tests:")
             for timeout_test in sorted(timed_out_tests):
                 print("\t" + timeout_test)
+            retval = 1
 
         # delete generated folders if --keep_temp_files flag is set to false
         if args.purge:
@@ -1004,8 +1011,12 @@ def main(args):
             DeleteTraceFolders(worker_count, trace_folder)
             if os.path.isdir(args.out_dir):
                 SafeDeleteFolder(args.out_dir)
+
+        return retval
+
     except KeyboardInterrupt:
         child_processes_manager.KillAll()
+        return 1
 
 
 if __name__ == "__main__":
