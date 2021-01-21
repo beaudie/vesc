@@ -438,6 +438,52 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
 };
 // clang-format on
 
+// Align render areas with vkGetRenderAreaGranularity. This provides a workaround for multisampled
+// rendering to textures on Mali and get potential performance uplifts on tiling architectures GPUs
+void AlignRenderAreaWithGranularity(const Context *context,
+                                    const RenderPass *renderPass,
+                                    const gl::Rectangle &framebufferDimensions,
+                                    gl::Rectangle *renderArea)
+{
+    VkExtent2D renderAreaGranularity = {};
+    vkGetRenderAreaGranularity(context->getDevice(), renderPass->getHandle(),
+                               &renderAreaGranularity);
+    if (renderAreaGranularity.height == 0 || renderAreaGranularity.width == 0)
+    {
+        return;
+    }
+    gl::Rectangle alignedRenderArea;
+    // The offset.x and width member in renderArea is a multiple of the horizontal
+    // granularity. Similarly, the offset.y and height in renderArea is a multiple
+    // of the height of the returned VkExtent2D.
+    alignedRenderArea.x =
+        roundDown(static_cast<uint32_t>(renderArea->x), renderAreaGranularity.width);
+    alignedRenderArea.y =
+        roundDown(static_cast<uint32_t>(renderArea->y), renderAreaGranularity.height);
+
+    alignedRenderArea.width = roundUp(static_cast<uint32_t>(renderArea->width + renderArea->x),
+                                      renderAreaGranularity.width) -
+                              alignedRenderArea.x;
+    alignedRenderArea.height = roundUp(static_cast<uint32_t>(renderArea->height + renderArea->y),
+                                       renderAreaGranularity.height) -
+                               alignedRenderArea.y;
+    renderArea->x      = alignedRenderArea.x;
+    renderArea->y      = alignedRenderArea.y;
+    renderArea->width  = alignedRenderArea.width;
+    renderArea->height = alignedRenderArea.height;
+
+    // Offset.x + width should not be greater than framebuffer's width.
+    // And offset.y + height is not greater than framebuffer's height.
+    if (renderArea->x + renderArea->width > framebufferDimensions.width)
+    {
+        renderArea->width = framebufferDimensions.width - renderArea->x;
+    }
+    if (renderArea->y + renderArea->height > framebufferDimensions.height)
+    {
+        renderArea->height = framebufferDimensions.height - renderArea->y;
+    }
+}
+
 VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
 {
     switch (textureType)
@@ -1189,6 +1235,7 @@ void CommandBufferHelper::onImageHelperRelease(const ImageHelper *image)
 
 void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const gl::Rectangle &renderArea,
+                                          const gl::Rectangle &framebufferDimensions,
                                           const RenderPassDesc &renderPassDesc,
                                           const AttachmentOpsArray &renderPassAttachmentOps,
                                           const PackedAttachmentIndex depthStencilAttachmentIndex,
@@ -1206,7 +1253,8 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mClearValues      = clearValues;
     *commandBufferOut = &mCommandBuffer;
 
-    mRenderPassStarted = true;
+    mRenderPassStarted     = true;
+    mFramebufferDimensions = framebufferDimensions;
     mCounter++;
 }
 
@@ -1356,12 +1404,14 @@ void CommandBufferHelper::invalidateRenderPassStencilAttachment(
     ExtendRenderPassInvalidateArea(invalidateArea, &mStencilInvalidateArea);
 }
 
-angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &features,
+angle::Result CommandBufferHelper::flushToPrimary(const Context *context,
                                                   PrimaryCommandBuffer *primary,
                                                   const RenderPass *renderPass)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
+
+    const angle::FeaturesVk &features = context->getRenderer()->getFeatures();
 
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(features, primary);
@@ -1369,6 +1419,9 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
     if (mIsRenderPassCommandBuffer)
     {
         ASSERT(renderPass != nullptr);
+
+        // Align render area before beginning the render pass.
+        AlignRenderAreaWithGranularity(context, renderPass, mFramebufferDimensions, &mRenderArea);
 
         VkRenderPassBeginInfo beginInfo    = {};
         beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;

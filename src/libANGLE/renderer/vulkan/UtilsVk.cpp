@@ -1465,7 +1465,9 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                               vk::ImageLayout::ColorAttachment,
                                               vk::ImageLayout::ColorAttachment);
 
-    ANGLE_TRY(contextVk->beginNewRenderPass(framebuffer, renderArea, renderPassDesc,
+    gl::Rectangle fbSize = {0, 0, static_cast<int>(framebufferInfo.width),
+                            static_cast<int>(framebufferInfo.height)};
+    ANGLE_TRY(contextVk->beginNewRenderPass(framebuffer, renderArea, fbSize, renderPassDesc,
                                             renderPassAttachmentOps, vk::kAttachmentIndexInvalid,
                                             clearValues, commandBufferOut));
 

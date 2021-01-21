@@ -4577,6 +4577,7 @@ angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
 angle::Result ContextVk::beginNewRenderPass(
     const vk::Framebuffer &framebuffer,
     const gl::Rectangle &renderArea,
+    const gl::Rectangle &framebufferDimensions,
     const vk::RenderPassDesc &renderPassDesc,
     const vk::AttachmentOpsArray &renderPassAttachmentOps,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
@@ -4586,9 +4587,9 @@ angle::Result ContextVk::beginNewRenderPass(
     // Next end any currently outstanding renderPass
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
-    mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
-                                         renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                         clearValues, commandBufferOut);
+    mRenderPassCommands->beginRenderPass(
+        framebuffer, renderArea, framebufferDimensions, renderPassDesc, renderPassAttachmentOps,
+        depthStencilAttachmentIndex, clearValues, commandBufferOut);
     // Restart at subpass 0.
     mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
 
