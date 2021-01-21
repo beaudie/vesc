@@ -1193,7 +1193,9 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const AttachmentOpsArray &renderPassAttachmentOps,
                                           const PackedAttachmentIndex depthStencilAttachmentIndex,
                                           const PackedClearValuesArray &clearValues,
-                                          CommandBuffer **commandBufferOut)
+                                          CommandBuffer **commandBufferOut,
+                                          const gl::Rectangle &framebufferArea,
+                                          bool shouldDeferUpdateRenderArea)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());
@@ -1206,7 +1208,9 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mClearValues      = clearValues;
     *commandBufferOut = &mCommandBuffer;
 
-    mRenderPassStarted = true;
+    mRenderPassStarted     = true;
+    mRenderAreaDeferUpdate = shouldDeferUpdateRenderArea;
+    mFramebufferDimension  = framebufferArea;
     mCounter++;
 }
 
@@ -1356,12 +1360,15 @@ void CommandBufferHelper::invalidateRenderPassStencilAttachment(
     ExtendRenderPassInvalidateArea(invalidateArea, &mStencilInvalidateArea);
 }
 
-angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &features,
+angle::Result CommandBufferHelper::flushToPrimary(const Context *context,
                                                   PrimaryCommandBuffer *primary,
                                                   const RenderPass *renderPass)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
+    ASSERT(context != nullptr);
+
+    const auto &features = context->getRenderer()->getFeatures();
 
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(features, primary);
@@ -1369,6 +1376,45 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
     if (mIsRenderPassCommandBuffer)
     {
         ASSERT(renderPass != nullptr);
+
+        if (mRenderAreaDeferUpdate)
+        {
+            VkExtent2D renderAreaGranularity = {};
+            vkGetRenderAreaGranularity(context->getDevice(), renderPass->getHandle(),
+                                       &renderAreaGranularity);
+            if (renderAreaGranularity.height != 0 && renderAreaGranularity.width != 0)
+            {
+                gl::Rectangle alignedRenderArea;
+                // The offset.x and width member in renderArea is a multiple of the horizontal
+                // granularity. Similarly, the offset.y and height in renderArea is a multiple
+                // of the height of the returned VkExtent2D.
+                alignedRenderArea.x =
+                    roundDown(static_cast<uint32_t>(mRenderArea.x), renderAreaGranularity.width);
+                alignedRenderArea.y =
+                    roundDown(static_cast<uint32_t>(mRenderArea.y), renderAreaGranularity.height);
+
+                alignedRenderArea.width =
+                    roundUp(static_cast<uint32_t>(mRenderArea.width + mRenderArea.x),
+                            renderAreaGranularity.width) -
+                    alignedRenderArea.x;
+                alignedRenderArea.height =
+                    roundUp(static_cast<uint32_t>(mRenderArea.height + mRenderArea.y),
+                            renderAreaGranularity.height) -
+                    alignedRenderArea.y;
+                mRenderArea = alignedRenderArea;
+
+                // Offset.x + width should not be greater than framebuffer's width.
+                // And offset.y + height is not greater than framebuffer's height.
+                if (mRenderArea.x + mRenderArea.width > mFramebufferDimension.width)
+                {
+                    mRenderArea.width = mFramebufferDimension.width - mRenderArea.x;
+                }
+                if (mRenderArea.y + mRenderArea.height > mFramebufferDimension.height)
+                {
+                    mRenderArea.height = mFramebufferDimension.height - mRenderArea.y;
+                }
+            }
+        }
 
         VkRenderPassBeginInfo beginInfo    = {};
         beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;

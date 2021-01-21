@@ -483,7 +483,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                      const vk::AttachmentOpsArray &renderPassAttachmentOps,
                                      const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
                                      const vk::PackedClearValuesArray &clearValues,
-                                     vk::CommandBuffer **commandBufferOut);
+                                     vk::CommandBuffer **commandBufferOut,
+                                     const gl::Rectangle &framebufferArea,
+                                     bool shouldDeferUpdateRenderArea = false);
 
     // Only returns true if we have a started RP and we've run setupDraw.
     bool hasStartedRenderPass() const

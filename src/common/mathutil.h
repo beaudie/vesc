@@ -1321,6 +1321,12 @@ T roundUp(const T value, const T alignment)
 }
 
 template <typename T>
+T roundDown(const T value, const T alignment)
+{
+    return value - value % alignment;
+}
+
+template <typename T>
 constexpr T roundUpPow2(const T value, const T alignment)
 {
     ASSERT(gl::isPow2(alignment));

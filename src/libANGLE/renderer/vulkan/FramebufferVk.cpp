@@ -2330,6 +2330,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     const bool hasDeferredClears        = mDeferredClears.any();
     const bool previousUnresolveDepth   = mRenderPassDesc.hasDepthUnresolveAttachment();
     const bool previousUnresolveStencil = mRenderPassDesc.hasStencilUnresolveAttachment();
+    uint32_t multisampleAttachmentCnt   = 0;
 
     // Make sure render pass and framebuffer are in agreement w.r.t unresolve attachments.
     ASSERT(mCurrentFramebufferDesc.getUnresolveAttachmentMask() ==
@@ -2394,6 +2395,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             {
                 mRenderPassDesc.removeColorUnresolveAttachment(colorIndexGL);
             }
+            ++multisampleAttachmentCnt;
         }
         else
         {
@@ -2517,6 +2519,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             {
                 mRenderPassDesc.packDepthStencilUnresolveAttachment(unresolveDepth,
                                                                     unresolveStencil);
+                ++multisampleAttachmentCnt;
             }
             else
             {
@@ -2559,10 +2562,18 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     {
         renderArea = getRotatedCompleteRenderArea(contextVk);
     }
-
-    ANGLE_TRY(contextVk->beginNewRenderPass(*framebuffer, renderArea, mRenderPassDesc,
-                                            renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                            packedClearValues, commandBufferOut));
+    // If it is multisampled rendering with a transient multisampled image and
+    // a resolve attachment, render area could be updated by aligning the
+    // render area granularity to gain the performance benefit.
+    bool shouldAlignRenderArea = false;
+    if (multisampleAttachmentCnt > 0)
+    {
+        shouldAlignRenderArea = true;
+    }
+    ANGLE_TRY(contextVk->beginNewRenderPass(
+        *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps,
+        depthStencilAttachmentIndex, packedClearValues, commandBufferOut,
+        getRotatedCompleteRenderArea(contextVk), shouldAlignRenderArea));
 
     // Transition the images to the correct layout (through onColorDraw).
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
