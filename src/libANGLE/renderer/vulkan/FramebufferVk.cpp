@@ -2560,9 +2560,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         renderArea = getRotatedCompleteRenderArea(contextVk);
     }
 
-    ANGLE_TRY(contextVk->beginNewRenderPass(*framebuffer, renderArea, mRenderPassDesc,
-                                            renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                            packedClearValues, commandBufferOut));
+    ANGLE_TRY(contextVk->beginNewRenderPass(
+        *framebuffer, renderArea, getRotatedCompleteRenderArea(contextVk), mRenderPassDesc,
+        renderPassAttachmentOps, depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
 
     // Transition the images to the correct layout (through onColorDraw).
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())

@@ -968,6 +968,14 @@ class PackedClearValuesArray final
 // This value indicates an "infinite" CmdSize that is not valid for comparing
 constexpr uint32_t kInfiniteCmdSize = 0xFFFFFFFF;
 
+// Align render areas with vkGetRenderAreaGranularity. This provides
+// a workaround for multisampled rendering to textures and get potential
+// preformance uplifts on Mali.
+void GetAlignedRenderAreaWithGranularity(const Context *context,
+                                         const RenderPass *renderPass,
+                                         const gl::Rectangle framebufferDimensions,
+                                         gl::Rectangle &renderArea);
+
 // CommandBufferHelper (CBH) class wraps ANGLE's custom command buffer
 //  class, SecondaryCommandBuffer. This provides a way to temporarily
 //  store Vulkan commands that be can submitted in-line to a primary
@@ -1017,7 +1025,7 @@ class CommandBufferHelper : angle::NonCopyable
 
     CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
-    angle::Result flushToPrimary(const angle::FeaturesVk &features,
+    angle::Result flushToPrimary(const Context *context,
                                  PrimaryCommandBuffer *primary,
                                  const RenderPass *renderPass);
 
@@ -1057,6 +1065,7 @@ class CommandBufferHelper : angle::NonCopyable
 
     void beginRenderPass(const Framebuffer &framebuffer,
                          const gl::Rectangle &renderArea,
+                         const gl::Rectangle &framebufferDimensions,
                          const RenderPassDesc &renderPassDesc,
                          const AttachmentOpsArray &renderPassAttachmentOps,
                          const PackedAttachmentIndex depthStencilAttachmentIndex,
@@ -1196,6 +1205,7 @@ class CommandBufferHelper : angle::NonCopyable
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;
     bool mRenderPassStarted;
+    gl::Rectangle mFramebufferDimensions;
 
     // Transform feedback state
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
