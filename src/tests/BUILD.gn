@@ -170,7 +170,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
     if (is_win) {
       sources += angle_end2end_tests_win_sources
     }
-    if (angle_use_x11) {
+    if (angle_use_x11 && !is_chromeos_lacros) {
       sources += angle_end2end_tests_x11_sources
     }
 
