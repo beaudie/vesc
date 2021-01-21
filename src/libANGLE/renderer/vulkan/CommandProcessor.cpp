@@ -1081,8 +1081,7 @@ angle::Result CommandQueue::flushOutsideRPCommands(Context *context,
                                                    CommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRY(ensurePrimaryCommandBufferValid(context));
-    return (*outsideRPCommands)
-        ->flushToPrimary(context->getRenderer()->getFeatures(), &mPrimaryCommands, nullptr);
+    return (*outsideRPCommands)->flushToPrimary(context, &mPrimaryCommands, nullptr);
 }
 
 angle::Result CommandQueue::flushRenderPassCommands(Context *context,
@@ -1090,8 +1089,7 @@ angle::Result CommandQueue::flushRenderPassCommands(Context *context,
                                                     CommandBufferHelper **renderPassCommands)
 {
     ANGLE_TRY(ensurePrimaryCommandBufferValid(context));
-    return (*renderPassCommands)
-        ->flushToPrimary(context->getRenderer()->getFeatures(), &mPrimaryCommands, &renderPass);
+    return (*renderPassCommands)->flushToPrimary(context, &mPrimaryCommands, &renderPass);
 }
 
 angle::Result CommandQueue::queueSubmitOneOff(Context *context,

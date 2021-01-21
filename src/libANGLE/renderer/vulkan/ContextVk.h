@@ -479,6 +479,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result beginNewRenderPass(const vk::Framebuffer &framebuffer,
                                      const gl::Rectangle &renderArea,
+                                     const gl::Rectangle &framebufferDimensions,
                                      const vk::RenderPassDesc &renderPassDesc,
                                      const vk::AttachmentOpsArray &renderPassAttachmentOps,
                                      const vk::PackedAttachmentIndex depthStencilAttachmentIndex,

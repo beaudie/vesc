@@ -1017,7 +1017,7 @@ class CommandBufferHelper : angle::NonCopyable
 
     CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
-    angle::Result flushToPrimary(const angle::FeaturesVk &features,
+    angle::Result flushToPrimary(const Context *context,
                                  PrimaryCommandBuffer *primary,
                                  const RenderPass *renderPass);
 
@@ -1057,6 +1057,7 @@ class CommandBufferHelper : angle::NonCopyable
 
     void beginRenderPass(const Framebuffer &framebuffer,
                          const gl::Rectangle &renderArea,
+                         const gl::Rectangle &framebufferDimensions,
                          const RenderPassDesc &renderPassDesc,
                          const AttachmentOpsArray &renderPassAttachmentOps,
                          const PackedAttachmentIndex depthStencilAttachmentIndex,
@@ -1196,6 +1197,7 @@ class CommandBufferHelper : angle::NonCopyable
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;
     bool mRenderPassStarted;
+    gl::Rectangle mFramebufferDimensions;
 
     // Transform feedback state
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
