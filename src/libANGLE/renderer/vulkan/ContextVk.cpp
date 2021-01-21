@@ -4581,14 +4581,17 @@ angle::Result ContextVk::beginNewRenderPass(
     const vk::AttachmentOpsArray &renderPassAttachmentOps,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
     const vk::PackedClearValuesArray &clearValues,
-    vk::CommandBuffer **commandBufferOut)
+    vk::CommandBuffer **commandBufferOut,
+    const gl::Rectangle &framebufferArea,
+    bool shouldDeferUpdateRenderArea)
 {
     // Next end any currently outstanding renderPass
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
     mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                          renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                         clearValues, commandBufferOut);
+                                         clearValues, commandBufferOut, framebufferArea,
+                                         shouldDeferUpdateRenderArea);
     // Restart at subpass 0.
     mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
 
