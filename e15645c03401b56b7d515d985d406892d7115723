@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ef6baf4_e54a4596",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-01-22T22:28:13Z",
+      "side": 1,
+      "message": "Blocked on IterableBitSet being std::bitset, which is not constexpr. If a \"fast-multi-uint-bitset\" is developed, can make another attempt.",
+      "revId": "e15645c03401b56b7d515d985d406892d7115723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
