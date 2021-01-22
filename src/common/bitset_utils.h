@@ -87,8 +87,9 @@ class BitSetT final
 
     using value_type = BitsT;
 
-    BitSetT();
+    constexpr BitSetT();
     constexpr explicit BitSetT(BitsT value);
+    constexpr explicit BitSetT(std::initializer_list<ParamT> init);
 
     BitSetT(const BitSetT &other);
     BitSetT &operator=(const BitSetT &other);
@@ -252,7 +253,7 @@ unsigned long IterableBitSet<N>::Iterator::getNextBit()
 }
 
 template <size_t N, typename BitsT, typename ParamT>
-BitSetT<N, BitsT, ParamT>::BitSetT() : mBits(0)
+constexpr BitSetT<N, BitsT, ParamT>::BitSetT() : mBits(0)
 {
     static_assert(N > 0, "Bitset type cannot support zero bits.");
     static_assert(N <= sizeof(BitsT) * 8, "Bitset type cannot support a size this large.");
@@ -261,6 +262,15 @@ BitSetT<N, BitsT, ParamT>::BitSetT() : mBits(0)
 template <size_t N, typename BitsT, typename ParamT>
 constexpr BitSetT<N, BitsT, ParamT>::BitSetT(BitsT value) : mBits(value & Mask(N))
 {}
+
+template <size_t N, typename BitsT, typename ParamT>
+constexpr BitSetT<N, BitsT, ParamT>::BitSetT(std::initializer_list<ParamT> init) : mBits(0)
+{
+    for (ParamT element : init)
+    {
+        mBits |= Bit<BitsT>(element) & Mask(N);
+    }
+}
 
 template <size_t N, typename BitsT, typename ParamT>
 BitSetT<N, BitsT, ParamT>::BitSetT(const BitSetT &other) : mBits(other.mBits)

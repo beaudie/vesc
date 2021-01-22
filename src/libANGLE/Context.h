@@ -751,14 +751,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     State::DirtyBits mAllDirtyBits;
     State::DirtyBits mTexImageDirtyBits;
-    State::DirtyObjects mTexImageDirtyObjects;
-    State::DirtyBits mReadPixelsDirtyBits;
     State::DirtyObjects mReadPixelsDirtyObjects;
-    State::DirtyBits mClearDirtyBits;
-    State::DirtyObjects mClearDirtyObjects;
-    State::DirtyBits mBlitDirtyBits;
     State::DirtyObjects mBlitDirtyObjects;
-    State::DirtyBits mComputeDirtyBits;
     State::DirtyObjects mComputeDirtyObjects;
     State::DirtyBits mCopyImageDirtyBits;
     State::DirtyObjects mCopyImageDirtyObjects;
