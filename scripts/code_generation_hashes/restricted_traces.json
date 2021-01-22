@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "f8059af893e2a0b624722c1c0a4264d3",
+    "2b88beb1ea3d9f8c32d92301d0d39487",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "2b5d6505d6a8b6f3bbfbad2c8405a89d",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -29,6 +29,8 @@
     "eccb9514e9606eb56b24cf57598e596c",
   "src/tests/restricted_traces/google_maps.tar.gz.sha1":
     "5d7001969619570e80e5a39b1ab8b0c4",
+  "src/tests/restricted_traces/hearthstone.tar.gz.sha1":
+    "73fa97c4ab9be39017725c219666e908",
   "src/tests/restricted_traces/kartrider_rush.tar.gz.sha1":
     "c11aab56dcaba570a1993c1f8ebe4668",
   "src/tests/restricted_traces/klondike_adventures.tar.gz.sha1":
@@ -52,13 +54,13 @@
   "src/tests/restricted_traces/real_gangster_crime.tar.gz.sha1":
     "c85be329035a760edad673eb2ca7c3f1",
   "src/tests/restricted_traces/restricted_traces.json":
-    "46234fd8f771915a64937e1f2b4565ce",
+    "c6921c883ae3c1eea1a1e2107b7aeb24",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "41a9f85175b75c074cb25a2e5e0d1b2d",
+    "e1998a649083d014f118e1545dde2563",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "21cce03e456b86caf80be379c09f1497",
+    "35d111f69da6daaa52ecbdde2fedf205",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "7a2f1393f2d909a707c61bfeecb62653",
+    "72c192020c1bc59942fba278606ad06e",
   "src/tests/restricted_traces/saint_seiya_awakening.tar.gz.sha1":
     "c9cde6bdfd9096a44d5f03d905a45a4f",
   "src/tests/restricted_traces/subway_surfers.tar.gz.sha1":
