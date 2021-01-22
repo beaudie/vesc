@@ -242,7 +242,7 @@ void main()
     // to resolve depth/stencil images.
 
 #if IsBlitDepth
-    gl_FragDepth = DEPTH_TEXEL_FETCH(depth, srcImageCoords, 0).x;
+    gl_FragDepth = DEPTH_TEXEL_FETCH(depth, srcImageCoords, 1).x;
 #endif  // IsBlitDepth
 
 #if IsBlitStencil
