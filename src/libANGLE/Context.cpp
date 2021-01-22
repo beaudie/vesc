@@ -50,6 +50,57 @@ namespace gl
 {
 namespace
 {
+constexpr State::DirtyObjects kDrawDirtyObjectsBase{
+    State::DIRTY_OBJECT_ACTIVE_TEXTURES, State::DIRTY_OBJECT_DRAW_FRAMEBUFFER,
+    State::DIRTY_OBJECT_VERTEX_ARRAY,    State::DIRTY_OBJECT_TEXTURES,
+    State::DIRTY_OBJECT_PROGRAM,         State::DIRTY_OBJECT_SAMPLERS,
+    State::DIRTY_OBJECT_IMAGES};
+constexpr State::DirtyBits kTexImageDirtyBitsBase{State::DIRTY_BIT_UNPACK_STATE,
+                                                  State::DIRTY_BIT_UNPACK_BUFFER_BINDING,
+                                                  State::DIRTY_BIT_EXTENDED};
+// No dirty objects for tex image.
+constexpr State::DirtyObjects kTexImageDirtyObjects{};
+// Readpixels uses the pack state and read FBO
+constexpr State::DirtyBits kReadPixelsDirtyBits{State::DIRTY_BIT_PACK_STATE,
+                                                State::DIRTY_BIT_PACK_BUFFER_BINDING,
+                                                State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING};
+constexpr State::DirtyObjects kReadPixelsDirtyObjectsBase{State::DIRTY_OBJECT_READ_FRAMEBUFFER};
+// We sync the draw Framebuffer manually in prepareForClear to allow the clear calls to do
+// more custom handling for robust resource init.
+constexpr State::DirtyBits kClearDirtyBits{State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED,
+                                           State::DIRTY_BIT_SCISSOR_TEST_ENABLED,
+                                           State::DIRTY_BIT_SCISSOR,
+                                           State::DIRTY_BIT_VIEWPORT,
+                                           State::DIRTY_BIT_CLEAR_COLOR,
+                                           State::DIRTY_BIT_CLEAR_DEPTH,
+                                           State::DIRTY_BIT_CLEAR_STENCIL,
+                                           State::DIRTY_BIT_COLOR_MASK,
+                                           State::DIRTY_BIT_DEPTH_MASK,
+                                           State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT,
+                                           State::DIRTY_BIT_STENCIL_WRITEMASK_BACK,
+                                           State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING};
+constexpr State::DirtyObjects kClearDirtyObjects{State::DIRTY_OBJECT_DRAW_FRAMEBUFFER};
+constexpr State::DirtyBits kBlitDirtyBits{
+    State::DIRTY_BIT_SCISSOR_TEST_ENABLED, State::DIRTY_BIT_SCISSOR,
+    State::DIRTY_BIT_FRAMEBUFFER_SRGB, State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING,
+    State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING};
+constexpr State::DirtyObjects kBlitDirtyObjectsBase{State::DIRTY_OBJECT_READ_FRAMEBUFFER,
+                                                    State::DIRTY_OBJECT_DRAW_FRAMEBUFFER};
+constexpr State::DirtyBits kComputeDirtyBits{State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,
+                                             State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,
+                                             State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING,
+                                             State::DIRTY_BIT_PROGRAM_BINDING,
+                                             State::DIRTY_BIT_PROGRAM_EXECUTABLE,
+                                             State::DIRTY_BIT_TEXTURE_BINDINGS,
+                                             State::DIRTY_BIT_SAMPLER_BINDINGS,
+                                             State::DIRTY_BIT_IMAGE_BINDINGS,
+                                             State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING};
+constexpr State::DirtyObjects kComputeDirtyObjectsBase{
+    State::DIRTY_OBJECT_ACTIVE_TEXTURES, State::DIRTY_OBJECT_TEXTURES, State::DIRTY_OBJECT_PROGRAM,
+    State::DIRTY_OBJECT_IMAGES, State::DIRTY_OBJECT_SAMPLERS};
+constexpr State::DirtyBits kCopyImageDirtyBitsBase{State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING};
+constexpr State::DirtyObjects kCopyImageDirtyObjectsBase{State::DIRTY_OBJECT_READ_FRAMEBUFFER};
+
 egl::ShareGroup *AllocateOrGetShareGroup(egl::Display *display, const gl::Context *shareContext)
 {
     if (shareContext)
@@ -383,12 +434,6 @@ void Context::initialize()
 
     initCaps();
 
-    if (mDisplay->getFrontendFeatures().syncFramebufferBindingsOnTexImage.enabled)
-    {
-        mTexImageDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
-        mTexImageDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
-    }
-
     mState.initialize(this);
 
     mFenceNVHandleAllocator.setBaseHandle(0);
@@ -511,69 +556,20 @@ void Context::initialize()
     }
 
     // Initialize dirty bit masks
-    mAllDirtyBits.set();
+    mDrawDirtyObjects = kDrawDirtyObjectsBase;
 
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
+    mTexImageDirtyBits = kTexImageDirtyBitsBase;
+    if (mDisplay->getFrontendFeatures().syncFramebufferBindingsOnTexImage.enabled)
+    {
+        mTexImageDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
+        mTexImageDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
+    }
 
-    mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_STATE);
-    mTexImageDirtyBits.set(State::DIRTY_BIT_UNPACK_BUFFER_BINDING);
-    mTexImageDirtyBits.set(State::DIRTY_BIT_EXTENDED);
-    // No dirty objects.
-
-    // Readpixels uses the pack state and read FBO
-    mReadPixelsDirtyBits.set(State::DIRTY_BIT_PACK_STATE);
-    mReadPixelsDirtyBits.set(State::DIRTY_BIT_PACK_BUFFER_BINDING);
-    mReadPixelsDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
-    mReadPixelsDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
-
-    mClearDirtyBits.set(State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
-    mClearDirtyBits.set(State::DIRTY_BIT_SCISSOR_TEST_ENABLED);
-    mClearDirtyBits.set(State::DIRTY_BIT_SCISSOR);
-    mClearDirtyBits.set(State::DIRTY_BIT_VIEWPORT);
-    mClearDirtyBits.set(State::DIRTY_BIT_CLEAR_COLOR);
-    mClearDirtyBits.set(State::DIRTY_BIT_CLEAR_DEPTH);
-    mClearDirtyBits.set(State::DIRTY_BIT_CLEAR_STENCIL);
-    mClearDirtyBits.set(State::DIRTY_BIT_COLOR_MASK);
-    mClearDirtyBits.set(State::DIRTY_BIT_DEPTH_MASK);
-    mClearDirtyBits.set(State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT);
-    mClearDirtyBits.set(State::DIRTY_BIT_STENCIL_WRITEMASK_BACK);
-    mClearDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
-    mClearDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
-
-    // We sync the draw Framebuffer manually in prepareForClear to allow the clear calls to do
-    // more custom handling for robust resource init.
-
-    mBlitDirtyBits.set(State::DIRTY_BIT_SCISSOR_TEST_ENABLED);
-    mBlitDirtyBits.set(State::DIRTY_BIT_SCISSOR);
-    mBlitDirtyBits.set(State::DIRTY_BIT_FRAMEBUFFER_SRGB);
-    mBlitDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
-    mBlitDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
-    mBlitDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
-    mBlitDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
-
-    mComputeDirtyBits.set(State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
-    mComputeDirtyBits.set(State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
-    mComputeDirtyBits.set(State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
-    mComputeDirtyBits.set(State::DIRTY_BIT_PROGRAM_BINDING);
-    mComputeDirtyBits.set(State::DIRTY_BIT_PROGRAM_EXECUTABLE);
-    mComputeDirtyBits.set(State::DIRTY_BIT_TEXTURE_BINDINGS);
-    mComputeDirtyBits.set(State::DIRTY_BIT_SAMPLER_BINDINGS);
-    mComputeDirtyBits.set(State::DIRTY_BIT_IMAGE_BINDINGS);
-    mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
-    mComputeDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
-    mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
-    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
-    mComputeDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
-    mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
-
-    mCopyImageDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
-    mCopyImageDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
+    mReadPixelsDirtyObjects = kReadPixelsDirtyObjectsBase;
+    mBlitDirtyObjects       = kBlitDirtyObjectsBase;
+    mComputeDirtyObjects    = kComputeDirtyObjectsBase;
+    mCopyImageDirtyBits     = kCopyImageDirtyBitsBase;
+    mCopyImageDirtyObjects  = kCopyImageDirtyObjectsBase;
 
     // Initialize overlay after implementation is initialized.
     ANGLE_CONTEXT_TRY(mOverlay.init(this));
@@ -3934,7 +3930,7 @@ ANGLE_INLINE angle::Result Context::prepareForDispatch()
     }
 
     ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects, Command::Dispatch));
-    return syncDirtyBits(mComputeDirtyBits);
+    return syncDirtyBits(kComputeDirtyBits);
 }
 
 angle::Result Context::syncState(const State::DirtyBits &bitMask,
@@ -5128,22 +5124,22 @@ void Context::flushMappedBufferRange(BufferBinding /*target*/,
 
 angle::Result Context::syncStateForReadPixels()
 {
-    return syncState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects, Command::ReadPixels);
+    return syncState(kReadPixelsDirtyBits, mReadPixelsDirtyObjects, Command::ReadPixels);
 }
 
 angle::Result Context::syncStateForTexImage()
 {
-    return syncState(mTexImageDirtyBits, mTexImageDirtyObjects, Command::TexImage);
+    return syncState(mTexImageDirtyBits, kTexImageDirtyObjects, Command::TexImage);
 }
 
 angle::Result Context::syncStateForBlit()
 {
-    return syncState(mBlitDirtyBits, mBlitDirtyObjects, Command::Blit);
+    return syncState(kBlitDirtyBits, mBlitDirtyObjects, Command::Blit);
 }
 
 angle::Result Context::syncStateForClear()
 {
-    return syncState(mClearDirtyBits, mClearDirtyObjects, Command::Clear);
+    return syncState(kClearDirtyBits, kClearDirtyObjects, Command::Clear);
 }
 
 angle::Result Context::syncTextureForCopy(Texture *texture)

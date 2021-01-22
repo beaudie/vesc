@@ -86,8 +86,9 @@ ANGLE_INLINE bool Context::noopDraw(PrimitiveMode mode, GLsizei count) const
 
 ANGLE_INLINE angle::Result Context::syncDirtyBits()
 {
-    const State::DirtyBits &dirtyBits = mState.getDirtyBits();
-    ANGLE_TRY(mImplementation->syncState(this, dirtyBits, mAllDirtyBits));
+    constexpr State::DirtyBits kAllDirtyBits = State::DirtyBits().set();
+    const State::DirtyBits dirtyBits         = mState.getDirtyBits();
+    ANGLE_TRY(mImplementation->syncState(this, dirtyBits, kAllDirtyBits));
     mState.clearDirtyBits();
     return angle::Result::Continue;
 }

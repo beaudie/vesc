@@ -1010,8 +1010,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::PerfCounters mPerfCounters;
     PerfCounters mObjectPerfCounters;
 
-    gl::State::DirtyBits mPipelineDirtyBitsMask;
-
     // List of all resources currently being used by this ContextVk's recorded commands.
     vk::ResourceUseList mResourceUseList;
 
