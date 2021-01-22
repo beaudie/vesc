@@ -21,7 +21,7 @@ class Program11 : public ProgramD3D
     ~Program11() override;
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::Program::DirtyBits &dirtyBits) override;
+                            const gl::Program::DirtyBits dirtyBits) override;
 };
 }  // namespace rx
 

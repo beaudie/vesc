@@ -179,8 +179,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
-                            const gl::State::DirtyBits &dirtyBits,
-                            const gl::State::DirtyBits &bitMask) override;
+                            const gl::State::DirtyBits dirtyBits,
+                            const gl::State::DirtyBits bitMask) override;
 
     // Disjoint timer queries
     GLint getGPUDisjoint() override;

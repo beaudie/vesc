@@ -29,7 +29,7 @@ class RenderTargetCache final : angle::NonCopyable
     // Update all RenderTargets from the dirty bits.
     angle::Result update(const gl::Context *context,
                          const gl::FramebufferState &state,
-                         const gl::Framebuffer::DirtyBits &dirtyBits);
+                         const gl::Framebuffer::DirtyBits dirtyBits);
 
     // Update individual RenderTargets.
     angle::Result updateReadColorRenderTarget(const gl::Context *context,
@@ -68,7 +68,7 @@ RenderTargetCache<RenderTargetT>::~RenderTargetCache() = default;
 template <typename RenderTargetT>
 angle::Result RenderTargetCache<RenderTargetT>::update(const gl::Context *context,
                                                        const gl::FramebufferState &state,
-                                                       const gl::Framebuffer::DirtyBits &dirtyBits)
+                                                       const gl::Framebuffer::DirtyBits dirtyBits)
 {
     for (auto dirtyBit : dirtyBits)
     {

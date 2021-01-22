@@ -49,7 +49,7 @@ class VertexArrayGL : public VertexArrayImpl
     GLuint getAppliedElementArrayBufferID() const;
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::VertexArray::DirtyBits &dirtyBits,
+                            const gl::VertexArray::DirtyBits dirtyBits,
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 
@@ -94,10 +94,10 @@ class VertexArrayGL : public VertexArrayImpl
                                    const gl::IndexRange &indexRange) const;
     void syncDirtyAttrib(const gl::Context *context,
                          size_t attribIndex,
-                         const gl::VertexArray::DirtyAttribBits &dirtyAttribBits);
+                         const gl::VertexArray::DirtyAttribBits dirtyAttribBits);
     void syncDirtyBinding(const gl::Context *context,
                           size_t bindingIndex,
-                          const gl::VertexArray::DirtyBindingBits &dirtyBindingBits);
+                          const gl::VertexArray::DirtyBindingBits dirtyBindingBits);
 
     void updateAttribEnabled(size_t attribIndex);
     void updateAttribPointer(const gl::Context *context, size_t attribIndex);

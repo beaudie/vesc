@@ -1155,7 +1155,7 @@ void ProgramGL::linkResources(const gl::ProgramLinkedResources &resources)
 }
 
 angle::Result ProgramGL::syncState(const gl::Context *context,
-                                   const gl::Program::DirtyBits &dirtyBits)
+                                   const gl::Program::DirtyBits dirtyBits)
 {
     for (size_t dirtyBit : dirtyBits)
     {

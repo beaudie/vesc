@@ -140,7 +140,7 @@ class TextureMtl : public TextureImpl
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::Texture::DirtyBits &dirtyBits,
+                            const gl::Texture::DirtyBits dirtyBits,
                             gl::Command source) override;
 
     angle::Result setStorageMultisample(const gl::Context *context,

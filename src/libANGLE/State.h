@@ -678,9 +678,9 @@ class State : angle::NonCopyable
     };
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
-    const DirtyBits &getDirtyBits() const { return mDirtyBits; }
+    DirtyBits getDirtyBits() const { return mDirtyBits; }
     void clearDirtyBits() { mDirtyBits.reset(); }
-    void clearDirtyBits(const DirtyBits &bitset) { mDirtyBits &= ~bitset; }
+    void clearDirtyBits(const DirtyBits bitset) { mDirtyBits &= ~bitset; }
     void setAllDirtyBits()
     {
         mDirtyBits.set();
@@ -691,7 +691,7 @@ class State : angle::NonCopyable
     void clearDirtyObjects() { mDirtyObjects.reset(); }
     void setAllDirtyObjects() { mDirtyObjects.set(); }
     angle::Result syncDirtyObjects(const Context *context,
-                                   const DirtyObjects &bitset,
+                                   const DirtyObjects bitset,
                                    Command command);
     angle::Result syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
@@ -780,7 +780,7 @@ class State : angle::NonCopyable
     }
 
     using ClipDistanceEnableBits = angle::BitSet32<IMPLEMENTATION_MAX_CLIP_DISTANCES>;
-    const ClipDistanceEnableBits &getEnabledClipDistances() const { return mClipDistancesEnabled; }
+    ClipDistanceEnableBits getEnabledClipDistances() const { return mClipDistancesEnabled; }
     void setClipDistanceEnable(int idx, bool enable);
 
     const OverlayType *getOverlay() const { return mOverlay; }
@@ -1096,10 +1096,10 @@ class State : angle::NonCopyable
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
-                                                   const DirtyObjects &bitset,
+                                                   const DirtyObjects bitset,
                                                    Command command)
 {
-    const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
+    const DirtyObjects dirtyObjects = mDirtyObjects & bitset;
 
     for (size_t dirtyObject : dirtyObjects)
     {

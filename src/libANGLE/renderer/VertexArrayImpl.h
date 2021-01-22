@@ -36,7 +36,7 @@ class VertexArrayImpl : angle::NonCopyable
     // It's up to the implementation to reset the attrib and binding dirty bits.
     // This is faster than the front-end having to clear all the bits after they have been scanned.
     virtual angle::Result syncState(const gl::Context *context,
-                                    const gl::VertexArray::DirtyBits &dirtyBits,
+                                    const gl::VertexArray::DirtyBits dirtyBits,
                                     gl::VertexArray::DirtyAttribBitsArray *attribBits,
                                     gl::VertexArray::DirtyBindingBitsArray *bindingBits);
 
@@ -50,7 +50,7 @@ class VertexArrayImpl : angle::NonCopyable
 };
 
 inline angle::Result VertexArrayImpl::syncState(const gl::Context *context,
-                                                const gl::VertexArray::DirtyBits &dirtyBits,
+                                                const gl::VertexArray::DirtyBits dirtyBits,
                                                 gl::VertexArray::DirtyAttribBitsArray *attribBits,
                                                 gl::VertexArray::DirtyBindingBitsArray *bindingBits)
 {

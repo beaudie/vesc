@@ -209,7 +209,7 @@ angle::Result TextureNULL::releaseTexImage(const gl::Context *context)
 }
 
 angle::Result TextureNULL::syncState(const gl::Context *context,
-                                     const gl::Texture::DirtyBits &dirtyBits,
+                                     const gl::Texture::DirtyBits dirtyBits,
                                      gl::Command source)
 {
     return angle::Result::Continue;

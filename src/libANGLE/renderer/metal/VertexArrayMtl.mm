@@ -212,7 +212,7 @@ void VertexArrayMtl::reset(ContextMtl *context)
 }
 
 angle::Result VertexArrayMtl::syncState(const gl::Context *context,
-                                        const gl::VertexArray::DirtyBits &dirtyBits,
+                                        const gl::VertexArray::DirtyBits dirtyBits,
                                         gl::VertexArray::DirtyAttribBitsArray *attribBits,
                                         gl::VertexArray::DirtyBindingBitsArray *bindingBits)
 {

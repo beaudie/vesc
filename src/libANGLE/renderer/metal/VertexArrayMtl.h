@@ -30,7 +30,7 @@ class VertexArrayMtl : public VertexArrayImpl
     void destroy(const gl::Context *context) override;
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::VertexArray::DirtyBits &dirtyBits,
+                            const gl::VertexArray::DirtyBits dirtyBits,
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 

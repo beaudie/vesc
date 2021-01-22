@@ -528,7 +528,7 @@ bool FramebufferMtl::checkPackedDepthStencilAttachment() const
 
 angle::Result FramebufferMtl::syncState(const gl::Context *context,
                                         GLenum binding,
-                                        const gl::Framebuffer::DirtyBits &dirtyBits,
+                                        const gl::Framebuffer::DirtyBits dirtyBits,
                                         gl::Command command)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);

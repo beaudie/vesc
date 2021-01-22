@@ -639,7 +639,7 @@ void VertexArrayGL::updateBindingDivisor(size_t bindingIndex)
 
 void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
                                     size_t attribIndex,
-                                    const gl::VertexArray::DirtyAttribBits &dirtyAttribBits)
+                                    const gl::VertexArray::DirtyAttribBits dirtyAttribBits)
 {
     ASSERT(dirtyAttribBits.any());
 
@@ -675,7 +675,7 @@ void VertexArrayGL::syncDirtyAttrib(const gl::Context *context,
 
 void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
                                      size_t bindingIndex,
-                                     const gl::VertexArray::DirtyBindingBits &dirtyBindingBits)
+                                     const gl::VertexArray::DirtyBindingBits dirtyBindingBits)
 {
     // Dependent state changes in buffers can trigger updates with no dirty bits set.
 
@@ -716,7 +716,7 @@ void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
         break;
 
 angle::Result VertexArrayGL::syncState(const gl::Context *context,
-                                       const gl::VertexArray::DirtyBits &dirtyBits,
+                                       const gl::VertexArray::DirtyBits dirtyBits,
                                        gl::VertexArray::DirtyAttribBitsArray *attribBits,
                                        gl::VertexArray::DirtyBindingBitsArray *bindingBits)
 {

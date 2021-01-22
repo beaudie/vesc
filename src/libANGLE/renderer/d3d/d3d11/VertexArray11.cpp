@@ -65,7 +65,7 @@ void VertexArray11::destroy(const gl::Context *context) {}
         break;
 
 angle::Result VertexArray11::syncState(const gl::Context *context,
-                                       const gl::VertexArray::DirtyBits &dirtyBits,
+                                       const gl::VertexArray::DirtyBits dirtyBits,
                                        gl::VertexArray::DirtyAttribBitsArray *attribBits,
                                        gl::VertexArray::DirtyBindingBitsArray *bindingBits)
 {

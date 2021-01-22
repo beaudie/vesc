@@ -3937,8 +3937,8 @@ ANGLE_INLINE angle::Result Context::prepareForDispatch()
     return syncDirtyBits(mComputeDirtyBits);
 }
 
-angle::Result Context::syncState(const State::DirtyBits &bitMask,
-                                 const State::DirtyObjects &objectMask,
+angle::Result Context::syncState(const State::DirtyBits bitMask,
+                                 const State::DirtyObjects objectMask,
                                  Command command)
 {
     ANGLE_TRY(syncDirtyObjects(objectMask, command));

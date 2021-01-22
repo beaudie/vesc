@@ -28,7 +28,7 @@ class VertexArray11 : public VertexArrayImpl
     // Does not apply any state updates - these are done in syncStateForDraw which as access to
     // the draw call parameters.
     angle::Result syncState(const gl::Context *context,
-                            const gl::VertexArray::DirtyBits &dirtyBits,
+                            const gl::VertexArray::DirtyBits dirtyBits,
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 

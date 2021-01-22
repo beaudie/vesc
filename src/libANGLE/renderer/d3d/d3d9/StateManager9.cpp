@@ -112,7 +112,7 @@ void StateManager9::updateStencilSizeIfChanged(bool depthStencilInitialized,
     }
 }
 
-void StateManager9::syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits)
+void StateManager9::syncState(const gl::State &state, const gl::State::DirtyBits dirtyBits)
 {
     if (!dirtyBits.any())
     {

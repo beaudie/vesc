@@ -112,7 +112,7 @@ class ProgramGL : public ProgramImpl
     void enableLayeredRenderingPath(int baseViewIndex) const;
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::Program::DirtyBits &dirtyBits) override;
+                            const gl::Program::DirtyBits dirtyBits) override;
 
   private:
     class LinkTask;

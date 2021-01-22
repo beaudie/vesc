@@ -2320,7 +2320,7 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
 }
 
 angle::Result TextureVk::syncState(const gl::Context *context,
-                                   const gl::Texture::DirtyBits &dirtyBits,
+                                   const gl::Texture::DirtyBits dirtyBits,
                                    gl::Command source)
 {
     ContextVk *contextVk = vk::GetImpl(context);

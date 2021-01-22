@@ -229,7 +229,7 @@ class StateManagerGL final : angle::NonCopyable
 
     void setProvokingVertex(GLenum mode);
 
-    void setClipDistancesEnable(const gl::State::ClipDistanceEnableBits &enables);
+    void setClipDistancesEnable(const gl::State::ClipDistanceEnableBits enables);
 
     void pauseTransformFeedback();
     angle::Result pauseAllQueries(const gl::Context *context);
@@ -239,8 +239,8 @@ class StateManagerGL final : angle::NonCopyable
     angle::Result onMakeCurrent(const gl::Context *context);
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::State::DirtyBits &glDirtyBits,
-                            const gl::State::DirtyBits &bitMask);
+                            const gl::State::DirtyBits glDirtyBits,
+                            const gl::State::DirtyBits bitMask);
 
     ANGLE_INLINE void updateMultiviewBaseViewLayerIndexUniform(
         const gl::Program *program,

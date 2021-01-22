@@ -92,15 +92,15 @@ ANGLE_INLINE angle::Result Context::syncDirtyBits()
     return angle::Result::Continue;
 }
 
-ANGLE_INLINE angle::Result Context::syncDirtyBits(const State::DirtyBits &bitMask)
+ANGLE_INLINE angle::Result Context::syncDirtyBits(const State::DirtyBits bitMask)
 {
-    const State::DirtyBits &dirtyBits = (mState.getDirtyBits() & bitMask);
+    const State::DirtyBits dirtyBits = mState.getDirtyBits() & bitMask;
     ANGLE_TRY(mImplementation->syncState(this, dirtyBits, bitMask));
     mState.clearDirtyBits(dirtyBits);
     return angle::Result::Continue;
 }
 
-ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects &objectMask,
+ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects objectMask,
                                                      Command command)
 {
     return mState.syncDirtyObjects(this, objectMask, command);

@@ -21,7 +21,7 @@ class VertexArrayNULL : public VertexArrayImpl
     VertexArrayNULL(const gl::VertexArrayState &data);
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::VertexArray::DirtyBits &dirtyBits,
+                            const gl::VertexArray::DirtyBits dirtyBits,
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 };

@@ -24,7 +24,7 @@ class VertexArray9 : public VertexArrayImpl
     VertexArray9(const gl::VertexArrayState &data) : VertexArrayImpl(data) {}
 
     angle::Result syncState(const gl::Context *context,
-                            const gl::VertexArray::DirtyBits &dirtyBits,
+                            const gl::VertexArray::DirtyBits dirtyBits,
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 
@@ -37,7 +37,7 @@ class VertexArray9 : public VertexArrayImpl
 };
 
 inline angle::Result VertexArray9::syncState(const gl::Context *context,
-                                             const gl::VertexArray::DirtyBits &dirtyBits,
+                                             const gl::VertexArray::DirtyBits dirtyBits,
                                              gl::VertexArray::DirtyAttribBitsArray *attribBits,
                                              gl::VertexArray::DirtyBindingBitsArray *bindingBits)
 {

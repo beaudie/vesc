@@ -833,8 +833,8 @@ angle::Result ContextMtl::popDebugGroup(const gl::Context *context)
 
 // State sync with dirty bits.
 angle::Result ContextMtl::syncState(const gl::Context *context,
-                                    const gl::State::DirtyBits &dirtyBits,
-                                    const gl::State::DirtyBits &bitMask)
+                                    const gl::State::DirtyBits dirtyBits,
+                                    const gl::State::DirtyBits bitMask)
 {
     const gl::State &glState = context->getState();
 

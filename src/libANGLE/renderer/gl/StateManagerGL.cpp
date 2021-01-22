@@ -1713,8 +1713,8 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
 }
 
 angle::Result StateManagerGL::syncState(const gl::Context *context,
-                                        const gl::State::DirtyBits &glDirtyBits,
-                                        const gl::State::DirtyBits &bitMask)
+                                        const gl::State::DirtyBits glDirtyBits,
+                                        const gl::State::DirtyBits bitMask)
 {
     const gl::State &state = context->getState();
 
@@ -2273,7 +2273,7 @@ void StateManagerGL::setProvokingVertex(GLenum mode)
     }
 }
 
-void StateManagerGL::setClipDistancesEnable(const gl::State::ClipDistanceEnableBits &enables)
+void StateManagerGL::setClipDistancesEnable(const gl::State::ClipDistanceEnableBits enables)
 {
     if (enables == mEnabledClipDistances)
     {

@@ -937,7 +937,7 @@ angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-void StateManager11::syncState(const gl::Context *context, const gl::State::DirtyBits &dirtyBits)
+void StateManager11::syncState(const gl::Context *context, const gl::State::DirtyBits dirtyBits)
 {
     if (!dirtyBits.any())
     {
