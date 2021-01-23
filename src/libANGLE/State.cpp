@@ -755,26 +755,38 @@ void State::setDepthMask(bool mask)
 
 void State::setRasterizerDiscard(bool enabled)
 {
-    mRasterizer.rasterizerDiscard = enabled;
-    mDirtyBits.set(DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
+    if (mRasterizer.rasterizerDiscard != enabled)
+    {
+        mRasterizer.rasterizerDiscard = enabled;
+        mDirtyBits.set(DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
+    }
 }
 
 void State::setCullFace(bool enabled)
 {
-    mRasterizer.cullFace = enabled;
-    mDirtyBits.set(DIRTY_BIT_CULL_FACE_ENABLED);
+    if (mRasterizer.cullFace != enabled)
+    {
+        mRasterizer.cullFace = enabled;
+        mDirtyBits.set(DIRTY_BIT_CULL_FACE_ENABLED);
+    }
 }
 
 void State::setCullMode(CullFaceMode mode)
 {
-    mRasterizer.cullMode = mode;
-    mDirtyBits.set(DIRTY_BIT_CULL_FACE);
+    if (mRasterizer.cullMode != mode)
+    {
+        mRasterizer.cullMode = mode;
+        mDirtyBits.set(DIRTY_BIT_CULL_FACE);
+    }
 }
 
 void State::setFrontFace(GLenum front)
 {
-    mRasterizer.frontFace = front;
-    mDirtyBits.set(DIRTY_BIT_FRONT_FACE);
+    if (mRasterizer.frontFace != front)
+    {
+        mRasterizer.frontFace = front;
+        mDirtyBits.set(DIRTY_BIT_FRONT_FACE);
+    }
 }
 
 void State::setDepthTest(bool enabled)
@@ -807,10 +819,13 @@ void State::setDepthRange(float zNear, float zFar)
 
 void State::setBlend(bool enabled)
 {
-    mBlendState.blend = enabled;
+    if (mBlendState.blend != enabled)
+    {
+        mBlendState.blend = enabled;
 
-    mBlendStateExt.setEnabled(enabled);
-    mDirtyBits.set(DIRTY_BIT_BLEND_ENABLED);
+        mBlendStateExt.setEnabled(enabled);
+        mDirtyBits.set(DIRTY_BIT_BLEND_ENABLED);
+    }
 }
 
 void State::setBlendIndexed(bool enabled, GLuint index)
@@ -991,8 +1006,11 @@ void State::setStencilBackOperations(GLenum stencilBackFail,
 
 void State::setPolygonOffsetFill(bool enabled)
 {
-    mRasterizer.polygonOffsetFill = enabled;
-    mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED);
+    if (mRasterizer.polygonOffsetFill != enabled)
+    {
+        mRasterizer.polygonOffsetFill = enabled;
+        mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED);
+    }
 }
 
 void State::setPolygonOffsetParams(GLfloat factor, GLfloat units)
@@ -1005,14 +1023,20 @@ void State::setPolygonOffsetParams(GLfloat factor, GLfloat units)
 
 void State::setSampleAlphaToCoverage(bool enabled)
 {
-    mSampleAlphaToCoverage = enabled;
-    mDirtyBits.set(DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);
+    if (mSampleAlphaToCoverage != enabled)
+    {
+        mSampleAlphaToCoverage = enabled;
+        mDirtyBits.set(DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);
+    }
 }
 
 void State::setSampleCoverage(bool enabled)
 {
-    mSampleCoverage = enabled;
-    mDirtyBits.set(DIRTY_BIT_SAMPLE_COVERAGE_ENABLED);
+    if (mSampleCoverage != enabled)
+    {
+        mSampleCoverage = enabled;
+        mDirtyBits.set(DIRTY_BIT_SAMPLE_COVERAGE_ENABLED);
+    }
 }
 
 void State::setSampleCoverageParams(GLclampf value, bool invert)
@@ -1024,8 +1048,11 @@ void State::setSampleCoverageParams(GLclampf value, bool invert)
 
 void State::setSampleMaskEnabled(bool enabled)
 {
-    mSampleMask = enabled;
-    mDirtyBits.set(DIRTY_BIT_SAMPLE_MASK_ENABLED);
+    if (mSampleMask != enabled)
+    {
+        mSampleMask = enabled;
+        mDirtyBits.set(DIRTY_BIT_SAMPLE_MASK_ENABLED);
+    }
 }
 
 void State::setSampleMaskParams(GLuint maskNumber, GLbitfield mask)
@@ -1038,21 +1065,30 @@ void State::setSampleMaskParams(GLuint maskNumber, GLbitfield mask)
 
 void State::setSampleAlphaToOne(bool enabled)
 {
-    mSampleAlphaToOne = enabled;
-    mDirtyBits.set(DIRTY_BIT_SAMPLE_ALPHA_TO_ONE);
+    if (mSampleAlphaToOne != enabled)
+    {
+        mSampleAlphaToOne = enabled;
+        mDirtyBits.set(DIRTY_BIT_SAMPLE_ALPHA_TO_ONE);
+    }
 }
 
 void State::setMultisampling(bool enabled)
 {
-    mMultiSampling = enabled;
-    mDirtyBits.set(DIRTY_BIT_MULTISAMPLING);
+    if (mMultiSampling != enabled)
+    {
+        mMultiSampling = enabled;
+        mDirtyBits.set(DIRTY_BIT_MULTISAMPLING);
+    }
 }
 
 void State::setSampleShading(bool enabled)
 {
-    mIsSampleShadingEnabled = enabled;
-    mMinSampleShading       = (enabled) ? 1.0f : mMinSampleShading;
-    mDirtyBits.set(DIRTY_BIT_SAMPLE_SHADING);
+    if (mIsSampleShadingEnabled != enabled)
+    {
+        mIsSampleShadingEnabled = enabled;
+        mMinSampleShading       = (enabled) ? 1.0f : mMinSampleShading;
+        mDirtyBits.set(DIRTY_BIT_SAMPLE_SHADING);
+    }
 }
 
 void State::setMinSampleShading(float value)
@@ -1090,14 +1126,20 @@ void State::setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height)
 
 void State::setDither(bool enabled)
 {
-    mRasterizer.dither = enabled;
-    mDirtyBits.set(DIRTY_BIT_DITHER_ENABLED);
+    if (mRasterizer.dither != enabled)
+    {
+        mRasterizer.dither = enabled;
+        mDirtyBits.set(DIRTY_BIT_DITHER_ENABLED);
+    }
 }
 
 void State::setPrimitiveRestart(bool enabled)
 {
-    mPrimitiveRestart = enabled;
-    mDirtyBits.set(DIRTY_BIT_PRIMITIVE_RESTART_ENABLED);
+    if (mPrimitiveRestart != enabled)
+    {
+        mPrimitiveRestart = enabled;
+        mDirtyBits.set(DIRTY_BIT_PRIMITIVE_RESTART_ENABLED);
+    }
 }
 
 void State::setClipDistanceEnable(int idx, bool enable)
@@ -2194,14 +2236,20 @@ void State::setUnpackSkipPixels(GLint skipPixels)
 
 void State::setCoverageModulation(GLenum components)
 {
-    mCoverageModulation = components;
-    mDirtyBits.set(DIRTY_BIT_COVERAGE_MODULATION);
+    if (mCoverageModulation != components)
+    {
+        mCoverageModulation = components;
+        mDirtyBits.set(DIRTY_BIT_COVERAGE_MODULATION);
+    }
 }
 
 void State::setFramebufferSRGB(bool sRGB)
 {
-    mFramebufferSRGB = sRGB;
-    mDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_SRGB);
+    if (mFramebufferSRGB != sRGB)
+    {
+        mFramebufferSRGB = sRGB;
+        mDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_SRGB);
+    }
 }
 
 void State::setMaxShaderCompilerThreads(GLuint count)
