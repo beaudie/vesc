@@ -16,6 +16,7 @@ BindUniformLocationTest.SamplerLocation/*
 BindUniformLocationTest.UnusedUniformUpdate/*
 BindUniformLocationTest.UnusedUniformUpdateComplex/*
 BindUniformLocationTest.UseSamplerWhenUnusedUniforms/*
+ClearTest.InceptionScissorClears/*
 ClientArraysTest.*
 CopyTexImageTest.*
 CopyTextureTestWebGL.*
@@ -43,6 +44,9 @@ WebGL2ReadOutsideFramebufferTest.*
 WebGLDrawElementsTest.*
 WebGLGLSLTest.*
 WebGLReadOutsideFramebufferTest.*
+
+# Has undefined framebuffer pixels. This fails comparison checks.
+SimpleOperationTest.DrawQuadAndSwap/*
 
 # Crashed tests
 BlendMinMaxTest.*
