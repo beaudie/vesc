@@ -9226,25 +9226,12 @@ void StateCache::updateValidDrawModes(Context *context)
         // active and not paused, regardless of mode. Any primitive type may be used while transform
         // feedback is paused.
         if (!context->getExtensions().geometryShader &&
-            !context->getExtensions().tessellationShaderEXT)
+            !context->getExtensions().tessellationShaderEXT && context->getClientVersion() < ES_3_2)
         {
             mCachedValidDrawModes.fill(false);
             mCachedValidDrawModes[curTransformFeedback->getPrimitiveMode()] = true;
             return;
         }
-
-        // EXT_geometry_shader validation text:
-        // When transform feedback is active and not paused, all geometric primitives generated must
-        // be compatible with the value of <primitiveMode> passed to BeginTransformFeedback. If a
-        // geometry shader is active, the type of primitive emitted by that shader is used instead
-        // of the <mode> parameter passed to drawing commands for the purposes of this error check.
-        // Any primitive type may be used while transform feedback is paused.
-        bool pointsOK = curTransformFeedback->getPrimitiveMode() == PrimitiveMode::Points;
-        bool linesOK  = curTransformFeedback->getPrimitiveMode() == PrimitiveMode::Lines;
-        bool trisOK   = curTransformFeedback->getPrimitiveMode() == PrimitiveMode::Triangles;
-
-        setValidDrawModes(pointsOK, linesOK, trisOK, false, false, false);
-        return;
     }
 
     if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
