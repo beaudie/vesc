@@ -744,6 +744,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
+        mCurrentGraphicsPipeline = nullptr;
     }
 
     ANGLE_INLINE void invalidateCurrentComputePipeline()
