@@ -277,7 +277,15 @@ EGLBoolean DestroyContext(Thread *thread, Display *display, gl::Context *context
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyContext",
                          GetDisplayIfValid(display), EGL_FALSE);
-    bool contextWasCurrent = context == thread->getContext();
+    gl::Context *contextForThread = thread->getContext();
+    bool contextWasCurrent        = context == contextForThread;
+
+    // Display can't access the current global context, but does exhibit a context switch,
+    // so ensuring the current context is correct needs to happen here.
+    if (!contextWasCurrent)
+    {
+        SetContextCurrent(thread, context);
+    }
 
     ANGLE_EGL_TRY_RETURN(thread, display->destroyContext(thread, context), "eglDestroyContext",
                          GetContextIfValid(display, context), EGL_FALSE);
@@ -287,6 +295,10 @@ EGLBoolean DestroyContext(Thread *thread, Display *display, gl::Context *context
         ANGLE_EGL_TRY_RETURN(thread, display->makeCurrent(context, nullptr, nullptr, nullptr),
                              "eglDestroyContext", GetContextIfValid(display, context), EGL_FALSE);
         SetContextCurrent(thread, nullptr);
+    }
+    else
+    {
+        SetContextCurrent(thread, contextForThread);
     }
 
     thread->setSuccess();
@@ -481,7 +493,6 @@ EGLBoolean MakeCurrent(Thread *thread,
         ANGLE_EGL_TRY_RETURN(
             thread, display->makeCurrent(previousContext, drawSurface, readSurface, context),
             "eglMakeCurrent", GetContextIfValid(display, context), EGL_FALSE);
-
         SetContextCurrent(thread, context);
     }
 
