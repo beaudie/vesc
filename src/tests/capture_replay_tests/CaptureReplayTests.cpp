@@ -135,12 +135,12 @@ class CaptureReplayTests
                 return -1;
             }
             bool isEqual = compareSerializedContexts(testIndex, frame, bos.getData());
+            swap();
             if (!isEqual)
             {
                 cleanupTest();
                 return -1;
             }
-            swap();
         }
         cleanupTest();
         return 0;
