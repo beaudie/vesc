@@ -252,6 +252,13 @@ SurfaceRotation DetermineSurfaceRotation(gl::Framebuffer *framebuffer,
     }
 }
 
+// Helper function for EXT_clip_control
+ClipSpaceOrigin GetClipSpaceOriginFromGLState(const gl::State &glState)
+{
+    return glState.isClipControlUpperLeftOrigin() ? ClipSpaceOrigin::UpperLeft
+                                                  : ClipSpaceOrigin::LowerLeft;
+}
+
 // Should not generate a copy with modern C++.
 EventName GetTraceEventName(const char *title, uint32_t counter)
 {
@@ -368,6 +375,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mXfbVertexCountPerInstance(0),
       mClearColorMasks(0),
       mFlipYForCurrentSurface(false),
+      mClipSpaceOrigin(ClipSpaceOrigin::LowerLeft),
       mIsAnyHostVisibleBufferWritten(false),
       mEmulateSeamfulCubeMapSampling(false),
       mOutsideRenderPassCommands(nullptr),
@@ -2615,11 +2623,15 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
                     correctedRect, &rotatedRect);
 
     VkViewport vkViewport;
-    gl_vk::GetViewport(rotatedRect, nearPlane, farPlane, invertViewport,
-                       // If the surface is rotated 90/270 degrees, use the framebuffer's width
-                       // instead of the height for calculating the final viewport.
-                       isRotatedAspectRatioForDrawFBO() ? fbDimensions.width : fbDimensions.height,
-                       &vkViewport);
+    gl_vk::GetViewport(
+        rotatedRect, nearPlane, farPlane, invertViewport,
+        // If clip space origin is upper left, viewport origin's y value will be offset by the
+        // height of the viewport when clip space is mapped into screen space.
+        mClipSpaceOrigin == ClipSpaceOrigin::UpperLeft,
+        // If the surface is rotated 90/270 degrees, use the framebuffer's width instead of the
+        // height for calculating the final viewport.
+        isRotatedAspectRatioForDrawFBO() ? fbDimensions.width : fbDimensions.height, &vkViewport);
+
     mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, vkViewport);
     invalidateGraphicsDriverUniforms();
 }
@@ -2876,7 +2888,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_FRONT_FACE:
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
-                                                       isViewportFlipEnabledForDrawFBO());
+                                                       isYFlipEnabledForDrawFBO());
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED:
                 mGraphicsPipelineDesc->updatePolygonOffsetFillEnabled(
@@ -2952,9 +2964,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 updateColorMasks(glState.getBlendStateExt());
                 updateRasterizationSamples(mDrawFramebuffer->getSamples());
+
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
-                                                       isViewportFlipEnabledForDrawFBO());
+                                                       isYFlipEnabledForDrawFBO());
                 updateScissor(glState);
                 const gl::DepthStencilState depthStencilState = glState.getDepthStencilState();
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
@@ -3051,10 +3064,30 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_PROVOKING_VERTEX:
                 break;
             case gl::State::DIRTY_BIT_EXTENDED:
+            {
                 // Handling clip distance enabled flags, mipmap generation hint & shader derivative
                 // hint.
                 invalidateGraphicsDriverUniforms();
+
+                // Handling clip space origin for EXT_clip_control.
+                if (GetClipSpaceOriginFromGLState(glState) != getClipSpaceOrigin())
+                {
+                    updateClipSpaceOrigin(glState);
+                    updateViewport(vk::GetImpl(glState.getDrawFramebuffer()), glState.getViewport(),
+                                   glState.getNearPlane(), glState.getFarPlane(),
+                                   isViewportFlipEnabledForDrawFBO());
+                    // Since we are flipping the y coordinate, update front face state
+                    mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
+                                                           glState.getRasterizerState(),
+                                                           isYFlipEnabledForDrawFBO());
+                    updateScissor(glState);
+
+                    // Nothing is needed for depth correction for EXT_clip_control.
+                    // glState will be used to toggle control path of depth correction code in
+                    // SPIR-V tranform options.
+                }
                 break;
+            }
             case gl::State::DIRTY_BIT_PATCH_VERTICES:
                 mGraphicsPipelineDesc->updatePatchVertices(&mGraphicsPipelineTransition,
                                                            glState.getPatchVertices());
@@ -3251,6 +3284,16 @@ void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
     gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mCurrentRotationReadFramebuffer =
         DetermineSurfaceRotation(readFramebuffer, mCurrentWindowSurface);
+}
+
+ClipSpaceOrigin ContextVk::getClipSpaceOrigin() const
+{
+    return mClipSpaceOrigin;
+}
+
+void ContextVk::updateClipSpaceOrigin(const gl::State &glState)
+{
+    mClipSpaceOrigin = GetClipSpaceOriginFromGLState(glState);
 }
 
 gl::Caps ContextVk::getNativeCaps() const
