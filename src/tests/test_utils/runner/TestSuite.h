@@ -135,6 +135,9 @@ class TestSuite
 
     static TestSuite *GetInstance() { return mInstance; }
 
+    // Returns the path to the artifact in the output directory.
+    std::string addTestArtifact(const std::string &artifactName);
+
   private:
     bool parseSingleArg(const char *argument);
     bool launchChildTestProcess(uint32_t batchId, const std::vector<TestIdentifier> &testsInBatch);
@@ -176,6 +179,8 @@ class TestSuite
     std::thread mWatchdogThread;
     HistogramWriter mHistogramWriter;
     std::vector<std::string> mSlowTests;
+    std::string mTestArtifactDirectory;
+    std::vector<std::string> mTestArtifacts;
 };
 
 bool GetTestResultsFromFile(const char *fileName, TestResults *resultsOut);
