@@ -46,10 +46,13 @@ constexpr char kPrintTestStdout[]      = "--print-test-stdout";
 constexpr char kResultFileArg[]        = "--results-file=";
 constexpr char kTestTimeoutArg[]       = "--test-timeout=";
 constexpr char kDisableCrashHandler[]  = "--disable-crash-handler";
+constexpr char kIsolatedOutDir[]       = "--isolated-outdir=";
 
 constexpr char kStartedTestString[] = "[ RUN      ] ";
 constexpr char kPassedTestString[]  = "[       OK ] ";
 constexpr char kFailedTestString[]  = "[  FAILED  ] ";
+
+constexpr char kArtifactsFakeTestName[] = "TestArtifactsFakeTest";
 
 #if defined(NDEBUG)
 constexpr int kDefaultTestTimeout = 20;
@@ -237,6 +240,43 @@ void WriteResultsFile(bool interrupted,
 
     js::Value tests;
     tests.SetObject();
+
+    // If we have any test artifacts, make a fake test to house them.
+    if (!testResults.testArtifactPaths.empty())
+    {
+        js::Value artifactsTest;
+        artifactsTest.SetObject();
+
+        artifactsTest.AddMember("actual", "PASS", allocator);
+        artifactsTest.AddMember("expected", "PASS", allocator);
+
+        js::Value artifacts;
+        artifacts.SetObject();
+
+        for (const std::string &testArtifactPath : testResults.testArtifactPaths)
+        {
+            std::vector<std::string> pieces =
+                SplitString(testArtifactPath, "/\\", WhitespaceHandling::TRIM_WHITESPACE,
+                            SplitResult::SPLIT_WANT_NONEMPTY);
+            ASSERT(!pieces.empty());
+
+            js::Value basename;
+            basename.SetString(pieces.back(), allocator);
+
+            js::Value artifactPath;
+            artifactPath.SetString(testArtifactPath, allocator);
+
+            js::Value artifactArray;
+            artifactArray.SetArray();
+            artifactArray.PushBack(artifactPath, allocator);
+
+            artifacts.AddMember(basename, artifactArray, allocator);
+        }
+
+        artifactsTest.AddMember("artifacts", artifacts, allocator);
+
+        tests.AddMember(kArtifactsFakeTestName, artifactsTest, allocator);
+    }
 
     std::map<TestResultType, uint32_t> counts;
 
@@ -562,35 +602,85 @@ bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOu
 {
     if (!document.HasMember("tests") || !document["tests"].IsObject())
     {
+        printf("JSON document has no tests member.\n");
         return false;
     }
 
     const js::Value::ConstObject &tests = document["tests"].GetObject();
-    for (auto iter = tests.MemberBegin(); iter != tests.MemberEnd(); ++iter)
+    for (const auto &testMember : tests)
     {
         // Get test identifier.
-        const js::Value &name = iter->name;
+        const js::Value &name = testMember.name;
         if (!name.IsString())
         {
+            printf("Name is not a string.\n");
             return false;
+        }
+
+        // Get test result.
+        const js::Value &value = testMember.value;
+        if (!value.IsObject())
+        {
+            printf("Test result is not an object.\n");
+            return false;
+        }
+
+        const js::Value::ConstObject &obj = value.GetObject();
+
+        if (name == kArtifactsFakeTestName)
+        {
+            if (!obj.HasMember("artifacts"))
+            {
+                printf("No artifacts member.\n");
+                return false;
+            }
+
+            const js::Value &jsArtifacts = obj["artifacts"];
+            if (!jsArtifacts.IsObject())
+            {
+                printf("Artifacts are not an object.\n");
+                return false;
+            }
+
+            const js::Value::ConstObject &artifacts = jsArtifacts.GetObject();
+            for (const auto &artifactMember : artifacts)
+            {
+                const js::Value &artifact = artifactMember.value;
+                if (!artifact.IsArray())
+                {
+                    printf("Artifact is not an array of strings of size 1.\n");
+                    return false;
+                }
+
+                const js::Value::ConstArray &artifactArray = artifact.GetArray();
+                if (artifactArray.Size() != 1)
+                {
+                    printf("Artifact is not an array of strings of size 1.\n");
+                    return false;
+                }
+
+                const js::Value &artifactName = artifactArray[0];
+                if (!artifactName.IsString())
+                {
+                    printf("Artifact is not an array of strings of size 1.\n");
+                    return false;
+                }
+
+                resultsOut->testArtifactPaths.push_back(artifactName.GetString());
+            }
+            continue;
         }
 
         TestIdentifier id;
         if (!TestIdentifier::ParseFromString(name.GetString(), &id))
         {
+            printf("Could not parse test identifier.\n");
             return false;
         }
 
-        // Get test result.
-        const js::Value &value = iter->value;
-        if (!value.IsObject())
-        {
-            return false;
-        }
-
-        const js::Value::ConstObject &obj = value.GetObject();
         if (!obj.HasMember("expected") || !obj.HasMember("actual"))
         {
+            printf("No expected or actual member.\n");
             return false;
         }
 
@@ -599,6 +689,7 @@ bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOu
 
         if (!expected.IsString() || !actual.IsString())
         {
+            printf("Expected or actual member is not a string.\n");
             return false;
         }
 
@@ -696,6 +787,10 @@ bool MergeTestResults(TestResults *input, TestResults *output, int flakyRetries)
             }
         }
     }
+
+    output->testArtifactPaths.insert(output->testArtifactPaths.end(),
+                                     input->testArtifactPaths.begin(),
+                                     input->testArtifactPaths.end());
 
     return true;
 }
@@ -1172,6 +1267,7 @@ bool TestSuite::parseSingleArg(const char *argument)
             ParseStringArg(kFilterFileArg, argument, &mFilterFile) ||
             ParseStringArg(kHistogramJsonFileArg, argument, &mHistogramJsonFile) ||
             ParseStringArg("--isolated-script-test-perf-output=", argument, &mHistogramJsonFile) ||
+            ParseStringArg(kIsolatedOutDir, argument, &mTestArtifactDirectory) ||
             ParseFlag("--bot-mode", argument, &mBotMode) ||
             ParseFlag("--debug-test-groups", argument, &mDebugTestGroups) ||
             ParseFlag(kGTestListTests, argument, &mGTestListTests) ||
@@ -1271,6 +1367,15 @@ bool TestSuite::launchChildTestProcess(uint32_t batchId,
         timeoutStream << kTestTimeoutArg << mTestTimeout;
         timeoutStr = timeoutStream.str();
         args.push_back(timeoutStr.c_str());
+    }
+
+    std::string artifactsDir;
+    if (!mTestArtifactDirectory.empty())
+    {
+        std::stringstream artifactsDirStream;
+        artifactsDirStream << kIsolatedOutDir << mTestArtifactDirectory;
+        artifactsDir = artifactsDirStream.str();
+        args.push_back(artifactsDir.c_str());
     }
 
     // Launch child process and wait for completion.
@@ -1471,8 +1576,8 @@ int TestSuite::run()
         {
             startWatchdog();
         }
-        int retVal = RUN_ALL_TESTS();
 
+        int retVal = RUN_ALL_TESTS();
         {
             std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
             mTestResults.allDone = true;
@@ -1648,6 +1753,20 @@ void TestSuite::registerSlowTests(const char *slowTests[], size_t numSlowTests)
     {
         mSlowTests.push_back(slowTests[slowTestIndex]);
     }
+}
+
+std::string TestSuite::addTestArtifact(const std::string &artifactName)
+{
+    mTestResults.testArtifactPaths.push_back(artifactName);
+
+    if (mTestArtifactDirectory.empty())
+    {
+        return artifactName;
+    }
+
+    std::stringstream pathStream;
+    pathStream << mTestArtifactDirectory << GetPathSeparator() << artifactName;
+    return pathStream.str();
 }
 
 bool GetTestResultsFromFile(const char *fileName, TestResults *resultsOut)
