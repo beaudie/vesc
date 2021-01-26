@@ -170,7 +170,7 @@ class alignas(4) RenderPassDesc final
     size_t hash() const;
 
     // Color attachments are in [0, colorAttachmentRange()), with possible gaps.
-    size_t colorAttachmentRange() const { return mColorAttachmentRange; }
+    size_t colorAttachmentRange() const { return mColorAttachmentZeroBasedRange + 1; }
     size_t depthStencilAttachmentIndex() const { return colorAttachmentRange(); }
 
     bool isColorAttachmentEnabled(size_t colorIndexGL) const;
@@ -220,6 +220,9 @@ class alignas(4) RenderPassDesc final
 
     uint8_t samples() const { return 1u << mLogSamples; }
 
+    void setFramebufferFetchMode(bool hasFramebufferFetch);
+    bool getFramebufferFetchMode() const { return mHasFramebufferFetch; }
+
     angle::FormatID operator[](size_t index) const
     {
         ASSERT(index < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1);
@@ -235,8 +238,9 @@ class alignas(4) RenderPassDesc final
   private:
     // Store log(samples), to be able to store it in 3 bits.
     uint8_t mLogSamples : 3;
-    uint8_t mColorAttachmentRange : 4;
+    uint8_t mColorAttachmentZeroBasedRange : 3;
     uint8_t mHasDepthStencilAttachment : 1;
+    uint8_t mHasFramebufferFetch : 1;
 
     // Whether each color attachment has a corresponding resolve attachment.  Color resolve
     // attachments can be used to optimize resolve through glBlitFramebuffer() as well as support
