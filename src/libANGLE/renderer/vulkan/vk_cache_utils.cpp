@@ -454,6 +454,10 @@ constexpr size_t kSubpassFastVectorSize = 2;
 template <typename T>
 using SubpassVector = angle::FastVector<T, kSubpassFastVectorSize>;
 
+// The unresolve subpass is the first subpass.  The application draw subpass is the next one.
+constexpr uint32_t kUnresolveSubpassIndex = 0;
+constexpr uint32_t kDrawSubpassIndex      = 1;
+
 void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescription> &subpassDesc,
                                             bool unresolveColor,
                                             bool unresolveDepthStencil,
@@ -461,10 +465,6 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
 {
     ASSERT(subpassDesc.size() >= 2);
     ASSERT(unresolveColor || unresolveDepthStencil);
-
-    // The unresolve subpass is the first subpass.  The application draw subpass is the next one.
-    constexpr uint32_t kUnresolveSubpassIndex = 0;
-    constexpr uint32_t kDrawSubpassIndex      = 1;
 
     // A subpass dependency is needed between the unresolve and draw subpasses.  There are two
     // hazards here:
@@ -563,6 +563,22 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
     dependency->dstStageMask    = kColorWriteStage;
     dependency->srcAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
     dependency->dstAccessMask   = kColorWriteFlags;
+    dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+}
+
+void InitializeInputAttachmentSubpassDependencies(
+    std::vector<VkSubpassDependency> *subpassDependencies,
+    uint32_t subpassIndex)
+{
+    subpassDependencies->emplace_back();
+    VkSubpassDependency *dependency = &subpassDependencies->back();
+
+    dependency->srcSubpass      = subpassIndex;
+    dependency->dstSubpass      = subpassIndex;
+    dependency->srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency->dstStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    dependency->srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependency->dstAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
     dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 }
 
@@ -890,6 +906,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR, nullptr, VK_ATTACHMENT_UNUSED,
         VK_IMAGE_LAYOUT_UNDEFINED, 0};
 
+    bool needInputAttachments = desc.getFramebufferFetchMode();
+
     // Unpack the packed and split representation into the format required by Vulkan.
     gl::DrawBuffersVector<VkAttachmentReference> colorAttachmentRefs;
     gl::DrawBuffersVector<VkAttachmentReference> colorResolveAttachmentRefs;
@@ -934,7 +952,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
-        colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        colorRef.layout     = needInputAttachments ? VK_IMAGE_LAYOUT_GENERAL
+                                               : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
         colorAttachmentRefs.push_back(colorRef);
 
@@ -1066,10 +1085,12 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     subpassDesc.push_back({});
     VkSubpassDescription *applicationSubpass = &subpassDesc.back();
 
-    applicationSubpass->flags                = 0;
-    applicationSubpass->pipelineBindPoint    = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    applicationSubpass->inputAttachmentCount = 0;
-    applicationSubpass->pInputAttachments    = nullptr;
+    applicationSubpass->flags             = 0;
+    applicationSubpass->pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    applicationSubpass->inputAttachmentCount =
+        needInputAttachments ? static_cast<uint32_t>(colorAttachmentRefs.size()) : 0;
+    applicationSubpass->pInputAttachments =
+        needInputAttachments ? colorAttachmentRefs.data() : nullptr;
     applicationSubpass->colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     applicationSubpass->pColorAttachments    = colorAttachmentRefs.data();
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
@@ -1112,6 +1133,12 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         InitializeUnresolveSubpassDependencies(
             subpassDesc, desc.getColorUnresolveAttachmentMask().any(),
             desc.hasDepthStencilUnresolveAttachment(), &subpassDependencies);
+    }
+
+    if (needInputAttachments)
+    {
+        uint32_t drawSubpassIndex = (hasUnresolveAttachments) ? kDrawSubpassIndex : 0;
+        InitializeInputAttachmentSubpassDependencies(&subpassDependencies, drawSubpassIndex);
     }
 
     VkRenderPassCreateInfo createInfo = {};
@@ -1302,6 +1329,11 @@ RenderPassDesc::RenderPassDesc(const RenderPassDesc &other)
 void RenderPassDesc::setSamples(GLint samples)
 {
     SetBitField(mLogSamples, PackSampleCount(samples));
+}
+
+void RenderPassDesc::setFramebufferFetchMode(bool hasFramebufferFetch)
+{
+    mHasFramebufferFetch = hasFramebufferFetch;
 }
 
 void RenderPassDesc::packColorAttachment(size_t colorIndexGL, angle::FormatID formatID)
