@@ -46,6 +46,7 @@ constexpr char kPrintTestStdout[]      = "--print-test-stdout";
 constexpr char kResultFileArg[]        = "--results-file=";
 constexpr char kTestTimeoutArg[]       = "--test-timeout=";
 constexpr char kDisableCrashHandler[]  = "--disable-crash-handler";
+constexpr char kIsolatedOutDir[]       = "--isolated-outdir=";
 
 constexpr char kStartedTestString[] = "[ RUN      ] ";
 constexpr char kPassedTestString[]  = "[       OK ] ";
@@ -216,7 +217,8 @@ bool WriteJsonFile(const std::string &outputFile, js::Document *doc)
 void WriteResultsFile(bool interrupted,
                       const TestResults &testResults,
                       const std::string &outputFile,
-                      const char *testSuiteName)
+                      const char *testSuiteName,
+                      const std::vector<std::string> &testArtifacts)
 {
     time_t ltime;
     time(&ltime);
@@ -237,6 +239,39 @@ void WriteResultsFile(bool interrupted,
 
     js::Value tests;
     tests.SetObject();
+
+    // If we have any test artifacts, make a fake test to house them.
+    if (!testArtifacts.empty())
+    {
+        js::Value artifactsTest;
+        artifactsTest.SetObject();
+
+        artifactsTest.AddMember("actual", "PASS", allocator);
+        artifactsTest.AddMember("expected", "PASS", allocator);
+
+        js::Value artifacts;
+        artifacts.SetObject();
+
+        for (const std::string &testArtifact : testArtifacts)
+        {
+            std::vector<std::string> pieces =
+                SplitString(testArtifact, "/\\", WhitespaceHandling::TRIM_WHITESPACE,
+                            SplitResult::SPLIT_WANT_NONEMPTY);
+            ASSERT(!pieces.empty());
+
+            js::Value basename;
+            basename.SetString(pieces.back(), allocator);
+
+            js::Value artifactName;
+            artifactName.SetString(testArtifact, allocator);
+
+            artifacts.AddMember(basename, artifactName, allocator);
+        }
+
+        artifactsTest.AddMember("artifacts", artifacts, allocator);
+
+        tests.AddMember("TestArtifactsFakeTest", artifactsTest, allocator);
+    }
 
     std::map<TestResultType, uint32_t> counts;
 
@@ -335,11 +370,12 @@ void WriteOutputFiles(bool interrupted,
                       const std::string &resultsFile,
                       const HistogramWriter &histogramWriter,
                       const std::string &histogramJsonOutputFile,
-                      const char *testSuiteName)
+                      const char *testSuiteName,
+                      const std::vector<std::string> &testArtifacts)
 {
     if (!resultsFile.empty())
     {
-        WriteResultsFile(interrupted, testResults, resultsFile, testSuiteName);
+        WriteResultsFile(interrupted, testResults, resultsFile, testSuiteName, testArtifacts);
     }
 
     if (!histogramJsonOutputFile.empty())
@@ -401,7 +437,8 @@ class TestEventListener : public testing::EmptyTestEventListener
                       double slowTestTimeout,
                       const char *testSuiteName,
                       TestResults *testResults,
-                      HistogramWriter *histogramWriter)
+                      HistogramWriter *histogramWriter,
+                      const std::vector<std::string> &testArtifacts)
         : mResultsFile(resultsFile),
           mHistogramJsonFile(histogramJsonFile),
           mSlowTests(slowTests),
@@ -409,7 +446,8 @@ class TestEventListener : public testing::EmptyTestEventListener
           mSlowTestTimeout(slowTestTimeout),
           mTestSuiteName(testSuiteName),
           mTestResults(testResults),
-          mHistogramWriter(histogramWriter)
+          mHistogramWriter(histogramWriter),
+          mTestArtifacts(testArtifacts)
     {}
 
     void OnTestStart(const testing::TestInfo &testInfo) override
@@ -435,7 +473,7 @@ class TestEventListener : public testing::EmptyTestEventListener
         std::lock_guard<std::mutex> guard(mTestResults->currentTestMutex);
         mTestResults->allDone = true;
         WriteOutputFiles(false, *mTestResults, mResultsFile, *mHistogramWriter, mHistogramJsonFile,
-                         mTestSuiteName);
+                         mTestSuiteName, mTestArtifacts);
     }
 
   private:
@@ -447,6 +485,7 @@ class TestEventListener : public testing::EmptyTestEventListener
     const char *mTestSuiteName;
     TestResults *mTestResults;
     HistogramWriter *mHistogramWriter;
+    const std::vector<std::string> &mTestArtifacts;
 };
 
 bool IsTestDisabled(const testing::TestInfo &testInfo)
@@ -1136,7 +1175,7 @@ TestSuite::TestSuite(int *argc, char **argv)
         testing::TestEventListeners &listeners = testing::UnitTest::GetInstance()->listeners();
         listeners.Append(new TestEventListener(
             mResultsFile, mHistogramJsonFile, mSlowTests, mTestTimeout, mTestTimeout * 3.0,
-            mTestSuiteName.c_str(), &mTestResults, &mHistogramWriter));
+            mTestSuiteName.c_str(), &mTestResults, &mHistogramWriter, mTestArtifacts));
 
         for (const TestIdentifier &id : testSet)
         {
@@ -1172,6 +1211,7 @@ bool TestSuite::parseSingleArg(const char *argument)
             ParseStringArg(kFilterFileArg, argument, &mFilterFile) ||
             ParseStringArg(kHistogramJsonFileArg, argument, &mHistogramJsonFile) ||
             ParseStringArg("--isolated-script-test-perf-output=", argument, &mHistogramJsonFile) ||
+            ParseStringArg(kIsolatedOutDir, argument, &mTestArtifactDirectory) ||
             ParseFlag("--bot-mode", argument, &mBotMode) ||
             ParseFlag("--debug-test-groups", argument, &mDebugTestGroups) ||
             ParseFlag(kGTestListTests, argument, &mGTestListTests) ||
@@ -1197,7 +1237,7 @@ void TestSuite::onCrashOrTimeout(TestResultType crashOrTimeout)
     }
 
     WriteOutputFiles(true, mTestResults, mResultsFile, mHistogramWriter, mHistogramJsonFile,
-                     mTestSuiteName.c_str());
+                     mTestSuiteName.c_str(), mTestArtifacts);
 }
 
 bool TestSuite::launchChildTestProcess(uint32_t batchId,
@@ -1271,6 +1311,15 @@ bool TestSuite::launchChildTestProcess(uint32_t batchId,
         timeoutStream << kTestTimeoutArg << mTestTimeout;
         timeoutStr = timeoutStream.str();
         args.push_back(timeoutStr.c_str());
+    }
+
+    std::string artifactsDir;
+    if (!mTestArtifactDirectory.empty())
+    {
+        std::stringstream artifactsDirStream;
+        artifactsDirStream << kIsolatedOutDir << mTestArtifactDirectory;
+        artifactsDir = artifactsDirStream.str();
+        args.push_back(artifactsDir.c_str());
     }
 
     // Launch child process and wait for completion.
@@ -1569,7 +1618,7 @@ int TestSuite::run()
 
     // Dump combined results.
     WriteOutputFiles(false, mTestResults, mResultsFile, mHistogramWriter, mHistogramJsonFile,
-                     mTestSuiteName.c_str());
+                     mTestSuiteName.c_str(), mTestArtifacts);
 
     totalRunTime.stop();
     printf("Tests completed in %lf seconds\n", totalRunTime.getElapsedTime());
@@ -1648,6 +1697,19 @@ void TestSuite::registerSlowTests(const char *slowTests[], size_t numSlowTests)
     {
         mSlowTests.push_back(slowTests[slowTestIndex]);
     }
+}
+
+std::string TestSuite::addTestArtifact(const std::string &artifactName)
+{
+    std::stringstream pathStream;
+    if (!mTestArtifactDirectory.empty())
+    {
+        pathStream << mTestArtifactDirectory << GetPathSeparator();
+    }
+    pathStream << artifactName;
+    std::string path = pathStream.str();
+    mTestArtifacts.push_back(path);
+    return path;
 }
 
 bool GetTestResultsFromFile(const char *fileName, TestResults *resultsOut)

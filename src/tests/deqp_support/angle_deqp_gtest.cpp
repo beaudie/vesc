@@ -23,6 +23,7 @@
 #include "platform/PlatformMethods.h"
 #include "tests/test_expectations/GPUTestConfig.h"
 #include "tests/test_expectations/GPUTestExpectationsParser.h"
+#include "tests/test_utils/runner/TestSuite.h"
 #include "util/OSWindow.h"
 #include "util/test_utils.h"
 
@@ -386,8 +387,8 @@ class dEQPTest : public testing::TestWithParam<size_t>
             return;
         }
 
-        gExpectError      = (caseInfo.mExpectation != GPUTestExpectationsParser::kGpuTestPass);
-        TestResult result = deqp_libtester_run(caseInfo.mDEQPName.c_str());
+        gExpectError          = (caseInfo.mExpectation != GPUTestExpectationsParser::kGpuTestPass);
+        dEQPTestResult result = deqp_libtester_run(caseInfo.mDEQPName.c_str());
 
         bool testSucceeded = countTestResultAndReturnSuccess(result);
 
@@ -414,20 +415,20 @@ class dEQPTest : public testing::TestWithParam<size_t>
         }
     }
 
-    bool countTestResultAndReturnSuccess(TestResult result) const
+    bool countTestResultAndReturnSuccess(dEQPTestResult result) const
     {
         switch (result)
         {
-            case TestResult::Pass:
+            case dEQPTestResult::Pass:
                 sPassedTestCount++;
                 return true;
-            case TestResult::Fail:
+            case dEQPTestResult::Fail:
                 sFailedTestCount++;
                 return false;
-            case TestResult::NotSupported:
+            case dEQPTestResult::NotSupported:
                 sNotSupportedTestCount++;
                 return true;
-            case TestResult::Exception:
+            case dEQPTestResult::Exception:
                 sTestExceptionCount++;
                 return false;
             default:
@@ -533,16 +534,27 @@ void dEQPTest<TestModuleIndex>::SetUpTestCase()
         argv.push_back("--deqp-visibility=hidden");
     }
 
-    std::string logNameString;
+    std::stringstream logNameStream;
+    if (gBatchId == 0)
+    {
+        logNameStream << "TestResults.qpa";
+    }
+    else
+    {
+        logNameStream << "TestResults-Batch" << std::setfill('0') << std::setw(3) << gBatchId
+                      << ".qpa";
+    }
+
+    std::stringstream logArgStream;
+    logNameStream << "--deqp-log-filename="
+                  << TestSuite::GetInstance()->addTestArtifact(logNameStream.str());
+
+    std::string logNameString = logArgStream.str();
+    argv.push_back(logNameString.c_str());
+
+    // Flushing during multi-process execution punishes HDDs. http://anglebug.com/5157
     if (gBatchId != 0)
     {
-        std::stringstream logNameStream;
-        logNameStream << "--deqp-log-filename=test-results-batch-" << std::setfill('0')
-                      << std::setw(3) << gBatchId << ".qpa";
-        logNameString = logNameStream.str();
-        argv.push_back(logNameString.c_str());
-
-        // Flushing during multi-process execution punishes HDDs. http://anglebug.com/5157
         argv.push_back("--deqp-log-flush=disable");
     }
 
