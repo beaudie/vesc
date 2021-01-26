@@ -1662,6 +1662,10 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
 
     if (mDrawFramebuffer)
     {
+        mDrawFramebuffer->setWriteControlMode(getFramebufferSRGB() == true
+                                                  ? SrgbWriteControlMode::Default
+                                                  : SrgbWriteControlMode::Linear);
+
         if (mDrawFramebuffer->hasAnyDirtyBit())
         {
             mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
@@ -2200,8 +2204,13 @@ void State::setCoverageModulation(GLenum components)
 
 void State::setFramebufferSRGB(bool sRGB)
 {
-    mFramebufferSRGB = sRGB;
-    mDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_SRGB);
+    ASSERT(sRGB || getExtensions().sRGBWriteControl);
+    if (sRGB != mFramebufferSRGB)
+    {
+        mFramebufferSRGB = sRGB;
+        mDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE);
+        setDrawFramebufferDirty();
+    }
 }
 
 void State::setMaxShaderCompilerThreads(GLuint count)
@@ -3196,6 +3205,9 @@ angle::Result State::syncReadFramebuffer(const Context *context, Command command
 angle::Result State::syncDrawFramebuffer(const Context *context, Command command)
 {
     ASSERT(mDrawFramebuffer);
+    mDrawFramebuffer->setWriteControlMode(context->getState().getFramebufferSRGB() == true
+                                              ? SrgbWriteControlMode::Default
+                                              : SrgbWriteControlMode::Linear);
     return mDrawFramebuffer->syncState(context, GL_DRAW_FRAMEBUFFER, command);
 }
 

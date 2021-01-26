@@ -167,6 +167,18 @@ class alignas(4) RenderPassDesc final
     void packDepthStencilUnresolveAttachment(bool unresolveDepth, bool unresolveStencil);
     void removeDepthStencilUnresolveAttachment();
 
+    ANGLE_INLINE void setWriteControlMode(gl::SrgbWriteControlMode mode)
+    {
+        if (mode == gl::SrgbWriteControlMode::Default)
+        {
+            mAttachmentFormats.back() &= ~kImagelessFramebufferFlag;
+        }
+        else
+        {
+            mAttachmentFormats.back() |= kImagelessFramebufferFlag;
+        }
+    }
+
     size_t hash() const;
 
     // Color attachments are in [0, colorAttachmentRange()), with possible gaps.
@@ -210,6 +222,12 @@ class alignas(4) RenderPassDesc final
     bool hasStencilUnresolveAttachment() const
     {
         return (mAttachmentFormats.back() & kUnresolveStencilFlag) != 0;
+    }
+    gl::SrgbWriteControlMode getSRGBWriteControlMode() const
+    {
+        return ((mAttachmentFormats.back() & kImagelessFramebufferFlag) != 0)
+                   ? gl::SrgbWriteControlMode::Linear
+                   : gl::SrgbWriteControlMode::Default;
     }
 
     // Get the number of attachments in the Vulkan render pass, i.e. after removing disabled
@@ -286,10 +304,11 @@ class alignas(4) RenderPassDesc final
     static constexpr uint8_t kDepthStencilFormatStorageMask = 0x7;
 
     // Flags stored in the upper 5 bits of mAttachmentFormats.back().
-    static constexpr uint8_t kResolveDepthFlag     = 0x80;
-    static constexpr uint8_t kResolveStencilFlag   = 0x40;
-    static constexpr uint8_t kUnresolveDepthFlag   = 0x20;
-    static constexpr uint8_t kUnresolveStencilFlag = 0x10;
+    static constexpr uint8_t kResolveDepthFlag         = 0x80;
+    static constexpr uint8_t kResolveStencilFlag       = 0x40;
+    static constexpr uint8_t kUnresolveDepthFlag       = 0x20;
+    static constexpr uint8_t kUnresolveStencilFlag     = 0x10;
+    static constexpr uint8_t kImagelessFramebufferFlag = 0x08;
 };
 
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs);
@@ -1160,6 +1179,10 @@ class FramebufferDesc
     void updateUnresolveMask(FramebufferNonResolveAttachmentMask unresolveMask);
     void updateDepthStencil(ImageOrBufferViewSubresourceSerial serial);
     void updateDepthStencilResolve(ImageOrBufferViewSubresourceSerial serial);
+    ANGLE_INLINE void setWriteControlMode(gl::SrgbWriteControlMode mode)
+    {
+        mSrgbWriteControlMode = static_cast<uint8_t>(mode);
+    }
     size_t hash() const;
 
     bool operator==(const FramebufferDesc &other) const;
@@ -1173,6 +1196,11 @@ class FramebufferDesc
     }
 
     FramebufferNonResolveAttachmentMask getUnresolveAttachmentMask() const;
+    ANGLE_INLINE gl::SrgbWriteControlMode getWriteControlMode() const
+    {
+        return (mSrgbWriteControlMode == 1) ? gl::SrgbWriteControlMode::Linear
+                                            : gl::SrgbWriteControlMode::Default;
+    }
 
     void updateLayerCount(uint32_t layerCount);
     uint32_t getLayerCount() const { return mLayerCount; }
@@ -1181,19 +1209,26 @@ class FramebufferDesc
     void reset();
     void update(uint32_t index, ImageOrBufferViewSubresourceSerial serial);
 
-    // Note: this is an exclusive index. If there is one index it will be "1".
-    uint16_t mMaxIndex : 7;
-    static_assert(gl::IMPLEMENTATION_MAX_FRAMEBUFFER_LAYERS < (1 << 9) - 1,
-                  "Not enough bits for mLayerCount");
-    uint16_t mLayerCount : 9;
+    FramebufferAttachmentArray<ImageOrBufferViewSubresourceSerial> mSerials;
 
     // If the render pass contains an initial subpass to unresolve a number of attachments, the
     // subpass description is derived from the following mask, specifying which attachments need
     // to be unresolved.  Includes both color and depth/stencil attachments.
     FramebufferNonResolveAttachmentMask mUnresolveAttachmentMask;
 
-    FramebufferAttachmentArray<ImageOrBufferViewSubresourceSerial> mSerials;
+    // Note: this is an exclusive index. If there is one index it will be "1".
+    uint16_t mMaxIndex : 7;
+    static_assert(gl::IMPLEMENTATION_MAX_FRAMEBUFFER_LAYERS < (1 << 9) - 1,
+                  "Not enough bits for mLayerCount");
+    uint16_t mLayerCount : 9;
+    // SrgbWriteControlMode - 0: default, 1: force linear colorspace
+    uint8_t mSrgbWriteControlMode : 1;
+    uint8_t mPadding0 : 7;
+    uint8_t mPadding1[3];
 };
+
+constexpr size_t kFramebufferDescSize = sizeof(FramebufferDesc);
+static_assert(kFramebufferDescSize == 152, "Size check failed");
 
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
