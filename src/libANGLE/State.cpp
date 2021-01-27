@@ -471,6 +471,10 @@ void State::initialize(Context *context)
     {
         mSamplerTextures[TextureType::VideoImage].resize(caps.maxCombinedTextureImageUnits);
     }
+    if (nativeExtensions.webglVideoFrame)
+    {
+        mSamplerTextures[TextureType::VideoFrame].resize(caps.maxCombinedTextureImageUnits);
+    }
     mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
     for (int32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits; ++textureIndex)
     {
