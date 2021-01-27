@@ -3952,14 +3952,23 @@ void RecordDrawModeError(const Context *context, PrimitiveMode mode)
     // If we are running GLES1, there is no current program.
     if (context->getClientVersion() >= Version(2, 0))
     {
-        Program *program = context->getActiveLinkedProgram();
-        ASSERT(program);
+        Program *program                    = state.getLinkedProgram(context);
+        ProgramPipeline *programPipeline    = state.getProgramPipeline();
+        const ProgramExecutable *executable = state.getProgramExecutable();
+        ASSERT(executable);
 
         // Do geometry shader specific validations
-        if (program->getExecutable().hasLinkedShaderStage(ShaderType::Geometry))
+        if (executable->hasLinkedShaderStage(ShaderType::Geometry))
         {
+            Program *gsProgram = program;
+            if (gsProgram == nullptr)
+            {
+                ASSERT(programPipeline);
+                gsProgram = programPipeline->getShaderProgram(ShaderType::Geometry);
+            }
+            ASSERT(gsProgram);
             if (!IsCompatibleDrawModeWithGeometryShader(
-                    mode, program->getGeometryShaderInputPrimitiveType()))
+                    mode, gsProgram->getGeometryShaderInputPrimitiveType()))
             {
                 context->validationError(GL_INVALID_OPERATION,
                                          kIncompatibleDrawModeAgainstGeometryShader);
@@ -3967,16 +3976,14 @@ void RecordDrawModeError(const Context *context, PrimitiveMode mode)
             }
         }
 
-        if (program->getExecutable().hasLinkedTessellationShader() &&
-            mode != PrimitiveMode::Patches)
+        if (executable->hasLinkedTessellationShader() && mode != PrimitiveMode::Patches)
         {
             context->validationError(GL_INVALID_OPERATION,
                                      kIncompatibleDrawModeWithTessellationShader);
             return;
         }
 
-        if (!program->getExecutable().hasLinkedTessellationShader() &&
-            mode == PrimitiveMode::Patches)
+        if (!executable->hasLinkedTessellationShader() && mode == PrimitiveMode::Patches)
         {
             context->validationError(GL_INVALID_OPERATION,
                                      kIncompatibleDrawModeWithoutTessellationShader);
