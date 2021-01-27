@@ -1870,7 +1870,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
     }
 
-    updateRenderPassDesc();
+    updateRenderPassDesc(contextVk);
 
     // Deactivate Framebuffer
     mFramebuffer = nullptr;
@@ -1881,7 +1881,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-void FramebufferVk::updateRenderPassDesc()
+void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
 {
     mRenderPassDesc = {};
     mRenderPassDesc.setSamples(getSamples());
@@ -1928,6 +1928,15 @@ void FramebufferVk::updateRenderPassDesc()
             mRenderPassDesc.packDepthStencilResolveAttachment(hasDepth, hasStencil);
         }
     }
+    bool programHasFramebufferFetch         = false;
+    const gl::State &glState                = contextVk->getState();
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    if (executable)
+    {
+        programHasFramebufferFetch = executable->hasFramebufferFetch();
+    }
+
+    mRenderPassDesc.setFramebufferFetchMode(programHasFramebufferFetch);
 
     mCurrentFramebufferDesc.updateUnresolveMask({});
 }
@@ -2718,6 +2727,16 @@ void FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
     ASSERT(readOnlyDepthStencilMode || !mReadOnlyDepthFeedbackLoopMode);
 
     renderPass->updateStartedRenderPassWithDepthMode(readOnlyDepthStencilMode);
+}
+
+void FramebufferVk::onSwitchProgramFramebufferFetch(ContextVk *contextVk, bool isFetchProgram)
+{
+    // Make sure framebuffer is recreated.
+    mFramebuffer = nullptr;
+    mFramebufferCache.clear(contextVk);
+
+    mRenderPassDesc.setFramebufferFetchMode(isFetchProgram);
+    contextVk->onDrawFramebufferRenderPassDescChange(this);
 }
 
 // FramebufferCache implementation.

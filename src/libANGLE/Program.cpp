@@ -4730,6 +4730,9 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     stream.writeInt(mState.getAtomicCounterUniformRange().low());
     stream.writeInt(mState.getAtomicCounterUniformRange().high());
 
+    stream.writeInt(mState.getFragmentInoutRange().low());
+    stream.writeInt(mState.getFragmentInoutRange().high());
+
     mProgram->save(context, &stream);
 
     ASSERT(binaryOut);
@@ -4987,6 +4990,11 @@ angle::Result Program::deserialize(const Context *context,
     unsigned int atomicCounterRangeLow  = stream.readInt<unsigned int>();
     unsigned int atomicCounterRangeHigh = stream.readInt<unsigned int>();
     mState.mAtomicCounterUniformRange   = RangeUI(atomicCounterRangeLow, atomicCounterRangeHigh);
+
+    unsigned int fragmentInoutRangeLow  = stream.readInt<unsigned int>();
+    unsigned int fragmentInoutRangeHigh = stream.readInt<unsigned int>();
+    mState.mExecutable->mFragmentInoutRange =
+        RangeUI(fragmentInoutRangeLow, fragmentInoutRangeHigh);
 
     static_assert(static_cast<unsigned long>(ShaderType::EnumCount) <= sizeof(unsigned long) * 8,
                   "Too many shader types");
