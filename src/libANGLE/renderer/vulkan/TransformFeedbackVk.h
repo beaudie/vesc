@@ -87,6 +87,11 @@ class TransformFeedbackVk : public TransformFeedbackImpl
         return mBufferSizes;
     }
 
+    gl::TransformFeedbackBuffersArray<vk::BufferHelper> &getCounterBufferHelpers()
+    {
+        return mCounterBufferHelpers;
+    }
+
     const gl::TransformFeedbackBuffersArray<VkBuffer> &getCounterBufferHandles() const
     {
         return mCounterBufferHandles;

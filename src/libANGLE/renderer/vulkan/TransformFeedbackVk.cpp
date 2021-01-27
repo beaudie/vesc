@@ -129,7 +129,8 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
         mRebindTransformFeedbackBuffer = true;
     }
 
-    return contextVk->onBeginTransformFeedback(xfbBufferCount, mBufferHelpers);
+    return contextVk->onBeginTransformFeedback(xfbBufferCount, mBufferHelpers,
+                                               mCounterBufferHelpers);
 }
 
 angle::Result TransformFeedbackVk::end(const gl::Context *context)
@@ -184,7 +185,8 @@ angle::Result TransformFeedbackVk::resume(const gl::Context *context)
         initializeXFBBuffersDesc(contextVk, xfbBufferCount);
     }
 
-    return contextVk->onBeginTransformFeedback(xfbBufferCount, mBufferHelpers);
+    return contextVk->onBeginTransformFeedback(xfbBufferCount, mBufferHelpers,
+                                               mCounterBufferHelpers);
 }
 
 angle::Result TransformFeedbackVk::bindIndexedBuffer(

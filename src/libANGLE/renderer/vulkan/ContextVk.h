@@ -308,18 +308,19 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void invalidateDefaultAttribute(size_t attribIndex);
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
-    void onFramebufferChange(FramebufferVk *framebufferVk);
-    void onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk);
+    angle::Result onFramebufferChange(FramebufferVk *framebufferVk);
+    angle::Result onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk);
     void onHostVisibleBufferWrite() { mIsAnyHostVisibleBufferWritten = true; }
 
     void invalidateCurrentTransformFeedbackBuffers();
     void onTransformFeedbackStateChanged();
     angle::Result onBeginTransformFeedback(
         size_t bufferCount,
-        const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
+        const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers,
+        const gl::TransformFeedbackBuffersArray<vk::BufferHelper> &counterBuffers);
     void onEndTransformFeedback();
     angle::Result onPauseTransformFeedback();
-    void pauseTransformFeedbackIfStartedAndRebindBuffersOnResume();
+    void pauseTransformFeedbackIfActiveUnpaused();
 
     // When UtilsVk issues draw or dispatch calls, it binds a new pipeline and descriptor sets that
     // the context is not aware of.  These functions are called to make sure the pipeline and
@@ -588,7 +589,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
         DIRTY_BIT_SHADER_RESOURCES,  // excluding textures, which are handled separately.
         DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
-        DIRTY_BIT_TRANSFORM_FEEDBACK_STATE,
         DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_MAX,
@@ -740,9 +740,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                      vk::CommandBufferHelper *commandBufferHelper);
     angle::Result updateDefaultAttribute(size_t attribIndex);
 
-    ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
+    ANGLE_INLINE angle::Result invalidateCurrentGraphicsPipeline()
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
+        // VK_EXT_transform_feedback disallows binding pipelines while transform feedback is active.
+        // The render pass is necessarily broken (which implicitly pauses transform feedback), as
+        // resuming requires a barrier on the transform feedback counter buffer.
+        if (mRenderPassCommands && mRenderPassCommands->isTransformFeedbackActiveUnpaused())
+        {
+            return flushCommandsAndEndRenderPass();
+        }
+        return angle::Result::Continue;
     }
 
     ANGLE_INLINE void invalidateCurrentComputePipeline()
@@ -782,8 +790,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyGraphicsTransformFeedbackBuffersExtension(
         const gl::Context *context,
         vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
-                                                            vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackResume(const gl::Context *context,
                                                              vk::CommandBuffer *commandBuffer);
 
@@ -844,7 +850,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void populateTransformFeedbackBufferSet(
         size_t bufferCount,
         const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
-    void pauseTransformFeedbackIfStarted(DirtyBits onResumeOps);
 
     // DescriptorSet writes
     template <typename T, const T *VkWriteDescriptorSet::*pInfo>
@@ -1076,7 +1081,7 @@ ANGLE_INLINE angle::Result ContextVk::onVertexAttributeChange(size_t attribIndex
                                                               GLuint relativeOffset,
                                                               const vk::BufferHelper *vertexBuffer)
 {
-    invalidateCurrentGraphicsPipeline();
+    ANGLE_TRY(invalidateCurrentGraphicsPipeline());
     // Set divisor to 1 for attribs with emulated divisor
     mGraphicsPipelineDesc->updateVertexInput(
         &mGraphicsPipelineTransition, static_cast<uint32_t>(attribIndex), stride,
