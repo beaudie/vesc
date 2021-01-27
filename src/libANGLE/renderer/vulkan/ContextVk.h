@@ -322,23 +322,24 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void invalidateDefaultAttribute(size_t attribIndex);
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onFramebufferChange(FramebufferVk *framebufferVk);
-    void onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk);
+    angle::Result onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk);
     void onHostVisibleBufferWrite() { mIsAnyHostVisibleBufferWritten = true; }
 
     void invalidateCurrentTransformFeedbackBuffers();
     void onTransformFeedbackStateChanged();
     angle::Result onBeginTransformFeedback(
         size_t bufferCount,
-        const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
+        const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers,
+        const gl::TransformFeedbackBuffersArray<vk::BufferHelper> &counterBuffers);
     void onEndTransformFeedback();
     angle::Result onPauseTransformFeedback();
-    void pauseTransformFeedbackIfStartedAndRebindBuffersOnResume();
+    void pauseTransformFeedbackIfActiveUnpaused();
 
     // When UtilsVk issues draw or dispatch calls, it binds a new pipeline and descriptor sets that
     // the context is not aware of.  These functions are called to make sure the pipeline and
     // affected descriptor set bindings are dirtied for the next application draw/dispatch call.
-    void invalidateGraphicsPipeline();
-    void invalidateComputePipeline();
+    void invalidateGraphicsPipelineBinding();
+    void invalidateComputePipelineBinding();
     void invalidateGraphicsDescriptorSet(DescriptorSetIndex usedDescriptorSet);
     void invalidateComputeDescriptorSet(DescriptorSetIndex usedDescriptorSet);
 
@@ -594,15 +595,19 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         DIRTY_BIT_EVENT_LOG,
         DIRTY_BIT_DEFAULT_ATTRIBS,
+        // The pipeline has changed and needs to be recreated
         DIRTY_BIT_PIPELINE,
+        // Pipeline needs to rebind because a new command buffer has been allocated, or UtilsVk has
+        // changed the binding.  The pipeline itself doesn't need to be recreated.
+        DIRTY_BIT_PIPELINE_BIND,
         DIRTY_BIT_TEXTURES,
         DIRTY_BIT_VERTEX_BUFFERS,
         DIRTY_BIT_INDEX_BUFFER,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
-        DIRTY_BIT_SHADER_RESOURCES,  // excluding textures, which are handled separately.
+        // Shader resources excluding textures, which are handled separately.
+        DIRTY_BIT_SHADER_RESOURCES,
         DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
-        DIRTY_BIT_TRANSFORM_FEEDBACK_STATE,
         DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_MAX,
@@ -758,12 +763,14 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
     {
+        // Note: DIRTY_BIT_PIPELINE_BIND will be automatically set if pipeline bind is necessary.
         mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
     }
 
     ANGLE_INLINE void invalidateCurrentComputePipeline()
     {
         mComputeDirtyBits.set(DIRTY_BIT_PIPELINE);
+        mComputeDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
         mCurrentComputePipeline = nullptr;
     }
 
@@ -780,6 +787,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                     vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsPipeline(const gl::Context *context,
                                               vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsPipelineBind(const gl::Context *context,
+                                                  vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTextures(const gl::Context *context,
                                               vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsVertexBuffers(const gl::Context *context,
@@ -798,14 +807,14 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyGraphicsTransformFeedbackBuffersExtension(
         const gl::Context *context,
         vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
-                                                            vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackResume(const gl::Context *context,
                                                              vk::CommandBuffer *commandBuffer);
 
     // Handlers for compute pipeline dirty bits.
     angle::Result handleDirtyComputePipeline(const gl::Context *context,
                                              vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputePipelineBind(const gl::Context *context,
+                                                 vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyComputeTextures(const gl::Context *context,
                                              vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyComputeDriverUniforms(const gl::Context *context,
@@ -834,6 +843,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOut, size_t offsetsSize);
 
+    // Updates mCurrentGraphicsPipeline based on the current description.
+    angle::Result updateGraphicsPipeline();
+    void updateRenderPassDesc(FramebufferVk *framebufferVk);
+
     angle::Result submitFrame(const vk::Semaphore *signalSemaphore);
     angle::Result memoryBarrierImpl(GLbitfield barriers, VkPipelineStageFlags stageMask);
 
@@ -860,7 +873,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void populateTransformFeedbackBufferSet(
         size_t bufferCount,
         const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
-    void pauseTransformFeedbackIfStarted(DirtyBits onResumeOps);
 
     // DescriptorSet writes
     template <typename T, const T *VkWriteDescriptorSet::*pInfo>
