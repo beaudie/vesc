@@ -1,0 +1,128 @@
+Name
+
+    ANGLE_webgl_video_frame
+
+Name Strings
+
+    GL_ANGLE_webgl_video_frame
+
+Contributors
+
+    Jie Chen
+
+Contact
+
+    Jie Chen (jie.a.chen 'at' intel.com)
+
+Notice
+
+    Copyright (c) 2021 The Khronos Group Inc. Copyright terms at
+        http://www.khronos.org/registry/speccopyright.html
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, Jan 20, 2021
+
+Number
+
+    OpenGL ES Extension #??
+
+Dependencies
+
+    Requires OpenGL ES 2.0
+
+    Written against the OpenGL ES 2.0 specification.
+
+    Interacts with the ARB_texture_rectangle/ANGLE_texture_rectangle extension.
+    
+    Interacts with the OES_EGL_image_external extension.
+
+Overview
+
+    This extension defines a new texture target, GL_TEXTURE_VIDEO_FRAME_WEBGL.
+    It can be thought as a wrapper or alias to either GL_TEXTURE_EXTERNAL_OES
+    or GL_TEXTURE_RECTANGLE, which are usually used for textures of the imported
+    video frames. With this extension enabled, video frames of different targets
+    can be sampled by a unified sampler provided by this extension.
+    The major difference of this target is that the texture to be bound to this
+    target must exist already. It's illegal to bind an un-named, or un-allocated
+    texture to this target. 
+
+New Types
+
+    /*
+     * New sampler type allowed by the OpenGL ES Shading Language when
+     *      #extension GL_ANGLE_webgl_video_frame
+     * is used.
+     */
+    samplerVideoFrameWEBGL
+
+New Procedures and Functions
+
+    /*
+     * New sampler functions allowed by the OpenGL ES Shading Language when
+     *      #extension GL_ANGLE_webgl_video_frame
+     * is used.
+     */
+    vec4 textureVideoFrameWEBGL(
+        samplerVideoFrameWEBGL sampler,
+        vec2 coord);
+     vec4 textureVideoFrameWEBGLProj(
+        samplerVideoFrameWEBGL sampler,
+        vec3 coord);
+    vec4 textureVideoFrameWEBGLProj(
+        samplerVideoFrameWEBGL sampler,
+        vec4 coord);
+   
+New Tokens
+
+     Accepted as a target in the <target> parameter of BindTexture,
+     GetTexParameterfv, GetTexParameteriv, TexParameterf, TexParameteri,
+     TexParameterfv and TexParameteriv:
+
+        GL_TEXTURE_VIDEO_FRAME_WEBGL                             0x9250
+
+    Returned in the <type> parameter of GetActiveUniform:
+        SAMPLER_VIDEO_FRAME_WEBGL                                0x9251
+
+    Accepted as the <pname> parameter of GetBooleanv, GetIntegerv,
+    GetFloatv, and GetFixedv:
+        TEXTURE_BINDING_VIDEO_FRAME_WEBGL                        0x9252
+
+Additions to the OpenGL ES 2.0 Specification
+
+    Add to the section 3.7.13 after the statement of BindTexture:
+
+    If 'target' set to GL_TEXTURE_VIDEO_FRAME_WEBGL, the 'texture' must being
+    bound to one of the GL_TEXTURE_2D, GL_TEXTURE_EXTERNAL_OES, and
+    GL_TEXTURE_RECTANGLE targets. Otherwise the error INVALID_OPERATION is
+    generated.
+    If a texture has ever been bound to GL_TEXTURE_VIDEO_FRAME_WEBGL,
+      it cannot be used with TexImage2D, TexSubImage2D, CompressedTexImage2D,
+      CompressedTexSubImage2D, CopyTexImage2D, CopyTexSubImage2D, or
+      GenerateMipmap, and an INVALID_ENUM error will be generated if this is
+      attempted;
+      Its min filter can only be set to LINEAR or NEAREST;
+      Its s and t wrap modes can only be set to CLAMP_TO_EDGE;
+
+New State
+
+    None
+
+Conformance Tests
+
+    TBD
+
+Issues
+
+    None
+
+Revision History
+
+    Rev.    Date         Author     Changes
+    ----  -------------  ---------  ----------------------------------------
+      1   Jan 20, 2021   jchen10    Initial version

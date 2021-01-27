@@ -436,6 +436,8 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
     initSamplerDefaultPrecision(EbtSamplerExternal2DY2YEXT);
     // It isn't specified whether Sampler2DRect has default precision.
     initSamplerDefaultPrecision(EbtSampler2DRect);
+    // It isn't specified whether SamplerVideoFrameWEBGL has default precision.
+    initSamplerDefaultPrecision(EbtSamplerVideoFrameWEBGL);
 
     if (spec < SH_GLES3_SPEC)
     {

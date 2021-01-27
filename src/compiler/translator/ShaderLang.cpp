@@ -219,6 +219,7 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->EXT_texture_buffer                          = 0;
     resources->OES_sample_variables                        = 0;
     resources->EXT_clip_cull_distance                      = 0;
+    resources->ANGLE_webgl_video_frame                     = 0;
 
     resources->MaxClipDistances                = 8;
     resources->MaxCullDistances                = 8;

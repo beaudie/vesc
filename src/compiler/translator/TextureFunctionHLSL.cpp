@@ -239,6 +239,7 @@ int GetHLSLCoordCount(const TextureFunctionHLSL::TextureFunction &textureFunctio
             case EbtSamplerExternalOES:
             case EbtSampler2DMS:
             case EbtSamplerVideoWEBGL:
+            case EbtSamplerVideoFrameWEBGL:
                 hlslCoords = 2;
                 break;
             case EbtSamplerCube:
@@ -285,6 +286,7 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
         {
             case EbtSampler2D:
             case EbtSamplerVideoWEBGL:
+            case EbtSamplerVideoFrameWEBGL:
             case EbtSamplerExternalOES:
                 out << "sampler2D s";
                 break;
@@ -364,6 +366,7 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
             case EbtSampler2DArrayShadow:
             case EbtSamplerExternalOES:
             case EbtSamplerVideoWEBGL:
+            case EbtSamplerVideoFrameWEBGL:
                 out << ", float2 ddx, float2 ddy";
                 break;
             case EbtSampler3D:
@@ -435,6 +438,7 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
             case EbtSampler2DArrayShadow:
             case EbtSamplerExternalOES:
             case EbtSamplerVideoWEBGL:
+            case EbtSamplerVideoFrameWEBGL:
                 out << ", int2 offset";
                 break;
             default:
@@ -1024,6 +1028,7 @@ void OutputTextureSampleFunctionReturnStatement(
         {
             case EbtSampler2D:
             case EbtSamplerVideoWEBGL:
+            case EbtSamplerVideoFrameWEBGL:
             case EbtSamplerExternalOES:
                 out << "tex2D";
                 break;
@@ -1301,6 +1306,7 @@ const char *TextureFunctionHLSL::TextureFunction::getReturnType() const
             case EbtISampler2DMS:
             case EbtUSampler2DMS:
             case EbtSamplerVideoWEBGL:
+            case EbtSamplerVideoFrameWEBGL:
                 return "int2";
             case EbtSampler3D:
             case EbtISampler3D:
@@ -1329,6 +1335,7 @@ const char *TextureFunctionHLSL::TextureFunction::getReturnType() const
             case EbtSampler2DArray:
             case EbtSamplerExternalOES:
             case EbtSamplerVideoWEBGL:
+            case EbtSamplerVideoFrameWEBGL:
                 return "float4";
             case EbtISampler2D:
             case EbtISampler2DMS:
@@ -1468,6 +1475,10 @@ ImmutableString TextureFunctionHLSL::useTextureFunction(const ImmutableString &n
         textureFunction.offset = true;
     }
     else if (name == "textureVideoWEBGL")
+    {
+        textureFunction.method = TextureFunction::IMPLICIT;
+    }
+    else if (name == "textureVideoFrameWEBGL")
     {
         textureFunction.method = TextureFunction::IMPLICIT;
     }

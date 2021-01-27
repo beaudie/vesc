@@ -42,6 +42,8 @@ TextureType TextureTargetToType(TextureTarget target)
             return TextureType::_3D;
         case TextureTarget::VideoImage:
             return TextureType::VideoImage;
+        case TextureTarget::VideoFrame:
+            return TextureType::VideoFrame;
         case TextureTarget::Buffer:
             return TextureType::Buffer;
         case TextureTarget::InvalidEnum:
@@ -178,6 +180,9 @@ TextureType SamplerTypeToTextureType(GLenum samplerType)
 
         case GL_SAMPLER_VIDEO_IMAGE_WEBGL:
             return TextureType::VideoImage;
+
+        case GL_SAMPLER_VIDEO_FRAME_WEBGL:
+            return TextureType::VideoFrame;
 
         default:
             UNREACHABLE();

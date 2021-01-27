@@ -142,6 +142,8 @@ const char *getBasicString(TBasicType t)
             return "atomic_uint";
         case EbtSamplerVideoWEBGL:
             return "samplerVideoWEBGL";
+        case EbtSamplerVideoFrameWEBGL:
+            return "samplerVideoFrameWEBGL";
         default:
             UNREACHABLE();
             return "unknown type";

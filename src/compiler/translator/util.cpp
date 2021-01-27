@@ -476,6 +476,8 @@ GLenum GLVariableType(const TType &type)
             return GL_UNSIGNED_INT_ATOMIC_COUNTER;
         case EbtSamplerVideoWEBGL:
             return GL_SAMPLER_VIDEO_IMAGE_WEBGL;
+        case EbtSamplerVideoFrameWEBGL:
+            return GL_SAMPLER_VIDEO_FRAME_WEBGL;
         default:
             UNREACHABLE();
     }

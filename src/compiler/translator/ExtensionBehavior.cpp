@@ -16,6 +16,7 @@
     OP(ANGLE_base_vertex_base_instance)             \
     OP(ANGLE_multi_draw)                            \
     OP(ANGLE_texture_multisample)                   \
+    OP(ANGLE_webgl_video_frame)                     \
     OP(APPLE_clip_distance)                         \
     OP(ARB_texture_rectangle)                       \
     OP(ARM_shader_framebuffer_fetch)                \

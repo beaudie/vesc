@@ -22,6 +22,7 @@ enum class TExtension : uint8_t
     ANGLE_base_vertex_base_instance,
     ANGLE_multi_draw,
     ANGLE_texture_multisample,
+    ANGLE_webgl_video_frame,
     APPLE_clip_distance,
     ARB_texture_rectangle,
     ARM_shader_framebuffer_fetch,

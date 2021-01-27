@@ -106,7 +106,8 @@ enum TBasicType
     EbtUSamplerBuffer,
     EbtUSamplerCubeArray,
     EbtSamplerVideoWEBGL,
-    EbtGuardSamplerEnd = EbtSamplerVideoWEBGL,  // non type: see implementation of IsSampler()
+    EbtSamplerVideoFrameWEBGL,
+    EbtGuardSamplerEnd = EbtSamplerVideoFrameWEBGL,  // non type: see implementation of IsSampler()
 
     // images
     EbtGuardImageBegin,
@@ -274,6 +275,7 @@ inline bool IsIntegerSampler(TBasicType type)
         case EbtSampler1DShadow:
         case EbtSampler2DRectShadow:
         case EbtSamplerVideoWEBGL:
+        case EbtSamplerVideoFrameWEBGL:
             return false;
         default:
             ASSERT(!IsSampler(type));
@@ -437,6 +439,7 @@ inline bool IsSampler2D(TBasicType type)
         case EbtISampler2DMS:
         case EbtUSampler2DMS:
         case EbtSamplerVideoWEBGL:
+        case EbtSamplerVideoFrameWEBGL:
             return true;
         case EbtSampler2DArray:
         case EbtISampler2DArray:
@@ -523,6 +526,7 @@ inline bool IsSamplerCube(TBasicType type)
         case EbtUSamplerBuffer:
         case EbtUSamplerCubeArray:
         case EbtSamplerVideoWEBGL:
+        case EbtSamplerVideoFrameWEBGL:
             return false;
         default:
             ASSERT(!IsSampler(type));
@@ -579,6 +583,7 @@ inline bool IsSampler3D(TBasicType type)
         case EbtUSamplerBuffer:
         case EbtUSamplerCubeArray:
         case EbtSamplerVideoWEBGL:
+        case EbtSamplerVideoFrameWEBGL:
             return false;
         default:
             ASSERT(!IsSampler(type));
@@ -635,6 +640,7 @@ inline bool IsSamplerArray(TBasicType type)
         case EbtUSampler2DRect:
         case EbtUSamplerBuffer:
         case EbtSamplerVideoWEBGL:
+        case EbtSamplerVideoFrameWEBGL:
             return false;
         default:
             ASSERT(!IsSampler(type));
@@ -691,6 +697,7 @@ inline bool IsShadowSampler(TBasicType type)
         case EbtUSamplerBuffer:
         case EbtUSamplerCubeArray:
         case EbtSamplerVideoWEBGL:
+        case EbtSamplerVideoFrameWEBGL:
             return false;
         default:
             ASSERT(!IsSampler(type));

@@ -1066,6 +1066,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_EXT_texture_cube_map_array"] = enableableExtension(&Extensions::textureCubeMapArrayEXT);
         map["GL_EXT_shadow_samplers"] = enableableExtension(&Extensions::shadowSamplersEXT);
         map["GL_EXT_tessellation_shader"] = enableableExtension(&Extensions::tessellationShaderEXT);
+        map["GL_ANGLE_webgl_video_frame"] = enableableExtension(&Extensions::webglVideoFrame);
         // clang-format on
 
 #if defined(ANGLE_ENABLE_ASSERTS)

@@ -421,6 +421,7 @@ void StateManagerGL::activeTexture(size_t unit)
 
 void StateManagerGL::bindTexture(gl::TextureType type, GLuint texture)
 {
+    ASSERT(type != gl::TextureType::VideoFrame);
     gl::TextureType nativeType = nativegl::GetNativeTextureType(type);
     if (mTextures[nativeType][mTextureUnitIndex] != texture)
     {
@@ -841,6 +842,12 @@ void StateManagerGL::updateProgramTextureBindings(const gl::Context *context)
     {
         gl::TextureType textureType = textureTypes[textureUnitIndex];
         gl::Texture *texture        = textures[textureUnitIndex];
+        // Get the real texture type of the alias VideoFrame type.
+        if (textureType == gl::TextureType::VideoFrame)
+        {
+            const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
+            textureType                = textureGL->getType();
+        }
 
         // A nullptr texture indicates incomplete.
         if (texture != nullptr)

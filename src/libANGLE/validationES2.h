@@ -141,10 +141,34 @@ ANGLE_INLINE bool ValidateBindTexture(const Context *context, TextureType target
     }
 
     Texture *textureObject = context->getTexture(texture);
-    if (textureObject && textureObject->getType() != target)
+    if (textureObject)
     {
-        context->validationError(GL_INVALID_OPERATION, err::kTextureTargetMismatch);
-        return false;
+        // Binding to a different target is only allowed for TEXTURE_VIDEO_FRAME_WEBGL.
+        if (textureObject->getType() != target && target != TextureType::VideoFrame)
+        {
+            context->validationError(GL_INVALID_OPERATION, err::kTextureTargetMismatch);
+            return false;
+        }
+        // VideoFrame target is only compatible with 2D, External and Rectangle.
+        if (target == TextureType::VideoFrame)
+        {
+            TextureType type = textureObject->getType();
+            if (type != TextureType::_2D && type != TextureType::VideoFrame &&
+                type != TextureType::External && type != TextureType::Rectangle)
+            {
+                context->validationError(GL_INVALID_OPERATION, err::kTextureTargetMismatch);
+                return false;
+            }
+        }
+    }
+    else
+    {
+        // Binding a new texture to TEXTURE_VIDEO_FRAME_WEBGL is not allowed.
+        if (target == TextureType::VideoFrame)
+        {
+            context->validationError(GL_INVALID_OPERATION, err::kInvalidTextureName);
+            return false;
+        }
     }
 
     if (!context->getState().isBindGeneratesResourceEnabled() &&

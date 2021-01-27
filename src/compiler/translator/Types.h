@@ -348,6 +348,7 @@ class TType
     bool isSamplerCube() const { return type == EbtSamplerCube; }
     bool isAtomicCounter() const { return IsAtomicCounter(type); }
     bool isSamplerVideoWEBGL() const { return type == EbtSamplerVideoWEBGL; }
+    bool isSamplerVideoFrameWEBGL() const { return type == EbtSamplerVideoFrameWEBGL; }
     bool isImage() const { return IsImage(type); }
 
   private:

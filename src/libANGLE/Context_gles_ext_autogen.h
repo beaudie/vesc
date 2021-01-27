@@ -211,6 +211,7 @@
                             GLsizei width, GLsizei height, GLint border, GLenum format,            \
                             GLenum type);                                                          \
     void invalidateTexture(TextureType targetPacked);                                              \
+    /* GL_ANGLE_webgl_video_frame */                                                               \
     /* GL_CHROMIUM_bind_uniform_location */                                                        \
     void bindUniformLocation(ShaderProgramID programPacked, UniformLocation locationPacked,        \
                              const GLchar *name);                                                  \
