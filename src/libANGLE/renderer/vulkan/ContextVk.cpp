@@ -375,6 +375,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuEventsEnabled(false),
       mEGLSyncObjectPendingFlush(false),
       mHasDeferredFlush(false),
+      mIsProgramFramebufferFetch(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mPerfCounters{},
@@ -431,6 +432,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsDriverUniformsBinding;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_SHADER_RESOURCES] =
         &ContextVk::handleDirtyGraphicsShaderResources;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_FRAMEBUFFER_FETCH] =
+        &ContextVk::handleDirtyGraphicsFramebufferFetchBarrier;
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS] =
@@ -1349,6 +1352,22 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(const gl::Context *conte
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::handleDirtyGraphicsFramebufferFetchBarrier(
+    const gl::Context *context,
+    vk::CommandBuffer *commandBuffer)
+{
+    VkMemoryBarrier memoryBarrier = {};
+    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    memoryBarrier.dstAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+
+    commandBuffer->pipelineBarrier(
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+        VK_DEPENDENCY_BY_REGION_BIT, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
+
+    return angle::Result::Continue;
+}
+
 ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     const gl::Context *context,
     vk::CommandBufferHelper *commandBufferHelper)
@@ -1362,10 +1381,11 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     }
 
     if (executable->hasUniformBuffers() || executable->hasStorageBuffers() ||
-        executable->hasAtomicCounterBuffers() || executable->hasImages())
+        executable->hasAtomicCounterBuffers() || executable->hasImages() ||
+        executable->hasFramebufferFetch())
     {
-        ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(this, &mResourceUseList,
-                                                                  commandBufferHelper));
+        ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(
+            this, mDrawFramebuffer, &mResourceUseList, commandBufferHelper));
     }
     return angle::Result::Continue;
 }
@@ -2763,6 +2783,16 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
 
         ASSERT(mExecutable);
         mExecutable->updateEarlyFragmentTestsOptimization(this);
+
+        if (mIsProgramFramebufferFetch != executable->hasFramebufferFetch())
+        {
+            mIsProgramFramebufferFetch = executable->hasFramebufferFetch();
+            ANGLE_TRY(flushCommandsAndEndRenderPass());
+
+            ASSERT(mDrawFramebuffer);
+            mDrawFramebuffer->onSwitchProgramFramebufferFetch(this,
+                                                              executable->hasFramebufferFetch());
+        }
     }
 
     return angle::Result::Continue;
@@ -3422,7 +3452,8 @@ void ContextVk::invalidateCurrentShaderResources()
     ASSERT(executable);
 
     if (executable->hasUniformBuffers() || executable->hasStorageBuffers() ||
-        executable->hasAtomicCounterBuffers() || executable->hasImages())
+        executable->hasAtomicCounterBuffers() || executable->hasImages() ||
+        executable->hasFramebufferFetch())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -3463,6 +3494,11 @@ void ContextVk::onFramebufferChange(FramebufferVk *framebufferVk)
 
     // Update scissor.
     updateScissor(mState);
+
+    if (mState.getProgramExecutable())
+    {
+        invalidateCurrentShaderResources();
+    }
 
     onDrawFramebufferRenderPassDescChange(framebufferVk);
 }
@@ -3686,6 +3722,11 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
     }
 
     return angle::Result::Continue;
+}
+
+void ContextVk::framebufferFetchBarrier()
+{
+    mGraphicsDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_FETCH);
 }
 
 vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
