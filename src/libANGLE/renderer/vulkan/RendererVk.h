@@ -363,6 +363,11 @@ class RendererVk : angle::NonCopyable
     // Log cache stats for all caches
     void logCacheStats() const;
 
+    VkPipelineStageFlags getSupportedVulkanPipelineStageFlags() const
+    {
+        return mSupportedVulkanPipelineStages;
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -492,6 +497,13 @@ class RendererVk : angle::NonCopyable
     // Stats about all Vulkan object caches
     using VulkanCacheStats = angle::PackedEnumMap<VulkanCacheType, CacheStats>;
     VulkanCacheStats mVulkanCacheStats;
+
+    // A cache of valid Vulkan pipeline stages based on extension support:
+    //
+    // - Excludes GEOMETRY if geometry shaders are not supported.
+    // - Excludes TESSELLATION_CONTROL and TESSELLATION_EVALUATION if tessellation shaders are not
+    //   supported.
+    VkPipelineStageFlags mSupportedVulkanPipelineStages;
 };
 
 }  // namespace rx

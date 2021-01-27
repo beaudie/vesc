@@ -433,7 +433,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                vk::ImageHelper *image)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->imageRead(&mResourceUseList, aspectFlags, imageLayout, image);
+        mRenderPassCommands->imageRead(this, aspectFlags, imageLayout, image);
     }
 
     void onImageRenderPassWrite(gl::LevelIndex level,
@@ -444,8 +444,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                 vk::ImageHelper *image)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->imageWrite(&mResourceUseList, level, layerStart, layerCount,
-                                        aspectFlags, imageLayout, vk::AliasingMode::Allowed, image);
+        mRenderPassCommands->imageWrite(this, level, layerStart, layerCount, aspectFlags,
+                                        imageLayout, vk::AliasingMode::Allowed, image);
     }
 
     void onDepthStencilDraw(gl::LevelIndex level,
@@ -463,7 +463,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         if (mRenderPassCommands->started())
         {
-            mRenderPassCommands->onImageHelperRelease(image);
+            mRenderPassCommands->onImageHelperRelease(this, image);
         }
     }
 
