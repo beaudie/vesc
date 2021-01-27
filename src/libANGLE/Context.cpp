@@ -7512,7 +7512,7 @@ void Context::getActiveUniformBlockName(ShaderProgramID program,
 }
 
 void Context::uniformBlockBinding(ShaderProgramID program,
-                                  GLuint uniformBlockIndex,
+                                  UniformBlockIndex uniformBlockIndex,
                                   GLuint uniformBlockBinding)
 {
     Program *programObject = getProgramResolveLink(program);

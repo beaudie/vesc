@@ -379,7 +379,7 @@ bool ValidateUniform4uiv(const Context *context,
                          const GLuint *value);
 bool ValidateUniformBlockBinding(const Context *context,
                                  ShaderProgramID programPacked,
-                                 GLuint uniformBlockIndex,
+                                 UniformBlockIndex uniformBlockIndexPacked,
                                  GLuint uniformBlockBinding);
 bool ValidateUniformMatrix2x3fv(const Context *context,
                                 UniformLocation locationPacked,

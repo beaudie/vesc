@@ -669,7 +669,7 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
     GLuint getUniformBlockIndex(const std::string &name) const;
     GLuint getShaderStorageBlockIndex(const std::string &name) const;
 
-    void bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding);
+    void bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint uniformBlockBinding);
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const;
     GLuint getShaderStorageBlockBinding(GLuint shaderStorageBlockIndex) const;
 

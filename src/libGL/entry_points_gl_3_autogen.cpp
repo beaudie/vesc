@@ -2571,17 +2571,20 @@ void GL_APIENTRY GL_UniformBlockBinding(GLuint program,
 
     if (context)
     {
-        ShaderProgramID programPacked                         = PackParam<ShaderProgramID>(program);
+        ShaderProgramID programPacked             = PackParam<ShaderProgramID>(program);
+        UniformBlockIndex uniformBlockIndexPacked = PackParam<UniformBlockIndex>(uniformBlockIndex);
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
-        bool isCallValid                                      = (context->skipValidation() ||
-                            ValidateUniformBlockBinding(context, programPacked, uniformBlockIndex,
-                                                        uniformBlockBinding));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateUniformBlockBinding(context, programPacked, uniformBlockIndexPacked,
+                                         uniformBlockBinding));
         if (isCallValid)
         {
-            context->uniformBlockBinding(programPacked, uniformBlockIndex, uniformBlockBinding);
+            context->uniformBlockBinding(programPacked, uniformBlockIndexPacked,
+                                         uniformBlockBinding);
         }
-        ANGLE_CAPTURE(UniformBlockBinding, isCallValid, context, programPacked, uniformBlockIndex,
-                      uniformBlockBinding);
+        ANGLE_CAPTURE(UniformBlockBinding, isCallValid, context, programPacked,
+                      uniformBlockIndexPacked, uniformBlockBinding);
     }
     else
     {

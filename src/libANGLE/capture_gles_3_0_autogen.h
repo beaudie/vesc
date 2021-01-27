@@ -510,7 +510,7 @@ angle::CallCapture CaptureUniform4uiv(const State &glState,
 angle::CallCapture CaptureUniformBlockBinding(const State &glState,
                                               bool isCallValid,
                                               ShaderProgramID programPacked,
-                                              GLuint uniformBlockIndex,
+                                              UniformBlockIndex uniformBlockIndexPacked,
                                               GLuint uniformBlockBinding);
 angle::CallCapture CaptureUniformMatrix2x3fv(const State &glState,
                                              bool isCallValid,

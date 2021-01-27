@@ -2367,13 +2367,14 @@ CallCapture CaptureUniform4uiv(const State &glState,
 CallCapture CaptureUniformBlockBinding(const State &glState,
                                        bool isCallValid,
                                        ShaderProgramID programPacked,
-                                       GLuint uniformBlockIndex,
+                                       UniformBlockIndex uniformBlockIndexPacked,
                                        GLuint uniformBlockBinding)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("programPacked", ParamType::TShaderProgramID, programPacked);
-    paramBuffer.addValueParam("uniformBlockIndex", ParamType::TGLuint, uniformBlockIndex);
+    paramBuffer.addValueParam("uniformBlockIndexPacked", ParamType::TUniformBlockIndex,
+                              uniformBlockIndexPacked);
     paramBuffer.addValueParam("uniformBlockBinding", ParamType::TGLuint, uniformBlockBinding);
 
     return CallCapture(angle::EntryPoint::GLUniformBlockBinding, std::move(paramBuffer));

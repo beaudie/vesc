@@ -3140,12 +3140,12 @@ const InterfaceBlock &Program::getShaderStorageBlockByIndex(GLuint index) const
     return mState.mExecutable->getShaderStorageBlocks()[index];
 }
 
-void Program::bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding)
+void Program::bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint uniformBlockBinding)
 {
     ASSERT(!mLinkingState);
-    mState.mExecutable->mUniformBlocks[uniformBlockIndex].binding = uniformBlockBinding;
-    mState.mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlockBinding != 0);
-    mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex);
+    mState.mExecutable->mUniformBlocks[uniformBlockIndex.value].binding = uniformBlockBinding;
+    mState.mActiveUniformBlockBindings.set(uniformBlockIndex.value, uniformBlockBinding != 0);
+    mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex.value);
 }
 
 GLuint Program::getUniformBlockBinding(GLuint uniformBlockIndex) const
@@ -4337,7 +4337,7 @@ void Program::initInterfaceBlockBindings()
          blockIndex++)
     {
         InterfaceBlock &uniformBlock = mState.mExecutable->mUniformBlocks[blockIndex];
-        bindUniformBlock(blockIndex, uniformBlock.binding);
+        bindUniformBlock({blockIndex}, uniformBlock.binding);
     }
 }
 

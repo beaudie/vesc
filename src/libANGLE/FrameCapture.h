@@ -596,6 +596,11 @@ void WriteParamValueReplay<ParamType::TUniformLocation>(std::ostream &os,
                                                         gl::UniformLocation value);
 
 template <>
+void WriteParamValueReplay<ParamType::TUniformBlockIndex>(std::ostream &os,
+                                                          const CallCapture &call,
+                                                          gl::UniformBlockIndex value);
+
+template <>
 void WriteParamValueReplay<ParamType::TGLsync>(std::ostream &os,
                                                const CallCapture &call,
                                                GLsync value);

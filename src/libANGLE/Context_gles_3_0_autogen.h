@@ -134,7 +134,8 @@
     void uniform3uiv(UniformLocation locationPacked, GLsizei count, const GLuint *value);          \
     void uniform4ui(UniformLocation locationPacked, GLuint v0, GLuint v1, GLuint v2, GLuint v3);   \
     void uniform4uiv(UniformLocation locationPacked, GLsizei count, const GLuint *value);          \
-    void uniformBlockBinding(ShaderProgramID programPacked, GLuint uniformBlockIndex,              \
+    void uniformBlockBinding(ShaderProgramID programPacked,                                        \
+                             UniformBlockIndex uniformBlockIndexPacked,                            \
                              GLuint uniformBlockBinding);                                          \
     void uniformMatrix2x3fv(UniformLocation locationPacked, GLsizei count, GLboolean transpose,    \
                             const GLfloat *value);                                                 \

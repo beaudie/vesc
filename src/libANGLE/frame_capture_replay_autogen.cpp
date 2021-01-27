@@ -3110,7 +3110,8 @@ void FrameCapture::ReplayCall(gl::Context *context,
             context->uniformBlockBinding(
                 params.getParam("programPacked", ParamType::TShaderProgramID, 0)
                     .value.ShaderProgramIDVal,
-                params.getParam("uniformBlockIndex", ParamType::TGLuint, 1).value.GLuintVal,
+                params.getParam("uniformBlockIndexPacked", ParamType::TUniformBlockIndex, 1)
+                    .value.UniformBlockIndexVal,
                 params.getParam("uniformBlockBinding", ParamType::TGLuint, 2).value.GLuintVal);
             break;
         case angle::EntryPoint::GLUniformMatrix2fv:

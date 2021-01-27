@@ -1825,7 +1825,8 @@
         "location": "UniformLocation"
     },
     "glUniformBlockBinding": {
-        "program": "ShaderProgramID"
+        "program": "ShaderProgramID",
+        "uniformBlockIndex": "UniformBlockIndex"
     },
     "glUnmapBuffer": {
         "target": "BufferBinding"
