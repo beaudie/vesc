@@ -12,10 +12,10 @@
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
-#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
-#    define ANGLE_AHARDWARE_BUFFER_SUPPORT
-// NDK header file for access to Android Hardware Buffers
-#    include <android/hardware_buffer.h>
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include "libANGLE/Display.h"
+#    include "libANGLE/renderer/vulkan/android/AHBFunctions.h"
+#    include "libANGLE/renderer/vulkan/android/DisplayVkAndroid.h"
 #endif
 
 namespace rx
@@ -26,30 +26,39 @@ angle::Result GetClientBufferMemoryRequirements(ContextVk *contextVk,
                                                 const AHardwareBuffer *hardwareBuffer,
                                                 VkMemoryRequirements &memRequirements)
 {
-#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (GetImplAs<DisplayVkAndroid>(contextVk->getRenderer()->getDisplay())->getAHBFunctions())
+    {
 
-    // Get Android Buffer Properties
-    VkAndroidHardwareBufferFormatPropertiesANDROID bufferFormatProperties = {};
-    bufferFormatProperties.sType =
-        VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
+        // Get Android Buffer Properties
+        VkAndroidHardwareBufferFormatPropertiesANDROID bufferFormatProperties = {};
+        bufferFormatProperties.sType =
+            VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
 
-    VkAndroidHardwareBufferPropertiesANDROID bufferProperties = {};
-    bufferProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID;
-    bufferProperties.pNext = &bufferFormatProperties;
+        VkAndroidHardwareBufferPropertiesANDROID bufferProperties = {};
+        bufferProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID;
+        bufferProperties.pNext = &bufferFormatProperties;
 
-    VkDevice device = contextVk->getRenderer()->getDevice();
-    ANGLE_VK_TRY(contextVk, vkGetAndroidHardwareBufferPropertiesANDROID(device, hardwareBuffer,
-                                                                        &bufferProperties));
+        VkDevice device = contextVk->getRenderer()->getDevice();
+        ANGLE_VK_TRY(contextVk, vkGetAndroidHardwareBufferPropertiesANDROID(device, hardwareBuffer,
+                                                                            &bufferProperties));
 
-    memRequirements.size           = bufferProperties.allocationSize;
-    memRequirements.alignment      = 0;
-    memRequirements.memoryTypeBits = bufferProperties.memoryTypeBits;
+        memRequirements.size           = bufferProperties.allocationSize;
+        memRequirements.alignment      = 0;
+        memRequirements.memoryTypeBits = bufferProperties.memoryTypeBits;
 
-    return angle::Result::Continue;
+        return angle::Result::Continue;
+    }
+    else
+    {
+        ANGLE_VK_UNREACHABLE(contextVk);
+        return angle::Result::Stop;
+    }
 #else
     ANGLE_VK_UNREACHABLE(contextVk);
     return angle::Result::Stop;
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+
+#endif
 }
 
 angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
@@ -59,39 +68,57 @@ angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
                                         VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                         DeviceMemory *deviceMemoryOut)
 {
-#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
-    struct AHardwareBuffer *hardwareBuffer =
-        angle::android::ClientBufferToAHardwareBuffer(clientBuffer);
+#if defined(ANGLE_PLATFORM_ANDROID)
+    const AHBFunctions *functions =
+        GetImplAs<DisplayVkAndroid>(contextVk->getRenderer()->getDisplay())->getAHBFunctions();
+    if (functions)
+    {
 
-    VkMemoryRequirements externalMemoryRequirements = {};
-    ANGLE_TRY(
-        GetClientBufferMemoryRequirements(contextVk, hardwareBuffer, externalMemoryRequirements));
+        struct AHardwareBuffer *hardwareBuffer =
+            angle::android::ClientBufferToAHardwareBuffer(clientBuffer);
 
-    // Import Vulkan DeviceMemory from Android Hardware Buffer.
-    VkImportAndroidHardwareBufferInfoANDROID importHardwareBufferInfo = {};
-    importHardwareBufferInfo.sType  = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
-    importHardwareBufferInfo.buffer = hardwareBuffer;
+        VkMemoryRequirements externalMemoryRequirements = {};
+        ANGLE_TRY(GetClientBufferMemoryRequirements(contextVk, hardwareBuffer,
+                                                    externalMemoryRequirements));
 
-    ANGLE_TRY(AllocateBufferMemoryWithRequirements(
-        contextVk, memoryProperties, externalMemoryRequirements, &importHardwareBufferInfo, buffer,
-        memoryPropertyFlagsOut, deviceMemoryOut));
+        // Import Vulkan DeviceMemory from Android Hardware Buffer.
+        VkImportAndroidHardwareBufferInfoANDROID importHardwareBufferInfo = {};
+        importHardwareBufferInfo.sType =
+            VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
+        importHardwareBufferInfo.buffer = hardwareBuffer;
 
-    AHardwareBuffer_acquire(hardwareBuffer);
+        ANGLE_TRY(AllocateBufferMemoryWithRequirements(
+            contextVk, memoryProperties, externalMemoryRequirements, &importHardwareBufferInfo,
+            buffer, memoryPropertyFlagsOut, deviceMemoryOut));
 
-    return angle::Result::Continue;
+        functions->acquire(hardwareBuffer);
+
+        return angle::Result::Continue;
+    }
+    else
+    {
+        ANGLE_VK_UNREACHABLE(contextVk);
+        return angle::Result::Stop;
+    }
+
 #else
     ANGLE_VK_UNREACHABLE(contextVk);
     return angle::Result::Stop;
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+#endif
 }
 
-void ReleaseAndroidExternalMemory(EGLClientBuffer clientBuffer)
+void ReleaseAndroidExternalMemory(RendererVk *rendererVk, EGLClientBuffer clientBuffer)
 {
-#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
-    struct AHardwareBuffer *hardwareBuffer =
-        angle::android::ClientBufferToAHardwareBuffer(clientBuffer);
-    AHardwareBuffer_release(hardwareBuffer);
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+#if defined(ANGLE_PLATFORM_ANDROID)
+    const AHBFunctions *functions =
+        GetImplAs<DisplayVkAndroid>(rendererVk->getDisplay())->getAHBFunctions();
+    if (functions)
+    {
+        struct AHardwareBuffer *hardwareBuffer =
+            angle::android::ClientBufferToAHardwareBuffer(clientBuffer);
+        functions->release(hardwareBuffer);
+    }
+#endif
 }
 }  // namespace vk
 }  // namespace rx

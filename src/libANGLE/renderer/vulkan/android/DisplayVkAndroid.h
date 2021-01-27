@@ -14,6 +14,9 @@
 
 namespace rx
 {
+
+class AHBFunctions;
+
 class DisplayVkAndroid : public DisplayVk
 {
   public:
@@ -40,6 +43,11 @@ class DisplayVkAndroid : public DisplayVk
                                                          const egl::AttributeMap &attribs) override;
 
     const char *getWSIExtension() const override;
+
+    const AHBFunctions *getAHBFunctions() const { return mAHBFunctions.get(); }
+
+  private:
+    std::unique_ptr<AHBFunctions> mAHBFunctions;
 };
 
 }  // namespace rx

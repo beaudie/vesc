@@ -15,6 +15,7 @@
 
 #include "common/angle_version.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/android/AHBFunctions.h"
 #include "libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.h"
 #include "libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
@@ -27,6 +28,8 @@ DisplayVkAndroid::DisplayVkAndroid(const egl::DisplayState &state) : DisplayVk(s
 egl::Error DisplayVkAndroid::initialize(egl::Display *display)
 {
     ANGLE_TRY(DisplayVk::initialize(display));
+
+    mAHBFunctions = AHBFunctions::Create();
 
     std::stringstream strstr;
     strstr << "Version (" << ANGLE_VERSION_STRING << "), ";
