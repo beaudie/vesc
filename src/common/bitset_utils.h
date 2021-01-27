@@ -78,6 +78,12 @@ class BitSetT final
             mBitsCopy.set(index);
         }
 
+        void setLaterBits(const BitSetT &bits)
+        {
+            ASSERT((BitSetT(bits) &= Mask(mCurrentBit + 1)).none());
+            mBitsCopy |= bits;
+        }
+
       private:
         std::size_t getNextBit();
 
