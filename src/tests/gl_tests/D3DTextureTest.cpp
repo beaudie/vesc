@@ -1435,7 +1435,7 @@ class D3DTextureYUVTest : public D3DTextureTest
   protected:
     D3DTextureYUVTest() : D3DTextureTest() {}
 
-    void RunYUVTest(DXGI_FORMAT format)
+    void RunYUVTest(DXGI_FORMAT format, bool use_angle_webgl_video_frame)
     {
         ASSERT_TRUE(format == DXGI_FORMAT_NV12 || format == DXGI_FORMAT_P010 ||
                     format == DXGI_FORMAT_P016);
@@ -1444,6 +1444,9 @@ class D3DTextureYUVTest : public D3DTextureTest
                            FAILED(mD3D11Device->CheckFormatSupport(format, &formatSupport)));
         ASSERT_TRUE(formatSupport &
                     (D3D11_FORMAT_SUPPORT_TEXTURE2D | D3D11_FORMAT_SUPPORT_SHADER_SAMPLE));
+
+        ANGLE_SKIP_TEST_IF(use_angle_webgl_video_frame &&
+                           !IsGLExtensionEnabled("GL_ANGLE_webgl_video_frame"));
 
         constexpr char kVS[] =
             R"(precision highp float;
@@ -1468,12 +1471,24 @@ class D3DTextureYUVTest : public D3DTextureTest
                 gl_FragColor = texture2D(tex, texcoord);
             })";
 
-        GLuint textureExternalOESProgram = CompileProgram(kVS, kTextureExternalOESFS);
-        ASSERT_NE(0u, textureExternalOESProgram) << "shader compilation failed.";
+        constexpr char kTextureVideoFrameFS[] =
+            R"(#extension GL_ANGLE_webgl_video_frame : require
+            precision highp float;
+            uniform samplerVideoFrameWEBGL tex;
+            varying vec2 texcoord;
 
-        GLint textureExternalOESUniformLocation =
-            glGetUniformLocation(textureExternalOESProgram, "tex");
-        ASSERT_NE(-1, textureExternalOESUniformLocation);
+            void main()
+            {
+                gl_FragColor = textureVideoFrameWEBGL(tex, texcoord);
+            })";
+
+        auto fs = use_angle_webgl_video_frame ? kTextureVideoFrameFS : kTextureExternalOESFS;
+
+        GLuint textureProgram = CompileProgram(kVS, fs);
+        ASSERT_NE(0u, textureProgram) << "shader compilation failed.";
+
+        GLint textureUniformLocation = glGetUniformLocation(textureProgram, "tex");
+        ASSERT_NE(-1, textureUniformLocation);
 
         EGLWindow *window  = getEGLWindow();
         EGLDisplay display = window->getDisplay();
@@ -1550,6 +1565,12 @@ class D3DTextureYUVTest : public D3DTextureTest
         glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, yImage);
         ASSERT_GL_NO_ERROR();
 
+        if (use_angle_webgl_video_frame)
+        {
+            glBindTexture(GL_TEXTURE_VIDEO_FRAME_WEBGL, yTexture);
+            ASSERT_GL_NO_ERROR();
+        }
+
         GLuint rbo;
         glGenRenderbuffers(1, &rbo);
         glBindRenderbuffer(GL_RENDERBUFFER, rbo);
@@ -1566,12 +1587,12 @@ class D3DTextureYUVTest : public D3DTextureTest
         ASSERT_GL_NO_ERROR();
 
         // Draw the Y plane using a shader.
-        glUseProgram(textureExternalOESProgram);
-        glUniform1i(textureExternalOESUniformLocation, 0);
+        glUseProgram(textureProgram);
+        glUniform1i(textureUniformLocation, 0);
         ASSERT_GL_NO_ERROR();
 
         glViewport(0, 0, bufferSize, bufferSize);
-        drawQuad(textureExternalOESProgram, "position", 1.0f);
+        drawQuad(textureProgram, "position", 1.0f);
         ASSERT_GL_NO_ERROR();
 
         if (isNV12)
@@ -1610,14 +1631,20 @@ class D3DTextureYUVTest : public D3DTextureTest
         glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, uvImage);
         ASSERT_GL_NO_ERROR();
 
+        if (use_angle_webgl_video_frame)
+        {
+            glBindTexture(GL_TEXTURE_VIDEO_FRAME_WEBGL, uvTexture);
+            ASSERT_GL_NO_ERROR();
+        }
+
         // Draw the UV plane using a shader.
-        glUseProgram(textureExternalOESProgram);
-        glUniform1i(textureExternalOESUniformLocation, 0);
+        glUseProgram(textureProgram);
+        glUniform1i(textureUniformLocation, 0);
         ASSERT_GL_NO_ERROR();
 
         // Use only half of the framebuffer to match UV plane dimensions.
         glViewport(0, 0, bufferSize / 2, bufferSize / 2);
-        drawQuad(textureExternalOESProgram, "position", 1.0f);
+        drawQuad(textureProgram, "position", 1.0f);
         ASSERT_GL_NO_ERROR();
 
         if (isNV12)
@@ -1645,7 +1672,7 @@ class D3DTextureYUVTest : public D3DTextureTest
 
 TEST_P(D3DTextureYUVTest, NV12TextureImage)
 {
-    RunYUVTest(DXGI_FORMAT_NV12);
+    RunYUVTest(DXGI_FORMAT_NV12, false);
 }
 
 // Reading back from RGBA16_EXT renderbuffer needs GL_EXT_texture_norm16 which is ES3 only.
@@ -1657,12 +1684,27 @@ class D3DTextureYUVTestES3 : public D3DTextureYUVTest
 
 TEST_P(D3DTextureYUVTestES3, P010TextureImage)
 {
-    RunYUVTest(DXGI_FORMAT_P010);
+    RunYUVTest(DXGI_FORMAT_P010, false);
 }
 
 TEST_P(D3DTextureYUVTestES3, P016TextureImage)
 {
-    RunYUVTest(DXGI_FORMAT_P016);
+    RunYUVTest(DXGI_FORMAT_P016, false);
+}
+
+TEST_P(D3DTextureYUVTest, NV12TextureImageVideoFrameWEBGL)
+{
+    RunYUVTest(DXGI_FORMAT_NV12, true);
+}
+
+TEST_P(D3DTextureYUVTestES3, P010TextureImageVideoFrameWEBGL)
+{
+    RunYUVTest(DXGI_FORMAT_P010, true);
+}
+
+TEST_P(D3DTextureYUVTestES3, P016TextureImageVideoFrameWEBGL)
+{
+    RunYUVTest(DXGI_FORMAT_P016, true);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these

@@ -1220,3 +1220,14 @@ GROUP BEGIN WEBGLVideoTexture
   DEFAULT METADATA {"essl_level": "ESSL3_BUILTINS", "glsl_level": "GLSL1_3_BUILTINS", "op": "CallBuiltInFunction", "extension": "WEBGL_video_texture"}
     vec4 texture(samplerVideoWEBGL, vec2);
 GROUP END WEBGLVideoTexture
+
+GROUP BEGIN ANGLE_webgl_video_frame
+  DEFAULT METADATA {"essl_level": "ESSL1_BUILTINS", "op": "CallBuiltInFunction", "essl_extension": "ANGLE_webgl_video_frame"}
+      vec4 textureVideoFrameWEBGL(samplerVideoFrameWEBGL, vec2);
+      vec4 textureVideoFrameWEBGLProj(samplerVideoFrameWEBGL, vec3);
+      vec4 textureVideoFrameWEBGLProj(samplerVideoFrameWEBGL, vec4);
+  DEFAULT METADATA {"essl_level": "ESSL3_BUILTINS", "op": "CallBuiltInFunction", "essl_extension": "ANGLE_webgl_video_frame"}
+    vec4 texture(samplerVideoFrameWEBGL, vec2);
+    vec4 textureProj(samplerVideoFrameWEBGL, vec3);
+    vec4 textureProj(samplerVideoFrameWEBGL, vec4);
+GROUP END ANGLE_webgl_video_frame

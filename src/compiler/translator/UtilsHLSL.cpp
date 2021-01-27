@@ -74,6 +74,7 @@ HLSLTextureGroup TextureGroup(const TBasicType type, TLayoutImageInternalFormat 
     {
         case EbtSampler2D:
         case EbtSamplerVideoWEBGL:
+        case EbtSamplerVideoFrameWEBGL:
             return HLSL_TEXTURE_2D;
         case EbtSamplerCube:
             return HLSL_TEXTURE_CUBE;
