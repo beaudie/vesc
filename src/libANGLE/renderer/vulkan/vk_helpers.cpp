@@ -101,8 +101,12 @@ struct ImageMemoryBarrierData
     PipelineStage barrierIndex;
 };
 
+constexpr VkPipelineStageFlags kPreFragmentStageFlags =
+    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+    VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT | VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+
 constexpr VkPipelineStageFlags kAllShadersPipelineStageFlags =
-    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+    kPreFragmentStageFlags | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
     VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
 
 constexpr VkPipelineStageFlags kAllDepthStencilPipelineStageFlags =
@@ -314,33 +318,35 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
-        ImageLayout::GeometryShaderReadOnly,
+        ImageLayout::PreFragmentShadersReadOnly,
         ImageMemoryBarrierData{
-            "GeometryShaderReadOnly",
+            "PreFragmentShadersReadOnly",
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT,
-            VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT,
+            kPreFragmentStageFlags,
+            kPreFragmentStageFlags,
             // Transition to: all reads must happen after barrier.
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
-            PipelineStage::GeometryShader,
+            // In case of multiple destination stages, We barrier the earliest stage
+            PipelineStage::VertexShader,
         },
     },
     {
-        ImageLayout::GeometryShaderWrite,
+        ImageLayout::PreFragmentShadersWrite,
         ImageMemoryBarrierData{
-            "GeometryShaderWrite",
+            "PreFragmentShadersWrite",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT,
-            VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT,
+            kPreFragmentStageFlags,
+            kPreFragmentStageFlags,
             // Transition to: all reads and writes must happen after barrier.
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
             ResourceAccess::Write,
-            PipelineStage::GeometryShader,
+            // In case of multiple destination stages, We barrier the earliest stage
+            PipelineStage::VertexShader,
         },
     },
     {

@@ -121,14 +121,18 @@ GLenum DefaultGLErrorCode(VkResult result)
 
 constexpr gl::ShaderMap<vk::ImageLayout> kShaderReadOnlyImageLayouts = {
     {gl::ShaderType::Vertex, vk::ImageLayout::VertexShaderReadOnly},
+    {gl::ShaderType::TessControl, vk::ImageLayout::PreFragmentShadersReadOnly},
+    {gl::ShaderType::TessEvaluation, vk::ImageLayout::PreFragmentShadersReadOnly},
+    {gl::ShaderType::Geometry, vk::ImageLayout::PreFragmentShadersReadOnly},
     {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderReadOnly},
-    {gl::ShaderType::Geometry, vk::ImageLayout::GeometryShaderReadOnly},
     {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderReadOnly}};
 
 constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
     {gl::ShaderType::Vertex, vk::ImageLayout::VertexShaderWrite},
+    {gl::ShaderType::TessControl, vk::ImageLayout::PreFragmentShadersWrite},
+    {gl::ShaderType::TessEvaluation, vk::ImageLayout::PreFragmentShadersWrite},
+    {gl::ShaderType::Geometry, vk::ImageLayout::PreFragmentShadersWrite},
     {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderWrite},
-    {gl::ShaderType::Geometry, vk::ImageLayout::GeometryShaderWrite},
     {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderWrite}};
 
 constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
@@ -1265,12 +1269,18 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
             ASSERT(remainingShaderBits.any());
             gl::ShaderType firstShader = remainingShaderBits.first();
+            gl::ShaderType lastShader  = remainingShaderBits.last();
             remainingShaderBits.reset(firstShader);
-            // If we have multiple shader accessing it, we barrier against all shader stage read
-            // given that we only support vertex/frag shaders
-            if (remainingShaderBits.any())
+            remainingShaderBits.reset(lastShader);
+            // We barrier against either:
+            // - Vertex only
+            // - Fragment only
+            // - Pre-fragment only (vertex, geometry and tessellation together)
+            if (remainingShaderBits.any() || firstShader != lastShader)
             {
-                textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+                textureLayout = lastShader == gl::ShaderType::Fragment
+                                    ? vk::ImageLayout::AllGraphicsShadersReadOnly
+                                    : vk::ImageLayout::PreFragmentShadersReadOnly;
             }
             else
             {
@@ -4264,16 +4274,23 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         alreadyProcessed.insert(image);
 
         vk::ImageLayout imageLayout;
-        gl::ShaderType shader = static_cast<gl::ShaderType>(gl::ScanForward(shaderStages.bits()));
-        shaderStages.reset(shader);
-        // This is accessed by multiple shaders
-        if (shaderStages.any())
+        gl::ShaderType firstShader = shaderStages.first();
+        gl::ShaderType lastShader  = shaderStages.last();
+        shaderStages.reset(firstShader);
+        shaderStages.reset(lastShader);
+        // We barrier against either:
+        // - Vertex only
+        // - Fragment only
+        // - Pre-fragment only (vertex, geometry and tessellation together)
+        if (shaderStages.any() || firstShader != lastShader)
         {
-            imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
+            imageLayout = lastShader == gl::ShaderType::Fragment
+                              ? vk::ImageLayout::AllGraphicsShadersWrite
+                              : vk::ImageLayout::PreFragmentShadersWrite;
         }
         else
         {
-            imageLayout = kShaderWriteImageLayouts[shader];
+            imageLayout = kShaderWriteImageLayouts[firstShader];
         }
 
         VkImageAspectFlags aspectFlags = image->getAspectFlags();
