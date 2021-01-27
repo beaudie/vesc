@@ -1286,8 +1286,9 @@ enum class ImageLayout
     TransferDst,
     VertexShaderReadOnly,
     VertexShaderWrite,
-    GeometryShaderReadOnly,
-    GeometryShaderWrite,
+    // PreFragment == Vertex, Tessellation and Geometry stages
+    PreFragmentShadersReadOnly,
+    PreFragmentShadersWrite,
     FragmentShaderReadOnly,
     FragmentShaderWrite,
     ComputeShaderReadOnly,
