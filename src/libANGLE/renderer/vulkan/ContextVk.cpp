@@ -404,7 +404,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Note that currently these dirty bits are set every time a new render pass command buffer is
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
-    mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE);
+    mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
@@ -416,7 +416,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
 
-    mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE);
+    mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -426,6 +426,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DEFAULT_ATTRIBS] =
         &ContextVk::handleDirtyGraphicsDefaultAttribs;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE] = &ContextVk::handleDirtyGraphicsPipeline;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE_BIND] =
+        &ContextVk::handleDirtyGraphicsPipelineBind;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyGraphicsTextures;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VERTEX_BUFFERS] =
         &ContextVk::handleDirtyGraphicsVertexBuffers;
@@ -440,8 +442,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     {
         mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS] =
             &ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension;
-        mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_STATE] =
-            &ContextVk::handleDirtyGraphicsTransformFeedbackState;
         mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME] =
             &ContextVk::handleDirtyGraphicsTransformFeedbackResume;
     }
@@ -453,9 +453,10 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] = &ContextVk::handleDirtyDescriptorSets;
 
-    mComputeDirtyBitHandlers[DIRTY_BIT_EVENT_LOG] = &ContextVk::handleDirtyGraphicsEventLog;
-    mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE]  = &ContextVk::handleDirtyComputePipeline;
-    mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES]  = &ContextVk::handleDirtyComputeTextures;
+    mComputeDirtyBitHandlers[DIRTY_BIT_EVENT_LOG]     = &ContextVk::handleDirtyGraphicsEventLog;
+    mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE]      = &ContextVk::handleDirtyComputePipeline;
+    mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE_BIND] = &ContextVk::handleDirtyComputePipelineBind;
+    mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES]      = &ContextVk::handleDirtyComputeTextures;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] =
         &ContextVk::handleDirtyComputeDriverUniforms;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS_BINDING] =
@@ -782,6 +783,15 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                                       indexTypeOrInvalid, indices));
 
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+    }
+
+    // Before checking the render pass, see if it needs to break.  This could happen if transform
+    // feedback is active and a program pipeline is rebound.  Note that if the pipeline rebind is
+    // redundant, this step will reset the dirty bit instead of breaking the render pass.
+    if (mGraphicsDirtyBits.test(DIRTY_BIT_PIPELINE))
+    {
+        ANGLE_TRY(updateGraphicsPipeline());
+        mGraphicsDirtyBits.reset(DIRTY_BIT_PIPELINE);
     }
 
     // This could be improved using a dirty bit. But currently it's slower to use a handler
@@ -1135,9 +1145,12 @@ angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(const gl::Context *co
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
-                                                     vk::CommandBuffer *commandBuffer)
+angle::Result ContextVk::updateGraphicsPipeline()
 {
+    const VkPipeline previousPipeline = mCurrentGraphicsPipeline
+                                            ? mCurrentGraphicsPipeline->getPipeline().getHandle()
+                                            : VK_NULL_HANDLE;
+
     ASSERT(mExecutable);
 
     if (!mCurrentGraphicsPipeline)
@@ -1152,8 +1165,8 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mExecutable->getGraphicsPipeline(
             this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-            context->getState().getProgramExecutable()->getNonBuiltinAttribLocationsMask(),
-            &descPtr, &mCurrentGraphicsPipeline));
+            mState.getProgramExecutable()->getNonBuiltinAttribLocationsMask(), &descPtr,
+            &mCurrentGraphicsPipeline));
         mGraphicsPipelineTransition.reset();
     }
     else if (mGraphicsPipelineTransition.any())
@@ -1166,8 +1179,8 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
 
             ANGLE_TRY(mExecutable->getGraphicsPipeline(
                 this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                context->getState().getProgramExecutable()->getNonBuiltinAttribLocationsMask(),
-                &descPtr, &mCurrentGraphicsPipeline));
+                mState.getProgramExecutable()->getNonBuiltinAttribLocationsMask(), &descPtr,
+                &mCurrentGraphicsPipeline));
 
             oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr,
                                        mCurrentGraphicsPipeline);
@@ -1176,14 +1189,52 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
         mGraphicsPipelineTransition.reset();
     }
 
-    pauseTransformFeedbackIfStarted({});
-
-    commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
     // TODO: https://issuetracker.google.com/issues/169788986: Need to change this so that we get
     // the actual serial used when this work is submitted.
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
+
+    const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
+
+    // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
+    // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BIND.
+    if (newPipeline == previousPipeline)
+    {
+        return angle::Result::Continue;
+    }
+
+    // VK_EXT_transform_feedback disallows binding pipelines while transform feedback is active.
+    // If a new pipeline needs to be bound, the render pass should necessarily be broken (which
+    // implicitly pauses transform feedback), as resuming requires a barrier on the transform
+    // feedback counter buffer.
+    if (mRenderPassCommands && mRenderPassCommands->isTransformFeedbackActiveUnpaused())
+    {
+        ANGLE_TRY(flushCommandsAndEndRenderPass());
+    }
+
+    // The pipeline needs to rebind because it's changed.
+    mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
+                                                     vk::CommandBuffer *commandBuffer)
+{
+    // DIRTY_BIT_PIPELINE is not handled through mGraphicsDirtyBitHandlers.
+    UNREACHABLE();
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsPipelineBind(const gl::Context *context,
+                                                         vk::CommandBuffer *commandBuffer)
+{
+    ASSERT(mCurrentGraphicsPipeline);
+    ASSERT(!mRenderPassCommands->isTransformFeedbackActiveUnpaused());
+
+    commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+
     return angle::Result::Continue;
 }
 
@@ -1195,6 +1246,16 @@ angle::Result ContextVk::handleDirtyComputePipeline(const gl::Context *context,
         ASSERT(mExecutable);
         ANGLE_TRY(mExecutable->getComputePipeline(this, &mCurrentComputePipeline));
     }
+
+    ASSERT(mComputeDirtyBits.test(DIRTY_BIT_PIPELINE_BIND));
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyComputePipelineBind(const gl::Context *context,
+                                                        vk::CommandBuffer *commandBuffer)
+{
+    ASSERT(mCurrentComputePipeline);
 
     commandBuffer->bindComputePipeline(mCurrentComputePipeline->get());
     // TODO: https://issuetracker.google.com/issues/169788986: Need to change this so that we get
@@ -1448,17 +1509,30 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
     size_t bufferCount                       = executable->getTransformFeedbackBufferCount();
 
-    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
+    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers =
         transformFeedbackVk->getBufferHelpers();
+    gl::TransformFeedbackBuffersArray<vk::BufferHelper> &counterBuffers =
+        transformFeedbackVk->getCounterBufferHelpers();
 
+    // Issue necessary barriers for the transform feedback buffers.
     for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
-        vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
+        vk::BufferHelper *bufferHelper = buffers[bufferIndex];
         ASSERT(bufferHelper);
         mRenderPassCommands->bufferWrite(
             &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
             vk::PipelineStage::TransformFeedback, vk::AliasingMode::Disallowed, bufferHelper);
     }
+
+    // Issue necessary barriers for the transform feedback counter buffer.  Note that the barrier is
+    // issued only on the first buffer (which uses a global memory barrier), as all the counter
+    // buffers of the transform feedback object are used together.
+    ASSERT(counterBuffers[0].valid());
+    mRenderPassCommands->bufferWrite(&mResourceUseList,
+                                     VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT |
+                                         VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT,
+                                     vk::PipelineStage::TransformFeedback,
+                                     vk::AliasingMode::Disallowed, &counterBuffers[0]);
 
     const gl::TransformFeedbackBuffersArray<VkBuffer> &bufferHandles =
         transformFeedbackVk->getBufferHandles();
@@ -1471,24 +1545,12 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
                                                 bufferHandles.data(), bufferOffsets.data(),
                                                 bufferSizes.data());
 
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
-                                                                   vk::CommandBuffer *commandBuffer)
-{
-    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
-    ASSERT(executable);
-
-    if (!executable->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActiveUnpaused())
+    if (!mState.isTransformFeedbackActiveUnpaused())
     {
         return angle::Result::Continue;
     }
 
-    TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
-
     // We should have same number of counter buffers as xfb buffers have
-    size_t bufferCount = executable->getTransformFeedbackBufferCount();
     const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBufferHandles =
         transformFeedbackVk->getCounterBufferHandles();
 
@@ -2758,10 +2820,10 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
     }
     else
     {
+        invalidateCurrentGraphicsPipeline();
         // No additional work is needed here. We will update the pipeline desc
         // later.
         invalidateDefaultAttributes(context->getStateCache().getActiveDefaultAttribsMask());
-        invalidateCurrentGraphicsPipeline();
         invalidateVertexAndIndexBuffers();
         bool useVertexBuffer = (executable->getMaxActiveAttribLocation() > 0);
         mNonIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
@@ -3004,7 +3066,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     &mGraphicsPipelineTransition, depthStencilState, drawFramebuffer);
                 mGraphicsPipelineDesc->updateStencilBackWriteMask(
                     &mGraphicsPipelineTransition, depthStencilState, drawFramebuffer);
-                onDrawFramebufferRenderPassDescChange(mDrawFramebuffer);
+                mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
+                updateRenderPassDesc(mDrawFramebuffer);
                 break;
             }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
@@ -3503,17 +3566,26 @@ void ContextVk::onFramebufferChange(FramebufferVk *framebufferVk)
     // Update scissor.
     updateScissor(mState);
 
-    onDrawFramebufferRenderPassDescChange(framebufferVk);
+    updateRenderPassDesc(framebufferVk);
+    invalidateCurrentGraphicsPipeline();
 }
 
-void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk)
+void ContextVk::updateRenderPassDesc(FramebufferVk *framebufferVk)
 {
-    invalidateCurrentGraphicsPipeline();
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
                                                 framebufferVk->getRenderPassDesc());
     const gl::Box &dimensions = framebufferVk->getState().getDimensions();
     mGraphicsPipelineDesc->updateDrawableSize(&mGraphicsPipelineTransition, dimensions.width,
                                               dimensions.height);
+}
+
+angle::Result ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk)
+{
+    updateRenderPassDesc(framebufferVk);
+    // Recreate the graphics pipeline.  This function is called from
+    // FramebufferVk::startNewRenderPass when the framebuffer's desc changes due to
+    // multisampled-render-to-texture.  This happens after setupDraw() has handled dirty pipelines.
+    return updateGraphicsPipeline();
 }
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
@@ -3533,7 +3605,6 @@ void ContextVk::onTransformFeedbackStateChanged()
 {
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_STATE);
         mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
     else if (getFeatures().emulateTransformFeedback.enabled)
@@ -3545,27 +3616,46 @@ void ContextVk::onTransformFeedbackStateChanged()
 
 angle::Result ContextVk::onBeginTransformFeedback(
     size_t bufferCount,
-    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers)
+    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers,
+    const gl::TransformFeedbackBuffersArray<vk::BufferHelper> &counterBuffers)
 {
     onTransformFeedbackStateChanged();
 
+    bool shouldEndRenderPass = false;
+
+    // If any of the buffers were previously used in the render pass, break the render pass as a
+    // barrier is needed.
     for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
         const vk::BufferHelper *buffer = buffers[bufferIndex];
-        if (mCurrentTransformFeedbackBuffers.contains(buffer) ||
-            mRenderPassCommands->usesBuffer(*buffer))
+        if (mRenderPassCommands->usesBuffer(*buffer))
         {
-            ANGLE_TRY(flushCommandsAndEndRenderPass());
+            shouldEndRenderPass = true;
             break;
         }
     }
 
-    populateTransformFeedbackBufferSet(bufferCount, buffers);
-
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
+        // Break the render pass if the counter buffers are used too.  Note that Vulkan requires a
+        // barrier on the counter buffer between pause and resume, so it cannot be resumed in the
+        // same render pass.  Note additionally that we don't need to test all counters being used
+        // in the render pass, as outside of the transform feedback object these buffers are
+        // inaccessible and are therefore always used together.
+        if (!shouldEndRenderPass && mRenderPassCommands->usesBuffer(counterBuffers[0]))
+        {
+            shouldEndRenderPass = true;
+        }
+
         mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
     }
+
+    if (shouldEndRenderPass)
+    {
+        ANGLE_TRY(flushCommandsAndEndRenderPass());
+    }
+
+    populateTransformFeedbackBufferSet(bufferCount, buffers);
 
     return angle::Result::Continue;
 }
@@ -3603,24 +3693,29 @@ angle::Result ContextVk::onPauseTransformFeedback()
 {
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        return flushCommandsAndEndRenderPass();
+        // If transform feedback was already active on this render pass, break it.  This
+        // is for simplicity to avoid tracking multiple simultaneously active transform feedback
+        // settings in the render pass.
+        if (mRenderPassCommands->isTransformFeedbackActiveUnpaused())
+        {
+            return flushCommandsAndEndRenderPass();
+        }
     }
     else if (getFeatures().emulateTransformFeedback.enabled)
     {
         invalidateCurrentTransformFeedbackBuffers();
-        return flushCommandsAndEndRenderPass();
     }
     return angle::Result::Continue;
 }
 
-void ContextVk::invalidateGraphicsPipeline()
+void ContextVk::invalidateGraphicsPipelineBinding()
 {
-    mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
+    mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
 }
 
-void ContextVk::invalidateComputePipeline()
+void ContextVk::invalidateComputePipelineBinding()
 {
-    mComputeDirtyBits.set(DIRTY_BIT_PIPELINE);
+    mComputeDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
 }
 
 void ContextVk::invalidateGraphicsDescriptorSet(DescriptorSetIndex usedDescriptorSet)
@@ -3801,24 +3896,18 @@ void ContextVk::writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOu
     }
 }
 
-void ContextVk::pauseTransformFeedbackIfStartedAndRebindBuffersOnResume()
+void ContextVk::pauseTransformFeedbackIfActiveUnpaused()
 {
-    DirtyBits rebindTransformFeedbackOnResume;
-    rebindTransformFeedbackOnResume.set(DIRTY_BIT_TRANSFORM_FEEDBACK_STATE);
-    pauseTransformFeedbackIfStarted(rebindTransformFeedbackOnResume);
-}
-
-ANGLE_INLINE void ContextVk::pauseTransformFeedbackIfStarted(DirtyBits onResumeOps)
-{
-    // Note that UtilsVk may have already paused transform feedback, so don't pause it again if it's
-    // already paused.
-    if (mRenderPassCommands->isTransformFeedbackStarted() &&
-        !mGraphicsDirtyBits.test(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME))
+    if (mRenderPassCommands->isTransformFeedbackActiveUnpaused())
     {
         ASSERT(getFeatures().supportsTransformFeedbackExtension.enabled);
-        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
-        mGraphicsDirtyBits |= onResumeOps;
         mRenderPassCommands->pauseTransformFeedback();
+
+        // Note that this function is called when render pass break is imminent
+        // (flushCommandsAndEndRenderPass(), or UtilsVk::clearFramebuffer which will close the
+        // render pass after the clear).  This dirty bit allows transform feedback to resume
+        // automatically on next render pass.
+        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
     }
 }
 
@@ -4647,9 +4736,6 @@ angle::Result ContextVk::beginNewRenderPass(
     mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                          renderPassAttachmentOps, depthStencilAttachmentIndex,
                                          clearValues, commandBufferOut);
-    // Restart at subpass 0.
-    mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
-
     mPerfCounters.renderPasses++;
 
     return angle::Result::Continue;
@@ -4658,8 +4744,6 @@ angle::Result ContextVk::beginNewRenderPass(
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
                                          vk::CommandBuffer **commandBufferOut)
 {
-    mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
-
     ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
 
     ANGLE_TRY(resumeRenderPassQueriesIfActive());
@@ -4756,7 +4840,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 
     addOverlayUsedBuffersCount(mRenderPassCommands);
 
-    pauseTransformFeedbackIfStartedAndRebindBuffersOnResume();
+    pauseTransformFeedbackIfActiveUnpaused();
 
     mRenderPassCommands->endRenderPass(this);
 
@@ -4784,6 +4868,11 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
         // If we have deferred glFlush call in the middle of renderpass, flush them now.
         ANGLE_TRY(flushImpl(nullptr));
     }
+
+    mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
+
+    // Restart at subpass 0.
+    mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
 
     return angle::Result::Continue;
 }
