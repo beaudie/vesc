@@ -1876,9 +1876,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     mFramebuffer = nullptr;
 
     // Notify the ContextVk to update the pipeline desc.
-    contextVk->onFramebufferChange(this);
-
-    return angle::Result::Continue;
+    return contextVk->onFramebufferChange(this);
 }
 
 void FramebufferVk::updateRenderPassDesc()
@@ -2541,7 +2539,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     if (previousUnresolveColorMask != unresolveColorMask ||
         previousUnresolveDepth != unresolveDepth || previousUnresolveStencil != unresolveStencil)
     {
-        contextVk->onDrawFramebufferRenderPassDescChange(this);
+        ANGLE_TRY(contextVk->onDrawFramebufferRenderPassDescChange(this));
 
         // Make sure framebuffer is recreated.
         mFramebuffer = nullptr;
