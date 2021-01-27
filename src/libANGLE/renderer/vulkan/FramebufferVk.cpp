@@ -2536,13 +2536,13 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     // or the existence of resolve attachments in single subpass render passes.  The modification
     // here can add/remove a subpass, or modify its input attachments.
     gl::DrawBufferMask unresolveColorMask = mRenderPassDesc.getColorUnresolveAttachmentMask();
-    bool unresolveDepth                   = mRenderPassDesc.hasDepthUnresolveAttachment();
-    bool unresolveStencil                 = mRenderPassDesc.hasStencilUnresolveAttachment();
-    if (previousUnresolveColorMask != unresolveColorMask ||
-        previousUnresolveDepth != unresolveDepth || previousUnresolveStencil != unresolveStencil)
+    const bool unresolveDepth             = mRenderPassDesc.hasDepthUnresolveAttachment();
+    const bool unresolveStencil           = mRenderPassDesc.hasStencilUnresolveAttachment();
+    const bool unresolveChanged           = previousUnresolveColorMask != unresolveColorMask ||
+                                  previousUnresolveDepth != unresolveDepth ||
+                                  previousUnresolveStencil != unresolveStencil;
+    if (unresolveChanged)
     {
-        contextVk->onDrawFramebufferRenderPassDescChange(this);
-
         // Make sure framebuffer is recreated.
         mFramebuffer = nullptr;
 
@@ -2580,7 +2580,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                      mCurrentFramebufferDesc.getLayerCount());
     }
 
-    if (unresolveColorMask.any() || unresolveDepth || unresolveStencil)
+    const bool anyUnresolve = unresolveColorMask.any() || unresolveDepth || unresolveStencil;
+    if (anyUnresolve)
     {
         // Unresolve attachments if any.
         UtilsVk::UnresolveParameters params;
@@ -2592,6 +2593,13 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
         // The unresolve subpass has only one draw call.
         contextVk->startNextSubpass();
+    }
+
+    if (unresolveChanged || anyUnresolve)
+    {
+        // Make sure the context's graphics pipeline is recreated based on the desc and subpass
+        // index change.
+        ANGLE_TRY(contextVk->onDrawFramebufferRenderPassDescChange(this));
     }
 
     return angle::Result::Continue;
