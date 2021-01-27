@@ -468,6 +468,7 @@ basic_types_enumeration = [
     'USamplerBuffer',
     'USamplerCubeArray',
     'SamplerVideoWEBGL',
+    'SamplerVideoFrameWEBGL',
     'Image2D',
     'IImage2D',
     'UImage2D',

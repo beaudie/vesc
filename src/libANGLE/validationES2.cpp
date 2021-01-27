@@ -210,6 +210,8 @@ bool IsValidCopyTextureSourceTarget(const Context *context, TextureType type)
             return context->getExtensions().eglImageExternalOES;
         case TextureType::VideoImage:
             return context->getExtensions().webglVideoTexture;
+        case TextureType::VideoFrame:
+            return context->getExtensions().webglVideoFrame;
         default:
             return false;
     }
@@ -6430,6 +6432,11 @@ void RecordBindTextureTypeError(const Context *context, TextureType target)
 
         case TextureType::VideoImage:
             ASSERT(!context->getExtensions().webglVideoTexture);
+            context->validationError(GL_INVALID_ENUM, kExtensionNotEnabled);
+            break;
+
+        case TextureType::VideoFrame:
+            ASSERT(!context->getExtensions().webglVideoFrame);
             context->validationError(GL_INVALID_ENUM, kExtensionNotEnabled);
             break;
 

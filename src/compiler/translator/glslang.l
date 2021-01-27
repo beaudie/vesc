@@ -112,6 +112,7 @@ static int ES3_1_reserved_ES3_1_extension_ES3_2_keyword(TParseContext *context, 
 static int ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(TParseContext *context, TExtension extension1, TExtension extension2, int token1, int token2);
 static int ES3_and_3_1_reserved_ES3_1_extension_ES3_2_keyword_2(TParseContext *context, TExtension extension1, TExtension extension2, int token1, int token2);
 static int WEBGL_video_texture_extension(TParseContext *context, int token);
+static int ANGLE_webgl_video_frame_extension(TParseContext *context, int token);
 static int uint_constant(TParseContext *context);
 static int int_constant(TParseContext *context);
 static int float_constant(yyscan_t yyscanner);
@@ -244,6 +245,7 @@ O           [0-7]
 "usamplerCubeArray"    { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_cube_map_array, TExtension::EXT_texture_cube_map_array, USAMPLERCUBEARRAYOES, USAMPLERCUBEARRAYEXT); }
 "usamplerBuffer"       { return ES3_and_3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::OES_texture_buffer, TExtension::EXT_texture_buffer, USAMPLERBUFFER, USAMPLERBUFFER); }
 "samplerVideoWEBGL"    { return WEBGL_video_texture_extension(context, SAMPLERVIDEOWEBGL); }
+"samplerVideoFrameWEBGL"    { return ANGLE_webgl_video_frame_extension(context, SAMPLERVIDEOFRAMEWEBGL); }
 "struct"       { return STRUCT; }
 
 "layout"  { return ES3_keyword(context, LAYOUT); }
@@ -599,6 +601,22 @@ int WEBGL_video_texture_extension(TParseContext *context, int token)
 {
     // Available with WEBGL_video_texture_extension
     if (context->isExtensionEnabled(TExtension::WEBGL_video_texture))
+    {
+        return token;
+    }
+
+    // Otherwise can be used as an identifier/type name
+    struct yyguts_t* yyg = (struct yyguts_t*) context->getScanner();
+    yyscan_t yyscanner = (yyscan_t) context->getScanner();
+
+    yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+    return check_type(yyscanner);
+}
+
+int ANGLE_webgl_video_frame_extension(TParseContext *context, int token)
+{
+    // Available with ANGLE_webgl_video_frame extension
+    if (context->isExtensionEnabled(TExtension::ANGLE_webgl_video_frame))
     {
         return token;
     }

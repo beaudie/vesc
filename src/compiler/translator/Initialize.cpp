@@ -165,6 +165,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::EXT_clip_cull_distance] = EBhUndefined;
     }
+    if (resources.ANGLE_webgl_video_frame)
+    {
+        extBehavior[TExtension::ANGLE_webgl_video_frame] = EBhUndefined;
+    }
 }
 
 void ResetExtensionBehavior(const ShBuiltInResources &resources,
