@@ -137,6 +137,9 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     // WEBGL_video_texture
     mResources.WEBGL_video_texture = extensions.webglVideoTexture;
 
+    // WEBGL_video_frame
+    mResources.ANGLE_webgl_video_frame = extensions.webglVideoFrame;
+
     // OES_texture_cube_map_array
     mResources.OES_texture_cube_map_array = extensions.textureCubeMapArrayOES;
     mResources.EXT_texture_cube_map_array = extensions.textureCubeMapArrayEXT;

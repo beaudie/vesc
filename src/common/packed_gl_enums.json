@@ -194,6 +194,7 @@
         "CubeMap": "GL_TEXTURE_CUBE_MAP",
         "CubeMapArray": "GL_TEXTURE_CUBE_MAP_ARRAY",
         "VideoImage": "GL_TEXTURE_VIDEO_IMAGE_WEBGL",
+        "VideoFrame": "GL_TEXTURE_VIDEO_FRAME_WEBGL",
         "Buffer": "GL_TEXTURE_BUFFER"
     },
     "TextureTarget":
@@ -213,6 +214,7 @@
         "CubeMapNegativeZ": "GL_TEXTURE_CUBE_MAP_NEGATIVE_Z",
         "CubeMapArray": "GL_TEXTURE_CUBE_MAP_ARRAY",
         "VideoImage": "GL_TEXTURE_VIDEO_IMAGE_WEBGL",
+        "VideoFrame": "GL_TEXTURE_VIDEO_FRAME_WEBGL",
         "Buffer": "GL_TEXTURE_BUFFER"
     },
     "VertexArrayType":
