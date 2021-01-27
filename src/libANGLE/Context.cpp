@@ -477,6 +477,13 @@ void Context::initialize()
         mZeroTextures[TextureType::VideoImage].set(this, zeroTextureVideoImage);
     }
 
+    if (mSupportedExtensions.webglVideoFrame)
+    {
+        Texture *zeroTextureVideoFrame =
+            new Texture(mImplementation.get(), {0}, TextureType::VideoFrame);
+        mZeroTextures[TextureType::VideoFrame].set(this, zeroTextureVideoFrame);
+    }
+
     mState.initializeZeroTextures(this, mZeroTextures);
 
     ANGLE_CONTEXT_TRY(mImplementation->initialize());
@@ -1148,6 +1155,12 @@ void Context::bindTexture(TextureType target, TextureID handle)
     ASSERT(texture);
     mState.setSamplerTexture(this, target, texture);
     mStateCache.onActiveTextureChange(this);
+
+    // To test whether there will be any side effect if bound to the alias target.
+    if (target != TextureType::VideoFrame)
+    {
+        bindTexture(TextureType::VideoFrame, handle);
+    }
 }
 
 void Context::bindReadFramebuffer(FramebufferID framebufferHandle)
@@ -9283,6 +9296,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::CubeMapArray, exts.textureCubeMapArrayAny()},
         {TextureType::VideoImage, exts.webglVideoTexture},
         {TextureType::Buffer, exts.textureBufferAny()},
+        {TextureType::VideoFrame, exts.webglVideoFrame},
     }};
 }
 

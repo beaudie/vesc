@@ -639,6 +639,9 @@ bool ValidTextureTarget(const Context *context, TextureType type)
         case TextureType::VideoImage:
             return context->getExtensions().webglVideoTexture;
 
+        case TextureType::VideoFrame:
+            return context->getExtensions().webglVideoFrame;
+
         case TextureType::Buffer:
             return (context->getClientVersion() >= Version(3, 2) ||
                     context->getExtensions().textureBufferAny());
@@ -935,6 +938,7 @@ bool ValidMipLevel(const Context *context, TextureType type, GLint level)
         case TextureType::External:
         case TextureType::Rectangle:
         case TextureType::VideoImage:
+        case TextureType::VideoFrame:
         case TextureType::Buffer:
             return level == 0;
 
@@ -1757,6 +1761,12 @@ bool ValidateGenerateMipmapBase(const Context *context, TextureType target)
     if (!ValidTextureTarget(context, target))
     {
         context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+        return false;
+    }
+
+    if (target == TextureType::VideoFrame)
+    {
+        context->validationError(GL_INVALID_OPERATION, kGenerateMipmapNotAllowed);
         return false;
     }
 
@@ -2646,6 +2656,13 @@ bool ValidateStateQuery(const Context *context,
         case GL_TEXTURE_BINDING_EXTERNAL_OES:
             if (!context->getExtensions().eglStreamConsumerExternalNV &&
                 !context->getExtensions().eglImageExternalOES)
+            {
+                context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                return false;
+            }
+            break;
+        case GL_TEXTURE_BINDING_VIDEO_FRAME_WEBGL:
+            if (!context->getExtensions().webglVideoFrame)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                 return false;
@@ -6909,6 +6926,10 @@ bool ValidateTexParameterBase(const Context *context,
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             }
+            if (target == TextureType::VideoFrame && !context->getExtensions().webglVideoFrame)
+            {
+                context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+            }
             break;
 
         case GL_GENERATE_MIPMAP:
@@ -6949,9 +6970,10 @@ bool ValidateTexParameterBase(const Context *context,
         case GL_TEXTURE_WRAP_T:
         case GL_TEXTURE_WRAP_R:
         {
-            bool restrictedWrapModes = ((target == TextureType::External &&
-                                         !context->getExtensions().eglImageExternalWrapModesEXT) ||
-                                        target == TextureType::Rectangle);
+            bool restrictedWrapModes =
+                ((target == TextureType::External &&
+                  !context->getExtensions().eglImageExternalWrapModesEXT) ||
+                 target == TextureType::Rectangle || target == TextureType::VideoFrame);
             if (!ValidateTextureWrapModeValue(context, params, restrictedWrapModes))
             {
                 return false;
@@ -6961,8 +6983,9 @@ bool ValidateTexParameterBase(const Context *context,
 
         case GL_TEXTURE_MIN_FILTER:
         {
-            bool restrictedMinFilter =
-                target == TextureType::External || target == TextureType::Rectangle;
+            bool restrictedMinFilter = target == TextureType::External ||
+                                       target == TextureType::Rectangle ||
+                                       target == TextureType::VideoFrame;
             if (!ValidateTextureMinFilterValue(context, params, restrictedMinFilter))
             {
                 return false;
