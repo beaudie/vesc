@@ -11,9 +11,13 @@
 #define LIBANGLE_RENDERER_VULKAN_ANDROID_DISPLAYVKANDROID_H_
 
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
+#include "libANGLE/renderer/vulkan/android/AHBFunctions.h"
 
 namespace rx
 {
+
+class AHBFunctions;
+
 class DisplayVkAndroid : public DisplayVk
 {
   public:
@@ -40,6 +44,11 @@ class DisplayVkAndroid : public DisplayVk
                                                          const egl::AttributeMap &attribs) override;
 
     const char *getWSIExtension() const override;
+
+    const AHBFunctions &getAHBFunctions() const { return mAHBFunctions; }
+
+  private:
+    AHBFunctions mAHBFunctions{};
 };
 
 }  // namespace rx
