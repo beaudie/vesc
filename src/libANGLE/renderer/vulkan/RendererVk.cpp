@@ -1460,6 +1460,14 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
     }
 
+    if (getFeatures().supportsExternalFenceFd.enabled)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME);
+#if !defined(ANGLE_SHARED_LIBVULKAN)
+        InitExternalFenceFdFunctions(mInstance);
+#endif  // !defined(ANGLE_SHARED_LIBVULKAN)
+    }
+
     if (getFeatures().supportsExternalFenceCapabilities.enabled)
     {
         enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_FENCE_CAPABILITIES_EXTENSION_NAME);
@@ -1678,6 +1686,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
+    InitGetMemoryRequirements2KHRFunctions(mDevice);
+    InitBindMemory2KHRFunctions(mDevice);
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         InitTransformFeedbackEXTFunctions(mDevice);
