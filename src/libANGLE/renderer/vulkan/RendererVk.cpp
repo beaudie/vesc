@@ -1678,6 +1678,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
+    InitGetMemoryRequirements2KHRFunctions(mDevice);
+    InitBindMemory2KHRFunctions(mDevice);
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         InitTransformFeedbackEXTFunctions(mDevice);
