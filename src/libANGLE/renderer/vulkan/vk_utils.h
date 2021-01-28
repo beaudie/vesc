@@ -954,6 +954,7 @@ void GetViewport(const gl::Rectangle &viewport,
                  float nearPlane,
                  float farPlane,
                  bool invertViewport,
+                 bool upperLeftOrigin,
                  GLint renderAreaHeight,
                  VkViewport *viewportOut);
 
