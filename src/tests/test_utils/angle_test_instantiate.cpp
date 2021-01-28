@@ -110,6 +110,19 @@ bool IsAndroidDevice(const std::string &deviceName)
     return false;
 }
 
+bool IsAndroidPAndAbove() {
+    if (!IsAndroid())
+    {
+        return false;
+    }
+    SystemInfo *systemInfo = GetTestSystemInfo();
+    if (systemInfo->androidSdkLevel >= 28)
+    {
+        return true;
+    }
+    return false;
+}
+
 GPUDeviceInfo *GetActiveGPUDeviceInfo()
 {
     SystemInfo *systemInfo = GetTestSystemInfo();
@@ -554,6 +567,9 @@ bool IsConfigAllowlisted(const SystemInfo &systemInfo, const PlatformParameters 
                 // Swiftshader's vulkan frontend doesn't build on Android.
                 if (param.getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE)
                 {
+                    return false;
+                }
+                if (!IsAndroidPAndAbove()) {
                     return false;
                 }
                 return true;
