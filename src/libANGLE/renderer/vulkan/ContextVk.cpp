@@ -131,6 +131,14 @@ constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
     {gl::ShaderType::Geometry, vk::ImageLayout::GeometryShaderWrite},
     {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderWrite}};
 
+constexpr gl::ShaderMap<VkPipelineStageFlagBits> kShaderPipelineStageFlagBitMap = {
+    {gl::ShaderType::Vertex, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
+    {gl::ShaderType::TessControl, VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT},
+    {gl::ShaderType::TessEvaluation, VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT},
+    {gl::ShaderType::Geometry, VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT},
+    {gl::ShaderType::Fragment, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+    {gl::ShaderType::Compute, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT}};
+
 constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 constexpr size_t kDefaultValueSize              = sizeof(gl::VertexAttribCurrentValueData::Values);
 constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
@@ -1367,6 +1375,13 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
         ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(this, &mResourceUseList,
                                                                   commandBufferHelper));
     }
+
+    if (executable->hasImages() || executable->hasStorageBuffers() ||
+        executable->hasAtomicCounterBuffers())
+    {
+        updateShaderStorageOutputStages(context, commandBufferHelper);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -3634,7 +3649,13 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 
 angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield barriers)
 {
-    return memoryBarrierImpl(barriers, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
+    VkPipelineStageFlags srcStageMask = 0;
+    for (gl::ShaderType shaderType : mShaderStorageOutputStages)
+    {
+        srcStageMask |= kShaderPipelineStageFlagBitMap[shaderType];
+    }
+
+    return memoryBarrierImpl(barriers, srcStageMask, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
 }
 
 angle::Result ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers)
@@ -3642,10 +3663,13 @@ angle::Result ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbit
     // Note: memoryBarrierByRegion is expected to affect only the fragment pipeline, but is
     // otherwise similar to memoryBarrier.
 
-    return memoryBarrierImpl(barriers, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+    return memoryBarrierImpl(barriers, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 }
 
-angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageFlags stageMask)
+angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers,
+                                           VkPipelineStageFlags srcStageMask,
+                                           VkPipelineStageFlags dstStageMask)
 {
     // Note: many of the barriers specified here are already covered automatically.
     //
@@ -3669,14 +3693,18 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
         dstAccess |= VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT;
     }
 
-    ANGLE_TRY(flushCommandsAndEndRenderPass());
+    // If the render pass has any storage output, break it.
+    if (mRenderPassCommands->hasShaderStorageOutput())
+    {
+        ANGLE_TRY(flushCommandsAndEndRenderPass());
+    }
 
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
     memoryBarrier.srcAccessMask   = srcAccess;
     memoryBarrier.dstAccessMask   = dstAccess;
 
-    mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(stageMask, stageMask,
+    mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(srcStageMask, dstStageMask,
                                                                  &memoryBarrier);
 
     if ((barriers & GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT) != 0)
@@ -4276,6 +4304,48 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+void ContextVk::updateShaderStorageOutputStages(const gl::Context *context,
+                                                vk::CommandBufferHelper *commandBufferHelper)
+{
+    const gl::State &glState                = mState;
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    ASSERT(executable);
+
+    gl::ShaderBitSet outputStages;
+
+    const gl::ActiveTextureMask &activeImages = executable->getActiveImagesMask();
+    const gl::ActiveTextureArray<gl::ShaderBitSet> &activeImageShaderBits =
+        executable->getActiveImageShaderBits();
+
+    for (size_t imageUnitIndex : activeImages)
+    {
+        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        if (imageUnit.texture.get() == nullptr)
+        {
+            continue;
+        }
+
+        gl::ShaderBitSet shaderStages = activeImageShaderBits[imageUnitIndex];
+        ASSERT(shaderStages.any());
+
+        outputStages |= shaderStages;
+    }
+
+    // Until the executable provides a mask of which shader stages exactly access the storage
+    // buffers and atomic counters, assume all stages do.  Most often this is just going to be the
+    // compute stage.
+    if (executable->hasStorageBuffers() || executable->hasAtomicCounterBuffers())
+    {
+        outputStages |= executable->getLinkedShaderStages();
+    }
+
+    if (outputStages.any())
+    {
+        commandBufferHelper->setHasShaderStorageOutput();
+        mShaderStorageOutputStages |= outputStages;
+    }
 }
 
 bool ContextVk::hasRecordedCommands()
