@@ -227,6 +227,13 @@ TracePerfTest::TracePerfTest()
         mSkipTest = true;
     }
 
+    // TODO: http://anglebug.com/5591 Vulkan: manhattan_31 trace crashes on Pixel 2 in vulkan driver
+    if (IsAndroid() && IsPixel2() && param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE &&
+        param.testID == RestrictedTraceID::manhattan_31)
+    {
+        mSkipTest = true;
+    }
+
     if (param.surfaceType != SurfaceType::Window && !gEnableAllTraceTests)
     {
         printf("Test skipped. Use --enable-all-trace-tests to run.\n");
