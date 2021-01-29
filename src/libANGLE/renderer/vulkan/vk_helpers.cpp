@@ -756,6 +756,7 @@ CommandBufferHelper::CommandBufferHelper()
       mRebindTransformFeedbackBuffers(false),
       mIsRenderPassCommandBuffer(false),
       mReadOnlyDepthStencilMode(false),
+      mHasShaderStorageOutput(false),
       mDepthAccess(ResourceAccess::Unused),
       mStencilAccess(ResourceAccess::Unused),
       mDepthCmdSizeInvalidated(kInfiniteCmdSize),
@@ -1527,6 +1528,7 @@ void CommandBufferHelper::reset()
         mRenderPassStarted                 = false;
         mValidTransformFeedbackBufferCount = 0;
         mRebindTransformFeedbackBuffers    = false;
+        mHasShaderStorageOutput            = false;
         mDepthAccess                       = ResourceAccess::Unused;
         mStencilAccess                     = ResourceAccess::Unused;
         mDepthCmdSizeInvalidated           = kInfiniteCmdSize;
