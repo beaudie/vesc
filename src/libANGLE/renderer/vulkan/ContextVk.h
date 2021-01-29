@@ -739,6 +739,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result updateActiveImages(const gl::Context *context,
                                      vk::CommandBufferHelper *commandBufferHelper);
     angle::Result updateDefaultAttribute(size_t attribIndex);
+    void updateShaderStorageOutputStages(const gl::Context *context,
+                                         vk::CommandBufferHelper *commandBufferHelper);
 
     ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
     {
@@ -819,7 +821,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOut, size_t offsetsSize);
 
     angle::Result submitFrame(const vk::Semaphore *signalSemaphore);
-    angle::Result memoryBarrierImpl(GLbitfield barriers, VkPipelineStageFlags stageMask);
+    angle::Result memoryBarrierImpl(GLbitfield barriers,
+                                    VkPipelineStageFlags srcStageMask,
+                                    VkPipelineStageFlags dstStageMask);
 
     angle::Result synchronizeCpuGpuTime();
     angle::Result traceGpuEventImpl(vk::CommandBuffer *commandBuffer,
@@ -1013,6 +1017,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // List of all resources currently being used by this ContextVk's recorded commands.
     vk::ResourceUseList mResourceUseList;
+
+    // Set of shader stages which have possibly output data through storage buffers and images
+    // since beginning of time.  This is used to determine the src stage mask of barriers that
+    // result from glMemoryBarrier*.
+    gl::ShaderBitSet mShaderStorageOutputStages;
 
     egl::ContextPriority mContextPriority;
 
