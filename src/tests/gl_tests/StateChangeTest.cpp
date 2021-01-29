@@ -3906,6 +3906,88 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Tests that consecutive identical draw calls that write to an image in the fragment shader work
+// correctly.  This requires a memory barrier in between the draw calls which should not be
+// reordered w.r.t the calls.
+TEST_P(SimpleStateChangeTestES31, DrawWithImageTextureThenDrawAgain)
+{
+    GLint maxFragmentImageUniforms;
+    glGetIntegerv(GL_MAX_FRAGMENT_IMAGE_UNIFORMS, &maxFragmentImageUniforms);
+
+    ANGLE_SKIP_TEST_IF(maxFragmentImageUniforms < 1);
+
+    constexpr GLsizei kSize = 1;
+
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    EXPECT_GL_NO_ERROR();
+
+    const float kInitialValue = 0.125f;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32F, kSize, kSize);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kSize, kSize, GL_RED, GL_FLOAT, &kInitialValue);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer readbackFbo;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readbackFbo);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_NO_ERROR();
+
+    // Create a program that outputs to the image in the fragment shader.
+    constexpr char kFS[] = R"(#version 310 es
+precision mediump float;
+layout(r32f, binding = 0) uniform highp image2D dst;
+out vec4 colorOut;
+void main()
+{
+    vec4 result = imageLoad(dst, ivec2(gl_FragCoord.xy));
+    colorOut = result;
+
+    result.x += 0.193;
+    imageStore(dst, ivec2(gl_FragCoord.xy), result);
+})";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint positionLoc = glGetAttribLocation(program, essl31_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLoc);
+
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32F);
+
+    // Setup the draw so that there's no state change between the draw calls.
+    const std::array<Vector3, 6> &quadVertices = GetQuadVertices();
+    const size_t posBufferSize                 = quadVertices.size() * sizeof(Vector3);
+
+    GLBuffer posBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+    glBufferData(GL_ARRAY_BUFFER, posBufferSize, quadVertices.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLoc);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+
+    // Verify the output of the two draw calls through the image is correct
+    EXPECT_PIXEL_COLOR32F_NEAR(0, 0, GLColor32F(kInitialValue + 0.193f * 2, 0.0f, 0.0f, 1.0f),
+                               0.001f);
+
+    // Verify the output of rendering as well
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(81, 0, 0, 255), 1);
+}
+
 // Tests that deleting an in-flight image texture does not immediately delete the resource.
 TEST_P(SimpleStateChangeTestComputeES31, DeleteImageTextureInUse)
 {
