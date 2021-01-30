@@ -660,6 +660,8 @@ egl::Error DisplayCGL::handleGPUSwitch()
             mCurrentGPUID = gpuID;
             // Dirty the cache of the GL strings because we are on a new driver
             resetCachedGLStrings();
+
+            mRenderer->handleGPUSwitch();
         }
     }
 
