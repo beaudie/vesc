@@ -878,6 +878,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result onResourceAccess(const vk::CommandBufferAccess &access);
     angle::Result flushCommandBuffersIfNecessary(const vk::CommandBufferAccess &access);
 
+    angle::Result onStorageOutputAccess();
+
     void outputCumulativePerfCounters();
 
     void updateSampleShadingWithRasterizationSamples(const uint32_t rasterizationSamples);
@@ -1032,6 +1034,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     PerfCounters mObjectPerfCounters;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
+    gl::State::DirtyBits mStorageOutputDirtyBitsMask;
 
     // List of all resources currently being used by this ContextVk's recorded commands.
     vk::ResourceUseList mResourceUseList;
