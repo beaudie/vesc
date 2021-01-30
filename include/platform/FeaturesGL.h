@@ -512,6 +512,13 @@ struct FeaturesGL : FeatureSetBase
         "promote_packed_formats_to_8_bit_per_channel", FeatureCategory::OpenGLWorkarounds,
         "Packed color formats are buggy on Macs with AMD GPUs", &members,
         "http://anglebug.com/5469"};
+
+    // On macOS with Intel GPUs, instanced array with divisor > 0 is buggy when first > 0 in
+    // drawArraysInstanced. Shift the attributes with extra offset to workaround.
+    Feature shiftInstancedArrayDataWithExtraOffset = {
+        "shift_instanced_array_data_with_offset", FeatureCategory::OpenGLWorkarounds,
+        "glDrawArraysInstanced is buggy on certain new Mac Intel GPUs", &members,
+        "http://crbug.com/1144207"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
