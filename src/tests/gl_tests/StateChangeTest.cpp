@@ -3978,6 +3978,7 @@ void main()
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+    EXPECT_GL_NO_ERROR();
 
     // Verify the output of the two draw calls through the image is correct
     EXPECT_PIXEL_COLOR32F_NEAR(0, 0, GLColor32F(kInitialValue + 0.193f * 2, 0.0f, 0.0f, 1.0f),
@@ -3986,6 +3987,211 @@ void main()
     // Verify the output of rendering as well
     glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
     EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(81, 0, 0, 255), 1);
+}
+
+// Tests that sampling from a texture in one draw call followed by writing to its image in another
+// draw call works correctly.  This requires an implicit barrier in between the draw calls.
+TEST_P(SimpleStateChangeTestES31, DrawWithTextureThenDrawWithImage)
+{
+    GLint maxFragmentImageUniforms;
+    glGetIntegerv(GL_MAX_FRAGMENT_IMAGE_UNIFORMS, &maxFragmentImageUniforms);
+
+    ANGLE_SKIP_TEST_IF(maxFragmentImageUniforms < 1);
+
+    constexpr GLsizei kSize = 1;
+
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    EXPECT_GL_NO_ERROR();
+
+    const GLColor kInitialColor = GLColor::red;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kSize, kSize, GL_RGBA, GL_UNSIGNED_BYTE,
+                    &kInitialColor);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer readbackFbo;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readbackFbo);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_NO_ERROR();
+
+    // Create a program that samples from the texture in the fragment shader.
+    constexpr char kFSSample[] = R"(#version 310 es
+precision mediump float;
+uniform sampler2D tex;
+out vec4 colorOut;
+void main()
+{
+    colorOut = texture(tex, vec2(0));
+})";
+    ANGLE_GL_PROGRAM(sampleProgram, essl31_shaders::vs::Simple(), kFSSample);
+
+    // Create a program that outputs to the image in the fragment shader.
+    constexpr char kFSWrite[] = R"(#version 310 es
+precision mediump float;
+layout(rgba8, binding = 0) uniform highp writeonly image2D dst;
+out vec4 colorOut;
+void main()
+{
+    colorOut = vec4(0, 0, 1.0, 0);
+    imageStore(dst, ivec2(gl_FragCoord.xy), vec4(0.0, 1.0, 0.0, 1.0));
+})";
+
+    ANGLE_GL_PROGRAM(writeProgram, essl31_shaders::vs::Simple(), kFSWrite);
+
+    glUseProgram(sampleProgram);
+    GLint positionLocSample = glGetAttribLocation(sampleProgram, essl31_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocSample);
+
+    glUseProgram(writeProgram);
+    GLint positionLocWrite = glGetAttribLocation(writeProgram, essl31_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocWrite);
+
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+
+    // Setup the draw so that there's no state change between the draw calls.
+    const std::array<Vector3, 6> &quadVertices = GetQuadVertices();
+    const size_t posBufferSize                 = quadVertices.size() * sizeof(Vector3);
+
+    GLBuffer posBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+    glBufferData(GL_ARRAY_BUFFER, posBufferSize, quadVertices.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLocSample, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(positionLocWrite, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocSample);
+    glEnableVertexAttribArray(positionLocWrite);
+
+    glUseProgram(sampleProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    glUseProgram(writeProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    // Verify the output of the two draw calls through the image is correct
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Verify the output of rendering as well
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+}
+
+// Tests that reading from a ubo in one draw call followed by writing to it as SSBO in another draw
+// call works correctly.  This requires an implicit barrier in between the draw calls.
+TEST_P(SimpleStateChangeTestES31, DrawWithUBOThenDrawWithSSBO)
+{
+    GLint maxFragmentShaderStorageBlocks;
+    glGetIntegerv(GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS, &maxFragmentShaderStorageBlocks);
+
+    ANGLE_SKIP_TEST_IF(maxFragmentShaderStorageBlocks < 1);
+
+    constexpr GLsizei kSize = 1;
+
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    EXPECT_GL_NO_ERROR();
+
+    constexpr std::array<float, 4> kBufferInitValue = {0.125f, 0.25f, 0.5f, 1.0f};
+    GLBuffer buffer;
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(kBufferInitValue), kBufferInitValue.data(),
+                 GL_STATIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, buffer);
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, buffer);
+
+    // Create a program that reads from the ubo in the fragment shader.
+    constexpr char kFSRead[] = R"(#version 310 es
+precision mediump float;
+uniform block { vec4 vec; } b;
+out vec4 colorOut;
+void main()
+{
+    colorOut = b.vec;
+})";
+    ANGLE_GL_PROGRAM(readProgram, essl31_shaders::vs::Simple(), kFSRead);
+
+    // Create a program that outputs to the image in the fragment shader.
+    constexpr char kFSWrite[] = R"(#version 310 es
+precision mediump float;
+layout(binding = 0, std430) buffer Output {
+    vec4 vec;
+} b;
+out vec4 colorOut;
+void main()
+{
+    b.vec = vec4(0.7, 0.6, 0.4, 0.3);
+    colorOut = vec4(0.125, 0.125, 0.125, 0);
+})";
+
+    ANGLE_GL_PROGRAM(writeProgram, essl31_shaders::vs::Simple(), kFSWrite);
+
+    glUseProgram(readProgram);
+    GLint positionLocRead = glGetAttribLocation(readProgram, essl31_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocRead);
+
+    glUseProgram(writeProgram);
+    GLint positionLocWrite = glGetAttribLocation(writeProgram, essl31_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocWrite);
+
+    // Setup the draw so that there's no state change between the draw calls.
+    const std::array<Vector3, 6> &quadVertices = GetQuadVertices();
+    const size_t posBufferSize                 = quadVertices.size() * sizeof(Vector3);
+
+    GLBuffer posBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+    glBufferData(GL_ARRAY_BUFFER, posBufferSize, quadVertices.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(positionLocRead, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(positionLocWrite, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocRead);
+    glEnableVertexAttribArray(positionLocWrite);
+
+    glUseProgram(readProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    glUseProgram(writeProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    // Verify the output of rendering
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(63, 95, 159, 255), 1);
+
+    // Verify the output from the second draw call
+    const float *ptr = reinterpret_cast<const float *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, sizeof(kBufferInitValue), GL_MAP_READ_BIT));
+
+    EXPECT_NEAR(ptr[0], 0.7f, 0.001);
+    EXPECT_NEAR(ptr[1], 0.6f, 0.001);
+    EXPECT_NEAR(ptr[2], 0.4f, 0.001);
+    EXPECT_NEAR(ptr[3], 0.3f, 0.001);
+
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 }
 
 // Tests that deleting an in-flight image texture does not immediately delete the resource.
