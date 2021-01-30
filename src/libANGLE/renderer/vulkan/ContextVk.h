@@ -860,6 +860,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void initIndexTypeMap();
 
     angle::Result endRenderPassIfTransformFeedbackBuffer(const vk::BufferHelper *buffer);
+    angle::Result endRenderPassIfResourceWriteAfterRead();
 
     void populateTransformFeedbackBufferSet(
         size_t bufferCount,
@@ -1033,6 +1034,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     PerfCounters mObjectPerfCounters;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
+    gl::State::DirtyBits mStorageOutputDirtyBitsMask;
 
     // List of all resources currently being used by this ContextVk's recorded commands.
     vk::ResourceUseList mResourceUseList;
