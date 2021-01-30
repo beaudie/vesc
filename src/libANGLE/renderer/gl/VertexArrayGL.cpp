@@ -103,6 +103,7 @@ VertexArrayGL::VertexArrayGL(const VertexArrayState &state, GLuint id)
     {
         mAppliedAttributes.emplace_back(i);
     }
+    mForcedStreamingAttributesFirstOffsets.fill(0);
 }
 
 VertexArrayGL::~VertexArrayGL() {}
@@ -170,6 +171,7 @@ angle::Result VertexArrayGL::syncDrawState(const gl::Context *context,
     // Determine if an index buffer needs to be streamed and the range of vertices that need to be
     // copied
     IndexRange indexRange;
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
     if (type != gl::DrawElementsType::InvalidEnum)
     {
         ANGLE_TRY(syncIndexData(context, count, type, indices, primitiveRestartEnabled,
@@ -180,6 +182,34 @@ angle::Result VertexArrayGL::syncDrawState(const gl::Context *context,
         // Not an indexed call, set the range to [first, first + count - 1]
         indexRange.start = first;
         indexRange.end   = first + count - 1;
+
+        if (features.shiftInstancedArrayDataWithExtraOffset.enabled && first > 0)
+        {
+            gl::AttributesMask updatedStreamingAttribsMask = needsStreamingAttribs;
+
+            const auto &attribs  = mState.getVertexAttributes();
+            const auto &bindings = mState.getVertexBindings();
+            for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; attribIndex++)
+            {
+                const auto &attrib  = attribs[attribIndex];
+                const auto &binding = bindings[attrib.bindingIndex];
+
+                if (binding.getDivisor() > 0 &&
+                    mForcedStreamingAttributesFirstOffsets[attribIndex] != first)
+                {
+                    updatedStreamingAttribsMask.set(attribIndex);
+                    mForcedStreamingAttributesForDrawArraysInstancedMask.set(attribIndex);
+                    mForcedStreamingAttributesFirstOffsets[attribIndex] = first;
+                }
+            }
+
+            if (updatedStreamingAttribsMask.any())
+            {
+                ANGLE_TRY(streamAttributes(context, updatedStreamingAttribsMask, instanceCount,
+                                           indexRange));
+            }
+            return angle::Result::Continue;
+        }
     }
 
     if (needsStreamingAttribs.any())
@@ -342,6 +372,8 @@ angle::Result VertexArrayGL::streamAttributes(const gl::Context *context,
 
     stateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
+
     // Unmapping a buffer can return GL_FALSE to indicate that the system has corrupted the data
     // somehow (such as by a screen change), retry writing the data a few times and return
     // OUT_OF_MEMORY if that fails.
@@ -364,7 +396,9 @@ angle::Result VertexArrayGL::streamAttributes(const gl::Context *context,
             const auto &binding = bindings[attrib.bindingIndex];
 
             GLuint adjustedDivisor = GetAdjustedDivisor(mAppliedNumViews, binding.getDivisor());
-            const size_t streamedVertexCount = ComputeVertexBindingElementCount(
+            // streamedVertexCount is only going to be modified by
+            // shiftInstancedArrayDataWithExtraOffset workaround, otherwise it's const
+            size_t streamedVertexCount = ComputeVertexBindingElementCount(
                 adjustedDivisor, indexRange.vertexCount(), instanceCount);
 
             const size_t sourceStride = ComputeVertexAttributeStride(attrib, binding);
@@ -382,13 +416,44 @@ angle::Result VertexArrayGL::streamAttributes(const gl::Context *context,
             // would cause the buffer to be much larger than needed.
             if (destStride == sourceStride)
             {
-                // Can copy in one go, the data is packed
-                memcpy(bufferPointer + curBufferOffset, inputPointer + (sourceStride * firstIndex),
-                       destStride * streamedVertexCount);
+                if (features.shiftInstancedArrayDataWithExtraOffset.enabled && adjustedDivisor > 0)
+                {
+                    const size_t copySize =
+                        destStride *
+                        streamedVertexCount;  // the real data in the buffer we are streaming
+                    const size_t offset =
+                        destStride * indexRange.start;  // the extra offset at the begining we add
+                    const size_t inputBuffersize = copySize + offset;
+
+                    streamedVertexCount =
+                        (instanceCount + indexRange.start + adjustedDivisor - 1u) / adjustedDivisor;
+
+                    std::vector<unsigned char> inputBuffer(inputBuffersize);
+
+                    const auto buffer = GetImplAs<BufferGL>(binding.getBuffer().get());
+                    stateManager->bindBuffer(gl::BufferBinding::Array, buffer->getBufferID());
+
+                    // The workaround is only for Mac Intel so getBufferSubData function should
+                    // exist
+                    ASSERT(functions->getBufferSubData != nullptr);
+                    functions->getBufferSubData(GL_ARRAY_BUFFER, binding.getOffset(), copySize,
+                                                static_cast<GLvoid *>(inputBuffer.data() + offset));
+
+                    memcpy(bufferPointer + curBufferOffset, inputBuffer.data(), inputBuffersize);
+
+                    stateManager->bindBuffer(gl::BufferBinding::Array, mStreamingArrayBuffer);
+                }
+                else
+                {
+                    memcpy(bufferPointer + curBufferOffset,
+                           inputPointer + (sourceStride * firstIndex),
+                           destStride * streamedVertexCount);
+                }
             }
             else
             {
                 // Copy each vertex individually
+                // TODO(crbug.com/1144207): workaround for this case as well
                 for (size_t vertexIdx = 0; vertexIdx < streamedVertexCount; vertexIdx++)
                 {
                     uint8_t *out      = bufferPointer + curBufferOffset + (destStride * vertexIdx);
@@ -423,6 +488,48 @@ angle::Result VertexArrayGL::streamAttributes(const gl::Context *context,
     ANGLE_CHECK(GetImplAs<ContextGL>(context), unmapResult == GL_TRUE,
                 "Failed to unmap the client data streaming buffer.", GL_OUT_OF_MEMORY);
     return angle::Result::Continue;
+}
+
+void VertexArrayGL::recoverForcedStreamingAttributesForDrawArraysInstanced(
+    const gl::Context *context) const
+{
+    if (mForcedStreamingAttributesForDrawArraysInstancedMask.none())
+    {
+        return;
+    }
+
+    StateManagerGL *stateManager = GetStateManagerGL(context);
+
+    stateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+
+    const auto &attribs  = mState.getVertexAttributes();
+    const auto &bindings = mState.getVertexBindings();
+    for (auto idx : mForcedStreamingAttributesForDrawArraysInstancedMask)
+    {
+        const auto &attrib = attribs[idx];
+        ASSERT(IsVertexAttribPointerSupported(idx, attrib));
+
+        const auto &binding = bindings[attrib.bindingIndex];
+        const auto buffer   = GetImplAs<BufferGL>(binding.getBuffer().get());
+        stateManager->bindBuffer(gl::BufferBinding::Array, buffer->getBufferID());
+
+        callVertexAttribPointer(context, static_cast<GLuint>(idx), attrib,
+                                static_cast<GLsizei>(binding.getStride()),
+                                static_cast<GLintptr>(binding.getOffset()));
+
+        // Restore the state to track their original buffers
+        mAppliedAttributes[idx].format = attrib.format;
+
+        mAppliedAttributes[idx].relativeOffset = 0;
+        mAppliedAttributes[idx].bindingIndex   = static_cast<GLuint>(attrib.bindingIndex);
+
+        mAppliedBindings[idx].setStride(binding.getStride());
+        mAppliedBindings[idx].setOffset(binding.getOffset());
+        mAppliedBindings[idx].setBuffer(context, binding.getBuffer().get());
+    }
+
+    mForcedStreamingAttributesForDrawArraysInstancedMask.reset();
+    mForcedStreamingAttributesFirstOffsets.fill(0);
 }
 
 GLuint VertexArrayGL::getVertexArrayID() const

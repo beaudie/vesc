@@ -1894,6 +1894,11 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, setZeroLevelBeforeGenerateMipmap, IsApple());
 
     ANGLE_FEATURE_CONDITION(features, promotePackedFormatsTo8BitPerChannel, IsApple() && hasAMD);
+
+    // http://crbug.com/1144207
+    // The Iris Mac bot seems unaffected by this bug. Exclude the Haswell family for now.
+    ANGLE_FEATURE_CONDITION(features, shiftInstancedArrayDataWithExtraOffset,
+                            IsApple() && isIntel && !IsHaswell(device));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
