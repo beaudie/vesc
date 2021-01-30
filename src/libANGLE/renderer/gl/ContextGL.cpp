@@ -205,7 +205,9 @@ ANGLE_INLINE angle::Result ContextGL::setDrawArraysState(const gl::Context *cont
                                                          GLsizei count,
                                                          GLsizei instanceCount)
 {
-    if (context->getStateCache().hasAnyActiveClientAttrib())
+    const angle::FeaturesGL &features = getFeaturesGL();
+    if (context->getStateCache().hasAnyActiveClientAttrib() ||
+        (first > 0 && features.shiftInstancedArrayDataWithExtraOffset.enabled))
     {
         const gl::State &glState                = context->getState();
         const gl::ProgramExecutable *executable = getState().getProgramExecutable();
@@ -220,7 +222,6 @@ ANGLE_INLINE angle::Result ContextGL::setDrawArraysState(const gl::Context *cont
 #endif  // ANGLE_STATE_VALIDATION_ENABLED
     }
 
-    const angle::FeaturesGL &features = getFeaturesGL();
     if (features.setPrimitiveRestartFixedIndexForDrawArrays.enabled)
     {
         StateManagerGL *stateManager           = getStateManager();
@@ -243,6 +244,7 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
     const gl::VertexArray *vao              = glState.getVertexArray();
     const gl::StateCache &stateCache        = context->getStateCache();
 
+    const angle::FeaturesGL &features = getFeaturesGL();
     if (stateCache.hasAnyActiveClientAttrib() || vao->getElementArrayBuffer() == nullptr)
     {
         const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
@@ -252,10 +254,16 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
     }
     else
     {
+        if (features.shiftInstancedArrayDataWithExtraOffset.enabled)
+        {
+            // There might be instanced arrays that are forced streaming for drawArraysInstanced
+            // They cannot be ELEMENT_ARRAY_BUFFER
+            const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
+            vaoGL->recoverForcedStreamingAttributesForDrawArraysInstanced(context);
+        }
         *outIndices = indices;
     }
 
-    const angle::FeaturesGL &features = getFeaturesGL();
     if (glState.isPrimitiveRestartEnabled() && features.emulatePrimitiveRestartFixedIndex.enabled)
     {
         StateManagerGL *stateManager = getStateManager();
