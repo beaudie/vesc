@@ -52,6 +52,24 @@
       "parentUuid": "41f647c8_646e673e",
       "revId": "0739f07a95c555f42df5d31579c57745455e9439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c0b2f90_3a44f06e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-02-01T15:50:12Z",
+      "side": 1,
+      "message": "According to the bug config this was crashing on a Dawn config, so it might not be a config people have familiarity with. How do we ensure a safe re-land?",
+      "parentUuid": "ef8c62c6_d58397f9",
+      "revId": "0739f07a95c555f42df5d31579c57745455e9439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
