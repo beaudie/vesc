@@ -106,6 +106,24 @@
       "parentUuid": "63e62613_4fdd33e7",
       "revId": "0739f07a95c555f42df5d31579c57745455e9439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e56ae41_b196fb80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2021-02-01T16:05:20Z",
+      "side": 1,
+      "message": "You\u0027re able to manually trigger that bot on an ANGLE CL. Would it not patch correctly?\n\nI don\u0027t know how you would repro it without a build otherwise.\nGN arg: use_dawn\u003dtrue\nRun chrome with --enable-unsafe-webgpu.\nNote: it only happens on Windows x86.\n\nAgain, the crash is happening before Dawn even loads anything - so I don\u0027t know what would be Dawn-specific here.\n\nHere\u0027s where I did the experimental revert in case it\u0027s helpful:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/2638246",
+      "parentUuid": "5b999e98_d790ec35",
+      "revId": "0739f07a95c555f42df5d31579c57745455e9439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
