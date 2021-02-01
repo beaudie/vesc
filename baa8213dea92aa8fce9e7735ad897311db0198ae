@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46204f3d_74f342e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-02-01T18:22:52Z",
+      "side": 1,
+      "message": "texture perf test on local machine gave this result -\n\nwithout patch -\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from TexturesBenchmark\n[ RUN      ] TexturesBenchmark.Run/vulkan_null_8_textures_5_rebind_3_state_8_mips\n*RESULT Textures_vulkan_null.wall_time: 8_textures_5_rebind_3_state_8_mips\u003d 1152.3734264549 ns\nRESULT Textures_vulkan_null.trial_steps: 8_textures_5_rebind_3_state_8_mips\u003d 3396 count\nRESULT Textures_vulkan_null.total_steps: 8_textures_5_rebind_3_state_8_mips\u003d 16804 count\n*RESULT Textures_vulkan_null.wall_time: 8_textures_5_rebind_3_state_8_mips\u003d 1166.2437196270 ns\nRESULT Textures_vulkan_null.trial_steps: 8_textures_5_rebind_3_state_8_mips\u003d 3396 count\nRESULT Textures_vulkan_null.total_steps: 8_textures_5_rebind_3_state_8_mips\u003d 20200 count\n*RESULT Textures_vulkan_null.wall_time: 8_textures_5_rebind_3_state_8_mips\u003d 1147.5633097704 ns\nRESULT Textures_vulkan_null.trial_steps: 8_textures_5_rebind_3_state_8_mips\u003d 3396 count\nRESULT Textures_vulkan_null.total_steps: 8_textures_5_rebind_3_state_8_mips\u003d 23596 count\n[       OK ] TexturesBenchmark.Run/vulkan_null_8_textures_5_rebind_3_state_8_mips (7128 ms)\n[----------] 1 test from TexturesBenchmark (7128 ms total)\n\nwith patch -\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from TexturesBenchmark\n[ RUN      ] TexturesBenchmark.Run/vulkan_null_8_textures_5_rebind_3_state_8_mips\n*RESULT Textures_vulkan_null.wall_time: 8_textures_5_rebind_3_state_8_mips\u003d 835.8876610760 ns\nRESULT Textures_vulkan_null.trial_steps: 8_textures_5_rebind_3_state_8_mips\u003d 4734 count\nRESULT Textures_vulkan_null.total_steps: 8_textures_5_rebind_3_state_8_mips\u003d 23513 count\n*RESULT Textures_vulkan_null.wall_time: 8_textures_5_rebind_3_state_8_mips\u003d 831.6839452489 ns\nRESULT Textures_vulkan_null.trial_steps: 8_textures_5_rebind_3_state_8_mips\u003d 4734 count\nRESULT Textures_vulkan_null.total_steps: 8_textures_5_rebind_3_state_8_mips\u003d 28247 count\n*RESULT Textures_vulkan_null.wall_time: 8_textures_5_rebind_3_state_8_mips\u003d 820.6383508962 ns\nRESULT Textures_vulkan_null.trial_steps: 8_textures_5_rebind_3_state_8_mips\u003d 4734 count\nRESULT Textures_vulkan_null.total_steps: 8_textures_5_rebind_3_state_8_mips\u003d 32981 count\n[       OK ] TexturesBenchmark.Run/vulkan_null_8_textures_5_rebind_3_state_8_mips (7084 ms)\n[----------] 1 test from TexturesBenchmark (7086 ms total)",
+      "revId": "baa8213dea92aa8fce9e7735ad897311db0198ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
