@@ -34,6 +34,24 @@
       "parentUuid": "9412db87_b3f4676b",
       "revId": "0739f07a95c555f42df5d31579c57745455e9439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef8c62c6_d58397f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2021-02-01T15:48:24Z",
+      "side": 1,
+      "message": "The tests began passing with just this change in the revert, so I\u0027m confident it\u0027s the culprit. It crashes on content_shell startup before anything Dawn-specific really happens. I\u0027m not sure how Dawn would impact things there.\n\nWhy do you think the callstack is unlikely?\nIt\u0027s crashing on GPU process startup.  I figured it\u0027s because ANGLE is failing to load something.",
+      "parentUuid": "41f647c8_646e673e",
+      "revId": "0739f07a95c555f42df5d31579c57745455e9439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
