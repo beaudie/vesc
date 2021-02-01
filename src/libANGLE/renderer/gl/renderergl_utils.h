@@ -110,6 +110,7 @@ void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFea
 
 namespace nativegl
 {
+bool SupportsVertexArrayObjects(const FunctionsGL *functions);
 bool SupportsCompute(const FunctionsGL *functions);
 bool SupportsFenceSync(const FunctionsGL *functions);
 bool SupportsOcclusionQueries(const FunctionsGL *functions);
