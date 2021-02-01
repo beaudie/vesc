@@ -941,6 +941,23 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], format, desc.samples(),
                              ops[attachmentCount]);
 
+        angle::FormatID attachmentFormat = format.actualImageFormatID;
+
+        // If this renderpass uses EXT_srgb_write_control, we need to override the format to its
+        // linear counterpart. Formats that cannot be reinterpreted are exempt from this
+        // requirement.
+        angle::FormatID linearFormat = rx::ConvertToLinear(attachmentFormat);
+        if (linearFormat != angle::FormatID::NONE)
+        {
+            if (desc.getSRGBWriteControlMode() == gl::SrgbWriteControlMode::Linear)
+            {
+                attachmentFormat = linearFormat;
+            }
+        }
+        attachmentDescs[attachmentCount.get()].format =
+            contextVk->getRenderer()->getFormat(attachmentFormat).actualImageVkFormat();
+        ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
+
         isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
 
         ++attachmentCount;
@@ -2975,12 +2992,14 @@ void FramebufferDesc::reset()
     mLayerCount = 0;
     mUnresolveAttachmentMask.reset();
     memset(&mSerials, 0, sizeof(mSerials));
+    mSrgbWriteControlMode = 0;
 }
 
 bool FramebufferDesc::operator==(const FramebufferDesc &other) const
 {
     if (mMaxIndex != other.mMaxIndex || mLayerCount != other.mLayerCount ||
-        mUnresolveAttachmentMask != other.mUnresolveAttachmentMask)
+        mUnresolveAttachmentMask != other.mUnresolveAttachmentMask ||
+        mSrgbWriteControlMode != other.mSrgbWriteControlMode)
     {
         return false;
     }

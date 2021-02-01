@@ -318,6 +318,11 @@
 3588 VULKAN ANDROID : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.multisample_*_2 = FAIL
 3588 VULKAN ANDROID : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.correctness.multisample_*_4 = FAIL
 
+// Possible nvidia driver bug
+5075 LINUX NVIDIA VULKAN dEQP.GLES31/functional_copy_image_non_compressed_viewclass_32_bits_r32i_r32ui_texture3d_to_texture3d = SKIP
+5075 LINUX NVIDIA VULKAN dEQP.GLES31/functional_copy_image_non_compressed_viewclass_32_bits_r32ui_rgba8_texture3d_to_texture2d = SKIP
+5075 LINUX NVIDIA VULKAN dEQP.GLES31/functional_copy_image_non_compressed_viewclass_32_bits_rgb10_a2_r32i_renderbuffer_to_texture2d_array = SKIP
+
 // When ANGLE allows non-conformant features, imageAtomicExchange with r32f fails
 5503 VULKAN ANDROID : dEQP-GLES31.functional.image_load_store.*.atomic.exchange_r32f* = FAIL
 5503 SWIFTSHADER : dEQP-GLES31.functional.image_load_store.*.atomic.exchange_r32f* = SKIP
