@@ -1931,6 +1931,12 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // If output variable gl_FragColor is written by fragment shader, it may cause context lost with
     // Adreno 42x and 3xx.
     ANGLE_FEATURE_CONDITION(features, initFragmentOutputVariables, IsAdreno42xOr3xx(functions));
+
+    // ANGLE_FEATURE_CONDITION(features, syncVertexArraysToDefault, functions->standard ==
+    // STANDARD_GL_ES && !functions->isAtLeastGLES(gl::Version(3, 0)) &&
+    // !functions->hasGLESExtension("GL_OES_vertex_array_object"));
+    ANGLE_FEATURE_CONDITION(features, syncVertexArraysToDefault,
+                            (functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) == 0);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
