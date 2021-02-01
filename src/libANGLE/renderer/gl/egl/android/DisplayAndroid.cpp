@@ -65,33 +65,20 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
     ASSERT(eglVersion >= gl::Version(1, 4));
 
-    static_assert(EGL_OPENGL_ES3_BIT == EGL_OPENGL_ES3_BIT_KHR, "Extension define must match core");
-    EGLint esBit = (eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_create_context"))
-                       ? EGL_OPENGL_ES3_BIT
-                       : EGL_OPENGL_ES2_BIT;
-
     // clang-format off
     std::vector<EGLint> configAttribListBase =
     {
         EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
         // Android doesn't support pixmaps
         EGL_SURFACE_TYPE, EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
-        EGL_CONFIG_CAVEAT, EGL_NONE,
-        EGL_CONFORMANT, esBit,
-        EGL_RENDERABLE_TYPE, esBit,
+        EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
     };
     // clang-format on
-
-    if (mEGL->hasExtension("EGL_EXT_pixel_format_float"))
-    {
-        // Don't request floating point configs
-        configAttribListBase.push_back(EGL_COLOR_COMPONENT_TYPE_EXT);
-        configAttribListBase.push_back(EGL_COLOR_COMPONENT_TYPE_FIXED_EXT);
-    }
 
     std::vector<EGLint> configAttribListWithFormat = configAttribListBase;
     // EGL1.5 spec Section 2.2 says that depth, multisample and stencil buffer depths
     // must match for contexts to be compatible.
+
     // Choose RGBA8888
     configAttribListWithFormat.push_back(EGL_RED_SIZE);
     configAttribListWithFormat.push_back(8);
@@ -101,14 +88,12 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
     configAttribListWithFormat.push_back(8);
     configAttribListWithFormat.push_back(EGL_ALPHA_SIZE);
     configAttribListWithFormat.push_back(8);
-    // Choose DEPTH24_STENCIL8
+
+    // Don't request a specific depthstencil size
     configAttribListWithFormat.push_back(EGL_DEPTH_SIZE);
-    configAttribListWithFormat.push_back(24);
+    configAttribListWithFormat.push_back(EGL_DONT_CARE);
     configAttribListWithFormat.push_back(EGL_STENCIL_SIZE);
-    configAttribListWithFormat.push_back(8);
-    // Choose no multisampling
-    configAttribListWithFormat.push_back(EGL_SAMPLE_BUFFERS);
-    configAttribListWithFormat.push_back(0);
+    configAttribListWithFormat.push_back(EGL_DONT_CARE);
 
     // Complete the attrib lists
     configAttribListBase.push_back(EGL_NONE);
