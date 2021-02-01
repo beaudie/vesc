@@ -511,12 +511,12 @@ egl::ConfigSet DisplayEGL::generateConfigs()
             {
                 ERR() << "RGBA(" << config.redSize << "," << config.greenSize << ","
                       << config.blueSize << "," << config.alphaSize << ") not handled";
-                UNREACHABLE();
+                continue;
             }
         }
         else
         {
-            UNREACHABLE();
+            continue;
         }
 
         if (config.depthSize == 0 && config.stencilSize == 0)
@@ -541,7 +541,7 @@ egl::ConfigSet DisplayEGL::generateConfigs()
         }
         else
         {
-            UNREACHABLE();
+            continue;
         }
 
         config.matchNativePixmap  = EGL_NONE;
