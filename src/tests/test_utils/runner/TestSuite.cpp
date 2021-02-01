@@ -967,6 +967,20 @@ void GTestListTests(const std::map<TestIdentifier, TestResult> &resultsMap)
         }
     }
 }
+
+uint32_t CountUniqueTestConfigs(const std::vector<TestIdentifier> &testIdentifiers)
+{
+    std::set<std::string> uniqueConfigNames;
+    for (const TestIdentifier &id : testIdentifiers)
+    {
+        std::string config = GetConfigNameFromTestIdentifier(id);
+        if (uniqueConfigNames.count(config) == 0)
+        {
+            uniqueConfigNames.insert(config);
+        }
+    }
+    return uniqueConfigNames.size();
+}
 }  // namespace
 
 // static
@@ -1172,6 +1186,13 @@ TestSuite::TestSuite(int *argc, char **argv)
     testing::internal::ParseGoogleTestFlagsOnly(argc, argv);
 
     std::vector<TestIdentifier> testSet = GetFilteredTests(&mTestFileLines, alsoRunDisabledTests);
+
+    // Count the number of different configs. If more than one, enable "bot mode" by default.
+    if (CountUniqueTestConfigs(testSet) > 1)
+    {
+        printf("Enabling bot mode automatically when running with more than one test config.\n");
+        mBotMode = true;
+    }
 
     if (mShardCount == 0)
     {
