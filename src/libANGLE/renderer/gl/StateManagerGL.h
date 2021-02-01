@@ -115,6 +115,36 @@ struct ExternalContextState
     GLenum vertexArrayBinding;
 };
 
+struct VertexAttributeGL
+{
+    bool enabled                = false;
+    const angle::Format *format = &angle::Format::Get(angle::FormatID::R32G32B32A32_FLOAT);
+
+    const void *pointer   = nullptr;
+    GLuint relativeOffset = 0;
+
+    GLuint bindingIndex = 0;
+};
+
+struct VertexBindingGL
+{
+    GLuint stride   = 16;
+    GLuint divisor  = 0;
+    GLintptr offset = 0;
+
+    GLuint buffer = 0;
+};
+
+struct VertexArrayStateGL
+{
+    VertexArrayStateGL(size_t maxAttribs, size_t maxBindings);
+
+    GLuint elementArrayBuffer = 0;
+
+    angle::FixedVector<VertexAttributeGL, gl::MAX_VERTEX_ATTRIBS> attributes;
+    angle::FixedVector<VertexBindingGL, gl::MAX_VERTEX_ATTRIBS> bindings;
+};
+
 class StateManagerGL final : angle::NonCopyable
 {
   public:
@@ -260,6 +290,8 @@ class StateManagerGL final : angle::NonCopyable
     }
     GLuint getBufferID(gl::BufferBinding binding) const { return mBuffers[binding]; }
 
+    VertexArrayStateGL *GetDefaultVAOState();
+
     void validateState() const;
 
     void syncFromNativeContext(const gl::Extensions &extensions, ExternalContextState *state);
@@ -335,6 +367,7 @@ class StateManagerGL final : angle::NonCopyable
 
     GLuint mVAO;
     std::vector<gl::VertexAttribCurrentValueData> mVertexAttribCurrentValues;
+    VertexArrayStateGL mDefaultVAOState;
 
     angle::PackedEnumMap<gl::BufferBinding, GLuint> mBuffers;
 
