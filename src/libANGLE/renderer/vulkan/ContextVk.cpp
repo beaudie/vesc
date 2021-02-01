@@ -2639,8 +2639,7 @@ gl::Rectangle ContextVk::getCorrectedViewport(const gl::Rectangle &viewport) con
 void ContextVk::updateViewport(FramebufferVk *framebufferVk,
                                const gl::Rectangle &viewport,
                                float nearPlane,
-                               float farPlane,
-                               bool invertViewport)
+                               float farPlane)
 {
 
     gl::Box fbDimensions        = framebufferVk->getState().getDimensions();
@@ -2648,6 +2647,9 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
     gl::Rectangle rotatedRect;
     RotateRectangle(getRotationDrawFramebuffer(), false, fbDimensions.width, fbDimensions.height,
                     correctedRect, &rotatedRect);
+
+    bool invertViewport =
+        isViewportFlipEnabledForDrawFBO() && getFeatures().supportsNegativeViewport.enabled;
 
     VkViewport vkViewport;
     gl_vk::GetViewport(
@@ -2806,7 +2808,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             {
                 FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
                 updateViewport(framebufferVk, glState.getViewport(), glState.getNearPlane(),
-                               glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
+                               glState.getFarPlane());
                 // Update the scissor, which will be constrained to the viewport
                 updateScissor(glState);
                 break;
@@ -2989,7 +2991,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 SpecConstUsageBits usageBits = getCurrentProgramSpecConstUsageBits();
                 updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
-                               glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
+                               glState.getFarPlane());
                 updateColorMasks(glState.getBlendStateExt());
                 updateRasterizationSamples(mDrawFramebuffer->getSamples());
 
@@ -3102,8 +3104,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                         gl::State::ExtendedDirtyBitType::EXTENDED_DIRTY_BIT_CLIP_CONTROL))
                 {
                     updateViewport(vk::GetImpl(glState.getDrawFramebuffer()), glState.getViewport(),
-                                   glState.getNearPlane(), glState.getFarPlane(),
-                                   isViewportFlipEnabledForDrawFBO());
+                                   glState.getNearPlane(), glState.getFarPlane());
                     // Since we are flipping the y coordinate, update front face state
                     mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                            glState.getRasterizerState(),
@@ -3250,7 +3251,8 @@ void ContextVk::updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageB
     SurfaceRotation rotationAndFlip = mCurrentRotationDrawFramebuffer;
     ASSERT(ToUnderlying(rotationAndFlip) < ToUnderlying(SurfaceRotation::FlippedIdentity));
     bool yFlipped =
-        isViewportFlipEnabledForDrawFBO() && usageBits.test(sh::vk::SpecConstUsage::YFlip);
+        isViewportFlipEnabledForDrawFBO() && (usageBits.test(sh::vk::SpecConstUsage::YFlip) ||
+                                              !getFeatures().supportsNegativeViewport.enabled);
 
     // usageBits are only set when specialization constants are used.  With gl_Position pre-rotation
     // handled by the SPIR-V transformer, we need to have this information even when the driver
