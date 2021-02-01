@@ -740,8 +740,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,
                         float nearPlane,
-                        float farPlane,
-                        bool invertViewport);
+                        float farPlane);
     void updateDepthRange(float nearPlane, float farPlane);
     void updateFlipViewportDrawFramebuffer(const gl::State &glState);
     void updateFlipViewportReadFramebuffer(const gl::State &glState);

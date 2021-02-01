@@ -2276,6 +2276,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // required.
     ANGLE_FEATURE_CONDITION(&mFeatures, emulateR32fImageAtomicExchange, true);
 
+    // Negative viewports are exposed in the Maintenance1 extension and in core Vulkan 1.1+.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsNegativeViewport,
+        ExtensionFound(VK_KHR_MAINTENANCE1_EXTENSION_NAME, deviceExtensionNames) ||
+            mPhysicalDeviceProperties.apiVersion >= VK_API_VERSION_1_1);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
