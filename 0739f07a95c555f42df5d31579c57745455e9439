@@ -88,6 +88,24 @@
       "parentUuid": "1c0b2f90_3a44f06e",
       "revId": "0739f07a95c555f42df5d31579c57745455e9439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b999e98_d790ec35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-02-01T16:00:00Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027ll work on the ANGLE CQ since we use ANGLE CLs not Chromium ones. Any ideas on why this bot behaves specially? Or to repro without a full build of Chrome?",
+      "parentUuid": "63e62613_4fdd33e7",
+      "revId": "0739f07a95c555f42df5d31579c57745455e9439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
