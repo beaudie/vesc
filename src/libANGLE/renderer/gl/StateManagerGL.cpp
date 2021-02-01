@@ -56,6 +56,16 @@ static void ValidateStateHelper(const FunctionsGL *functions,
 
 }  // anonymous namespace
 
+VertexArrayStateGL::VertexArrayStateGL(size_t maxAttribs, size_t maxBindings)
+    : attributes(maxAttribs), bindings(maxBindings)
+{
+    // Set the cached vertex attribute array and vertex attribute binding array size
+    for (GLuint i = 0; i < maxAttribs; i++)
+    {
+        attributes[i].bindingIndex = i;
+    }
+}
+
 StateManagerGL::IndexedBufferBinding::IndexedBufferBinding() : offset(0), size(0), buffer(0) {}
 
 StateManagerGL::StateManagerGL(const FunctionsGL *functions,
@@ -67,6 +77,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mProgram(0),
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
+      mDefaultVAOState(rendererCaps.maxVertexAttributes, rendererCaps.maxVertexAttribBindings),
+      mVAOState(&mDefaultVAOState),
       mBuffers(),
       mIndexedBuffers(),
       mTextureUnitIndex(0),
@@ -203,7 +215,7 @@ void StateManagerGL::deleteVertexArray(GLuint vao)
     {
         if (mVAO == vao)
         {
-            bindVertexArray(0, 0);
+            bindVertexArray(0, &mDefaultVAOState);
         }
         mFunctions->deleteVertexArrays(1, &vao);
     }
@@ -279,6 +291,22 @@ void StateManagerGL::deleteBuffer(GLuint buffer)
         }
     }
 
+    if (mVAOState)
+    {
+        if (mVAOState->elementArrayBuffer == buffer)
+        {
+            mVAOState->elementArrayBuffer = 0;
+        }
+
+        for (VertexBindingGL &binding : mVAOState->bindings)
+        {
+            if (binding.buffer == buffer)
+            {
+                binding.buffer = 0;
+            }
+        }
+    }
+
     mFunctions->deleteBuffers(1, &buffer);
 }
 
@@ -346,16 +374,25 @@ void StateManagerGL::forceUseProgram(GLuint program)
     mLocalDirtyBits.set(gl::State::DIRTY_BIT_PROGRAM_BINDING);
 }
 
-void StateManagerGL::bindVertexArray(GLuint vao, GLuint elementArrayBuffer)
+void StateManagerGL::bindVertexArray(GLuint vao, VertexArrayStateGL *vaoState)
 {
     if (mVAO != vao)
     {
-        mVAO                                      = vao;
-        mBuffers[gl::BufferBinding::ElementArray] = elementArrayBuffer;
+        ASSERT(!mFeatures.syncVertexArraysToDefault.enabled);
+
+        mVAO      = vao;
+        mVAOState = vaoState;
         mFunctions->bindVertexArray(vao);
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING);
     }
+    else
+    {
+        // VertexArrayStateGL shouldn't ever change for the same VAO.
+        ASSERT(mVAOState == vaoState);
+    }
+
+    mBuffers[gl::BufferBinding::ElementArray] = vaoState ? vaoState->elementArrayBuffer : 0;
 }
 
 void StateManagerGL::bindBuffer(gl::BufferBinding target, GLuint buffer)
@@ -1937,11 +1974,35 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING:
             {
-                const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(state.getVertexArray());
-                bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
+                VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(state.getVertexArray());
+                bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getNativeState());
 
                 propagateProgramToVAO(context, state.getProgram(),
                                       GetImplAs<VertexArrayGL>(state.getVertexArray()));
+
+                if (mFeatures.syncVertexArraysToDefault.enabled)
+                {
+                    // Re-sync the vertex array because all frontend VAOs share the same backend
+                    // state
+                    gl::VertexArray::DirtyBits dirtyBits;
+                    gl::VertexArray::DirtyAttribBitsArray dirtyAttribBits;
+                    gl::VertexArray::DirtyBindingBitsArray dirtBindingBits;
+
+                    dirtyBits.set(gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
+                    for (size_t attrib = 0; attrib < mDefaultVAOState.attributes.size(); attrib++)
+                    {
+                        dirtyBits.set(gl::VertexArray::DIRTY_BIT_ATTRIB_0 + attrib);
+                        dirtyAttribBits[attrib].set();
+                    }
+                    for (size_t attrib = 0; attrib < mDefaultVAOState.bindings.size(); attrib++)
+                    {
+                        dirtyBits.set(gl::VertexArray::DIRTY_BIT_BINDING_0 + attrib);
+                        dirtBindingBits[attrib].set();
+                    }
+
+                    ANGLE_TRY(
+                        vaoGL->syncState(context, dirtyBits, &dirtyAttribBits, &dirtBindingBits));
+                }
                 break;
             }
             case gl::State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
@@ -2400,6 +2461,11 @@ void StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
         bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
         mCurrentTransformFeedback = nullptr;
     }
+}
+
+VertexArrayStateGL *StateManagerGL::GetDefaultVAOState()
+{
+    return &mDefaultVAOState;
 }
 
 void StateManagerGL::validateState() const
