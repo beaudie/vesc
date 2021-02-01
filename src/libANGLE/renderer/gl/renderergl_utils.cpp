@@ -1894,6 +1894,12 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, setZeroLevelBeforeGenerateMipmap, IsApple());
 
     ANGLE_FEATURE_CONDITION(features, promotePackedFormatsTo8BitPerChannel, IsApple() && hasAMD);
+
+    // ANGLE_FEATURE_CONDITION(features, syncVertexArraysToDefault, functions->standard ==
+    // STANDARD_GL_ES && !functions->isAtLeastGLES(gl::Version(3, 0)) &&
+    // !functions->hasGLESExtension("GL_OES_vertex_array_object"));
+    ANGLE_FEATURE_CONDITION(features, syncVertexArraysToDefault,
+                            (functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) == 0);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

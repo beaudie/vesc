@@ -512,6 +512,12 @@ struct FeaturesGL : FeatureSetBase
         "promote_packed_formats_to_8_bit_per_channel", FeatureCategory::OpenGLWorkarounds,
         "Packed color formats are buggy on Macs with AMD GPUs", &members,
         "http://anglebug.com/5469"};
+
+    // ANGLE needs to support devices that have no native VAOs. Sync everything to the default VAO.
+    Feature syncVertexArraysToDefault = {
+        "sync_vertex_arrays_to_default", FeatureCategory::OpenGLWorkarounds,
+        "Only use the default VAO because of missing support or driver bugs", &members,
+        "http://anglebug.com/5577"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
