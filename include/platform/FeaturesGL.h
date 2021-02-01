@@ -522,6 +522,12 @@ struct FeaturesGL : FeatureSetBase
     Feature initFragmentOutputVariables = {
         "init_fragment_output_variables", FeatureCategory::OpenGLWorkarounds,
         "No init gl_FragColor causes context lost", &members, "http://crbug.com/1171371"};
+
+    // ANGLE needs to support devices that have no native VAOs. Sync everything to the default VAO.
+    Feature syncVertexArraysToDefault = {
+        "sync_vertex_arrays_to_default", FeatureCategory::OpenGLWorkarounds,
+        "Only use the default VAO because of missing support or driver bugs", &members,
+        "http://anglebug.com/5577"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

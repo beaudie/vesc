@@ -20,11 +20,13 @@ namespace rx
 
 class FunctionsGL;
 class StateManagerGL;
+struct VertexArrayStateGL;
 
 class VertexArrayGL : public VertexArrayImpl
 {
   public:
     VertexArrayGL(const gl::VertexArrayState &data, GLuint id);
+    VertexArrayGL(const gl::VertexArrayState &data, VertexArrayStateGL *sharedState);
     ~VertexArrayGL() override;
 
     void destroy(const gl::Context *context) override;
@@ -44,7 +46,7 @@ class VertexArrayGL : public VertexArrayImpl
                                         const void **outIndices) const;
 
     GLuint getVertexArrayID() const;
-    GLuint getAppliedElementArrayBufferID() const;
+    VertexArrayStateGL *getNativeState() const;
 
     angle::Result syncState(const gl::Context *context,
                             const gl::VertexArray::DirtyBits &dirtyBits,
@@ -116,23 +118,21 @@ class VertexArrayGL : public VertexArrayImpl
                                  GLsizei stride,
                                  GLintptr offset) const;
 
-    GLuint mVertexArrayID;
-    int mAppliedNumViews;
+    GLuint mVertexArrayID = 0;
+    int mAppliedNumViews  = 1;
 
     // Remember the program's active attrib location mask so that attributes can be enabled/disabled
     // based on whether they are active in the program
     gl::AttributesMask mProgramActiveAttribLocationsMask;
 
-    mutable gl::BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
+    bool mOwnsNativeState            = false;
+    VertexArrayStateGL *mNativeState = nullptr;
 
-    mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
-    mutable std::vector<gl::VertexBinding> mAppliedBindings;
+    mutable size_t mStreamingElementArrayBufferSize = 0;
+    mutable GLuint mStreamingElementArrayBuffer     = 0;
 
-    mutable size_t mStreamingElementArrayBufferSize;
-    mutable GLuint mStreamingElementArrayBuffer;
-
-    mutable size_t mStreamingArrayBufferSize;
-    mutable GLuint mStreamingArrayBuffer;
+    mutable size_t mStreamingArrayBufferSize = 0;
+    mutable GLuint mStreamingArrayBuffer     = 0;
 };
 
 ANGLE_INLINE angle::Result VertexArrayGL::syncDrawElementsState(
