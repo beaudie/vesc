@@ -8502,7 +8502,7 @@ void Context::eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES ima
 
 void Context::framebufferFetchBarrier()
 {
-    UNIMPLEMENTED();
+    mImplementation->framebufferFetchBarrier();
 }
 
 void Context::texStorage1D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width)

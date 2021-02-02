@@ -1870,7 +1870,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
     }
 
-    updateRenderPassDesc();
+    updateRenderPassDesc(contextVk);
 
     // Deactivate Framebuffer
     mFramebuffer = nullptr;
@@ -1881,7 +1881,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-void FramebufferVk::updateRenderPassDesc()
+void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
 {
     mRenderPassDesc = {};
     mRenderPassDesc.setSamples(getSamples());
@@ -2547,6 +2547,18 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         mFramebuffer = nullptr;
 
         mCurrentFramebufferDesc.updateUnresolveMask(MakeUnresolveAttachmentMask(mRenderPassDesc));
+    }
+
+    const gl::State &glState                = contextVk->getState();
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    bool programUsesFramebufferFetch        = executable->usesFramebufferFetch();
+    if (programUsesFramebufferFetch != mRenderPassDesc.getFramebufferFetchMode())
+    {
+        mRenderPassDesc.setFramebufferFetchMode(programUsesFramebufferFetch);
+        contextVk->onDrawFramebufferRenderPassDescChange(this);
+        // Make sure framebuffer is recreated.
+        mFramebuffer = nullptr;
+        mFramebufferCache.clear(contextVk);
     }
 
     vk::Framebuffer *framebuffer = nullptr;
