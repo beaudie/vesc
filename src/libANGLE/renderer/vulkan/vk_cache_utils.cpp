@@ -153,8 +153,7 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
                           uint8_t samples,
                           const PackedAttachmentOpsDesc &ops)
 {
-    // We would only need this flag for duplicated attachments. Apply it conservatively.
-    desc->flags   = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+    desc->flags   = 0;
     desc->format  = format.actualImageVkFormat();
     desc->samples = gl_vk::GetSamples(samples);
     desc->loadOp  = static_cast<VkAttachmentLoadOp>(ops.loadOp);
