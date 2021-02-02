@@ -393,7 +393,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mPerfCounters{},
       mObjectPerfCounters{},
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mCurrentIndirectBuffer(nullptr),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
@@ -935,10 +934,9 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
     GLsizei vertexCount   = 0;
     GLsizei instanceCount = 1;
 
-    if (indirectBuffer != mCurrentIndirectBuffer)
+    if (mRenderPassCommands->usesBufferForWrite(*indirectBuffer))
     {
         ANGLE_TRY(flushCommandsAndEndRenderPass());
-        mCurrentIndirectBuffer = indirectBuffer;
     }
 
     mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
@@ -4837,7 +4835,6 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
     }
 
     mCurrentTransformFeedbackBuffers.clear();
-    mCurrentIndirectBuffer = nullptr;
 
     // Reset serials for XFB if active.
     if (mState.isTransformFeedbackActiveUnpaused())
