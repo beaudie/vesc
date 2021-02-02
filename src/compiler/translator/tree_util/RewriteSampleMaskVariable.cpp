@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 // RewriteSampleMaskVariable.cpp: Find any references to gl_SampleMask and gl_SampleMaskIn, and
-// rewrite it with ANGLESampleMask or ANGLESampleMaskIn.
+// rewrite its index with a constant.
 //
 
 #include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
@@ -116,8 +116,7 @@ ANGLE_NO_DISCARD bool RewriteSampleMask(TCompiler *compiler,
         return false;
     }
 
-    // Retrieve gl_SampleMask variable reference
-    // Search user redeclared it first
+    // Retrieve gl_SampleMask variable reference.  Search if user redeclared it first.
     const TVariable *glSampleMaskVar = nullptr;
     if (redeclaredGLSampleMask)
     {

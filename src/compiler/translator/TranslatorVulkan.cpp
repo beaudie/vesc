@@ -1091,9 +1091,13 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                 return false;
             }
 
-            if (usesSampleMaskIn && !RewriteSampleMaskIn(this, root, &getSymbolTable()))
+            if (usesSampleMaskIn)
             {
-                return false;
+                sink << "precision highp int;\n";
+                if (!RewriteSampleMaskIn(this, root, &getSymbolTable()))
+                {
+                    return false;
+                }
             }
 
             if (hasGLSampleMask)
