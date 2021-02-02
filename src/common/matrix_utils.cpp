@@ -238,7 +238,7 @@ Mat4 Mat4::Ortho(float l, float r, float b, float t, float n, float f)
     return Mat4(r00, r01, r02, r03, r10, r11, r12, r13, r20, r21, r22, r23, r30, r31, r32, r33);
 }
 
-Mat4 Mat4::product(const Mat4 &m)
+Mat4 Mat4::product(const Mat4 &m) const
 {
     const float *a = mElements.data();
     const float *b = m.mElements.data();
@@ -264,7 +264,7 @@ Mat4 Mat4::product(const Mat4 &m)
                 a[3] * b[12] + a[7] * b[13] + a[11] * b[14] + a[15] * b[15]);
 }
 
-Vector4 Mat4::product(const Vector4 &b)
+Vector4 Mat4::product(const Vector4 &b) const
 {
     return Vector4(
         mElements[0] * b.x() + mElements[4] * b.y() + mElements[8] * b.z() + mElements[12] * b.w(),
@@ -274,7 +274,7 @@ Vector4 Mat4::product(const Vector4 &b)
             mElements[15] * b.w());
 }
 
-void Mat4::dump()
+void Mat4::dump() const
 {
     printf("[ %f %f %f %f ]\n", mElements[0], mElements[4], mElements[8], mElements[12]);
     printf("[ %f %f %f %f ]\n", mElements[1], mElements[5], mElements[9], mElements[13]);

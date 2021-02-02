@@ -414,9 +414,9 @@ class Mat4 : public Matrix<float>
     static Mat4 Perspective(float fov, float aspectRatio, float n, float f);
     static Mat4 Ortho(float l, float r, float b, float t, float n, float f);
 
-    Mat4 product(const Mat4 &m);
-    Vector4 product(const Vector4 &b);
-    void dump();
+    Mat4 product(const Mat4 &m) const;
+    Vector4 product(const Vector4 &b) const;
+    void dump() const;
 };
 
 }  // namespace angle
