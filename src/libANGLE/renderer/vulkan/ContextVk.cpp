@@ -515,6 +515,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Dirty bits signifying that a storage buffer/image access may be done next and which may
     // require breaking the render pass to issue a barrier.
     mStorageOutputDirtyBitsMask.set(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);
+    mStorageOutputDirtyBitsMask.set(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
     mStorageOutputDirtyBitsMask.set(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
     mStorageOutputDirtyBitsMask.set(gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
     mStorageOutputDirtyBitsMask.set(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
@@ -1055,10 +1056,14 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
 angle::Result ContextVk::setupDispatch(const gl::Context *context,
                                        vk::CommandBuffer **commandBufferOut)
 {
-    // |setupDispatch| and |setupDraw| are special in that they flush dirty bits. Therefore they
-    // don't use the same APIs to record commands as the functions outside ContextVk.
-    // The following ensures prior commands are flushed before we start processing dirty bits.
-    ANGLE_TRY(flushCommandsAndEndRenderPass());
+    // Either |endRenderPassIfResourceWriteAfterRead()|,
+    // |endRenderPassIfComputeReadAfterAttachmentWrite| or a call to |glMemoryBarrier| must have
+    // ensured that the render pass is ended if necessary.  The outside render pass command buffer
+    // may need to be flushed so that the barriers issued when handling dirty bits are placed in the
+    // correct order.  Currently, in some situations commands are recorded which don't record usage
+    // of resources (such as flushing staged updates to images), so it's unknown whether the command
+    // buffer needs to flush or not.  It is flushed here conservatively.
+    ANGLE_TRY(flushOutsideRenderPassCommands());
     *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
 
     // Create a local object to ensure we flush the descriptor updates to device when we leave this
@@ -3158,6 +3163,15 @@ angle::Result ContextVk::syncState(const gl::Context *context,
     if ((dirtyBits & mStorageOutputDirtyBitsMask).any())
     {
         ANGLE_TRY(endRenderPassIfResourceWriteAfterRead());
+        if (programExecutable->isCompute())
+        {
+            // While *-after-write hazards are handled with |glMemoryBarrier| when the source of
+            // write is shader output, they must be automatically handled when the source of write
+            // is framebuffer attachment.  Ignoring feedback loops, this can only happen if the
+            // framebuffer attachment is bound as texture for a dispatch call.  The render pass is
+            // broken in such a situation as well.
+            ANGLE_TRY(endRenderPassIfComputeReadAfterAttachmentWrite());
+        }
     }
 
     return angle::Result::Continue;
@@ -5393,6 +5407,53 @@ angle::Result ContextVk::endRenderPassIfResourceWriteAfterRead()
             {
                 return flushCommandsAndEndRenderPass();
             }
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::endRenderPassIfComputeReadAfterAttachmentWrite()
+{
+    // Similar to endRenderPassIfResourceWriteAfterRead(), but checks a compute shader's currently
+    // bound textures vs the attachments in the current render pass.  This is to handle
+    // *-after-write hazards where the write originates from a framebuffer attachment.
+    //
+    // Note that graphics and compute shader reads currently use different vk::ImageLayouts, so the
+    // render pass is broken even if a texture used by the compute shader is only used read-only in
+    // the render pass.  TODO: Don't break the render pass if the image was only used read-only in
+    // the render pass.  http://anglebug.com/4984
+
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable && executable->isCompute());
+
+    const bool hasTextures = executable->hasTextures();
+
+    if (!hasTextures)
+    {
+        return angle::Result::Continue;
+    }
+
+    const gl::ActiveTexturesCache &textures        = mState.getActiveTexturesCache();
+    const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
+
+    for (size_t textureUnit : executable->getActiveSamplersMask())
+    {
+        gl::Texture *texture        = textures[textureUnit];
+        gl::TextureType textureType = textureTypes[textureUnit];
+
+        if (texture == nullptr || textureType == gl::TextureType::Buffer)
+        {
+            continue;
+        }
+
+        TextureVk *textureVk = vk::GetImpl(texture);
+        ASSERT(textureVk != nullptr);
+        vk::ImageHelper &image = textureVk->getImage();
+
+        if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
+        {
+            return flushCommandsAndEndRenderPass();
         }
     }
 
