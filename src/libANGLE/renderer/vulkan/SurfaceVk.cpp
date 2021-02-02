@@ -1023,9 +1023,14 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     {
         const VkImageUsageFlags usage = kSurfaceVkColorImageUsageFlags;
 
-        ANGLE_TRY(mColorImageMS.init(context, gl::TextureType::_2D, vkExtents, format, samples,
-                                     usage, gl::LevelIndex(0), gl::LevelIndex(0), 1, 1,
-                                     robustInit));
+        // Create a multisampled image that will be rendered to, and then resolved to a swapchain
+        // image.  The actual VkImage is created with rotated coordinates to make it easier to do
+        // the resolve.  The ImageHelper::mExtents will have non-rotated extents in order to fit
+        // with the rest of ANGLE, (e.g. which calculates the Vulkan scissor with non-rotated
+        // values and then rotates the final rectangle).
+        ANGLE_TRY(mColorImageMS.initMSAASwapchain(
+            context, gl::TextureType::_2D, vkExtents, Is90DegreeRotation(getPreTransform()), format,
+            samples, usage, gl::LevelIndex(0), gl::LevelIndex(0), 1, 1, robustInit));
         ANGLE_TRY(mColorImageMS.initMemory(context, renderer->getMemoryProperties(),
                                            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
