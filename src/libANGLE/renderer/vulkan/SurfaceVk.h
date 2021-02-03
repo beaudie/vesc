@@ -241,6 +241,8 @@ class WindowSurfaceVk : public SurfaceVk
         return mPreTransform;
     }
 
+    EGLint getBufferAge() const override { return mBufferAge; }
+
   protected:
     angle::Result swapImpl(const gl::Context *context,
                            const EGLint *rects,
@@ -338,6 +340,11 @@ class WindowSurfaceVk : public SurfaceVk
 
     // True when acquiring the next image is deferred.
     bool mNeedToAcquireNextSwapchainImage;
+
+    // Track frame number for each image, for buffer age.
+    std::vector<uint64_t> mImageIndexToFrameNumber;
+    uint64_t mFrameCount;
+    EGLint mBufferAge;
 };
 
 }  // namespace rx

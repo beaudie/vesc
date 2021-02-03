@@ -586,6 +586,17 @@ GLuint Surface::getId() const
     return 0;
 }
 
+EGLint Surface::getBufferAge() const
+{
+    // When EGL_BUFFER_PRESERVED, the previous frame contents are copied to
+    // current frame, so the buffer age is always 1.
+    if (mSwapBehavior == EGL_BUFFER_PRESERVED)
+    {
+        return 1;
+    }
+    return mImplementation->getBufferAge();
+}
+
 gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context,
                                                    egl::Surface *readSurface)
 {
