@@ -687,6 +687,15 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_MAX = DIRTY_OBJECT_UNKNOWN,
     };
 
+    enum DirtyBitExtendedType
+    {
+        DIRTY_BIT_EXTENDED_CLIP_CONTROL,  // EXT_clip_control
+        DIRTY_BIT_EXTENDED_INVALID,
+        DIRTY_BIT_EXTENDED_MAX = DIRTY_BIT_EXTENDED_INVALID,
+    };
+
+    static_assert(DIRTY_BIT_EXTENDED_MAX <= 8, "State extended dirty bits must be capped at 8");
+
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
     const DirtyBits &getDirtyBits() const { return mDirtyBits; }
     void clearDirtyBits() { mDirtyBits.reset(); }
@@ -696,6 +705,10 @@ class State : angle::NonCopyable
         mDirtyBits.set();
         mDirtyCurrentValues.set();
     }
+
+    using DirtyBitsExtended = angle::BitSet8<DIRTY_BIT_EXTENDED_MAX>;
+    const DirtyBitsExtended &getDirtyBitsExtended() const { return mDirtyBitsExtended; }
+    void clearDirtyBitsExtended() { mDirtyBitsExtended.reset(); }
 
     using DirtyObjects = angle::BitSet<DIRTY_OBJECT_MAX>;
     void clearDirtyObjects() { mDirtyObjects.reset(); }
@@ -1092,6 +1105,7 @@ class State : angle::NonCopyable
     GLES1State mGLES1State;
 
     DirtyBits mDirtyBits;
+    DirtyBitsExtended mDirtyBitsExtended;
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
     ActiveTextureMask mDirtyActiveTextures;
