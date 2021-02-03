@@ -2637,7 +2637,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
 
             if (desc.size.empty())
+            {
                 continue;
+            }
 
             const gl::InternalFormat &format = *desc.format.info;
 
@@ -3758,6 +3760,35 @@ FrameCapture::FrameCapture()
 
 FrameCapture::~FrameCapture() = default;
 
+void FrameCapture::copyCompressedTextureData(const gl::Context *context, const CallCapture &call)
+{
+    // For compressed textures, we need to copy the source data that was already captured into a new
+    // cached texture entry for use during mid-execution capture, rather than reading it back with
+    // ANGLE_get_image.
+
+    GLuint srcName = call.params.getParam("srcName", ParamType::TGLuint, 0).value.GLuintVal;
+    GLint srcLevel = call.params.getParam("srcLevel", ParamType::TGLint, 2).value.GLintVal;
+    GLuint dstName = call.params.getParam("dstName", ParamType::TGLuint, 6).value.GLuintVal;
+    GLint dstLevel = call.params.getParam("dstLevel", ParamType::TGLint, 8).value.GLintVal;
+
+    // Look up the texture type
+    GLenum dstTarget = call.params.getParam("dstTarget", ParamType::TGLenum, 7).value.GLenumVal;
+    gl::TextureTarget dstTargetPacked = gl::PackParam<gl::TextureTarget>(dstTarget);
+    gl::TextureType dstTextureType    = gl::TextureTargetToType(dstTargetPacked);
+
+    // Look up the currently bound texture
+    gl::Texture *dstTexture = context->getState().getTargetTexture(dstTextureType);
+    ASSERT(dstTexture);
+
+    const gl::InternalFormat &format = *dstTexture->getFormat(dstTargetPacked, dstLevel).info;
+
+    if (format.compressed)
+    {
+        context->getShareGroup()->getFrameCaptureShared()->copyCachedTextureLevel(
+            {srcName}, srcLevel, {dstName}, dstLevel);
+    }
+}
+
 void FrameCapture::captureCompressedTextureData(const gl::Context *context, const CallCapture &call)
 {
     // For compressed textures, track a shadow copy of the data
@@ -4182,6 +4213,15 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
             break;
         }
 
+        case EntryPoint::GLCopyImageSubData:
+        case EntryPoint::GLCopyImageSubDataEXT:
+        case EntryPoint::GLCopyImageSubDataOES:
+        {
+            // glCopyImageSubData supports copying compressed and uncompressed texture formats.
+            copyCompressedTextureData(context, call);
+            break;
+        }
+
         case EntryPoint::GLDeleteTextures:
         {
             // Free any TextureLevelDataMap entries being tracked for this texture
@@ -4307,7 +4347,9 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
 void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call)
 {
     if (SkipCall(call.entryPoint))
+    {
         return;
+    }
 
     maybeOverrideEntryPoint(context, call);
 
@@ -4792,6 +4834,43 @@ const std::vector<uint8_t> &FrameCaptureShared::retrieveCachedTextureLevel(gl::T
     const std::vector<uint8_t> &capturedTextureLevel = foundTextureLevel->second;
 
     return capturedTextureLevel;
+}
+
+void FrameCaptureShared::copyCachedTextureLevel(gl::TextureID srcID,
+                                                GLint srcLevel,
+                                                gl::TextureID dstID,
+                                                GLint dstLevel)
+{
+    // Look up the data for the source texture
+    const auto &foundSrcTextureLevels = mCachedTextureLevelData.find(srcID);
+    ASSERT(foundSrcTextureLevels != mCachedTextureLevelData.end());
+
+    // For that texture, look up the data for the given level
+    const auto &foundSrcTextureLevel = foundSrcTextureLevels->second.find(srcLevel);
+    ASSERT(foundSrcTextureLevel != foundSrcTextureLevels->second.end());
+    const std::vector<uint8_t> &srcTextureLevel = foundSrcTextureLevel->second;
+
+    auto foundDstTextureLevels = mCachedTextureLevelData.find(dstID);
+    if (foundDstTextureLevels == mCachedTextureLevelData.end())
+    {
+        // Initialize the texture ID data.
+        auto emplaceResult = mCachedTextureLevelData.emplace(dstID, TextureLevels());
+        ASSERT(emplaceResult.second);
+        foundDstTextureLevels = emplaceResult.first;
+    }
+
+    TextureLevels &foundDstLevels         = foundDstTextureLevels->second;
+    TextureLevels::iterator foundDstLevel = foundDstLevels.find(dstLevel);
+    if (foundDstLevel != foundDstLevels.end())
+    {
+        // If we have a cache for this level, remove it since we're recreating it.
+        foundDstLevels.erase(dstLevel);
+    }
+
+    // Initialize destination texture data and copy the source into it.
+    std::vector<uint8_t> dstTextureLevel = srcTextureLevel;
+    auto emplaceResult = foundDstLevels.emplace(dstLevel, std::move(dstTextureLevel));
+    ASSERT(emplaceResult.second);
 }
 
 std::vector<uint8_t> &FrameCaptureShared::getCachedTextureLevelData(gl::Texture *texture,
