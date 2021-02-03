@@ -32,6 +32,7 @@ TextureType TextureTargetToType(TextureTarget target)
             return TextureType::Rectangle;
         case TextureTarget::_2D:
             return TextureType::_2D;
+        case TextureTarget::CubeMap:
         case TextureTarget::_2DArray:
             return TextureType::_2DArray;
         case TextureTarget::_2DMultisample:

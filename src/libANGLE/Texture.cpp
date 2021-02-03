@@ -1047,7 +1047,12 @@ const TextureState &Texture::getTextureState() const
 
 const Extents &Texture::getExtents(TextureTarget target, size_t level) const
 {
-    ASSERT(TextureTargetToType(target) == mState.mType);
+    // Cubemaps are a texture type, using the type GL_TEXTURE_CUBE_MAP. They are similar to 2D
+    // textures in that they have two dimensions. Slices of a GL_TEXTURE_2D_ARRAY,
+    // GL_TEXTURE_CUBE_MAP_ARRAY GL_TEXTURE_3D and faces of GL_TEXTURE_CUBE_MAP are all compatible
+    ASSERT((TextureTargetToType(target) == mState.mType) ||
+           ((TextureTargetToType(target) == TextureType::_2DArray &&
+             mState.mType == TextureType::CubeMap)));
     return mState.getImageDesc(target, level).size;
 }
 
