@@ -916,6 +916,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->externalContextAndSurface = true;
 
+    outExtensions->bufferAgeEXT = mEGL->hasExtension("EGL_EXT_buffer_age");
+
     DisplayGL::generateExtensions(outExtensions);
 }
 

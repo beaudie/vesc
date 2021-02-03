@@ -495,7 +495,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mCurrentSwapchainImageIndex(0),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
-      mNeedToAcquireNextSwapchainImage(false)
+      mNeedToAcquireNextSwapchainImage(false),
+      mFrameCount(0)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -1075,6 +1076,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
                                          Is90DegreeRotation(getPreTransform()), format, 1,
                                          robustInit);
         member.imageViews.init(renderer);
+        member.mFrameNumber = 0;
     }
 
     // Initialize depth/stencil if requested.
@@ -1559,9 +1561,12 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
         return result;
     }
 
+    mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;
+
     result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
                                    acquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
                                    &mCurrentSwapchainImageIndex);
+
     if (ANGLE_UNLIKELY(result != VK_SUCCESS))
     {
         return result;
@@ -1907,6 +1912,23 @@ angle::Result WindowSurfaceVk::drawOverlay(ContextVk *contextVk, SwapchainImage 
     ANGLE_TRY(overlayVk->onPresent(contextVk, &image->image, imageView));
 
     return angle::Result::Continue;
+}
+
+egl::Error WindowSurfaceVk::getBufferAge(EGLint *age) const
+{
+    if (age != nullptr)
+    {
+        uint64_t frameNumber = mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber;
+        if (frameNumber == 0)
+        {
+            *age = 0;  // Has not been used for rendering yet, no age.
+        }
+        else
+        {
+            *age = static_cast<EGLint>(mFrameCount - frameNumber);
+        }
+    }
+    return egl::NoError();
 }
 
 }  // namespace rx

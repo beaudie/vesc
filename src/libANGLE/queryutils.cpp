@@ -4253,6 +4253,9 @@ egl::Error QuerySurfaceAttrib(const Display *display,
         case EGL_TIMESTAMPS_ANDROID:
             *value = surface->isTimestampsEnabled();
             break;
+        case EGL_BUFFER_AGE_EXT:
+            ANGLE_TRY(surface->getBufferAge(value));
+            break;
         default:
             UNREACHABLE();
             break;
