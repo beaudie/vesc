@@ -186,6 +186,8 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     // otherwise.
     const gl::Offset &getTextureOffset() const { return mTextureOffset; }
 
+    Error getBufferAge(EGLint *age) const;
+
   protected:
     Surface(EGLint surfaceType,
             const egl::Config *config,
@@ -244,6 +246,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     gl::Format mDSFormat;
 
     gl::Offset mTextureOffset;
+    const gl::Context *mCurrentContext;
 
   private:
     Error destroyImpl(const Display *display);
