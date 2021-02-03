@@ -42,4 +42,14 @@ egl::Error WindowSurfaceEGL::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
+egl::Error WindowSurfaceEGL::getBufferAge(EGLint *age) const
+{
+    EGLBoolean result = mEGL->querySurface(mSurface, EGL_BUFFER_AGE_EXT, age);
+    if (result == EGL_FALSE)
+    {
+        return egl::Error(mEGL->getError(), "eglQuerySurface for EGL_BUFFER_AGE_EXT failed");
+    }
+    return egl::NoError();
+}
+
 }  // namespace rx

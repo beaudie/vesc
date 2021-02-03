@@ -508,7 +508,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mCurrentSwapchainImageIndex(0),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
-      mNeedToAcquireNextSwapchainImage(false)
+      mNeedToAcquireNextSwapchainImage(false),
+      mFrameCount(0),
+      mCurrentBufferAge(0)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -1048,6 +1050,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         member.image.init2DWeakReference(context, swapchainImages[imageIndex], extents, format, 1,
                                          robustInit);
         member.imageViews.init(renderer);
+        member.mFrameNumber = 0;
     }
 
     // Initialize depth/stencil if requested.
@@ -1243,6 +1246,7 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
     angle::Result result = swapImpl(context, nullptr, 0, nullptr);
+
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
@@ -1467,6 +1471,20 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         // swapchain (potentially because of a rotation change), and recreate it.
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
+
+    ++mFrameCount;
+    // EGL_EXT_buffer_age - Age = difference between the current mFrameCount
+    // and the mFrameNumber the image was last drawn.
+    const SwapchainImage *currentImage = &mSwapchainImages[mCurrentSwapchainImageIndex];
+    if (currentImage->mFrameNumber == 0)
+    {
+        mCurrentBufferAge = 0;  // Has not been used for rendering yet, no age.
+    }
+    else
+    {
+        mCurrentBufferAge = static_cast<EGLint>(mFrameCount - currentImage->mFrameNumber);
+    }
+    mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount;
 
     return angle::Result::Continue;
 }
@@ -1880,6 +1898,15 @@ angle::Result WindowSurfaceVk::drawOverlay(ContextVk *contextVk, SwapchainImage 
     ANGLE_TRY(overlayVk->onPresent(contextVk, &image->image, imageView));
 
     return angle::Result::Continue;
+}
+
+egl::Error WindowSurfaceVk::getBufferAge(EGLint *age) const
+{
+    if (age != nullptr)
+    {
+        *age = mCurrentBufferAge;
+    }
+    return egl::NoError();
 }
 
 }  // namespace rx
