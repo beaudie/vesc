@@ -113,4 +113,15 @@ egl::Error SurfaceImpl::getUserHeight(const egl::Display *display, EGLint *value
     *value = getHeight();
     return egl::NoError();
 }
+
+egl::Error SurfaceImpl::getBufferAge(EGLint *age) const
+{
+    UNREACHABLE();
+    if (age != nullptr)
+    {
+        *age = 0;
+    }
+    return egl::NoError();
+}
+
 }  // namespace rx
