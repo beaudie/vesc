@@ -508,7 +508,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mCurrentSwapchainImageIndex(0),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
-      mNeedToAcquireNextSwapchainImage(false)
+      mNeedToAcquireNextSwapchainImage(false),
+      mFrameCount(0),
+      mBufferAge(0)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -1042,12 +1044,16 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     ANGLE_TRY(resizeSwapchainImages(context, imageCount));
 
+    mImageIndexToFrameNumber.resize(imageCount);
+
     for (uint32_t imageIndex = 0; imageIndex < imageCount; ++imageIndex)
     {
         SwapchainImage &member = mSwapchainImages[imageIndex];
         member.image.init2DWeakReference(context, swapchainImages[imageIndex], extents, format, 1,
                                          robustInit);
         member.imageViews.init(renderer);
+
+        mImageIndexToFrameNumber[imageIndex] = 0;
     }
 
     // Initialize depth/stencil if requested.
@@ -1243,6 +1249,20 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
     angle::Result result = swapImpl(context, nullptr, 0, nullptr);
+
+    // BufferAge
+    ++mFrameCount;
+    uint64_t previousFrameNumber = mImageIndexToFrameNumber[mCurrentSwapchainImageIndex];
+    if (previousFrameNumber == 0)
+    {
+        mBufferAge = 0;
+    }
+    else
+    {
+        mBufferAge = static_cast<EGLint>(mFrameCount - previousFrameNumber);
+    }
+    mImageIndexToFrameNumber[mCurrentSwapchainImageIndex] = mFrameCount;
+
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
