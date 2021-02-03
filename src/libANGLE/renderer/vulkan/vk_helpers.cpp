@@ -3763,6 +3763,14 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSiz
             VkBufferImageCopy copyRegion = {};
 
             gl_vk::GetExtent(getLevelExtents(level), &copyRegion.imageExtent);
+
+            // Round up the extent dimensions to the block size.
+            const vk::Format &vkFormat =
+                context->getRenderer()->getFormat(angleFormat.glInternalFormat);
+            uint32_t alignment = static_cast<uint32_t>(vkFormat.getImageCopyBufferAlignment());
+            copyRegion.imageExtent.width  = roundUp(copyRegion.imageExtent.width, alignment);
+            copyRegion.imageExtent.height = roundUp(copyRegion.imageExtent.height, alignment);
+
             copyRegion.imageSubresource.aspectMask = getAspectFlags();
             copyRegion.imageSubresource.layerCount = mLayerCount;
 
