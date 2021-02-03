@@ -700,6 +700,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->robustnessVideoMemoryPurgeNV = mHasNVRobustnessVideoMemoryPurge;
 
+    outExtensions->bufferAgeEXT = mEGL->hasExtension("EGL_EXT_buffer_age");
+
     DisplayGL::generateExtensions(outExtensions);
 }
 
