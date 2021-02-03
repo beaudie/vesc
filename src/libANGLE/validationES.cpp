@@ -2965,16 +2965,13 @@ bool ValidateCompressedRegion(const Context *context,
                               GLsizei width,
                               GLsizei height)
 {
-    if (formatInfo.compressed)
+    // INVALID_VALUE is generated if the image format is compressed and the dimensions of the
+    // subregion fail to meet the alignment constraints of the format.
+    if ((width % formatInfo.compressedBlockWidth != 0) ||
+        (height % formatInfo.compressedBlockHeight != 0))
     {
-        // INVALID_VALUE is generated if the image format is compressed and the dimensions of the
-        // subregion fail to meet the alignment constraints of the format.
-        if ((width % formatInfo.compressedBlockWidth != 0) ||
-            (height % formatInfo.compressedBlockHeight != 0))
-        {
-            context->validationError(GL_INVALID_VALUE, kInvalidCompressedRegionSize);
-            return false;
-        }
+        context->validationError(GL_INVALID_VALUE, kInvalidCompressedRegionSize);
+        return false;
     }
 
     return true;
@@ -3355,14 +3352,32 @@ bool ValidateCopyImageSubDataBase(const Context *context,
         return false;
     }
 
-    if (!ValidateCompressedRegion(context, srcFormatInfo, srcWidth, srcHeight))
+    bool fillsEntireMip               = false;
+    gl::Texture *dstTexture           = context->getTexture({dstName});
+    gl::TextureTarget dstTargetPacked = gl::PackParam<gl::TextureTarget>(dstTarget);
+    const gl::Extents &dstExtents     = dstTexture->getExtents(dstTargetPacked, dstLevel);
+    // Some targets (e.g., GL_TEXTURE_CUBE_MAP, GL_RENDERBUFFER) are unsupported.
+    if (dstTargetPacked != gl::TextureTarget::InvalidEnum)
     {
-        return false;
+        fillsEntireMip = dstX == 0 && dstY == 0 && dstZ == 0 && srcWidth == dstExtents.width &&
+                         srcHeight == dstExtents.height && srcDepth == dstExtents.depth;
     }
 
-    if (!ValidateCompressedRegion(context, dstFormatInfo, dstWidth, dstHeight))
+    if (dstFormatInfo.compressed &&
+        (!fillsEntireMip ||
+         dstExtents.width > static_cast<int>(dstFormatInfo.compressedBlockWidth) ||
+         dstExtents.height > static_cast<int>(dstFormatInfo.compressedBlockHeight) ||
+         dstExtents.depth > static_cast<int>(dstFormatInfo.compressedBlockDepth)))
     {
-        return false;
+        if (!ValidateCompressedRegion(context, srcFormatInfo, srcWidth, srcHeight))
+        {
+            return false;
+        }
+
+        if (!ValidateCompressedRegion(context, dstFormatInfo, dstWidth, dstHeight))
+        {
+            return false;
+        }
     }
 
     // From EXT_copy_image: INVALID_OPERATION is generated if the source and destination formats
