@@ -4982,6 +4982,27 @@ bool ValidateQuerySurface(const ValidationContext *val,
             }
             break;
 
+        case EGL_BUFFER_AGE_EXT:
+        {
+            if (!display->getExtensions().bufferAgeEXT)
+            {
+                val->setError(EGL_BAD_ATTRIBUTE,
+                              "EGL_BUFFER_AGE_EXT cannot be used without "
+                              "EGL_EXT_buffer_age support.");
+                return false;
+            }
+            // Spec: Current thread's draw surfaace must be this surface.
+            gl::Context *context = val->eglThread->getContext();
+            if ((context == nullptr) || (context->getCurrentDrawSurface() != surface))
+            {
+                val->setError(EGL_BAD_SURFACE,
+                              "Surface must be current to current context. "
+                              "EGL_EXT_buffer_age.");
+                return false;
+            }
+        }
+        break;
+
         default:
             val->setError(EGL_BAD_ATTRIBUTE, "Invalid surface attribute.");
             return false;
