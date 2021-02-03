@@ -2963,14 +2963,15 @@ bool ValidateCopyImageSubDataTargetRegion(const Context *context,
 bool ValidateCompressedRegion(const Context *context,
                               const InternalFormat &formatInfo,
                               GLsizei width,
-                              GLsizei height)
+                              GLsizei height,
+                              bool fillsEntireMip)
 {
     if (formatInfo.compressed)
     {
         // INVALID_VALUE is generated if the image format is compressed and the dimensions of the
         // subregion fail to meet the alignment constraints of the format.
-        if ((width % formatInfo.compressedBlockWidth != 0) ||
-            (height % formatInfo.compressedBlockHeight != 0))
+        if (!fillsEntireMip && ((width % formatInfo.compressedBlockWidth != 0) ||
+                                (height % formatInfo.compressedBlockHeight != 0)))
         {
             context->validationError(GL_INVALID_VALUE, kInvalidCompressedRegionSize);
             return false;
@@ -3355,12 +3356,18 @@ bool ValidateCopyImageSubDataBase(const Context *context,
         return false;
     }
 
-    if (!ValidateCompressedRegion(context, srcFormatInfo, srcWidth, srcHeight))
+    gl::Texture *dstTexture           = context->getTexture({dstName});
+    gl::TextureTarget dstTargetPacked = gl::PackParam<gl::TextureTarget>(dstTarget);
+    const gl::Extents &dstExtents     = dstTexture->getExtents(dstTargetPacked, dstLevel);
+    bool fillsEntireMip = dstX == 0 && dstY == 0 && dstZ == 0 && srcWidth == dstExtents.width &&
+                          srcHeight == dstExtents.height && srcDepth == dstExtents.depth;
+
+    if (!ValidateCompressedRegion(context, srcFormatInfo, srcWidth, srcHeight, fillsEntireMip))
     {
         return false;
     }
 
-    if (!ValidateCompressedRegion(context, dstFormatInfo, dstWidth, dstHeight))
+    if (!ValidateCompressedRegion(context, dstFormatInfo, dstWidth, dstHeight, fillsEntireMip))
     {
         return false;
     }
