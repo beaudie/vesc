@@ -236,6 +236,7 @@ Error Surface::initialize(const Display *display)
 Error Surface::makeCurrent(const gl::Context *context)
 {
     ANGLE_TRY(mImplementation->makeCurrent(context));
+    mCurrentContext = context;
 
     mRefCount++;
     return NoError();
@@ -244,6 +245,7 @@ Error Surface::makeCurrent(const gl::Context *context)
 Error Surface::unMakeCurrent(const gl::Context *context)
 {
     ANGLE_TRY(mImplementation->unMakeCurrent(context));
+    mCurrentContext = nullptr;
     return releaseRef(context->getDisplay());
 }
 
@@ -584,6 +586,25 @@ GLuint Surface::getId() const
 {
     UNREACHABLE();
     return 0;
+}
+
+Error Surface::getBufferAge(EGLint *age) const
+{
+    // When EGL_BUFFER_PRESERVED, the previous frame contents are copied to
+    // current frame, so the buffer age is always 1.
+    if (mSwapBehavior == EGL_BUFFER_PRESERVED)
+    {
+        if (age != nullptr)
+        {
+            *age = 1;
+        }
+        return egl::NoError();
+    }
+    if (mCurrentContext == nullptr)
+    {
+        return egl::EglBadSurface();
+    }
+    return mImplementation->getBufferAge(mCurrentContext, age);
 }
 
 gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context,
