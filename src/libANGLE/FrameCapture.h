@@ -440,7 +440,10 @@ void CaptureCallToFrameCapture(CaptureFuncT captureFunc,
     CallCapture call = captureFunc(context->getState(), isCallValid, captureParams...);
 
     if (!isCallValid)
-        INFO() << "FrameCapture: Capturing invalid call to " << GetEntryPointName(call.entryPoint);
+    {
+        INFO() << "FrameCapture: Ignoring invalid call to " << GetEntryPointName(call.entryPoint);
+        return;
+    }
 
     frameCapture->captureCall(context, std::move(call));
 }
