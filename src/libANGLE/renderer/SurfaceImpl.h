@@ -109,6 +109,7 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
                                           EGLint numTimestamps,
                                           const EGLint *timestamps,
                                           EGLnsecsANDROID *values) const;
+    virtual EGLint getBufferAge() const;
 
   protected:
     const egl::SurfaceState &mState;
