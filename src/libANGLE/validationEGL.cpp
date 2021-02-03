@@ -4982,6 +4982,16 @@ bool ValidateQuerySurface(const ValidationContext *val,
             }
             break;
 
+        case EGL_BUFFER_AGE_EXT:
+            if (!display->getExtensions().bufferAgeEXT)
+            {
+                val->setError(EGL_BAD_ATTRIBUTE,
+                              "EGL_BUFFER_AGE_EXT cannot be used without "
+                              "EGL_EXT_buffer_age support.");
+                return false;
+            }
+            break;
+
         default:
             val->setError(EGL_BAD_ATTRIBUTE, "Invalid surface attribute.");
             return false;

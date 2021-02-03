@@ -17,7 +17,6 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Texture.h"
-#include "libANGLE/Thread.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/trace.h"
@@ -584,6 +583,26 @@ GLuint Surface::getId() const
 {
     UNREACHABLE();
     return 0;
+}
+
+Error Surface::getBufferAge(const gl::Context *context, EGLint *age) const
+{
+    // Spec: Current thread's draw surfaace must be this surface.
+    if ((context == nullptr) || (context->getCurrentDrawSurface() != this))
+    {
+        return egl::EglBadSurface();
+    }
+    // When EGL_BUFFER_PRESERVED, the previous frame contents are copied to
+    // current frame, so the buffer age is always 1.
+    if (mSwapBehavior == EGL_BUFFER_PRESERVED)
+    {
+        if (age != nullptr)
+        {
+            *age = 1;
+        }
+        return egl::NoError();
+    }
+    return mImplementation->getBufferAge(context, age);
 }
 
 gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context,
