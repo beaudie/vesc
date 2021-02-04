@@ -26,6 +26,6 @@ int main(int argc, char **argv)
 #endif
 
     angle::InitTestHarness(&argc, argv);
-    angle::TestSuite testSuite(&argc, argv);
+    angle::TestSuite testSuite(&argc, argv, angle::TestSuiteRunMode::Unspecified);
     return testSuite.run();
 }

@@ -993,7 +993,7 @@ ANGLE_MAYBE_UNUSED std::set<std::string> GetUniqueTestConfigs(
 
 TestSuiteRunMode DetermineTestSuiteRunMode(const std::vector<TestIdentifier> &testSet, int batchId)
 {
-#if defined(ANGLE_PLATFORM_ANDROID)
+#if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_FUCHSIA)
     // TODO: Run single config per process on Android. http://anglebug.com/5600
     return TestSuiteRunMode::SingleProcess;
 #else
@@ -1014,7 +1014,7 @@ TestSuiteRunMode DetermineTestSuiteRunMode(const std::vector<TestIdentifier> &te
     {
         return TestSuiteRunMode::MultiProcess;
     }
-#endif  // defined(ANGLE_PLATFORM_ANDROID)
+#endif  // defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_PLATFORM_FUCHSIA)
 }
 }  // namespace
 
@@ -1076,10 +1076,10 @@ ProcessInfo::ProcessInfo(ProcessInfo &&other)
     *this = std::move(other);
 }
 
-TestSuite::TestSuite(int *argc, char **argv)
+TestSuite::TestSuite(int *argc, char **argv, TestSuiteRunMode preferredRunMode)
     : mShardCount(-1),
       mShardIndex(-1),
-      mRunMode(TestSuiteRunMode::Unspecified),
+      mRunMode(preferredRunMode),
       mDebugTestGroups(false),
       mGTestListTests(false),
       mListTests(false),

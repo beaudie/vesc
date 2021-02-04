@@ -15,7 +15,8 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv);
 
 int main(int argc, char **argv)
 {
-    angle::TestSuite testSuite(&argc, argv);
+    // Prefer single-process run mode for now.
+    angle::TestSuite testSuite(&argc, argv, angle::TestSuiteRunMode::SingleProcess);
     ANGLEProcessPerfTestArgs(&argc, argv);
     return testSuite.run();
 }

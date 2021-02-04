@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 
     if (runTestSuite)
     {
-        angle::TestSuite testSuite(&argc, argv);
+        angle::TestSuite testSuite(&argc, argv, angle::TestSuiteRunMode::Unspecified);
         return testSuite.run();
     }
 

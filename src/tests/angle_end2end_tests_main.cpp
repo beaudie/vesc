@@ -26,7 +26,7 @@ const char *kSlowTests[] = {"GLSLTest.VerifyMaxVertexUniformVectors*"};
 
 int main(int argc, char **argv)
 {
-    angle::TestSuite testSuite(&argc, argv);
+    angle::TestSuite testSuite(&argc, argv, angle::TestSuiteRunMode::Unspecified);
     ANGLEProcessTestArgs(&argc, argv);
     RegisterContextCompatibilityTests();
     testSuite.registerSlowTests(kSlowTests, ArraySize(kSlowTests));

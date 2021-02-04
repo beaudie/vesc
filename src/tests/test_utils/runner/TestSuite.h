@@ -131,7 +131,7 @@ using TestQueue = std::queue<std::vector<TestIdentifier>>;
 class TestSuite
 {
   public:
-    TestSuite(int *argc, char **argv);
+    TestSuite(int *argc, char **argv, TestSuiteRunMode preferredRunMode);
     ~TestSuite();
 
     int run();

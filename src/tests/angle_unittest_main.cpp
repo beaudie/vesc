@@ -41,7 +41,7 @@ int main(int argc, char **argv)
         }
     }
 
-    angle::TestSuite testSuite(&argc, argv);
+    angle::TestSuite testSuite(&argc, argv, angle::TestSuiteRunMode::Unspecified);
     testing::AddGlobalTestEnvironment(new CompilerTestEnvironment());
     return testSuite.run();
 }
