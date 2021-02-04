@@ -460,16 +460,6 @@ egl::Error DisplayCGL::validateClientBuffer(const egl::Config *configuration,
     return egl::NoError();
 }
 
-std::string DisplayCGL::getVendorString() const
-{
-    return GetVendorString(mRenderer->getFunctions());
-}
-
-std::string DisplayCGL::getVersionString() const
-{
-    return GetVersionString(mRenderer->getFunctions());
-}
-
 CGLContextObj DisplayCGL::getCGLContext() const
 {
     return mContext;
