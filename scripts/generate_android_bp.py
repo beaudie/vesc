@@ -21,7 +21,8 @@ root_targets = [
     "//:libfeature_support",
 ]
 
-sdk_version = '28'
+sdk_version = 'current'
+min_sdk_version = '28'
 stl = 'libc++_static'
 
 abi_arm = 'arm'
@@ -208,19 +209,28 @@ def gn_deps_to_blueprint_deps(target_info, build_info):
     return static_libs, shared_libs, defaults, generated_headers, header_libs
 
 
-def gn_libs_to_blueprint_shared_libraries(target_info):
+def gn_libs_to_blueprint_libraries(target_info):
     lib_blockist = [
         'android_support',
         'unwind',
     ]
 
-    result = []
+    lib_static_only = [
+        'libbase_ndk',
+    ]
+
+    shared_libs = []
+    static_libs = []
     if 'libs' in target_info:
         for lib in target_info['libs']:
-            if lib not in lib_blockist:
-                android_lib = lib if '@' in lib else 'lib' + lib
-                result.append(android_lib)
-    return result
+            if lib in lib_blockist:
+                continue
+            android_lib = lib if '@' in lib else 'lib' + lib
+            if android_lib in lib_static_only:
+                static_libs.append(android_lib)
+            else:
+                shared_libs.append(android_lib)
+    return static_libs, shared_libs
 
 
 def gn_include_dirs_to_blueprint_include_dirs(target_info):
@@ -331,7 +341,10 @@ def library_target_to_blueprint(target, build_info):
 
         (bp['static_libs'], bp['shared_libs'], bp['defaults'], bp['generated_headers'],
          bp['header_libs']) = gn_deps_to_blueprint_deps(target_info, build_info[abi])
-        bp['shared_libs'] += gn_libs_to_blueprint_shared_libraries(target_info)
+
+        (bp_static_libs, bp_shared_libs) = gn_libs_to_blueprint_libraries(target_info)
+        bp['static_libs'] += bp_static_libs
+        bp['shared_libs'] += bp_shared_libs
 
         bp['local_include_dirs'] = gn_include_dirs_to_blueprint_include_dirs(target_info)
 
@@ -516,7 +529,7 @@ def main():
         {
             'name': 'ANGLE_java_defaults',
             'sdk_version': 'system_current',
-            'min_sdk_version': sdk_version,
+            'min_sdk_version': min_sdk_version,
             'compile_multilib': 'both',
             'use_embedded_native_libs': True,
             'jni_libs': [
@@ -541,7 +554,7 @@ def main():
         {
             'name': 'ANGLE_library',
             'sdk_version': 'system_current',
-            'min_sdk_version': sdk_version,
+            'min_sdk_version': min_sdk_version,
             'resource_dirs': ['src/android_system_settings/res',],
             'asset_dirs': ['src/android_system_settings/assets',],
             'aaptflags': [

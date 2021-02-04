@@ -10,6 +10,10 @@
 
 #include <stdlib.h>
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#include <android-base/properties.h>
+#endif
+
 namespace angle
 {
 std::string GetExecutableName()
@@ -49,28 +53,7 @@ std::string GetEnvironmentVarOrUnCachedAndroidProperty(const char *variableName,
                                                        const char *propertyName)
 {
 #if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 21
-    std::string sanitizedPropertyName = propertyName;
-    sanitizedPropertyName.erase(
-        std::remove(sanitizedPropertyName.begin(), sanitizedPropertyName.end(), '\''),
-        sanitizedPropertyName.end());
-
-    std::string command("getprop '");
-    command += sanitizedPropertyName;
-    command += "'";
-
-    // Run the command and open a I/O stream to read the value
-    constexpr int kStreamSize = 64;
-    char stream[kStreamSize]  = {};
-    FILE *pipe                = popen(command.c_str(), "r");
-    if (pipe != nullptr)
-    {
-        fgets(stream, kStreamSize, pipe);
-        pclose(pipe);
-    }
-
-    // Right strip white space
-    std::string value(stream);
-    value.erase(value.find_last_not_of(" \n\r\t") + 1);
+    std::string value = android::base::GetProperty(propertyName, "");
 
     // Set the environment variable with the value.
     SetEnvironmentVar(variableName, value.c_str());
