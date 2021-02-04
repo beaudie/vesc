@@ -597,6 +597,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         DIRTY_BIT_DEFAULT_ATTRIBS,
         // The pipeline has changed and needs to be recreated
         DIRTY_BIT_PIPELINE,
+
+        DIRTY_BIT_RENDER_PASS,
+
         // Pipeline needs to rebind because a new command buffer has been allocated, or UtilsVk has
         // changed the binding.  The pipeline itself doesn't need to be recreated.
         DIRTY_BIT_PIPELINE_BIND,
@@ -615,8 +618,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
-    using DirtyBitHandler = angle::Result (ContextVk::*)(const gl::Context *,
-                                                         vk::CommandBuffer *commandBuffer);
+    using DirtyBitHandler = angle::Result (ContextVk::*)();
 
     struct DriverUniformsDescriptorSet
     {
@@ -693,42 +695,36 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             GLsizei instanceCount,
                             gl::DrawElementsType indexTypeOrInvalid,
                             const void *indices,
-                            DirtyBits dirtyBitMask,
-                            vk::CommandBuffer **commandBufferOut);
+                            DirtyBits dirtyBitMask);
 
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLsizei indexCount,
                                    GLsizei instanceCount,
                                    gl::DrawElementsType indexType,
-                                   const void *indices,
-                                   vk::CommandBuffer **commandBufferOut);
+                                   const void *indices);
     angle::Result setupIndirectDraw(const gl::Context *context,
                                     gl::PrimitiveMode mode,
                                     DirtyBits dirtyBitMask,
                                     vk::BufferHelper *indirectBuffer,
-                                    VkDeviceSize indirectBufferOffset,
-                                    vk::CommandBuffer **commandBufferOut);
+                                    VkDeviceSize indirectBufferOffset);
     angle::Result setupIndexedIndirectDraw(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            gl::DrawElementsType indexType,
                                            vk::BufferHelper *indirectBuffer,
-                                           VkDeviceSize indirectBufferOffset,
-                                           vk::CommandBuffer **commandBufferOut);
+                                           VkDeviceSize indirectBufferOffset);
 
     angle::Result setupLineLoopIndexedIndirectDraw(const gl::Context *context,
                                                    gl::PrimitiveMode mode,
                                                    gl::DrawElementsType indexType,
                                                    vk::BufferHelper *srcIndirectBuf,
                                                    VkDeviceSize indirectBufferOffset,
-                                                   vk::CommandBuffer **commandBufferOut,
                                                    vk::BufferHelper **indirectBufferOut,
                                                    VkDeviceSize *indirectBufferOffsetOut);
     angle::Result setupLineLoopIndirectDraw(const gl::Context *context,
                                             gl::PrimitiveMode mode,
                                             vk::BufferHelper *indirectBuffer,
                                             VkDeviceSize indirectBufferOffset,
-                                            vk::CommandBuffer **commandBufferOut,
                                             vk::BufferHelper **indirectBufferOut,
                                             VkDeviceSize *indirectBufferOffsetOut);
 
@@ -738,9 +734,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                     GLsizei vertexOrIndexCount,
                                     gl::DrawElementsType indexTypeOrInvalid,
                                     const void *indices,
-                                    vk::CommandBuffer **commandBufferOut,
                                     uint32_t *numIndicesOut);
-    angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
+    angle::Result setupDispatch(const gl::Context *context);
 
     gl::Rectangle getCorrectedViewport(const gl::Rectangle &viewport) const;
     void updateViewport(FramebufferVk *framebufferVk,
@@ -757,8 +752,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateClipSpaceOrigin(const gl::State &glState);
 
     angle::Result updateActiveTextures(const gl::Context *context);
-    angle::Result updateActiveImages(const gl::Context *context,
-                                     vk::CommandBufferHelper *commandBufferHelper);
+    angle::Result updateActiveImages(vk::CommandBufferHelper *commandBufferHelper);
     angle::Result updateDefaultAttribute(size_t attribIndex);
 
     ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
@@ -781,58 +775,40 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void invalidateDriverUniforms();
 
     // Handlers for graphics pipeline dirty bits.
-    angle::Result handleDirtyGraphicsEventLog(const gl::Context *context,
-                                              vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsDefaultAttribs(const gl::Context *context,
-                                                    vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsPipeline(const gl::Context *context,
-                                              vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsPipelineBind(const gl::Context *context,
-                                                  vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTextures(const gl::Context *context,
-                                              vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsVertexBuffers(const gl::Context *context,
-                                                   vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsIndexBuffer(const gl::Context *context,
-                                                 vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsDriverUniforms(const gl::Context *context,
-                                                    vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsDriverUniformsBinding(const gl::Context *context,
-                                                           vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsShaderResources(const gl::Context *context,
-                                                     vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTransformFeedbackBuffersEmulation(
-        const gl::Context *context,
-        vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTransformFeedbackBuffersExtension(
-        const gl::Context *context,
-        vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTransformFeedbackResume(const gl::Context *context,
-                                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsEventLog();
+    angle::Result handleDirtyGraphicsDefaultAttribs();
+    angle::Result handleDirtyGraphicsPipeline();
+    angle::Result handleDirtyGraphicsRenderPass();
+    angle::Result handleDirtyGraphicsPipelineBind();
+    angle::Result handleDirtyGraphicsTextures();
+    angle::Result handleDirtyGraphicsVertexBuffers();
+    angle::Result handleDirtyGraphicsIndexBuffer();
+    angle::Result handleDirtyGraphicsDriverUniforms();
+    angle::Result handleDirtyGraphicsDriverUniformsBinding();
+    angle::Result handleDirtyGraphicsShaderResources();
+    angle::Result handleDirtyGraphicsTransformFeedbackBuffersEmulation();
+    angle::Result handleDirtyGraphicsTransformFeedbackBuffersExtension();
+    angle::Result handleDirtyGraphicsTransformFeedbackResume();
+    angle::Result handleDirtyGraphicsDescriptorSets();
 
     // Handlers for compute pipeline dirty bits.
-    angle::Result handleDirtyComputePipeline(const gl::Context *context,
-                                             vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyComputePipelineBind(const gl::Context *context,
-                                                 vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyComputeTextures(const gl::Context *context,
-                                             vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyComputeDriverUniforms(const gl::Context *context,
-                                                   vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyComputeDriverUniformsBinding(const gl::Context *context,
-                                                          vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyComputeShaderResources(const gl::Context *context,
-                                                    vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputeEventLog();
+    angle::Result handleDirtyComputePipeline();
+    angle::Result handleDirtyComputePipelineBind();
+    angle::Result handleDirtyComputeTextures();
+    angle::Result handleDirtyComputeDriverUniforms();
+    angle::Result handleDirtyComputeDriverUniformsBinding();
+    angle::Result handleDirtyComputeShaderResources();
+    angle::Result handleDirtyComputeDescriptorSets();
 
     // Common parts of the common dirty bit handlers.
+    angle::Result handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyTexturesImpl(vk::CommandBufferHelper *commandBufferHelper);
-    angle::Result handleDirtyShaderResourcesImpl(const gl::Context *context,
-                                                 vk::CommandBufferHelper *commandBufferHelper);
+    angle::Result handleDirtyShaderResourcesImpl(vk::CommandBufferHelper *commandBufferHelper);
     void handleDirtyDriverUniformsBindingImpl(vk::CommandBuffer *commandBuffer,
                                               VkPipelineBindPoint bindPoint,
                                               DriverUniformsDescriptorSet *driverUniforms);
-    angle::Result handleDirtyDescriptorSets(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyDescriptorSetsImpl(vk::CommandBuffer *commandBuffer);
     angle::Result allocateDriverUniforms(size_t driverUniformsSize,
                                          DriverUniformsDescriptorSet *driverUniforms,
                                          uint8_t **ptrOut,
@@ -935,6 +911,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     DirtyBits mIndexedDirtyBitsMask;
     DirtyBits mNewGraphicsCommandBufferDirtyBits;
     DirtyBits mNewComputeCommandBufferDirtyBits;
+
+    // Current graphics dirty bit iterator.  Used by a few handlers that need to setLaterBit().
+    DirtyBits::Iterator *mCurrentGraphicsDirtyBitsIterator;
 
     // Cached back-end objects.
     VertexArrayVk *mVertexArray;
