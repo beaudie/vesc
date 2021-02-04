@@ -28,6 +28,12 @@ using namespace err;
 
 bool ValidateBlendBarrier(const Context *context)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -36,6 +42,12 @@ bool ValidateBlendEquationSeparatei(const Context *context,
                                     GLenum modeRGB,
                                     GLenum modeAlpha)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     if (buf >= static_cast<GLuint>(context->getCaps().maxDrawBuffers))
     {
         context->validationError(GL_INVALID_VALUE, kExceedsMaxDrawBuffers);
@@ -53,6 +65,12 @@ bool ValidateBlendEquationSeparatei(const Context *context,
 
 bool ValidateBlendEquationi(const Context *context, GLuint buf, GLenum mode)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     if (buf >= static_cast<GLuint>(context->getCaps().maxDrawBuffers))
     {
         context->validationError(GL_INVALID_VALUE, kExceedsMaxDrawBuffers);
@@ -75,6 +93,12 @@ bool ValidateBlendFuncSeparatei(const Context *context,
                                 GLenum srcAlpha,
                                 GLenum dstAlpha)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     if (buf >= static_cast<GLuint>(context->getCaps().maxDrawBuffers))
     {
         context->validationError(GL_INVALID_VALUE, kExceedsMaxDrawBuffers);
@@ -92,6 +116,12 @@ bool ValidateBlendFuncSeparatei(const Context *context,
 
 bool ValidateBlendFunci(const Context *context, GLuint buf, GLenum src, GLenum dst)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     if (buf >= static_cast<GLuint>(context->getCaps().maxDrawBuffers))
     {
         context->validationError(GL_INVALID_VALUE, kExceedsMaxDrawBuffers);
@@ -114,6 +144,12 @@ bool ValidateColorMaski(const Context *context,
                         GLboolean b,
                         GLboolean a)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     if (index >= static_cast<GLuint>(context->getCaps().maxDrawBuffers))
     {
         context->validationError(GL_INVALID_VALUE, kIndexExceedsMaxDrawBuffer);
@@ -155,6 +191,12 @@ bool ValidateDebugMessageCallback(const Context *context,
                                   GLDEBUGPROC callback,
                                   const void *userParam)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -166,6 +208,12 @@ bool ValidateDebugMessageControl(const Context *context,
                                  const GLuint *ids,
                                  GLboolean enabled)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -177,11 +225,23 @@ bool ValidateDebugMessageInsert(const Context *context,
                                 GLsizei length,
                                 const GLchar *buf)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
 bool ValidateDisablei(const Context *context, GLenum target, GLuint index)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     switch (target)
     {
         case GL_BLEND:
@@ -205,6 +265,12 @@ bool ValidateDrawElementsBaseVertex(const Context *context,
                                     const void *indices,
                                     GLint basevertex)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return ValidateDrawElementsCommon(context, mode, count, type, indices, 1);
 }
 
@@ -216,6 +282,12 @@ bool ValidateDrawElementsInstancedBaseVertex(const Context *context,
                                              GLsizei instancecount,
                                              GLint basevertex)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return ValidateDrawElementsInstancedBase(context, mode, count, type, indices, instancecount);
 }
 
@@ -228,6 +300,13 @@ bool ValidateDrawRangeElementsBaseVertex(const Context *context,
                                          const void *indices,
                                          GLint basevertex)
 {
+
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     if (end < start)
     {
         context->validationError(GL_INVALID_VALUE, kInvalidElementRange);
@@ -250,6 +329,12 @@ bool ValidateDrawRangeElementsBaseVertex(const Context *context,
 
 bool ValidateEnablei(const Context *context, GLenum target, GLuint index)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     switch (target)
     {
         case GL_BLEND:
@@ -272,6 +357,12 @@ bool ValidateFramebufferTexture(const Context *context,
                                 TextureID texture,
                                 GLint level)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -285,11 +376,23 @@ bool ValidateGetDebugMessageLog(const Context *context,
                                 const GLsizei *lengths,
                                 const GLchar *messageLog)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
 bool ValidateGetGraphicsResetStatus(const Context *context)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -300,6 +403,12 @@ bool ValidateGetObjectLabel(const Context *context,
                             const GLsizei *length,
                             const GLchar *label)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -309,6 +418,12 @@ bool ValidateGetObjectPtrLabel(const Context *context,
                                const GLsizei *length,
                                const GLchar *label)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -355,6 +470,12 @@ bool ValidateGetSamplerParameterIiv(const Context *context,
                                     GLenum pname,
                                     const GLint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -363,6 +484,12 @@ bool ValidateGetSamplerParameterIuiv(const Context *context,
                                      GLenum pname,
                                      const GLuint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -371,6 +498,12 @@ bool ValidateGetTexParameterIiv(const Context *context,
                                 GLenum pname,
                                 const GLint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -379,6 +512,12 @@ bool ValidateGetTexParameterIuiv(const Context *context,
                                  GLenum pname,
                                  const GLuint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -388,6 +527,12 @@ bool ValidateGetnUniformfv(const Context *context,
                            GLsizei bufSize,
                            const GLfloat *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -397,6 +542,12 @@ bool ValidateGetnUniformiv(const Context *context,
                            GLsizei bufSize,
                            const GLint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -406,11 +557,23 @@ bool ValidateGetnUniformuiv(const Context *context,
                             GLsizei bufSize,
                             const GLuint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
 bool ValidateIsEnabledi(const Context *context, GLenum target, GLuint index)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     switch (target)
     {
         case GL_BLEND:
@@ -429,6 +592,12 @@ bool ValidateIsEnabledi(const Context *context, GLenum target, GLuint index)
 
 bool ValidateMinSampleShading(const Context *context, GLfloat value)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -438,6 +607,12 @@ bool ValidateObjectLabel(const Context *context,
                          GLsizei length,
                          const GLchar *label)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -446,16 +621,34 @@ bool ValidateObjectPtrLabel(const Context *context,
                             GLsizei length,
                             const GLchar *label)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
 bool ValidatePatchParameteri(const Context *context, GLenum pname, GLint value)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
 bool ValidatePopDebugGroup(const Context *context)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -469,6 +662,12 @@ bool ValidatePrimitiveBoundingBox(const Context *context,
                                   GLfloat maxZ,
                                   GLfloat maxW)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -478,6 +677,12 @@ bool ValidatePushDebugGroup(const Context *context,
                             GLsizei length,
                             const GLchar *message)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -491,6 +696,12 @@ bool ValidateReadnPixels(const Context *context,
                          GLsizei bufSize,
                          const void *data)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -499,6 +710,12 @@ bool ValidateSamplerParameterIiv(const Context *context,
                                  GLenum pname,
                                  const GLint *param)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -507,6 +724,12 @@ bool ValidateSamplerParameterIuiv(const Context *context,
                                   GLenum pname,
                                   const GLuint *param)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -545,6 +768,12 @@ bool ValidateTexParameterIiv(const Context *context,
                              GLenum pname,
                              const GLint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -553,6 +782,12 @@ bool ValidateTexParameterIuiv(const Context *context,
                               GLenum pname,
                               const GLuint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
@@ -565,6 +800,12 @@ bool ValidateTexStorage3DMultisample(const Context *context,
                                      GLsizei depth,
                                      GLboolean fixedsamplelocations)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return true;
 }
 
