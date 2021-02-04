@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "4e623a37bf7372631c7f222c1564eb4b",
+    "278d022f500f852027522c29753a6620",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "2b5d6505d6a8b6f3bbfbad2c8405a89d",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -9,6 +9,8 @@
     "83e8aa4663fa6130db0bff09fb915f36",
   "src/tests/restricted_traces/brawl_stars.tar.gz.sha1":
     "8b1cf8ebd8a1099b4d298bb3b446e8bd",
+  "src/tests/restricted_traces/bus_simulator_indonesia.tar.gz.sha1":
+    "0d9c9de640f997cec3aee06f6a38de89",
   "src/tests/restricted_traces/candy_crush_500.tar.gz.sha1":
     "b0772c8cf2d3d49e49fea9fe7cff0446",
   "src/tests/restricted_traces/clash_of_clans.tar.gz.sha1":
@@ -76,13 +78,13 @@
   "src/tests/restricted_traces/real_gangster_crime.tar.gz.sha1":
     "c85be329035a760edad673eb2ca7c3f1",
   "src/tests/restricted_traces/restricted_traces.json":
-    "7eed313e826257e73426cc78b07b2154",
+    "76a0e3fab72b184f9a311da7cfa0321b",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "2b4bde4e4aef3c2171735528b55a2604",
+    "33fefdc460a09306fc3d932c23770c17",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "3f936634243168c4d302292dd6120bc9",
+    "91944140b076e7ced75c9c384a63183c",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "0a26d879b694dcb092c1c924a2120e65",
+    "01cd1043e6e631b7256a62ee5b06ed8c",
   "src/tests/restricted_traces/rise_of_kingdoms.tar.gz.sha1":
     "d4618f857c44f0dfa642ae3af8f161d9",
   "src/tests/restricted_traces/saint_seiya_awakening.tar.gz.sha1":
