@@ -3081,7 +3081,7 @@ void Context::initRendererString()
 {
     std::ostringstream frontendRendererString;
     std::string vendorString(mDisplay->getImplementation()->getVendorString());
-    std::string rendererString(mImplementation->getRendererDescription());
+    std::string rendererString(mDisplay->getImplementation()->getRendererDescription());
     std::string versionString(mDisplay->getImplementation()->getVersionString());
     // Commas are used as a separator in ANGLE's renderer string, so remove commas from each
     // element.
