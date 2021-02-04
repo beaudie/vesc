@@ -61,6 +61,10 @@ class DisplayGL : public DisplayImpl
 
   private:
     virtual egl::Error makeCurrentSurfaceless(gl::Context *context);
+
+    std::string mRendererDescription;
+    std::string mVendorString;
+    std::string mVersionString;
 };
 
 }  // namespace rx
