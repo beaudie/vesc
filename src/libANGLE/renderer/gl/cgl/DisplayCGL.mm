@@ -653,6 +653,10 @@ egl::Error DisplayCGL::handleGPUSwitch()
             CGLSetCurrentContext(mContext);
             onStateChange(angle::SubjectMessage::SubjectChanged);
             mCurrentGPUID = gpuID;
+            // Dirty the cache of the GL strings since we are on a new driver
+            mRendererDescription = "";
+            mVendorString        = "";
+            mVersionString       = ""
         }
     }
 
