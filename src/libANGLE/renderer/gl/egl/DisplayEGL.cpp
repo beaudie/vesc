@@ -133,16 +133,6 @@ EGLSyncImpl *DisplayEGL::createSync(const egl::AttributeMap &attribs)
     return new SyncEGL(attribs, mEGL);
 }
 
-std::string DisplayEGL::getVendorString() const
-{
-    return GetVendorString(mRenderer->getFunctions());
-}
-
-std::string DisplayEGL::getVersionString() const
-{
-    return GetVersionString(mRenderer->getFunctions());
-}
-
 egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
                                          const egl::AttributeMap &eglAttributes,
                                          EGLContext *outContext,
