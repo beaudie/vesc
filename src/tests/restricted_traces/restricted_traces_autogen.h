@@ -70,6 +70,7 @@ enum class RestrictedTraceID
     fifa_mobile,
     free_fire,
     google_maps,
+    happy_color,
     hay_day,
     hearthstone,
     kartrider_rush,
