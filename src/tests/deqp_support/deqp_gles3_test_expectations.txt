@@ -501,8 +501,6 @@
 // Nexus 5x failures
 3308 NEXUS5X GLES : dEQP-GLES3.functional.attribute_location.bind_aliasing.cond* = FAIL
 3308 NEXUS5X GLES : dEQP-GLES3.functional.attribute_location.bind_aliasing.max_cond* = FAIL
-3308 NEXUS5X GLES : dEQP-GLES3.functional.polygon_offset.default_result_depth_clamp = FAIL
-3308 NEXUS5X GLES : dEQP-GLES3.functional.polygon_offset.fixed24_result_depth_clamp = FAIL
 3308 NEXUS5X GLES : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.3 = FAIL
 3308 NEXUS5X GLES : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.8 = FAIL
 3308 NEXUS5X GLES : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.10 = FAIL
