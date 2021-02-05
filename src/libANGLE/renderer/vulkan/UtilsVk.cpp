@@ -996,7 +996,7 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
         pipelineAndSerial->updateSerial(serial);
         commandBuffer->bindComputePipeline(pipelineAndSerial->get());
 
-        contextVk->invalidateComputePipeline();
+        contextVk->invalidateComputePipelineBinding();
     }
     else
     {
@@ -1017,7 +1017,7 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
         helper->updateSerial(serial);
         commandBuffer->bindGraphicsPipeline(helper->getPipeline());
 
-        contextVk->invalidateGraphicsPipeline();
+        contextVk->invalidateGraphicsPipelineBinding();
     }
 
     if (descriptorSet != VK_NULL_HANDLE)
