@@ -80,12 +80,13 @@ diag.txt
 ipch
 lib/*
 out
+output.json
 patches-*
 Release/
 Release_ARM/
 Release_Win32/
 Release_x64/
-TestResults.qpa
+TestResults*.qpa
 .idea/
 
 # Any temporary files will confuse code generation.
