@@ -348,10 +348,13 @@ TracePerfTest::TracePerfTest()
         addExtensionPrerequisite("GL_OES_EGL_image_external");
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
-
-    if (param.testID == RestrictedTraceID::rise_of_kingdoms)
+    
+    if (param.testID == RestrictedTraceID::happy_color)
     {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
+        if (IsWindows() && IsAMD() && param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+        {
+            mSkipTest = true;
+        }
     }
 
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
