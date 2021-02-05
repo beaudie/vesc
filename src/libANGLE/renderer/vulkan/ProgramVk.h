@@ -105,23 +105,26 @@ class ProgramVk : public ProgramImpl
 
     angle::Result updateUniforms(ContextVk *contextVk);
 
+    void setAllDefaultUniformsDirty(ContextVk *contextVk);
     bool dirtyUniforms() const { return mDefaultUniformBlocksDirty.any(); }
     bool isShaderUniformDirty(gl::ShaderType shaderType) const
     {
         return mDefaultUniformBlocksDirty[shaderType];
     }
-    void setShaderUniformDirtyBit(gl::ShaderType shaderType)
+    void setShaderUniformDirtyBit(ContextVk *contextVk, gl::ShaderType shaderType)
     {
         if (!mDefaultUniformBlocks[shaderType].uniformData.empty())
         {
             mDefaultUniformBlocksDirty.set(shaderType);
         }
+
+        contextVk->invalidateDefaultUniforms();
     }
     void clearShaderUniformDirtyBit(gl::ShaderType shaderType)
     {
         mDefaultUniformBlocksDirty.reset(shaderType);
     }
-    void onProgramBind();
+    void onProgramBind(ContextVk *contextVk);
 
     // Used in testing only.
     vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t poolIndex)
@@ -214,8 +217,6 @@ class ProgramVk : public ProgramImpl
 
         return angle::Result::Continue;
     }
-
-    void setAllDefaultUniformsDirty();
 
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;

@@ -808,22 +808,22 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
-void ProgramVk::setAllDefaultUniformsDirty()
+void ProgramVk::setAllDefaultUniformsDirty(ContextVk *contextVk)
 {
     const gl::ProgramExecutable &glExecutable = mState.getExecutable();
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
-        setShaderUniformDirtyBit(shaderType);
+        setShaderUniformDirtyBit(contextVk, shaderType);
     }
 }
 
-void ProgramVk::onProgramBind()
+void ProgramVk::onProgramBind(ContextVk *contextVk)
 {
     // Because all programs share default uniform buffers, when we switch programs, we have to
     // re-update all uniform data. We could do more tracking to avoid update if the context's
     // current uniform buffer is still the same buffer we last time used and buffer has not been
     // recycled. But statistics gathered on gfxbench shows that app always update uniform data on
     // program bind anyway, so not really worth it to add more tracking logic here.
-    setAllDefaultUniformsDirty();
+    setAllDefaultUniformsDirty(contextVk);
 }
 }  // namespace rx
