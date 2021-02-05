@@ -77,6 +77,7 @@ ProgramExecutable::ProgramExecutable()
       mDefaultUniformRange(0, 0),
       mSamplerUniformRange(0, 0),
       mImageUniformRange(0, 0),
+      mFragmentInoutRange(0, 0),
       mPipelineHasGraphicsUniformBuffers(false),
       mPipelineHasComputeUniformBuffers(false),
       mPipelineHasGraphicsStorageBuffers(false),
@@ -137,6 +138,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mImageUniformRange(other.mImageUniformRange),
       mComputeShaderStorageBlocks(other.mComputeShaderStorageBlocks),
       mGraphicsShaderStorageBlocks(other.mGraphicsShaderStorageBlocks),
+      mFragmentInoutRange(other.mFragmentInoutRange),
       mPipelineHasGraphicsUniformBuffers(other.mPipelineHasGraphicsUniformBuffers),
       mPipelineHasComputeUniformBuffers(other.mPipelineHasComputeUniformBuffers),
       mPipelineHasGraphicsStorageBuffers(other.mPipelineHasGraphicsStorageBuffers),
@@ -220,6 +222,10 @@ void ProgramExecutable::load(gl::BinaryInputStream *stream)
     mAttributesMask            = gl::AttributesMask(stream->readInt<uint32_t>());
     mActiveAttribLocationsMask = gl::AttributesMask(stream->readInt<uint32_t>());
     mMaxActiveAttribLocation   = stream->readInt<unsigned int>();
+
+    unsigned int fragmentInoutRangeLow  = stream->readInt<uint32_t>();
+    unsigned int fragmentInoutRangeHigh = stream->readInt<uint32_t>();
+    mFragmentInoutRange                 = RangeUI(fragmentInoutRangeLow, fragmentInoutRangeHigh);
 
     mLinkedGraphicsShaderStages = ShaderBitSet(stream->readInt<uint8_t>());
     mLinkedComputeShaderStages  = ShaderBitSet(stream->readInt<uint8_t>());
@@ -420,6 +426,9 @@ void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
     stream->writeInt(static_cast<uint32_t>(mAttributesMask.to_ulong()));
     stream->writeInt(static_cast<uint32_t>(mActiveAttribLocationsMask.to_ulong()));
     stream->writeInt(mMaxActiveAttribLocation);
+
+    stream->writeInt(mFragmentInoutRange.low());
+    stream->writeInt(mFragmentInoutRange.high());
 
     stream->writeInt(mLinkedGraphicsShaderStages.bits());
     stream->writeInt(mLinkedComputeShaderStages.bits());
@@ -643,6 +652,11 @@ bool ProgramExecutable::hasGraphicsImages() const
 bool ProgramExecutable::hasComputeImages() const
 {
     return !mComputeImageBindings.empty() || mPipelineHasComputeImages;
+}
+
+bool ProgramExecutable::usesFramebufferFetch() const
+{
+    return (mFragmentInoutRange.length() > 0);
 }
 
 GLuint ProgramExecutable::getUniformIndexFromImageIndex(GLuint imageIndex) const
