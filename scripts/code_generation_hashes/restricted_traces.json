@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "a385235543c74efe5e629464c6c21410",
+    "8139af5bc038b3cbfb66a22c00a9e6c1",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
     "2b5d6505d6a8b6f3bbfbad2c8405a89d",
   "src/tests/restricted_traces/arena_of_valor.tar.gz.sha1":
@@ -70,17 +70,19 @@
   "src/tests/restricted_traces/real_gangster_crime.tar.gz.sha1":
     "c85be329035a760edad673eb2ca7c3f1",
   "src/tests/restricted_traces/restricted_traces.json":
-    "919e86f84cf4a7fb55b3707a602137e4",
+    "fb2bb1a71a6f6f7ab3c4d3684565c0d4",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "86eabb91447341145432697cc831a1bd",
+    "ca0c099a40b28321730de0492d68ea9f",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "8a7361dc9ad4e04fa9adf0f47025624a",
+    "f3310bc49a353c5bd276ceaee074537b",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "2ea8f1924bca98c57f36f2494fc4c3ea",
+    "3c2993dbca6a2b7f101b15d586be1dcb",
   "src/tests/restricted_traces/saint_seiya_awakening.tar.gz.sha1":
     "c9cde6bdfd9096a44d5f03d905a45a4f",
   "src/tests/restricted_traces/shadow_fight_2.tar.gz.sha1":
     "f8490221b74d0186b86a3d9e2b37b97d",
+  "src/tests/restricted_traces/sniper_3d.tar.gz.sha1":
+    "1901148bf50860b68778ffb077c72406",
   "src/tests/restricted_traces/subway_surfers.tar.gz.sha1":
     "647775e4cd6bc9969b69463c2ad99a39",
   "src/tests/restricted_traces/temple_run_2.tar.gz.sha1":
