@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/FramebufferImpl.h"
 #include "libANGLE/renderer/RenderTargetCache.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
@@ -138,7 +139,8 @@ class FramebufferVk : public FramebufferImpl
 
     angle::Result startNewRenderPass(ContextVk *contextVk,
                                      const gl::Rectangle &scissoredRenderArea,
-                                     vk::CommandBuffer **commandBufferOut);
+                                     vk::CommandBuffer **commandBufferOut,
+                                     ContextVk::DirtyBits::Iterator *dirtyBitsIterator);
 
     RenderTargetVk *getFirstRenderTarget() const;
     GLint getSamples() const;
