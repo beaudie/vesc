@@ -408,6 +408,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE);
+    mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_UNIFORMS);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
@@ -420,6 +421,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     }
 
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE);
+    mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_UNIFORMS);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -429,6 +431,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DEFAULT_ATTRIBS] =
         &ContextVk::handleDirtyGraphicsDefaultAttribs;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE] = &ContextVk::handleDirtyGraphicsPipeline;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_UNIFORMS] = &ContextVk::handleDirtyGraphicsUniforms;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyGraphicsTextures;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VERTEX_BUFFERS] =
         &ContextVk::handleDirtyGraphicsVertexBuffers;
@@ -458,6 +461,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mComputeDirtyBitHandlers[DIRTY_BIT_EVENT_LOG] = &ContextVk::handleDirtyGraphicsEventLog;
     mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE]  = &ContextVk::handleDirtyComputePipeline;
+    mComputeDirtyBitHandlers[DIRTY_BIT_UNIFORMS]  = &ContextVk::handleDirtyComputeUniforms;
     mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES]  = &ContextVk::handleDirtyComputeTextures;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] =
         &ContextVk::handleDirtyComputeDriverUniforms;
@@ -809,14 +813,10 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // function
     ScopedDescriptorSetUpdates descriptorSetUpdates(this);
 
-    if (mProgram && mProgram->dirtyUniforms())
+    if ((mProgram && mProgram->dirtyUniforms()) ||
+        (mProgramPipeline && mProgramPipeline->dirtyUniforms(getState())))
     {
-        ANGLE_TRY(mProgram->updateUniforms(this));
-        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
-    }
-    else if (mProgramPipeline && mProgramPipeline->dirtyUniforms(getState()))
-    {
-        ANGLE_TRY(mProgramPipeline->updateUniforms(this));
+        mGraphicsDirtyBits.set(DIRTY_BIT_UNIFORMS);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
@@ -1208,6 +1208,32 @@ angle::Result ContextVk::handleDirtyComputePipeline(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+ANGLE_INLINE angle::Result ContextVk::handleDirtyUniformsImpl(
+    vk::CommandBufferHelper *commandBufferHelper)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasDefaultUniforms())
+    {
+        if (mProgram)
+        {
+            mProgram->setAllDefaultUniformsDirty(this);
+            ANGLE_TRY(mProgram->updateUniforms(this));
+            ASSERT(mGraphicsDirtyBits.test(DIRTY_BIT_DESCRIPTOR_SETS));
+        }
+        else if (mProgramPipeline)
+        {
+            mProgramPipeline->setAllDefaultUniformsDirty(this);
+            ANGLE_TRY(mProgramPipeline->updateUniforms(this));
+            mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+            ASSERT(mGraphicsDirtyBits.test(DIRTY_BIT_DESCRIPTOR_SETS));
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     vk::CommandBufferHelper *commandBufferHelper)
 {
@@ -1306,10 +1332,22 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::handleDirtyGraphicsUniforms(const gl::Context *context,
+                                                     vk::CommandBuffer *commandBuffer)
+{
+    return handleDirtyUniformsImpl(mRenderPassCommands);
+}
+
 angle::Result ContextVk::handleDirtyGraphicsTextures(const gl::Context *context,
                                                      vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyTexturesImpl(mRenderPassCommands);
+}
+
+angle::Result ContextVk::handleDirtyComputeUniforms(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer)
+{
+    return handleDirtyUniformsImpl(mOutsideRenderPassCommands);
 }
 
 angle::Result ContextVk::handleDirtyComputeTextures(const gl::Context *context,
@@ -2738,7 +2776,7 @@ void ContextVk::invalidateProgramBindingHelper(const gl::State &glState)
 
     if (mProgram)
     {
-        mProgram->onProgramBind();
+        mProgram->onProgramBind(this);
     }
     else if (mProgramPipeline)
     {
@@ -4210,6 +4248,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
         // and handleDirtyGraphicsPipeline().
         mCurrentGraphicsPipeline = nullptr;
+        mGraphicsDirtyBits.set(DIRTY_BIT_UNIFORMS);
+        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
     return angle::Result::Continue;

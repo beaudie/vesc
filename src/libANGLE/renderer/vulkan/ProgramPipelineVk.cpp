@@ -149,7 +149,7 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
     if (!defaultUniformStorage->allocateFromCurrentBuffer(requiredSpace, &bufferData,
                                                           &bufferOffset))
     {
-        setAllDefaultUniformsDirty(contextVk->getState());
+        setAllDefaultUniformsDirty(contextVk);
 
         requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, glState, &offsets);
         ANGLE_TRY(defaultUniformStorage->allocate(contextVk, requiredSpace, &bufferData, nullptr,
@@ -238,21 +238,22 @@ bool ProgramPipelineVk::dirtyUniforms(const gl::State &glState)
     return false;
 }
 
-void ProgramPipelineVk::setAllDefaultUniformsDirty(const gl::State &glState)
+void ProgramPipelineVk::setAllDefaultUniformsDirty(ContextVk *contextVk)
 {
+    const gl::State &glState                  = contextVk->getState();
     const gl::ProgramExecutable &glExecutable = *glState.getProgramExecutable();
 
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
         ProgramVk *programVk = getShaderProgram(glState, shaderType);
         ASSERT(programVk);
-        programVk->setShaderUniformDirtyBit(shaderType);
+        programVk->setShaderUniformDirtyBit(contextVk, shaderType);
     }
 }
 
 void ProgramPipelineVk::onProgramBind(ContextVk *contextVk)
 {
-    setAllDefaultUniformsDirty(contextVk->getState());
+    setAllDefaultUniformsDirty(contextVk);
 }
 
 }  // namespace rx
