@@ -301,8 +301,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     ANGLE_INLINE void invalidateVertexAndIndexBuffers()
     {
-        mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
-        mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+        mGraphicsDirtyBits |= DirtyBits{DIRTY_BIT_VERTEX_BUFFERS, DIRTY_BIT_INDEX_BUFFER};
     }
 
     angle::Result onVertexBufferChange(const vk::BufferHelper *vertexBuffer);
@@ -766,8 +765,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     ANGLE_INLINE void invalidateCurrentComputePipeline()
     {
-        mComputeDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
-        mComputeDirtyBits.set(DIRTY_BIT_PIPELINE_BINDING);
+        mComputeDirtyBits |= DirtyBits{DIRTY_BIT_PIPELINE_DESC, DIRTY_BIT_PIPELINE_BINDING};
         mCurrentComputePipeline = nullptr;
     }
 
