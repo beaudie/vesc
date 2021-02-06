@@ -907,9 +907,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     DirtyBits mNewGraphicsCommandBufferDirtyBits;
     DirtyBits mNewComputeCommandBufferDirtyBits;
 
-    // Current graphics dirty bit iterator.  Used by a few handlers that need to setLaterBit().
-    DirtyBits::Iterator *mCurrentGraphicsDirtyBitsIterator;
-
     // Cached back-end objects.
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
