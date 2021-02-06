@@ -363,7 +363,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentRotationDrawFramebuffer(SurfaceRotation::Identity),
       mCurrentRotationReadFramebuffer(SurfaceRotation::Identity),
       mActiveRenderPassQueries{},
-      mCurrentGraphicsDirtyBitsIterator(nullptr),
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
@@ -822,28 +821,36 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    // If the render pass needs to be recreated, close it before processing dirty bits.  This
-    // operation may add many dirty bits.
-    if (mRenderPassCommandBuffer == nullptr)
+    constexpr DirtyBits kPreRenderPassDirtyBits{DIRTY_BIT_DEFAULT_ATTRIBS, DIRTY_BIT_PIPELINE,
+                                                DIRTY_BIT_RENDER_PASS};
+    dirtyBits &= kPreRenderPassDirtyBits;
+
+    // Flush dirty bits leading to render pass creation first.
+    for (size_t dirtyBit : dirtyBits)
     {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
+        ASSERT(mGraphicsDirtyBitHandlers[dirtyBit]);
+        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])());
     }
-
-    // Flush any relevant dirty bits.
-    DirtyBits::Iterator dirtyBitIter  = dirtyBits.begin();
-    mCurrentGraphicsDirtyBitsIterator = &dirtyBitIter;
-
-    for (; dirtyBitIter != dirtyBits.end(); ++dirtyBitIter)
-    {
-        ASSERT(mGraphicsDirtyBitHandlers[*dirtyBitIter]);
-        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[*dirtyBitIter])());
-    }
-
-    mCurrentGraphicsDirtyBitsIterator = nullptr;
-
-    mGraphicsDirtyBits &= ~dirtyBitMask;
 
     // Render pass must be always available at this point.
+    ASSERT(mRenderPassCommandBuffer);
+
+    // Make sure to pick up any dirty bits that were added by the previous handlers.
+    dirtyBits = mGraphicsDirtyBits & dirtyBitMask & ~kPreRenderPassDirtyBits;
+    mGraphicsDirtyBits &= ~dirtyBitMask;
+
+    // Flush dirty bits that record commands in the render pass.  These shouldn't set any new dirty
+    // bits.
+    for (size_t dirtyBit : dirtyBits)
+    {
+        ASSERT(mGraphicsDirtyBitHandlers[dirtyBit]);
+        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])());
+    }
+
+    // Make sure no new dirty bits are set.
+    ASSERT((mGraphicsDirtyBits & dirtyBitMask).none());
+
+    // Render pass not have been invalidated.
     ASSERT(mRenderPassCommandBuffer);
 
     return angle::Result::Continue;
@@ -1197,22 +1204,13 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline()
     pauseTransformFeedbackIfStarted({});
 
     // The pipeline needs to rebind because it's changed.
-    if (mCurrentGraphicsDirtyBitsIterator)
-    {
-        mCurrentGraphicsDirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BIND);
-    }
-    else
-    {
-        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
-    }
+    mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_BIND);
 
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyGraphicsRenderPass()
 {
-    ASSERT(mRenderPassCommandBuffer == nullptr);
-
     gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
     return startRenderPass(scissoredRenderArea, nullptr);
 }
@@ -4670,10 +4668,9 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 {
     ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
 
-    if (mCurrentGraphicsDirtyBitsIterator == nullptr)
-    {
-        mGraphicsDirtyBits.reset(DIRTY_BIT_RENDER_PASS);
-    }
+    // Make sure the render pass is not restarted if it is started by UtilsVk (as opposed to
+    // setupDraw(), which clears this bit automatically).
+    mGraphicsDirtyBits.reset(DIRTY_BIT_RENDER_PASS);
 
     ANGLE_TRY(resumeRenderPassQueriesIfActive());
 
@@ -4798,7 +4795,6 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
         ANGLE_TRY(flushImpl(nullptr));
     }
 
-    ASSERT(mCurrentGraphicsDirtyBitsIterator == nullptr);
     mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
 
     // Restart at subpass 0.
