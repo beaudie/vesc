@@ -269,6 +269,92 @@ TEST_P(FramebufferFetchNonCoherentES31, MultipleRenderTarget)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// Testing EXT_shader_framebuffer_fetch_non_coherent with multiple render target using inout array
+TEST_P(FramebufferFetchNonCoherentES31, MultipleRenderTargetWithInoutArray)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+
+    constexpr char kVS[] =
+        "#version 310 es\n"
+        "in highp vec4 a_position;\n"
+        "\n"
+        "void main (void)\n"
+        "{\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require\n"
+        "layout(noncoherent, location = 0) inout highp vec4 o_color[4];\n"
+        "uniform highp vec4 u_color;\n"
+        "\n"
+        "void main (void)\n"
+        "{\n"
+        "    o_color[0] += u_color;\n"
+        "    o_color[1] += u_color;\n"
+        "    o_color[2] += u_color;\n"
+        "    o_color[3] += u_color;\n"
+        "}\n";
+
+    GLProgram program;
+    program.makeRaster(kVS, kFS);
+    glUseProgram(program);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    std::vector<GLColor> color0(kViewportWidth * kViewportHeight, GLColor::black);
+    std::vector<GLColor> color1(kViewportWidth * kViewportHeight, GLColor::green);
+    std::vector<GLColor> color2(kViewportWidth * kViewportHeight, GLColor::blue);
+    std::vector<GLColor> color3(kViewportWidth * kViewportHeight, GLColor::cyan);
+    GLTexture colorBufferTex[kMaxColorBuffer];
+    GLenum colorAttachments[kMaxColorBuffer] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1,
+                                                GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color0.data());
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[1]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color1.data());
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[2]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color2.data());
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[3]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color3.data());
+    glBindTexture(GL_TEXTURE_2D, 0);
+    for (unsigned int i = 0; i < kMaxColorBuffer; i++)
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, colorAttachments[i], GL_TEXTURE_2D,
+                               colorBufferTex[i], 0);
+    }
+    glDrawBuffers(kMaxColorBuffer, &colorAttachments[0]);
+
+    ASSERT_GL_NO_ERROR();
+
+    float color[4]      = {1.0f, 0.0f, 0.0f, 1.0f};
+    GLint colorLocation = glGetUniformLocation(program, "u_color");
+    glUniform4fv(colorLocation, 1, color);
+
+    GLint positionLocation = glGetAttribLocation(program, "a_position");
+    render(positionLocation, GL_TRUE);
+
+    ASSERT_GL_NO_ERROR();
+
+    glReadBuffer(colorAttachments[0]);
+    EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::red);
+    glReadBuffer(colorAttachments[1]);
+    EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::yellow);
+    glReadBuffer(colorAttachments[2]);
+    EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::magenta);
+    glReadBuffer(colorAttachments[3]);
+    EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::white);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 // Testing EXT_shader_framebuffer_fetch_non_coherent with multiple draw
 TEST_P(FramebufferFetchNonCoherentES31, MultipleDraw)
 {
@@ -1123,6 +1209,165 @@ TEST_P(FramebufferFetchNonCoherentES31, ProgramPipeline)
     ASSERT_GL_NO_ERROR();
 
     EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::yellow);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+TEST_P(FramebufferFetchNonCoherentES31, UniformUsageCombinations)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+
+    constexpr char kVS[] =
+        "#version 310 es\n"
+        "in highp vec4 a_position;\n"
+        "out highp vec2 texCoord;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = a_position;\n"
+        "   texCoord = (a_position.xy * 0.5) + 0.5;\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require\n"
+        "\n"
+        "layout(binding=0, offset=0) uniform atomic_uint atDiff;\n"
+        "uniform sampler2D tex;\n"
+        "layout(noncoherent, location = 0) inout highp vec4 o_color[4];\n"
+        "\n"
+        "in highp vec2 texCoord;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "   highp vec4 texColor = texture(tex, texCoord);\n"
+        "\n"
+        "   if (texColor != o_color[0])\n"
+        "   {\n"
+        "       atomicCounterIncrement(atDiff);\n"
+        "       o_color[0] = texColor;\n"
+        "   }\n"
+        "   else\n"
+        "   {\n"
+        "       if (atomicCounter(atDiff) > 0u)\n"
+        "       {\n"
+        "          atomicCounterDecrement(atDiff);\n"
+        "       }\n"
+        "   }\n"
+        "\n"
+        "   if (texColor != o_color[1])\n"
+        "   {\n"
+        "       atomicCounterIncrement(atDiff);\n"
+        "       o_color[1] = texColor;\n"
+        "   }\n"
+        "   else\n"
+        "   {\n"
+        "       if (atomicCounter(atDiff) > 0u)\n"
+        "       {\n"
+        "          atomicCounterDecrement(atDiff);\n"
+        "       }\n"
+        "   }\n"
+        "\n"
+        "   if (texColor != o_color[2])\n"
+        "   {\n"
+        "       atomicCounterIncrement(atDiff);\n"
+        "       o_color[2] = texColor;\n"
+        "   }\n"
+        "   else\n"
+        "   {\n"
+        "       if (atomicCounter(atDiff) > 0u)\n"
+        "       {\n"
+        "          atomicCounterDecrement(atDiff);\n"
+        "       }\n"
+        "   }\n"
+        "\n"
+        "   if (texColor != o_color[3])\n"
+        "   {\n"
+        "       atomicCounterIncrement(atDiff);\n"
+        "       o_color[3] = texColor;\n"
+        "   }\n"
+        "   else\n"
+        "   {\n"
+        "       if (atomicCounter(atDiff) > 0u)\n"
+        "       {\n"
+        "          atomicCounterDecrement(atDiff);\n"
+        "       }\n"
+        "   }\n"
+        "}\n";
+
+    GLProgram program;
+    program.makeRaster(kVS, kFS);
+    glUseProgram(program);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    std::vector<GLColor> color0(kViewportWidth * kViewportHeight, GLColor::cyan);
+    std::vector<GLColor> color1(kViewportWidth * kViewportHeight, GLColor::green);
+    std::vector<GLColor> color2(kViewportWidth * kViewportHeight, GLColor::blue);
+    std::vector<GLColor> color3(kViewportWidth * kViewportHeight, GLColor::black);
+    GLTexture colorBufferTex[kMaxColorBuffer];
+    GLenum colorAttachments[kMaxColorBuffer] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1,
+                                                GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color0.data());
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[1]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color1.data());
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[2]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color2.data());
+    glBindTexture(GL_TEXTURE_2D, colorBufferTex[3]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, color3.data());
+    glBindTexture(GL_TEXTURE_2D, 0);
+    for (unsigned int i = 0; i < kMaxColorBuffer; i++)
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, colorAttachments[i], GL_TEXTURE_2D,
+                               colorBufferTex[i], 0);
+    }
+    glDrawBuffers(kMaxColorBuffer, &colorAttachments[0]);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLBuffer atomicBuffer;
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicBuffer);
+    glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(GLuint), NULL, GL_DYNAMIC_DRAW);
+
+    // Reset atomic counter buffer
+    GLuint *userCounters;
+    userCounters = static_cast<GLuint *>(glMapBufferRange(
+        GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint),
+        GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT));
+    memset(userCounters, 0, sizeof(GLuint));
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, atomicBuffer);
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
+
+    float color[4]      = {1.0f, 0.0f, 0.0f, 1.0f};
+    GLint colorLocation = glGetUniformLocation(program, "u_color");
+    glUniform4fv(colorLocation, 1, color);
+
+    GLint positionLocation = glGetAttribLocation(program, "a_position");
+    render(positionLocation, GL_TRUE);
+
+    ASSERT_GL_NO_ERROR();
+
+    for (unsigned int i = 0; i < kMaxColorBuffer; i++)
+    {
+        glReadBuffer(colorAttachments[i]);
+        EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::black);
+    }
+
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicBuffer);
+    userCounters = static_cast<GLuint *>(
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), GL_MAP_READ_BIT));
+    EXPECT_EQ(*userCounters, kViewportWidth * kViewportHeight * 2);
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, 0);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

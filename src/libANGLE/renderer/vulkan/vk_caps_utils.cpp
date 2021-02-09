@@ -296,7 +296,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.bufferStorageEXT = true;
 
     // Enable GL_EXT_shader_framebuffer_fetch_non_coherent
-    mNativeExtensions.shaderFramebufferFetchNonCoherentEXT = false;
+    mNativeExtensions.shaderFramebufferFetchNonCoherentEXT = true;
 
     // To ensure that ETC2/EAC formats are enabled only on hardware that supports them natively,
     // this flag is not set by the function above and must be set explicitly. It exposes
