@@ -186,6 +186,9 @@
 5557 VULKAN : dEQP-GLES31.functional.tessellation.shader_input_output.barrier = FAIL
 5557 VULKAN : dEQP-GLES31.functional.tessellation.shader_input_output.gl_position_tcs_to_tes = FAIL
 
+// Primitive bounding box not supported
+3576 VULKAN : dEQP-GLES31.functional.primitive_bounding_box.* = FAIL
+
 ////
 //// AMD Vulkan expectations
 ////
