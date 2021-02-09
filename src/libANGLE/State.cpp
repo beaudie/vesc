@@ -1726,6 +1726,9 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
 
     if (mDrawFramebuffer)
     {
+        mDrawFramebuffer->setWriteControlMode(getFramebufferSRGB() ? SrgbWriteControlMode::Default
+                                                                   : SrgbWriteControlMode::Linear);
+
         if (mDrawFramebuffer->hasAnyDirtyBit())
         {
             mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
@@ -2270,7 +2273,8 @@ void State::setFramebufferSRGB(bool sRGB)
     if (mFramebufferSRGB != sRGB)
     {
         mFramebufferSRGB = sRGB;
-        mDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_SRGB);
+        mDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE);
+        setDrawFramebufferDirty();
     }
 }
 
@@ -3292,6 +3296,9 @@ angle::Result State::syncReadFramebuffer(const Context *context, Command command
 angle::Result State::syncDrawFramebuffer(const Context *context, Command command)
 {
     ASSERT(mDrawFramebuffer);
+    mDrawFramebuffer->setWriteControlMode(context->getState().getFramebufferSRGB()
+                                              ? SrgbWriteControlMode::Default
+                                              : SrgbWriteControlMode::Linear);
     return mDrawFramebuffer->syncState(context, GL_DRAW_FRAMEBUFFER, command);
 }
 
