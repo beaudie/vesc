@@ -1231,7 +1231,7 @@ if (!is_component_build && is_android && symbol_level != 0) {
 
 if (build_with_chromium && !is_component_build && is_android &&
     current_toolchain == default_toolchain) {
-  # Package ANGLE libraries
+  # Package ANGLE libraries for normal use on Android
   angle_apk("angle_chromium_apk") {
     package_name = "org.chromium.angle"
     apk_name = "AngleLibraries"
@@ -1245,8 +1245,25 @@ if (build_with_chromium && !is_component_build && is_android &&
     }
   }
 
+  # Package ANGLE libraries for AGI use on Android
+  angle_apk("agi_angle_chromium_apk") {
+    package_name = "org.chromium.angle.agi"
+    apk_name = "AgiAngleLibraries"
+    version_name = "ANGLE AGI Build"
+
+    if (angle_enable_commit_id) {
+      version_code =
+          exec_script("src/commit_id.py", [ "position" ], "trim string")
+    } else {
+      version_code = "0"
+    }
+  }
+
   group("angle_apks") {
-    deps = [ ":angle_chromium_apk" ]
+    deps = [
+      ":agi_angle_chromium_apk",
+      ":angle_chromium_apk",
+    ]
   }
 }
 
