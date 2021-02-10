@@ -236,6 +236,11 @@ class TCompiler : public TShHandleBase
     // while spec says it is allowed.
     // This function should only be applied to vertex shaders.
     ANGLE_NO_DISCARD bool initializeGLPosition(TIntermBlock *root);
+    // Insert gl_FragColor = vec4(0,0,0,0) to the beginning of main().
+    // It is to work around an Adreno driver bug where missing this causes context lost
+    // while spec says it is allowed.
+    // This function should only be applied to fragment shaders.
+    ANGLE_NO_DISCARD bool initializeGLFragColor(TIntermBlock *root);
     // Return true if the maximum expression complexity is below the limit.
     bool limitExpressionComplexity(TIntermBlock *root);
     // Creates the function call DAG for further analysis, returning false if there is a recursion
@@ -249,6 +254,8 @@ class TCompiler : public TShHandleBase
     bool mVariablesCollected;
 
     bool mGLPositionInitialized;
+
+    bool mGLFragColorInitialized;
 
     // Removes unused function declarations and prototypes from the AST
     class UnusedPredicate;

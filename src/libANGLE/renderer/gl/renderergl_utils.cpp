@@ -101,6 +101,22 @@ uint32_t GetDeviceID(const FunctionsGL *functions)
     return 0;
 }
 
+bool IsAdreno42xOr3xx(const FunctionsGL *functions)
+{
+    const char *nativeGLRenderer =
+        reinterpret_cast<const char *>(functions->getString(GL_RENDERER));
+    int adrenoNumber = 0;
+    if (sscanf(nativeGLRenderer, "Adreno (TM) %d", &adrenoNumber) < 1)
+    {
+        // retry for freedreno driver
+        if (sscanf(nativeGLRenderer, "FD%d", &adrenoNumber) < 1)
+        {
+            return false;
+        }
+    }
+    return adrenoNumber < 430;
+}
+
 bool IsMesa(const FunctionsGL *functions, std::array<int, 3> *version)
 {
     ASSERT(version);
@@ -1894,6 +1910,11 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, setZeroLevelBeforeGenerateMipmap, IsApple());
 
     ANGLE_FEATURE_CONDITION(features, promotePackedFormatsTo8BitPerChannel, IsApple() && hasAMD);
+
+    // crbug.com/1171371
+    // If output variable gl_FragColor is not assigned any value, it may cause context lost for
+    // Adreno 42x and 3xx.
+    ANGLE_FEATURE_CONDITION(features, initFragColor, IsAdreno42xOr3xx(functions));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

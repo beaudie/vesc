@@ -512,6 +512,11 @@ struct FeaturesGL : FeatureSetBase
         "promote_packed_formats_to_8_bit_per_channel", FeatureCategory::OpenGLWorkarounds,
         "Packed color formats are buggy on Macs with AMD GPUs", &members,
         "http://anglebug.com/5469"};
+
+    // If gl_FragColor is not assigned any value, it may cause context lost for Adreno 42x and 3xx.
+    Feature initFragColor = {"init_frag_color", FeatureCategory::OpenGLWorkarounds,
+                             "No init gl_FragColor causes context lost", &members,
+                             "http://crbug.com/1171371"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

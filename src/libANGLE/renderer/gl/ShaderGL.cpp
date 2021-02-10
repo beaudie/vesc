@@ -247,7 +247,7 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
     ShCompileOptions additionalOptions = SH_INIT_GL_POSITION;
 
     bool isWebGL = context->getExtensions().webglCompatibility;
-    if (isWebGL && (mState.getShaderType() != gl::ShaderType::Compute))
+    if (isWebGL && mState.getShaderType() != gl::ShaderType::Compute)
     {
         additionalOptions |= SH_INIT_OUTPUT_VARIABLES;
     }
@@ -258,6 +258,11 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
     }
 
     const angle::FeaturesGL &features = GetFeaturesGL(context);
+
+    if (features.initFragColor.enabled)
+    {
+        additionalOptions |= SH_INIT_GL_FRAG_COLOR;
+    }
 
     if (features.doWhileGLSLCausesGPUHang.enabled)
     {
