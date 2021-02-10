@@ -9274,6 +9274,7 @@ egl::Error Context::unsetDefaultFramebuffer()
 
 void Context::onPreSwap() const
 {
+    fprintf(stderr, "onPreSwap\n");
     // Dump frame capture if enabled.
     getShareGroup()->getFrameCaptureShared()->onEndFrame(this);
 }

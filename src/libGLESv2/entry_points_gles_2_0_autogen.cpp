@@ -1135,6 +1135,13 @@ void GL_APIENTRY GL_DrawElements(GLenum mode, GLsizei count, GLenum type, const 
         if (isCallValid)
         {
             context->drawElements(modePacked, count, typePacked, indices);
+            static int drawCount = 0;
+            ++drawCount;
+            if (drawCount == 50)
+            {
+                context->onPreSwap();
+                drawCount = 0;
+            }
         }
         ANGLE_CAPTURE(DrawElements, isCallValid, context, modePacked, count, typePacked, indices);
     }

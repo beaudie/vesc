@@ -171,6 +171,21 @@ std::string GetDefaultOutDirectory()
 
 std::string GetCaptureTrigger()
 {
+    std::ifstream fin("angle_capture_trigger", std::ios::in);
+    if (fin)
+    {
+        fprintf(stderr, "File is there now!\n");
+        std::string value;
+        fin >> value;
+        if (fin)
+        {
+            fprintf(stderr, "Got %s from file\n", value.c_str());
+            return value;
+        }
+    }
+    else
+        fprintf(stderr, "no file\n");
+
     // Use the GetAndSet variant to improve future lookup times
     return GetAndSetEnvironmentVarOrUnCachedAndroidProperty(kTriggerVarName, kAndroidTrigger);
 }
@@ -6785,7 +6800,6 @@ void FrameCaptureShared::replay(gl::Context *context)
 void FrameCaptureShared::writeJSON(const gl::Context *context)
 {
     const gl::ContextID contextId           = context->id();
-    const SurfaceParams &surfaceParams      = mDrawSurfaceParams.at(contextId);
     const gl::State &glState                = context->getState();
     const egl::Config *config               = context->getConfig();
     const egl::AttributeMap &displayAttribs = context->getDisplay()->getAttributeMap();
@@ -6802,9 +6816,19 @@ void FrameCaptureShared::writeJSON(const gl::Context *context)
                      displayAttribs.getAsInt(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE));
     json.addScalar("FrameStart", 1);
     json.addScalar("FrameEnd", frameCount);
-    json.addScalar("DrawSurfaceWidth", surfaceParams.extents.width);
-    json.addScalar("DrawSurfaceHeight", surfaceParams.extents.height);
-    json.addHexValue("DrawSurfaceColorSpace", ToEGLenum(surfaceParams.colorSpace));
+    if (mDrawSurfaceParams.count(contextId) > 0)
+    {
+        const SurfaceParams &surfaceParams = mDrawSurfaceParams.at(contextId);
+        json.addScalar("DrawSurfaceWidth", surfaceParams.extents.width);
+        json.addScalar("DrawSurfaceHeight", surfaceParams.extents.height);
+        json.addHexValue("DrawSurfaceColorSpace", ToEGLenum(surfaceParams.colorSpace));
+    }
+    else
+    {
+        json.addScalar("DrawSurfaceWidth", 800);
+        json.addScalar("DrawSurfaceHeight", 800);
+        json.addHexValue("DrawSurfaceColorSpace", ToEGLenum(egl::ColorSpace::Linear));
+    }
     if (config)
     {
         json.addScalar("ConfigRedBits", config->redSize);
