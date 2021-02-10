@@ -804,7 +804,7 @@ void CaptureReadPixelsRobustANGLE_length(const State &glState,
                                          void *pixels,
                                          ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidPointerVal = nullptr;
 }
 
 void CaptureReadPixelsRobustANGLE_columns(const State &glState,
@@ -822,7 +822,7 @@ void CaptureReadPixelsRobustANGLE_columns(const State &glState,
                                           void *pixels,
                                           ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidPointerVal = nullptr;
 }
 
 void CaptureReadPixelsRobustANGLE_rows(const State &glState,
@@ -840,7 +840,7 @@ void CaptureReadPixelsRobustANGLE_rows(const State &glState,
                                        void *pixels,
                                        ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidPointerVal = nullptr;
 }
 
 void CaptureReadPixelsRobustANGLE_pixels(const State &glState,
@@ -858,7 +858,13 @@ void CaptureReadPixelsRobustANGLE_pixels(const State &glState,
                                          void *pixels,
                                          ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureReadPixels_pixels(glState, isCallValid, x, y, width, height, format, type, pixels,
+                             paramCapture);
+
+    if (!glState.getTargetBuffer(gl::BufferBinding::PixelPack))
+    {
+        paramCapture->readBufferSizeBytes = bufSize;
+    }
 }
 
 void CaptureTexImage2DRobustANGLE_pixels(const State &glState,
@@ -875,7 +881,17 @@ void CaptureTexImage2DRobustANGLE_pixels(const State &glState,
                                          const void *pixels,
                                          ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (glState.getTargetBuffer(gl::BufferBinding::PixelUnpack))
+    {
+        return;
+    }
+
+    if (!pixels)
+    {
+        return;
+    }
+
+    CaptureMemory(pixels, bufSize, paramCapture);
 }
 
 void CaptureTexParameterfvRobustANGLE_params(const State &glState,
