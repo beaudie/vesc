@@ -359,7 +359,6 @@ TEST_P(EXTClipCullDistanceForFragmentShaderTest, CompileSucceedsVulkan)
     EXPECT_FALSE(TestShaderCompile(""));
     EXPECT_TRUE(TestShaderCompile(EXTPragma));
 }
-#endif
 
 class EXTClipCullDistanceForVertexShaderCompileFailureTest
     : public EXTClipCullDistanceForVertexShaderTest
@@ -369,7 +368,6 @@ class EXTClipCullDistanceForFragmentShaderCompileFailureTest
     : public EXTClipCullDistanceForFragmentShaderTest
 {};
 
-#if defined(ANGLE_ENABLE_VULKAN)
 TEST_P(EXTClipCullDistanceForVertexShaderCompileFailureTest, CompileFails)
 {
     SetExtensionEnable(true);
@@ -395,18 +393,28 @@ TEST_P(EXTClipCullDistanceForFragmentShaderCompileFailureTest, CompileFails)
 }
 #endif
 
-INSTANTIATE_TEST_SUITE_P(IncorrectESSL100Shaders,
-                         EXTClipCullDistanceForVertexShaderCompileFailureTest,
-                         Combine(Values(SH_GLES2_SPEC),
-                                 Values(sh::ESSLVersion100),
-                                 Values(VertexShaderCompileFails5, VertexShaderCompileFailes6)));
-
 INSTANTIATE_TEST_SUITE_P(CorrectESSL300Shaders,
                          EXTClipCullDistanceForVertexShaderTest,
                          Combine(Values(SH_GLES3_SPEC),
                                  Values(sh::ESSLVersion300),
                                  Values(VertexShaderCompileSucceeds1,
                                         VertexShaderCompileSucceeds2)));
+
+INSTANTIATE_TEST_SUITE_P(CorrectESSL300Shaders,
+                         EXTClipCullDistanceForFragmentShaderTest,
+                         Combine(Values(SH_GLES3_SPEC),
+                                 Values(sh::ESSLVersion300),
+                                 Values(FragmentShaderCompileSucceeds1,
+                                        FragmentShaderCompileSucceeds2)));
+
+// The corresponding TEST_Ps are defined only when ANGLE_ENABLE_VULKAN is
+// defined.
+#if defined(ANGLE_ENABLE_VULKAN)
+INSTANTIATE_TEST_SUITE_P(IncorrectESSL100Shaders,
+                         EXTClipCullDistanceForVertexShaderCompileFailureTest,
+                         Combine(Values(SH_GLES2_SPEC),
+                                 Values(sh::ESSLVersion100),
+                                 Values(VertexShaderCompileFails5, VertexShaderCompileFailes6)));
 
 INSTANTIATE_TEST_SUITE_P(IncorrectESSL300Shaders,
                          EXTClipCullDistanceForVertexShaderCompileFailureTest,
@@ -417,13 +425,6 @@ INSTANTIATE_TEST_SUITE_P(IncorrectESSL300Shaders,
                                         VertexShaderCompileFails3,
                                         VertexShaderCompileFails4)));
 
-INSTANTIATE_TEST_SUITE_P(CorrectESSL300Shaders,
-                         EXTClipCullDistanceForFragmentShaderTest,
-                         Combine(Values(SH_GLES3_SPEC),
-                                 Values(sh::ESSLVersion300),
-                                 Values(FragmentShaderCompileSucceeds1,
-                                        FragmentShaderCompileSucceeds2)));
-
 INSTANTIATE_TEST_SUITE_P(IncorrectESSL300Shaders,
                          EXTClipCullDistanceForFragmentShaderCompileFailureTest,
                          Combine(Values(SH_GLES3_SPEC),
@@ -433,5 +434,6 @@ INSTANTIATE_TEST_SUITE_P(IncorrectESSL300Shaders,
                                         FragmentShaderCompileFails3,
                                         FragmentShaderCompileFails4,
                                         FragmentShaderCompileFails5)));
+#endif
 
 }  // anonymous namespace
