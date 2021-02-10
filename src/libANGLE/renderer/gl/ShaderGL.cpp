@@ -244,10 +244,13 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
 {
     mInfoLog.clear();
 
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
+
     ShCompileOptions additionalOptions = SH_INIT_GL_POSITION;
 
     bool isWebGL = context->getExtensions().webglCompatibility;
-    if (isWebGL && (mState.getShaderType() != gl::ShaderType::Compute))
+    if ((isWebGL || features.initOutputVariables.enabled) &&
+        (mState.getShaderType() != gl::ShaderType::Compute))
     {
         additionalOptions |= SH_INIT_OUTPUT_VARIABLES;
     }
@@ -256,8 +259,6 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
     {
         additionalOptions |= SH_DISABLE_ARB_TEXTURE_RECTANGLE;
     }
-
-    const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     if (features.doWhileGLSLCausesGPUHang.enabled)
     {

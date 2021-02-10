@@ -512,6 +512,11 @@ struct FeaturesGL : FeatureSetBase
         "promote_packed_formats_to_8_bit_per_channel", FeatureCategory::OpenGLWorkarounds,
         "Packed color formats are buggy on Macs with AMD GPUs", &members,
         "http://anglebug.com/5469"};
+
+    // Not initializing output variable may cause context lost for Adreno3xx and Adreno4xx.
+    Feature initOutputVariables = {"init_output_variables", FeatureCategory::OpenGLWorkarounds,
+                                   "No init output variables causes context lost", &members,
+                                   "http://crbug.com/1171371"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
