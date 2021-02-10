@@ -3445,6 +3445,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mTilingMode(other.mTilingMode),
       mUsage(other.mUsage),
       mExtents(other.mExtents),
+      mRotatedExtents(other.mRotatedExtents),
+      mRotatedAspectRatio(other.mRotatedAspectRatio),
       mFormat(other.mFormat),
       mSamples(other.mSamples),
       mImageSerial(other.mImageSerial),
@@ -3479,6 +3481,8 @@ void ImageHelper::resetCachedProperties()
     mTilingMode                  = VK_IMAGE_TILING_OPTIMAL;
     mUsage                       = 0;
     mExtents                     = {};
+    mRotatedExtents              = {};
+    mRotatedAspectRatio          = false;
     mFormat                      = nullptr;
     mSamples                     = 1;
     mImageSerial                 = kInvalidImageSerial;
@@ -3601,7 +3605,7 @@ angle::Result ImageHelper::init(Context *context,
 angle::Result ImageHelper::initMSAASwapchain(Context *context,
                                              gl::TextureType textureType,
                                              const VkExtent3D &extents,
-                                             bool rotatedAspectRation,
+                                             bool rotatedAspectRatio,
                                              const Format &format,
                                              GLint samples,
                                              VkImageUsageFlags usage,
@@ -3614,10 +3618,11 @@ angle::Result ImageHelper::initMSAASwapchain(Context *context,
     ANGLE_TRY(initExternal(context, textureType, extents, format, samples, usage,
                            kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
                            maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled));
-    if (rotatedAspectRation)
+    if (rotatedAspectRatio)
     {
         std::swap(mExtents.width, mExtents.height);
     }
+    mRotatedAspectRatio = rotatedAspectRatio;
     return angle::Result::Continue;
 }
 
@@ -3640,16 +3645,17 @@ angle::Result ImageHelper::initExternal(Context *context,
     ASSERT(!IsAnySubresourceContentDefined(mContentDefined));
     ASSERT(!IsAnySubresourceContentDefined(mStencilContentDefined));
 
-    mImageType   = gl_vk::GetImageType(textureType);
-    mExtents     = extents;
-    mFormat      = &format;
-    mSamples     = std::max(samples, 1);
-    mImageSerial = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
-    mBaseLevel   = baseLevel;
-    mMaxLevel    = maxLevel;
-    mLevelCount  = mipLevels;
-    mLayerCount  = layerCount;
-    mUsage       = usage;
+    mImageType      = gl_vk::GetImageType(textureType);
+    mExtents        = extents;
+    mRotatedExtents = extents;
+    mFormat         = &format;
+    mSamples        = std::max(samples, 1);
+    mImageSerial    = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+    mBaseLevel      = baseLevel;
+    mMaxLevel       = maxLevel;
+    mLevelCount     = mipLevels;
+    mLayerCount     = layerCount;
+    mUsage          = usage;
 
     // Validate that mLayerCount is compatible with the texture type
     ASSERT(textureType != gl::TextureType::_3D || mLayerCount == 1);
@@ -3732,7 +3738,8 @@ void ImageHelper::releaseStagingBuffer(RendererVk *renderer)
 void ImageHelper::resetImageWeakReference()
 {
     mImage.reset();
-    mImageSerial = kInvalidImageSerial;
+    mImageSerial        = kInvalidImageSerial;
+    mRotatedAspectRatio = false;
 }
 
 angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSize size)
@@ -4037,6 +4044,7 @@ void ImageHelper::destroy(RendererVk *renderer)
 void ImageHelper::init2DWeakReference(Context *context,
                                       VkImage handle,
                                       const gl::Extents &glExtents,
+                                      bool rotatedAspectRatio,
                                       const Format &format,
                                       GLint samples,
                                       bool isRobustResourceInitEnabled)
@@ -4046,6 +4054,12 @@ void ImageHelper::init2DWeakReference(Context *context,
     ASSERT(!IsAnySubresourceContentDefined(mStencilContentDefined));
 
     gl_vk::GetExtent(glExtents, &mExtents);
+    mRotatedExtents     = mExtents;
+    mRotatedAspectRatio = rotatedAspectRatio;
+    if (rotatedAspectRatio)
+    {
+        std::swap(mRotatedExtents.width, mRotatedExtents.height);
+    }
     mFormat        = &format;
     mSamples       = std::max(samples, 1);
     mImageSerial   = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
@@ -4070,12 +4084,13 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     ASSERT(!IsAnySubresourceContentDefined(mStencilContentDefined));
 
     gl_vk::GetExtent(glExtents, &mExtents);
-    mImageType   = VK_IMAGE_TYPE_2D;
-    mFormat      = &format;
-    mSamples     = 1;
-    mImageSerial = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
-    mLayerCount  = layerCount;
-    mLevelCount  = 1;
+    mRotatedExtents = mExtents;
+    mImageType      = VK_IMAGE_TYPE_2D;
+    mFormat         = &format;
+    mSamples        = 1;
+    mImageSerial    = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+    mLayerCount     = layerCount;
+    mLevelCount     = 1;
 
     mCurrentLayout = ImageLayout::Undefined;
 
@@ -4188,6 +4203,17 @@ gl::Extents ImageHelper::getLevelExtents2D(LevelIndex levelVk) const
     gl::Extents extents = getLevelExtents(levelVk);
     extents.depth       = 1;
     return extents;
+}
+
+gl::Extents ImageHelper::getRotatedLevelExtents2D(LevelIndex levelVk) const
+{
+    // Level 0 should be the size of the extents, after that every time you increase a level
+    // you shrink the extents by half.
+    uint32_t width  = std::max(mRotatedExtents.width >> levelVk.get(), 1u);
+    uint32_t height = std::max(mRotatedExtents.height >> levelVk.get(), 1u);
+    uint32_t depth  = 1;
+
+    return gl::Extents(width, height, depth);
 }
 
 bool ImageHelper::isDepthOrStencil() const

@@ -32,7 +32,8 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
       mResolveImageViews(other.mResolveImageViews),
       mLevelIndexGL(other.mLevelIndexGL),
       mLayerIndex(other.mLayerIndex),
-      mLayerCount(other.mLayerCount)
+      mLayerCount(other.mLayerCount),
+      mRotatedAspectRatio(other.mRotatedAspectRatio)
 {
     other.reset();
 }
@@ -57,18 +58,20 @@ void RenderTargetVk::init(vk::ImageHelper *image,
     mLayerIndex        = layerIndex;
     mLayerCount        = layerCount;
 
-    mTransience = transience;
+    mTransience         = transience;
+    mRotatedAspectRatio = false;
 }
 
 void RenderTargetVk::reset()
 {
-    mImage             = nullptr;
-    mImageViews        = nullptr;
-    mResolveImage      = nullptr;
-    mResolveImageViews = nullptr;
-    mLevelIndexGL      = gl::LevelIndex(0);
-    mLayerIndex        = 0;
-    mLayerCount        = 0;
+    mImage              = nullptr;
+    mImageViews         = nullptr;
+    mResolveImage       = nullptr;
+    mResolveImageViews  = nullptr;
+    mLevelIndexGL       = gl::LevelIndex(0);
+    mLayerIndex         = 0;
+    mLayerCount         = 0;
+    mRotatedAspectRatio = false;
 }
 
 vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
@@ -228,6 +231,18 @@ gl::Extents RenderTargetVk::getExtents() const
     ASSERT(mImage && mImage->valid());
     vk::LevelIndex levelVk = mImage->toVkLevel(mLevelIndexGL);
     return mImage->getLevelExtents2D(levelVk);
+}
+
+gl::Extents RenderTargetVk::getRotatedExtents() const
+{
+    ASSERT(mImage && mImage->valid());
+    vk::LevelIndex levelVk = mImage->toVkLevel(mLevelIndexGL);
+    return mImage->getRotatedLevelExtents2D(levelVk);
+}
+
+void RenderTargetVk::updateSwapchainRotationAspectRatio(bool rotatedAspectRatio)
+{
+    mRotatedAspectRatio = rotatedAspectRatio;
 }
 
 void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image,

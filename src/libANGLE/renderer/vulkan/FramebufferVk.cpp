@@ -1065,6 +1065,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                                               &flipX, &flipY);
     }
     SurfaceRotation rememberDestFramebufferRotation = destFramebufferRotation;
+    // FIXME: THE FOLLOWING SHOULD PROBABLY CHECK FOR 90 AND/OR 270, NOT JUST 90!!!
+    // FIXME: THE FOLLOWING SHOULD PROBABLY CHECK FOR 90 AND/OR 270, NOT JUST 90!!!
+    // FIXME: THE FOLLOWING SHOULD PROBABLY CHECK FOR 90 AND/OR 270, NOT JUST 90!!!
     if (srcFramebufferRotation == SurfaceRotation::Rotated90Degrees)
     {
         destFramebufferRotation = rotation;
@@ -2624,6 +2627,9 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                                       &mReadPixelBuffer);
 }
 
+// TBD/TODO(ianelliott): Ensure that the only users of this method are fine with non-rotated extents
+// TBD/TODO(ianelliott): Ensure that the only users of this method are fine with non-rotated extents
+// TBD/TODO(ianelliott): Ensure that the only users of this method are fine with non-rotated extents
 gl::Extents FramebufferVk::getReadImageExtents() const
 {
     RenderTargetVk *readRenderTarget = mRenderTargetCache.getColorRead(mState);

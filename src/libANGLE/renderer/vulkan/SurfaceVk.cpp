@@ -830,6 +830,9 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     // If prerotation is emulated, adjust the window extents to match what real prerotation would
     // have reported.
     gl::Extents swapchainExtents = extents;
+    // FIXME/TODO(ianelliott): INVESTIGATE THE FOLLOWING--THE if AND ASSERT DON'T ALIGN
+    // FIXME/TODO(ianelliott): INVESTIGATE THE FOLLOWING--THE if AND ASSERT DON'T ALIGN
+    // FIXME/TODO(ianelliott): INVESTIGATE THE FOLLOWING--THE if AND ASSERT DON'T ALIGN
     if (Is90DegreeRotation(mEmulatedPreTransform))
     {
         ASSERT(mPreTransform == VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR);
@@ -1040,12 +1043,15 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
                                 gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
     }
 
+    mColorRenderTarget.updateSwapchainRotationAspectRatio(Is90DegreeRotation(getPreTransform()));
+
     ANGLE_TRY(resizeSwapchainImages(context, imageCount));
 
     for (uint32_t imageIndex = 0; imageIndex < imageCount; ++imageIndex)
     {
         SwapchainImage &member = mSwapchainImages[imageIndex];
-        member.image.init2DWeakReference(context, swapchainImages[imageIndex], extents, format, 1,
+        member.image.init2DWeakReference(context, swapchainImages[imageIndex], extents,
+                                         Is90DegreeRotation(getPreTransform()), format, 1,
                                          robustInit);
         member.imageViews.init(renderer);
     }
@@ -1066,6 +1072,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageViews, nullptr,
                                        nullptr, gl::LevelIndex(0), 0, 1,
                                        RenderTargetTransience::Default);
+        mDepthStencilRenderTarget.updateSwapchainRotationAspectRatio(
+            Is90DegreeRotation(getPreTransform()));
 
         // We will need to pass depth/stencil image views to the RenderTargetVk in the future.
     }
@@ -1329,7 +1337,10 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         resolveRegion.srcOffset                     = {};
         resolveRegion.dstSubresource                = resolveRegion.srcSubresource;
         resolveRegion.dstOffset                     = {};
-        resolveRegion.extent                        = image.image.getExtents();
+        // FIXME/TODO(ianelliott): EVENTUALLY USE A getRotatedExtents() METHOD HERE!!!
+        // FIXME/TODO(ianelliott): EVENTUALLY USE A getRotatedExtents() METHOD HERE!!!
+        // FIXME/TODO(ianelliott): EVENTUALLY USE A getRotatedExtents() METHOD HERE!!!
+        resolveRegion.extent = image.image.getExtents();
         // ImageHelper extents are non-rotated.  If the window is 90 or 270 degrees, swap the width
         // and height.
         if (Is90DegreeRotation(getPreTransform()))
@@ -1651,9 +1662,19 @@ EGLint WindowSurfaceVk::getWidth() const
     return static_cast<EGLint>(mColorRenderTarget.getExtents().width);
 }
 
+EGLint WindowSurfaceVk::getRotatedWidth() const
+{
+    return static_cast<EGLint>(mColorRenderTarget.getRotatedExtents().width);
+}
+
 EGLint WindowSurfaceVk::getHeight() const
 {
     return static_cast<EGLint>(mColorRenderTarget.getExtents().height);
+}
+
+EGLint WindowSurfaceVk::getRotatedHeight() const
+{
+    return static_cast<EGLint>(mColorRenderTarget.getRotatedExtents().height);
 }
 
 egl::Error WindowSurfaceVk::getUserWidth(const egl::Display *display, EGLint *value) const
@@ -1750,7 +1771,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
 
     VkFramebufferCreateInfo framebufferInfo = {};
 
-    const gl::Extents extents             = mColorRenderTarget.getExtents();
+    const gl::Extents rotatedExtents      = mColorRenderTarget.getRotatedExtents();
     std::array<VkImageView, 2> imageViews = {};
 
     if (mDepthStencilImage.valid())
@@ -1765,13 +1786,9 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     framebufferInfo.renderPass      = compatibleRenderPass.getHandle();
     framebufferInfo.attachmentCount = (mDepthStencilImage.valid() ? 2u : 1u);
     framebufferInfo.pAttachments    = imageViews.data();
-    framebufferInfo.width           = static_cast<uint32_t>(extents.width);
-    framebufferInfo.height          = static_cast<uint32_t>(extents.height);
-    if (Is90DegreeRotation(getPreTransform()))
-    {
-        std::swap(framebufferInfo.width, framebufferInfo.height);
-    }
-    framebufferInfo.layers = 1;
+    framebufferInfo.width           = static_cast<uint32_t>(rotatedExtents.width);
+    framebufferInfo.height          = static_cast<uint32_t>(rotatedExtents.height);
+    framebufferInfo.layers          = 1;
 
     if (isMultiSampled())
     {

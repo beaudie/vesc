@@ -91,12 +91,14 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     const vk::Format &getImageFormat() const;
     gl::Extents getExtents() const;
+    gl::Extents getRotatedExtents() const;
     gl::LevelIndex getLevelIndex() const { return mLevelIndexGL; }
     uint32_t getLayerIndex() const { return mLayerIndex; }
     uint32_t getLayerCount() const { return mLayerCount; }
 
     gl::ImageIndex getImageIndexForClear(uint32_t layerCount) const;
 
+    void updateSwapchainRotationAspectRatio(bool rotatedAspectRatio);
     // Special mutator for Surface RenderTargets. Allows the Framebuffer to keep a single
     // RenderTargetVk pointer.
     void updateSwapchainImage(vk::ImageHelper *image,
@@ -201,6 +203,9 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // resolve attachment, it is not used.  The only purpose of |mResolveImage| is to store deferred
     // clears.
     RenderTargetTransience mTransience;
+
+    // Record whether the underlying VkImage has a rotated aspect ratio (i.e.  90 or 270 degrees)
+    bool mRotatedAspectRatio;
 };
 
 // A vector of rendertargets
