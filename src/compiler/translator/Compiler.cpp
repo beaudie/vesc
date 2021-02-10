@@ -294,6 +294,7 @@ TShHandleBase::~TShHandleBase()
 TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
     : mVariablesCollected(false),
       mGLPositionInitialized(false),
+      mGLFragColorInitialized(false),
       mShaderType(type),
       mShaderSpec(spec),
       mOutputType(output),
@@ -912,6 +913,15 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         mGLPositionInitialized = true;
     }
 
+    if (mShaderType == GL_FRAGMENT_SHADER && !mGLFragColorInitialized &&
+        (compileOptions & SH_INIT_GL_FRAG_COLOR) != 0)
+    {
+        if (!initializeGLFragColor(root))
+        {
+            return false;
+        }
+        mGLFragColorInitialized = true;
+    }
     // DeferGlobalInitializers needs to be run before other AST transformations that generate new
     // statements from expressions. But it's fine to run DeferGlobalInitializers after the above
     // SplitSequenceOperator and RemoveArrayLengthMethod since they only have an effect on the AST
@@ -1273,8 +1283,9 @@ void TCompiler::clearResults()
     mInterfaceBlocks.clear();
     mUniformBlocks.clear();
     mShaderStorageBlocks.clear();
-    mVariablesCollected    = false;
-    mGLPositionInitialized = false;
+    mVariablesCollected     = false;
+    mGLPositionInitialized  = false;
+    mGLFragColorInitialized = false;
 
     mNumViews = -1;
 
@@ -1490,11 +1501,17 @@ bool TCompiler::wereVariablesCollected() const
 
 bool TCompiler::initializeGLPosition(TIntermBlock *root)
 {
-    InitVariableList list;
     sh::ShaderVariable var(GL_FLOAT_VEC4);
     var.name = "gl_Position";
-    list.push_back(var);
-    return InitializeVariables(this, root, list, &mSymbolTable, mShaderVersion, mExtensionBehavior,
+    return InitializeVariables(this, root, {var}, &mSymbolTable, mShaderVersion, mExtensionBehavior,
+                               false, false);
+}
+
+bool TCompiler::initializeGLFragColor(TIntermBlock *root)
+{
+    sh::ShaderVariable var(GL_FLOAT_VEC4);
+    var.name = "gl_FragColor";
+    return InitializeVariables(this, root, {var}, &mSymbolTable, mShaderVersion, mExtensionBehavior,
                                false, false);
 }
 
@@ -1517,6 +1534,7 @@ bool TCompiler::useAllMembersInUnusedStandardAndSharedBlocks(TIntermBlock *root)
 bool TCompiler::initializeOutputVariables(TIntermBlock *root)
 {
     InitVariableList list;
+    list.reserve(mOutputVaryings.size());
     if (mShaderType == GL_VERTEX_SHADER || mShaderType == GL_GEOMETRY_SHADER_EXT)
     {
         for (const sh::ShaderVariable &var : mOutputVaryings)
@@ -1535,6 +1553,11 @@ bool TCompiler::initializeOutputVariables(TIntermBlock *root)
         for (const sh::ShaderVariable &var : mOutputVariables)
         {
             list.push_back(var);
+            if (var.name == "gl_FragColor")
+            {
+                ASSERT(!mGLFragColorInitialized);
+                mGLFragColorInitialized = true;
+            }
         }
     }
     return InitializeVariables(this, root, list, &mSymbolTable, mShaderVersion, mExtensionBehavior,
