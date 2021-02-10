@@ -821,14 +821,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         invalidateGraphicsDriverUniforms();
     }
 
-    // If the render pass needs to be recreated, close it before processing dirty bits.  This
-    // operation may add many dirty bits.
-    ASSERT((mRenderPassCommandBuffer == nullptr) == mGraphicsDirtyBits.test(DIRTY_BIT_RENDER_PASS));
-    if (mRenderPassCommandBuffer == nullptr)
-    {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
-    }
-
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
     if (dirtyBits.none())
@@ -1222,11 +1214,13 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                        DirtyBits dirtyBitMask)
 {
-    ASSERT(mRenderPassCommandBuffer == nullptr);
-
-    // Closing a render pass can affect the pipeline (by setting subpass to 0), and sets dirty bits.
-    // As such, it's expected that the render pass is closed before dirty bits are handled.
-    ASSERT(!mRenderPassCommands->started());
+    // If the render pass needs to be recreated, close it using the special mid-dirty-bit-handling
+    // function, so later dirty bits can be set.
+    if (mRenderPassCommands->started())
+    {
+        ANGLE_TRY(flushCommandsAndEndRenderPassMidDirtyBitHandling(
+            dirtyBitsIterator, dirtyBitMask & ~DirtyBits{DIRTY_BIT_RENDER_PASS}));
+    }
 
     gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
     bool renderPassDescChanged        = false;
