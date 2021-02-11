@@ -87,8 +87,10 @@ ANGLE_INLINE VkMemoryPropertyFlags GetStorageMemoryType(GLbitfield storageFlags,
         (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
          VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-    if (((storageFlags & GL_MAP_COHERENT_BIT_EXT) != 0) ||
-        ((storageFlags & GL_MAP_PERSISTENT_BIT_EXT) != 0) || externalBuffer)
+    const bool isCoherentMap   = (storageFlags & GL_MAP_COHERENT_BIT_EXT) != 0;
+    const bool isPersistentMap = (storageFlags & GL_MAP_PERSISTENT_BIT_EXT) != 0;
+
+    if (isCoherentMap || isPersistentMap || externalBuffer)
     {
         return kDeviceLocalHostCoherentFlags;
     }
