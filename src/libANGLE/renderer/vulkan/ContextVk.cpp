@@ -928,7 +928,7 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
         mCurrentIndirectBuffer = indirectBuffer;
     }
 
-    mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+    mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                     vk::PipelineStage::DrawIndirect, indirectBuffer);
 
     ANGLE_TRY(setupDraw(context, mode, firstVertex, vertexCount, instanceCount,
@@ -1292,7 +1292,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 // Note: if another range of the same buffer is simultaneously used for storage,
                 // such as for transform feedback output, or SSBO, unnecessary barriers can be
                 // generated.
-                commandBufferHelper->bufferRead(&mResourceUseList, VK_ACCESS_SHADER_READ_BIT,
+                commandBufferHelper->bufferRead(this, VK_ACCESS_SHADER_READ_BIT,
                                                 vk::GetPipelineStage(stage), &buffer);
             }
 
@@ -1393,7 +1393,7 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+            mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
                                             vk::PipelineStage::VertexInput, arrayBuffer);
         }
     }
@@ -1410,8 +1410,8 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dir
                                               mVertexArray->getCurrentElementArrayBufferOffset(),
                                               getVkIndexType(mCurrentDrawElementsType));
 
-    mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDEX_READ_BIT,
-                                    vk::PipelineStage::VertexInput, elementArrayBuffer);
+    mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
+                                    elementArrayBuffer);
 
     return angle::Result::Continue;
 }
@@ -1430,8 +1430,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     if (executable->hasUniformBuffers() || executable->hasStorageBuffers() ||
         executable->hasAtomicCounterBuffers() || executable->hasImages())
     {
-        ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(this, &mResourceUseList,
-                                                                  commandBufferHelper));
+        ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(this, commandBufferHelper));
     }
     return angle::Result::Continue;
 }
@@ -1469,7 +1468,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
         {
             vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
             ASSERT(bufferHelper);
-            mRenderPassCommands->bufferWrite(&mResourceUseList, VK_ACCESS_SHADER_WRITE_BIT,
+            mRenderPassCommands->bufferWrite(this, VK_ACCESS_SHADER_WRITE_BIT,
                                              vk::PipelineStage::VertexShader,
                                              vk::AliasingMode::Disallowed, bufferHelper);
         }
@@ -1507,9 +1506,9 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     {
         vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
         ASSERT(bufferHelper);
-        mRenderPassCommands->bufferWrite(
-            &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
-            vk::PipelineStage::TransformFeedback, vk::AliasingMode::Disallowed, bufferHelper);
+        mRenderPassCommands->bufferWrite(this, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
+                                         vk::PipelineStage::TransformFeedback,
+                                         vk::AliasingMode::Disallowed, bufferHelper);
     }
 
     const gl::TransformFeedbackBuffersArray<VkBuffer> &bufferHandles =
@@ -2249,7 +2248,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
-        mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                         vk::PipelineStage::DrawIndirect, currentIndirectBuf);
 
         // We have instanced vertex attributes that need to be emulated for Vulkan.
@@ -2303,7 +2302,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
-        mRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                         vk::PipelineStage::DrawIndirect, currentIndirectBuf);
 
         // We have instanced vertex attributes that need to be emulated for Vulkan.
@@ -3700,7 +3699,7 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 
     gl::Buffer *glBuffer     = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
     vk::BufferHelper &buffer = vk::GetImpl(glBuffer)->getBuffer();
-    mOutsideRenderPassCommands->bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+    mOutsideRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                            vk::PipelineStage::DrawIndirect, &buffer);
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(), indirect);
@@ -4309,7 +4308,7 @@ angle::Result ContextVk::updateActiveImages(vk::CommandBufferHelper *commandBuff
             for (gl::ShaderType stage : shaderStages)
             {
                 commandBufferHelper->bufferWrite(
-                    &mResourceUseList, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+                    this, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
                     vk::GetPipelineStage(stage), vk::AliasingMode::Disallowed, &buffer);
             }
 
@@ -5152,8 +5151,8 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
         ASSERT(!mRenderPassCommands->usesBufferForWrite(*bufferAccess.buffer));
         ASSERT(!mOutsideRenderPassCommands->usesBufferForWrite(*bufferAccess.buffer));
 
-        mOutsideRenderPassCommands->bufferRead(&mResourceUseList, bufferAccess.accessType,
-                                               bufferAccess.stage, bufferAccess.buffer);
+        mOutsideRenderPassCommands->bufferRead(this, bufferAccess.accessType, bufferAccess.stage,
+                                               bufferAccess.buffer);
     }
 
     for (const vk::CommandBufferBufferAccess &bufferAccess : access.getWriteBuffers())
@@ -5161,9 +5160,8 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
         ASSERT(!mRenderPassCommands->usesBuffer(*bufferAccess.buffer));
         ASSERT(!mOutsideRenderPassCommands->usesBuffer(*bufferAccess.buffer));
 
-        mOutsideRenderPassCommands->bufferWrite(&mResourceUseList, bufferAccess.accessType,
-                                                bufferAccess.stage, vk::AliasingMode::Disallowed,
-                                                bufferAccess.buffer);
+        mOutsideRenderPassCommands->bufferWrite(this, bufferAccess.accessType, bufferAccess.stage,
+                                                vk::AliasingMode::Disallowed, bufferAccess.buffer);
     }
 
     return angle::Result::Continue;
