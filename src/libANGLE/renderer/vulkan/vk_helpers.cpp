@@ -3900,7 +3900,8 @@ angle::Result ImageHelper::initImageView(Context *context,
                                          uint32_t levelCount)
 {
     return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut,
-                              baseMipLevelVk, levelCount, 0, mLayerCount);
+                              baseMipLevelVk, levelCount, 0, mLayerCount,
+                              gl::SrgbWriteControlMode::Default);
 }
 
 angle::Result ImageHelper::initLayerImageView(Context *context,
@@ -3911,11 +3912,27 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
                                               LevelIndex baseMipLevelVk,
                                               uint32_t levelCount,
                                               uint32_t baseArrayLayer,
-                                              uint32_t layerCount) const
+                                              uint32_t layerCount,
+                                              gl::SrgbWriteControlMode mode) const
 {
-    return initLayerImageViewImpl(context, textureType, aspectMask, swizzleMap, imageViewOut,
-                                  baseMipLevelVk, levelCount, baseArrayLayer, layerCount,
-                                  mFormat->actualImageVkFormat(), nullptr);
+    angle::FormatID imageFormat = mFormat->actualImageFormatID;
+
+    // If we are initializing an imageview for use with EXT_srgb_write_control, we need to override
+    // the format to its linear counterpart. Formats that cannot be reinterpreted are exempt from
+    // this requirement.
+    if (mode == gl::SrgbWriteControlMode::Linear)
+    {
+        angle::FormatID linearFormat = ConvertToLinear(imageFormat);
+        if (linearFormat != angle::FormatID::NONE)
+        {
+            imageFormat = linearFormat;
+        }
+    }
+
+    return initLayerImageViewImpl(
+        context, textureType, aspectMask, swizzleMap, imageViewOut, baseMipLevelVk, levelCount,
+        baseArrayLayer, layerCount,
+        context->getRenderer()->getFormat(imageFormat).actualImageVkFormat(), nullptr);
 }
 
 angle::Result ImageHelper::initLayerImageViewWithFormat(Context *context,
@@ -6552,6 +6569,8 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other) : Resource(std::move(o
     std::swap(mPerLevelStencilReadImageViews, other.mPerLevelStencilReadImageViews);
     std::swap(mLevelDrawImageViews, other.mLevelDrawImageViews);
     std::swap(mLayerLevelDrawImageViews, other.mLayerLevelDrawImageViews);
+    std::swap(mLevelDrawImageViewsLinear, other.mLevelDrawImageViewsLinear);
+    std::swap(mLayerLevelDrawImageViewsLinear, other.mLayerLevelDrawImageViewsLinear);
     std::swap(mLevelStorageImageViews, other.mLevelStorageImageViews);
     std::swap(mLayerLevelStorageImageViews, other.mLayerLevelStorageImageViews);
     std::swap(mImageViewSerial, other.mImageViewSerial);
@@ -6584,6 +6603,7 @@ void ImageViewHelper::release(RendererVk *renderer)
 
     // Release the draw views
     ReleaseImageViews(&mLevelDrawImageViews, &garbage);
+    ReleaseImageViews(&mLevelDrawImageViewsLinear, &garbage);
     for (ImageViewVector &layerViews : mLayerLevelDrawImageViews)
     {
         for (ImageView &imageView : layerViews)
@@ -6595,6 +6615,16 @@ void ImageViewHelper::release(RendererVk *renderer)
         }
     }
     mLayerLevelDrawImageViews.clear();
+    for (ImageViewVector &layerViews : mLayerLevelDrawImageViewsLinear)
+    {
+        for (ImageView &imageView : layerViews)
+        {
+            if (imageView.valid())
+            {
+                garbage.emplace_back(GetGarbage(&imageView));
+            }
+        }
+    }
 
     // Release the storage views
     ReleaseImageViews(&mLevelStorageImageViews, &garbage);
@@ -6608,6 +6638,7 @@ void ImageViewHelper::release(RendererVk *renderer)
             }
         }
     }
+    mLayerLevelDrawImageViewsLinear.clear();
     mLayerLevelStorageImageViews.clear();
 
     if (!garbage.empty())
@@ -6637,6 +6668,7 @@ void ImageViewHelper::destroy(VkDevice device)
 
     // Release the draw views
     DestroyImageViews(&mLevelDrawImageViews, device);
+    DestroyImageViews(&mLevelDrawImageViewsLinear, device);
     for (ImageViewVector &layerViews : mLayerLevelDrawImageViews)
     {
         for (ImageView &imageView : layerViews)
@@ -6645,6 +6677,13 @@ void ImageViewHelper::destroy(VkDevice device)
         }
     }
     mLayerLevelDrawImageViews.clear();
+    for (ImageViewVector &layerViews : mLayerLevelDrawImageViewsLinear)
+    {
+        for (ImageView &imageView : layerViews)
+        {
+            imageView.destroy(device);
+        }
+    }
 
     // Release the storage views
     DestroyImageViews(&mLevelStorageImageViews, device);
@@ -6655,6 +6694,7 @@ void ImageViewHelper::destroy(VkDevice device)
             imageView.destroy(device);
         }
     }
+    mLayerLevelDrawImageViewsLinear.clear();
     mLayerLevelStorageImageViews.clear();
 
     mImageViewSerial = kInvalidImageOrBufferViewSerial;
@@ -6933,13 +6973,15 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
     const uint32_t layerCount = GetImageLayerCountForView(image);
     gl::TextureType viewType  = Get2DTextureType(layerCount, image.getSamples());
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
-                                    imageView, levelVk, 1, 0, layerCount);
+                                    imageView, levelVk, 1, 0, layerCount,
+                                    gl::SrgbWriteControlMode::Default);
 }
 
 angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                                           const ImageHelper &image,
                                                           LevelIndex levelVk,
                                                           uint32_t layer,
+                                                          gl::SrgbWriteControlMode mode,
                                                           const ImageView **imageViewOut)
 {
     ASSERT(image.valid());
@@ -6948,10 +6990,13 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
 
     retain(&contextVk->getResourceUseList());
 
+    LayerLevelImageViewVector &imageViews = (mode == gl::SrgbWriteControlMode::Linear)
+                                                ? mLayerLevelDrawImageViewsLinear
+                                                : mLayerLevelDrawImageViews;
+
     // Lazily allocate the storage for image views
-    ImageView *imageView =
-        GetLevelLayerImageView(&mLayerLevelDrawImageViews, levelVk, layer, image.getLevelCount(),
-                               GetImageLayerCountForView(image));
+    ImageView *imageView = GetLevelLayerImageView(
+        &imageViews, levelVk, layer, image.getLevelCount(), GetImageLayerCountForView(image));
     *imageViewOut = imageView;
 
     if (imageView->valid())
@@ -6964,7 +7009,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     // therefore don't have swizzle.
     gl::TextureType viewType = Get2DTextureType(1, image.getSamples());
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
-                                    imageView, levelVk, 1, layer, 1);
+                                    imageView, levelVk, 1, layer, 1, mode);
 }
 
 ImageOrBufferViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
