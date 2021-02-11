@@ -6286,6 +6286,33 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         srcSubresource.mipLevel       = 0;
     }
 
+    // If PBO and if possible, copy directly on the GPU.
+    if (packPixelsParams.packBuffer && mFormat->intendedFormatID == mFormat->actualImageFormatID &&
+        *readFormat == *packPixelsParams.destFormat &&
+        packPixelsParams.rotation == SurfaceRotation::Identity && !packPixelsParams.reverseRowOrder)
+    {
+        BufferHelper &packBuffer = GetImpl(packPixelsParams.packBuffer)->getBuffer();
+
+        CommandBufferAccess access;
+        access.onBufferTransferWrite(&packBuffer);
+        access.onImageTransferRead(copyAspectFlags, src);
+
+        CommandBuffer *copyCommandBuffer;
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &copyCommandBuffer));
+
+        VkBufferImageCopy region = {};
+        region.bufferImageHeight = srcExtent.height;
+        region.bufferOffset      = packPixelsParams.offset;
+        region.bufferRowLength   = packPixelsParams.outputPitch;
+        region.imageExtent       = srcExtent;
+        region.imageOffset       = srcOffset;
+        region.imageSubresource  = srcSubresource;
+
+        copyCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(),
+                                             packBuffer.getBuffer().getHandle(), 1, &region);
+        return angle::Result::Continue;
+    }
+
     VkBuffer bufferHandle      = VK_NULL_HANDLE;
     uint8_t *readPixelBuffer   = nullptr;
     VkDeviceSize stagingOffset = 0;
