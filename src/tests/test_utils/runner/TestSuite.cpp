@@ -39,6 +39,7 @@ namespace
 constexpr char kBatchId[]              = "--batch-id=";
 constexpr char kFilterFileArg[]        = "--filter-file=";
 constexpr char kFlakyRetries[]         = "--flaky-retries=";
+constexpr char kIsSoftwareRenderer[]   = "--is-software-renderer";
 constexpr char kGTestListTests[]       = "--gtest_list_tests";
 constexpr char kHistogramJsonFileArg[] = "--histogram-json-file=";
 constexpr char kListTests[]            = "--list-tests";
@@ -1031,6 +1032,7 @@ TestSuite::TestSuite(int *argc, char **argv)
     : mShardCount(-1),
       mShardIndex(-1),
       mBotMode(false),
+      mIsSoftwareRenderer(false),
       mDebugTestGroups(false),
       mGTestListTests(false),
       mListTests(false),
@@ -1274,6 +1276,13 @@ TestSuite::TestSuite(int *argc, char **argv)
             mTestResults.results[id].type = TestResultType::NoResult;
         }
     }
+
+    // If running the tests through a software renderer, leave half the processors free for the
+    // software renderer's own threads to work.
+    if (mIsSoftwareRenderer)
+    {
+        mMaxProcesses = std::min(mMaxProcesses, NumberOfProcessors() / 2);
+    }
 }
 
 TestSuite::~TestSuite()
@@ -1306,6 +1315,7 @@ bool TestSuite::parseSingleArg(const char *argument)
             ParseStringArg(kIsolatedOutDir, argument, &mTestArtifactDirectory) ||
             ParseFlag("--bot-mode", argument, &mBotMode) ||
             ParseFlag("--debug-test-groups", argument, &mDebugTestGroups) ||
+            ParseFlag(kIsSoftwareRenderer, argument, &mIsSoftwareRenderer) ||
             ParseFlag(kGTestListTests, argument, &mGTestListTests) ||
             ParseFlag(kListTests, argument, &mListTests) ||
             ParseFlag(kPrintTestStdout, argument, &mPrintTestStdout) ||

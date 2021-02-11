@@ -165,6 +165,7 @@ class TestSuite
     angle::CrashCallback mCrashCallback;
     TestResults mTestResults;
     bool mBotMode;
+    bool mIsSoftwareRenderer;
     bool mDebugTestGroups;
     bool mGTestListTests;
     bool mListTests;
