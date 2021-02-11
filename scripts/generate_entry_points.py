@@ -9,7 +9,6 @@
 #   NOTE: don't run this script directly. Run scripts/run_code_generation.py.
 
 import sys, os, pprint, json
-from datetime import date
 import registry_xml
 
 # API types

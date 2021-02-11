@@ -7,7 +7,6 @@
 #  Code generation for mandatory formats supported by Vulkan.
 #  NOTE: don't run this script directly. Run scripts/run_code_generation.py.
 
-from datetime import date
 import sys
 
 sys.path.append('..')
