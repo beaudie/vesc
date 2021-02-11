@@ -100,8 +100,8 @@ void Context::color4x(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
 
 void Context::colorPointer(GLint size, VertexAttribType type, GLsizei stride, const void *ptr)
 {
-    vertexAttribPointer(vertexArrayIndex(ClientVertexArrayType::Color), size, type, GL_FALSE,
-                        stride, ptr);
+    vertexAttribPointer(vertexArrayIndex(ClientVertexArrayType::Color), size, type,
+                        type == VertexAttribType::UnsignedByte, stride, ptr);
 }
 
 void Context::depthRangex(GLfixed n, GLfixed f)
