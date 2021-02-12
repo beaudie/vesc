@@ -32,8 +32,10 @@ namespace nativegl
 struct SupportRequirement
 {
     SupportRequirement();
-    SupportRequirement(const SupportRequirement &other);
-    ~SupportRequirement();
+    SupportRequirement(const SupportRequirement &other) = default;
+    SupportRequirement &operator=(const SupportRequirement &other) = default;
+
+    ~SupportRequirement() = default;
 
     // Version that this format became supported without extensions
     gl::Version version;

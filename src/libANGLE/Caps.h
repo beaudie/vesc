@@ -25,9 +25,11 @@ struct Extensions;
 
 struct TextureCaps
 {
-    TextureCaps();
-    TextureCaps(const TextureCaps &other);
-    ~TextureCaps();
+    TextureCaps()                         = default;
+    TextureCaps(const TextureCaps &other) = default;
+    TextureCaps &operator=(const TextureCaps &other) = default;
+
+    ~TextureCaps() = default;
 
     // Supports for basic texturing: glTexImage, glTexSubImage, etc
     bool texturable = false;
@@ -795,9 +797,11 @@ struct TypePrecision
 
 struct Caps
 {
-    Caps();
-    Caps(const Caps &other);
-    ~Caps();
+    Caps()                  = default;
+    Caps(const Caps &other) = default;
+    Caps &operator=(const Caps &other) = default;
+
+    ~Caps() = default;
 
     // If the values could be got by using GetIntegeri_v, they should
     // be GLint instead of GLuint and call LimitToInt() to ensure

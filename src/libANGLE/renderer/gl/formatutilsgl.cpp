@@ -28,10 +28,6 @@ SupportRequirement::SupportRequirement()
       requiredExtensions()
 {}
 
-SupportRequirement::SupportRequirement(const SupportRequirement &other) = default;
-
-SupportRequirement::~SupportRequirement() {}
-
 InternalFormat::InternalFormat() : texture(), filter(), textureAttachment(), renderbuffer() {}
 
 InternalFormat::InternalFormat(const InternalFormat &other) = default;

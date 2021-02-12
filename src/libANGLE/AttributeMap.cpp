@@ -11,12 +11,6 @@
 namespace egl
 {
 
-AttributeMap::AttributeMap() {}
-
-AttributeMap::AttributeMap(const AttributeMap &other) = default;
-
-AttributeMap::~AttributeMap() = default;
-
 void AttributeMap::insert(EGLAttrib key, EGLAttrib value)
 {
     mAttributes[key] = value;

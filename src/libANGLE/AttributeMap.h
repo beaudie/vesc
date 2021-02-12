@@ -20,9 +20,10 @@ namespace egl
 class AttributeMap final
 {
   public:
-    AttributeMap();
-    AttributeMap(const AttributeMap &other);
-    ~AttributeMap();
+    AttributeMap()                          = default;
+    AttributeMap(const AttributeMap &other) = default;
+    AttributeMap &operator=(const AttributeMap &other) = default;
+    ~AttributeMap()                                    = default;
 
     void insert(EGLAttrib key, EGLAttrib value);
     bool contains(EGLAttrib key) const;

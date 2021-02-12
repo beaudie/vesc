@@ -30,12 +30,6 @@ static void InsertExtensionString(const std::string &extension,
 namespace gl
 {
 
-TextureCaps::TextureCaps() = default;
-
-TextureCaps::TextureCaps(const TextureCaps &other) = default;
-
-TextureCaps::~TextureCaps() = default;
-
 GLuint TextureCaps::getMaxSamples() const
 {
     return !sampleCounts.empty() ? *sampleCounts.rbegin() : 0;
@@ -1119,10 +1113,6 @@ void TypePrecision::get(GLint *returnRange, GLint *returnPrecision) const
     std::copy(range.begin(), range.end(), returnRange);
     *returnPrecision = precision;
 }
-
-Caps::Caps()                  = default;
-Caps::Caps(const Caps &other) = default;
-Caps::~Caps()                 = default;
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions)
 {
