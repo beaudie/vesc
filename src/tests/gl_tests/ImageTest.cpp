@@ -565,9 +565,12 @@ class ImageTest : public ANGLETest
         aHardwareBufferDescription.height               = height;
         aHardwareBufferDescription.layers               = depth;
         aHardwareBufferDescription.format               = androidFormat;
-        aHardwareBufferDescription.usage                = AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY |
-                                           AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE |
-                                           AHARDWAREBUFFER_USAGE_GPU_FRAMEBUFFER;
+        aHardwareBufferDescription.usage =
+            AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY | AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE;
+        if (androidFormat != AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420)
+        {
+            aHardwareBufferDescription.usage |= AHARDWAREBUFFER_USAGE_GPU_FRAMEBUFFER;
+        }
         aHardwareBufferDescription.stride = 0;
         aHardwareBufferDescription.rfu0   = 0;
         aHardwareBufferDescription.rfu1   = 0;
@@ -2440,6 +2443,106 @@ void ImageTest::SourceAHBTargetExternalESSL3_helper(const EGLint *attribs)
     eglDestroyImageKHR(window->getDisplay(), image);
     destroyAndroidHardwareBuffer(source);
     glDeleteTextures(1, &target);
+}
+
+// Testing sampling from 2 YUV AHB EGL images using target external ESSL3 texture
+TEST_P(ImageTestES3, SourceAHBTargetExternalESSL3_YUVUpdatedBetweenDraws)
+{
+#ifndef ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT
+    std::cout << "Test skipped: !ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT." << std::endl;
+    return;
+#else
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt() ||
+                       !hasExternalESSL3Ext());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    // YUV data.
+    GLubyte dataY[4] = {7, 51, 197, 231};
+    GLubyte dataCb[1] = {128};
+    GLubyte dataCr[1] = {192};
+
+    // Create the first YUV ahb.
+    AHardwareBuffer *ahb1;
+    EGLImageKHR ahbImage1;
+    createEGLImageAndroidHardwareBufferSource(
+        2, 2, 1, AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420, kDefaultAttribs,
+        {{dataY, 1}, {dataCb, 1}, {dataCr, 1}}, &ahb1, &ahbImage1);
+
+    // Create a texture target to bound to the first ahb egl image.
+    GLuint ahbTexture1;
+    createEGLImageTargetTextureExternal(ahbImage1, &ahbTexture1);
+
+    // Create the second YUV ahb.
+    AHardwareBuffer *ahb2;
+    EGLImageKHR ahbImage2;
+    createEGLImageAndroidHardwareBufferSource(
+        2, 2, 1, AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420, kDefaultAttribs,
+        {{dataY, 1}, {dataCb, 1}, {dataCr, 1}}, &ahb2, &ahbImage2);
+
+    // Create a texture target to bound to the second ahb egl image.
+    GLuint ahbTexture2;
+    createEGLImageTargetTextureExternal(ahbImage2, &ahbTexture2);
+
+    // Shaders are similar to those of mTextureExternalESSL3Program but with
+    // an extra uniform.
+    constexpr char kVert[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "in vec4 position;\n"
+        "out vec2 texcoord;\n"
+        "uniform vec2 floatUniform;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = position;\n"
+        "    texcoord = (position.xy * 0.5) + 0.5;\n"
+        "    texcoord.y = 1.0 - texcoord.y;\n"
+        "    texcoord *= floatUniform;\n"
+        "}\n";
+
+    constexpr char kFrag[] =
+        "#version 300 es\n"
+        "#extension GL_OES_EGL_image_external_essl3 : require\n"
+        "precision highp float;\n"
+        "uniform samplerExternalOES tex;\n"
+        "in vec2 texcoord;\n"
+        "out vec4 color;"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "    color = texture(tex, texcoord);\n"
+        "}\n";
+
+    GLuint program = CompileProgram(kVert, kFrag);
+    ASSERT_NE(0u, program) << "shader compilation failed.";
+    GLint texUniformLocation = glGetUniformLocation(program, "tex");
+    GLint floatUniformLocation = glGetUniformLocation(program, "floatUniform");
+
+    glUseProgram(program);
+    glBindTexture(GL_TEXTURE_EXTERNAL_OES, ahbTexture1);
+    glUniform1i(texUniformLocation, 0);
+    glUniform2f(floatUniformLocation, 1.0f, 1.0f);
+
+    drawQuad(program, "position", 0.5f);
+    glFinish();
+
+    // Note: only the sampled texture changes between draws.
+    glBindTexture(GL_TEXTURE_EXTERNAL_OES, ahbTexture2);
+
+    drawQuad(program, "position", 0.5f);
+    glFinish();
+
+    // Clean up
+    glDeleteTextures(1, &ahbTexture1);
+    glDeleteTextures(1, &ahbTexture2);
+    eglDestroyImageKHR(window->getDisplay(), ahbImage1);
+    eglDestroyImageKHR(window->getDisplay(), ahbImage2);
+    destroyAndroidHardwareBuffer(ahb1);
+    destroyAndroidHardwareBuffer(ahb2);
+    glDeleteProgram(program);
+#endif
 }
 
 // Create a depth format AHB backed EGL image and verify that the image's aspect is honored
