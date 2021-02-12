@@ -1424,16 +1424,28 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
-    if (executable->hasImages())
+    const bool hasImages = executable->hasImages();
+    const bool hasStorageBuffers = executable->hasStorageBuffers() ||
+        executable->hasAtomicCounterBuffers();
+    const bool hasUniformBuffers = executable->hasUniformBuffers();
+
+    if (hasImages)
     {
         ANGLE_TRY(updateActiveImages(commandBufferHelper));
     }
 
-    if (executable->hasUniformBuffers() || executable->hasStorageBuffers() ||
-        executable->hasAtomicCounterBuffers() || executable->hasImages())
+    if (hasUniformBuffers || hasStorageBuffers || hasImages)
     {
         ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(this, commandBufferHelper));
     }
+
+    // Record usage of storage buffers and images in the command buffer to aid handling of
+    // glMemoryBarrier.
+    if (hasImages || hasStorageBuffers)
+    {
+        commandBufferHelper->setHasShaderStorageOutput();
+    }
+
     return angle::Result::Continue;
 }
 
@@ -3734,11 +3746,47 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
     // GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT.
     barriers &= ~GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT;
 
+    // Barrier bits are categorized in two groups:
+    //
+    // 1. Those affecting draw/dispatch calls only
+    // 2. Those affecting other commands.
+    //
+    // For the second set, since storage buffer and images are not tracked in command buffers, we
+    // can't rely on the command buffers being flushed in the usual way when recording these
+    // commands (i.e. through |getOutsideRenderPassCommandBuffer()| and |vk::CommandBufferAccess|).
+    // For these barrier bits thus we flush the command buffers if they had any storage buffer or
+    // image output.
+    constexpr GLbitfield kNonDrawBarrierBits = GL_PIXEL_BUFFER_BARRIER_BIT |
+        GL_TEXTURE_UPDATE_BARRIER_BIT | GL_BUFFER_UPDATE_BARRIER_BIT | GL_FRAMEBUFFER_BARRIER_BIT;
+    if ((barriers & kNonDrawBarrierBits) != 0)
+    {
+        // Make sure memory barrier is issued for future usages of storage buffers and images even
+        // if there's no binding change.
+        mGraphicsDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
+        mComputeDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
+
+        // Break the render pass if necessary as future non-draw commands can't know if they should.
+        if (mRenderPassCommands->hasShaderStorageOutput())
+        {
+            ANGLE_TRY(flushCommandsAndEndRenderPass());
+        }
+        else if (mOutsideRenderPassCommands->hasShaderStorageOutput())
+        {
+            // Otherwise flush the outside render pass commands if necessary.
+            ANGLE_TRY(flushOutsideRenderPassCommands());
+        }
+
+        barriers &= ~kNonDrawBarrierBits;
+    }
+
     // If no other barrier, early out.
     if (barriers == 0)
     {
         return angle::Result::Continue;
     }
+
+    // TODO: Optimize barrier bits affecting draw/dispatch so they don't close the render pass
+    // unnecessarily.  http://anglebug.com/5070
 
     // Note: many of the barriers specified here are already covered automatically.
     //
