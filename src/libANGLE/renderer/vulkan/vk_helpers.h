@@ -1169,6 +1169,9 @@ class CommandBufferHelper : angle::NonCopyable
 
     bool hasRenderPass() const { return mIsRenderPassCommandBuffer; }
 
+    void setHasShaderStorageOutput() { mHasShaderStorageOutput = true; }
+    bool hasShaderStorageOutput() const { return mHasShaderStorageOutput; }
+
   private:
     bool onDepthStencilAccess(ResourceAccess access,
                               uint32_t *cmdCountInvalidated,
@@ -1204,6 +1207,11 @@ class CommandBufferHelper : angle::NonCopyable
 
     bool mIsRenderPassCommandBuffer;
     bool mReadOnlyDepthStencilMode;
+
+    // Whether the command buffers contains any draw/dispatch calls that possibly output data
+    // through storage buffers and images.  This is used to determine whether glMemoryBarrier*
+    // should flush the command buffer.
+    bool mHasShaderStorageOutput;
 
     // State tracking for the maximum (Write been the highest) depth access during the entire
     // renderpass. Note that this does not include VK_ATTACHMENT_LOAD_OP_CLEAR which is tracked
