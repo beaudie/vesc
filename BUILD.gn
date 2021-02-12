@@ -202,6 +202,8 @@ config("extra_warnings") {
         "-Wsuggest-override",
       ]
     }
+  } else if (is_linux) {
+    cflags_cc = [ "-Wdeprecated-copy" ]
   }
 
   if (angle_is_winuwp) {
