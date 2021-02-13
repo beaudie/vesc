@@ -425,6 +425,11 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
 
+    if (getFeatures().recreatePipelineOnEveryRenderPass.enabled)
+    {
+        mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+    }
+
     mNewComputeCommandBufferDirtyBits =
         DirtyBits{DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES, DIRTY_BIT_SHADER_RESOURCES,
                   DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
@@ -825,11 +830,14 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
+// TODO: test sws crash.  The check for none() prevents flushCommandsAndEndRenderPass().
+#if 0
     if (dirtyBits.none())
     {
         ASSERT(mRenderPassCommandBuffer);
         return angle::Result::Continue;
     }
+#endif
 
     // If the render pass needs to be recreated, close it before processing dirty bits.  This
     // operation may add many dirty bits.
@@ -1191,6 +1199,11 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
 
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
+
+    if (getFeatures().recreatePipelineOnEveryRenderPass.enabled)
+    {
+        dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
+    }
 
     // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
     // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BINDING.
@@ -3648,11 +3661,15 @@ angle::Result ContextVk::onPauseTransformFeedback()
 
 void ContextVk::invalidateGraphicsPipelineBinding()
 {
+// Test sws crash
+mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
     mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_BINDING);
 }
 
 void ContextVk::invalidateComputePipelineBinding()
 {
+// Test sws crash
+mComputeDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
     mComputeDirtyBits.set(DIRTY_BIT_PIPELINE_BINDING);
 }
 
@@ -4248,7 +4265,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 
         // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
         // and handleDirtyGraphicsPipeline().
-        mCurrentGraphicsPipeline = nullptr;
+        //mCurrentGraphicsPipeline = nullptr;
 
         // The default uniforms descriptor set was reset during createPipelineLayout(), so mark them
         // dirty to get everything reallocated/rebound before the next draw.
