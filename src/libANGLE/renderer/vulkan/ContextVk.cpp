@@ -425,6 +425,11 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
 
+    if (getFeatures().recreatePipelineOnEveryRenderPass.enabled)
+    {
+        mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+    }
+
     mNewComputeCommandBufferDirtyBits =
         DirtyBits{DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES, DIRTY_BIT_SHADER_RESOURCES,
                   DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
@@ -1191,6 +1196,11 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
 
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
+
+    if (getFeatures().recreatePipelineOnEveryRenderPass.enabled)
+    {
+        dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
+    }
 
     // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
     // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BINDING.

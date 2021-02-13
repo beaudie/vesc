@@ -471,7 +471,14 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsNegativeViewport = {
         "supportsNegativeViewport", FeatureCategory::VulkanFeatures,
         "The driver supports inverting the viewport with a negative height.", &members};
+
+    Feature recreatePipelineOnEveryRenderPass = {
+        "recreatePipelineOnEveryRenderPass", FeatureCategory::VulkanWorkarounds,
+        "Some drivers crash if pipelines are not unnecessarily recreated and rebound at the start "
+        "of render pass.",
+        &members, "http://anglebug.com/5644"};
 };
+};  // namespace angle
 
 inline FeaturesVk::FeaturesVk()  = default;
 inline FeaturesVk::~FeaturesVk() = default;

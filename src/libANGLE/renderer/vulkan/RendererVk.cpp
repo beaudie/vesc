@@ -2286,6 +2286,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Negative viewports are exposed in the Maintenance1 extension and in core Vulkan 1.1+.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsNegativeViewport, supportsNegativeViewport);
 
+    // On some platforms, swiftshader crashes if the pipeline is not recreated at the start of
+    // render pass.
+    ANGLE_FEATURE_CONDITION(&mFeatures, recreatePipelineOnEveryRenderPass, isSwiftShader);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
