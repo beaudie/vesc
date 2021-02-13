@@ -1190,6 +1190,9 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
 
+    // TODO: testing if this fixes swangle on mac
+    dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
+
     // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
     // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BINDING.
     if (newPipeline == previousPipeline)
@@ -1200,7 +1203,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     pauseTransformFeedbackIfStarted({});
 
     // The pipeline needs to rebind because it's changed.
-    dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
+    // dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
 
     return angle::Result::Continue;
 }
