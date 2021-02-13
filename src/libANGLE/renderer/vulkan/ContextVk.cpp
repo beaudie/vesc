@@ -408,6 +408,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Note that currently these dirty bits are set every time a new render pass command buffer is
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
+// TODO: testing if this fixes swangle mac
+mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_RENDER_PASS);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE_BINDING);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
