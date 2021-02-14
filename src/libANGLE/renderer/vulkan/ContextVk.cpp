@@ -835,7 +835,19 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // operation may add many dirty bits.
     if (mRenderPassCommandBuffer == nullptr)
     {
+        //    TODO: test sws mac crash
+#if 0
         ANGLE_TRY(flushCommandsAndEndRenderPass());
+#else
+        gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
+        bool renderPassDescChanged        = false;
+        ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr, &renderPassDescChanged));
+        dirtyBits.reset(DIRTY_BIT_RENDER_PASS);
+        if (renderPassDescChanged)
+        {
+            dirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+        }
+#endif
     }
 
     // Flush any relevant dirty bits.
