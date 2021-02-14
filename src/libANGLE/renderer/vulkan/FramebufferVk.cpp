@@ -2318,8 +2318,7 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 const gl::Rectangle &scissoredRenderArea,
-                                                vk::CommandBuffer **commandBufferOut,
-                                                bool *renderPassDescChangedOut)
+                                                vk::CommandBuffer **commandBufferOut)
 {
     ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
 
@@ -2537,13 +2536,13 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     // or the existence of resolve attachments in single subpass render passes.  The modification
     // here can add/remove a subpass, or modify its input attachments.
     gl::DrawBufferMask unresolveColorMask = mRenderPassDesc.getColorUnresolveAttachmentMask();
-    const bool unresolveDepth             = mRenderPassDesc.hasDepthUnresolveAttachment();
-    const bool unresolveStencil           = mRenderPassDesc.hasStencilUnresolveAttachment();
-    const bool unresolveChanged           = previousUnresolveColorMask != unresolveColorMask ||
-                                  previousUnresolveDepth != unresolveDepth ||
-                                  previousUnresolveStencil != unresolveStencil;
-    if (unresolveChanged)
+    bool unresolveDepth                   = mRenderPassDesc.hasDepthUnresolveAttachment();
+    bool unresolveStencil                 = mRenderPassDesc.hasStencilUnresolveAttachment();
+    if (previousUnresolveColorMask != unresolveColorMask ||
+        previousUnresolveDepth != unresolveDepth || previousUnresolveStencil != unresolveStencil)
     {
+        contextVk->onDrawFramebufferRenderPassDescChange(this);
+
         // Make sure framebuffer is recreated.
         mFramebuffer = nullptr;
 
@@ -2581,8 +2580,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                      mCurrentFramebufferDesc.getLayerCount());
     }
 
-    const bool anyUnresolve = unresolveColorMask.any() || unresolveDepth || unresolveStencil;
-    if (anyUnresolve)
+    if (unresolveColorMask.any() || unresolveDepth || unresolveStencil)
     {
         // Unresolve attachments if any.
         UtilsVk::UnresolveParameters params;
@@ -2594,13 +2592,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
         // The unresolve subpass has only one draw call.
         contextVk->startNextSubpass();
-    }
-
-    if (unresolveChanged || anyUnresolve)
-    {
-        contextVk->onDrawFramebufferRenderPassDescChange(this);
-        // Notify that the render pass desc has changed.
-        *renderPassDescChangedOut = true;
     }
 
     return angle::Result::Continue;
@@ -2710,7 +2701,7 @@ angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk)
         return angle::Result::Continue;
     }
 
-    return contextVk->startRenderPass(getRotatedCompleteRenderArea(contextVk), nullptr, nullptr);
+    return contextVk->startRenderPass(getRotatedCompleteRenderArea(contextVk), nullptr);
 }
 
 void FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,

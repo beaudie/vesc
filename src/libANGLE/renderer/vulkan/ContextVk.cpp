@@ -292,7 +292,6 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
 
 // Not necessary once upgraded to C++17.
 constexpr ContextVk::DirtyBits ContextVk::kIndexAndVertexDirtyBits;
-constexpr ContextVk::DirtyBits ContextVk::kPipelineDescAndBindingDirtyBits;
 constexpr ContextVk::DirtyBits ContextVk::kTexturesAndDescSetDirtyBits;
 constexpr ContextVk::DirtyBits ContextVk::kResourcesAndDescSetDirtyBits;
 constexpr ContextVk::DirtyBits ContextVk::kXfbBuffersAndDescSetDirtyBits;
@@ -319,7 +318,6 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished()
     pauseRenderPassQueriesIfActive();
 
     mRenderPassCommandBuffer = nullptr;
-    mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
 }
 
 // ContextVk::ScopedDescriptorSetUpdates implementation.
@@ -416,27 +414,26 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Note that currently these dirty bits are set every time a new render pass command buffer is
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
-    mNewGraphicsCommandBufferDirtyBits = DirtyBits{
-        DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING,       DIRTY_BIT_TEXTURES,
-        DIRTY_BIT_VERTEX_BUFFERS,  DIRTY_BIT_INDEX_BUFFER,           DIRTY_BIT_SHADER_RESOURCES,
-        DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
+    mNewGraphicsCommandBufferDirtyBits = DirtyBits{DIRTY_BIT_PIPELINE,
+                                                   DIRTY_BIT_TEXTURES,
+                                                   DIRTY_BIT_VERTEX_BUFFERS,
+                                                   DIRTY_BIT_INDEX_BUFFER,
+                                                   DIRTY_BIT_SHADER_RESOURCES,
+                                                   DIRTY_BIT_DESCRIPTOR_SETS,
+                                                   DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
 
     mNewComputeCommandBufferDirtyBits =
-        DirtyBits{DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES, DIRTY_BIT_SHADER_RESOURCES,
+        DirtyBits{DIRTY_BIT_PIPELINE, DIRTY_BIT_TEXTURES, DIRTY_BIT_SHADER_RESOURCES,
                   DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_EVENT_LOG] = &ContextVk::handleDirtyGraphicsEventLog;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DEFAULT_ATTRIBS] =
         &ContextVk::handleDirtyGraphicsDefaultAttribs;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE_DESC] =
-        &ContextVk::handleDirtyGraphicsPipelineDesc;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_RENDER_PASS] = &ContextVk::handleDirtyGraphicsRenderPass;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE_BINDING] =
-        &ContextVk::handleDirtyGraphicsPipelineBinding;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE] = &ContextVk::handleDirtyGraphicsPipeline;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyGraphicsTextures;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VERTEX_BUFFERS] =
         &ContextVk::handleDirtyGraphicsVertexBuffers;
@@ -465,11 +462,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyGraphicsDescriptorSets;
 
-    mComputeDirtyBitHandlers[DIRTY_BIT_EVENT_LOG]     = &ContextVk::handleDirtyComputeEventLog;
-    mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE_DESC] = &ContextVk::handleDirtyComputePipelineDesc;
-    mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE_BINDING] =
-        &ContextVk::handleDirtyComputePipelineBinding;
-    mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyComputeTextures;
+    mComputeDirtyBitHandlers[DIRTY_BIT_EVENT_LOG] = &ContextVk::handleDirtyComputeEventLog;
+    mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE]  = &ContextVk::handleDirtyComputePipeline;
+    mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES]  = &ContextVk::handleDirtyComputeTextures;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] =
         &ContextVk::handleDirtyComputeDriverUniforms;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS_BINDING] =
@@ -796,6 +791,18 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
+    // This could be improved using a dirty bit. But currently it's slower to use a handler
+    // function than an inlined if. We should probably replace the dirty bit dispatch table
+    // with a switch with inlined handler functions.
+    // TODO(jmadill): Use dirty bit. http://anglebug.com/3014
+    if (!mRenderPassCommandBuffer)
+    {
+        gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
+        ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
+    }
+
+    vk::CommandBuffer *commandBufferOut = mRenderPassCommandBuffer;
+
     // Create a local object to ensure we flush the descriptor updates to device when we leave this
     // function
     ScopedDescriptorSetUpdates descriptorSetUpdates(this);
@@ -827,29 +834,17 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     if (dirtyBits.none())
     {
-        ASSERT(mRenderPassCommandBuffer);
         return angle::Result::Continue;
     }
 
-    // If the render pass needs to be recreated, close it before processing dirty bits.  This
-    // operation may add many dirty bits.
-    if (mRenderPassCommandBuffer == nullptr)
-    {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
-    }
-
     // Flush any relevant dirty bits.
-    for (DirtyBits::Iterator dirtyBitIter = dirtyBits.begin(); dirtyBitIter != dirtyBits.end();
-         ++dirtyBitIter)
+    for (size_t dirtyBit : dirtyBits)
     {
-        ASSERT(mGraphicsDirtyBitHandlers[*dirtyBitIter]);
-        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[*dirtyBitIter])(&dirtyBitIter));
+        ASSERT(mGraphicsDirtyBitHandlers[dirtyBit]);
+        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])(context, commandBufferOut));
     }
 
     mGraphicsDirtyBits &= ~dirtyBitMask;
-
-    // Render pass must be always available at this point.
-    ASSERT(mRenderPassCommandBuffer);
 
     return angle::Result::Continue;
 }
@@ -1038,6 +1033,7 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     // don't use the same APIs to record commands as the functions outside ContextVk.
     // The following ensures prior commands are flushed before we start processing dirty bits.
     ANGLE_TRY(flushCommandsAndEndRenderPass());
+    vk::CommandBuffer *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
 
     // Create a local object to ensure we flush the descriptor updates to device when we leave this
     // function
@@ -1060,7 +1056,7 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     for (size_t dirtyBit : dirtyBits)
     {
         ASSERT(mComputeDirtyBitHandlers[dirtyBit]);
-        ANGLE_TRY((this->*mComputeDirtyBitHandlers[dirtyBit])());
+        ANGLE_TRY((this->*mComputeDirtyBitHandlers[dirtyBit])(context, commandBufferOut));
     }
 
     mComputeDirtyBits.reset();
@@ -1068,12 +1064,14 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsEventLog(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsEventLog(const gl::Context *context,
+                                                     vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyEventLogImpl(mRenderPassCommandBuffer);
 }
 
-angle::Result ContextVk::handleDirtyComputeEventLog()
+angle::Result ContextVk::handleDirtyComputeEventLog(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyEventLogImpl(&mOutsideRenderPassCommands->getCommandBuffer());
 }
@@ -1128,7 +1126,8 @@ angle::Result ContextVk::handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffe
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(const gl::Context *context,
+                                                           vk::CommandBuffer *commandBuffer)
 {
     ASSERT(mDirtyDefaultAttribsMask.any());
 
@@ -1141,12 +1140,9 @@ angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
+                                                     vk::CommandBuffer *commandBuffer)
 {
-    const VkPipeline previousPipeline = mCurrentGraphicsPipeline
-                                            ? mCurrentGraphicsPipeline->getPipeline().getHandle()
-                                            : VK_NULL_HANDLE;
-
     ASSERT(mExecutable);
 
     if (!mCurrentGraphicsPipeline)
@@ -1184,63 +1180,20 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 
         mGraphicsPipelineTransition.reset();
     }
+
+    pauseTransformFeedbackIfStarted({});
+
+    commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
     // TODO: https://issuetracker.google.com/issues/169788986: Need to change this so that we get
     // the actual serial used when this work is submitted.
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
-
-    const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
-
-    // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
-    // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BINDING.
-    if (newPipeline == previousPipeline)
-    {
-        return angle::Result::Continue;
-    }
-
-    pauseTransformFeedbackIfStarted({});
-
-    // The pipeline needs to rebind because it's changed.
-    dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
-
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator)
-{
-    ASSERT(mRenderPassCommandBuffer == nullptr);
-
-    // Closing a render pass can affect the pipeline (by setting subpass to 0), and sets dirty bits.
-    // As such, it's expected that the render pass is closed before dirty bits are handled.
-    ASSERT(!mRenderPassCommands->started());
-
-    gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
-    bool renderPassDescChanged        = false;
-
-    ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr, &renderPassDescChanged));
-
-    // The render pass desc can change when starting the render pass, for example due to
-    // multisampled-render-to-texture needs based on loadOps.  In that case, recreate the graphics
-    // pipeline.
-    if (renderPassDescChanged)
-    {
-        ANGLE_TRY(handleDirtyGraphicsPipelineDesc(dirtyBitsIterator));
-    }
-
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator *dirtyBitsIterator)
-{
-    ASSERT(mCurrentGraphicsPipeline);
-
-    mRenderPassCommandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
-
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::handleDirtyComputePipelineDesc()
+angle::Result ContextVk::handleDirtyComputePipeline(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer)
 {
     if (!mCurrentComputePipeline)
     {
@@ -1248,17 +1201,7 @@ angle::Result ContextVk::handleDirtyComputePipelineDesc()
         ANGLE_TRY(mExecutable->getComputePipeline(this, &mCurrentComputePipeline));
     }
 
-    ASSERT(mComputeDirtyBits.test(DIRTY_BIT_PIPELINE_BINDING));
-
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::handleDirtyComputePipelineBinding()
-{
-    ASSERT(mCurrentComputePipeline);
-
-    mOutsideRenderPassCommands->getCommandBuffer().bindComputePipeline(
-        mCurrentComputePipeline->get());
+    commandBuffer->bindComputePipeline(mCurrentComputePipeline->get());
     // TODO: https://issuetracker.google.com/issues/169788986: Need to change this so that we get
     // the actual serial used when this work is submitted.
     mCurrentComputePipeline->updateSerial(getCurrentQueueSerial());
@@ -1364,17 +1307,20 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsTextures(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsTextures(const gl::Context *context,
+                                                     vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyTexturesImpl(mRenderPassCommands);
 }
 
-angle::Result ContextVk::handleDirtyComputeTextures()
+angle::Result ContextVk::handleDirtyComputeTextures(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyTexturesImpl(mOutsideRenderPassCommands);
 }
 
-angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *context,
+                                                          vk::CommandBuffer *commandBuffer)
 {
     uint32_t maxAttrib = mState.getProgramExecutable()->getMaxActiveAttribLocation();
     const gl::AttribArray<VkBuffer> &bufferHandles = mVertexArray->getCurrentArrayBufferHandles();
@@ -1403,7 +1349,8 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(const gl::Context *context,
+                                                        vk::CommandBuffer *commandBuffer)
 {
     vk::BufferHelper *elementArrayBuffer = mVertexArray->getCurrentElementArrayBuffer();
     ASSERT(elementArrayBuffer != nullptr);
@@ -1438,18 +1385,21 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsShaderResources(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsShaderResources(const gl::Context *context,
+                                                            vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyShaderResourcesImpl(mRenderPassCommands);
 }
 
-angle::Result ContextVk::handleDirtyComputeShaderResources()
+angle::Result ContextVk::handleDirtyComputeShaderResources(const gl::Context *context,
+                                                           vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyShaderResourcesImpl(mOutsideRenderPassCommands);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
-    DirtyBits::Iterator *dirtyBitsIterator)
+    const gl::Context *context,
+    vk::CommandBuffer *commandBuffer)
 {
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
@@ -1489,7 +1439,8 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
-    DirtyBits::Iterator *dirtyBitsIterator)
+    const gl::Context *context,
+    vk::CommandBuffer *commandBuffer)
 {
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
@@ -1521,15 +1472,15 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     const gl::TransformFeedbackBuffersArray<VkDeviceSize> &bufferSizes =
         transformFeedbackVk->getBufferSizes();
 
-    mRenderPassCommandBuffer->bindTransformFeedbackBuffers(
-        static_cast<uint32_t>(bufferCount), bufferHandles.data(), bufferOffsets.data(),
-        bufferSizes.data());
+    commandBuffer->bindTransformFeedbackBuffers(static_cast<uint32_t>(bufferCount),
+                                                bufferHandles.data(), bufferOffsets.data(),
+                                                bufferSizes.data());
 
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(
-    DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
+                                                                   vk::CommandBuffer *commandBuffer)
 {
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
@@ -1555,7 +1506,8 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackResume(
-    DirtyBits::Iterator *dirtyBitsIterator)
+    const gl::Context *context,
+    vk::CommandBuffer *commandBuffer)
 {
     if (mRenderPassCommands->isTransformFeedbackStarted())
     {
@@ -1564,12 +1516,14 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackResume(
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(const gl::Context *context,
+                                                   vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyDescriptorSetsImpl(mRenderPassCommandBuffer);
 }
 
-angle::Result ContextVk::handleDirtyComputeDescriptorSets()
+angle::Result ContextVk::handleDirtyComputeDescriptorSets(const gl::Context *context,
+                                                          vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyDescriptorSetsImpl(&mOutsideRenderPassCommands->getCommandBuffer());
 }
@@ -3538,11 +3492,11 @@ void ContextVk::onFramebufferChange(FramebufferVk *framebufferVk)
     updateScissor(mState);
 
     onDrawFramebufferRenderPassDescChange(framebufferVk);
-    invalidateCurrentGraphicsPipeline();
 }
 
 void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk)
 {
+    invalidateCurrentGraphicsPipeline();
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
                                                 framebufferVk->getRenderPassDesc());
     const gl::Box &dimensions = framebufferVk->getState().getDimensions();
@@ -3646,14 +3600,14 @@ angle::Result ContextVk::onPauseTransformFeedback()
     return angle::Result::Continue;
 }
 
-void ContextVk::invalidateGraphicsPipelineBinding()
+void ContextVk::invalidateGraphicsPipeline()
 {
-    mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_BINDING);
+    mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
 }
 
-void ContextVk::invalidateComputePipelineBinding()
+void ContextVk::invalidateComputePipeline()
 {
-    mComputeDirtyBits.set(DIRTY_BIT_PIPELINE_BINDING);
+    mComputeDirtyBits.set(DIRTY_BIT_PIPELINE);
 }
 
 void ContextVk::invalidateGraphicsDescriptorSet(DescriptorSetIndex usedDescriptorSet)
@@ -3852,7 +3806,8 @@ ANGLE_INLINE void ContextVk::pauseTransformFeedbackIfStarted(DirtyBits onResumeO
     }
 }
 
-angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *context,
+                                                           vk::CommandBuffer *commandBuffer)
 {
     // Allocate a new region in the dynamic buffer.
     bool useGraphicsDriverUniformsExtended = getFeatures().forceDriverUniformOverSpecConst.enabled;
@@ -3976,7 +3931,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
                                              &mDriverUniforms[PipelineType::Graphics]);
 }
 
-angle::Result ContextVk::handleDirtyComputeDriverUniforms()
+angle::Result ContextVk::handleDirtyComputeDriverUniforms(const gl::Context *context,
+                                                          vk::CommandBuffer *commandBuffer)
 {
     // Allocate a new region in the dynamic buffer.
     uint8_t *ptr;
@@ -4016,20 +3972,20 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(vk::CommandBuffer *commandB
         &driverUniforms->descriptorSet, 1, &driverUniforms->dynamicOffset);
 }
 
-angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
-    DirtyBits::Iterator *dirtyBitsIterator)
+angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(const gl::Context *context,
+                                                                  vk::CommandBuffer *commandBuffer)
 {
     // Bind the driver descriptor set.
-    handleDirtyDriverUniformsBindingImpl(mRenderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+    handleDirtyDriverUniformsBindingImpl(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                          &mDriverUniforms[PipelineType::Graphics]);
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyComputeDriverUniformsBinding()
+angle::Result ContextVk::handleDirtyComputeDriverUniformsBinding(const gl::Context *context,
+                                                                 vk::CommandBuffer *commandBuffer)
 {
     // Bind the driver descriptor set.
-    handleDirtyDriverUniformsBindingImpl(&mOutsideRenderPassCommands->getCommandBuffer(),
-                                         VK_PIPELINE_BIND_POINT_COMPUTE,
+    handleDirtyDriverUniformsBindingImpl(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
                                          &mDriverUniforms[PipelineType::Compute]);
     return angle::Result::Continue;
 }
@@ -4700,15 +4656,10 @@ angle::Result ContextVk::beginNewRenderPass(
 }
 
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
-                                         vk::CommandBuffer **commandBufferOut,
-                                         bool *renderPassDescChangedOut)
+                                         vk::CommandBuffer **commandBufferOut)
 {
-    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer,
-                                                   renderPassDescChangedOut));
 
-    // Make sure the render pass is not restarted if it is started by UtilsVk (as opposed to
-    // setupDraw(), which clears this bit automatically).
-    mGraphicsDirtyBits.reset(DIRTY_BIT_RENDER_PASS);
+    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
 
     ANGLE_TRY(resumeRenderPassQueriesIfActive());
 

@@ -332,8 +332,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // When UtilsVk issues draw or dispatch calls, it binds a new pipeline and descriptor sets that
     // the context is not aware of.  These functions are called to make sure the pipeline and
     // affected descriptor set bindings are dirtied for the next application draw/dispatch call.
-    void invalidateGraphicsPipelineBinding();
-    void invalidateComputePipelineBinding();
+    void invalidateGraphicsPipeline();
+    void invalidateComputePipeline();
     void invalidateGraphicsDescriptorSet(DescriptorSetIndex usedDescriptorSet);
     void invalidateComputeDescriptorSet(DescriptorSetIndex usedDescriptorSet);
 
@@ -523,9 +523,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     uint32_t getCurrentSubpassIndex() const;
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
-    angle::Result startRenderPass(gl::Rectangle renderArea,
-                                  vk::CommandBuffer **commandBufferOut,
-                                  bool *renderPassDescChangedOut);
+    angle::Result startRenderPass(gl::Rectangle renderArea, vk::CommandBuffer **commandBufferOut);
     void startNextSubpass();
     angle::Result flushCommandsAndEndRenderPass();
 
@@ -589,22 +587,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Dirty bits.
     enum DirtyBitType : size_t
     {
-        // Dirty bits that must be processed before the render pass is started.  The handlers for
-        // these dirty bits don't record any commands.
-        DIRTY_BIT_DEFAULT_ATTRIBS,
-        // The pipeline has changed and needs to be recreated.  This dirty bit may close the render
-        // pass.
-        DIRTY_BIT_PIPELINE_DESC,
-
-        // Start the render pass.
-        DIRTY_BIT_RENDER_PASS,
-
-        // Dirty bits that must be processed after the render pass is started.  Their handlers
-        // record commands.
         DIRTY_BIT_EVENT_LOG,
-        // Pipeline needs to rebind because a new command buffer has been allocated, or UtilsVk has
-        // changed the binding.  The pipeline itself doesn't need to be recreated.
-        DIRTY_BIT_PIPELINE_BINDING,
+        DIRTY_BIT_DEFAULT_ATTRIBS,
+        DIRTY_BIT_PIPELINE,
         DIRTY_BIT_TEXTURES,
         DIRTY_BIT_VERTEX_BUFFERS,
         DIRTY_BIT_INDEX_BUFFER,
@@ -621,9 +606,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
-    using GraphicsDirtyBitHandler =
-        angle::Result (ContextVk::*)(DirtyBits::Iterator *dirtyBitsIterator);
-    using ComputeDirtyBitHandler = angle::Result (ContextVk::*)();
+    using DirtyBitHandler = angle::Result (ContextVk::*)(const gl::Context *,
+                                                         vk::CommandBuffer *commandBuffer);
 
     struct DriverUniformsDescriptorSet
     {
@@ -759,13 +743,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
     {
-        // Note: DIRTY_BIT_PIPELINE_BINDING will be automatically set if pipeline bind is necessary.
-        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
     }
 
     ANGLE_INLINE void invalidateCurrentComputePipeline()
     {
-        mComputeDirtyBits |= kPipelineDescAndBindingDirtyBits;
+        mComputeDirtyBits.set(DIRTY_BIT_PIPELINE);
         mCurrentComputePipeline = nullptr;
     }
 
@@ -776,35 +759,52 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void invalidateDriverUniforms();
 
     // Handlers for graphics pipeline dirty bits.
-    angle::Result handleDirtyGraphicsEventLog(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsTextures(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsDriverUniformsBinding(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsShaderResources(DirtyBits::Iterator *dirtyBitsIterator);
+    angle::Result handleDirtyGraphicsEventLog(const gl::Context *context,
+                                              vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsDefaultAttribs(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsPipeline(const gl::Context *context,
+                                              vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTextures(const gl::Context *context,
+                                              vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsVertexBuffers(const gl::Context *context,
+                                                   vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsIndexBuffer(const gl::Context *context,
+                                                 vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsDriverUniforms(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsDriverUniformsBinding(const gl::Context *context,
+                                                           vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsShaderResources(const gl::Context *context,
+                                                     vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackBuffersEmulation(
-        DirtyBits::Iterator *dirtyBitsIterator);
+        const gl::Context *context,
+        vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackBuffersExtension(
-        DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsTransformFeedbackState(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsTransformFeedbackResume(
-        DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsDescriptorSets(DirtyBits::Iterator *dirtyBitsIterator);
+        const gl::Context *context,
+        vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
+                                                            vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackResume(const gl::Context *context,
+                                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsDescriptorSets(const gl::Context *context,
+                                                             vk::CommandBuffer *commandBuffer);
 
     // Handlers for compute pipeline dirty bits.
-    angle::Result handleDirtyComputeEventLog();
-    angle::Result handleDirtyComputePipelineDesc();
-    angle::Result handleDirtyComputePipelineBinding();
-    angle::Result handleDirtyComputeTextures();
-    angle::Result handleDirtyComputeDriverUniforms();
-    angle::Result handleDirtyComputeDriverUniformsBinding();
-    angle::Result handleDirtyComputeShaderResources();
-    angle::Result handleDirtyComputeDescriptorSets();
+    angle::Result handleDirtyComputeEventLog(const gl::Context *context,
+                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputePipeline(const gl::Context *context,
+                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputeTextures(const gl::Context *context,
+                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputeDriverUniforms(const gl::Context *context,
+                                                   vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputeDriverUniformsBinding(const gl::Context *context,
+                                                          vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputeShaderResources(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputeDescriptorSets(const gl::Context *context,
+                                                    vk::CommandBuffer *commandBuffer);
 
     // Common parts of the common dirty bit handlers.
     angle::Result handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffer);
@@ -873,8 +873,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     SpecConstUsageBits getCurrentProgramSpecConstUsageBits() const;
     void updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageBits usageBits);
 
-    std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
-    std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
+    std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
+    std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
     vk::CommandBuffer *mRenderPassCommandBuffer;
 
@@ -915,8 +915,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     DirtyBits mNewComputeCommandBufferDirtyBits;
     static constexpr DirtyBits kIndexAndVertexDirtyBits{DIRTY_BIT_VERTEX_BUFFERS,
                                                         DIRTY_BIT_INDEX_BUFFER};
-    static constexpr DirtyBits kPipelineDescAndBindingDirtyBits{DIRTY_BIT_PIPELINE_DESC,
-                                                                DIRTY_BIT_PIPELINE_BINDING};
     static constexpr DirtyBits kTexturesAndDescSetDirtyBits{DIRTY_BIT_TEXTURES,
                                                             DIRTY_BIT_DESCRIPTOR_SETS};
     static constexpr DirtyBits kResourcesAndDescSetDirtyBits{DIRTY_BIT_SHADER_RESOURCES,
