@@ -796,6 +796,23 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
+    ASSERT((mRenderPassCommandBuffer == nullptr) == mGraphicsDirtyBits.test(DIRTY_BIT_RENDER_PASS));
+
+    // TODO: Temporary workaround for swiftshader crash on mac.  This whole block should be removed
+    // to allow render pass to be started with the dirty bit.  http://anglebug.com/5644
+    if (!mRenderPassCommandBuffer)
+    {
+        gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
+        bool renderPassDescChanged        = false;
+        ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr, &renderPassDescChanged));
+
+        mGraphicsDirtyBits.reset(DIRTY_BIT_RENDER_PASS);
+        if (renderPassDescChanged)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+        }
+    }
+
     // Create a local object to ensure we flush the descriptor updates to device when we leave this
     // function
     ScopedDescriptorSetUpdates descriptorSetUpdates(this);
