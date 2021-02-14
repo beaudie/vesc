@@ -319,7 +319,6 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished()
     pauseRenderPassQueriesIfActive();
 
     mRenderPassCommandBuffer = nullptr;
-    mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
 }
 
 // ContextVk::ScopedDescriptorSetUpdates implementation.
@@ -417,7 +416,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
     mNewGraphicsCommandBufferDirtyBits = DirtyBits{
-        DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING,       DIRTY_BIT_TEXTURES,
+                                   DIRTY_BIT_PIPELINE_BINDING,       DIRTY_BIT_TEXTURES,
         DIRTY_BIT_VERTEX_BUFFERS,  DIRTY_BIT_INDEX_BUFFER,           DIRTY_BIT_SHADER_RESOURCES,
         DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
@@ -434,7 +433,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsDefaultAttribs;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE_DESC] =
         &ContextVk::handleDirtyGraphicsPipelineDesc;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_RENDER_PASS] = &ContextVk::handleDirtyGraphicsRenderPass;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE_BINDING] =
         &ContextVk::handleDirtyGraphicsPipelineBinding;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyGraphicsTextures;
@@ -796,6 +794,16 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
+    // This could be improved using a dirty bit. But currently it's slower to use a handler
+    // function than an inlined if. We should probably replace the dirty bit dispatch table
+    // with a switch with inlined handler functions.
+    // TODO(jmadill): Use dirty bit. http://anglebug.com/3014
+    if (!mRenderPassCommandBuffer)
+    {
+        gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
+        ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr));
+    }
+
     // Create a local object to ensure we flush the descriptor updates to device when we leave this
     // function
     ScopedDescriptorSetUpdates descriptorSetUpdates(this);
@@ -829,13 +837,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     {
         ASSERT(mRenderPassCommandBuffer);
         return angle::Result::Continue;
-    }
-
-    // If the render pass needs to be recreated, close it before processing dirty bits.  This
-    // operation may add many dirty bits.
-    if (mRenderPassCommandBuffer == nullptr)
-    {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
     }
 
     // Flush any relevant dirty bits.
@@ -1143,10 +1144,6 @@ angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *
 
 angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *dirtyBitsIterator)
 {
-    const VkPipeline previousPipeline = mCurrentGraphicsPipeline
-                                            ? mCurrentGraphicsPipeline->getPipeline().getHandle()
-                                            : VK_NULL_HANDLE;
-
     ASSERT(mExecutable);
 
     if (!mCurrentGraphicsPipeline)
@@ -1190,43 +1187,10 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // the actual serial used when this work is submitted.
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
 
-    const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
-
-    // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
-    // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BINDING.
-    if (newPipeline == previousPipeline)
-    {
-        return angle::Result::Continue;
-    }
-
     pauseTransformFeedbackIfStarted({});
 
     // The pipeline needs to rebind because it's changed.
     dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
-
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator)
-{
-    ASSERT(mRenderPassCommandBuffer == nullptr);
-
-    // Closing a render pass can affect the pipeline (by setting subpass to 0), and sets dirty bits.
-    // As such, it's expected that the render pass is closed before dirty bits are handled.
-    ASSERT(!mRenderPassCommands->started());
-
-    gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getRotatedScissoredRenderArea(this);
-    bool renderPassDescChanged        = false;
-
-    ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr, &renderPassDescChanged));
-
-    // The render pass desc can change when starting the render pass, for example due to
-    // multisampled-render-to-texture needs based on loadOps.  In that case, recreate the graphics
-    // pipeline.
-    if (renderPassDescChanged)
-    {
-        ANGLE_TRY(handleDirtyGraphicsPipelineDesc(dirtyBitsIterator));
-    }
 
     return angle::Result::Continue;
 }
@@ -4700,15 +4664,10 @@ angle::Result ContextVk::beginNewRenderPass(
 }
 
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
-                                         vk::CommandBuffer **commandBufferOut,
-                                         bool *renderPassDescChangedOut)
+                                         vk::CommandBuffer **commandBufferOut)
 {
-    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer,
-                                                   renderPassDescChangedOut));
 
-    // Make sure the render pass is not restarted if it is started by UtilsVk (as opposed to
-    // setupDraw(), which clears this bit automatically).
-    mGraphicsDirtyBits.reset(DIRTY_BIT_RENDER_PASS);
+    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
 
     ANGLE_TRY(resumeRenderPassQueriesIfActive());
 

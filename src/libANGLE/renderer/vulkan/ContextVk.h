@@ -523,9 +523,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     uint32_t getCurrentSubpassIndex() const;
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
-    angle::Result startRenderPass(gl::Rectangle renderArea,
-                                  vk::CommandBuffer **commandBufferOut,
-                                  bool *renderPassDescChangedOut);
+    angle::Result startRenderPass(gl::Rectangle renderArea, vk::CommandBuffer **commandBufferOut);
     void startNextSubpass();
     angle::Result flushCommandsAndEndRenderPass();
 
@@ -595,9 +593,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         // The pipeline has changed and needs to be recreated.  This dirty bit may close the render
         // pass.
         DIRTY_BIT_PIPELINE_DESC,
-
-        // Start the render pass.
-        DIRTY_BIT_RENDER_PASS,
 
         // Dirty bits that must be processed after the render pass is started.  Their handlers
         // record commands.
@@ -779,7 +774,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyGraphicsEventLog(DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *dirtyBitsIterator);
-    angle::Result handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyGraphicsTextures(DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *dirtyBitsIterator);
