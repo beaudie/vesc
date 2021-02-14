@@ -2318,8 +2318,7 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 const gl::Rectangle &scissoredRenderArea,
-                                                vk::CommandBuffer **commandBufferOut,
-                                                bool *renderPassDescChangedOut)
+                                                vk::CommandBuffer **commandBufferOut)
 {
     ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
 
@@ -2599,8 +2598,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     if (unresolveChanged || anyUnresolve)
     {
         contextVk->onDrawFramebufferRenderPassDescChange(this);
-        // Notify that the render pass desc has changed.
-        *renderPassDescChangedOut = true;
     }
 
     return angle::Result::Continue;
@@ -2710,7 +2707,7 @@ angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk)
         return angle::Result::Continue;
     }
 
-    return contextVk->startRenderPass(getRotatedCompleteRenderArea(contextVk), nullptr, nullptr);
+    return contextVk->startRenderPass(getRotatedCompleteRenderArea(contextVk), nullptr);
 }
 
 void FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
