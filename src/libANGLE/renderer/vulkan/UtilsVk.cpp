@@ -996,7 +996,7 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
         pipelineAndSerial->updateSerial(serial);
         commandBuffer->bindComputePipeline(pipelineAndSerial->get());
 
-        contextVk->invalidateComputePipelineBinding();
+        contextVk->invalidateComputePipeline();
     }
     else
     {
@@ -1017,7 +1017,7 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
         helper->updateSerial(serial);
         commandBuffer->bindGraphicsPipeline(helper->getPipeline());
 
-        contextVk->invalidateGraphicsPipelineBinding();
+        contextVk->invalidateGraphicsPipeline();
     }
 
     if (descriptorSet != VK_NULL_HANDLE)
@@ -1492,9 +1492,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     }
     else
     {
-        bool renderPassDescChanged = false;
-        ANGLE_TRY(contextVk->startRenderPass(scissoredRenderArea, &commandBuffer,
-                                             &renderPassDescChanged));
+        ANGLE_TRY(contextVk->startRenderPass(scissoredRenderArea, &commandBuffer));
     }
 
     if (params.clearStencil || params.clearDepth)
@@ -1812,7 +1810,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     pipelineDesc.setScissor(gl_vk::GetRect(params.blitArea));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer, nullptr));
+    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer));
     contextVk->onImageRenderPassRead(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
                                      src);
 
