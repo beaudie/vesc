@@ -267,7 +267,7 @@ def get_shader_variations(shader):
         flags = {}
         enums = []
 
-        for key, value in variations.iteritems():
+        for key, value in variations.items():
             if key == "Description":
                 continue
             elif key == "Flags":
@@ -324,18 +324,18 @@ def read_and_compress_spirv_blob(blob_path):
 
 def write_compressed_spirv_blob_as_c_array(output_path, variable_name, compressed_blob,
                                            preprocessed_source):
-    hex_array = ['0x{:02x}'.format(ord(byte)) for byte in compressed_blob]
+    hex_array = ['0x{:02x}'.format(byte) for byte in compressed_blob]
     blob = ',\n    '.join(','.join(hex_array[i:i + 16]) for i in range(0, len(hex_array), 16))
+    text = template_spirv_blob_inc.format(
+        script_name=__file__,
+        copyright_year=date.today().year,
+        out_file_name=output_path.replace('\\', '/'),
+        variable_name=variable_name,
+        blob=blob,
+        preprocessed_source=preprocessed_source)
 
     with open(output_path, 'wb') as incfile:
-        incfile.write(
-            template_spirv_blob_inc.format(
-                script_name=__file__,
-                copyright_year=date.today().year,
-                out_file_name=output_path,
-                variable_name=variable_name,
-                blob=blob,
-                preprocessed_source=preprocessed_source))
+        incfile.write(str.encode(text))
 
 
 class CompileQueue:
@@ -345,7 +345,7 @@ class CompileQueue:
         def __init__(self, shader_file, preprocessor_args, output_path, variable_name):
             # Asynchronously launch the preprocessor job.
             self.process = subprocess.Popen(
-                preprocessor_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                preprocessor_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             # Store the file name for output to be appended to.
             self.output_path = output_path
             self.variable_name = variable_name
@@ -380,7 +380,7 @@ class CompileQueue:
                      compile_args, preprocessor_args, variable_name):
             # Asynchronously launch the compile job.
             self.process = subprocess.Popen(
-                compile_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                compile_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             # Store info for launching the preprocessor.
             self.preprocessor_args = preprocessor_args
             self.output_path = output_path
@@ -468,11 +468,11 @@ class CompileQueue:
 # [ name, arg1, ..., argN ].  In that case, name is option[0] and option[1:] are extra arguments
 # that need to be passed to glslang_validator for this variation.
 def get_variation_name(option):
-    return option if isinstance(option, unicode) else option[0]
+    return option if isinstance(option, str) else option[0]
 
 
 def get_variation_args(option):
-    return [] if isinstance(option, unicode) else option[1:]
+    return [] if isinstance(option, str) else option[1:]
 
 
 def compile_variation(glslang_path, compile_queue, shader_file, shader_basename, flags, enums,
