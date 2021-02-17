@@ -1037,10 +1037,10 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
 
 angle::Result ContextVk::setupDispatch(const gl::Context *context)
 {
-    // |setupDispatch| and |setupDraw| are special in that they flush dirty bits. Therefore they
-    // don't use the same APIs to record commands as the functions outside ContextVk.
-    // The following ensures prior commands are flushed before we start processing dirty bits.
-    ANGLE_TRY(flushCommandsAndEndRenderPass());
+    // Note: numerous tests miss a glMemoryBarrier call between the initial texture data upload and
+    // the dispatch call.  Flush the outside render pass command buffer as a workaround.
+    // TODO: Remove this and fix tests.  http://anglebug.com/5070
+    ANGLE_TRY(flushOutsideRenderPassCommands());
 
     // Create a local object to ensure we flush the descriptor updates to device when we leave this
     // function
@@ -3713,6 +3713,20 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
         mComputeDirtyBits |= kTexturesAndDescSetDirtyBits;
 
         ANGLE_TRY(updateActiveTextures(context));
+
+        // Read-after-write hazards are generally handled with |glMemoryBarrier| when the source of
+        // write is shader output.  When the write is outside render pass, the natural placement of
+        // the render pass after the current outside render pass commands ensures that the image
+        // layout transitions automatically take care of such synchronizations.
+        //
+        // The only exception is read-after-write when the write happens in the render pass and is
+        // through the framebuffer (as storage image writes are handled with |glMemoryBarrier|).  In
+        // such a case, the render pass must be broken so that the layout transitions and the
+        // dispatch call are placed after the render pass.
+        if (executable->isCompute())
+        {
+            ANGLE_TRY(endRenderPassIfComputeReadAfterAttachmentWrite());
+        }
     }
 
     return angle::Result::Continue;
@@ -5601,6 +5615,47 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     if (shouldCloseOutsideRenderPassCommands)
     {
         return flushOutsideRenderPassCommands();
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::endRenderPassIfComputeReadAfterAttachmentWrite()
+{
+    // Similar to flushCommandBuffersIfNecessary(), but using textures currently bound and used by
+    // the current (compute) program.  This is to handle read-after-write hazards where the write
+    // originates from a framebuffer attachment.
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable && executable->isCompute());
+
+    const bool hasTextures = executable->hasTextures();
+
+    if (!hasTextures)
+    {
+        return angle::Result::Continue;
+    }
+
+    const gl::ActiveTexturesCache &textures        = mState.getActiveTexturesCache();
+    const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
+
+    for (size_t textureUnit : executable->getActiveSamplersMask())
+    {
+        gl::Texture *texture        = textures[textureUnit];
+        gl::TextureType textureType = textureTypes[textureUnit];
+
+        if (texture == nullptr || textureType == gl::TextureType::Buffer)
+        {
+            continue;
+        }
+
+        TextureVk *textureVk = vk::GetImpl(texture);
+        ASSERT(textureVk != nullptr);
+        vk::ImageHelper &image = textureVk->getImage();
+
+        if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
+        {
+            return flushCommandsAndEndRenderPass();
+        }
     }
 
     return angle::Result::Continue;
