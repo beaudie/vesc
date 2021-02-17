@@ -3638,9 +3638,10 @@ angle::Result ImageHelper::init(Context *context,
                                 uint32_t layerCount,
                                 bool isRobustResourceInitEnabled)
 {
-    return initExternal(context, textureType, extents, format, samples, usage,
-                        kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
-                        maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled);
+    return initExternalWithImageFormatList(context, textureType, extents, format, samples, usage,
+                                           kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr,
+                                           baseLevel, maxLevel, mipLevels, layerCount,
+                                           isRobustResourceInitEnabled, nullptr);
 }
 
 angle::Result ImageHelper::initMSAASwapchain(Context *context,
@@ -3656,9 +3657,10 @@ angle::Result ImageHelper::initMSAASwapchain(Context *context,
                                              uint32_t layerCount,
                                              bool isRobustResourceInitEnabled)
 {
-    ANGLE_TRY(initExternal(context, textureType, extents, format, samples, usage,
-                           kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, baseLevel,
-                           maxLevel, mipLevels, layerCount, isRobustResourceInitEnabled));
+    ANGLE_TRY(initExternalWithImageFormatList(context, textureType, extents, format, samples, usage,
+                                              kVkImageCreateFlagsNone, ImageLayout::Undefined,
+                                              nullptr, baseLevel, maxLevel, mipLevels, layerCount,
+                                              isRobustResourceInitEnabled, nullptr));
     if (rotatedAspectRatio)
     {
         std::swap(mExtents.width, mExtents.height);
@@ -3667,20 +3669,21 @@ angle::Result ImageHelper::initMSAASwapchain(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result ImageHelper::initExternal(Context *context,
-                                        gl::TextureType textureType,
-                                        const VkExtent3D &extents,
-                                        const Format &format,
-                                        GLint samples,
-                                        VkImageUsageFlags usage,
-                                        VkImageCreateFlags additionalCreateFlags,
-                                        ImageLayout initialLayout,
-                                        const void *externalImageCreateInfo,
-                                        gl::LevelIndex baseLevel,
-                                        gl::LevelIndex maxLevel,
-                                        uint32_t mipLevels,
-                                        uint32_t layerCount,
-                                        bool isRobustResourceInitEnabled)
+angle::Result ImageHelper::initExternalWithImageFormatList(Context *context,
+                                                           gl::TextureType textureType,
+                                                           const VkExtent3D &extents,
+                                                           const Format &format,
+                                                           GLint samples,
+                                                           VkImageUsageFlags usage,
+                                                           VkImageCreateFlags additionalCreateFlags,
+                                                           ImageLayout initialLayout,
+                                                           const void *externalImageCreateInfo,
+                                                           gl::LevelIndex baseLevel,
+                                                           gl::LevelIndex maxLevel,
+                                                           uint32_t mipLevels,
+                                                           uint32_t layerCount,
+                                                           bool isRobustResourceInitEnabled,
+                                                           bool *imageFormatListEnabledOut)
 {
     ASSERT(!valid());
     ASSERT(!IsAnySubresourceContentDefined(mContentDefined));
@@ -3705,14 +3708,46 @@ angle::Result ImageHelper::initExternal(Context *context,
     ASSERT(textureType != gl::TextureType::Rectangle || mLayerCount == 1);
     ASSERT(textureType != gl::TextureType::CubeMap || mLayerCount == gl::kCubeFaceCount);
 
-    VkImageCreateInfo imageInfo     = {};
-    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.pNext                 = externalImageCreateInfo;
-    imageInfo.flags                 = GetImageCreateFlags(textureType) | additionalCreateFlags;
-    imageInfo.imageType             = mImageType;
-    imageInfo.format                = format.actualImageVkFormat();
-    imageInfo.extent                = mExtents;
-    imageInfo.mipLevels             = mipLevels;
+    // With the introduction of sRGB related GLES extensions any sample/render target could be
+    // respecified causing it to be interpreted in a different colorspace. Create the VkImage
+    // accordingly.
+    bool imageFormatListEnabled                        = false;
+    RendererVk *rendererVk                             = context->getRenderer();
+    VkImageFormatListCreateInfoKHR imageFormatListInfo = {};
+    angle::FormatID imageFormat                        = format.actualImageFormatID;
+    angle::FormatID imageListFormat                    = format.actualImageFormat().isSRGB
+                                          ? ConvertToLinear(imageFormat)
+                                          : ConvertToSRGB(imageFormat);
+    VkFormat imageListVkFormat = vk::GetVkFormatFromFormatID(imageListFormat);
+
+    if (rendererVk->getFeatures().supportsImageFormatList.enabled &&
+        rendererVk->haveSameFormatFeatureBits(imageFormat, imageListFormat))
+    {
+        imageFormatListEnabled = true;
+
+        // Add VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT to VkImage create flag
+        additionalCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+
+        // There is just 1 additional format we might use to create a VkImageView for this VkImage
+        imageFormatListInfo.sType           = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
+        imageFormatListInfo.pNext           = externalImageCreateInfo;
+        imageFormatListInfo.viewFormatCount = 1;
+        imageFormatListInfo.pViewFormats    = &imageListVkFormat;
+    }
+
+    if (imageFormatListEnabledOut)
+    {
+        *imageFormatListEnabledOut = imageFormatListEnabled;
+    }
+
+    VkImageCreateInfo imageInfo = {};
+    imageInfo.sType             = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.pNext     = (imageFormatListEnabled) ? &imageFormatListInfo : externalImageCreateInfo;
+    imageInfo.flags     = GetImageCreateFlags(textureType) | additionalCreateFlags;
+    imageInfo.imageType = mImageType;
+    imageInfo.format    = format.actualImageVkFormat();
+    imageInfo.extent    = mExtents;
+    imageInfo.mipLevels = mipLevels;
     imageInfo.arrayLayers           = mLayerCount;
     imageInfo.samples               = gl_vk::GetSamples(mSamples);
     imageInfo.tiling                = mTilingMode;
@@ -4187,11 +4222,11 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
              : VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
     constexpr VkImageCreateFlags kMultisampledCreateFlags = 0;
 
-    ANGLE_TRY(initExternal(
+    ANGLE_TRY(initExternalWithImageFormatList(
         context, textureType, resolveImage.getExtents(), resolveImage.getFormat(), samples,
         kMultisampledUsageFlags, kMultisampledCreateFlags, ImageLayout::Undefined, nullptr,
         resolveImage.getBaseLevel(), resolveImage.getMaxLevel(), resolveImage.getLevelCount(),
-        resolveImage.getLayerCount(), isRobustResourceInitEnabled));
+        resolveImage.getLayerCount(), isRobustResourceInitEnabled, nullptr));
 
     const VkMemoryPropertyFlags kMultisampledMemoryFlags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
