@@ -397,7 +397,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mPerfCounters{},
       mObjectPerfCounters{},
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mCurrentIndirectBuffer(nullptr),
+      mCurrentDrawIndirectBuffer(nullptr),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
@@ -443,6 +443,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VERTEX_BUFFERS] =
         &ContextVk::handleDirtyGraphicsVertexBuffers;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_INDEX_BUFFER] = &ContextVk::handleDirtyGraphicsIndexBuffer;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_INDIRECT_BUFFER] =
+        &ContextVk::handleDirtyGraphicsIndirectBuffer;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] =
         &ContextVk::handleDirtyGraphicsDriverUniforms;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS_BINDING] =
@@ -472,6 +474,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE_BINDING] =
         &ContextVk::handleDirtyComputePipelineBinding;
     mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyComputeTextures;
+    mComputeDirtyBitHandlers[DIRTY_BIT_INDIRECT_BUFFER] =
+        &ContextVk::handleDirtyComputeIndirectBuffer;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] =
         &ContextVk::handleDirtyComputeDriverUniforms;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS_BINDING] =
@@ -919,14 +923,15 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
     GLsizei vertexCount   = 0;
     GLsizei instanceCount = 1;
 
-    if (indirectBuffer != mCurrentIndirectBuffer)
+    // Break the render pass if the indirect buffer was previously used as the output from transform
+    // feedback.
+    if (mCurrentTransformFeedbackBuffers.contains(indirectBuffer))
     {
         ANGLE_TRY(flushCommandsAndEndRenderPass());
-        mCurrentIndirectBuffer = indirectBuffer;
     }
 
-    mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                    vk::PipelineStage::DrawIndirect, indirectBuffer);
+    mGraphicsDirtyBits.set(DIRTY_BIT_INDIRECT_BUFFER);
+    mCurrentDrawIndirectBuffer = indirectBuffer;
 
     ANGLE_TRY(setupDraw(context, mode, firstVertex, vertexCount, instanceCount,
                         gl::DrawElementsType::InvalidEnum, nullptr, dirtyBitMask));
@@ -1029,10 +1034,10 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
 
 angle::Result ContextVk::setupDispatch(const gl::Context *context)
 {
-    // |setupDispatch| and |setupDraw| are special in that they flush dirty bits. Therefore they
-    // don't use the same APIs to record commands as the functions outside ContextVk.
-    // The following ensures prior commands are flushed before we start processing dirty bits.
-    ANGLE_TRY(flushCommandsAndEndRenderPass());
+    // Note: numerous tests miss a glMemoryBarrier call between the initial texture data upload and
+    // the dispatch call.  Flush the outside render pass command buffer as a workaround.
+    // TODO: Remove this and fix tests.  http://anglebug.com/5070
+    ANGLE_TRY(flushOutsideRenderPassCommands());
 
     // Create a local object to ensure we flush the descriptor updates to device when we leave this
     // function
@@ -1574,6 +1579,30 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dir
                                     elementArrayBuffer);
 
     return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsIndirectBuffer(DirtyBits::Iterator *dirtyBitsIterator,
+                                                           DirtyBits dirtyBitMask)
+{
+    ASSERT(mCurrentDrawIndirectBuffer);
+    handleDirtyIndirectBufferImpl(mRenderPassCommands, mCurrentDrawIndirectBuffer);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyComputeIndirectBuffer()
+{
+    gl::Buffer *glBuffer     = mState.getTargetBuffer(gl::BufferBinding::DispatchIndirect);
+    vk::BufferHelper &buffer = vk::GetImpl(glBuffer)->getBuffer();
+
+    handleDirtyIndirectBufferImpl(mOutsideRenderPassCommands, &buffer);
+    return angle::Result::Continue;
+}
+
+void ContextVk::handleDirtyIndirectBufferImpl(vk::CommandBufferHelper *commandBufferHelper,
+                                              vk::BufferHelper *buffer)
+{
+    commandBufferHelper->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+                                    vk::PipelineStage::DrawIndirect, buffer);
 }
 
 ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
@@ -2426,9 +2455,6 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
-        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                        vk::PipelineStage::DrawIndirect, currentIndirectBuf);
-
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
         // Mapping the buffer will cause a flush.
@@ -2480,9 +2506,6 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
-        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                        vk::PipelineStage::DrawIndirect, currentIndirectBuf);
-
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
         // Mapping the buffer will cause a flush.
@@ -3915,12 +3938,19 @@ angle::Result ContextVk::dispatchCompute(const gl::Context *context,
 
 angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
 {
-    ANGLE_TRY(setupDispatch(context));
-
     gl::Buffer *glBuffer     = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
     vk::BufferHelper &buffer = vk::GetImpl(glBuffer)->getBuffer();
-    mOutsideRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                           vk::PipelineStage::DrawIndirect, &buffer);
+
+    // Break the render pass if the indirect buffer was previously used as the output from transform
+    // feedback.
+    if (mCurrentTransformFeedbackBuffers.contains(&buffer))
+    {
+        ANGLE_TRY(flushCommandsAndEndRenderPass());
+    }
+
+    mComputeDirtyBits.set(DIRTY_BIT_INDIRECT_BUFFER);
+
+    ANGLE_TRY(setupDispatch(context));
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(), indirect);
 
@@ -5047,7 +5077,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
     }
 
     mCurrentTransformFeedbackBuffers.clear();
-    mCurrentIndirectBuffer = nullptr;
+    mCurrentDrawIndirectBuffer = nullptr;
 
     // Reset serials for XFB if active.
     if (mState.isTransformFeedbackActiveUnpaused())
