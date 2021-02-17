@@ -122,7 +122,7 @@ void GenerateContextLostErrorOnCurrentGlobalContext()
 }
 }  // namespace gl
 
-#ifdef ANGLE_PLATFORM_WINDOWS
+#ifdef ANGLE_PLATFORM_WINDOWS && !defined(ANGLE_STATIC)
 namespace egl
 {
 
@@ -238,4 +238,4 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
 
     return TRUE;
 }
-#endif  // ANGLE_PLATFORM_WINDOWS
+#endif  // ANGLE_PLATFORM_WINDOWS && !ANGLE_STATIC
