@@ -597,12 +597,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         // Dirty bits that must be processed before the render pass is started.  The handlers for
         // these dirty bits don't record any commands.
         DIRTY_BIT_DEFAULT_ATTRIBS,
+        // Start the render pass.
+        DIRTY_BIT_RENDER_PASS,
+
         // The pipeline has changed and needs to be recreated.  This dirty bit may close the render
         // pass.
         DIRTY_BIT_PIPELINE_DESC,
-
-        // Start the render pass.
-        DIRTY_BIT_RENDER_PASS,
 
         // Dirty bits that must be processed after the render pass is started.  Their handlers
         // record commands.
