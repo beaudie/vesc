@@ -880,6 +880,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void initIndexTypeMap();
 
     angle::Result endRenderPassIfTransformFeedbackBuffer(const vk::BufferHelper *buffer);
+    angle::Result endRenderPassIfComputeReadAfterAttachmentWrite();
 
     void populateTransformFeedbackBufferSet(
         size_t bufferCount,
