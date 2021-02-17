@@ -615,6 +615,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         DIRTY_BIT_TEXTURES,
         DIRTY_BIT_VERTEX_BUFFERS,
         DIRTY_BIT_INDEX_BUFFER,
+        DIRTY_BIT_INDIRECT_BUFFER,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
         // Shader resources excluding textures, which are handled separately.
@@ -801,6 +802,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                    DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dirtyBitsIterator,
                                                  DirtyBits dirtyBitMask);
+    angle::Result handleDirtyGraphicsIndirectBuffer(DirtyBits::Iterator *dirtyBitsIterator,
+                                                    DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *dirtyBitsIterator,
                                                     DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsDriverUniformsBinding(DirtyBits::Iterator *dirtyBitsIterator,
@@ -826,6 +829,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyComputePipelineDesc();
     angle::Result handleDirtyComputePipelineBinding();
     angle::Result handleDirtyComputeTextures();
+    angle::Result handleDirtyComputeIndirectBuffer();
     angle::Result handleDirtyComputeDriverUniforms();
     angle::Result handleDirtyComputeDriverUniformsBinding();
     angle::Result handleDirtyComputeShaderResources();
@@ -836,6 +840,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                DirtyBits dirtyBitMask);
     angle::Result handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyTexturesImpl(vk::CommandBufferHelper *commandBufferHelper);
+    void handleDirtyIndirectBufferImpl(vk::CommandBufferHelper *commandBufferHelper,
+                                       vk::BufferHelper *buffer);
     angle::Result handleDirtyShaderResourcesImpl(vk::CommandBufferHelper *commandBufferHelper);
     void handleDirtyDriverUniformsBindingImpl(vk::CommandBuffer *commandBuffer,
                                               VkPipelineBindPoint bindPoint,
@@ -1071,7 +1077,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     egl::ContextPriority mContextPriority;
 
-    const vk::BufferHelper *mCurrentIndirectBuffer;
+    // The current draw indirect buffer.  This may be different from the front-end buffer due to
+    // emulation of line loops, and is the one that's actually used for drawing.
+    vk::BufferHelper *mCurrentDrawIndirectBuffer;
 
     // Storage for vkUpdateDescriptorSets
     std::vector<VkDescriptorBufferInfo> mDescriptorBufferInfos;
