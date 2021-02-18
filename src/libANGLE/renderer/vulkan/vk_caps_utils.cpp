@@ -246,7 +246,10 @@ bool HasTextureBufferSupport(const RendererVk *rendererVk)
     {
         if (!HasTexelBufferSupport(rendererVk, formatGL))
         {
-            return false;
+            WARN() << "Format " << formatGL
+                   << " does not support UNIFORM_TEXEL_BUFFER and/or STORAGE_TEXEL_BUFFER. The "
+                      "extension EXT_texture_buffer will be enabled anyway, though there may be "
+                      "errors if that format is used.";
         }
     }
 
