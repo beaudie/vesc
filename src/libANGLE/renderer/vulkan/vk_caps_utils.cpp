@@ -229,8 +229,8 @@ bool HasTextureBufferSupport(const RendererVk *rendererVk)
         }
     }
 
-    // TODO: RGB32 formats currently don't have STORAGE_TEXEL_BUFFER support on any known platform.
-    // Despite this limitation, we expose EXT_texture_buffer.  http://anglebug.com/3573
+    // TODO(http://anglebug.com/5671): RGB32 formats currently don't have STORAGE_TEXEL_BUFFER
+    // support on any known platform. Despite this limitation, we expose EXT_texture_buffer.
     if (rendererVk->getFeatures().exposeNonConformantExtensionsAndVersions.enabled)
     {
         return true;
@@ -246,7 +246,10 @@ bool HasTextureBufferSupport(const RendererVk *rendererVk)
     {
         if (!HasTexelBufferSupport(rendererVk, formatGL))
         {
-            return false;
+            // Don't return 'false', since the extension still needs to be exposed.
+            WARN() << "Format " << formatGL
+                   << " does not support texture buffers. The extension EXT_texture_buffer will be "
+                      "enabled anyway, though there will be errors if that format is used.";
         }
     }
 
