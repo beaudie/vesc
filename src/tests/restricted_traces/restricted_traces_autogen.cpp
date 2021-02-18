@@ -41,6 +41,7 @@
 #include "manhattan_10/manhattan_10_capture_context1.h"
 #include "manhattan_31/manhattan_31_capture_context6.h"
 #include "marvel_contest_of_champions/marvel_contest_of_champions_capture_context1.h"
+#include "messenger_lite/messenger_lite_capture_context1.h"
 #include "minecraft/minecraft_capture_context2.h"
 #include "mobile_legends/mobile_legends_capture_context1.h"
 #include "nba2k20_800/nba2k20_800_capture_context1.h"
@@ -176,6 +177,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {marvel_contest_of_champions::kReplayFrameStart, marvel_contest_of_champions::kReplayFrameEnd,
       marvel_contest_of_champions::kReplayDrawSurfaceWidth,
       marvel_contest_of_champions::kReplayDrawSurfaceHeight, "marvel_contest_of_champions"}},
+    {RestrictedTraceID::messenger_lite,
+     {messenger_lite::kReplayFrameStart, messenger_lite::kReplayFrameEnd,
+      messenger_lite::kReplayDrawSurfaceWidth, messenger_lite::kReplayDrawSurfaceHeight,
+      "messenger_lite"}},
     {RestrictedTraceID::minecraft,
      {minecraft::kReplayFrameStart, minecraft::kReplayFrameEnd, minecraft::kReplayDrawSurfaceWidth,
       minecraft::kReplayDrawSurfaceHeight, "minecraft"}},
@@ -357,6 +362,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::marvel_contest_of_champions:
             marvel_contest_of_champions::ReplayContext1Frame(frameIndex);
             break;
+        case RestrictedTraceID::messenger_lite:
+            messenger_lite::ReplayContext1Frame(frameIndex);
+            break;
         case RestrictedTraceID::minecraft:
             minecraft::ReplayContext2Frame(frameIndex);
             break;
@@ -520,6 +528,9 @@ void ResetReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::marvel_contest_of_champions:
             marvel_contest_of_champions::ResetContext1Replay();
+            break;
+        case RestrictedTraceID::messenger_lite:
+            messenger_lite::ResetContext1Replay();
             break;
         case RestrictedTraceID::minecraft:
             minecraft::ResetContext2Replay();
@@ -685,6 +696,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::marvel_contest_of_champions:
             marvel_contest_of_champions::SetupContext1Replay();
             break;
+        case RestrictedTraceID::messenger_lite:
+            messenger_lite::SetupContext1Replay();
+            break;
         case RestrictedTraceID::minecraft:
             minecraft::SetupContext2Replay();
             break;
@@ -849,6 +863,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::marvel_contest_of_champions:
             marvel_contest_of_champions::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::messenger_lite:
+            messenger_lite::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::minecraft:
             minecraft::SetBinaryDataDir(dataDir);
             break;
@@ -1012,6 +1029,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::marvel_contest_of_champions:
             marvel_contest_of_champions::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::messenger_lite:
+            messenger_lite::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::minecraft:
             minecraft::SetBinaryDataDecompressCallback(callback);
