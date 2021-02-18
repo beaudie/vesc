@@ -1626,9 +1626,15 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
         updateActiveColorMasks(colorIndexGL, actualFormat.redBits > 0, actualFormat.greenBits > 0,
                                actualFormat.blueBits > 0, actualFormat.alphaBits > 0);
 
-        const angle::Format &intendedFormat = renderTarget->getImageFormat().intendedFormat();
-        mEmulatedAlphaAttachmentMask.set(
-            colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
+        // Ensure the alpha channel write mask is always set for swapchain images.  Otherwise,
+        // address the case of non-swapchain render targets that have no alpha channel but are
+        // represented with a texture that has one.
+        if (!mBackbuffer)
+        {
+            const angle::Format &intendedFormat = renderTarget->getImageFormat().intendedFormat();
+            mEmulatedAlphaAttachmentMask.set(
+                colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
+        }
 
         contextVk->updateColorMasks(context->getState().getBlendStateExt());
     }
