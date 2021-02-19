@@ -486,3 +486,27 @@
 5169 NEXUS5X GLES : dEQP-GLES2.functional.fbo.render.texsubimage.after_render_tex2d_rgba = FAIL
 5169 NEXUS5X GLES : dEQP-GLES2.functional.fbo.render.texsubimage.between_render_tex2d_rgb = FAIL
 5169 NEXUS5X GLES : dEQP-GLES2.functional.fbo.render.texsubimage.between_render_tex2d_rgba = FAIL
+
+// AddressSanitizer:DEADLYSIGNAL on Nexus 5X
+5665 NEXUS5X : dEQP-GLES2.functional.clip_control.depth_mode_one_to_one = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.clip_control.depth_mode_zero_to_one = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.clip_control.initial = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.clip_control.modify_get = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.clip_control.origin = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.clip_control.viewport_bounds = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.color_clear.tex2d_rgb_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.recreate_colorbuffer.rebind_tex2d_rgb_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.resize.rbo_rgb565_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.shared_colorbuffer.rbo_rgb565_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.shared_colorbuffer.tex2d_rgba_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.shared_colorbuffer.tex2d_rgb_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.shared_depthbuffer.rbo_rgb5_a1_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.shared_depthbuffer.tex2d_rgb_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.stencil.rbo_rgb5_a1_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.fbo.render.stencil.tex2d_rgba_depth_component16_stencil_index8 = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.multisample.common_edge_big_quad = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.multisample.common_edge_small_quads = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.multisample.num_samples_polygon = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.shaders.struct.uniform.sampler_in_array_function_arg_fragment = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.shaders.struct.uniform.sampler_in_array_function_arg_vertex = SKIP
+5665 NEXUS5X : dEQP-GLES2.functional.shaders.struct.uniform.sampler_in_function_arg_vertex = SKIP
