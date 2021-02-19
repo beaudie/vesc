@@ -1168,7 +1168,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     // Query transform feedback features
     if (ExtensionFound(VK_EXT_TRANSFORM_FEEDBACK_EXTENSION_NAME, deviceExtensionNames))
     {
-        vk::AddToPNextChain(&deviceFeatures, &mTransformFeedbackFeatures);
+        // vk::AddToPNextChain(&deviceFeatures, &mTransformFeedbackFeatures);
     }
 
     // Query uint8 index type features
