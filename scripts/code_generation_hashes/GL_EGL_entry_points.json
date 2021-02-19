@@ -1,4 +1,6 @@
 {
+  "scripts/cl.xml":
+    "c7b7bf8184d73c991f3a1ca11e882894",
   "scripts/egl.xml":
     "013c552e6c523abdcf268268ea47e9fe",
   "scripts/egl_angle_ext.xml":
@@ -8,15 +10,19 @@
   "scripts/entry_point_packed_gl_enums.json":
     "4f7b43863a5e61991bba4010db463679",
   "scripts/generate_entry_points.py":
-    "09729fe8be0f242cc97058c2b5ab7310",
+    "c0feda694073201d6e2689fc71fa3bba",
   "scripts/gl.xml":
     "f66967f3f3d696b5d8306fd80bbd49a8",
   "scripts/gl_angle_ext.xml":
     "0b4f3476d76a5ccc40af342d6c08739d",
   "scripts/registry_xml.py":
-    "574c34b93db348eb2e13d8026c3014ff",
+    "7e9b9e8b735dadb417b2d10434f56a41",
   "scripts/wgl.xml":
     "c36001431919e1c435f1215a85f7e1db",
+  "src/cl/entry_points_cl_autogen.cpp":
+    "5896e22eda0ee6e94a7b994b464d19ba",
+  "src/cl/entry_points_cl_autogen.h":
+    "1f1c7e50015fe7822ced507a0c991e20",
   "src/common/entry_points_enum_autogen.cpp":
     "d83f88ab763eb661dc5196d144fdfda5",
   "src/common/entry_points_enum_autogen.h":
