@@ -1580,6 +1580,9 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
         mColorRenderTarget.updateSwapchainImage(&image.image, &image.imageViews, nullptr, nullptr);
     }
 
+    // On Android, need to stage a clear for GL_RGB formats that are emulated with GL_RGBA.
+    mColorRenderTarget.getImageForRenderPass().stageClearIfEmulatedFormat(false);
+
     // Notify the owning framebuffer there may be staged updates.
     if (image.image.hasStagedUpdatesInAllocatedLevels())
     {

@@ -1604,6 +1604,9 @@ class ImageHelper final : public Resource, public angle::Subject
     void stageClear(const gl::ImageIndex &index,
                     VkImageAspectFlags aspectFlags,
                     const VkClearValue &clearValue);
+    // If the image has emulated channels, we clear them once so as not to leave garbage on those
+    // channels.
+    void stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled);
 
     // Stage a clear based on robust resource init.
     angle::Result stageRobustResourceClearWithFormat(ContextVk *contextVk,
@@ -1867,10 +1870,6 @@ class ImageHelper final : public Resource, public angle::Subject
                      ImageLayout newLayout,
                      uint32_t newQueueFamilyIndex,
                      CommandBufferT *commandBuffer);
-
-    // If the image has emulated channels, we clear them once so as not to leave garbage on those
-    // channels.
-    void stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled);
 
     void clearColor(const VkClearColorValue &color,
                     LevelIndex baseMipLevelVk,
