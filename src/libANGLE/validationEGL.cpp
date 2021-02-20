@@ -696,19 +696,19 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
                     break;
 
                 case EGL_PLATFORM_ANGLE_CONTEXT_VIRTUALIZATION_ANGLE:
-                    if (!clientExtensions.platformANGLEContextVirtualization)
-                    {
-                        val->setError(EGL_BAD_ATTRIBUTE,
-                                      "EGL_ANGLE_platform_angle_context_"
-                                      "virtualization extension not active");
-                        return false;
-                    }
-
                     switch (value)
                     {
                         case EGL_DONT_CARE:
                         case EGL_FALSE:
+                            break;
                         case EGL_TRUE:
+                            if (!clientExtensions.platformANGLEContextVirtualization)
+                            {
+                                val->setError(EGL_BAD_ATTRIBUTE,
+                                              "EGL_ANGLE_platform_angle_context_"
+                                              "virtualization extension not active");
+                                return false;
+                            }
                             break;
 
                         default:
