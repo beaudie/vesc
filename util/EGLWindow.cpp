@@ -161,6 +161,18 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
 
     if (params.contextVirtualization != EGL_DONT_CARE)
     {
+        bool platformANGLEContextVirtualization = false;
+#if defined(ANGLE_ENABLE_OPENGL)
+        // Selecting context virtualization is currently only supported in the OpenGL backend.
+        platformANGLEContextVirtualization = true;
+#endif
+
+        if (!platformANGLEContextVirtualization)
+        {
+            fprintf(stderr, "Virtualization extension not active.\n");
+            destroyGL();
+            return false;
+        }
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_CONTEXT_VIRTUALIZATION_ANGLE);
         displayAttributes.push_back(params.contextVirtualization);
     }
