@@ -383,6 +383,18 @@ bool IsConfigAllowlisted(const SystemInfo &systemInfo, const PlatformParameters 
     VendorID vendorID =
         systemInfo.gpus.empty() ? 0 : systemInfo.gpus[systemInfo.activeGPUIndex].vendorId;
 
+    bool platformANGLEContextVirtualization = false;
+#if defined(ANGLE_ENABLE_OPENGL)
+    // Selecting context virtualization is currently only supported in the OpenGL backend.
+    platformANGLEContextVirtualization = true;
+#endif
+
+    if (!platformANGLEContextVirtualization &&
+        param.eglParameters.contextVirtualization != EGL_DONT_CARE)
+    {
+        return false;
+    }
+
     // We support the default and null back-ends on every platform.
     if (param.driver == GLESDriverType::AngleEGL)
     {
