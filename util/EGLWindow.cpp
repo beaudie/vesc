@@ -159,7 +159,7 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         displayAttributes.push_back(params.debugLayersEnabled);
     }
 
-    if (params.contextVirtualization != EGL_DONT_CARE)
+    if (params.contextVirtualization != EGL_FALSE && params.contextVirtualization != EGL_DONT_CARE)
     {
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_CONTEXT_VIRTUALIZATION_ANGLE);
         displayAttributes.push_back(params.contextVirtualization);
