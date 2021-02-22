@@ -30,7 +30,9 @@ if (angle_has_build) {
   }
 
   angle_use_x11 = use_x11 && !is_ggp
-  angle_use_vulkan_display = is_linux && !use_x11 && !is_ggp && !use_ozone
+  angle_use_vulkan_display =
+      is_linux && !use_x11 && !is_ggp &&
+      (!use_ozone || angle_vulkan_display_mode == "headless")
 } else {
   declare_args() {
     is_ubsan = false
