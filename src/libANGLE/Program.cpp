@@ -944,6 +944,7 @@ void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
     stream->writeInt(var.offset);
     stream->writeBool(var.readonly);
     stream->writeBool(var.writeonly);
+    stream->writeInt(var.FragmentInOut);
     stream->writeBool(var.texelFetchStaticUse);
 
     ASSERT(var.fields.empty());
@@ -967,6 +968,7 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
     var->offset              = stream->readInt<int>();
     var->readonly            = stream->readBool();
     var->writeonly           = stream->readBool();
+    var->FragmentInOut       = stream->readInt<int>();
     var->texelFetchStaticUse = stream->readBool();
 }
 
@@ -3554,8 +3556,8 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
 {
     ASSERT(combinedImageUniforms);
 
-    // Iterate over mExecutable->mUniforms from the back, and find the range of atomic counters,
-    // images and samplers in that order.
+    // Iterate over mExecutable->mUniforms from the back, and find the range of subpass inputs,
+    // atomic counters, images and samplers in that order.
     auto highIter = mState.mExecutable->getUniforms().rbegin();
     auto lowIter  = highIter;
 
@@ -3564,7 +3566,19 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
 
     // Note that uniform block uniforms are not yet appended to this list.
     ASSERT(mState.mExecutable->getUniforms().size() == 0 || highIter->isAtomicCounter() ||
-           highIter->isImage() || highIter->isSampler() || highIter->isInDefaultBlock());
+           highIter->isImage() || highIter->isSampler() || highIter->isInDefaultBlock() ||
+           highIter->isFragmentInOut());
+
+    for (; lowIter != mState.mExecutable->getUniforms().rend() && lowIter->isFragmentInOut();
+         ++lowIter)
+    {
+        --low;
+    }
+
+    mState.mExecutable->mFragmentInoutRange = RangeUI(low, high);
+
+    highIter = lowIter;
+    high     = low;
 
     for (; lowIter != mState.mExecutable->getUniforms().rend() && lowIter->isAtomicCounter();
          ++lowIter)

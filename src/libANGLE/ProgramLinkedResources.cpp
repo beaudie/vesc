@@ -363,6 +363,7 @@ struct ShaderUniformCount
     unsigned int samplerCount       = 0;
     unsigned int imageCount         = 0;
     unsigned int atomicCounterCount = 0;
+    unsigned int fragmentInOutCount = 0;
 };
 
 ShaderUniformCount &operator+=(ShaderUniformCount &lhs, const ShaderUniformCount &rhs)
@@ -371,6 +372,7 @@ ShaderUniformCount &operator+=(ShaderUniformCount &lhs, const ShaderUniformCount
     lhs.samplerCount += rhs.samplerCount;
     lhs.imageCount += rhs.imageCount;
     lhs.atomicCounterCount += rhs.atomicCounterCount;
+    lhs.fragmentInOutCount += rhs.fragmentInOutCount;
     return lhs;
 }
 
@@ -386,6 +388,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
                           std::vector<LinkedUniform> *samplerUniforms,
                           std::vector<LinkedUniform> *imageUniforms,
                           std::vector<LinkedUniform> *atomicCounterUniforms,
+                          std::vector<LinkedUniform> *inputAttachmentUniforms,
                           std::vector<UnusedUniform> *unusedUniforms)
         : sh::VariableNameVisitor("", ""),
           mShaderType(shaderType),
@@ -398,15 +401,17 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
           mSamplerUniforms(samplerUniforms),
           mImageUniforms(imageUniforms),
           mAtomicCounterUniforms(atomicCounterUniforms),
+          mInputAttachmentUniforms(inputAttachmentUniforms),
           mUnusedUniforms(unusedUniforms)
     {}
 
-    void visitNamedSamplerOrImage(const sh::ShaderVariable &sampler,
-                                  const std::string &name,
-                                  const std::string &mappedName,
-                                  const std::vector<unsigned int> &arraySizes) override
+    void visitNamedSamplerOrImageOrSubpassInput(
+        const sh::ShaderVariable &variable,
+        const std::string &name,
+        const std::string &mappedName,
+        const std::vector<unsigned int> &arraySizes) override
     {
-        visitNamedVariable(sampler, false, name, mappedName, arraySizes);
+        visitNamedVariable(variable, false, name, mappedName, arraySizes);
     }
 
     void visitNamedVariable(const sh::ShaderVariable &variable,
@@ -418,6 +423,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         bool isSampler                          = IsSamplerType(variable.type);
         bool isImage                            = IsImageType(variable.type);
         bool isAtomicCounter                    = IsAtomicCounterType(variable.type);
+        bool isFragmentInOut                    = IsFragmentInOut(variable.FragmentInOut);
         std::vector<LinkedUniform> *uniformList = mUniforms;
         if (isSampler)
         {
@@ -430,6 +436,10 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         else if (isAtomicCounter)
         {
             uniformList = mAtomicCounterUniforms;
+        }
+        else if (isFragmentInOut)
+        {
+            uniformList = mInputAttachmentUniforms;
         }
 
         std::string fullNameWithArrayIndex(name);
@@ -479,6 +489,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             linkedUniform.outerArraySizes     = arraySizes;
             linkedUniform.texelFetchStaticUse = variable.texelFetchStaticUse;
             linkedUniform.imageUnitFormat     = variable.imageUnitFormat;
+            linkedUniform.FragmentInOut       = variable.FragmentInOut;
             if (variable.hasParentArrayIndex())
             {
                 linkedUniform.setParentArrayIndex(variable.parentArrayIndex());
@@ -489,9 +500,9 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             }
             else
             {
-                mUnusedUniforms->emplace_back(linkedUniform.name, linkedUniform.isSampler(),
-                                              linkedUniform.isImage(),
-                                              linkedUniform.isAtomicCounter());
+                mUnusedUniforms->emplace_back(
+                    linkedUniform.name, linkedUniform.isSampler(), linkedUniform.isImage(),
+                    linkedUniform.isAtomicCounter(), linkedUniform.isFragmentInOut());
             }
 
             uniformList->push_back(linkedUniform);
@@ -502,7 +513,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         // Samplers and images aren't "real" uniforms, so they don't count towards register usage.
         // Likewise, don't count "real" uniforms towards opaque count.
 
-        if (!IsOpaqueType(variable.type))
+        if (!IsOpaqueType(variable.type) && !isFragmentInOut)
         {
             mUniformCount.vectorCount += VariableRegisterCount(variable.type) * elementCount;
         }
@@ -510,6 +521,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         mUniformCount.samplerCount += (isSampler ? elementCount : 0);
         mUniformCount.imageCount += (isImage ? elementCount : 0);
         mUniformCount.atomicCounterCount += (isAtomicCounter ? elementCount : 0);
+        mUniformCount.fragmentInOutCount += (isFragmentInOut ? elementCount : 0);
 
         if (mLocation != -1)
         {
@@ -547,6 +559,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
     std::vector<LinkedUniform> *mSamplerUniforms;
     std::vector<LinkedUniform> *mImageUniforms;
     std::vector<LinkedUniform> *mAtomicCounterUniforms;
+    std::vector<LinkedUniform> *mInputAttachmentUniforms;
     std::vector<UnusedUniform> *mUnusedUniforms;
     ShaderUniformCount mUniformCount;
     unsigned int mStructStackSize = 0;
@@ -1037,7 +1050,8 @@ void UniformLinker::pruneUnusedUniforms()
         else
         {
             mUnusedUniforms.emplace_back(uniformIter->name, uniformIter->isSampler(),
-                                         uniformIter->isImage(), uniformIter->isAtomicCounter());
+                                         uniformIter->isImage(), uniformIter->isAtomicCounter(),
+                                         uniformIter->isFragmentInOut());
             uniformIter = mUniforms.erase(uniformIter);
         }
     }
@@ -1049,6 +1063,7 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
     std::vector<LinkedUniform> &samplerUniforms,
     std::vector<LinkedUniform> &imageUniforms,
     std::vector<LinkedUniform> &atomicCounterUniforms,
+    std::vector<LinkedUniform> &inputAttachmentUniforms,
     std::vector<UnusedUniform> &unusedUniforms,
     InfoLog &infoLog)
 {
@@ -1056,7 +1071,8 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
     for (const sh::ShaderVariable &uniform : shader->getUniforms())
     {
         FlattenUniformVisitor flattener(shader->getType(), uniform, &mUniforms, &samplerUniforms,
-                                        &imageUniforms, &atomicCounterUniforms, &unusedUniforms);
+                                        &imageUniforms, &atomicCounterUniforms,
+                                        &inputAttachmentUniforms, &unusedUniforms);
         sh::TraverseShaderVariable(uniform, false, &flattener);
 
         if (uniform.active)
@@ -1065,9 +1081,9 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
         }
         else
         {
-            unusedUniforms.emplace_back(uniform.name, IsSamplerType(uniform.type),
-                                        IsImageType(uniform.type),
-                                        IsAtomicCounterType(uniform.type));
+            unusedUniforms.emplace_back(
+                uniform.name, IsSamplerType(uniform.type), IsImageType(uniform.type),
+                IsAtomicCounterType(uniform.type), IsFragmentInOut(uniform.FragmentInOut));
         }
     }
 
@@ -1125,6 +1141,7 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoL
     std::vector<LinkedUniform> samplerUniforms;
     std::vector<LinkedUniform> imageUniforms;
     std::vector<LinkedUniform> atomicCounterUniforms;
+    std::vector<LinkedUniform> inputAttachmentUniforms;
     std::vector<UnusedUniform> unusedUniforms;
 
     for (const ShaderType shaderType : AllShaderTypes())
@@ -1136,7 +1153,8 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoL
         }
 
         if (!flattenUniformsAndCheckCapsForShader(shader, caps, samplerUniforms, imageUniforms,
-                                                  atomicCounterUniforms, unusedUniforms, infoLog))
+                                                  atomicCounterUniforms, inputAttachmentUniforms,
+                                                  unusedUniforms, infoLog))
         {
             return false;
         }
@@ -1145,6 +1163,8 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoL
     mUniforms.insert(mUniforms.end(), samplerUniforms.begin(), samplerUniforms.end());
     mUniforms.insert(mUniforms.end(), imageUniforms.begin(), imageUniforms.end());
     mUniforms.insert(mUniforms.end(), atomicCounterUniforms.begin(), atomicCounterUniforms.end());
+    mUniforms.insert(mUniforms.end(), inputAttachmentUniforms.begin(),
+                     inputAttachmentUniforms.end());
     mUnusedUniforms.insert(mUnusedUniforms.end(), unusedUniforms.begin(), unusedUniforms.end());
     return true;
 }
