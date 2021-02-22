@@ -26,6 +26,7 @@
 #include "efootball_pes_2021/efootball_pes_2021_capture_context7.h"
 #include "egypt_1500/egypt_1500_capture_context1.h"
 #include "eight_ball_pool/eight_ball_pool_capture_context2.h"
+#include "facebook/facebook_capture_context2.h"
 #include "fallout_shelter_online/fallout_shelter_online_capture_context3.h"
 #include "fate_grand_order/fate_grand_order_capture_context1.h"
 #include "fifa_mobile/fifa_mobile_capture_context2.h"
@@ -124,6 +125,9 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {eight_ball_pool::kReplayFrameStart, eight_ball_pool::kReplayFrameEnd,
       eight_ball_pool::kReplayDrawSurfaceWidth, eight_ball_pool::kReplayDrawSurfaceHeight,
       "eight_ball_pool"}},
+    {RestrictedTraceID::facebook,
+     {facebook::kReplayFrameStart, facebook::kReplayFrameEnd, facebook::kReplayDrawSurfaceWidth,
+      facebook::kReplayDrawSurfaceHeight, "facebook"}},
     {RestrictedTraceID::fallout_shelter_online,
      {fallout_shelter_online::kReplayFrameStart, fallout_shelter_online::kReplayFrameEnd,
       fallout_shelter_online::kReplayDrawSurfaceWidth,
@@ -321,6 +325,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::eight_ball_pool:
             eight_ball_pool::ReplayContext2Frame(frameIndex);
             break;
+        case RestrictedTraceID::facebook:
+            facebook::ReplayContext2Frame(frameIndex);
+            break;
         case RestrictedTraceID::fallout_shelter_online:
             fallout_shelter_online::ReplayContext3Frame(frameIndex);
             break;
@@ -490,6 +497,9 @@ void ResetReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::eight_ball_pool:
             eight_ball_pool::ResetContext2Replay();
+            break;
+        case RestrictedTraceID::facebook:
+            facebook::ResetContext2Replay();
             break;
         case RestrictedTraceID::fallout_shelter_online:
             fallout_shelter_online::ResetContext3Replay();
@@ -661,6 +671,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::eight_ball_pool:
             eight_ball_pool::SetupContext2Replay();
             break;
+        case RestrictedTraceID::facebook:
+            facebook::SetupContext2Replay();
+            break;
         case RestrictedTraceID::fallout_shelter_online:
             fallout_shelter_online::SetupContext3Replay();
             break;
@@ -831,6 +844,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::eight_ball_pool:
             eight_ball_pool::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::facebook:
+            facebook::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::fallout_shelter_online:
             fallout_shelter_online::SetBinaryDataDir(dataDir);
             break;
@@ -1000,6 +1016,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::eight_ball_pool:
             eight_ball_pool::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::facebook:
+            facebook::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::fallout_shelter_online:
             fallout_shelter_online::SetBinaryDataDecompressCallback(callback);

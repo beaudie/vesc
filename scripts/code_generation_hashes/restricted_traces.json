@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "2d8dfb6d78cc28197b5fa37a7dcf2b51",
+    "d7e81d9fb41466a8eac6c246154f9906",
   "src/tests/restricted_traces/aliexpress.tar.gz.sha1":
     "12f48ff0c4ca7980ea879c81b0c9518b",
   "src/tests/restricted_traces/angry_birds_2_1500.tar.gz.sha1":
@@ -31,6 +31,8 @@
     "0d569cbab0adf4df1027f671c65f7bff",
   "src/tests/restricted_traces/eight_ball_pool.tar.gz.sha1":
     "5826ab8ccdef774fbec4106ddef76720",
+  "src/tests/restricted_traces/facebook.tar.gz.sha1":
+    "7cf3128f99fa85a74cf935ce412029ad",
   "src/tests/restricted_traces/fallout_shelter_online.tar.gz.sha1":
     "6f2784d375489b6d6f44092de1a859e0",
   "src/tests/restricted_traces/fate_grand_order.tar.gz.sha1":
@@ -84,13 +86,13 @@
   "src/tests/restricted_traces/real_gangster_crime.tar.gz.sha1":
     "c85be329035a760edad673eb2ca7c3f1",
   "src/tests/restricted_traces/restricted_traces.json":
-    "030dab939ec64fcdabdfbe6b05662e53",
+    "0a086d0bf3018cd95079f96451f1540f",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "aea362cf1696f1014b8751c584748190",
+    "dd4097f50ebd2df531ec2ea4d5c7a177",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "16b9118b91f903331c934c7b1786fe7f",
+    "78f0a08818bf2acdda329c04eb9381ef",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "d3e0d3469baea6837bcaae8a9d85a5d0",
+    "42b25c43152125dfd785cfbbc545cb62",
   "src/tests/restricted_traces/rise_of_kingdoms.tar.gz.sha1":
     "d4618f857c44f0dfa642ae3af8f161d9",
   "src/tests/restricted_traces/romancing_saga.tar.gz.sha1":
