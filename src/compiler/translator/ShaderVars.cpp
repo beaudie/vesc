@@ -46,6 +46,7 @@ ShaderVariable::ShaderVariable(GLenum typeIn)
       offset(-1),
       readonly(false),
       writeonly(false),
+      FragmentInOut(-1),
       index(-1),
       yuv(false),
       interpolation(INTERPOLATION_SMOOTH),
@@ -83,6 +84,7 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       offset(other.offset),
       readonly(other.readonly),
       writeonly(other.writeonly),
+      FragmentInOut(other.FragmentInOut),
       index(other.index),
       yuv(other.yuv),
       interpolation(other.interpolation),
@@ -114,6 +116,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     offset                        = other.offset;
     readonly                      = other.readonly;
     writeonly                     = other.writeonly;
+    FragmentInOut                 = other.FragmentInOut;
     index                         = other.index;
     yuv                           = other.yuv;
     interpolation                 = other.interpolation;
@@ -137,7 +140,8 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
         readonly != other.readonly || writeonly != other.writeonly || index != other.index ||
         yuv != other.yuv || interpolation != other.interpolation ||
         isInvariant != other.isInvariant || isShaderIOBlock != other.isShaderIOBlock ||
-        isPatch != other.isPatch || texelFetchStaticUse != other.texelFetchStaticUse)
+        isPatch != other.isPatch || texelFetchStaticUse != other.texelFetchStaticUse ||
+        FragmentInOut != other.FragmentInOut)
     {
         return false;
     }
