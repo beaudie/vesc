@@ -1954,7 +1954,7 @@ void SpirvVaryingPrecisionFixer::writeInputPreamble(
     }
 
     // Copy from corrected varyings to temp global variables with original precision.
-    for (uint32_t idIndex = 0; idIndex < variableInfoById.size(); idIndex++)
+    for (uint32_t idIndex = spirv::kMinValidId; idIndex < variableInfoById.size(); idIndex++)
     {
         const spirv::IdRef id(idIndex);
         const ShaderInterfaceVariableInfo *info = variableInfoById[id];
@@ -2004,7 +2004,7 @@ void SpirvVaryingPrecisionFixer::writeOutputPrologue(
     }
 
     // Copy from temp global variables with original precision to corrected varyings.
-    for (uint32_t idIndex = 0; idIndex < variableInfoById.size(); idIndex++)
+    for (uint32_t idIndex = spirv::kMinValidId; idIndex < variableInfoById.size(); idIndex++)
     {
         const spirv::IdRef id(idIndex);
         const ShaderInterfaceVariableInfo *info = variableInfoById[id];
@@ -3381,7 +3381,7 @@ void SpirvVertexAttributeAliasingTransformer::preprocessAliasingAttributes()
     mExpandedMatrixFirstVectorIdById.resize(indexBound);
 
     // Go through attributes and find out which alias which.
-    for (size_t idIndex = 0; idIndex < indexBound; ++idIndex)
+    for (size_t idIndex = spirv::kMinValidId; idIndex < indexBound; ++idIndex)
     {
         const spirv::IdRef id(idIndex);
 
