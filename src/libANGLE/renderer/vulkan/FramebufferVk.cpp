@@ -2362,6 +2362,17 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                     mDeferredClears[colorIndexGL]);
             mDeferredClears.reset(colorIndexGL);
         }
+        else if (mEmulatedAlphaAttachmentMask[colorIndexGL])
+        {
+            // This color attachment has a format with no alpha channel, but is emulated with a
+            // format that does have an alpha channel, which must be cleared to 1.0 in order to be
+            // visible.
+            renderPassAttachmentOps.setOps(colorIndexVk, VK_ATTACHMENT_LOAD_OP_CLEAR, storeOp);
+            VkClearValue emulatedAlphaClearValue     = {};
+            emulatedAlphaClearValue.color.float32[3] = 1.0;
+            packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
+                                    emulatedAlphaClearValue);
+        }
         else
         {
             const VkAttachmentLoadOp loadOp = colorRenderTarget->hasDefinedContent()
