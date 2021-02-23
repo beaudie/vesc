@@ -62,6 +62,13 @@ namespace
 {
 constexpr char kXfbOutMarker[] = "@@ XFB-OUT @@;";
 
+static constexpr size_t kXfbDecorationCount                           = 3;
+static constexpr spv::Decoration kXfbDecorations[kXfbDecorationCount] = {
+    spv::DecorationXfbBuffer,
+    spv::DecorationXfbStride,
+    spv::DecorationOffset,
+};
+
 template <size_t N>
 constexpr size_t ConstStrLen(const char (&)[N])
 {
@@ -2056,13 +2063,6 @@ class SpirvTransformFeedbackCodeGenerator final : angle::NonCopyable
     void addDecorate(const ShaderInterfaceVariableInfo &info, spirv::IdRef id, SpirvBlob *blobOut);
 
   private:
-    static constexpr size_t kXfbDecorationCount                           = 3;
-    static constexpr spv::Decoration kXfbDecorations[kXfbDecorationCount] = {
-        spv::DecorationXfbBuffer,
-        spv::DecorationXfbStride,
-        spv::DecorationOffset,
-    };
-
     bool mHasTransformFeedbackOutput;
 
     // Ids needed to generate transform feedback support code.
