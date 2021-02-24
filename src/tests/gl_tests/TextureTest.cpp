@@ -3889,7 +3889,7 @@ TEST_P(Texture2DTestES3, CopyCompressedImageMipMaps)
     glBindTexture(GL_TEXTURE_2D, srcTexture);
     for (size_t level = 0; level < kNumLevels; ++level)
     {
-        glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_ETC1_RGB8_OES, kSize >> level,
+        glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGB8_ETC2, kSize >> level,
                                kSize >> level, 0, 8, CompressedImageETC1);
         EXPECT_GL_NO_ERROR();
     }
@@ -3898,7 +3898,7 @@ TEST_P(Texture2DTestES3, CopyCompressedImageMipMaps)
     glBindTexture(GL_TEXTURE_2D, destTexture);
     for (size_t level = 0; level < kNumLevels; ++level)
     {
-        glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_ETC1_RGB8_OES, kSize >> level,
+        glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGB8_ETC2, kSize >> level,
                                kSize >> level, 0, 8, nullptr);
         EXPECT_GL_NO_ERROR();
     }
