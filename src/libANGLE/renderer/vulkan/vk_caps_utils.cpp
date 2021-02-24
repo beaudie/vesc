@@ -313,6 +313,11 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.textureCompressionSliced3dASTCKHR =
         mNativeExtensions.textureCompressionASTCLDRKHR;
 
+    // Disable GL_OES_compressed_ETC1_RGB8_texture when there's no hardware support.
+    mNativeExtensions.compressedETC1RGB8TextureOES =
+        mNativeExtensions.compressedETC1RGB8TextureOES &&
+        (mPhysicalDeviceFeatures.textureCompressionETC2 == VK_TRUE);
+
     // Enable EXT_compressed_ETC1_RGB8_sub_texture
     mNativeExtensions.compressedETC1RGB8SubTexture = mNativeExtensions.compressedETC1RGB8TextureOES;
 
