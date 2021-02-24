@@ -24,7 +24,6 @@ class GetTexLevelParameterTest : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
-        setExtensionsEnabled(false);
     }
 };
 
