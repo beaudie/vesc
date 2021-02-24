@@ -3371,6 +3371,44 @@ void CaptureGenVertexArraysOES_arraysPacked(const State &glState,
     CaptureGenVertexArrays_arraysPacked(glState, isCallValid, n, arrays, paramCapture);
 }
 
+// This should probably go elsewhere
+static TextureType GetTextureTypeFromTarget(TextureTarget target)
+{
+    switch (target)
+    {
+        case TextureTarget::_2D:
+            return TextureType::_2D;
+        case TextureTarget::_2DArray:
+            return TextureType::_2DArray;
+        case TextureTarget::_2DMultisample:
+            return TextureType::_2DMultisample;
+        case TextureTarget::_2DMultisampleArray:
+            return TextureType::_2DMultisampleArray;
+        case TextureTarget::_3D:
+            return TextureType::_3D;
+        case TextureTarget::External:
+            return TextureType::External;
+        case TextureTarget::Rectangle:
+            return TextureType::Rectangle;
+        case TextureTarget::CubeMapPositiveX:
+        case TextureTarget::CubeMapNegativeX:
+        case TextureTarget::CubeMapPositiveY:
+        case TextureTarget::CubeMapNegativeY:
+        case TextureTarget::CubeMapPositiveZ:
+        case TextureTarget::CubeMapNegativeZ:
+            return TextureType::CubeMap;
+        case TextureTarget::CubeMapArray:
+            return TextureType::CubeMapArray;
+        case TextureTarget::VideoImage:
+            return TextureType::VideoImage;
+        case TextureTarget::Buffer:
+            return TextureType::Buffer;
+        case TextureTarget::InvalidEnum:
+        default:
+            return TextureType::InvalidEnum;
+    }
+}
+
 void CaptureGetTexImageANGLE_pixels(const State &glState,
                                     bool isCallValid,
                                     TextureTarget target,
