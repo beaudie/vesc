@@ -212,10 +212,9 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 
-angle::Result GlslangCompileShaderOneOff(const GlslangErrorCallback &callback,
-                                         gl::ShaderType shaderType,
-                                         const std::string &shaderSource,
-                                         SpirvBlob *spirvBlobOut);
+void GlslangTransformUnresolveSpirvCode(const SpirvBlob &spirvBlobIn,
+                                        const gl::DrawBuffersVector<GLenum> &colorAttachmentTypes,
+                                        SpirvBlob *spirvBlobOut);
 
 }  // namespace rx
 

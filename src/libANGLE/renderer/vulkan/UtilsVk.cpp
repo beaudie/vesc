@@ -311,7 +311,7 @@ uint32_t GetUnresolveFlags(uint32_t colorAttachmentCount,
                            const gl::DrawBuffersArray<vk::ImageHelper *> &colorSrc,
                            bool unresolveDepth,
                            bool unresolveStencil,
-                           gl::DrawBuffersArray<UnresolveColorAttachmentType> *attachmentTypesOut)
+                           gl::DrawBuffersVector<GLenum> *attachmentTypesOut)
 {
     uint32_t flags = 0;
 
@@ -320,16 +320,19 @@ uint32_t GetUnresolveFlags(uint32_t colorAttachmentCount,
         const angle::Format &format = colorSrc[attachmentIndex]->getFormat().intendedFormat();
 
         UnresolveColorAttachmentType type = kUnresolveTypeFloat;
+        GLenum glType                     = GL_FLOAT;
         if (format.isSint())
         {
-            type = kUnresolveTypeSint;
+            type   = kUnresolveTypeSint;
+            glType = GL_INT;
         }
         else if (format.isUint())
         {
-            type = kUnresolveTypeUint;
+            type   = kUnresolveTypeUint;
+            glType = GL_UNSIGNED_INT;
         }
 
-        (*attachmentTypesOut)[attachmentIndex] = type;
+        attachmentTypesOut->push_back(glType);
 
         // |flags| is comprised of |colorAttachmentCount| values from
         // |UnresolveColorAttachmentType|, each taking up 2 bits.
@@ -408,122 +411,40 @@ void SetStencilForShaderExport(ContextVk *contextVk, vk::GraphicsPipelineDesc *d
     desc->setStencilBackWriteMask(completeMask);
 }
 
-// Creates a shader that looks like the following, based on the number and types of unresolve
-// attachments.
-//
-//     #version 450 core
-//     #extension GL_ARB_shader_stencil_export : require
-//
-//     layout(location = 0) out vec4 colorOut0;
-//     layout(location = 1) out ivec4 colorOut1;
-//     layout(location = 2) out uvec4 colorOut2;
-//     layout(input_attachment_index = 0, set = 0, binding = 0) uniform subpassInput colorIn0;
-//     layout(input_attachment_index = 1, set = 0, binding = 1) uniform isubpassInput colorIn1;
-//     layout(input_attachment_index = 2, set = 0, binding = 2) uniform usubpassInput colorIn2;
-//     layout(input_attachment_index = 3, set = 0, binding = 3) uniform subpassInput depthIn;
-//     layout(input_attachment_index = 3, set = 0, binding = 4) uniform usubpassInput stencilIn;
-//
-//     void main()
-//     {
-//         colorOut0 = subpassLoad(colorIn0);
-//         colorOut1 = subpassLoad(colorIn1);
-//         colorOut2 = subpassLoad(colorIn2);
-//         gl_FragDepth = subpassLoad(depthIn).x;
-//         gl_FragStencilRefARB = int(subpassLoad(stencilIn).x);
-//     }
-angle::Result MakeUnresolveFragShader(
-    vk::Context *context,
-    uint32_t colorAttachmentCount,
-    gl::DrawBuffersArray<UnresolveColorAttachmentType> &colorAttachmentTypes,
-    bool unresolveDepth,
-    bool unresolveStencil,
-    SpirvBlob *spirvBlobOut)
-{
-    std::ostringstream source;
-
-    source << "#version 450 core\n";
-
-    if (unresolveStencil)
-    {
-        source << "#extension GL_ARB_shader_stencil_export : require\n";
-    }
-
-    for (uint32_t attachmentIndex = 0; attachmentIndex < colorAttachmentCount; ++attachmentIndex)
-    {
-        const UnresolveColorAttachmentType type = colorAttachmentTypes[attachmentIndex];
-        ASSERT(type != kUnresolveTypeUnused);
-
-        const char *prefix =
-            type == kUnresolveTypeUint ? "u" : type == kUnresolveTypeSint ? "i" : "";
-
-        source << "layout(location=" << attachmentIndex << ") out " << prefix << "vec4 colorOut"
-               << attachmentIndex << ";\n";
-        source << "layout(input_attachment_index=" << attachmentIndex
-               << ", set=" << DescriptorSetIndex::InternalShader << ", binding=" << attachmentIndex
-               << ") uniform " << prefix << "subpassInput colorIn" << attachmentIndex << ";\n";
-    }
-
-    const uint32_t depthStencilInputIndex = colorAttachmentCount;
-    uint32_t depthStencilBindingIndex     = colorAttachmentCount;
-    if (unresolveDepth)
-    {
-        source << "layout(input_attachment_index=" << depthStencilInputIndex
-               << ", set=" << DescriptorSetIndex::InternalShader
-               << ", binding=" << depthStencilBindingIndex << ") uniform subpassInput depthIn;\n";
-        ++depthStencilBindingIndex;
-    }
-    if (unresolveStencil)
-    {
-        source << "layout(input_attachment_index=" << depthStencilInputIndex
-               << ", set=" << DescriptorSetIndex::InternalShader
-               << ", binding=" << depthStencilBindingIndex
-               << ") uniform usubpassInput stencilIn;\n";
-    }
-
-    source << "void main(){\n";
-
-    for (uint32_t attachmentIndex = 0; attachmentIndex < colorAttachmentCount; ++attachmentIndex)
-    {
-        source << "colorOut" << attachmentIndex << " = subpassLoad(colorIn" << attachmentIndex
-               << ");\n";
-    }
-
-    if (unresolveDepth)
-    {
-        source << "gl_FragDepth = subpassLoad(depthIn).x;\n";
-    }
-
-    if (unresolveStencil)
-    {
-        source << "gl_FragStencilRefARB = int(subpassLoad(stencilIn).x);\n";
-    }
-
-    source << "}\n";
-
-    return GlslangWrapperVk::CompileShaderOneOff(context, gl::ShaderType::Fragment, source.str(),
-                                                 spirvBlobOut);
-}
-
-angle::Result GetUnresolveFrag(
-    vk::Context *context,
-    uint32_t colorAttachmentCount,
-    gl::DrawBuffersArray<UnresolveColorAttachmentType> &colorAttachmentTypes,
-    bool unresolveDepth,
-    bool unresolveStencil,
-    vk::RefCounted<vk::ShaderAndSerial> *shader)
+angle::Result GetUnresolveFrag(ContextVk *contextVk,
+                               uint32_t colorAttachmentCount,
+                               gl::DrawBuffersVector<GLenum> &colorAttachmentTypes,
+                               bool unresolveDepth,
+                               bool unresolveStencil,
+                               vk::RefCounted<vk::ShaderAndSerial> *shader)
 {
     if (shader->get().valid())
     {
         return angle::Result::Continue;
     }
 
+    vk::ShaderLibrary &shaderLibrary = contextVk->getShaderLibrary();
+
+    uint32_t flags = 0;
+    if (unresolveDepth)
+    {
+        flags |= vk::InternalShader::Unresolve_frag::kUnresolveDepth;
+    }
+    if (unresolveStencil)
+    {
+        flags |= vk::InternalShader::Unresolve_frag::kUnresolveStencil;
+    }
+
     SpirvBlob shaderCode;
-    ANGLE_TRY(MakeUnresolveFragShader(context, colorAttachmentCount, colorAttachmentTypes,
-                                      unresolveDepth, unresolveStencil, &shaderCode));
+    ANGLE_TRY(shaderLibrary.getUnresolve_frag_code(contextVk, flags, &shaderCode));
+
+    SpirvBlob modifiedShaderCode;
+    GlslangWrapperVk::TransformUnresolveSpirV(shaderCode, colorAttachmentTypes,
+                                              &modifiedShaderCode);
 
     // Create shader lazily. Access will need to be locked for multi-threading.
-    return vk::InitShaderAndSerial(context, &shader->get(), shaderCode.data(),
-                                   shaderCode.size() * 4);
+    return vk::InitShaderAndSerial(contextVk, &shader->get(), modifiedShaderCode.data(),
+                                   modifiedShaderCode.size() * 4);
 }
 }  // namespace
 
@@ -2739,7 +2660,7 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
 
     vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
 
-    gl::DrawBuffersArray<UnresolveColorAttachmentType> colorAttachmentTypes;
+    gl::DrawBuffersVector<GLenum> colorAttachmentTypes;
     uint32_t flags = GetUnresolveFlags(colorAttachmentCount, colorSrc, params.unresolveDepth,
                                        params.unresolveStencil, &colorAttachmentTypes);
 

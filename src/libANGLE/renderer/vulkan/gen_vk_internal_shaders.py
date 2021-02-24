@@ -59,6 +59,34 @@ struct CompressedShaderBlob
 
 {shader_tables_cpp}
 
+angle::Result GetShaderCode(Context *context,
+                            const CompressedShaderBlob *compressedShaderBlobs,
+                            size_t shadersCount,
+                            uint32_t shaderFlags,
+                            std::vector<uint32_t> *shaderCodeOut)
+{{
+    ASSERT(shaderFlags < shadersCount);
+
+    const CompressedShaderBlob &compressedShaderCode = compressedShaderBlobs[shaderFlags];
+    ASSERT(compressedShaderCode.code != nullptr);
+
+    uLong uncompressedSize = zlib_internal::GetGzipUncompressedSize(compressedShaderCode.code,
+                                                                    compressedShaderCode.size);
+    shaderCodeOut->resize((uncompressedSize + 3) / 4, 0);
+
+    // Note: we assume a little-endian environment throughout ANGLE.
+    int zResult = zlib_internal::GzipUncompressHelper(reinterpret_cast<uint8_t *>(shaderCodeOut->data()),
+            &uncompressedSize, compressedShaderCode.code, compressedShaderCode.size);
+
+    if (zResult != Z_OK)
+    {{
+        ERR() << "Failure to decompressed internal shader: " << zResult << "\\n";
+        return angle::Result::Stop;
+    }}
+
+    return angle::Result::Continue;
+}}
+
 angle::Result GetShader(Context *context,
                         RefCounted<ShaderAndSerial> *shaders,
                         const CompressedShaderBlob *compressedShaderBlobs,
@@ -76,22 +104,8 @@ angle::Result GetShader(Context *context,
     }}
 
     // Create shader lazily. Access will need to be locked for multi-threading.
-    const CompressedShaderBlob &compressedShaderCode = compressedShaderBlobs[shaderFlags];
-    ASSERT(compressedShaderCode.code != nullptr);
-
-    uLong uncompressedSize = zlib_internal::GetGzipUncompressedSize(compressedShaderCode.code,
-                                                                    compressedShaderCode.size);
-    std::vector<uint32_t> shaderCode((uncompressedSize + 3) / 4, 0);
-
-    // Note: we assume a little-endian environment throughout ANGLE.
-    int zResult = zlib_internal::GzipUncompressHelper(reinterpret_cast<uint8_t *>(shaderCode.data()),
-            &uncompressedSize, compressedShaderCode.code, compressedShaderCode.size);
-
-    if (zResult != Z_OK)
-    {{
-        ERR() << "Failure to decompressed internal shader: " << zResult << "\\n";
-        return angle::Result::Stop;
-    }}
+    std::vector<uint32_t> shaderCode;
+    ANGLE_TRY(GetShaderCode(context, compressedShaderBlobs, shadersCount, shaderFlags, &shaderCode));
 
     return InitShaderAndSerial(context, &shader.get(), shaderCode.data(), shaderCode.size() * 4);
 }}
@@ -112,6 +126,7 @@ void ShaderLibrary::destroy(VkDevice device)
 }}
 
 {shader_get_functions_cpp}
+{shader_get_code_functions_cpp}
 }}  // namespace vk
 }}  // namespace rx
 """
@@ -149,6 +164,7 @@ class ShaderLibrary final : angle::NonCopyable
     void destroy(VkDevice device);
 
     {shader_get_functions_h}
+    {shader_get_code_functions_h}
 
   private:
     {shader_tables_h}
@@ -455,6 +471,8 @@ class CompileQueue:
                 raise Exception(exception)
 
         # Add a compile job
+        print(output_path)
+        print(' '.join(compile_args))
         self.queue.append(
             CompileQueue.CompileToSPIRV(shader_file, shader_basename, variation_string,
                                         output_path, compile_args, preprocessor_args,
@@ -667,6 +685,33 @@ def get_get_function_cpp(shader_and_variation):
     return definition
 
 
+def get_get_code_function_h(shader_and_variation):
+    shader_file = shader_and_variation.shader_file
+
+    function_name = get_var_name(os.path.basename(shader_file), 'get') + '_code'
+
+    definition = 'angle::Result %s' % function_name
+    definition += '(Context *context, uint32_t shaderFlags, std::vector<uint32_t> *shaderCodeOut);'
+
+    return definition
+
+
+def get_get_code_function_cpp(shader_and_variation):
+    shader_file = shader_and_variation.shader_file
+    enums = shader_and_variation.enums
+
+    function_name = get_var_name(os.path.basename(shader_file), 'get') + '_code'
+    namespace_name = "InternalShader::" + get_namespace_name(shader_file)
+    constant_table_name = get_variation_table_name(shader_file)
+
+    definition = 'angle::Result ShaderLibrary::%s' % function_name
+    definition += '(Context *context, uint32_t shaderFlags, std::vector<uint32_t> *shaderCodeOut)\n{\n'
+    definition += 'return GetShaderCode(context, %s, ArraySize(%s), shaderFlags, shaderCodeOut);\n}\n' % (
+        constant_table_name, constant_table_name)
+
+    return definition
+
+
 def get_destroy_call(shader_and_variation):
     shader_file = shader_and_variation.shader_file
 
@@ -769,6 +814,8 @@ def main():
             [get_destroy_call(s) for s in input_shaders_and_variations])
         shader_get_functions_cpp = '\n'.join(
             [get_get_function_cpp(s) for s in input_shaders_and_variations])
+        shader_get_code_functions_cpp = '\n'.join(
+            [get_get_code_function_cpp(s) for s in input_shaders_and_variations])
 
         outcode = template_shader_library_cpp.format(
             script_name=__file__,
@@ -777,7 +824,8 @@ def main():
             internal_shader_includes=includes,
             shader_tables_cpp=shader_tables_cpp,
             shader_destroy_calls=shader_destroy_calls,
-            shader_get_functions_cpp=shader_get_functions_cpp)
+            shader_get_functions_cpp=shader_get_functions_cpp,
+            shader_get_code_functions_cpp=shader_get_code_functions_cpp)
         outfile.write(outcode)
         outfile.close()
 
@@ -786,6 +834,8 @@ def main():
             [get_variation_definition(s) for s in input_shaders_and_variations])
         shader_get_functions_h = '\n'.join(
             [get_get_function_h(s) for s in input_shaders_and_variations])
+        shader_get_code_functions_h = '\n'.join(
+            [get_get_code_function_h(s) for s in input_shaders_and_variations])
         shader_tables_h = '\n'.join([get_shader_table_h(s) for s in input_shaders_and_variations])
         outcode = template_shader_library_h.format(
             script_name=__file__,
@@ -793,6 +843,7 @@ def main():
             input_file_name='shaders/src/*',
             shader_variation_definitions=shader_variation_definitions,
             shader_get_functions_h=shader_get_functions_h,
+            shader_get_code_functions_h=shader_get_code_functions_h,
             shader_tables_h=shader_tables_h)
         outfile.write(outcode)
         outfile.close()

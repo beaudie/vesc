@@ -2984,7 +2984,7 @@ class SpirvTransformer final : public SpirvTransformerBase
           mPositionTransformer(options)
     {}
 
-    bool transform();
+    void transform();
 
   private:
     // A prepass to resolve interesting ids:
@@ -3044,7 +3044,7 @@ class SpirvTransformer final : public SpirvTransformerBase
     SpirvPositionTransformer mPositionTransformer;
 };
 
-bool SpirvTransformer::transform()
+void SpirvTransformer::transform()
 {
     onTransformBegin();
 
@@ -3056,8 +3056,6 @@ bool SpirvTransformer::transform()
     {
         transformInstruction();
     }
-
-    return true;
 }
 
 void SpirvTransformer::resolveVariableIds()
@@ -3669,7 +3667,7 @@ TransformationState SpirvTransformer::transformTypeStruct(const uint32_t *instru
 {
     spirv::IdResult id;
     spirv::IdRefList memberList;
-    ParseTypeStruct(instruction, &id, &memberList);
+    spirv::ParseTypeStruct(instruction, &id, &memberList);
 
     return mPerVertexTrimmer.transformTypeStruct(mIds, id, &memberList, mSpirvBlobOut);
 }
@@ -3829,7 +3827,7 @@ class SpirvVertexAttributeAliasingTransformer final : public SpirvTransformerBas
         mVariableInfoById = std::move(variableInfoById);
     }
 
-    bool transform();
+    void transform();
 
   private:
     // Preprocess aliasing attributes in preparation for their removal.
@@ -3926,7 +3924,7 @@ class SpirvVertexAttributeAliasingTransformer final : public SpirvTransformerBas
     std::array<spirv::IdRef, 5> mPrivateMatrixTypePointers;
 };
 
-bool SpirvVertexAttributeAliasingTransformer::transform()
+void SpirvVertexAttributeAliasingTransformer::transform()
 {
     onTransformBegin();
 
@@ -3936,8 +3934,6 @@ bool SpirvVertexAttributeAliasingTransformer::transform()
     {
         transformInstruction();
     }
-
-    return true;
 }
 
 void SpirvVertexAttributeAliasingTransformer::preprocessAliasingAttributes()
@@ -4569,7 +4565,7 @@ TransformationState SpirvVertexAttributeAliasingTransformer::transformLoad(
     spirv::IdResultType typeId;
     spirv::IdResult id;
     spirv::IdRef pointerId;
-    ParseLoad(instruction, &typeId, &id, &pointerId, nullptr);
+    spirv::ParseLoad(instruction, &typeId, &id, &pointerId, nullptr);
 
     // Currently, the instruction is:
     //
@@ -4782,6 +4778,637 @@ bool HasAliasingAttributes(const ShaderInterfaceVariableInfoMap &variableInfoMap
     }
 
     return false;
+}
+
+// A transformation for multisampled-render-to-texture unresolve operation.  This special
+// transformation is given a baked shader (one of vulkan/shaders/gen/Unresolve.frag.*) and adjusts
+// the number and types of color attachments to be unresolved.  All possible combination of
+// attachments and types cannot be pregenerated due to large number of them.
+class SpirvUnresolveTransformer final : public SpirvTransformerBase
+{
+  public:
+    SpirvUnresolveTransformer(const SpirvBlob &spirvBlobIn,
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                              const gl::DrawBuffersVector<GLenum> &colorAttachmentTypes,
+                              SpirvBlob *spirvBlobOut)
+        : SpirvTransformerBase(spirvBlobIn, variableInfoMap, spirvBlobOut),
+          mColorAttachmentTypes(colorAttachmentTypes)
+    {}
+
+    void transform();
+
+  private:
+    // Find ids of importance; types, type pointers and variables.
+    void resolveIds();
+
+    // Transform instructions:
+    void transformInstruction();
+
+    // Instructions that are purely informational:
+    void visitDecorate(const uint32_t *instruction);
+    void visitTypeFloat(const uint32_t *instruction);
+    void visitTypeImage(const uint32_t *instruction);
+    void visitTypeInt(const uint32_t *instruction);
+    void visitTypePointer(const uint32_t *instruction);
+    void visitTypeVector(const uint32_t *instruction);
+
+    // Instructions that potentially need transformation.  They return true if the instruction is
+    // transformed.  If false is returned, the instruction should be copied as-is.
+    TransformationState transformDecorate(const uint32_t *instruction);
+    TransformationState transformEntryPoint(const uint32_t *instruction);
+    TransformationState transformImageRead(const uint32_t *instruction);
+    TransformationState transformLoad(const uint32_t *instruction);
+    TransformationState transformStore(const uint32_t *instruction);
+    TransformationState transformVariable(const uint32_t *instruction);
+
+    // Transformation state:
+
+    const gl::DrawBuffersVector<GLenum> &mColorAttachmentTypes;
+
+    // Ids of interest
+
+    // Basic types
+    spirv::IdRef mFloatId;
+    spirv::IdRef mIntId;
+    spirv::IdRef mUintId;
+    spirv::IdRef mVec4Id;
+    spirv::IdRef mIVec4Id;
+    spirv::IdRef mUVec4Id;
+
+    // Output types
+    spirv::IdRef mVec4OutputPtrId;
+    spirv::IdRef mIVec4OutputPtrId;
+    spirv::IdRef mUVec4OutputPtrId;
+
+    // Image types
+    spirv::IdRef mFloatImageId;
+    spirv::IdRef mIntImageId;
+    spirv::IdRef mUintImageId;
+
+    // Image pointers
+    spirv::IdRef mFloatImagePtrId;
+    spirv::IdRef mIntImagePtrId;
+    spirv::IdRef mUintImagePtrId;
+
+    // Output variables
+    gl::AttachmentArray<spirv::IdRef> mOutIds;
+
+    // Input variables
+    gl::AttachmentArray<spirv::IdRef> mInIds;
+
+    // Load result from color input variables
+    gl::DrawBuffersArray<spirv::IdRef> mLoadIds;
+};
+
+void SpirvUnresolveTransformer::transform()
+{
+    onTransformBegin();
+
+    // First, find all necessary ids and associate them with the information required to transform
+    // their decorations.
+    resolveIds();
+
+    while (mCurrentWord < mSpirvBlobIn.size())
+    {
+        transformInstruction();
+    }
+}
+
+void SpirvUnresolveTransformer::transformInstruction()
+{
+    uint32_t wordCount;
+    spv::Op opCode;
+    const uint32_t *instruction = getCurrentInstruction(&opCode, &wordCount);
+
+    if (opCode == spv::OpFunction)
+    {
+        mIsInFunctionSection = true;
+    }
+
+    // Only look at interesting instructions.
+    TransformationState transformationState = TransformationState::Unchanged;
+
+    if (mIsInFunctionSection)
+    {
+        // Look at in-function opcodes.
+        switch (opCode)
+        {
+            case spv::OpImageRead:
+                transformationState = transformImageRead(instruction);
+                break;
+            case spv::OpLoad:
+                transformationState = transformLoad(instruction);
+                break;
+            case spv::OpStore:
+                transformationState = transformStore(instruction);
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        // Look at global declaration opcodes.
+        switch (opCode)
+        {
+            case spv::OpEntryPoint:
+                transformationState = transformEntryPoint(instruction);
+                break;
+            case spv::OpDecorate:
+                transformationState = transformDecorate(instruction);
+                break;
+            case spv::OpVariable:
+                transformationState = transformVariable(instruction);
+                break;
+            default:
+                break;
+        }
+    }
+
+    // If the instruction was not transformed, copy it to output as is.
+    if (transformationState == TransformationState::Unchanged)
+    {
+        copyInstruction(instruction, wordCount);
+    }
+
+    // Advance to next instruction.
+    mCurrentWord += wordCount;
+}
+
+void SpirvUnresolveTransformer::resolveIds()
+{
+    size_t currentWord = kHeaderIndexInstructions;
+
+    while (currentWord < mSpirvBlobIn.size())
+    {
+        const uint32_t *instruction = &mSpirvBlobIn[currentWord];
+
+        uint32_t wordCount;
+        spv::Op opCode;
+        spirv::GetInstructionOpAndLength(instruction, &opCode, &wordCount);
+
+        switch (opCode)
+        {
+            case spv::OpDecorate:
+                visitDecorate(instruction);
+                break;
+            case spv::OpTypeFloat:
+                visitTypeFloat(instruction);
+                break;
+            case spv::OpTypeImage:
+                visitTypeImage(instruction);
+                break;
+            case spv::OpTypeInt:
+                visitTypeInt(instruction);
+                break;
+            case spv::OpTypePointer:
+                visitTypePointer(instruction);
+                break;
+            case spv::OpTypeVector:
+                visitTypeVector(instruction);
+                break;
+            case spv::OpFunction:
+                // Early out when the function declaration section is met.
+                return;
+            default:
+                break;
+        }
+
+        currentWord += wordCount;
+    }
+    UNREACHABLE();
+}
+
+void SpirvUnresolveTransformer::visitDecorate(const uint32_t *instruction)
+{
+    spirv::IdRef id;
+    spv::Decoration decoration;
+    spirv::LiteralIntegerList decorationValues;
+    spirv::ParseDecorate(instruction, &id, &decoration, &decorationValues);
+
+    switch (decoration)
+    {
+        case spv::DecorationLocation:
+            // Find color attachment ids by location.
+            mOutIds[decorationValues[0]] = id;
+            break;
+        case spv::DecorationBuiltIn:
+            // Find depth/stencil attachment ids by built-in decoration.
+            if (decorationValues[0] == spv::BuiltInFragDepth)
+            {
+                mOutIds[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS] = id;
+            }
+            if (decorationValues[0] == spv::BuiltInFragStencilRefEXT)
+            {
+                mOutIds[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1] = id;
+            }
+            break;
+        case spv::DecorationBinding:
+            // Find subpass input ids (all of color, depth and stencil) by binding.
+            mInIds[decorationValues[0]] = id;
+            break;
+        default:
+            break;
+    }
+}
+
+void SpirvUnresolveTransformer::visitTypeFloat(const uint32_t *instruction)
+{
+    spirv::IdResult id;
+    spirv::LiteralInteger width;
+    spirv::ParseTypeFloat(instruction, &id, &width);
+
+    // Only interested in OpTypeFloat 32.
+    if (width == 32)
+    {
+        ASSERT(!mFloatId.valid());
+        mFloatId = id;
+    }
+}
+
+void SpirvUnresolveTransformer::visitTypeImage(const uint32_t *instruction)
+{
+    spirv::IdResult id;
+    spirv::IdRef sampledType;
+    spv::Dim dim;
+    spirv::LiteralInteger depth;
+    spirv::LiteralInteger arrayed;
+    spirv::LiteralInteger mS;
+    spirv::LiteralInteger sampled;
+    spv::ImageFormat imageFormat;
+    spirv::ParseTypeImage(instruction, &id, &sampledType, &dim, &depth, &arrayed, &mS, &sampled,
+                          &imageFormat, nullptr);
+
+    if (sampledType == mFloatId)
+    {
+        ASSERT(!mFloatImageId.valid());
+        mFloatImageId = id;
+    }
+    else if (sampledType == mIntId)
+    {
+        ASSERT(!mIntImageId.valid());
+        mIntImageId = id;
+    }
+    else if (sampledType == mUintId)
+    {
+        ASSERT(!mUintImageId.valid());
+        mUintImageId = id;
+    }
+}
+
+void SpirvUnresolveTransformer::visitTypeInt(const uint32_t *instruction)
+{
+    spirv::IdResult id;
+    spirv::LiteralInteger width;
+    spirv::LiteralInteger signedness;
+    spirv::ParseTypeInt(instruction, &id, &width, &signedness);
+
+    // Only interested in OpTypeInt 32 *.
+    if (width != 32)
+    {
+        return;
+    }
+
+    if (signedness == 0)
+    {
+        ASSERT(!mUintId.valid());
+        mUintId = id;
+    }
+    else
+    {
+        ASSERT(!mIntId.valid());
+        mIntId = id;
+    }
+}
+
+void SpirvUnresolveTransformer::visitTypePointer(const uint32_t *instruction)
+{
+    spirv::IdResult id;
+    spv::StorageClass storageClass;
+    spirv::IdRef typeId;
+    spirv::ParseTypePointer(instruction, &id, &storageClass, &typeId);
+
+    if (storageClass == spv::StorageClassUniformConstant)
+    {
+        if (typeId == mFloatImageId)
+        {
+            ASSERT(!mFloatImagePtrId.valid());
+            mFloatImagePtrId = id;
+        }
+        else if (typeId == mIntImageId)
+        {
+            ASSERT(!mIntImagePtrId.valid());
+            mIntImagePtrId = id;
+        }
+        else if (typeId == mUintImageId)
+        {
+            ASSERT(!mUintImagePtrId.valid());
+            mUintImagePtrId = id;
+        }
+    }
+    else if (storageClass == spv::StorageClassOutput)
+    {
+        if (typeId == mVec4Id)
+        {
+            ASSERT(!mVec4OutputPtrId.valid());
+            mVec4OutputPtrId = id;
+        }
+        else if (typeId == mIVec4Id)
+        {
+            ASSERT(!mIVec4OutputPtrId.valid());
+            mIVec4OutputPtrId = id;
+        }
+        else if (typeId == mUVec4Id)
+        {
+            ASSERT(!mUVec4OutputPtrId.valid());
+            mUVec4OutputPtrId = id;
+        }
+    }
+}
+
+void SpirvUnresolveTransformer::visitTypeVector(const uint32_t *instruction)
+{
+    spirv::IdResult id;
+    spirv::IdRef componentId;
+    spirv::LiteralInteger componentCount;
+    spirv::ParseTypeVector(instruction, &id, &componentId, &componentCount);
+
+    // Only interested in OpTypeVector %m*Id 4
+    if (componentCount != 4)
+    {
+        return;
+    }
+
+    if (componentId == mFloatId)
+    {
+        ASSERT(!mVec4Id.valid());
+        mVec4Id = id;
+    }
+    else if (componentId == mIntId)
+    {
+        ASSERT(!mIVec4Id.valid());
+        mIVec4Id = id;
+    }
+    else if (componentId == mUintId)
+    {
+        ASSERT(!mUVec4Id.valid());
+        mUVec4Id = id;
+    }
+}
+
+TransformationState SpirvUnresolveTransformer::transformDecorate(const uint32_t *instruction)
+{
+    spirv::IdRef id;
+    spv::Decoration decoration;
+    spirv::LiteralIntegerList decorationValues;
+    spirv::ParseDecorate(instruction, &id, &decoration, &decorationValues);
+
+    // If it's a color attachment/subpass input that should be removed, remove it.
+    for (size_t colorIndex = mColorAttachmentTypes.size();
+         colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+    {
+        if (id == mOutIds[colorIndex] || id == mInIds[colorIndex])
+        {
+            return TransformationState::Transformed;
+        }
+    }
+
+    // If it's the depth/stencil subpass input, adjust the binding.
+    const bool hasDepth   = mInIds[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS].valid();
+    const bool hasStencil = mInIds[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1].valid();
+    const bool isDepth    = hasDepth && id == mInIds[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS];
+    const bool isStencil  = hasStencil && id == mInIds[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1];
+
+    if (isDepth || isStencil)
+    {
+        if (decoration == spv::DecorationBinding)
+        {
+            uint32_t newBinding = static_cast<uint32_t>(mColorAttachmentTypes.size());
+            if (isStencil && hasDepth)
+            {
+                ++newBinding;
+            }
+            spirv::WriteDecorate(mSpirvBlobOut, id, decoration,
+                                 {spirv::LiteralInteger{newBinding}});
+            return TransformationState::Transformed;
+        }
+        if (decoration == spv::DecorationInputAttachmentIndex)
+        {
+            uint32_t newIndex = static_cast<uint32_t>(mColorAttachmentTypes.size());
+            spirv::WriteDecorate(mSpirvBlobOut, id, decoration, {spirv::LiteralInteger{newIndex}});
+            return TransformationState::Transformed;
+        }
+    }
+
+    return TransformationState::Unchanged;
+}
+
+TransformationState SpirvUnresolveTransformer::transformEntryPoint(const uint32_t *instruction)
+{
+    // Remove color attachment/subpass inputs that should be removed.
+    spv::ExecutionModel executionModel;
+    spirv::IdRef entryPointId;
+    spirv::LiteralString name;
+    spirv::IdRefList interfaceList;
+    spirv::ParseEntryPoint(instruction, &executionModel, &entryPointId, &name, &interfaceList);
+
+    // Filter out aliasing attributes from entry point interface declaration.
+    size_t writeIndex = 0;
+    for (size_t index = 0; index < interfaceList.size(); ++index)
+    {
+        const spirv::IdRef id(interfaceList[index]);
+
+        bool remove = false;
+
+        for (size_t colorIndex = mColorAttachmentTypes.size();
+             colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+        {
+            if (id == mOutIds[colorIndex] || id == mInIds[colorIndex])
+            {
+                remove = true;
+                break;
+            }
+        }
+
+        if (!remove)
+        {
+            interfaceList[writeIndex] = id;
+            ++writeIndex;
+        }
+    }
+
+    // Update the number of interface variables.
+    interfaceList.resize(writeIndex);
+
+    // Write the entry point with the extra variables removed.
+    spirv::WriteEntryPoint(mSpirvBlobOut, executionModel, entryPointId, name, interfaceList);
+
+    return TransformationState::Transformed;
+}
+
+TransformationState SpirvUnresolveTransformer::transformImageRead(const uint32_t *instruction)
+{
+    spirv::IdResultType typeId;
+    spirv::IdResult id;
+    spirv::IdRef image;
+    spirv::IdRef coordinate;
+    spirv::ParseImageRead(instruction, &typeId, &id, &image, &coordinate, nullptr, nullptr);
+
+    // Remove if needs be, or adjust the type.
+    size_t colorIndex;
+    for (colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+    {
+        if (image == mLoadIds[colorIndex])
+        {
+            break;
+        }
+    }
+
+    // Leave depth/stencil operations be.
+    if (colorIndex == gl::IMPLEMENTATION_MAX_DRAW_BUFFERS)
+    {
+        return TransformationState::Unchanged;
+    }
+
+    // Drop instruction if subpass input is removed.
+    if (colorIndex >= mColorAttachmentTypes.size())
+    {
+        return TransformationState::Transformed;
+    }
+
+    // Adjust the type based on the desired attachment type.
+    spirv::IdRef newTypeId = mVec4Id;
+    if (mColorAttachmentTypes[colorIndex] == GL_INT)
+    {
+        newTypeId = mIVec4Id;
+    }
+    else if (mColorAttachmentTypes[colorIndex] == GL_UNSIGNED_INT)
+    {
+        newTypeId = mUVec4Id;
+    }
+    spirv::WriteImageRead(mSpirvBlobOut, newTypeId, id, image, coordinate, nullptr, {});
+    return TransformationState::Transformed;
+}
+
+TransformationState SpirvUnresolveTransformer::transformLoad(const uint32_t *instruction)
+{
+    spirv::IdResultType typeId;
+    spirv::IdResult id;
+    spirv::IdRef pointerId;
+    spirv::ParseLoad(instruction, &typeId, &id, &pointerId, nullptr);
+
+    // Remove if needs be, or adjust the type.
+    size_t colorIndex;
+    for (colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+    {
+        if (pointerId == mInIds[colorIndex])
+        {
+            break;
+        }
+    }
+
+    // Leave depth/stencil operations be.
+    if (colorIndex == gl::IMPLEMENTATION_MAX_DRAW_BUFFERS)
+    {
+        return TransformationState::Unchanged;
+    }
+
+    mLoadIds[colorIndex] = id;
+
+    // Drop instruction if subpass input is removed.
+    if (colorIndex >= mColorAttachmentTypes.size())
+    {
+        return TransformationState::Transformed;
+    }
+
+    // Adjust the type based on the desired attachment type.
+    spirv::IdRef newTypeId = mFloatImageId;
+    if (mColorAttachmentTypes[colorIndex] == GL_INT)
+    {
+        newTypeId = mIntImageId;
+    }
+    else if (mColorAttachmentTypes[colorIndex] == GL_UNSIGNED_INT)
+    {
+        newTypeId = mUintImageId;
+    }
+    spirv::WriteLoad(mSpirvBlobOut, newTypeId, id, pointerId, nullptr);
+    return TransformationState::Transformed;
+}
+
+TransformationState SpirvUnresolveTransformer::transformStore(const uint32_t *instruction)
+{
+    spirv::IdRef pointer;
+    spirv::IdRef object;
+    spirv::ParseStore(instruction, &pointer, &object, nullptr);
+
+    // Remove if needs be.
+    size_t colorIndex;
+    for (colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+    {
+        if (pointer == mOutIds[colorIndex])
+        {
+            break;
+        }
+    }
+
+    // Leave depth/stencil operations be.
+    if (colorIndex == gl::IMPLEMENTATION_MAX_DRAW_BUFFERS)
+    {
+        return TransformationState::Unchanged;
+    }
+
+    // Drop instruction if attachment is removed.
+    if (colorIndex >= mColorAttachmentTypes.size())
+    {
+        return TransformationState::Transformed;
+    }
+
+    return TransformationState::Unchanged;
+}
+
+TransformationState SpirvUnresolveTransformer::transformVariable(const uint32_t *instruction)
+{
+    spirv::IdResultType typeId;
+    spirv::IdResult id;
+    spv::StorageClass storageClass;
+    spirv::ParseVariable(instruction, &typeId, &id, &storageClass, nullptr);
+
+    // Remove if needs be, or adjust the type.
+    bool isOutput = true;
+    size_t colorIndex;
+    for (colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+    {
+        if (id == mOutIds[colorIndex] || id == mInIds[colorIndex])
+        {
+            isOutput = id == mOutIds[colorIndex];
+            break;
+        }
+    }
+
+    // Leave depth/stencil operations be.
+    if (colorIndex == gl::IMPLEMENTATION_MAX_DRAW_BUFFERS)
+    {
+        return TransformationState::Unchanged;
+    }
+
+    // Drop instruction if attachment or subpass input is removed.
+    if (colorIndex >= mColorAttachmentTypes.size())
+    {
+        return TransformationState::Transformed;
+    }
+
+    // Adjust the type based on the desired attachment type.
+    spirv::IdRef newPointerTypeId = isOutput ? mVec4OutputPtrId : mFloatImagePtrId;
+    if (mColorAttachmentTypes[colorIndex] == GL_INT)
+    {
+        newPointerTypeId = isOutput ? mIVec4OutputPtrId : mIntImagePtrId;
+    }
+    else if (mColorAttachmentTypes[colorIndex] == GL_UNSIGNED_INT)
+    {
+        newPointerTypeId = isOutput ? mUVec4OutputPtrId : mUintImagePtrId;
+    }
+    spirv::WriteVariable(mSpirvBlobOut, newPointerTypeId, id, storageClass, nullptr);
+    return TransformationState::Transformed;
 }
 }  // anonymous namespace
 
@@ -5048,7 +5675,7 @@ angle::Result GlslangTransformSpirvCode(const GlslangErrorCallback &callback,
 
     // Transform the SPIR-V code by assigning location/set/binding values.
     SpirvTransformer transformer(initialSpirvBlob, options, variableInfoMap, spirvBlobOut);
-    ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
+    transformer.transform();
 
     // If there are aliasing vertex attributes, transform the SPIR-V again to remove them.
     if (options.shaderType == gl::ShaderType::Vertex && HasAliasingAttributes(variableInfoMap))
@@ -5057,7 +5684,7 @@ angle::Result GlslangTransformSpirvCode(const GlslangErrorCallback &callback,
         SpirvVertexAttributeAliasingTransformer aliasingTransformer(
             preTransformBlob, variableInfoMap, std::move(transformer.getVariableInfoByIdMap()),
             spirvBlobOut);
-        ANGLE_GLSLANG_CHECK(callback, aliasingTransformer.transform(), GlslangError::InvalidSpirv);
+        aliasingTransformer.transform();
     }
 
     ASSERT(ValidateSpirv(*spirvBlobOut));
@@ -5118,23 +5745,15 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     return angle::Result::Continue;
 }
 
-angle::Result GlslangCompileShaderOneOff(const GlslangErrorCallback &callback,
-                                         gl::ShaderType shaderType,
-                                         const std::string &shaderSource,
-                                         SpirvBlob *spirvBlobOut)
+void GlslangTransformUnresolveSpirvCode(const SpirvBlob &spirvBlobIn,
+                                        const gl::DrawBuffersVector<GLenum> &colorAttachmentTypes,
+                                        SpirvBlob *spirvBlobOut)
 {
-    const TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
+    ShaderInterfaceVariableInfoMap unused;
 
-    glslang::TShader shader(kShLanguageMap[shaderType]);
-    glslang::TProgram program;
+    SpirvUnresolveTransformer transformer(spirvBlobIn, unused, colorAttachmentTypes, spirvBlobOut);
+    transformer.transform();
 
-    ANGLE_TRY(
-        CompileShader(callback, builtInResources, shaderType, shaderSource, &shader, &program));
-    ANGLE_TRY(LinkProgram(callback, &program));
-
-    glslang::TIntermediate *intermediate = program.getIntermediate(kShLanguageMap[shaderType]);
-    glslang::GlslangToSpv(*intermediate, *spirvBlobOut);
-
-    return angle::Result::Continue;
+    ASSERT(ValidateSpirv(*spirvBlobOut));
 }
 }  // namespace rx
