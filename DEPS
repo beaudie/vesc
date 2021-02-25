@@ -20,7 +20,7 @@ vars = {
   'checkout_angle_internal': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'b90646417bd3e0106689c8eccc8d7ad9a91f1348',
+  'chromium_revision': '304760e4a7543f6aef7d0d6d66689eff0a565c52',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -65,7 +65,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '370c3d98a6db53222e9f36a4491a3757bb93e61a',
+  'catapult_revision': 'a34cee3161ef5a20e4e255cd01076bec810689c8',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
@@ -76,22 +76,22 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@72bbbc35a825e690534bec0986e3931ffcd9ab04',
+    'url': '{chromium_git}/chromium/src/build.git@67d73b82b3820a3da4c47fa078a09c24451a8a8e',
     'condition': 'not build_with_chromium',
   },
 
   'buildtools': {
-    'url': '{chromium_git}/chromium/src/buildtools.git@4c78ef9c38b683c5c5cbac70445378c2362cebfc',
+    'url': '{chromium_git}/chromium/src/buildtools.git@45fb4c0b040efbcccc4ef647a5b04acdacf77996',
     'condition': 'not build_with_chromium',
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@677f5aa5b05e1b16409be4d357d1dab7a116de83',
+    'url': '{chromium_git}/chromium/src/testing@864ddd9de855652f8ba3e348b48373cfdc6c1e64',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/abseil-cpp': {
-    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@4a1e66d2e54be92de6495a9b912e8405a5422475',
+    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@800c09f4d719f3bd00762a5b274e199fdeef22ca',
     'condition': 'not build_with_chromium',
   },
 
@@ -141,7 +141,7 @@ deps = {
 
   # libjpeg_turbo is used by glmark2.
   'third_party/libjpeg_turbo': {
-    'url': '{chromium_git}/chromium/deps/libjpeg_turbo.git@fa0de07678c9828cc57b3eb086c03771912ba527',
+    'url': '{chromium_git}/chromium/deps/libjpeg_turbo.git@7b4981b6500ccba10733c352b9ed2dad14ce3c73',
     'condition': 'not build_with_chromium',
   },
 
@@ -221,7 +221,7 @@ deps = {
   },
 
   'tools/clang': {
-    'url': '{chromium_git}/chromium/src/tools/clang.git@cfd0f628093b7382ac054fb33e23fa9d9a278bc3',
+    'url': '{chromium_git}/chromium/src/tools/clang.git@823927c5fe092f19612900a3516d4e20083cdf32',
     'condition': 'not build_with_chromium',
   },
 
@@ -256,7 +256,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': '{chromium_git}/chromium/src/tools/mb@bf8d1f051b082d013df011fa74b48e9d70ddcc08',
+    'url': '{chromium_git}/chromium/src/tools/mb@10d0c851f17042b6a8d31a3b73fc61cbc8730c40',
     'condition': 'not build_with_chromium',
   },
 
