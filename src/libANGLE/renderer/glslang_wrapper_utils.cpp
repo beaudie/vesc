@@ -2117,6 +2117,9 @@ class SpirvTransformFeedbackCodeGenerator final : angle::NonCopyable
     spirv::IdRef mTransformFeedbackExtensionPositionId;
 };
 
+constexpr size_t SpirvTransformFeedbackCodeGenerator::kXfbDecorationCount;
+constexpr spv::Decoration SpirvTransformFeedbackCodeGenerator::kXfbDecorations[kXfbDecorationCount];
+
 void SpirvTransformFeedbackCodeGenerator::visitVariable(const ShaderInterfaceVariableInfo &info,
                                                         gl::ShaderType shaderType,
                                                         const spirv::LiteralString &name,
