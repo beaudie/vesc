@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 254
+#define ANGLE_SH_VERSION 255
 
 enum ShShaderSpec
 {
@@ -616,6 +616,7 @@ using ShHandle = void *;
 
 namespace sh
 {
+using BinaryBlob = std::vector<uint32_t>;
 
 //
 // Driver must call this first, once, before doing any other compiler operations.
@@ -678,7 +679,7 @@ void Destruct(ShHandle handle);
 //                            compiling for WebGL - it is implied.
 // SH_INTERMEDIATE_TREE: Writes intermediate tree to info log.
 //                       Can be queried by calling sh::GetInfoLog().
-// SH_OBJECT_CODE: Translates intermediate tree to glsl or hlsl shader.
+// SH_OBJECT_CODE: Translates intermediate tree to glsl or hlsl shader, or SPIR-V binary.
 //                 Can be queried by calling sh::GetObjectCode().
 // SH_VARIABLES: Extracts attributes, uniforms, and varyings.
 //               Can be queried by calling ShGetVariableInfo().
@@ -702,10 +703,17 @@ ShShaderOutput GetShaderOutputType(const ShHandle handle);
 // handle: Specifies the compiler
 const std::string &GetInfoLog(const ShHandle handle);
 
-// Returns null-terminated object code for a compiled shader.
+// Returns null-terminated object code for a compiled shader.  Only valid for output types that
+// generate human-readable code (GLSL, ESSL or HLSL).
 // Parameters:
 // handle: Specifies the compiler
 const std::string &GetObjectCode(const ShHandle handle);
+
+// Returns object binary code for a compiled shader.  Only valid for output types that
+// generate binary code (SPIR-V).
+// Parameters:
+// handle: Specifies the compiler
+const BinaryBlob &GetObjectBinaryCode(const ShHandle handle);
 
 // Returns a (original_name, hash) map containing all the user defined names in the shader,
 // including variable names, function names, struct names, and struct field names.
