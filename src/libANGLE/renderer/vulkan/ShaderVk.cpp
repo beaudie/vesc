@@ -97,7 +97,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
 
 std::string ShaderVk::getDebugInfo() const
 {
-    return mState.getTranslatedSource();
+    UNREACHABLE();
+    return "<binary blob>";
 }
 
 }  // namespace rx
