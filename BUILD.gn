@@ -535,6 +535,8 @@ angle_static_library("translator") {
   deps = [
     ":includes",
     ":preprocessor",
+    "${angle_glslang_dir}:glslang_default_resource_limits_sources",
+    "${angle_glslang_dir}:glslang_lib_sources",
   ]
 
   public_deps = [
@@ -1145,7 +1147,11 @@ angle_executable("angle_shader_translator") {
 
   sources = [ "samples/shader_translator/shader_translator.cpp" ]
 
-  deps = [ ":translator" ]
+  deps = [
+    ":translator",
+    "${angle_spirv_tools_dir}:spvtools_headers",
+    "${angle_spirv_tools_dir}:spvtools_val",
+  ]
 }
 
 if (angle_standalone || build_with_chromium) {
