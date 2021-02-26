@@ -42,7 +42,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderMtl::compile(const gl::Context *cont
 
 std::string ShaderMtl::getDebugInfo() const
 {
-    return mState.getTranslatedSource();
+    UNREACHABLE();
+    return "<binary blob>";
 }
 
 }  // namespace rx

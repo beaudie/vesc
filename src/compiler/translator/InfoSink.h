@@ -103,17 +103,39 @@ class TInfoSinkBase
         return *this;
     }
 
-    void erase() { sink.clear(); }
-    int size() { return static_cast<int>(sink.size()); }
+    void erase()
+    {
+        sink.clear();
+        binarySink.clear();
+    }
+    int size() { return static_cast<int>(isBinary() ? binarySink.size() : sink.size()); }
 
-    const TPersistString &str() const { return sink; }
-    const char *c_str() const { return sink.c_str(); }
+    const TPersistString &str() const
+    {
+        ASSERT(!isBinary());
+        return sink;
+    }
+    const char *c_str() const
+    {
+        ASSERT(!isBinary());
+        return sink.c_str();
+    }
 
     void prefix(Severity severity);
     void location(int file, int line);
 
+    bool isBinary() const { return !binarySink.empty(); }
+    void setBinary(TPersistBinary &&binary) { binarySink = std::move(binary); }
+    const TPersistBinary &getBinary() const
+    {
+        ASSERT(isBinary());
+        return binarySink;
+    }
+
   private:
+    // The data in the info sink is either in human readable form (|sink|) or binary (|binarySink|).
     TPersistString sink;
+    TPersistBinary binarySink;
 };
 
 class TInfoSink
