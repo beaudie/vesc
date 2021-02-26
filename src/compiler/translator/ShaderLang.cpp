@@ -442,6 +442,18 @@ const std::string &GetObjectCode(const ShHandle handle)
     return infoSink.obj.str();
 }
 
+//
+// Return any object binary code.
+//
+const BinaryBlob &GetObjectBinaryBlob(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    ASSERT(compiler);
+
+    TInfoSink &infoSink = compiler->getInfoSink();
+    return infoSink.obj.getBinary();
+}
+
 const std::map<std::string, std::string> *GetNameHashingMap(const ShHandle handle)
 {
     TCompiler *compiler = GetCompilerFromHandle(handle);

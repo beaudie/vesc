@@ -641,10 +641,9 @@ void DisplayMtl::initializeExtensions() const
     // backend to be used in Chrome (http://anglebug.com/4946)
     mNativeExtensions.debugMarker = true;
 
-    mNativeExtensions.robustness             = true;
-    mNativeExtensions.textureBorderClampOES  = false;  // not implemented yet
-    mNativeExtensions.translatedShaderSource = true;
-    mNativeExtensions.discardFramebuffer     = true;
+    mNativeExtensions.robustness            = true;
+    mNativeExtensions.textureBorderClampOES = false;  // not implemented yet
+    mNativeExtensions.discardFramebuffer    = true;
 
     // Enable EXT_blend_minmax
     mNativeExtensions.blendMinMax = true;
