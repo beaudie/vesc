@@ -439,7 +439,23 @@ const std::string &GetObjectCode(const ShHandle handle)
     ASSERT(compiler);
 
     TInfoSink &infoSink = compiler->getInfoSink();
+    ASSERT(!infoSink.obj.isBinary());
+
     return infoSink.obj.str();
+}
+
+//
+// Return any object binary code.
+//
+const std::vector<uint32_t> &GetObjectBinaryCode(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    ASSERT(compiler);
+
+    TInfoSink &infoSink = compiler->getInfoSink();
+    ASSERT(infoSink.obj.isBinary());
+
+    return infoSink.obj.getBinary();
 }
 
 const std::map<std::string, std::string> *GetNameHashingMap(const ShHandle handle)
