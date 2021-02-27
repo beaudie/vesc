@@ -25,7 +25,7 @@ namespace
 ObserverInterface::~ObserverInterface() = default;
 
 // Subject implementation.
-Subject::Subject() {}
+Subject::Subject() : mObserverBindingBaseHead(nullptr) {}
 
 Subject::~Subject()
 {
@@ -34,27 +34,42 @@ Subject::~Subject()
 
 bool Subject::hasObservers() const
 {
-    return !mObservers.empty();
+    return (mObserverBindingBaseHead != nullptr);
 }
 
 void Subject::onStateChange(SubjectMessage message) const
 {
-    if (mObservers.empty())
+    if (!mObserverBindingBaseHead)
+    {
         return;
+    }
 
-    for (const ObserverBindingBase *binding : mObservers)
+    ObserverBindingBase *binding = mObserverBindingBaseHead;
+    while (binding)
     {
         binding->getObserver()->onSubjectStateChange(binding->getSubjectIndex(), message);
+        binding = binding->getNext();
     }
 }
 
 void Subject::resetObservers()
 {
-    for (angle::ObserverBindingBase *binding : mObservers)
+    if (!mObserverBindingBaseHead)
+    {
+        return;
+    }
+
+    ObserverBindingBase *binding = mObserverBindingBaseHead;
+    ObserverBindingBase *next    = nullptr;
+    while (binding)
     {
         binding->onSubjectReset();
+        next = binding->getNext();
+        binding->setPrevious(nullptr);
+        binding->setNext(nullptr);
+        binding = next;
     }
-    mObservers.clear();
+    mObserverBindingBaseHead = nullptr;
 }
 
 // ObserverBinding implementation.
