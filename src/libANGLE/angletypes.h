@@ -10,6 +10,7 @@
 #define LIBANGLE_ANGLETYPES_H_
 
 #include "common/Color.h"
+#include "common/FastVector.h"
 #include "common/FixedVector.h"
 #include "common/PackedEnums.h"
 #include "common/bitset_utils.h"
