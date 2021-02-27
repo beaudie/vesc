@@ -1808,11 +1808,7 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
             mSize = std::max(mInitialSize, sizeToAllocate);
 
             // Clear the free list since the free buffers are now too small.
-            for (std::unique_ptr<BufferHelper> &toFree : mBufferFreeList)
-            {
-                toFree->release(contextVk->getRenderer());
-            }
-            mBufferFreeList.clear();
+            ReleaseBufferListToRenderer(contextVk->getRenderer(), &mBufferFreeList);
         }
 
         // The front of the free list should be the oldest. Thus if it is in use the rest of the
@@ -1913,8 +1909,9 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
     {
         bufferHelper->retain(resourceUseList);
 
-        // If the dynamic buffer was resized we cannot reuse the retained buffer.
-        if (bufferHelper->getSize() < mSize)
+        // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
+        // don't accumulate too many buffers in the free list to save memory.
+        if (bufferHelper->getSize() < mSize || mBufferFreeList.size() > 0)
         {
             bufferHelper->release(contextVk->getRenderer());
         }
@@ -1930,8 +1927,9 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
 {
     for (std::unique_ptr<BufferHelper> &toRelease : mInFlightBuffers)
     {
-        // If the dynamic buffer was resized we cannot reuse the retained buffer.
-        if (toRelease->getSize() < mSize)
+        // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
+        // don't accumulate too many buffers in the free list to save memory.
+        if (toRelease->getSize() < mSize || mBufferFreeList.size() > 0)
         {
             toRelease->release(contextVk->getRenderer());
         }
