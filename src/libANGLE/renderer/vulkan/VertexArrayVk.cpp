@@ -130,16 +130,20 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
     mCurrentArrayBuffers.fill(&emptyBuffer);
 
     mDynamicVertexData.init(renderer, vk::kVertexBufferUsageFlags, vk::kVertexBufferAlignment,
-                            kDynamicVertexDataSize, true);
+                            kDynamicVertexDataSize, true,
+                            vk::DynamicBufferPolicy::ReleaseFreeBuffers);
 
     // We use an alignment of four for index data. This ensures that compute shaders can read index
     // elements from "uint" aligned addresses.
     mDynamicIndexData.init(renderer, vk::kIndexBufferUsageFlags, vk::kIndexBufferAlignment,
-                           kDynamicIndexDataSize, true);
+                           kDynamicIndexDataSize, true,
+                           vk::DynamicBufferPolicy::ReleaseFreeBuffers);
     mTranslatedByteIndexData.init(renderer, vk::kIndexBufferUsageFlags, vk::kIndexBufferAlignment,
-                                  kDynamicIndexDataSize, true);
+                                  kDynamicIndexDataSize, true,
+                                  vk::DynamicBufferPolicy::ReleaseFreeBuffers);
     mTranslatedByteIndirectData.init(renderer, vk::kIndirectBufferUsageFlags,
-                                     vk::kIndirectBufferAlignment, kDynamicIndirectDataSize, true);
+                                     vk::kIndirectBufferAlignment, kDynamicIndirectDataSize, true,
+                                     vk::DynamicBufferPolicy::ReleaseFreeBuffers);
 }
 
 VertexArrayVk::~VertexArrayVk() {}
