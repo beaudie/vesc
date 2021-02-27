@@ -12,10 +12,6 @@
 
 #include "libANGLE/Observer.h"
 
-#include <algorithm>
-
-#include "common/debug.h"
-
 namespace angle
 {
 namespace
@@ -32,29 +28,40 @@ Subject::~Subject()
     resetObservers();
 }
 
-bool Subject::hasObservers() const
-{
-    return !mObservers.empty();
-}
-
 void Subject::onStateChange(SubjectMessage message) const
 {
-    if (mObservers.empty())
-        return;
-
-    for (const ObserverBindingBase *binding : mObservers)
+    if (!hasObservers())
     {
+        return;
+    }
+
+    angle::ListNode *currentNode = mSentinelNode.getNext();
+    while (currentNode != &mSentinelNode)
+    {
+        ObserverBindingBase *binding = static_cast<ObserverBindingBase *>(currentNode);
         binding->getObserver()->onSubjectStateChange(binding->getSubjectIndex(), message);
+        currentNode = currentNode->getNext();
     }
 }
 
 void Subject::resetObservers()
 {
-    for (angle::ObserverBindingBase *binding : mObservers)
+    if (!hasObservers())
     {
-        binding->onSubjectReset();
+        return;
     }
-    mObservers.clear();
+
+    angle::ListNode *currentNode = mSentinelNode.getNext();
+    angle::ListNode *nextNode    = nullptr;
+    while (currentNode != &mSentinelNode)
+    {
+        ObserverBindingBase *binding = static_cast<ObserverBindingBase *>(currentNode);
+        binding->onSubjectReset();
+        nextNode = currentNode->getNext();
+        currentNode->detachListNode();
+        currentNode = nextNode;
+    }
+    mSentinelNode.detachListNode();
 }
 
 // ObserverBinding implementation.
