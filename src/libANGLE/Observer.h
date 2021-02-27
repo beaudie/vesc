@@ -13,17 +13,11 @@
 #ifndef LIBANGLE_OBSERVER_H_
 #define LIBANGLE_OBSERVER_H_
 
-#include "common/FastVector.h"
-#include "common/angleutils.h"
+#include "common/ListNode.h"
+#include "common/debug.h"
 
 namespace angle
 {
-template <typename HaystackT, typename NeedleT>
-bool IsInContainer(const HaystackT &haystack, const NeedleT &needle)
-{
-    return std::find(haystack.begin(), haystack.end(), needle) != haystack.end();
-}
-
 using SubjectIndex = size_t;
 
 // Messages are used to distinguish different Subject events that get sent to a single Observer.
@@ -64,7 +58,7 @@ class ObserverInterface
     virtual void onSubjectStateChange(SubjectIndex index, SubjectMessage message) = 0;
 };
 
-class ObserverBindingBase
+class ObserverBindingBase : public angle::ListNode
 {
   public:
     ObserverBindingBase(ObserverInterface *observer, SubjectIndex subjectIndex)
@@ -74,7 +68,6 @@ class ObserverBindingBase
 
     ObserverInterface *getObserver() const { return mObserver; }
     SubjectIndex getSubjectIndex() const { return mIndex; }
-
     virtual void onSubjectReset() {}
 
   private:
@@ -90,26 +83,30 @@ class Subject : NonCopyable
     virtual ~Subject();
 
     void onStateChange(SubjectMessage message) const;
-    bool hasObservers() const;
+    ANGLE_INLINE bool hasObservers() const { return (mSentinelNode.getNext() != &mSentinelNode); }
     void resetObservers();
 
     ANGLE_INLINE void addObserver(ObserverBindingBase *observer)
     {
-        ASSERT(!IsInContainer(mObservers, observer));
-        mObservers.push_back(observer);
+        ASSERT(!isInContainer(observer));
+        // Always add at head
+        mSentinelNode.insertListNode(observer);
     }
 
     ANGLE_INLINE void removeObserver(ObserverBindingBase *observer)
     {
-        ASSERT(IsInContainer(mObservers, observer));
-        mObservers.remove_and_permute(observer);
+        ASSERT(isInContainer(observer));
+        mSentinelNode.removeListNode(observer);
     }
 
   private:
-    // Keep a short list of observers so we can allocate/free them quickly. But since we support
-    // unlimited bindings, have a spill-over list of that uses dynamic allocation.
-    static constexpr size_t kMaxFixedObservers = 8;
-    angle::FastVector<ObserverBindingBase *, kMaxFixedObservers> mObservers;
+    ANGLE_INLINE bool isInContainer(ObserverBindingBase *observer)
+    {
+        angle::ListNode *node = static_cast<angle::ListNode *>(observer);
+        return (node->getNext() != node);
+    }
+
+    angle::ListNode mSentinelNode;
 };
 
 // Keeps a binding between a Subject and Observer, with a specific subject index.
