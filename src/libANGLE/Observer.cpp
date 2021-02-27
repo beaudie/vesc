@@ -12,10 +12,6 @@
 
 #include "libANGLE/Observer.h"
 
-#include <algorithm>
-
-#include "common/debug.h"
-
 namespace angle
 {
 namespace
@@ -25,36 +21,47 @@ namespace
 ObserverInterface::~ObserverInterface() = default;
 
 // Subject implementation.
-Subject::Subject() {}
+Subject::Subject() : mObserverBindingSentinelNode(&mSentinelNode) {}
 
 Subject::~Subject()
 {
     resetObservers();
 }
 
-bool Subject::hasObservers() const
-{
-    return !mObservers.empty();
-}
-
 void Subject::onStateChange(SubjectMessage message) const
 {
-    if (mObservers.empty())
-        return;
-
-    for (const ObserverBindingBase *binding : mObservers)
+    if (!hasObservers())
     {
+        return;
+    }
+
+    angle::ListNode *currentNode = mObserverBindingSentinelNode->getNext();
+    while (currentNode != mObserverBindingSentinelNode)
+    {
+        ObserverBindingBase *binding = static_cast<ObserverBindingBase *>(currentNode);
         binding->getObserver()->onSubjectStateChange(binding->getSubjectIndex(), message);
+        currentNode = currentNode->getNext();
     }
 }
 
 void Subject::resetObservers()
 {
-    for (angle::ObserverBindingBase *binding : mObservers)
+    if (!hasObservers())
     {
-        binding->onSubjectReset();
+        return;
     }
-    mObservers.clear();
+
+    angle::ListNode *currentNode = mObserverBindingSentinelNode->getNext();
+    angle::ListNode *nextNode    = nullptr;
+    while (currentNode != mObserverBindingSentinelNode)
+    {
+        ObserverBindingBase *binding = static_cast<ObserverBindingBase *>(currentNode);
+        binding->onSubjectReset();
+        nextNode = currentNode->getNext();
+        currentNode->resetLinks();
+        currentNode = nextNode;
+    }
+    mObserverBindingSentinelNode->resetLinks();
 }
 
 // ObserverBinding implementation.
