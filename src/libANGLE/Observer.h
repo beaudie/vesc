@@ -68,18 +68,27 @@ class ObserverBindingBase
 {
   public:
     ObserverBindingBase(ObserverInterface *observer, SubjectIndex subjectIndex)
-        : mObserver(observer), mIndex(subjectIndex)
+        : mObserver(observer),
+          mIndex(subjectIndex),
+          mPreviousObserver(nullptr),
+          mNextObserver(nullptr)
     {}
     virtual ~ObserverBindingBase() {}
 
     ObserverInterface *getObserver() const { return mObserver; }
     SubjectIndex getSubjectIndex() const { return mIndex; }
+    ANGLE_INLINE void setNext(ObserverBindingBase *next) { mNextObserver = next; }
+    ANGLE_INLINE void setPrevious(ObserverBindingBase *previous) { mPreviousObserver = previous; }
+    ANGLE_INLINE ObserverBindingBase *getNext() { return mNextObserver; }
+    ANGLE_INLINE ObserverBindingBase *getPrevious() { return mPreviousObserver; }
 
     virtual void onSubjectReset() {}
 
   private:
     ObserverInterface *mObserver;
     SubjectIndex mIndex;
+    ObserverBindingBase *mPreviousObserver;
+    ObserverBindingBase *mNextObserver;
 };
 
 // Maintains a list of observer bindings. Sends update messages to the observer.
@@ -95,21 +104,44 @@ class Subject : NonCopyable
 
     ANGLE_INLINE void addObserver(ObserverBindingBase *observer)
     {
-        ASSERT(!IsInContainer(mObservers, observer));
-        mObservers.push_back(observer);
+        // Always add at head
+        if (mObserverBindingBaseHead)
+        {
+            mObserverBindingBaseHead->setPrevious(observer);
+            observer->setNext(mObserverBindingBaseHead);
+        }
+        mObserverBindingBaseHead = observer;
     }
 
     ANGLE_INLINE void removeObserver(ObserverBindingBase *observer)
     {
-        ASSERT(IsInContainer(mObservers, observer));
-        mObservers.remove_and_permute(observer);
+        ObserverBindingBase *previous = observer->getPrevious();
+        ObserverBindingBase *next     = observer->getNext();
+        if (mObserverBindingBaseHead == observer)
+        {
+            mObserverBindingBaseHead = next;
+            if (next)
+            {
+                next->setPrevious(nullptr);
+            }
+        }
+        else
+        {
+            if (previous)
+            {
+                previous->setNext(next);
+            }
+            if (next)
+            {
+                next->setPrevious(previous);
+            }
+        }
+        observer->setPrevious(nullptr);
+        observer->setNext(nullptr);
     }
 
   private:
-    // Keep a short list of observers so we can allocate/free them quickly. But since we support
-    // unlimited bindings, have a spill-over list of that uses dynamic allocation.
-    static constexpr size_t kMaxFixedObservers = 8;
-    angle::FastVector<ObserverBindingBase *, kMaxFixedObservers> mObservers;
+    ObserverBindingBase *mObserverBindingBaseHead;
 };
 
 // Keeps a binding between a Subject and Observer, with a specific subject index.
