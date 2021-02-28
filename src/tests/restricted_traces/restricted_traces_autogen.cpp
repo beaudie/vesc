@@ -57,6 +57,7 @@
 #include "shadow_fight_2/shadow_fight_2_capture_context2.h"
 #include "sniper_3d/sniper_3d_capture_context3.h"
 #include "subway_surfers/subway_surfers_capture_context2.h"
+#include "talking_tom_hero_dash/talking_tom_hero_dash_capture_context9.h"
 #include "temple_run_2/temple_run_2_capture_context1.h"
 #include "temple_run_300/temple_run_300_capture_context1.h"
 #include "trex_200/trex_200_capture_context1.h"
@@ -287,6 +288,12 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
       subway_surfers::kReplayFrameStart, subway_surfers::kReplayFrameEnd,
       subway_surfers::kReplayDrawSurfaceWidth, subway_surfers::kReplayDrawSurfaceHeight,
       "subway_surfers"}},
+    {RestrictedTraceID::talking_tom_hero_dash,
+     {talking_tom_hero_dash::kReplayContextClientMajorVersion,
+      talking_tom_hero_dash::kReplayContextClientMinorVersion,
+      talking_tom_hero_dash::kReplayFrameStart, talking_tom_hero_dash::kReplayFrameEnd,
+      talking_tom_hero_dash::kReplayDrawSurfaceWidth,
+      talking_tom_hero_dash::kReplayDrawSurfaceHeight, "talking_tom_hero_dash"}},
     {RestrictedTraceID::temple_run_2,
      {temple_run_2::kReplayContextClientMajorVersion,
       temple_run_2::kReplayContextClientMinorVersion, temple_run_2::kReplayFrameStart,
@@ -469,6 +476,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::subway_surfers:
             subway_surfers::ReplayContext2Frame(frameIndex);
             break;
+        case RestrictedTraceID::talking_tom_hero_dash:
+            talking_tom_hero_dash::ReplayContext9Frame(frameIndex);
+            break;
         case RestrictedTraceID::temple_run_2:
             temple_run_2::ReplayContext1Frame(frameIndex);
             break;
@@ -638,6 +648,9 @@ void ResetReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::subway_surfers:
             subway_surfers::ResetContext2Replay();
+            break;
+        case RestrictedTraceID::talking_tom_hero_dash:
+            talking_tom_hero_dash::ResetContext9Replay();
             break;
         case RestrictedTraceID::temple_run_2:
             temple_run_2::ResetContext1Replay();
@@ -809,6 +822,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::subway_surfers:
             subway_surfers::SetupContext2Replay();
             break;
+        case RestrictedTraceID::talking_tom_hero_dash:
+            talking_tom_hero_dash::SetupContext9Replay();
+            break;
         case RestrictedTraceID::temple_run_2:
             temple_run_2::SetupContext1Replay();
             break;
@@ -979,6 +995,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::subway_surfers:
             subway_surfers::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::talking_tom_hero_dash:
+            talking_tom_hero_dash::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::temple_run_2:
             temple_run_2::SetBinaryDataDir(dataDir);
             break;
@@ -1148,6 +1167,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::subway_surfers:
             subway_surfers::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::talking_tom_hero_dash:
+            talking_tom_hero_dash::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::temple_run_2:
             temple_run_2::SetBinaryDataDecompressCallback(callback);
