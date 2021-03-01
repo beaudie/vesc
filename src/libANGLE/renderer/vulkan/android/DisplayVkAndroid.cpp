@@ -14,6 +14,7 @@
 #include <vulkan/vulkan.h>
 
 #include "common/angle_version.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.h"
 #include "libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.h"
@@ -65,10 +66,26 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
                                    depthStencilFormats.data(), depthStencilFormats.size(), this);
 }
 
+void DisplayVkAndroid::enableRecordableIfSupported(egl::Config *config)
+{
+    const VkPhysicalDeviceProperties &physicalDeviceProperties =
+        getRenderer()->getPhysicalDeviceProperties();
+
+    bool isSwiftShader =
+        IsSwiftshader(physicalDeviceProperties.vendorID, physicalDeviceProperties.deviceID);
+
+    if (isSwiftShader)
+    {
+        config->recordable = true;
+    }
+}
+
 void DisplayVkAndroid::checkConfigSupport(egl::Config *config)
 {
     // TODO(geofflang): Test for native support and modify the config accordingly.
     // anglebug.com/2692
+
+    enableRecordableIfSupported(config);
 }
 
 egl::Error DisplayVkAndroid::validateImageClientBuffer(const gl::Context *context,
