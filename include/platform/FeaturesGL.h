@@ -529,6 +529,13 @@ struct FeaturesGL : FeatureSetBase
         "shift_instanced_array_data_with_offset", FeatureCategory::OpenGLWorkarounds,
         "glDrawArraysInstanced is buggy on certain new Mac Intel GPUs", &members,
         "http://crbug.com/1144207"};
+
+    // On desktop Linux/AMD when using the amdgpu drivers, the precise kernel and DRM version are
+    // leaked via GL_RENDERER. We workaround this to improve user privacy.
+    Feature sanitizeAmdGpuRendererString = {
+        "sanitize_amdgpu_renderer_string", FeatureCategory::OpenGLWorkarounds,
+        "Strip precise kernel and DRM version information from amdgpu renderer strings.", &members,
+        "http://crbug.com/1181193"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
