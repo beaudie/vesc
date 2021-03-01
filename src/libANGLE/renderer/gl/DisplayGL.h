@@ -19,6 +19,10 @@ class Surface;
 
 namespace rx
 {
+
+std::string SanitizeRendererString(std::string rendererString);
+std::string SanitizeVersionString(std::string versionString, bool isES);
+
 class ShareGroupGL : public ShareGroupImpl
 {};
 
