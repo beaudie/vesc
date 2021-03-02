@@ -191,3 +191,9 @@ is_official_build = true
 is_debug = false
 dcheck_always_on = true
 ```
+### Command line for launching chrome on Android
+
+A [Makefile](https://github.com/phuang/test/blob/master/chromium/Makefile) contains many useful command lines for launching chrome.
+
+Targets run_chrome_public_apk_* is for launching chrome on Android
+
