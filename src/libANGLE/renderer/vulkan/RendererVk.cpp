@@ -164,6 +164,8 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/5331
     "VUID-VkSubpassDescriptionDepthStencilResolve-depthResolveMode-parameter",
     "VUID-VkSubpassDescriptionDepthStencilResolve-stencilResolveMode-parameter",
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=1183542
+    "VUID-vkCmdBindDescriptorSets-pDescriptorSets-01979",
 };
 
 // Suppress validation errors that are known
