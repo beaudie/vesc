@@ -33,6 +33,7 @@ def FindSrcDirPath():
 ANGLE_CHROMIUM_DEPS = [
     'build',
     'buildtools',
+    'buildtools/third_party/libc++abi/trunk',
     'testing',
     'third_party/abseil-cpp',
     'third_party/catapult',

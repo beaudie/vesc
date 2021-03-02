@@ -85,6 +85,11 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'buildtools/third_party/libc++abi/trunk': {
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxxabi.git@6918862bfc2bff22b45058fac22b1596c49982fb',
+    'condition': 'not build_with_chromium',
+  },
+
   'testing': {
     'url': '{chromium_git}/chromium/src/testing@4138b13c164ce60bb99115a078957b7a952ce32f',
     'condition': 'not build_with_chromium',
