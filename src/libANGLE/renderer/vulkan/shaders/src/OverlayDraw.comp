@@ -83,7 +83,28 @@ uint getChar(const uint textWidget, const uvec2 coordInWidget, const uint fontGl
 {
     const uint charIndex = coordInWidget.x / fontGlyphWidth;
     const uint packIndex = charIndex / 4;
-    const uint packedChars = textWidgetsData[textWidget].text[packIndex / 4][packIndex % 4];
+    const uint col = packIndex / 4;
+    const uint row = packIndex % 4;
+    // Work around Android bug with dynamic indexing of the matrix column.
+    uvec4 rows;
+    if (col == 0)
+    {
+        rows = textWidgetsData[textWidget].text[0];
+    }
+    else if (col == 1)
+    {
+        rows = textWidgetsData[textWidget].text[1];
+    }
+    else if (col == 2)
+    {
+        rows = textWidgetsData[textWidget].text[2];
+    }
+    else
+    {
+        rows = textWidgetsData[textWidget].text[3];
+    }
+
+    const uint packedChars = rows[row];
     const uint shift = (charIndex % 4) * 8;
 
 #if IsBigEndian
@@ -108,7 +129,28 @@ float sampleFont(const uint textChar,
 uint getValue(const uint graphWidget, const uvec2 coordInWidget, const uint valueWidth)
 {
     const uint valueIndex = coordInWidget.x / valueWidth.x;
-    return graphWidgetsData[graphWidget].values[valueIndex / 4][valueIndex % 4];
+    const uint col = valueIndex / 4;
+    const uint row = valueIndex % 4;
+    // Work around Android bug with dynamic indexing of the matrix column.
+    uvec4 rows;
+    if (col == 0)
+    {
+        rows = graphWidgetsData[graphWidget].values[0];
+    }
+    else if (col == 1)
+    {
+        rows = graphWidgetsData[graphWidget].values[1];
+    }
+    else if (col == 2)
+    {
+        rows = graphWidgetsData[graphWidget].values[2];
+    }
+    else
+    {
+        rows = graphWidgetsData[graphWidget].values[3];
+    }
+
+    return rows[valueIndex % 4];
 }
 
 vec4 blend(const vec4 blendedSoFar, const vec4 color)
