@@ -22,7 +22,9 @@ OverlayVk::OverlayVk(const gl::OverlayState &state)
     : OverlayImpl(state),
       mSupportsSubgroupBallot(false),
       mSupportsSubgroupArithmetic(false),
-      mRefreshCulledWidgets(false)
+      mRefreshCulledWidgets(false),
+      mPresentImageExtent{},
+      mIs90DegreeRotation(false)
 {}
 OverlayVk::~OverlayVk() = default;
 
@@ -199,6 +201,7 @@ angle::Result OverlayVk::cullWidgets(ContextVk *contextVk)
     params.subgroupSize[1]            = mSubgroupSize[1];
     params.supportsSubgroupBallot     = mSupportsSubgroupBallot;
     params.supportsSubgroupArithmetic = mSupportsSubgroupArithmetic;
+    params.rotateXY                   = mIs90DegreeRotation;
 
     return contextVk->getUtils().cullOverlayWidgets(contextVk, &enabledWidgetsBuffer.get(),
                                                     &mCulledWidgets, &mCulledWidgetsView, params);
@@ -206,7 +209,8 @@ angle::Result OverlayVk::cullWidgets(ContextVk *contextVk)
 
 angle::Result OverlayVk::onPresent(ContextVk *contextVk,
                                    vk::ImageHelper *imageToPresent,
-                                   const vk::ImageView *imageToPresentView)
+                                   const vk::ImageView *imageToPresentView,
+                                   bool is90DegreeRotation)
 {
     if (mState.getEnabledWidgetCount() == 0)
     {
@@ -227,12 +231,14 @@ angle::Result OverlayVk::onPresent(ContextVk *contextVk,
 
     mRefreshCulledWidgets = mRefreshCulledWidgets ||
                             mPresentImageExtent.width != imageExtent.width ||
-                            mPresentImageExtent.height != imageExtent.height;
+                            mPresentImageExtent.height != imageExtent.height ||
+                            mIs90DegreeRotation != is90DegreeRotation;
 
     if (mRefreshCulledWidgets)
     {
         mPresentImageExtent.width  = imageExtent.width;
         mPresentImageExtent.height = imageExtent.height;
+        mIs90DegreeRotation        = is90DegreeRotation;
 
         ANGLE_TRY(cullWidgets(contextVk));
 
@@ -272,6 +278,7 @@ angle::Result OverlayVk::onPresent(ContextVk *contextVk,
     UtilsVk::OverlayDrawParameters params;
     params.subgroupSize[0] = mSubgroupSize[0];
     params.subgroupSize[1] = mSubgroupSize[1];
+    params.rotateXY        = mIs90DegreeRotation;
 
     return contextVk->getUtils().drawOverlay(
         contextVk, &textDataBuffer.get(), &graphDataBuffer.get(), &mFontImage, &mFontImageView,

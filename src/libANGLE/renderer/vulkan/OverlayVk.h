@@ -30,7 +30,8 @@ class OverlayVk : public OverlayImpl
 
     angle::Result onPresent(ContextVk *contextVk,
                             vk::ImageHelper *imageToPresent,
-                            const vk::ImageView *imageToPresentView);
+                            const vk::ImageView *imageToPresentView,
+                            bool is90DegreeRotation);
 
     uint32_t getEnabledWidgetCount() const { return mState.getEnabledWidgetCount(); }
 
@@ -47,6 +48,7 @@ class OverlayVk : public OverlayImpl
 
     // Cached size of last presented image.  If the size changes, culling is repeated.
     VkExtent2D mPresentImageExtent;
+    bool mIs90DegreeRotation;
 
     vk::ImageHelper mFontImage;
     vk::ImageView mFontImageView;

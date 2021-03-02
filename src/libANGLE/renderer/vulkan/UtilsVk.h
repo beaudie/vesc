@@ -157,11 +157,13 @@ class UtilsVk : angle::NonCopyable
         uint32_t subgroupSize[2];
         bool supportsSubgroupBallot;
         bool supportsSubgroupArithmetic;
+        bool rotateXY;
     };
 
     struct OverlayDrawParameters
     {
         uint32_t subgroupSize[2];
+        bool rotateXY;
     };
 
     struct GenerateMipmapParameters
@@ -407,10 +409,17 @@ class UtilsVk : angle::NonCopyable
         uint32_t rotateXY        = 0;
     };
 
+    struct OverlayCullShaderParams
+    {
+        // Structure matching PushConstants in OverlayCull.comp
+        uint32_t rotateXY;
+    };
+
     struct OverlayDrawShaderParams
     {
         // Structure matching PushConstants in OverlayDraw.comp
         uint32_t outputSize[2] = {};
+        uint32_t rotateXY;
     };
 
     struct GenerateMipmapShaderParams
