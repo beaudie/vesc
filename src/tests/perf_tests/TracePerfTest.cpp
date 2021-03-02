@@ -34,6 +34,9 @@ struct TracePerfParams final : public RenderTestParams
     // Common default options
     TracePerfParams()
     {
+        majorVersion = 3;
+        minorVersion = 1;
+
         // Display the frame after every drawBenchmark invocation
         iterationsPerStep = 1;
     }
@@ -946,8 +949,6 @@ TracePerfParams CombineTestID(const TracePerfParams &in, RestrictedTraceID id)
 
     TracePerfParams out = in;
     out.testID          = id;
-    out.majorVersion    = traceInfo.contextClientMajorVersion;
-    out.minorVersion    = traceInfo.contextClientMinorVersion;
     out.windowWidth     = traceInfo.drawSurfaceWidth;
     out.windowHeight    = traceInfo.drawSurfaceHeight;
     return out;

@@ -97,13 +97,8 @@ using SetBinaryDataDirFunc = void (*)(const char *);
 
 static constexpr size_t kTraceInfoMaxNameLen = 32;
 
-static constexpr uint32_t kDefaultReplayContextClientMajorVersion = 3;
-static constexpr uint32_t kDefaultReplayContextClientMinorVersion = 1;
-
 struct TraceInfo
 {{
-    uint32_t contextClientMajorVersion;
-    uint32_t contextClientMinorVersion;
     uint32_t startFrame;
     uint32_t endFrame;
     uint32_t drawSurfaceWidth;
@@ -269,32 +264,12 @@ def gen_gni(traces, gni_file, format_args):
     return True
 
 
-def contains_context_version(trace):
-    "Determines if the trace contains the major/minor context version"
-    for file in os.listdir(trace):
-        if fnmatch.fnmatch(file, '*.h'):
-            with open(os.path.join(trace, file)) as f:
-                if 'kReplayContextClientMajorVersion' in f.read():
-                    return True
-    return False
-
-
 def get_trace_info(trace):
-    # Some traces don't contain major/minor version, so use defaults
-    info = []
-    defaults = ''
-    if contains_context_version(trace):
-        info += ["%s::kReplayContextClientMajorVersion", "%s::kReplayContextClientMinorVersion"]
-    else:
-        defaults = "kDefaultReplayContextClientMajorVersion, kDefaultReplayContextClientMinorVersion,"
-
-    info += [
+    info = [
         "%s::kReplayFrameStart", "%s::kReplayFrameEnd", "%s::kReplayDrawSurfaceWidth",
         "%s::kReplayDrawSurfaceHeight", "\"%s\""
     ]
-
-    merged_info = defaults + ", ".join([element % trace for element in info])
-    return merged_info
+    return ", ".join([element % trace for element in info])
 
 
 def get_context(trace):
