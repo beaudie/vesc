@@ -731,9 +731,10 @@ bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
 
     // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
     // only reuse the buffer if specifically requested.
-    const bool sizeMismatch    = buffer.getSize() < dynamicBufferSize;
-    const bool releaseByPolicy = policy == DynamicBufferPolicy::ReleaseFreeBuffers ||
-                                 (policy == DynamicBufferPolicy::LimitedReuseFreeBuffers &&
+    const bool sizeMismatch    = buffer.getSize() != dynamicBufferSize;
+    const bool releaseByPolicy = policy == DynamicBufferPolicy::OneShotBufferUse ||
+                                 policy == DynamicBufferPolicy::OneShotTextureUpload ||
+                                 (policy == DynamicBufferPolicy::SporadicTextureUpload &&
                                   freeListSize >= kLimitedFreeListMaxSize);
 
     return sizeMismatch || releaseByPolicy;
@@ -1683,7 +1684,7 @@ void CommandBufferHelper::growRenderArea(ContextVk *contextVk, const gl::Rectang
 DynamicBuffer::DynamicBuffer()
     : mUsage(0),
       mHostVisible(false),
-      mPolicy(DynamicBufferPolicy::ReleaseFreeBuffers),
+      mPolicy(DynamicBufferPolicy::OneShotBufferUse),
       mInitialSize(0),
       mNextAllocationOffset(0),
       mLastFlushOrInvalidateOffset(0),
@@ -1834,12 +1835,22 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
             ASSERT(!mBuffer);
         }
 
+        if (mPolicy == DynamicBufferPolicy::OneShotTextureUpload ||
+            mPolicy == DynamicBufferPolicy::SporadicTextureUpload)
+        {
+            mSize = mInitialSize * 4 / 3 + alignment * 3;
+        }
         if (sizeToAllocate > mSize)
         {
             mSize = std::max(mInitialSize, sizeToAllocate);
 
             // Clear the free list since the free buffers are now too small.
             ReleaseBufferListToRenderer(contextVk->getRenderer(), &mBufferFreeList);
+        }
+        if (mPolicy == DynamicBufferPolicy::OneShotTextureUpload ||
+            mPolicy == DynamicBufferPolicy::SporadicTextureUpload)
+        {
+            mSize = mSize * 4 / 3 + alignment * 3;
         }
 
         // The front of the free list should be the oldest. Thus if it is in use the rest of the
@@ -2786,10 +2797,10 @@ LineLoopHelper::LineLoopHelper(RendererVk *renderer)
     // must be a multiple of the type indicated by indexType'.
     mDynamicIndexBuffer.init(renderer, kLineLoopDynamicBufferUsage, sizeof(uint32_t),
                              kLineLoopDynamicBufferInitialSize, true,
-                             DynamicBufferPolicy::ReleaseFreeBuffers);
+                             DynamicBufferPolicy::OneShotBufferUse);
     mDynamicIndirectBuffer.init(renderer, kLineLoopDynamicIndirectBufferUsage, sizeof(uint32_t),
                                 kLineLoopDynamicIndirectBufferInitialSize, true,
-                                DynamicBufferPolicy::ReleaseFreeBuffers);
+                                DynamicBufferPolicy::OneShotBufferUse);
 }
 
 LineLoopHelper::~LineLoopHelper() = default;
@@ -3627,7 +3638,7 @@ void ImageHelper::initStagingBuffer(RendererVk *renderer,
                                     size_t initialSize)
 {
     mStagingBuffer.init(renderer, usageFlags, imageCopyBufferAlignment, initialSize, true,
-                        DynamicBufferPolicy::ReleaseFreeBuffers);
+                        DynamicBufferPolicy::OneShotTextureUpload);
 }
 
 angle::Result ImageHelper::init(Context *context,
@@ -6263,7 +6274,7 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     // Use a temporary staging buffer. Could be optimized.
     RendererScoped<DynamicBuffer> stagingBuffer(contextVk->getRenderer());
     stagingBuffer.get().init(contextVk->getRenderer(), VK_BUFFER_USAGE_TRANSFER_DST_BIT, 1,
-                             kStagingBufferSize, true, DynamicBufferPolicy::ReleaseFreeBuffers);
+                             kStagingBufferSize, true, DynamicBufferPolicy::OneShotBufferUse);
 
     if (mExtents.depth > 1)
     {
