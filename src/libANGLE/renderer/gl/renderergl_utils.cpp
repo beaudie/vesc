@@ -369,6 +369,13 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
         functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_NUM_SAMPLE_COUNTS,
                                        1, &numSamples);
 
+        // Android emulator has bug for GL_OES_depth32 extnesion.
+        if (queryInternalFormat == GL_DEPTH_COMPONENT32_OES)
+        {
+            if (functions->getError() != GL_NO_ERROR)
+                ERR() << "glGetInternalformativ() fails for GL_DEPTH_COMPOMENT32_OES";
+        }
+
         if (numSamples > 0)
         {
             std::vector<GLint> samples(numSamples);
@@ -423,7 +430,7 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
     const gl::InternalFormat &glFormatInfo = gl::GetSizedInternalFormatInfo(internalFormat);
     if (textureCaps.renderbuffer && !glFormatInfo.isInt() &&
         glFormatInfo.isRequiredRenderbufferFormat(gl::Version(3, 0)) &&
-        textureCaps.getMaxSamples() < 4)
+        textureCaps.getMaxSamples() < 4 && internalFormat != GL_DEPTH_COMPONENT32_OES)
     {
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
     }
