@@ -365,9 +365,17 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
             queryInternalFormat = GL_RGBA8;
         }
 
+        ASSERT(functions->getError() == GL_NO_ERROR);
         GLint numSamples = 0;
         functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_NUM_SAMPLE_COUNTS,
                                        1, &numSamples);
+        GLenum error = functions->getError();
+        if (error != GL_NO_ERROR)
+        {
+            ERR() << "glGetInternalformativ generated error " << gl::FmtHex(error) << " for format "
+                  << gl::FmtHex(queryInternalFormat) << ". Skipping multisample checks.";
+            numSamples = 0;
+        }
 
         if (numSamples > 0)
         {
@@ -423,7 +431,7 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
     const gl::InternalFormat &glFormatInfo = gl::GetSizedInternalFormatInfo(internalFormat);
     if (textureCaps.renderbuffer && !glFormatInfo.isInt() &&
         glFormatInfo.isRequiredRenderbufferFormat(gl::Version(3, 0)) &&
-        textureCaps.getMaxSamples() < 4)
+        textureCaps.getMaxSamples() < 4 && internalFormat != GL_DEPTH_COMPONENT32_OES)
     {
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
     }
