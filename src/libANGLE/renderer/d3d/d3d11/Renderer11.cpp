@@ -524,7 +524,7 @@ Renderer11::Renderer11(egl::Display *display)
     }
 
     const EGLenum presentPath = static_cast<EGLenum>(attributes.get(
-        EGL_EXPERIMENTAL_PRESENT_PATH_ANGLE, EGL_EXPERIMENTAL_PRESENT_PATH_COPY_ANGLE));
+        EGL_EXPERIMENTAL_PRESENT_PATH_ANGLE, EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE));
     mPresentPathFastEnabled   = (presentPath == EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE);
 }
 
