@@ -122,7 +122,7 @@ ConversionBuffer::ConversionBuffer(RendererVk *renderer,
     : dirty(true), lastAllocationOffset(0)
 {
     data.init(renderer, usageFlags, alignment, initialSize, hostVisible,
-              vk::DynamicBufferPolicy::OneShotUse);
+              vk::DynamicBufferPolicy::OneShotBufferUse);
 }
 
 ConversionBuffer::~ConversionBuffer() = default;
