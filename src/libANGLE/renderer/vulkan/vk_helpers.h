@@ -64,8 +64,10 @@ using BufferHelperPointerVector = std::vector<std::unique_ptr<BufferHelper>>;
 enum class DynamicBufferPolicy
 {
     // Used where future allocations from the dynamic buffer are unlikely, so it's best to free the
-    // memory when the allocated buffers are no longer in use.
-    OneShotUse,
+    // memory when the allocated buffers are no longer in use.  Different policies for use with
+    // buffers and textures.
+    OneShotBufferUse,
+    OneShotTextureUpload,
     // Used where multiple small allocations are made every frame, so it's worth keeping the free
     // buffers around to avoid release/reallocation.
     FrequentSmallAllocations,

@@ -732,11 +732,21 @@ bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
     // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
     // only reuse the buffer if specifically requested.
     const bool sizeMismatch    = buffer.getSize() != dynamicBufferSize;
-    const bool releaseByPolicy = policy == DynamicBufferPolicy::OneShotUse ||
+    const bool releaseByPolicy = policy == DynamicBufferPolicy::OneShotBufferUse ||
+                                 policy == DynamicBufferPolicy::OneShotTextureUpload ||
                                  (policy == DynamicBufferPolicy::SporadicTextureUpload &&
                                   freeListSize >= kLimitedFreeListMaxSize);
 
     return sizeMismatch || releaseByPolicy;
+}
+
+size_t RoundUpToFullMipchainSize(size_t base0Size, size_t bufferAlignment)
+{
+    // The full mipchain requires 1/3 more memory than base 0.  The alignment requirements may cause
+    // the individual buffer allocations for each level to be larger, which generally only affects
+    // the last few mips.  For an alignment of 64 or 256 bytes, that means the last three or four
+    // levels allocate extra memory respectively.
+    return roundUp(base0Size * 4 / 3, bufferAlignment) + bufferAlignment * 4;
 }
 }  // anonymous namespace
 
@@ -1683,7 +1693,7 @@ void CommandBufferHelper::growRenderArea(ContextVk *contextVk, const gl::Rectang
 DynamicBuffer::DynamicBuffer()
     : mUsage(0),
       mHostVisible(false),
-      mPolicy(DynamicBufferPolicy::OneShotUse),
+      mPolicy(DynamicBufferPolicy::OneShotBufferUse),
       mInitialSize(0),
       mNextAllocationOffset(0),
       mLastFlushOrInvalidateOffset(0),
@@ -1834,9 +1844,50 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
             ASSERT(!mBuffer);
         }
 
+        const bool isTextureUploadPolicy = mPolicy == DynamicBufferPolicy::OneShotTextureUpload ||
+                                           mPolicy == DynamicBufferPolicy::SporadicTextureUpload;
+
+        // If used to upload texture data, shrink the size back to the original to avoid making
+        // large allocations due to some huge texture data upload prior to this one.  See also the
+        // comment below where RoundUpToFullMipchainSize is used on the final calculation of mSize.
+        if (isTextureUploadPolicy)
+        {
+            mSize = RoundUpToFullMipchainSize(mInitialSize, alignment);
+        }
+
         if (sizeToAllocate > mSize)
         {
             mSize = std::max(mInitialSize, sizeToAllocate);
+
+            // If uploading textures, make a bet that uploads for the whole mip chain will follow.
+            // This will allow for significant memory savings in the usual situation which is:
+            //
+            // - Upload texture 0 mip 0     <-- size S0
+            // - Upload texture 0 mip 1     <-- size S0 / 4  \
+            // - ...                                          > Total size S0 / 3
+            // - Upload texture 0 mip N     <-- size 1       /
+            //
+            // - Upload texture 1 mip 0     <-- size S1
+            // - Upload texture 1 mip 1     <-- size S1 / 4  \
+            // - ...                                          > Total size S1 / 3
+            // - Upload texture 1 mip M     <-- size 1       /
+            //
+            // In this situation, mSize is set to S0 above on first upload (because the texture is
+            // likely huge).  If DynamicBuffer continues with this size, the next upload (mip 1)
+            // would allocate another buffer with size S0.  Until the last mip of this texture, only
+            // a third of the buffer will be used.  When uploading mip 0 of texture 1, the buffer
+            // likely doesn't have enough space (for example if S0 == S1), so it's discarded and a
+            // new one is allocated.  Basically, in the above scenario, 4 buffers will be allocated
+            // and there would be 2*(S0+S1)/3 memory waste.
+            //
+            // The following code will make sure that the memory allocated on the first upload is
+            // actually S0*4/3.  This lets data for the whole mipchain of the texture to be
+            // suballocated from that same buffer.  The next texture will similarly consume one
+            // buffer.  The amount of waste in this scenario is in the order of O(|alignment|).
+            if (isTextureUploadPolicy)
+            {
+                mSize = RoundUpToFullMipchainSize(mSize, alignment);
+            }
 
             // Clear the free list since the free buffers are now too small.
             ReleaseBufferListToRenderer(contextVk->getRenderer(), &mBufferFreeList);
@@ -2786,10 +2837,10 @@ LineLoopHelper::LineLoopHelper(RendererVk *renderer)
     // must be a multiple of the type indicated by indexType'.
     mDynamicIndexBuffer.init(renderer, kLineLoopDynamicBufferUsage, sizeof(uint32_t),
                              kLineLoopDynamicBufferInitialSize, true,
-                             DynamicBufferPolicy::OneShotUse);
+                             DynamicBufferPolicy::OneShotBufferUse);
     mDynamicIndirectBuffer.init(renderer, kLineLoopDynamicIndirectBufferUsage, sizeof(uint32_t),
                                 kLineLoopDynamicIndirectBufferInitialSize, true,
-                                DynamicBufferPolicy::OneShotUse);
+                                DynamicBufferPolicy::OneShotBufferUse);
 }
 
 LineLoopHelper::~LineLoopHelper() = default;
@@ -3627,7 +3678,7 @@ void ImageHelper::initStagingBuffer(RendererVk *renderer,
                                     size_t initialSize)
 {
     mStagingBuffer.init(renderer, usageFlags, imageCopyBufferAlignment, initialSize, true,
-                        DynamicBufferPolicy::OneShotUse);
+                        DynamicBufferPolicy::OneShotTextureUpload);
 }
 
 angle::Result ImageHelper::init(Context *context,
@@ -6263,7 +6314,7 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     // Use a temporary staging buffer. Could be optimized.
     RendererScoped<DynamicBuffer> stagingBuffer(contextVk->getRenderer());
     stagingBuffer.get().init(contextVk->getRenderer(), VK_BUFFER_USAGE_TRANSFER_DST_BIT, 1,
-                             kStagingBufferSize, true, DynamicBufferPolicy::OneShotUse);
+                             kStagingBufferSize, true, DynamicBufferPolicy::OneShotBufferUse);
 
     if (mExtents.depth > 1)
     {
