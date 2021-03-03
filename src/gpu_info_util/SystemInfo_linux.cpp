@@ -73,7 +73,12 @@ bool GetSystemInfo(SystemInfo *info)
 {
     if (!GetPCIDevicesWithLibPCI(&(info->gpus)))
     {
+#if ANGLE_PLATFORM_CHROMEOS
         return false;
+#else
+        // Try vulkan backend to get GPU info
+        return GetSystemInfoVulkan(info);
+#endif
     }
 
     if (info->gpus.size() == 0)
