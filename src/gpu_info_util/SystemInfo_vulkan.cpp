@@ -48,7 +48,7 @@ class VulkanLibrary final : NonCopyable
         for (const char *libraryName : kLibVulkanNames)
         {
             mLibVulkan = OpenSharedLibraryWithExtension(libraryName);
-            if (mLibVulkan)
+            if (mLibVulkan && mLibVulkan->getNative())
                 break;
         }
 
