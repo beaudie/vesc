@@ -366,8 +366,16 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
         }
 
         GLint numSamples = 0;
+        ANGLE_GL_CLEAR_ERRORS(functions);
         functions->getInternalformativ(GL_RENDERBUFFER, queryInternalFormat, GL_NUM_SAMPLE_COUNTS,
                                        1, &numSamples);
+        GLenum error = functions->getError();
+        if (error != GL_NO_ERROR)
+        {
+            ERR() << "glGetInternalformativ generated error " << gl::FmtHex(error) << " for format "
+                  << gl::FmtHex(queryInternalFormat) << ". Skipping multisample checks.";
+            numSamples = 0;
+        }
 
         if (numSamples > 0)
         {
@@ -2213,13 +2221,11 @@ const angle::FeaturesGL &GetFeaturesGL(const gl::Context *context)
     return GetImplAs<ContextGL>(context)->getFeaturesGL();
 }
 
-void ClearErrors(const gl::Context *context,
+void ClearErrors(const FunctionsGL *functions,
                  const char *file,
                  const char *function,
                  unsigned int line)
 {
-    const FunctionsGL *functions = GetFunctionsGL(context);
-
     GLenum error = functions->getError();
     while (error != GL_NO_ERROR)
     {
