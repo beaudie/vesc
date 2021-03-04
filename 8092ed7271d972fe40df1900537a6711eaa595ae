@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7d01ecd_8ffe5310",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-03-04T21:41:35Z",
+      "side": 1,
+      "message": "Thanks for the revert Austin. Can you share a back-link in the CL description (next time) to a file bug or failing build?",
+      "revId": "8092ed7271d972fe40df1900537a6711eaa595ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
