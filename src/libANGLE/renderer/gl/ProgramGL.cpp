@@ -473,7 +473,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         return angle::Result::Continue;
     };
 
-    if (mRenderer->hasNativeParallelCompile())
+    bool disableAsyncLink = true;
+    if (mRenderer->hasNativeParallelCompile() || disableAsyncLink)
     {
         mFunctions->linkProgram(mProgramID);
 
