@@ -529,6 +529,12 @@ struct FeaturesGL : FeatureSetBase
         "shift_instanced_array_data_with_offset", FeatureCategory::OpenGLWorkarounds,
         "glDrawArraysInstanced is buggy on certain new Mac Intel GPUs", &members,
         "http://crbug.com/1144207"};
+
+    // glLinkProgram() fails if it is called on background threads with Android emulator.
+    Feature disableParallelCompile = {
+        "disable_parallel_compile", FeatureCategory::OpenGLWorkarounds,
+        "glLinkProgram() fails if it is called on background threads.", &members,
+        "http://crbug.com/1184692"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

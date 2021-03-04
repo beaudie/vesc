@@ -84,6 +84,13 @@ bool IsAdreno42xOr3xx(const FunctionsGL *functions)
     return adrenoNumber < 430;
 }
 
+bool IsAndroidEmulator(const FunctionsGL *functions)
+{
+    const char androidEmulator[] = "Android Emulator";
+    const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
+    return strncmp(nativeGLRenderer, androidEmulator, sizeof(androidEmulator) - 1) == 0;
+}
+
 void ClearErrors(const FunctionsGL *functions,
                  const char *file,
                  const char *function,
@@ -1984,6 +1991,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // now.
     ANGLE_FEATURE_CONDITION(features, shiftInstancedArrayDataWithExtraOffset,
                             IsApple() && IsIntel(vendor) && !IsHaswell(device));
+
+    // http://crbug.com/1184692
+    // Linking program fails on background threads with Android emulator.
+    ANGLE_FEATURE_CONDITION(features, disableParallelCompile, IsAndroidEmulator(functions));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

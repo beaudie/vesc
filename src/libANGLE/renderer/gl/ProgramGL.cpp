@@ -473,7 +473,7 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         return angle::Result::Continue;
     };
 
-    if (mRenderer->hasNativeParallelCompile())
+    if (mRenderer->hasNativeParallelCompile() || mFeatures.disableParallelCompile.enabled)
     {
         mFunctions->linkProgram(mProgramID);
 
