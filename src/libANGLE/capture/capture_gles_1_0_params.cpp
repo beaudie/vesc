@@ -6,6 +6,7 @@
 // capture_gles1_params.cpp:
 //   Pointer parameter capture functions for the OpenGL ES 1.0 entry points.
 
+#include "libANGLE/GLES1Renderer.h"
 #include "libANGLE/capture/capture_gles_1_0_autogen.h"
 
 using namespace angle;
@@ -39,7 +40,9 @@ void CaptureColorPointer_pointer(const State &glState,
                                  const void *pointer,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex =
+        GLES1Renderer::VertexArrayIndex(ClientVertexArrayType::Color, glState.gles1());
 }
 
 void CaptureFogfv_params(const State &glState,
@@ -264,7 +267,9 @@ void CaptureNormalPointer_pointer(const State &glState,
                                   const void *pointer,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex =
+        GLES1Renderer::VertexArrayIndex(ClientVertexArrayType::Normal, glState.gles1());
 }
 
 void CapturePointParameterfv_params(const State &glState,
@@ -293,7 +298,9 @@ void CaptureTexCoordPointer_pointer(const State &glState,
                                     const void *pointer,
                                     ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex =
+        GLES1Renderer::VertexArrayIndex(ClientVertexArrayType::TextureCoord, glState.gles1());
 }
 
 void CaptureTexEnvfv_params(const State &glState,
@@ -344,7 +351,9 @@ void CaptureVertexPointer_pointer(const State &glState,
                                   const void *pointer,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex =
+        GLES1Renderer::VertexArrayIndex(ClientVertexArrayType::Vertex, glState.gles1());
 }
 
 }  // namespace gl

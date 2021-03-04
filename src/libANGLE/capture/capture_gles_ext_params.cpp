@@ -8,6 +8,7 @@
 
 #include "libANGLE/capture/capture_gles_ext_autogen.h"
 
+#include "libANGLE/GLES1Renderer.h"
 #include "libANGLE/capture/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_2_autogen.h"
@@ -3139,7 +3140,9 @@ void CapturePointSizePointerOES_pointer(const State &glState,
                                         const void *pointer,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex =
+        GLES1Renderer::VertexArrayIndex(ClientVertexArrayType::PointSize, glState.gles1());
 }
 
 void CaptureQueryMatrixxOES_mantissa(const State &glState,
