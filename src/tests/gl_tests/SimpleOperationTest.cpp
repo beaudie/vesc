@@ -14,6 +14,8 @@
 #include "util/EGLWindow.h"
 #include "util/random_utils.h"
 
+#include "common/debug.h"
+
 using namespace angle;
 
 namespace
@@ -83,6 +85,8 @@ TEST_P(SimpleOperationTest, CullFaceEnabledState)
     drawQuad(program.get(), "position", 0.0f, 1.0f, true);
 
     ASSERT_GL_NO_ERROR();
+
+    ANGLE_CRASH();
 
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
