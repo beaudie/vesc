@@ -39,7 +39,8 @@ void CaptureColorPointer_pointer(const State &glState,
                                  const void *pointer,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex   = FixedVertexArrayIndexColor;
 }
 
 void CaptureFogfv_params(const State &glState,
@@ -264,7 +265,8 @@ void CaptureNormalPointer_pointer(const State &glState,
                                   const void *pointer,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex   = FixedVertexArrayIndexNormal;
 }
 
 void CapturePointParameterfv_params(const State &glState,
@@ -293,7 +295,9 @@ void CaptureTexCoordPointer_pointer(const State &glState,
                                     const void *pointer,
                                     ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    unsigned int activeTexture              = glState.gles1().getClientTextureUnit();
+    paramCapture->arrayClientPointerIndex   = FixedVertexArrayIndexTexCoord + activeTexture;
 }
 
 void CaptureTexEnvfv_params(const State &glState,
@@ -344,7 +348,8 @@ void CaptureVertexPointer_pointer(const State &glState,
                                   const void *pointer,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex   = FixedVertexArrayIndexPosition;
 }
 
 }  // namespace gl

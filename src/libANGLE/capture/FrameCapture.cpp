@@ -4152,9 +4152,26 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
     switch (call.entryPoint)
     {
         case EntryPoint::GLVertexAttribPointer:
+        case EntryPoint::GLVertexPointer:
+        case EntryPoint::GLColorPointer:
+        case EntryPoint::GLTexCoordPointer:
+        case EntryPoint::GLNormalPointer:
         {
             // Get array location
-            GLuint index = call.params.getParam("index", ParamType::TGLuint, 0).value.GLuintVal;
+            GLuint index;
+
+            switch (call.entryPoint)
+            {
+                case EntryPoint::GLVertexPointer:
+                case EntryPoint::GLColorPointer:
+                case EntryPoint::GLTexCoordPointer:
+                case EntryPoint::GLNormalPointer:
+                    index = call.params.getClientArrayPointerParameter().arrayClientPointerIndex;
+                    break;
+                // EntryPoint::GLVertexAttribPointer:
+                default:
+                    index = call.params.getParam("index", ParamType::TGLuint, 0).value.GLuintVal;
+            }
 
             if (call.params.hasClientArrayData())
             {

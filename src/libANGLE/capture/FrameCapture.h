@@ -24,6 +24,14 @@ enum class GLenumGroup;
 namespace angle
 {
 
+enum FixedVertexArrayIndex
+{
+    FixedVertexArrayIndexPosition = 0,
+    FixedVertexArrayIndexColor,
+    FixedVertexArrayIndexNormal,
+    FixedVertexArrayIndexTexCoord
+};
+
 using ParamData = std::vector<std::vector<uint8_t>>;
 struct ParamCapture : angle::NonCopyable
 {
