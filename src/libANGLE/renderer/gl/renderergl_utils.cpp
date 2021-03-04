@@ -84,6 +84,13 @@ bool IsAdreno42xOr3xx(const FunctionsGL *functions)
     return adrenoNumber < 430;
 }
 
+bool IsAndroidEmulator(const FunctionsGL *functions)
+{
+    const char androidEmulator[] = "Android Emulator";
+    const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
+    return strncmp(nativeGLRenderer, androidEmulator, sizeof(androidEmulator) - 1) == 0;
+}
+
 void ClearErrors(const FunctionsGL *functions,
                  const char *file,
                  const char *function,
@@ -1827,9 +1834,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // TODO(jie.a.chen@intel.com): Clean up the bugs.
     // anglebug.com/3031
     // crbug.com/922936
-    ANGLE_FEATURE_CONDITION(
-        features, disableWorkerContexts,
-        (IsWindows() && (isIntel || isAMD)) || (IsLinux() && isNvidia) || IsIOS());
+    // crbug.com/1184692
+    ANGLE_FEATURE_CONDITION(features, disableWorkerContexts,
+                            (IsWindows() && (isIntel || isAMD)) || (IsLinux() && isNvidia) ||
+                                IsIOS() || IsAndroidEmulator(functions));
 
     bool limitMaxTextureSize = isIntel && IsLinux() && GetLinuxOSVersion() < OSVersion(5, 0, 0);
     ANGLE_FEATURE_CONDITION(features, limitMaxTextureSizeTo4096,
