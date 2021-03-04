@@ -3139,7 +3139,8 @@ void CapturePointSizePointerOES_pointer(const State &glState,
                                         const void *pointer,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->value.voidConstPointerVal = pointer;
+    paramCapture->arrayClientPointerIndex   = kCaptureClientArrayIndexPointSize;
 }
 
 void CaptureQueryMatrixxOES_mantissa(const State &glState,

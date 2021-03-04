@@ -24,6 +24,16 @@ enum class GLenumGroup;
 namespace angle
 {
 
+// These need to match the AttribIndex constants from GLES1Renderer.h
+enum CaptureClientArrayIndex
+{
+    kCaptureClientArrayIndexPosition = 0,
+    kCaptureClientArrayIndexNormal,
+    kCaptureClientArrayIndexColor,
+    kCaptureClientArrayIndexPointSize,
+    kCaptureClientArrayIndexTexCoordBase
+};
+
 using ParamData = std::vector<std::vector<uint8_t>>;
 struct ParamCapture : angle::NonCopyable
 {
