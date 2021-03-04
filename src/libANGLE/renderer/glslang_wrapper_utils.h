@@ -163,9 +163,6 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     gl::ShaderMap<VariableNameToInfoMap> mData;
 };
 
-void GlslangInitialize();
-void GlslangRelease();
-
 bool GetImageNameWithoutIndices(std::string *name);
 
 // Get the mapped sampler name.

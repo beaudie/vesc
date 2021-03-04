@@ -919,6 +919,13 @@ extern const char kCoverageMaskEnabledConstName[];
 // Specialization constant to emulate rasterizer discard.
 extern const char kRasterizerDiscardEnabledConstName[];
 }  // namespace mtl
+
+// For backends that use glslang (the Vulkan shader compiler), i.e. Vulkan and Metal, call these to
+// initialize and finalize glslang itself.  This can be called independently from Initialize() and
+// Finalize().
+void InitializeGlslang();
+void FinalizeGlslang();
+
 }  // namespace sh
 
 #endif  // GLSLANG_SHADERLANG_H_

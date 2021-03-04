@@ -38,6 +38,26 @@ namespace sh
 {
 namespace
 {
+// Run at startup to warm up glslang's internals to avoid hitches on first shader compile.
+void Warmup()
+{
+    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
+
+    const TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
+    glslang::TShader warmUpShader(EShLangVertex);
+
+    const char *kShaderString = R"(#version 450 core
+        void main(){}
+    )";
+    const int kShaderLength   = static_cast<int>(strlen(kShaderString));
+
+    warmUpShader.setStringsWithLengths(&kShaderString, &kShaderLength, 1);
+    warmUpShader.setEntryPoint("main");
+
+    bool result = warmUpShader.parse(&builtInResources, 450, ECoreProfile, false, false, messages);
+    ASSERT(result);
+}
+
 // Generate glslang resources from ANGLE translator resources.
 void GetBuiltInResources(const ShBuiltInResources &resources, TBuiltInResource *outResources)
 {
@@ -71,6 +91,19 @@ void GetBuiltInResources(const ShBuiltInResources &resources, TBuiltInResource *
     outResources->maxCombinedClipAndCullDistances  = resources.MaxCombinedClipAndCullDistances;
 }
 }  // anonymous namespace
+
+void GlslangInitialize()
+{
+    int result = ShInitialize();
+    ASSERT(result != 0);
+    Warmup();
+}
+
+void GlslangFinalize()
+{
+    int result = ShFinalize();
+    ASSERT(result != 0);
+}
 
 ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
                                             sh::GLenum shaderType,

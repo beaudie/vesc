@@ -13,6 +13,7 @@
 
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/InitializeDll.h"
+#include "compiler/translator/glslang_wrapper.h"
 #include "compiler/translator/length_limits.h"
 #ifdef ANGLE_ENABLE_HLSL
 #    include "compiler/translator/TranslatorHLSL.h"
@@ -26,7 +27,8 @@ namespace sh
 namespace
 {
 
-bool isInitialized = false;
+bool isInitialized        = false;
+bool isGlslangInitialized = false;
 
 //
 // This is the platform independent interface between an OGL driver
@@ -916,6 +918,24 @@ unsigned int GetShaderSharedMemorySize(const ShHandle handle)
 
     unsigned int sharedMemorySize = compiler->getSharedMemorySize();
     return sharedMemorySize;
+}
+
+void InitializeGlslang()
+{
+    if (!isGlslangInitialized)
+    {
+        GlslangInitialize();
+    }
+    isGlslangInitialized = true;
+}
+
+void FinalizeGlslang()
+{
+    if (isGlslangInitialized)
+    {
+        GlslangFinalize();
+    }
+    isGlslangInitialized = false;
 }
 
 // Can't prefix with just _ because then we might introduce a double underscore, which is not safe

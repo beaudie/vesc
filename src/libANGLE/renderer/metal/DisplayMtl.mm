@@ -56,9 +56,7 @@ struct DefaultShaderAsyncInfoMtl
     bool compiled = false;
 };
 
-DisplayMtl::DisplayMtl(const egl::DisplayState &state)
-    : DisplayImpl(state), mUtils(this), mGlslangInitialized(false)
-{}
+DisplayMtl::DisplayMtl(const egl::DisplayState &state) : DisplayImpl(state), mUtils(this) {}
 
 DisplayMtl::~DisplayMtl() {}
 
@@ -90,10 +88,9 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
 
         mCapsInitialized = false;
 
-        if (!mGlslangInitialized)
         {
-            GlslangInitialize();
-            mGlslangInitialized = true;
+            ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
+            sh::InitializeGlslang();
         }
 
         if (!mState.featuresAllDisabled)
@@ -121,11 +118,7 @@ void DisplayMtl::terminate()
 
     mMetalDeviceVendorId = 0;
 
-    if (mGlslangInitialized)
-    {
-        GlslangRelease();
-        mGlslangInitialized = false;
-    }
+    sh::FinalizeGlslang();
 }
 
 bool DisplayMtl::testDeviceLost()

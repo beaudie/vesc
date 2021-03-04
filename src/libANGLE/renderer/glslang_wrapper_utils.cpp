@@ -8,10 +8,6 @@
 
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 
-// glslang's version of ShaderLang.h, not to be confused with ANGLE's.
-#include <StandAlone/ResourceLimits.h>
-#include <glslang/Public/ShaderLang.h>
-
 #include <array>
 #include <numeric>
 
@@ -38,29 +34,6 @@ constexpr size_t ConstStrLen(const char (&)[N])
     // The length of a string defined as a char array is the size of the array minus 1 (the
     // terminating '\0').
     return N - 1;
-}
-
-// Run at startup to warm up glslang's internals to avoid hitches on first shader compile.
-void GlslangWarmup()
-{
-    ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
-
-    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
-    // EShMessages messages = EShMsgDefault;
-
-    const TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
-    glslang::TShader warmUpShader(EShLangVertex);
-
-    const char *kShaderString = R"(#version 450 core
-        void main(){}
-    )";
-    const int kShaderLength   = static_cast<int>(strlen(kShaderString));
-
-    warmUpShader.setStringsWithLengths(&kShaderString, &kShaderLength, 1);
-    warmUpShader.setEntryPoint("main");
-
-    bool result = warmUpShader.parse(&builtInResources, 450, ECoreProfile, false, false, messages);
-    ASSERT(result);
 }
 
 bool IsRotationIdentity(SurfaceRotation rotation)
@@ -260,7 +233,7 @@ void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
     }
 
     // Remove inactive transform feedback buffers.
-    for (uint32_t bufferIndex = bufferCount;
+    for (uint32_t bufferIndex = static_cast<uint32_t>(bufferCount);
          bufferIndex < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; ++bufferIndex)
     {
         variableInfoMapOut->add(shaderType, GetXfbBufferName(bufferIndex));
@@ -3830,14 +3803,14 @@ void SpirvVertexAttributeAliasingTransformer::transform()
 
 void SpirvVertexAttributeAliasingTransformer::preprocessAliasingAttributes()
 {
-    const size_t indexBound = mSpirvBlobIn[kHeaderIndexIndexBound];
+    const uint32_t indexBound = mSpirvBlobIn[kHeaderIndexIndexBound];
 
     mVariableInfoById.resize(indexBound, nullptr);
     mIsAliasingAttributeById.resize(indexBound, false);
     mExpandedMatrixFirstVectorIdById.resize(indexBound);
 
     // Go through attributes and find out which alias which.
-    for (size_t idIndex = spirv::kMinValidId; idIndex < indexBound; ++idIndex)
+    for (uint32_t idIndex = spirv::kMinValidId; idIndex < indexBound; ++idIndex)
     {
         const spirv::IdRef id(idIndex);
 
@@ -4732,19 +4705,6 @@ ShaderInterfaceVariableInfoMap::Iterator ShaderInterfaceVariableInfoMap::getIter
     gl::ShaderType shaderType) const
 {
     return Iterator(mData[shaderType].begin(), mData[shaderType].end());
-}
-
-void GlslangInitialize()
-{
-    int result = ShInitialize();
-    ASSERT(result != 0);
-    GlslangWarmup();
-}
-
-void GlslangRelease()
-{
-    int result = ShFinalize();
-    ASSERT(result != 0);
 }
 
 // Strip indices from the name.  If there are non-zero indices, return false to indicate that this

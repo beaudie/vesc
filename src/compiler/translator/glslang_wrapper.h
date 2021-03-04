@@ -19,6 +19,9 @@
 
 namespace sh
 {
+void GlslangInitialize();
+void GlslangFinalize();
+
 // Generate SPIR-V out of intermediate GLSL through glslang.
 ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
                                             sh::GLenum shaderType,
