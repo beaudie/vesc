@@ -529,6 +529,13 @@ struct FeaturesGL : FeatureSetBase
         "shift_instanced_array_data_with_offset", FeatureCategory::OpenGLWorkarounds,
         "glDrawArraysInstanced is buggy on certain new Mac Intel GPUs", &members,
         "http://crbug.com/1144207"};
+
+    // On macOS with Intel GPUs, instanced array with divisor > 0 is buggy when first > 0 in
+    // drawArraysInstanced. Shift the attributes with extra offset to workaround.
+    Feature disableParallelCompile = {
+        "disable_parallel_compile", FeatureCategory::OpenGLWorkarounds,
+        "Compile shader program on thread pool may cause problem with Android emulator", &members,
+        "http://crbug.com/1184692"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
