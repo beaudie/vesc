@@ -377,6 +377,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mProgram(nullptr),
       mExecutable(nullptr),
       mLastIndexBufferOffset(nullptr),
+      mCurrentIndexBufferOffset(0),
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mXfbBaseVertex(0),
       mXfbVertexCountPerInstance(0),
@@ -868,6 +869,8 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
         ANGLE_TRY(onIndexBufferChange(nullptr));
     }
 
+    mCurrentIndexBufferOffset = 0;
+
     const gl::Buffer *elementArrayBuffer = mVertexArray->getState().getElementArrayBuffer();
     if (!elementArrayBuffer)
     {
@@ -879,8 +882,8 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
         if (indices != mLastIndexBufferOffset)
         {
             mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
-            mLastIndexBufferOffset = indices;
-            mVertexArray->updateCurrentElementArrayBufferOffset(mLastIndexBufferOffset);
+            mLastIndexBufferOffset    = indices;
+            mCurrentIndexBufferOffset = reinterpret_cast<VkDeviceSize>(indices);
         }
         if (shouldConvertUint8VkIndexType(indexType) && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
         {
@@ -889,14 +892,15 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                "lack of hardware support");
 
             BufferVk *bufferVk             = vk::GetImpl(elementArrayBuffer);
-            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+            VkDeviceSize bufferOffset      = 0;
+            vk::BufferHelper &bufferHelper = bufferVk->getBuffer(&bufferOffset);
 
             if (bufferHelper.isHostVisible() &&
                 !bufferHelper.isCurrentlyInUse(getLastCompletedQueueSerial()))
             {
                 uint8_t *src = nullptr;
                 ANGLE_TRY(bufferVk->mapImpl(this, reinterpret_cast<void **>(&src)));
-                src += reinterpret_cast<uintptr_t>(indices);
+                src += bufferOffset + reinterpret_cast<uintptr_t>(indices);
                 const size_t byteCount = static_cast<size_t>(elementArrayBuffer->getSize()) -
                                          reinterpret_cast<uintptr_t>(indices);
                 ANGLE_TRY(mVertexArray->convertIndexBufferCPU(this, indexType, byteCount, src));
@@ -1098,7 +1102,9 @@ bool ContextVk::renderPassUsesStorageResources() const
 
         if (texture->getType() == gl::TextureType::Buffer)
         {
-            vk::BufferHelper &buffer = vk::GetImpl(textureVk->getBuffer().get())->getBuffer();
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferHelper &buffer =
+                vk::GetImpl(textureVk->getBuffer().get())->getBuffer(&bufferOffset);
             if (mRenderPassCommands->usesBuffer(buffer))
             {
                 return true;
@@ -1139,7 +1145,8 @@ bool ContextVk::renderPassUsesStorageResources() const
                 continue;
             }
 
-            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferHelper &buffer  = vk::GetImpl(bufferBinding.get())->getBuffer(&bufferOffset);
             if (mRenderPassCommands->usesBuffer(buffer))
             {
                 return true;
@@ -1161,7 +1168,8 @@ bool ContextVk::renderPassUsesStorageResources() const
                 continue;
             }
 
-            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferHelper &buffer  = vk::GetImpl(bufferBinding.get())->getBuffer(&bufferOffset);
             if (mRenderPassCommands->usesBuffer(buffer))
             {
                 return true;
@@ -1442,8 +1450,9 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         // If it's a texture buffer, get the attached buffer.
         if (textureVk->getBuffer().get() != nullptr)
         {
-            BufferVk *bufferVk       = vk::GetImpl(textureVk->getBuffer().get());
-            vk::BufferHelper &buffer = bufferVk->getBuffer();
+            BufferVk *bufferVk        = vk::GetImpl(textureVk->getBuffer().get());
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferHelper &buffer  = bufferVk->getBuffer(&bufferOffset);
 
             gl::ShaderBitSet stages =
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
@@ -1579,8 +1588,10 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dir
     vk::BufferHelper *elementArrayBuffer = mVertexArray->getCurrentElementArrayBuffer();
     ASSERT(elementArrayBuffer != nullptr);
 
-    mRenderPassCommandBuffer->bindIndexBuffer(elementArrayBuffer->getBuffer(),
-                                              mVertexArray->getCurrentElementArrayBufferOffset(),
+    VkDeviceSize offset =
+        mVertexArray->getCurrentElementArrayBufferOffset() + mCurrentIndexBufferOffset;
+
+    mRenderPassCommandBuffer->bindIndexBuffer(elementArrayBuffer->getBuffer(), offset,
                                               getVkIndexType(mCurrentDrawElementsType));
 
     mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
@@ -2461,9 +2472,12 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             gl::PrimitiveMode mode,
                                             const void *indirect)
 {
-    gl::Buffer *indirectBuffer            = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
-    vk::BufferHelper *currentIndirectBuf  = &vk::GetImpl(indirectBuffer)->getBuffer();
-    VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
+    gl::Buffer *indirectBuffer        = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    VkDeviceSize indirectBufferOffset = 0;
+    vk::BufferHelper *currentIndirectBuf =
+        &vk::GetImpl(indirectBuffer)->getBuffer(&indirectBufferOffset);
+    VkDeviceSize currentIndirectBufOffset =
+        indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
@@ -2511,10 +2525,13 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
                                               gl::DrawElementsType type,
                                               const void *indirect)
 {
-    VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
-    gl::Buffer *indirectBuffer            = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(indirectBuffer);
-    vk::BufferHelper *currentIndirectBuf = &vk::GetImpl(indirectBuffer)->getBuffer();
+    VkDeviceSize indirectBufferOffset = 0;
+    vk::BufferHelper *currentIndirectBuf =
+        &vk::GetImpl(indirectBuffer)->getBuffer(&indirectBufferOffset);
+    VkDeviceSize currentIndirectBufOffset =
+        indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
@@ -3976,8 +3993,9 @@ angle::Result ContextVk::dispatchCompute(const gl::Context *context,
 
 angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
 {
-    gl::Buffer *glBuffer     = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
-    vk::BufferHelper &buffer = vk::GetImpl(glBuffer)->getBuffer();
+    gl::Buffer *glBuffer      = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
+    VkDeviceSize bufferOffset = 0;
+    vk::BufferHelper &buffer  = vk::GetImpl(glBuffer)->getBuffer(&bufferOffset);
 
     // Break the render pass if the indirect buffer was previously used as the output from transform
     // feedback.
@@ -3992,7 +4010,8 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
     mOutsideRenderPassCommands->bufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
                                            vk::PipelineStage::DrawIndirect, &buffer);
 
-    mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(), indirect);
+    mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(),
+                                                                    bufferOffset + indirect);
 
     return angle::Result::Continue;
 }
@@ -4657,8 +4676,9 @@ angle::Result ContextVk::updateActiveImages(vk::CommandBufferHelper *commandBuff
         // Special handling of texture buffers.  They have a buffer attached instead of an image.
         if (texture->getType() == gl::TextureType::Buffer)
         {
-            BufferVk *bufferVk       = vk::GetImpl(textureVk->getBuffer().get());
-            vk::BufferHelper &buffer = bufferVk->getBuffer();
+            BufferVk *bufferVk        = vk::GetImpl(textureVk->getBuffer().get());
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferHelper &buffer  = bufferVk->getBuffer(&bufferOffset);
 
             // TODO: accept multiple stages in bufferWrite.  http://anglebug.com/3573
             for (gl::ShaderType stage : shaderStages)
@@ -5658,7 +5678,8 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
                 continue;
             }
 
-            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferHelper &buffer  = vk::GetImpl(bufferBinding.get())->getBuffer(&bufferOffset);
             if (mCurrentTransformFeedbackBuffers.contains(&buffer))
             {
                 return flushCommandsAndEndRenderPass();
