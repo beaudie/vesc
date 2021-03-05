@@ -505,8 +505,9 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     if (unpackBuffer)
     {
         BufferVk *unpackBufferVk       = vk::GetImpl(unpackBuffer);
-        vk::BufferHelper &bufferHelper = unpackBufferVk->getBuffer();
-        uintptr_t offset               = reinterpret_cast<uintptr_t>(pixels);
+        VkDeviceSize bufferOffset      = 0;
+        vk::BufferHelper &bufferHelper = unpackBufferVk->getBuffer(&bufferOffset);
+        uintptr_t offset               = bufferOffset + reinterpret_cast<uintptr_t>(pixels);
         GLuint inputRowPitch           = 0;
         GLuint inputDepthPitch         = 0;
         GLuint inputSkipBytes          = 0;
@@ -2647,10 +2648,12 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
     }
 
     // Create a view for the required format.
-    const vk::BufferHelper &buffer = vk::GetImpl(mState.getBuffer().get())->getBuffer();
+    VkDeviceSize bufferOffset = 0;
+    const vk::BufferHelper &buffer =
+        vk::GetImpl(mState.getBuffer().get())->getBuffer(&bufferOffset);
 
     retainBufferViews(&contextVk->getResourceUseList());
-    return mBufferViews.getView(contextVk, buffer, *imageUniformFormat, viewOut);
+    return mBufferViews.getView(contextVk, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
