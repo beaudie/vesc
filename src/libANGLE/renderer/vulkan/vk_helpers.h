@@ -608,6 +608,7 @@ class LineLoopHelper final : angle::NonCopyable
     angle::Result streamIndicesIndirect(ContextVk *contextVk,
                                         gl::DrawElementsType glIndexType,
                                         BufferHelper *indexBuffer,
+                                        VkDeviceSize indexBufferOffset,
                                         BufferHelper *indirectBuffer,
                                         VkDeviceSize indirectBufferOffset,
                                         BufferHelper **indexBufferOut,
@@ -2358,6 +2359,7 @@ class BufferViewHelper final : public Resource
 
     angle::Result getView(ContextVk *contextVk,
                           const BufferHelper &buffer,
+                          VkDeviceSize bufferOffset,
                           const Format &format,
                           const BufferView **viewOut);
 

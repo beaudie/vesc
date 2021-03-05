@@ -98,15 +98,17 @@ class BufferVk : public BufferImpl
 
     void onDataChanged() override;
 
-    const vk::BufferHelper &getBuffer() const
+    const vk::BufferHelper &getBuffer(VkDeviceSize *offsetOut) const
     {
         ASSERT(isBufferValid());
+        *offsetOut = mBufferOffset;
         return *mBuffer;
     }
 
-    vk::BufferHelper &getBuffer()
+    vk::BufferHelper &getBuffer(VkDeviceSize *offsetOut)
     {
         ASSERT(isBufferValid());
+        *offsetOut = mBufferOffset;
         return *mBuffer;
     }
 
@@ -119,12 +121,6 @@ class BufferVk : public BufferImpl
                                GLbitfield access,
                                void **mapPtr);
     angle::Result unmapImpl(ContextVk *contextVk);
-
-    // Calls copyBuffer internally.
-    angle::Result copyToBufferImpl(ContextVk *contextVk,
-                                   vk::BufferHelper *destBuffer,
-                                   uint32_t copyCount,
-                                   const VkBufferCopy *copies);
 
     ConversionBuffer *getVertexConversionBuffer(RendererVk *renderer,
                                                 angle::FormatID formatID,
@@ -165,7 +161,8 @@ class BufferVk : public BufferImpl
                                         const void *data,
                                         size_t size,
                                         VkMemoryPropertyFlags memoryPropertyFlags,
-                                        bool persistentMapRequired);
+                                        bool persistentMapRequired,
+                                        gl::BufferUsage usage);
     angle::Result setDataImpl(ContextVk *contextVk,
                               const uint8_t *data,
                               size_t size,
@@ -173,9 +170,7 @@ class BufferVk : public BufferImpl
     void release(ContextVk *context);
     void markConversionBuffersDirty();
 
-    angle::Result acquireBufferHelper(ContextVk *contextVk,
-                                      size_t sizeInBytes,
-                                      vk::BufferHelper **bufferHelperOut);
+    angle::Result acquireBufferHelper(ContextVk *contextVk, size_t sizeInBytes);
 
     struct VertexConversionBuffer : public ConversionBuffer
     {
@@ -195,6 +190,7 @@ class BufferVk : public BufferImpl
     };
 
     vk::BufferHelper *mBuffer;
+    VkDeviceSize mBufferOffset;
 
     // Pool of BufferHelpers for mBuffer to acquire from
     vk::DynamicBuffer mBufferPool;

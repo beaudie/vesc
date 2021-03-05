@@ -2994,8 +2994,11 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                            bufferOffsetOut, nullptr));
     *bufferOut = mDynamicIndexBuffer.getCurrentBuffer();
 
-    VkDeviceSize sourceOffset                  = static_cast<VkDeviceSize>(elementArrayOffset);
-    uint64_t unitCount                         = static_cast<VkDeviceSize>(indexCount);
+    VkDeviceSize sourceBufferOffset = 0;
+    BufferHelper *sourceBuffer      = &elementArrayBufferVk->getBuffer(&sourceBufferOffset);
+
+    VkDeviceSize sourceOffset = static_cast<VkDeviceSize>(elementArrayOffset) + sourceBufferOffset;
+    uint64_t unitCount        = static_cast<VkDeviceSize>(indexCount);
     angle::FixedVector<VkBufferCopy, 3> copies = {
         {sourceOffset, *bufferOffsetOut, unitCount * unitSize},
         {sourceOffset, *bufferOffsetOut + unitCount * unitSize, unitSize},
@@ -3003,8 +3006,16 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     if (contextVk->getRenderer()->getFeatures().extraCopyBufferRegion.enabled)
         copies.push_back({sourceOffset, *bufferOffsetOut + (unitCount + 1) * unitSize, 1});
 
-    ANGLE_TRY(elementArrayBufferVk->copyToBufferImpl(
-        contextVk, *bufferOut, static_cast<uint32_t>(copies.size()), copies.data()));
+    vk::CommandBufferAccess access;
+    access.onBufferTransferWrite(*bufferOut);
+    access.onBufferTransferRead(sourceBuffer);
+
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    commandBuffer->copyBuffer(sourceBuffer->getBuffer(), (*bufferOut)->getBuffer(),
+                              static_cast<uint32_t>(copies.size()), copies.data());
+
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
     return angle::Result::Continue;
 }
@@ -3066,6 +3077,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
 angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
                                                     gl::DrawElementsType glIndexType,
                                                     BufferHelper *indexBuffer,
+                                                    VkDeviceSize indexBufferOffset,
                                                     BufferHelper *indirectBuffer,
                                                     VkDeviceSize indirectBufferOffset,
                                                     BufferHelper **indexBufferOut,
@@ -3109,6 +3121,7 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
     UtilsVk::ConvertLineLoopIndexIndirectParameters params = {};
     params.indirectBufferOffset    = static_cast<uint32_t>(indirectBufferOffset);
     params.dstIndirectBufferOffset = static_cast<uint32_t>(*indirectBufferOffsetOut);
+    params.srcIndexBufferOffset    = static_cast<uint32_t>(indexBufferOffset);
     params.dstIndexBufferOffset    = static_cast<uint32_t>(*indexBufferOffsetOut);
     params.indicesBitsWidth        = static_cast<uint32_t>(unitSize * 8);
 
@@ -3478,9 +3491,17 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            uint32_t regionCount,
                                            const VkBufferCopy *copyRegions)
 {
-    CommandBufferAccess access;
-    access.onBufferTransferRead(srcBuffer);
-    access.onBufferTransferWrite(this);
+    // Check for self-dependency.
+    vk::CommandBufferAccess access;
+    if (srcBuffer->getBufferSerial() == getBufferSerial())
+    {
+        access.onBufferSelfCopy(this);
+    }
+    else
+    {
+        access.onBufferTransferRead(srcBuffer);
+        access.onBufferTransferWrite(this);
+    }
 
     CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
@@ -6570,7 +6591,9 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     if (packPixelsParams.packBuffer &&
         CanCopyWithTransformForReadPixels(packPixelsParams, mFormat, readFormat))
     {
-        BufferHelper &packBuffer = GetImpl(packPixelsParams.packBuffer)->getBuffer();
+        VkDeviceSize packBufferOffset = 0;
+        BufferHelper &packBuffer =
+            GetImpl(packPixelsParams.packBuffer)->getBuffer(&packBufferOffset);
 
         CommandBufferAccess copyAccess;
         copyAccess.onBufferTransferWrite(&packBuffer);
@@ -6583,11 +6606,12 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
         VkBufferImageCopy region = {};
         region.bufferImageHeight = srcExtent.height;
-        region.bufferOffset      = packPixelsParams.offset + reinterpret_cast<ptrdiff_t>(pixels);
-        region.bufferRowLength   = packPixelsParams.outputPitch / readFormat->pixelBytes;
-        region.imageExtent       = srcExtent;
-        region.imageOffset       = srcOffset;
-        region.imageSubresource  = srcSubresource;
+        region.bufferOffset =
+            packBufferOffset + packPixelsParams.offset + reinterpret_cast<ptrdiff_t>(pixels);
+        region.bufferRowLength  = packPixelsParams.outputPitch / readFormat->pixelBytes;
+        region.imageExtent      = srcExtent;
+        region.imageOffset      = srcOffset;
+        region.imageSubresource = srcSubresource;
 
         copyCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(),
                                              packBuffer.getBuffer().getHandle(), 1, &region);
@@ -7411,6 +7435,7 @@ void BufferViewHelper::destroy(VkDevice device)
 
 angle::Result BufferViewHelper::getView(ContextVk *contextVk,
                                         const BufferHelper &buffer,
+                                        VkDeviceSize bufferOffset,
                                         const Format &format,
                                         const BufferView **viewOut)
 {
@@ -7436,7 +7461,7 @@ angle::Result BufferViewHelper::getView(ContextVk *contextVk,
     viewCreateInfo.sType                  = VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
     viewCreateInfo.buffer                 = buffer.getBuffer().getHandle();
     viewCreateInfo.format                 = viewVkFormat;
-    viewCreateInfo.offset                 = mOffset;
+    viewCreateInfo.offset                 = mOffset + bufferOffset;
     viewCreateInfo.range                  = size;
 
     BufferView view;
