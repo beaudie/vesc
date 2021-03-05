@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a8d996f_aa844ba4",
+        "filename": "src/gpu_info_util/SystemInfo_linux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2021-03-05T07:57:15Z",
+      "side": 1,
+      "message": "From BUILD.gn, it looks chromeos does not contain the \u0027libangle_gpu_info_util_vulkan_sources\u0027, so here just use macro for this, any advice for better solution is appreciated!",
+      "revId": "329ee881132dbab68607346199f1d245b683b070",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
