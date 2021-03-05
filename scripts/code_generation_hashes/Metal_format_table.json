@@ -6,7 +6,7 @@
   "src/libANGLE/renderer/metal/gen_mtl_format_table.py":
     "5e3a7d6e95784fa0276e4b689c01cdec",
   "src/libANGLE/renderer/metal/mtl_format_map.json":
-    "07db91c8be19afe687f77eb42998f3c9",
+    "3e22f418d2e09be4d3f9ffa0b14a7983",
   "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm":
-    "76ef6391067b5e5ac6be19a11db21e49"
+    "7a7708acf4d9dd4b1c38aeda96cded67"
 }

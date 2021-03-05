@@ -707,6 +707,12 @@ void DisplayMtl::initializeTextureCaps() const
     // Re-verify texture extensions.
     mNativeExtensions.setTextureExtensionSupport(mNativeTextureCaps);
 
+    // Enable ASTC sliced 3D when possible.
+    if (mNativeExtensions.textureCompressionASTCLDRKHR && supportsAppleGPUFamily(3))
+    {
+        mNativeExtensions.textureCompressionSliced3dASTCKHR = true;
+    }
+
     // Disable all depth buffer and stencil buffer readback extensions until we need them
     mNativeExtensions.readDepthNV         = false;
     mNativeExtensions.readStencilNV       = false;
