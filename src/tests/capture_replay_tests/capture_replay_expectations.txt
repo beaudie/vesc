@@ -26,7 +26,6 @@ DifferentStencilMasksTest.*
 EGLContextASANTest.*
 EGLContextSharingTest.TextureLifetime/*
 FramebufferTest.MultiContextNoRenderingFeedbackLoops/*
-GetTexLevelParameterTest.ExtensionStringExposed/*
 GLSLTest.InactiveVaryingInVertexActiveInFragment/*
 InstancingTest.LineLoop/*
 MaxTextureSizeTest.*
@@ -107,7 +106,6 @@ MipmapTest.DISABLED_ThreeLevelsInitData/*
 EGLSyncTest.AndroidNativeFence_WaitSync/*
 ExplicitContextTest.GetProcAddress/*
 GetImageTest.*
-GetTexLevelParameterTest.Queries/*
 PointSpritesTest.PointWithoutAttributesCompliance/*
 RobustBufferAccessBehaviorTest.EmptyBuffer/*
 RobustClientMemoryTest.*
