@@ -85,7 +85,8 @@ void SerializeBindingPointerVector(
 {
     for (size_t i = 0; i < bindingPointerVector.size(); i++)
     {
-        bos->writeInt(bindingPointerVector[i].id().value);
+        if (bindingPointerVector[i].id().value != 0)
+            bos->writeInt(bindingPointerVector[i].id().value);
     }
 }
 
