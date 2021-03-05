@@ -1250,7 +1250,16 @@ egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
                                            EGLint n_rects)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
-    angle::Result result = swapImpl(context, rects, n_rects, nullptr);
+    angle::Result result;
+    if (n_rects == 1 && rects[0] == 0 && rects[1] == 0 && rects[2] == getWidth() &&
+        rects[3] == getHeight())
+    {
+        result = swapImpl(context, nullptr, 0, nullptr);
+    }
+    else
+    {
+        result = swapImpl(context, rects, n_rects, nullptr);
+    }
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
