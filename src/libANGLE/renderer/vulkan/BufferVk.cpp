@@ -632,7 +632,17 @@ angle::Result BufferVk::directUpdate(ContextVk *contextVk,
     ASSERT(mapPointer);
 
     memcpy(mapPointer, data, size);
-    mBuffer->unmap(contextVk->getRenderer());
+
+    // If the buffer has dynamic usage then the intent is frequent client side updates to the
+    // buffer. Don't CPU unmap the buffer, we will take care of unmapping when releasing the buffer
+    // to either the renderer or mBufferFreeList.
+    constexpr uint8_t kBufferHasDynamicUsage = static_cast<uint8_t>(gl::BufferUsage::DynamicDraw) |
+                                               static_cast<uint8_t>(gl::BufferUsage::DynamicCopy) |
+                                               static_cast<uint8_t>(gl::BufferUsage::DynamicRead);
+    if ((static_cast<uint8_t>(mState.getUsage()) & kBufferHasDynamicUsage) == 0)
+    {
+        mBuffer->unmap(contextVk->getRenderer());
+    }
     ASSERT(mBuffer->isCoherent());
 
     return angle::Result::Continue;
