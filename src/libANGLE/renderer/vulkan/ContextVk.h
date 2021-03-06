@@ -375,9 +375,52 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     const vk::CommandPool &getCommandPool() const;
 
-    Serial getCurrentQueueSerial() const { return mRenderer->getCurrentQueueSerial(); }
-    Serial getLastSubmittedQueueSerial() const { return mRenderer->getLastSubmittedQueueSerial(); }
-    Serial getLastCompletedQueueSerial() const { return mRenderer->getLastCompletedQueueSerial(); }
+    ANGLE_INLINE void updateCurrentQueueSerial(Serial serial)
+    {
+        mCurrentQueueSerial.updateSerial(serial);
+    }
+    ANGLE_INLINE void updateLastSubmittedQueueSerial(Serial serial)
+    {
+        mLastSubmittedQueueSerial.updateSerial(serial);
+    }
+    ANGLE_INLINE void updateLastCompletedQueueSerial(Serial serial)
+    {
+        mLastCompletedQueueSerial.updateSerial(serial);
+    }
+
+    ANGLE_INLINE Serial getCurrentQueueSerial() const
+    {
+        if (getRenderer()->getFeatures().asyncCommandQueue.enabled)
+        {
+            return mRenderer->getCurrentQueueSerial();
+        }
+        else
+        {
+            return mCurrentQueueSerial.getSerial();
+        }
+    }
+    ANGLE_INLINE Serial getLastSubmittedQueueSerial() const
+    {
+        if (getRenderer()->getFeatures().asyncCommandQueue.enabled)
+        {
+            return mRenderer->getLastSubmittedQueueSerial();
+        }
+        else
+        {
+            return mLastSubmittedQueueSerial.getSerial();
+        }
+    }
+    ANGLE_INLINE Serial getLastCompletedQueueSerial() const
+    {
+        if (getRenderer()->getFeatures().asyncCommandQueue.enabled)
+        {
+            return mRenderer->getLastCompletedQueueSerial();
+        }
+        else
+        {
+            return mLastCompletedQueueSerial.getSerial();
+        }
+    }
 
     bool isSerialInUse(Serial serial) const;
 
@@ -1109,6 +1152,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Record GL API calls for debuggers
     std::vector<std::string> mEventLog;
+
+    // Cached values of RendererVk's serials. Used when asyncCommandQueue is disabled.
+    AtomicSerial mCurrentQueueSerial;
+    AtomicSerial mLastSubmittedQueueSerial;
+    AtomicSerial mLastCompletedQueueSerial;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
