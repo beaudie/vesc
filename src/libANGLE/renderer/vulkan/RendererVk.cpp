@@ -2395,7 +2395,11 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     }
     else
     {
-        submitQueueSerial = mCommandQueue.reserveSubmitSerial();
+        submitQueueSerial    = mCommandQueue.reserveSubmitSerial();
+        ContextVk *contextVk = static_cast<ContextVk *>(context);
+        contextVk->updateCurrentQueueSerial(mCommandQueue.getCurrentQueueSerial());
+        contextVk->updateLastSubmittedQueueSerial(submitQueueSerial);
+
         ANGLE_TRY(mCommandQueue.queueSubmitOneOff(context, priority, primary.getHandle(), fence,
                                                   submitPolicy, submitQueueSerial));
     }
@@ -2621,11 +2625,16 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     }
     else
     {
-        submitQueueSerial = mCommandQueue.reserveSubmitSerial();
+        submitQueueSerial    = mCommandQueue.reserveSubmitSerial();
+        ContextVk *contextVk = static_cast<ContextVk *>(context);
+        contextVk->updateCurrentQueueSerial(mCommandQueue.getCurrentQueueSerial());
+        contextVk->updateLastSubmittedQueueSerial(submitQueueSerial);
 
         ANGLE_TRY(mCommandQueue.submitFrame(
             context, contextPriority, waitSemaphores, waitSemaphoreStageMasks, signalSemaphore,
             std::move(currentGarbage), commandPool, submitQueueSerial));
+
+        contextVk->updateLastCompletedQueueSerial(mCommandQueue.getLastCompletedQueueSerial());
     }
 
     waitSemaphores.clear();
@@ -2697,6 +2706,7 @@ angle::Result RendererVk::finish(vk::Context *context)
 angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 {
     std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+
     // TODO: https://issuetracker.google.com/169788986 - would be better if we could just wait
     // for the work we need but that requires QueryHelper to use the actual serial for the
     // query.
@@ -2707,6 +2717,8 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
     else
     {
         ANGLE_TRY(mCommandQueue.checkCompletedCommands(context));
+        ContextVk *contextVk = static_cast<ContextVk *>(context);
+        contextVk->updateLastCompletedQueueSerial(mCommandQueue.getLastCompletedQueueSerial());
     }
 
     return angle::Result::Continue;

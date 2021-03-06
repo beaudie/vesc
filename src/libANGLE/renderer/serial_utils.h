@@ -72,6 +72,7 @@ class Serial final
     constexpr bool valid() const { return mValue != kInvalid; }
 
   private:
+    friend class AtomicSerial;
     template <typename T>
     friend class SerialFactoryBase;
     constexpr explicit Serial(uint64_t value) : mValue(value) {}
@@ -81,6 +82,17 @@ class Serial final
 
 // Used as default/initial serial
 static constexpr Serial kZeroSerial = Serial();
+
+class AtomicSerial final : angle::NonCopyable
+{
+  public:
+    AtomicSerial();
+    ANGLE_INLINE void updateSerial(Serial serial) { mValue.store(serial.getValue()); }
+    ANGLE_INLINE Serial getSerial() const { return Serial(mValue.load()); }
+
+  private:
+    std::atomic<uint64_t> mValue;
+};
 
 template <typename SerialBaseType>
 class SerialFactoryBase final : angle::NonCopyable

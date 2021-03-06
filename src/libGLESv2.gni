@@ -411,6 +411,7 @@ libangle_sources = [
   "src/libANGLE/renderer/driver_utils.cpp",
   "src/libANGLE/renderer/load_functions_table_autogen.cpp",
   "src/libANGLE/renderer/renderer_utils.cpp",
+  "src/libANGLE/renderer/serial_utils.cpp",
   "src/libANGLE/validationEGL.cpp",
   "src/libANGLE/validationES.cpp",
   "src/libANGLE/validationES1.cpp",
