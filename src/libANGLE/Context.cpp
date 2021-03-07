@@ -3708,6 +3708,17 @@ void Context::initCaps()
         }
     }
 
+#if defined(ANGLE_ENABLE_VULKAN)
+    // Hide ETC1 extension from WebGL contexts when it's emulated by the Vulkan renderer
+    const bool isVulkan = mDisplay->getAttributeMap().get(EGL_PLATFORM_ANGLE_TYPE_ANGLE,
+                                                          EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE) ==
+                          EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
+    if (mWebGLContext && isVulkan && !mSupportedExtensions.compressedTextureETC)
+    {
+        mSupportedExtensions.compressedETC1RGB8TextureOES = false;
+    }
+#endif
+
     // If we're capturing application calls for replay, don't expose any binary formats to prevent
     // traces from trying to use cached results
     if (getFrameCapture()->enabled())
