@@ -302,6 +302,12 @@ void RendererVk::ensureCapsInitialized() const
         (mPhysicalDeviceFeatures.textureCompressionETC2 == VK_TRUE) &&
         gl::DetermineCompressedTextureETCSupport(mNativeTextureCaps);
 
+    // When ETC2/EAC formats are not supported natively, ETC1 is also emulated.
+    if (!mNativeExtensions.compressedTextureETC)
+    {
+        mNativeLimitations.emulatedEtc1 = true;
+    }
+
     // Vulkan doesn't support ASTC 3D block textures, which are required by
     // GL_OES_texture_compression_astc.
     mNativeExtensions.textureCompressionASTCOES = false;
