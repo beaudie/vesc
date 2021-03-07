@@ -1024,6 +1024,22 @@ bool ValidCompressedImageSize(const Context *context,
         return false;
     }
 
+    // Only PVRTC1 requires dimensions to be powers of two
+    if (IsPVRTC1Format(internalFormat))
+    {
+        if (!isPow2(width) || !isPow2(height))
+        {
+            return false;
+        }
+#if defined(ANGLE_PLATFORM_APPLE)
+        // Apple platforms additionally require PVRTC1 textures to be squares
+        if (width != height)
+        {
+            return false;
+        }
+#endif
+    }
+
     if (CompressedTextureFormatRequiresExactSize(internalFormat))
     {
         if (!ValidCompressedDimension(width, formatInfo.compressedBlockWidth, level) ||
