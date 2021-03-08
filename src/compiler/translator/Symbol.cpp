@@ -40,10 +40,27 @@ TSymbol::TSymbol(TSymbolTable *symbolTable,
     : mName(name),
       mUniqueId(symbolTable->nextUniqueId()),
       mSymbolType(symbolType),
-      mExtension(extension),
+      mExtensions(
+          std::array<TExtension, 3u>{{extension, TExtension::UNDEFINED, TExtension::UNDEFINED}}),
       mSymbolClass(symbolClass)
 {
-    ASSERT(mSymbolType == SymbolType::BuiltIn || mExtension == TExtension::UNDEFINED);
+    ASSERT(mSymbolType == SymbolType::BuiltIn || extension == TExtension::UNDEFINED);
+    ASSERT(mName != "" || mSymbolType == SymbolType::AngleInternal ||
+           mSymbolType == SymbolType::Empty);
+}
+
+TSymbol::TSymbol(TSymbolTable *symbolTable,
+                 const ImmutableString &name,
+                 SymbolType symbolType,
+                 SymbolClass symbolClass,
+                 const std::array<TExtension, 3u> &extensions)
+    : mName(name),
+      mUniqueId(symbolTable->nextUniqueId()),
+      mSymbolType(symbolType),
+      mExtensions(extensions),
+      mSymbolClass(symbolClass)
+{
+    ASSERT(mSymbolType == SymbolType::BuiltIn || extensions[0] == TExtension::UNDEFINED);
     ASSERT(mName != "" || mSymbolType == SymbolType::AngleInternal ||
            mSymbolType == SymbolType::Empty);
 }
@@ -89,6 +106,19 @@ TVariable::TVariable(TSymbolTable *symbolTable,
     ASSERT(name.empty() || symbolType != SymbolType::Empty);
 }
 
+TVariable::TVariable(TSymbolTable *symbolTable,
+                     const ImmutableString &name,
+                     const TType *type,
+                     SymbolType symbolType,
+                     const std::array<TExtension, 3u> &extensions)
+    : TSymbol(symbolTable, name, symbolType, SymbolClass::Variable, extensions),
+      mType(type),
+      unionArray(nullptr)
+{
+    ASSERT(mType);
+    ASSERT(name.empty() || symbolType != SymbolType::Empty);
+}
+
 TStructure::TStructure(TSymbolTable *symbolTable,
                        const ImmutableString &name,
                        const TFieldList *fields,
@@ -100,7 +130,47 @@ TStructure::TStructure(const TSymbolUniqueId &id,
                        const ImmutableString &name,
                        TExtension extension,
                        const TFieldList *fields)
-    : TSymbol(id, name, SymbolType::BuiltIn, extension, SymbolClass::Struct),
+    : TSymbol(id,
+              name,
+              SymbolType::BuiltIn,
+              std::array<TExtension, 3u>{{extension, TExtension::UNDEFINED, TExtension::UNDEFINED}},
+              SymbolClass::Struct),
+      TFieldListCollection(fields)
+{}
+
+template <>
+TStructure::TStructure(const TSymbolUniqueId &id,
+                       const ImmutableString &name,
+                       const std::array<TExtension, 1u> &extensions,
+                       const TFieldList *fields)
+    : TSymbol(
+          id,
+          name,
+          SymbolType::BuiltIn,
+          std::array<TExtension, 3u>{{extensions[0], TExtension::UNDEFINED, TExtension::UNDEFINED}},
+          SymbolClass::Struct),
+      TFieldListCollection(fields)
+{}
+
+template <>
+TStructure::TStructure(const TSymbolUniqueId &id,
+                       const ImmutableString &name,
+                       const std::array<TExtension, 2u> &extensions,
+                       const TFieldList *fields)
+    : TSymbol(id,
+              name,
+              SymbolType::BuiltIn,
+              std::array<TExtension, 3u>{{extensions[0], extensions[1], TExtension::UNDEFINED}},
+              SymbolClass::Struct),
+      TFieldListCollection(fields)
+{}
+
+template <>
+TStructure::TStructure(const TSymbolUniqueId &id,
+                       const ImmutableString &name,
+                       const std::array<TExtension, 3u> &extensions,
+                       const TFieldList *fields)
+    : TSymbol(id, name, SymbolType::BuiltIn, extensions, SymbolClass::Struct),
       TFieldListCollection(fields)
 {}
 
@@ -146,11 +216,71 @@ TInterfaceBlock::TInterfaceBlock(TSymbolTable *symbolTable,
     ASSERT(name != nullptr);
 }
 
+TInterfaceBlock::TInterfaceBlock(TSymbolTable *symbolTable,
+                                 const ImmutableString &name,
+                                 const TFieldList *fields,
+                                 const TLayoutQualifier &layoutQualifier,
+                                 SymbolType symbolType,
+                                 const std::array<TExtension, 3u> &extensions)
+    : TSymbol(symbolTable, name, symbolType, SymbolClass::InterfaceBlock, extensions),
+      TFieldListCollection(fields),
+      mBlockStorage(layoutQualifier.blockStorage),
+      mBinding(layoutQualifier.binding)
+{
+    ASSERT(name != nullptr);
+}
+
 TInterfaceBlock::TInterfaceBlock(const TSymbolUniqueId &id,
                                  const ImmutableString &name,
                                  TExtension extension,
                                  const TFieldList *fields)
-    : TSymbol(id, name, SymbolType::BuiltIn, extension, SymbolClass::InterfaceBlock),
+    : TSymbol(id,
+              name,
+              SymbolType::BuiltIn,
+              std::array<TExtension, 3u>{{extension, TExtension::UNDEFINED, TExtension::UNDEFINED}},
+              SymbolClass::InterfaceBlock),
+      TFieldListCollection(fields),
+      mBlockStorage(EbsUnspecified),
+      mBinding(0)
+{}
+
+template <>
+TInterfaceBlock::TInterfaceBlock(const TSymbolUniqueId &id,
+                                 const ImmutableString &name,
+                                 const std::array<TExtension, 1u> &extensions,
+                                 const TFieldList *fields)
+    : TSymbol(
+          id,
+          name,
+          SymbolType::BuiltIn,
+          std::array<TExtension, 3u>{{extensions[0], TExtension::UNDEFINED, TExtension::UNDEFINED}},
+          SymbolClass::InterfaceBlock),
+      TFieldListCollection(fields),
+      mBlockStorage(EbsUnspecified),
+      mBinding(0)
+{}
+
+template <>
+TInterfaceBlock::TInterfaceBlock(const TSymbolUniqueId &id,
+                                 const ImmutableString &name,
+                                 const std::array<TExtension, 2u> &extensions,
+                                 const TFieldList *fields)
+    : TSymbol(id,
+              name,
+              SymbolType::BuiltIn,
+              std::array<TExtension, 3u>{{extensions[0], extensions[1], TExtension::UNDEFINED}},
+              SymbolClass::InterfaceBlock),
+      TFieldListCollection(fields),
+      mBlockStorage(EbsUnspecified),
+      mBinding(0)
+{}
+
+template <>
+TInterfaceBlock::TInterfaceBlock(const TSymbolUniqueId &id,
+                                 const ImmutableString &name,
+                                 const std::array<TExtension, 3u> &extensions,
+                                 const TFieldList *fields)
+    : TSymbol(id, name, SymbolType::BuiltIn, extensions, SymbolClass::InterfaceBlock),
       TFieldListCollection(fields),
       mBlockStorage(EbsUnspecified),
       mBinding(0)
