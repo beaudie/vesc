@@ -1600,7 +1600,8 @@ void GenerateCaps(const FunctionsGL *functions,
          functions->hasGLExtension("GL_ARB_shader_storage_buffer_object") &&
          functions->hasGLExtension("GL_ARB_shader_image_load_store")))
     {
-        extensions->geometryShader = true;
+        extensions->geometryShaderEXT = true;
+        extensions->geometryShaderOES = true;
 
         caps->maxFramebufferLayers = QuerySingleGLInt(functions, GL_MAX_FRAMEBUFFER_LAYERS_EXT);
 
