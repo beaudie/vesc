@@ -31,6 +31,12 @@ class TSymbol : angle::NonCopyable
             SymbolClass symbolClass,
             TExtension extension = TExtension::UNDEFINED);
 
+    TSymbol(TSymbolTable *symbolTable,
+            const ImmutableString &name,
+            SymbolType symbolType,
+            SymbolClass symbolClass,
+            const std::array<TExtension, 3u> &extensions);
+
     // Note that we can't have a virtual destructor in order to support constexpr symbols. Data is
     // either statically allocated or pool allocated.
     ~TSymbol() = default;
@@ -48,18 +54,18 @@ class TSymbol : angle::NonCopyable
 
     const TSymbolUniqueId &uniqueId() const { return mUniqueId; }
     SymbolType symbolType() const { return mSymbolType; }
-    TExtension extension() const { return mExtension; }
+    const std::array<TExtension, 3u> extensions() const { return mExtensions; }
 
   protected:
     constexpr TSymbol(const TSymbolUniqueId &id,
                       const ImmutableString &name,
                       SymbolType symbolType,
-                      TExtension extension,
+                      const std::array<TExtension, 3u> &extensions,
                       SymbolClass symbolClass)
         : mName(name),
           mUniqueId(id),
           mSymbolType(symbolType),
-          mExtension(extension),
+          mExtensions(extensions),
           mSymbolClass(symbolClass)
     {}
 
@@ -68,7 +74,7 @@ class TSymbol : angle::NonCopyable
   private:
     const TSymbolUniqueId mUniqueId;
     const SymbolType mSymbolType;
-    const TExtension mExtension;
+    const std::array<TExtension, 3u> mExtensions;
 
     // We use this instead of having virtual functions for querying the class in order to support
     // constexpr symbols.
@@ -86,6 +92,12 @@ class TVariable : public TSymbol
               SymbolType symbolType,
               TExtension ext = TExtension::UNDEFINED);
 
+    TVariable(TSymbolTable *symbolTable,
+              const ImmutableString &name,
+              const TType *type,
+              SymbolType symbolType,
+              const std::array<TExtension, 3u> &extensions);
+
     const TType &getType() const { return *mType; }
 
     const TConstantUnion *getConstPointer() const { return unionArray; }
@@ -98,7 +110,51 @@ class TVariable : public TSymbol
                         SymbolType symbolType,
                         TExtension extension,
                         const TType *type)
-        : TSymbol(id, name, symbolType, extension, SymbolClass::Variable),
+        : TSymbol(
+              id,
+              name,
+              symbolType,
+              std::array<TExtension, 3u>{{extension, TExtension::UNDEFINED, TExtension::UNDEFINED}},
+              SymbolClass::Variable),
+          mType(type),
+          unionArray(nullptr)
+    {}
+
+    constexpr TVariable(const TSymbolUniqueId &id,
+                        const ImmutableString &name,
+                        SymbolType symbolType,
+                        const std::array<TExtension, 1u> &extensions,
+                        const TType *type)
+        : TSymbol(id,
+                  name,
+                  symbolType,
+                  std::array<TExtension, 3u>{
+                      {extensions[0], TExtension::UNDEFINED, TExtension::UNDEFINED}},
+                  SymbolClass::Variable),
+          mType(type),
+          unionArray(nullptr)
+    {}
+
+    constexpr TVariable(const TSymbolUniqueId &id,
+                        const ImmutableString &name,
+                        SymbolType symbolType,
+                        const std::array<TExtension, 2u> &extensions,
+                        const TType *type)
+        : TSymbol(id,
+                  name,
+                  symbolType,
+                  std::array<TExtension, 3u>{{extensions[0], extensions[1], TExtension::UNDEFINED}},
+                  SymbolClass::Variable),
+          mType(type),
+          unionArray(nullptr)
+    {}
+
+    constexpr TVariable(const TSymbolUniqueId &id,
+                        const ImmutableString &name,
+                        SymbolType symbolType,
+                        const std::array<TExtension, 3u> &extensions,
+                        const TType *type)
+        : TSymbol(id, name, symbolType, extensions, SymbolClass::Variable),
           mType(type),
           unionArray(nullptr)
     {}
@@ -135,6 +191,21 @@ class TStructure : public TSymbol, public TFieldListCollection
                TExtension extension,
                const TFieldList *fields);
 
+    TStructure(const TSymbolUniqueId &id,
+               const ImmutableString &name,
+               const std::array<TExtension, 1u> &extensions,
+               const TFieldList *fields);
+
+    TStructure(const TSymbolUniqueId &id,
+               const ImmutableString &name,
+               const std::array<TExtension, 2u> &extensions,
+               const TFieldList *fields);
+
+    TStructure(const TSymbolUniqueId &id,
+               const ImmutableString &name,
+               const std::array<TExtension, 3u> &extensions,
+               const TFieldList *fields);
+
     // TODO(zmo): Find a way to get rid of the const_cast in function
     // setName().  At the moment keep this function private so only
     // friend class RegenerateStructNames may call it.
@@ -156,6 +227,13 @@ class TInterfaceBlock : public TSymbol, public TFieldListCollection
                     SymbolType symbolType,
                     TExtension extension = TExtension::UNDEFINED);
 
+    TInterfaceBlock(TSymbolTable *symbolTable,
+                    const ImmutableString &name,
+                    const TFieldList *fields,
+                    const TLayoutQualifier &layoutQualifier,
+                    SymbolType symbolType,
+                    const std::array<TExtension, 3u> &extensions);
+
     TLayoutBlockStorage blockStorage() const { return mBlockStorage; }
     int blockBinding() const { return mBinding; }
 
@@ -165,6 +243,21 @@ class TInterfaceBlock : public TSymbol, public TFieldListCollection
     TInterfaceBlock(const TSymbolUniqueId &id,
                     const ImmutableString &name,
                     TExtension extension,
+                    const TFieldList *fields);
+
+    TInterfaceBlock(const TSymbolUniqueId &id,
+                    const ImmutableString &name,
+                    const std::array<TExtension, 1u> &extensions,
+                    const TFieldList *fields);
+
+    TInterfaceBlock(const TSymbolUniqueId &id,
+                    const ImmutableString &name,
+                    const std::array<TExtension, 2u> &extensions,
+                    const TFieldList *fields);
+
+    TInterfaceBlock(const TSymbolUniqueId &id,
+                    const ImmutableString &name,
+                    const std::array<TExtension, 3u> &extensions,
                     const TFieldList *fields);
 
     TLayoutBlockStorage mBlockStorage;
@@ -246,7 +339,81 @@ class TFunction : public TSymbol
                         const TType *retType,
                         TOperator op,
                         bool knownToNotHaveSideEffects)
-        : TSymbol(id, name, SymbolType::BuiltIn, extension, SymbolClass::Function),
+        : TSymbol(
+              id,
+              name,
+              SymbolType::BuiltIn,
+              std::array<TExtension, 3u>{{extension, TExtension::UNDEFINED, TExtension::UNDEFINED}},
+              SymbolClass::Function),
+          mParametersVector(nullptr),
+          mParameters(parameters),
+          mParamCount(paramCount),
+          returnType(retType),
+          mMangledName(nullptr),
+          mOp(op),
+          defined(false),
+          mHasPrototypeDeclaration(false),
+          mKnownToNotHaveSideEffects(knownToNotHaveSideEffects)
+    {}
+
+    constexpr TFunction(const TSymbolUniqueId &id,
+                        const ImmutableString &name,
+                        const std::array<TExtension, 1u> &extensions,
+                        const TVariable *const *parameters,
+                        size_t paramCount,
+                        const TType *retType,
+                        TOperator op,
+                        bool knownToNotHaveSideEffects)
+        : TSymbol(id,
+                  name,
+                  SymbolType::BuiltIn,
+                  std::array<TExtension, 3u>{
+                      {extensions[0], TExtension::UNDEFINED, TExtension::UNDEFINED}},
+                  SymbolClass::Function),
+          mParametersVector(nullptr),
+          mParameters(parameters),
+          mParamCount(paramCount),
+          returnType(retType),
+          mMangledName(nullptr),
+          mOp(op),
+          defined(false),
+          mHasPrototypeDeclaration(false),
+          mKnownToNotHaveSideEffects(knownToNotHaveSideEffects)
+    {}
+
+    constexpr TFunction(const TSymbolUniqueId &id,
+                        const ImmutableString &name,
+                        const std::array<TExtension, 2u> &extensions,
+                        const TVariable *const *parameters,
+                        size_t paramCount,
+                        const TType *retType,
+                        TOperator op,
+                        bool knownToNotHaveSideEffects)
+        : TSymbol(id,
+                  name,
+                  SymbolType::BuiltIn,
+                  std::array<TExtension, 3u>{{extensions[0], extensions[1], TExtension::UNDEFINED}},
+                  SymbolClass::Function),
+          mParametersVector(nullptr),
+          mParameters(parameters),
+          mParamCount(paramCount),
+          returnType(retType),
+          mMangledName(nullptr),
+          mOp(op),
+          defined(false),
+          mHasPrototypeDeclaration(false),
+          mKnownToNotHaveSideEffects(knownToNotHaveSideEffects)
+    {}
+
+    constexpr TFunction(const TSymbolUniqueId &id,
+                        const ImmutableString &name,
+                        const std::array<TExtension, 3u> &extensions,
+                        const TVariable *const *parameters,
+                        size_t paramCount,
+                        const TType *retType,
+                        TOperator op,
+                        bool knownToNotHaveSideEffects)
+        : TSymbol(id, name, SymbolType::BuiltIn, extensions, SymbolClass::Function),
           mParametersVector(nullptr),
           mParameters(parameters),
           mParamCount(paramCount),
