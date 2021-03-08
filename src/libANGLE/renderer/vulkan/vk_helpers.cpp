@@ -982,21 +982,24 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
                                                  uint32_t layerStart,
                                                  uint32_t layerCount,
                                                  ImageHelper *image,
-                                                 ImageHelper *resolveImage)
+                                                 ImageHelper *resolveImage,
+                                                 PackedAttachmentIndex packedAttachmentIndex)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(!usesImageInRenderPass(*image));
     ASSERT(!resolveImage || !usesImageInRenderPass(*resolveImage));
+    ASSERT(mDepthStencilAttachmentIndex == kAttachmentIndexInvalid);
 
     // Because depthStencil buffer's read/write property can change while we build renderpass, we
     // defer the image layout changes until endRenderPass time or when images going away so that we
     // only insert layout change barrier once.
     image->retain(resourceUseList);
     mRenderPassUsedImages.insert(image->getImageSerial().getValue());
-    mDepthStencilImage      = image;
-    mDepthStencilLevelIndex = level;
-    mDepthStencilLayerIndex = layerStart;
-    mDepthStencilLayerCount = layerCount;
+    mDepthStencilImage           = image;
+    mDepthStencilLevelIndex      = level;
+    mDepthStencilLayerIndex      = layerStart;
+    mDepthStencilLayerCount      = layerCount;
+    mDepthStencilAttachmentIndex = packedAttachmentIndex;
 
     if (resolveImage)
     {
@@ -1260,16 +1263,14 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const gl::Rectangle &renderArea,
                                           const RenderPassDesc &renderPassDesc,
                                           const AttachmentOpsArray &renderPassAttachmentOps,
-                                          const PackedAttachmentIndex depthStencilAttachmentIndex,
                                           const PackedClearValuesArray &clearValues,
                                           CommandBuffer **commandBufferOut)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());
 
-    mRenderPassDesc              = renderPassDesc;
-    mAttachmentOps               = renderPassAttachmentOps;
-    mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
+    mRenderPassDesc = renderPassDesc;
+    mAttachmentOps  = renderPassAttachmentOps;
     mFramebuffer.setHandle(framebuffer.getHandle());
     mRenderArea       = renderArea;
     mClearValues      = clearValues;

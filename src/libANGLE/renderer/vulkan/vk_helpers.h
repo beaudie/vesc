@@ -1029,7 +1029,8 @@ class CommandBufferHelper : angle::NonCopyable
                                 uint32_t layerStart,
                                 uint32_t layerCount,
                                 ImageHelper *image,
-                                ImageHelper *resolveImage);
+                                ImageHelper *resolveImage,
+                                PackedAttachmentIndex packedAttachmentIndex);
 
     CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
@@ -1075,7 +1076,6 @@ class CommandBufferHelper : angle::NonCopyable
                          const gl::Rectangle &renderArea,
                          const RenderPassDesc &renderPassDesc,
                          const AttachmentOpsArray &renderPassAttachmentOps,
-                         const PackedAttachmentIndex depthStencilAttachmentIndex,
                          const PackedClearValuesArray &clearValues,
                          CommandBuffer **commandBufferOut);
 

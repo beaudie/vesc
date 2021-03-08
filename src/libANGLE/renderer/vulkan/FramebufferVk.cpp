@@ -2591,8 +2591,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     }
 
     ANGLE_TRY(contextVk->beginNewRenderPass(*framebuffer, renderArea, mRenderPassDesc,
-                                            renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                            packedClearValues, commandBufferOut));
+                                            renderPassAttachmentOps, packedClearValues,
+                                            commandBufferOut));
 
     // Transition the images to the correct layout (through onColorDraw).
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
@@ -2606,8 +2606,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // This must be called after hasDefined*Content() since it will set content to valid.  If
         // the attachment ends up not used in the render pass, contents will be marked undefined at
         // endRenderPass.  The actual layout determination is also deferred until the same time.
-        depthStencilRenderTarget->onDepthStencilDraw(contextVk,
-                                                     mCurrentFramebufferDesc.getLayerCount());
+        depthStencilRenderTarget->onDepthStencilDraw(
+            contextVk, mCurrentFramebufferDesc.getLayerCount(), depthStencilAttachmentIndex);
     }
 
     const bool anyUnresolve = unresolveColorMask.any() || unresolveDepth || unresolveStencil;

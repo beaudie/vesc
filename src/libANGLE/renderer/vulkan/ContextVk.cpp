@@ -5021,21 +5021,18 @@ angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::beginNewRenderPass(
-    const vk::Framebuffer &framebuffer,
-    const gl::Rectangle &renderArea,
-    const vk::RenderPassDesc &renderPassDesc,
-    const vk::AttachmentOpsArray &renderPassAttachmentOps,
-    const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
-    const vk::PackedClearValuesArray &clearValues,
-    vk::CommandBuffer **commandBufferOut)
+angle::Result ContextVk::beginNewRenderPass(const vk::Framebuffer &framebuffer,
+                                            const gl::Rectangle &renderArea,
+                                            const vk::RenderPassDesc &renderPassDesc,
+                                            const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                            const vk::PackedClearValuesArray &clearValues,
+                                            vk::CommandBuffer **commandBufferOut)
 {
     // Next end any currently outstanding renderPass
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
     mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
-                                         renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                         clearValues, commandBufferOut);
+                                         renderPassAttachmentOps, clearValues, commandBufferOut);
     mPerfCounters.renderPasses++;
 
     return angle::Result::Continue;

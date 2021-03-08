@@ -115,14 +115,16 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk, uint32_t framebufferLayer
     retainImageViews(contextVk);
 }
 
-void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount)
+void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk,
+                                        uint32_t framebufferLayerCount,
+                                        vk::PackedAttachmentIndex packedAttachmentIndex)
 {
     const angle::Format &format = mImage->getFormat().actualImageFormat();
     ASSERT(format.hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
     contextVk->onDepthStencilDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mImage,
-                                  mResolveImage);
+                                  mResolveImage, packedAttachmentIndex);
     retainImageViews(contextVk);
 }
 

@@ -68,7 +68,9 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     // Note: RenderTargets should be called in order, with the depth/stencil onRender last.
     void onColorDraw(ContextVk *contextVk, uint32_t framebufferLayerCount);
-    void onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount);
+    void onDepthStencilDraw(ContextVk *contextVk,
+                            uint32_t framebufferLayerCount,
+                            vk::PackedAttachmentIndex packedAttachmentIndex);
 
     vk::ImageHelper &getImageForRenderPass();
     const vk::ImageHelper &getImageForRenderPass() const;
