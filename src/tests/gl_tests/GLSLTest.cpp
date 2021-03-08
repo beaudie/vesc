@@ -5416,6 +5416,56 @@ TEST_P(GLSLTest_ES3, VaryingStructUsedInFragmentShader)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that a shader IO block varying with separable program links
+// successfully.
+TEST_P(GLSLTest_ES31, VaryingIOBlockSeparableProgram)
+{
+    constexpr char kVS[] =
+        R"(#version 310 es
+        #extension GL_EXT_shader_io_blocks : require
+
+        precision highp float;
+        out BLOCK_INOUT { vec4 value; } user_out;
+
+        void main()
+        {
+            gl_Position    = vec4(1.0, 0.0, 0.0, 1.0);
+            user_out.value = vec4(4.0, 5.0, 6.0, 7.0);
+        })";
+
+    constexpr char kFS[] =
+        R"(#version 310 es
+        #extension GL_EXT_shader_io_blocks : require
+
+        precision highp float;
+        in BLOCK_INOUT { vec4 value; } user_in;
+        out vec4 col;
+
+        void main()
+        {
+            col = vec4(1.0);
+        })";
+
+    GLProgram programVert, programFrag;
+    const char *sourceArray[3] = {kVS, kFS};
+
+    GLShader vertShader(GL_VERTEX_SHADER);
+    glShaderSource(vertShader, 1, &sourceArray[0], nullptr);
+    glCompileShader(vertShader);
+    glProgramParameteri(programVert, GL_PROGRAM_SEPARABLE, GL_TRUE);
+    glAttachShader(programVert, vertShader);
+    glLinkProgram(programVert);
+    ASSERT_GL_NO_ERROR();
+
+    GLShader fragShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragShader, 1, &sourceArray[1], nullptr);
+    glCompileShader(fragShader);
+    glProgramParameteri(programFrag, GL_PROGRAM_SEPARABLE, GL_TRUE);
+    glAttachShader(programFrag, fragShader);
+    glLinkProgram(programFrag);
+    ASSERT_GL_NO_ERROR();
+}
+
 // This is a regression test to make sure a red quad is rendered without issues
 // when a passthrough function with a vec3 input parameter is used in the fragment shader.
 TEST_P(GLSLTest_ES31, SamplerPassthroughFailedLink)
