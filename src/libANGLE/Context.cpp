@@ -3419,7 +3419,8 @@ Extensions Context::generateSupportedExtensions() const
     if (getClientVersion() < ES_3_1)
     {
         // Disable ES3.1+ extensions
-        supportedExtensions.geometryShader        = false;
+        supportedExtensions.geometryShaderEXT     = false;
+        supportedExtensions.geometryShaderOES     = false;
         supportedExtensions.tessellationShaderEXT = false;
 
         // TODO(http://anglebug.com/2775): Multisample arrays could be supported on ES 3.0 as well
@@ -8969,7 +8970,7 @@ std::mutex &Context::getProgramCacheMutex() const
 
 bool Context::supportsGeometryOrTesselation() const
 {
-    return mState.getClientVersion() == ES_3_2 || mState.getExtensions().geometryShader ||
+    return mState.getClientVersion() == ES_3_2 || mState.getExtensions().geometryShaderAny() ||
            mState.getExtensions().tessellationShaderEXT;
 }
 
@@ -9312,7 +9313,7 @@ void StateCache::updateValidDrawModes(Context *context)
         // DrawElements, DrawElementsInstanced, and DrawRangeElements while transform feedback is
         // active and not paused, regardless of mode. Any primitive type may be used while transform
         // feedback is paused.
-        if (!context->getExtensions().geometryShader &&
+        if (!context->getExtensions().geometryShaderAny() &&
             !context->getExtensions().tessellationShaderEXT && context->getClientVersion() < ES_3_2)
         {
             mCachedValidDrawModes.fill(false);
