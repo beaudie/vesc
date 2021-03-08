@@ -9,6 +9,12 @@
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
+namespace
+{
+constexpr angle::GLColor linearColor(64, 127, 191, 255);
+constexpr angle::GLColor srgbColor(13, 54, 133, 255);
+}  // namespace
+
 namespace angle
 {
 
@@ -80,9 +86,6 @@ TEST_P(SRGBFramebufferTest, BasicUsage)
         return;
     }
 
-    GLColor linearColor(64, 127, 191, 255);
-    GLColor srgbColor(13, 54, 133, 255);
-
     GLTexture texture;
     glBindTexture(GL_TEXTURE_2D, texture.get());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA_EXT, 1, 1, 0, GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE,
@@ -101,6 +104,197 @@ TEST_P(SRGBFramebufferTest, BasicUsage)
 
     glDisable(GL_FRAMEBUFFER_SRGB_EXT);
     drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+}
+
+// Test that GL_EXT_sRGB_write_control state applies to all framebuffers if multiple are used
+// 1. disable srgb
+// 2. draw to both framebuffers
+// 3. enable srgb
+// 4. draw to both framebuffers
+TEST_P(SRGBFramebufferTest, MultipleFramebuffers)
+{
+    if (!IsGLExtensionEnabled("GL_EXT_sRGB_write_control") ||
+        (!IsGLExtensionEnabled("GL_EXT_sRGB") && getClientMajorVersion() < 3))
+    {
+        std::cout
+            << "Test skipped because GL_EXT_sRGB_write_control and GL_EXT_sRGB are not available."
+            << std::endl;
+        return;
+    }
+
+    // NVIDIA failures on older drivers
+    // http://anglebug.com/5641
+    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGLES());
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA_EXT, 1, 1, 0, GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE,
+                 nullptr);
+
+    GLFramebuffer framebuffer1;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer1.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+
+    glUseProgram(mProgram);
+    glUniform4fv(mColorLocation, 1, srgbColor.toNormalizedVector().data());
+
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+
+    GLFramebuffer framebuffer2;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+
+    glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer1.get());
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2.get());
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+}
+
+// Test that we behave correctly when we toggle FRAMEBUFFER_SRGB_EXT on a framebuffer that has an
+// attachment in linear colorspace
+TEST_P(SRGBFramebufferTest, NegativeAlreadyLinear)
+{
+    if (!IsGLExtensionEnabled("GL_EXT_sRGB_write_control") ||
+        (!IsGLExtensionEnabled("GL_EXT_sRGB") && getClientMajorVersion() < 3))
+    {
+        std::cout
+            << "Test skipped because GL_EXT_sRGB_write_control and GL_EXT_sRGB are not available."
+            << std::endl;
+        return;
+    }
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+
+    glUseProgram(mProgram);
+    glUniform4fv(mColorLocation, 1, linearColor.toNormalizedVector().data());
+
+    glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+}
+
+// Test that lifetimes of internal resources are tracked correctly by deleting a texture and then
+// attempting to use it. This is expected to produce a non-fatal error.
+TEST_P(SRGBFramebufferTest, NegativeLifetimeTracking)
+{
+    if (!IsGLExtensionEnabled("GL_EXT_sRGB_write_control") ||
+        (!IsGLExtensionEnabled("GL_EXT_sRGB") && getClientMajorVersion() < 3))
+    {
+        std::cout
+            << "Test skipped because GL_EXT_sRGB_write_control and GL_EXT_sRGB are not available."
+            << std::endl;
+        return;
+    }
+
+    // NVIDIA failures
+    // http://anglebug.com/5641
+    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGLES());
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA_EXT, 1, 1, 0, GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE,
+                 nullptr);
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.get(), 0);
+
+    glUseProgram(mProgram);
+    glUniform4fv(mColorLocation, 1, srgbColor.toNormalizedVector().data());
+
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+
+    // Delete the texture
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
+    texture.reset();
+
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_ERROR(GL_INVALID_FRAMEBUFFER_OPERATION);
+
+    GLColor throwaway_color;
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &throwaway_color);
+    EXPECT_GL_ERROR(GL_INVALID_FRAMEBUFFER_OPERATION);
+}
+
+// Test that glBlitFramebuffer correctly converts colorspaces
+TEST_P(SRGBFramebufferTest, BlitFramebuffer)
+{
+    if (!IsGLExtensionEnabled("GL_EXT_sRGB_write_control") ||
+        (!IsGLExtensionEnabled("GL_EXT_sRGB") && getClientMajorVersion() < 3))
+    {
+        std::cout
+            << "Test skipped because GL_EXT_sRGB_write_control and GL_EXT_sRGB are not available."
+            << std::endl;
+        return;
+    }
+
+    // http://anglebug.com/5075
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    GLTexture dstTexture;
+    glBindTexture(GL_TEXTURE_2D, dstTexture.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA_EXT, 1, 1, 0, GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE,
+                 nullptr);
+    GLFramebuffer dstFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, dstFramebuffer.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dstTexture.get(),
+                           0);
+
+    GLTexture srcTexture;
+    glBindTexture(GL_TEXTURE_2D, srcTexture.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA_EXT, 1, 1, 0, GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE,
+                 nullptr);
+
+    GLFramebuffer srcFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, srcFramebuffer.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, srcTexture.get(),
+                           0);
+
+    glUseProgram(mProgram);
+    glUniform4fv(mColorLocation, 1, srgbColor.toNormalizedVector().data());
+
+    // Draw onto the framebuffer normally
+    glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+
+    // Blit the framebuffer normally
+    glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, dstFramebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, srcFramebuffer);
+    glBlitFramebuffer(0, 0, 1, 1, 0, 0, 1, 1, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, dstFramebuffer);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+
+    // Blit the framebuffer with forced linear colorspace
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, dstFramebuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, srcFramebuffer);
+    glBlitFramebuffer(0, 0, 1, 1, 0, 0, 1, 1, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, dstFramebuffer);
     EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
 }
 
