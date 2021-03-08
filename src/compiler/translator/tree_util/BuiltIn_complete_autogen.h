@@ -4658,181 +4658,233 @@ class BuiltInId
         TSymbolUniqueId(2870);
     static constexpr const TSymbolUniqueId gl_MaxGeometryAtomicCounterBuffersES3_2 =
         TSymbolUniqueId(2871);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlInputComponents = TSymbolUniqueId(2872);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlInputComponentsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryInputComponentsOES = TSymbolUniqueId(2872);
+    static constexpr const TSymbolUniqueId gl_MaxGeometryInputComponentsOESES3_2 =
         TSymbolUniqueId(2873);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlOutputComponents =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryOutputComponentsOES =
         TSymbolUniqueId(2874);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlOutputComponentsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryOutputComponentsOESES3_2 =
         TSymbolUniqueId(2875);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlTextureImageUnits =
-        TSymbolUniqueId(2876);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlTextureImageUnitsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryImageUniformsOES = TSymbolUniqueId(2876);
+    static constexpr const TSymbolUniqueId gl_MaxGeometryImageUniformsOESES3_2 =
         TSymbolUniqueId(2877);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlUniformComponents =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryTextureImageUnitsOES =
         TSymbolUniqueId(2878);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlUniformComponentsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryTextureImageUnitsOESES3_2 =
         TSymbolUniqueId(2879);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlTotalOutputComponents =
-        TSymbolUniqueId(2880);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlTotalOutputComponentsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryOutputVerticesOES = TSymbolUniqueId(2880);
+    static constexpr const TSymbolUniqueId gl_MaxGeometryOutputVerticesOESES3_2 =
         TSymbolUniqueId(2881);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlImageUniforms = TSymbolUniqueId(2882);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlImageUniformsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryTotalOutputComponentsOES =
+        TSymbolUniqueId(2882);
+    static constexpr const TSymbolUniqueId gl_MaxGeometryTotalOutputComponentsOESES3_2 =
         TSymbolUniqueId(2883);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCounters = TSymbolUniqueId(2884);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCountersES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryUniformComponentsOES =
+        TSymbolUniqueId(2884);
+    static constexpr const TSymbolUniqueId gl_MaxGeometryUniformComponentsOESES3_2 =
         TSymbolUniqueId(2885);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCounterBuffers =
-        TSymbolUniqueId(2886);
-    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCounterBuffersES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryAtomicCountersOES = TSymbolUniqueId(2886);
+    static constexpr const TSymbolUniqueId gl_MaxGeometryAtomicCountersOESES3_2 =
         TSymbolUniqueId(2887);
-    static constexpr const TSymbolUniqueId gl_MaxTessPatchComponents      = TSymbolUniqueId(2888);
-    static constexpr const TSymbolUniqueId gl_MaxTessPatchComponentsES3_2 = TSymbolUniqueId(2889);
-    static constexpr const TSymbolUniqueId gl_MaxPatchVertices            = TSymbolUniqueId(2890);
-    static constexpr const TSymbolUniqueId gl_MaxPatchVerticesES3_2       = TSymbolUniqueId(2891);
-    static constexpr const TSymbolUniqueId gl_MaxTessGenLevel             = TSymbolUniqueId(2892);
-    static constexpr const TSymbolUniqueId gl_MaxTessGenLevelES3_2        = TSymbolUniqueId(2893);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationInputComponents =
+    static constexpr const TSymbolUniqueId gl_MaxGeometryAtomicCounterBuffersOES =
+        TSymbolUniqueId(2888);
+    static constexpr const TSymbolUniqueId gl_MaxGeometryAtomicCounterBuffersOESES3_2 =
+        TSymbolUniqueId(2889);
+    static constexpr const TSymbolUniqueId gl_MaxTessControlInputComponents = TSymbolUniqueId(2890);
+    static constexpr const TSymbolUniqueId gl_MaxTessControlInputComponentsES3_2 =
+        TSymbolUniqueId(2891);
+    static constexpr const TSymbolUniqueId gl_MaxTessControlOutputComponents =
+        TSymbolUniqueId(2892);
+    static constexpr const TSymbolUniqueId gl_MaxTessControlOutputComponentsES3_2 =
+        TSymbolUniqueId(2893);
+    static constexpr const TSymbolUniqueId gl_MaxTessControlTextureImageUnits =
         TSymbolUniqueId(2894);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationInputComponentsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlTextureImageUnitsES3_2 =
         TSymbolUniqueId(2895);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationOutputComponents =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlUniformComponents =
         TSymbolUniqueId(2896);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationOutputComponentsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlUniformComponentsES3_2 =
         TSymbolUniqueId(2897);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationTextureImageUnits =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlTotalOutputComponents =
         TSymbolUniqueId(2898);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationTextureImageUnitsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlTotalOutputComponentsES3_2 =
         TSymbolUniqueId(2899);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationUniformComponents =
-        TSymbolUniqueId(2900);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationUniformComponentsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlImageUniforms = TSymbolUniqueId(2900);
+    static constexpr const TSymbolUniqueId gl_MaxTessControlImageUniformsES3_2 =
         TSymbolUniqueId(2901);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationImageUniforms =
-        TSymbolUniqueId(2902);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationImageUniformsES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCounters = TSymbolUniqueId(2902);
+    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCountersES3_2 =
         TSymbolUniqueId(2903);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCounters =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCounterBuffers =
         TSymbolUniqueId(2904);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCountersES3_2 =
+    static constexpr const TSymbolUniqueId gl_MaxTessControlAtomicCounterBuffersES3_2 =
         TSymbolUniqueId(2905);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCounterBuffers =
-        TSymbolUniqueId(2906);
-    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCounterBuffersES3_2 =
-        TSymbolUniqueId(2907);
-    static constexpr const TSymbolUniqueId gl_MaxSamples            = TSymbolUniqueId(2908);
-    static constexpr const TSymbolUniqueId gl_MaxSamplesES3_2       = TSymbolUniqueId(2909);
-    static constexpr const TSymbolUniqueId gl_MaxClipDistancesAPPLE = TSymbolUniqueId(2910);
-    static constexpr const TSymbolUniqueId gl_MaxCullDistancesEXT   = TSymbolUniqueId(2911);
-    static constexpr const TSymbolUniqueId gl_MaxCombinedClipAndCullDistancesEXT =
+    static constexpr const TSymbolUniqueId gl_MaxTessPatchComponents      = TSymbolUniqueId(2906);
+    static constexpr const TSymbolUniqueId gl_MaxTessPatchComponentsES3_2 = TSymbolUniqueId(2907);
+    static constexpr const TSymbolUniqueId gl_MaxPatchVertices            = TSymbolUniqueId(2908);
+    static constexpr const TSymbolUniqueId gl_MaxPatchVerticesES3_2       = TSymbolUniqueId(2909);
+    static constexpr const TSymbolUniqueId gl_MaxTessGenLevel             = TSymbolUniqueId(2910);
+    static constexpr const TSymbolUniqueId gl_MaxTessGenLevelES3_2        = TSymbolUniqueId(2911);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationInputComponents =
         TSymbolUniqueId(2912);
-    static constexpr const TSymbolUniqueId gl_FragCoord                 = TSymbolUniqueId(2913);
-    static constexpr const TSymbolUniqueId gl_FrontFacing               = TSymbolUniqueId(2914);
-    static constexpr const TSymbolUniqueId gl_PointCoord                = TSymbolUniqueId(2915);
-    static constexpr const TSymbolUniqueId gl_FragColor                 = TSymbolUniqueId(2916);
-    static constexpr const TSymbolUniqueId gl_FragData                  = TSymbolUniqueId(2917);
-    static constexpr const TSymbolUniqueId gl_FragDepth                 = TSymbolUniqueId(2918);
-    static constexpr const TSymbolUniqueId gl_HelperInvocation          = TSymbolUniqueId(2919);
-    static constexpr const TSymbolUniqueId gl_SecondaryFragColorEXT     = TSymbolUniqueId(2920);
-    static constexpr const TSymbolUniqueId gl_SecondaryFragDataEXT      = TSymbolUniqueId(2921);
-    static constexpr const TSymbolUniqueId gl_FragDepthEXT              = TSymbolUniqueId(2922);
-    static constexpr const TSymbolUniqueId gl_LastFragData              = TSymbolUniqueId(2923);
-    static constexpr const TSymbolUniqueId gl_LastFragDataNonCoherent   = TSymbolUniqueId(2924);
-    static constexpr const TSymbolUniqueId gl_LastFragColor             = TSymbolUniqueId(2925);
-    static constexpr const TSymbolUniqueId gl_LastFragDataNV            = TSymbolUniqueId(2926);
-    static constexpr const TSymbolUniqueId gl_LastFragColorARM          = TSymbolUniqueId(2927);
-    static constexpr const TSymbolUniqueId gl_PrimitiveID               = TSymbolUniqueId(2928);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDES3_2          = TSymbolUniqueId(2929);
-    static constexpr const TSymbolUniqueId gl_Layer                     = TSymbolUniqueId(2930);
-    static constexpr const TSymbolUniqueId gl_LayerES3_2                = TSymbolUniqueId(2931);
-    static constexpr const TSymbolUniqueId gl_SampleID                  = TSymbolUniqueId(2932);
-    static constexpr const TSymbolUniqueId gl_SampleIDES3_2             = TSymbolUniqueId(2933);
-    static constexpr const TSymbolUniqueId gl_SamplePosition            = TSymbolUniqueId(2934);
-    static constexpr const TSymbolUniqueId gl_SamplePositionES3_2       = TSymbolUniqueId(2935);
-    static constexpr const TSymbolUniqueId gl_SampleMaskIn              = TSymbolUniqueId(2936);
-    static constexpr const TSymbolUniqueId gl_SampleMaskInES3_2         = TSymbolUniqueId(2937);
-    static constexpr const TSymbolUniqueId gl_SampleMask                = TSymbolUniqueId(2938);
-    static constexpr const TSymbolUniqueId gl_SampleMaskES3_2           = TSymbolUniqueId(2939);
-    static constexpr const TSymbolUniqueId gl_CullDistance              = TSymbolUniqueId(2940);
-    static constexpr const TSymbolUniqueId gl_ClipDistance              = TSymbolUniqueId(2941);
-    static constexpr const TSymbolUniqueId gl_Position                  = TSymbolUniqueId(2942);
-    static constexpr const TSymbolUniqueId gl_PointSize                 = TSymbolUniqueId(2943);
-    static constexpr const TSymbolUniqueId gl_InstanceID                = TSymbolUniqueId(2944);
-    static constexpr const TSymbolUniqueId gl_InstanceIndex             = TSymbolUniqueId(2945);
-    static constexpr const TSymbolUniqueId gl_VertexID                  = TSymbolUniqueId(2946);
-    static constexpr const TSymbolUniqueId gl_VertexIndex               = TSymbolUniqueId(2947);
-    static constexpr const TSymbolUniqueId gl_ViewportIndex             = TSymbolUniqueId(2948);
-    static constexpr const TSymbolUniqueId gl_LayerVS                   = TSymbolUniqueId(2949);
-    static constexpr const TSymbolUniqueId gl_DrawID                    = TSymbolUniqueId(2950);
-    static constexpr const TSymbolUniqueId gl_BaseVertex                = TSymbolUniqueId(2951);
-    static constexpr const TSymbolUniqueId gl_BaseInstance              = TSymbolUniqueId(2952);
-    static constexpr const TSymbolUniqueId angle_BaseVertex             = TSymbolUniqueId(2953);
-    static constexpr const TSymbolUniqueId angle_BaseInstance           = TSymbolUniqueId(2954);
-    static constexpr const TSymbolUniqueId gl_ClipDistanceAPPLE         = TSymbolUniqueId(2955);
-    static constexpr const TSymbolUniqueId gl_CullDistanceEXT           = TSymbolUniqueId(2956);
-    static constexpr const TSymbolUniqueId gl_NumWorkGroups             = TSymbolUniqueId(2957);
-    static constexpr const TSymbolUniqueId gl_WorkGroupSize             = TSymbolUniqueId(2958);
-    static constexpr const TSymbolUniqueId gl_WorkGroupID               = TSymbolUniqueId(2959);
-    static constexpr const TSymbolUniqueId gl_LocalInvocationID         = TSymbolUniqueId(2960);
-    static constexpr const TSymbolUniqueId gl_GlobalInvocationID        = TSymbolUniqueId(2961);
-    static constexpr const TSymbolUniqueId gl_LocalInvocationIndex      = TSymbolUniqueId(2962);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDIn             = TSymbolUniqueId(2963);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDInES3_2        = TSymbolUniqueId(2964);
-    static constexpr const TSymbolUniqueId gl_InvocationID              = TSymbolUniqueId(2965);
-    static constexpr const TSymbolUniqueId gl_InvocationIDES3_2         = TSymbolUniqueId(2966);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDGS             = TSymbolUniqueId(2967);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDGSES3_2        = TSymbolUniqueId(2968);
-    static constexpr const TSymbolUniqueId gl_LayerGS                   = TSymbolUniqueId(2969);
-    static constexpr const TSymbolUniqueId gl_LayerGSES3_2              = TSymbolUniqueId(2970);
-    static constexpr const TSymbolUniqueId gl_PerVertex                 = TSymbolUniqueId(2971);
-    static constexpr const TSymbolUniqueId gl_PerVertexES3_2            = TSymbolUniqueId(2972);
-    static constexpr const TSymbolUniqueId gl_in                        = TSymbolUniqueId(2973);
-    static constexpr const TSymbolUniqueId gl_inES3_2                   = TSymbolUniqueId(2974);
-    static constexpr const TSymbolUniqueId gl_PerVertexOutBlock         = TSymbolUniqueId(2975);
-    static constexpr const TSymbolUniqueId gl_PerVertexOutBlockES3_2    = TSymbolUniqueId(2976);
-    static constexpr const TSymbolUniqueId gl_PositionGS                = TSymbolUniqueId(2977);
-    static constexpr const TSymbolUniqueId gl_PositionGSES3_2           = TSymbolUniqueId(2978);
-    static constexpr const TSymbolUniqueId gl_PatchVerticesInTCS        = TSymbolUniqueId(2979);
-    static constexpr const TSymbolUniqueId gl_PatchVerticesInTCSES3_2   = TSymbolUniqueId(2980);
-    static constexpr const TSymbolUniqueId gl_InvocationIDTCS           = TSymbolUniqueId(2981);
-    static constexpr const TSymbolUniqueId gl_InvocationIDTCSES3_2      = TSymbolUniqueId(2982);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDTCS            = TSymbolUniqueId(2983);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDTCSES3_2       = TSymbolUniqueId(2984);
-    static constexpr const TSymbolUniqueId gl_TessLevelOuterTCS         = TSymbolUniqueId(2985);
-    static constexpr const TSymbolUniqueId gl_TessLevelOuterTCSES3_2    = TSymbolUniqueId(2986);
-    static constexpr const TSymbolUniqueId gl_TessLevelInnerTCS         = TSymbolUniqueId(2987);
-    static constexpr const TSymbolUniqueId gl_TessLevelInnerTCSES3_2    = TSymbolUniqueId(2988);
-    static constexpr const TSymbolUniqueId gl_PerVertexTCS              = TSymbolUniqueId(2989);
-    static constexpr const TSymbolUniqueId gl_PerVertexTCSES3_2         = TSymbolUniqueId(2990);
-    static constexpr const TSymbolUniqueId gl_inTCS                     = TSymbolUniqueId(2991);
-    static constexpr const TSymbolUniqueId gl_inTCSES3_2                = TSymbolUniqueId(2992);
-    static constexpr const TSymbolUniqueId gl_outTCS                    = TSymbolUniqueId(2993);
-    static constexpr const TSymbolUniqueId gl_outTCSES3_2               = TSymbolUniqueId(2994);
-    static constexpr const TSymbolUniqueId gl_PerVertexOutTcsBlock      = TSymbolUniqueId(2995);
-    static constexpr const TSymbolUniqueId gl_PerVertexOutTcsBlockES3_2 = TSymbolUniqueId(2996);
-    static constexpr const TSymbolUniqueId gl_PositionTCS               = TSymbolUniqueId(2997);
-    static constexpr const TSymbolUniqueId gl_PositionTCSES3_2          = TSymbolUniqueId(2998);
-    static constexpr const TSymbolUniqueId gl_PatchVerticesInTES        = TSymbolUniqueId(2999);
-    static constexpr const TSymbolUniqueId gl_PatchVerticesInTESES3_2   = TSymbolUniqueId(3000);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDTES            = TSymbolUniqueId(3001);
-    static constexpr const TSymbolUniqueId gl_PrimitiveIDTESES3_2       = TSymbolUniqueId(3002);
-    static constexpr const TSymbolUniqueId gl_TessCoord                 = TSymbolUniqueId(3003);
-    static constexpr const TSymbolUniqueId gl_TessLevelOuterTES         = TSymbolUniqueId(3004);
-    static constexpr const TSymbolUniqueId gl_TessLevelOuterTESES3_2    = TSymbolUniqueId(3005);
-    static constexpr const TSymbolUniqueId gl_TessLevelInnerTES         = TSymbolUniqueId(3006);
-    static constexpr const TSymbolUniqueId gl_TessLevelInnerTESES3_2    = TSymbolUniqueId(3007);
-    static constexpr const TSymbolUniqueId gl_PerVertexTES              = TSymbolUniqueId(3008);
-    static constexpr const TSymbolUniqueId gl_PerVertexTESES3_2         = TSymbolUniqueId(3009);
-    static constexpr const TSymbolUniqueId gl_inTES                     = TSymbolUniqueId(3010);
-    static constexpr const TSymbolUniqueId gl_inTESES3_2                = TSymbolUniqueId(3011);
-    static constexpr const TSymbolUniqueId gl_outTES                    = TSymbolUniqueId(3012);
-    static constexpr const TSymbolUniqueId gl_outTESES3_2               = TSymbolUniqueId(3013);
-    static constexpr const TSymbolUniqueId gl_PerVertexOutTesBlock      = TSymbolUniqueId(3014);
-    static constexpr const TSymbolUniqueId gl_PerVertexOutTesBlockES3_2 = TSymbolUniqueId(3015);
-    static constexpr const TSymbolUniqueId gl_PositionTES               = TSymbolUniqueId(3016);
-    static constexpr const TSymbolUniqueId gl_PositionTESES3_2          = TSymbolUniqueId(3017);
-    static constexpr const TSymbolUniqueId gl_ViewID_OVR                = TSymbolUniqueId(3018);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationInputComponentsES3_2 =
+        TSymbolUniqueId(2913);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationOutputComponents =
+        TSymbolUniqueId(2914);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationOutputComponentsES3_2 =
+        TSymbolUniqueId(2915);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationTextureImageUnits =
+        TSymbolUniqueId(2916);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationTextureImageUnitsES3_2 =
+        TSymbolUniqueId(2917);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationUniformComponents =
+        TSymbolUniqueId(2918);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationUniformComponentsES3_2 =
+        TSymbolUniqueId(2919);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationImageUniforms =
+        TSymbolUniqueId(2920);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationImageUniformsES3_2 =
+        TSymbolUniqueId(2921);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCounters =
+        TSymbolUniqueId(2922);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCountersES3_2 =
+        TSymbolUniqueId(2923);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCounterBuffers =
+        TSymbolUniqueId(2924);
+    static constexpr const TSymbolUniqueId gl_MaxTessEvaluationAtomicCounterBuffersES3_2 =
+        TSymbolUniqueId(2925);
+    static constexpr const TSymbolUniqueId gl_MaxSamples            = TSymbolUniqueId(2926);
+    static constexpr const TSymbolUniqueId gl_MaxSamplesES3_2       = TSymbolUniqueId(2927);
+    static constexpr const TSymbolUniqueId gl_MaxClipDistancesAPPLE = TSymbolUniqueId(2928);
+    static constexpr const TSymbolUniqueId gl_MaxCullDistancesEXT   = TSymbolUniqueId(2929);
+    static constexpr const TSymbolUniqueId gl_MaxCombinedClipAndCullDistancesEXT =
+        TSymbolUniqueId(2930);
+    static constexpr const TSymbolUniqueId gl_FragCoord                 = TSymbolUniqueId(2931);
+    static constexpr const TSymbolUniqueId gl_FrontFacing               = TSymbolUniqueId(2932);
+    static constexpr const TSymbolUniqueId gl_PointCoord                = TSymbolUniqueId(2933);
+    static constexpr const TSymbolUniqueId gl_FragColor                 = TSymbolUniqueId(2934);
+    static constexpr const TSymbolUniqueId gl_FragData                  = TSymbolUniqueId(2935);
+    static constexpr const TSymbolUniqueId gl_FragDepth                 = TSymbolUniqueId(2936);
+    static constexpr const TSymbolUniqueId gl_HelperInvocation          = TSymbolUniqueId(2937);
+    static constexpr const TSymbolUniqueId gl_SecondaryFragColorEXT     = TSymbolUniqueId(2938);
+    static constexpr const TSymbolUniqueId gl_SecondaryFragDataEXT      = TSymbolUniqueId(2939);
+    static constexpr const TSymbolUniqueId gl_FragDepthEXT              = TSymbolUniqueId(2940);
+    static constexpr const TSymbolUniqueId gl_LastFragData              = TSymbolUniqueId(2941);
+    static constexpr const TSymbolUniqueId gl_LastFragDataNonCoherent   = TSymbolUniqueId(2942);
+    static constexpr const TSymbolUniqueId gl_LastFragColor             = TSymbolUniqueId(2943);
+    static constexpr const TSymbolUniqueId gl_LastFragDataNV            = TSymbolUniqueId(2944);
+    static constexpr const TSymbolUniqueId gl_LastFragColorARM          = TSymbolUniqueId(2945);
+    static constexpr const TSymbolUniqueId gl_PrimitiveID               = TSymbolUniqueId(2946);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDES3_2          = TSymbolUniqueId(2947);
+    static constexpr const TSymbolUniqueId gl_Layer                     = TSymbolUniqueId(2948);
+    static constexpr const TSymbolUniqueId gl_LayerES3_2                = TSymbolUniqueId(2949);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDOES            = TSymbolUniqueId(2950);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDOESES3_2       = TSymbolUniqueId(2951);
+    static constexpr const TSymbolUniqueId gl_LayerOES                  = TSymbolUniqueId(2952);
+    static constexpr const TSymbolUniqueId gl_LayerOESES3_2             = TSymbolUniqueId(2953);
+    static constexpr const TSymbolUniqueId gl_SampleID                  = TSymbolUniqueId(2954);
+    static constexpr const TSymbolUniqueId gl_SampleIDES3_2             = TSymbolUniqueId(2955);
+    static constexpr const TSymbolUniqueId gl_SamplePosition            = TSymbolUniqueId(2956);
+    static constexpr const TSymbolUniqueId gl_SamplePositionES3_2       = TSymbolUniqueId(2957);
+    static constexpr const TSymbolUniqueId gl_SampleMaskIn              = TSymbolUniqueId(2958);
+    static constexpr const TSymbolUniqueId gl_SampleMaskInES3_2         = TSymbolUniqueId(2959);
+    static constexpr const TSymbolUniqueId gl_SampleMask                = TSymbolUniqueId(2960);
+    static constexpr const TSymbolUniqueId gl_SampleMaskES3_2           = TSymbolUniqueId(2961);
+    static constexpr const TSymbolUniqueId gl_CullDistance              = TSymbolUniqueId(2962);
+    static constexpr const TSymbolUniqueId gl_ClipDistance              = TSymbolUniqueId(2963);
+    static constexpr const TSymbolUniqueId gl_Position                  = TSymbolUniqueId(2964);
+    static constexpr const TSymbolUniqueId gl_PointSize                 = TSymbolUniqueId(2965);
+    static constexpr const TSymbolUniqueId gl_InstanceID                = TSymbolUniqueId(2966);
+    static constexpr const TSymbolUniqueId gl_InstanceIndex             = TSymbolUniqueId(2967);
+    static constexpr const TSymbolUniqueId gl_VertexID                  = TSymbolUniqueId(2968);
+    static constexpr const TSymbolUniqueId gl_VertexIndex               = TSymbolUniqueId(2969);
+    static constexpr const TSymbolUniqueId gl_ViewportIndex             = TSymbolUniqueId(2970);
+    static constexpr const TSymbolUniqueId gl_LayerVS                   = TSymbolUniqueId(2971);
+    static constexpr const TSymbolUniqueId gl_DrawID                    = TSymbolUniqueId(2972);
+    static constexpr const TSymbolUniqueId gl_BaseVertex                = TSymbolUniqueId(2973);
+    static constexpr const TSymbolUniqueId gl_BaseInstance              = TSymbolUniqueId(2974);
+    static constexpr const TSymbolUniqueId angle_BaseVertex             = TSymbolUniqueId(2975);
+    static constexpr const TSymbolUniqueId angle_BaseInstance           = TSymbolUniqueId(2976);
+    static constexpr const TSymbolUniqueId gl_ClipDistanceAPPLE         = TSymbolUniqueId(2977);
+    static constexpr const TSymbolUniqueId gl_CullDistanceEXT           = TSymbolUniqueId(2978);
+    static constexpr const TSymbolUniqueId gl_NumWorkGroups             = TSymbolUniqueId(2979);
+    static constexpr const TSymbolUniqueId gl_WorkGroupSize             = TSymbolUniqueId(2980);
+    static constexpr const TSymbolUniqueId gl_WorkGroupID               = TSymbolUniqueId(2981);
+    static constexpr const TSymbolUniqueId gl_LocalInvocationID         = TSymbolUniqueId(2982);
+    static constexpr const TSymbolUniqueId gl_GlobalInvocationID        = TSymbolUniqueId(2983);
+    static constexpr const TSymbolUniqueId gl_LocalInvocationIndex      = TSymbolUniqueId(2984);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDIn             = TSymbolUniqueId(2985);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDInES3_2        = TSymbolUniqueId(2986);
+    static constexpr const TSymbolUniqueId gl_InvocationID              = TSymbolUniqueId(2987);
+    static constexpr const TSymbolUniqueId gl_InvocationIDES3_2         = TSymbolUniqueId(2988);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDGS             = TSymbolUniqueId(2989);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDGSES3_2        = TSymbolUniqueId(2990);
+    static constexpr const TSymbolUniqueId gl_LayerGS                   = TSymbolUniqueId(2991);
+    static constexpr const TSymbolUniqueId gl_LayerGSES3_2              = TSymbolUniqueId(2992);
+    static constexpr const TSymbolUniqueId gl_PerVertex                 = TSymbolUniqueId(2993);
+    static constexpr const TSymbolUniqueId gl_PerVertexES3_2            = TSymbolUniqueId(2994);
+    static constexpr const TSymbolUniqueId gl_in                        = TSymbolUniqueId(2995);
+    static constexpr const TSymbolUniqueId gl_inES3_2                   = TSymbolUniqueId(2996);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutBlock         = TSymbolUniqueId(2997);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutBlockES3_2    = TSymbolUniqueId(2998);
+    static constexpr const TSymbolUniqueId gl_PositionGS                = TSymbolUniqueId(2999);
+    static constexpr const TSymbolUniqueId gl_PositionGSES3_2           = TSymbolUniqueId(3000);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDInGSOES        = TSymbolUniqueId(3001);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDInGSOESES3_2   = TSymbolUniqueId(3002);
+    static constexpr const TSymbolUniqueId gl_InvocationIDGSOES         = TSymbolUniqueId(3003);
+    static constexpr const TSymbolUniqueId gl_InvocationIDGSOESES3_2    = TSymbolUniqueId(3004);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDGSOES          = TSymbolUniqueId(3005);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDGSOESES3_2     = TSymbolUniqueId(3006);
+    static constexpr const TSymbolUniqueId gl_LayerGSOES                = TSymbolUniqueId(3007);
+    static constexpr const TSymbolUniqueId gl_LayerGSOESES3_2           = TSymbolUniqueId(3008);
+    static constexpr const TSymbolUniqueId gl_PerVertexGSOES            = TSymbolUniqueId(3009);
+    static constexpr const TSymbolUniqueId gl_PerVertexGSOESES3_2       = TSymbolUniqueId(3010);
+    static constexpr const TSymbolUniqueId gl_inGSOES                   = TSymbolUniqueId(3011);
+    static constexpr const TSymbolUniqueId gl_inGSOESES3_2              = TSymbolUniqueId(3012);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutBlockOES      = TSymbolUniqueId(3013);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutBlockOESES3_2 = TSymbolUniqueId(3014);
+    static constexpr const TSymbolUniqueId gl_PositionGSOES             = TSymbolUniqueId(3015);
+    static constexpr const TSymbolUniqueId gl_PositionGSOESES3_2        = TSymbolUniqueId(3016);
+    static constexpr const TSymbolUniqueId gl_PatchVerticesInTCS        = TSymbolUniqueId(3017);
+    static constexpr const TSymbolUniqueId gl_PatchVerticesInTCSES3_2   = TSymbolUniqueId(3018);
+    static constexpr const TSymbolUniqueId gl_InvocationIDTCS           = TSymbolUniqueId(3019);
+    static constexpr const TSymbolUniqueId gl_InvocationIDTCSES3_2      = TSymbolUniqueId(3020);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDTCS            = TSymbolUniqueId(3021);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDTCSES3_2       = TSymbolUniqueId(3022);
+    static constexpr const TSymbolUniqueId gl_TessLevelOuterTCS         = TSymbolUniqueId(3023);
+    static constexpr const TSymbolUniqueId gl_TessLevelOuterTCSES3_2    = TSymbolUniqueId(3024);
+    static constexpr const TSymbolUniqueId gl_TessLevelInnerTCS         = TSymbolUniqueId(3025);
+    static constexpr const TSymbolUniqueId gl_TessLevelInnerTCSES3_2    = TSymbolUniqueId(3026);
+    static constexpr const TSymbolUniqueId gl_PerVertexTCS              = TSymbolUniqueId(3027);
+    static constexpr const TSymbolUniqueId gl_PerVertexTCSES3_2         = TSymbolUniqueId(3028);
+    static constexpr const TSymbolUniqueId gl_inTCS                     = TSymbolUniqueId(3029);
+    static constexpr const TSymbolUniqueId gl_inTCSES3_2                = TSymbolUniqueId(3030);
+    static constexpr const TSymbolUniqueId gl_outTCS                    = TSymbolUniqueId(3031);
+    static constexpr const TSymbolUniqueId gl_outTCSES3_2               = TSymbolUniqueId(3032);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutTcsBlock      = TSymbolUniqueId(3033);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutTcsBlockES3_2 = TSymbolUniqueId(3034);
+    static constexpr const TSymbolUniqueId gl_PositionTCS               = TSymbolUniqueId(3035);
+    static constexpr const TSymbolUniqueId gl_PositionTCSES3_2          = TSymbolUniqueId(3036);
+    static constexpr const TSymbolUniqueId gl_PatchVerticesInTES        = TSymbolUniqueId(3037);
+    static constexpr const TSymbolUniqueId gl_PatchVerticesInTESES3_2   = TSymbolUniqueId(3038);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDTES            = TSymbolUniqueId(3039);
+    static constexpr const TSymbolUniqueId gl_PrimitiveIDTESES3_2       = TSymbolUniqueId(3040);
+    static constexpr const TSymbolUniqueId gl_TessCoord                 = TSymbolUniqueId(3041);
+    static constexpr const TSymbolUniqueId gl_TessLevelOuterTES         = TSymbolUniqueId(3042);
+    static constexpr const TSymbolUniqueId gl_TessLevelOuterTESES3_2    = TSymbolUniqueId(3043);
+    static constexpr const TSymbolUniqueId gl_TessLevelInnerTES         = TSymbolUniqueId(3044);
+    static constexpr const TSymbolUniqueId gl_TessLevelInnerTESES3_2    = TSymbolUniqueId(3045);
+    static constexpr const TSymbolUniqueId gl_PerVertexTES              = TSymbolUniqueId(3046);
+    static constexpr const TSymbolUniqueId gl_PerVertexTESES3_2         = TSymbolUniqueId(3047);
+    static constexpr const TSymbolUniqueId gl_inTES                     = TSymbolUniqueId(3048);
+    static constexpr const TSymbolUniqueId gl_inTESES3_2                = TSymbolUniqueId(3049);
+    static constexpr const TSymbolUniqueId gl_outTES                    = TSymbolUniqueId(3050);
+    static constexpr const TSymbolUniqueId gl_outTESES3_2               = TSymbolUniqueId(3051);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutTesBlock      = TSymbolUniqueId(3052);
+    static constexpr const TSymbolUniqueId gl_PerVertexOutTesBlockES3_2 = TSymbolUniqueId(3053);
+    static constexpr const TSymbolUniqueId gl_PositionTES               = TSymbolUniqueId(3054);
+    static constexpr const TSymbolUniqueId gl_PositionTESES3_2          = TSymbolUniqueId(3055);
+    static constexpr const TSymbolUniqueId gl_ViewID_OVR                = TSymbolUniqueId(3056);
 
 };  // class BuiltInId
 
@@ -4854,6 +4906,8 @@ const TVariable *gl_InstanceID();
 const TVariable *gl_InstanceIndex();
 const TVariable *gl_InvocationID();
 const TVariable *gl_InvocationIDES3_2();
+const TVariable *gl_InvocationIDGSOES();
+const TVariable *gl_InvocationIDGSOESES3_2();
 const TVariable *gl_InvocationIDTCS();
 const TVariable *gl_InvocationIDTCSES3_2();
 const TVariable *gl_LastFragColor();
@@ -4862,6 +4916,10 @@ const TVariable *gl_Layer();
 const TVariable *gl_LayerES3_2();
 const TVariable *gl_LayerGS();
 const TVariable *gl_LayerGSES3_2();
+const TVariable *gl_LayerGSOES();
+const TVariable *gl_LayerGSOESES3_2();
+const TVariable *gl_LayerOES();
+const TVariable *gl_LayerOESES3_2();
 const TVariable *gl_LayerVS();
 const TVariable *gl_LocalInvocationID();
 const TVariable *gl_LocalInvocationIndex();
@@ -4879,8 +4937,14 @@ const TVariable *gl_PrimitiveID();
 const TVariable *gl_PrimitiveIDES3_2();
 const TVariable *gl_PrimitiveIDGS();
 const TVariable *gl_PrimitiveIDGSES3_2();
+const TVariable *gl_PrimitiveIDGSOES();
+const TVariable *gl_PrimitiveIDGSOESES3_2();
 const TVariable *gl_PrimitiveIDIn();
 const TVariable *gl_PrimitiveIDInES3_2();
+const TVariable *gl_PrimitiveIDInGSOES();
+const TVariable *gl_PrimitiveIDInGSOESES3_2();
+const TVariable *gl_PrimitiveIDOES();
+const TVariable *gl_PrimitiveIDOESES3_2();
 const TVariable *gl_PrimitiveIDTCS();
 const TVariable *gl_PrimitiveIDTCSES3_2();
 const TVariable *gl_PrimitiveIDTES();

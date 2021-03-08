@@ -657,6 +657,20 @@ class GroupedList:
                         self.objs[name_hash]['glsl_level4'] = glsl_level
                     self.objs[name_hash]['symbol4'] = symbol
                     self.objs[name_hash]['shader_type4'] = shader_type
+                elif 'symbol5' not in self.objs[name_hash]:
+                    if essl_level:
+                        self.objs[name_hash]['essl_level5'] = essl_level
+                    if glsl_level:
+                        self.objs[name_hash]['glsl_level5'] = glsl_level
+                    self.objs[name_hash]['symbol5'] = symbol
+                    self.objs[name_hash]['shader_type5'] = shader_type
+                elif 'symbol6' not in self.objs[name_hash]:
+                    if essl_level:
+                        self.objs[name_hash]['essl_level6'] = essl_level
+                    if glsl_level:
+                        self.objs[name_hash]['glsl_level6'] = glsl_level
+                    self.objs[name_hash]['symbol6'] = symbol
+                    self.objs[name_hash]['shader_type6'] = shader_type
                 else:
                     assert (False)
             else:
@@ -686,6 +700,16 @@ class GroupedList:
                     self.objs[name_hash]['essl_ext_level4'] = essl_level
                     self.objs[name_hash]['essl_ext_symbol4'] = symbol
                     self.objs[name_hash]['essl_ext_shader_type4'] = shader_type
+                elif 'essl_ext_symbol5' not in self.objs[name_hash]:
+                    self.objs[name_hash]['essl_extension5'] = essl_extension
+                    self.objs[name_hash]['essl_ext_level5'] = essl_level
+                    self.objs[name_hash]['essl_ext_symbol5'] = symbol
+                    self.objs[name_hash]['essl_ext_shader_type5'] = shader_type
+                elif 'essl_ext_symbol6' not in self.objs[name_hash]:
+                    self.objs[name_hash]['essl_extension6'] = essl_extension
+                    self.objs[name_hash]['essl_ext_level6'] = essl_level
+                    self.objs[name_hash]['essl_ext_symbol6'] = symbol
+                    self.objs[name_hash]['essl_ext_shader_type6'] = shader_type
                 else:
                     assert (False)
             else:
@@ -772,6 +796,22 @@ class GroupedList:
                     add_rule(rules, "GLSL", data['glsl_level4'], data['shader_type4'], None,
                              data["symbol4"])
 
+                if "symbol5" in data and "essl_level5" in data:
+                    add_rule(rules, "ESSL", data['essl_level5'], data['shader_type5'], None,
+                             data["symbol5"])
+
+                if "symbol5" in data and "glsl_level5" in data:
+                    add_rule(rules, "GLSL", data['glsl_level5'], data['shader_type5'], None,
+                             data["symbol5"])
+
+                if "symbol6" in data and "essl_level6" in data:
+                    add_rule(rules, "ESSL", data['essl_level6'], data['shader_type6'], None,
+                             data["symbol6"])
+
+                if "symbol6" in data and "glsl_level6" in data:
+                    add_rule(rules, "GLSL", data['glsl_level6'], data['shader_type6'], None,
+                             data["symbol6"])
+
                 if "essl_ext_symbol" in data:
                     add_rule(rules, "ESSL", data["essl_ext_level"], data["essl_ext_shader_type"],
                              data["essl_extension"], data["essl_ext_symbol"])
@@ -791,6 +831,14 @@ class GroupedList:
                 if "essl_ext_symbol4" in data:
                     add_rule(rules, "ESSL", data["essl_ext_level4"], data["essl_ext_shader_type4"],
                              data["essl_extension4"], data["essl_ext_symbol4"])
+
+                if "essl_ext_symbol5" in data:
+                    add_rule(rules, "ESSL", data["essl_ext_level5"], data["essl_ext_shader_type5"],
+                             data["essl_extension5"], data["essl_ext_symbol5"])
+
+                if "essl_ext_symbol6" in data:
+                    add_rule(rules, "ESSL", data["essl_ext_level6"], data["essl_ext_shader_type6"],
+                             data["essl_extension6"], data["essl_ext_symbol6"])
 
                 name = data['name']
                 name_underscore = name.replace("(", "_")

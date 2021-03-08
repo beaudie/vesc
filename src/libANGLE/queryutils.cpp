@@ -3815,7 +3815,7 @@ bool GetQueryParameterInfo(const State &glState,
             return true;
     }
 
-    if (extensions.geometryShader)
+    if (extensions.geometryShaderAny())
     {
         switch (pname)
         {

@@ -2567,6 +2567,7 @@ void TParseContext::checkInputOutputTypeIsValidES3(const TQualifier qualifier,
          type.isStructureContainingType(EbtInt) || type.isStructureContainingType(EbtUInt));
     bool extendedShaderTypes = mShaderVersion >= 320 ||
                                isExtensionEnabled(TExtension::EXT_geometry_shader) ||
+                               isExtensionEnabled(TExtension::OES_geometry_shader) ||
                                isExtensionEnabled(TExtension::EXT_tessellation_shader);
     if (typeContainsIntegers && qualifier != EvqFlatIn && qualifier != EvqFlatOut &&
         (!extendedShaderTypes || mShaderType == GL_FRAGMENT_SHADER))
@@ -5049,7 +5050,10 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
     }
     else if (mShaderType == GL_GEOMETRY_SHADER_EXT &&
              (mShaderVersion >= 320 ||
-              (checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader) &&
+              (checkCanUseOneOfExtensions(
+                   qualifierTypeLine,
+                   std::array<TExtension, 2u>{
+                       {TExtension::EXT_geometry_shader, TExtension::OES_geometry_shader}}) &&
                checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310))))
     {
         if (qualifierType == "points")
@@ -5335,13 +5339,19 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
     }
     else if (qualifierType == "invocations" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
              (mShaderVersion >= 320 ||
-              checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader)))
+              checkCanUseOneOfExtensions(
+                  qualifierTypeLine,
+                  std::array<TExtension, 2u>{
+                      {TExtension::EXT_geometry_shader, TExtension::OES_geometry_shader}})))
     {
         parseInvocations(intValue, intValueLine, intValueString, &qualifier.invocations);
     }
     else if (qualifierType == "max_vertices" && mShaderType == GL_GEOMETRY_SHADER_EXT &&
              (mShaderVersion >= 320 ||
-              checkCanUseExtension(qualifierTypeLine, TExtension::EXT_geometry_shader)))
+              checkCanUseOneOfExtensions(
+                  qualifierTypeLine,
+                  std::array<TExtension, 2u>{
+                      {TExtension::EXT_geometry_shader, TExtension::OES_geometry_shader}})))
     {
         parseMaxVertices(intValue, intValueLine, intValueString, &qualifier.maxVertices);
     }

@@ -918,11 +918,13 @@ void RendererVk::ensureCapsInitialized() const
     if (mPhysicalDeviceFeatures.geometryShader && !mFeatures.basicGLLineRasterization.enabled)
     {
         // TODO: geometry shader support is incomplete.  http://anglebug.com/3571
-        mNativeExtensions.geometryShader =
-            mFeatures.supportsTransformFeedbackExtension.enabled &&
-            mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
-        mNativeCaps.maxFramebufferLayers = LimitToInt(limitsVk.maxFramebufferLayers);
-        mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
+        bool geometryShader = mFeatures.supportsTransformFeedbackExtension.enabled &&
+                              mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
+
+        mNativeExtensions.geometryShaderEXT = geometryShader;
+        mNativeExtensions.geometryShaderOES = geometryShader;
+        mNativeCaps.maxFramebufferLayers    = LimitToInt(limitsVk.maxFramebufferLayers);
+        mNativeCaps.layerProvokingVertex    = GL_LAST_VERTEX_CONVENTION_EXT;
 
         mNativeCaps.maxGeometryInputComponents =
             LimitToInt(limitsVk.maxGeometryInputComponents) - reservedVaryingVectorCount * 4;
