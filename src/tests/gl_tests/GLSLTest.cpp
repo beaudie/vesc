@@ -5205,6 +5205,67 @@ TEST_P(GLSLTest_ES3, VaryingStructNotStaticallyUsedInFragmentShader)
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 }
 
+// Test that a shader IO block varying that's not declared in the fragment shader links
+// successfully.
+TEST_P(GLSLTest_ES31, VaryingIOBlockNotDeclaredInFragmentShader)
+{
+    constexpr char kVS[] =
+        R"(#version 310 es
+        #extension GL_EXT_shader_io_blocks : require
+
+        precision highp float;
+        out BLOCK_INOUT { vec4 value; } user_out;
+
+        void main()
+        {
+            gl_Position    = vec4(1.0, 0.0, 0.0, 1.0);
+            user_out.value = vec4(4.0, 5.0, 6.0, 7.0);
+        })";
+
+    constexpr char kFS[] =
+        R"(#version 310 es
+        #extension GL_EXT_shader_io_blocks : require
+
+        precision highp float;
+
+        void main()
+        {
+        })";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
+// Test that a shader IO block varying that's not declared in the vertex shader links
+// successfully.
+TEST_P(GLSLTest_ES31, VaryingIOBlockNotDeclaredInVertexShader)
+{
+    constexpr char kVS[] =
+        R"(#version 310 es
+        #extension GL_EXT_shader_io_blocks : require
+
+        precision highp float;
+
+        void main()
+        {
+            gl_Position = vec4(1.0, 0.0, 0.0, 1.0);
+        })";
+
+    constexpr char kFS[] =
+        R"(#version 310 es
+        #extension GL_EXT_shader_io_blocks : require
+
+        precision highp float;
+        in BLOCK_INOUT { vec4 value; } user_in;
+        out vec4 col;
+
+        void main()
+        {
+            col = vec4(1.0);
+        })";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 // Test that a varying struct that's not declared in the fragment shader links successfully.
 // GLSL ES 3.00.6 section 4.3.10.
 TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInFragmentShader)
