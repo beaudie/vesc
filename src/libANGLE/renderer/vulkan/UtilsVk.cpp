@@ -1466,8 +1466,8 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                               vk::ImageLayout::ColorAttachment);
 
     ANGLE_TRY(contextVk->beginNewRenderPass(framebuffer, renderArea, renderPassDesc,
-                                            renderPassAttachmentOps, vk::kAttachmentIndexInvalid,
-                                            clearValues, commandBufferOut));
+                                            renderPassAttachmentOps, clearValues,
+                                            commandBufferOut));
 
     contextVk->addGarbage(&framebuffer);
 
