@@ -851,9 +851,12 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
         // not active. GLES specs are a bit vague on whether it's allowed to only pack active
         // varyings, though GLES 3.1 spec section 11.1.2.1 says that "device-dependent
         // optimizations" may be used to make vertex shader outputs fit.
+        // When separable programs are linked, varyings at the separable program's boundary are
+        // treated as active. See section 7.4.1 in
+        // https://www.khronos.org/registry/OpenGL/specs/es/3.2/es_spec_3.2.pdf
         if ((input && output && output->staticUse) || isActiveBuiltInInput ||
             isActiveBuiltInOutput ||
-            (isSeparableProgram && ((input && input->active) || (output && output->active))))
+            (isSeparableProgram && ((input && !output) || (!input && output))))
         {
             const sh::ShaderVariable *varying = output ? output : input;
 
