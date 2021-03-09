@@ -1441,8 +1441,9 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     // If the attachment is invalidated, skip the store op.  If we are not loading or clearing the
     // attachment and the attachment has not been used, auto-invalidate it.
-    const bool depthNotLoaded = dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
-                                !mRenderPassDesc.hasDepthUnresolveAttachment();
+    const bool depthNotLoaded =
+        dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
+        !mRenderPassDesc.hasDepthUnresolveAttachment(contextVk->getRenderer());
     if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled) ||
         (depthNotLoaded && mDepthAccess != ResourceAccess::Write))
     {
