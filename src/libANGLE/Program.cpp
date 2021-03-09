@@ -1376,7 +1376,7 @@ void Program::attachShader(const Context *context, Shader *shader)
 
 void Program::detachShader(const Context *context, Shader *shader)
 {
-    ASSERT(!mLinkingState);
+    resolveLink(context);
     ShaderType shaderType = shader->getType();
     ASSERT(shaderType != ShaderType::InvalidEnum);
 
