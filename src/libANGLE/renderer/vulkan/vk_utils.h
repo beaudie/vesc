@@ -1039,4 +1039,34 @@ gl::LevelIndex GetLevelIndex(vk::LevelIndex levelVk, gl::LevelIndex baseLevel);
 #define ANGLE_VK_VERSION_MAJOR_WIN_INTEL(version) (((uint32_t)(version) >> 14) & 0x3ffff)
 #define ANGLE_VK_VERSION_MINOR_WIN_INTEL(version) ((uint32_t)(version)&0x3fff)
 
+// For the unreleased VK_EXT_multisampled_render_to_single_sampled
+#if !defined(VK_EXT_multisampled_render_to_single_sampled)
+#    define VK_EXT_multisampled_render_to_single_sampled 1
+#    define VK_EXT_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_SPEC_VERSION 1
+#    define VK_EXT_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_EXTENSION_NAME \
+        "VK_EXT_multisampled_render_to_single_sampled"
+
+#    define VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_FEATURES_EXT \
+        ((VkStructureType)(1000376000))
+#    define VK_STRUCTURE_TYPE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_INFO_EXT \
+        ((VkStructureType)(1000376001))
+
+typedef struct VkPhysicalDeviceMultisampledRenderToSingleSampledFeaturesEXT
+{
+    VkStructureType sType;
+    const void *pNext;
+    VkBool32 multisampledRenderToSingleSampled;
+} VkPhysicalDeviceMultisampledRenderToSingleSampledFeaturesEXT;
+
+typedef struct VkMultisampledRenderToSingleSampledInfoEXT
+{
+    VkStructureType sType;
+    const void *pNext;
+    VkBool32 multisampledRenderToSingleSampledEnable;
+    VkSampleCountFlagBits rasterizationSamples;
+    VkResolveModeFlagBits depthResolveMode;
+    VkResolveModeFlagBits stencilResolveMode;
+} VkMultisampledRenderToSingleSampledInfoEXT;
+#endif /* VK_EXT_multisampled_render_to_single_sampled */
+
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_UTILS_H_
