@@ -3642,7 +3642,11 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
                                              /* cheapRenderPass */ true),
     WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                              /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false));
+                                             /* cheapRenderPass */ false),
+    WithEmulatedVAOs(ES2_OPENGL()),
+    WithEmulatedVAOs(ES2_OPENGLES()),
+    WithEmulatedVAOs(ES3_OPENGL()),
+    WithEmulatedVAOs(ES3_OPENGLES()));
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeOORTest,
