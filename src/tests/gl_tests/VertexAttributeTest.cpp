@@ -3642,7 +3642,15 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
                                              /* cheapRenderPass */ true),
     WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
                                              /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false));
+                                             /* cheapRenderPass */ false),
+#if !defined(__APPLE__)  // VAO emulation fails on Mac but is not used on Mac in the wild.
+                         // http://anglebug.com/5577
+    WithEmulatedVAOs(ES2_OPENGL()),
+    WithEmulatedVAOs(ES2_OPENGLES()),
+    WithEmulatedVAOs(ES3_OPENGL()),
+    WithEmulatedVAOs(ES3_OPENGLES()),
+#endif
+);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeOORTest,
