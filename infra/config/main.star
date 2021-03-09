@@ -142,7 +142,8 @@ def angle_standalone_builder(name, clang, debug, cpu, uwp = False, trace_tests =
         # Cache for mac_toolchain tool and XCode.app
         caches += [swarming.cache(name = "osx_sdk", path = "osx_sdk")]
         properties["$depot_tools/osx_sdk"] = {
-            "sdk_version": "12a7209"
+            # Xcode 12.4 per http://crrev.com/c/2715984
+            "sdk_version": "Za4aUIwiTUjk8rnjRow4nXbth-j7ZoN5plyOSCLidcgC"
         }
 
     if not clang:
