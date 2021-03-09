@@ -95,24 +95,25 @@ vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getResolveSubresourceSeri
     return getSubresourceSerialImpl(mResolveImageViews);
 }
 
-void RenderTargetVk::onColorDraw(ContextVk *contextVk, uint32_t framebufferLayerCount)
+void RenderTargetVk::onColorDraw(ContextVk *contextVk,
+                                 uint32_t framebufferLayerCount,
+                                 vk::PackedAttachmentIndex packedAttachmentIndex)
 {
     ASSERT(!mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
-    contextVk->onImageRenderPassWrite(mLevelIndexGL, mLayerIndex, framebufferLayerCount,
-                                      VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
-                                      mImage);
+    contextVk->onColorDraw(mImage, mResolveImage, packedAttachmentIndex);
+    retainImageViews(contextVk);
+
+    mImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
+                    VK_IMAGE_ASPECT_COLOR_BIT);
     if (mResolveImage)
     {
         // Multisampled render to texture framebuffers cannot be layered.
         ASSERT(framebufferLayerCount == 1);
-
-        contextVk->onImageRenderPassWrite(mLevelIndexGL, mLayerIndex, framebufferLayerCount,
-                                          VK_IMAGE_ASPECT_COLOR_BIT,
-                                          vk::ImageLayout::ColorAttachment, mResolveImage);
+        mResolveImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
+                               VK_IMAGE_ASPECT_COLOR_BIT);
     }
-    retainImageViews(contextVk);
 }
 
 void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount)
