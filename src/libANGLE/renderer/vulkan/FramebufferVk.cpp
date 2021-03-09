@@ -1388,7 +1388,8 @@ angle::Result FramebufferVk::resolveColorWithSubpass(ContextVk *contextVk,
                                                    srcFramebufferVk->getRenderPassDesc());
 
     // End the render pass now since we don't (yet) support subpass dependencies.
-    drawRenderTarget->onColorDraw(contextVk, mCurrentFramebufferDesc.getLayerCount());
+    drawRenderTarget->onColorDraw(contextVk, mCurrentFramebufferDesc.getLayerCount(),
+                                  vk::PackedAttachmentIndex(0));
     ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
 
     // Remove the resolve attachment from the source framebuffer.
@@ -2361,10 +2362,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // Color render targets are never entirely transient.  Only depth/stencil
         // multisampled-render-to-texture textures can be so.
         ASSERT(!colorRenderTarget->isEntirelyTransient());
-
-        renderPassAttachmentOps.setLayouts(colorIndexVk, vk::ImageLayout::ColorAttachment,
-                                           vk::ImageLayout::ColorAttachment);
-
         const vk::RenderPassStoreOp storeOp = colorRenderTarget->isImageTransient()
                                                   ? vk::RenderPassStoreOp::DontCare
                                                   : vk::RenderPassStoreOp::Store;
@@ -2590,15 +2587,18 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         renderArea = getRotatedCompleteRenderArea(contextVk);
     }
 
-    ANGLE_TRY(contextVk->beginNewRenderPass(*framebuffer, renderArea, mRenderPassDesc,
-                                            renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                            packedClearValues, commandBufferOut));
+    ANGLE_TRY(contextVk->beginNewRenderPass(
+        *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
+        depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
 
     // Transition the images to the correct layout (through onColorDraw).
+    vk::PackedAttachmentIndex colorAttachmentIndex(0);
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
-        colorRenderTarget->onColorDraw(contextVk, mCurrentFramebufferDesc.getLayerCount());
+        colorRenderTarget->onColorDraw(contextVk, mCurrentFramebufferDesc.getLayerCount(),
+                                       colorAttachmentIndex);
+        ++colorAttachmentIndex;
     }
 
     if (depthStencilRenderTarget)

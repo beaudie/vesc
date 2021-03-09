@@ -816,6 +816,7 @@ CommandBufferHelper::CommandBufferHelper()
       mReadOnlyDepthStencilMode(false),
       mHasShaderStorageOutput(false),
       mHasGLMemoryBarrierIssued(false),
+      mOptimizeFinalLayoutForPresent(false),
       mDepthAccess(ResourceAccess::Unused),
       mStencilAccess(ResourceAccess::Unused),
       mDepthCmdSizeInvalidated(kInfiniteCmdSize),
@@ -823,11 +824,12 @@ CommandBufferHelper::CommandBufferHelper()
       mStencilCmdSizeInvalidated(kInfiniteCmdSize),
       mStencilCmdSizeDisabled(kInfiniteCmdSize),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
-      mDepthStencilImage(nullptr),
-      mDepthStencilResolveImage(nullptr),
       mDepthStencilLevelIndex(0),
       mDepthStencilLayerIndex(0),
-      mDepthStencilLayerCount(0)
+      mDepthStencilLayerCount(0),
+      mImagesCount(kAttachmentIndexZero),
+      mColorResolveImageIndex(kAttachmentIndexInvalid),
+      mDepthStencilResolveImageIndex(kAttachmentIndexInvalid)
 {}
 
 void CommandBufferHelper::reset()
@@ -844,19 +846,22 @@ void CommandBufferHelper::reset()
         mRebindTransformFeedbackBuffers    = false;
         mHasShaderStorageOutput            = false;
         mHasGLMemoryBarrierIssued          = false;
+        mOptimizeFinalLayoutForPresent     = false;
         mDepthAccess                       = ResourceAccess::Unused;
         mStencilAccess                     = ResourceAccess::Unused;
         mDepthCmdSizeInvalidated           = kInfiniteCmdSize;
         mDepthCmdSizeDisabled              = kInfiniteCmdSize;
         mStencilCmdSizeInvalidated         = kInfiniteCmdSize;
         mStencilCmdSizeDisabled            = kInfiniteCmdSize;
+        mImagesCount                       = kAttachmentIndexZero;
+        mColorResolveImageIndex            = kAttachmentIndexInvalid;
         mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
+        mDepthStencilResolveImageIndex     = kAttachmentIndexInvalid;
         mDepthInvalidateArea               = gl::Rectangle();
         mStencilInvalidateArea             = gl::Rectangle();
         mRenderPassUsedImages.clear();
-        mDepthStencilImage        = nullptr;
-        mDepthStencilResolveImage = nullptr;
         mReadOnlyDepthStencilMode = false;
+        mImages.reset();
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
@@ -1013,6 +1018,33 @@ void CommandBufferHelper::imageWrite(ContextVk *contextVk,
     }
 }
 
+void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
+                                          ImageHelper *image,
+                                          ImageHelper *resolveImage,
+                                          PackedAttachmentIndex packedAttachmentIndex)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(!usesImageInRenderPass(*image));
+    ASSERT(!resolveImage || !usesImageInRenderPass(*resolveImage));
+    ASSERT(packedAttachmentIndex < mImagesCount);
+
+    image->retain(resourceUseList);
+    mRenderPassUsedImages.insert(image->getImageSerial().getValue());
+    ASSERT(mImages[packedAttachmentIndex] == nullptr);
+    mImages[packedAttachmentIndex] = image;
+
+    if (resolveImage)
+    {
+        resolveImage->retain(resourceUseList);
+        mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
+        // We always append the resolve attachments after the normal attachments.
+        mColorResolveImageIndex = mImagesCount;
+        ASSERT(mImages[mColorResolveImageIndex] == nullptr);
+        mImages[mColorResolveImageIndex] = resolveImage;
+        ++mImagesCount;
+    }
+}
+
 void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseList,
                                                  gl::LevelIndex level,
                                                  uint32_t layerStart,
@@ -1023,16 +1055,17 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(!usesImageInRenderPass(*image));
     ASSERT(!resolveImage || !usesImageInRenderPass(*resolveImage));
+    ASSERT(mImages[mDepthStencilAttachmentIndex] == nullptr);
 
     // Because depthStencil buffer's read/write property can change while we build renderpass, we
     // defer the image layout changes until endRenderPass time or when images going away so that we
     // only insert layout change barrier once.
     image->retain(resourceUseList);
     mRenderPassUsedImages.insert(image->getImageSerial().getValue());
-    mDepthStencilImage      = image;
-    mDepthStencilLevelIndex = level;
-    mDepthStencilLayerIndex = layerStart;
-    mDepthStencilLayerCount = layerCount;
+    mImages[mDepthStencilAttachmentIndex] = image;
+    mDepthStencilLevelIndex               = level;
+    mDepthStencilLayerIndex               = layerStart;
+    mDepthStencilLayerCount               = layerCount;
 
     if (resolveImage)
     {
@@ -1041,7 +1074,11 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
         // multisampled-render-to-texture renderbuffers.
         resolveImage->retain(resourceUseList);
         mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
-        mDepthStencilResolveImage = resolveImage;
+        // We always append the resolve attachments after the normal attachments
+        mDepthStencilResolveImageIndex = mImagesCount;
+        ASSERT(mImages[mDepthStencilResolveImageIndex] == nullptr);
+        mImages[mDepthStencilResolveImageIndex] = resolveImage;
+        ++mImagesCount;
     }
 }
 
@@ -1117,10 +1154,11 @@ bool CommandBufferHelper::onDepthStencilAccess(ResourceAccess access,
 void CommandBufferHelper::restoreDepthContent()
 {
     // Note that the image may have been deleted since the render pass has started.
-    if (mDepthStencilImage)
+    if (mDepthStencilAttachmentIndex != kAttachmentIndexInvalid)
     {
-        ASSERT(mDepthStencilImage->valid());
-        mDepthStencilImage->restoreSubresourceContent(
+        ASSERT(mImages[mDepthStencilAttachmentIndex] &&
+               mImages[mDepthStencilAttachmentIndex]->valid());
+        mImages[mDepthStencilAttachmentIndex]->restoreSubresourceContent(
             mDepthStencilLevelIndex, mDepthStencilLayerIndex, mDepthStencilLayerCount);
         mDepthInvalidateArea = gl::Rectangle();
     }
@@ -1129,10 +1167,11 @@ void CommandBufferHelper::restoreDepthContent()
 void CommandBufferHelper::restoreStencilContent()
 {
     // Note that the image may have been deleted since the render pass has started.
-    if (mDepthStencilImage)
+    if (mDepthStencilAttachmentIndex != kAttachmentIndexInvalid)
     {
-        ASSERT(mDepthStencilImage->valid());
-        mDepthStencilImage->restoreSubresourceStencilContent(
+        ASSERT(mImages[mDepthStencilAttachmentIndex] &&
+               mImages[mDepthStencilAttachmentIndex]->valid());
+        mImages[mDepthStencilAttachmentIndex]->restoreSubresourceStencilContent(
             mDepthStencilLevelIndex, mDepthStencilLayerIndex, mDepthStencilLayerCount);
         mStencilInvalidateArea = gl::Rectangle();
     }
@@ -1169,10 +1208,36 @@ void CommandBufferHelper::executeBarriers(const angle::FeaturesVk &features,
     mPipelineBarrierMask.reset();
 }
 
+void CommandBufferHelper::finalizeColorImageLayout(Context *context,
+                                                   PackedAttachmentIndex packedAttachmentIndex)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(mDepthStencilAttachmentIndex == kAttachmentIndexInvalid ||
+           packedAttachmentIndex < mDepthStencilAttachmentIndex);
+    ASSERT(packedAttachmentIndex < mImagesCount);
+    ASSERT(mImages[packedAttachmentIndex]);
+
+    // Do layout change.
+    ImageLayout imageLayout = ImageLayout::ColorAttachment;
+    if (packedAttachmentIndex != mColorResolveImageIndex)
+    {
+        mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
+    }
+
+    PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
+    ASSERT(barrierIndex != PipelineStage::InvalidEnum);
+    PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
+    if (mImages[packedAttachmentIndex]->updateLayoutAndBarrier(context, VK_IMAGE_ASPECT_COLOR_BIT,
+                                                               imageLayout, barrier))
+    {
+        mPipelineBarrierMask.set(barrierIndex);
+    }
+}
+
 void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
 {
     ASSERT(mIsRenderPassCommandBuffer);
-    ASSERT(mDepthStencilImage);
+    ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
 
     // Do depth stencil layout change.
     ImageLayout imageLayout;
@@ -1180,8 +1245,9 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
 
     if (mReadOnlyDepthStencilMode)
     {
-        imageLayout     = ImageLayout::DepthStencilReadOnly;
-        barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
+        imageLayout = ImageLayout::DepthStencilReadOnly;
+        barrierRequired =
+            mImages[mDepthStencilAttachmentIndex]->isReadBarrierNecessary(imageLayout);
     }
     else
     {
@@ -1194,7 +1260,8 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
 
     if (barrierRequired)
     {
-        const angle::Format &format = mDepthStencilImage->getFormat().actualImageFormat();
+        const angle::Format &format =
+            mImages[mDepthStencilAttachmentIndex]->getFormat().actualImageFormat();
         ASSERT(format.hasDepthOrStencilBits());
         VkImageAspectFlags aspectFlags = GetDepthStencilAspectFlags(format);
 
@@ -1202,7 +1269,8 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
         ASSERT(barrierIndex != PipelineStage::InvalidEnum);
         PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
 
-        if (mDepthStencilImage->updateLayoutAndBarrier(context, aspectFlags, imageLayout, barrier))
+        if (mImages[mDepthStencilAttachmentIndex]->updateLayoutAndBarrier(context, aspectFlags,
+                                                                          imageLayout, barrier))
         {
             mPipelineBarrierMask.set(barrierIndex);
         }
@@ -1225,8 +1293,9 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
         }
         if (definedAspects != 0)
         {
-            mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
-                                        mDepthStencilLayerCount, definedAspects);
+            mImages[mDepthStencilAttachmentIndex]->onWrite(mDepthStencilLevelIndex, 1,
+                                                           mDepthStencilLayerIndex,
+                                                           mDepthStencilLayerCount, definedAspects);
         }
     }
 }
@@ -1234,11 +1303,12 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
 void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(Context *context)
 {
     ASSERT(mIsRenderPassCommandBuffer);
-    ASSERT(mDepthStencilImage);
+    ASSERT(mDepthStencilResolveImageIndex != kAttachmentIndexInvalid);
     ASSERT(!mReadOnlyDepthStencilMode);
 
-    ImageLayout imageLayout     = ImageLayout::DepthStencilResolveAttachment;
-    const angle::Format &format = mDepthStencilResolveImage->getFormat().actualImageFormat();
+    ImageLayout imageLayout = ImageLayout::DepthStencilResolveAttachment;
+    const angle::Format &format =
+        mImages[mDepthStencilResolveImageIndex]->getFormat().actualImageFormat();
     ASSERT(format.hasDepthOrStencilBits());
     VkImageAspectFlags aspectFlags = GetDepthStencilAspectFlags(format);
 
@@ -1246,8 +1316,8 @@ void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(Context *contex
     ASSERT(barrierIndex != PipelineStage::InvalidEnum);
     PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
 
-    if (mDepthStencilResolveImage->updateLayoutAndBarrier(context, aspectFlags, imageLayout,
-                                                          barrier))
+    if (mImages[mDepthStencilResolveImageIndex]->updateLayoutAndBarrier(context, aspectFlags,
+                                                                        imageLayout, barrier))
     {
         mPipelineBarrierMask.set(barrierIndex);
     }
@@ -1269,8 +1339,9 @@ void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(Context *contex
         }
         if (definedAspects != 0)
         {
-            mDepthStencilResolveImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
-                                               mDepthStencilLayerCount, definedAspects);
+            mImages[mDepthStencilResolveImageIndex]->onWrite(
+                mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex, mDepthStencilLayerCount,
+                definedAspects);
         }
     }
 }
@@ -1279,16 +1350,30 @@ void CommandBufferHelper::onImageHelperRelease(Context *context, const ImageHelp
 {
     ASSERT(mIsRenderPassCommandBuffer);
 
-    if (mDepthStencilImage == image)
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mImagesCount; ++index)
     {
-        finalizeDepthStencilImageLayout(context);
-        mDepthStencilImage = nullptr;
-    }
+        if (mImages[index] != image)
+        {
+            continue;
+        }
+        else if (index == mDepthStencilAttachmentIndex)
+        {
+            finalizeDepthStencilImageLayout(context);
+            mImages[mDepthStencilAttachmentIndex] = nullptr;
+        }
+        else if (index == mDepthStencilResolveImageIndex)
+        {
+            finalizeDepthStencilResolveImageLayout(context);
+            mImages[mDepthStencilResolveImageIndex] = nullptr;
+        }
+        else
+        {
+            finalizeColorImageLayout(context, index);
+            mImages[index] = nullptr;
+        }
 
-    if (mDepthStencilResolveImage == image)
-    {
-        finalizeDepthStencilResolveImageLayout(context);
-        mDepthStencilResolveImage = nullptr;
+        // One image can only attached to one attachment
+        break;
     }
 }
 
@@ -1296,6 +1381,7 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const gl::Rectangle &renderArea,
                                           const RenderPassDesc &renderPassDesc,
                                           const AttachmentOpsArray &renderPassAttachmentOps,
+                                          const vk::PackedAttachmentIndex colorAttachmentCount,
                                           const PackedAttachmentIndex depthStencilAttachmentIndex,
                                           const PackedClearValuesArray &clearValues,
                                           CommandBuffer **commandBufferOut)
@@ -1306,6 +1392,11 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mRenderPassDesc              = renderPassDesc;
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
+    mImagesCount                 = colorAttachmentCount;
+    if (depthStencilAttachmentIndex != kAttachmentIndexInvalid)
+    {
+        ++mImagesCount;
+    }
     mFramebuffer.setHandle(framebuffer.getHandle());
     mRenderArea       = renderArea;
     mClearValues      = clearValues;
@@ -1317,85 +1408,116 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
 
 void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
-    if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mImagesCount; ++index)
     {
-        return;
-    }
-
-    PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
-    // Depth/Stencil buffer optimizations:
-
-    // If the attachment is invalidated, skip the store op.  If we are not loading or clearing the
-    // attachment and the attachment has not been used, auto-invalidate it.
-    const bool depthNotLoaded = dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
-                                !mRenderPassDesc.hasDepthUnresolveAttachment();
-    if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled) ||
-        (depthNotLoaded && mDepthAccess != ResourceAccess::Write))
-    {
-        dsOps.storeOp       = RenderPassStoreOp::DontCare;
-        dsOps.isInvalidated = true;
-    }
-    else if (hasWriteAfterInvalidate(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
-    {
-        // The depth attachment was invalidated, but is now valid.  Let the image know the contents
-        // are now defined so a future render pass would use loadOp=LOAD.
-        restoreDepthContent();
-    }
-    const bool stencilNotLoaded = dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
-                                  !mRenderPassDesc.hasStencilUnresolveAttachment();
-    if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled) ||
-        (stencilNotLoaded && mStencilAccess != ResourceAccess::Write))
-    {
-        dsOps.stencilStoreOp       = RenderPassStoreOp::DontCare;
-        dsOps.isStencilInvalidated = true;
-    }
-    else if (hasWriteAfterInvalidate(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled))
-    {
-        // The stencil attachment was invalidated, but is now valid.  Let the image know the
-        // contents are now defined so a future render pass would use loadOp=LOAD.
-        restoreStencilContent();
-    }
-
-    // For read only depth stencil, we can use StoreOpNone if available. DONT_CARE is still
-    // preferred, so do this after finish the DONT_CARE handling.
-    if (mReadOnlyDepthStencilMode &&
-        contextVk->getFeatures().supportsRenderPassStoreOpNoneQCOM.enabled)
-    {
-        if (dsOps.storeOp == RenderPassStoreOp::Store)
+        if (!mImages[index])
         {
-            dsOps.storeOp = RenderPassStoreOp::NoneQCOM;
+            continue;
         }
-        if (dsOps.stencilStoreOp == RenderPassStoreOp::Store)
+        else if (index == mDepthStencilAttachmentIndex)
         {
-            dsOps.stencilStoreOp = RenderPassStoreOp::NoneQCOM;
+            PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
+            // Depth/Stencil buffer optimizations:
+
+            // If the attachment is invalidated, skip the store op.  If we are not loading or
+            // clearing the attachment and the attachment has not been used, auto-invalidate it.
+            const bool depthNotLoaded = dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
+                                        !mRenderPassDesc.hasDepthUnresolveAttachment();
+            if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled) ||
+                (depthNotLoaded && mDepthAccess != ResourceAccess::Write))
+            {
+                dsOps.storeOp       = RenderPassStoreOp::DontCare;
+                dsOps.isInvalidated = true;
+            }
+            else if (hasWriteAfterInvalidate(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
+            {
+                // The depth attachment was invalidated, but is now valid.  Let the image know the
+                // contents are now defined so a future render pass would use loadOp=LOAD.
+                restoreDepthContent();
+            }
+            const bool stencilNotLoaded = dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
+                                          !mRenderPassDesc.hasStencilUnresolveAttachment();
+            if (isInvalidated(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled) ||
+                (stencilNotLoaded && mStencilAccess != ResourceAccess::Write))
+            {
+                dsOps.stencilStoreOp       = RenderPassStoreOp::DontCare;
+                dsOps.isStencilInvalidated = true;
+            }
+            else if (hasWriteAfterInvalidate(mStencilCmdSizeInvalidated, mStencilCmdSizeDisabled))
+            {
+                // The stencil attachment was invalidated, but is now valid.  Let the image know the
+                // contents are now defined so a future render pass would use loadOp=LOAD.
+                restoreStencilContent();
+            }
+
+            // For read only depth stencil, we can use StoreOpNone if available. DONT_CARE is still
+            // preferred, so do this after finish the DONT_CARE handling.
+            if (mReadOnlyDepthStencilMode &&
+                contextVk->getFeatures().supportsRenderPassStoreOpNoneQCOM.enabled)
+            {
+                if (dsOps.storeOp == RenderPassStoreOp::Store)
+                {
+                    dsOps.storeOp = RenderPassStoreOp::NoneQCOM;
+                }
+                if (dsOps.stencilStoreOp == RenderPassStoreOp::Store)
+                {
+                    dsOps.stencilStoreOp = RenderPassStoreOp::NoneQCOM;
+                }
+            }
+
+            // If we are loading or clearing the attachment, but the attachment has not been used,
+            // and the data has also not been stored back into attachment, then just skip the
+            // load/clear op.
+            if (mDepthAccess == ResourceAccess::Unused &&
+                dsOps.storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
+            {
+                dsOps.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            }
+
+            if (mStencilAccess == ResourceAccess::Unused &&
+                dsOps.stencilStoreOp == RenderPassStoreOp::DontCare)
+            {
+                dsOps.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            }
+
+            // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
+            ASSERT(!mReadOnlyDepthStencilMode || (mDepthAccess != ResourceAccess::Write &&
+                                                  mStencilAccess != ResourceAccess::Write));
+
+            // Do depth stencil layout change.
+            if (mImages[mDepthStencilAttachmentIndex])
+            {
+                finalizeDepthStencilImageLayout(contextVk);
+            }
+        }
+        else if (index == mDepthStencilResolveImageIndex)
+        {
+            finalizeDepthStencilResolveImageLayout(contextVk);
+        }
+        else
+        {
+            finalizeColorImageLayout(contextVk, index);
         }
     }
 
-    // If we are loading or clearing the attachment, but the attachment has not been used, and the
-    // data has also not been stored back into attachment, then just skip the load/clear op.
-    if (mDepthAccess == ResourceAccess::Unused && dsOps.storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
+    if (mOptimizeFinalLayoutForPresent)
     {
-        dsOps.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    }
-
-    if (mStencilAccess == ResourceAccess::Unused &&
-        dsOps.stencilStoreOp == RenderPassStoreOp::DontCare)
-    {
-        dsOps.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    }
-
-    // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
-    ASSERT(!mReadOnlyDepthStencilMode ||
-           (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
-
-    // Do depth stencil layout change.
-    if (mDepthStencilImage)
-    {
-        finalizeDepthStencilImageLayout(contextVk);
-    }
-    if (mDepthStencilResolveImage)
-    {
-        finalizeDepthStencilResolveImageLayout(contextVk);
+        // Use finalLayout instead of extra barrier for layout change to present
+        vk::ImageHelper *imageToPresent;
+        if (mColorResolveImageIndex != kAttachmentIndexInvalid)
+        {
+            imageToPresent = mImages[mColorResolveImageIndex];
+        }
+        else
+        {
+            imageToPresent = mImages[kAttachmentIndexZero];
+        }
+        imageToPresent->setCurrentImageLayout(vk::ImageLayout::Present);
+        // TODO(syoussefi):  We currently don't store the layout of the resolve attachments, so once
+        // multisampled backbuffers are optimized to use resolve attachments, this information needs
+        // to be stored somewhere.  http://anglebug.com/4836
+        SetBitField(mAttachmentOps[kAttachmentIndexZero].finalLayout,
+                    imageToPresent->getCurrentImageLayout());
     }
 }
 
