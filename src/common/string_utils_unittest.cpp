@@ -9,6 +9,7 @@
 
 #include "string_utils.h"
 
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace angle;
@@ -90,6 +91,44 @@ TEST(StringUtilsTest, SplitString_WhitespaceAndResultType)
     EXPECT_EQ("", r[2]);
     r = SplitString(", ,", ",", TRIM_WHITESPACE, SPLIT_WANT_NONEMPTY);
     ASSERT_TRUE(r.empty());
+}
+
+TEST(StringUtilsTest, SplitStringAlongWhitespaceSkipQuotes)
+{
+    {
+        // No quotes or spaces.
+        std::vector<std::string> r;
+        SplitStringAlongWhitespaceSkipQuotes("abcd", '\'', &r);
+        ASSERT_THAT(r, testing::ElementsAre("abcd"));
+    }
+
+    {
+        // Quotes at the beginning and end of input.
+        std::vector<std::string> r;
+        SplitStringAlongWhitespaceSkipQuotes("''", '\'', &r);
+        ASSERT_THAT(r, testing::ElementsAre("''"));
+    }
+
+    {
+        // Multiple spaces within quoted text.
+        std::vector<std::string> r;
+        SplitStringAlongWhitespaceSkipQuotes("a'b  c'd", '\'', &r);
+        ASSERT_THAT(r, testing::ElementsAre("a'b  c'd"));
+    }
+
+    {
+        // Multiple spaces outside quoted text.
+        std::vector<std::string> r;
+        SplitStringAlongWhitespaceSkipQuotes("a'b'  de", '\'', &r);
+        ASSERT_THAT(r, testing::ElementsAre("a'b'", "de"));
+    }
+
+    {
+        // Unbalanced quotes.
+        std::vector<std::string> r;
+        SplitStringAlongWhitespaceSkipQuotes("a'bc'd e'fg h", '\'', &r);
+        ASSERT_THAT(r, testing::ElementsAre("a'bc'd", "e'fg h"));
+    }
 }
 
 // Tests for TrimString
