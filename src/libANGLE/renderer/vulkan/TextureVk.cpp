@@ -2371,6 +2371,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
     if (isGenerateMipmap)
     {
+        ANGLE_TRY(contextVk->onPrepareForGenerateMipmap(mImage));
         prepareForGenerateMipmap(contextVk);
     }
 
