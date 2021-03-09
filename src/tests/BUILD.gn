@@ -16,6 +16,39 @@ declare_args() {
       is_win || is_linux || is_chromeos || is_android || is_apple || is_fuchsia
 }
 
+if (is_android && build_with_chromium) {
+  android_library("native_test_java") {
+    testonly = true
+    sources = [
+      "test_utils/runner/android/java/src/com/android/angle/test/AngleNativeTestDelegate.java",
+      "test_utils/runner/android/java/src/com/android/angle/test/AngleUnitTestActivity.java",
+    ]
+
+    deps = [
+      "//base:base_java",
+      "//build/android/testing/native_test:native_test_java",
+    ]
+  }
+
+  generate_jni("native_test_jni_headers") {
+    testonly = true
+    sources = [ "test_utils/runner/android/java/src/com/android/angle/test/AngleNativeTestDelegate.java" ]
+  }
+
+  source_set("native_test_support_android") {
+    testonly = true
+    sources = [
+      "test_utils/runner/android/angle_native_test_delegate.cc",
+      "test_utils/runner/android/native_test_util.cc",
+      "test_utils/runner/android/native_test_util.h",
+    ]
+    deps = [
+      ":native_test_jni_headers",
+      "//base",
+    ]
+  }
+}
+
 angle_test("test_utils_unittest_helper") {
   sources = [
     "../../util/test_utils_unittest_helper.cpp",
