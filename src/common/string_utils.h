@@ -39,6 +39,16 @@ std::vector<std::string> SplitString(const std::string &input,
 
 void SplitStringAlongWhitespace(const std::string &input, std::vector<std::string> *tokensOut);
 
+// Splits 'input' along whitespace, with the exception of whitespace inside quoted text. The
+// special quoted-text-behavior only applies for the passed-in 'quoteChar'.
+// Example:
+//   'input': 'a b "c d"'
+//   'quoteChar': '"'
+//   'tokensOut': ['a', 'b', '"c d"']
+void SplitStringAlongWhitespaceSkipQuotes(const std::string &input,
+                                          char quoteChar,
+                                          std::vector<std::string> *tokensOut);
+
 std::string TrimString(const std::string &input, const std::string &trimChars);
 
 // Return the substring starting at offset and up to the first occurance of the |delimeter|.
@@ -92,6 +102,9 @@ void ToUpper(std::string *str);
 bool ReplaceSubstring(std::string *str,
                       const std::string &substring,
                       const std::string &replacement);
+
+// Removes all occurences of 'c' in 'str'.
+void RemoveChars(std::string *str, char c);
 
 // Split up a string parsed from an environment variable.
 std::vector<std::string> GetStringsFromEnvironmentVarOrAndroidProperty(const char *varName,
