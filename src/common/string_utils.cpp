@@ -98,6 +98,39 @@ void SplitStringAlongWhitespace(const std::string &input, std::vector<std::strin
     }
 }
 
+void SplitStringAlongWhitespaceSkipQuotes(const std::string &input,
+                                          char quoteChar,
+                                          std::vector<std::string> *tokensOut)
+{
+    std::istringstream stream(input);
+    std::string line;
+
+    std::string delimiters(kWhitespaceASCII);
+    delimiters.append(1, quoteChar);
+
+    while (std::getline(stream, line))
+    {
+        size_t prev = 0, tokenStart = 0, pos;
+        bool inQuote = false;
+        while ((pos = line.find_first_of(delimiters, prev)) != std::string::npos)
+        {
+            if (line[pos] == quoteChar)
+            {
+                inQuote = !inQuote;
+            }
+            else if (!inQuote)
+            {
+                if (pos > tokenStart)
+                    tokensOut->push_back(line.substr(tokenStart, pos - tokenStart));
+                tokenStart = pos + 1;
+            }
+            prev = pos + 1;
+        }
+        if (tokenStart < line.length())
+            tokensOut->push_back(line.substr(tokenStart, std::string::npos));
+    }
+}
+
 std::string TrimString(const std::string &input, const std::string &trimChars)
 {
     auto begin = input.find_first_not_of(trimChars);
@@ -233,6 +266,15 @@ bool ReplaceSubstring(std::string *str,
     }
     str->replace(replacePos, substring.size(), replacement);
     return true;
+}
+
+void RemoveChars(std::string *str, char c)
+{
+    size_t pos = 0;
+    while ((pos = str->find(c, pos)) != std::string::npos)
+    {
+        str->erase(pos, 1);
+    }
 }
 
 std::vector<std::string> GetStringsFromEnvironmentVarOrAndroidProperty(const char *varName,
