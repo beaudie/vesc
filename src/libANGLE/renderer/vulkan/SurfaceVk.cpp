@@ -1414,11 +1414,13 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
             rect.extent.width  = gl::clamp(*eglRects++, 0, width - rect.offset.x);
             rect.extent.height = gl::clamp(*eglRects++, 0, height - rect.offset.y);
             rect.layer         = 0;
+#ifdef WORK_AROUND_DAMAGE_RECT_BUG
             if (Is90DegreeRotation(getPreTransform()))
             {
                 std::swap(rect.offset.x, rect.offset.y);
                 std::swap(rect.extent.width, rect.extent.height);
             }
+#endif  // WORK_AROUND_DAMAGE_RECT_BUG
         }
         presentRegion.pRectangles = vkRects.data();
 
