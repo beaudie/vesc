@@ -661,4 +661,18 @@ Shader *ProgramPipeline::getAttachedShader(ShaderType shaderType) const
     const Program *program = mState.mPrograms[shaderType];
     return program ? program->getAttachedShader(shaderType) : nullptr;
 }
+
+GLsizei ProgramPipeline::getTransformFeedbackVaryingCount() const
+{
+    GLsizei totalVarying = 0;
+    for (const ShaderType shaderType : gl::AllShaderTypes())
+    {
+        Program *shaderProgram = getShaderProgram(shaderType);
+        if (shaderProgram)
+        {
+            totalVarying += shaderProgram->getTransformFeedbackVaryingCount();
+        }
+    }
+    return totalVarying;
+}
 }  // namespace gl
