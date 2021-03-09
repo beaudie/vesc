@@ -666,14 +666,14 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
 
 angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
                                          const uint8_t *data,
-                                         size_t size,
+                                         size_t updateSize,
                                          size_t offset)
 {
     // Here we acquire a new BufferHelper and directUpdate() the new buffer.
     // If the subData size was less than the buffer's size we additionally enqueue
     // a GPU copy of the remaining regions from the old mBuffer to the new one.
     vk::BufferHelper *src          = mBuffer;
-    size_t offsetAfterSubdata      = (offset + size);
+    size_t offsetAfterSubdata      = (offset + updateSize);
     bool updateRegionBeforeSubData = (offset > 0);
     bool updateRegionAfterSubData  = (offsetAfterSubdata < static_cast<size_t>(mState.getSize()));
 
@@ -682,7 +682,7 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
         src->retain(&contextVk->getResourceUseList());
     }
 
-    ANGLE_TRY(acquireBufferHelper(contextVk, size, &mBuffer));
+    ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()), &mBuffer));
     ANGLE_TRY(directUpdate(contextVk, data, size, offset));
 
     constexpr int kMaxCopyRegions = 2;
