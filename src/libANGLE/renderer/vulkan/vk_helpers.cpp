@@ -816,6 +816,7 @@ CommandBufferHelper::CommandBufferHelper()
       mReadOnlyDepthStencilMode(false),
       mHasShaderStorageOutput(false),
       mHasGLMemoryBarrierIssued(false),
+      mOptimizeFinalLayoutForPresent(false),
       mDepthAccess(ResourceAccess::Unused),
       mStencilAccess(ResourceAccess::Unused),
       mDepthCmdSizeInvalidated(kInfiniteCmdSize),
@@ -827,7 +828,8 @@ CommandBufferHelper::CommandBufferHelper()
       mDepthStencilResolveImage(nullptr),
       mDepthStencilLevelIndex(0),
       mDepthStencilLayerIndex(0),
-      mDepthStencilLayerCount(0)
+      mDepthStencilLayerCount(0),
+      mColorImagesCount(0)
 {}
 
 CommandBufferHelper::~CommandBufferHelper()
@@ -862,12 +864,14 @@ void CommandBufferHelper::reset()
         mRebindTransformFeedbackBuffers    = false;
         mHasShaderStorageOutput            = false;
         mHasGLMemoryBarrierIssued          = false;
+        mOptimizeFinalLayoutForPresent     = false;
         mDepthAccess                       = ResourceAccess::Unused;
         mStencilAccess                     = ResourceAccess::Unused;
         mDepthCmdSizeInvalidated           = kInfiniteCmdSize;
         mDepthCmdSizeDisabled              = kInfiniteCmdSize;
         mStencilCmdSizeInvalidated         = kInfiniteCmdSize;
         mStencilCmdSizeDisabled            = kInfiniteCmdSize;
+        mColorImagesCount                  = PackedAttachmentCount(0);
         mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
         mDepthInvalidateArea               = gl::Rectangle();
         mStencilInvalidateArea             = gl::Rectangle();
@@ -875,6 +879,8 @@ void CommandBufferHelper::reset()
         mDepthStencilImage        = nullptr;
         mDepthStencilResolveImage = nullptr;
         mReadOnlyDepthStencilMode = false;
+        mColorImages.reset();
+        mColorResolveImages.reset();
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
@@ -1011,6 +1017,49 @@ void CommandBufferHelper::imageWrite(ContextVk *contextVk,
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         }
     }
+}
+
+void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
+                                          ImageHelper *image,
+                                          ImageHelper *resolveImage,
+                                          PackedAttachmentIndex packedAttachmentIndex)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(packedAttachmentIndex < mColorImagesCount);
+
+    image->retain(resourceUseList);
+    if (!usesImageInRenderPass(*image))
+    {
+        // This is possible due to different layers of the same texture being attached to different
+        // attachments
+        mRenderPassUsedImages.insert(image->getImageSerial().getValue());
+    }
+    ASSERT(mColorImages[packedAttachmentIndex] == nullptr);
+    mColorImages[packedAttachmentIndex] = image;
+
+    if (resolveImage)
+    {
+        resolveImage->retain(resourceUseList);
+        if (!usesImageInRenderPass(*resolveImage))
+        {
+            mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
+        }
+        ASSERT(mColorResolveImages[packedAttachmentIndex] == nullptr);
+        mColorResolveImages[packedAttachmentIndex] = resolveImage;
+    }
+}
+
+bool CommandBufferHelper::usesImageInAttachments(const ImageHelper &image)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    {
+        if (mColorImages[index] == &image || mColorResolveImages[index] == &image)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseList,
@@ -1169,6 +1218,46 @@ void CommandBufferHelper::executeBarriers(const angle::FeaturesVk &features,
     mPipelineBarrierMask.reset();
 }
 
+void CommandBufferHelper::finalizeColorImageLayout(Context *context,
+                                                   PackedAttachmentIndex packedAttachmentIndex)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(packedAttachmentIndex < mColorImagesCount);
+    ASSERT(mColorImages[packedAttachmentIndex]);
+
+    // Do layout change.
+    ImageLayout imageLayout = ImageLayout::ColorAttachment;
+    mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
+    PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
+    ASSERT(barrierIndex != PipelineStage::InvalidEnum);
+    PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
+    if (mColorImages[packedAttachmentIndex]->updateLayoutAndBarrier(
+            context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+    {
+        mPipelineBarrierMask.set(barrierIndex);
+    }
+}
+
+void CommandBufferHelper::finalizeColorResolveImageLayout(
+    Context *context,
+    PackedAttachmentIndex packedAttachmentIndex)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(packedAttachmentIndex < mColorImagesCount);
+    ASSERT(mColorResolveImages[packedAttachmentIndex]);
+
+    // Do layout change.
+    ImageLayout imageLayout    = ImageLayout::ColorAttachment;
+    PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
+    ASSERT(barrierIndex != PipelineStage::InvalidEnum);
+    PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
+    if (mColorResolveImages[packedAttachmentIndex]->updateLayoutAndBarrier(
+            context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+    {
+        mPipelineBarrierMask.set(barrierIndex);
+    }
+}
+
 void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
 {
     ASSERT(mIsRenderPassCommandBuffer);
@@ -1279,6 +1368,20 @@ void CommandBufferHelper::onImageHelperRelease(Context *context, const ImageHelp
 {
     ASSERT(mIsRenderPassCommandBuffer);
 
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    {
+        if (mColorImages[index] == image)
+        {
+            finalizeColorImageLayout(context, index);
+            mColorImages[index] = nullptr;
+        }
+        if (mColorResolveImages[index] == image)
+        {
+            finalizeColorResolveImageLayout(context, index);
+            mColorResolveImages[index] = nullptr;
+        }
+    }
+
     if (mDepthStencilImage == image)
     {
         finalizeDepthStencilImageLayout(context);
@@ -1296,6 +1399,7 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
                                           const gl::Rectangle &renderArea,
                                           const RenderPassDesc &renderPassDesc,
                                           const AttachmentOpsArray &renderPassAttachmentOps,
+                                          const vk::PackedAttachmentCount colorAttachmentCount,
                                           const PackedAttachmentIndex depthStencilAttachmentIndex,
                                           const PackedClearValuesArray &clearValues,
                                           CommandBuffer **commandBufferOut)
@@ -1306,6 +1410,7 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
     mRenderPassDesc              = renderPassDesc;
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
+    mColorImagesCount            = colorAttachmentCount;
     mFramebuffer.setHandle(framebuffer.getHandle());
     mRenderArea       = renderArea;
     mClearValues      = clearValues;
@@ -1317,6 +1422,32 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
 
 void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    {
+        if (mColorImages[index])
+        {
+            finalizeColorImageLayout(contextVk, index);
+        }
+        if (mColorResolveImages[index])
+        {
+            finalizeColorResolveImageLayout(contextVk, index);
+        }
+    }
+
+    if (mOptimizeFinalLayoutForPresent)
+    {
+        // Use finalLayout instead of extra barrier for layout change to present
+        vk::ImageHelper *imageToPresent = mColorResolveImages[kAttachmentIndexZero]
+                                              ? mColorResolveImages[kAttachmentIndexZero]
+                                              : mColorImages[kAttachmentIndexZero];
+        imageToPresent->setCurrentImageLayout(vk::ImageLayout::Present);
+        // TODO(syoussefi):  We currently don't store the layout of the resolve attachments, so once
+        // multisampled backbuffers are optimized to use resolve attachments, this information needs
+        // to be stored somewhere.  http://anglebug.com/4836
+        SetBitField(mAttachmentOps[kAttachmentIndexZero].finalLayout,
+                    imageToPresent->getCurrentImageLayout());
+    }
+
     if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
     {
         return;
@@ -1325,8 +1456,8 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
     // Depth/Stencil buffer optimizations:
 
-    // If the attachment is invalidated, skip the store op.  If we are not loading or clearing the
-    // attachment and the attachment has not been used, auto-invalidate it.
+    // If the attachment is invalidated, skip the store op.  If we are not loading or
+    // clearing the attachment and the attachment has not been used, auto-invalidate it.
     const bool depthNotLoaded = dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
                                 !mRenderPassDesc.hasDepthUnresolveAttachment();
     if (isInvalidated(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled) ||
@@ -1337,8 +1468,8 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     }
     else if (hasWriteAfterInvalidate(mDepthCmdSizeInvalidated, mDepthCmdSizeDisabled))
     {
-        // The depth attachment was invalidated, but is now valid.  Let the image know the contents
-        // are now defined so a future render pass would use loadOp=LOAD.
+        // The depth attachment was invalidated, but is now valid.  Let the image know the
+        // contents are now defined so a future render pass would use loadOp=LOAD.
         restoreDepthContent();
     }
     const bool stencilNotLoaded = dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
@@ -1371,8 +1502,9 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
         }
     }
 
-    // If we are loading or clearing the attachment, but the attachment has not been used, and the
-    // data has also not been stored back into attachment, then just skip the load/clear op.
+    // If we are loading or clearing the attachment, but the attachment has not been used,
+    // and the data has also not been stored back into attachment, then just skip the
+    // load/clear op.
     if (mDepthAccess == ResourceAccess::Unused && dsOps.storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
     {
         dsOps.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -1502,12 +1634,19 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
     return angle::Result::Continue;
 }
 
-void CommandBufferHelper::updateRenderPassForResolve(Framebuffer *newFramebuffer,
-                                                     const RenderPassDesc &renderPassDesc)
+void CommandBufferHelper::updateRenderPassForResolve(ContextVk *contextVk,
+                                                     Framebuffer *newFramebuffer,
+                                                     const RenderPassDesc &renderPassDesc,
+                                                     const PackedAttachmentIndex index)
 {
     ASSERT(newFramebuffer);
     mFramebuffer.setHandle(newFramebuffer->getHandle());
     mRenderPassDesc = renderPassDesc;
+    // Because we are reusing the existing renderpass for MSAA resolve and replacing the color
+    // attachment with resolve target, we need to finish the layout change for previous attachment
+    // before new color targets put in place.
+    finalizeColorImageLayout(contextVk, index);
+    mColorImages[index] = nullptr;
 }
 
 // Helper functions used below
@@ -5594,10 +5733,14 @@ void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled)
     }
 }
 
-void ImageHelper::stageSelfForBaseLevel()
+angle::Result ImageHelper::stageSelfForBaseLevel(ContextVk *contextVk)
 {
-    std::unique_ptr<ImageHelper> prevImage = std::make_unique<ImageHelper>();
+    // Because we are cloning this object to another object, we must endRenderPass if it is being
+    // used by current renderpass as attachment. Otherwise we are copying the incorrect layout since
+    // it is determined at endRenderPass time.
+    ANGLE_TRY(contextVk->onImageStageSelfForBaseLevel(this));
 
+    std::unique_ptr<ImageHelper> prevImage = std::make_unique<ImageHelper>();
     // Move the necessary information for staged update to work, and keep the rest as part of this
     // object.
 
@@ -5630,6 +5773,7 @@ void ImageHelper::stageSelfForBaseLevel()
         gl::ImageIndex::Make2DArrayRange(mBaseLevel.get(), 0, mLayerCount);
     stageSubresourceUpdateFromImage(prevImage.release(), baseLevelIndex, gl::kOffsetZero,
                                     getLevelExtents(LevelIndex(0)), mImageType);
+    return angle::Result::Continue;
 }
 
 angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contextVk,

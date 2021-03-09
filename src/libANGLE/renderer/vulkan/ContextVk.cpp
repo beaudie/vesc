@@ -2671,14 +2671,7 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
         depthStencilRenderTarget->invalidateEntireStencilContent(this);
     }
 
-    // Use finalLayout instead of extra barrier for layout change to present
-    vk::ImageHelper &image = color0RenderTarget->getImageForWrite();
-    image.setCurrentImageLayout(vk::ImageLayout::Present);
-    // TODO(syoussefi):  We currently don't store the layout of the resolve attachments, so once
-    // multisampled backbuffers are optimized to use resolve attachments, this information needs to
-    // be stored somewhere.  http://anglebug.com/4836
-    mRenderPassCommands->updateRenderPassAttachmentFinalLayout(vk::kAttachmentIndexZero,
-                                                               image.getCurrentImageLayout());
+    mRenderPassCommands->optimizeFinalLayoutForPresent();
 }
 
 gl::GraphicsResetStatus ContextVk::getResetStatus()
@@ -5024,11 +5017,21 @@ angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::onImageStageSelfForBaseLevel(vk::ImageHelper *image)
+{
+    if (mRenderPassCommands->started() && mRenderPassCommands->usesImageInAttachments(*image))
+    {
+        return flushCommandsAndEndRenderPass();
+    }
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::beginNewRenderPass(
     const vk::Framebuffer &framebuffer,
     const gl::Rectangle &renderArea,
     const vk::RenderPassDesc &renderPassDesc,
     const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const vk::PackedAttachmentCount colorAttachmentCount,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
     const vk::PackedClearValuesArray &clearValues,
     vk::CommandBuffer **commandBufferOut)
@@ -5036,9 +5039,9 @@ angle::Result ContextVk::beginNewRenderPass(
     // Next end any currently outstanding renderPass
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
-    mRenderPassCommands->beginRenderPass(framebuffer, renderArea, renderPassDesc,
-                                         renderPassAttachmentOps, depthStencilAttachmentIndex,
-                                         clearValues, commandBufferOut);
+    mRenderPassCommands->beginRenderPass(
+        framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps, colorAttachmentCount,
+        depthStencilAttachmentIndex, clearValues, commandBufferOut);
     mPerfCounters.renderPasses++;
 
     return angle::Result::Continue;
