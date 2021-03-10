@@ -1488,6 +1488,11 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             // using specialized barriers without breaking the RenderPass.
             textureLayout = vk::ImageLayout::DepthStencilReadOnly;
         }
+        else if (mRenderPassCommands->started() &&
+                 mRenderPassCommands->usesImageInAttachments(image))
+        {
+            textureLayout = vk::ImageLayout::ColorAttachmentAndFragmentShaderRead;
+        }
         else
         {
             gl::ShaderBitSet remainingShaderBits =

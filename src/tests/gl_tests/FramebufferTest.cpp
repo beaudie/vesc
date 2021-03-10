@@ -2477,7 +2477,7 @@ void main()
 TEST_P(FramebufferTest_ES3, SampleFromAttachedTextureWithDifferentLOD)
 {
     // TODO: https://issuetracker.google.com/175584609
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsWindows());
+    // ANGLE_SKIP_TEST_IF(IsVulkan() || IsWindows());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;
