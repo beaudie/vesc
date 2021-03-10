@@ -145,6 +145,8 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
 
     Shader *getAttachedShader(ShaderType shaderType) const override;
 
+    GLsizei getTransformFeedbackVaryingCount() const;
+
   private:
     void updateLinkedShaderStages();
     void updateExecutableAttributes();
