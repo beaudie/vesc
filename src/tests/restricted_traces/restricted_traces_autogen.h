@@ -76,6 +76,7 @@ enum class RestrictedTraceID
     fate_grand_order,
     fifa_mobile,
     free_fire,
+    genshin_impact,
     google_maps,
     happy_color,
     hay_day,
