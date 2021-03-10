@@ -35,13 +35,18 @@ angle_shared_library("OpenCL") {
     "LIBCL_IMPLEMENTATION",
   ]
   sources = [
+    "cl_loader.h",
+    "cl_loader_autogen.cpp",
     "entry_points_cl_autogen.cpp",
     "entry_points_cl_autogen.h",
     "entry_points_cl_utils.h",
+    "libOpenCL_autogen.cpp",
   ]
   deps = [ ":cl_includes" ]
 }
 
 group("angle_cl") {
-  data_deps = [ ":OpenCL" ]
+  if (is_linux) {
+    data_deps = [ ":OpenCL" ]
+  }
 }
