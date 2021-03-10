@@ -1,6 +1,6 @@
 {
   "src/tests/restricted_traces/.gitignore":
-    "b8258f89dc44e6ec67eda213285595f7",
+    "74d13a618bd376ac1413de2eeea05205",
   "src/tests/restricted_traces/aliexpress.tar.gz.sha1":
     "12f48ff0c4ca7980ea879c81b0c9518b",
   "src/tests/restricted_traces/among_us.tar.gz.sha1":
@@ -47,6 +47,8 @@
     "a4e7aba54fb48524bb4f3022623bc7cd",
   "src/tests/restricted_traces/gen_restricted_traces.py":
     "7df2fbfb890d54ea9932b443439ae97e",
+  "src/tests/restricted_traces/genshin_impact.tar.gz.sha1":
+    "7afaf526b92aa87e9ae6ae91739fa269",
   "src/tests/restricted_traces/google_maps.tar.gz.sha1":
     "5d7001969619570e80e5a39b1ab8b0c4",
   "src/tests/restricted_traces/happy_color.tar.gz.sha1":
@@ -90,13 +92,13 @@
   "src/tests/restricted_traces/real_gangster_crime.tar.gz.sha1":
     "c85be329035a760edad673eb2ca7c3f1",
   "src/tests/restricted_traces/restricted_traces.json":
-    "89efa0342ac35c3c9e9e24638ea9c28f",
+    "345b6d1d87d4eea98bb66329c2782683",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "ea1ca2bdf1eb3e381e965562fe6903fe",
+    "91c1cc8aa3c6fe07b0313a97b6b7c683",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "e73d4a44957e38f49dc217f2ad9de9a3",
+    "67b5ced2ea8ba185ad3801c847e1012c",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
-    "22e3ffdc20fa3cb5728b24db7935fa3b",
+    "e35a5d525ce32dc6dfb22e0c75a28fe3",
   "src/tests/restricted_traces/rise_of_kingdoms.tar.gz.sha1":
     "d4618f857c44f0dfa642ae3af8f161d9",
   "src/tests/restricted_traces/romancing_saga.tar.gz.sha1":

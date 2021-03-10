@@ -33,6 +33,7 @@
 #include "fate_grand_order/fate_grand_order_capture_context1.h"
 #include "fifa_mobile/fifa_mobile_capture_context2.h"
 #include "free_fire/free_fire_capture_context1.h"
+#include "genshin_impact/genshin_impact_capture_context3.h"
 #include "google_maps/google_maps_capture_context3.h"
 #include "happy_color/happy_color_capture_context2.h"
 #include "hay_day/hay_day_capture_context2.h"
@@ -182,6 +183,11 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {kDefaultReplayContextClientMajorVersion, kDefaultReplayContextClientMinorVersion,
       free_fire::kReplayFrameStart, free_fire::kReplayFrameEnd, free_fire::kReplayDrawSurfaceWidth,
       free_fire::kReplayDrawSurfaceHeight, "free_fire"}},
+    {RestrictedTraceID::genshin_impact,
+     {genshin_impact::kReplayContextClientMajorVersion,
+      genshin_impact::kReplayContextClientMinorVersion, genshin_impact::kReplayFrameStart,
+      genshin_impact::kReplayFrameEnd, genshin_impact::kReplayDrawSurfaceWidth,
+      genshin_impact::kReplayDrawSurfaceHeight, "genshin_impact"}},
     {RestrictedTraceID::google_maps,
      {kDefaultReplayContextClientMajorVersion, kDefaultReplayContextClientMinorVersion,
       google_maps::kReplayFrameStart, google_maps::kReplayFrameEnd,
@@ -435,6 +441,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::free_fire:
             free_fire::ReplayContext1Frame(frameIndex);
             break;
+        case RestrictedTraceID::genshin_impact:
+            genshin_impact::ReplayContext3Frame(frameIndex);
+            break;
         case RestrictedTraceID::google_maps:
             google_maps::ReplayContext3Frame(frameIndex);
             break;
@@ -622,6 +631,9 @@ void ResetReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::free_fire:
             free_fire::ResetContext1Replay();
+            break;
+        case RestrictedTraceID::genshin_impact:
+            genshin_impact::ResetContext3Replay();
             break;
         case RestrictedTraceID::google_maps:
             google_maps::ResetContext3Replay();
@@ -811,6 +823,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::free_fire:
             free_fire::SetupContext1Replay();
             break;
+        case RestrictedTraceID::genshin_impact:
+            genshin_impact::SetupContext3Replay();
+            break;
         case RestrictedTraceID::google_maps:
             google_maps::SetupContext3Replay();
             break;
@@ -999,6 +1014,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::free_fire:
             free_fire::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::genshin_impact:
+            genshin_impact::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::google_maps:
             google_maps::SetBinaryDataDir(dataDir);
             break;
@@ -1186,6 +1204,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::free_fire:
             free_fire::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::genshin_impact:
+            genshin_impact::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::google_maps:
             google_maps::SetBinaryDataDecompressCallback(callback);
