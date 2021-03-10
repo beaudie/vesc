@@ -168,6 +168,13 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdBindDescriptorSets-pDescriptorSets-01979",
 };
 
+// Array of Validation error/warning messages that will be ignored but still produce a warning
+// message, should include bugID
+constexpr const char *kWarnButSkippedMessages[] = {
+    // https://issuetracker.google.com/175584609
+    "VUID-vkCmdDraw-None-04584",
+};
+
 // Suppress validation errors that are known
 //  return "true" if given code/prefix/message is known, else return "false"
 bool IsIgnoredDebugMessage(const char *message)
@@ -177,6 +184,24 @@ bool IsIgnoredDebugMessage(const char *message)
         return false;
     }
     for (const char *msg : kSkippedMessages)
+    {
+        if (strstr(message, msg) != nullptr)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Suppress validation errors that are known.
+//  return "true" if given code/prefix/message is known, else return "false"
+bool IsWarnButIgnoredDebugMessage(const char *message)
+{
+    if (!message)
+    {
+        return false;
+    }
+    for (const char *msg : kWarnButSkippedMessages)
     {
         if (strstr(message, msg) != nullptr)
         {
@@ -275,10 +300,16 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                     const VkDebugUtilsMessengerCallbackDataEXT *callbackData,
                     void *userData)
 {
+    bool isError = (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) != 0;
     // See if it's an issue we are aware of and don't want to be spammed about.
     if (IsIgnoredDebugMessage(callbackData->pMessageIdName))
     {
         return VK_FALSE;
+    }
+
+    if (IsWarnButIgnoredDebugMessage(callbackData->pMessageIdName))
+    {
+        isError = false;
     }
 
     std::ostringstream log;
@@ -337,7 +368,6 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         }
     }
 
-    bool isError    = (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) != 0;
     std::string msg = log.str();
 
     RendererVk *rendererVk = static_cast<RendererVk *>(userData);
