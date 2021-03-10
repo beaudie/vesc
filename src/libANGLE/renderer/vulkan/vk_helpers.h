@@ -1342,6 +1342,7 @@ enum class ImageLayout
     // Framebuffer attachment layouts are placed first, so they can fit in fewer bits in
     // PackedAttachmentOpsDesc.
     ColorAttachment,
+    ColorAttachmentAndShaderRead,
     DepthStencilReadOnly,
     DepthStencilAttachment,
     DepthStencilResolveAttachment,
@@ -1369,6 +1370,17 @@ enum class ImageLayout
 };
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout);
+
+// How the ImagHelper object is been used by the renderpass
+enum class RenderPassUsage
+{
+    RenderTargetAttachment,
+    TextureSampler,
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+using RenderPassUseFlags = angle::PackedEnumBitSet<RenderPassUsage, uint16_t>;
 
 bool FormatHasNecessaryFeature(RendererVk *renderer,
                                angle::FormatID formatID,
@@ -1551,7 +1563,13 @@ class ImageHelper final : public Resource, public angle::Subject
     // image.
     gl::Extents getLevelExtents2D(LevelIndex levelVk) const;
     gl::Extents getRotatedLevelExtents2D(LevelIndex levelVk) const;
+
     bool isDepthOrStencil() const;
+
+    void setRenderPassUsageFlag(RenderPassUsage flag);
+    void resetRenderPassUsageFlags();
+    bool hasRenderPassUseFlag(RenderPassUsage flag) const;
+    bool usedByCurrentRenderPassAsAttachmentAndSampler() const;
 
     // Clear either color or depth/stencil based on image format.
     void clear(VkImageAspectFlags aspectFlags,
@@ -2024,6 +2042,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // For optimizing transition between different shader readonly layouts
     ImageLayout mLastNonShaderReadOnlyLayout;
     VkPipelineStageFlags mCurrentShaderReadStageMask;
+    // Track how it is been used by current open renderpass.
+    RenderPassUseFlags mRenderPassUseFlags;
 
     // For imported images
     BindingPointer<SamplerYcbcrConversion> mYuvConversionSampler;
