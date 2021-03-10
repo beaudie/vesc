@@ -1170,6 +1170,7 @@ class CommandBufferHelper : angle::NonCopyable
     bool usesBufferForWrite(const BufferHelper &buffer) const;
     bool usesImageInRenderPass(const ImageHelper &image) const;
     size_t getUsedBuffersCount() const { return mUsedBuffers.size(); }
+    bool usesImageInAttachments(const ImageHelper &image);
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
@@ -1303,6 +1304,7 @@ class CommandBufferHelper : angle::NonCopyable
     // Attached render target images. Color and depth resolve images are always come last.
     PackedAttachedImagesArray mColorImages;
     PackedAttachedImagesArray mColorResolveImages;
+    gl::AttachmentsMask mUsedForSampler;
 };
 
 // Imagine an image going through a few layout transitions:
@@ -1341,6 +1343,7 @@ enum class ImageLayout
     // Framebuffer attachment layouts are placed first, so they can fit in fewer bits in
     // PackedAttachmentOpsDesc.
     ColorAttachment,
+    ColorAttachmentAndFragmentShaderRead,
     DepthStencilReadOnly,
     DepthStencilAttachment,
     DepthStencilResolveAttachment,
