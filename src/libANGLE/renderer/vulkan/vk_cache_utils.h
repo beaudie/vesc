@@ -1096,14 +1096,14 @@ class TextureDescriptorDesc
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 };
 
-class UniformsAndXfbDesc
+class UniformsAndXfbDescriptorDesc
 {
   public:
-    UniformsAndXfbDesc();
-    ~UniformsAndXfbDesc();
+    UniformsAndXfbDescriptorDesc();
+    ~UniformsAndXfbDescriptorDesc();
 
-    UniformsAndXfbDesc(const UniformsAndXfbDesc &other);
-    UniformsAndXfbDesc &operator=(const UniformsAndXfbDesc &other);
+    UniformsAndXfbDescriptorDesc(const UniformsAndXfbDescriptorDesc &other);
+    UniformsAndXfbDescriptorDesc &operator=(const UniformsAndXfbDescriptorDesc &other);
 
     BufferSerial getDefaultUniformBufferSerial() const
     {
@@ -1123,7 +1123,7 @@ class UniformsAndXfbDesc
     size_t hash() const;
     void reset();
 
-    bool operator==(const UniformsAndXfbDesc &other) const;
+    bool operator==(const UniformsAndXfbDescriptorDesc &other) const;
 
   private:
     uint32_t mBufferCount;
@@ -1131,6 +1131,34 @@ class UniformsAndXfbDesc
     static constexpr size_t kDefaultUniformBufferIndex = 0;
     static constexpr size_t kMaxBufferCount = 1 + gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS;
     std::array<BufferSerial, kMaxBufferCount> mBufferSerials;
+};
+
+class ShaderBuffersDescriptorDesc
+{
+  public:
+    ShaderBuffersDescriptorDesc();
+    ~ShaderBuffersDescriptorDesc();
+
+    ShaderBuffersDescriptorDesc(const ShaderBuffersDescriptorDesc &other);
+    ShaderBuffersDescriptorDesc &operator=(const ShaderBuffersDescriptorDesc &other);
+
+    size_t hash() const;
+    void reset();
+
+    bool operator==(const ShaderBuffersDescriptorDesc &other) const;
+
+    // 3 buffer types: uniform, shader storage, atomic counter buffer.
+    void setBufferMask(uint32_t bufferTypeIndex, uint64_t bufferMask);
+
+    // Should be specified in a consistent order, otherwise order doesn't matter.
+    void addBufferSerial(BufferSerial bufferSerial);
+
+  private:
+    // Each buffer type reserves 2 32-bit values for the buffer mask.
+    static constexpr size_t kReservedBufferMasks = 3 * 2;
+    // Allow 16 buffer serials comfortably.
+    static constexpr size_t kFastBufferLimit = 16;
+    angle::FastVector<uint32_t, kFastBufferLimit + kReservedBufferMasks> mPayload;
 };
 
 // In the FramebufferDesc object:
@@ -1291,9 +1319,15 @@ struct hash<rx::vk::TextureDescriptorDesc>
 };
 
 template <>
-struct hash<rx::vk::UniformsAndXfbDesc>
+struct hash<rx::vk::UniformsAndXfbDescriptorDesc>
 {
-    size_t operator()(const rx::vk::UniformsAndXfbDesc &key) const { return key.hash(); }
+    size_t operator()(const rx::vk::UniformsAndXfbDescriptorDesc &key) const { return key.hash(); }
+};
+
+template <>
+struct hash<rx::vk::ShaderBuffersDescriptorDesc>
+{
+    size_t operator()(const rx::vk::ShaderBuffersDescriptorDesc &key) const { return key.hash(); }
 };
 
 template <>
@@ -1334,7 +1368,8 @@ enum class VulkanCacheType
     DescriptorSet,
     DescriptorSetLayout,
     TextureDescriptors,
-    UniformsAndXfbDescriptorSet,
+    UniformsAndXfbDescriptors,
+    ShaderBuffersDescriptors,
     Framebuffer,
     EnumCount
 };

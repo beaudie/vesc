@@ -1673,8 +1673,9 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     }
 
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
-    vk::BufferHelper *uniformBuffer      = mDefaultUniformStorage.getCurrentBuffer();
-    vk::UniformsAndXfbDesc xfbBufferDesc = transformFeedbackVk->getTransformFeedbackDesc();
+    vk::BufferHelper *uniformBuffer = mDefaultUniformStorage.getCurrentBuffer();
+    vk::UniformsAndXfbDescriptorDesc xfbBufferDesc =
+        transformFeedbackVk->getTransformFeedbackDesc();
     xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
                                                            : vk::kInvalidBufferSerial);
 
@@ -3299,13 +3300,19 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // Nothing to do.
                 break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
-                ANGLE_TRY(invalidateCurrentShaderResources());
+                ASSERT(gl::State::DIRTY_BIT_IMAGE_BINDINGS >
+                       gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
+                iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
-                ANGLE_TRY(invalidateCurrentShaderResources());
+                ASSERT(gl::State::DIRTY_BIT_IMAGE_BINDINGS >
+                       gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
+                iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
                 break;
             case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
-                ANGLE_TRY(invalidateCurrentShaderResources());
+                ASSERT(gl::State::DIRTY_BIT_IMAGE_BINDINGS >
+                       gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
                 invalidateDriverUniforms();
                 break;
             case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
@@ -3744,6 +3751,16 @@ angle::Result ContextVk::invalidateCurrentShaderResources()
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
         mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+    }
+
+    if (hasUniformBuffers || hasStorageBuffers)
+    {
+        mShaderBuffersDescriptorDesc.reset();
+        mShaderBuffersDescriptorDesc.setBufferMask(0, mState.getUniformBuffersMask().bits());
+        mShaderBuffersDescriptorDesc.setBufferMask(1, mState.getAtomicCounterBuffersMask().bits());
+        mShaderBuffersDescriptorDesc.setBufferMask(2, mState.getShaderStorageBuffersMask().bits());
+
+        // FIXME: buffers.
     }
 
     return angle::Result::Continue;

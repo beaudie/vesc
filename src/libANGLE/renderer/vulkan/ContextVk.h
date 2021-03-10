@@ -1023,6 +1023,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     gl::ActiveTextureArray<vk::TextureUnit> mActiveTextures;
     vk::TextureDescriptorDesc mActiveTexturesDesc;
 
+    vk::ShaderBuffersDescriptorDesc mShaderBuffersDescriptorDesc;
+
     gl::ActiveTextureArray<TextureVk *> mActiveImages;
 
     // "Current Value" aka default vertex attribute state.
