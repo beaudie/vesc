@@ -1101,14 +1101,14 @@ class TextureDescriptorDesc
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 };
 
-class UniformsAndXfbDesc
+class UniformsAndXfbDescriptorDesc
 {
   public:
-    UniformsAndXfbDesc();
-    ~UniformsAndXfbDesc();
+    UniformsAndXfbDescriptorDesc();
+    ~UniformsAndXfbDescriptorDesc();
 
-    UniformsAndXfbDesc(const UniformsAndXfbDesc &other);
-    UniformsAndXfbDesc &operator=(const UniformsAndXfbDesc &other);
+    UniformsAndXfbDescriptorDesc(const UniformsAndXfbDescriptorDesc &other);
+    UniformsAndXfbDescriptorDesc &operator=(const UniformsAndXfbDescriptorDesc &other);
 
     BufferSerial getDefaultUniformBufferSerial() const
     {
@@ -1128,7 +1128,7 @@ class UniformsAndXfbDesc
     size_t hash() const;
     void reset();
 
-    bool operator==(const UniformsAndXfbDesc &other) const;
+    bool operator==(const UniformsAndXfbDescriptorDesc &other) const;
 
   private:
     uint32_t mBufferCount;
@@ -1136,6 +1136,30 @@ class UniformsAndXfbDesc
     static constexpr size_t kDefaultUniformBufferIndex = 0;
     static constexpr size_t kMaxBufferCount = 1 + gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS;
     std::array<BufferSerial, kMaxBufferCount> mBufferSerials;
+};
+
+class ShaderBuffersDescriptorDesc
+{
+  public:
+    ShaderBuffersDescriptorDesc();
+    ~ShaderBuffersDescriptorDesc();
+
+    ShaderBuffersDescriptorDesc(const ShaderBuffersDescriptorDesc &other);
+    ShaderBuffersDescriptorDesc &operator=(const ShaderBuffersDescriptorDesc &other);
+
+    size_t hash() const;
+    void reset();
+
+    bool operator==(const ShaderBuffersDescriptorDesc &other) const;
+
+    void append32BitValue(uint32_t value);
+    void append64BitValue(uint64_t value);
+    void appendBufferSerial(BufferSerial bufferSerial);
+
+  private:
+    // Allow 16 32-bit words in the fast buffer comfortably. After that use heap memory.
+    static constexpr size_t kFastBufferWordLimit = 16;
+    angle::FastVector<uint32_t, kFastBufferWordLimit> mPayload;
 };
 
 // In the FramebufferDesc object:
@@ -1312,9 +1336,15 @@ struct hash<rx::vk::TextureDescriptorDesc>
 };
 
 template <>
-struct hash<rx::vk::UniformsAndXfbDesc>
+struct hash<rx::vk::UniformsAndXfbDescriptorDesc>
 {
-    size_t operator()(const rx::vk::UniformsAndXfbDesc &key) const { return key.hash(); }
+    size_t operator()(const rx::vk::UniformsAndXfbDescriptorDesc &key) const { return key.hash(); }
+};
+
+template <>
+struct hash<rx::vk::ShaderBuffersDescriptorDesc>
+{
+    size_t operator()(const rx::vk::ShaderBuffersDescriptorDesc &key) const { return key.hash(); }
 };
 
 template <>
@@ -1355,7 +1385,8 @@ enum class VulkanCacheType
     DescriptorSet,
     DescriptorSetLayout,
     TextureDescriptors,
-    UniformsAndXfbDescriptorSet,
+    UniformsAndXfbDescriptors,
+    ShaderBuffersDescriptors,
     Framebuffer,
     EnumCount
 };

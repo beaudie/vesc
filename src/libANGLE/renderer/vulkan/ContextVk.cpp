@@ -288,6 +288,21 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
 {
     return egl::FromEGLenum<egl::ContextPriority>(state.getContextPriority());
 }
+
+template <typename MaskT>
+void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
+                              const gl::BufferVector &buffers,
+                              const MaskT &mask)
+{
+    for (size_t bufferIndex : mask)
+    {
+        const gl::Buffer *bufferGL    = buffers[bufferIndex].get();
+        BufferVk *bufferVk            = vk::GetImpl(bufferGL);
+        vk::BufferSerial bufferSerial = bufferVk->getBuffer().getBufferSerial();
+
+        desc->appendBufferSerial(bufferSerial);
+    }
+}
 }  // anonymous namespace
 
 // Not necessary once upgraded to C++17.
@@ -1519,7 +1534,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
     if (executable->hasTextures())
     {
-        ANGLE_TRY(mExecutable->updateTexturesDescriptorSet(this));
+        ANGLE_TRY(mExecutable->updateTexturesDescriptorSet(this, mActiveTexturesDesc));
     }
 
     return angle::Result::Continue;
@@ -1616,8 +1631,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
 
     if (hasUniformBuffers || hasStorageBuffers || hasImages || executable->usesFramebufferFetch())
     {
-        ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(this, mDrawFramebuffer,
-                                                                  commandBufferHelper));
+        ANGLE_TRY(mExecutable->updateShaderResourcesDescriptorSet(
+            this, mDrawFramebuffer, mShaderBuffersDescriptorDesc, commandBufferHelper));
     }
 
     // Record usage of storage buffers and images in the command buffer to aid handling of
@@ -1672,8 +1687,9 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     }
 
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
-    vk::BufferHelper *uniformBuffer      = mDefaultUniformStorage.getCurrentBuffer();
-    vk::UniformsAndXfbDesc xfbBufferDesc = transformFeedbackVk->getTransformFeedbackDesc();
+    vk::BufferHelper *uniformBuffer = mDefaultUniformStorage.getCurrentBuffer();
+    vk::UniformsAndXfbDescriptorDesc xfbBufferDesc =
+        transformFeedbackVk->getTransformFeedbackDesc();
     xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
                                                            : vk::kInvalidBufferSerial);
 
@@ -3081,8 +3097,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
                 mGraphicsPipelineDesc->updateAlphaToCoverageEnable(
                     &mGraphicsPipelineTransition, glState.isSampleAlphaToCoverageEnabled());
-                ASSERT(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE >
-                       gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);
+                static_assert(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE >
+                                  gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED,
+                              "Dirty bit order");
                 iter.setLaterBit(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED:
@@ -3278,8 +3295,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             {
                 ASSERT(programExecutable);
                 invalidateCurrentDefaultUniforms();
-                ASSERT(gl::State::DIRTY_BIT_TEXTURE_BINDINGS >
-                       gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);
+                static_assert(
+                    gl::State::DIRTY_BIT_TEXTURE_BINDINGS > gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE,
+                    "Dirty bit order");
                 iter.setLaterBit(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
                 ANGLE_TRY(invalidateCurrentShaderResources());
                 ANGLE_TRY(invalidateProgramExecutableHelper(context));
@@ -3287,8 +3305,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             }
             case gl::State::DIRTY_BIT_SAMPLER_BINDINGS:
             {
-                ASSERT(gl::State::DIRTY_BIT_TEXTURE_BINDINGS >
-                       gl::State::DIRTY_BIT_SAMPLER_BINDINGS);
+                static_assert(
+                    gl::State::DIRTY_BIT_TEXTURE_BINDINGS > gl::State::DIRTY_BIT_SAMPLER_BINDINGS,
+                    "Dirty bit order");
                 iter.setLaterBit(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
                 break;
             }
@@ -3298,18 +3317,27 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
                 // Nothing to do.
                 break;
+            case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
+                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
+                                  gl::State::DIRTY_BIT_IMAGE_BINDINGS,
+                              "Dirty bit order");
+                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
-                ANGLE_TRY(invalidateCurrentShaderResources());
+                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
+                                  gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,
+                              "Dirty bit order");
+                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
-                ANGLE_TRY(invalidateCurrentShaderResources());
+                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
+                                  gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,
+                              "Dirty bit order");
+                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
                 break;
             case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
                 ANGLE_TRY(invalidateCurrentShaderResources());
                 invalidateDriverUniforms();
-                break;
-            case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
-                ANGLE_TRY(invalidateCurrentShaderResources());
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 // TODO(syoussefi): this should configure the pipeline to render as if
@@ -3744,6 +3772,40 @@ angle::Result ContextVk::invalidateCurrentShaderResources()
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
         mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+    }
+
+    if (hasUniformBuffers || hasStorageBuffers)
+    {
+        mShaderBuffersDescriptorDesc.reset();
+
+#if defined(ANGLE_IS_64_BIT_CPU)
+        mShaderBuffersDescriptorDesc.append64BitValue(mState.getUniformBuffersMask().bits(0));
+        mShaderBuffersDescriptorDesc.append64BitValue(mState.getUniformBuffersMask().bits(1));
+        mShaderBuffersDescriptorDesc.append64BitValue(mState.getAtomicCounterBuffersMask().bits());
+        mShaderBuffersDescriptorDesc.append64BitValue(mState.getShaderStorageBuffersMask().bits());
+#else
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(0));
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(1));
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(2));
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(3));
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getAtomicCounterBuffersMask().bits());
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(0));
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(1));
+#endif  // defined(ANGLE_IS_64_BIT_CPU)
+
+        const gl::BufferVector &uniformBuffers = mState.getOffsetBindingPointerUniformBuffers();
+        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, uniformBuffers,
+                                 mState.getUniformBuffersMask());
+
+        const gl::BufferVector &atomicCounterBuffers =
+            mState.getOffsetBindingPointerAtomicCounterBuffers();
+        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, atomicCounterBuffers,
+                                 mState.getAtomicCounterBuffersMask());
+
+        const gl::BufferVector &shaderStorageBuffers =
+            mState.getOffsetBindingPointerShaderStorageBuffers();
+        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, shaderStorageBuffers,
+                                 mState.getShaderStorageBuffersMask());
     }
 
     return angle::Result::Continue;
