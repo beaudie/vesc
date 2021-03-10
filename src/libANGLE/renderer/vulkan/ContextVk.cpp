@@ -1488,6 +1488,13 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             // using specialized barriers without breaking the RenderPass.
             textureLayout = vk::ImageLayout::DepthStencilReadOnly;
         }
+        else if (image.hasRenderPassUseFlag(vk::RenderPassUsage::RenderTargetAttachment))
+        {
+            // Right now we set this flag only when RenderTargetAttachment is set since we do not
+            // track all textures in the renderpass.
+            image.setRenderPassUsageFlag(vk::RenderPassUsage::TextureSampler);
+            textureLayout = vk::ImageLayout::ColorAttachmentAndShaderRead;
+        }
         else
         {
             gl::ShaderBitSet remainingShaderBits =
@@ -5011,15 +5018,6 @@ angle::Result ContextVk::onBufferReleaseToExternal(const vk::BufferHelper &buffe
 angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
 {
     if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
-    {
-        return flushCommandsAndEndRenderPass();
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::onImageStageSelfForBaseLevel(vk::ImageHelper *image)
-{
-    if (mRenderPassCommands->started() && mRenderPassCommands->usesImageInAttachments(*image))
     {
         return flushCommandsAndEndRenderPass();
     }

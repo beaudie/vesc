@@ -145,6 +145,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::ColorAttachmentAndShaderRead,
+        ImageMemoryBarrierData{
+            "ColorAttachmentAndShaderRead",
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            ResourceAccess::Write,
+            PipelineStage::VertexShader,
+        },
+    },
+    {
         ImageLayout::DepthStencilReadOnly,
         ImageMemoryBarrierData{
             "DepthStencilReadOnly",
@@ -1036,6 +1051,7 @@ void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
     }
     ASSERT(mColorImages[packedAttachmentIndex] == nullptr);
     mColorImages[packedAttachmentIndex] = image;
+    image->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
 
     if (resolveImage)
     {
@@ -1046,20 +1062,8 @@ void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
         }
         ASSERT(mColorResolveImages[packedAttachmentIndex] == nullptr);
         mColorResolveImages[packedAttachmentIndex] = resolveImage;
+        resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
     }
-}
-
-bool CommandBufferHelper::usesImageInAttachments(const ImageHelper &image)
-{
-    ASSERT(mIsRenderPassCommandBuffer);
-    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
-    {
-        if (mColorImages[index] == &image || mColorResolveImages[index] == &image)
-        {
-            return true;
-        }
-    }
-    return false;
 }
 
 void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseList,
@@ -1225,17 +1229,28 @@ void CommandBufferHelper::finalizeColorImageLayout(Context *context,
     ASSERT(packedAttachmentIndex < mColorImagesCount);
     ASSERT(mColorImages[packedAttachmentIndex]);
 
-    // Do layout change.
-    ImageLayout imageLayout = ImageLayout::ColorAttachment;
-    mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
-    PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
-    ASSERT(barrierIndex != PipelineStage::InvalidEnum);
-    PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
-    if (mColorImages[packedAttachmentIndex]->updateLayoutAndBarrier(
-            context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+    ImageLayout imageLayout;
+    if (mColorImages[packedAttachmentIndex]->usedByCurrentRenderPassAsAttachmentAndSampler())
     {
-        mPipelineBarrierMask.set(barrierIndex);
+        // texture code already picked layout and inserted barrier
+        imageLayout = mColorImages[packedAttachmentIndex]->getCurrentImageLayout();
+        ASSERT(imageLayout == ImageLayout::ColorAttachmentAndShaderRead);
     }
+    else
+    {
+        // Do layout change.
+        imageLayout                = ImageLayout::ColorAttachment;
+        PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
+        ASSERT(barrierIndex != PipelineStage::InvalidEnum);
+        PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
+        if (mColorImages[packedAttachmentIndex]->updateLayoutAndBarrier(
+                context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+        {
+            mPipelineBarrierMask.set(barrierIndex);
+        }
+    }
+    mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
+    mColorImages[packedAttachmentIndex]->resetRenderPassUsageFlags();
 }
 
 void CommandBufferHelper::finalizeColorResolveImageLayout(
@@ -1246,16 +1261,27 @@ void CommandBufferHelper::finalizeColorResolveImageLayout(
     ASSERT(packedAttachmentIndex < mColorImagesCount);
     ASSERT(mColorResolveImages[packedAttachmentIndex]);
 
-    // Do layout change.
-    ImageLayout imageLayout    = ImageLayout::ColorAttachment;
-    PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
-    ASSERT(barrierIndex != PipelineStage::InvalidEnum);
-    PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
-    if (mColorResolveImages[packedAttachmentIndex]->updateLayoutAndBarrier(
-            context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+    ImageLayout imageLayout;
+    if (mColorResolveImages[packedAttachmentIndex]->usedByCurrentRenderPassAsAttachmentAndSampler())
     {
-        mPipelineBarrierMask.set(barrierIndex);
+        // texture code already picked layout and inserted barrier
+        imageLayout = mColorResolveImages[packedAttachmentIndex]->getCurrentImageLayout();
+        ASSERT(imageLayout == ImageLayout::ColorAttachmentAndShaderRead);
     }
+    else
+    {
+        // Do layout change.
+        imageLayout                = ImageLayout::ColorAttachment;
+        PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
+        ASSERT(barrierIndex != PipelineStage::InvalidEnum);
+        PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
+        if (mColorResolveImages[packedAttachmentIndex]->updateLayoutAndBarrier(
+                context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+        {
+            mPipelineBarrierMask.set(barrierIndex);
+        }
+    }
+    mColorResolveImages[packedAttachmentIndex]->resetRenderPassUsageFlags();
 }
 
 void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
@@ -1368,17 +1394,20 @@ void CommandBufferHelper::onImageHelperRelease(Context *context, const ImageHelp
 {
     ASSERT(mIsRenderPassCommandBuffer);
 
-    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    if (image->hasRenderPassUseFlag(RenderPassUsage::RenderTargetAttachment))
     {
-        if (mColorImages[index] == image)
+        for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
         {
-            finalizeColorImageLayout(context, index);
-            mColorImages[index] = nullptr;
-        }
-        if (mColorResolveImages[index] == image)
-        {
-            finalizeColorResolveImageLayout(context, index);
-            mColorResolveImages[index] = nullptr;
+            if (mColorImages[index] == image)
+            {
+                finalizeColorImageLayout(context, index);
+                mColorImages[index] = nullptr;
+            }
+            if (mColorResolveImages[index] == image)
+            {
+                finalizeColorResolveImageLayout(context, index);
+                mColorResolveImages[index] = nullptr;
+            }
         }
     }
 
@@ -3680,6 +3709,7 @@ void ImageHelper::resetCachedProperties()
     mLevelCount                  = 0;
     mExternalFormat              = 0;
     mCurrentSingleClearValue.reset();
+    mRenderPassUseFlags.reset();
 
     setEntireContentUndefined();
 }
@@ -4441,6 +4471,27 @@ gl::Extents ImageHelper::getRotatedLevelExtents2D(LevelIndex levelVk) const
 bool ImageHelper::isDepthOrStencil() const
 {
     return mFormat->actualImageFormat().hasDepthOrStencilBits();
+}
+
+void ImageHelper::setRenderPassUsageFlag(RenderPassUsage flag)
+{
+    mRenderPassUseFlags.set(flag);
+}
+
+void ImageHelper::resetRenderPassUsageFlags()
+{
+    mRenderPassUseFlags.reset();
+}
+
+bool ImageHelper::hasRenderPassUseFlag(RenderPassUsage flag) const
+{
+    return mRenderPassUseFlags.test(flag);
+}
+
+bool ImageHelper::usedByCurrentRenderPassAsAttachmentAndSampler() const
+{
+    return mRenderPassUseFlags[RenderPassUsage::RenderTargetAttachment] &&
+           mRenderPassUseFlags[RenderPassUsage::TextureSampler];
 }
 
 bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
@@ -5738,7 +5789,10 @@ angle::Result ImageHelper::stageSelfForBaseLevel(ContextVk *contextVk)
     // Because we are cloning this object to another object, we must endRenderPass if it is been
     // used by current renderpass as attachment. Otherwise we are copying the incorrect layout since
     // it is determined at endRenderPass time.
-    ANGLE_TRY(contextVk->onImageStageSelfForBaseLevel(this));
+    if (hasRenderPassUseFlag(RenderPassUsage::RenderTargetAttachment))
+    {
+        ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
+    }
 
     std::unique_ptr<ImageHelper> prevImage = std::make_unique<ImageHelper>();
     // Move the necessary information for staged update to work, and keep the rest as part of this
