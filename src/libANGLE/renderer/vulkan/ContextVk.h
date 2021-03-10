@@ -442,8 +442,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result onBufferReleaseToExternal(const vk::BufferHelper &buffer);
     angle::Result onImageReleaseToExternal(const vk::ImageHelper &image);
 
-    angle::Result onImageStageSelfForBaseLevel(vk::ImageHelper *image);
-
     void onImageRenderPassRead(VkImageAspectFlags aspectFlags,
                                vk::ImageLayout imageLayout,
                                vk::ImageHelper *image)
