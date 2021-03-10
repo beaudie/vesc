@@ -145,6 +145,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::ColorAttachmentAndFragmentShaderRead,
+        ImageMemoryBarrierData{
+            "ColorAttachmentAndFragmentShaderRead",
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            ResourceAccess::Write,
+            PipelineStage::FragmentShader,
+        },
+    },
+    {
         ImageLayout::DepthStencilReadOnly,
         ImageMemoryBarrierData{
             "DepthStencilReadOnly",
@@ -861,6 +876,7 @@ void CommandBufferHelper::reset()
         mReadOnlyDepthStencilMode = false;
         mColorImages.reset();
         mColorResolveImages.reset();
+        mUsedForSampler.reset();
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
@@ -954,6 +970,23 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
     }
 }
 
+PackedAttachmentIndex CommandBufferHelper::usesImageInAttachments(const ImageHelper &image)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    {
+        if (mColorImages[index] == &image)
+        {
+            return index;
+        }
+        if (mColorResolveImages[index] == &image)
+        {
+            return index;
+        }
+    }
+    return kAttachmentIndexInvalid;
+}
+
 void CommandBufferHelper::imageRead(ContextVk *contextVk,
                                     VkImageAspectFlags aspectFlags,
                                     ImageLayout imageLayout,
@@ -979,6 +1012,14 @@ void CommandBufferHelper::imageRead(ContextVk *contextVk,
         if (!usesImageInRenderPass(*image))
         {
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
+        }
+        else
+        {
+            PackedAttachmentIndex index = usesImageInAttachments(*image);
+            if (index != kAttachmentIndexInvalid)
+            {
+                mUsedForSampler.set(index.get());
+            }
         }
     }
 }
@@ -1210,7 +1251,9 @@ void CommandBufferHelper::finalizeColorImageLayout(Context *context,
     ASSERT(mColorImages[packedAttachmentIndex]);
 
     // Do layout change.
-    ImageLayout imageLayout = ImageLayout::ColorAttachment;
+    ImageLayout imageLayout = mUsedForSampler[packedAttachmentIndex.get()]
+                                  ? ImageLayout::ColorAttachment
+                                  : ImageLayout::ColorAttachmentAndFragmentShaderRead;
     mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
     PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
     ASSERT(barrierIndex != PipelineStage::InvalidEnum);
