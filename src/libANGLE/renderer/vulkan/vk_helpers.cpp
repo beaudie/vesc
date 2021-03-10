@@ -145,6 +145,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::ColorAttachmentAndShaderRead,
+        ImageMemoryBarrierData{
+            "ColorAttachmentAndShaderRead",
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            ResourceAccess::Write,
+            PipelineStage::VertexShader,
+        },
+    },
+    {
         ImageLayout::DepthStencilReadOnly,
         ImageMemoryBarrierData{
             "DepthStencilReadOnly",
@@ -881,6 +896,7 @@ void CommandBufferHelper::reset()
         mReadOnlyDepthStencilMode = false;
         mColorImages.reset();
         mColorResolveImages.reset();
+        mUsedForSampler.reset();
     }
     // This state should never change for non-renderPass command buffer
     ASSERT(mRenderPassStarted == false);
@@ -1062,6 +1078,18 @@ bool CommandBufferHelper::usesImageInAttachments(const ImageHelper &image)
     return false;
 }
 
+void CommandBufferHelper::setAttachmentUsedForSamplerBit(const ImageHelper &image)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    {
+        if (mColorImages[index] == &image || mColorResolveImages[index] == &image)
+        {
+            mUsedForSampler.set(index.get());
+        }
+    }
+}
+
 void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseList,
                                                  gl::LevelIndex level,
                                                  uint32_t layerStart,
@@ -1225,17 +1253,27 @@ void CommandBufferHelper::finalizeColorImageLayout(Context *context,
     ASSERT(packedAttachmentIndex < mColorImagesCount);
     ASSERT(mColorImages[packedAttachmentIndex]);
 
-    // Do layout change.
-    ImageLayout imageLayout = ImageLayout::ColorAttachment;
-    mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
-    PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
-    ASSERT(barrierIndex != PipelineStage::InvalidEnum);
-    PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
-    if (mColorImages[packedAttachmentIndex]->updateLayoutAndBarrier(
-            context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+    ImageLayout imageLayout;
+    if (mUsedForSampler[packedAttachmentIndex.get()])
     {
-        mPipelineBarrierMask.set(barrierIndex);
+        // texture code already picked layout and inserted barrier
+        imageLayout = mColorImages[packedAttachmentIndex]->getCurrentImageLayout();
+        ASSERT(imageLayout == ImageLayout::ColorAttachmentAndShaderRead);
     }
+    else
+    {
+        // Do layout change.
+        imageLayout                = ImageLayout::ColorAttachment;
+        PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
+        ASSERT(barrierIndex != PipelineStage::InvalidEnum);
+        PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
+        if (mColorImages[packedAttachmentIndex]->updateLayoutAndBarrier(
+                context, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout, barrier))
+        {
+            mPipelineBarrierMask.set(barrierIndex);
+        }
+    }
+    mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
 }
 
 void CommandBufferHelper::finalizeColorResolveImageLayout(
