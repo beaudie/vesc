@@ -1842,12 +1842,19 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         gl::ComponentType programAttribType =
             gl::GetComponentTypeMask(programAttribsTypeMask, attribIndex);
 
+        // This forces stride to 0 when glVertexAttribute specifies a different type from the
+        // program's attribute type except when the type mismatch is a mismatched integer sign.
         if (attribType != programAttribType)
         {
             // Override the format with a compatible one.
             vkFormat = kMismatchedComponentTypeMap[programAttribType];
 
-            bindingDesc.stride = 0;  // Prevent out-of-bounds accesses.
+            if (!contextVk->getNativeExtensions().relaxedVertexAttributeType ||
+                programAttribType == gl::ComponentType::Float ||
+                attribType == gl::ComponentType::Float)
+            {
+                bindingDesc.stride = 0;
+            }
         }
 
         // The binding index could become more dynamic in ES 3.1.
