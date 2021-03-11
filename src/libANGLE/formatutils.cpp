@@ -2593,6 +2593,94 @@ size_t GetVertexFormatSize(angle::FormatID vertexFormatID)
     }
 }
 
+angle::FormatID ConvertFormatSignedness(const angle::Format &format)
+{
+    switch (format.componentType)
+    {
+        case GL_INT:
+            if (format.redBits == 10)
+            {
+                return angle::FormatID::R10G10B10A2_UINT;
+            }
+            switch (format.pixelBytes / format.channelCount)
+            {
+                case 1:
+                    return angle::FormatID::R8G8B8A8_UINT;
+                case 2:
+                    return angle::FormatID::R16G16B16A16_UINT;
+                case 4:
+                    return angle::FormatID::R32G32B32A32_UINT;
+                default:
+                    UNREACHABLE();
+            }
+#if !UNREACHABLE_IS_NORETURN
+            return angle::FormatID::NONE;
+#endif
+        case GL_UNSIGNED_INT:
+            if (format.redBits == 10)
+            {
+                return angle::FormatID::R10G10B10A2_SINT;
+            }
+            switch (format.pixelBytes / format.channelCount)
+            {
+                case 1:
+                    return angle::FormatID::R8G8B8A8_SINT;
+                case 2:
+                    return angle::FormatID::R16G16B16A16_SINT;
+                case 4:
+                    return angle::FormatID::R32G32B32A32_SINT;
+                default:
+                    UNREACHABLE();
+            }
+#if !UNREACHABLE_IS_NORETURN
+            return angle::FormatID::NONE;
+#endif
+        case GL_SIGNED_NORMALIZED:
+            if (format.redBits == 10)
+            {
+                return angle::FormatID::R10G10B10A2_UNORM;
+            }
+            switch (format.pixelBytes / format.channelCount)
+            {
+                case 1:
+                    return angle::FormatID::R8G8B8A8_UNORM;
+                case 2:
+                    return angle::FormatID::R16G16B16A16_UNORM;
+                case 4:
+                    return angle::FormatID::R32G32B32A32_UNORM;
+                default:
+                    UNREACHABLE();
+            }
+#if !UNREACHABLE_IS_NORETURN
+            return angle::FormatID::NONE;
+#endif
+        case GL_UNSIGNED_NORMALIZED:
+            if (format.redBits == 10)
+            {
+                return angle::FormatID::R10G10B10A2_SNORM;
+            }
+            switch (format.pixelBytes / format.channelCount)
+            {
+                case 1:
+                    return angle::FormatID::R8G8B8A8_SNORM;
+                case 2:
+                    return angle::FormatID::R16G16B16A16_SNORM;
+                case 4:
+                    return angle::FormatID::R32G32B32A32_SNORM;
+                default:
+                    UNREACHABLE();
+            }
+#if !UNREACHABLE_IS_NORETURN
+            return angle::FormatID::NONE;
+#endif
+        default:
+            UNREACHABLE();
+    }
+#if !UNREACHABLE_IS_NORETURN
+    return angle::FormatID::NONE;
+#endif
+}
+
 bool ValidES3InternalFormat(GLenum internalFormat)
 {
     const InternalFormatInfoMap &formatMap = GetInternalFormatMap();
