@@ -1733,6 +1733,80 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
 }
 
+// Tests that rendering is fine if GL_ANGLE_relaxed_vertex_attribute_type is enabled
+// and mismatched integer signedness between the program's attribute type and the
+// attribute type specified by VertexAttribIPointer are used.
+TEST_P(VertexAttributeTestES3, DrawWithRelaxedVertexAttributeType)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_relaxed_vertex_attribute_type"));
+
+    constexpr char kVS[] = R"(#version 300 es
+precision highp float;
+in highp vec4 a_position;
+in highp ivec4 a_ColorTest;
+out highp vec4 v_colorTest;
+
+void main() {
+    v_colorTest = vec4(a_ColorTest);
+    gl_Position = a_position;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+in highp vec4 v_colorTest;
+out vec4 fragColor;
+
+void main() {
+    if(v_colorTest.x > 0.5) {
+        fragColor = vec4(0.0, 1.0, 0.0, 1.0);
+    } else {
+        fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glBindAttribLocation(program, 0, "a_position");
+    glBindAttribLocation(program, 1, "a_ColorTest");
+    glLinkProgram(program);
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+
+    constexpr size_t kDataSize = 48;
+
+    // Interleave test data with 0's.
+    // This guards against a future code change that adjusts stride to 0
+
+    // clang-format off
+    constexpr GLuint kColorTestData[kDataSize] = {
+        // Vertex attribute data      Unused data
+        0u, 0u, 0u, 0u, /*red*/       0u, 0u, 0u, 0u,
+        1u, 1u, 1u, 1u,               0u, 0u, 0u, 0u,
+        1u, 1u, 1u, 1u,               0u, 0u, 0u, 0u,
+        1u, 1u, 1u, 1u,               0u, 0u, 0u, 0u,
+        1u, 1u, 1u, 1u,               0u, 0u, 0u, 0u,
+        1u, 1u, 1u, 1u,               0u, 0u, 0u, 0u
+    };
+    // clang-format on
+
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint) * kDataSize, kColorTestData, GL_STATIC_DRAW);
+
+    glVertexAttribIPointer(1, 4, GL_UNSIGNED_INT, 8 * sizeof(GLuint),
+                           reinterpret_cast<const void *>(0));
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glEnableVertexAttribArray(1);
+
+    drawQuad(program, "a_position", 0.5f);
+
+    // Verify green was drawn. If the stride isn't adjusted to 0 this corner will be green. If it is
+    // adjusted to 0, the whole image will be red
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::green);
+    ASSERT_GL_NO_ERROR();
+}
+
 class VertexAttributeTestES31 : public VertexAttributeTestES3
 {
   protected:
