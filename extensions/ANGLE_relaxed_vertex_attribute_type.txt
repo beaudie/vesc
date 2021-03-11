@@ -1,0 +1,82 @@
+Name
+
+    ANGLE_relaxed_vertex_attribute_type
+
+Name Strings
+
+    GL_ANGLE_relaxed_vertex_attribute_type
+
+Contributors
+
+    n/a
+
+Contact
+
+    n/a (n/a 'at' na.com)
+
+Notice
+
+    Copyright (c) 2016 The Khronos Group Inc. Copyright terms at
+        http://www.khronos.org/registry/speccopyright.html
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, March 19, 2021
+
+Number
+
+    OpenGL ES Extension #??
+
+Dependencies
+
+    Requires OpenGL ES 2.0
+
+    Written against the OpenGL ES 2.0 specification.
+
+Overview
+
+    This extension defines behavior when the type and size parameters of
+    VertexAttribPointer do not match the corresponding vertex attribute's
+    type in the shader.
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    None
+
+Additions to the OpenGL ES Specification
+
+    Add after paragraph 1 of section 2.9 "Vertex Arrays":
+
+    If VertexAttribPointer is called with type and size parameters that do not match the
+    corresponding vertex attribute's type and size, the first attribute's values will be
+    used for all subsequent attributes.
+
+    If VertexAttribPointer is called with type that does not match the corresponding
+    vertex attribute's type, but the VertexAttribPointer size parameters matches, the
+    OpenGL should treat as if the type matched.
+
+New State
+
+    None
+
+Conformance Tests
+
+    TBD
+
+Issues
+
+    None
+
+Revision History
+
+    Rev.    Date         Author                 Changes
+    ----  -------------  ---------              ----------------------------------------
+      1   Mar 19, 2021   na                     Initial version

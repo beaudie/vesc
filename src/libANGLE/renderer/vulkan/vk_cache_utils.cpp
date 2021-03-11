@@ -1812,12 +1812,28 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         gl::ComponentType programAttribType =
             gl::GetComponentTypeMask(programAttribsTypeMask, attribIndex);
 
+        // This forces stride to 0 when glVertexAttribute specifies a different size than
+        // shader's vertex attribute component size and a different type than the shader's
+        // vertex attribute's type. For example, if the shader declares an ivec4, but
+        // glVertexAttribute specifies size 2 and type GL_UNSIGNED_BYTE, we set stride to 0.
+        // We choose to only set stride to 0 when both type and size mismatch as there are real
+        // world applications where the type differs but the size is consistent and the app expects
+        // the gl to maintain the specified stride.
         if (attribType != programAttribType)
         {
             // Override the format with a compatible one.
             vkFormat = kMismatchedComponentTypeMap[programAttribType];
 
-            bindingDesc.stride = 0;  // Prevent out-of-bounds accesses.
+            GLenum programAttributeType =
+                contextVk->getState().getProgramExecutable()->getProgramInputs()[attribIndex].type;
+            GLuint attribSize = gl::GetVertexFormatFromID(formatID).components;
+            GLuint shaderVarSize =
+                static_cast<GLuint>(gl::VariableColumnCount(programAttributeType));
+
+            if (attribSize != shaderVarSize)
+            {
+                bindingDesc.stride = 0;
+            }
         }
 
         // The binding index could become more dynamic in ES 3.1.
