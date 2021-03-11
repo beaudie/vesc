@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8513e5b_628f45af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2021-03-11T22:48:54Z",
+      "side": 1,
+      "message": "I also get errors in tools/clang/scripts/update.py when running in my local Python 3. I think there are a bunch of issues yet to be resolved. Not sure why I\u0027m seeing more issues than others, maybe a different Python version.\n\nHere are the errors I got:\n\n________ running \u0027python3 build/mac_toolchain.py\u0027 in \u0027/Users/jdarpinian/src/chrome/src/third_party/angle/.\u0027\nTraceback (most recent call last):\n  File \"/Users/jdarpinian/src/chrome/src/third_party/angle/build/mac_toolchain.py\", line 199, in \u003cmodule\u003e\n    sys.exit(main())\n  File \"/Users/jdarpinian/src/chrome/src/third_party/angle/build/mac_toolchain.py\", line 195, in main\n    return InstallXcodeBinaries()\n  File \"/Users/jdarpinian/src/chrome/src/third_party/angle/build/mac_toolchain.py\", line 118, in InstallXcodeBinaries\n    stdout, stderr \u003d p.communicate(input\u003dPARANOID_MODE + MAC_BINARIES_LABEL +\n  File \"/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/subprocess.py\", line 1130, in communicate\n    stdout, stderr \u003d self._communicate(input, endtime, timeout)\n  File \"/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/subprocess.py\", line 1957, in _communicate\n    input_view \u003d memoryview(self._input)\nTypeError: memoryview: a bytes-like object is required, not \u0027str\u0027\nError: Command \u0027python3 build/mac_toolchain.py\u0027 returned non-zero exit status 1 in /Users/jdarpinian/src/chrome/src/third_party/angle/.\n\n\n\n________ running \u0027python3 tools/clang/scripts/update.py\u0027 in \u0027/Users/jdarpinian/src/chrome/src/third_party/angle/.\u0027\nDownloading https://commondatastorage.googleapis.com/chromium-browser-clang/Mac/clang-llvmorg-13-init-3462-gfe5c2c3c-2.tgz \n\u003curlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1122)\u003e\n\n",
+      "revId": "9f8e12994a7388fd7415455ca58ced350deeeb38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
