@@ -2593,6 +2593,137 @@ size_t GetVertexFormatSize(angle::FormatID vertexFormatID)
     }
 }
 
+bool is1010102VertexFormat(angle::FormatID vertexFormatID)
+{
+    switch (vertexFormatID)
+    {
+        case angle::FormatID::R10G10B10A2_SSCALED:
+        case angle::FormatID::R10G10B10A2_USCALED:
+        case angle::FormatID::R10G10B10A2_SNORM:
+        case angle::FormatID::R10G10B10A2_UNORM:
+        case angle::FormatID::R10G10B10A2_SINT:
+        case angle::FormatID::R10G10B10A2_UINT:
+        case angle::FormatID::A2R10G10B10_SSCALED_VERTEX:
+        case angle::FormatID::A2R10G10B10_USCALED_VERTEX:
+        case angle::FormatID::A2R10G10B10_SINT_VERTEX:
+        case angle::FormatID::A2R10G10B10_UINT_VERTEX:
+        case angle::FormatID::A2R10G10B10_SNORM_VERTEX:
+        case angle::FormatID::A2R10G10B10_UNORM_VERTEX:
+        case angle::FormatID::X2R10G10B10_SSCALED_VERTEX:
+        case angle::FormatID::X2R10G10B10_USCALED_VERTEX:
+        case angle::FormatID::X2R10G10B10_SINT_VERTEX:
+        case angle::FormatID::X2R10G10B10_UINT_VERTEX:
+        case angle::FormatID::X2R10G10B10_SNORM_VERTEX:
+        case angle::FormatID::X2R10G10B10_UNORM_VERTEX:
+            return true;
+        default:
+            return false;
+    }
+}
+
+size_t GetVertexFormatComponentByteWidth(angle::FormatID vertexFormatID)
+{
+    switch (vertexFormatID)
+    {
+        case angle::FormatID::R8_SSCALED:
+        case angle::FormatID::R8_SNORM:
+        case angle::FormatID::R8_USCALED:
+        case angle::FormatID::R8_UNORM:
+        case angle::FormatID::R8_SINT:
+        case angle::FormatID::R8_UINT:
+        case angle::FormatID::R8G8_SSCALED:
+        case angle::FormatID::R8G8_SNORM:
+        case angle::FormatID::R8G8_USCALED:
+        case angle::FormatID::R8G8_UNORM:
+        case angle::FormatID::R8G8_SINT:
+        case angle::FormatID::R8G8_UINT:
+        case angle::FormatID::R8G8B8_SSCALED:
+        case angle::FormatID::R8G8B8_SNORM:
+        case angle::FormatID::R8G8B8_USCALED:
+        case angle::FormatID::R8G8B8_UNORM:
+        case angle::FormatID::R8G8B8_SINT:
+        case angle::FormatID::R8G8B8_UINT:
+        case angle::FormatID::R8G8B8A8_SSCALED:
+        case angle::FormatID::R8G8B8A8_SNORM:
+        case angle::FormatID::R8G8B8A8_USCALED:
+        case angle::FormatID::R8G8B8A8_UNORM:
+        case angle::FormatID::R8G8B8A8_SINT:
+        case angle::FormatID::R8G8B8A8_UINT:
+            return 1;
+
+        case angle::FormatID::R16_SSCALED:
+        case angle::FormatID::R16_SNORM:
+        case angle::FormatID::R16_USCALED:
+        case angle::FormatID::R16_UNORM:
+        case angle::FormatID::R16_SINT:
+        case angle::FormatID::R16_UINT:
+        case angle::FormatID::R16_FLOAT:
+        case angle::FormatID::R16G16_SSCALED:
+        case angle::FormatID::R16G16_SNORM:
+        case angle::FormatID::R16G16_USCALED:
+        case angle::FormatID::R16G16_UNORM:
+        case angle::FormatID::R16G16_SINT:
+        case angle::FormatID::R16G16_UINT:
+        case angle::FormatID::R16G16_FLOAT:
+        case angle::FormatID::R16G16B16_SSCALED:
+        case angle::FormatID::R16G16B16_SNORM:
+        case angle::FormatID::R16G16B16_USCALED:
+        case angle::FormatID::R16G16B16_UNORM:
+        case angle::FormatID::R16G16B16_SINT:
+        case angle::FormatID::R16G16B16_UINT:
+        case angle::FormatID::R16G16B16_FLOAT:
+        case angle::FormatID::R16G16B16A16_SSCALED:
+        case angle::FormatID::R16G16B16A16_SNORM:
+        case angle::FormatID::R16G16B16A16_USCALED:
+        case angle::FormatID::R16G16B16A16_UNORM:
+        case angle::FormatID::R16G16B16A16_SINT:
+        case angle::FormatID::R16G16B16A16_UINT:
+        case angle::FormatID::R16G16B16A16_FLOAT:
+            return 2;
+
+        case angle::FormatID::R32_SSCALED:
+        case angle::FormatID::R32_SNORM:
+        case angle::FormatID::R32_USCALED:
+        case angle::FormatID::R32_UNORM:
+        case angle::FormatID::R32_SINT:
+        case angle::FormatID::R32_UINT:
+        case angle::FormatID::R32_FIXED:
+        case angle::FormatID::R32_FLOAT:
+        case angle::FormatID::R32G32_SSCALED:
+        case angle::FormatID::R32G32_SNORM:
+        case angle::FormatID::R32G32_USCALED:
+        case angle::FormatID::R32G32_UNORM:
+        case angle::FormatID::R32G32_SINT:
+        case angle::FormatID::R32G32_UINT:
+        case angle::FormatID::R32G32_FIXED:
+        case angle::FormatID::R32G32_FLOAT:
+        case angle::FormatID::R32G32B32_SSCALED:
+        case angle::FormatID::R32G32B32_SNORM:
+        case angle::FormatID::R32G32B32_USCALED:
+        case angle::FormatID::R32G32B32_UNORM:
+        case angle::FormatID::R32G32B32_SINT:
+        case angle::FormatID::R32G32B32_UINT:
+        case angle::FormatID::R32G32B32_FIXED:
+        case angle::FormatID::R32G32B32_FLOAT:
+        case angle::FormatID::R32G32B32A32_SSCALED:
+        case angle::FormatID::R32G32B32A32_SNORM:
+        case angle::FormatID::R32G32B32A32_USCALED:
+        case angle::FormatID::R32G32B32A32_UNORM:
+        case angle::FormatID::R32G32B32A32_SINT:
+        case angle::FormatID::R32G32B32A32_UINT:
+        case angle::FormatID::R32G32B32A32_FIXED:
+        case angle::FormatID::R32G32B32A32_FLOAT:
+            return 4;
+
+        case angle::FormatID::NONE:
+        default:
+            UNREACHABLE();
+#if !UNREACHABLE_IS_NORETURN
+            return 0;
+#endif
+    }
+}
+
 bool ValidES3InternalFormat(GLenum internalFormat)
 {
     const InternalFormatInfoMap &formatMap = GetInternalFormatMap();

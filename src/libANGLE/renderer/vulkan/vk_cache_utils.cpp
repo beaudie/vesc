@@ -1352,11 +1352,40 @@ constexpr size_t kTransitionBitShift = kTransitionByteShift + Log2(kBitsPerByte)
 #define ANGLE_GET_INDEXED_TRANSITION_BIT(Member, Field, Index, BitWidth) \
     (((BitWidth * Index) >> kTransitionBitShift) + ANGLE_GET_TRANSITION_BIT(Member, Field))
 
-constexpr angle::PackedEnumMap<gl::ComponentType, VkFormat> kMismatchedComponentTypeMap = {{
-    {gl::ComponentType::Float, VK_FORMAT_R32G32B32A32_SFLOAT},
-    {gl::ComponentType::Int, VK_FORMAT_R32G32B32A32_SINT},
-    {gl::ComponentType::UnsignedInt, VK_FORMAT_R32G32B32A32_UINT},
-}};
+enum class FormatWidth
+{
+    GLbyteWidth             = 1,
+    GLshortWidth            = 2,
+    GLfloatWidth            = 4,
+    GL_INT_2_10_10_10_Width = 5,
+    InvalidEnum             = 6,
+    EnumCount               = 6,
+};
+
+constexpr angle::PackedEnumMap<gl::ComponentType, angle::PackedEnumMap<FormatWidth, VkFormat>>
+    kMismatchedComponentTypeMap = {{
+        {gl::ComponentType::Float,
+         {
+             {FormatWidth::GLbyteWidth,
+              VK_FORMAT_R16G16B16A16_SFLOAT},  // 16 is used as we don't have
+                                               // a suitable minifloat format
+             {FormatWidth::GLshortWidth, VK_FORMAT_R16G16B16A16_SFLOAT},
+             {FormatWidth::GLfloatWidth, VK_FORMAT_R32G32B32A32_SFLOAT},
+             {FormatWidth::GL_INT_2_10_10_10_Width,
+              VK_FORMAT_R16G16B16A16_SFLOAT}  // 16 is used as we don't have a float format with a
+                                              // matching bit width
+         }},
+        {gl::ComponentType::Int,
+         {{FormatWidth::GLbyteWidth, VK_FORMAT_R8G8B8A8_SINT},
+          {FormatWidth::GLshortWidth, VK_FORMAT_R16G16B16A16_SINT},
+          {FormatWidth::GLfloatWidth, VK_FORMAT_R32G32B32A32_SINT},
+          {FormatWidth::GL_INT_2_10_10_10_Width, VK_FORMAT_A2B10G10R10_SINT_PACK32}}},
+        {gl::ComponentType::UnsignedInt,
+         {{FormatWidth::GLbyteWidth, VK_FORMAT_R8G8B8A8_UINT},
+          {FormatWidth::GLshortWidth, VK_FORMAT_R16G16B16A16_UINT},
+          {FormatWidth::GLfloatWidth, VK_FORMAT_R32G32B32A32_UINT},
+          {FormatWidth::GL_INT_2_10_10_10_Width, VK_FORMAT_A2B10G10R10_UINT_PACK32}}},
+    }};
 }  // anonymous namespace
 
 // RenderPassDesc implementation.
@@ -1843,12 +1872,29 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         gl::ComponentType programAttribType =
             gl::GetComponentTypeMask(programAttribsTypeMask, attribIndex);
 
+        // This forces stride to 0 when glVertexAttribute specifies a different type from the
+        // program's attribute type except when the type mismatch is a mismatched integer sign.
         if (attribType != programAttribType)
         {
             // Override the format with a compatible one.
-            vkFormat = kMismatchedComponentTypeMap[programAttribType];
+            FormatWidth byteWidth =
+                gl::is1010102VertexFormat(formatID)
+                    ? FormatWidth::GL_INT_2_10_10_10_Width
+                    : static_cast<FormatWidth>(gl::GetVertexFormatComponentByteWidth(formatID));
+            vkFormat = kMismatchedComponentTypeMap[programAttribType][byteWidth];
 
-            bindingDesc.stride = 0;  // Prevent out-of-bounds accesses.
+            GLenum programAttributeType =
+                contextVk->getState().getProgramExecutable()->getProgramInputs()[attribIndex].type;
+            GLuint attribSize = gl::GetVertexFormatFromID(formatID).components;
+            GLuint shaderVarSize =
+                static_cast<GLuint>(gl::VariableColumnCount(programAttributeType));
+
+            if (!contextVk->getNativeExtensions().relaxedVertexAttributeTypeANGLE ||
+                programAttribType == gl::ComponentType::Float ||
+                attribType == gl::ComponentType::Float || attribSize != shaderVarSize)
+            {
+                bindingDesc.stride = 0;
+            }
         }
 
         // The binding index could become more dynamic in ES 3.1.
