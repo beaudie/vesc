@@ -79,7 +79,7 @@ class DisplayGLX : public DisplayGL
     // Calling this is required at the end of every functions that does buffered
     // X calls (not for glX calls) otherwise there might be race conditions
     // between the application's display and ANGLE's one.
-    void syncXCommands() const;
+    void syncXCommands(bool alwaysSync) const;
 
     // Depending on the supported GLX extension, swap interval can be set
     // globally or per drawable. This function will make sure the drawable's
