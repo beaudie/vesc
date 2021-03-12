@@ -69,20 +69,48 @@ bool IsMesa(const FunctionsGL *functions, std::array<int, 3> *version)
     return true;
 }
 
-bool IsAdreno42xOr3xx(const FunctionsGL *functions)
+int getAdrenoNumber(const FunctionsGL *functions)
 {
-    const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
-
-    int adrenoNumber = 0;
-    if (std::sscanf(nativeGLRenderer, "Adreno (TM) %d", &adrenoNumber) < 1)
+    static int adrenoNumber = -1;
+    if (adrenoNumber == -1)
     {
-        // retry for freedreno driver
-        if (std::sscanf(nativeGLRenderer, "FD%d", &adrenoNumber) < 1)
+        const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
+        if (std::sscanf(nativeGLRenderer, "Adreno (TM) %d", &adrenoNumber) < 1 &&
+            std::sscanf(nativeGLRenderer, "FD%d", &adrenoNumber) < 1)
         {
-            return false;
+            adrenoNumber = 0;
         }
     }
-    return adrenoNumber < 430;
+    return adrenoNumber;
+}
+
+bool IsAdreno42xOr3xx(const FunctionsGL *functions)
+{
+    return getAdrenoNumber(functions) < 430;
+}
+
+bool IsAdrenoOlder5xxOrOlder(const FunctionsGL *functions)
+{
+    return getAdrenoNumber(functions) < 600;
+}
+
+int getMaliTNumber(const FunctionsGL *functions)
+{
+    static int maliTNumber = -1;
+    if (maliTNumber == -1)
+    {
+        const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
+        if (std::sscanf(nativeGLRenderer, "Mali-T%d", &maliTNumber) < 1)
+        {
+            maliTNumber = 0;
+        }
+    }
+    return maliTNumber;
+}
+
+bool IsMaliT8xxOrOlder(const FunctionsGL *functions)
+{
+    return getMaliTNumber(functions) < 900;
 }
 
 bool IsAndroidEmulator(const FunctionsGL *functions)
@@ -1243,6 +1271,13 @@ void GenerateCaps(const FunctionsGL *functions,
         LimitVersion(maxSupportedESVersion, gl::Version(3, 1));
     }
 
+    if (!nativegl::SupportsVertexArrayObjects(functions) ||
+        features.syncVertexArraysToDefault.enabled)
+    {
+        // ES 3.1 vertex bindings are not emulated on the default vertex array
+        LimitVersion(maxSupportedESVersion, gl::Version(3, 0));
+    }
+
     // Extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
     extensions->textureCompressionASTCHDRKHR =
@@ -1929,7 +1964,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
         features, disableSemaphoreFd,
         IsLinux() && isAMD && isMesa && mesaVersion < (std::array<int, 3>{19, 3, 5}));
 
-    ANGLE_FEATURE_CONDITION(features, disableTimestampQueries, IsLinux() && isVMWare);
+    ANGLE_FEATURE_CONDITION(features, disableTimestampQueries,
+                            (IsLinux() && isVMWare) || (IsAndroid() && isNvidia) ||
+                                (IsAndroid() && IsAdrenoOlder5xxOrOlder(functions)) ||
+                                (IsAndroid() && IsMaliT8xxOrOlder(functions)));
 
     ANGLE_FEATURE_CONDITION(features, encodeAndDecodeSRGBForGenerateMipmap, IsApple());
 
