@@ -4493,7 +4493,17 @@ void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
     const gl::VertexArray *vao = context->getState().getVertexArray();
 
     // Capture client array data.
-    for (size_t attribIndex : context->getStateCache().getActiveClientAttribsMask())
+    gl::AttributesMask attributesMask;
+    if (context->getClientVersion() < gl::Version(2, 0))
+    {
+        attributesMask = context->getState().gles1().getActiveAttributesMask();
+    }
+    else
+    {
+        attributesMask = context->getStateCache().getActiveClientAttribsMask();
+    }
+
+    for (size_t attribIndex : attributesMask)
     {
         const gl::VertexAttribute &attrib = vao->getVertexAttribute(attribIndex);
         const gl::VertexBinding &binding  = vao->getVertexBinding(attrib.bindingIndex);
