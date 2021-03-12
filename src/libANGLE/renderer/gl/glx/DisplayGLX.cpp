@@ -827,10 +827,7 @@ gl::Version DisplayGLX::getMaxSupportedESVersion() const
 
 void DisplayGLX::syncXCommands() const
 {
-    if (mUsesNewXDisplay)
-    {
-        XSync(mGLX.getDisplay(), False);
-    }
+    XSync(mGLX.getDisplay(), False);
 }
 
 void DisplayGLX::setSwapInterval(glx::Drawable drawable, SwapControlData *data)
