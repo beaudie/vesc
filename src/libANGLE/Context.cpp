@@ -19,6 +19,7 @@
 #include "common/angle_version.h"
 #include "common/matrix_utils.h"
 #include "common/platform.h"
+#include "common/system_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Compiler.h"
@@ -50,6 +51,7 @@ namespace gl
 {
 namespace
 {
+
 egl::ShareGroup *AllocateOrGetShareGroup(egl::Display *display, const gl::Context *shareContext)
 {
     if (shareContext)
@@ -3732,16 +3734,19 @@ void Context::initCaps()
 
     // If we're capturing application calls for replay, don't expose any binary formats to prevent
     // traces from trying to use cached results
-    if (getFrameCapture()->enabled())
+    if (getFrameCapture()->enabled() || getFrontendFeatures().captureLimits.enabled)
     {
-        INFO() << "Limiting binary format support count to zero while FrameCapture enabled"
+        INFO() << "Limit some features because "
+               << (getFrameCapture()->enabled() ? "FrameCapture is enabled"
+                                                : "FrameCapture limits were forced")
                << std::endl;
+
+        INFO() << "Limiting binary format support count to zero" << std::endl;
         mDisplay->overrideFrontendFeatures({"disable_program_binary"}, true);
 
         // Set to the most common limit per gpuinfo.org. Required for several platforms we test.
         constexpr GLint maxImageUnits = 8;
-        INFO() << "Limiting image unit count to " << maxImageUnits << " while FrameCapture enabled"
-               << std::endl;
+        INFO() << "Limiting image unit count to " << maxImageUnits << std::endl;
         ANGLE_LIMIT_CAP(mState.mCaps.maxImageUnits, maxImageUnits);
 
         // Set a large uniform buffer offset alignment that works on multiple platforms.
@@ -3750,7 +3755,7 @@ void Context::initCaps()
         constexpr GLint uniformBufferOffsetAlignment = 256;
         ASSERT(uniformBufferOffsetAlignment % mState.mCaps.uniformBufferOffsetAlignment == 0);
         INFO() << "Setting uniform buffer offset alignment to " << uniformBufferOffsetAlignment
-               << " while FrameCapture enabled" << std::endl;
+               << std::endl;
         mState.mCaps.uniformBufferOffsetAlignment = uniformBufferOffsetAlignment;
 
         INFO() << "Disabling GL_EXT_map_buffer_range and GL_OES_mapbuffer during capture, which "
@@ -3771,8 +3776,7 @@ void Context::initCaps()
 
         // Nvidia's Vulkan driver only supports 4 draw buffers
         constexpr GLint maxDrawBuffers = 4;
-        INFO() << "Limiting draw buffer count to " << maxDrawBuffers
-               << " while FrameCapture enabled" << std::endl;
+        INFO() << "Limiting draw buffer count to " << maxDrawBuffers << std::endl;
         ANGLE_LIMIT_CAP(mState.mCaps.maxDrawBuffers, maxDrawBuffers);
     }
 
