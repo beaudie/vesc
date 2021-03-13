@@ -630,6 +630,7 @@ class TestBatch():
     def RunReplay(self, replay_exe_path, child_processes_manager, tests):
         env = os.environ.copy()
         env['ANGLE_CAPTURE_ENABLED'] = '0'
+        env['ANGLE_APPLY_CAPTURE_LIMITS'] = '1'
         returncode, output = child_processes_manager.RunSubprocess([replay_exe_path],
                                                                    env,
                                                                    timeout=SUBPROCESS_TIMEOUT)
