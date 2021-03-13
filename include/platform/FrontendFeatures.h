@@ -65,6 +65,11 @@ struct FrontendFeatures : angle::FeatureSetBase
     angle::Feature allowCompressedFormats = {"allow_compressed_formats",
                                              angle::FeatureCategory::FrontendWorkarounds,
                                              "Allow compressed formats", &members};
+
+    angle::Feature captureLimits = {
+        "enable_capture_limits", angle::FeatureCategory::FrontendFeatures,
+        "Set the context limits like frame capturing was enabled", &members,
+        "https://bugs.chromium.org/p/angleproject/issues/detail?id=5750"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
