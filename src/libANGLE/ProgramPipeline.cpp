@@ -661,4 +661,22 @@ Shader *ProgramPipeline::getAttachedShader(ShaderType shaderType) const
     const Program *program = mState.mPrograms[shaderType];
     return program ? program->getAttachedShader(shaderType) : nullptr;
 }
+
+GLsizei ProgramPipeline::getTransformFeedbackVaryingCount() const
+{
+    GLsizei numVarying = 0;
+    // If separable program objects are in use, the set of attributes captured is taken from the
+    // program object active on the last vertex processing stage. The set of attributes to capture
+    // in transform feedback mode for any other program active on a previous shader stage is
+    // ignored.
+    for (const ShaderType shaderType : gl::AllShaderTypes())
+    {
+        Program *shaderProgram = getShaderProgram(shaderType);
+        if (shaderProgram && (shaderType < ShaderType::Fragment))
+        {
+            numVarying = shaderProgram->getTransformFeedbackVaryingCount();
+        }
+    }
+    return numVarying;
+}
 }  // namespace gl
