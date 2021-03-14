@@ -174,6 +174,7 @@ void ProgramExecutable::reset()
 
     mProgramInputs.clear();
     mLinkedTransformFeedbackVaryings.clear();
+    mTransformFeedbackStrides.clear();
     mUniforms.clear();
     mUniformBlocks.clear();
     mActiveUniformBlockBindings.reset();
