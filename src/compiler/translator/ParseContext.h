@@ -197,6 +197,8 @@ class TParseContext : angle::NonCopyable
         return mDirectiveHandler.extensionBehavior();
     }
 
+    bool checkTCSOutVarIndex(TIntermBinary *binaryExpression, const TSourceLoc &location);
+
     bool isExtensionEnabled(TExtension extension) const;
     void handleExtensionDirective(const TSourceLoc &loc, const char *extName, const char *behavior);
     void handlePragmaDirective(const TSourceLoc &loc,

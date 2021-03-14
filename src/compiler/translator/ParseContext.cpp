@@ -1986,6 +1986,27 @@ void TParseContext::checkNoncoherentIsNotSpecified(const TSourceLoc &location, b
     }
 }
 
+bool TParseContext::checkTCSOutVarIndex(TIntermBinary *binaryExpression, const TSourceLoc &location)
+{
+    ASSERT(binaryExpression != nullptr);
+    ASSERT(binaryExpression->getLeft() != nullptr);
+    ASSERT(binaryExpression->getRight() != nullptr);
+    TIntermTyped *baseExpression = binaryExpression->getLeft();
+    if (IsTessellationControlShaderOutput(mShaderType, baseExpression->getQualifier()))
+    {
+        const TIntermSymbol *intermSymbol = binaryExpression->getRight()->getAsSymbolNode();
+        if ((intermSymbol != nullptr) && (intermSymbol->getName() != "gl_InvocationID"))
+        {
+            error(location,
+                  "tessellation-control per-vertex output l-value must be indexed with "
+                  "gl_InvocationID",
+                  "[");
+            return false;
+        }
+    }
+    return true;
+}
+
 void TParseContext::functionCallRValueLValueErrorCheck(const TFunction *fnCandidate,
                                                        TIntermAggregate *fnCall)
 {
@@ -4601,20 +4622,6 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
         }
     }
 
-    if (mShaderType == GL_TESS_CONTROL_SHADER &&
-        IsTessellationControlShaderOutput(mShaderType, baseExpression->getQualifier()))
-    {
-        const TIntermSymbol *intermSymbol = indexExpression->getAsSymbolNode();
-        if (!intermSymbol || intermSymbol->getName() != "gl_InvocationID")
-        {
-            error(location,
-                  "tessellation-control per-vertex output l-value must be indexed with "
-                  "gl_InvocationID",
-                  "[");
-            return CreateZeroNode(TType(EbtFloat, EbpHigh, EvqConst));
-        }
-    }
-
     TIntermConstantUnion *indexConstantUnion = indexExpression->getAsConstantUnion();
 
     // ES3.2 or ES3.1's EXT_gpu_shader5 allow dynamically uniform expressions to be used as indices
@@ -6259,6 +6266,16 @@ TIntermTyped *TParseContext::addAssign(TOperator op,
     TIntermBinary *node = nullptr;
     if (binaryOpCommonCheck(op, left, right, loc))
     {
+        TIntermBinary *lValue = left->getAsBinaryNode();
+        if ((mShaderType == GL_TESS_CONTROL_SHADER) && (lValue != nullptr) &&
+            (lValue->getOp() == EOpIndexIndirect))
+        {
+            if (!checkTCSOutVarIndex(lValue, loc))
+            {
+                return left;
+            }
+        }
+
         if (op == EOpMulAssign)
         {
             op = TIntermBinary::GetMulAssignOpBasedOnOperands(left->getType(), right->getType());
