@@ -789,11 +789,20 @@ angle::Result TextureD3D::initializeContents(const gl::Context *context,
 
     // Slow path: non-renderable texture or the texture levels aren't set up.
     const auto &formatInfo = gl::GetSizedInternalFormatInfo(image->getInternalFormat());
+    gl::Extents imageSize(image->getWidth(), image->getWidth(), image->getDepth());
 
     GLuint imageBytes = 0;
-    ANGLE_CHECK_GL_MATH(contextD3D, formatInfo.computeRowPitch(formatInfo.type, image->getWidth(),
-                                                               1, 0, &imageBytes));
-    imageBytes *= image->getHeight() * image->getDepth();
+    if (formatInfo.compressed)
+    {
+        ANGLE_CHECK_GL_MATH(contextD3D,
+                            formatInfo.computeCompressedImageSize(imageSize, &imageBytes));
+    }
+    else
+    {
+        ANGLE_CHECK_GL_MATH(contextD3D, formatInfo.computeRowPitch(formatInfo.type, imageSize.width,
+                                                                   1, 0, &imageBytes));
+        imageBytes *= imageSize.height * imageSize.depth;
+    }
 
     gl::PixelUnpackState zeroDataUnpackState;
     zeroDataUnpackState.alignment = 1;
@@ -808,9 +817,16 @@ angle::Result TextureD3D::initializeContents(const gl::Context *context,
     }
     else
     {
-        gl::Box fullImageArea(0, 0, 0, image->getWidth(), image->getHeight(), image->getDepth());
-        ANGLE_TRY(image->loadData(context, fullImageArea, zeroDataUnpackState, formatInfo.type,
-                                  zeroBuffer->data(), false));
+        gl::Box fullImageArea(gl::Offset(0, 0, 0), imageSize);
+        if (formatInfo.compressed)
+        {
+            ANGLE_TRY(image->loadCompressedData(context, fullImageArea, zeroBuffer->data()));
+        }
+        else
+        {
+            ANGLE_TRY(image->loadData(context, fullImageArea, zeroDataUnpackState, formatInfo.type,
+                                      zeroBuffer->data(), false));
+        }
 
         // Force an update to the tex storage so we avoid problems with subImage and dirty regions.
         if (mTexStorage)
