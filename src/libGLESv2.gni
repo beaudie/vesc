@@ -467,6 +467,11 @@ libangle_capture_sources = [
   "src/libANGLE/capture/gl_enum_utils_autogen.cpp",
 ]
 
+libjson_serializer_sources = [
+  "src/libANGLE/serializer/JsonSerializer.cpp",
+  "src/libANGLE/serializer/JsonSerializer.h",
+]
+
 libgl_sources = [
   "src/libGL/entry_points_gl_1_autogen.cpp",
   "src/libGL/entry_points_gl_1_autogen.h",
