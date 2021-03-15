@@ -1080,15 +1080,10 @@ void WriteCppReplay(bool compression,
         if (SerializeContext(&serializedContextData, const_cast<gl::Context *>(context)) ==
             Result::Continue)
         {
-            size_t serializedContextLength = serializedContextData.length();
-            size_t serializedContextOffset = rx::roundUpPow2(binaryData->size(), kBinaryAlignment);
-            binaryData->resize(serializedContextOffset + serializedContextLength);
-            memcpy(binaryData->data() + serializedContextOffset, serializedContextData.data(),
-                   serializedContextLength);
-            out << "const uint8_t *"
+            out << "const std::string "
                 << FmtGetSerializedContextStateFunction(context->id(), frameIndex) << "\n";
             out << "{\n";
-            out << "    return &gBinaryData[" << serializedContextOffset << "];\n";
+            out << "    return R\"(" << serializedContextData.data() << ")\";\n";
             out << "}\n";
             out << "\n";
         }
@@ -1143,6 +1138,7 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "#include <cstdio>\n";
     header << "#include <cstring>\n";
     header << "#include <limits>\n";
+    header << "#include <string>\n";
     header << "#include <vector>\n";
     header << "#include <unordered_map>\n";
     header << "\n";
@@ -1212,7 +1208,7 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "ANGLE_REPLAY_EXPORT void ResetContext" << contextId << "Replay();\n";
     if (serializeStateEnabled)
     {
-        header << "ANGLE_REPLAY_EXPORT const uint8_t *GetSerializedContext" << contextId
+        header << "ANGLE_REPLAY_EXPORT const std::string GetSerializedContext" << contextId
                << "State(uint32_t frameIndex);\n";
     }
     header << "\n";
@@ -1225,7 +1221,7 @@ void WriteCppReplayIndexFiles(bool compression,
     {
         for (uint32_t frameIndex = 1; frameIndex <= frameCount; ++frameIndex)
         {
-            header << "ANGLE_REPLAY_EXPORT const uint8_t *"
+            header << "ANGLE_REPLAY_EXPORT const std::string "
                    << FmtGetSerializedContextStateFunction(contextId, frameIndex) << ";\n";
         }
         header << "\n";
@@ -1379,7 +1375,7 @@ void WriteCppReplayIndexFiles(bool compression,
 
     if (serializeStateEnabled)
     {
-        source << "const uint8_t *GetSerializedContext" << contextId
+        source << "const std::string GetSerializedContext" << contextId
                << "State(uint32_t frameIndex)\n";
         source << "{\n";
         source << "    switch (frameIndex)\n";
