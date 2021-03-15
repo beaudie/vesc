@@ -13,12 +13,12 @@
 
 namespace gl
 {
-class BinaryOutputStream;
+class JsonSerializer;
 class Context;
 }  // namespace gl
 
 namespace angle
 {
-Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context);
+Result SerializeContext(gl::JsonSerializer *bos, const gl::Context *context);
 }  // namespace angle
 #endif  // FRAME_CAPTURE_UTILS_H_
