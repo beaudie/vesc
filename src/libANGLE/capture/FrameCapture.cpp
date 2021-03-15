@@ -16,6 +16,7 @@
 
 #include "sys/stat.h"
 
+#include "common/JsonSerializer.h"
 #include "common/mathutil.h"
 #include "common/string_utils.h"
 #include "common/system_utils.h"
@@ -1076,7 +1077,7 @@ void WriteCppReplay(bool compression,
 
     if (serializeStateEnabled)
     {
-        gl::BinaryOutputStream serializedContextData{};
+        angle::JsonSerializer serializedContextData;
         if (SerializeContext(&serializedContextData, const_cast<gl::Context *>(context)) ==
             Result::Continue)
         {

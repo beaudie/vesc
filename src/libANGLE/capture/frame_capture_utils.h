@@ -11,14 +11,18 @@
 
 #include "libANGLE/Error.h"
 
+namespace angle
+{
+class JsonSerializer;
+}
+
 namespace gl
 {
-class BinaryOutputStream;
 class Context;
 }  // namespace gl
 
 namespace angle
 {
-Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context);
+Result SerializeContext(angle::JsonSerializer *bos, const gl::Context *context);
 }  // namespace angle
 #endif  // FRAME_CAPTURE_UTILS_H_
