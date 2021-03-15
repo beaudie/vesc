@@ -14,7 +14,6 @@
 #include "common/Color.h"
 #include "common/MemoryBuffer.h"
 #include "common/angleutils.h"
-#include "libANGLE/BinaryStream.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Context.h"
@@ -24,6 +23,7 @@
 #include "libANGLE/ResourceMap.h"
 #include "libANGLE/Sampler.h"
 #include "libANGLE/State.h"
+
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/angletypes.h"
@@ -42,46 +42,277 @@ namespace angle
 namespace
 {
 
-void SerializeColorF(gl::BinaryOutputStream *bos, const ColorF &color)
+using angle::JsonSerializer;
+
+using gl::BufferUsage;
+using gl::CompileStatus;
+using gl::CullFaceMode;
+using gl::InitState;
+using gl::PrimitiveMode;
+using gl::ProvokingVertexConvention;
+using gl::SrgbOverride;
+using gl::TextureTarget;
+using gl::TextureType;
+
+using sh::BlockLayoutType;
+using sh::BlockType;
+using sh::InterpolationType;
+
+static const char *TextureTypeToString(TextureType type)
 {
-    bos->writeFloat(color.red);
-    bos->writeFloat(color.green);
-    bos->writeFloat(color.blue);
-    bos->writeFloat(color.alpha);
+    switch (type)
+    {
+        case TextureType::_2D:
+            return "TEXTURE_2D";
+        case TextureType::_2DArray:
+            return "TEXTURE_2D_ARRAY";
+        case TextureType::_2DMultisample:
+            return "TEXTURE_2DMS";
+        case TextureType::_2DMultisampleArray:
+            return "TEXTURE_2DMS_ARRAY";
+        case TextureType::_3D:
+            return "TEXTURE_3D";
+        case TextureType::External:
+            return "TEXTURE_EXTERNAL";
+        case TextureType::Rectangle:
+            return "TEXTURE_RECT";
+        case TextureType::CubeMap:
+            return "TEXTURE_CUBE_MAP";
+        case TextureType::CubeMapArray:
+            return "TEXTURE_CUBE_MAP_ARRAY";
+        case TextureType::VideoImage:
+            return "TEXTURE_VIDEO_IMAGE";
+        case TextureType::Buffer:
+            return "TEXTURE_BUFFER";
+        default:
+            return "invalid";
+    }
 }
 
-void SerializeColorI(gl::BinaryOutputStream *bos, const ColorI &color)
+static const char *CullFaceModeToString(CullFaceMode mode)
 {
-    bos->writeInt(color.red);
-    bos->writeInt(color.green);
-    bos->writeInt(color.blue);
-    bos->writeInt(color.alpha);
+    switch (mode)
+    {
+        case CullFaceMode::Back:
+            return "CULL_BACK";
+        case CullFaceMode::Front:
+            return "CULL_FRONT";
+        case CullFaceMode::FrontAndBack:
+            return "CULL_FRONT_AND_BACK";
+        default:
+            return "invalid";
+    }
 }
 
-void SerializeColorUI(gl::BinaryOutputStream *bos, const ColorUI &color)
+static const char *ProvokingVertexConventionToString(ProvokingVertexConvention mode)
 {
-    bos->writeInt(color.red);
-    bos->writeInt(color.green);
-    bos->writeInt(color.blue);
-    bos->writeInt(color.alpha);
+    switch (mode)
+    {
+        case ProvokingVertexConvention::FirstVertexConvention:
+            return "First";
+        case ProvokingVertexConvention::LastVertexConvention:
+            return "Last";
+        default:
+            return "invalid";
+    }
+}
+
+static const char *InitStateToString(InitState state)
+{
+    return state == InitState::Initialized ? "Initialized" : "MayNeedInit";
+}
+
+static const char *BlockLayoutTypeToString(BlockLayoutType type)
+{
+    switch (type)
+    {
+        case BlockLayoutType::BLOCKLAYOUT_STD140:
+            return "std140";
+        case BlockLayoutType::BLOCKLAYOUT_STD430:
+            return "std430";
+        case BlockLayoutType::BLOCKLAYOUT_PACKED:
+            return "packed";
+        case BlockLayoutType::BLOCKLAYOUT_SHARED:
+            return "shared";
+        default:
+            return "invalid";
+    }
+}
+
+static const char *BlockTypeToString(BlockType type)
+{
+    return type == BlockType::BLOCK_BUFFER ? "buffer" : "uniform";
+}
+
+static const char *InterpolationTypeToString(InterpolationType type)
+{
+    switch (type)
+    {
+        case InterpolationType::INTERPOLATION_SMOOTH:
+            return "smooth";
+        case InterpolationType::INTERPOLATION_CENTROID:
+            return "centroid";
+        case InterpolationType::INTERPOLATION_SAMPLE:
+            return "sampled";
+        case InterpolationType::INTERPOLATION_FLAT:
+            return "flat";
+        case InterpolationType::INTERPOLATION_NOPERSPECTIVE:
+            return "nonperspective";
+        default:
+            return "invalid";
+    }
+}
+
+#define ENUM_TO_STRING(C, M) \
+    case C ::M:              \
+        return #M
+
+static const char *PrimitiveModeToString(PrimitiveMode mode)
+{
+    switch (mode)
+    {
+        ENUM_TO_STRING(PrimitiveMode, Points);
+        ENUM_TO_STRING(PrimitiveMode, Lines);
+        ENUM_TO_STRING(PrimitiveMode, LineLoop);
+        ENUM_TO_STRING(PrimitiveMode, LineStrip);
+        ENUM_TO_STRING(PrimitiveMode, Triangles);
+        ENUM_TO_STRING(PrimitiveMode, TriangleStrip);
+        ENUM_TO_STRING(PrimitiveMode, TriangleFan);
+        ENUM_TO_STRING(PrimitiveMode, Unused1);
+        ENUM_TO_STRING(PrimitiveMode, Unused2);
+        ENUM_TO_STRING(PrimitiveMode, Unused3);
+        ENUM_TO_STRING(PrimitiveMode, LinesAdjacency);
+        ENUM_TO_STRING(PrimitiveMode, LineStripAdjacency);
+        ENUM_TO_STRING(PrimitiveMode, TrianglesAdjacency);
+        ENUM_TO_STRING(PrimitiveMode, TriangleStripAdjacency);
+        ENUM_TO_STRING(PrimitiveMode, Patches);
+        default:
+            return "invalid";
+    }
+}
+
+static const char *BufferUsageToString(BufferUsage usage)
+{
+    switch (usage)
+    {
+        ENUM_TO_STRING(BufferUsage, DynamicCopy);
+        ENUM_TO_STRING(BufferUsage, DynamicDraw);
+        ENUM_TO_STRING(BufferUsage, DynamicRead);
+        ENUM_TO_STRING(BufferUsage, StaticCopy);
+        ENUM_TO_STRING(BufferUsage, StaticDraw);
+        ENUM_TO_STRING(BufferUsage, StaticRead);
+        ENUM_TO_STRING(BufferUsage, StreamCopy);
+        ENUM_TO_STRING(BufferUsage, StreamDraw);
+        ENUM_TO_STRING(BufferUsage, StreamRead);
+        default:
+            return "invalid";
+    }
+}
+
+static const char *SrgbOverrideToString(SrgbOverride value)
+{
+    switch (value)
+    {
+        ENUM_TO_STRING(SrgbOverride, Default);
+        ENUM_TO_STRING(SrgbOverride, SRGB);
+        ENUM_TO_STRING(SrgbOverride, Linear);
+        default:
+            return "invalid";
+    }
+}
+
+static const char *ColorGenericTypeToString(ColorGeneric::Type type)
+{
+    switch (type)
+    {
+        ENUM_TO_STRING(ColorGeneric::Type, Float);
+        ENUM_TO_STRING(ColorGeneric::Type, Int);
+        ENUM_TO_STRING(ColorGeneric::Type, UInt);
+        default:
+            return "invalid";
+    }
+}
+
+static const char *CompileStatusToString(CompileStatus status)
+{
+    switch (status)
+    {
+        ENUM_TO_STRING(CompileStatus, NOT_COMPILED);
+        ENUM_TO_STRING(CompileStatus, COMPILE_REQUESTED);
+        ENUM_TO_STRING(CompileStatus, COMPILED);
+        default:
+            return "invalid";
+    }
+}
+
+#undef ENUM_TO_STRING
+
+class GroupScope
+{
+  public:
+    GroupScope(JsonSerializer *json_, const std::string &name) : json(json_)
+    {
+        json->startGroup(name);
+    }
+
+    template <typename Int>
+    GroupScope(JsonSerializer *json_, const std::string &name, Int index) : json(json_)
+    {
+        std::ostringstream os;
+        os << name << index;
+        json->startGroup(os.str());
+    }
+    template <typename Int>
+    GroupScope(JsonSerializer *json_, Int index) : GroupScope(json_, "", index)
+    {}
+
+    ~GroupScope() { json->endGroup(); }
+
+  private:
+    JsonSerializer *json;
+};
+
+void SerializeColorF(JsonSerializer *json, const ColorF &color)
+{
+    json->addEntry("red", color.red);
+    json->addEntry("green", color.green);
+    json->addEntry("blue", color.blue);
+    json->addEntry("alpha", color.alpha);
+}
+
+void SerializeColorI(JsonSerializer *json, const ColorI &color)
+{
+    json->addEntry("Red", color.red);
+    json->addEntry("Green", color.green);
+    json->addEntry("Blue", color.blue);
+    json->addEntry("Alpha", color.alpha);
+}
+
+void SerializeColorUI(JsonSerializer *json, const ColorUI &color)
+{
+    json->addEntry("Red", color.red);
+    json->addEntry("Green", color.green);
+    json->addEntry("Blue", color.blue);
+    json->addEntry("Alpha", color.alpha);
 }
 
 template <class ObjectType>
 void SerializeOffsetBindingPointerVector(
-    gl::BinaryOutputStream *bos,
+    JsonSerializer *json,
     const std::vector<gl::OffsetBindingPointer<ObjectType>> &offsetBindingPointerVector)
 {
     for (size_t i = 0; i < offsetBindingPointerVector.size(); i++)
     {
-        bos->writeInt(offsetBindingPointerVector[i].id().value);
-        bos->writeInt(offsetBindingPointerVector[i].getOffset());
-        bos->writeInt(offsetBindingPointerVector[i].getSize());
+        GroupScope group(json, i);
+        json->addEntry("Value", offsetBindingPointerVector[i].id().value);
+        json->addEntry("Offset", offsetBindingPointerVector[i].getOffset());
+        json->addEntry("Size", offsetBindingPointerVector[i].getSize());
     }
 }
 
 template <class ObjectType>
 void SerializeBindingPointerVector(
-    gl::BinaryOutputStream *bos,
+    JsonSerializer *json,
     const std::vector<gl::BindingPointer<ObjectType>> &bindingPointerVector)
 {
     for (size_t i = 0; i < bindingPointerVector.size(); i++)
@@ -89,16 +320,19 @@ void SerializeBindingPointerVector(
         // Do not serialize zero bindings, as this will create unwanted diffs
         if (bindingPointerVector[i].id().value != 0)
         {
-            bos->writeInt(bindingPointerVector[i].id().value);
+            std::ostringstream s;
+            s << i;
+            json->addEntry(s.str().c_str(), bindingPointerVector[i].id().value);
         }
     }
 }
 
 template <class T>
-void SerializeRange(gl::BinaryOutputStream *bos, const gl::Range<T> &range)
+void SerializeRange(JsonSerializer *json, const gl::Range<T> &range)
 {
-    bos->writeInt(range.low());
-    bos->writeInt(range.high());
+    GroupScope group(json, "Range");
+    json->addEntry("Low", range.low());
+    json->addEntry("High", range.high());
 }
 
 bool IsValidColorAttachmentBinding(GLenum binding, size_t colorAttachmentsCount)
@@ -129,16 +363,17 @@ Result ReadPixelsFromAttachment(const gl::Context *context,
                                       (*pixels)->data()));
     return Result::Continue;
 }
-void SerializeImageIndex(gl::BinaryOutputStream *bos, const gl::ImageIndex &imageIndex)
+void SerializeImageIndex(JsonSerializer *json, const gl::ImageIndex &imageIndex)
 {
-    bos->writeEnum(imageIndex.getType());
-    bos->writeInt(imageIndex.getLevelIndex());
-    bos->writeInt(imageIndex.getLayerIndex());
-    bos->writeInt(imageIndex.getLayerCount());
+    GroupScope group(json, "Image");
+    json->addEntry("ImageType", TextureTypeToString(imageIndex.getType()));
+    json->addEntry("LevelIndex", imageIndex.getLevelIndex());
+    json->addEntry("LayerIndex", imageIndex.getLayerIndex());
+    json->addEntry("LayerCount", imageIndex.getLayerCount());
 }
 
 Result SerializeFramebufferAttachment(const gl::Context *context,
-                                      gl::BinaryOutputStream *bos,
+                                      JsonSerializer *json,
                                       ScratchBuffer *scratchBuffer,
                                       gl::Framebuffer *framebuffer,
                                       const gl::FramebufferAttachment &framebufferAttachment)
@@ -146,19 +381,19 @@ Result SerializeFramebufferAttachment(const gl::Context *context,
     if (framebufferAttachment.type() == GL_TEXTURE ||
         framebufferAttachment.type() == GL_RENDERBUFFER)
     {
-        bos->writeInt(framebufferAttachment.id());
+        json->addEntry("ID", framebufferAttachment.id());
     }
-    bos->writeInt(framebufferAttachment.type());
+    json->addEntry("Type", framebufferAttachment.type());
     // serialize target variable
-    bos->writeInt(framebufferAttachment.getBinding());
+    json->addEntry("Binding", framebufferAttachment.getBinding());
     if (framebufferAttachment.type() == GL_TEXTURE)
     {
-        SerializeImageIndex(bos, framebufferAttachment.getTextureImageIndex());
+        SerializeImageIndex(json, framebufferAttachment.getTextureImageIndex());
     }
-    bos->writeInt(framebufferAttachment.getNumViews());
-    bos->writeBool(framebufferAttachment.isMultiview());
-    bos->writeInt(framebufferAttachment.getBaseViewIndex());
-    bos->writeInt(framebufferAttachment.getRenderToTextureSamples());
+    json->addEntry("NumViews", framebufferAttachment.getNumViews());
+    json->addEntry("Multiview", framebufferAttachment.isMultiview());
+    json->addEntry("ViewIndex", framebufferAttachment.getBaseViewIndex());
+    json->addEntry("Samples", framebufferAttachment.getRenderToTextureSamples());
 
     if (framebufferAttachment.type() != GL_TEXTURE &&
         framebufferAttachment.type() != GL_RENDERBUFFER)
@@ -174,7 +409,7 @@ Result SerializeFramebufferAttachment(const gl::Context *context,
         MemoryBuffer *pixelsPtr = nullptr;
         ANGLE_TRY(ReadPixelsFromAttachment(context, framebuffer, framebufferAttachment,
                                            scratchBuffer, &pixelsPtr));
-        bos->writeBytes(pixelsPtr->data(), pixelsPtr->size());
+        json->addEntry("Data", pixelsPtr->data(), pixelsPtr->size());
         // Reset framebuffer state
         framebuffer->setReadBuffer(prevReadBufferState);
     }
@@ -182,20 +417,21 @@ Result SerializeFramebufferAttachment(const gl::Context *context,
 }
 
 Result SerializeFramebufferState(const gl::Context *context,
-                                 gl::BinaryOutputStream *bos,
+                                 JsonSerializer *json,
                                  ScratchBuffer *scratchBuffer,
                                  gl::Framebuffer *framebuffer,
                                  const gl::FramebufferState &framebufferState)
 {
-    bos->writeInt(framebufferState.id().value);
-    bos->writeString(framebufferState.getLabel());
-    bos->writeIntVector(framebufferState.getDrawBufferStates());
-    bos->writeInt(framebufferState.getReadBufferState());
-    bos->writeInt(framebufferState.getDefaultWidth());
-    bos->writeInt(framebufferState.getDefaultHeight());
-    bos->writeInt(framebufferState.getDefaultSamples());
-    bos->writeBool(framebufferState.getDefaultFixedSampleLocations());
-    bos->writeInt(framebufferState.getDefaultLayers());
+    GroupScope group(json, "Framebuffer");
+    json->addEntry("ID", framebufferState.id().value);
+    json->addEntry("Label", framebufferState.getLabel());
+    json->addEntry("DrawStates", framebufferState.getDrawBufferStates());
+    json->addEntry("ReadBufferState", framebufferState.getReadBufferState());
+    json->addEntry("DefaultWidth", framebufferState.getDefaultWidth());
+    json->addEntry("DefaultHeight", framebufferState.getDefaultHeight());
+    json->addEntry("DefaultSamples", framebufferState.getDefaultSamples());
+    json->addEntry("DefaultFixedSampleLocation", framebufferState.getDefaultFixedSampleLocations());
+    json->addEntry("DefaultLayers", framebufferState.getDefaultLayers());
 
     const std::vector<gl::FramebufferAttachment> &colorAttachments =
         framebufferState.getColorAttachments();
@@ -203,25 +439,29 @@ Result SerializeFramebufferState(const gl::Context *context,
     {
         if (colorAttachment.isAttached())
         {
-            ANGLE_TRY(SerializeFramebufferAttachment(context, bos, scratchBuffer, framebuffer,
+            GroupScope colorAttachmentgroup(json, "ColorAttachment");
+            ANGLE_TRY(SerializeFramebufferAttachment(context, json, scratchBuffer, framebuffer,
                                                      colorAttachment));
         }
     }
     if (framebuffer->getDepthStencilAttachment())
     {
-        ANGLE_TRY(SerializeFramebufferAttachment(context, bos, scratchBuffer, framebuffer,
+        GroupScope dsAttachmentgroup(json, "DepthStencilAttachment");
+        ANGLE_TRY(SerializeFramebufferAttachment(context, json, scratchBuffer, framebuffer,
                                                  *framebuffer->getDepthStencilAttachment()));
     }
     else
     {
         if (framebuffer->getDepthAttachment())
         {
-            ANGLE_TRY(SerializeFramebufferAttachment(context, bos, scratchBuffer, framebuffer,
+            GroupScope depthAttachmentgroup(json, "DepthAttachment");
+            ANGLE_TRY(SerializeFramebufferAttachment(context, json, scratchBuffer, framebuffer,
                                                      *framebuffer->getDepthAttachment()));
         }
         if (framebuffer->getStencilAttachment())
         {
-            ANGLE_TRY(SerializeFramebufferAttachment(context, bos, scratchBuffer, framebuffer,
+            GroupScope stencilAttachmengroup(json, "StencilAttachment");
+            ANGLE_TRY(SerializeFramebufferAttachment(context, json, scratchBuffer, framebuffer,
                                                      *framebuffer->getStencilAttachment()));
         }
     }
@@ -229,72 +469,78 @@ Result SerializeFramebufferState(const gl::Context *context,
 }
 
 Result SerializeFramebuffer(const gl::Context *context,
-                            gl::BinaryOutputStream *bos,
+                            JsonSerializer *json,
                             ScratchBuffer *scratchBuffer,
                             gl::Framebuffer *framebuffer)
 {
-    return SerializeFramebufferState(context, bos, scratchBuffer, framebuffer,
+    return SerializeFramebufferState(context, json, scratchBuffer, framebuffer,
                                      framebuffer->getState());
 }
 
-void SerializeRasterizerState(gl::BinaryOutputStream *bos,
-                              const gl::RasterizerState &rasterizerState)
+void SerializeRasterizerState(JsonSerializer *json, const gl::RasterizerState &rasterizerState)
 {
-    bos->writeBool(rasterizerState.cullFace);
-    bos->writeEnum(rasterizerState.cullMode);
-    bos->writeInt(rasterizerState.frontFace);
-    bos->writeBool(rasterizerState.polygonOffsetFill);
-    bos->writeFloat(rasterizerState.polygonOffsetFactor);
-    bos->writeFloat(rasterizerState.polygonOffsetUnits);
-    bos->writeBool(rasterizerState.pointDrawMode);
-    bos->writeBool(rasterizerState.multiSample);
-    bos->writeBool(rasterizerState.rasterizerDiscard);
-    bos->writeBool(rasterizerState.dither);
+    GroupScope group(json, "Rasterizer");
+    json->addEntry("CullFace", rasterizerState.cullFace);
+    json->addEntry("CullMode", CullFaceModeToString(rasterizerState.cullMode));
+    json->addEntry("FrontFace", rasterizerState.frontFace);
+    json->addEntry("PolygonOffsetFill", rasterizerState.polygonOffsetFill);
+    json->addEntry("PolygonOffsetFactor", rasterizerState.polygonOffsetFactor);
+    json->addEntry("PolygonOffsetUnits", rasterizerState.polygonOffsetUnits);
+    json->addEntry("PointDrawMode", rasterizerState.pointDrawMode);
+    json->addEntry("MultiSample", rasterizerState.multiSample);
+    json->addEntry("RasterizerDiscard", rasterizerState.rasterizerDiscard);
+    json->addEntry("Dither", rasterizerState.dither);
 }
 
-void SerializeRectangle(gl::BinaryOutputStream *bos, const gl::Rectangle &rectangle)
+void SerializeRectangle(JsonSerializer *json,
+                        const std::string &name,
+                        const gl::Rectangle &rectangle)
 {
-    bos->writeInt(rectangle.x);
-    bos->writeInt(rectangle.y);
-    bos->writeInt(rectangle.width);
-    bos->writeInt(rectangle.height);
+    GroupScope group(json, name);
+    json->addEntry("x", rectangle.x);
+    json->addEntry("y", rectangle.y);
+    json->addEntry("w", rectangle.width);
+    json->addEntry("h", rectangle.height);
 }
 
-void SerializeBlendStateExt(gl::BinaryOutputStream *bos, const gl::BlendStateExt &blendStateExt)
+void SerializeBlendStateExt(JsonSerializer *json, const gl::BlendStateExt &blendStateExt)
 {
-    bos->writeInt(blendStateExt.mEnabledMask.bits());
-    bos->writeInt(blendStateExt.mDstColor);
-    bos->writeInt(blendStateExt.mDstAlpha);
-    bos->writeInt(blendStateExt.mSrcColor);
-    bos->writeInt(blendStateExt.mSrcAlpha);
-    bos->writeInt(blendStateExt.mEquationColor);
-    bos->writeInt(blendStateExt.mEquationAlpha);
-    bos->writeInt(blendStateExt.mColorMask);
+    GroupScope group(json, "BlendStateExt");
+    json->addEntry("MaxDrawBuffers", blendStateExt.mMaxDrawBuffers);
+    json->addEntry("enableMask", blendStateExt.mEnabledMask.bits());
+    json->addEntry("DstColor", blendStateExt.mDstColor);
+    json->addEntry("DstAlpha", blendStateExt.mDstAlpha);
+    json->addEntry("SrcColor", blendStateExt.mSrcColor);
+    json->addEntry("SrcAlpha", blendStateExt.mSrcAlpha);
+    json->addEntry("EquationColor", blendStateExt.mEquationColor);
+    json->addEntry("EquationAlpha", blendStateExt.mEquationAlpha);
+    json->addEntry("ColorMask", blendStateExt.mColorMask);
 }
 
-void SerializeDepthStencilState(gl::BinaryOutputStream *bos,
+void SerializeDepthStencilState(JsonSerializer *json,
                                 const gl::DepthStencilState &depthStencilState)
 {
-    bos->writeBool(depthStencilState.depthTest);
-    bos->writeInt(depthStencilState.depthFunc);
-    bos->writeBool(depthStencilState.depthMask);
-    bos->writeBool(depthStencilState.stencilTest);
-    bos->writeInt(depthStencilState.stencilFunc);
-    bos->writeInt(depthStencilState.stencilMask);
-    bos->writeInt(depthStencilState.stencilFail);
-    bos->writeInt(depthStencilState.stencilPassDepthFail);
-    bos->writeInt(depthStencilState.stencilPassDepthPass);
-    bos->writeInt(depthStencilState.stencilWritemask);
-    bos->writeInt(depthStencilState.stencilBackFunc);
-    bos->writeInt(depthStencilState.stencilBackMask);
-    bos->writeInt(depthStencilState.stencilBackFail);
-    bos->writeInt(depthStencilState.stencilBackPassDepthFail);
-    bos->writeInt(depthStencilState.stencilBackPassDepthPass);
-    bos->writeInt(depthStencilState.stencilBackWritemask);
+    GroupScope group(json, "DepthStencilState");
+    json->addEntry("DepthTest", depthStencilState.depthTest);
+    json->addEntry("DepthFunc", depthStencilState.depthFunc);
+    json->addEntry("DepthMask", depthStencilState.depthMask);
+    json->addEntry("StencilTest", depthStencilState.stencilTest);
+    json->addEntry("StencilFunc", depthStencilState.stencilFunc);
+    json->addEntry("StencilMask", depthStencilState.stencilMask);
+    json->addEntry("StencilFail", depthStencilState.stencilFail);
+    json->addEntry("StencilPassDepthFail", depthStencilState.stencilPassDepthFail);
+    json->addEntry("StencilPassDepthPass", depthStencilState.stencilPassDepthPass);
+    json->addEntry("StencilWritemask", depthStencilState.stencilWritemask);
+    json->addEntry("StencilBackFunc", depthStencilState.stencilBackFunc);
+    json->addEntry("StencilBackMask", depthStencilState.stencilBackMask);
+    json->addEntry("StencilBackFail", depthStencilState.stencilBackFail);
+    json->addEntry("StencilBackPassDepthFail", depthStencilState.stencilBackPassDepthFail);
+    json->addEntry("StencilBackPassDepthPass", depthStencilState.stencilBackPassDepthPass);
+    json->addEntry("StencilBackWritemask", depthStencilState.stencilBackWritemask);
 }
 
 void SerializeVertexAttribCurrentValueData(
-    gl::BinaryOutputStream *bos,
+    JsonSerializer *json,
     const gl::VertexAttribCurrentValueData &vertexAttribCurrentValueData)
 {
     ASSERT(vertexAttribCurrentValueData.Type == gl::VertexAttribType::Float ||
@@ -302,282 +548,302 @@ void SerializeVertexAttribCurrentValueData(
            vertexAttribCurrentValueData.Type == gl::VertexAttribType::UnsignedInt);
     if (vertexAttribCurrentValueData.Type == gl::VertexAttribType::Float)
     {
-        bos->writeFloat(vertexAttribCurrentValueData.Values.FloatValues[0]);
-        bos->writeFloat(vertexAttribCurrentValueData.Values.FloatValues[1]);
-        bos->writeFloat(vertexAttribCurrentValueData.Values.FloatValues[2]);
-        bos->writeFloat(vertexAttribCurrentValueData.Values.FloatValues[3]);
+        json->addEntry("0", vertexAttribCurrentValueData.Values.FloatValues[0]);
+        json->addEntry("1", vertexAttribCurrentValueData.Values.FloatValues[1]);
+        json->addEntry("2", vertexAttribCurrentValueData.Values.FloatValues[2]);
+        json->addEntry("3", vertexAttribCurrentValueData.Values.FloatValues[3]);
     }
     else if (vertexAttribCurrentValueData.Type == gl::VertexAttribType::Int)
     {
-        bos->writeInt(vertexAttribCurrentValueData.Values.IntValues[0]);
-        bos->writeInt(vertexAttribCurrentValueData.Values.IntValues[1]);
-        bos->writeInt(vertexAttribCurrentValueData.Values.IntValues[2]);
-        bos->writeInt(vertexAttribCurrentValueData.Values.IntValues[3]);
+        json->addEntry("0", vertexAttribCurrentValueData.Values.IntValues[0]);
+        json->addEntry("1", vertexAttribCurrentValueData.Values.IntValues[1]);
+        json->addEntry("2", vertexAttribCurrentValueData.Values.IntValues[2]);
+        json->addEntry("3", vertexAttribCurrentValueData.Values.IntValues[3]);
     }
     else
     {
-        bos->writeInt(vertexAttribCurrentValueData.Values.UnsignedIntValues[0]);
-        bos->writeInt(vertexAttribCurrentValueData.Values.UnsignedIntValues[1]);
-        bos->writeInt(vertexAttribCurrentValueData.Values.UnsignedIntValues[2]);
-        bos->writeInt(vertexAttribCurrentValueData.Values.UnsignedIntValues[3]);
+        json->addEntry("0", vertexAttribCurrentValueData.Values.UnsignedIntValues[0]);
+        json->addEntry("1", vertexAttribCurrentValueData.Values.UnsignedIntValues[1]);
+        json->addEntry("2", vertexAttribCurrentValueData.Values.UnsignedIntValues[2]);
+        json->addEntry("3", vertexAttribCurrentValueData.Values.UnsignedIntValues[3]);
     }
 }
 
-void SerializePixelPackState(gl::BinaryOutputStream *bos, const gl::PixelPackState &pixelPackState)
+void SerializePixelPackState(JsonSerializer *json, const gl::PixelPackState &pixelPackState)
 {
-    bos->writeInt(pixelPackState.alignment);
-    bos->writeInt(pixelPackState.rowLength);
-    bos->writeInt(pixelPackState.skipRows);
-    bos->writeInt(pixelPackState.skipPixels);
-    bos->writeInt(pixelPackState.imageHeight);
-    bos->writeInt(pixelPackState.skipImages);
-    bos->writeBool(pixelPackState.reverseRowOrder);
+    GroupScope group(json, "PixelPackState");
+    json->addEntry("Alignment", pixelPackState.alignment);
+    json->addEntry("RowLength", pixelPackState.rowLength);
+    json->addEntry("SkipRows", pixelPackState.skipRows);
+    json->addEntry("SkipPixels", pixelPackState.skipPixels);
+    json->addEntry("ImageHeight", pixelPackState.imageHeight);
+    json->addEntry("SkipImages", pixelPackState.skipImages);
+    json->addEntry("ReverseRowOrder", pixelPackState.reverseRowOrder);
 }
 
-void SerializePixelUnpackState(gl::BinaryOutputStream *bos,
-                               const gl::PixelUnpackState &pixelUnpackState)
+void SerializePixelUnpackState(JsonSerializer *json, const gl::PixelUnpackState &pixelUnpackState)
 {
-    bos->writeInt(pixelUnpackState.alignment);
-    bos->writeInt(pixelUnpackState.rowLength);
-    bos->writeInt(pixelUnpackState.skipRows);
-    bos->writeInt(pixelUnpackState.skipPixels);
-    bos->writeInt(pixelUnpackState.imageHeight);
-    bos->writeInt(pixelUnpackState.skipImages);
+    GroupScope group(json, "PixelUnpackState");
+    json->addEntry("Alignment", pixelUnpackState.alignment);
+    json->addEntry("RowLength", pixelUnpackState.rowLength);
+    json->addEntry("SkipRows", pixelUnpackState.skipRows);
+    json->addEntry("SkipPixels", pixelUnpackState.skipPixels);
+    json->addEntry("ImageHeight", pixelUnpackState.imageHeight);
+    json->addEntry("SkipImages", pixelUnpackState.skipImages);
 }
 
-void SerializeImageUnit(gl::BinaryOutputStream *bos, const gl::ImageUnit &imageUnit)
+void SerializeImageUnit(JsonSerializer *json, const gl::ImageUnit &imageUnit)
 {
-    bos->writeInt(imageUnit.level);
-    bos->writeInt(imageUnit.layered);
-    bos->writeInt(imageUnit.layer);
-    bos->writeInt(imageUnit.access);
-    bos->writeInt(imageUnit.format);
-    bos->writeInt(imageUnit.texture.id().value);
+    GroupScope group(json, "ImageUnit");
+    json->addEntry("Level", imageUnit.level);
+    json->addEntry("Layered", imageUnit.layered);
+    json->addEntry("Layer", imageUnit.layer);
+    json->addEntry("Access", imageUnit.access);
+    json->addEntry("Format", imageUnit.format);
+    json->addEntry("Texid", imageUnit.texture.id().value);
 }
 
-void SerializeGLContextStates(gl::BinaryOutputStream *bos, const gl::State &state)
+void SerializeGLContextStates(JsonSerializer *json, const gl::State &state)
 {
-    bos->writeInt(state.getClientType());
-    bos->writeInt(state.getContextPriority());
-    bos->writeInt(state.getClientMajorVersion());
-    bos->writeInt(state.getClientMinorVersion());
+    GroupScope group(json, "ContextStates");
+    json->addEntry("ClientType", state.getClientType());
+    json->addEntry("Priority", state.getContextPriority());
+    json->addEntry("Major", state.getClientMajorVersion());
+    json->addEntry("Minor", state.getClientMinorVersion());
 
-    SerializeColorF(bos, state.getColorClearValue());
-    bos->writeFloat(state.getDepthClearValue());
-    bos->writeInt(state.getStencilClearValue());
-    SerializeRasterizerState(bos, state.getRasterizerState());
-    bos->writeBool(state.isScissorTestEnabled());
-    SerializeRectangle(bos, state.getScissor());
-    SerializeBlendStateExt(bos, state.getBlendStateExt());
-    SerializeColorF(bos, state.getBlendColor());
-    bos->writeBool(state.isSampleAlphaToCoverageEnabled());
-    bos->writeBool(state.isSampleCoverageEnabled());
-    bos->writeFloat(state.getSampleCoverageValue());
-    bos->writeBool(state.getSampleCoverageInvert());
-    bos->writeBool(state.isSampleMaskEnabled());
-    bos->writeInt(state.getMaxSampleMaskWords());
+    SerializeColorF(json, state.getColorClearValue());
+    json->addEntry("DepthClearValue", state.getDepthClearValue());
+    json->addEntry("StencilClearValue", state.getStencilClearValue());
+    SerializeRasterizerState(json, state.getRasterizerState());
+    json->addEntry("ScissorTestEnabled", state.isScissorTestEnabled());
+    SerializeRectangle(json, "Scissors", state.getScissor());
+    SerializeBlendStateExt(json, state.getBlendStateExt());
+    SerializeColorF(json, state.getBlendColor());
+    json->addEntry("SampleAlphaToCoverageEnabled", state.isSampleAlphaToCoverageEnabled());
+    json->addEntry("SampleCoverageEnabled", state.isSampleCoverageEnabled());
+    json->addEntry("SampleCoverageValue", state.getSampleCoverageValue());
+    json->addEntry("SampleCoverageInvert", state.getSampleCoverageInvert());
+    json->addEntry("SampleMaskEnabled", state.isSampleMaskEnabled());
+    json->addEntry("MaxSampleMaskWords", state.getMaxSampleMaskWords());
     const auto &sampleMaskValues = state.getSampleMaskValues();
     for (size_t i = 0; i < sampleMaskValues.size(); i++)
     {
-        bos->writeInt(sampleMaskValues[i]);
+        std::ostringstream os;
+        os << i;
+        json->addEntry(os.str(), sampleMaskValues[i]);
     }
-    SerializeDepthStencilState(bos, state.getDepthStencilState());
-    bos->writeInt(state.getStencilRef());
-    bos->writeInt(state.getStencilBackRef());
-    bos->writeFloat(state.getLineWidth());
-    bos->writeInt(state.getGenerateMipmapHint());
-    bos->writeInt(state.getTextureFilteringHint());
-    bos->writeInt(state.getFragmentShaderDerivativeHint());
-    bos->writeBool(state.isBindGeneratesResourceEnabled());
-    bos->writeBool(state.areClientArraysEnabled());
-    SerializeRectangle(bos, state.getViewport());
-    bos->writeFloat(state.getNearPlane());
-    bos->writeFloat(state.getFarPlane());
+    SerializeDepthStencilState(json, state.getDepthStencilState());
+    json->addEntry("StencilRef", state.getStencilRef());
+    json->addEntry("StencilBackRef", state.getStencilBackRef());
+    json->addEntry("LineWidth", state.getLineWidth());
+    json->addEntry("GenerateMipmapHint", state.getGenerateMipmapHint());
+    json->addEntry("TextureFilteringHint", state.getTextureFilteringHint());
+    json->addEntry("FragmentShaderDerivativeHint", state.getFragmentShaderDerivativeHint());
+    json->addEntry("BindGeneratesResourceEnabled", state.isBindGeneratesResourceEnabled());
+    json->addEntry("ClientArraysEnabled", state.areClientArraysEnabled());
+    SerializeRectangle(json, "Viewport", state.getViewport());
+    json->addEntry("Near", state.getNearPlane());
+    json->addEntry("Far", state.getFarPlane());
     if (state.getReadFramebuffer())
     {
-        bos->writeInt(state.getReadFramebuffer()->id().value);
+        json->addEntry("Framebuffer ID", state.getReadFramebuffer()->id().value);
     }
     if (state.getDrawFramebuffer())
     {
-        bos->writeInt(state.getDrawFramebuffer()->id().value);
+        json->addEntry("Draw Framebuffer ID", state.getDrawFramebuffer()->id().value);
     }
-    bos->writeInt(state.getRenderbufferId().value);
+    json->addEntry("Renderbuffer ID", state.getRenderbufferId().value);
     if (state.getProgram())
     {
-        bos->writeInt(state.getProgram()->id().value);
+        json->addEntry("ProgramID", state.getProgram()->id().value);
     }
     if (state.getProgramPipeline())
     {
-        bos->writeInt(state.getProgramPipeline()->id().value);
+        json->addEntry("ProgramPipelineID", state.getProgramPipeline()->id().value);
     }
-    bos->writeEnum(state.getProvokingVertex());
+    json->addEntry("ProvokingVertex",
+                   ProvokingVertexConventionToString(state.getProvokingVertex()));
     const std::vector<gl::VertexAttribCurrentValueData> &vertexAttribCurrentValues =
         state.getVertexAttribCurrentValues();
     for (size_t i = 0; i < vertexAttribCurrentValues.size(); i++)
     {
-        SerializeVertexAttribCurrentValueData(bos, vertexAttribCurrentValues[i]);
+        GroupScope vagroup(json, "VertexAttribCurrentValues", i);
+        SerializeVertexAttribCurrentValueData(json, vertexAttribCurrentValues[i]);
     }
     if (state.getVertexArray())
     {
-        bos->writeInt(state.getVertexArray()->id().value);
+        json->addEntry("VertexArrayID", state.getVertexArray()->id().value);
     }
-    bos->writeInt(state.getCurrentValuesTypeMask().to_ulong());
-    bos->writeInt(state.getActiveSampler());
+    json->addEntry("CurrentValuesTypeMask", state.getCurrentValuesTypeMask().to_ulong());
+    json->addEntry("ActiveSampler", state.getActiveSampler());
     for (const auto &textures : state.getBoundTexturesForCapture())
     {
-        SerializeBindingPointerVector<gl::Texture>(bos, textures);
+        SerializeBindingPointerVector<gl::Texture>(json, textures);
     }
-    bos->writeInt(state.getTexturesIncompatibleWithSamplers().to_ulong());
-    SerializeBindingPointerVector<gl::Sampler>(bos, state.getSamplers());
+    json->addEntry("texturesIncompatibleWithSamplers",
+                   state.getTexturesIncompatibleWithSamplers().to_ulong());
+    SerializeBindingPointerVector<gl::Sampler>(json, state.getSamplers());
     for (const gl::ImageUnit &imageUnit : state.getImageUnits())
     {
-        SerializeImageUnit(bos, imageUnit);
+        SerializeImageUnit(json, imageUnit);
     }
     for (const auto &query : state.getActiveQueriesForCapture())
     {
-        bos->writeInt(query.id().value);
+        json->addEntry("Query", query.id().value);
     }
     for (const auto &boundBuffer : state.getBoundBuffersForCapture())
     {
-        bos->writeInt(boundBuffer.id().value);
+        json->addEntry("Bound", boundBuffer.id().value);
     }
-    SerializeOffsetBindingPointerVector<gl::Buffer>(bos,
+    SerializeOffsetBindingPointerVector<gl::Buffer>(json,
                                                     state.getOffsetBindingPointerUniformBuffers());
     SerializeOffsetBindingPointerVector<gl::Buffer>(
-        bos, state.getOffsetBindingPointerAtomicCounterBuffers());
+        json, state.getOffsetBindingPointerAtomicCounterBuffers());
     SerializeOffsetBindingPointerVector<gl::Buffer>(
-        bos, state.getOffsetBindingPointerShaderStorageBuffers());
+        json, state.getOffsetBindingPointerShaderStorageBuffers());
     if (state.getCurrentTransformFeedback())
     {
-        bos->writeInt(state.getCurrentTransformFeedback()->id().value);
+        json->addEntry("CurrentTransformFeedback", state.getCurrentTransformFeedback()->id().value);
     }
-    SerializePixelUnpackState(bos, state.getUnpackState());
-    SerializePixelPackState(bos, state.getPackState());
-    bos->writeBool(state.isPrimitiveRestartEnabled());
-    bos->writeBool(state.isMultisamplingEnabled());
-    bos->writeBool(state.isSampleAlphaToOneEnabled());
-    bos->writeInt(state.getCoverageModulation());
-    bos->writeBool(state.getFramebufferSRGB());
-    bos->writeBool(state.isRobustResourceInitEnabled());
-    bos->writeBool(state.isProgramBinaryCacheEnabled());
-    bos->writeBool(state.isTextureRectangleEnabled());
-    bos->writeInt(state.getMaxShaderCompilerThreads());
-    bos->writeInt(state.getEnabledClipDistances().to_ulong());
-    bos->writeInt(state.getBlendFuncConstantAlphaDrawBuffers().to_ulong());
-    bos->writeInt(state.getBlendFuncConstantColorDrawBuffers().to_ulong());
-    bos->writeBool(state.noSimultaneousConstantColorAndAlphaBlendFunc());
+    SerializePixelUnpackState(json, state.getUnpackState());
+    SerializePixelPackState(json, state.getPackState());
+    json->addEntry("PrimitiveRestartEnabled", state.isPrimitiveRestartEnabled());
+    json->addEntry("MultisamplingEnabled", state.isMultisamplingEnabled());
+    json->addEntry("SampleAlphaToOneEnabled", state.isSampleAlphaToOneEnabled());
+    json->addEntry("CoverageModulation", state.getCoverageModulation());
+    json->addEntry("FramebufferSRGB", state.getFramebufferSRGB());
+    json->addEntry("RobustResourceInitEnabled", state.isRobustResourceInitEnabled());
+    json->addEntry("ProgramBinaryCacheEnabled", state.isProgramBinaryCacheEnabled());
+    json->addEntry("TextureRectangleEnabled", state.isTextureRectangleEnabled());
+    json->addEntry("MaxShaderCompilerThreads", state.getMaxShaderCompilerThreads());
+    json->addEntry("EnabledClipDistances", state.getEnabledClipDistances().to_ulong());
+    json->addEntry("BlendFuncConstantAlphaDrawBuffers",
+                   state.getBlendFuncConstantAlphaDrawBuffers().to_ulong());
+    json->addEntry("BlendFuncConstantColorDrawBuffers",
+                   state.getBlendFuncConstantColorDrawBuffers().to_ulong());
+    json->addEntry("SimultaneousConstantColorAndAlphaBlendFunc",
+                   state.noSimultaneousConstantColorAndAlphaBlendFunc());
 }
 
-void SerializeBufferState(gl::BinaryOutputStream *bos, const gl::BufferState &bufferState)
+void SerializeBufferState(JsonSerializer *json, const gl::BufferState &bufferState)
 {
-    bos->writeString(bufferState.getLabel());
-    bos->writeEnum(bufferState.getUsage());
-    bos->writeInt(bufferState.getSize());
-    bos->writeInt(bufferState.getAccessFlags());
-    bos->writeInt(bufferState.getAccess());
-    bos->writeInt(bufferState.isMapped());
-    bos->writeInt(bufferState.getMapOffset());
-    bos->writeInt(bufferState.getMapLength());
+    json->addEntry("Label", bufferState.getLabel());
+    json->addEntry("Usage", BufferUsageToString(bufferState.getUsage()));
+    json->addEntry("Size", bufferState.getSize());
+    json->addEntry("AccessFlags", bufferState.getAccessFlags());
+    json->addEntry("Access", bufferState.getAccess());
+    json->addEntry("Mapped", bufferState.isMapped());
+    json->addEntry("MapOffset", bufferState.getMapOffset());
+    json->addEntry("MapLength", bufferState.getMapLength());
 }
 
 Result SerializeBuffer(const gl::Context *context,
-                       gl::BinaryOutputStream *bos,
+                       JsonSerializer *json,
                        ScratchBuffer *scratchBuffer,
                        gl::Buffer *buffer)
 {
-    SerializeBufferState(bos, buffer->getState());
+    GroupScope group(json, "Buffer");
+    SerializeBufferState(json, buffer->getState());
     MemoryBuffer *dataPtr = nullptr;
     ANGLE_CHECK_GL_ALLOC(
         const_cast<gl::Context *>(context),
         scratchBuffer->getInitialized(static_cast<size_t>(buffer->getSize()), &dataPtr, 0));
     ANGLE_TRY(buffer->getSubData(context, 0, dataPtr->size(), dataPtr->data()));
-    bos->writeBytes(dataPtr->data(), dataPtr->size());
+    json->addEntry("data", dataPtr->data(), dataPtr->size());
     return Result::Continue;
 }
-void SerializeColorGeneric(gl::BinaryOutputStream *bos, const ColorGeneric &colorGeneric)
+void SerializeColorGeneric(JsonSerializer *json,
+                           const std::string &name,
+                           const ColorGeneric &colorGeneric)
 {
+    GroupScope group(json, name);
     ASSERT(colorGeneric.type == ColorGeneric::Type::Float ||
            colorGeneric.type == ColorGeneric::Type::Int ||
            colorGeneric.type == ColorGeneric::Type::UInt);
-    bos->writeEnum(colorGeneric.type);
+    json->addEntry("Type", ColorGenericTypeToString(colorGeneric.type));
     if (colorGeneric.type == ColorGeneric::Type::Float)
     {
-        SerializeColorF(bos, colorGeneric.colorF);
+        SerializeColorF(json, colorGeneric.colorF);
     }
     else if (colorGeneric.type == ColorGeneric::Type::Int)
     {
-        SerializeColorI(bos, colorGeneric.colorI);
+        SerializeColorI(json, colorGeneric.colorI);
     }
     else
     {
-        SerializeColorUI(bos, colorGeneric.colorUI);
+        SerializeColorUI(json, colorGeneric.colorUI);
     }
 }
 
-void SerializeSamplerState(gl::BinaryOutputStream *bos, const gl::SamplerState &samplerState)
+void SerializeSamplerState(JsonSerializer *json,
+                           const std::string &name,
+                           const gl::SamplerState &samplerState)
 {
-    bos->writeInt(samplerState.getMinFilter());
-    bos->writeInt(samplerState.getMagFilter());
-    bos->writeInt(samplerState.getWrapS());
-    bos->writeInt(samplerState.getWrapT());
-    bos->writeInt(samplerState.getWrapR());
-    bos->writeFloat(samplerState.getMaxAnisotropy());
-    bos->writeFloat(samplerState.getMinLod());
-    bos->writeFloat(samplerState.getMaxLod());
-    bos->writeInt(samplerState.getCompareMode());
-    bos->writeInt(samplerState.getCompareFunc());
-    bos->writeInt(samplerState.getSRGBDecode());
-    SerializeColorGeneric(bos, samplerState.getBorderColor());
+    GroupScope group(json, name);
+    json->addEntry("MinFilter", samplerState.getMinFilter());
+    json->addEntry("MagFilter", samplerState.getMagFilter());
+    json->addEntry("WrapS", samplerState.getWrapS());
+    json->addEntry("WrapT", samplerState.getWrapT());
+    json->addEntry("WrapR", samplerState.getWrapR());
+    json->addEntry("MaxAnisotropy", samplerState.getMaxAnisotropy());
+    json->addEntry("MinLod", samplerState.getMinLod());
+    json->addEntry("MaxLod", samplerState.getMaxLod());
+    json->addEntry("CompareMode", samplerState.getCompareMode());
+    json->addEntry("CompareFunc", samplerState.getCompareFunc());
+    json->addEntry("SRGBDecode", samplerState.getSRGBDecode());
+    SerializeColorGeneric(json, "BorderColor", samplerState.getBorderColor());
 }
 
-void SerializeSampler(gl::BinaryOutputStream *bos, gl::Sampler *sampler)
+void SerializeSampler(JsonSerializer *json, gl::Sampler *sampler)
 {
-    bos->writeString(sampler->getLabel());
-    SerializeSamplerState(bos, sampler->getSamplerState());
+    json->addEntry("Label", sampler->getLabel());
+    SerializeSamplerState(json, "Sampler", sampler->getSamplerState());
 }
 
-void SerializeSwizzleState(gl::BinaryOutputStream *bos, const gl::SwizzleState &swizzleState)
+void SerializeSwizzleState(JsonSerializer *json, const gl::SwizzleState &swizzleState)
 {
-    bos->writeInt(swizzleState.swizzleRed);
-    bos->writeInt(swizzleState.swizzleGreen);
-    bos->writeInt(swizzleState.swizzleBlue);
-    bos->writeInt(swizzleState.swizzleAlpha);
+    json->addEntry("SwizzleRed", swizzleState.swizzleRed);
+    json->addEntry("SwizzleGreen", swizzleState.swizzleGreen);
+    json->addEntry("SwizzleBlue", swizzleState.swizzleBlue);
+    json->addEntry("SwizzleAlpha", swizzleState.swizzleAlpha);
 }
 
-void SerializeExtents(gl::BinaryOutputStream *bos, const gl::Extents &extents)
+void SerializeExtents(JsonSerializer *json, const gl::Extents &extents)
 {
-    bos->writeInt(extents.width);
-    bos->writeInt(extents.height);
-    bos->writeInt(extents.depth);
+    json->addEntry("Width", extents.width);
+    json->addEntry("Height", extents.height);
+    json->addEntry("Depth", extents.depth);
 }
 
-void SerializeInternalFormat(gl::BinaryOutputStream *bos, const gl::InternalFormat *internalFormat)
+void SerializeInternalFormat(JsonSerializer *json, const gl::InternalFormat *internalFormat)
 {
-    bos->writeInt(internalFormat->internalFormat);
+    json->addEntry("InternalFormat", internalFormat->internalFormat);
 }
 
-void SerializeFormat(gl::BinaryOutputStream *bos, const gl::Format &format)
+void SerializeFormat(JsonSerializer *json, const gl::Format &format)
 {
-    SerializeInternalFormat(bos, format.info);
+    SerializeInternalFormat(json, format.info);
 }
 
-void SerializeRenderbufferState(gl::BinaryOutputStream *bos,
+void SerializeRenderbufferState(JsonSerializer *json,
                                 const gl::RenderbufferState &renderbufferState)
 {
-    bos->writeInt(renderbufferState.getWidth());
-    bos->writeInt(renderbufferState.getHeight());
-    SerializeFormat(bos, renderbufferState.getFormat());
-    bos->writeInt(renderbufferState.getSamples());
-    bos->writeEnum(renderbufferState.getInitState());
+    GroupScope wg(json, "State");
+    json->addEntry("Width", renderbufferState.getWidth());
+    json->addEntry("Height", renderbufferState.getHeight());
+    SerializeFormat(json, renderbufferState.getFormat());
+    json->addEntry("Samples", renderbufferState.getSamples());
+    json->addEntry("InitState", InitStateToString(renderbufferState.getInitState()));
 }
 
 Result SerializeRenderbuffer(const gl::Context *context,
-                             gl::BinaryOutputStream *bos,
+                             JsonSerializer *json,
                              ScratchBuffer *scratchBuffer,
                              gl::Renderbuffer *renderbuffer)
 {
-    SerializeRenderbufferState(bos, renderbuffer->getState());
-    bos->writeString(renderbuffer->getLabel());
+    GroupScope wg(json, "Renderbuffer");
+    SerializeRenderbufferState(json, renderbuffer->getState());
+    json->addEntry("Label", renderbuffer->getLabel());
     MemoryBuffer *pixelsPtr = nullptr;
     ANGLE_CHECK_GL_ALLOC(
         const_cast<gl::Context *>(context),
@@ -587,273 +853,295 @@ Result SerializeRenderbuffer(const gl::Context *context,
     ANGLE_TRY(renderbuffer->getImplementation()->getRenderbufferImage(
         context, packState, nullptr, renderbuffer->getImplementationColorReadFormat(context),
         renderbuffer->getImplementationColorReadType(context), pixelsPtr->data()));
-    bos->writeBytes(pixelsPtr->data(), pixelsPtr->size());
+    json->addEntry("pixel", pixelsPtr->data(), pixelsPtr->size());
     return Result::Continue;
 }
 
-void SerializeWorkGroupSize(gl::BinaryOutputStream *bos, const sh::WorkGroupSize &workGroupSize)
+void SerializeWorkGroupSize(JsonSerializer *json, const sh::WorkGroupSize &workGroupSize)
 {
-    bos->writeInt(workGroupSize[0]);
-    bos->writeInt(workGroupSize[1]);
-    bos->writeInt(workGroupSize[2]);
+    GroupScope wg(json, "workGroupSize");
+    json->addEntry("x", workGroupSize[0]);
+    json->addEntry("y", workGroupSize[1]);
+    json->addEntry("z", workGroupSize[2]);
 }
 
-void SerializeShaderVariable(gl::BinaryOutputStream *bos, const sh::ShaderVariable &shaderVariable)
+void SerializeShaderVariable(JsonSerializer *json, const sh::ShaderVariable &shaderVariable)
 {
-    bos->writeInt(shaderVariable.type);
-    bos->writeInt(shaderVariable.precision);
-    bos->writeString(shaderVariable.name);
-    bos->writeString(shaderVariable.mappedName);
-    bos->writeIntVector(shaderVariable.arraySizes);
-    bos->writeBool(shaderVariable.staticUse);
-    bos->writeBool(shaderVariable.active);
+    GroupScope wg(json, "ShaderVariable");
+    json->addEntry("Type", shaderVariable.type);
+    json->addEntry("Precision", shaderVariable.precision);
+    json->addEntry("Name", shaderVariable.name);
+    json->addEntry("MappedName", shaderVariable.mappedName);
+    json->addEntry("ArraySizes", shaderVariable.arraySizes);
+    json->addEntry("StaticUse", shaderVariable.staticUse);
+    json->addEntry("Active", shaderVariable.active);
     for (const sh::ShaderVariable &field : shaderVariable.fields)
     {
-        SerializeShaderVariable(bos, field);
+        SerializeShaderVariable(json, field);
     }
-    bos->writeString(shaderVariable.structOrBlockName);
-    bos->writeString(shaderVariable.mappedStructOrBlockName);
-    bos->writeBool(shaderVariable.isRowMajorLayout);
-    bos->writeInt(shaderVariable.location);
-    bos->writeInt(shaderVariable.binding);
-    bos->writeInt(shaderVariable.imageUnitFormat);
-    bos->writeInt(shaderVariable.offset);
-    bos->writeBool(shaderVariable.readonly);
-    bos->writeBool(shaderVariable.writeonly);
-    bos->writeInt(shaderVariable.index);
-    bos->writeBool(shaderVariable.yuv);
-    bos->writeEnum(shaderVariable.interpolation);
-    bos->writeBool(shaderVariable.isInvariant);
-    bos->writeBool(shaderVariable.texelFetchStaticUse);
+    json->addEntry("StructOrBlockName", shaderVariable.structOrBlockName);
+    json->addEntry("MappedStructOrBlockName", shaderVariable.mappedStructOrBlockName);
+    json->addEntry("RowMajorLayout", shaderVariable.isRowMajorLayout);
+    json->addEntry("Location", shaderVariable.location);
+    json->addEntry("Binding", shaderVariable.binding);
+    json->addEntry("ImageUnitFormat", shaderVariable.imageUnitFormat);
+    json->addEntry("Offset", shaderVariable.offset);
+    json->addEntry("Readonly", shaderVariable.readonly);
+    json->addEntry("Writeonly", shaderVariable.writeonly);
+    json->addEntry("Index", shaderVariable.index);
+    json->addEntry("YUV", shaderVariable.yuv);
+    json->addEntry("Interpolation", InterpolationTypeToString(shaderVariable.interpolation));
+    json->addEntry("Invariant", shaderVariable.isInvariant);
+    json->addEntry("TexelFetchStaticUse", shaderVariable.texelFetchStaticUse);
 }
 
-void SerializeShaderVariablesVector(gl::BinaryOutputStream *bos,
+void SerializeShaderVariablesVector(JsonSerializer *json,
                                     const std::vector<sh::ShaderVariable> &shaderVariables)
 {
     for (const sh::ShaderVariable &shaderVariable : shaderVariables)
     {
-        SerializeShaderVariable(bos, shaderVariable);
+        SerializeShaderVariable(json, shaderVariable);
     }
 }
 
-void SerializeInterfaceBlocksVector(gl::BinaryOutputStream *bos,
+void SerializeInterfaceBlocksVector(JsonSerializer *json,
                                     const std::vector<sh::InterfaceBlock> &interfaceBlocks)
 {
     for (const sh::InterfaceBlock &interfaceBlock : interfaceBlocks)
     {
-        bos->writeString(interfaceBlock.name);
-        bos->writeString(interfaceBlock.mappedName);
-        bos->writeString(interfaceBlock.instanceName);
-        bos->writeInt(interfaceBlock.arraySize);
-        bos->writeEnum(interfaceBlock.layout);
-        bos->writeInt(interfaceBlock.binding);
-        bos->writeBool(interfaceBlock.staticUse);
-        bos->writeBool(interfaceBlock.active);
-        bos->writeEnum(interfaceBlock.blockType);
-        SerializeShaderVariablesVector(bos, interfaceBlock.fields);
+        GroupScope group(json, "Interface Block");
+        json->addEntry("Name", interfaceBlock.name);
+        json->addEntry("MappedName", interfaceBlock.mappedName);
+        json->addEntry("InstanceName", interfaceBlock.instanceName);
+        json->addEntry("ArraySize", interfaceBlock.arraySize);
+        json->addEntry("Layout", BlockLayoutTypeToString(interfaceBlock.layout));
+        json->addEntry("Binding", interfaceBlock.binding);
+        json->addEntry("StaticUse", interfaceBlock.staticUse);
+        json->addEntry("Active", interfaceBlock.active);
+        json->addEntry("BlockType", BlockTypeToString(interfaceBlock.blockType));
+        SerializeShaderVariablesVector(json, interfaceBlock.fields);
     }
 }
 
-void SerializeShaderState(gl::BinaryOutputStream *bos, const gl::ShaderState &shaderState)
+void SerializeShaderState(JsonSerializer *json, const gl::ShaderState &shaderState)
 {
-    bos->writeString(shaderState.getLabel());
-    bos->writeEnum(shaderState.getShaderType());
-    bos->writeInt(shaderState.getShaderVersion());
-    bos->writeString(shaderState.getTranslatedSource());
-    bos->writeString(shaderState.getSource());
-    SerializeWorkGroupSize(bos, shaderState.getLocalSize());
-    SerializeShaderVariablesVector(bos, shaderState.getInputVaryings());
-    SerializeShaderVariablesVector(bos, shaderState.getOutputVaryings());
-    SerializeShaderVariablesVector(bos, shaderState.getUniforms());
-    SerializeInterfaceBlocksVector(bos, shaderState.getUniformBlocks());
-    SerializeInterfaceBlocksVector(bos, shaderState.getShaderStorageBlocks());
-    SerializeShaderVariablesVector(bos, shaderState.getAllAttributes());
-    SerializeShaderVariablesVector(bos, shaderState.getActiveAttributes());
-    SerializeShaderVariablesVector(bos, shaderState.getActiveOutputVariables());
-    bos->writeBool(shaderState.getEarlyFragmentTestsOptimization());
-    bos->writeInt(shaderState.getNumViews());
-    bos->writeInt(shaderState.getSpecConstUsageBits().bits());
+    GroupScope group(json, "ShaderState");
+    json->addEntry("Label", shaderState.getLabel());
+    json->addEntry("Type", gl::ShaderTypeToString(shaderState.getShaderType()));
+    json->addEntry("Version", shaderState.getShaderVersion());
+    json->addEntry("TranslatedSource", shaderState.getTranslatedSource());
+    json->addEntry("Source", shaderState.getSource());
+    SerializeWorkGroupSize(json, shaderState.getLocalSize());
+    SerializeShaderVariablesVector(json, shaderState.getInputVaryings());
+    SerializeShaderVariablesVector(json, shaderState.getOutputVaryings());
+    SerializeShaderVariablesVector(json, shaderState.getUniforms());
+    SerializeInterfaceBlocksVector(json, shaderState.getUniformBlocks());
+    SerializeInterfaceBlocksVector(json, shaderState.getShaderStorageBlocks());
+    SerializeShaderVariablesVector(json, shaderState.getAllAttributes());
+    SerializeShaderVariablesVector(json, shaderState.getActiveAttributes());
+    SerializeShaderVariablesVector(json, shaderState.getActiveOutputVariables());
+    json->addEntry("EarlyFragmentTestsOptimization",
+                   shaderState.getEarlyFragmentTestsOptimization());
+    json->addEntry("NumViews", shaderState.getNumViews());
+    json->addEntry("SpecConstUsageBits", shaderState.getSpecConstUsageBits().bits());
     if (shaderState.getGeometryShaderInputPrimitiveType().valid())
     {
-        bos->writeEnum(shaderState.getGeometryShaderInputPrimitiveType().value());
+        json->addEntry(
+            "GeometryShaderInputPrimitiveType",
+            PrimitiveModeToString(shaderState.getGeometryShaderInputPrimitiveType().value()));
     }
     if (shaderState.getGeometryShaderOutputPrimitiveType().valid())
     {
-        bos->writeEnum(shaderState.getGeometryShaderOutputPrimitiveType().value());
+        json->addEntry(
+            "GeometryShaderOutputPrimitiveType",
+            PrimitiveModeToString(shaderState.getGeometryShaderOutputPrimitiveType().value()));
     }
     if (shaderState.getGeometryShaderInvocations().valid())
     {
-        bos->writeInt(shaderState.getGeometryShaderInvocations().value());
+        json->addEntry("GeometryShaderInvocations",
+                       shaderState.getGeometryShaderInvocations().value());
     }
-    bos->writeEnum(shaderState.getCompileStatus());
+    json->addEntry("CompileStatus", CompileStatusToString(shaderState.getCompileStatus()));
 }
 
-void SerializeShader(gl::BinaryOutputStream *bos, gl::Shader *shader)
+void SerializeShader(JsonSerializer *json, gl::Shader *shader)
 {
-    SerializeShaderState(bos, shader->getState());
-    bos->writeInt(shader->getHandle().value);
-    bos->writeInt(shader->getRefCount());
-    bos->writeBool(shader->isFlaggedForDeletion());
+    GroupScope group(json, "Shader");
+    SerializeShaderState(json, shader->getState());
+    json->addEntry("Handle", shader->getHandle().value);
+    json->addEntry("RefCount", shader->getRefCount());
+    json->addEntry("FlaggedForDeletion", shader->isFlaggedForDeletion());
     // Do not serialize mType because it is already serialized in SerializeShaderState.
-    bos->writeString(shader->getInfoLogString());
+    json->addEntry("InfoLogString", shader->getInfoLogString());
     // Do not serialize compiler resources string because it can vary between test modes.
-    bos->writeInt(shader->getCurrentMaxComputeWorkGroupInvocations());
-    bos->writeInt(shader->getMaxComputeSharedMemory());
+    json->addEntry("CurrentMaxComputeWorkGroupInvocations",
+                   shader->getCurrentMaxComputeWorkGroupInvocations());
+    json->addEntry("MaxComputeSharedMemory", shader->getMaxComputeSharedMemory());
 }
 
-void SerializeVariableLocationsVector(gl::BinaryOutputStream *bos,
+void SerializeVariableLocationsVector(JsonSerializer *json,
+                                      const std::string &group_name,
                                       const std::vector<gl::VariableLocation> &variableLocations)
 {
+    GroupScope group(json, group_name);
     for (const gl::VariableLocation &variableLocation : variableLocations)
     {
-        bos->writeInt(variableLocation.arrayIndex);
-        bos->writeInt(variableLocation.index);
-        bos->writeBool(variableLocation.ignored);
+        GroupScope vargroup(json, "Variable");
+        json->addEntry("ArrayIndex", variableLocation.arrayIndex);
+        json->addEntry("Index", variableLocation.index);
+        json->addEntry("Ignored", variableLocation.ignored);
     }
 }
 
-void SerializeBlockMemberInfo(gl::BinaryOutputStream *bos,
-                              const sh::BlockMemberInfo &blockMemberInfo)
+void SerializeBlockMemberInfo(JsonSerializer *json, const sh::BlockMemberInfo &blockMemberInfo)
 {
-    bos->writeInt(blockMemberInfo.offset);
-    bos->writeInt(blockMemberInfo.arrayStride);
-    bos->writeInt(blockMemberInfo.matrixStride);
-    bos->writeBool(blockMemberInfo.isRowMajorMatrix);
-    bos->writeInt(blockMemberInfo.topLevelArrayStride);
+    GroupScope(json, "BlockMemberInfo");
+    json->addEntry("Offset", blockMemberInfo.offset);
+    json->addEntry("Stride", blockMemberInfo.arrayStride);
+    json->addEntry("MatrixStride", blockMemberInfo.matrixStride);
+    json->addEntry("IsRowMajorMatrix", blockMemberInfo.isRowMajorMatrix);
+    json->addEntry("TopLevelArrayStride", blockMemberInfo.topLevelArrayStride);
 }
 
-void SerializeActiveVariable(gl::BinaryOutputStream *bos, const gl::ActiveVariable &activeVariable)
+void SerializeActiveVariable(JsonSerializer *json, const gl::ActiveVariable &activeVariable)
 {
-    bos->writeInt(activeVariable.activeShaders().to_ulong());
+    json->addEntry("ActiveShaders", activeVariable.activeShaders().to_ulong());
 }
 
-void SerializeBufferVariablesVector(gl::BinaryOutputStream *bos,
+void SerializeBufferVariablesVector(JsonSerializer *json,
                                     const std::vector<gl::BufferVariable> &bufferVariables)
 {
     for (const gl::BufferVariable &bufferVariable : bufferVariables)
     {
-        bos->writeInt(bufferVariable.bufferIndex);
-        SerializeBlockMemberInfo(bos, bufferVariable.blockInfo);
-        bos->writeInt(bufferVariable.topLevelArraySize);
-        SerializeActiveVariable(bos, bufferVariable);
-        SerializeShaderVariable(bos, bufferVariable);
+        GroupScope group(json, "BufferVariable");
+        json->addEntry("BufferIndex", bufferVariable.bufferIndex);
+        SerializeBlockMemberInfo(json, bufferVariable.blockInfo);
+        json->addEntry("TopLevelArraySize", bufferVariable.topLevelArraySize);
+        SerializeActiveVariable(json, bufferVariable);
+        SerializeShaderVariable(json, bufferVariable);
     }
 }
 
-void SerializeProgramAliasedBindings(gl::BinaryOutputStream *bos,
+void SerializeProgramAliasedBindings(JsonSerializer *json,
                                      const gl::ProgramAliasedBindings &programAliasedBindings)
 {
     for (const auto &programAliasedBinding : programAliasedBindings)
     {
-        bos->writeString(programAliasedBinding.first);
-        bos->writeInt(programAliasedBinding.second.location);
-        bos->writeBool(programAliasedBinding.second.aliased);
+        GroupScope group(json, programAliasedBinding.first);
+        json->addEntry("Location", programAliasedBinding.second.location);
+        json->addEntry("Aliased", programAliasedBinding.second.aliased);
     }
 }
 
-void SerializeProgramState(gl::BinaryOutputStream *bos, const gl::ProgramState &programState)
+void SerializeProgramState(JsonSerializer *json, const gl::ProgramState &programState)
 {
-    bos->writeString(programState.getLabel());
-    SerializeWorkGroupSize(bos, programState.getComputeShaderLocalSize());
+    json->addEntry("Label", programState.getLabel());
+    SerializeWorkGroupSize(json, programState.getComputeShaderLocalSize());
     for (gl::Shader *shader : programState.getAttachedShaders())
     {
         if (shader)
         {
-            bos->writeInt(shader->getHandle().value);
+            json->addEntry("Handle", shader->getHandle().value);
         }
         else
         {
-            bos->writeInt(0);
+            json->addEntry("Handle", 0);
         }
     }
-    for (bool isAttached : programState.getAttachedShadersMarkedForDetach())
+    const gl::ShaderMap<bool> sm = programState.getAttachedShadersMarkedForDetach();
+    for (auto i = 0; i < static_cast<int>(gl::ShaderType::EnumCount); ++i)
     {
-        bos->writeBool(isAttached);
+        auto shaderType = static_cast<gl::ShaderType>(i);
+        if (sm[shaderType])
+            json->addEntry("Attached", gl::ShaderTypeToString(shaderType));
     }
-    bos->writeInt(programState.getLocationsUsedForXfbExtension());
+    json->addEntry("LocationsUsedForXfbExtension", programState.getLocationsUsedForXfbExtension());
     for (const std::string &transformFeedbackVaryingName :
          programState.getTransformFeedbackVaryingNames())
     {
-        bos->writeString(transformFeedbackVaryingName);
+        json->addEntry("TransformFeedbackVaryingName", transformFeedbackVaryingName);
     }
-    bos->writeInt(programState.getActiveUniformBlockBindingsMask().to_ulong());
-    SerializeVariableLocationsVector(bos, programState.getUniformLocations());
-    SerializeBufferVariablesVector(bos, programState.getBufferVariables());
-    SerializeRange(bos, programState.getAtomicCounterUniformRange());
-    SerializeVariableLocationsVector(bos, programState.getSecondaryOutputLocations());
-    bos->writeInt(programState.getActiveOutputVariables().to_ulong());
+    json->addEntry("ActiveUniformBlockBindingsMask",
+                   programState.getActiveUniformBlockBindingsMask().to_ulong());
+    SerializeVariableLocationsVector(json, "UniformLocations", programState.getUniformLocations());
+    SerializeBufferVariablesVector(json, programState.getBufferVariables());
+    SerializeRange(json, programState.getAtomicCounterUniformRange());
+    SerializeVariableLocationsVector(json, "SecondaryOutputLocations",
+                                     programState.getSecondaryOutputLocations());
+    json->addEntry("ActiveOutputVariables", programState.getActiveOutputVariables().to_ulong());
     for (GLenum outputVariableType : programState.getOutputVariableTypes())
     {
-        bos->writeInt(outputVariableType);
+        json->addEntry("OutputVariableType", outputVariableType);
     }
-    bos->writeInt(programState.getDrawBufferTypeMask().to_ulong());
-    bos->writeBool(programState.hasBinaryRetrieveableHint());
-    bos->writeBool(programState.isSeparable());
-    bos->writeBool(programState.hasEarlyFragmentTestsOptimization());
-    bos->writeInt(programState.getNumViews());
-    bos->writeInt(programState.getDrawIDLocation());
-    bos->writeInt(programState.getBaseVertexLocation());
-    bos->writeInt(programState.getBaseInstanceLocation());
-    SerializeProgramAliasedBindings(bos, programState.getUniformLocationBindings());
+    json->addEntry("DrawBufferTypeMask", programState.getDrawBufferTypeMask().to_ulong());
+    json->addEntry("BinaryRetrieveableHint", programState.hasBinaryRetrieveableHint());
+    json->addEntry("Separable", programState.isSeparable());
+    json->addEntry("EarlyFragmentTestsOptimization",
+                   programState.hasEarlyFragmentTestsOptimization());
+    json->addEntry("NumViews", programState.getNumViews());
+    json->addEntry("DrawIDLocation", programState.getDrawIDLocation());
+    json->addEntry("BaseVertexLocation", programState.getBaseVertexLocation());
+    json->addEntry("BaseInstanceLocation", programState.getBaseInstanceLocation());
+    SerializeProgramAliasedBindings(json, programState.getUniformLocationBindings());
 }
 
-void SerializeProgramBindings(gl::BinaryOutputStream *bos,
-                              const gl::ProgramBindings &programBindings)
+void SerializeProgramBindings(JsonSerializer *json, const gl::ProgramBindings &programBindings)
 {
     for (const auto &programBinding : programBindings)
     {
-        bos->writeString(programBinding.first);
-        bos->writeInt(programBinding.second);
+        json->addEntry(programBinding.first, programBinding.second);
     }
 }
 
-void SerializeProgram(gl::BinaryOutputStream *bos, gl::Program *program)
+void SerializeProgram(JsonSerializer *json, gl::Program *program)
 {
-    SerializeProgramState(bos, program->getState());
-    bos->writeBool(program->isValidated());
-    SerializeProgramBindings(bos, program->getAttributeBindings());
-    SerializeProgramAliasedBindings(bos, program->getFragmentOutputLocations());
-    SerializeProgramAliasedBindings(bos, program->getFragmentOutputIndexes());
-    bos->writeBool(program->isLinked());
-    bos->writeBool(program->isFlaggedForDeletion());
-    bos->writeInt(program->getRefCount());
-    bos->writeInt(program->id().value);
+    GroupScope group(json, "Program");
+    SerializeProgramState(json, program->getState());
+    json->addEntry("IsValidated", program->isValidated());
+    SerializeProgramBindings(json, program->getAttributeBindings());
+    SerializeProgramAliasedBindings(json, program->getFragmentOutputLocations());
+    SerializeProgramAliasedBindings(json, program->getFragmentOutputIndexes());
+    json->addEntry("IsLinked", program->isLinked());
+    json->addEntry("IsFlaggedForDeletion", program->isFlaggedForDeletion());
+    json->addEntry("RefCount", program->getRefCount());
+    json->addEntry("ID", program->id().value);
 }
 
-void SerializeImageDesc(gl::BinaryOutputStream *bos, const gl::ImageDesc &imageDesc)
+void SerializeImageDesc(JsonSerializer *json, const gl::ImageDesc &imageDesc)
 {
-    SerializeExtents(bos, imageDesc.size);
-    SerializeFormat(bos, imageDesc.format);
-    bos->writeInt(imageDesc.samples);
-    bos->writeBool(imageDesc.fixedSampleLocations);
-    bos->writeEnum(imageDesc.initState);
+    GroupScope group(json, "ImageDesc");
+    SerializeExtents(json, imageDesc.size);
+    SerializeFormat(json, imageDesc.format);
+    json->addEntry("Samples", imageDesc.samples);
+    json->addEntry("FixesSampleLocations", imageDesc.fixedSampleLocations);
+    json->addEntry("InitState", InitStateToString(imageDesc.initState));
 }
 
-void SerializeTextureState(gl::BinaryOutputStream *bos, const gl::TextureState &textureState)
+void SerializeTextureState(JsonSerializer *json, const gl::TextureState &textureState)
 {
-    bos->writeEnum(textureState.getType());
-    SerializeSwizzleState(bos, textureState.getSwizzleState());
-    SerializeSamplerState(bos, textureState.getSamplerState());
-    bos->writeEnum(textureState.getSRGBOverride());
-    bos->writeInt(textureState.getBaseLevel());
-    bos->writeInt(textureState.getMaxLevel());
-    bos->writeInt(textureState.getDepthStencilTextureMode());
-    bos->writeBool(textureState.hasBeenBoundAsImage());
-    bos->writeBool(textureState.getImmutableFormat());
-    bos->writeInt(textureState.getImmutableLevels());
-    bos->writeInt(textureState.getUsage());
+    json->addEntry("Type", TextureTypeToString(textureState.getType()));
+    SerializeSwizzleState(json, textureState.getSwizzleState());
+    SerializeSamplerState(json, "TextureState", textureState.getSamplerState());
+    json->addEntry("SRGB", SrgbOverrideToString(textureState.getSRGBOverride()));
+    json->addEntry("BaseLevel", textureState.getBaseLevel());
+    json->addEntry("MaxLevel", textureState.getMaxLevel());
+    json->addEntry("DepthStencilTextureMode", textureState.getDepthStencilTextureMode());
+    json->addEntry("BeenBoundAsImage", textureState.hasBeenBoundAsImage());
+    json->addEntry("ImmutableFormat", textureState.getImmutableFormat());
+    json->addEntry("ImmutableLevels", textureState.getImmutableLevels());
+    json->addEntry("Usage", textureState.getUsage());
     const std::vector<gl::ImageDesc> &imageDescs = textureState.getImageDescs();
     for (const gl::ImageDesc &imageDesc : imageDescs)
     {
-        SerializeImageDesc(bos, imageDesc);
+        SerializeImageDesc(json, imageDesc);
     }
-    SerializeRectangle(bos, textureState.getCrop());
+    SerializeRectangle(json, "Crop", textureState.getCrop());
 
-    bos->writeInt(textureState.getGenerateMipmapHint());
-    bos->writeEnum(textureState.getInitState());
+    json->addEntry("GenerateMipmapHint", textureState.getGenerateMipmapHint());
+    json->addEntry("InitState", InitStateToString(textureState.getInitState()));
 }
 
-Result SerializeTextureData(gl::BinaryOutputStream *bos,
+Result SerializeTextureData(JsonSerializer *json,
                             const gl::Context *context,
                             gl::Texture *texture,
                             ScratchBuffer *scratchBuffer)
@@ -896,114 +1184,121 @@ Result SerializeTextureData(gl::BinaryOutputStream *bos,
         ANGLE_TRY(texture->getTexImage(context, packState, nullptr, index.getTarget(),
                                        index.getLevelIndex(), getFormat, getType,
                                        texelsPtr->data()));
-        bos->writeBytes(texelsPtr->data(), texelsPtr->size());
+        json->addEntry("Texels", texelsPtr->data(), texelsPtr->size());
     }
     return Result::Continue;
 }
 
 Result SerializeTexture(const gl::Context *context,
-                        gl::BinaryOutputStream *bos,
+                        JsonSerializer *json,
                         ScratchBuffer *scratchBuffer,
                         gl::Texture *texture)
 {
-    SerializeTextureState(bos, texture->getState());
-    bos->writeString(texture->getLabel());
+    GroupScope group(json, "Texture ", texture->getId());
+    SerializeTextureState(json, texture->getState());
+    json->addEntry("Label", texture->getLabel());
     // FrameCapture can not serialize mBoundSurface and mBoundStream
     // because they are likely to change with each run
-    ANGLE_TRY(SerializeTextureData(bos, context, texture, scratchBuffer));
+    ANGLE_TRY(SerializeTextureData(json, context, texture, scratchBuffer));
     return Result::Continue;
 }
 
-void SerializeFormat(gl::BinaryOutputStream *bos, const angle::Format *format)
+void SerializeFormat(JsonSerializer *json, const angle::Format *format)
 {
-    bos->writeInt(format->glInternalFormat);
+    json->addEntry("InternalFormat", format->glInternalFormat);
 }
 
-void SerializeVertexAttributeVector(gl::BinaryOutputStream *bos,
+void SerializeVertexAttributeVector(JsonSerializer *json,
                                     const std::vector<gl::VertexAttribute> &vertexAttributes)
 {
     for (const gl::VertexAttribute &vertexAttribute : vertexAttributes)
     {
-        bos->writeBool(vertexAttribute.enabled);
+        GroupScope group(json, "VertexAttribute@BindingIndex", vertexAttribute.bindingIndex);
+        json->addEntry("Enabled", vertexAttribute.enabled);
         ASSERT(vertexAttribute.format);
-        SerializeFormat(bos, vertexAttribute.format);
-        bos->writeInt(vertexAttribute.relativeOffset);
-        bos->writeInt(vertexAttribute.vertexAttribArrayStride);
-        bos->writeInt(vertexAttribute.bindingIndex);
+        SerializeFormat(json, vertexAttribute.format);
+        json->addEntry("RelativeOffset", vertexAttribute.relativeOffset);
+        json->addEntry("VertexAttribArrayStride", vertexAttribute.vertexAttribArrayStride);
     }
 }
 
-void SerializeVertexBindingsVector(gl::BinaryOutputStream *bos,
+void SerializeVertexBindingsVector(JsonSerializer *json,
                                    const std::vector<gl::VertexBinding> &vertexBindings)
 {
     for (const gl::VertexBinding &vertexBinding : vertexBindings)
     {
-        bos->writeInt(vertexBinding.getStride());
-        bos->writeInt(vertexBinding.getDivisor());
-        bos->writeInt(vertexBinding.getOffset());
-        bos->writeInt(vertexBinding.getBuffer().id().value);
-        bos->writeInt(vertexBinding.getBoundAttributesMask().to_ulong());
+        GroupScope group(json, "VertexBinding");
+        json->addEntry("Stride", vertexBinding.getStride());
+        json->addEntry("Divisor", vertexBinding.getDivisor());
+        json->addEntry("Offset", vertexBinding.getOffset());
+        json->addEntry("BufferID", vertexBinding.getBuffer().id().value);
+        json->addEntry("BoundAttributesMask", vertexBinding.getBoundAttributesMask().to_ulong());
     }
 }
 
-void SerializeVertexArrayState(gl::BinaryOutputStream *bos,
-                               const gl::VertexArrayState &vertexArrayState)
+void SerializeVertexArrayState(JsonSerializer *json, const gl::VertexArrayState &vertexArrayState)
 {
-    bos->writeString(vertexArrayState.getLabel());
-    SerializeVertexAttributeVector(bos, vertexArrayState.getVertexAttributes());
+    json->addEntry("Label", vertexArrayState.getLabel());
+    SerializeVertexAttributeVector(json, vertexArrayState.getVertexAttributes());
     if (vertexArrayState.getElementArrayBuffer())
     {
-        bos->writeInt(vertexArrayState.getElementArrayBuffer()->id().value);
+        json->addEntry("ElementArrayBufferID",
+                       vertexArrayState.getElementArrayBuffer()->id().value);
     }
     else
     {
-        bos->writeInt(0);
+        json->addEntry("ElementArrayBufferID", 0);
     }
-    SerializeVertexBindingsVector(bos, vertexArrayState.getVertexBindings());
-    bos->writeInt(vertexArrayState.getEnabledAttributesMask().to_ulong());
-    bos->writeInt(vertexArrayState.getVertexAttributesTypeMask().to_ulong());
-    bos->writeInt(vertexArrayState.getClientMemoryAttribsMask().to_ulong());
-    bos->writeInt(vertexArrayState.getNullPointerClientMemoryAttribsMask().to_ulong());
+    SerializeVertexBindingsVector(json, vertexArrayState.getVertexBindings());
+    json->addEntry("EnabledAttributesMask", vertexArrayState.getEnabledAttributesMask().to_ulong());
+    json->addEntry("VertexAttributesTypeMask",
+                   vertexArrayState.getVertexAttributesTypeMask().to_ulong());
+    json->addEntry("ClientMemoryAttribsMask",
+                   vertexArrayState.getClientMemoryAttribsMask().to_ulong());
+    json->addEntry("NullPointerClientMemoryAttribsMask",
+                   vertexArrayState.getNullPointerClientMemoryAttribsMask().to_ulong());
 }
 
-void SerializeVertexArray(gl::BinaryOutputStream *bos, gl::VertexArray *vertexArray)
+void SerializeVertexArray(JsonSerializer *json, gl::VertexArray *vertexArray)
 {
-    bos->writeInt(vertexArray->id().value);
-    SerializeVertexArrayState(bos, vertexArray->getState());
-    bos->writeBool(vertexArray->isBufferAccessValidationEnabled());
+    GroupScope group(json, "VertexArray", vertexArray->id().value);
+    SerializeVertexArrayState(json, vertexArray->getState());
+    json->addEntry("BufferAccessValidationEnabled", vertexArray->isBufferAccessValidationEnabled());
 }
 
 }  // namespace
 
-Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
+Result SerializeContext(JsonSerializer *json, const gl::Context *context)
 {
-    SerializeGLContextStates(bos, context->getState());
+    json->startDocument("Context");
+
+    SerializeGLContextStates(json, context->getState());
     ScratchBuffer scratchBuffer(1);
     const gl::FramebufferManager &framebufferManager =
         context->getState().getFramebufferManagerForCapture();
     for (const auto &framebuffer : framebufferManager)
     {
         gl::Framebuffer *framebufferPtr = framebuffer.second;
-        ANGLE_TRY(SerializeFramebuffer(context, bos, &scratchBuffer, framebufferPtr));
+        ANGLE_TRY(SerializeFramebuffer(context, json, &scratchBuffer, framebufferPtr));
     }
     const gl::BufferManager &bufferManager = context->getState().getBufferManagerForCapture();
     for (const auto &buffer : bufferManager)
     {
         gl::Buffer *bufferPtr = buffer.second;
-        ANGLE_TRY(SerializeBuffer(context, bos, &scratchBuffer, bufferPtr));
+        ANGLE_TRY(SerializeBuffer(context, json, &scratchBuffer, bufferPtr));
     }
     const gl::SamplerManager &samplerManager = context->getState().getSamplerManagerForCapture();
     for (const auto &sampler : samplerManager)
     {
         gl::Sampler *samplerPtr = sampler.second;
-        SerializeSampler(bos, samplerPtr);
+        SerializeSampler(json, samplerPtr);
     }
     const gl::RenderbufferManager &renderbufferManager =
         context->getState().getRenderbufferManagerForCapture();
     for (const auto &renderbuffer : renderbufferManager)
     {
         gl::Renderbuffer *renderbufferPtr = renderbuffer.second;
-        ANGLE_TRY(SerializeRenderbuffer(context, bos, &scratchBuffer, renderbufferPtr));
+        ANGLE_TRY(SerializeRenderbuffer(context, json, &scratchBuffer, renderbufferPtr));
     }
     const gl::ShaderProgramManager &shaderProgramManager =
         context->getState().getShaderProgramManagerForCapture();
@@ -1012,27 +1307,28 @@ Result SerializeContext(gl::BinaryOutputStream *bos, const gl::Context *context)
     for (const auto &shader : shaderManager)
     {
         gl::Shader *shaderPtr = shader.second;
-        SerializeShader(bos, shaderPtr);
+        SerializeShader(json, shaderPtr);
     }
     const gl::ResourceMap<gl::Program, gl::ShaderProgramID> &programManager =
         shaderProgramManager.getProgramsForCaptureAndPerf();
     for (const auto &program : programManager)
     {
         gl::Program *programPtr = program.second;
-        SerializeProgram(bos, programPtr);
+        SerializeProgram(json, programPtr);
     }
     const gl::TextureManager &textureManager = context->getState().getTextureManagerForCapture();
     for (const auto &texture : textureManager)
     {
         gl::Texture *texturePtr = texture.second;
-        ANGLE_TRY(SerializeTexture(context, bos, &scratchBuffer, texturePtr));
+        ANGLE_TRY(SerializeTexture(context, json, &scratchBuffer, texturePtr));
     }
     const gl::VertexArrayMap &vertexArrayMap = context->getVertexArraysForCapture();
     for (auto &vertexArray : vertexArrayMap)
     {
         gl::VertexArray *vertexArrayPtr = vertexArray.second;
-        SerializeVertexArray(bos, vertexArrayPtr);
+        SerializeVertexArray(json, vertexArrayPtr);
     }
+    json->endDocument();
 
     scratchBuffer.clear();
     return Result::Continue;
