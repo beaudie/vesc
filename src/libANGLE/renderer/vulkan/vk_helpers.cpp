@@ -4096,7 +4096,11 @@ angle::Result ImageHelper::initExternalMemory(
             reinterpret_cast<const VkExternalFormatANDROID *>(
                 samplerYcbcrConversionCreateInfo->pNext);
         ASSERT(vkExternalFormat->sType == VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID);
-        mExternalFormat = vkExternalFormat->externalFormat;
+
+        // Account for ICDs that return valid Vulkan YUV formats
+        mExternalFormat = (vkExternalFormat->externalFormat == VK_FORMAT_UNDEFINED)
+                              ? samplerYcbcrConversionCreateInfo->format
+                              : vkExternalFormat->externalFormat;
 
         ANGLE_TRY(context->getRenderer()->getYuvConversionCache().getYuvConversion(
             context, mExternalFormat, *samplerYcbcrConversionCreateInfo, &mYuvConversionSampler));
