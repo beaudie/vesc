@@ -112,7 +112,8 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(RendererV
         return egl::EglBadParameter() << "Failed to query AHardwareBuffer properties";
     }
 
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED ||
+        bufferFormat.actualImageFormat().isYUV)
     {
         ASSERT(bufferFormatProperties.externalFormat != 0);
         // We must have an external format, check that it supports texture sampling
@@ -229,7 +230,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     VkImageTiling imageTilingMode = AhbDescUsageToVkImageTiling(ahbDescription);
     VkImageUsageFlags usage = AhbDescUsageToVkImageUsage(ahbDescription, isDepthOrStencilFormat);
 
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED ||
+        bufferFormat.actualImageFormat().isYUV)
     {
         ANGLE_VK_CHECK(displayVk, bufferFormatProperties.externalFormat != 0, VK_ERROR_UNKNOWN);
         externalFormat.externalFormat = bufferFormatProperties.externalFormat;
@@ -280,9 +282,12 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     externalMemoryRequirements.size                 = bufferProperties.allocationSize;
     externalMemoryRequirements.alignment            = 0;
     externalMemoryRequirements.memoryTypeBits       = bufferProperties.memoryTypeBits;
+    VkMemoryPropertyFlags flags                     = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
-    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    const vk::Format &bufferFormat =
+        renderer->getFormat(vk::GetFormatIDFromVkFormat(bufferFormatProperties.format));
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED ||
+        bufferFormat.actualImageFormat().isYUV)
     {
         // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
         // and conversion calculations as Vulkan does, achieving identical results between APIs may
