@@ -29,6 +29,7 @@ angle_unittests_sources = [
   "../libANGLE/HandleAllocator_unittest.cpp",
   "../libANGLE/ImageIndexIterator_unittest.cpp",
   "../libANGLE/Image_unittest.cpp",
+  "../libANGLE/JsonSerializer_unittest.cpp",
   "../libANGLE/Observer_unittest.cpp",
   "../libANGLE/Program_unittest.cpp",
   "../libANGLE/ResourceManager_unittest.cpp",
