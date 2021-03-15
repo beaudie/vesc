@@ -280,9 +280,12 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     externalMemoryRequirements.size                 = bufferProperties.allocationSize;
     externalMemoryRequirements.alignment            = 0;
     externalMemoryRequirements.memoryTypeBits       = bufferProperties.memoryTypeBits;
+    VkMemoryPropertyFlags flags                     = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
-    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    const vk::Format &bufferFormat =
+        renderer->getFormat(vk::GetFormatIDFromVkFormat(bufferFormatProperties.format));
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED ||
+        bufferFormat.actualImageFormat().isYUV)
     {
         // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
         // and conversion calculations as Vulkan does, achieving identical results between APIs may
