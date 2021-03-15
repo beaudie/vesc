@@ -1482,18 +1482,7 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             }
             else if (IsInShaderStorageBlock(node->getLeft()))
             {
-                mSSBOOutputHLSL->outputStoreFunctionCallPrefix(node->getLeft());
-                out << ", ";
-                if (IsInShaderStorageBlock(node->getRight()))
-                {
-                    mSSBOOutputHLSL->outputLoadFunctionCall(node->getRight());
-                }
-                else
-                {
-                    node->getRight()->traverse(this);
-                }
-
-                out << ")";
+                mSSBOOutputHLSL->outputStoreFunctionCall(node);
                 return false;
             }
             else if (IsInShaderStorageBlock(node->getRight()))
