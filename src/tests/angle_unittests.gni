@@ -7,6 +7,7 @@ angle_unittests_sources = [
   "../../util/test_utils_unittest_helper.h",
   "../common/FastVector_unittest.cpp",
   "../common/FixedVector_unittest.cpp",
+  "../common/JsonSerializer_unittest.cpp",
   "../common/Optional_unittest.cpp",
   "../common/PoolAlloc_unittest.cpp",
   "../common/aligned_memory_unittest.cpp",

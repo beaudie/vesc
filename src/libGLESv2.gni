@@ -8,6 +8,8 @@ libangle_common_sources = [
   "src/common/FastVector.h",
   "src/common/FixedVector.h",
   "src/common/Float16ToFloat32.cpp",
+  "src/common/JsonSerializer.cpp",
+  "src/common/JsonSerializer.h",
   "src/common/MemoryBuffer.cpp",
   "src/common/MemoryBuffer.h",
   "src/common/Optional.h",
