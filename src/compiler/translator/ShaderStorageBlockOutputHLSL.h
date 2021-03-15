@@ -58,24 +58,16 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     void outputAtomicMemoryFunctionCallPrefix(TIntermTyped *node, TOperator op);
 
     void writeShaderStorageBlocksHeader(TInfoSinkBase &out) const;
-
-  protected:
-    void visitSymbol(TIntermSymbol *) override;
-    void visitConstantUnion(TIntermConstantUnion *) override;
-    bool visitSwizzle(Visit visit, TIntermSwizzle *node) override;
-    bool visitBinary(Visit visit, TIntermBinary *) override;
-    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
-    bool visitTernary(Visit visit, TIntermTernary *) override;
-    bool visitUnary(Visit visit, TIntermUnary *) override;
+    void referenceBufferSymbol(TIntermSymbol *node);
+    void writeBufferSymbol(TInfoSinkBase &out, TIntermNode *node);
+    TIntermTyped *createByteAddressExpression(TIntermTyped *node, SSBOMethod method);
 
   private:
     void traverseSSBOAccess(TIntermTyped *node, SSBOMethod method);
     void setMatrixStride(TIntermTyped *node, TLayoutBlockStorage storage, bool rowMajor);
-    bool isEndOfSSBOAccessChain();
-    void writeEOpIndexDirectOrIndirectOutput(TInfoSinkBase &out, Visit visit, TIntermBinary *node);
     // Common part in dot operations.
-    void writeDotOperatorOutput(TInfoSinkBase &out, const TField *field);
-
+    TIntermTyped *convertEOpIndexDirectOrIndirectOutput(TIntermBinary *node, SSBOMethod method);
+    TIntermTyped *addFieldOffset(const TField *field, TIntermTyped* node);
     int mMatrixStride;
     bool mRowMajor;
     bool mLocationAsTheLastArgument;
