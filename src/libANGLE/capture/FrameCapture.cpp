@@ -25,6 +25,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/JsonSerializer.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/ResourceMap.h"
 #include "libANGLE/Shader.h"
@@ -1075,7 +1076,7 @@ void WriteCppReplay(bool compression,
 
     if (serializeStateEnabled)
     {
-        gl::BinaryOutputStream serializedContextData{};
+        gl::JsonSerializer serializedContextData;
         if (SerializeContext(&serializedContextData, const_cast<gl::Context *>(context)) ==
             Result::Continue)
         {
