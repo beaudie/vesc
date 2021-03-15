@@ -17,14 +17,14 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <utility>
-#include <fstream>
-#include <ostream>
 
 #include "util/frame_capture_test_utils.h"
 
@@ -137,13 +137,22 @@ class CaptureReplayTests
                 cleanupTest();
                 return -1;
             }
-            bool isEqual = compareSerializedContexts(testIndex, frame, json.getData());
+            bool isEqual = compareSerializedContexts(testIndex, frame, json.data());
             // Swap always to allow RenderDoc/other tools to capture frames.
             swap();
             if (!isEqual)
             {
-                std::ofstream debug("replayed.json");
-                debug << json.data() << "\n";
+                std::ostringstream replay_name;
+                replay_name << testTraceInfo.testName << "_ContextReplayed" << frame << ".json";
+                std::ofstream debug_replay(replay_name.str());
+                debug_replay << json.data() << "\n";
+
+                std::ostringstream capture_name;
+                capture_name << testTraceInfo.testName << "_ContextCaptured" << frame << ".json";
+                std::ofstream debug_capture(capture_name.str());
+
+                debug_capture << GetSerializedContextState(testIndex, frame) << "\n";
+
                 cleanupTest();
                 return -1;
             }
@@ -165,12 +174,10 @@ class CaptureReplayTests
   private:
     bool compareSerializedContexts(uint32_t testIndex,
                                    uint32_t frame,
-                                   const std::vector<uint8_t> &replaySerializedContextState)
+                                   const char *replaySerializedContextState)
     {
 
-        return memcmp(replaySerializedContextState.data(),
-                      GetSerializedContextState(testIndex, frame),
-                      replaySerializedContextState.size()) == 0;
+        return strcmp(replaySerializedContextState, GetSerializedContextState(testIndex, frame));
     }
 
     OSWindow *mOSWindow   = nullptr;
