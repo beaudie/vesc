@@ -388,7 +388,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     mResourcesHLSL->reserveUniformBlockRegisters(2);
 
     mSSBOOutputHLSL =
-        new ShaderStorageBlockOutputHLSL(this, symbolTable, mResourcesHLSL, shaderStorageBlocks);
+        new ShaderStorageBlockOutputHLSL(this, mResourcesHLSL, shaderStorageBlocks);
 }
 
 OutputHLSL::~OutputHLSL()
