@@ -1076,7 +1076,7 @@ void WriteCppReplay(bool compression,
 
     if (serializeStateEnabled)
     {
-        gl::BinaryOutputStream serializedContextData{};
+        angle::JsonSerializer serializedContextData;
         if (SerializeContext(&serializedContextData, const_cast<gl::Context *>(context)) ==
             Result::Continue)
         {
