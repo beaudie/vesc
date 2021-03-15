@@ -17,14 +17,14 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <utility>
-#include <fstream>
-#include <ostream>
 
 #include "util/frame_capture_test_utils.h"
 
@@ -142,8 +142,19 @@ class CaptureReplayTests
             swap();
             if (!isEqual)
             {
-                std::ofstream debug("replayed.json");
-                debug << json.data() << "\n";
+                std::ostringstream replay_name;
+                replay_name << testTraceInfo.testName << "_ContextReplayed" << frame << ".json";
+                std::ofstream debug_replay(replay_name.str());
+                debug_replay << json.data() << "\n";
+
+                std::ostringstream capture_name;
+                capture_name << testTraceInfo.testName << "_ContextCaptured" << frame << ".json";
+                std::ofstream debug_capture(capture_name.str());
+
+                const char *context_captured = GetSerializedContextState(testIndex, frame);
+                std::string capture(context_captured, context_captured + json.getData().size());
+                debug_replay << capture << "\n";
+
                 cleanupTest();
                 return -1;
             }
