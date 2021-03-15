@@ -49,7 +49,7 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     // This writes part of the function call to store a value to a SSBO to the output stream. After
     // calling this, ", <stored value>)" should be written to the output stream to complete the
     // function call.
-    void outputStoreFunctionCallPrefix(TIntermTyped *node);
+    void outputStoreFunctionCall(TIntermBinary *node);
     // This writes the function call to load a SSBO value to the output stream.
     void outputLoadFunctionCall(TIntermTyped *node);
     // This writes the function call to get the lengh of unsized array member of SSBO.
@@ -58,6 +58,10 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     void outputAtomicMemoryFunctionCallPrefix(TIntermTyped *node, TOperator op);
 
     void writeShaderStorageBlocksHeader(TInfoSinkBase &out) const;
+    void referenceBufferSymbol(TIntermSymbol *node);
+    TIntermSymbol *findBase(TIntermNode *node) const;
+    void writeBufferSymbol(TInfoSinkBase &out, TIntermNode *node);
+    TIntermTyped *createByteAddressExpression(TIntermTyped *node, SSBOMethod method);
 
   protected:
     void visitSymbol(TIntermSymbol *) override;
@@ -75,7 +79,8 @@ class ShaderStorageBlockOutputHLSL : public TIntermTraverser
     void writeEOpIndexDirectOrIndirectOutput(TInfoSinkBase &out, Visit visit, TIntermBinary *node);
     // Common part in dot operations.
     void writeDotOperatorOutput(TInfoSinkBase &out, const TField *field);
-
+    TIntermTyped *convertEOpIndexDirectOrIndirectOutput(TIntermBinary *node, SSBOMethod method);
+    TIntermTyped *addFieldOffset(const TField *field, TIntermTyped* node);
     int mMatrixStride;
     bool mRowMajor;
     bool mLocationAsTheLastArgument;

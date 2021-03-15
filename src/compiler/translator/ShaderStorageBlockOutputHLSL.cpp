@@ -27,6 +27,7 @@
 
 #include "compiler/translator/ResourcesHLSL.h"
 #include "compiler/translator/blocklayoutHLSL.h"
+#include "compiler/translator/tree_util\IntermNode_util.h"
 #include "compiler/translator/util.h"
 
 namespace sh
@@ -117,6 +118,46 @@ const BlockMemberInfo GetBlockMemberInfoByType(const TType &type,
         arraySizes.assign(typeArraySizes.begin(), typeArraySizes.end());
     }
     return encoder->encodeType(GLVariableType(type), arraySizes, rowMajor);
+}
+
+int GetArrayStrideByType(const TType &type,
+                         TLayoutBlockStorage storage,
+                         bool rowMajor)
+{
+    sh::Std140BlockEncoder std140Encoder;
+    sh::Std430BlockEncoder std430Encoder;
+    sh::HLSLBlockEncoder hlslEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
+    sh::BlockLayoutEncoder *encoder = nullptr;
+
+    if (storage == EbsStd140)
+    {
+        encoder = &std140Encoder;
+    }
+    else if (storage == EbsStd430)
+    {
+        encoder = &std430Encoder;
+    }
+    else
+    {
+        encoder = &hlslEncoder;
+    }
+
+    std::vector<unsigned int> arraySizes;
+    const TSpan<const unsigned int> &typeArraySizes = type.getArraySizes();
+    if (!typeArraySizes.empty())
+    {
+        arraySizes.assign(typeArraySizes.begin(), typeArraySizes.end());
+    }
+    const TStructure* tStruct = type.getStruct();
+    if (tStruct) {
+        int arrayStride = 0;
+        for (TField* field : tStruct->fields()) {
+            arrayStride += encoder->encodeType(GLVariableType(*field->type()), arraySizes, rowMajor).arrayStride;
+        }
+        return arrayStride;
+    } else {
+       return encoder->encodeType(GLVariableType(type), arraySizes, rowMajor).arrayStride;
+    }
 }
 
 const TField *GetFieldMemberInShaderStorageBlock(const TInterfaceBlock *interfaceBlock,
@@ -324,22 +365,37 @@ ShaderStorageBlockOutputHLSL::~ShaderStorageBlockOutputHLSL()
     SafeDelete(mSSBOFunctionHLSL);
 }
 
-void ShaderStorageBlockOutputHLSL::outputStoreFunctionCallPrefix(TIntermTyped *node)
+void ShaderStorageBlockOutputHLSL::outputStoreFunctionCall(TIntermBinary *node)
 {
+    TInfoSinkBase &out         = mOutputHLSL->getInfoSink();
     mLocationAsTheLastArgument = false;
-    traverseSSBOAccess(node, SSBOMethod::STORE);
+    traverseSSBOAccess(node->getLeft(), SSBOMethod::STORE);
+    out << ", ";
+    if (IsInShaderStorageBlock(node->getRight()))
+    {
+        outputLoadFunctionCall(node->getRight());
+    }
+    else
+    {
+        node->getRight()->traverse(mOutputHLSL);
+    }
+    out << ")";
 }
 
 void ShaderStorageBlockOutputHLSL::outputLoadFunctionCall(TIntermTyped *node)
 {
+    TInfoSinkBase &out         = mOutputHLSL->getInfoSink();
     mLocationAsTheLastArgument = true;
-    traverseSSBOAccess(node, SSBOMethod::LOAD);
+    traverseSSBOAccess(node, SSBOMethod::LOAD );
+    out << ")";
 }
 
 void ShaderStorageBlockOutputHLSL::outputLengthFunctionCall(TIntermTyped *node)
 {
+    TInfoSinkBase &out         = mOutputHLSL->getInfoSink();
     mLocationAsTheLastArgument = true;
     traverseSSBOAccess(node, SSBOMethod::LENGTH);
+    out << ")";
 }
 
 void ShaderStorageBlockOutputHLSL::outputAtomicMemoryFunctionCallPrefix(TIntermTyped *node,
@@ -425,18 +481,29 @@ void ShaderStorageBlockOutputHLSL::traverseSSBOAccess(TIntermTyped *node, SSBOMe
     int unsizedArrayStride = 0;
     if (node->getType().isUnsizedArray())
     {
-        unsizedArrayStride =
-            GetBlockMemberInfoByType(node->getType(), storage, rowMajor).arrayStride;
+        unsizedArrayStride = GetArrayStrideByType(node->getType(), storage, rowMajor);
     }
     setMatrixStride(node, storage, rowMajor);
 
     const TString &functionName = mSSBOFunctionHLSL->registerShaderStorageBlockFunction(
         node->getType(), method, storage, mRowMajor, mMatrixStride, unsizedArrayStride,
         node->getAsSwizzleNode());
+    TIntermSymbol *base  = findBase(node);
+    referenceBufferSymbol(base);
+    TIntermNode *loc   = createByteAddressExpression(node, method);
     TInfoSinkBase &out = mOutputHLSL->getInfoSink();
     out << functionName;
     out << "(";
-    node->traverse(this);
+    writeBufferSymbol(out, node);
+    out << ", ";
+    if (loc)
+    {
+        loc->traverse(mOutputHLSL);
+    }
+    else
+    {
+        out << "0";
+    }
 }
 
 void ShaderStorageBlockOutputHLSL::writeShaderStorageBlocksHeader(TInfoSinkBase &out) const
@@ -475,6 +542,27 @@ bool ShaderStorageBlockOutputHLSL::isEndOfSSBOAccessChain()
         }
     }
     return true;
+}
+
+void ShaderStorageBlockOutputHLSL::referenceBufferSymbol(TIntermSymbol *node)
+{
+    const TVariable &variable = node->variable();
+
+    const TType &variableType             = variable.getType();
+    const TInterfaceBlock *interfaceBlock = variableType.getInterfaceBlock();
+    ASSERT(interfaceBlock);
+    if (mReferencedShaderStorageBlocks.count(interfaceBlock->uniqueId().get()) == 0)
+    {
+        const TVariable *instanceVariable = nullptr;
+        if (variableType.isInterfaceBlock())
+        {
+            instanceVariable = &variable;
+        }
+        mReferencedShaderStorageBlocks[interfaceBlock->uniqueId().get()] =
+            new TReferencedBlock(interfaceBlock, instanceVariable);
+        GetShaderStorageBlockMembersInfo(interfaceBlock, mShaderStorageBlocks,
+                                            &mBlockMemberInfoMap);
+    }
 }
 
 void ShaderStorageBlockOutputHLSL::visitSymbol(TIntermSymbol *node)
@@ -548,7 +636,6 @@ bool ShaderStorageBlockOutputHLSL::visitSwizzle(Visit visit, TIntermSwizzle *nod
         {
             return mOutputHLSL->visitSwizzle(visit, node);
         }
-
         TInfoSinkBase &out = mOutputHLSL->getInfoSink();
         // TODO(jiajia.qin@intel.com): add swizzle process if the swizzle node is not the last node
         // of ssbo access chain. Such as, data.xy[0]
@@ -757,6 +844,210 @@ void ShaderStorageBlockOutputHLSL::writeDotOperatorOutput(TInfoSinkBase &out, co
     {
         out << ")";
     }
+}
+
+TIntermSymbol *ShaderStorageBlockOutputHLSL::findBase(TIntermNode *node) const
+{
+    if (TIntermSymbol *symbolNode = node->getAsSymbolNode())
+    {
+        return symbolNode;
+    }
+    else if (TIntermSwizzle *swizzleNode = node->getAsSwizzleNode())
+    {
+        return findBase(swizzleNode->getOperand());
+    }
+    else if (TIntermBinary *binaryNode = node->getAsBinaryNode())
+    {
+        switch (binaryNode->getOp())
+        {
+            case EOpIndexDirectInterfaceBlock:
+            case EOpIndexIndirect:
+            case EOpIndexDirect:
+            case EOpIndexDirectStruct:
+                return findBase(binaryNode->getLeft());
+            default:
+                return nullptr;
+        }
+    }
+    return nullptr;
+}
+
+void ShaderStorageBlockOutputHLSL::writeBufferSymbol(TInfoSinkBase &out, TIntermNode *node)
+{
+    if (TIntermSymbol *symbolNode = node->getAsSymbolNode())
+    {
+        const TType &type = symbolNode->variable().getType();
+        if (type.isInterfaceBlock())
+        {
+            out << DecorateVariableIfNeeded(symbolNode->variable());
+        }
+        else
+        {
+            out << Decorate(type.getInterfaceBlock()->name());
+        }
+    }
+    else if (TIntermSwizzle *swizzleNode = node->getAsSwizzleNode())
+    {
+        writeBufferSymbol(out, swizzleNode->getOperand());
+    }
+    else if (TIntermBinary *binaryNode = node->getAsBinaryNode())
+    {
+        switch (binaryNode->getOp())
+        {
+            case EOpIndexDirect:
+            {
+                const TType &leftType = binaryNode->getLeft()->getType();
+                if (leftType.isInterfaceBlock())
+                {
+                    TIntermSymbol *instanceArraySymbol = binaryNode->getLeft()->getAsSymbolNode();
+                    const int arrayIndex =
+                        binaryNode->getRight()->getAsConstantUnion()->getIConst(0);
+                    out << mResourcesHLSL->InterfaceBlockInstanceString(
+                        instanceArraySymbol->getName(), arrayIndex);
+                }
+                else
+                {
+                    writeBufferSymbol(out, binaryNode->getLeft());
+                }
+                break;
+            }
+            case EOpIndexDirectInterfaceBlock:
+            case EOpIndexIndirect:
+            case EOpIndexDirectStruct:
+                writeBufferSymbol(out, binaryNode->getLeft());
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+TIntermTyped *ShaderStorageBlockOutputHLSL::createByteAddressExpression(TIntermTyped *node, SSBOMethod method)
+{
+    if (TIntermSwizzle *swizzleNode = node->getAsSwizzleNode())
+    {
+        // FIXME: should the swizzle offsets be applied to the byte address?
+        return createByteAddressExpression(swizzleNode->getOperand(), method);
+    }
+    else if (TIntermBinary *binaryNode = node->getAsBinaryNode())
+    {
+        switch (binaryNode->getOp())
+        {
+            case EOpIndexDirect:
+            {
+                const TType &leftType = binaryNode->getLeft()->getType();
+                if (leftType.isInterfaceBlock())
+                {
+                    ASSERT(leftType.getQualifier() == EvqBuffer);
+                    TIntermSymbol *instanceArraySymbol    = binaryNode->getLeft()->getAsSymbolNode();
+                    const TInterfaceBlock *interfaceBlock = leftType.getInterfaceBlock();
+
+                    if (mReferencedShaderStorageBlocks.count(interfaceBlock->uniqueId().get()) == 0)
+                    {
+                        mReferencedShaderStorageBlocks[interfaceBlock->uniqueId().get()] =
+                            new TReferencedBlock(interfaceBlock, &instanceArraySymbol->variable());
+                        GetShaderStorageBlockMembersInfo(interfaceBlock, mShaderStorageBlocks,
+                                                         &mBlockMemberInfoMap);
+                    }
+                }
+                else
+                {
+                    return convertEOpIndexDirectOrIndirectOutput(binaryNode, method);
+                }
+                break;
+            }
+            case EOpIndexIndirect:
+            {
+                // We do not currently support indirect references to interface blocks
+                ASSERT(binaryNode->getLeft()->getBasicType() != EbtInterfaceBlock);
+                return convertEOpIndexDirectOrIndirectOutput(binaryNode, method);
+                break;
+            }
+            case EOpIndexDirectStruct:
+            {
+                // We do not currently support direct references to interface blocks
+                ASSERT(binaryNode->getLeft()->getBasicType() != EbtInterfaceBlock);
+                TIntermTyped *left = createByteAddressExpression(binaryNode->getLeft(), method);
+                const TStructure *structure       = binaryNode->getLeft()->getType().getStruct();
+                const TIntermConstantUnion *index = binaryNode->getRight()->getAsConstantUnion();
+                const TField *field               = structure->fields()[index->getIConst(0)];
+                return addFieldOffset(field, left);
+                break;
+            }
+            case EOpIndexDirectInterfaceBlock:
+            {
+                // FIXME: COMMA HERE
+                ASSERT(IsInShaderStorageBlock(binaryNode->getLeft()));
+                const TInterfaceBlock *interfaceBlock = binaryNode->getLeft()->getType().getInterfaceBlock();
+                const TIntermConstantUnion *index = binaryNode->getRight()->getAsConstantUnion();
+                const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
+                auto fieldInfoIter = mBlockMemberInfoMap.find(field);
+                ASSERT(fieldInfoIter != mBlockMemberInfoMap.end());
+                const BlockMemberInfo &memberInfo = fieldInfoIter->second;
+                return CreateUIntNode(memberInfo.offset);
+                break;
+            }
+            default:
+                return nullptr;
+        }
+    }
+    return nullptr;
+}
+TIntermTyped *ShaderStorageBlockOutputHLSL::convertEOpIndexDirectOrIndirectOutput(TIntermBinary *node, SSBOMethod method)
+{
+    ASSERT(IsInShaderStorageBlock(node->getLeft()));
+    TIntermTyped *left = createByteAddressExpression(node->getLeft(), method);
+    TIntermTyped *right = node->getRight()->deepCopy();
+    const TType &type  = node->getLeft()->getType();
+
+    if (node->getLeft()->getType().isUnsizedArray())
+    {
+        TLayoutBlockStorage storage;
+        bool rowMajor;
+        GetBlockLayoutInfo(node, false, &storage, &rowMajor);
+        int stride = GetArrayStrideByType(node->getLeft()->getType(), storage, rowMajor);
+        right      = new TIntermBinary(EOpMul, CreateUIntNode(stride), right);
+    }
+    else if (node->getLeft()->getType().isArray())
+    {
+        const TSpan<const unsigned int> &arraySizes = type.getArraySizes();
+        for (unsigned int i = 0; i < arraySizes.size(); i++)
+        {
+            right = new TIntermBinary(EOpMul, CreateUIntNode(arraySizes[i]), right);
+        }
+    }
+    else if (node->getLeft()->getType().isVector() && type.isMatrix())
+    {
+        if (mRowMajor)
+        {
+            right = new TIntermBinary(EOpAdd, CreateUIntNode(BlockLayoutEncoder::kBytesPerComponent), right);
+        }
+        else
+        {
+            right = new TIntermBinary(EOpAdd, CreateUIntNode(mMatrixStride), right);
+        }
+    }
+    else if (node->getLeft()->getType().isScalar() && !type.isArray())
+    {
+        if (mRowMajor)
+        {
+            right = new TIntermBinary(EOpAdd, CreateUIntNode(mMatrixStride), right);
+        }
+        else
+        {
+            right = new TIntermBinary(EOpAdd, CreateUIntNode(BlockLayoutEncoder::kBytesPerComponent), right);
+        }
+    }
+    return left ? new TIntermBinary(EOpAdd, left, right) : right;
+}
+
+TIntermTyped *ShaderStorageBlockOutputHLSL::addFieldOffset(const TField *field, TIntermTyped* node)
+{
+    auto fieldInfoIter = mBlockMemberInfoMap.find(field);
+    ASSERT(fieldInfoIter != mBlockMemberInfoMap.end());
+    const BlockMemberInfo &memberInfo = fieldInfoIter->second;
+
+    return new TIntermBinary(EOpAdd, CreateUIntNode(memberInfo.offset), node);
 }
 
 }  // namespace sh
