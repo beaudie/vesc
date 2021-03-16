@@ -1788,7 +1788,22 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             // Override the format with a compatible one.
             vkFormat = kMismatchedComponentTypeMap[programAttribType];
 
-            bindingDesc.stride = 0;  // Prevent out-of-bounds accesses.
+            // This forces stride to 0 when glVertexAttribute specifies a different size than
+            // shader's vertex attribute component size and a different type than the shader's
+            // vertex attribute's type For example, if the shader declares an ivec4, but
+            // glVertexAttribute specifies size 2 and type GL_UNSIGNED_BYTE, we set stride to 0
+            GLint discardableParameter;
+            GLenum programAttributeType;
+            contextVk->getState().getProgram()->getActiveAttribute(
+                attribIndex, 0, nullptr, &discardableParameter, &programAttributeType, nullptr);
+            GLuint attribSize = gl::GetVertexFormatFromID(formatID).components;
+            GLuint shaderVarSize =
+                static_cast<GLuint>(gl::VariableColumnCount(programAttributeType));
+
+            if (attribSize != shaderVarSize)
+            {
+                bindingDesc.stride = 0;
+            }
         }
 
         // The binding index could become more dynamic in ES 3.1.
