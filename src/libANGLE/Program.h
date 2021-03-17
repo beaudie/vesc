@@ -451,19 +451,26 @@ struct ProgramVaryingRef
 
 using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
 
+// Interface to describe functions common to both Programs and ProgramPipelines, so external callers
+// don't need to know which they are interacting with.
 // TODO: Copy necessary shader state into Program. http://anglebug.com/5506
-class HasAttachedShaders
+class CommonShaderStageInterface
 {
   public:
     virtual Shader *getAttachedShader(ShaderType shaderType) const = 0;
+    virtual bool hasLinkedShaderStage(ShaderType shaderType) const = 0;
+    virtual const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(
+        ShaderType shaderType) const = 0;
+    virtual const std::vector<sh::ShaderVariable> &getLinkedInputVaryings(
+        ShaderType shaderType) const = 0;
 
     ShaderType getTransformFeedbackStage() const;
 
   protected:
-    virtual ~HasAttachedShaders() {}
+    virtual ~CommonShaderStageInterface() {}
 };
 
-class Program final : public LabeledObject, public angle::Subject, public HasAttachedShaders
+class Program final : public LabeledObject, public angle::Subject, public CommonShaderStageInterface
 {
   public:
     Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, ShaderProgramID handle);
@@ -484,7 +491,13 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
     void detachShader(const Context *context, Shader *shader);
     int getAttachedShadersCount() const;
 
+    // CommonShaderStageInterface implementation
     Shader *getAttachedShader(ShaderType shaderType) const override;
+    bool hasLinkedShaderStage(ShaderType shaderType) const override;
+    const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(
+        ShaderType shaderType) const override;
+    const std::vector<sh::ShaderVariable> &getLinkedInputVaryings(
+        ShaderType shaderType) const override;
 
     void bindAttributeLocation(GLuint index, const char *name);
     void bindUniformLocation(UniformLocation location, const char *name);

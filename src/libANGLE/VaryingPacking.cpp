@@ -997,6 +997,7 @@ bool ProgramVaryingPacking::collectAndPackUserVaryings(InfoLog &infoLog,
 
     ShaderBitSet attachedShaders = attachedShadersMask;
 
+    ASSERT(attachedShaders.any());
     ShaderType frontShaderStage       = attachedShaders.first();
     attachedShaders[frontShaderStage] = false;
 
@@ -1066,56 +1067,63 @@ bool ProgramVaryingPacking::collectAndPackUserVaryings(InfoLog &infoLog,
     return true;
 }
 
-ProgramMergedVaryings GetMergedVaryingsFromShaders(const HasAttachedShaders &programOrPipeline)
+ProgramMergedVaryings GetMergedVaryingsFromShaders(
+    const CommonShaderStageInterface &programOrPipeline)
 {
-    Shader *frontShader = nullptr;
+    ShaderType frontShaderType = ShaderType::InvalidEnum;
     ProgramMergedVaryings merged;
 
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    for (ShaderType backShaderType : kAllGraphicsShaderTypes)
     {
-        Shader *backShader = programOrPipeline.getAttachedShader(shaderType);
-        if (!backShader)
+        Shader *backShader = programOrPipeline.getAttachedShader(backShaderType);
+
+        if (!backShader && !programOrPipeline.hasLinkedShaderStage(backShaderType))
         {
             continue;
         }
 
-        ASSERT(backShader->getType() != ShaderType::Compute);
+        const std::vector<sh::ShaderVariable> &backShaderOutputVaryings =
+            backShader ? backShader->getOutputVaryings()
+                       : programOrPipeline.getLinkedOutputVaryings(backShaderType);
+        const std::vector<sh::ShaderVariable> &backShaderInputVaryings =
+            backShader ? backShader->getInputVaryings()
+                       : programOrPipeline.getLinkedInputVaryings(backShaderType);
 
         // Add outputs. These are always unmatched since we walk shader stages sequentially.
-        for (const sh::ShaderVariable &frontVarying : backShader->getOutputVaryings())
+        for (const sh::ShaderVariable &frontVarying : backShaderOutputVaryings)
         {
             ProgramVaryingRef ref;
             ref.frontShader      = &frontVarying;
-            ref.frontShaderStage = backShader->getType();
+            ref.frontShaderStage = backShaderType;
             merged.push_back(ref);
         }
 
-        if (!frontShader)
+        if (frontShaderType == ShaderType::InvalidEnum)
         {
             // If this is our first shader stage, and not a VS, we might have unmatched inputs.
-            for (const sh::ShaderVariable &backVarying : backShader->getInputVaryings())
+            for (const sh::ShaderVariable &backVarying : backShaderInputVaryings)
             {
                 ProgramVaryingRef ref;
                 ref.backShader      = &backVarying;
-                ref.backShaderStage = backShader->getType();
+                ref.backShaderStage = backShaderType;
                 merged.push_back(ref);
             }
         }
         else
         {
             // Match inputs with the prior shader stage outputs.
-            for (const sh::ShaderVariable &backVarying : backShader->getInputVaryings())
+            for (const sh::ShaderVariable &backVarying : backShaderInputVaryings)
             {
                 bool found = false;
                 for (ProgramVaryingRef &ref : merged)
                 {
-                    if (ref.frontShader && ref.frontShaderStage == frontShader->getType() &&
+                    if (ref.frontShader && ref.frontShaderStage == frontShaderType &&
                         InterfaceVariablesMatch(*ref.frontShader, backVarying))
                     {
                         ASSERT(ref.backShader == nullptr);
 
                         ref.backShader      = &backVarying;
-                        ref.backShaderStage = backShader->getType();
+                        ref.backShaderStage = backShaderType;
                         found               = true;
                         break;
                     }
@@ -1126,14 +1134,14 @@ ProgramMergedVaryings GetMergedVaryingsFromShaders(const HasAttachedShaders &pro
                 {
                     ProgramVaryingRef ref;
                     ref.backShader      = &backVarying;
-                    ref.backShaderStage = backShader->getType();
+                    ref.backShaderStage = backShaderType;
                     merged.push_back(ref);
                 }
             }
         }
 
         // Save the current back shader to use as the next front shader.
-        frontShader = backShader;
+        frontShaderType = backShaderType;
     }
 
     return merged;

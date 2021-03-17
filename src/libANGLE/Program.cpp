@@ -935,49 +935,66 @@ void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
     stream->writeIntVector(var.arraySizes);
     stream->writeBool(var.staticUse);
     stream->writeBool(var.active);
-    stream->writeInt(var.binding);
+    stream->writeInt<size_t>(var.fields.size());
+    for (const sh::ShaderVariable &shaderVariable : var.fields)
+    {
+        WriteShaderVar(stream, shaderVariable);
+    }
     stream->writeString(var.structOrBlockName);
     stream->writeString(var.mappedStructOrBlockName);
-    stream->writeInt(var.hasParentArrayIndex() ? var.parentArrayIndex() : -1);
-
+    stream->writeBool(var.isRowMajorLayout);
+    stream->writeInt(var.location);
+    stream->writeBool(var.hasImplicitLocation);
+    stream->writeInt(var.binding);
     stream->writeInt(var.imageUnitFormat);
     stream->writeInt(var.offset);
     stream->writeBool(var.readonly);
     stream->writeBool(var.writeonly);
     stream->writeBool(var.isFragmentInOut);
-    if (var.isFragmentInOut)
-    {
-        stream->writeInt(var.location);
-    }
+    stream->writeInt(var.index);
+    stream->writeBool(var.yuv);
+    stream->writeEnum(var.interpolation);
+    stream->writeBool(var.isInvariant);
+    stream->writeBool(var.isShaderIOBlock);
+    stream->writeBool(var.isPatch);
     stream->writeBool(var.texelFetchStaticUse);
-
-    ASSERT(var.fields.empty());
+    stream->writeInt(var.getFlattenedOffsetInParentArrays());
 }
 
-void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
+void LoadShaderVar(gl::BinaryInputStream *stream, sh::ShaderVariable *shaderVariable)
 {
-    var->type       = stream->readInt<GLenum>();
-    var->precision  = stream->readInt<GLenum>();
-    var->name       = stream->readString();
-    var->mappedName = stream->readString();
-    stream->readIntVector<unsigned int>(&var->arraySizes);
-    var->staticUse               = stream->readBool();
-    var->active                  = stream->readBool();
-    var->binding                 = stream->readInt<int>();
-    var->structOrBlockName       = stream->readString();
-    var->mappedStructOrBlockName = stream->readString();
-    var->setParentArrayIndex(stream->readInt<int>());
-
-    var->imageUnitFormat = stream->readInt<GLenum>();
-    var->offset          = stream->readInt<int>();
-    var->readonly        = stream->readBool();
-    var->writeonly       = stream->readBool();
-    var->isFragmentInOut = stream->readBool();
-    if (var->isFragmentInOut)
+    shaderVariable->type      = stream->readInt<GLenum>();
+    shaderVariable->precision = stream->readInt<GLenum>();
+    stream->readString(&shaderVariable->name);
+    stream->readString(&shaderVariable->mappedName);
+    stream->readIntVector<unsigned int>(&shaderVariable->arraySizes);
+    shaderVariable->staticUse = stream->readBool();
+    shaderVariable->active    = stream->readBool();
+    size_t elementCount       = stream->readInt<size_t>();
+    shaderVariable->fields.resize(elementCount);
+    for (sh::ShaderVariable &variable : shaderVariable->fields)
     {
-        var->location = stream->readInt<int>();
+        LoadShaderVar(stream, &variable);
     }
-    var->texelFetchStaticUse = stream->readBool();
+    stream->readString(&shaderVariable->structOrBlockName);
+    stream->readString(&shaderVariable->mappedStructOrBlockName);
+    shaderVariable->isRowMajorLayout    = stream->readBool();
+    shaderVariable->location            = stream->readInt<int>();
+    shaderVariable->hasImplicitLocation = stream->readBool();
+    shaderVariable->binding             = stream->readInt<int>();
+    shaderVariable->imageUnitFormat     = stream->readInt<GLenum>();
+    shaderVariable->offset              = stream->readInt<int>();
+    shaderVariable->readonly            = stream->readBool();
+    shaderVariable->writeonly           = stream->readBool();
+    shaderVariable->isFragmentInOut     = stream->readBool();
+    shaderVariable->index               = stream->readInt<int>();
+    shaderVariable->yuv                 = stream->readBool();
+    shaderVariable->interpolation       = stream->readEnum<sh::InterpolationType>();
+    shaderVariable->isInvariant         = stream->readBool();
+    shaderVariable->isShaderIOBlock     = stream->readBool();
+    shaderVariable->isPatch             = stream->readBool();
+    shaderVariable->texelFetchStaticUse = stream->readBool();
+    shaderVariable->setParentArrayIndex(stream->readInt<int>());
 }
 
 // VariableLocation implementation.
@@ -1415,6 +1432,21 @@ Shader *Program::getAttachedShader(ShaderType shaderType) const
 {
     ASSERT(!mLinkingState);
     return mState.getAttachedShader(shaderType);
+}
+
+bool Program::hasLinkedShaderStage(ShaderType shaderType) const
+{
+    return getExecutable().hasLinkedShaderStage(shaderType);
+}
+
+const std::vector<sh::ShaderVariable> &Program::getLinkedOutputVaryings(ShaderType shaderType) const
+{
+    return getExecutable().getLinkedOutputVaryings(shaderType);
+}
+
+const std::vector<sh::ShaderVariable> &Program::getLinkedInputVaryings(ShaderType shaderType) const
+{
+    return getExecutable().getLinkedInputVaryings(shaderType);
 }
 
 void Program::bindAttributeLocation(GLuint index, const char *name)
@@ -4673,6 +4705,8 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     stream.writeInt(mState.getAtomicCounterUniformRange().low());
     stream.writeInt(mState.getAtomicCounterUniformRange().high());
 
+    stream.writeBool(mState.mSeparable);
+
     mProgram->save(context, &stream);
 
     ASSERT(binaryOut);
@@ -4758,6 +4792,8 @@ angle::Result Program::deserialize(const Context *context,
     unsigned int atomicCounterRangeHigh = stream.readInt<unsigned int>();
     mState.mAtomicCounterUniformRange   = RangeUI(atomicCounterRangeLow, atomicCounterRangeHigh);
 
+    mState.mSeparable = stream.readBool();
+
     static_assert(static_cast<unsigned long>(ShaderType::EnumCount) <= sizeof(unsigned long) * 8,
                   "Too many shader types");
 
@@ -4800,8 +4836,8 @@ void Program::postResolveLink(const gl::Context *context)
     }
 }
 
-// HasAttachedShaders implementation.
-ShaderType HasAttachedShaders::getTransformFeedbackStage() const
+// CommonShaderStageInterface implementation.
+ShaderType CommonShaderStageInterface::getTransformFeedbackStage() const
 {
     if (getAttachedShader(ShaderType::Geometry))
     {

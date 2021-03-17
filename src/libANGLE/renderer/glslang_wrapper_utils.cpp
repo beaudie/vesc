@@ -247,6 +247,13 @@ void AddVaryingLocationInfo(ShaderInterfaceVariableInfoMap *infoMap,
                             const uint32_t location,
                             const uint32_t component)
 {
+    // In the following:
+    //
+    //     struct S { vec4 field; };
+    //     out S varStruct;
+    //
+    // "_uvarStruct" is found through |parentStructMappedName|, with |varying->mappedName| being
+    // "_ufield".  In such a case, use |parentStructMappedName|.
     const std::string &name = isStructField ? ref.parentStructMappedName : ref.varying->mappedName;
     AddLocationInfo(infoMap, ref.stage, name, location, component, 0, 0);
 }
@@ -571,13 +578,6 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
             component = varyingReg.registerColumn;
         }
 
-        // In the following:
-        //
-        //     struct S { vec4 field; };
-        //     out S varStruct;
-        //
-        // "_uvarStruct" is found through |parentStructMappedName|, with |varying->mappedName|
-        // being "_ufield".  In such a case, use |parentStructMappedName|.
         if (varying.frontVarying.varying && (varying.frontVarying.stage == shaderType))
         {
             AddVaryingLocationInfo(variableInfoMapOut, varying.frontVarying,

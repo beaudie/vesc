@@ -1061,7 +1061,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
          ++image2DUniformIndex)
     {
         sh::ShaderVariable image2Duniform;
-        gl::LoadShaderVar(stream, &image2Duniform);
+        LoadShaderVar(stream, &image2Duniform);
         mImage2DUniforms.push_back(image2Duniform);
     }
 

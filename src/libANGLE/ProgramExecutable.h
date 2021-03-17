@@ -312,14 +312,23 @@ class ProgramExecutable final : public angle::Subject
     GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
 
     void saveLinkedStateInfo(const ProgramState &state);
-    std::vector<sh::ShaderVariable> getLinkedOutputVaryings(ShaderType shaderType)
+    std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(ShaderType shaderType)
     {
         return mLinkedOutputVaryings[shaderType];
     }
-    std::vector<sh::ShaderVariable> getLinkedInputVaryings(ShaderType shaderType)
+    const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(ShaderType shaderType) const
+    {
+        return mLinkedOutputVaryings[shaderType];
+    }
+    std::vector<sh::ShaderVariable> &getLinkedInputVaryings(ShaderType shaderType)
     {
         return mLinkedInputVaryings[shaderType];
     }
+    const std::vector<sh::ShaderVariable> &getLinkedInputVaryings(ShaderType shaderType) const
+    {
+        return mLinkedInputVaryings[shaderType];
+    }
+
     int getLinkedShaderVersion(ShaderType shaderType) { return mLinkedShaderVersions[shaderType]; }
 
     bool isYUVOutput() const;
@@ -354,7 +363,7 @@ class ProgramExecutable final : public angle::Subject
                                                std::vector<SamplerBinding> &samplerBindings);
 
     bool linkMergedVaryings(const Context *context,
-                            const HasAttachedShaders &programOrPipeline,
+                            const CommonShaderStageInterface &programOrPipeline,
                             const ProgramMergedVaryings &mergedVaryings,
                             const std::vector<std::string> &transformFeedbackVaryingNames,
                             bool isSeparable,

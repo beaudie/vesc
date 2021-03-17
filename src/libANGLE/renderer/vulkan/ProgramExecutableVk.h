@@ -185,6 +185,8 @@ class ProgramExecutableVk
 
     ProgramExecutablePerfCounters getAndResetObjectPerfCounters();
 
+    ShaderInterfaceVariableInfoMap &getVariableInfoMap() { return mVariableInfoMap; }
+
   private:
     friend class ProgramVk;
     friend class ProgramPipelineVk;
