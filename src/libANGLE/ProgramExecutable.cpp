@@ -10,7 +10,6 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
-#include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/Shader.h"
 
 namespace gl
@@ -414,6 +413,35 @@ void ProgramExecutable::load(gl::BinaryInputStream *stream)
             mGraphicsImageBindings.emplace_back(imageBinding);
         }
     }
+
+    for (ShaderType shaderType : mLinkedGraphicsShaderStages)
+    {
+        mLinkedOutputVaryings[shaderType].resize(stream->readInt<size_t>());
+        for (sh::ShaderVariable &variable : mLinkedOutputVaryings[shaderType])
+        {
+            LoadShaderVar(stream, &variable);
+        }
+        mLinkedInputVaryings[shaderType].resize(stream->readInt<size_t>());
+        for (sh::ShaderVariable &variable : mLinkedInputVaryings[shaderType])
+        {
+            LoadShaderVar(stream, &variable);
+        }
+        mLinkedShaderVersions[shaderType] = stream->readInt<int>();
+    }
+    for (ShaderType shaderType : mLinkedComputeShaderStages)
+    {
+        mLinkedOutputVaryings[shaderType].resize(stream->readInt<size_t>());
+        for (sh::ShaderVariable &variable : mLinkedOutputVaryings[shaderType])
+        {
+            LoadShaderVar(stream, &variable);
+        }
+        mLinkedInputVaryings[shaderType].resize(stream->readInt<size_t>());
+        for (sh::ShaderVariable &variable : mLinkedInputVaryings[shaderType])
+        {
+            LoadShaderVar(stream, &variable);
+        }
+        mLinkedShaderVersions[shaderType] = stream->readInt<int>();
+    }
 }
 
 void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
@@ -466,8 +494,6 @@ void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
     for (const LinkedUniform &uniform : getUniforms())
     {
         WriteShaderVar(stream, uniform);
-
-        // FIXME: referenced
 
         stream->writeInt(uniform.bufferIndex);
         WriteBlockMemberInfo(stream, uniform.blockInfo);
@@ -562,6 +588,35 @@ void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
         {
             stream->writeInt(imageBinding.boundImageUnits[i]);
         }
+    }
+
+    for (ShaderType shaderType : mLinkedGraphicsShaderStages)
+    {
+        stream->writeInt(mLinkedOutputVaryings[shaderType].size());
+        for (const sh::ShaderVariable &shaderVariable : mLinkedOutputVaryings[shaderType])
+        {
+            WriteShaderVar(stream, shaderVariable);
+        }
+        stream->writeInt(mLinkedInputVaryings[shaderType].size());
+        for (const sh::ShaderVariable &shaderVariable : mLinkedInputVaryings[shaderType])
+        {
+            WriteShaderVar(stream, shaderVariable);
+        }
+        stream->writeInt(mLinkedShaderVersions[shaderType]);
+    }
+    for (ShaderType shaderType : mLinkedComputeShaderStages)
+    {
+        stream->writeInt(mLinkedOutputVaryings[shaderType].size());
+        for (const sh::ShaderVariable &shaderVariable : mLinkedOutputVaryings[shaderType])
+        {
+            WriteShaderVar(stream, shaderVariable);
+        }
+        stream->writeInt(mLinkedInputVaryings[shaderType].size());
+        for (const sh::ShaderVariable &shaderVariable : mLinkedInputVaryings[shaderType])
+        {
+            WriteShaderVar(stream, shaderVariable);
+        }
+        stream->writeInt(mLinkedShaderVersions[shaderType]);
     }
 }
 
