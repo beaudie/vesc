@@ -291,9 +291,14 @@ void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->flexibleSurfaceCompatibility = true;
     outExtensions->iosurfaceClientBuffer        = true;
-    outExtensions->surfacelessContext           = true;
-    outExtensions->displayTextureShareGroup     = true;
-    outExtensions->displaySemaphoreShareGroup   = true;
+
+    // FIXME(https://crbug.com/angleproject/5756): Verify EGL_EXT_pixel_format_float can always be
+    // supported on Metal
+    outExtensions->pixelFormatFloat = true;
+
+    outExtensions->surfacelessContext         = true;
+    outExtensions->displayTextureShareGroup   = true;
+    outExtensions->displaySemaphoreShareGroup = true;
 
     if (mFeatures.hasEvents.enabled)
     {

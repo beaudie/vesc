@@ -894,6 +894,10 @@ void DisplayGLX::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup   = true;
     outExtensions->displaySemaphoreShareGroup = true;
 
+    // FIXME(https://crbug.com/angleproject/5756): Verify EGL_EXT_pixel_format_float can always be
+    // supported on GLX
+    outExtensions->pixelFormatFloat = true;
+
     outExtensions->surfacelessContext = true;
 
     if (!mRenderer->getFeatures().disableSyncControlSupport.enabled)

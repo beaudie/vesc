@@ -220,6 +220,11 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->glRenderbufferImage   = true;
     outExtensions->imageNativeBuffer =
         getRenderer()->getFeatures().supportsAndroidHardwareBuffer.enabled;
+
+    // FIXME(https://crbug.com/angleproject/5756): Check WSI surface formats for whether
+    // EGL_EXT_pixel_format_float can be supported
+    outExtensions->pixelFormatFloat = false;
+
     outExtensions->surfacelessContext = true;
     outExtensions->glColorspace =
         getRenderer()->getFeatures().supportsSwapchainColorspace.enabled &&

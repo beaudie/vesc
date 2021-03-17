@@ -473,7 +473,12 @@ CGLPixelFormatObj DisplayCGL::getCGLPixelFormat() const
 void DisplayCGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->iosurfaceClientBuffer = true;
-    outExtensions->surfacelessContext    = true;
+
+    // FIXME(https://crbug.com/angleproject/5756): Verify EGL_EXT_pixel_format_float can always be
+    // supported on CGL
+    outExtensions->pixelFormatFloat = true;
+
+    outExtensions->surfacelessContext = true;
 
     // Contexts are virtualized so textures and semaphores can be shared globally
     outExtensions->displayTextureShareGroup   = true;

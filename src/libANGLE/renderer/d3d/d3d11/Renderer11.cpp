@@ -1311,6 +1311,10 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
     // syncControlCHROMIUM requires direct composition.
     outExtensions->syncControlCHROMIUM = outExtensions->directComposition;
 
+    // FIXME(https://crbug.com/angleproject/5756): Verify EGL_EXT_pixel_format_float can always be
+    // supported on D3D11
+    outExtensions->pixelFormatFloat = true;
+
     // D3D11 can be used without a swap chain
     outExtensions->surfacelessContext = true;
 

@@ -1725,7 +1725,6 @@ void Display::initDisplayExtensions()
     mDisplayExtensions.createContextWebGLCompatibility    = true;
     mDisplayExtensions.createContextBindGeneratesResource = true;
     mDisplayExtensions.createContextClientArrays          = true;
-    mDisplayExtensions.pixelFormatFloat                   = true;
     mDisplayExtensions.reusableSyncKHR                    = true;
 
     // Force EGL_KHR_get_all_proc_addresses on.
