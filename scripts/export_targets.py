@@ -231,6 +231,7 @@ IGNORED_INCLUDES = {
     b'vulkan_xcb.h',
     b'vulkan_xlib.h',
     b'vulkan_xlib_xrandr.h',
+    b'rapidjson/...',
 }
 
 IGNORED_INCLUDE_PREFIXES = {
