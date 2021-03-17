@@ -145,6 +145,8 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
 
     Shader *getAttachedShader(ShaderType shaderType) const override;
 
+    void fillProgramStateMap(ShaderMap<const ProgramState *> *programStatesOut);
+
   private:
     void updateLinkedShaderStages();
     void updateExecutableAttributes();

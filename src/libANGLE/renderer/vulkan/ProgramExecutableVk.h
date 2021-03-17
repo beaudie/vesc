@@ -184,6 +184,8 @@ class ProgramExecutableVk
 
     const PerfCounters getObjectPerfCounters() const { return mObjectPerfCounters; }
 
+    ShaderInterfaceVariableInfoMap &getVariableInfoMap() { return mVariableInfoMap; }
+
   private:
     friend class ProgramVk;
     friend class ProgramPipelineVk;

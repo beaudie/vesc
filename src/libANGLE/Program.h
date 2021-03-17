@@ -840,6 +840,8 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
     const ProgramExecutable &getExecutable() const { return mState.getExecutable(); }
     ProgramExecutable &getExecutable() { return mState.getExecutable(); }
 
+    void fillProgramStateMap(ShaderMap<const ProgramState *> *programStatesOut);
+
   private:
     struct LinkingState;
 

@@ -506,7 +506,9 @@ angle::Result ProgramPipeline::link(const Context *context)
             return angle::Result::Stop;
         }
 
-        mergedVaryings = GetMergedVaryingsFromShaders(*this);
+        ShaderMap<const ProgramState *> programStates;
+        fillProgramStateMap(&programStates);
+        mergedVaryings = GetMergedVaryingsFromShaders(*this, programStates);
         // If separable program objects are in use, the set of attributes captured is taken
         // from the program object active on the last vertex processing stage.
         Program *tfProgram = mState.mPrograms[ShaderType::Geometry];
@@ -660,5 +662,19 @@ Shader *ProgramPipeline::getAttachedShader(ShaderType shaderType) const
 {
     const Program *program = mState.mPrograms[shaderType];
     return program ? program->getAttachedShader(shaderType) : nullptr;
+}
+
+void ProgramPipeline::fillProgramStateMap(ShaderMap<const ProgramState *> *programStatesOut)
+{
+    for (ShaderType shaderType : AllShaderTypes())
+    {
+        (*programStatesOut)[shaderType] = nullptr;
+
+        Program *program = getShaderProgram(shaderType);
+        if (program)
+        {
+            (*programStatesOut)[shaderType] = &program->getState();
+        }
+    }
 }
 }  // namespace gl
