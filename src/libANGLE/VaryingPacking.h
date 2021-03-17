@@ -24,6 +24,7 @@ namespace gl
 {
 class HasAttachedShaders;
 class InfoLog;
+class ProgramState;
 struct Caps;
 struct ProgramVaryingRef;
 
@@ -322,7 +323,8 @@ class ProgramVaryingPacking final : angle::NonCopyable
 };
 
 // Takes an abstract handle to a program or pipeline.
-ProgramMergedVaryings GetMergedVaryingsFromShaders(const HasAttachedShaders &programOrPipeline);
+ProgramMergedVaryings GetMergedVaryingsFromShaders(const HasAttachedShaders &programOrPipeline,
+                                                   ShaderMap<const ProgramState *> &programStates);
 }  // namespace gl
 
 #endif  // LIBANGLE_VARYINGPACKING_H_
