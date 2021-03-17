@@ -4527,6 +4527,12 @@ void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
             ParamCapture &param = call.params.getClientArrayPointerParameter();
             ASSERT(param.type == ParamType::TvoidConstPointer);
 
+            if (param.value.voidConstPointerVal == nullptr)
+            {
+                WARN() << "Received nullptr from " << GetEntryPointName(call.entryPoint);
+                continue;
+            }
+
             ParamBuffer updateParamBuffer;
             updateParamBuffer.addValueParam<GLint>("arrayIndex", ParamType::TGLint,
                                                    static_cast<uint32_t>(attribIndex));
