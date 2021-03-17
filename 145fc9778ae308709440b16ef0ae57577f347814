@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9212fd71_9b0f734f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-03-17T21:45:10Z",
+      "side": 1,
+      "message": "Its not really ready for review yet, I am still in middle of fixing the failures. But just want to make it visible to you make sure I am not off the track. The texture code is very complicated. What I am trying to do here is basically for immutable texture, we call initImage at glTexStorage time (If you notice this, this CL is last year\u0027s WIP CL, but I discontinued the effort among other things, now I am picking this up and well fit for this purpose). And then when base/max level changes, we do not try to reallocate a ImageHelper object. I introducing a firstLevel concept here to indicate that the first level we allocated might be different from base level. That way, when base_level changes, because ImageHelper object is allocated with firstLevel, we do not need to reallocate. For immutable, firstLevel is 0. For mutable firstLevel equals baseLevel for now, but this might also subject to change in future when we have a need to not reallocate just because of base level have changed.",
+      "revId": "145fc9778ae308709440b16ef0ae57577f347814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
