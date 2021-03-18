@@ -92,7 +92,7 @@ class ProgramPipelineState final : angle::NonCopyable
 class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
                               public LabeledObject,
                               public angle::ObserverInterface,
-                              public HasAttachedShaders
+                              public CommonShaderStageInterface
 {
   public:
     ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID handle);
@@ -143,7 +143,13 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    // CommonShaderStageInterface implementation
     Shader *getAttachedShader(ShaderType shaderType) const override;
+    bool hasLinkedShaderStage(ShaderType shaderType) const override;
+    const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(
+        ShaderType shaderType) const override;
+    const std::vector<sh::ShaderVariable> &getLinkedInputVaryings(
+        ShaderType shaderType) const override;
 
   private:
     void updateLinkedShaderStages();

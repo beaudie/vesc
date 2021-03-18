@@ -661,4 +661,25 @@ Shader *ProgramPipeline::getAttachedShader(ShaderType shaderType) const
     const Program *program = mState.mPrograms[shaderType];
     return program ? program->getAttachedShader(shaderType) : nullptr;
 }
+
+bool ProgramPipeline::hasLinkedShaderStage(ShaderType shaderType) const
+{
+    return getExecutable().hasLinkedShaderStage(shaderType);
+}
+
+const std::vector<sh::ShaderVariable> &ProgramPipeline::getLinkedOutputVaryings(
+    ShaderType shaderType) const
+{
+    Program *program = getShaderProgram(shaderType);
+    ASSERT(program);
+    return program->getExecutable().getLinkedOutputVaryings(shaderType);
+}
+
+const std::vector<sh::ShaderVariable> &ProgramPipeline::getLinkedInputVaryings(
+    ShaderType shaderType) const
+{
+    Program *program = getShaderProgram(shaderType);
+    ASSERT(program);
+    return program->getExecutable().getLinkedInputVaryings(shaderType);
+}
 }  // namespace gl

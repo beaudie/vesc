@@ -1434,6 +1434,21 @@ Shader *Program::getAttachedShader(ShaderType shaderType) const
     return mState.getAttachedShader(shaderType);
 }
 
+bool Program::hasLinkedShaderStage(ShaderType shaderType) const
+{
+    return getExecutable().hasLinkedShaderStage(shaderType);
+}
+
+const std::vector<sh::ShaderVariable> &Program::getLinkedOutputVaryings(ShaderType shaderType) const
+{
+    return getExecutable().getLinkedOutputVaryings(shaderType);
+}
+
+const std::vector<sh::ShaderVariable> &Program::getLinkedInputVaryings(ShaderType shaderType) const
+{
+    return getExecutable().getLinkedInputVaryings(shaderType);
+}
+
 void Program::bindAttributeLocation(GLuint index, const char *name)
 {
     ASSERT(!mLinkingState);
@@ -4821,8 +4836,8 @@ void Program::postResolveLink(const gl::Context *context)
     }
 }
 
-// HasAttachedShaders implementation.
-ShaderType HasAttachedShaders::getTransformFeedbackStage() const
+// CommonShaderStageInterface implementation.
+ShaderType CommonShaderStageInterface::getTransformFeedbackStage() const
 {
     if (getAttachedShader(ShaderType::Geometry))
     {

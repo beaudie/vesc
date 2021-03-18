@@ -862,7 +862,7 @@ ShaderType ProgramExecutable::getLinkedTransformFeedbackStage() const
 
 bool ProgramExecutable::linkMergedVaryings(
     const Context *context,
-    const HasAttachedShaders &programOrPipeline,
+    const CommonShaderStageInterface &programOrPipeline,
     const ProgramMergedVaryings &mergedVaryings,
     const std::vector<std::string> &transformFeedbackVaryingNames,
     bool isSeparable,

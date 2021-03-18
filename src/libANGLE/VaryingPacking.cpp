@@ -1066,7 +1066,8 @@ bool ProgramVaryingPacking::collectAndPackUserVaryings(InfoLog &infoLog,
     return true;
 }
 
-ProgramMergedVaryings GetMergedVaryingsFromShaders(const HasAttachedShaders &programOrPipeline)
+ProgramMergedVaryings GetMergedVaryingsFromShaders(
+    const CommonShaderStageInterface &programOrPipeline)
 {
     Shader *frontShader = nullptr;
     ProgramMergedVaryings merged;

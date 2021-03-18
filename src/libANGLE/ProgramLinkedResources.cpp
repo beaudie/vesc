@@ -1502,7 +1502,8 @@ void ProgramLinkedResourcesLinker::getAtomicCounterBufferSizeMap(
 }
 
 // Note: this is broken for pipelines with modified/discarded shaders. http://anglebug.com/5506
-bool LinkValidateProgramGlobalNames(InfoLog &infoLog, const HasAttachedShaders &programOrPipeline)
+bool LinkValidateProgramGlobalNames(InfoLog &infoLog,
+                                    const CommonShaderStageInterface &programOrPipeline)
 {
     angle::HashMap<std::string, const sh::ShaderVariable *> uniformMap;
     using BlockAndFieldPair = std::pair<const sh::InterfaceBlock *, const sh::ShaderVariable *>;

@@ -263,7 +263,8 @@ class ProgramLinkedResourcesLinker final : angle::NonCopyable
     CustomBlockLayoutEncoderFactory *mCustomEncoderFactory;
 };
 
-bool LinkValidateProgramGlobalNames(InfoLog &infoLog, const HasAttachedShaders &programOrPipeline);
+bool LinkValidateProgramGlobalNames(InfoLog &infoLog,
+                                    const CommonShaderStageInterface &programOrPipeline);
 bool LinkValidateShaderInterfaceMatching(const std::vector<sh::ShaderVariable> &outputVaryings,
                                          const std::vector<sh::ShaderVariable> &inputVaryings,
                                          ShaderType frontShaderType,
