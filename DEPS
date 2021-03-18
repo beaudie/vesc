@@ -76,12 +76,12 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@17a38f4bb2c5375815a8c9e1dfb3a36658b29b8a',
+    'url': '{chromium_git}/chromium/src/build.git@cb067b2df499d519aa61cdef528e491b1a0594ef',
     'condition': 'not build_with_chromium',
   },
 
   'buildtools': {
-    'url': '{chromium_git}/chromium/src/buildtools.git@69cc9b8a3ae010e0721c4bea12de7a352d9a93f9',
+    'url': '{chromium_git}/chromium/src/buildtools.git@368c7dd2c90cd27cadfa8e653ab6953405f153cc',
     'condition': 'not build_with_chromium',
   },
 
@@ -94,7 +94,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/linux-amd64',
-        'version': 'git_revision:64b3b9401c1c3ed5f3c43c1cac00b91f83597ab8',
+        'version': 'git_revision:dfcbc6fed0a8352696f92d67ccad54048ad182b3',
       }
     ],
     'dep_type': 'cipd',
@@ -105,7 +105,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/mac-${{arch}}',
-        'version': 'git_revision:64b3b9401c1c3ed5f3c43c1cac00b91f83597ab8',
+        'version': 'git_revision:dfcbc6fed0a8352696f92d67ccad54048ad182b3',
       }
     ],
     'dep_type': 'cipd',
@@ -126,7 +126,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/windows-amd64',
-        'version': 'git_revision:64b3b9401c1c3ed5f3c43c1cac00b91f83597ab8',
+        'version': 'git_revision:dfcbc6fed0a8352696f92d67ccad54048ad182b3',
       }
     ],
     'dep_type': 'cipd',
