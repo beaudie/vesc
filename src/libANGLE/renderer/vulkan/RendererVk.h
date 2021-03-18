@@ -376,7 +376,6 @@ class RendererVk : angle::NonCopyable
     void queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceExtensionNames);
 
     void initFeatures(DisplayVk *display, const vk::ExtensionNameList &extensions);
-    void initPipelineCacheVkKey();
     angle::Result initPipelineCache(DisplayVk *display,
                                     vk::PipelineCache *pipelineCache,
                                     bool *success);
@@ -445,7 +444,6 @@ class RendererVk : angle::NonCopyable
     // a lock.
     std::mutex mPipelineCacheMutex;
     vk::PipelineCache mPipelineCache;
-    egl::BlobCache::Key mPipelineCacheVkBlobKey;
     uint32_t mPipelineCacheVkUpdateTimeout;
     bool mPipelineCacheDirty;
     bool mPipelineCacheInitialized;
@@ -512,6 +510,9 @@ class RendererVk : angle::NonCopyable
     // Note that this mask can have bits set that don't correspond to valid stages, so it's strictly
     // only useful for masking out unsupported stages in an otherwise valid set of stages.
     VkPipelineStageFlags mSupportedVulkanPipelineStageMask;
+
+    // Compress worker thread.
+    std::thread compressThread;
 };
 
 }  // namespace rx
