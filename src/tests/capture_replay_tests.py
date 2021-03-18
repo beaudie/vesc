@@ -318,7 +318,7 @@ class ChildProcessesManager():
 def GetTestsListForFilter(test_path, filter):
     cmd = [test_path, "--list-tests", "--gtest_filter=%s" % filter]
     info('Getting test list from "%s"' % " ".join(cmd))
-    return subprocess.check_output(cmd, text=True)
+    return subprocess.check_output(cmd, text=True, shell=True)
 
 
 def GetSkippedTestPatterns():
