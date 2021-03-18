@@ -31,6 +31,8 @@
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "platform/FeaturesGL.h"
 
+#include <iostream>
+
 using angle::CheckedNumeric;
 
 namespace rx
@@ -912,6 +914,9 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
     const FunctionsGL *functions      = GetFunctionsGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
     BlitGL *blitter                   = GetBlitGL(context);
+
+    bool isTexture = functions->isTexture(mTextureID);
+    std::cerr << "TextureGL::copySubTextureHelper isTexture:" << isTexture << std::endl;
 
     TextureGL *sourceGL = GetImplAs<TextureGL>(source);
     const gl::ImageDesc &sourceImageDesc =

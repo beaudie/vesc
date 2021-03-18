@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 
 #include "common/debug.h"
 #include "libANGLE/Config.h"
@@ -91,7 +92,10 @@ DisplayGLX::DisplayGLX(const egl::DisplayState &state)
       mCurrentDrawable(0),
       mXDisplay(nullptr),
       mEGLDisplay(nullptr)
-{}
+{
+    std::cerr << "DisplayGLX::DisplayGLX" << std::endl;
+
+}
 
 DisplayGLX::~DisplayGLX() {}
 

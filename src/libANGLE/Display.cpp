@@ -15,6 +15,7 @@
 #include <map>
 #include <sstream>
 #include <vector>
+#include  <iostream>
 
 #include <EGL/eglext.h>
 #include <platform/Platform.h>
@@ -253,6 +254,9 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
     ASSERT(displayType != EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
     rx::DisplayImpl *impl = nullptr;
 
+    std::cerr << "CreateDisplayFromAttribs displayType: " << displayType << std::endl;
+    std::cerr << "CreateDisplayFromAttribs platformType: " << platformType << std::endl;
+
     switch (displayType)
     {
         case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
@@ -281,31 +285,30 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
 
 #    elif defined(ANGLE_PLATFORM_LINUX)
 #        if defined(ANGLE_USE_GBM)
+            std::cerr << "CreateDisplayFromAttribs ANGLE_USE_GBM" << std::endl;
             if (platformType == 0)
             {
                 // If platformType is unknown, use DisplayGbm now. In the future, it should use
                 // DisplayEGL letting native EGL decide what display to use.
+                std::cerr << "CreateDisplayFromAttribs DisplayGbm" << std::endl;
                 impl = new rx::DisplayGbm(state);
                 break;
             }
 #        endif
-            if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
-            {
-                impl = new rx::DisplayEGL(state);
-                break;
-            }
-            else
-            {
 #        if defined(ANGLE_USE_X11)
-                if (platformType == EGL_PLATFORM_X11_EXT)
-                {
-                    impl = new rx::DisplayGLX(state);
-                    break;
-                }
+                                if (platformType == EGL_PLATFORM_X11_EXT)
+                                {
+                                std::cerr << "CreateDisplayFromAttribs DisplayGLX" << std::endl;
+                                    impl = new rx::DisplayGLX(state);
+                                    break;
+                                }
 #        endif
-            }
+                    std::cerr << "CreateDisplayFromAttribs DisplayEGL" << std::endl;
+                    impl = new rx::DisplayEGL(state);
+                    break;
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             // No GL support on this platform, fail display creation.
+                std::cerr << "CreateDisplayFromAttribs NOIMPL" << std::endl;
             impl = nullptr;
 #    else
 #        error Unsupported OpenGL platform.

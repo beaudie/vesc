@@ -27,6 +27,8 @@
 #include "libANGLE/renderer/renderer_utils.h"
 #include "platform/FeaturesGL.h"
 
+#include <iostream>
+
 using angle::Vector2;
 
 namespace rx
@@ -581,6 +583,7 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
     // Make sure the destination texture can be rendered to before setting anything else up.  Some
     // cube maps may not be renderable until all faces have been filled.
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    std::cerr << "BlitGL::copySubTexture destID: " << destID << std::endl;
     ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                                            ToGLenum(destTarget), destID,
                                                            static_cast<GLint>(destLevel)));

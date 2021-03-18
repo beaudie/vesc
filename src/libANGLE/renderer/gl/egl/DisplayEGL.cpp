@@ -8,6 +8,8 @@
 
 #include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
+#include <iostream>
+
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
@@ -116,7 +118,9 @@ DisplayEGL::DisplayEGL(const egl::DisplayState &state)
       mCurrentNativeContexts(),
       mHasEXTCreateContextRobustness(false),
       mHasNVRobustnessVideoMemoryPurge(false)
-{}
+{
+    std::cerr << "DisplayEGL::DisplayEGL" << std::endl;
+}
 
 DisplayEGL::~DisplayEGL() {}
 
