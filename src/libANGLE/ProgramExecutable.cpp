@@ -893,7 +893,8 @@ bool ProgramExecutable::linkMergedVaryings(
     ShaderBitSet attachedShadersMask;
     for (ShaderType shaderType : kAllGraphicsShaderTypes)
     {
-        if (programOrPipeline.getAttachedShader(shaderType))
+        if (programOrPipeline.getAttachedShader(shaderType) ||
+            getLinkedShaderStages().test(shaderType))
         {
             attachedShadersMask[shaderType] = true;
         }
