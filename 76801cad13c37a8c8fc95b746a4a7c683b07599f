@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "291874e4_1f1c85fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-03-19T04:42:08Z",
+      "side": 1,
+      "message": "Note the skip on Pixel 2, which passes locally.",
+      "revId": "76801cad13c37a8c8fc95b746a4a7c683b07599f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
