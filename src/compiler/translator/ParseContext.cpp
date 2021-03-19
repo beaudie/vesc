@@ -1,4 +1,4 @@
-//
+checkTCSOutVarIndexIsValid//
 // Copyright 2002 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -1983,6 +1983,21 @@ void TParseContext::checkNoncoherentIsNotSpecified(const TSourceLoc &location, b
               "invalid layout qualifier: only valid when used with 'gl_LastFragData' or the "
               "variable decorated with 'inout' in a fragment shader",
               "noncoherent");
+    }
+}
+
+void TParseContext::checkTCSOutVarIndexIsValid(TIntermBinary *binaryExpression,
+                                               const TSourceLoc &location)
+{
+    ASSERT(binaryExpression->getOp() == EOpIndexIndirect ||
+           binaryExpression->getOp() == EOpIndexDirect);
+    const TIntermSymbol *intermSymbol = binaryExpression->getRight()->getAsSymbolNode();
+    if ((intermSymbol == nullptr) || (intermSymbol->getName() != "gl_InvocationID"))
+    {
+        error(location,
+              "tessellation-control per-vertex output l-value must be indexed with "
+              "gl_InvocationID",
+              "[");
     }
 }
 
@@ -4601,20 +4616,6 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
         }
     }
 
-    if (mShaderType == GL_TESS_CONTROL_SHADER &&
-        IsTessellationControlShaderOutput(mShaderType, baseExpression->getQualifier()))
-    {
-        const TIntermSymbol *intermSymbol = indexExpression->getAsSymbolNode();
-        if (!intermSymbol || intermSymbol->getName() != "gl_InvocationID")
-        {
-            error(location,
-                  "tessellation-control per-vertex output l-value must be indexed with "
-                  "gl_InvocationID",
-                  "[");
-            return CreateZeroNode(TType(EbtFloat, EbpHigh, EvqConst));
-        }
-    }
-
     TIntermConstantUnion *indexConstantUnion = indexExpression->getAsConstantUnion();
 
     // ES3.2 or ES3.1's EXT_gpu_shader5 allow dynamically uniform expressions to be used as indices
@@ -6259,6 +6260,14 @@ TIntermTyped *TParseContext::addAssign(TOperator op,
     TIntermBinary *node = nullptr;
     if (binaryOpCommonCheck(op, left, right, loc))
     {
+        TIntermBinary *lValue = left->getAsBinaryNode();
+        if ((lValue != nullptr) &&
+            (lValue->getOp() == EOpIndexIndirect || lValue->getOp() == EOpIndexDirect) &&
+            IsTessellationControlShaderOutput(mShaderType, lValue->getLeft()->getQualifier()))
+        {
+            checkTCSOutVarIndexIsValid(lValue, loc);
+        }
+
         if (op == EOpMulAssign)
         {
             op = TIntermBinary::GetMulAssignOpBasedOnOperands(left->getType(), right->getType());
