@@ -4455,7 +4455,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     TInterfaceBlock *interfaceBlock = new TInterfaceBlock(
         &symbolTable, blockName, fieldList, blockLayoutQualifier, SymbolType::UserDefined);
-    if (!symbolTable.declare(interfaceBlock))
+    if (!symbolTable.declare(interfaceBlock) && isUniformOrBuffer)
     {
         error(nameLine, "redefinition of an interface block name", blockName);
     }
