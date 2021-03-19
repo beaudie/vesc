@@ -1699,14 +1699,19 @@ LinkMismatchError LinkValidateProgramVariables(const sh::ShaderVariable &variabl
 
     bool variable1IsArray = variable1.isArray();
     bool variable2IsArray = variable2.isArray();
+
+    if ((treatVariable1AsNonArray && !variable1IsArray) ||
+        (treatVariable2AsNonArray && !variable2IsArray))
+    {
+        return LinkMismatchError::ARRAYNESS_MISMATCH;
+    }
+
     if (treatVariable1AsNonArray)
     {
-        ASSERT(variable1IsArray);
         variable1IsArray = false;
     }
     if (treatVariable2AsNonArray)
     {
-        ASSERT(variable2IsArray);
         variable2IsArray = false;
     }
     // TODO(anglebug.com/5557): Investigate interactions with arrays-of-arrays.
