@@ -900,6 +900,17 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
         if (input && !input->isBuiltIn() &&
             uniqueFullNames[ref.frontShaderStage].count(input->name) == 0)
         {
+            // Prevent output variable in TCS becomes a Private variable by the transformer.
+            //
+            // 3.32.20 Barrier Instructions in SPIR-V specification.
+            // When used with the TessellationControl execution model, it also implicitly
+            // synchronizes the Output Storage Class.
+            if (input->staticUse && ref.frontShaderStage == ShaderType::TessControl)
+            {
+                collectVarying(*input, ref, packMode, &uniqueFullNames);
+                continue;
+            }
+
             mInactiveVaryingMappedNames[ref.frontShaderStage].push_back(input->mappedName);
             if (input->isShaderIOBlock)
             {
