@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -246,7 +247,16 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->swapWithFrameToken  = getRenderer()->getFeatures().supportsGGPFrameToken.enabled;
 #endif  // defined(ANGLE_PLATFORM_GGP)
 
-    outExtensions->bufferAgeEXT = true;
+    // TODO(b/182521420): The EGL_EXT_buffer_age implementation causes
+    // android.graphics.cts.BitmapTest#testDrawingHardwareBitmapNotLeaking to fail on Cuttlefish
+    // with SwANGLE. Needs investigation whether this is a race condition which could affect other
+    // Vulkan drivers, or if it's a SwiftShader bug.
+    const VkPhysicalDeviceProperties &physicalDeviceProperties =
+        getRenderer()->getPhysicalDeviceProperties();
+    if (!IsSwiftshader(physicalDeviceProperties.vendorID, physicalDeviceProperties.deviceID))
+    {
+        outExtensions->bufferAgeEXT = true;
+    }
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
