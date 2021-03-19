@@ -861,8 +861,6 @@ void ANGLETestBase::drawQuadPPO(GLuint vertProgram,
                                 const GLfloat positionAttribZ,
                                 const GLfloat positionAttribXYScale)
 {
-    glUseProgram(0);
-
     std::array<Vector3, 6> quadVertices = GetQuadVertices();
 
     for (Vector3 &vertex : quadVertices)
