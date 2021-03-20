@@ -58,14 +58,13 @@ class ShaderStorageBlockOutputHLSL
 
     void writeShaderStorageBlocksHeader(TInfoSinkBase &out) const;
     void referenceBufferSymbol(TIntermSymbol *node);
-    void writeBufferSymbol(TInfoSinkBase &out, TIntermNode *node);
-    TIntermTyped *createByteAddressExpression(TIntermTyped *node);
+    TIntermTyped *createByteAddressExpression(TInfoSinkBase &out, TIntermTyped *node);
 
   private:
     void traverseSSBOAccess(TIntermTyped *node, SSBOMethod method);
     void setMatrixStride(TIntermTyped *node, TLayoutBlockStorage storage, bool rowMajor);
     // Common part in dot operations.
-    TIntermTyped *convertEOpIndexDirectOrIndirectOutput(TIntermBinary *node);
+    TIntermTyped *convertEOpIndexDirectOrIndirectOutput(TInfoSinkBase &out, TIntermBinary *node);
     TIntermTyped *createFieldOffset(const TField *field);
     int mMatrixStride;
     bool mRowMajor;
