@@ -27,6 +27,7 @@
 
 #include "compiler/translator/ResourcesHLSL.h"
 #include "compiler/translator/blocklayoutHLSL.h"
+#include "compiler/translator/tree_util\IntermNode_util.h"
 #include "compiler/translator/util.h"
 
 namespace sh
@@ -288,30 +289,28 @@ void GetShaderStorageBlockMembersInfo(const TInterfaceBlock *interfaceBlock,
     TraverseShaderVariables(block->fields, false, &visitor);
 }
 
-bool IsInArrayOfArraysChain(TIntermTyped *node)
+TIntermTyped *Op(TOperator op, TIntermTyped *left, TIntermTyped *right)
 {
-    if (node->getType().isArrayOfArrays())
-        return true;
-    TIntermBinary *binaryNode = node->getAsBinaryNode();
-    if (binaryNode)
-    {
-        if (binaryNode->getLeft()->getType().isArrayOfArrays())
-            return true;
-    }
-
-    return false;
+    return left ? right ? new TIntermBinary(op, left, right) : left : right;
 }
+
+TIntermTyped *Mul(TIntermTyped *left, TIntermTyped *right)
+{
+    return Op(EOpMul, left, right);
+}
+
+TIntermTyped *Add(TIntermTyped *left, TIntermTyped *right)
+{
+    return Op(EOpAdd, left, right);
+}
+
 }  // anonymous namespace
 
 ShaderStorageBlockOutputHLSL::ShaderStorageBlockOutputHLSL(
     OutputHLSL *outputHLSL,
-    TSymbolTable *symbolTable,
     ResourcesHLSL *resourcesHLSL,
     const std::vector<InterfaceBlock> &shaderStorageBlocks)
-    : TIntermTraverser(true, true, true, symbolTable),
-      mMatrixStride(0),
-      mRowMajor(false),
-      mOutputHLSL(outputHLSL),
+    : mOutputHLSL(outputHLSL),
       mResourcesHLSL(resourcesHLSL),
       mShaderStorageBlocks(shaderStorageBlocks)
 {
@@ -325,20 +324,21 @@ ShaderStorageBlockOutputHLSL::~ShaderStorageBlockOutputHLSL()
 
 void ShaderStorageBlockOutputHLSL::outputStoreFunctionCallPrefix(TIntermTyped *node)
 {
-    mMethodTypeStack.push(SSBOMethod::STORE);
     traverseSSBOAccess(node, SSBOMethod::STORE);
 }
 
 void ShaderStorageBlockOutputHLSL::outputLoadFunctionCall(TIntermTyped *node)
 {
-    mMethodTypeStack.push(SSBOMethod::LOAD);
+    TInfoSinkBase &out = mOutputHLSL->getInfoSink();
     traverseSSBOAccess(node, SSBOMethod::LOAD);
+    out << ")";
 }
 
 void ShaderStorageBlockOutputHLSL::outputLengthFunctionCall(TIntermTyped *node)
 {
-    mMethodTypeStack.push(SSBOMethod::LENGTH);
+    TInfoSinkBase &out = mOutputHLSL->getInfoSink();
     traverseSSBOAccess(node, SSBOMethod::LENGTH);
+    out << ")";
 }
 
 void ShaderStorageBlockOutputHLSL::outputAtomicMemoryFunctionCallPrefix(TIntermTyped *node,
@@ -347,35 +347,27 @@ void ShaderStorageBlockOutputHLSL::outputAtomicMemoryFunctionCallPrefix(TIntermT
     switch (op)
     {
         case EOpAtomicAdd:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_ADD);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_ADD);
             break;
         case EOpAtomicMin:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_MIN);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_MIN);
             break;
         case EOpAtomicMax:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_MAX);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_MAX);
             break;
         case EOpAtomicAnd:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_AND);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_AND);
             break;
         case EOpAtomicOr:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_OR);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_OR);
             break;
         case EOpAtomicXor:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_XOR);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_XOR);
             break;
         case EOpAtomicExchange:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_EXCHANGE);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_EXCHANGE);
             break;
         case EOpAtomicCompSwap:
-            mMethodTypeStack.push(SSBOMethod::ATOMIC_COMPSWAP);
             traverseSSBOAccess(node, SSBOMethod::ATOMIC_COMPSWAP);
             break;
         default:
@@ -387,15 +379,13 @@ void ShaderStorageBlockOutputHLSL::outputAtomicMemoryFunctionCallPrefix(TIntermT
 // Note that we must calculate the matrix stride here instead of ShaderStorageBlockFunctionHLSL.
 // It's because that if the current node's type is a vector which comes from a matrix, we will
 // lose the matrix type info once we enter ShaderStorageBlockFunctionHLSL.
-void ShaderStorageBlockOutputHLSL::setMatrixStride(TIntermTyped *node,
-                                                   TLayoutBlockStorage storage,
-                                                   bool rowMajor)
+int ShaderStorageBlockOutputHLSL::getMatrixStride(TIntermTyped *node,
+                                                  TLayoutBlockStorage storage,
+                                                  bool rowMajor) const
 {
     if (node->getType().isMatrix())
     {
-        mMatrixStride = GetBlockMemberInfoByType(node->getType(), storage, rowMajor).matrixStride;
-        mRowMajor     = rowMajor;
-        return;
+        return GetBlockMemberInfoByType(node->getType(), storage, rowMajor).matrixStride;
     }
 
     if (node->getType().isVector())
@@ -403,17 +393,18 @@ void ShaderStorageBlockOutputHLSL::setMatrixStride(TIntermTyped *node,
         TIntermBinary *binaryNode = node->getAsBinaryNode();
         if (binaryNode)
         {
-            return setMatrixStride(binaryNode->getLeft(), storage, rowMajor);
+            return getMatrixStride(binaryNode->getLeft(), storage, rowMajor);
         }
         else
         {
             TIntermSwizzle *swizzleNode = node->getAsSwizzleNode();
             if (swizzleNode)
             {
-                return setMatrixStride(swizzleNode->getOperand(), storage, rowMajor);
+                return getMatrixStride(swizzleNode->getOperand(), storage, rowMajor);
             }
         }
     }
+    return 0;
 }
 
 void ShaderStorageBlockOutputHLSL::collectShaderStorageBlocks(TIntermTyped *node)
@@ -465,8 +456,6 @@ void ShaderStorageBlockOutputHLSL::traverseSSBOAccess(TIntermTyped *node, SSBOMe
 {
     // TODO: Merge collectShaderStorageBlocks and GetBlockLayoutInfo to simplify the code.
     collectShaderStorageBlocks(node);
-    mMatrixStride = 0;
-    mRowMajor     = false;
 
     // Note that we don't have correct BlockMemberInfo from mBlockMemberInfoMap at the current
     // point. But we must use those information to generate the right function name. So here we have
@@ -503,15 +492,18 @@ void ShaderStorageBlockOutputHLSL::traverseSSBOAccess(TIntermTyped *node, SSBOMe
             unsizedArrayStride = fieldInfoIter->second.arrayStride;
         }
     }
-    setMatrixStride(node, storage, rowMajor);
+    int matrixStride = getMatrixStride(node, storage, rowMajor);
 
     const TString &functionName = mSSBOFunctionHLSL->registerShaderStorageBlockFunction(
-        node->getType(), method, storage, mRowMajor, mMatrixStride, unsizedArrayStride,
+        node->getType(), method, storage, rowMajor, matrixStride, unsizedArrayStride,
         node->getAsSwizzleNode());
     TInfoSinkBase &out = mOutputHLSL->getInfoSink();
     out << functionName;
     out << "(";
-    node->traverse(this);
+    BlockMemberInfo blockMemberInfo;
+    TIntermNode *loc = createByteAddressExpression(out, node, &blockMemberInfo);
+    out << ", ";
+    loc->traverse(mOutputHLSL);
 }
 
 void ShaderStorageBlockOutputHLSL::writeShaderStorageBlocksHeader(TInfoSinkBase &out) const
@@ -520,315 +512,194 @@ void ShaderStorageBlockOutputHLSL::writeShaderStorageBlocksHeader(TInfoSinkBase 
     mSSBOFunctionHLSL->shaderStorageBlockFunctionHeader(out);
 }
 
-// Check if the current node is the end of the SSBO access chain. If true, we should output ')' for
-// Load method.
-bool ShaderStorageBlockOutputHLSL::isEndOfSSBOAccessChain()
+const TField *ShaderStorageBlockOutputHLSL::findBaseField(TIntermTyped *node) const
 {
-    TIntermNode *parent = getParentNode();
-    if (parent)
+    if (TIntermSwizzle *swizzleNode = node->getAsSwizzleNode())
     {
-        TIntermBinary *parentBinary = parent->getAsBinaryNode();
-        if (parentBinary != nullptr)
+        return findBaseField(swizzleNode);
+    }
+    else if (TIntermBinary *binaryNode = node->getAsBinaryNode())
+    {
+        switch (binaryNode->getOp())
         {
-            switch (parentBinary->getOp())
+            case EOpIndexDirect:
+            case EOpIndexIndirect:
             {
-                case EOpIndexDirectStruct:
-                case EOpIndexDirect:
-                case EOpIndexIndirect:
-                {
-                    return false;
-                }
-                default:
-                    return true;
+                return findBaseField(binaryNode->getLeft());
+                break;
             }
-        }
-
-        const TIntermSwizzle *parentSwizzle = parent->getAsSwizzleNode();
-        if (parentSwizzle)
-        {
-            return false;
+            case EOpIndexDirectStruct:
+            {
+                const TStructure *structure       = binaryNode->getLeft()->getType().getStruct();
+                const TIntermConstantUnion *index = binaryNode->getRight()->getAsConstantUnion();
+                return structure->fields()[index->getIConst(0)];
+                break;
+            }
+            case EOpIndexDirectInterfaceBlock:
+            {
+                const TInterfaceBlock *interfaceBlock =
+                    binaryNode->getLeft()->getType().getInterfaceBlock();
+                const TIntermConstantUnion *index = binaryNode->getRight()->getAsConstantUnion();
+                return interfaceBlock->fields()[index->getIConst(0)];
+                break;
+            }
+            default:
+                return nullptr;
         }
     }
-    return true;
+    else if (TIntermSymbol *symbolNode = node->getAsSymbolNode())
+    {
+        const TVariable &variable = symbolNode->variable();
+        const TType &type         = variable.getType();
+        if (!type.isInterfaceBlock())
+        {
+            const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
+            return GetFieldMemberInShaderStorageBlock(interfaceBlock, variable.name());
+        }
+    }
+    return nullptr;
 }
 
-void ShaderStorageBlockOutputHLSL::visitSymbol(TIntermSymbol *node)
+TIntermTyped *ShaderStorageBlockOutputHLSL::createByteAddressExpression(
+    TInfoSinkBase &out,
+    TIntermTyped *node,
+    BlockMemberInfo *blockMemberInfo)
 {
-    TInfoSinkBase &out        = mOutputHLSL->getInfoSink();
-    const TVariable &variable = node->variable();
-    TQualifier qualifier      = variable.getType().getQualifier();
-
-    if (qualifier == EvqBuffer)
+    if (TIntermSwizzle *swizzleNode = node->getAsSwizzleNode())
     {
-        const TType &variableType             = variable.getType();
-        const TInterfaceBlock *interfaceBlock = variableType.getInterfaceBlock();
-        ASSERT(interfaceBlock);
-        if (variableType.isInterfaceBlock())
+        return createByteAddressExpression(out, swizzleNode->getOperand(), blockMemberInfo);
+    }
+    else if (TIntermBinary *binaryNode = node->getAsBinaryNode())
+    {
+        switch (binaryNode->getOp())
+        {
+            case EOpIndexDirect:
+            {
+                const TType &leftType = binaryNode->getLeft()->getType();
+                if (leftType.isInterfaceBlock())
+                {
+                    ASSERT(leftType.getQualifier() == EvqBuffer);
+                    TIntermSymbol *instanceArraySymbol = binaryNode->getLeft()->getAsSymbolNode();
+
+                    const int arrayIndex =
+                        binaryNode->getRight()->getAsConstantUnion()->getIConst(0);
+                    out << mResourcesHLSL->InterfaceBlockInstanceString(
+                        instanceArraySymbol->getName(), arrayIndex);
+                }
+                else
+                {
+                    return convertEOpIndexDirectOrIndirectOutput(out, binaryNode, blockMemberInfo);
+                }
+                break;
+            }
+            case EOpIndexIndirect:
+            {
+                // We do not currently support indirect references to interface blocks
+                ASSERT(binaryNode->getLeft()->getBasicType() != EbtInterfaceBlock);
+                return convertEOpIndexDirectOrIndirectOutput(out, binaryNode, blockMemberInfo);
+                break;
+            }
+            case EOpIndexDirectStruct:
+            {
+                // We do not currently support direct references to interface blocks
+                ASSERT(binaryNode->getLeft()->getBasicType() != EbtInterfaceBlock);
+                TIntermTyped *left =
+                    createByteAddressExpression(out, binaryNode->getLeft(), blockMemberInfo);
+                const TStructure *structure       = binaryNode->getLeft()->getType().getStruct();
+                const TIntermConstantUnion *index = binaryNode->getRight()->getAsConstantUnion();
+                const TField *field               = structure->fields()[index->getIConst(0)];
+                return Add(createFieldOffset(field, blockMemberInfo), left);
+                break;
+            }
+            case EOpIndexDirectInterfaceBlock:
+            {
+                ASSERT(IsInShaderStorageBlock(binaryNode->getLeft()));
+                createByteAddressExpression(out, binaryNode->getLeft(), blockMemberInfo);
+                const TInterfaceBlock *interfaceBlock =
+                    binaryNode->getLeft()->getType().getInterfaceBlock();
+                const TIntermConstantUnion *index = binaryNode->getRight()->getAsConstantUnion();
+                const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
+                return createFieldOffset(field, blockMemberInfo);
+                break;
+            }
+            default:
+                return nullptr;
+        }
+    }
+    else if (TIntermSymbol *symbolNode = node->getAsSymbolNode())
+    {
+        const TVariable &variable = symbolNode->variable();
+        const TType &type         = variable.getType();
+        if (type.isInterfaceBlock())
         {
             out << DecorateVariableIfNeeded(variable);
         }
         else
         {
+            const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
             out << Decorate(interfaceBlock->name());
-            out << ", ";
-
             const TField *field =
                 GetFieldMemberInShaderStorageBlock(interfaceBlock, variable.name());
-            writeDotOperatorOutput(out, field);
+            return createFieldOffset(field, blockMemberInfo);
         }
     }
-    else
-    {
-        return mOutputHLSL->visitSymbol(node);
-    }
+    return nullptr;
 }
 
-void ShaderStorageBlockOutputHLSL::visitConstantUnion(TIntermConstantUnion *node)
-{
-    mOutputHLSL->visitConstantUnion(node);
-}
-
-bool ShaderStorageBlockOutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
-{
-    return mOutputHLSL->visitAggregate(visit, node);
-}
-
-bool ShaderStorageBlockOutputHLSL::visitTernary(Visit visit, TIntermTernary *node)
-{
-    return mOutputHLSL->visitTernary(visit, node);
-}
-
-bool ShaderStorageBlockOutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
-{
-    return mOutputHLSL->visitUnary(visit, node);
-}
-
-bool ShaderStorageBlockOutputHLSL::visitSwizzle(Visit visit, TIntermSwizzle *node)
-{
-    if (visit == PostVisit)
-    {
-        if (!IsInShaderStorageBlock(node))
-        {
-            return mOutputHLSL->visitSwizzle(visit, node);
-        }
-
-        TInfoSinkBase &out = mOutputHLSL->getInfoSink();
-        // TODO(jiajia.qin@intel.com): add swizzle process if the swizzle node is not the last node
-        // of ssbo access chain. Such as, data.xy[0]
-        if (isEndOfSSBOAccessChain())
-        {
-            ASSERT(!mMethodTypeStack.empty());
-            SSBOMethod curMethod = mMethodTypeStack.top();
-            if (curMethod == SSBOMethod::LENGTH || curMethod == SSBOMethod::LOAD)
-            {
-                out << ")";
-            }
-            mMethodTypeStack.pop();
-        }
-    }
-    return true;
-}
-
-bool ShaderStorageBlockOutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
-{
-    TInfoSinkBase &out = mOutputHLSL->getInfoSink();
-
-    switch (node->getOp())
-    {
-        case EOpIndexDirect:
-        {
-            if (!IsInShaderStorageBlock(node->getLeft()))
-            {
-                return mOutputHLSL->visitBinary(visit, node);
-            }
-
-            const TType &leftType = node->getLeft()->getType();
-            if (leftType.isInterfaceBlock())
-            {
-                if (visit == PreVisit)
-                {
-                    ASSERT(leftType.getQualifier() == EvqBuffer);
-                    TIntermSymbol *instanceArraySymbol = node->getLeft()->getAsSymbolNode();
-
-                    const int arrayIndex = node->getRight()->getAsConstantUnion()->getIConst(0);
-                    out << mResourcesHLSL->InterfaceBlockInstanceString(
-                        instanceArraySymbol->getName(), arrayIndex);
-                    return false;
-                }
-            }
-            else
-            {
-                writeEOpIndexDirectOrIndirectOutput(out, visit, node);
-            }
-            break;
-        }
-        case EOpIndexIndirect:
-        {
-            if (!IsInShaderStorageBlock(node->getLeft()))
-            {
-                return mOutputHLSL->visitBinary(visit, node);
-            }
-
-            // We do not currently support indirect references to interface blocks
-            ASSERT(node->getLeft()->getBasicType() != EbtInterfaceBlock);
-            writeEOpIndexDirectOrIndirectOutput(out, visit, node);
-            break;
-        }
-        case EOpIndexDirectStruct:
-        {
-            if (!IsInShaderStorageBlock(node->getLeft()))
-            {
-                return mOutputHLSL->visitBinary(visit, node);
-            }
-
-            if (visit == InVisit)
-            {
-                ASSERT(IsInShaderStorageBlock(node->getLeft()));
-                const TStructure *structure       = node->getLeft()->getType().getStruct();
-                const TIntermConstantUnion *index = node->getRight()->getAsConstantUnion();
-                const TField *field               = structure->fields()[index->getIConst(0)];
-                out << " + ";
-                writeDotOperatorOutput(out, field);
-                return false;
-            }
-            break;
-        }
-        case EOpIndexDirectInterfaceBlock:
-            if (!IsInShaderStorageBlock(node->getLeft()))
-            {
-                return mOutputHLSL->visitBinary(visit, node);
-            }
-
-            if (visit == InVisit)
-            {
-                ASSERT(IsInShaderStorageBlock(node->getLeft()));
-                out << ", ";
-                const TInterfaceBlock *interfaceBlock =
-                    node->getLeft()->getType().getInterfaceBlock();
-                const TIntermConstantUnion *index = node->getRight()->getAsConstantUnion();
-                const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
-                writeDotOperatorOutput(out, field);
-                return false;
-            }
-            break;
-        default:
-            // It may have other operators in EOpIndexIndirect. Such as buffer.attribs[(y * gridSize
-            // + x) * 6u + 0u]
-            return mOutputHLSL->visitBinary(visit, node);
-    }
-
-    return true;
-}
-
-void ShaderStorageBlockOutputHLSL::writeEOpIndexDirectOrIndirectOutput(TInfoSinkBase &out,
-                                                                       Visit visit,
-                                                                       TIntermBinary *node)
+TIntermTyped *ShaderStorageBlockOutputHLSL::convertEOpIndexDirectOrIndirectOutput(
+    TInfoSinkBase &out,
+    TIntermBinary *node,
+    BlockMemberInfo *blockMemberInfo)
 {
     ASSERT(IsInShaderStorageBlock(node->getLeft()));
-    if (visit == InVisit)
+    TIntermTyped *left  = createByteAddressExpression(out, node->getLeft(), blockMemberInfo);
+    TIntermTyped *right = node->getRight()->deepCopy();
+    const TType &type   = node->getLeft()->getType();
+    TLayoutBlockStorage storage;
+    bool rowMajor;
+    GetBlockLayoutInfo(node, false, &storage, &rowMajor);
+
+    if (type.isArray())
     {
-        const TType &type = node->getLeft()->getType();
-        // For array of arrays, we calculate the offset using the formula below:
-        // elementStride * (a3 * a2 * a1 * i0 + a3 * a2 * i1 + a3 * i2 + i3)
-        // Note: assume that there are 4 dimensions.
-        //       a0, a1, a2, a3 is the size of the array in each dimension. (S s[a0][a1][a2][a3])
-        //       i0, i1, i2, i3 is the index of the array in each dimension. (s[i0][i1][i2][i3])
-        if (IsInArrayOfArraysChain(node->getLeft()))
+        const TSpan<const unsigned int> &arraySizes = type.getArraySizes();
+        for (unsigned int i = 0; i < arraySizes.size() - 1; i++)
         {
-            if (type.isArrayOfArrays())
-            {
-                const TSpan<const unsigned int> &arraySizes = type.getArraySizes();
-                // Don't need to concern the tail comma which will be used to multiply the index.
-                for (unsigned int i = 0; i < (arraySizes.size() - 1); i++)
-                {
-                    out << arraySizes[i];
-                    out << " * ";
-                }
-            }
+            right = Mul(CreateUIntNode(arraySizes[i]), right);
+        }
+        right = Mul(CreateUIntNode(blockMemberInfo->arrayStride), right);
+    }
+    else if (type.isMatrix())
+    {
+        if (rowMajor)
+        {
+            right = Mul(CreateUIntNode(BlockLayoutEncoder::kBytesPerComponent), right);
         }
         else
         {
-            if (node->getType().isVector() && type.isMatrix())
-            {
-                if (mRowMajor)
-                {
-                    out << " + " << str(BlockLayoutEncoder::kBytesPerComponent);
-                }
-                else
-                {
-                    out << " + " << str(mMatrixStride);
-                }
-            }
-            else if (node->getType().isScalar() && !type.isArray())
-            {
-                if (mRowMajor)
-                {
-                    out << " + " << str(mMatrixStride);
-                }
-                else
-                {
-                    out << " + " << str(BlockLayoutEncoder::kBytesPerComponent);
-                }
-            }
-
-            out << " * ";
+            right = Mul(CreateUIntNode(blockMemberInfo->matrixStride), right);
         }
     }
-    else if (visit == PostVisit)
+    else if (type.isVector())
     {
-        // This is used to output the '+' in the array of arrays formula in above.
-        if (node->getType().isArray() && !isEndOfSSBOAccessChain())
+        if (blockMemberInfo->isRowMajorMatrix)
         {
-            out << " + ";
+            right = Mul(CreateUIntNode(blockMemberInfo->matrixStride), right);
         }
-        // This corresponds to '(' in writeDotOperatorOutput when fieldType.isArrayOfArrays() is
-        // true.
-        if (IsInArrayOfArraysChain(node->getLeft()) && !node->getType().isArray())
+        else
         {
-            out << ")";
-        }
-        if (isEndOfSSBOAccessChain())
-        {
-            ASSERT(!mMethodTypeStack.empty());
-            SSBOMethod curMethod = mMethodTypeStack.top();
-            if (curMethod == SSBOMethod::LENGTH || curMethod == SSBOMethod::LOAD)
-            {
-                out << ")";
-            }
-            mMethodTypeStack.pop();
+            right = Mul(CreateUIntNode(BlockLayoutEncoder::kBytesPerComponent), right);
         }
     }
+    return Add(left, right);
 }
 
-void ShaderStorageBlockOutputHLSL::writeDotOperatorOutput(TInfoSinkBase &out, const TField *field)
+TIntermTyped *ShaderStorageBlockOutputHLSL::createFieldOffset(const TField *field,
+                                                              BlockMemberInfo *blockMemberInfo)
 {
     auto fieldInfoIter = mBlockMemberInfoMap.find(field);
     ASSERT(fieldInfoIter != mBlockMemberInfoMap.end());
-    const BlockMemberInfo &memberInfo = fieldInfoIter->second;
-    mMatrixStride                     = memberInfo.matrixStride;
-    mRowMajor                         = memberInfo.isRowMajorMatrix;
-    out << memberInfo.offset;
-
-    const TType &fieldType = *field->type();
-    if (fieldType.isArray() && !isEndOfSSBOAccessChain())
-    {
-        out << " + ";
-        out << memberInfo.arrayStride;
-        if (fieldType.isArrayOfArrays())
-        {
-            out << " * (";
-        }
-    }
-    if (isEndOfSSBOAccessChain())
-    {
-        ASSERT(!mMethodTypeStack.empty());
-        SSBOMethod curMethod = mMethodTypeStack.top();
-        if (curMethod == SSBOMethod::LENGTH || curMethod == SSBOMethod::LOAD)
-        {
-            out << ")";
-        }
-        mMethodTypeStack.pop();
-    }
+    *blockMemberInfo = fieldInfoIter->second;
+    return CreateUIntNode(blockMemberInfo->offset);
 }
 
 }  // namespace sh
