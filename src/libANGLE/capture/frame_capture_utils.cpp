@@ -766,10 +766,6 @@ void SerializeProgramState(gl::BinaryOutputStream *bos, const gl::ProgramState &
             bos->writeInt(0);
         }
     }
-    for (bool isAttached : programState.getAttachedShadersMarkedForDetach())
-    {
-        bos->writeBool(isAttached);
-    }
     bos->writeInt(programState.getLocationsUsedForXfbExtension());
     for (const std::string &transformFeedbackVaryingName :
          programState.getTransformFeedbackVaryingNames())
