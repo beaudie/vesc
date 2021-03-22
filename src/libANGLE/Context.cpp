@@ -251,18 +251,6 @@ void GetObjectLabelBase(const std::string &objectLabel,
     }
 }
 
-// The rest default to false.
-constexpr angle::PackedEnumMap<PrimitiveMode, bool, angle::EnumSize<PrimitiveMode>() + 1>
-    kValidBasicDrawModes = {{
-        {PrimitiveMode::Points, true},
-        {PrimitiveMode::Lines, true},
-        {PrimitiveMode::LineLoop, true},
-        {PrimitiveMode::LineStrip, true},
-        {PrimitiveMode::Triangles, true},
-        {PrimitiveMode::TriangleStrip, true},
-        {PrimitiveMode::TriangleFan, true},
-    }};
-
 enum SubjectIndexes : angle::SubjectIndex
 {
     kTexture0SubjectIndex       = 0,
@@ -9261,11 +9249,14 @@ void StateCache::setValidDrawModes(bool pointsOK,
 {
     mCachedValidDrawModes[PrimitiveMode::Points]                 = pointsOK;
     mCachedValidDrawModes[PrimitiveMode::Lines]                  = linesOK;
-    mCachedValidDrawModes[PrimitiveMode::LineStrip]              = linesOK;
     mCachedValidDrawModes[PrimitiveMode::LineLoop]               = linesOK;
+    mCachedValidDrawModes[PrimitiveMode::LineStrip]              = linesOK;
     mCachedValidDrawModes[PrimitiveMode::Triangles]              = trisOK;
-    mCachedValidDrawModes[PrimitiveMode::TriangleFan]            = trisOK;
     mCachedValidDrawModes[PrimitiveMode::TriangleStrip]          = trisOK;
+    mCachedValidDrawModes[PrimitiveMode::TriangleFan]            = trisOK;
+    mCachedValidDrawModes[PrimitiveMode::Unused1]                = false;
+    mCachedValidDrawModes[PrimitiveMode::Unused2]                = false;
+    mCachedValidDrawModes[PrimitiveMode::Unused3]                = false;
     mCachedValidDrawModes[PrimitiveMode::LinesAdjacency]         = lineAdjOK;
     mCachedValidDrawModes[PrimitiveMode::LineStripAdjacency]     = lineAdjOK;
     mCachedValidDrawModes[PrimitiveMode::TrianglesAdjacency]     = triAdjOK;
@@ -9309,18 +9300,18 @@ void StateCache::updateValidDrawModes(Context *context)
 
     if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
     {
-        mCachedValidDrawModes = kValidBasicDrawModes;
+        // All draw modes are valid, since drawing without a program does not generate an error and
+        // and operations requiring a GS will trigger other validation errors.
+        setValidDrawModes(true, true, true, true, true, true);
         return;
     }
 
-    ASSERT(programExecutable->hasLinkedShaderStage(ShaderType::Geometry));
     PrimitiveMode gsMode = programExecutable->getGeometryShaderInputPrimitiveType();
-
-    bool pointsOK  = gsMode == PrimitiveMode::Points;
-    bool linesOK   = gsMode == PrimitiveMode::Lines;
-    bool trisOK    = gsMode == PrimitiveMode::Triangles;
-    bool lineAdjOK = gsMode == PrimitiveMode::LinesAdjacency;
-    bool triAdjOK  = gsMode == PrimitiveMode::TrianglesAdjacency;
+    bool pointsOK        = gsMode == PrimitiveMode::Points;
+    bool linesOK         = gsMode == PrimitiveMode::Lines;
+    bool trisOK          = gsMode == PrimitiveMode::Triangles;
+    bool lineAdjOK       = gsMode == PrimitiveMode::LinesAdjacency;
+    bool triAdjOK        = gsMode == PrimitiveMode::TrianglesAdjacency;
 
     setValidDrawModes(pointsOK, linesOK, trisOK, lineAdjOK, triAdjOK, false);
 }
