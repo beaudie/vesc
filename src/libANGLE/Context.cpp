@@ -251,18 +251,6 @@ void GetObjectLabelBase(const std::string &objectLabel,
     }
 }
 
-// The rest default to false.
-constexpr angle::PackedEnumMap<PrimitiveMode, bool, angle::EnumSize<PrimitiveMode>() + 1>
-    kValidBasicDrawModes = {{
-        {PrimitiveMode::Points, true},
-        {PrimitiveMode::Lines, true},
-        {PrimitiveMode::LineLoop, true},
-        {PrimitiveMode::LineStrip, true},
-        {PrimitiveMode::Triangles, true},
-        {PrimitiveMode::TriangleStrip, true},
-        {PrimitiveMode::TriangleFan, true},
-    }};
-
 enum SubjectIndexes : angle::SubjectIndex
 {
     kTexture0SubjectIndex       = 0,
@@ -9306,14 +9294,18 @@ void StateCache::updateValidDrawModes(Context *context)
         }
     }
 
-    if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
+    PrimitiveMode gsMode = PrimitiveMode::InvalidEnum;
+    if (programExecutable && programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
     {
-        mCachedValidDrawModes = kValidBasicDrawModes;
+        gsMode = programExecutable->getGeometryShaderInputPrimitiveType();
+    }
+    else
+    {
+        // All draw modes are valid, since drawing without a program does not generate an error and
+        // and operations requiring a GS will trigger other validation errors.
+        setValidDrawModes(true, true, true, true, true, true);
         return;
     }
-
-    ASSERT(programExecutable->hasLinkedShaderStage(ShaderType::Geometry));
-    PrimitiveMode gsMode = programExecutable->getGeometryShaderInputPrimitiveType();
 
     bool pointsOK  = gsMode == PrimitiveMode::Points;
     bool linesOK   = gsMode == PrimitiveMode::Lines;
