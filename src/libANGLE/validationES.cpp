@@ -3984,7 +3984,11 @@ void RecordDrawModeError(const Context *context, PrimitiveMode mode)
     if (context->getClientVersion() >= Version(2, 0))
     {
         const ProgramExecutable *executable = state.getProgramExecutable();
-        ASSERT(executable);
+        if (!executable)
+        {
+            context->validationError(GL_INVALID_OPERATION, kProgramNotBound);
+            return;
+        }
 
         // Do geometry shader specific validations
         if (executable->hasLinkedShaderStage(ShaderType::Geometry))
