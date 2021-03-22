@@ -2145,12 +2145,12 @@ void MakeValidSize(bool isImage,
     }
     else
     {
-        if (*requestWidth % dxgiFormatInfo.blockWidth != 0)
+        if (dxgiFormatInfo.blockWidth > 0 && *requestWidth % dxgiFormatInfo.blockWidth != 0)
         {
             *requestWidth = roundUp(*requestWidth, static_cast<GLsizei>(dxgiFormatInfo.blockWidth));
         }
 
-        if (*requestHeight % dxgiFormatInfo.blockHeight != 0)
+        if (dxgiFormatInfo.blockHeight > 0 && *requestHeight % dxgiFormatInfo.blockHeight != 0)
         {
             *requestHeight =
                 roundUp(*requestHeight, static_cast<GLsizei>(dxgiFormatInfo.blockHeight));
