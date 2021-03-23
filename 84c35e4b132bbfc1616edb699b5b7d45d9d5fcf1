@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a4308e2_4b11822d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-03-23T00:01:30Z",
+      "side": 1,
+      "message": "Landing this since it\u0027s trivial\n\nTBR: Shabi",
+      "revId": "84c35e4b132bbfc1616edb699b5b7d45d9d5fcf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
