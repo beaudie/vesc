@@ -372,12 +372,12 @@ TracePerfTest::TracePerfTest()
 
     if (param.testID == RestrictedTraceID::messenger_lite)
     {
-        // TODO: https://anglebug.com/5663 Incorrect pixels on Nvidia Windows for first frame
-        if (IsWindows() && IsNVIDIA() &&
-            param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
-        {
-            mSkipTest = true;
-        }
+        //// TODO: https://anglebug.com/5663 Incorrect pixels on Nvidia Windows for first frame
+        // if (IsWindows() && IsNVIDIA() &&
+        //    param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+        //{
+        //    mSkipTest = true;
+        //}
     }
 
     if (param.testID == RestrictedTraceID::among_us)
