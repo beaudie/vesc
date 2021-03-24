@@ -332,10 +332,10 @@ void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
     }
 }
 
-void AssignTransformFeedbackExtensionLocations(gl::ShaderType shaderType,
+void AssignTransformFeedbackExtensionLocations(const gl::Caps &caps,
+                                               gl::ShaderType shaderType,
                                                const gl::ProgramState &programState,
                                                bool isTransformFeedbackStage,
-                                               GlslangProgramInterfaceInfo *programInterfaceInfo,
                                                ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     // The only varying that requires additional resources is gl_Position, as it's indirectly
@@ -364,9 +364,10 @@ void AssignTransformFeedbackExtensionLocations(gl::ShaderType shaderType,
 
     if (capturesPosition)
     {
+        // Set the location of XFB position to the end of max varying vectors not to hurt shader
+        // interface matching.
         AddLocationInfo(variableInfoMapOut, shaderType, sh::vk::kXfbExtensionPositionOutName,
-                        programInterfaceInfo->locationsUsedForXfbExtension, 0, 0, 0);
-        ++programInterfaceInfo->locationsUsedForXfbExtension;
+                        caps.maxVaryingVectors - 1, 0, 0, 0);
     }
     else
     {
@@ -536,10 +537,9 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
                             const gl::VaryingPacking &varyingPacking,
                             const gl::ShaderType shaderType,
                             const gl::ShaderType frontShaderType,
-                            GlslangProgramInterfaceInfo *programInterfaceInfo,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    uint32_t locationsUsedForEmulation = programInterfaceInfo->locationsUsedForXfbExtension;
+    uint32_t locationsUsedForEmulation = 0;
 
     // Substitute layout and qualifier strings for the position varying added for line raster
     // emulation.
@@ -4933,6 +4933,7 @@ std::string GetXfbBufferName(const uint32_t bufferIndex)
 }
 
 void GlslangAssignLocations(const GlslangSourceOptions &options,
+                            const gl::Caps &caps,
                             const gl::ProgramState &programState,
                             const gl::ProgramVaryingPacking &varyingPacking,
                             const gl::ShaderType shaderType,
@@ -4966,21 +4967,20 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
         if (options.supportsTransformFeedbackExtension &&
             gl::ShaderTypeSupportsTransformFeedback(shaderType))
         {
-            AssignTransformFeedbackExtensionLocations(shaderType, programState,
-                                                      isTransformFeedbackStage,
-                                                      programInterfaceInfo, variableInfoMapOut);
+            AssignTransformFeedbackExtensionLocations(caps, shaderType, programState,
+                                                      isTransformFeedbackStage, variableInfoMapOut);
         }
 
         // Assign varying locations.
         if (shaderType != gl::ShaderType::Vertex)
         {
             AssignVaryingLocations(options, inputPacking, shaderType, frontShaderType,
-                                   programInterfaceInfo, variableInfoMapOut);
+                                   variableInfoMapOut);
         }
         if (shaderType != gl::ShaderType::Fragment)
         {
             AssignVaryingLocations(options, outputPacking, shaderType, frontShaderType,
-                                   programInterfaceInfo, variableInfoMapOut);
+                                   variableInfoMapOut);
         }
 
         // Assign qualifiers to all varyings captured by transform feedback
@@ -5014,6 +5014,7 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
 }
 
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
+                            const gl::Caps &caps,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
@@ -5033,7 +5034,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     {
         const bool isXfbStage =
             shaderType == xfbStage && !programState.getLinkedTransformFeedbackVaryings().empty();
-        GlslangAssignLocations(options, programState, resources.varyingPacking, shaderType,
+        GlslangAssignLocations(options, caps, programState, resources.varyingPacking, shaderType,
                                frontShaderType, isXfbStage, programInterfaceInfo,
                                variableInfoMapOut);
 

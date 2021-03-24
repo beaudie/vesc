@@ -78,21 +78,14 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
             const_cast<gl::Program *>(glPipeline->getShaderProgram(shaderType));
         if (glProgram)
         {
-            // The program interface info must survive across shaders, except
-            // for some program-specific values.
-            ProgramVk *programVk = vk::GetImpl(glProgram);
-            const GlslangProgramInterfaceInfo &programProgramInterfaceInfo =
-                programVk->getGlslangProgramInterfaceInfo();
-            glslangProgramInterfaceInfo.locationsUsedForXfbExtension =
-                programProgramInterfaceInfo.locationsUsedForXfbExtension;
-
             const bool isTransformFeedbackStage =
                 shaderType == linkedTransformFeedbackStage &&
                 !glProgram->getState().getLinkedTransformFeedbackVaryings().empty();
 
-            GlslangAssignLocations(options, glProgram->getState(), varyingPacking, shaderType,
-                                   frontShaderType, isTransformFeedbackStage,
-                                   &glslangProgramInterfaceInfo, &mExecutable.mVariableInfoMap);
+            GlslangAssignLocations(options, glState.getCaps(), glProgram->getState(),
+                                   varyingPacking, shaderType, frontShaderType,
+                                   isTransformFeedbackStage, &glslangProgramInterfaceInfo,
+                                   &mExecutable.mVariableInfoMap);
             frontShaderType = shaderType;
         }
     }

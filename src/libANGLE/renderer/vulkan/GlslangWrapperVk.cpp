@@ -52,12 +52,11 @@ void GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(
     glslangProgramInterfaceInfo->currentShaderResourceBindingIndex = 0;
     glslangProgramInterfaceInfo->driverUniformsDescriptorSetIndex =
         ToUnderlying(DescriptorSetIndex::Internal);
-
-    glslangProgramInterfaceInfo->locationsUsedForXfbExtension = 0;
 }
 
 // static
 void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
+                                       const gl::Caps &caps,
                                        const gl::ProgramState &programState,
                                        const gl::ProgramLinkedResources &resources,
                                        GlslangProgramInterfaceInfo *programInterfaceInfo,
@@ -65,8 +64,8 @@ void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
                                        ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     GlslangSourceOptions options = CreateSourceOptions(features);
-    GlslangGetShaderSource(options, programState, resources, programInterfaceInfo, shaderSourcesOut,
-                           variableInfoMapOut);
+    GlslangGetShaderSource(options, caps, programState, resources, programInterfaceInfo,
+                           shaderSourcesOut, variableInfoMapOut);
 }
 
 // static

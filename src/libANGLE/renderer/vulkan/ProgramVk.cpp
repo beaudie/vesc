@@ -269,8 +269,8 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
 
     // Gather variable info and transform sources.
     gl::ShaderMap<std::string> shaderSources;
-    GlslangWrapperVk::GetShaderSource(contextVk->getFeatures(), mState, resources,
-                                      &mGlslangProgramInterfaceInfo, &shaderSources,
+    GlslangWrapperVk::GetShaderSource(contextVk->getFeatures(), context->getCaps(), mState,
+                                      resources, &mGlslangProgramInterfaceInfo, &shaderSources,
                                       &mExecutable.mVariableInfoMap);
 
     // Compile the shaders.

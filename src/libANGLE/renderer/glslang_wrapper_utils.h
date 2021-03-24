@@ -45,8 +45,6 @@ struct GlslangProgramInterfaceInfo
     uint32_t currentShaderResourceBindingIndex;
     // ANGLE driver uniforms set index:
     uint32_t driverUniformsDescriptorSetIndex;
-
-    uint32_t locationsUsedForXfbExtension;
 };
 
 struct GlslangSourceOptions
@@ -180,6 +178,7 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName);
 std::string GetXfbBufferName(const uint32_t bufferIndex);
 
 void GlslangAssignLocations(const GlslangSourceOptions &options,
+                            const gl::Caps &caps,
                             const gl::ProgramState &programState,
                             const gl::ProgramVaryingPacking &varyingPacking,
                             const gl::ShaderType shaderType,
@@ -193,6 +192,7 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
 // to be set during a SPIR-V transformation.  This is a transitory step towards moving all variables
 // to this map, at which point GlslangGetShaderSpirvCode will also be called by this function.
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
+                            const gl::Caps &caps,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
