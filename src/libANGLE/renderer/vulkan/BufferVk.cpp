@@ -749,7 +749,14 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     }
     else
     {
-        ANGLE_TRY(directUpdate(contextVk, data, size, offset));
+        if (!mBuffer->isExternalBuffer())
+        {
+            ANGLE_TRY(directUpdate(contextVk, data, size, offset));
+        }
+        else
+        {
+            ANGLE_TRY(stagedUpdate(contextVk, data, size, offset));
+        }
     }
 
     // Update conversions
