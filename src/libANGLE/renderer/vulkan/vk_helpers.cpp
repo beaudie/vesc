@@ -1240,6 +1240,7 @@ void CommandBufferHelper::finalizeColorImageLayout(Context *context,
         // texture code already picked layout and inserted barrier
         imageLayout = image->getCurrentImageLayout();
         ASSERT(imageLayout == ImageLayout::ColorAttachmentAndShaderRead);
+        abort();
     }
     else
     {
@@ -1377,6 +1378,7 @@ void CommandBufferHelper::finalizeImageLayout(Context *context, const ImageHelpe
                 mColorResolveImages[index] = nullptr;
             }
         }
+        ASSERT(!image->hasRenderPassUseFlag(RenderPassUsage::RenderTargetAttachment));
     }
 
     if (mDepthStencilImage == image)

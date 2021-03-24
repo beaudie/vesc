@@ -2477,7 +2477,7 @@ void main()
 TEST_P(FramebufferTest_ES3, SampleFromAttachedTextureWithDifferentLOD)
 {
     // TODO: https://anglebug.com/5760
-    ANGLE_SKIP_TEST_IF(IsD3D());
+    ANGLE_SKIP_TEST_IF(IsD3D() || IsVulkan());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;

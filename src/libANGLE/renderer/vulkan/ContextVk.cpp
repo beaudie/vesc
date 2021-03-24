@@ -1493,6 +1493,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             // track all textures in the renderpass.
             image.setRenderPassUsageFlag(vk::RenderPassUsage::TextureSampler);
             textureLayout = vk::ImageLayout::ColorAttachmentAndShaderRead;
+            abort();
         }
         else
         {
