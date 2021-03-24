@@ -1885,16 +1885,19 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(vk::CommandBuffer *comman
 
 void ContextVk::syncObjectPerfCounters()
 {
-    uint32_t descriptorSetAllocations = 0;
+    mPerfCounters.descriptorSetAllocations              = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheHits   = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheMisses = 0;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
     for (uint32_t count : contextCounters.descriptorSetsAllocated)
     {
-        descriptorSetAllocations += count;
+        mPerfCounters.descriptorSetAllocations += count;
     }
     // UtilsVk's descriptor set allocations
-    descriptorSetAllocations += mUtils.getAndResetObjectPerfCounters().descriptorSetsAllocated;
+    mPerfCounters.descriptorSetAllocations +=
+        mUtils.getAndResetObjectPerfCounters().descriptorSetsAllocated;
     // ProgramExecutableVk's descriptor set allocations
     const gl::State &state                             = getState();
     const gl::ShaderProgramManager &shadersAndPrograms = state.getShaderProgramManagerForCapture();
@@ -1902,16 +1905,26 @@ void ContextVk::syncObjectPerfCounters()
         shadersAndPrograms.getProgramsForCaptureAndPerf();
     for (const std::pair<GLuint, gl::Program *> &resource : programs)
     {
+        gl::Program *program = resource.second;
+        if (program->hasLinkingState())
+            continue;
         ProgramVk *programVk = vk::GetImpl(resource.second);
         ProgramExecutablePerfCounters progPerfCounters =
             programVk->getExecutable().getAndResetObjectPerfCounters();
 
-        for (const uint32_t count : progPerfCounters.descriptorSetsAllocated)
+        for (uint32_t count : progPerfCounters.descriptorSetAllocations)
         {
-            descriptorSetAllocations += count;
+            mPerfCounters.descriptorSetAllocations += count;
         }
+
+        mPerfCounters.shaderBuffersDescriptorSetCacheHits +=
+            progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::ShaderResource];
+        mPerfCounters.shaderBuffersDescriptorSetCacheMisses +=
+            progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::ShaderResource];
+
+        INFO() << "Shader buffer hits: " << mPerfCounters.shaderBuffersDescriptorSetCacheHits;
+        INFO() << "Shader buffer misses: " << mPerfCounters.shaderBuffersDescriptorSetCacheMisses;
     }
-    mPerfCounters.descriptorSetAllocations = descriptorSetAllocations;
 }
 
 void ContextVk::updateOverlayOnPresent()

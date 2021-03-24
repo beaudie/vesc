@@ -3543,7 +3543,7 @@ GraphicsPipelineCache::~GraphicsPipelineCache()
 
 void GraphicsPipelineCache::destroy(RendererVk *rendererVk)
 {
-    rendererVk->accumulateCacheStats(VulkanCacheType::GraphicsPipeline, mCacheStats);
+    accumulateCacheStats(rendererVk);
 
     VkDevice device = rendererVk->getDevice();
 
@@ -3686,7 +3686,7 @@ PipelineLayoutCache::~PipelineLayoutCache()
 
 void PipelineLayoutCache::destroy(RendererVk *rendererVk)
 {
-    rendererVk->accumulateCacheStats(VulkanCacheType::PipelineLayout, mCacheStats);
+    accumulateCacheStats(rendererVk);
 
     VkDevice device = rendererVk->getDevice();
 
@@ -3894,15 +3894,15 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
 // DriverUniformsDescriptorSetCache implementation.
 void DriverUniformsDescriptorSetCache::destroy(RendererVk *rendererVk)
 {
-    rendererVk->accumulateCacheStats(VulkanCacheType::DescriptorSet, mCacheStats);
+    accumulateCacheStats(rendererVk);
     mPayload.clear();
 }
 
 // DescriptorSetCache implementation.
-template <typename key, VulkanCacheType cacheType>
-void DescriptorSetCache<key, cacheType>::destroy(RendererVk *rendererVk)
+template <typename Key, VulkanCacheType CacheType>
+void DescriptorSetCache<Key, CacheType>::destroy(RendererVk *rendererVk)
 {
-    rendererVk->accumulateCacheStats(cacheType, mCacheStats);
+    this->accumulateCacheStats(rendererVk);
     mPayload.clear();
 }
 
