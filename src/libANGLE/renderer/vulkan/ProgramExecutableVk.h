@@ -106,7 +106,9 @@ using DescriptorSetCountList = angle::PackedEnumMap<DescriptorSetIndex, uint32_t
 
 struct ProgramExecutablePerfCounters
 {
-    DescriptorSetCountList descriptorSetsAllocated;
+    DescriptorSetCountList descriptorSetAllocations;
+    DescriptorSetCountList descriptorSetCacheHits;
+    DescriptorSetCountList descriptorSetCacheMisses;
 };
 
 class ProgramExecutableVk
@@ -191,6 +193,7 @@ class ProgramExecutableVk
         return mUniformBufferDescriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     }
 
+    void accumulateCacheStats(VulkanCacheType cacheType, const CacheStats &cacheStats);
     ProgramExecutablePerfCounters getAndResetObjectPerfCounters();
 
   private:
