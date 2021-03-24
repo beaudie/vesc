@@ -1505,10 +1505,10 @@ void GenerateCaps(const FunctionsGL *functions,
     }
 #endif
 
-    extensions->sRGBWriteControl = functions->isAtLeastGL(gl::Version(3, 0)) ||
-                                   functions->hasGLExtension("GL_EXT_framebuffer_sRGB") ||
-                                   functions->hasGLExtension("GL_ARB_framebuffer_sRGB") ||
-                                   functions->hasGLESExtension("GL_EXT_sRGB_write_control");
+    // The GLES spec requires functionality that desktop OpenGL does not provide. Disable extension
+    // on desktop until ANGLE provides support through emulation. For details look here -
+    // https://anglebug.com/5790
+    extensions->sRGBWriteControl = functions->hasGLESExtension("GL_EXT_sRGB_write_control");
 
 #if defined(ANGLE_PLATFORM_ANDROID)
     // SRGB blending does not appear to work correctly on the Nexus 5. Writing to an SRGB
