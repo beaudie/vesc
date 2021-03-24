@@ -47,6 +47,7 @@ const VkExternalSemaphoreHandleTypeFlagBits
     VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TEMP_ZIRCON_EVENT_BIT_FUCHSIA =
         static_cast<VkExternalSemaphoreHandleTypeFlagBits>(0x00100000);
 
+#ifndef VK_FUCHSIA_external_memory
 #define VK_FUCHSIA_external_memory 1
 #define VK_FUCHSIA_EXTERNAL_MEMORY_SPEC_VERSION 1
 #define VK_FUCHSIA_EXTERNAL_MEMORY_EXTENSION_NAME "VK_FUCHSIA_external_memory"
@@ -96,7 +97,9 @@ VKAPI_ATTR VkResult VKAPI_CALL vkGetMemoryZirconHandlePropertiesFUCHSIA(
     zx_handle_t ZirconHandle,
     VkMemoryZirconHandlePropertiesFUCHSIA *pMemoryZirconHandleProperties);
 #endif
+#endif
 
+#ifndef VK_FUCHSIA_external_semaphore
 #define VK_FUCHSIA_external_semaphore 1
 #define VK_FUCHSIA_EXTERNAL_SEMAPHORE_SPEC_VERSION 1
 #define VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME "VK_FUCHSIA_external_semaphore"
@@ -108,7 +111,7 @@ typedef struct VkImportSemaphoreZirconHandleInfoFUCHSIA
     VkSemaphore semaphore;
     VkSemaphoreImportFlags flags;
     VkExternalSemaphoreHandleTypeFlagBits handleType;
-    zx_handle_t handle;
+    zx_handle_t zirconHandle;
 } VkImportSemaphoreZirconHandleInfoFUCHSIA;
 
 typedef struct VkSemaphoreGetZirconHandleInfoFUCHSIA
@@ -136,6 +139,7 @@ VKAPI_ATTR VkResult VKAPI_CALL
 vkGetSemaphoreZirconHandleFUCHSIA(VkDevice device,
                                   const VkSemaphoreGetZirconHandleInfoFUCHSIA *pGetZirconHandleInfo,
                                   zx_handle_t *pZirconHandle);
+#endif
 #endif
 
 #ifdef __cplusplus
