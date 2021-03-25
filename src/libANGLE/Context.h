@@ -465,6 +465,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     EGLenum getClientType() const;
     EGLenum getRenderBuffer() const;
     EGLenum getContextPriority() const;
+    bool isProtectedMemory() const;
 
     const GLubyte *getString(GLenum name) const;
     const GLubyte *getStringi(GLenum name, GLuint index) const;

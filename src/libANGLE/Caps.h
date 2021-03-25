@@ -1227,6 +1227,9 @@ struct DisplayExtensions
 
     // EGL_EXT_buffer_age
     bool bufferAgeEXT = false;
+
+    // EGL_EXT_protected_content
+    bool protectedContentEXT = false;
 };
 
 struct DeviceExtensions
