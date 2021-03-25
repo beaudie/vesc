@@ -85,18 +85,22 @@ class CommandProcessorTask
 
     void initProcessCommands(CommandBufferHelper *commandBuffer, const RenderPass *renderPass);
 
-    void initPresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+    void initPresent(bool isProtectedMemory,
+                     egl::ContextPriority priority,
+                     const VkPresentInfoKHR &presentInfo);
 
     void initFinishToSerial(Serial serial);
 
     void initFlushAndQueueSubmit(const std::vector<VkSemaphore> &waitSemaphores,
                                  const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                                  const Semaphore *semaphore,
+                                 bool isProtectedMemory,
                                  egl::ContextPriority priority,
                                  GarbageList &&currentGarbage,
                                  Serial submitQueueSerial);
 
     void initOneOffQueueSubmit(VkCommandBuffer commandBufferHandle,
+                               bool isProtectedMemory,
                                egl::ContextPriority priority,
                                const Fence *fence,
                                Serial submitQueueSerial);
@@ -119,6 +123,7 @@ class CommandProcessorTask
     const Semaphore *getSemaphore() { return mSemaphore; }
     GarbageList &getGarbage() { return mGarbage; }
     egl::ContextPriority getPriority() const { return mPriority; }
+    bool isProtectedMemory() const { return mIsProtectedMemory; }
     VkCommandBuffer getOneOffCommandBufferVk() const { return mOneOffCommandBufferVk; }
     const Fence *getOneOffFence() { return mOneOffFence; }
     const VkPresentInfoKHR &getPresentInfo() const { return mPresentInfo; }
@@ -159,6 +164,7 @@ class CommandProcessorTask
 
     // Flush, Present & QueueWaitIdle data
     egl::ContextPriority mPriority;
+    bool mIsProtectedMemory;
 };
 
 struct CommandBatch final : angle::NonCopyable
@@ -179,13 +185,66 @@ struct CommandBatch final : angle::NonCopyable
 
 using DeviceQueueMap = angle::PackedEnumMap<egl::ContextPriority, VkQueue>;
 
+class QueueFamily final : angle::NonCopyable
+{
+    const VkQueueFamilyProperties *mProperties;
+    uint32_t mIndex;
+    angle::PackedEnumMap<egl::ContextPriority, egl::ContextPriority> mPriorities;
+    vk::DeviceQueueMap mQueueMap;
+
+    // QueuePriority values
+    static const float kVulkanQueuePriorityLow;
+    static const float kVulkanQueuePriorityMedium;
+    static const float kVulkanQueuePriorityHigh;
+
+    // Index order: Medium, High, Low - so no need to rearrange according to count:
+    // If we have 1 queue - all same, if 2 - Medium and High, if 3 Medioum, High and Low.
+    static const uint32_t kQueueIndexMedium = 0;
+    static const uint32_t kQueueIndexHigh   = 1;
+    static const uint32_t kQueueIndexLow    = 2;
+
+    void getDeviceQueue(VkDevice device, uint32_t queueIndex, VkQueue *queue);
+
+  public:
+    static const uint32_t kInvalidIndex = std::numeric_limits<uint32_t>::max();
+    static uint32_t findIndex(const std::vector<VkQueueFamilyProperties> &queueFamilyProperties,
+                              VkQueueFlags flags,
+                              uint32_t *matchCount);
+    static const uint32_t kQueueCount = static_cast<uint32_t>(egl::ContextPriority::EnumCount);
+    static const float kQueuePriorities[static_cast<uint32_t>(egl::ContextPriority::EnumCount)];
+
+    QueueFamily() : mProperties(nullptr), mIndex(kInvalidIndex) {}
+    ~QueueFamily() {}
+
+    void initialize(const VkQueueFamilyProperties *queueFamilyProperties, uint32_t index);
+    // These are available after intiialize.
+    bool isValid() const { return (mIndex != kInvalidIndex); }
+    uint32_t getIndex() const { return mIndex; }
+    const VkQueueFamilyProperties *getProperties() const { return mProperties; }
+    bool isGraphics() const { return (mProperties->queueFlags & VK_QUEUE_GRAPHICS_BIT); }
+    bool isCompute() const { return (mProperties->queueFlags & VK_QUEUE_COMPUTE_BIT); }
+    bool isProtected() const { return (mProperties->queueFlags & VK_QUEUE_PROTECTED_BIT); }
+    uint32_t getActualQueueCount() const { return mProperties->queueCount; }
+
+    void makeQueues(VkDevice device);
+    // These are available after makeQueues.
+    egl::ContextPriority getActualPriority(egl::ContextPriority priority) const
+    {
+        return mPriorities[priority];
+    }
+    const vk::DeviceQueueMap getQueueMap() const { return mQueueMap; }
+    VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
+};
+
 class CommandQueueInterface : angle::NonCopyable
 {
   public:
     virtual ~CommandQueueInterface() {}
 
-    virtual angle::Result init(Context *context, const DeviceQueueMap &queueMap) = 0;
-    virtual void destroy(Context *context)                                       = 0;
+    virtual angle::Result init(Context *context,
+                               const QueueFamily *graphicsQueueFamily,
+                               const QueueFamily *protectedQueueFamily) = 0;
+    virtual void destroy(Context *context)                              = 0;
 
     virtual void handleDeviceLost(RendererVk *renderer) = 0;
 
@@ -196,6 +255,7 @@ class CommandQueueInterface : angle::NonCopyable
     virtual Serial reserveSubmitSerial()                   = 0;
     virtual angle::Result submitFrame(
         Context *context,
+        bool isProtectedMemory,
         egl::ContextPriority priority,
         const std::vector<VkSemaphore> &waitSemaphores,
         const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
@@ -204,12 +264,14 @@ class CommandQueueInterface : angle::NonCopyable
         CommandPool *commandPool,
         Serial submitQueueSerial)                                      = 0;
     virtual angle::Result queueSubmitOneOff(Context *context,
+                                            bool isProtectedMemory,
                                             egl::ContextPriority contextPriority,
                                             VkCommandBuffer commandBufferHandle,
                                             const Fence *fence,
                                             SubmitPolicy submitPolicy,
                                             Serial submitQueueSerial)  = 0;
-    virtual VkResult queuePresent(egl::ContextPriority contextPriority,
+    virtual VkResult queuePresent(bool isProtectedMemory,
+                                  egl::ContextPriority contextPriority,
                                   const VkPresentInfoKHR &presentInfo) = 0;
 
     virtual angle::Result waitForSerialWithUserTimeout(vk::Context *context,
@@ -239,7 +301,9 @@ class CommandQueue final : public CommandQueueInterface
     CommandQueue();
     ~CommandQueue() override;
 
-    angle::Result init(Context *context, const DeviceQueueMap &queueMap) override;
+    angle::Result init(Context *context,
+                       const QueueFamily *graphicsQueueFamily,
+                       const QueueFamily *protectedQueueFamily) override;
     void destroy(Context *context) override;
     void clearAllGarbage(RendererVk *renderer);
 
@@ -250,6 +314,7 @@ class CommandQueue final : public CommandQueueInterface
     Serial reserveSubmitSerial() override;
 
     angle::Result submitFrame(Context *context,
+                              bool isProtectedMemory,
                               egl::ContextPriority priority,
                               const std::vector<VkSemaphore> &waitSemaphores,
                               const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
@@ -259,13 +324,15 @@ class CommandQueue final : public CommandQueueInterface
                               Serial submitQueueSerial) override;
 
     angle::Result queueSubmitOneOff(Context *context,
+                                    bool isProtectedMemory,
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Fence *fence,
                                     SubmitPolicy submitPolicy,
                                     Serial submitQueueSerial) override;
 
-    VkResult queuePresent(egl::ContextPriority contextPriority,
+    VkResult queuePresent(bool isProtectedMemory,
+                          egl::ContextPriority contextPriority,
                           const VkPresentInfoKHR &presentInfo) override;
 
     angle::Result waitForSerialWithUserTimeout(vk::Context *context,
@@ -286,6 +353,7 @@ class CommandQueue final : public CommandQueueInterface
     Serial getCurrentQueueSerial() const override;
 
     angle::Result queueSubmit(Context *context,
+                              bool isProtectedMemory,
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
                               const Fence *fence,
@@ -293,6 +361,7 @@ class CommandQueue final : public CommandQueueInterface
 
   private:
     angle::Result releaseToCommandBatch(Context *context,
+                                        bool isProtectedMemory,
                                         PrimaryCommandBuffer &&commandBuffer,
                                         CommandPool *commandPool,
                                         CommandBatch *batch);
@@ -301,12 +370,29 @@ class CommandQueue final : public CommandQueueInterface
 
     bool allInFlightCommandsAreAfterSerial(Serial serial) const;
 
+    VkQueue getQueue(bool isProtectedMemory, egl::ContextPriority);
+
+    const vk::QueueFamily *getQueueFamily(bool isProtected) const
+    {
+        if (isProtected)
+        {
+            ASSERT(mProtectedQueueFamily->isValid());
+            return mProtectedQueueFamily;
+        }
+        else
+        {
+            return mGraphicsQueueFamily;
+        }
+    }
+
     GarbageQueue mGarbageQueue;
     std::vector<CommandBatch> mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
     PrimaryCommandBuffer mPrimaryCommands;
     PersistentCommandPool mPrimaryCommandPool;
+    PrimaryCommandBuffer mProtectedCommands;
+    PersistentCommandPool mProtectedCommandPool;
 
     // Queue serial management.
     AtomicSerialFactory mQueueSerialFactory;
@@ -314,8 +400,9 @@ class CommandQueue final : public CommandQueueInterface
     Serial mLastSubmittedQueueSerial;
     Serial mCurrentQueueSerial;
 
-    // Devices queues.
-    DeviceQueueMap mQueues;
+    // QueueFamilies
+    const vk::QueueFamily *mGraphicsQueueFamily;
+    const vk::QueueFamily *mProtectedQueueFamily;
 
     FenceRecycler mFenceRecycler;
 };
@@ -348,7 +435,9 @@ class CommandProcessor : public Context, public CommandQueueInterface
                      unsigned int line) override;
 
     // CommandQueueInterface
-    angle::Result init(Context *context, const DeviceQueueMap &queueMap) override;
+    angle::Result init(Context *context,
+                       const QueueFamily *qgraphicsQeueFamily,
+                       const QueueFamily *protectedQueueFamily) override;
 
     void destroy(Context *context) override;
 
@@ -359,6 +448,7 @@ class CommandProcessor : public Context, public CommandQueueInterface
     Serial reserveSubmitSerial() override;
 
     angle::Result submitFrame(Context *context,
+                              bool isProtectedMemory,
                               egl::ContextPriority priority,
                               const std::vector<VkSemaphore> &waitSemaphores,
                               const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
@@ -368,12 +458,14 @@ class CommandProcessor : public Context, public CommandQueueInterface
                               Serial submitQueueSerial) override;
 
     angle::Result queueSubmitOneOff(Context *context,
+                                    bool isProtectedMemory,
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Fence *fence,
                                     SubmitPolicy submitPolicy,
                                     Serial submitQueueSerial) override;
-    VkResult queuePresent(egl::ContextPriority contextPriority,
+    VkResult queuePresent(bool isProtectedMemory,
+                          egl::ContextPriority contextPriority,
                           const VkPresentInfoKHR &presentInfo) override;
 
     angle::Result waitForSerialWithUserTimeout(vk::Context *context,
@@ -403,7 +495,7 @@ class CommandProcessor : public Context, public CommandQueueInterface
 
     // Entry point for command processor thread, calls processTasksImpl to do the
     // work. called by RendererVk::initializeDevice on main thread
-    void processTasks(const DeviceQueueMap &queueMap);
+    void processTasks();
 
     // Called asynchronously from main thread to queue work that is then processed by the worker
     // thread
@@ -417,7 +509,9 @@ class CommandProcessor : public Context, public CommandQueueInterface
     angle::Result processTask(CommandProcessorTask *task);
 
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
-    VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+    VkResult present(bool isProtectedMemory,
+                     egl::ContextPriority priority,
+                     const VkPresentInfoKHR &presentInfo);
 
     std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;

@@ -58,6 +58,7 @@ struct SurfaceState final : private angle::NonCopyable
     SupportedCompositorTiming supportedCompositorTimings;
     SupportedTimestamps supportedTimestamps;
     bool directComposition;
+    bool isProtectedMemory;
 };
 
 class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
@@ -132,6 +133,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     EGLint getHorizontalResolution() const;
     EGLint getVerticalResolution() const;
     EGLenum getMultisampleResolve() const;
+    bool isProtectedMemory() const;
 
     gl::Texture *getBoundTexture() const { return mTexture; }
 

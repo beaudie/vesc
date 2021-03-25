@@ -108,7 +108,12 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
                                    nullptr, gl::LevelIndex(0), 1, 1, robustInit, nullptr));
 
     VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
+    if (contextVk->isProtectedMemory())
+    {
+        flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
+    }
+    ANGLE_TRY(mImage->initMemory(contextVk, contextVk->isProtectedMemory(),
+                                 renderer->getMemoryProperties(), flags));
 
     // If multisampled render to texture, an implicit multisampled image is created which is used as
     // the color or depth/stencil attachment.  At the end of the render pass, this image is
@@ -118,8 +123,8 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         mMultisampledImageViews.init(renderer);
 
         ANGLE_TRY(mMultisampledImage.initImplicitMultisampledRenderToTexture(
-            contextVk, renderer->getMemoryProperties(), gl::TextureType::_2D, samples, *mImage,
-            robustInit));
+            contextVk, contextVk->isProtectedMemory(), renderer->getMemoryProperties(),
+            gl::TextureType::_2D, samples, *mImage, robustInit));
 
         mRenderTarget.init(&mMultisampledImage, &mMultisampledImageViews, mImage, &mImageViews,
                            gl::LevelIndex(0), 0, 1, RenderTargetTransience::MultisampledTransient);
@@ -174,7 +179,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
 
     // Transfer the image to this queue if needed
-    uint32_t rendererQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
+    uint32_t rendererQueueFamilyIndex =
+        contextVk->getRenderer()->getQueueFamilyIndex(contextVk->isProtectedMemory());
     if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
     {
         vk::CommandBuffer *commandBuffer;

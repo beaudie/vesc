@@ -149,10 +149,15 @@ class RendererVk : angle::NonCopyable
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
 
-    uint32_t getQueueFamilyIndex() const { return mCurrentQueueFamilyIndex; }
-    const VkQueueFamilyProperties &getQueueFamilyProperties() const
+    uint32_t getQueueFamilyIndex(bool isProtectedMemory) const
     {
-        return mQueueFamilyProperties[mCurrentQueueFamilyIndex];
+        const vk::QueueFamily *queueFamily = getQueueFamily(isProtectedMemory);
+        return queueFamily->getIndex();
+    }
+    uint32_t getTimeStampValidBits(bool isProtectedMemory) const
+    {
+        const vk::QueueFamily *queueFamily = getQueueFamily(isProtectedMemory);
+        return queueFamily->getProperties()->timestampValidBits;
     }
 
     const vk::MemoryProperties &getMemoryProperties() const { return mMemoryProperties; }
@@ -197,19 +202,23 @@ class RendererVk : angle::NonCopyable
     bool hasBufferFormatFeatureBits(angle::FormatID format,
                                     const VkFormatFeatureFlags featureBits) const;
 
-    ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
+    ANGLE_INLINE egl::ContextPriority getDriverPriority(bool isProtectedMemory,
+                                                        egl::ContextPriority priority)
     {
-        return mPriorities[priority];
+        const vk::QueueFamily *queueFamily = getQueueFamily(isProtectedMemory);
+        return queueFamily->getActualPriority(priority);
     }
 
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
+                                         bool isProtectedMemory,
                                          vk::PrimaryCommandBuffer *commandBufferOut);
 
     // Fire off a single command buffer immediately with default priority.
     // Command buffer must be allocated with getCommandBufferOneOff and is reclaimed.
     angle::Result queueSubmitOneOff(vk::Context *context,
                                     vk::PrimaryCommandBuffer &&primary,
+                                    bool isProtectedMemory,
                                     egl::ContextPriority priority,
                                     const vk::Fence *fence,
                                     vk::SubmitPolicy submitPolicy,
@@ -319,6 +328,7 @@ class RendererVk : angle::NonCopyable
     angle::Result cleanupGarbage(Serial lastCompletedQueueSerial);
 
     angle::Result submitFrame(vk::Context *context,
+                              bool isProtectedMemory,
                               egl::ContextPriority contextPriority,
                               std::vector<VkSemaphore> &&waitSemaphores,
                               std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
@@ -343,6 +353,7 @@ class RendererVk : angle::NonCopyable
                                          vk::CommandBufferHelper **outsideRPCommands);
 
     VkResult queuePresent(vk::Context *context,
+                          bool isProtectedMemory,
                           egl::ContextPriority priority,
                           const VkPresentInfoKHR &presentInfo);
 
@@ -370,7 +381,9 @@ class RendererVk : angle::NonCopyable
     }
 
   private:
-    angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
+    angle::Result initializeDevice(DisplayVk *displayVk,
+                                   uint32_t queueFamilyIndex,
+                                   uint32_t protectedQueueFamilyIndex);
     void ensureCapsInitialized() const;
 
     void queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceExtensionNames);
@@ -387,6 +400,19 @@ class RendererVk : angle::NonCopyable
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     bool hasFormatFeatureBits(angle::FormatID formatID,
                               const VkFormatFeatureFlags featureBits) const;
+
+    const vk::QueueFamily *getQueueFamily(bool isProtectedMemory) const
+    {
+        if (isProtectedMemory)
+        {
+            ASSERT(mProtectedQueueFamilyPtr->isValid());
+            return mProtectedQueueFamilyPtr;
+        }
+        else
+        {
+            return &mGraphicsQueueFamily;
+        }
+    }
 
     egl::Display *mDisplay;
 
@@ -421,12 +447,12 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceMultisampledRenderToSingleSampledFeaturesEXT
         mMultisampledRenderToSingleSampledFeatures;
     VkPhysicalDeviceDriverPropertiesKHR mDriverProperties;
+    VkPhysicalDeviceProtectedMemoryFeatures mProtectedMemoryFeatures;
+    VkPhysicalDeviceProtectedMemoryProperties mProtectedMemoryProperties;
     VkExternalFenceProperties mExternalFenceProperties;
     VkExternalSemaphoreProperties mExternalSemaphoreProperties;
     VkPhysicalDeviceSamplerYcbcrConversionFeatures mSamplerYcbcrConversionFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
-    angle::PackedEnumMap<egl::ContextPriority, egl::ContextPriority> mPriorities;
-    uint32_t mCurrentQueueFamilyIndex;
     uint32_t mMaxVertexAttribDivisor;
     VkDeviceSize mMaxVertexAttribStride;
     VkDeviceSize mMinImportedHostPointerAlignment;
@@ -473,6 +499,16 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
+
+    // QueueFamilies and Queues
+    uint32_t mCurrentQueueFamilyIndex;
+    uint32_t mProtectedQueueFamilyIndex;
+
+    vk::QueueFamily mGraphicsQueueFamily;
+    vk::QueueFamily mProtectedQueueFamily;
+    // mProtectedQueueFamily may be same or different from mGraphicsQueueFamily. Use pointer to one
+    // or other.
+    vk::QueueFamily *mProtectedQueueFamilyPtr;
 
     std::mutex mCommandQueueMutex;
     vk::CommandQueue mCommandQueue;

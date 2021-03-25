@@ -399,7 +399,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mPerfCounters{},
       mContextPerfCounters{},
       mCumulativeContextPerfCounters{},
-      mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
+      mContextPriority(
+          renderer->getDriverPriority(state.isProtectedMemory(), GetContextPriority(state))),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
@@ -602,7 +603,7 @@ angle::Result ContextVk::initialize()
         this, VK_QUERY_TYPE_OCCLUSION, vk::kDefaultOcclusionQueryPoolSize));
 
     // Only initialize the timestamp query pools if the extension is available.
-    if (mRenderer->getQueueFamilyProperties().timestampValidBits > 0)
+    if (mRenderer->getTimeStampValidBits(isProtectedMemory()) > 0)
     {
         ANGLE_TRY(mQueryPools[gl::QueryType::Timestamp].init(this, VK_QUERY_TYPE_TIMESTAMP,
                                                              vk::kDefaultTimestampQueryPoolSize));
@@ -688,7 +689,7 @@ angle::Result ContextVk::initialize()
     if (mGpuEventsEnabled)
     {
         // GPU events should only be available if timestamp queries are available.
-        ASSERT(mRenderer->getQueueFamilyProperties().timestampValidBits > 0);
+        ASSERT(mRenderer->getTimeStampValidBits(isProtectedMemory()) > 0);
         // Calculate the difference between CPU and GPU clocks for GPU event reporting.
         ANGLE_TRY(mGpuEventQueryPool.init(this, VK_QUERY_TYPE_TIMESTAMP,
                                           vk::kDefaultTimestampQueryPoolSize));
@@ -712,15 +713,15 @@ angle::Result ContextVk::initialize()
     constexpr VkBufferUsageFlags kEmptyBufferUsage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
                                                      VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
                                                      VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-    VkBufferCreateInfo emptyBufferInfo          = {};
-    emptyBufferInfo.sType                       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    emptyBufferInfo.flags                       = 0;
-    emptyBufferInfo.size                        = 16;
-    emptyBufferInfo.usage                       = kEmptyBufferUsage;
-    emptyBufferInfo.sharingMode                 = VK_SHARING_MODE_EXCLUSIVE;
-    emptyBufferInfo.queueFamilyIndexCount       = 0;
-    emptyBufferInfo.pQueueFamilyIndices         = nullptr;
-    constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    VkBufferCreateInfo emptyBufferInfo    = {};
+    emptyBufferInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    emptyBufferInfo.flags                 = 0;
+    emptyBufferInfo.size                  = 16;
+    emptyBufferInfo.usage                 = kEmptyBufferUsage;
+    emptyBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    emptyBufferInfo.queueFamilyIndexCount = 0;
+    emptyBufferInfo.pQueueFamilyIndices   = nullptr;
+    VkMemoryPropertyFlags kMemoryType     = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
 
     constexpr VkImageUsageFlags kStagingBufferUsageFlags =
@@ -1904,10 +1905,10 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore)
     }
 
     getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
-    ANGLE_TRY(mRenderer->submitFrame(this, mContextPriority, std::move(mWaitSemaphores),
-                                     std::move(mWaitSemaphoreStageMasks), signalSemaphore,
-                                     getShareGroupVk()->releaseResourceUseLists(),
-                                     std::move(mCurrentGarbage), &mCommandPool));
+    ANGLE_TRY(mRenderer->submitFrame(
+        this, isProtectedMemory(), mContextPriority, std::move(mWaitSemaphores),
+        std::move(mWaitSemaphoreStageMasks), signalSemaphore,
+        getShareGroupVk()->releaseResourceUseLists(), std::move(mCurrentGarbage), &mCommandPool));
 
     onRenderPassFinished();
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
@@ -2031,7 +2032,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
 
         vk::ResourceUseList scratchResourceUseList;
 
-        ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, &commandBuffer));
+        ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, isProtectedMemory(), &commandBuffer));
 
         commandBuffer.setEvent(gpuReady.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
         commandBuffer.waitEvents(1, cpuReady.get().ptr(), VK_PIPELINE_STAGE_HOST_BIT,
@@ -2047,9 +2048,9 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         Serial throwAwaySerial;
         // vkEvent's are externally synchronized, therefore need work to be submitted before calling
         // vkGetEventStatus
-        ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), mContextPriority,
-                                               nullptr, vk::SubmitPolicy::EnsureSubmitted,
-                                               &throwAwaySerial));
+        ANGLE_TRY(mRenderer->queueSubmitOneOff(
+            this, std::move(commandBuffer), isProtectedMemory(), mContextPriority, nullptr,
+            vk::SubmitPolicy::EnsureSubmitted, &throwAwaySerial));
         scratchResourceUseList.releaseResourceUsesAndUpdateSerials(throwAwaySerial);
 
         // Wait for GPU to be ready.  This is a short busy wait.
@@ -3412,7 +3413,7 @@ GLint ContextVk::getGPUDisjoint()
 GLint64 ContextVk::getTimestamp()
 {
     // This function should only be called if timestamp queries are available.
-    ASSERT(mRenderer->getQueueFamilyProperties().timestampValidBits > 0);
+    ASSERT(mRenderer->getTimeStampValidBits(isProtectedMemory()) > 0);
 
     uint64_t timestamp = 0;
 
@@ -4138,7 +4139,7 @@ vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 
     // Assert that timestamp extension is available if needed.
     ASSERT(queryType != gl::QueryType::Timestamp && queryType != gl::QueryType::TimeElapsed ||
-           mRenderer->getQueueFamilyProperties().timestampValidBits > 0);
+           mRenderer->getTimeStampValidBits(isProtectedMemory()) > 0);
     ASSERT(mQueryPools[queryType].isValid());
     return &mQueryPools[queryType];
 }
@@ -4905,7 +4906,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     vk::DeviceScoped<vk::PrimaryCommandBuffer> commandBatch(device);
     vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-    ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, &commandBuffer));
+    ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, isProtectedMemory(), &commandBuffer));
 
     timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
     timestampQuery.retain(&scratchResourceUseList);
@@ -4930,10 +4931,18 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     submitInfo.signalSemaphoreCount = 0;
     submitInfo.pSignalSemaphores    = nullptr;
 
+    if (isProtectedMemory())
+    {
+        VkProtectedSubmitInfo protectedSubmitInfo = {};
+        protectedSubmitInfo.sType                 = VK_STRUCTURE_TYPE_PROTECTED_SUBMIT_INFO;
+        protectedSubmitInfo.protectedSubmit       = true;
+        submitInfo.pNext                          = &protectedSubmitInfo;
+    }
+
     Serial throwAwaySerial;
-    ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), mContextPriority,
-                                           &fence.get(), vk::SubmitPolicy::EnsureSubmitted,
-                                           &throwAwaySerial));
+    ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), isProtectedMemory(),
+                                           mContextPriority, &fence.get(),
+                                           vk::SubmitPolicy::EnsureSubmitted, &throwAwaySerial));
 
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
