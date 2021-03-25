@@ -2015,8 +2015,3 @@ deqp_libtester_sources = [
   "deqp_support/tcuRandomOrderExecutor.cpp",
   "deqp_support/tcuRandomOrderExecutor.h",
 ]
-
-deqp_libtester_sources_android = [
-  "$deqp_path/framework/platform/android/tcuAndroidInternals.cpp",
-  "$deqp_path/framework/platform/android/tcuAndroidInternals.hpp",
-]
