@@ -36,6 +36,11 @@
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
 
+// TIMTIM - Taken from: https://stackoverflow.com/a/28858941
+#include <dlfcn.h>
+#include <unwind.h>
+#include <csignal>
+
 // Consts
 namespace
 {
@@ -473,6 +478,76 @@ constexpr char kEnableDebugMarkersVarName[]      = "ANGLE_ENABLE_DEBUG_MARKERS";
 constexpr char kEnableDebugMarkersPropertyName[] = "debug.angle.markers";
 }  // namespace
 
+// TIMTIM - Taken from: https://stackoverflow.com/a/28858941
+namespace
+{
+
+struct BacktraceState
+{
+    void **current;
+    void **end;
+};
+
+static _Unwind_Reason_Code unwindCallback(struct _Unwind_Context *context, void *arg)
+{
+    BacktraceState *state = static_cast<BacktraceState *>(arg);
+    uintptr_t pc          = _Unwind_GetIP(context);
+    if (pc)
+    {
+        if (state->current == state->end)
+        {
+            return _URC_END_OF_STACK;
+        }
+        else
+        {
+            *state->current++ = reinterpret_cast<void *>(pc);
+        }
+    }
+    return _URC_NO_REASON;
+}
+
+}  // namespace
+
+size_t captureBacktrace(void **buffer, size_t max)
+{
+    BacktraceState state = {buffer, buffer + max};
+    _Unwind_Backtrace(unwindCallback, &state);
+
+    return state.current - buffer;
+}
+
+void dumpBacktrace(std::ostream &os, void **buffer, size_t count)
+{
+    for (size_t idx = 0; idx < count; ++idx)
+    {
+        const void *addr   = buffer[idx];
+        const char *symbol = "";
+
+        Dl_info info;
+        if (dladdr(addr, &info) && info.dli_sname)
+        {
+            symbol = info.dli_sname;
+        }
+
+        os << "  #" << std::setw(2) << idx << ": " << addr << "  " << symbol << "\n";
+    }
+}
+
+void sigHandler(int sig)
+{
+    WARN() << "TIMTIM >> sig = " << sig;
+
+    const size_t max = 64;
+    void *buffer[max];
+    std::ostringstream oss;
+
+    dumpBacktrace(oss, buffer, captureBacktrace(buffer, max));
+
+    WARN() << "TIMTIM >> " << oss.str();
+
+    ASSERT(false);
+}
+
 // RendererVk implementation.
 RendererVk::RendererVk()
     : mDisplay(nullptr),
@@ -505,6 +580,13 @@ RendererVk::RendererVk()
     // a number of places in the Vulkan backend that make this assumption.  This assertion is made
     // early to fail immediately on big-endian platforms.
     ASSERT(IsLittleEndian());
+
+    signal(SIGINT, sigHandler);
+    signal(SIGILL, sigHandler);
+    signal(SIGABRT, sigHandler);
+    signal(SIGFPE, sigHandler);
+    signal(SIGSEGV, sigHandler);
+    signal(SIGTERM, sigHandler);
 }
 
 RendererVk::~RendererVk()
