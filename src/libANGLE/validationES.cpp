@@ -4539,6 +4539,13 @@ bool ValidateEGLImageTargetTexture2DOES(const Context *context,
         return false;
     }
 
+    if (imageObject->isProtectedMemory() != context->isProtectedMemory())
+    {
+        context->validationError(GL_INVALID_OPERATION,
+                                 "Mismatch between Image and Context Protected Content state");
+        return false;
+    }
+
     return true;
 }
 
@@ -4574,6 +4581,13 @@ bool ValidateEGLImageTargetRenderbufferStorageOES(const Context *context,
     if (!imageObject->isRenderable(context))
     {
         context->validationError(GL_INVALID_OPERATION, kEGLImageRenderbufferFormatNotSupported);
+        return false;
+    }
+
+    if (imageObject->isProtectedMemory() != context->isProtectedMemory())
+    {
+        context->validationError(GL_INVALID_OPERATION,
+                                 "Mismatch between Image and Context Protected Content state");
         return false;
     }
 
