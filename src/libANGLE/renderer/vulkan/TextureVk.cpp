@@ -1009,7 +1009,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         stagingImage = std::make_unique<vk::RefCounted<vk::ImageHelper>>();
 
         ANGLE_TRY(
-            stagingImage->get().init2DStaging(contextVk, renderer->getMemoryProperties(),
+            stagingImage->get().init2DStaging(contextVk, false, renderer->getMemoryProperties(),
                                               gl::Extents(sourceBox.width, sourceBox.height, 1),
                                               destFormat, kTransferStagingImageFlags, layerCount));
 
@@ -1160,7 +1160,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         stagingImage = std::make_unique<vk::RefCounted<vk::ImageHelper>>();
 
         ANGLE_TRY(
-            stagingImage->get().init2DStaging(contextVk, renderer->getMemoryProperties(),
+            stagingImage->get().init2DStaging(contextVk, false, renderer->getMemoryProperties(),
                                               gl::Extents(sourceBox.width, sourceBox.height, 1),
                                               destFormat, kDrawStagingImageFlags, layerCount));
 
@@ -1987,7 +1987,7 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
     const uint32_t levelCount = srcImage->getLevelCount();
     const uint32_t layerCount = srcImage->getLayerCount();
 
-    ANGLE_TRY(stagingImage->get().initStaging(contextVk, renderer->getMemoryProperties(),
+    ANGLE_TRY(stagingImage->get().initStaging(contextVk, false, renderer->getMemoryProperties(),
                                               srcImage->getType(), srcImage->getExtents(),
                                               srcImage->getFormat(), srcImage->getSamples(),
                                               kTransferStagingImageFlags, levelCount, layerCount));
@@ -2196,7 +2196,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
         // Create the implicit multisampled image.
         ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
-            contextVk, renderer->getMemoryProperties(), mState.getType(), samples, *mImage,
+            contextVk, false, renderer->getMemoryProperties(), mState.getType(), samples, *mImage,
             useRobustInit));
     }
 
@@ -2803,7 +2803,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
-    ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
+    ANGLE_TRY(mImage->initMemory(contextVk, false, renderer->getMemoryProperties(), flags));
 
     const uint32_t viewLevelCount =
         mState.getImmutableFormat() ? getMipLevelCount(ImageMipLevels::EnabledLevels) : levelCount;

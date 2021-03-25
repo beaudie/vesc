@@ -121,7 +121,7 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
                         renderer->getFormat(angle::FormatID::R8_UNORM), 1,
                         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                         gl::LevelIndex(0), 1, gl::overlay::kFontCount, useRobustInit));
-    ANGLE_TRY(mFontImage.initMemory(contextVk, renderer->getMemoryProperties(),
+    ANGLE_TRY(mFontImage.initMemory(contextVk, false, renderer->getMemoryProperties(),
                                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     ANGLE_TRY(mFontImage.initImageView(contextVk, gl::TextureType::_2DArray,
                                        VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
@@ -194,7 +194,7 @@ angle::Result OverlayVk::cullWidgets(ContextVk *contextVk)
                                   renderer->getFormat(angle::FormatID::R32G32_UINT), 1,
                                   VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                   gl::LevelIndex(0), 1, 1, useRobustInit));
-    ANGLE_TRY(mCulledWidgets.initMemory(contextVk, renderer->getMemoryProperties(),
+    ANGLE_TRY(mCulledWidgets.initMemory(contextVk, false, renderer->getMemoryProperties(),
                                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
     ANGLE_TRY(mCulledWidgets.initImageView(contextVk, gl::TextureType::_2D,
                                            VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),

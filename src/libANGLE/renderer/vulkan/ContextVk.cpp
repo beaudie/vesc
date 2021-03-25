@@ -2175,10 +2175,10 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore)
     }
 
     getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
-    ANGLE_TRY(mRenderer->submitFrame(this, mContextPriority, std::move(mWaitSemaphores),
-                                     std::move(mWaitSemaphoreStageMasks), signalSemaphore,
-                                     getShareGroupVk()->releaseResourceUseLists(),
-                                     std::move(mCurrentGarbage), &mCommandPool));
+    ANGLE_TRY(mRenderer->submitFrame(
+        this, hasProtectedContent(), mContextPriority, std::move(mWaitSemaphores),
+        std::move(mWaitSemaphoreStageMasks), signalSemaphore,
+        getShareGroupVk()->releaseResourceUseLists(), std::move(mCurrentGarbage), &mCommandPool));
 
     onRenderPassFinished();
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
@@ -2302,7 +2302,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
 
         vk::ResourceUseList scratchResourceUseList;
 
-        ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, &commandBuffer));
+        ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, hasProtectedContent(), &commandBuffer));
 
         commandBuffer.setEvent(gpuReady.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
         commandBuffer.waitEvents(1, cpuReady.get().ptr(), VK_PIPELINE_STAGE_HOST_BIT,
@@ -2318,9 +2318,9 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         Serial throwAwaySerial;
         // vkEvent's are externally synchronized, therefore need work to be submitted before calling
         // vkGetEventStatus
-        ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), mContextPriority,
-                                               nullptr, vk::SubmitPolicy::EnsureSubmitted,
-                                               &throwAwaySerial));
+        ANGLE_TRY(mRenderer->queueSubmitOneOff(
+            this, std::move(commandBuffer), hasProtectedContent(), mContextPriority, nullptr,
+            vk::SubmitPolicy::EnsureSubmitted, &throwAwaySerial));
         scratchResourceUseList.releaseResourceUsesAndUpdateSerials(throwAwaySerial);
 
         // Wait for GPU to be ready.  This is a short busy wait.
@@ -5282,7 +5282,7 @@ angle::Result ContextVk::finishImpl()
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::finishImpl");
 
     ANGLE_TRY(flushImpl(nullptr));
-    ANGLE_TRY(mRenderer->finish(this));
+    ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
 
     clearAllGarbage();
 
@@ -5323,12 +5323,12 @@ bool ContextVk::isSerialInUse(Serial serial) const
 
 angle::Result ContextVk::checkCompletedCommands()
 {
-    return mRenderer->checkCompletedCommands(this);
+    return mRenderer->checkCompletedCommands(this, hasProtectedContent());
 }
 
 angle::Result ContextVk::finishToSerial(Serial serial)
 {
-    return mRenderer->finishToSerial(this, serial);
+    return mRenderer->finishToSerial(this, hasProtectedContent(), serial);
 }
 
 angle::Result ContextVk::getCompatibleRenderPass(const vk::RenderPassDesc &desc,
@@ -5382,7 +5382,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     vk::DeviceScoped<vk::PrimaryCommandBuffer> commandBatch(device);
     vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-    ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, &commandBuffer));
+    ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, hasProtectedContent(), &commandBuffer));
 
     timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
     timestampQuery.retain(&scratchResourceUseList);
@@ -5408,7 +5408,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     submitInfo.pSignalSemaphores    = nullptr;
 
     Serial throwAwaySerial;
-    ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), mContextPriority,
+    ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), false, mContextPriority,
                                            &fence.get(), vk::SubmitPolicy::EnsureSubmitted,
                                            &throwAwaySerial));
 
@@ -5656,7 +5656,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
     ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
                                    mRenderPassCommands->getAttachmentOps(), &renderPass));
 
-    ANGLE_TRY(mRenderer->flushRenderPassCommands(this, *renderPass, &mRenderPassCommands));
+    ANGLE_TRY(mRenderer->flushRenderPassCommands(this, hasProtectedContent(), *renderPass,
+                                                 &mRenderPassCommands));
 
     if (mGpuEventsEnabled)
     {
@@ -5804,7 +5805,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
         mOutsideRenderPassCommands->addCommandDiagnostics(this);
     }
 
-    ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, &mOutsideRenderPassCommands));
+    ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, hasProtectedContent(),
+                                                &mOutsideRenderPassCommands));
 
     // Make sure appropriate dirty bits are set, in case another thread makes a submission before
     // the next dispatch call.
