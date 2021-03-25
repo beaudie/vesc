@@ -6,7 +6,6 @@
 
 // Context.cpp: Implements the gl::Context class, managing all GL state and performing
 // rendering operations. It is the GLES2 specific implementation of EGLContext.
-
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 
@@ -3557,6 +3556,12 @@ Extensions Context::generateSupportedExtensions() const
         // GL_KHR_texture_compression_astc_ldr and GL_KHR_texture_compression_astc_hdr
         ASSERT(supportedExtensions.textureCompressionASTCLDRKHR);
         ASSERT(supportedExtensions.textureCompressionASTCHDRKHR);
+    }
+
+    // GL_KHR_protected_textures
+    if (!mDisplay->getExtensions().protectedContentEXT)
+    {
+        supportedExtensions.protectedTexturesEXT = false;
     }
 
     // GL_ANGLE_get_tex_level_parameter is implemented in the frontend
