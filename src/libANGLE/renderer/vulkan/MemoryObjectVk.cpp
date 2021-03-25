@@ -252,10 +252,11 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
     ASSERT(offset == 0);
     ASSERT(externalMemoryRequirements.size == mSize);
 
-    VkMemoryPropertyFlags flags = 0;
-    ANGLE_TRY(image->initExternalMemory(contextVk, renderer->getMemoryProperties(),
-                                        externalMemoryRequirements, nullptr, importMemoryInfo,
-                                        renderer->getQueueFamilyIndex(), flags));
+    VkMemoryPropertyFlags flags =
+        contextVk->isProtectedMemory() ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0;
+    ANGLE_TRY(image->initExternalMemory(
+        contextVk, renderer->getMemoryProperties(), externalMemoryRequirements, nullptr,
+        importMemoryInfo, renderer->getQueueFamilyIndex(contextVk->isProtectedMemory()), flags));
 
     return angle::Result::Continue;
 }

@@ -222,6 +222,11 @@ EGLenum GetContextPriority(const egl::AttributeMap &attribs)
         attribs.getAsInt(EGL_CONTEXT_PRIORITY_LEVEL_IMG, EGL_CONTEXT_PRIORITY_MEDIUM_IMG));
 }
 
+bool GetProtectedContext(const egl::AttributeMap &attribs)
+{
+    return static_cast<bool>(attribs.getAsInt(EGL_PROTECTED_CONTENT_EXT, EGL_FALSE));
+}
+
 std::string GetObjectLabelFromPointer(GLsizei length, const GLchar *label)
 {
     std::string labelName;
@@ -339,7 +344,8 @@ Context::Context(egl::Display *display,
              GetClientArraysEnabled(attribs),
              GetRobustResourceInit(attribs),
              memoryProgramCache != nullptr,
-             GetContextPriority(attribs)),
+             GetContextPriority(attribs),
+             GetProtectedContext(attribs)),
       mShared(shareContext != nullptr),
       mSkipValidation(GetNoError(attribs)),
       mDisplayTextureShareGroup(shareTextures != nullptr),
@@ -1023,6 +1029,11 @@ EGLenum Context::getContextPriority() const
     return egl::ToEGLenum(mImplementation->getContextPriority());
 }
 
+bool Context::isProtectedMemory() const
+{
+    return mState.isProtectedMemory();
+}
+
 Sync *Context::getSync(GLsync handle) const
 {
     return mState.mSyncManager->getSync(static_cast<GLuint>(reinterpret_cast<uintptr_t>(handle)));
@@ -1675,9 +1686,16 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
 
         // Desktop client flags
         case GL_CONTEXT_FLAGS:
+        {
             ASSERT(getClientType() == EGL_OPENGL_API);
-            *params = 0;
-            break;
+            GLint contextFlags = 0;
+            if (mState.isProtectedMemory())
+            {
+                contextFlags |= GL_CONTEXT_FLAG_PROTECTED_CONTENT_BIT_EXT;
+            }
+            *params = contextFlags;
+        }
+        break;
         case GL_CONTEXT_PROFILE_MASK:
             ASSERT(getClientType() == EGL_OPENGL_API);
             *params = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT;
