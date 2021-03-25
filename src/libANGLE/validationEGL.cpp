@@ -1989,6 +1989,24 @@ bool ValidateCreateContext(const ValidationContext *val,
                     return false;
                 }
                 break;
+
+            case EGL_PROTECTED_CONTENT_EXT:
+                if (!display->getExtensions().protectedContentEXT)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute EGL_PROTECTED_CONTEXT_EXT requires "
+                                  "extension EGL_EXT_protected_content.");
+                    return false;
+                }
+                if (value != EGL_TRUE && value != EGL_FALSE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_PROTECTED_CONTENT_EXT must "
+                                  "be either EGL_TRUE or EGL_FALSE.");
+                    return false;
+                }
+                break;
+
             default:
                 val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute.");
                 return false;
@@ -2214,6 +2232,23 @@ bool ValidateCreateWindowSurface(const ValidationContext *val,
                 }
                 break;
 
+            case EGL_PROTECTED_CONTENT_EXT:
+                if (!displayExtensions.protectedContentEXT)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute EGL_PROTECTED_CONTEXT_EXT requires "
+                                  "extension EGL_EXT_protected_content.");
+                    return false;
+                }
+                if (value != EGL_TRUE && value != EGL_FALSE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_PROTECTED_CONTENT_EXT must "
+                                  "be either EGL_TRUE or EGL_FALSE.");
+                    return false;
+                }
+                break;
+
             default:
                 val->setError(EGL_BAD_ATTRIBUTE);
                 return false;
@@ -2320,6 +2355,23 @@ bool ValidateCreatePbufferSurface(const ValidationContext *val,
                     val->setError(EGL_BAD_ATTRIBUTE,
                                   "EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE must be "
                                   "either EGL_TRUE or EGL_FALSE.");
+                    return false;
+                }
+                break;
+
+            case EGL_PROTECTED_CONTENT_EXT:
+                if (!displayExtensions.protectedContentEXT)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute EGL_PROTECTED_CONTEXT_EXT requires "
+                                  "extension EGL_EXT_protected_content.");
+                    return false;
+                }
+                if (value != EGL_TRUE && value != EGL_FALSE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_PROTECTED_CONTENT_EXT must "
+                                  "be either EGL_TRUE or EGL_FALSE.");
                     return false;
                 }
                 break;
@@ -2572,6 +2624,23 @@ bool ValidateCreatePbufferFromClientBuffer(const ValidationContext *val,
                 }
                 break;
 
+            case EGL_PROTECTED_CONTENT_EXT:
+                if (!displayExtensions.protectedContentEXT)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute EGL_PROTECTED_CONTEXT_EXT requires "
+                                  "extension EGL_EXT_protected_content.");
+                    return false;
+                }
+                if (value != EGL_TRUE && value != EGL_FALSE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_PROTECTED_CONTENT_EXT must "
+                                  "be either EGL_TRUE or EGL_FALSE.");
+                    return false;
+                }
+                break;
+
             default:
                 val->setError(EGL_BAD_ATTRIBUTE);
                 return false;
@@ -2734,6 +2803,23 @@ bool ValidateCreatePixmapSurface(const ValidationContext *val,
                 if (!displayExtensions.textureFromPixmapNOK)
                 {
                     val->setError(EGL_BAD_ATTRIBUTE, "EGL_NOK_texture_from_pixmap is not enabled.");
+                    return false;
+                }
+                break;
+
+            case EGL_PROTECTED_CONTENT_EXT:
+                if (!displayExtensions.protectedContentEXT)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute EGL_PROTECTED_CONTEXT_EXT requires "
+                                  "extension EGL_EXT_protected_content.");
+                    return false;
+                }
+                if (value != EGL_TRUE && value != EGL_FALSE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_PROTECTED_CONTENT_EXT must "
+                                  "be either EGL_TRUE or EGL_FALSE.");
                     return false;
                 }
                 break;
@@ -3080,6 +3166,23 @@ bool ValidateCreateImage(const ValidationContext *val,
                     val->setError(EGL_BAD_PARAMETER,
                                   "Parameter cannot be used without "
                                   "EGL_EXT_image_dma_buf_import_modifiers support.");
+                    return false;
+                }
+                break;
+
+            case EGL_PROTECTED_CONTENT_EXT:
+                if (!displayExtensions.protectedContentEXT)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute EGL_PROTECTED_CONTEXT_EXT requires "
+                                  "extension EGL_EXT_protected_content.");
+                    return false;
+                }
+                if (value != EGL_TRUE && value != EGL_FALSE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_PROTECTED_CONTENT_EXT must "
+                                  "be either EGL_TRUE or EGL_FALSE.");
                     return false;
                 }
                 break;
