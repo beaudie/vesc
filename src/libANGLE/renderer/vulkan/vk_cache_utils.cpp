@@ -7,7 +7,6 @@
 //    Contains the classes for the Pipeline State Object cache as well as the RenderPass cache.
 //    Also contains the structures for the packed descriptions for the RenderPass and Pipeline.
 //
-
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 #include "common/aligned_memory.h"
