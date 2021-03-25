@@ -1039,6 +1039,9 @@ void RendererVk::ensureCapsInitialized() const
         mMultiviewFeatures.multiview && mFeatures.bresenhamLineRasterization.enabled;
     mNativeExtensions.multiview2 = mNativeExtensions.multiview;
     mNativeExtensions.maxViews   = mMultiviewProperties.maxMultiviewViewCount;
+
+    // GL_EXT_protected_textures
+    mNativeExtensions.protectedTexturesEXT = mFeatures.supportsProtectedMemory.enabled;
 }
 
 namespace vk
