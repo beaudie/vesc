@@ -3532,7 +3532,7 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSi
     RendererVk *renderer = context->getRenderer();
 
     PrimaryCommandBuffer commandBuffer;
-    ANGLE_TRY(renderer->getCommandBufferOneOff(context, &commandBuffer));
+    ANGLE_TRY(renderer->getCommandBufferOneOff(context, false, &commandBuffer));
 
     // Queue a DMA copy.
     VkBufferCopy copyRegion = {};
@@ -3545,7 +3545,7 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSi
     ANGLE_VK_TRY(context, commandBuffer.end());
 
     Serial serial;
-    ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer),
+    ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer), false,
                                           egl::ContextPriority::Medium, nullptr,
                                           vk::SubmitPolicy::AllowDeferred, &serial));
 
@@ -3882,11 +3882,13 @@ angle::Result ImageHelper::init(Context *context,
                                 gl::LevelIndex firstLevel,
                                 uint32_t mipLevels,
                                 uint32_t layerCount,
-                                bool isRobustResourceInitEnabled)
+                                bool isRobustResourceInitEnabled,
+                                bool hasProtectedContent)
 {
     return initExternal(context, textureType, extents, format, samples, usage,
                         kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, firstLevel,
-                        mipLevels, layerCount, isRobustResourceInitEnabled, nullptr);
+                        mipLevels, layerCount, isRobustResourceInitEnabled, nullptr,
+                        hasProtectedContent);
 }
 
 angle::Result ImageHelper::initMSAASwapchain(Context *context,
@@ -3903,7 +3905,7 @@ angle::Result ImageHelper::initMSAASwapchain(Context *context,
 {
     ANGLE_TRY(initExternal(context, textureType, extents, format, samples, usage,
                            kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, firstLevel,
-                           mipLevels, layerCount, isRobustResourceInitEnabled, nullptr));
+                           mipLevels, layerCount, isRobustResourceInitEnabled, nullptr, false));
     if (rotatedAspectRatio)
     {
         std::swap(mExtents.width, mExtents.height);
@@ -3925,7 +3927,8 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         uint32_t mipLevels,
                                         uint32_t layerCount,
                                         bool isRobustResourceInitEnabled,
-                                        bool *imageFormatListEnabledOut)
+                                        bool *imageFormatListEnabledOut,
+                                        bool hasProtectedContent)
 {
     ASSERT(!valid());
     ASSERT(!IsAnySubresourceContentDefined(mContentDefined));
@@ -3984,6 +3987,11 @@ angle::Result ImageHelper::initExternal(Context *context,
     if (imageFormatListEnabledOut)
     {
         *imageFormatListEnabledOut = imageFormatListEnabled;
+    }
+
+    if (hasProtectedContent)
+    {
+        additionalCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
     }
 
     VkImageCreateInfo imageInfo = {};
@@ -4069,7 +4077,9 @@ void ImageHelper::resetImageWeakReference()
     mRotatedAspectRatio = false;
 }
 
-angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSize size)
+angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
+                                                   bool hasProtectedContent,
+                                                   VkDeviceSize size)
 {
     const angle::Format &angleFormat = mFormat->actualImageFormat();
     bool isCompressedFormat          = angleFormat.isBlock;
@@ -4077,7 +4087,7 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSiz
     RendererVk *renderer = context->getRenderer();
 
     PrimaryCommandBuffer commandBuffer;
-    ANGLE_TRY(renderer->getCommandBufferOneOff(context, &commandBuffer));
+    ANGLE_TRY(renderer->getCommandBufferOneOff(context, hasProtectedContent, &commandBuffer));
 
     // Queue a DMA copy.
     barrierImpl(context, getAspectFlags(), ImageLayout::TransferDst, mCurrentQueueFamilyIndex,
@@ -4159,7 +4169,7 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSiz
     ANGLE_VK_TRY(context, commandBuffer.end());
 
     Serial serial;
-    ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer),
+    ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer), hasProtectedContent,
                                           egl::ContextPriority::Medium, nullptr,
                                           vk::SubmitPolicy::AllowDeferred, &serial));
 
@@ -4173,11 +4183,16 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSiz
 }
 
 angle::Result ImageHelper::initMemory(Context *context,
+                                      bool hasProtectedContent,
                                       const MemoryProperties &memoryProperties,
                                       VkMemoryPropertyFlags flags)
 {
     // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
     VkDeviceSize size;
+    if (hasProtectedContent)
+    {
+        flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
+    }
     ANGLE_TRY(AllocateImageMemory(context, flags, &flags, nullptr, &mImage, &mDeviceMemory, &size));
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
 
@@ -4187,7 +4202,7 @@ angle::Result ImageHelper::initMemory(Context *context,
         // Can't map the memory. Use a staging resource.
         if ((flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0)
         {
-            ANGLE_TRY(initializeNonZeroMemory(context, size));
+            ANGLE_TRY(initializeNonZeroMemory(context, hasProtectedContent, size));
         }
     }
 
@@ -4201,7 +4216,6 @@ angle::Result ImageHelper::initExternalMemory(
     const VkSamplerYcbcrConversionCreateInfo *samplerYcbcrConversionCreateInfo,
     const void *extraAllocationInfo,
     uint32_t currentQueueFamilyIndex,
-
     VkMemoryPropertyFlags flags)
 {
     // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
@@ -4412,6 +4426,7 @@ void ImageHelper::init2DWeakReference(Context *context,
 }
 
 angle::Result ImageHelper::init2DStaging(Context *context,
+                                         bool hasProtectedContent,
                                          const MemoryProperties &memoryProperties,
                                          const gl::Extents &glExtents,
                                          const Format &format,
@@ -4420,11 +4435,12 @@ angle::Result ImageHelper::init2DStaging(Context *context,
 {
     gl_vk::GetExtent(glExtents, &mExtents);
 
-    return initStaging(context, memoryProperties, VK_IMAGE_TYPE_2D, mExtents, format, 1, usage, 1,
-                       layerCount);
+    return initStaging(context, hasProtectedContent, memoryProperties, VK_IMAGE_TYPE_2D, mExtents,
+                       format, 1, usage, 1, layerCount);
 }
 
 angle::Result ImageHelper::initStaging(Context *context,
+                                       bool hasProtectedContent,
                                        const MemoryProperties &memoryProperties,
                                        VkImageType imageType,
                                        const VkExtent3D &extents,
@@ -4456,7 +4472,7 @@ angle::Result ImageHelper::initStaging(Context *context,
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.flags                 = 0;
+    imageInfo.flags                 = hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : 0;
     imageInfo.imageType             = mImageType;
     imageInfo.format                = format.actualImageVkFormat();
     imageInfo.extent                = mExtents;
@@ -4474,13 +4490,18 @@ angle::Result ImageHelper::initStaging(Context *context,
 
     // Allocate and bind device-local memory.
     VkMemoryPropertyFlags memoryPropertyFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(initMemory(context, memoryProperties, memoryPropertyFlags));
+    if (hasProtectedContent)
+    {
+        memoryPropertyFlags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
+    }
+    ANGLE_TRY(initMemory(context, hasProtectedContent, memoryProperties, memoryPropertyFlags));
 
     return angle::Result::Continue;
 }
 
 angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
     Context *context,
+    bool hasProtectedContent,
     const MemoryProperties &memoryProperties,
     gl::TextureType textureType,
     GLint samples,
@@ -4509,21 +4530,23 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
         (resolveImage.getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT
              ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
              : VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-    constexpr VkImageCreateFlags kMultisampledCreateFlags = 0;
+    const VkImageCreateFlags kMultisampledCreateFlags =
+        hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : 0;
 
-    ANGLE_TRY(initExternal(context, textureType, resolveImage.getExtents(),
-                           resolveImage.getFormat(), samples, kMultisampledUsageFlags,
-                           kMultisampledCreateFlags, ImageLayout::Undefined, nullptr,
-                           resolveImage.getFirstAllocatedLevel(), resolveImage.getLevelCount(),
-                           resolveImage.getLayerCount(), isRobustResourceInitEnabled, nullptr));
+    ANGLE_TRY(initExternal(
+        context, textureType, resolveImage.getExtents(), resolveImage.getFormat(), samples,
+        kMultisampledUsageFlags, kMultisampledCreateFlags, ImageLayout::Undefined, nullptr,
+        resolveImage.getFirstAllocatedLevel(), resolveImage.getLevelCount(),
+        resolveImage.getLayerCount(), isRobustResourceInitEnabled, nullptr, false));
 
     const VkMemoryPropertyFlags kMultisampledMemoryFlags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
-        (hasLazilyAllocatedMemory ? VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT : 0);
+        (hasLazilyAllocatedMemory ? VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT : 0) |
+        (hasProtectedContent ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0);
 
     // If this ever fails, this code should be modified to retry creating the image without the
     // TRANSIENT flag.
-    ANGLE_TRY(initMemory(context, memoryProperties, kMultisampledMemoryFlags));
+    ANGLE_TRY(initMemory(context, hasProtectedContent, memoryProperties, kMultisampledMemoryFlags));
 
     // Remove the emulated format clear from the multisampled image if any.  There is one already
     // staged on the resolve image if needed.
@@ -6688,8 +6711,9 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     if (isMultisampled)
     {
         ANGLE_TRY(resolvedImage.get().init2DStaging(
-            contextVk, renderer->getMemoryProperties(), gl::Extents(area.width, area.height, 1),
-            *mFormat, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
+            contextVk, contextVk->hasProtectedContent(), renderer->getMemoryProperties(),
+            gl::Extents(area.width, area.height, 1), *mFormat,
+            VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
         resolvedImage.get().retain(&contextVk->getResourceUseList());
     }
 
