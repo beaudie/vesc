@@ -191,7 +191,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
 
     int pixelFormat = 0;
     angle::android::GetANativeWindowBufferProperties(windowBuffer, &mSize.width, &mSize.height,
-                                                     &mSize.depth, &pixelFormat);
+                                                     &mSize.depth, &pixelFormat, &mUsage);
     GLenum internalFormat = angle::android::NativePixelFormatToGLInternalFormat(pixelFormat);
     mFormat               = gl::Format(internalFormat);
 
@@ -259,12 +259,17 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     bool robustInitEnabled = false;
 
     mImage->setTilingMode(imageTilingMode);
+    VkImageCreateFlags imageCreateFlags = vk::kVkImageCreateFlagsNone;
+    if (hasProtectedContent())
+    {
+        imageCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
+    }
     ANGLE_TRY(mImage->initExternal(
         displayVk, gl::TextureType::_2D, vkExtents,
         bufferFormatProperties.format == VK_FORMAT_UNDEFINED ? externalVkFormat : vkFormat, 1,
-        usage, vk::kVkImageCreateFlagsNone, vk::ImageLayout::ExternalPreInitialized,
+        usage, imageCreateFlags, vk::ImageLayout::ExternalPreInitialized,
         &externalMemoryImageCreateInfo, gl::LevelIndex(0), 1, 1, robustInitEnabled, nullptr,
-        false));
+        hasProtectedContent()));
 
     VkImportAndroidHardwareBufferInfoANDROID importHardwareBufferInfo = {};
     importHardwareBufferInfo.sType  = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
@@ -281,7 +286,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     externalMemoryRequirements.alignment            = 0;
     externalMemoryRequirements.memoryTypeBits       = bufferProperties.memoryTypeBits;
 
-    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
+                                  (hasProtectedContent() ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0);
     if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
     {
         // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
@@ -358,6 +364,11 @@ bool HardwareBufferImageSiblingVkAndroid::isTexturable(const gl::Context *contex
 bool HardwareBufferImageSiblingVkAndroid::isYUV() const
 {
     return mYUV;
+}
+
+bool HardwareBufferImageSiblingVkAndroid::hasProtectedContent() const
+{
+    return ((mUsage & AHARDWAREBUFFER_USAGE_PROTECTED_CONTENT) ? true : false);
 }
 
 gl::Extents HardwareBufferImageSiblingVkAndroid::getSize() const
