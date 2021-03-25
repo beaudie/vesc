@@ -72,6 +72,9 @@ bool IsValidMemoryObjectParamater(const Context *context, GLenum pname)
         case GL_DEDICATED_MEMORY_OBJECT_EXT:
             return true;
 
+        case GL_PROTECTED_MEMORY_OBJECT_EXT:
+            return true;
+
         default:
             return false;
     }
@@ -816,6 +819,13 @@ bool ValidateGetMemoryObjectParameterivEXT(const Context *context,
         return false;
     }
 
+    if ((pname == GL_PROTECTED_MEMORY_OBJECT_EXT) &&
+        (!context->getExtensions().protectedTexturesEXT))
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
     return true;
 }
 
@@ -884,6 +894,13 @@ bool ValidateMemoryObjectParameterivEXT(const Context *context,
     if (!IsValidMemoryObjectParamater(context, pname))
     {
         context->validationError(GL_INVALID_ENUM, kInvalidMemoryObjectParameter);
+        return false;
+    }
+
+    if ((pname == GL_PROTECTED_MEMORY_OBJECT_EXT) &&
+        (!context->getExtensions().protectedTexturesEXT))
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
 
