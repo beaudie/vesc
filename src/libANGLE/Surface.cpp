@@ -36,6 +36,7 @@ SurfaceState::SurfaceState(const egl::Config *configIn, const AttributeMap &attr
       directComposition(false)
 {
     directComposition = attributes.get(EGL_DIRECT_COMPOSITION_ANGLE, EGL_FALSE) == EGL_TRUE;
+    isProtectedMemory = static_cast<bool>(attributesIn.get(EGL_PROTECTED_CONTENT_EXT, EGL_FALSE));
 }
 
 SurfaceState::~SurfaceState()
@@ -625,6 +626,11 @@ void Surface::setTimestampsEnabled(bool enabled)
 bool Surface::isTimestampsEnabled() const
 {
     return mState.timestampsEnabled;
+}
+
+bool Surface::isProtectedMemory() const
+{
+    return mState.isProtectedMemory;
 }
 
 const SupportedCompositorTiming &Surface::getSupportedCompositorTimings() const

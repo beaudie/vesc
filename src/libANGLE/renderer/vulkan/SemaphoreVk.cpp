@@ -107,7 +107,8 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
         ANGLE_TRY(contextVk->syncExternalMemory());
     }
 
-    uint32_t rendererQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
+    uint32_t rendererQueueFamilyIndex =
+        contextVk->getRenderer()->getQueueFamilyIndex(contextVk->isProtectedMemory());
 
     if (!bufferBarriers.empty())
     {
@@ -161,7 +162,8 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    uint32_t rendererQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
+    uint32_t rendererQueueFamilyIndex =
+        contextVk->getRenderer()->getQueueFamilyIndex(contextVk->isProtectedMemory());
 
     if (!bufferBarriers.empty())
     {

@@ -1055,7 +1055,8 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         // Create a temporary image to stage the copy
         stagingImage = std::make_unique<vk::ImageHelper>();
 
-        ANGLE_TRY(stagingImage->init2DStaging(contextVk, renderer->getMemoryProperties(),
+        ANGLE_TRY(stagingImage->init2DStaging(contextVk, contextVk->isProtectedMemory(),
+                                              renderer->getMemoryProperties(),
                                               gl::Extents(sourceBox.width, sourceBox.height, 1),
                                               destFormat, kTransferStagingImageFlags, layerCount));
 
@@ -1208,7 +1209,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         // Create a temporary image to stage the copy
         stagingImage = std::make_unique<vk::ImageHelper>();
 
-        ANGLE_TRY(stagingImage->init2DStaging(contextVk, renderer->getMemoryProperties(),
+        ANGLE_TRY(stagingImage->init2DStaging(contextVk, contextVk->isProtectedMemory(),
+                                              renderer->getMemoryProperties(),
                                               gl::Extents(sourceBox.width, sourceBox.height, 1),
                                               destFormat, kDrawStagingImageFlags, layerCount));
 
@@ -1360,7 +1362,8 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     ANGLE_TRY(initImageViews(contextVk, format, image->getFormat().info->sized, 1, 1));
 
     // Transfer the image to this queue if needed
-    uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
+    uint32_t rendererQueueFamilyIndex =
+        renderer->getQueueFamilyIndex(contextVk->isProtectedMemory());
     if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
     {
         vk::ImageLayout newLayout = vk::ImageLayout::AllGraphicsShadersWrite;
@@ -2186,8 +2189,8 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
         // Create the implicit multisampled image.
         ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
-            contextVk, renderer->getMemoryProperties(), mState.getType(), samples, *mImage,
-            useRobustInit));
+            contextVk, contextVk->isProtectedMemory(), renderer->getMemoryProperties(),
+            mState.getType(), samples, *mImage, useRobustInit));
     }
 
     // Don't flush staged updates here. We'll handle that in FramebufferVk so it can defer clears.
@@ -2759,9 +2762,14 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     mRequiresMutableStorage = (mImageCreateFlags & VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT) != 0;
 
-    const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    if (contextVk->isProtectedMemory())
+    {
+        flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
+    }
 
-    ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
+    ANGLE_TRY(mImage->initMemory(contextVk, contextVk->isProtectedMemory(),
+                                 renderer->getMemoryProperties(), flags));
 
     const uint32_t viewLevelCount =
         mState.getImmutableFormat() ? getMipLevelCount(ImageMipLevels::EnabledLevels) : levelCount;

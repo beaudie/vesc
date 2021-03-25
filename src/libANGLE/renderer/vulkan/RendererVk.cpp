@@ -657,7 +657,6 @@ RendererVk::RendererVk()
       mDebugUtilsMessenger(VK_NULL_HANDLE),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
-      mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
       mMaxVertexAttribStride(0),
       mMinImportedHostPointerAlignment(1),
@@ -668,6 +667,11 @@ RendererVk::RendererVk()
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
+      mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mProtectedQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mGraphicsQueueFamily(),
+      mProtectedQueueFamily(),
+      mProtectedQueueFamilyPtr(nullptr),
       mCommandProcessor(this),
       mSupportedVulkanPipelineStageMask(0)
 {
@@ -874,8 +878,16 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     }
 
     vk::ExtensionNameList enabledInstanceExtensions;
-    enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
-    enabledInstanceExtensions.push_back(wsiExtension);
+
+    if (ExtensionFound(VK_KHR_SURFACE_EXTENSION_NAME, instanceExtensionNames))
+    {
+        enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+    }
+    if (ExtensionFound(wsiExtension, instanceExtensionNames))
+    {
+        enabledInstanceExtensions.push_back(wsiExtension);
+    }
+
     mEnableDebugUtils = mEnableValidationLayers &&
                         ExtensionFound(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, instanceExtensionNames);
 
@@ -896,6 +908,19 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         enabledInstanceExtensions.push_back(VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME);
         ANGLE_FEATURE_CONDITION(&mFeatures, supportsSwapchainColorspace, true);
+    }
+
+    if (ExtensionFound(VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME, instanceExtensionNames))
+    {
+        enabledInstanceExtensions.push_back(VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
+        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceCapabilities2Extension, true);
+    }
+
+    if (ExtensionFound(VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME,
+                       instanceExtensionNames))
+    {
+        enabledInstanceExtensions.push_back(VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME);
+        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceProtectedCapabilitiesExtension, true);
     }
 
     // Verify the required extensions are in the extension names set. Fail if not.
@@ -1048,40 +1073,30 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     vkGetPhysicalDeviceFeatures(mPhysicalDevice, &mPhysicalDeviceFeatures);
 
     // Ensure we can find a graphics queue family.
-    uint32_t queueCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueCount, nullptr);
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, nullptr);
 
-    ANGLE_VK_CHECK(displayVk, queueCount > 0, VK_ERROR_INITIALIZATION_FAILED);
+    ANGLE_VK_CHECK(displayVk, queueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
-    mQueueFamilyProperties.resize(queueCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueCount,
+    mQueueFamilyProperties.resize(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount,
                                              mQueueFamilyProperties.data());
 
-    size_t graphicsQueueFamilyCount            = false;
-    uint32_t firstGraphicsQueueFamily          = 0;
-    constexpr VkQueueFlags kGraphicsAndCompute = VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT;
-    for (uint32_t familyIndex = 0; familyIndex < queueCount; ++familyIndex)
-    {
-        const auto &queueInfo = mQueueFamilyProperties[familyIndex];
-        if ((queueInfo.queueFlags & kGraphicsAndCompute) == kGraphicsAndCompute)
-        {
-            ASSERT(queueInfo.queueCount > 0);
-            graphicsQueueFamilyCount++;
-            if (firstGraphicsQueueFamily == 0)
-            {
-                firstGraphicsQueueFamily = familyIndex;
-            }
-            break;
-        }
-    }
-
+    uint32_t graphicsQueueFamilyCount = 0;
+    uint32_t firstGraphicsQueueFamily = vk::QueueFamily::findIndex(
+        mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT),
+        &graphicsQueueFamilyCount);
     ANGLE_VK_CHECK(displayVk, graphicsQueueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
+
+    uint32_t firstProtectedGraphicsQueueFamily = vk::QueueFamily::findIndex(
+        mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_PROTECTED_BIT), nullptr);
 
     // If only one queue family, go ahead and initialize the device. If there is more than one
     // queue, we'll have to wait until we see a WindowSurface to know which supports present.
     if (graphicsQueueFamilyCount == 1)
     {
-        ANGLE_TRY(initializeDevice(displayVk, firstGraphicsQueueFamily));
+        ANGLE_TRY(initializeDevice(displayVk, firstGraphicsQueueFamily,
+                                   firstProtectedGraphicsQueueFamily));
     }
 
     VkDeviceSize preferredLargeHeapBlockSize = 0;
@@ -1176,6 +1191,13 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mSamplerYcbcrConversionFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES;
 
+    mProtectedMemoryFeatures       = {};
+    mProtectedMemoryFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_FEATURES;
+
+    mProtectedMemoryProperties = {};
+    mProtectedMemoryProperties.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_PROPERTIES;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -1265,6 +1287,13 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     // Query subgroup properties
     vk::AddToPNextChain(&deviceProperties, &mSubgroupProperties);
 
+    // Query protected memory features and properties
+    if (mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mProtectedMemoryFeatures);
+        vk::AddToPNextChain(&deviceProperties, &mProtectedMemoryProperties);
+    }
+
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
@@ -1305,9 +1334,13 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mMultisampledRenderToSingleSampledFeatures.pNext = nullptr;
     mDriverProperties.pNext                          = nullptr;
     mSamplerYcbcrConversionFeatures.pNext            = nullptr;
+    mProtectedMemoryFeatures.pNext                   = nullptr;
+    mProtectedMemoryProperties.pNext                 = nullptr;
 }
 
-angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
+angle::Result RendererVk::initializeDevice(DisplayVk *displayVk,
+                                           uint32_t graphicsQueueFamilyIndex,
+                                           uint32_t protectedQueueFamilyIndex)
 {
     uint32_t deviceLayerCount = 0;
     ANGLE_VK_TRY(displayVk,
@@ -1374,30 +1407,6 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     vk::ExtensionNameList enabledDeviceExtensions;
     enabledDeviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-
-    // Queues: map low, med, high priority to whatever is supported up to 3 queues
-    uint32_t queueCount = std::min(mQueueFamilyProperties[queueFamilyIndex].queueCount,
-                                   static_cast<uint32_t>(egl::ContextPriority::EnumCount));
-
-    constexpr float kVulkanQueuePriorityLow    = 0.0;
-    constexpr float kVulkanQueuePriorityMedium = 0.4;
-    constexpr float kVulkanQueuePriorityHigh   = 1.0;
-
-    // Index order: Low, High, Medium - so no need to rearrange according to count:
-    // If we have 1 queue - all same, if 2 - Low and High, if 3 Low, High and Medium.
-    constexpr uint32_t kQueueIndexLow    = 0;
-    constexpr uint32_t kQueueIndexHigh   = 1;
-    constexpr uint32_t kQueueIndexMedium = 2;
-
-    constexpr float queuePriorities[static_cast<uint32_t>(egl::ContextPriority::EnumCount)] = {
-        kVulkanQueuePriorityMedium, kVulkanQueuePriorityHigh, kVulkanQueuePriorityLow};
-
-    VkDeviceQueueCreateInfo queueCreateInfo = {};
-    queueCreateInfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.flags                   = 0;
-    queueCreateInfo.queueFamilyIndex        = queueFamilyIndex;
-    queueCreateInfo.queueCount              = queueCount;
-    queueCreateInfo.pQueuePriorities        = queuePriorities;
 
     // Query extensions and their features.
     queryDeviceExtensionFeatures(deviceExtensionNames);
@@ -1602,6 +1611,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
     }
+    // pNext chain VkPhysicalDeviceProtectedMemoryFeatures to enable ProtectedMemory
+    if (mProtectedMemoryFeatures.protectedMemory)
+    {
+        mProtectedMemoryFeatures.pNext = enabledFeatures.pNext;
+        enabledFeatures.pNext          = &mProtectedMemoryFeatures;
+    }
 
     // Setup device initialization struct
     VkDeviceCreateInfo createInfo = {};
@@ -1691,18 +1706,74 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         vk::AddToPNextChain(&createInfo, &mShaderFloat16Int8Features);
     }
 
+    mCurrentQueueFamilyIndex   = graphicsQueueFamilyIndex;
+    mProtectedQueueFamilyIndex = protectedQueueFamilyIndex;
+
+    // Initialize QueueFamilies
+    mGraphicsQueueFamily.initialize(&mQueueFamilyProperties[graphicsQueueFamilyIndex],
+                                    graphicsQueueFamilyIndex);
+    mProtectedQueueFamilyPtr = &mProtectedQueueFamily;
+    if (protectedQueueFamilyIndex == graphicsQueueFamilyIndex)
+    {
+        mProtectedQueueFamilyPtr = &mGraphicsQueueFamily;
+    }
+    else if (protectedQueueFamilyIndex != vk::QueueFamily::kInvalidIndex)
+    {
+        mProtectedQueueFamily.initialize(&mQueueFamilyProperties[protectedQueueFamilyIndex],
+                                         protectedQueueFamilyIndex);
+    }
+
+    uint32_t queueCount = std::min(mGraphicsQueueFamily.getActualQueueCount(),
+                                   static_cast<uint32_t>(egl::ContextPriority::EnumCount));
+
+    uint32_t queueCreateInfoCount              = 1;
+    VkDeviceQueueCreateInfo queueCreateInfo[2] = {};
+    queueCreateInfo[0].sType                   = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queueCreateInfo[0].flags =
+        mGraphicsQueueFamily.isProtected() ? VK_DEVICE_QUEUE_CREATE_PROTECTED_BIT : 0;
+    queueCreateInfo[0].queueFamilyIndex = graphicsQueueFamilyIndex;
+    queueCreateInfo[0].queueCount       = queueCount;
+    queueCreateInfo[0].pQueuePriorities = vk::QueueFamily::kQueuePriorities;
+
+    uint32_t protectedQueueCount = 0;
+    if (mProtectedQueueFamily.isValid())
+    {
+        protectedQueueCount = std::min(mProtectedQueueFamily.getActualQueueCount(),
+                                       static_cast<uint32_t>(egl::ContextPriority::EnumCount));
+
+        if (protectedQueueCount > 0)
+        {
+            queueCreateInfo[1].sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+            queueCreateInfo[1].flags            = VK_DEVICE_QUEUE_CREATE_PROTECTED_BIT;
+            queueCreateInfo[1].queueFamilyIndex = protectedQueueFamilyIndex;
+            queueCreateInfo[1].queueCount       = protectedQueueCount;
+            queueCreateInfo[1].pQueuePriorities = vk::QueueFamily::kQueuePriorities;
+            queueCreateInfoCount                = 2;
+        }
+    }
+
+    // Create Device
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     createInfo.flags                 = 0;
-    createInfo.queueCreateInfoCount  = 1;
-    createInfo.pQueueCreateInfos     = &queueCreateInfo;
+    createInfo.queueCreateInfoCount  = queueCreateInfoCount;
+    createInfo.pQueueCreateInfos     = queueCreateInfo;
     createInfo.enabledLayerCount     = static_cast<uint32_t>(enabledDeviceLayerNames.size());
     createInfo.ppEnabledLayerNames   = enabledDeviceLayerNames.data();
     createInfo.enabledExtensionCount = static_cast<uint32_t>(enabledDeviceExtensions.size());
     createInfo.ppEnabledExtensionNames =
         enabledDeviceExtensions.empty() ? nullptr : enabledDeviceExtensions.data();
-    // Enable core features without assuming VkPhysicalDeviceFeatures2KHR is accepted in the pNext
-    // chain of VkDeviceCreateInfo.
-    createInfo.pEnabledFeatures = &enabledFeatures.features;
+
+    if (mProtectedMemoryFeatures.protectedMemory)
+    {
+        // Need this for protected memory, assume VkPhysicalDeviceFeatures2KHR
+        createInfo.pNext = &enabledFeatures;
+    }
+    else
+    {
+        // Enable core features without assuming VkPhysicalDeviceFeatures2KHR is accepted in the
+        // pNext chain of VkDeviceCreateInfo.
+        createInfo.pEnabledFeatures = &enabledFeatures.features;
+    }
 
     ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
 #if defined(ANGLE_SHARED_LIBVULKAN)
@@ -1710,42 +1781,21 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     volkLoadDevice(mDevice);
 #endif  // defined(ANGLE_SHARED_LIBVULKAN)
 
-    mCurrentQueueFamilyIndex = queueFamilyIndex;
+    mGraphicsQueueFamily.makeQueues(mDevice);
 
-    // When only 1 Queue, use same for all, Low index. Identify as Medium, since it's default.
-    vk::DeviceQueueMap queueMap;
-
-    VkQueue queue;
-    vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexLow, &queue);
-    queueMap[egl::ContextPriority::Low]       = queue;
-    queueMap[egl::ContextPriority::Medium]    = queue;
-    queueMap[egl::ContextPriority::High]      = queue;
-    mPriorities[egl::ContextPriority::Low]    = egl::ContextPriority::Medium;
-    mPriorities[egl::ContextPriority::Medium] = egl::ContextPriority::Medium;
-    mPriorities[egl::ContextPriority::High]   = egl::ContextPriority::Medium;
-
-    // If at least 2 queues, High has its own queue
-    if (queueCount > 1)
+    if (mProtectedQueueFamily.isValid())
     {
-        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexHigh,
-                         &queueMap[egl::ContextPriority::High]);
-        mPriorities[egl::ContextPriority::High] = egl::ContextPriority::High;
-    }
-    // If at least 3 queues, Medium has its own queue. Adjust Low priority.
-    if (queueCount > 2)
-    {
-        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexMedium,
-                         &queueMap[egl::ContextPriority::Medium]);
-        mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Low;
+        mProtectedQueueFamily.makeQueues(mDevice);
     }
 
     if (mFeatures.asyncCommandQueue.enabled)
     {
-        ANGLE_TRY(mCommandProcessor.init(displayVk, queueMap));
+        ANGLE_TRY(
+            mCommandProcessor.init(displayVk, &mGraphicsQueueFamily, mProtectedQueueFamilyPtr));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.init(displayVk, queueMap));
+        ANGLE_TRY(mCommandQueue.init(displayVk, &mGraphicsQueueFamily, mProtectedQueueFamilyPtr));
     }
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
@@ -1812,26 +1862,27 @@ angle::Result RendererVk::selectPresentQueueForSurface(DisplayVk *displayVk,
     // TODO(jmadill): Handle the re-creation case if necessary.
     if (mDevice != VK_NULL_HANDLE)
     {
-        ASSERT(mCurrentQueueFamilyIndex != std::numeric_limits<uint32_t>::max());
+        ASSERT(mGraphicsQueueFamily.isValid());
 
         // Check if the current device supports present on this surface.
-        VkBool32 supportsPresent = VK_FALSE;
+        VkBool32 supportsPresent         = VK_FALSE;
+        uint32_t currentQueueFamilyIndex = mGraphicsQueueFamily.getIndex();
         ANGLE_VK_TRY(displayVk,
-                     vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mCurrentQueueFamilyIndex,
+                     vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, currentQueueFamilyIndex,
                                                           surface, &supportsPresent));
 
         if (supportsPresent == VK_TRUE)
         {
-            *presentQueueOut = mCurrentQueueFamilyIndex;
+            *presentQueueOut = currentQueueFamilyIndex;
             return angle::Result::Continue;
         }
     }
 
     // Find a graphics and present queue.
     Optional<uint32_t> newPresentQueue;
-    uint32_t queueCount = static_cast<uint32_t>(mQueueFamilyProperties.size());
+    uint32_t queueFamilyCount = static_cast<uint32_t>(mQueueFamilyProperties.size());
     constexpr VkQueueFlags kGraphicsAndCompute = VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT;
-    for (uint32_t queueIndex = 0; queueIndex < queueCount; ++queueIndex)
+    for (uint32_t queueIndex = 0; queueIndex < queueFamilyCount; ++queueIndex)
     {
         const auto &queueInfo = mQueueFamilyProperties[queueIndex];
         if ((queueInfo.queueFlags & kGraphicsAndCompute) == kGraphicsAndCompute)
@@ -1849,7 +1900,16 @@ angle::Result RendererVk::selectPresentQueueForSurface(DisplayVk *displayVk,
     }
 
     ANGLE_VK_CHECK(displayVk, newPresentQueue.valid(), VK_ERROR_INITIALIZATION_FAILED);
-    ANGLE_TRY(initializeDevice(displayVk, newPresentQueue.value()));
+
+    // If new present queue family index supports protected then update protected queue Family
+    // index.
+    uint32_t protectedQueueFamilyIndex = mProtectedQueueFamily.getIndex();
+    if (mQueueFamilyProperties[newPresentQueue.value()].queueFlags & VK_QUEUE_PROTECTED_BIT)
+    {
+        protectedQueueFamilyIndex = newPresentQueue.value();
+    }
+
+    ANGLE_TRY(initializeDevice(displayVk, newPresentQueue.value(), protectedQueueFamilyIndex));
 
     *presentQueueOut = newPresentQueue.value();
     return angle::Result::Continue;
@@ -2087,6 +2147,19 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         ASSERT(mProvokingVertexFeatures.sType ==
                VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT);
         ANGLE_FEATURE_CONDITION(&mFeatures, provokingVertex, true);
+    }
+
+    // http://anglebug.com/3965
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsProtectedMemory,
+                            (mProtectedMemoryFeatures.protectedMemory == VK_TRUE));
+
+    /* Note: Protected Swapchains is not determined until we have a VkSurface to query.
+     * So here vendors should indicate support so that protected_content extension
+     * is enabled.
+     */
+    if (IsAndroid())
+    {
+        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceProtectedSwapchains, true);
     }
 
     // http://anglebug.com/2838
@@ -2581,6 +2654,7 @@ void RendererVk::outputVmaStatString()
 
 angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             vk::PrimaryCommandBuffer &&primary,
+                                            bool isProtectedMemory,
                                             egl::ContextPriority priority,
                                             const vk::Fence *fence,
                                             vk::SubmitPolicy submitPolicy,
@@ -2594,14 +2668,16 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     if (mFeatures.asyncCommandQueue.enabled)
     {
         submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
-        ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(context, priority, primary.getHandle(), fence,
-                                                      submitPolicy, submitQueueSerial));
+        ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(context, isProtectedMemory, priority,
+                                                      primary.getHandle(), fence, submitPolicy,
+                                                      submitQueueSerial));
     }
     else
     {
         submitQueueSerial = mCommandQueue.reserveSubmitSerial();
-        ANGLE_TRY(mCommandQueue.queueSubmitOneOff(context, priority, primary.getHandle(), fence,
-                                                  submitPolicy, submitQueueSerial));
+        ANGLE_TRY(mCommandQueue.queueSubmitOneOff(context, isProtectedMemory, priority,
+                                                  primary.getHandle(), fence, submitPolicy,
+                                                  submitQueueSerial));
     }
 
     *serialOut = submitQueueSerial;
@@ -2765,13 +2841,15 @@ void RendererVk::reloadVolkIfNeeded() const
 }
 
 angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
+                                                 bool isProtectedMemory,
                                                  vk::PrimaryCommandBuffer *commandBufferOut)
 {
     if (!mOneOffCommandPool.valid())
     {
         VkCommandPoolCreateInfo createInfo = {};
         createInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        createInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        createInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT |
+                           (isProtectedMemory ? VK_COMMAND_POOL_CREATE_PROTECTED_BIT : 0);
         ANGLE_VK_TRY(context, mOneOffCommandPool.init(mDevice, createInfo));
     }
 
@@ -2803,6 +2881,7 @@ angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
 }
 
 angle::Result RendererVk::submitFrame(vk::Context *context,
+                                      bool isProtectedMemory,
                                       egl::ContextPriority contextPriority,
                                       std::vector<VkSemaphore> &&waitSemaphores,
                                       std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
@@ -2820,16 +2899,16 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
         submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
 
         ANGLE_TRY(mCommandProcessor.submitFrame(
-            context, contextPriority, waitSemaphores, waitSemaphoreStageMasks, signalSemaphore,
-            std::move(currentGarbage), commandPool, submitQueueSerial));
+            context, isProtectedMemory, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
+            signalSemaphore, std::move(currentGarbage), commandPool, submitQueueSerial));
     }
     else
     {
         submitQueueSerial = mCommandQueue.reserveSubmitSerial();
 
         ANGLE_TRY(mCommandQueue.submitFrame(
-            context, contextPriority, waitSemaphores, waitSemaphoreStageMasks, signalSemaphore,
-            std::move(currentGarbage), commandPool, submitQueueSerial));
+            context, isProtectedMemory, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
+            signalSemaphore, std::move(currentGarbage), commandPool, submitQueueSerial));
     }
 
     waitSemaphores.clear();
@@ -2955,6 +3034,7 @@ angle::Result RendererVk::flushOutsideRPCommands(vk::Context *context,
 }
 
 VkResult RendererVk::queuePresent(vk::Context *context,
+                                  bool isProtectedMemory,
                                   egl::ContextPriority priority,
                                   const VkPresentInfoKHR &presentInfo)
 {
@@ -2963,11 +3043,11 @@ VkResult RendererVk::queuePresent(vk::Context *context,
     VkResult result = VK_SUCCESS;
     if (mFeatures.asyncCommandQueue.enabled)
     {
-        result = mCommandProcessor.queuePresent(priority, presentInfo);
+        result = mCommandProcessor.queuePresent(isProtectedMemory, priority, presentInfo);
     }
     else
     {
-        result = mCommandQueue.queuePresent(priority, presentInfo);
+        result = mCommandQueue.queuePresent(isProtectedMemory, priority, presentInfo);
     }
 
     if (getFeatures().logMemoryReportStats.enabled)

@@ -293,10 +293,12 @@ State::State(const State *shareContextState,
              bool clientArraysEnabled,
              bool robustResourceInit,
              bool programBinaryCacheEnabled,
-             EGLenum contextPriority)
+             EGLenum contextPriority,
+             bool isProtectedMemory)
     : mID({gIDCounter++}),
       mClientType(clientType),
       mContextPriority(contextPriority),
+      mIsProtectedMemory(isProtectedMemory),
       mClientVersion(clientVersion),
       mShareGroup(shareGroup),
       mBufferManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mBufferManager)),

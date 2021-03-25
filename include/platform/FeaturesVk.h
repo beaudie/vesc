@@ -493,6 +493,27 @@ struct FeaturesVk : FeatureSetBase
         "forceFragmentShaderPrecisionHighpToMediump", FeatureCategory::VulkanWorkarounds,
         "Forces highp precision in fragment shader to mediump.", &members,
         "https://issuetracker.google.com/184850002"};
+
+    // Whether the VkDevice can support Protected Memory.
+    Feature supportsProtectedMemory = {"supports_protected_memory", FeatureCategory::VulkanFeatures,
+                                       "VkDevice supports protected memory", &members,
+                                       "http://anglebug.com/3965"};
+
+    // Whether the VkDevice supports the VK_KHR_get_surface_capabilities2 extension.
+    Feature supportsSurfaceCapabilities2Extension = {
+        "supportsSurfaceCapabilities2Extension", FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_get_surface_capabilities2 extension", &members};
+
+    // Whether the VkDevice supports the VK_KHR_surface_protected_capabilities extension.
+    Feature supportsSurfaceProtectedCapabilitiesExtension = {
+        "supportsSurfaceProtectedCapabilitiesExtension", FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_surface_protected_capabilities extension", &members};
+
+    // Whether the VkSurface supports protected swapchains from
+    // supportsSurfaceProtectedCapabilitiesExtension.
+    Feature supportsSurfaceProtectedSwapchains = {
+        "supportsSurfaceProtectedSwapchains", FeatureCategory::VulkanFeatures,
+        "VkSurface supportsProtected for protected swapchains", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
