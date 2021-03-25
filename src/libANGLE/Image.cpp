@@ -135,6 +135,11 @@ bool ImageSibling::isYUV() const
     return mTargetOf.get() && mTargetOf->isYUV();
 }
 
+bool ImageSibling::hasProtectedContent() const
+{
+    return mTargetOf.get() && mTargetOf->hasProtectedContent();
+}
+
 void ImageSibling::notifySiblings(angle::SubjectMessage message)
 {
     if (mTargetOf.get())
@@ -203,6 +208,11 @@ bool ExternalImageSibling::isYUV() const
     return mImplementation->isYUV();
 }
 
+bool ExternalImageSibling::hasProtectedContent() const
+{
+    return mImplementation->hasProtectedContent();
+}
+
 void ExternalImageSibling::onAttach(const gl::Context *context, rx::Serial framebufferSerial) {}
 
 void ExternalImageSibling::onDetach(const gl::Context *context, rx::Serial framebufferSerial) {}
@@ -249,7 +259,8 @@ ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap 
       samples(),
       sourceType(target),
       colorspace(
-          static_cast<EGLenum>(attribs.get(EGL_GL_COLORSPACE, EGL_GL_COLORSPACE_DEFAULT_EXT)))
+          static_cast<EGLenum>(attribs.get(EGL_GL_COLORSPACE, EGL_GL_COLORSPACE_DEFAULT_EXT))),
+      hasProtectedContent(static_cast<bool>(attribs.get(EGL_PROTECTED_CONTENT_EXT, EGL_FALSE)))
 {}
 
 ImageState::~ImageState() {}
@@ -267,6 +278,7 @@ Image::Image(rx::EGLImplFactory *factory,
     ASSERT(buffer != nullptr);
 
     mState.source->addImageSource(this);
+    mState.hasProtectedContent = buffer->hasProtectedContent();
 }
 
 void Image::onDestroy(const Display *display)
@@ -414,6 +426,11 @@ size_t Image::getSamples() const
     return mState.samples;
 }
 
+bool Image::hasProtectedContent() const
+{
+    return mState.hasProtectedContent;
+}
+
 rx::ImageImpl *Image::getImplementation() const
 {
     return mImplementation;
@@ -421,6 +438,12 @@ rx::ImageImpl *Image::getImplementation() const
 
 Error Image::initialize(const Display *display)
 {
+    if (hasProtectedContent() != mState.source->hasProtectedContent())
+    {
+        // Check that protected state is same between native buffer and new image.
+        return egl::EglBadAttribute();
+    }
+
     if (IsExternalImageTarget(mState.sourceType))
     {
         ExternalImageSibling *externalSibling = rx::GetAs<ExternalImageSibling>(mState.source);
