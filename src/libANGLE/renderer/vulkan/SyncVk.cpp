@@ -170,7 +170,8 @@ angle::Result SyncHelper::clientWait(Context *context,
     ASSERT(mUse.getSerial().valid());
 
     VkResult status = VK_SUCCESS;
-    ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+    ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, contextVk->hasProtectedContent(),
+                                                     mUse.getSerial(), timeout, &status));
 
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
@@ -277,9 +278,9 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // obeys copy semantics. This means that the fence must already be signaled or the work to
     // signal it is in the graphics pipeline at the time we export the fd. Thus we need to
     // EnsureSubmitted here.
-    ANGLE_TRY(renderer->queueSubmitOneOff(contextVk, vk::PrimaryCommandBuffer(),
-                                          contextVk->getPriority(), &fence.get(),
-                                          vk::SubmitPolicy::EnsureSubmitted, &serialOut));
+    ANGLE_TRY(renderer->queueSubmitOneOff(
+        contextVk, vk::PrimaryCommandBuffer(), contextVk->hasProtectedContent(),
+        contextVk->getPriority(), &fence.get(), vk::SubmitPolicy::EnsureSubmitted, &serialOut));
 
     VkFenceGetFdInfoKHR fenceGetFdInfo = {};
     fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
@@ -325,8 +326,8 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     if (mUse.valid())
     {
         // We have a valid serial to wait on
-        ANGLE_TRY(
-            renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+        ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, contextVk->hasProtectedContent(),
+                                                         mUse.getSerial(), timeout, &status));
     }
     else
     {
