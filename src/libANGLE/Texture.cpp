@@ -144,6 +144,7 @@ TextureState::TextureState(TextureType type)
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
+      mIsProtectedMemory(false),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) * (type == TextureType::CubeMap ? 6 : 1)),
       mCropRect(0, 0, 0, 0),
       mGenerateMipmapHint(GL_FALSE),
@@ -1800,7 +1801,8 @@ angle::Result Texture::setEGLImageTarget(Context *context,
     Extents size(static_cast<int>(imageTarget->getWidth()),
                  static_cast<int>(imageTarget->getHeight()), 1);
 
-    auto initState = imageTarget->sourceInitState();
+    auto initState            = imageTarget->sourceInitState();
+    mState.mIsProtectedMemory = imageTarget->isProtectedMemory();
 
     mState.clearImageDescs();
     mState.setImageDesc(NonCubeTextureTypeToTarget(type), 0,
