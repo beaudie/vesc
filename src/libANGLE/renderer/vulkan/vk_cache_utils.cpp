@@ -7,8 +7,8 @@
 //    Contains the classes for the Pipeline State Object cache as well as the RenderPass cache.
 //    Also contains the structures for the packed descriptions for the RenderPass and Pipeline.
 //
-
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include <iostream>
 
 #include "common/aligned_memory.h"
 #include "common/vulkan/vk_google_filtering_precision.h"
@@ -1920,11 +1920,14 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     // VK_LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT and if rasterization is enabled, then the
     // alphaToCoverageEnable, alphaToOneEnable, and sampleShadingEnable members of pMultisampleState
     // must all be VK_FALSE.
+    std::cout << "contextVk->getFeatures().bresenhamLineRasterization.enabled "
+              << contextVk->getFeatures().bresenhamLineRasterization.enabled << std::endl;
     if (rasterAndMS.bits.rasterizationSamples <= 1 &&
         !rasterAndMS.bits.rasterizationDiscardEnable && !rasterAndMS.bits.alphaToCoverageEnable &&
         !rasterAndMS.bits.alphaToOneEnable && !rasterAndMS.bits.sampleShadingEnable &&
         contextVk->getFeatures().bresenhamLineRasterization.enabled)
     {
+        std::cout << "Link rasterLineState MODE_BRESENHAM : " << &rasterLineState << std::endl;
         rasterLineState.lineRasterizationMode = VK_LINE_RASTERIZATION_MODE_BRESENHAM_EXT;
         *pNextPtr                             = &rasterLineState;
         pNextPtr                              = &rasterLineState.pNext;
@@ -1934,8 +1937,12 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     provokingVertexState.sType =
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT;
     // Always set provoking vertex mode to last if available.
+    std::cout << "contextVk->getFeatures().provokingVertex.enabled "
+              << contextVk->getFeatures().provokingVertex.enabled << std::endl;
     if (contextVk->getFeatures().provokingVertex.enabled)
     {
+        std::cout << "Link provokingVertextState  MODE_LAST_VERTEX : " << &provokingVertexState
+                  << std::endl;
         provokingVertexState.provokingVertexMode = VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT;
         *pNextPtr                                = &provokingVertexState;
         pNextPtr                                 = &provokingVertexState.pNext;
@@ -1948,8 +1955,11 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     VkPipelineRasterizationDepthClipStateCreateInfoEXT depthClipState = {};
     depthClipState.sType =
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_DEPTH_CLIP_STATE_CREATE_INFO_EXT;
+    std::cout << "contextVk->getFeatures().depthClamping.enabled "
+              << contextVk->getFeatures().depthClamping.enabled << std::endl;
     if (contextVk->getFeatures().depthClamping.enabled)
     {
+        std::cout << "Link depthClipState  depthClipEnable TRUE : " << &depthClipState << std::endl;
         depthClipState.depthClipEnable = VK_TRUE;
         *pNextPtr                      = &depthClipState;
         pNextPtr                       = &depthClipState.pNext;
@@ -1957,13 +1967,42 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
 
     VkPipelineRasterizationStateStreamCreateInfoEXT rasterStreamState = {};
     rasterStreamState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT;
+    std::cout << "contextVk->getFeatures().supportsTransformFeedbackExtension.enabled "
+              << contextVk->getFeatures().supportsTransformFeedbackExtension.enabled << std::endl;
     if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
     {
+        std::cout << "Link rasterStreamState  rasterizationStream 0 : " << &rasterStreamState
+                  << std::endl;
         rasterStreamState.rasterizationStream = 0;
         *pNextPtr                             = &rasterStreamState;
         pNextPtr                              = &rasterStreamState.pNext;
     }
 
+    for (VkBaseInStructure *ptr = (VkBaseInStructure *)rasterState.pNext; ptr != nullptr;
+         ptr                    = (VkBaseInStructure *)ptr->pNext)
+    {
+        const char *sType = "Unknown";
+        switch (ptr->sType)
+        {
+            case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT:
+                sType = "RAST_LINE_STATE";
+                break;
+            case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT:
+                sType = "PROVOKING_VERTEX_STATE";
+                break;
+            case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_DEPTH_CLIP_STATE_CREATE_INFO_EXT:
+                sType = "DEPTH_CLIP_STATE";
+                break;
+            case VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT:
+                sType = "RAST_STREAM_STATE";
+                break;
+            default:
+                break;
+        }
+        std::cout << "Link: " << ptr << " sType: " << sType << " Code: " << ptr->sType << std::endl;
+    }
+
+    std::cout << "Start multisampleState " << std::endl;
     // Multisample state.
     multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampleState.flags = 0;
@@ -1977,6 +2016,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         static_cast<VkBool32>(rasterAndMS.bits.alphaToCoverageEnable);
     multisampleState.alphaToOneEnable = static_cast<VkBool32>(rasterAndMS.bits.alphaToOneEnable);
 
+    std::cout << "Start depthStencilState " << std::endl;
     // Depth/stencil state.
     depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     depthStencilState.flags = 0;
@@ -2000,6 +2040,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     const PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend =
         mInputAssemblyAndColorBlendStateInfo;
 
+    std::cout << "Start blendState " << std::endl;
     blendState.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     blendState.flags           = 0;
     blendState.logicOpEnable   = static_cast<VkBool32>(inputAndBlend.logic.opEnable);
@@ -2055,6 +2096,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     dynamicStateList.push_back(VK_DYNAMIC_STATE_VIEWPORT);
     dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
 
+    std::cout << "Start dynamicState " << std::endl;
     VkPipelineDynamicStateCreateInfo dynamicState = {};
     dynamicState.sType             = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
     dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStateList.size());
@@ -2075,6 +2117,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             static_cast<uint32_t>(inputAndBlend.primitive.patchVertices);
     }
 
+    std::cout << "Start createInfo " << std::endl;
     createInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     createInfo.flags               = 0;
     createInfo.stageCount          = static_cast<uint32_t>(shaderStages.size());
@@ -2094,8 +2137,16 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     createInfo.basePipelineHandle  = VK_NULL_HANDLE;
     createInfo.basePipelineIndex   = 0;
 
-    ANGLE_VK_TRY(contextVk,
-                 pipelineOut->initGraphics(contextVk->getDevice(), createInfo, pipelineCacheVk));
+    std::cout << "Calling initGraphics " << std::endl;
+    VkResult result =
+        pipelineOut->initGraphics(contextVk->getDevice(), createInfo, pipelineCacheVk);
+    std::cout << "vkCreateGraphicsPipelines Result: " << result << std::endl;
+    std::cout << "returned from initGraphics " << std::endl;
+    ANGLE_VK_TRY(contextVk, result);
+
+    //    ANGLE_VK_TRY(contextVk,
+    //                 pipelineOut->initGraphics(contextVk->getDevice(), createInfo,
+    //                 pipelineCacheVk));
     return angle::Result::Continue;
 }
 
