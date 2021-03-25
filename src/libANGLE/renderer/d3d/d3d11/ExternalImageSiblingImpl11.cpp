@@ -81,6 +81,11 @@ bool ExternalImageSiblingImpl11::isYUV() const
     return mYUV;
 }
 
+bool ExternalImageSiblingImpl11::isProtectedMemory() const
+{
+    return mIsProtectedMemory;
+}
+
 gl::Extents ExternalImageSiblingImpl11::getSize() const
 {
     return gl::Extents(mWidth, mHeight, 1);
