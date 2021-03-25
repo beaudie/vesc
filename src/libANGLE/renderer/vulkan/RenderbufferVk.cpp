@@ -103,12 +103,19 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
     bool robustInit = contextVk->isRobustResourceInitEnabled();
 
     VkExtent3D extents = {static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1u};
+    VkImageCreateFlags imageFlags = contextVk->hasProtectedContent() ? VK_IMAGE_CREATE_PROTECTED_BIT
+                                                                     : vk::kVkImageCreateFlagsNone;
     ANGLE_TRY(mImage->initExternal(contextVk, gl::TextureType::_2D, extents, format, imageSamples,
-                                   usage, vk::kVkImageCreateFlagsNone, vk::ImageLayout::Undefined,
-                                   nullptr, gl::LevelIndex(0), 1, 1, robustInit, nullptr));
+                                   usage, imageFlags, vk::ImageLayout::Undefined, nullptr,
+                                   gl::LevelIndex(0), 1, 1, robustInit, nullptr));
 
     VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
+    if (contextVk->hasProtectedContent())
+    {
+        flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
+    }
+    ANGLE_TRY(mImage->initMemory(contextVk, contextVk->hasProtectedContent(),
+                                 renderer->getMemoryProperties(), flags));
 
     // If multisampled render to texture, an implicit multisampled image is created which is used as
     // the color or depth/stencil attachment.  At the end of the render pass, this image is
@@ -118,8 +125,8 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         mMultisampledImageViews.init(renderer);
 
         ANGLE_TRY(mMultisampledImage.initImplicitMultisampledRenderToTexture(
-            contextVk, renderer->getMemoryProperties(), gl::TextureType::_2D, samples, *mImage,
-            robustInit));
+            contextVk, contextVk->hasProtectedContent(), renderer->getMemoryProperties(),
+            gl::TextureType::_2D, samples, *mImage, robustInit));
 
         mRenderTarget.init(&mMultisampledImage, &mMultisampledImageViews, mImage, &mImageViews,
                            gl::LevelIndex(0), 0, 1, RenderTargetTransience::MultisampledTransient);
