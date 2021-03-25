@@ -108,7 +108,7 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
                                    nullptr, gl::LevelIndex(0), 1, 1, robustInit, nullptr));
 
     VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
+    ANGLE_TRY(mImage->initMemory(contextVk, false, renderer->getMemoryProperties(), flags));
 
     // If multisampled render to texture, an implicit multisampled image is created which is used as
     // the color or depth/stencil attachment.  At the end of the render pass, this image is
@@ -118,8 +118,8 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         mMultisampledImageViews.init(renderer);
 
         ANGLE_TRY(mMultisampledImage.initImplicitMultisampledRenderToTexture(
-            contextVk, renderer->getMemoryProperties(), gl::TextureType::_2D, samples, *mImage,
-            robustInit));
+            contextVk, false, renderer->getMemoryProperties(), gl::TextureType::_2D, samples,
+            *mImage, robustInit));
 
         mRenderTarget.init(&mMultisampledImage, &mMultisampledImageViews, mImage, &mImageViews,
                            gl::LevelIndex(0), 0, 1, RenderTargetTransience::MultisampledTransient);
