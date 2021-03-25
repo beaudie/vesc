@@ -35,7 +35,8 @@ SurfaceState::SurfaceState(const egl::Config *configIn, const AttributeMap &attr
       timestampsEnabled(false),
       directComposition(false)
 {
-    directComposition = attributes.get(EGL_DIRECT_COMPOSITION_ANGLE, EGL_FALSE) == EGL_TRUE;
+    directComposition   = attributes.get(EGL_DIRECT_COMPOSITION_ANGLE, EGL_FALSE) == EGL_TRUE;
+    hasProtectedContent = static_cast<bool>(attributesIn.get(EGL_PROTECTED_CONTENT_EXT, EGL_FALSE));
 }
 
 SurfaceState::~SurfaceState()
@@ -625,6 +626,11 @@ void Surface::setTimestampsEnabled(bool enabled)
 bool Surface::isTimestampsEnabled() const
 {
     return mState.timestampsEnabled;
+}
+
+bool Surface::hasProtectedContent() const
+{
+    return mState.hasProtectedContent;
 }
 
 const SupportedCompositorTiming &Surface::getSupportedCompositorTimings() const
