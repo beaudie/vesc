@@ -2731,6 +2731,15 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     gl_vk::GetExtentsAndLayerCount(mState.getType(), firstLevelExtents, &vkExtent, &layerCount);
     GLint samples = mState.getBaseLevelDesc().samples ? mState.getBaseLevelDesc().samples : 1;
 
+    if (mState.hasProtectedContent())
+    {
+        mImageCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
+    }
+    else
+    {
+        mImageCreateFlags &= ~VK_IMAGE_CREATE_PROTECTED_BIT;
+    }
+
     bool imageFormatListEnabled = false;
     ANGLE_TRY(mImage->initExternal(
         contextVk, mState.getType(), vkExtent, format, samples, mImageUsageFlags, mImageCreateFlags,
@@ -2739,9 +2748,14 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     mRequiresMutableStorage = (mImageCreateFlags & VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT) != 0;
 
-    const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    if (mState.hasProtectedContent())
+    {
+        flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
+    }
 
-    ANGLE_TRY(mImage->initMemory(contextVk, false, renderer->getMemoryProperties(), flags));
+    ANGLE_TRY(mImage->initMemory(contextVk, mState.hasProtectedContent(),
+                                 renderer->getMemoryProperties(), flags));
 
     const uint32_t viewLevelCount =
         mState.getImmutableFormat() ? getMipLevelCount(ImageMipLevels::EnabledLevels) : levelCount;
