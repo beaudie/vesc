@@ -191,7 +191,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
 
     int pixelFormat = 0;
     angle::android::GetANativeWindowBufferProperties(windowBuffer, &mSize.width, &mSize.height,
-                                                     &mSize.depth, &pixelFormat);
+                                                     &mSize.depth, &pixelFormat, &mUsage);
     GLenum internalFormat = angle::android::NativePixelFormatToGLInternalFormat(pixelFormat);
     mFormat               = gl::Format(internalFormat);
 
@@ -357,6 +357,11 @@ bool HardwareBufferImageSiblingVkAndroid::isTexturable(const gl::Context *contex
 bool HardwareBufferImageSiblingVkAndroid::isYUV() const
 {
     return mYUV;
+}
+
+bool HardwareBufferImageSiblingVkAndroid::isProtectedMemory() const
+{
+    return ((mUsage & EGL_NATIVE_BUFFER_USAGE_PROTECTED_BIT_ANDROID) ? true : false);
 }
 
 gl::Extents HardwareBufferImageSiblingVkAndroid::getSize() const
