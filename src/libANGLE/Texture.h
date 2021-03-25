@@ -221,6 +221,9 @@ class TextureState final : private angle::NonCopyable
     // From GL_ANGLE_texture_usage
     GLenum mUsage;
 
+    // GL_EXT_protected_textures
+    bool mIsProtectedMemory;
+
     std::vector<ImageDesc> mImageDescs;
 
     // GLES1 emulation: Texture crop rectangle
