@@ -53,6 +53,7 @@ class RenderbufferState final : angle::NonCopyable
                 const Format &format,
                 GLsizei samples,
                 MultisamplingMode multisamplingMode,
+                bool hasProtectedContent,
                 InitState initState);
 
     GLsizei mWidth;
@@ -60,6 +61,7 @@ class RenderbufferState final : angle::NonCopyable
     Format mFormat;
     GLsizei mSamples;
     MultisamplingMode mMultisamplingMode;
+    bool mHasProtectedContent;
 
     // For robust resource init.
     InitState mInitState;
