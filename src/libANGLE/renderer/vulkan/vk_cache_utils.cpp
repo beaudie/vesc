@@ -7,8 +7,8 @@
 //    Contains the classes for the Pipeline State Object cache as well as the RenderPass cache.
 //    Also contains the structures for the packed descriptions for the RenderPass and Pipeline.
 //
-
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include <iostream>
 
 #include "common/aligned_memory.h"
 #include "common/vulkan/vk_google_filtering_precision.h"
@@ -1984,11 +1984,14 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     // VK_LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT and if rasterization is enabled, then the
     // alphaToCoverageEnable, alphaToOneEnable, and sampleShadingEnable members of pMultisampleState
     // must all be VK_FALSE.
+    std::cout << "contextVk->getFeatures().bresenhamLineRasterization.enabled "
+              << contextVk->getFeatures().bresenhamLineRasterization.enabled << std::endl;
     if (rasterAndMS.bits.rasterizationSamples <= 1 &&
         !rasterAndMS.bits.rasterizationDiscardEnable && !rasterAndMS.bits.alphaToCoverageEnable &&
         !rasterAndMS.bits.alphaToOneEnable && !rasterAndMS.bits.sampleShadingEnable &&
         contextVk->getFeatures().bresenhamLineRasterization.enabled)
     {
+        std::cout << "Link rasterLineState MODE_BRESENHAM" << std::endl;
         rasterLineState.lineRasterizationMode = VK_LINE_RASTERIZATION_MODE_BRESENHAM_EXT;
         *pNextPtr                             = &rasterLineState;
         pNextPtr                              = &rasterLineState.pNext;
@@ -1998,8 +2001,11 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     provokingVertexState.sType =
         VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT;
     // Always set provoking vertex mode to last if available.
+    std::cout << "contextVk->getFeatures().provokingVertex.enabled "
+              << contextVk->getFeatures().provokingVertex.enabled << std::endl;
     if (contextVk->getFeatures().provokingVertex.enabled)
     {
+        std::cout << "Link provokingVertextState  MODE_LAST_VERTEX" << std::endl;
         provokingVertexState.provokingVertexMode = VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT;
         *pNextPtr                                = &provokingVertexState;
         pNextPtr                                 = &provokingVertexState.pNext;
@@ -2159,8 +2165,14 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     createInfo.basePipelineHandle  = VK_NULL_HANDLE;
     createInfo.basePipelineIndex   = 0;
 
-    ANGLE_VK_TRY(contextVk,
-                 pipelineOut->initGraphics(contextVk->getDevice(), createInfo, pipelineCacheVk));
+    VkResult result =
+        pipelineOut->initGraphics(contextVk->getDevice(), createInfo, pipelineCacheVk);
+    std::cout << "vkCreateGraphicsPipelines Result: " << result << std::endl;
+    ANGLE_VK_TRY(contextVk, result);
+
+    //    ANGLE_VK_TRY(contextVk,
+    //                 pipelineOut->initGraphics(contextVk->getDevice(), createInfo,
+    //                 pipelineCacheVk));
     return angle::Result::Continue;
 }
 
