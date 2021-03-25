@@ -144,6 +144,7 @@ TextureState::TextureState(TextureType type)
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
+      mHasProtectedContent(false),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) * (type == TextureType::CubeMap ? 6 : 1)),
       mCropRect(0, 0, 0, 0),
       mGenerateMipmapHint(GL_FALSE),
@@ -1707,6 +1708,7 @@ angle::Result Texture::bindTexImageFromSurface(Context *context, egl::Surface *s
     Extents size(surface->getWidth(), surface->getHeight(), 1);
     ImageDesc desc(size, surface->getBindTexImageFormat(), InitState::Initialized);
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0, desc);
+    mState.mHasProtectedContent = surface->hasProtectedContent();
     signalDirtyStorage(InitState::Initialized);
     return angle::Result::Continue;
 }
@@ -1720,6 +1722,7 @@ angle::Result Texture::releaseTexImageFromSurface(const Context *context)
     // Erase the image info for level 0
     ASSERT(mState.mType == TextureType::_2D || mState.mType == TextureType::Rectangle);
     mState.clearImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0);
+    mState.mHasProtectedContent = false;
     signalDirtyStorage(InitState::Initialized);
     return angle::Result::Continue;
 }
@@ -1810,6 +1813,7 @@ angle::Result Texture::setEGLImageTarget(Context *context,
     mState.clearImageDescs();
     mState.setImageDesc(NonCubeTextureTypeToTarget(type), 0,
                         ImageDesc(size, imageTarget->getFormat(), initState));
+    mState.mHasProtectedContent = imageTarget->hasProtectedContent();
     signalDirtyStorage(initState);
 
     return angle::Result::Continue;
