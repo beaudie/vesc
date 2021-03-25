@@ -7,6 +7,7 @@
 //   Various tests related for Frambuffers.
 //
 
+#include "common/mathutil.h"
 #include "platform/FeaturesD3D.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
