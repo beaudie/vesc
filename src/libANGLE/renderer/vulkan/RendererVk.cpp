@@ -6,8 +6,8 @@
 // RendererVk.cpp:
 //    Implements the class methods for RendererVk.
 //
-
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include <iostream>
 
 // Placing this first seems to solve an intellisense bug.
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -927,14 +927,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     vk::ExtensionNameList enabledInstanceExtensions;
 
-    if (ExtensionFound(VK_KHR_SURFACE_EXTENSION_NAME, instanceExtensionNames))
-    {
-        enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
-    }
-    if (ExtensionFound(wsiExtension, instanceExtensionNames))
-    {
-        enabledInstanceExtensions.push_back(wsiExtension);
-    }
+    enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+    enabledInstanceExtensions.push_back(wsiExtension);
 
     mEnableDebugUtils = mEnableValidationLayers &&
                         ExtensionFound(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, instanceExtensionNames);
@@ -1123,6 +1117,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Ensure we can find a graphics queue family.
     uint32_t queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, nullptr);
+    std::cout << "Queue Family Count: " << queueFamilyCount << std::endl;
 
     ANGLE_VK_CHECK(displayVk, queueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
@@ -1143,6 +1138,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT), 0,
             &queueFamilyMatchCount);
     }
+    std::cout << "Queue Family Match Count: " << queueFamilyMatchCount << std::endl;
     ANGLE_VK_CHECK(displayVk, queueFamilyMatchCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // If only one queue family, go ahead and initialize the device. If there is more than one
@@ -1759,11 +1755,22 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t graphi
 
     mCurrentQueueFamilyIndex = graphicsQueueFamilyIndex;
 
+    std::cout << "graphicsQueueFamilyIndex: " << graphicsQueueFamilyIndex << std::endl;
+    if (graphicsQueueFamilyIndex != vk::QueueFamily::kInvalidIndex)
+    {
+        std::cout << "graphicsQueueFamily queueCount: "
+                  << mQueueFamilyProperties[graphicsQueueFamilyIndex].queueCount << std::endl;
+    }
+
+    ANGLE_VK_CHECK(displayVk, (graphicsQueueFamilyIndex != vk::QueueFamily::kInvalidIndex),
+                   VK_ERROR_INITIALIZATION_FAILED);
+
+    ANGLE_VK_CHECK(displayVk, (mQueueFamilyProperties[graphicsQueueFamilyIndex].queueCount > 1),
+                   VK_ERROR_INITIALIZATION_FAILED);
+
     vk::QueueFamily graphicsQueueFamily;
     graphicsQueueFamily.initialize(mQueueFamilyProperties[graphicsQueueFamilyIndex],
                                    graphicsQueueFamilyIndex);
-    ANGLE_VK_CHECK(displayVk, graphicsQueueFamily.getDeviceQueueCount() > 1,
-                   VK_ERROR_INITIALIZATION_FAILED);
 
     uint32_t queueCount = std::min(graphicsQueueFamily.getDeviceQueueCount(),
                                    static_cast<uint32_t>(egl::ContextPriority::EnumCount));
