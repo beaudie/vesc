@@ -616,6 +616,22 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,
                                                       gl::Texture *glTexture) override;
 
+    // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
+    // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
+    void resetCurrentGraphicsPipeline() { mCurrentGraphicsPipeline = nullptr; }
+
+    ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
+    {
+        // Note: DIRTY_BIT_PIPELINE_BINDING will be automatically set if pipeline bind is necessary.
+        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+    }
+
+    ANGLE_INLINE void invalidateCurrentComputePipeline()
+    {
+        mComputeDirtyBits |= kPipelineDescAndBindingDirtyBits;
+        mCurrentComputePipeline = nullptr;
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -772,18 +788,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result updateActiveTextures(const gl::Context *context);
     angle::Result updateActiveImages(vk::CommandBufferHelper *commandBufferHelper);
     angle::Result updateDefaultAttribute(size_t attribIndex);
-
-    ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
-    {
-        // Note: DIRTY_BIT_PIPELINE_BINDING will be automatically set if pipeline bind is necessary.
-        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
-    }
-
-    ANGLE_INLINE void invalidateCurrentComputePipeline()
-    {
-        mComputeDirtyBits |= kPipelineDescAndBindingDirtyBits;
-        mCurrentComputePipeline = nullptr;
-    }
 
     void invalidateCurrentDefaultUniforms();
     angle::Result invalidateCurrentTextures(const gl::Context *context);

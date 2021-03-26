@@ -839,6 +839,44 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
 }
 
+TEST_P(ProgramPipelineTest31, DrawTwiceWithSamePPO)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    // Create two separable program objects from a
+    // single source string respectively (vertSrc and fragSrc)
+    const GLchar *vertString = essl31_shaders::vs::Passthrough();
+    const GLchar *fragString = R"(#version 310 es
+precision highp float;
+in vec4 v_position;
+out vec4 my_FragColor;
+void main()
+{
+    my_FragColor = round(v_position);
+})";
+
+    bindProgramPipeline(vertString, fragString);
+
+    drawQuadWithPPO("a_position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+
+    int w = getWindowWidth() - 2;
+    int h = getWindowHeight() - 2;
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
+
+    drawQuadWithPPO("a_position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ProgramPipelineTest);
 ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(ProgramPipelineTest);
 
