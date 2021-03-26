@@ -3550,6 +3550,12 @@ Extensions Context::generateSupportedExtensions() const
         ASSERT(supportedExtensions.textureCompressionASTCHDRKHR);
     }
 
+    // GL_KHR_protected_textures
+    if (mDisplay->getExtensions().protectedContentEXT)
+    {
+        supportedExtensions.protectedTexturesEXT = true;
+    }
+
     // GL_ANGLE_get_tex_level_parameter is implemented in the frontend
     supportedExtensions.getTexLevelParameterANGLE = true;
 

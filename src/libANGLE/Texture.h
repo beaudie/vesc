@@ -143,6 +143,7 @@ class TextureState final : private angle::NonCopyable
     const SwizzleState &getSwizzleState() const { return mSwizzleState; }
     const SamplerState &getSamplerState() const { return mSamplerState; }
     GLenum getUsage() const { return mUsage; }
+    bool isProtectedMemory() const { return mIsProtectedMemory; }
     GLenum getDepthStencilTextureMode() const { return mDepthStencilTextureMode; }
     bool isStencilMode() const { return mDepthStencilTextureMode == GL_STENCIL_INDEX; }
 
@@ -326,6 +327,9 @@ class Texture final : public RefCountObject<TextureID>,
 
     void setUsage(const Context *context, GLenum usage);
     GLenum getUsage() const;
+
+    void setProtectedMemory(Context *context, bool isProtectedMemory);
+    bool isProtectedMemory() const override;
 
     const TextureState &getState() const { return mState; }
 
