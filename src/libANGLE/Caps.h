@@ -740,6 +740,9 @@ struct Extensions
 
     // GL_ANGLE_relaxed_vertex_attribute_type
     bool relaxedVertexAttributeTypeANGLE = false;
+
+    // GL_EXT_protected_textures
+    bool protectedTexturesEXT = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct
