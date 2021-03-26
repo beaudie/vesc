@@ -508,25 +508,27 @@ void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDevicePro
 angle::Result CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDeviceProperties,
                                               DisplayVk *displayVk,
                                               ContextVk *contextVk,
-                                              angle::MemoryBuffer *pipelineCacheData,
-                                              bool *success)
+                                              const std::vector<uint8_t> &cacheData,
+                                              const size_t maxTotalSize)
 {
-    // There is a limitation in android, we can only store cache data less than 64kb in blob cache.
-    // So there is no use to handle big pipeline cache when android will reject it finally.
-    constexpr size_t kMaxTotalSize = 64 * 1024;
-
-    if (pipelineCacheData->size() >= kMaxTotalSize)
+    // Though the pipeline cache will be compressed and divided into several chunks to store in blob
+    // cache, the largest total size of blob cache is only 2M in android now, so there is no use to
+    // handle big pipeline cache when android will reject it finally.
+    if (cacheData.size() >= maxTotalSize)
     {
         // TODO: handle the big pipeline cache. http://anglebug.com/4722
         ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
-                           "Skip syncing pipeline cache data when it's larger than 64kb.");
+                           "Skip syncing pipeline cache data when it's larger than maxTotalSize.");
         return angle::Result::Continue;
     }
 
     // To make it possible to store more pipeline cache data, compress the whole pipelineCache.
     angle::MemoryBuffer compressedData;
-    ANGLE_VK_CHECK(displayVk, egl::CompressBlobCacheData(pipelineCacheData, &compressedData),
-                   VK_ERROR_INITIALIZATION_FAILED);
+
+    if (!egl::CompressBlobCacheData(cacheData.size(), cacheData.data(), &compressedData))
+    {
+        return angle::Result::Incomplete;
+    }
 
     // If the size of compressedData is larger than (kMaxBlobCacheSize - sizeof(numChunks)),
     // the pipelineCache still can't be stored in blob cache. Divide the large compressed
@@ -553,8 +555,10 @@ angle::Result CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physica
         }
 
         angle::MemoryBuffer keyData;
-        ANGLE_VK_CHECK(displayVk, keyData.resize(kBlobHeaderSize + chunkSize),
-                       VK_ERROR_INITIALIZATION_FAILED);
+        if (!keyData.resize(kBlobHeaderSize + chunkSize))
+        {
+            return angle::Result::Incomplete;
+        }
 
         ASSERT(numChunks <= UINT8_MAX);
         keyData.data()[0] = static_cast<uint8_t>(numChunks);
@@ -565,11 +569,59 @@ angle::Result CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physica
         // Create unique hash key.
         egl::BlobCache::Key chunkCacheHash;
         ComputePipelineCacheVkChunkKey(physicalDeviceProperties, chunkIndex, &chunkCacheHash);
+
+        std::lock_guard<std::mutex> lock(displayVk->getBlobCacheMutex());
         displayVk->getBlobCache()->putApplication(chunkCacheHash, keyData);
     }
-    *success = true;
+
     return angle::Result::Continue;
 }
+
+class CompressAndStorePipelineCacheTask : public angle::Closure
+{
+  public:
+    CompressAndStorePipelineCacheTask(DisplayVk *displayVk,
+                                      ContextVk *contextVk,
+                                      std::vector<uint8_t> &&cacheData,
+                                      size_t kMaxTotalSize)
+        : mDisplayVk(displayVk),
+          mContextVk(contextVk),
+          mCacheData(std::move(cacheData)),
+          mMaxTotalSize(kMaxTotalSize),
+          mResult(angle::Result::Continue)
+    {}
+
+    void operator()() override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "CompressAndStorePipelineCacheVk");
+        mResult = CompressAndStorePipelineCacheVk(
+            mContextVk->getRenderer()->getPhysicalDeviceProperties(), mDisplayVk, mContextVk,
+            mCacheData, mMaxTotalSize);
+    }
+
+    angle::Result getResult() { return mResult; }
+
+  private:
+    DisplayVk *mDisplayVk;
+    ContextVk *mContextVk;
+    std::vector<uint8_t> mCacheData;
+    size_t mMaxTotalSize;
+    angle::Result mResult;
+};
+
+class WaitableCompressEventImpl : public WaitableCompressEvent
+{
+  public:
+    WaitableCompressEventImpl(std::shared_ptr<angle::WaitableEvent> waitableEvent,
+                              std::shared_ptr<CompressAndStorePipelineCacheTask> compressTask)
+        : WaitableCompressEvent(waitableEvent), mCompressTask(compressTask)
+    {}
+
+    angle::Result getResult() override { return mCompressTask->getResult(); }
+
+  private:
+    std::shared_ptr<CompressAndStorePipelineCacheTask> mCompressTask;
+};
 
 angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physicalDeviceProperties,
                                               DisplayVk *displayVk,
@@ -763,6 +815,12 @@ void RendererVk::onDestroy(vk::Context *context)
     {
         vkDestroyInstance(mInstance, nullptr);
         mInstance = VK_NULL_HANDLE;
+    }
+
+    if (mCompressEvent)
+    {
+        mCompressEvent->wait();
+        mCompressEvent.reset();
     }
 
     mMemoryProperties.destroy();
@@ -2368,6 +2426,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     platform->overrideFeaturesVk(platform, &mFeatures);
 
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
+
+    // Disabled by default. To reduce the risk, create a feature to enable
+    // compressing pipeline cache in multi-thread pool.
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableCompressingPipelineCacheInThreadPool, false);
 }
 
 angle::Result RendererVk::initPipelineCache(DisplayVk *display,
@@ -2451,7 +2513,7 @@ angle::Result RendererVk::getPipelineCacheSize(DisplayVk *displayVk, size_t *pip
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, ContextVk *contextVk)
+angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Context *context)
 {
     // TODO: Synchronize access to the pipeline/blob caches?
     ASSERT(mPipelineCache.valid());
@@ -2479,13 +2541,24 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, ContextVk *c
         return angle::Result::Continue;
     }
 
-    angle::MemoryBuffer *pipelineCacheData = nullptr;
-    ANGLE_VK_CHECK_ALLOC(displayVk,
-                         displayVk->getScratchBuffer(pipelineCacheSize, &pipelineCacheData));
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    // Use worker thread pool to complete compression.
+    // If the last task hasn't been finished, skip the syncing.
+    if (mCompressEvent &&
+        (!mCompressEvent->isReady() || mCompressEvent->getResult() != angle::Result::Continue))
+    {
+        ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
+                           "Skip syncing pipeline cache data when the last task is not ready or "
+                           "the compress task failed.");
+        return angle::Result::Continue;
+    }
+
+    std::vector<uint8_t> pipelineCacheData(pipelineCacheSize);
 
     size_t oldPipelineCacheSize = pipelineCacheSize;
     VkResult result =
-        mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, pipelineCacheData->data());
+        mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, pipelineCacheData.data());
     // We don't need all of the cache data, so just make sure we at least got the header
     // Vulkan Spec 9.6. Pipeline Cache
     // https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/chap9.html#pipelines-cache
@@ -2510,20 +2583,41 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, ContextVk *c
 
     // If vkGetPipelineCacheData ends up writing fewer bytes than requested, zero out the rest of
     // the buffer to avoid leaking garbage memory.
-    ASSERT(pipelineCacheSize <= pipelineCacheData->size());
-    if (pipelineCacheSize < pipelineCacheData->size())
+    ASSERT(pipelineCacheSize <= pipelineCacheData.size());
+    if (pipelineCacheSize < pipelineCacheData.size())
     {
-        memset(pipelineCacheData->data() + pipelineCacheSize, 0,
-               pipelineCacheData->size() - pipelineCacheSize);
+        memset(pipelineCacheData.data() + pipelineCacheSize, 0,
+               pipelineCacheData.size() - pipelineCacheSize);
     }
 
-    bool success = false;
-    ANGLE_TRY(CompressAndStorePipelineCacheVk(mPhysicalDeviceProperties, displayVk, contextVk,
-                                              pipelineCacheData, &success));
-
-    if (success)
+    if (mFeatures.enableCompressingPipelineCacheInThreadPool.enabled)
     {
+        // The function zlib_internal::GzipCompressHelper() can compress 10M pipeline cache data
+        // into about 2M, to save the time of compression, set kMaxTotalSize to 10M.
+        constexpr size_t kMaxTotalSize = 10 * 1024 * 1024;
+
+        // Create task to compress.
+        auto compressAndStorePipelineCacheTask =
+            std::make_shared<CompressAndStorePipelineCacheTask>(
+                displayVk, contextVk, std::move(pipelineCacheData), kMaxTotalSize);
+        mCompressEvent = std::make_shared<WaitableCompressEventImpl>(
+            angle::WorkerThreadPool::PostWorkerTask(context->getWorkerThreadPool(),
+                                                    compressAndStorePipelineCacheTask),
+            compressAndStorePipelineCacheTask);
         mPipelineCacheDirty = false;
+    }
+    else
+    {
+        // If enableCompressingPipelineCacheInThreadPool is diabled, to avoid the risk, set
+        // kMaxTotalSize to 64k.
+        constexpr size_t kMaxTotalSize = 64 * 1024;
+        angle::Result compressResult   = CompressAndStorePipelineCacheVk(
+            mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
+
+        if (compressResult == angle::Result::Continue)
+        {
+            mPipelineCacheDirty = false;
+        }
     }
 
     return angle::Result::Continue;
