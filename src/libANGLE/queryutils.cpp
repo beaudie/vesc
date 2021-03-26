@@ -369,6 +369,9 @@ void QueryTexParameterBase(const Context *context,
             *params = CastFromGLintStateValue<ParamType>(
                 pname, texture->getRequiredTextureImageUnits(context));
             break;
+        case GL_TEXTURE_PROTECTED_EXT:
+            *params = CastFromGLintStateValue<ParamType>(pname, texture->hasProtectedContent());
+            break;
         default:
             UNREACHABLE();
             break;
@@ -478,6 +481,9 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
         case GL_RESOURCE_INITIALIZED_ANGLE:
             texture->setInitState(ConvertToBool(params[0]) ? InitState::Initialized
                                                            : InitState::MayNeedInit);
+            break;
+        case GL_TEXTURE_PROTECTED_EXT:
+            texture->setProtectedContent(context, (params[0] == GL_TRUE));
             break;
         default:
             UNREACHABLE();
