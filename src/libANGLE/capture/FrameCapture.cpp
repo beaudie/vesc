@@ -4177,6 +4177,12 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
             {
                 mClientVertexArrayMap[index] = -1;
             }
+
+            // Define at least a 1 sized entry for this index in gClientArrays,
+            // which is required for VertexAtrribPointer functions to compile
+            // if there was no draw call.
+            mClientArraySizes[index] = 1;
+
             break;
         }
 
