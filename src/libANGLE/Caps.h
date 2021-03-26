@@ -737,6 +737,9 @@ struct Extensions
 
     // GL_EXT_primitive_bounding_box
     bool primitiveBoundingBoxEXT = false;
+
+    // GL_EXT_protected_textures
+    bool protectedTexturesEXT = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct
