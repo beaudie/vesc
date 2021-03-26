@@ -500,18 +500,21 @@ void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDevicePro
 angle::Result CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDeviceProperties,
                                               DisplayVk *displayVk,
                                               ContextVk *contextVk,
-                                              angle::MemoryBuffer *pipelineCacheData,
-                                              bool *success)
+                                              angle::MemoryBuffer *pipelineCacheData)
 {
-    // There is a limitation in android, we can only store cache data less than 64kb in blob cache.
-    // So there is no use to handle big pipeline cache when android will reject it finally.
-    constexpr size_t kMaxTotalSize = 64 * 1024;
+    // Though the pipeline cache will be compressed and divided into several chunks to store in blob
+    // cache, the largest total size of blob cache is only 2M in android now, so there is no use to
+    // handle big pipeline cache when android will reject it finally.
+    // The function zlib_internal::GzipCompressHelper() can compress 10M pipeline cache data into
+    // about 2M, to save the time of compression, just return when the pipeline cache is larger
+    // than 10M.
+    constexpr size_t kMaxTotalSize = 10 * 1024 * 1024;
 
     if (pipelineCacheData->size() >= kMaxTotalSize)
     {
         // TODO: handle the big pipeline cache. http://anglebug.com/4722
         ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
-                           "Skip syncing pipeline cache data when it's larger than 64kb.");
+                           "Skip syncing pipeline cache data when it's larger than 10M.");
         return angle::Result::Continue;
     }
 
@@ -559,9 +562,53 @@ angle::Result CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physica
         ComputePipelineCacheVkChunkKey(physicalDeviceProperties, chunkIndex, &chunkCacheHash);
         displayVk->getBlobCache()->putApplication(chunkCacheHash, keyData);
     }
-    *success = true;
+
     return angle::Result::Continue;
 }
+
+class CompressTask : public angle::Closure
+{
+  public:
+    CompressTask(VkPhysicalDeviceProperties physicalDeviceProperties,
+                 DisplayVk *displayVk,
+                 ContextVk *contextVk,
+                 angle::MemoryBuffer *pipelineCacheData)
+        : mPhysicalDeviceProperties(physicalDeviceProperties),
+          mDisplayVk(displayVk),
+          mContextVk(contextVk),
+          mPipelineCacheData(pipelineCacheData),
+          mResult(angle::Result::Continue)
+    {}
+
+    void operator()() override
+    {
+        mResult = CompressAndStorePipelineCacheVk(mPhysicalDeviceProperties, mDisplayVk, mContextVk,
+                                                  mPipelineCacheData);
+    }
+
+    angle::Result getResult() { return mResult; }
+
+  private:
+    VkPhysicalDeviceProperties mPhysicalDeviceProperties;
+    DisplayVk *mDisplayVk;
+    ContextVk *mContextVk;
+    angle::MemoryBuffer *mPipelineCacheData;
+    angle::Result mResult;
+};
+
+class WaitableCompressEventImpl final : public WaitableCompressEvent
+{
+  public:
+    WaitableCompressEventImpl(std::shared_ptr<angle::WaitableEvent> waitableEvent,
+                              std::shared_ptr<CompressTask> compressTask)
+        : WaitableCompressEvent(waitableEvent), mCompressTask(compressTask)
+    {}
+
+    angle::Result getResult() override { return mCompressTask->getResult(); }
+
+  private:
+    std::shared_ptr<CompressTask> mCompressTask;
+};
 
 angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physicalDeviceProperties,
                                               DisplayVk *displayVk,
@@ -660,7 +707,9 @@ RendererVk::RendererVk()
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
       mCommandProcessor(this),
-      mSupportedVulkanPipelineStageMask(0)
+      mSupportedVulkanPipelineStageMask(0),
+      mCompressThreadPool(nullptr),
+      mCompressEvent(nullptr)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -754,6 +803,17 @@ void RendererVk::onDestroy(vk::Context *context)
     {
         vkDestroyInstance(mInstance, nullptr);
         mInstance = VK_NULL_HANDLE;
+    }
+
+    if (mCompressEvent)
+    {
+        mCompressEvent->wait();
+        if (mCompressEvent->getResult() != angle::Result::Continue)
+        {
+            WARN() << "Fail to compress pipeline cache data.";
+        }
+
+        mCompressEvent.reset();
     }
 
     mMemoryProperties.destroy();
@@ -2445,7 +2505,7 @@ angle::Result RendererVk::getPipelineCacheSize(DisplayVk *displayVk, size_t *pip
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, ContextVk *contextVk)
+angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Context *context)
 {
     // TODO: Synchronize access to the pipeline/blob caches?
     ASSERT(mPipelineCache.valid());
@@ -2511,14 +2571,16 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, ContextVk *c
                pipelineCacheData->size() - pipelineCacheSize);
     }
 
-    bool success = false;
-    ANGLE_TRY(CompressAndStorePipelineCacheVk(mPhysicalDeviceProperties, displayVk, contextVk,
-                                              pipelineCacheData, &success));
+    ContextVk *contextVk = vk::GetImpl(context);
+    mCompressThreadPool  = context->getWorkerThreadPool();
 
-    if (success)
-    {
-        mPipelineCacheDirty = false;
-    }
+    // Use worker thread pool to complete compression.
+    auto compressTask = std::make_shared<CompressTask>(mPhysicalDeviceProperties, displayVk,
+                                                       contextVk, pipelineCacheData);
+    mCompressEvent    = std::make_shared<WaitableCompressEventImpl>(
+        angle::WorkerThreadPool::PostWorkerTask(mCompressThreadPool, compressTask), compressTask);
+
+    mPipelineCacheDirty = false;
 
     return angle::Result::Continue;
 }
