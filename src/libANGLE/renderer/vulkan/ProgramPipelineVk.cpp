@@ -102,7 +102,23 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
         mExecutable.resolvePrecisionMismatch(mergedVaryings);
     }
 
-    return mExecutable.createPipelineLayout(glContext, nullptr);
+    ANGLE_TRY(mExecutable.createPipelineLayout(glContext, nullptr));
+    if (glExecutable.isCompute())
+    {
+        contextVk->invalidateCurrentComputePipeline();
+    }
+    else
+    {
+        contextVk->invalidateCurrentGraphicsPipeline();
+    }
+
+    // Reset *ContextVk::mCurrentGraphicsPipeline, since createPipelineLayout() will free the
+    // PipelineHelper that it's currently pointing to.
+    // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
+    // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
+    contextVk->resetCurrentGraphicsPipeline();
+
+    return angle::Result::Continue;
 }
 
 size_t ProgramPipelineVk::calcUniformUpdateRequiredSpace(
