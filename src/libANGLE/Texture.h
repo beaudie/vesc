@@ -329,6 +329,9 @@ class Texture final : public RefCountObject<TextureID>,
     void setUsage(const Context *context, GLenum usage);
     GLenum getUsage() const;
 
+    void setProtectedContent(Context *context, bool hasProtectedContent);
+    bool hasProtectedContent() const override;
+
     const TextureState &getState() const { return mState; }
 
     void setBorderColor(const Context *context, const ColorGeneric &color);

@@ -1003,10 +1003,10 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         std::unique_ptr<vk::RefCounted<vk::ImageHelper>> stagingImage;
         stagingImage = std::make_unique<vk::RefCounted<vk::ImageHelper>>();
 
-        ANGLE_TRY(
-            stagingImage->get().init2DStaging(contextVk, false, renderer->getMemoryProperties(),
-                                              gl::Extents(sourceBox.width, sourceBox.height, 1),
-                                              destFormat, kTransferStagingImageFlags, layerCount));
+        ANGLE_TRY(stagingImage->get().init2DStaging(
+            contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+            gl::Extents(sourceBox.width, sourceBox.height, 1), destFormat,
+            kTransferStagingImageFlags, layerCount));
 
         access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     &stagingImage->get());
@@ -1157,10 +1157,10 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         std::unique_ptr<vk::RefCounted<vk::ImageHelper>> stagingImage;
         stagingImage = std::make_unique<vk::RefCounted<vk::ImageHelper>>();
 
-        ANGLE_TRY(
-            stagingImage->get().init2DStaging(contextVk, false, renderer->getMemoryProperties(),
-                                              gl::Extents(sourceBox.width, sourceBox.height, 1),
-                                              destFormat, kDrawStagingImageFlags, layerCount));
+        ANGLE_TRY(stagingImage->get().init2DStaging(
+            contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+            gl::Extents(sourceBox.width, sourceBox.height, 1), destFormat, kDrawStagingImageFlags,
+            layerCount));
 
         params.destOffset[0] = 0;
         params.destOffset[1] = 0;
@@ -1955,10 +1955,10 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
     const uint32_t levelCount = srcImage->getLevelCount();
     const uint32_t layerCount = srcImage->getLayerCount();
 
-    ANGLE_TRY(stagingImage->get().initStaging(contextVk, false, renderer->getMemoryProperties(),
-                                              srcImage->getType(), srcImage->getExtents(),
-                                              srcImage->getFormat(), srcImage->getSamples(),
-                                              kTransferStagingImageFlags, levelCount, layerCount));
+    ANGLE_TRY(stagingImage->get().initStaging(
+        contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+        srcImage->getType(), srcImage->getExtents(), srcImage->getFormat(), srcImage->getSamples(),
+        kTransferStagingImageFlags, levelCount, layerCount));
 
     // Copy the src image wholly into the staging image
     const VkImageAspectFlags aspectFlags = srcImage->getAspectFlags();
@@ -2164,8 +2164,8 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
         // Create the implicit multisampled image.
         ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
-            contextVk, false, renderer->getMemoryProperties(), mState.getType(), samples, *mImage,
-            useRobustInit));
+            contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+            mState.getType(), samples, *mImage, useRobustInit));
     }
 
     // Don't flush staged updates here. We'll handle that in FramebufferVk so it can defer clears.
@@ -2741,10 +2741,11 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     }
 
     bool imageFormatListEnabled = false;
-    ANGLE_TRY(mImage->initExternal(
-        contextVk, mState.getType(), vkExtent, format, samples, mImageUsageFlags, mImageCreateFlags,
-        vk::ImageLayout::Undefined, nullptr, gl::LevelIndex(firstLevel), levelCount, layerCount,
-        contextVk->isRobustResourceInitEnabled(), &imageFormatListEnabled, false));
+    ANGLE_TRY(mImage->initExternal(contextVk, mState.getType(), vkExtent, format, samples,
+                                   mImageUsageFlags, mImageCreateFlags, vk::ImageLayout::Undefined,
+                                   nullptr, gl::LevelIndex(firstLevel), levelCount, layerCount,
+                                   contextVk->isRobustResourceInitEnabled(),
+                                   &imageFormatListEnabled, mState.hasProtectedContent()));
 
     mRequiresMutableStorage = (mImageCreateFlags & VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT) != 0;
 
