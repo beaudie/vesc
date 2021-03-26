@@ -6,8 +6,8 @@
 // RendererVk.cpp:
 //    Implements the class methods for RendererVk.
 //
-
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include <iostream>
 
 // Placing this first seems to solve an intellisense bug.
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -1117,6 +1117,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Ensure we can find a graphics queue family.
     uint32_t queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, nullptr);
+    std::cout << "Queue Family Count: " << queueFamilyCount << std::endl;
 
     ANGLE_VK_CHECK(displayVk, queueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
@@ -1137,6 +1138,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT), 0,
             &queueFamilyMatchCount);
     }
+    std::cout << "Queue Family Match Count: " << queueFamilyMatchCount << std::endl;
     ANGLE_VK_CHECK(displayVk, queueFamilyMatchCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // If only one queue family, go ahead and initialize the device. If there is more than one
@@ -1790,6 +1792,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
     createInfo.pEnabledFeatures = &enabledFeatures.features;
 
+    std::cout << "CreateDevice" << std::endl;
     ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are loading dynamically
@@ -1801,10 +1804,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     if (mFeatures.asyncCommandQueue.enabled)
     {
+        std::cout << "Create CommandProcessor" << std::endl;
         ANGLE_TRY(mCommandProcessor.init(displayVk, graphicsQueueMap));
     }
     else
     {
+        std::cout << "Create CommandQueue" << std::endl;
         ANGLE_TRY(mCommandQueue.init(displayVk, graphicsQueueMap));
     }
 
@@ -1861,6 +1866,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
 
+    std::cout << "DeviceInitialize continue" << std::endl;
     return angle::Result::Continue;
 }
 
