@@ -3923,7 +3923,9 @@ void Context::updateCaps()
         mValidBufferBindings.set(BufferBinding::Texture);
     }
 
-    mThreadPool = angle::WorkerThreadPool::Create(mState.mExtensions.parallelShaderCompile);
+    mThreadPool = angle::WorkerThreadPool::Create(
+        mState.mExtensions.parallelShaderCompile ||
+        getFrontendFeatures().enableCompressingPipelineCacheInThreadPool.enabled);
 
     // Reinitialize some dirty bits that depend on extensions.
     if (mState.isRobustResourceInitEnabled())
