@@ -26,6 +26,7 @@
 #include "common/vulkan/vulkan_icd.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/WorkerThread.h"
 #include "libANGLE/renderer/vulkan/CommandProcessor.h"
 #include "libANGLE/renderer/vulkan/DebugAnnotatorVk.h"
 #include "libANGLE/renderer/vulkan/QueryVk.h"
@@ -95,6 +96,25 @@ void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut, ArgT object, Arg
     }
     CollectGarbage(garbageOut, objectsIn...);
 }
+
+class WaitableCompressEvent : public angle::WaitableEvent
+{
+  public:
+    WaitableCompressEvent(std::shared_ptr<angle::WaitableEvent> waitableEvent)
+        : mWaitableEvent(waitableEvent)
+    {}
+
+    ~WaitableCompressEvent() override { mWaitableEvent.reset(); }
+
+    void wait() override { mWaitableEvent->wait(); }
+
+    bool isReady() override { return mWaitableEvent->isReady(); }
+
+    virtual angle::Result getResult() = 0;
+
+  protected:
+    std::shared_ptr<angle::WaitableEvent> mWaitableEvent;
+};
 
 class RendererVk : angle::NonCopyable
 {
@@ -509,6 +529,11 @@ class RendererVk : angle::NonCopyable
     // Note that this mask can have bits set that don't correspond to valid stages, so it's strictly
     // only useful for masking out unsupported stages in an otherwise valid set of stages.
     VkPipelineStageFlags mSupportedVulkanPipelineStageMask;
+
+    // Thread pool to compress cache data.
+    std::shared_ptr<angle::WorkerThreadPool> mCompressThreadPool;
+
+    std::shared_ptr<rx::WaitableCompressEvent> mCompressEvent;
 };
 
 }  // namespace rx
