@@ -493,6 +493,12 @@ struct FeaturesVk : FeatureSetBase
         "forceFragmentShaderPrecisionHighpToMediump", FeatureCategory::VulkanWorkarounds,
         "Forces highp precision in fragment shader to mediump.", &members,
         "https://issuetracker.google.com/184850002"};
+
+    // Whether we should compress pipeline cache in thread pool before it's stored in blob cache.
+    // http://anglebug.com/4722
+    Feature enableCompressingPipelineCacheInThreadPool = {
+        "enableCompressingPipelineCacheInThreadPool", FeatureCategory::VulkanWorkarounds,
+        "Enable compressing pipeline cache in thread pool.", &members, "http://anglebug.com/4722"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

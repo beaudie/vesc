@@ -121,6 +121,8 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
 
     virtual egl::Error handleGPUSwitch();
 
+    std::mutex &getBlobCacheMutex() { return mBlobCacheMutex; }
+
   protected:
     const egl::DisplayState &mState;
 
@@ -134,6 +136,7 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
     mutable bool mCapsInitialized;
     mutable egl::Caps mCaps;
 
+    std::mutex mBlobCacheMutex;
     egl::BlobCache *mBlobCache;
 };
 
