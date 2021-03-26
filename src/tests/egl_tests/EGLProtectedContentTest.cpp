@@ -125,9 +125,50 @@ class EGLProtectedContentTest : public ANGLETest
         EXPECT_TRUE(result);
         return result;
     }
+#if 0  // TODO
+    bool createTexture(EGLBoolean isProtected, EGLContext context, GLuint *textureId)
+    {
+        bool result = false;
+        *textureId  = 0;
 
+        glGenTextures(1, textureId);
+        EXPECT_GL_NO_ERROR();
+        result = (*textureId != 0);
+        EXPECT_TRUE(result);
+        return result;
+    }
+
+    bool createTextureFromImage(EGLBoolean isProtected, EGLContext context, EGLImage image, GLuint *textureId)
+    {
+        bool result = false;
+        *textureId  = 0;
+
+        glGenTextures(1, textureId);
+        EXPECT_GL_NO_ERROR();
+        result = (*textureId != 0);
+        EXPECT_TRUE(result);
+        return result;
+    }
+
+    bool createTextureFromPbuffer(EGLBoolean isProtected,
+                                EGLContext context,
+                                EGLSurface pBuffer,
+                                GLuint *textureId)
+    {
+        bool result = false;
+        *textureId  = 0;
+
+        glGenTextures(1, textureId);
+        EXPECT_GL_NO_ERROR();
+        result = (*textureId != 0);
+        EXPECT_TRUE(result);
+        return result;
+    }
+#endif
     void PbufferTest(bool isProtectedContext, bool isProtectedSurface);
     void WindowTest(bool isProtectedContext, bool isProtectedSurface);
+    bool RenderTexture(bool isProtectedContext, bool isProtectedTexture, GLuint textureId);
+    bool TestTexture(bool isProtectedContext, bool isProtectedTexture, GLuint textureId);
 
     EGLDisplay mDisplay      = EGL_NO_DISPLAY;
     EGLint mMajorVersion     = 0;
@@ -326,12 +367,172 @@ TEST_P(EGLProtectedContentTest, ProtectedContextWithProtectedWindowSurface)
     WindowTest(true, true);
 }
 
+// Render pixels to the texture
+bool EGLProtectedContentTest::RenderTexture(bool isProtectedContext,
+                                            bool isProtectedTexture,
+                                            GLuint textureId)
+{
+    return true;  // TODO
+}
+
+// Check Texture for expected pixels
+bool EGLProtectedContentTest::TestTexture(bool isProtectedContext,
+                                          bool isProtectedTexture,
+                                          GLuint textureId)
+{
+    return true;  // TODO
+}
+#if 0
+// Unprotected context with unprotected texture
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithUnprotectedTexture)
+{
+    EGLConfig config = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(chooseConfig(&config));
+
+    EGLContext context = EGL_NO_CONTEXT;
+    EXPECT_TRUE(createContext(false, config, &context));
+    ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
+
+    GLuint texture = 0;
+    EXPECT_TRUE(createTexture(false, context, &texture));
+
+    EXPECT_TRUE(RenderTexture(false, false, texture));
+    EXPECT_TRUE(TestTexture(false, false, texture));
+}
+
+// Protected context with unprotected texture
+TEST_P(EGLProtectedContentTest, ProtectedContextWithUnprotectedTexture)
+{
+    EGLConfig config = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(chooseConfig(&config));
+
+    EGLContext context = EGL_NO_CONTEXT;
+    EXPECT_TRUE(createContext(true, config, &context));
+    ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
+
+    GLuint texture = 0;
+    EXPECT_TRUE(createTexture(false, context, &texture));
+
+    EXPECT_TRUE(RenderTexture(true, false, texture));
+    EXPECT_TRUE(TestTexture(true, false, texture));
+}
+
+// Unprotected context with protected texture
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithProtectedTexture)
+{
+    EGLConfig config = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(chooseConfig(&config));
+
+    EGLContext context = EGL_NO_CONTEXT;
+    EXPECT_TRUE(createContext(false, config, &context));
+    ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
+
+    GLuint texture = 0;
+    EXPECT_TRUE(createTexture(true, context, &texture));
+
+    EXPECT_TRUE(RenderTexture(false, true, texture));
+    EXPECT_TRUE(TestTexture(false, true, texture));
+}
+
+// Protected context with protected texture
+TEST_P(EGLProtectedContentTest, ProtectedContextWithProtectedTexture)
+{
+    EGLConfig config = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(chooseConfig(&config));
+
+    EGLContext context = EGL_NO_CONTEXT;
+    EXPECT_TRUE(createContext(true, config, &context));
+    ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
+
+    GLuint texture = 0;
+    EXPECT_TRUE(createTexture(true, context, &texture));
+
+    EXPECT_TRUE(RenderTexture(true, true, texture));
+    EXPECT_TRUE(TestTexture(true, true, texture));
+}
+#endif
+#if 0  // TODO
+// Unprotected context with unprotected texture from EGL image
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithUnprotectedTextureFromImage)
+{
+    RenderTexture(false, false, 1);
+}
+
+// Protected context with unprotected texture from EGL image
+TEST_P(EGLProtectedContentTest, ProtectedContextWithUnprotectedTextureFromImage)
+{
+    RenderTexture(true, false, 1);
+}
+
+// Unprotected context with protected texture from EGL image
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithProtectedTextureFromImage)
+{
+    RenderTexture(false, true, 1);
+}
+
+// Protected context with protected texture from EGL image
+TEST_P(EGLProtectedContentTest, ProtectedContextWithProtectedTextureFromImage)
+{
+    RenderTexture(true, true, 1);
+}
+
+
+// Unprotected context with unprotected texture from BindTex of PBufferSurface
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithUnprotectedTextureFromPBuffer)
+{
+    RenderTexture(false, false, 1);
+}
+
+// Protected context with unprotected texture from BindTex of PBufferSurface
+TEST_P(EGLProtectedContentTest, ProtectedContextWithUnprotectedTextureFromPbuffer)
+{
+    RenderTexture(true, false, 1);
+}
+
+// Unprotected context with protected texture from BindTex of PBufferSurface
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithProtectedTextureFromPbuffer)
+{
+    RenderTexture(false, true, 1);
+}
+
+// Protected context with protected texture from BindTex of PBufferSurface
+TEST_P(EGLProtectedContentTest, ProtectedContextWithProtectedTextureFromPbuffer)
+{
+    RenderTexture(true, true, 1);
+}
+
+
+// Unprotected context with unprotected texture from EGL image from Android native buffer
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithUnprotectedTextureFromAndroidNativeBuffer)
+{
+    RenderTexture(false, false, 1);
+}
+
+// Protected context with unprotected texture from EGL image from Android native buffer
+TEST_P(EGLProtectedContentTest, ProtectedContextWithUnprotectedTextureFromAndroidNativeBuffer)
+{
+    RenderTexture(true, false, 1);
+}
+
+// Unprotected context with protected texture from EGL image from Android native buffer
+TEST_P(EGLProtectedContentTest, UnprotectedContextWithProtectedTextureFromAndroidNativeBuffer)
+{
+    RenderTexture(false, true, 1);
+}
+
+// Protected context with protected texture from EGL image from Android native buffer
+TEST_P(EGLProtectedContentTest, ProtectedContextWithProtectedTextureFromAndroidNativeBuffer)
+{
+    RenderTexture(true, true, 1);
+}
+#endif
+
 ANGLE_INSTANTIATE_TEST(EGLProtectedContentTest,
                        WithNoFixture(ES2_OPENGLES()),
                        WithNoFixture(ES3_OPENGLES()),
                        WithNoFixture(ES2_OPENGL()),
                        WithNoFixture(ES3_OPENGL()),
-                       WithNoFixture(ES2_VULKAN()),
-                       WithNoFixture(ES3_VULKAN()),
                        WithNoFixture(ES2_VULKAN_SWIFTSHADER()),
-                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()));
+                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()),
+                       WithNoFixture(ES2_VULKAN()),
+                       WithNoFixture(ES3_VULKAN()));

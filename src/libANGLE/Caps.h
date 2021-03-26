@@ -722,6 +722,9 @@ struct Extensions
 
     // GL_ANGLE_get_serialized_context_string
     bool getSerializedContextStringANGLE = false;
+
+    // GL_EXT_protected_textures
+    bool protectedTexturesEXT = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct

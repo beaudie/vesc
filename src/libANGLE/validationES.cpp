@@ -6526,6 +6526,14 @@ bool ValidateGetTexParameterBase(const Context *context,
             }
             break;
 
+        case GL_TEXTURE_PROTECTED_EXT:
+            if (!context->getExtensions().protectedTexturesEXT)
+            {
+                context->validationError(GL_INVALID_ENUM, kProtectedTexturesExtensionRequired);
+                return false;
+            }
+            break;
+
         default:
             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             return false;
@@ -7227,7 +7235,30 @@ bool ValidateTexParameterBase(const Context *context,
                                          kRobustResourceInitializationExtensionRequired);
                 return false;
             }
+            break;
 
+        case GL_TEXTURE_PROTECTED_EXT:
+            if (!context->getExtensions().protectedTexturesEXT)
+            {
+                context->validationError(GL_INVALID_ENUM, kProtectedTexturesExtensionRequired);
+                return false;
+            }
+            switch (ConvertToGLenum(params[0]))
+            {
+                case GL_FALSE:
+                case GL_TRUE:
+                    break;
+
+                default:
+                    context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                    return false;
+            }
+            if ((ConvertToGLenum(params[0]) == GL_TRUE) && !context->isProtectedMemory())
+            {
+                context->validationError(GL_INVALID_OPERATION,
+                                         "Protected Texture requires Protected Context");
+                return false;
+            }
             break;
 
         default:
