@@ -1047,6 +1047,16 @@ GLenum Texture::getUsage() const
     return mState.mUsage;
 }
 
+void Texture::setProtectedMemory(Context *context, bool isProtected)
+{
+    mState.mIsProtectedMemory = isProtected;
+}
+
+bool Texture::isProtectedMemory() const
+{
+    return mState.mIsProtectedMemory;
+}
+
 const TextureState &Texture::getTextureState() const
 {
     return mState;
