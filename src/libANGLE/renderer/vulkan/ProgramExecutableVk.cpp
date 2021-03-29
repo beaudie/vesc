@@ -267,6 +267,8 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
         programInfo.release(contextVk);
     }
     mComputeProgramInfo.release(contextVk);
+
+    contextVk->onProgramExecutableReset(this);
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *stream)
