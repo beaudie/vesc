@@ -616,6 +616,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,
                                                       gl::Texture *glTexture) override;
 
+    // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
+    // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
+    void resetCurrentGraphicsPipeline() { mCurrentGraphicsPipeline = nullptr; }
+
+    void invalidateCurrentPipeline();
+
+    bool isCurrentExecutable(ProgramExecutableVk *executableVk)
+    {
+        return executableVk == mExecutable;
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
