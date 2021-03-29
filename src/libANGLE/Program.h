@@ -728,9 +728,6 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
 
     bool isValidated() const;
 
-    Optional<bool> getCachedValidateSamplersResult() { return mCachedValidateSamplersResult; }
-    void setCachedValidateSamplersResult(bool result) { mCachedValidateSamplersResult = result; }
-
     const std::vector<ImageBinding> &getImageBindings() const
     {
         ASSERT(!mLinkingState);

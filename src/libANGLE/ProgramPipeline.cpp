@@ -656,17 +656,28 @@ void ProgramPipeline::validate(const gl::Context *context)
     }
 }
 
-bool ProgramPipeline::validateSamplers(InfoLog *infoLog, const Caps &caps)
+bool ProgramPipeline::validateSamplersImpl(InfoLog *infoLog, const Caps &caps)
 {
-    for (const ShaderType shaderType : gl::AllShaderTypes())
+    // if any two active samplers in a program are of different types, but refer to the same
+    // texture image unit, and this is the current program, then ValidateProgram will fail, and
+    // DrawArrays and DrawElements will issue the INVALID_OPERATION error.
+    for (size_t textureUnit : mState.mExecutable->mActiveSamplersMask)
     {
-        Program *shaderProgram = mState.mPrograms[shaderType];
-        if (shaderProgram && !shaderProgram->validateSamplers(infoLog, caps))
+        if (mState.mExecutable->mActiveSamplerTypes[textureUnit] == TextureType::InvalidEnum)
         {
+            if (infoLog)
+            {
+                (*infoLog) << "Samplers of conflicting types refer to the same texture "
+                              "image unit ("
+                           << textureUnit << ").";
+            }
+
+            mCachedValidateSamplersResult = false;
             return false;
         }
     }
 
+    mCachedValidateSamplersResult = true;
     return true;
 }
 
@@ -681,6 +692,9 @@ void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::Sub
         case angle::SubjectMessage::ProgramRelinked:
             mState.mIsLinked = false;
             updateExecutable();
+            break;
+        case angle::SubjectMessage::SamplerUniformsUpdated:
+            mCachedValidateSamplersResult.reset();
             break;
         default:
             UNREACHABLE();
