@@ -1774,6 +1774,31 @@ bool ValidateFramebufferTextureBase(const Context *context,
             context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
             return false;
         }
+
+        // GLES spec 3.2, Section 9.2.8 "Attaching Texture Images to a Framebuffer"
+        // An INVALID_VALUE error is generated if texture is not zero and is not the name of a
+        // texture object, or if level is not a supported texture level for texture
+
+        // Common criteria for not supported texture levels(other criteria are handled case by case
+        // in non base functions): If texture refers to an immutable-format texture, level must be
+        // greater than or equal to zero and smaller than the value of TEXTURE_IMMUTABLE_LEVELS for
+        // texture.
+        if (tex->getImmutableFormat())
+        {
+            if (level >= static_cast<GLint>(tex->getImmutableLevels()))
+            {
+                context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+                return false;
+            }
+        }
+
+        // GLES spec 3.2, Section 9.2.8 "Attaching Texture Images to a Framebuffer"
+        // An INVALID_OPERATION error is generated if <texture> is the name of a buffer texture.
+        if (tex->getType() == TextureType::Buffer)
+        {
+            context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
+            return false;
+        }
     }
 
     const Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
