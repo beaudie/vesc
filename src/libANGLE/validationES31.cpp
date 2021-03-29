@@ -2711,6 +2711,25 @@ bool ValidateFramebufferTextureEXT(const Context *context,
             context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
             return false;
         }
+
+        // [EXT_geometry_shader] Section 9.2.8 "Attaching Texture Images to a Framebuffer"
+        // An INVALID_VALUE error is generated if <texture> is not the name of a texture object, or
+        // if <level> is not a supported texture level for <texture>.
+        // We put this before ValidateFramebufferTextureBase as it is not an error if <level> is not
+        // a supported texture level with FramebufferTexture2D and FramebufferTextureLayer.
+        if (level > static_cast<GLint>(tex->getState().getEffectiveMaxLevel()))
+        {
+            context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+            return false;
+        }
+
+        // [EXT_geometry_shader] Section 9.2.8 "Attaching Texture Images to a Framebuffer"
+        // An INVALID_OPERATION error is generated if <texture> is the name of a buffer texture.
+        if (tex->getType() == TextureType::Buffer)
+        {
+            context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
+            return false;
+        }
     }
 
     if (!ValidateFramebufferTextureBase(context, target, attachment, texture, level))
