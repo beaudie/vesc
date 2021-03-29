@@ -1749,8 +1749,8 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 
     // If the image has more levels than supported, generate as many mips as possible at a time.
     const vk::LevelIndex maxGenerateLevels(UtilsVk::GetGenerateMipmapMaxLevels(contextVk));
-
-    for (vk::LevelIndex destBaseLevelVk(1);
+    gl::LevelIndex destBaseLevelGL = gl::LevelIndex(mState.getEffectiveBaseLevel() + 1);
+    for (vk::LevelIndex destBaseLevelVk = mImage->toVkLevel(destBaseLevelGL);
          destBaseLevelVk < vk::LevelIndex(mImage->getLevelCount());
          destBaseLevelVk = destBaseLevelVk + maxGenerateLevels.get())
     {
@@ -1758,7 +1758,7 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 
         uint32_t writeLevelCount =
             std::min(maxGenerateLevels.get(), mImage->getLevelCount() - destBaseLevelVk.get());
-        access.onImageComputeShaderWrite(mImage->toGLLevel(destBaseLevelVk), writeLevelCount, 0,
+        access.onImageComputeShaderWrite(destBaseLevelGL, writeLevelCount, 0,
                                          mImage->getLayerCount(), VK_IMAGE_ASPECT_COLOR_BIT,
                                          mImage);
 
@@ -1819,8 +1819,17 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    const VkExtent3D baseLevelExtents = mImage->getExtents();
-    uint32_t imageLayerCount          = mImage->getLayerCount();
+    // Because first level and base level maybe different, we need to calculate base level extend
+    // first
+    const VkExtent3D firstLevelExtents = mImage->getExtents();
+    int32_t levelShift = mState.getEffectiveBaseLevel() - mImage->getFirstAllocateLevel().get();
+    ASSERT(levelShift >= 0);
+    VkExtent3D baseLevelExtents;
+    baseLevelExtents.width  = std::max<uint32_t>(1, firstLevelExtents.width >> levelShift);
+    baseLevelExtents.height = std::max<uint32_t>(1, firstLevelExtents.height >> levelShift);
+    baseLevelExtents.depth  = std::max<uint32_t>(1, firstLevelExtents.depth >> levelShift);
+
+    uint32_t imageLayerCount = mImage->getLayerCount();
 
     uint8_t *imageData = nullptr;
     gl::Box imageArea(0, 0, 0, baseLevelExtents.width, baseLevelExtents.height,
@@ -2416,6 +2425,17 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (isGenerateMipmap)
     {
         prepareForGenerateMipmap(contextVk);
+    }
+
+    // For immutable texture, base level does not affect allocation. Only usage flags are. If usage
+    // flag changed (which is likely usage scenario due to generate mipmap's ue fo compute), we
+    // respecify image storage early on. This makes the code more reliable adn also better
+    // performance wise. Otherwise, we will try to preserve base level and only to find out the
+    // whole thing has to be respecified.
+    if (mState.getImmutableFormat() &&
+        (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags))
+    {
+        ANGLE_TRY(respecifyImageStorage(contextVk));
     }
 
     // Set base and max level before initializing the image
