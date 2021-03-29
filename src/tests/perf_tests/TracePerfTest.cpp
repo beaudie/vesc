@@ -586,7 +586,7 @@ void TracePerfTest::initializeBenchmark()
 
     // If we're re-tracing, trigger capture start after setup. This ensures the Setup function gets
     // recaptured into another Setup function and not merged with the first frame.
-    if (angle::gStartTraceAfterSetup)
+    if (angle::gRetraceMode)
     {
         angle::SetEnvironmentVar("ANGLE_CAPTURE_TRIGGER", "0");
         getGLWindow()->swap();
