@@ -206,6 +206,9 @@ def _CheckChangeHasBugField(input_api, output_api):
         match = re.match(bug_regex, bug)
         if match == None or bug != match.group(0) or match.group(1) not in projects:
             errors.append(output_api.PresubmitError('Incorrect bug tag "' + bug + '".'))
+            print(bug)
+            print(match.group(0))
+            print(match.group(1))
             if not extra_help:
                 extra_help = output_api.PresubmitError('Acceptable format is:\n\n'
                                                        '    Bug: project:bugnumber\n\n'
