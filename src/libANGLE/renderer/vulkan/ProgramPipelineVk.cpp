@@ -102,7 +102,17 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
         mExecutable.resolvePrecisionMismatch(mergedVaryings);
     }
 
-    return mExecutable.createPipelineLayout(glContext, nullptr);
+    ANGLE_TRY(mExecutable.createPipelineLayout(glContext, nullptr));
+    if (glExecutable.isCompute())
+    {
+        contextVk->invalidateCurrentComputePipeline();
+    }
+    else
+    {
+        contextVk->invalidateCurrentGraphicsPipeline();
+    }
+
+    return angle::Result::Continue;
 }
 
 size_t ProgramPipelineVk::calcUniformUpdateRequiredSpace(
