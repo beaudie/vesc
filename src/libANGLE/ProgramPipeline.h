@@ -131,11 +131,17 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
     angle::Result link(const gl::Context *context);
     bool linkVaryings(InfoLog &infoLog) const;
     void validate(const gl::Context *context);
-    bool validateSamplers(InfoLog *infoLog, const Caps &caps);
-
-    bool usesShaderProgram(ShaderProgramID program) const
+    bool validateSamplersImpl(InfoLog *infoLog, const Caps &caps);
+    bool validateSamplers(InfoLog *infoLog, const Caps &caps)
     {
-        return mState.usesShaderProgram(program);
+        // Skip cache if we're using an infolog, so we get the full error.
+        // Also skip the cache if the sample mapping has changed, or if we haven't ever validated.
+        if (infoLog == nullptr && mCachedValidateSamplersResult.valid())
+        {
+            return mCachedValidateSamplersResult.value();
+        }
+
+        return validateSamplersImpl(infoLog, caps);
     }
 
     GLboolean isValid() const { return mState.isValid(); }
@@ -162,6 +168,9 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
     std::unique_ptr<rx::ProgramPipelineImpl> mProgramPipelineImpl;
 
     ProgramPipelineState mState;
+
+    // Cache for sampler validation
+    Optional<bool> mCachedValidateSamplersResult;
 
     std::vector<angle::ObserverBinding> mProgramObserverBindings;
     angle::ObserverBinding mExecutableObserverBinding;
