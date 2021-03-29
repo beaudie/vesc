@@ -4480,6 +4480,8 @@ void Program::updateSamplerUniform(Context *context,
 
     // Invalidate the validation cache.
     mCachedValidateSamplersResult.reset();
+    // Inform any PPOs this Program may be bound to.
+    onStateChange(angle::SubjectMessage::SamplerUniformsUpdated);
 }
 
 void ProgramState::setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex)
