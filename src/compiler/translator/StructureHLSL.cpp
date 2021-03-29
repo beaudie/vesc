@@ -123,9 +123,21 @@ int Std140PaddingHelper::prePadding(const TType &type, bool forcePadding)
 {
     if (type.getBasicType() == EbtStruct || type.isMatrix() || type.isArray())
     {
-        // no padding needed, HLSL will align the field to a new register
-        mElementIndex = 0;
-        return 0;
+        if (forcePadding)
+        {
+            // If this structure will be used as HLSL StructuredBuffer member's type, we should add
+            // padding between the structure's members to follow the std140 rules manually.
+            const int forcePaddingOffset = mElementIndex % 4;
+            const int forcePaddingCount  = forcePaddingOffset != 0 ? (4 - forcePaddingOffset) : 0;
+            mElementIndex                = 0;
+            return forcePaddingCount;
+        }
+        else
+        {
+            // no padding needed, HLSL will align the field to a new register
+            mElementIndex = 0;
+            return 0;
+        }
     }
 
     const GLenum glType     = GLVariableType(type);
@@ -133,19 +145,30 @@ int Std140PaddingHelper::prePadding(const TType &type, bool forcePadding)
 
     if (numComponents >= 4)
     {
-        // no padding needed, HLSL will align the field to a new register
-        mElementIndex = 0;
-        return 0;
+        if (forcePadding)
+        {
+            // Add padding between the structure's members to follow the std140 rules manually.
+            const int forcePaddingOffset = mElementIndex % 4;
+            const int forcePaddingCount  = forcePaddingOffset != 0 ? (4 - forcePaddingOffset) : 0;
+            mElementIndex                = numComponents % 4;
+            return forcePaddingCount;
+        }
+        else
+        {
+            // no padding needed, HLSL will align the field to a new register
+            mElementIndex = 0;
+            return 0;
+        }
     }
 
     if (mElementIndex + numComponents > 4)
     {
         if (forcePadding)
         {
-            // If this structure will be used as HLSL StructuredBuffer member's type, we should add
-            // padding between the structure's members to follow the std140 rules manually.
-            const int forcePaddingCount = 4 - mElementIndex;
-            mElementIndex               = numComponents;
+            // Add padding between the structure's members to follow the std140 rules manually.
+            const int forcePaddingOffset = mElementIndex % 4;
+            const int forcePaddingCount  = forcePaddingOffset != 0 ? (4 - forcePaddingOffset) : 0;
+            mElementIndex                = numComponents;
             return forcePaddingCount;
         }
         else
