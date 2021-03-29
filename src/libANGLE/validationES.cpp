@@ -3808,7 +3808,7 @@ const char *ValidateDrawStates(const Context *context)
 
         if (program)
         {
-            if (!program->validateSamplers(nullptr, context->getCaps()))
+            if (!program->getExecutable().validateSamplers(nullptr, context->getCaps()))
             {
                 return kTextureTypeConflict;
             }
@@ -3829,7 +3829,7 @@ const char *ValidateDrawStates(const Context *context)
                 return errorMsg;
             }
 
-            if (!programPipeline->validateSamplers(nullptr, context->getCaps()))
+            if (!programPipeline->getExecutable().validateSamplers(nullptr, context->getCaps()))
             {
                 return kTextureTypeConflict;
             }
