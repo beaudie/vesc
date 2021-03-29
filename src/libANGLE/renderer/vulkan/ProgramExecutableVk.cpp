@@ -264,6 +264,18 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
         programInfo.release(contextVk);
     }
     mComputeProgramInfo.release(contextVk);
+
+    // Reset *ContextVk::mCurrentGraphicsPipeline, since programInfo.release() freed the
+    // PipelineHelper that it's currently pointing to.
+    // Only do this for the currently bound ProgramExecutableVk, since Program A can be linked while
+    // Program B is currently in use and we don't want to reset/invalidate Program B's pipeline.
+    // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
+    // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
+    if (contextVk->isCurrentExecutable(this))
+    {
+        contextVk->resetCurrentGraphicsPipeline();
+        contextVk->invalidateCurrentPipeline();
+    }
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *stream)
