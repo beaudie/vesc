@@ -1931,7 +1931,6 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
         {
             mImage->setFirstAllocatedLevel(baseLevel);
         }
-        mImage->setMaxLevel(maxLevel);
 
         // No further work to do, let staged updates handle the new levels
         return angle::Result::Continue;
@@ -1945,7 +1944,7 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
         ASSERT(!baseLevelChanged || baseLevel >= mImage->getFirstAllocatedLevel());
         ASSERT(!maxLevelChanged || maxLevel < gl::LevelIndex(mImage->getLevelCount()));
     }
-    else if (!baseLevelChanged && (maxLevel < baseLevel + mImage->getLevelCount()))
+    else if (!baseLevelChanged && (maxLevel <= mImage->getLastAllocatedLevel()))
     {
         // With a valid image, check if only changing the maxLevel to a subset of the texture's
         // actual number of mip levels
@@ -1960,9 +1959,6 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
     {
         // Don't need to respecify the texture; but do need to update which vkImageView's are
         // served up by ImageViewHelper
-
-        // Track the levels in our ImageHelper
-        mImage->setMaxLevel(maxLevel);
 
         // Update the current max level in ImageViewHelper
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
@@ -2032,7 +2028,7 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
     {
         ASSERT((mImage->getFirstAllocatedLevel() == gl::LevelIndex(0)) ||
                (mImage->getFirstAllocatedLevel() == baseLevel));
-        ASSERT((mImage->getMaxLevel() == gl::LevelIndex(0)) || (mImage->getMaxLevel() == maxLevel));
+        ASSERT(!mState.getImmutableFormat());
         releaseImage(contextVk);
         return angle::Result::Continue;
     }
@@ -2079,10 +2075,6 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
         // Set the newly created mImage as the destination for the staging operation
         dstImage = mImage;
     }
-
-    // After flushing prior staged updates, track the new levels (they are used in the flush, hence
-    // the wait)
-    dstImage->setMaxLevel(maxLevel);
 
     // Transfer the entire contents of the source image into the destination image.
     ANGLE_TRY(copyAndStageImageData(contextVk, previousFirstAllocateLevel, srcImage, dstImage));
