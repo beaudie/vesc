@@ -481,6 +481,11 @@ TracePerfTest::TracePerfTest()
         }
     }
 
+    if (param.testID == RestrictedTraceID::dragon_raja)
+    {
+        addExtensionPrerequisite("GL_OES_EGL_image_external");
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
