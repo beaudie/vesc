@@ -812,7 +812,7 @@ size_t InfoLog::getLength() const
         return 0;
     }
 
-    const std::string &logString = mLazyStream->str();
+    const std::string &logString = angle::TrimString(mLazyStream->str(), angle::kWhitespaceASCII);
     return logString.empty() ? 0 : logString.length() + 1;
 }
 
@@ -867,6 +867,11 @@ void InfoLog::reset()
     {
         mLazyStream.reset(nullptr);
     }
+}
+
+std::string InfoLog::str() const
+{
+    return mLazyStream ? angle::TrimString(mLazyStream->str(), angle::kWhitespaceASCII) : "";
 }
 
 bool InfoLog::empty() const

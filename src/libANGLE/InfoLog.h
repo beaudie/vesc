@@ -69,8 +69,7 @@ class InfoLog : angle::NonCopyable
         return helper;
     }
 
-    std::string str() const { return mLazyStream ? mLazyStream->str() : ""; }
-
+    std::string str() const;
     bool empty() const;
 
   private:
