@@ -10,6 +10,14 @@
 
 #include "test_utils/runner/TestSuite.h"
 
+namespace
+{
+const char *kSlowTests[] = {
+    "dEQP.KHR_GLES31/"
+    "core_texture_storage_multisample_APIDependencies_fbo_with_renderbuffer_and_multisample_"
+    "texture_attachments_with_different_number_of_samples"};
+}  // namespace
+
 // Defined in angle_deqp_gtest.cpp. Declared here so we don't need to make a header that we import
 // in Chromium.
 namespace angle
@@ -27,5 +35,6 @@ int main(int argc, char **argv)
 
     angle::InitTestHarness(&argc, argv);
     angle::TestSuite testSuite(&argc, argv);
+    testSuite.registerSlowTests(kSlowTests, ArraySize(kSlowTests));
     return testSuite.run();
 }
