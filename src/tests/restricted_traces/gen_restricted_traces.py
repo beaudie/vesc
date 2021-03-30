@@ -303,9 +303,12 @@ def get_context(trace):
         # Load up the only header present for each trace
         if fnmatch.fnmatch(file, '*.h'):
             # Strip the extension to isolate the context
-            context = file[len(file) - 3]
-            assert context.isdigit() == True, "Failed to find trace context number"
-            assert file[len(file) - 4].isdigit() == False, "Context number is higher than 9"
+            i = 3
+            context = ''
+            while file[len(file) - i].isdigit():
+                context = file[len(file) - i] + context
+                i += 1
+            assert context.isnumeric() == True, "Failed to find trace context number"
             return context
 
 
