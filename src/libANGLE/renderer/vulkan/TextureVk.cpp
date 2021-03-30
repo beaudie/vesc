@@ -1595,10 +1595,7 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
             }
 
             bool isUpdateToSingleLevelImage =
-                mImage->getLevelCount() == 1 && mImage->getBaseLevel() == levelIndexGL;
-            // If it is single level image, baseLevel must equal to firstAllocateLevel
-            ASSERT(!isUpdateToSingleLevelImage ||
-                   mImage->getFirstAllocatedLevel() == mImage->getBaseLevel());
+                mImage->getLevelCount() == 1 && mImage->getFirstAllocatedLevel() == levelIndexGL;
 
             // If incompatible, and redefining the single-level image, release it so it can be
             // recreated immediately.  This is an optimization to avoid an extra copy.
@@ -1866,12 +1863,14 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     ASSERT(mImage->valid());
 
     // If base level has changed, the front-end should have called syncState already.
-    ASSERT(mImage->getBaseLevel() == gl::LevelIndex(mState.getEffectiveBaseLevel()));
+    ASSERT(mState.getImmutableFormat() ||
+           mImage->getFirstAllocatedLevel() == gl::LevelIndex(mState.getEffectiveBaseLevel()));
 
     // Only staged update here is the robust resource init if any.
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
-    vk::LevelIndex maxLevel = mImage->toVkLevel(gl::LevelIndex(mState.getMipmapMaxLevel()));
+    vk::LevelIndex baseLevel = mImage->toVkLevel(gl::LevelIndex(mState.getEffectiveBaseLevel()));
+    vk::LevelIndex maxLevel  = mImage->toVkLevel(gl::LevelIndex(mState.getMipmapMaxLevel()));
     ASSERT(maxLevel != vk::LevelIndex(0));
 
     // If it's possible to generate mipmap in compute, that would give the best possible
@@ -1890,7 +1889,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
                                                  kBlitFeatureFlags))
     {
         // Otherwise, use blit if possible.
-        return mImage->generateMipmapsWithBlit(contextVk, maxLevel);
+        return mImage->generateMipmapsWithBlit(contextVk, baseLevel, maxLevel);
     }
 
     ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_HIGH,
@@ -1906,21 +1905,13 @@ angle::Result TextureVk::setBaseLevel(const gl::Context *context, GLuint baseLev
 }
 
 angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
-                                             gl::LevelIndex baseLevel,
-                                             gl::LevelIndex maxLevel)
+                                             bool baseLevelChanged,
+                                             bool maxLevelChanged)
 {
     if (!mImage)
     {
         return angle::Result::Continue;
     }
-
-    // Track the previous levels for use in update loop below
-    gl::LevelIndex previousBaseLevel = mImage->getBaseLevel();
-    gl::LevelIndex previousMaxLevel  = mImage->getMaxLevel();
-
-    ASSERT(baseLevel <= maxLevel);
-    bool baseLevelChanged = baseLevel != previousBaseLevel;
-    bool maxLevelChanged  = previousMaxLevel != maxLevel;
 
     if (!(baseLevelChanged || maxLevelChanged))
     {
@@ -1929,10 +1920,18 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
+    gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
+    gl::LevelIndex maxLevel(mState.getEffectiveMaxLevel());
+    ASSERT(baseLevel <= maxLevel);
+
     if (!mImage->valid())
     {
         // Track the levels in our ImageHelper
-        mImage->setBaseAndMaxLevels(baseLevel, maxLevel);
+        if (!mState.getImmutableFormat())
+        {
+            mImage->setFirstAllocatedLevel(baseLevel);
+        }
+        mImage->setMaxLevel(maxLevel);
 
         // No further work to do, let staged updates handle the new levels
         return angle::Result::Continue;
@@ -1961,8 +1960,9 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
     {
         // Don't need to respecify the texture; but do need to update which vkImageView's are
         // served up by ImageViewHelper
+
         // Track the levels in our ImageHelper
-        mImage->setBaseAndMaxLevels(baseLevel, maxLevel);
+        mImage->setMaxLevel(maxLevel);
 
         // Update the current max level in ImageViewHelper
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
@@ -1974,7 +1974,8 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
                               maxLevel - baseLevel + 1, layerCount);
     }
 
-    return respecifyImageStorageAndLevels(contextVk, previousBaseLevel, baseLevel, maxLevel);
+    return respecifyImageStorageAndLevels(contextVk, mImage->getFirstAllocatedLevel(), baseLevel,
+                                          maxLevel);
 }
 
 angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
@@ -2029,8 +2030,8 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
 {
     if (!mImage->valid())
     {
-        ASSERT((mImage->getBaseLevel() == gl::LevelIndex(0)) ||
-               (mImage->getBaseLevel() == baseLevel));
+        ASSERT((mImage->getFirstAllocatedLevel() == gl::LevelIndex(0)) ||
+               (mImage->getFirstAllocatedLevel() == baseLevel));
         ASSERT((mImage->getMaxLevel() == gl::LevelIndex(0)) || (mImage->getMaxLevel() == maxLevel));
         releaseImage(contextVk);
         return angle::Result::Continue;
@@ -2081,7 +2082,7 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
 
     // After flushing prior staged updates, track the new levels (they are used in the flush, hence
     // the wait)
-    dstImage->setBaseAndMaxLevels(baseLevel, maxLevel);
+    dstImage->setMaxLevel(maxLevel);
 
     // Transfer the entire contents of the source image into the destination image.
     ANGLE_TRY(copyAndStageImageData(contextVk, previousFirstAllocateLevel, srcImage, dstImage));
@@ -2092,6 +2093,11 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
     if (ownsCurrentImage)
     {
         releaseImage(contextVk);
+
+        if (!mState.getImmutableFormat())
+        {
+            dstImage->setFirstAllocatedLevel(baseLevel);
+        }
     }
 
     mImage->retain(&contextVk->getResourceUseList());
@@ -2336,14 +2342,14 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
                   "levels mask assumes 32-bits is enough");
     gl::TexLevelMask::value_type levelsMask = angle::Bit<uint32_t>(maxLevel + 1 - baseLevel) - 1;
 
-    gl::LevelIndex imageBaseLevel = mImage->getBaseLevel();
-    if (imageBaseLevel > baseLevel)
+    gl::LevelIndex imageAllocatedLevel = mImage->getFirstAllocatedLevel();
+    if (imageAllocatedLevel > baseLevel)
     {
-        levelsMask >>= imageBaseLevel - baseLevel;
+        levelsMask >>= imageAllocatedLevel - baseLevel;
     }
     else
     {
-        levelsMask <<= baseLevel - imageBaseLevel;
+        levelsMask <<= baseLevel - imageAllocatedLevel;
     }
 
     mRedefinedLevels &= gl::TexLevelMask(~levelsMask);
@@ -2437,11 +2443,11 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     // Set base and max level before initializing the image
-    if (dirtyBits.test(gl::Texture::DIRTY_BIT_MAX_LEVEL) ||
-        dirtyBits.test(gl::Texture::DIRTY_BIT_BASE_LEVEL))
+    bool baseLevelChanged = dirtyBits.test(gl::Texture::DIRTY_BIT_BASE_LEVEL);
+    bool maxLevelChanged  = dirtyBits.test(gl::Texture::DIRTY_BIT_MAX_LEVEL);
+    if (maxLevelChanged || baseLevelChanged)
     {
-        ANGLE_TRY(updateBaseMaxLevels(contextVk, gl::LevelIndex(mState.getEffectiveBaseLevel()),
-                                      gl::LevelIndex(mState.getEffectiveMaxLevel())));
+        ANGLE_TRY(updateBaseMaxLevels(contextVk, baseLevelChanged, maxLevelChanged));
 
         // Updating levels could have respecified the storage, recapture mImageCreateFlags
         oldCreateFlags = mImageCreateFlags;
@@ -2788,7 +2794,8 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
 {
     ASSERT(mImage != nullptr && mImage->valid());
 
-    gl::LevelIndex baseLevelGL = getNativeImageLevel(mImage->getBaseLevel());
+    gl::LevelIndex baseLevelGL =
+        getNativeImageLevel(gl::LevelIndex(mState.getEffectiveBaseLevel()));
     vk::LevelIndex baseLevelVk = mImage->toVkLevel(baseLevelGL);
     uint32_t baseLayer         = getNativeImageLayer(0);
 
