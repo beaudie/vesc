@@ -858,7 +858,11 @@ void InfoLog::appendSanitized(const char *message)
         }
     } while (found != std::string::npos);
 
-    *mLazyStream << message << std::endl;
+    if (!msg.empty())
+    {
+        printf("message: '%s'\n", message);
+        *mLazyStream << message << std::endl;
+    }
 }
 
 void InfoLog::reset()
