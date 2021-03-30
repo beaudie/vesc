@@ -26,6 +26,7 @@
 #include "cod_mobile/cod_mobile_capture_context1.h"
 #include "coin_master/coin_master_capture_context2.h"
 #include "dragon_ball_legends/dragon_ball_legends_capture_context1.h"
+#include "dragon_raja/dragon_raja_capture_context10.h"
 #include "efootball_pes_2021/efootball_pes_2021_capture_context7.h"
 #include "egypt_1500/egypt_1500_capture_context1.h"
 #include "eight_ball_pool/eight_ball_pool_capture_context2.h"
@@ -152,6 +153,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
       dragon_ball_legends::kReplayFrameStart, dragon_ball_legends::kReplayFrameEnd,
       dragon_ball_legends::kReplayDrawSurfaceWidth, dragon_ball_legends::kReplayDrawSurfaceHeight,
       "dragon_ball_legends"}},
+    {RestrictedTraceID::dragon_raja,
+     {dragon_raja::kReplayContextClientMajorVersion, dragon_raja::kReplayContextClientMinorVersion,
+      dragon_raja::kReplayFrameStart, dragon_raja::kReplayFrameEnd,
+      dragon_raja::kReplayDrawSurfaceWidth, dragon_raja::kReplayDrawSurfaceHeight, "dragon_raja"}},
     {RestrictedTraceID::efootball_pes_2021,
      {efootball_pes_2021::kReplayContextClientMajorVersion,
       efootball_pes_2021::kReplayContextClientMinorVersion, efootball_pes_2021::kReplayFrameStart,
@@ -449,6 +454,9 @@ void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
         case RestrictedTraceID::dragon_ball_legends:
             dragon_ball_legends::ReplayContext1Frame(frameIndex);
             break;
+        case RestrictedTraceID::dragon_raja:
+            dragon_raja::ReplayContext10Frame(frameIndex);
+            break;
         case RestrictedTraceID::efootball_pes_2021:
             efootball_pes_2021::ReplayContext7Frame(frameIndex);
             break;
@@ -654,6 +662,9 @@ void ResetReplay(RestrictedTraceID traceID)
             break;
         case RestrictedTraceID::dragon_ball_legends:
             dragon_ball_legends::ResetContext1Replay();
+            break;
+        case RestrictedTraceID::dragon_raja:
+            dragon_raja::ResetContext10Replay();
             break;
         case RestrictedTraceID::efootball_pes_2021:
             efootball_pes_2021::ResetContext7Replay();
@@ -861,6 +872,9 @@ void SetupReplay(RestrictedTraceID traceID)
         case RestrictedTraceID::dragon_ball_legends:
             dragon_ball_legends::SetupContext1Replay();
             break;
+        case RestrictedTraceID::dragon_raja:
+            dragon_raja::SetupContext10Replay();
+            break;
         case RestrictedTraceID::efootball_pes_2021:
             efootball_pes_2021::SetupContext7Replay();
             break;
@@ -1067,6 +1081,9 @@ void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
         case RestrictedTraceID::dragon_ball_legends:
             dragon_ball_legends::SetBinaryDataDir(dataDir);
             break;
+        case RestrictedTraceID::dragon_raja:
+            dragon_raja::SetBinaryDataDir(dataDir);
+            break;
         case RestrictedTraceID::efootball_pes_2021:
             efootball_pes_2021::SetBinaryDataDir(dataDir);
             break;
@@ -1272,6 +1289,9 @@ void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallba
             break;
         case RestrictedTraceID::dragon_ball_legends:
             dragon_ball_legends::SetBinaryDataDecompressCallback(callback);
+            break;
+        case RestrictedTraceID::dragon_raja:
+            dragon_raja::SetBinaryDataDecompressCallback(callback);
             break;
         case RestrictedTraceID::efootball_pes_2021:
             efootball_pes_2021::SetBinaryDataDecompressCallback(callback);
