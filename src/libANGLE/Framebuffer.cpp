@@ -1535,7 +1535,10 @@ angle::Result Framebuffer::discard(const Context *context, size_t count, const G
 {
     // Back-ends might make the contents of the FBO undefined. In WebGL 2.0, invalidate operations
     // can be no-ops, so we should probably do that to ensure consistency.
-    // TODO(jmadill): WebGL behaviour, and robust resource init behaviour without WebGL.
+    if (context->isWebGL())
+    {
+        return angle::Result::Continue;
+    }
 
     return mImpl->discard(context, count, attachments);
 }
@@ -1546,7 +1549,10 @@ angle::Result Framebuffer::invalidate(const Context *context,
 {
     // Back-ends might make the contents of the FBO undefined. In WebGL 2.0, invalidate operations
     // can be no-ops, so we should probably do that to ensure consistency.
-    // TODO(jmadill): WebGL behaviour, and robust resource init behaviour without WebGL.
+    if (context->isWebGL())
+    {
+        return angle::Result::Continue;
+    }
 
     return mImpl->invalidate(context, count, attachments);
 }
@@ -1594,7 +1600,10 @@ angle::Result Framebuffer::invalidateSub(const Context *context,
 {
     // Back-ends might make the contents of the FBO undefined. In WebGL 2.0, invalidate operations
     // can be no-ops, so we should probably do that to ensure consistency.
-    // TODO(jmadill): Make a invalidate no-op in WebGL 2.0.
+    if (context->isWebGL())
+    {
+        return angle::Result::Continue;
+    }
 
     return mImpl->invalidateSub(context, count, attachments, area);
 }
