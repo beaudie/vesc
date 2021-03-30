@@ -252,6 +252,20 @@ bool HasTextureBufferSupport(const RendererVk *rendererVk)
 
     return true;
 }
+
+bool CanSupportYUVSampling(const RendererVk *rendererVk)
+{
+    // The following formats are not mandatory in Vulkan, even when VK_KHR_sampler_ycbcr_conversion
+    // is supported. GL_ANGLE_texture_external_yuv_sampling requires support for sampling only the
+    // 8-bit 2-plane YUV format, if the ICD supports that we can expose the extension.
+    //
+    //     VK_FORMAT_G8_B8R8_2PLANE_420_UNORM
+
+    const Format &formatVk = rendererVk->getFormat(GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX);
+
+    return rendererVk->hasImageFormatFeatureBits(formatVk.actualImageFormatID,
+                                                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT);
+}
 }  // namespace
 }  // namespace vk
 
@@ -1026,6 +1040,10 @@ void RendererVk::ensureCapsInitialized() const
     // GL_EXT_blend_func_extended
     mNativeExtensions.blendFuncExtended        = (mPhysicalDeviceFeatures.dualSrcBlend == VK_TRUE);
     mNativeExtensions.maxDualSourceDrawBuffers = LimitToInt(limitsVk.maxFragmentDualSrcAttachments);
+
+    // GL_ANGLE_texture_external_yuv_sampling
+    mNativeExtensions.textureExternalYuvSamplingANGLE =
+        getFeatures().supportsYUVSamplerConversion.enabled && vk::CanSupportYUVSampling(this);
 }
 
 namespace vk
