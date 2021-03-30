@@ -25,6 +25,12 @@ namespace gl
 namespace
 {
 angle::SubjectIndex kRenderbufferImplSubjectIndex = 0;
+
+InitState DetermineInitState(const Context *context)
+{
+    return (context && context->isRobustResourceInitEnabled()) ? InitState::MayNeedInit
+                                                               : InitState::Initialized;
+}
 }  // namespace
 
 // RenderbufferState implementation.
@@ -81,7 +87,7 @@ void RenderbufferState::update(GLsizei width,
     mFormat            = format;
     mSamples           = samples;
     mMultisamplingMode = multisamplingMode;
-    mInitState         = InitState::MayNeedInit;
+    mInitState         = initState;
 }
 
 // Renderbuffer implementation.
@@ -126,7 +132,7 @@ angle::Result Renderbuffer::setStorage(const Context *context,
     ANGLE_TRY(mImplementation->setStorage(context, internalformat, width, height));
 
     mState.update(width, height, Format(internalformat), 0, MultisamplingMode::Regular,
-                  InitState::MayNeedInit);
+                  DetermineInitState(context));
     onStateChange(angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
@@ -148,7 +154,8 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
     ANGLE_TRY(mImplementation->setStorageMultisample(context, samples, internalformat, width,
                                                      height, mode));
 
-    mState.update(width, height, Format(internalformat), samples, mode, InitState::MayNeedInit);
+    mState.update(width, height, Format(internalformat), samples, mode,
+                  DetermineInitState(context));
     onStateChange(angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
