@@ -1,0 +1,112 @@
+Name
+
+    ANGLE_texture_external_yuv_sampling
+
+Name Strings
+
+    GL_ANGLE_texture_external_yuv_sampling
+
+Contributors
+
+    Mohan Maiya, Samsung
+
+Contacts
+
+    Mohan Maiya, Samsung (m.maiya 'at' samsung 'dot' com)
+
+Notice
+
+    Copyright (c) 2021 The Khronos Group Inc. Copyright terms at
+        http://www.khronos.org/registry/speccopyright.html
+
+Status
+
+    Draft.
+
+Version
+
+    Version 1, April 10, 2021
+
+Number
+
+    OpenGL ES Extension ###
+
+Dependencies
+
+    OpenGL ES 2.0 is required.
+    Requires GL_OES_EGL_image_external extension.
+
+Overview
+
+    The GL_OES_EGL_image_external exension allows for binding EGLImages which have internal
+    formats not otherwise supported by OpenGL ES. On some implementations this may also include
+    support for planar or interleaved YUV formats. There are implementations that support
+    sampling GLES texture target siblings with non-standard RGB formats but lack the support for
+    sampling YUV formats, refer [fn1] for examples.
+
+    Apps need to query, at runtime, the REQUIRED_TEXTURE_IMAGE_UNITS_OES to infer support for
+    planar YUV formats and possibly fail at draw time if there are insufficient image units available.
+    This extension formalizes support for sampling external textures, with image data specified
+    in YUV colorspace through exposing the "GL_ANGLE_texture_external_yuv_sampling" extension string.
+
+    This extension only requires NEAREST magnification filter and NEAREST and NEAREST_MIPMAP_NEAREST
+    minification filters to be supported. This extension only requires support for sampling the
+    commonly used 8-bit 2-plane YUV format listed in the "New Tokens" section, refer to [fn2] for
+    details about the formats and layout. It is up to the implementation to extend support for the
+    rest of the formats.
+
+    [fn1] : Implementations that have ANGLE as the GLES driver with Vulkan as the backend will
+            lack support for sampling YUV formats when the underlying Vulkan ICD does not support
+            the VK_KHR_sampler_ycbcr_conversion extension.
+
+    [fn2] : https://www.fourcc.org/yuv.php
+
+New Types
+
+    None.
+
+New Procedures and Functions
+
+    None.
+
+New Tokens
+
+    List of non-standard YUV internal formats
+
+    // 8-bit YUV formats
+    G8_B8_R8_3PLANE_420_UNORM_ANGLEX                    0x6B00
+    G8_B8R8_2PLANE_420_UNORM_ANGLEX                     0x6B01
+
+    // 10-bit YUV formats
+    G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLEX   0x6B02
+    G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLEX    0x6B03
+
+    // 12-bit YUV formats
+    G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLEX   0x6B04
+    G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLEX    0x6B05
+
+    // 16-bit YUV formats
+    G16_B16_R16_3PLANE_420_UNORM_ANGLEX                 0x6B06
+    G16_B16R16_2PLANE_420_UNORM_ANGLEX                  0x6B07
+
+
+Issues
+
+    1. How was the new format list chosen?
+
+       Commonly used planar YUV formats across various platforms were surveyed, including
+       new platforms that support HDR content. A subset of those were chosen to be required.
+       It is up to the implementations to extend support for the rest of the formats.
+
+    2. What is the value add of exposing this exension string?
+
+        Applications can now ascertain support for sampling external textures with YUV format
+        beforehand (and not at runtime) and make informed choices about code paths. For instance,
+        having determined the lack of support for sampling YUV formats, the app can choose to
+        inject code that transforms data from YUV colorspace to a supported GLES internal format
+        before creating a GLES texture target sibling, thus avoiding potential run time errors.
+
+Revision History
+
+    Version 1, 2021-04-10 (Mohan Maiya)
+        - Initial draft
