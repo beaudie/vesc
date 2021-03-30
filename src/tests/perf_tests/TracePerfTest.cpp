@@ -481,6 +481,17 @@ TracePerfTest::TracePerfTest()
         }
     }
 
+    if (param.testID == RestrictedTraceID::dragon_raja)
+    {
+        addExtensionPrerequisite("GL_OES_EGL_image_external");
+
+        // TODO: http://anglebug.com/5807 Pixel 2 errors with "Framebuffer is incomplete" on Vulkan
+        if (IsPixel2() && param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+        {
+            mSkipTest = true;
+        }
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
