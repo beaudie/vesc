@@ -7,16 +7,16 @@
 // Note that for binary blob data only a checksum is stored so that
 // a lossless  deserialization is not supported.
 
-#include "JsonSerializer.h"
+#ifdef HAVE_RAPIDJSON
+#    include "JsonSerializer.h"
 
-#include "common/debug.h"
+#    include "common/debug.h"
 
-#include <rapidjson/document.h>
-#include <rapidjson/filewritestream.h>
-#include <rapidjson/ostreamwrapper.h>
-#include <rapidjson/prettywriter.h>
-
-#include <anglebase/sha1.h>
+#    include <anglebase/sha1.h>
+#    include <rapidjson/document.h>
+#    include <rapidjson/filewritestream.h>
+#    include <rapidjson/ostreamwrapper.h>
+#    include <rapidjson/prettywriter.h>
 
 namespace angle
 {
@@ -116,3 +116,4 @@ size_t JsonSerializer::length() const
 }
 
 }  // namespace angle
+#endif

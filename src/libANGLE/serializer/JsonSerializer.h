@@ -11,7 +11,9 @@
 
 #include "common/angleutils.h"
 
-#include <rapidjson/document.h>
+#ifdef HAVE_RAPIDJSON
+#    include <rapidjson/document.h>
+#endif
 
 #include <memory>
 #include <sstream>
@@ -44,11 +46,28 @@ struct StoreAs<signed long>
 class JsonSerializer : public angle::NonCopyable
 {
   public:
+#ifdef HAVE_RAPIDJSON
     JsonSerializer();
     ~JsonSerializer();
 
     void startDocument(const std::string &name);
     void endDocument();
+
+    void addCString(const std::string &name, const char *value);
+
+    void addString(const std::string &name, const std::string &value);
+
+    void addBlob(const std::string &name, const uint8_t *value, size_t length);
+
+    void startGroup(const std::string &name);
+
+    void endGroup();
+
+    const char *data() const;
+
+    std::vector<uint8_t> getData() const;
+
+    size_t length() const;
 
     template <typename T>
     void addScalar(const std::string &name, T value)
@@ -71,22 +90,6 @@ class JsonSerializer : public angle::NonCopyable
         mGroupValueStack.top()->AddMember(tag, array, mAllocator);
     }
 
-    void addCString(const std::string &name, const char *value);
-
-    void addString(const std::string &name, const std::string &value);
-
-    void addBlob(const std::string &name, const uint8_t *value, size_t length);
-
-    void startGroup(const std::string &name);
-
-    void endGroup();
-
-    const char *data() const;
-
-    std::vector<uint8_t> getData() const;
-
-    size_t length() const;
-
   private:
     using ValuePointer = std::unique_ptr<rapidjson::Value>;
 
@@ -95,6 +98,56 @@ class JsonSerializer : public angle::NonCopyable
     std::stack<std::string> mGroupNameStack;
     std::stack<ValuePointer> mGroupValueStack;
     std::string mResult;
+#else
+    JsonSerializer() {}
+    ~JsonSerializer() {}
+
+    void startDocument(const std::string &name) { (void)name; }
+    void endDocument() {}
+
+    void addCString(const std::string &name, const char *value)
+    {
+        (void)name;
+        (void)value;
+    }
+
+    void addString(const std::string &name, const std::string &value)
+    {
+        (void)name;
+        (void)value;
+    }
+
+    void addBlob(const std::string &name, const uint8_t *value, size_t length)
+    {
+        (void)name;
+        (void)value;
+        (void)length;
+    }
+
+    void startGroup(const std::string &name) { (void)name; }
+
+    void endGroup() {}
+
+    const char *data() const { return ""; }
+
+    std::vector<uint8_t> getData() const { return std::vector<uint8_t>(); }
+
+    size_t length() const { return 0; }
+
+    template <typename T>
+    void addScalar(const std::string &name, T value)
+    {
+        (void)name;
+        (void)value;
+    }
+
+    template <typename T>
+    void addVector(const std::string &name, const std::vector<T> &value)
+    {
+        (void)name;
+        (void)value;
+    }
+#endif
 };
 
 }  // namespace angle
