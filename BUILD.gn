@@ -915,13 +915,16 @@ group("angle_compression") {
 }
 
 angle_source_set("libjson_serializer") {
+  sources = [ "src/libANGLE/serializer/JsonSerializer.h" ]
+
+  if (angle_has_build) {
+    defines = [ "ANGLE_HAVE_RAPIDJSON" ]
+    sources += [ "src/libANGLE/serializer/JsonSerializer.cpp" ]
+  }
+
   public_deps = [
     ":libANGLE_base",
     "$angle_root/third_party/rapidjson",
-  ]
-  sources = [
-    "src/libANGLE/serializer/JsonSerializer.cpp",
-    "src/libANGLE/serializer/JsonSerializer.h",
   ]
 }
 
