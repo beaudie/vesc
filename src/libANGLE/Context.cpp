@@ -9306,9 +9306,18 @@ void StateCache::updateValidDrawModes(Context *context)
         }
     }
 
-    if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
+    if (!programExecutable)
     {
         mCachedValidDrawModes = kValidBasicDrawModes;
+        return;
+    }
+
+    // [EXT_geometry_shader] Section 10.1.7
+    // If a geometry shader is not active, the "adjacent" vertices are ignored.
+    // Set the valid draw modes to include all primitives except for GL_PATCHES
+    if (!programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
+    {
+        setValidDrawModes(true, true, true, true, true, false);
         return;
     }
 
