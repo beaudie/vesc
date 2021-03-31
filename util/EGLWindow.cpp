@@ -526,7 +526,7 @@ EGLContext EGLWindow::createContext(EGLContext share) const
             contextAttributes.push_back(mConfigParams.debug ? EGL_TRUE : EGL_FALSE);
         }
 
-        if (hasKHRCreateContextNoError)
+        if (hasKHRCreateContextNoError && mConfigParams.noError)
         {
             contextAttributes.push_back(EGL_CONTEXT_OPENGL_NO_ERROR_KHR);
             contextAttributes.push_back(mConfigParams.noError ? EGL_TRUE : EGL_FALSE);
