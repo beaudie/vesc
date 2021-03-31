@@ -3835,8 +3835,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     VkImageFormatListCreateInfoKHR imageFormatListInfo = {};
     angle::FormatID imageFormat                        = format.actualImageFormatID;
     angle::FormatID imageListFormat                    = format.actualImageFormat().isSRGB
-                                          ? ConvertToLinear(imageFormat)
-                                          : ConvertToSRGB(imageFormat);
+                                          ? ConvertToSRGB(imageFormat)
+                                          : ConvertToLinear(imageFormat);
     VkFormat imageListVkFormat = vk::GetVkFormatFromFormatID(imageListFormat);
 
     if (rendererVk->getFeatures().supportsImageFormatList.enabled &&
