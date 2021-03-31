@@ -11,16 +11,18 @@
 
 #include "common/debug.h"
 
-#include <rapidjson/document.h>
-#include <rapidjson/filewritestream.h>
-#include <rapidjson/ostreamwrapper.h>
-#include <rapidjson/prettywriter.h>
-
+#ifdef HAVE_RAPIDJSON
+#    include <rapidjson/document.h>
+#    include <rapidjson/filewritestream.h>
+#    include <rapidjson/ostreamwrapper.h>
+#    include <rapidjson/prettywriter.h>
+#endif
 #include <anglebase/sha1.h>
 
 namespace angle
 {
 
+#ifdef HAVE_RAPIDJSON
 namespace js = rapidjson;
 
 JsonSerializer::JsonSerializer() : mDoc(js::kObjectType), mAllocator(mDoc.GetAllocator()) {}
@@ -114,5 +116,57 @@ size_t JsonSerializer::length() const
 {
     return mResult.length();
 }
+#else
+JsonSerializer::JsonSerializer() {}
 
+JsonSerializer::~JsonSerializer() {}
+
+void JsonSerializer::startDocument(const std::string &name)
+{
+    startGroup(name);
+}
+
+void JsonSerializer::startGroup(const std::string &name)
+{
+    (void)name;
+}
+
+void JsonSerializer::endGroup() {}
+
+void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_t length)
+{
+    (void)name;
+    (void)blob;
+    (void)length;
+}
+
+void JsonSerializer::addCString(const std::string &name, const char *value)
+{
+    (void)name;
+    (void)value;
+}
+
+void JsonSerializer::addString(const std::string &name, const std::string &value)
+{
+    (void)name;
+    (void)value;
+}
+
+const char *JsonSerializer::data() const
+{
+    return "";
+}
+
+std::vector<uint8_t> JsonSerializer::getData() const
+{
+    return std::vector<uint8_t>();
+}
+
+void JsonSerializer::endDocument() {}
+
+size_t JsonSerializer::length() const
+{
+    return 0;
+}
+#endif
 }  // namespace angle

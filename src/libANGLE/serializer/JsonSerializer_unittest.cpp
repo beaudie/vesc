@@ -10,6 +10,8 @@
 
 #include <gtest/gtest.h>
 
+#if HAVE_RAPIDJSON
+
 class JsonSerializerTest : public ::testing::Test
 {
   protected:
@@ -183,3 +185,5 @@ void JsonSerializerTest::check(const std::string &expect)
     std::vector<uint8_t> expect_as_ubyte(expect.begin(), expect.end());
     EXPECT_EQ(js.getData(), expect_as_ubyte);
 }
+
+#endif

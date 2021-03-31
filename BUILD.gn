@@ -915,6 +915,10 @@ group("angle_compression") {
 }
 
 angle_source_set("libjson_serializer") {
+  if (angle_has_build) {
+    defines = [ "HAVE_RAPIDJSON" ]
+  }
+
   public_deps = [
     ":libANGLE_base",
     "$angle_root/third_party/rapidjson",

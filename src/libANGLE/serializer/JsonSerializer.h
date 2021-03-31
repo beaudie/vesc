@@ -11,7 +11,9 @@
 
 #include "common/angleutils.h"
 
-#include <rapidjson/document.h>
+#ifdef HAVE_RAPIDJSON
+#    include <rapidjson/document.h>
+#endif
 
 #include <memory>
 #include <sstream>
@@ -53,14 +55,20 @@ class JsonSerializer : public angle::NonCopyable
     template <typename T>
     void addScalar(const std::string &name, T value)
     {
+#ifdef HAVE_RAPIDJSON
         rapidjson::Value tag(name.c_str(), mAllocator);
         typename StoreAs<T>::Type v = value;
         mGroupValueStack.top()->AddMember(tag, v, mAllocator);
+#else
+        (void)name;
+        (void)value;
+#endif
     }
 
     template <typename T>
     void addVector(const std::string &name, const std::vector<T> &value)
     {
+#ifdef HAVE_RAPIDJSON
         rapidjson::Value tag(name.c_str(), mAllocator);
         rapidjson::Value array(rapidjson::kArrayType);
         array.SetArray();
@@ -69,6 +77,10 @@ class JsonSerializer : public angle::NonCopyable
             array.PushBack(v, mAllocator);
 
         mGroupValueStack.top()->AddMember(tag, array, mAllocator);
+#else
+        (void)name;
+        (void)value;
+#endif
     }
 
     void addCString(const std::string &name, const char *value);
@@ -88,6 +100,7 @@ class JsonSerializer : public angle::NonCopyable
     size_t length() const;
 
   private:
+#ifdef HAVE_RAPIDJSON
     using ValuePointer = std::unique_ptr<rapidjson::Value>;
 
     rapidjson::Document mDoc;
@@ -95,6 +108,7 @@ class JsonSerializer : public angle::NonCopyable
     std::stack<std::string> mGroupNameStack;
     std::stack<ValuePointer> mGroupValueStack;
     std::string mResult;
+#endif
 };
 
 }  // namespace angle
