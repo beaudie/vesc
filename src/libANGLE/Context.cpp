@@ -9306,20 +9306,32 @@ void StateCache::updateValidDrawModes(Context *context)
         }
     }
 
-    if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
+    if (!programExecutable)
     {
         mCachedValidDrawModes = kValidBasicDrawModes;
         return;
     }
 
-    ASSERT(programExecutable->hasLinkedShaderStage(ShaderType::Geometry));
-    PrimitiveMode gsMode = programExecutable->getGeometryShaderInputPrimitiveType();
+    // [EXT_geometry_shader] Section 10.1.7
+    // If a geometry shader is not active, the "adjacent" vertices are ignored.
+    // Set the valid draw modes to include all primitives except for GL_PATCHES
+    bool pointsOK  = true;
+    bool linesOK   = true;
+    bool trisOK    = true;
+    bool lineAdjOK = true;
+    bool triAdjOK  = true;
+    if (programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
+    {
+        // If the geometry shader is active, set valid draw modes based on
+        // the primitive topology
+        PrimitiveMode gsMode = programExecutable->getGeometryShaderInputPrimitiveType();
 
-    bool pointsOK  = gsMode == PrimitiveMode::Points;
-    bool linesOK   = gsMode == PrimitiveMode::Lines;
-    bool trisOK    = gsMode == PrimitiveMode::Triangles;
-    bool lineAdjOK = gsMode == PrimitiveMode::LinesAdjacency;
-    bool triAdjOK  = gsMode == PrimitiveMode::TrianglesAdjacency;
+        pointsOK  = gsMode == PrimitiveMode::Points;
+        linesOK   = gsMode == PrimitiveMode::Lines;
+        trisOK    = gsMode == PrimitiveMode::Triangles;
+        lineAdjOK = gsMode == PrimitiveMode::LinesAdjacency;
+        triAdjOK  = gsMode == PrimitiveMode::TrianglesAdjacency;
+    }
 
     setValidDrawModes(pointsOK, linesOK, trisOK, lineAdjOK, triAdjOK, false);
 }
