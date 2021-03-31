@@ -18,16 +18,30 @@ angle_shared_library("angle_restricted_trace_loader") {
   deps = [ "$angle_root:includes" ]
 }
 
+angle_source_set("angle_restricted_trace_fixture") {
+  defines = [ "ANGLE_REPLAY_IMPLEMENTATION" ]
+  suppressed_configs += [ "$angle_root:constructor_and_destructor_warnings" ]
+  sources = [
+    "angle_trace_gl.h",
+    "restricted_trace_fixture.cpp",
+    "restricted_trace_fixture.h",
+  ]
+  public_deps = [
+    ":angle_restricted_trace_loader",
+    "$angle_root:includes",
+  ]
+  include_dirs = [ "." ]
+  public_configs += [ "$angle_root:no_gl_prototypes" ]
+}
+
 # Imports "angle_restricted_traces"
 import("restricted_traces_autogen.gni")
 _traces = []
 
 foreach(_test_info, angle_restricted_traces) {
   # Empty out the "_test_and_ctx" list so GN doesn't complain about replacing non-empty list.
-  _test_and_ctx = []
-  _test_and_ctx = string_split(_test_info)
-  _test = _test_and_ctx[0]
-  _ctx = _test_and_ctx[1]
+  _test = _test_info[0]
+  _ctx = _test_info[1]
   _test_dir = "${_test}"
   _test_ctx = "${_test_dir}/${_test}_capture_context${_ctx}"
   _target = "angle_restricted_trace_" + _test
@@ -36,23 +50,19 @@ foreach(_test_info, angle_restricted_traces) {
     testonly = true
 
     # Similar to capture replay sample, use the file index for sources
-    sources = [ "angle_trace_gl.h" ] +
-              rebase_path(read_file("${_test_ctx}_files.txt", "list lines"),
-                          ".",
-                          "${_test_dir}") +
-              [
+    sources = [
                 "${_test_ctx}.cpp",
                 "${_test_ctx}.h",
-              ]
+              ] + _test_info[2]
 
-    configs += [ "$angle_root:no_gl_prototypes" ]
-    data = [ "${_test_dir}/${_test}_capture_context${_ctx}.angledata.gz" ]
+    data = [ "${_test_ctx}.angledata.gz" ]
     defines = [ "ANGLE_REPLAY_IMPLEMENTATION" ]
-    inputs = [ "${_test}.tar.gz.sha1" ]
     suppressed_configs += [ "$angle_root:constructor_and_destructor_warnings" ]
 
-    public_deps = [ ":angle_restricted_trace_loader" ]
-    deps = [ "$angle_root:includes" ]
+    deps = [
+      ":angle_restricted_trace_fixture",
+      "$angle_root:includes",
+    ]
 
     if (is_android) {
       libs = [ "log" ]
@@ -77,17 +87,18 @@ angle_shared_library("angle_restricted_traces") {
   testonly = true
 
   sources = [
+    "restricted_trace_fixture.h",
     "restricted_traces_autogen.cpp",
     "restricted_traces_autogen.h",
   ]
 
-  data = []
+  data_deps = _traces
   defines = [ "ANGLE_TRACE_IMPLEMENTATION" ]
 
   deps = [
-           "$angle_root:angle_common",
-           "$angle_root/util:angle_util",
-         ] + _traces
+    "$angle_root:angle_common",
+    "$angle_root/util:angle_util",
+  ]
 
   public_deps = [ ":angle_restricted_trace_loader" ]
 }

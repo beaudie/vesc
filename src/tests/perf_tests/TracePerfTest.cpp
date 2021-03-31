@@ -18,6 +18,7 @@
 #include "util/png_utils.h"
 #include "util/test_utils.h"
 
+#include "restricted_traces/restricted_trace_fixture.h"
 #include "restricted_traces/restricted_traces_autogen.h"
 
 #include <cassert>
@@ -53,6 +54,55 @@ std::ostream &operator<<(std::ostream &os, const TracePerfParams &params)
     os << params.backendAndStory().substr(1);
     return os;
 }
+
+class TraceLibrary
+{
+  public:
+    TraceLibrary(RestrictedTraceID traceID)
+    {
+        const TraceInfo &traceInfo = GetTraceInfo(traceID);
+
+        std::stringstream traceNameStr;
+#if !defined(ANGLE_PLATFORM_WINDOWS)
+        traceNameStr << "lib";
+#endif  // !defined(ANGLE_PLATFORM_WINDOWS)
+        traceNameStr << "angle_restricted_trace_" << traceInfo.name;
+        std::string traceName = traceNameStr.str();
+        mTraceLibrary.reset(OpenSharedLibrary(traceName.c_str(), SearchType::ApplicationDir));
+    }
+
+    bool valid() const { return mTraceLibrary != nullptr; }
+
+    void setBinaryDataDir(const char *dataDir)
+    {
+        callFunc<SetBinaryDataDirFunc>("SetBinaryDataDir", dataDir);
+    }
+
+    void setBinaryDataDecompressCallback(DecompressCallback callback)
+    {
+        callFunc<SetBinaryDataDecompressCallbackFunc>("SetBinaryDataDecompressCallback", callback);
+    }
+
+    void replayFrame(uint32_t frameIndex) { callFunc<ReplayFrameFunc>("ReplayFrame", frameIndex); }
+
+    void setupReplay() { callFunc<SetupReplayFunc>("SetupReplay"); }
+
+    void resetReplay() { callFunc<ResetReplayFunc>("ResetReplay"); }
+
+    void finishReplay() { callFunc<FinishReplayFunc>("FinishReplay"); }
+
+  private:
+    template <typename FuncT, typename... ArgsT>
+    void callFunc(const char *funcName, ArgsT... args)
+    {
+        void *untypedFunc = mTraceLibrary->getSymbol(funcName);
+        ASSERT(untypedFunc);
+        auto typedFunc = reinterpret_cast<FuncT>(untypedFunc);
+        typedFunc(args...);
+    }
+
+    std::unique_ptr<Library> mTraceLibrary;
+};
 
 class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterface<TracePerfParams>
 {
@@ -129,6 +179,7 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
     uint32_t mCurrentFrame         = 0;
     uint32_t mOffscreenFrameCount  = 0;
     bool mScreenshotSaved          = false;
+    std::unique_ptr<TraceLibrary> mTraceLibrary;
 };
 
 class TracePerfTest;
@@ -210,19 +261,20 @@ TracePerfTest::TracePerfTest()
 {
     const TracePerfParams &param = GetParam();
 
-    // TODO: http://anglebug.com/4533 This fails after the upgrade to the 26.20.100.7870 driver.
-    if (IsWindows() && IsIntel() && param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE &&
-        param.testID == RestrictedTraceID::manhattan_10)
-    {
-        mSkipTest = true;
-    }
+    //// TODO: http://anglebug.com/4533 This fails after the upgrade to the 26.20.100.7870 driver.
+    // if (IsWindows() && IsIntel() && param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE
+    // &&
+    //    param.testID == RestrictedTraceID::manhattan_10)
+    //{
+    //    mSkipTest = true;
+    //}
 
-    // TODO: http://anglebug.com/4731 Fails on older Intel drivers. Passes in newer.
-    if (IsWindows() && IsIntel() && param.driver != GLESDriverType::AngleEGL &&
-        param.testID == RestrictedTraceID::angry_birds_2_1500)
-    {
-        mSkipTest = true;
-    }
+    //// TODO: http://anglebug.com/4731 Fails on older Intel drivers. Passes in newer.
+    // if (IsWindows() && IsIntel() && param.driver != GLESDriverType::AngleEGL &&
+    //    param.testID == RestrictedTraceID::angry_birds_2_1500)
+    //{
+    //    mSkipTest = true;
+    //}
 
     if (param.surfaceType != SurfaceType::Window && !gEnableAllTraceTests)
     {
@@ -470,6 +522,8 @@ void TracePerfTest::initializeBenchmark()
 
     mStartingDirectory = angle::GetCWD().value();
 
+    mTraceLibrary.reset(new TraceLibrary(params.testID));
+
     // To load the trace data path correctly we set the CWD to the executable dir.
     if (!IsAndroid())
     {
@@ -479,10 +533,17 @@ void TracePerfTest::initializeBenchmark()
 
     trace_angle::LoadGLES(TraceLoadProc);
 
+    if (!mTraceLibrary->valid())
+    {
+        ERR() << "Could not load trace library.";
+        mSkipTest = true;
+        return;
+    }
+
     const TraceInfo &traceInfo = GetTraceInfo(params.testID);
     mStartFrame                = traceInfo.startFrame;
     mEndFrame                  = traceInfo.endFrame;
-    SetBinaryDataDecompressCallback(params.testID, DecompressBinaryData);
+    mTraceLibrary->setBinaryDataDecompressCallback(DecompressBinaryData);
 
     std::string relativeTestDataDir = std::string("src/tests/restricted_traces/") + traceInfo.name;
 
@@ -492,9 +553,10 @@ void TracePerfTest::initializeBenchmark()
     {
         ERR() << "Could not find test data folder.";
         mSkipTest = true;
+        return;
     }
 
-    SetBinaryDataDir(params.testID, testDataDir);
+    mTraceLibrary->setBinaryDataDir(testDataDir);
 
     mWindowWidth  = mTestParams.windowWidth;
     mWindowHeight = mTestParams.windowHeight;
@@ -539,7 +601,7 @@ void TracePerfTest::initializeBenchmark()
     }
 
     // Potentially slow. Can load a lot of resources.
-    SetupReplay(params.testID);
+    mTraceLibrary->setupReplay();
 
     glFinish();
 
@@ -578,6 +640,9 @@ void TracePerfTest::destroyBenchmark()
         glDeleteFramebuffers(1, &mOffscreenFramebuffer);
         mOffscreenFramebuffer = 0;
     }
+
+    mTraceLibrary->finishReplay();
+    mTraceLibrary.reset(nullptr);
 
     // In order for the next test to load, restore the working directory
     angle::SetCWD(mStartingDirectory.c_str());
@@ -633,7 +698,7 @@ void TracePerfTest::drawBenchmark()
     beginInternalTraceEvent(frameName);
 
     startGpuTimer();
-    ReplayFrame(params.testID, mCurrentFrame);
+    mTraceLibrary->replayFrame(mCurrentFrame);
     stopGpuTimer();
 
     if (params.surfaceType == SurfaceType::Offscreen)
@@ -696,7 +761,7 @@ void TracePerfTest::drawBenchmark()
 
     if (mCurrentFrame == mEndFrame)
     {
-        ResetReplay(params.testID);
+        mTraceLibrary->resetReplay();
         mCurrentFrame = mStartFrame;
     }
     else
