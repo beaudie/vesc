@@ -89,12 +89,6 @@ enum class RestrictedTraceID
 {trace_ids}, InvalidEnum, EnumCount = InvalidEnum
 }};
 
-using ReplayFunc = void (*)(uint32_t);
-using ResetFunc = void (*)();
-using SetupFunc = void (*)();
-using DecompressFunc = uint8_t *(*)(const std::vector<uint8_t> &);
-using SetBinaryDataDirFunc = void (*)(const char *);
-
 static constexpr size_t kTraceInfoMaxNameLen = 32;
 
 static constexpr uint32_t kDefaultReplayContextClientMajorVersion = 3;
@@ -111,14 +105,7 @@ struct TraceInfo
     char name[kTraceInfoMaxNameLen];
 }};
 
-using DecompressCallback = uint8_t *(*)(const std::vector<uint8_t> &);
-
 ANGLE_TRACE_EXPORT const TraceInfo &GetTraceInfo(RestrictedTraceID traceID);
-ANGLE_TRACE_EXPORT void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex);
-ANGLE_TRACE_EXPORT void ResetReplay(RestrictedTraceID traceID);
-ANGLE_TRACE_EXPORT void SetupReplay(RestrictedTraceID traceID);
-ANGLE_TRACE_EXPORT void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir);
-ANGLE_TRACE_EXPORT void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallback callback);
 }}  // namespace angle
 
 #endif  // ANGLE_RESTRICTED_TRACES_H_
@@ -137,6 +124,7 @@ SOURCE_TEMPLATE = """\
 #include "{filename}.h"
 
 #include "common/PackedEnums.h"
+#include "common/system_utils.h"
 
 {trace_includes}
 
@@ -152,66 +140,6 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {{
 const TraceInfo &GetTraceInfo(RestrictedTraceID traceID)
 {{
     return kTraceInfos[traceID];
-}}
-
-void ReplayFrame(RestrictedTraceID traceID, uint32_t frameIndex)
-{{
-    switch (traceID)
-    {{
-{replay_func_cases}
-        default:
-            fprintf(stderr, "Error in switch.\\n");
-            assert(0);
-            break;
-    }}
-}}
-
-void ResetReplay(RestrictedTraceID traceID)
-{{
-    switch (traceID)
-    {{
-{reset_func_cases}
-        default:
-            fprintf(stderr, "Error in switch.\\n");
-            assert(0);
-            break;
-    }}
-}}
-
-void SetupReplay(RestrictedTraceID traceID)
-{{
-    switch (traceID)
-    {{
-{setup_func_cases}
-        default:
-            fprintf(stderr, "Error in switch.\\n");
-            assert(0);
-            break;
-    }}
-}}
-
-void SetBinaryDataDir(RestrictedTraceID traceID, const char *dataDir)
-{{
-    switch (traceID)
-    {{
-{set_binary_data_dir_cases}
-        default:
-            fprintf(stderr, "Error in switch.\\n");
-            assert(0);
-            break;
-    }}
-}}
-
-void SetBinaryDataDecompressCallback(RestrictedTraceID traceID, DecompressCallback callback)
-{{
-    switch (traceID)
-    {{
-{decompress_callback_cases}
-        default:
-            fprintf(stderr, "Error in switch.\\n");
-            assert(0);
-            break;
-    }}
 }}
 }}  // namespace angle
 """
@@ -249,6 +177,23 @@ namespace {namespace}
 }}  // namespace {namespace}
 """
 
+CIPD_TRACE_PREFIX = 'experimental/google.com/jmadill/angle/traces2'
+DEPS_PATH = '../../../DEPS'
+DEPS_START = '# === ANGLE Restricted Trace Generated Code Start ==='
+DEPS_END = '# === ANGLE Restricted Trace Generated Code End ==='
+DEPS_TEMPLATE = """\
+  'src/tests/restricted_traces/{trace}': {{
+      'packages': [
+        {{
+            'package': '{trace_prefix}/{trace}',
+            'version': 'version:{version}',
+        }},
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  }},
+"""
+
 
 def reject_duplicate_keys(pairs):
     found_keys = {}
@@ -261,8 +206,18 @@ def reject_duplicate_keys(pairs):
 
 
 def gen_gni(traces, gni_file, format_args):
-    format_args["test_list"] = ",\n".join(
-        ['"%s %s"' % (trace, get_context(trace)) for trace in traces])
+
+    test_list = []
+    for trace in traces:
+        context = get_context(trace)
+        files = []
+        with open('%s/%s_capture_context%s_files.txt' % (trace, trace, context)) as f:
+            files = f.readlines()
+            f.close()
+        files = ['"%s/%s"' % (trace, file.strip()) for file in files]
+        test_list += ['["%s", %s, [%s]]' % (trace, context, ','.join(files))]
+
+    format_args['test_list'] = ',\n'.join(test_list)
     gni_data = GNI_TEMPLATE.format(**format_args)
     with open(gni_file, "w") as out_file:
         out_file.write(gni_data)
@@ -309,32 +264,12 @@ def get_context(trace):
             return context
 
 
-def get_cases(traces, function, args):
-    funcs = [
-        "case RestrictedTraceID::%s: %s::%s(%s); break;" % (trace, trace, function, args)
-        for trace in traces
-    ]
-    return "\n".join(funcs)
-
-
 def get_header_name(trace):
     return "%s/%s_capture_context%s.h" % (trace, trace, get_context(trace))
 
 
 def get_source_name(trace):
     return "%s/%s_capture_context%s.cpp" % (trace, trace, get_context(trace))
-
-
-def get_sha1_name(trace):
-    return "%s.tar.gz.sha1" % trace
-
-
-def get_cases_with_context(traces, function_start, function_end, args):
-    funcs = [
-        "case RestrictedTraceID::%s: %s::%s%s%s(%s); break;" %
-        (trace, trace, function_start, get_context(trace), function_end, args) for trace in traces
-    ]
-    return "\n".join(funcs)
 
 
 def gen_header(header_file, format_args):
@@ -363,6 +298,39 @@ def read_json(json_file):
         return json.loads(map_file.read(), object_pairs_hook=reject_duplicate_keys)
 
 
+def update_deps(traces):
+    # Generate substituation string
+    replacement = ""
+    for trace in traces:
+        version = 1
+        sub = {'trace': trace, 'version': version, 'trace_prefix': CIPD_TRACE_PREFIX}
+        replacement += DEPS_TEMPLATE.format(**sub)
+
+    # Update DEPS to download CIPD dependencies
+    new_deps = ""
+    with open(DEPS_PATH) as f:
+        in_deps = False
+        for line in f:
+            if in_deps:
+                if DEPS_END in line:
+                    new_deps += replacement
+                    new_deps += line
+                    in_deps = False
+            else:
+                if DEPS_START in line:
+                    new_deps += line
+                    in_deps = True
+                else:
+                    new_deps += line
+        f.close()
+
+    with open(DEPS_PATH, 'w') as f:
+        f.write(new_deps)
+        f.close()
+
+    return True
+
+
 def main():
     json_file = 'restricted_traces.json'
     gni_file = 'restricted_traces_autogen.gni'
@@ -377,7 +345,10 @@ def main():
 
     # auto_script parameters.
     if len(sys.argv) > 1:
-        inputs = [json_file] + [get_sha1_name(trace) for trace in traces]
+        inputs = [json_file]
+
+        # Note: we do not include DEPS in the list of outputs to simplify the integration.
+        # Otherwise we'd continually need to regenerate on any roll.
         outputs = [gni_file, header_file, source_file, '.gitignore']
 
         if sys.argv[1] == 'inputs':
@@ -407,13 +378,6 @@ def main():
     format_args["trace_ids"] = ",\n".join(traces)
     format_args["trace_includes"] = "\n".join(includes)
     format_args["trace_infos"] = ",\n".join(trace_infos)
-    format_args["replay_func_cases"] = get_cases_with_context(traces, "ReplayContext", "Frame",
-                                                              "frameIndex")
-    format_args["reset_func_cases"] = get_cases_with_context(traces, "ResetContext", "Replay", "")
-    format_args["setup_func_cases"] = get_cases_with_context(traces, "SetupContext", "Replay", "")
-    format_args["set_binary_data_dir_cases"] = get_cases(traces, "SetBinaryDataDir", "dataDir")
-    format_args["decompress_callback_cases"] = get_cases(traces, "SetBinaryDataDecompressCallback",
-                                                         "callback")
     if not gen_header(header_file, format_args):
         print('.h file generation failed.')
         return 1
@@ -424,6 +388,10 @@ def main():
 
     if not gen_git_ignore(traces):
         print('.gitignore file generation failed')
+        return 1
+
+    if not update_deps(traces):
+        print('DEPS file update failed')
         return 1
 
     return 0

@@ -355,6 +355,659 @@ deps = {
       'dep_type': 'cipd',
       'condition': 'checkout_mac and not build_with_chromium',
   },
+
+  # === ANGLE Restricted Trace Generated Code Start ===
+  'src/tests/restricted_traces/aliexpress': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/aliexpress',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/among_us': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/among_us',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/angry_birds_2_1500': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/angry_birds_2_1500',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/arena_of_valor': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/arena_of_valor',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/asphalt_8': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/asphalt_8',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/avakin_life': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/avakin_life',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/brawl_stars': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/brawl_stars',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/bus_simulator_indonesia': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/bus_simulator_indonesia',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/candy_crush_500': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/candy_crush_500',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/car_parking_multiplayer': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/car_parking_multiplayer',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/clash_of_clans': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/clash_of_clans',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/clash_royale': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/clash_royale',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/cod_mobile': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/cod_mobile',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/coin_master': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/coin_master',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/dragon_ball_legends': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/dragon_ball_legends',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/efootball_pes_2021': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/efootball_pes_2021',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/egypt_1500': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/egypt_1500',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/eight_ball_pool': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/eight_ball_pool',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/extreme_car_driving_simulator': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/extreme_car_driving_simulator',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/fallout_shelter_online': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/fallout_shelter_online',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/fate_grand_order': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/fate_grand_order',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/fifa_mobile': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/fifa_mobile',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/free_fire': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/free_fire',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/google_maps': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/google_maps',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/happy_color': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/happy_color',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/hay_day': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/hay_day',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/hearthstone': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/hearthstone',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/hill_climb_racing': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/hill_climb_racing',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/junes_journey': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/junes_journey',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/kartrider_rush': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/kartrider_rush',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/klondike_adventures': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/klondike_adventures',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/lego_legacy': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/lego_legacy',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/lineage_m': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/lineage_m',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/magic_tiles_3': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/magic_tiles_3',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/manhattan_10': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/manhattan_10',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/manhattan_31': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/manhattan_31',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/marvel_contest_of_champions': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/marvel_contest_of_champions',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/messenger_lite': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/messenger_lite',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/minecraft': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/minecraft',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/mobile_legends': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/mobile_legends',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/nba2k20_800': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/nba2k20_800',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/one_punch_man': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/one_punch_man',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/plants_vs_zombies_2': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/plants_vs_zombies_2',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/pubg_mobile_lite': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/pubg_mobile_lite',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/ragnarok_m_eternal_love': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/ragnarok_m_eternal_love',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/raid_shadow_legends': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/raid_shadow_legends',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/real_commando_secret_mission': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/real_commando_secret_mission',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/real_cricket_20': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/real_cricket_20',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/real_gangster_crime': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/real_gangster_crime',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/rise_of_kingdoms': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/rise_of_kingdoms',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/romancing_saga': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/romancing_saga',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/rope_hero_vice_town': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/rope_hero_vice_town',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/saint_seiya_awakening': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/saint_seiya_awakening',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/shadow_fight_2': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/shadow_fight_2',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/sniper_3d': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/sniper_3d',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/standoff_2': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/standoff_2',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/subway_surfers': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/subway_surfers',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/talking_tom_hero_dash': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/talking_tom_hero_dash',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/temple_run_2': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/temple_run_2',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/temple_run_300': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/temple_run_300',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/trex_200': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/trex_200',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/whatsapp': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/whatsapp',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/world_of_tanks_blitz': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/world_of_tanks_blitz',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/world_war_doh': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/world_war_doh',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  'src/tests/restricted_traces/worms_zone_io': {
+      'packages': [
+        {
+            'package': 'experimental/google.com/jmadill/angle/traces2/worms_zone_io',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_internal',
+  },
+  # === ANGLE Restricted Trace Generated Code End ===
 }
 
 hooks = [
@@ -519,17 +1172,6 @@ hooks = [
                 '-d', 'tools/flex-bison/windows/',
     ],
   },
-
-  # Download internal captures for perf tests
-  {
-    'name': 'restricted_traces',
-    'pattern': '\\.sha1',
-    'condition': 'checkout_angle_internal',
-    'action': [ 'vpython3',
-                'src/tests/restricted_traces/download_restricted_traces.py',
-                'src/tests/restricted_traces',
-    ]
-  }
 ]
 
 recursedeps = [
