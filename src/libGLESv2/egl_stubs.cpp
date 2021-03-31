@@ -275,18 +275,35 @@ EGLSurface CreateWindowSurface(Thread *thread,
 
 EGLBoolean DestroyContext(Thread *thread, Display *display, gl::Context *context)
 {
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyContext",
                          GetDisplayIfValid(display), EGL_FALSE);
-    bool contextWasCurrent = context == thread->getContext();
+    gl::Context* contextForThread = thread->getContext();
+    bool contextWasCurrent = context == contextForThread;
 
-    ANGLE_EGL_TRY_RETURN(thread, display->destroyContext(thread, context), "eglDestroyContext",
-                         GetContextIfValid(display, context), EGL_FALSE);
+    bool shouldFlipContexts =
+        !contextWasCurrent && !context->isExternal() && context->getRefCount() <= 1;
+
+    // Display can't access the current global context, but does exhibit a context switch,
+    // so ensuring the current global context is correct needs to happen here.
+    if (shouldFlipContexts)
+    {
+        SetContextCurrent(thread, context);
+    }
+
+    ANGLE_EGL_TRY_RETURN(thread, display->destroyContext(thread, context, contextForThread),
+                         "eglDestroyContext",
+                          GetContextIfValid(display, context), EGL_FALSE);
 
     if (contextWasCurrent)
     {
         ANGLE_EGL_TRY_RETURN(thread, display->makeCurrent(context, nullptr, nullptr, nullptr),
                              "eglDestroyContext", GetContextIfValid(display, context), EGL_FALSE);
         SetContextCurrent(thread, nullptr);
+    }
+    else if (shouldFlipContexts)
+    {
+        SetContextCurrent(thread, contextForThread);
     }
 
     thread->setSuccess();

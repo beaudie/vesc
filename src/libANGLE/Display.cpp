@@ -1440,6 +1440,13 @@ Error Display::releaseContext(gl::Context *context)
 
 Error Display::destroyContext(const Thread *thread, gl::Context *context)
 {
+    return this->destroyContext(thread, context, thread->getContext());
+}
+
+Error Display::destroyContext(const Thread *thread,
+                              gl::Context *context,
+                              gl::Context *currentContext)
+{
     size_t refCount = context->getRefCount();
     if (refCount > 1)
     {
@@ -1448,7 +1455,6 @@ Error Display::destroyContext(const Thread *thread, gl::Context *context)
     }
 
     // This is the last reference for this context, so we can destroy it now.
-    gl::Context *currentContext   = thread->getContext();
     Surface *currentDrawSurface   = thread->getCurrentDrawSurface();
     Surface *currentReadSurface   = thread->getCurrentReadSurface();
     bool changeContextForDeletion = context != currentContext;
