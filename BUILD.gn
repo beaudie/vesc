@@ -581,6 +581,56 @@ angle_static_library("translator") {
   }
 }
 
+angle_static_library("translator_gl_d3d_only") {
+  sources = angle_translator_sources
+  defines = []
+
+  _needs_glsl_base = false
+
+  if (angle_enable_essl || use_fuzzing_engine) {
+    _needs_glsl_base = true
+    sources += angle_translator_essl_sources
+    defines += [ "ANGLE_ENABLE_ESSL" ]
+  }
+
+  if (angle_enable_glsl || use_fuzzing_engine) {
+    _needs_glsl_base = true
+    sources += angle_translator_glsl_sources
+    if (is_apple) {
+      sources += angle_translator_glsl_mac_sources
+    }
+    defines += [ "ANGLE_ENABLE_GLSL" ]
+  }
+
+  if (angle_enable_hlsl || use_fuzzing_engine) {
+    sources += angle_translator_hlsl_sources
+    defines += [ "ANGLE_ENABLE_HLSL" ]
+  }
+
+  if (_needs_glsl_base) {
+    sources += angle_translator_glsl_base_sources
+    sources += angle_translator_glsl_and_vulkan_base_sources
+  }
+
+  public_configs += [ ":external_config" ]
+
+  deps = [
+    ":includes",
+    ":preprocessor",
+  ]
+
+  public_deps = [
+    ":angle_common",
+    ":angle_translator_headers",
+  ]
+
+  if (is_win) {
+    # Necessary to suppress some system header xtree warnigns in Release.
+    # For some reason this warning doesn't get triggered in Chromium
+    cflags = [ "/wd4718" ]
+  }
+}
+
 angle_source_set("translator_fuzzer") {
   sources = [ "src/compiler/fuzz/translator_fuzzer.cpp" ]
 
