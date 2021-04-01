@@ -925,7 +925,9 @@ void RendererVk::ensureCapsInitialized() const
             mFeatures.supportsTransformFeedbackExtension.enabled &&
             mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
         mNativeCaps.maxFramebufferLayers = LimitToInt(limitsVk.maxFramebufferLayers);
-        mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
+        mNativeCaps.layerProvokingVertex = (mFeatures.provokingVertex.enabled)
+                                               ? GL_LAST_VERTEX_CONVENTION_EXT
+                                               : GL_FIRST_VERTEX_CONVENTION_EXT;
 
         mNativeCaps.maxGeometryInputComponents =
             LimitToInt(limitsVk.maxGeometryInputComponents) - reservedVaryingVectorCount * 4;
