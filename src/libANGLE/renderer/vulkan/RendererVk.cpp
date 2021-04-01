@@ -660,6 +660,7 @@ RendererVk::RendererVk()
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
       mCommandProcessor(this),
+      mGlslangInitialized(false),
       mSupportedVulkanPipelineStageMask(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -729,7 +730,11 @@ void RendererVk::onDestroy(vk::Context *context)
 
     mAllocator.destroy();
 
-    sh::FinalizeGlslang();
+    if (mGlslangInitialized)
+    {
+        GlslangRelease();
+        mGlslangInitialized = false;
+    }
 
     if (mDevice)
     {
@@ -1092,9 +1097,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Store the physical device memory properties so we can find the right memory pools.
     mMemoryProperties.init(mPhysicalDevice);
 
+    if (!mGlslangInitialized)
     {
-        ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
-        sh::InitializeGlslang();
+        GlslangInitialize();
+        mGlslangInitialized = true;
     }
 
     // Initialize the format table.

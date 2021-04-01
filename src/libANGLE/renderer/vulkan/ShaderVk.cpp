@@ -97,7 +97,7 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
 
 std::string ShaderVk::getDebugInfo() const
 {
-    return mState.getCompiledBinary().empty() ? "" : "<binary blob>";
+    return mState.getTranslatedSource();
 }
 
 }  // namespace rx

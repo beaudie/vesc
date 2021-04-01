@@ -8,6 +8,22 @@
 
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 
+// glslang has issues with some specific warnings.
+ANGLE_DISABLE_EXTRA_SEMI_WARNING
+ANGLE_DISABLE_SHADOWING_WARNING
+ANGLE_DISABLE_SUGGEST_OVERRIDE_WARNINGS
+
+// glslang's version of ShaderLang.h, not to be confused with ANGLE's.
+#include <glslang/Public/ShaderLang.h>
+
+// Other glslang includes.
+#include <SPIRV/GlslangToSpv.h>
+#include <StandAlone/ResourceLimits.h>
+
+ANGLE_REENABLE_SUGGEST_OVERRIDE_WARNINGS
+ANGLE_REENABLE_SHADOWING_WARNING
+ANGLE_REENABLE_EXTRA_SEMI_WARNING
+
 #include <array>
 #include <numeric>
 
@@ -19,6 +35,21 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/trace.h"
+
+#define ANGLE_GLSLANG_CHECK(CALLBACK, TEST, ERR) \
+    do                                           \
+    {                                            \
+        if (ANGLE_UNLIKELY(!(TEST)))             \
+        {                                        \
+            return CALLBACK(ERR);                \
+        }                                        \
+                                                 \
+    } while (0)
+
+// Enable this for debug logging of pre-transform SPIR-V:
+#if !defined(ANGLE_DEBUG_SPIRV_TRANSFORMER)
+#    define ANGLE_DEBUG_SPIRV_TRANSFORMER 0
+#endif  // !defined(ANGLE_DEBUG_SPIRV_TRANSFORMER)
 
 namespace spirv = angle::spirv;
 
@@ -34,6 +65,67 @@ constexpr size_t ConstStrLen(const char (&)[N])
     // The length of a string defined as a char array is the size of the array minus 1 (the
     // terminating '\0').
     return N - 1;
+}
+
+void GetBuiltInResourcesFromCaps(const gl::Caps &caps, TBuiltInResource *outBuiltInResources)
+{
+    outBuiltInResources->maxDrawBuffers                   = caps.maxDrawBuffers;
+    outBuiltInResources->maxAtomicCounterBindings         = caps.maxAtomicCounterBufferBindings;
+    outBuiltInResources->maxAtomicCounterBufferSize       = caps.maxAtomicCounterBufferSize;
+    outBuiltInResources->maxClipPlanes                    = caps.maxClipPlanes;
+    outBuiltInResources->maxCombinedAtomicCounterBuffers  = caps.maxCombinedAtomicCounterBuffers;
+    outBuiltInResources->maxCombinedAtomicCounters        = caps.maxCombinedAtomicCounters;
+    outBuiltInResources->maxCombinedImageUniforms         = caps.maxCombinedImageUniforms;
+    outBuiltInResources->maxCombinedTextureImageUnits     = caps.maxCombinedTextureImageUnits;
+    outBuiltInResources->maxCombinedShaderOutputResources = caps.maxCombinedShaderOutputResources;
+    outBuiltInResources->maxComputeWorkGroupCountX        = caps.maxComputeWorkGroupCount[0];
+    outBuiltInResources->maxComputeWorkGroupCountY        = caps.maxComputeWorkGroupCount[1];
+    outBuiltInResources->maxComputeWorkGroupCountZ        = caps.maxComputeWorkGroupCount[2];
+    outBuiltInResources->maxComputeWorkGroupSizeX         = caps.maxComputeWorkGroupSize[0];
+    outBuiltInResources->maxComputeWorkGroupSizeY         = caps.maxComputeWorkGroupSize[1];
+    outBuiltInResources->maxComputeWorkGroupSizeZ         = caps.maxComputeWorkGroupSize[2];
+    outBuiltInResources->minProgramTexelOffset            = caps.minProgramTexelOffset;
+    outBuiltInResources->maxFragmentUniformVectors        = caps.maxFragmentUniformVectors;
+    outBuiltInResources->maxFragmentInputComponents       = caps.maxFragmentInputComponents;
+    outBuiltInResources->maxGeometryInputComponents       = caps.maxGeometryInputComponents;
+    outBuiltInResources->maxGeometryOutputComponents      = caps.maxGeometryOutputComponents;
+    outBuiltInResources->maxGeometryOutputVertices        = caps.maxGeometryOutputVertices;
+    outBuiltInResources->maxGeometryTotalOutputComponents = caps.maxGeometryTotalOutputComponents;
+    outBuiltInResources->maxPatchVertices                 = caps.maxPatchVertices;
+    outBuiltInResources->maxLights                        = caps.maxLights;
+    outBuiltInResources->maxProgramTexelOffset            = caps.maxProgramTexelOffset;
+    outBuiltInResources->maxVaryingComponents             = caps.maxVaryingComponents;
+    outBuiltInResources->maxVaryingVectors                = caps.maxVaryingVectors;
+    outBuiltInResources->maxVertexAttribs                 = caps.maxVertexAttributes;
+    outBuiltInResources->maxVertexOutputComponents        = caps.maxVertexOutputComponents;
+    outBuiltInResources->maxVertexUniformVectors          = caps.maxVertexUniformVectors;
+    outBuiltInResources->maxClipDistances                 = caps.maxClipDistances;
+    outBuiltInResources->maxSamples                       = caps.maxSamples;
+    outBuiltInResources->maxCullDistances                 = caps.maxCullDistances;
+    outBuiltInResources->maxCombinedClipAndCullDistances  = caps.maxCombinedClipAndCullDistances;
+}
+
+// Run at startup to warm up glslang's internals to avoid hitches on first shader compile.
+void GlslangWarmup()
+{
+    ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
+
+    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
+    // EShMessages messages = EShMsgDefault;
+
+    const TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
+    glslang::TShader warmUpShader(EShLangVertex);
+
+    const char *kShaderString = R"(#version 450 core
+        void main(){}
+    )";
+    const int kShaderLength   = static_cast<int>(strlen(kShaderString));
+
+    warmUpShader.setStringsWithLengths(&kShaderString, &kShaderLength, 1);
+    warmUpShader.setEntryPoint("main");
+
+    bool result = warmUpShader.parse(&builtInResources, 450, ECoreProfile, false, false, messages);
+    ASSERT(result);
 }
 
 bool IsRotationIdentity(SurfaceRotation rotation)
@@ -233,7 +325,7 @@ void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
     }
 
     // Remove inactive transform feedback buffers.
-    for (uint32_t bufferIndex = static_cast<uint32_t>(bufferCount);
+    for (uint32_t bufferIndex = bufferCount;
          bufferIndex < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; ++bufferIndex)
     {
         variableInfoMapOut->add(shaderType, GetXfbBufferName(bufferIndex));
@@ -913,6 +1005,61 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
             }
         }
     }
+}
+
+constexpr gl::ShaderMap<EShLanguage> kShLanguageMap = {
+    {gl::ShaderType::Vertex, EShLangVertex},
+    {gl::ShaderType::TessControl, EShLangTessControl},
+    {gl::ShaderType::TessEvaluation, EShLangTessEvaluation},
+    {gl::ShaderType::Geometry, EShLangGeometry},
+    {gl::ShaderType::Fragment, EShLangFragment},
+    {gl::ShaderType::Compute, EShLangCompute},
+};
+
+angle::Result CompileShader(const GlslangErrorCallback &callback,
+                            const TBuiltInResource &builtInResources,
+                            gl::ShaderType shaderType,
+                            const std::string &shaderSource,
+                            glslang::TShader *shader,
+                            glslang::TProgram *program)
+{
+    // Enable SPIR-V and Vulkan rules when parsing GLSL
+    constexpr EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
+
+    ANGLE_TRACE_EVENT0("gpu.angle", "Glslang CompileShader TShader::parse");
+
+    const char *shaderString = shaderSource.c_str();
+    int shaderLength         = static_cast<int>(shaderSource.size());
+
+    shader->setStringsWithLengths(&shaderString, &shaderLength, 1);
+    shader->setEntryPoint("main");
+
+    bool result = shader->parse(&builtInResources, 450, ECoreProfile, false, false, messages);
+    if (!result)
+    {
+        ERR() << "Internal error parsing Vulkan shader corresponding to " << shaderType << ":\n"
+              << shader->getInfoLog() << "\n"
+              << shader->getInfoDebugLog() << "\n";
+        ANGLE_GLSLANG_CHECK(callback, false, GlslangError::InvalidShader);
+    }
+
+    program->addShader(shader);
+
+    return angle::Result::Continue;
+}
+
+angle::Result LinkProgram(const GlslangErrorCallback &callback, glslang::TProgram *program)
+{
+    // Enable SPIR-V and Vulkan rules
+    constexpr EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
+
+    bool linkResult = program->link(messages);
+    if (!linkResult)
+    {
+        ERR() << "Internal error linking Vulkan shaders:\n" << program->getInfoLog() << "\n";
+        ANGLE_GLSLANG_CHECK(callback, false, GlslangError::InvalidShader);
+    }
+    return angle::Result::Continue;
 }
 
 // Base class for SPIR-V transformations.
@@ -2851,7 +2998,7 @@ class SpirvTransformer final : public SpirvTransformerBase
           mPositionTransformer(options)
     {}
 
-    void transform();
+    bool transform();
 
   private:
     // A prepass to resolve interesting ids:
@@ -2911,7 +3058,7 @@ class SpirvTransformer final : public SpirvTransformerBase
     SpirvPositionTransformer mPositionTransformer;
 };
 
-void SpirvTransformer::transform()
+bool SpirvTransformer::transform()
 {
     onTransformBegin();
 
@@ -2923,6 +3070,8 @@ void SpirvTransformer::transform()
     {
         transformInstruction();
     }
+
+    return true;
 }
 
 void SpirvTransformer::resolveVariableIds()
@@ -3694,7 +3843,7 @@ class SpirvVertexAttributeAliasingTransformer final : public SpirvTransformerBas
         mVariableInfoById = std::move(variableInfoById);
     }
 
-    void transform();
+    bool transform();
 
   private:
     // Preprocess aliasing attributes in preparation for their removal.
@@ -3791,7 +3940,7 @@ class SpirvVertexAttributeAliasingTransformer final : public SpirvTransformerBas
     std::array<spirv::IdRef, 5> mPrivateMatrixTypePointers;
 };
 
-void SpirvVertexAttributeAliasingTransformer::transform()
+bool SpirvVertexAttributeAliasingTransformer::transform()
 {
     onTransformBegin();
 
@@ -3801,18 +3950,20 @@ void SpirvVertexAttributeAliasingTransformer::transform()
     {
         transformInstruction();
     }
+
+    return true;
 }
 
 void SpirvVertexAttributeAliasingTransformer::preprocessAliasingAttributes()
 {
-    const uint32_t indexBound = mSpirvBlobIn[kHeaderIndexIndexBound];
+    const size_t indexBound = mSpirvBlobIn[kHeaderIndexIndexBound];
 
     mVariableInfoById.resize(indexBound, nullptr);
     mIsAliasingAttributeById.resize(indexBound, false);
     mExpandedMatrixFirstVectorIdById.resize(indexBound);
 
     // Go through attributes and find out which alias which.
-    for (uint32_t idIndex = spirv::kMinValidId; idIndex < indexBound; ++idIndex)
+    for (size_t idIndex = spirv::kMinValidId; idIndex < indexBound; ++idIndex)
     {
         const spirv::IdRef id(idIndex);
 
@@ -4709,6 +4860,19 @@ ShaderInterfaceVariableInfoMap::Iterator ShaderInterfaceVariableInfoMap::getIter
     return Iterator(mData[shaderType].begin(), mData[shaderType].end());
 }
 
+void GlslangInitialize()
+{
+    int result = ShInitialize();
+    ASSERT(result != 0);
+    GlslangWarmup();
+}
+
+void GlslangRelease()
+{
+    int result = ShFinalize();
+    ASSERT(result != 0);
+}
+
 // Strip indices from the name.  If there are non-zero indices, return false to indicate that this
 // image uniform doesn't require set/binding.  That is done on index 0.
 bool GetImageNameWithoutIndices(std::string *name)
@@ -4849,17 +5013,17 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
     }
 }
 
-void GlslangGetShaderSpirvCode(const GlslangSourceOptions &options,
-                               const gl::ProgramState &programState,
-                               const gl::ProgramLinkedResources &resources,
-                               GlslangProgramInterfaceInfo *programInterfaceInfo,
-                               gl::ShaderMap<const spirv::Blob *> *spirvBlobsOut,
-                               ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+void GlslangGetShaderSource(const GlslangSourceOptions &options,
+                            const gl::ProgramState &programState,
+                            const gl::ProgramLinkedResources &resources,
+                            GlslangProgramInterfaceInfo *programInterfaceInfo,
+                            gl::ShaderMap<std::string> *shaderSourcesOut,
+                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        gl::Shader *glShader         = programState.getAttachedShader(shaderType);
-        (*spirvBlobsOut)[shaderType] = glShader ? &glShader->getCompiledBinary() : nullptr;
+        gl::Shader *glShader            = programState.getAttachedShader(shaderType);
+        (*shaderSourcesOut)[shaderType] = glShader ? glShader->getTranslatedSource() : "";
     }
 
     gl::ShaderType xfbStage        = programState.getAttachedTransformFeedbackStage();
@@ -4877,7 +5041,8 @@ void GlslangGetShaderSpirvCode(const GlslangSourceOptions &options,
     }
 }
 
-angle::Result GlslangTransformSpirvCode(const GlslangSpirvOptions &options,
+angle::Result GlslangTransformSpirvCode(const GlslangErrorCallback &callback,
+                                        const GlslangSpirvOptions &options,
                                         const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                         const spirv::Blob &initialSpirvBlob,
                                         spirv::Blob *spirvBlobOut)
@@ -4887,9 +5052,17 @@ angle::Result GlslangTransformSpirvCode(const GlslangSpirvOptions &options,
         return angle::Result::Continue;
     }
 
+#if defined(ANGLE_DEBUG_SPIRV_TRANSFORMER) && ANGLE_DEBUG_SPIRV_TRANSFORMER
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
+    std::string readableSpirv;
+    spirvTools.Disassemble(initialSpirvBlob, &readableSpirv, 0);
+    fprintf(stderr, "%s\n", readableSpirv.c_str());
+#endif  // defined(ANGLE_DEBUG_SPIRV_TRANSFORMER) && ANGLE_DEBUG_SPIRV_TRANSFORMER
+
     // Transform the SPIR-V code by assigning location/set/binding values.
     SpirvTransformer transformer(initialSpirvBlob, options, variableInfoMap, spirvBlobOut);
-    transformer.transform();
+    ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
 
     // If there are aliasing vertex attributes, transform the SPIR-V again to remove them.
     if (options.shaderType == gl::ShaderType::Vertex && HasAliasingAttributes(variableInfoMap))
@@ -4898,11 +5071,57 @@ angle::Result GlslangTransformSpirvCode(const GlslangSpirvOptions &options,
         SpirvVertexAttributeAliasingTransformer aliasingTransformer(
             preTransformBlob, variableInfoMap, std::move(transformer.getVariableInfoByIdMap()),
             spirvBlobOut);
-        aliasingTransformer.transform();
+        ANGLE_GLSLANG_CHECK(callback, aliasingTransformer.transform(), GlslangError::InvalidSpirv);
     }
 
     ASSERT(spirv::Validate(*spirvBlobOut));
 
     return angle::Result::Continue;
 }
+
+angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
+                                        const gl::ShaderBitSet &linkedShaderStages,
+                                        const gl::Caps &glCaps,
+                                        const gl::ShaderMap<std::string> &shaderSources,
+                                        gl::ShaderMap<spirv::Blob> *spirvBlobsOut)
+{
+    TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
+    GetBuiltInResourcesFromCaps(glCaps, &builtInResources);
+
+    glslang::TShader vertexShader(EShLangVertex);
+    glslang::TShader fragmentShader(EShLangFragment);
+    glslang::TShader geometryShader(EShLangGeometry);
+    glslang::TShader tessControlShader(EShLangTessControl);
+    glslang::TShader tessEvaluationShader(EShLangTessEvaluation);
+    glslang::TShader computeShader(EShLangCompute);
+
+    gl::ShaderMap<glslang::TShader *> shaders = {
+        {gl::ShaderType::Vertex, &vertexShader},
+        {gl::ShaderType::Fragment, &fragmentShader},
+        {gl::ShaderType::TessControl, &tessControlShader},
+        {gl::ShaderType::TessEvaluation, &tessEvaluationShader},
+        {gl::ShaderType::Geometry, &geometryShader},
+        {gl::ShaderType::Compute, &computeShader},
+    };
+    for (const gl::ShaderType shaderType : linkedShaderStages)
+    {
+        if (shaderSources[shaderType].empty())
+        {
+            continue;
+        }
+
+        glslang::TProgram program;
+
+        ANGLE_TRY(CompileShader(callback, builtInResources, shaderType, shaderSources[shaderType],
+                                shaders[shaderType], &program));
+
+        ANGLE_TRY(LinkProgram(callback, &program));
+
+        glslang::TIntermediate *intermediate = program.getIntermediate(kShLanguageMap[shaderType]);
+        glslang::GlslangToSpv(*intermediate, (*spirvBlobsOut)[shaderType]);
+    }
+
+    return angle::Result::Continue;
+}
+
 }  // namespace rx

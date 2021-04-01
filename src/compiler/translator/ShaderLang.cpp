@@ -13,7 +13,6 @@
 
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/InitializeDll.h"
-#include "compiler/translator/glslang_wrapper.h"
 #include "compiler/translator/length_limits.h"
 #ifdef ANGLE_ENABLE_HLSL
 #    include "compiler/translator/TranslatorHLSL.h"
@@ -27,8 +26,7 @@ namespace sh
 namespace
 {
 
-bool isInitialized        = false;
-bool isGlslangInitialized = false;
+bool isInitialized = false;
 
 //
 // This is the platform independent interface between an OGL driver
@@ -442,18 +440,6 @@ const std::string &GetObjectCode(const ShHandle handle)
 
     TInfoSink &infoSink = compiler->getInfoSink();
     return infoSink.obj.str();
-}
-
-//
-// Return any object binary code.
-//
-const BinaryBlob &GetObjectBinaryBlob(const ShHandle handle)
-{
-    TCompiler *compiler = GetCompilerFromHandle(handle);
-    ASSERT(compiler);
-
-    TInfoSink &infoSink = compiler->getInfoSink();
-    return infoSink.obj.getBinary();
 }
 
 const std::map<std::string, std::string> *GetNameHashingMap(const ShHandle handle)
@@ -914,24 +900,6 @@ unsigned int GetShaderSharedMemorySize(const ShHandle handle)
 
     unsigned int sharedMemorySize = compiler->getSharedMemorySize();
     return sharedMemorySize;
-}
-
-void InitializeGlslang()
-{
-    if (!isGlslangInitialized)
-    {
-        GlslangInitialize();
-    }
-    isGlslangInitialized = true;
-}
-
-void FinalizeGlslang()
-{
-    if (isGlslangInitialized)
-    {
-        GlslangFinalize();
-    }
-    isGlslangInitialized = false;
 }
 
 // Can't prefix with just _ because then we might introduce a double underscore, which is not safe

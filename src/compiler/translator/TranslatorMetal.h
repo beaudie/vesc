@@ -65,10 +65,9 @@ class TranslatorMetal : public TranslatorVulkan
         TIntermBlock *root,
         const DriverUniform *driverUniforms) override;
 
-    ANGLE_NO_DISCARD bool insertSampleMaskWritingLogic(TInfoSinkBase &sink,
-                                                       TIntermBlock *root,
+    ANGLE_NO_DISCARD bool insertSampleMaskWritingLogic(TIntermBlock *root,
                                                        const DriverUniformMetal *driverUniforms);
-    ANGLE_NO_DISCARD bool insertRasterizerDiscardLogic(TInfoSinkBase &sink, TIntermBlock *root);
+    ANGLE_NO_DISCARD bool insertRasterizerDiscardLogic(TIntermBlock *root);
 };
 
 }  // namespace sh

@@ -19,7 +19,6 @@
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
-#include "compiler/translator/glslang_wrapper.h"
 #include "compiler/translator/tree_ops/vulkan/FlagSamplersWithTexelFetch.h"
 #include "compiler/translator/tree_ops/vulkan/MonomorphizeUnsupportedFunctionsInVulkanGLSL.h"
 #include "compiler/translator/tree_ops/vulkan/NameEmbeddedUniformStructs.h"
@@ -763,14 +762,15 @@ TranslatorVulkan::TranslatorVulkan(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_GLSL_450_CORE_OUTPUT)
 {}
 
-bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
-                                     TIntermBlock *root,
+bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                                      ShCompileOptions compileOptions,
                                      PerformanceDiagnostics * /*perfDiagnostics*/,
                                      SpecConst *specConst,
                                      DriverUniform *driverUniforms,
                                      TOutputVulkanGLSL *outputGLSL)
 {
+    TInfoSinkBase &sink = getInfoSink().obj;
+
     if (getShaderType() == GL_VERTEX_SHADER)
     {
         if (!ShaderBuiltinsWorkaround(this, root, &getSymbolTable(), compileOptions))
@@ -1324,7 +1324,8 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
                                  ShCompileOptions compileOptions,
                                  PerformanceDiagnostics *perfDiagnostics)
 {
-    TInfoSinkBase sink;
+
+    TInfoSinkBase &sink = getInfoSink().obj;
 
     bool precisionEmulation = false;
     if (!emulatePrecisionIfNeeded(root, sink, &precisionEmulation, SH_SPIRV_VULKAN_OUTPUT))
@@ -1342,7 +1343,7 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     if ((compileOptions & SH_USE_SPECIALIZATION_CONSTANT) != 0)
     {
         DriverUniform driverUniforms;
-        if (!translateImpl(sink, root, compileOptions, perfDiagnostics, &specConst, &driverUniforms,
+        if (!translateImpl(root, compileOptions, perfDiagnostics, &specConst, &driverUniforms,
                            &outputGLSL))
         {
             return false;
@@ -1351,8 +1352,8 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     else
     {
         DriverUniformExtended driverUniformsExt;
-        if (!translateImpl(sink, root, compileOptions, perfDiagnostics, &specConst,
-                           &driverUniformsExt, &outputGLSL))
+        if (!translateImpl(root, compileOptions, perfDiagnostics, &specConst, &driverUniformsExt,
+                           &outputGLSL))
         {
             return false;
         }
@@ -1361,24 +1362,12 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     // Write translated shader.
     root->traverse(&outputGLSL);
 
-    return compileToSpirv(sink);
+    return true;
 }
 
 bool TranslatorVulkan::shouldFlattenPragmaStdglInvariantAll()
 {
     // Not necessary.
     return false;
-}
-
-bool TranslatorVulkan::compileToSpirv(const TInfoSinkBase &glsl)
-{
-    std::vector<uint32_t> spirvBlob;
-    if (!GlslangCompileToSpirv(getResources(), getShaderType(), glsl.str(), &spirvBlob))
-    {
-        return false;
-    }
-
-    getInfoSink().obj.setBinary(std::move(spirvBlob));
-    return true;
 }
 }  // namespace sh
