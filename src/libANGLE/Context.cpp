@@ -3103,24 +3103,7 @@ void Context::programParameteri(ShaderProgramID program, GLenum pname, GLint val
 void Context::initRendererString()
 {
     std::ostringstream frontendRendererString;
-    std::string vendorString(mDisplay->getBackendVendorString());
-    std::string rendererString(mDisplay->getBackendRendererDescription());
-    std::string versionString(mDisplay->getBackendVersionString());
-    // Commas are used as a separator in ANGLE's renderer string, so remove commas from each
-    // element.
-    vendorString.erase(std::remove(vendorString.begin(), vendorString.end(), ','),
-                       vendorString.end());
-    rendererString.erase(std::remove(rendererString.begin(), rendererString.end(), ','),
-                         rendererString.end());
-    versionString.erase(std::remove(versionString.begin(), versionString.end(), ','),
-                        versionString.end());
-    frontendRendererString << "ANGLE (";
-    frontendRendererString << vendorString;
-    frontendRendererString << ", ";
-    frontendRendererString << rendererString;
-    frontendRendererString << ", ";
-    frontendRendererString << versionString;
-    frontendRendererString << ")";
+    frontendRendererString << "Adreno (TM) 640";
 
     mRendererString = MakeStaticString(frontendRendererString.str());
 }
