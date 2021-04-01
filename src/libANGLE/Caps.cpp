@@ -401,6 +401,15 @@ static bool DetermineRGTextureSupport(const TextureCapsMap &textureCaps,
     return GetFormatSupport(textureCaps, requiredFormats, true, true, true, true, false);
 }
 
+static bool DetermineTextureFormat2101010Support(const TextureCapsMap &textureCaps)
+{
+    constexpr GLenum requiredFormats[] = {
+        GL_RGB10_A2,
+    };
+
+    return GetFormatSupport(textureCaps, requiredFormats, true, true, false, false, false);
+}
+
 // Check for GL_EXT_texture_compression_dxt1 support
 static bool DetermineDXT1TextureSupport(const TextureCapsMap &textureCaps)
 {
@@ -824,10 +833,11 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     textureFloatOES       = DetermineFloatTextureSupport(textureCaps);
     textureFloatLinearOES = DetermineFloatTextureFilteringSupport(textureCaps, textureFloatOES);
     textureRG = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloatOES);
-    colorBufferHalfFloat   = textureHalfFloat && DetermineColorBufferHalfFloatSupport(textureCaps);
-    textureCompressionDXT1 = DetermineDXT1TextureSupport(textureCaps);
-    textureCompressionDXT3 = DetermineDXT3TextureSupport(textureCaps);
-    textureCompressionDXT5 = DetermineDXT5TextureSupport(textureCaps);
+    colorBufferHalfFloat    = textureHalfFloat && DetermineColorBufferHalfFloatSupport(textureCaps);
+    textureFormat2101010REV = DetermineTextureFormat2101010Support(textureCaps);
+    textureCompressionDXT1  = DetermineDXT1TextureSupport(textureCaps);
+    textureCompressionDXT3  = DetermineDXT3TextureSupport(textureCaps);
+    textureCompressionDXT5  = DetermineDXT5TextureSupport(textureCaps);
     textureCompressionS3TCsRGB    = DetermineS3TCsRGBTextureSupport(textureCaps);
     textureCompressionASTCLDRKHR  = DetermineASTCLDRTextureSupport(textureCaps);
     textureCompressionASTCOES     = DetermineASTCOESTExtureSupport(textureCaps);
