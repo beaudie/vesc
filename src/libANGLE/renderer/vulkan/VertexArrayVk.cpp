@@ -578,6 +578,13 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
             if (vertexFormat.getVertexLoadRequiresConversion(compressed) || !bindingIsAligned)
             {
+                if (vertexFormat.getVertexLoadRequiresConversion(compressed))
+                {
+                    const char warning[] = "Hardware does not support the vertex attribute format";
+                    ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW, warning);
+                    ANGLE_TRY(contextVk->pushGroupMarker(0, warning));
+                    ANGLE_TRY(contextVk->popGroupMarker());
+                }
                 ConversionBuffer *conversion = bufferVk->getVertexConversionBuffer(
                     renderer, intendedFormat.id, binding.getStride(),
                     binding.getOffset() + attrib.relativeOffset, !bindingIsAligned);
