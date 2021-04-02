@@ -241,17 +241,21 @@ void ProgramPipeline::updateExecutableAttributes()
 
 void ProgramPipeline::updateTransformFeedbackMembers()
 {
-    Program *vertexProgram = getShaderProgram(gl::ShaderType::Vertex);
-
-    if (!vertexProgram)
+    ShaderType lastVertexProcessingStage =
+        gl::GetLastPreFragmentStage(getExecutable().getLinkedShaderStages());
+    if (lastVertexProcessingStage == ShaderType::InvalidEnum)
     {
         return;
     }
 
-    const ProgramExecutable &vertexExecutable     = vertexProgram->getExecutable();
-    mState.mExecutable->mTransformFeedbackStrides = vertexExecutable.mTransformFeedbackStrides;
+    Program *shaderProgram = getShaderProgram(lastVertexProcessingStage);
+    ASSERT(shaderProgram);
+
+    const ProgramExecutable &lastPreFragmentExecutable = shaderProgram->getExecutable();
+    mState.mExecutable->mTransformFeedbackStrides =
+        lastPreFragmentExecutable.mTransformFeedbackStrides;
     mState.mExecutable->mLinkedTransformFeedbackVaryings =
-        vertexExecutable.mLinkedTransformFeedbackVaryings;
+        lastPreFragmentExecutable.mLinkedTransformFeedbackVaryings;
 }
 
 void ProgramPipeline::updateShaderStorageBlocks()
