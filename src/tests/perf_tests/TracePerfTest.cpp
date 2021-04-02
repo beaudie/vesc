@@ -80,6 +80,80 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
                                        GLsizei numAttachments,
                                        const GLenum *attachments);
 
+    void onViewport(GLint x, GLint y, GLsizei width, GLsizei height);
+    // Interpose the calls that generate actual GPU work
+    void onDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices);
+    void onDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect);
+    void onDrawElementsInstanced(GLenum mode,
+                                 GLsizei count,
+                                 GLenum type,
+                                 const void *indices,
+                                 GLsizei instancecount);
+    void onDrawElementsBaseVertex(GLenum mode,
+                                  GLsizei count,
+                                  GLenum type,
+                                  const void *indices,
+                                  GLint basevertex);
+    void onDrawElementsInstancedBaseVertex(GLenum mode,
+                                           GLsizei count,
+                                           GLenum type,
+                                           const void *indices,
+                                           GLsizei instancecount,
+                                           GLint basevertex);
+    void onDrawRangeElements(GLenum mode,
+                             GLuint start,
+                             GLuint end,
+                             GLsizei count,
+                             GLenum type,
+                             const void *indices);
+    void onDrawArrays(GLenum mode, GLint first, GLsizei count);
+    void onDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+    void onDrawArraysIndirect(GLenum mode, const void *indirect);
+    void onDispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z);
+    void onDispatchComputeIndirect(GLintptr indirect);
+    void onBufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage);
+    void onBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data);
+    void onTexImage2D(GLenum target,
+                      GLint level,
+                      GLint internalformat,
+                      GLsizei width,
+                      GLsizei height,
+                      GLint border,
+                      GLenum format,
+                      GLenum type,
+                      const void *pixels);
+    void onTexSubImage2D(GLenum target,
+                         GLint level,
+                         GLint xoffset,
+                         GLint yoffset,
+                         GLsizei width,
+                         GLsizei height,
+                         GLenum format,
+                         GLenum type,
+                         const void *pixels);
+    void onTexImage3D(GLenum target,
+                      GLint level,
+                      GLint internalformat,
+                      GLsizei width,
+                      GLsizei height,
+                      GLsizei depth,
+                      GLint border,
+                      GLenum format,
+                      GLenum type,
+                      const void *pixels);
+    void onTexSubImage3D(GLenum target,
+                         GLint level,
+                         GLint xoffset,
+                         GLint yoffset,
+                         GLint zoffset,
+                         GLsizei width,
+                         GLsizei height,
+                         GLsizei depth,
+                         GLenum format,
+                         GLenum type,
+                         const void *pixels);
+    void onGenerateMipmap(GLenum target);
+
     bool isDefaultFramebuffer(GLenum target) const;
 
     uint32_t mStartFrame;
@@ -177,6 +251,168 @@ void KHRONOS_APIENTRY DiscardFramebufferEXTProc(GLenum target,
     gCurrentTracePerfTest->onReplayDiscardFramebufferEXT(target, numAttachments, attachments);
 }
 
+void KHRONOS_APIENTRY ViewportProc(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    gCurrentTracePerfTest->onViewport(x, y, width, height);
+}
+
+// Interpose the calls that generate actual GPU work
+void KHRONOS_APIENTRY DrawElementsProc(GLenum mode, GLsizei count, GLenum type, const void *indices)
+{
+    gCurrentTracePerfTest->onDrawElements(mode, count, type, indices);
+}
+
+void KHRONOS_APIENTRY DrawElementsIndirectProc(GLenum mode, GLenum type, const void *indirect)
+{
+    gCurrentTracePerfTest->onDrawElementsIndirect(mode, type, indirect);
+}
+
+void KHRONOS_APIENTRY DrawElementsInstancedProc(GLenum mode,
+                                                GLsizei count,
+                                                GLenum type,
+                                                const void *indices,
+                                                GLsizei instancecount)
+{
+    gCurrentTracePerfTest->onDrawElementsInstanced(mode, count, type, indices, instancecount);
+}
+
+void KHRONOS_APIENTRY DrawElementsBaseVertexProc(GLenum mode,
+                                                 GLsizei count,
+                                                 GLenum type,
+                                                 const void *indices,
+                                                 GLint basevertex)
+{
+    gCurrentTracePerfTest->onDrawElementsBaseVertex(mode, count, type, indices, basevertex);
+}
+
+void KHRONOS_APIENTRY DrawElementsInstancedBaseVertexProc(GLenum mode,
+                                                          GLsizei count,
+                                                          GLenum type,
+                                                          const void *indices,
+                                                          GLsizei instancecount,
+                                                          GLint basevertex)
+{
+    gCurrentTracePerfTest->onDrawElementsInstancedBaseVertex(mode, count, type, indices,
+                                                             instancecount, basevertex);
+}
+
+void KHRONOS_APIENTRY DrawRangeElementsProc(GLenum mode,
+                                            GLuint start,
+                                            GLuint end,
+                                            GLsizei count,
+                                            GLenum type,
+                                            const void *indices)
+{
+    gCurrentTracePerfTest->onDrawRangeElements(mode, start, end, count, type, indices);
+}
+
+void KHRONOS_APIENTRY DrawArraysProc(GLenum mode, GLint first, GLsizei count)
+{
+    gCurrentTracePerfTest->onDrawArrays(mode, first, count);
+}
+
+void KHRONOS_APIENTRY DrawArraysInstancedProc(GLenum mode,
+                                              GLint first,
+                                              GLsizei count,
+                                              GLsizei instancecount)
+{
+    gCurrentTracePerfTest->onDrawArraysInstanced(mode, first, count, instancecount);
+}
+
+void KHRONOS_APIENTRY DrawArraysIndirectProc(GLenum mode, const void *indirect)
+{
+    gCurrentTracePerfTest->onDrawArraysIndirect(mode, indirect);
+}
+
+void KHRONOS_APIENTRY DispatchComputeProc(GLuint num_groups_x,
+                                          GLuint num_groups_y,
+                                          GLuint num_groups_z)
+{
+    gCurrentTracePerfTest->onDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
+}
+
+void KHRONOS_APIENTRY DispatchComputeIndirectProc(GLintptr indirect)
+{
+    gCurrentTracePerfTest->onDispatchComputeIndirect(indirect);
+}
+
+void KHRONOS_APIENTRY BufferDataProc(GLenum target, GLsizeiptr size, const void *data, GLenum usage)
+{
+    gCurrentTracePerfTest->onBufferData(target, size, data, usage);
+}
+
+void KHRONOS_APIENTRY BufferSubDataProc(GLenum target,
+                                        GLintptr offset,
+                                        GLsizeiptr size,
+                                        const void *data)
+{
+    gCurrentTracePerfTest->onBufferSubData(target, offset, size, data);
+}
+
+void KHRONOS_APIENTRY TexImage2DProc(GLenum target,
+                                     GLint level,
+                                     GLint internalformat,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLint border,
+                                     GLenum format,
+                                     GLenum type,
+                                     const void *pixels)
+{
+    gCurrentTracePerfTest->onTexImage2D(target, level, internalformat, width, height, border,
+                                        format, type, pixels);
+}
+
+void KHRONOS_APIENTRY TexSubImage2DProc(GLenum target,
+                                        GLint level,
+                                        GLint xoffset,
+                                        GLint yoffset,
+                                        GLsizei width,
+                                        GLsizei height,
+                                        GLenum format,
+                                        GLenum type,
+                                        const void *pixels)
+{
+    gCurrentTracePerfTest->onTexSubImage2D(target, level, xoffset, yoffset, width, height, format,
+                                           type, pixels);
+}
+
+void KHRONOS_APIENTRY TexImage3DProc(GLenum target,
+                                     GLint level,
+                                     GLint internalformat,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLsizei depth,
+                                     GLint border,
+                                     GLenum format,
+                                     GLenum type,
+                                     const void *pixels)
+{
+    gCurrentTracePerfTest->onTexImage3D(target, level, internalformat, width, height, depth, border,
+                                        format, type, pixels);
+}
+
+void KHRONOS_APIENTRY TexSubImage3DProc(GLenum target,
+                                        GLint level,
+                                        GLint xoffset,
+                                        GLint yoffset,
+                                        GLint zoffset,
+                                        GLsizei width,
+                                        GLsizei height,
+                                        GLsizei depth,
+                                        GLenum format,
+                                        GLenum type,
+                                        const void *pixels)
+{
+    gCurrentTracePerfTest->onTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height,
+                                           depth, format, type, pixels);
+}
+
+void KHRONOS_APIENTRY GenerateMipmapProc(GLenum target)
+{
+    gCurrentTracePerfTest->onGenerateMipmap(target);
+}
+
 angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
 {
     if (strcmp(procName, "glBindFramebuffer") == 0)
@@ -202,6 +438,91 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
     if (strcmp(procName, "glDiscardFramebufferEXT") == 0)
     {
         return reinterpret_cast<angle::GenericProc>(DiscardFramebufferEXTProc);
+    }
+
+    if (strcmp(procName, "glViewport") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(ViewportProc);
+    }
+
+    // Interpose the calls that generate actual GPU work
+    if (strcmp(procName, "glDrawElements") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawElementsProc);
+    }
+    if (strcmp(procName, "glDrawElementsIndirect") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawElementsIndirectProc);
+    }
+    if (strcmp(procName, "glDrawElementsInstanced") == 0 ||
+        strcmp(procName, "glDrawElementsInstancedEXT") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawElementsInstancedProc);
+    }
+    if (strcmp(procName, "glDrawElementsBaseVertex") == 0 ||
+        strcmp(procName, "glDrawElementsBaseVertexEXT") == 0 ||
+        strcmp(procName, "glDrawElementsBaseVertexOES") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawElementsBaseVertexProc);
+    }
+    if (strcmp(procName, "glDrawElementsInstancedBaseVertex") == 0 ||
+        strcmp(procName, "glDrawElementsInstancedBaseVertexEXT") == 0 ||
+        strcmp(procName, "glDrawElementsInstancedBaseVertexOES") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawElementsInstancedBaseVertexProc);
+    }
+    if (strcmp(procName, "glDrawRangeElements") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawRangeElementsProc);
+    }
+    if (strcmp(procName, "glDrawArrays") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawArraysProc);
+    }
+    if (strcmp(procName, "glDrawArraysInstanced") == 0 ||
+        strcmp(procName, "glDrawArraysInstancedEXT") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawArraysInstancedProc);
+    }
+    if (strcmp(procName, "glDrawArraysIndirect") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DrawArraysIndirectProc);
+    }
+    if (strcmp(procName, "glDispatchCompute") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DispatchComputeProc);
+    }
+    if (strcmp(procName, "glDispatchComputeIndirect") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(DispatchComputeIndirectProc);
+    }
+    if (strcmp(procName, "glBufferData") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(BufferDataProc);
+    }
+    if (strcmp(procName, "glBufferSubData") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(BufferSubDataProc);
+    }
+    if (strcmp(procName, "glTexImage2D") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(TexImage2DProc);
+    }
+    if (strcmp(procName, "glTexImage3D") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(TexImage3DProc);
+    }
+    if (strcmp(procName, "glTexSubImage2D") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(TexSubImage2DProc);
+    }
+    if (strcmp(procName, "glTexSubImage3D") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(TexSubImage3DProc);
+    }
+    if (strcmp(procName, "glGenerateMipmap") == 0 || strcmp(procName, "glGenerateMipmapOES") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(GenerateMipmapProc);
     }
     return gCurrentTracePerfTest->getGLWindow()->getProcAddress(procName);
 }
@@ -1012,6 +1333,293 @@ void TracePerfTest::onReplayDiscardFramebufferEXT(GLenum target,
         std::vector<GLenum> translatedAttachments =
             ConvertDefaultFramebufferEnums(numAttachments, attachments);
         glDiscardFramebufferEXT(target, numAttachments, translatedAttachments.data());
+    }
+}
+
+void TracePerfTest::onViewport(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    if (gMinimizeGPUWork)
+    {
+        glViewport(x, y, 1, 1);
+    }
+    else
+    {
+        glViewport(x, y, width, height);
+    }
+}
+
+// Interpose the calls that generate actual GPU work
+void TracePerfTest::onDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawElements(GL_POINTS, 1, type, indices);
+    }
+    else
+    {
+        glDrawElements(mode, count, type, indices);
+    }
+}
+
+void TracePerfTest::onDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawElementsInstancedBaseVertex(GL_POINTS, 1, type, 0, 1, 0);
+    }
+    else
+    {
+        glDrawElementsIndirect(mode, type, indirect);
+    }
+}
+
+void TracePerfTest::onDrawElementsInstanced(GLenum mode,
+                                            GLsizei count,
+                                            GLenum type,
+                                            const void *indices,
+                                            GLsizei instancecount)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawElementsInstanced(GL_POINTS, 1, type, indices, 1);
+    }
+    else
+    {
+        glDrawElementsInstanced(mode, count, type, indices, instancecount);
+    }
+}
+
+void TracePerfTest::onDrawElementsBaseVertex(GLenum mode,
+                                             GLsizei count,
+                                             GLenum type,
+                                             const void *indices,
+                                             GLint basevertex)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawElementsBaseVertex(GL_POINTS, 1, type, indices, basevertex);
+    }
+    else
+    {
+        glDrawElementsBaseVertex(mode, count, type, indices, basevertex);
+    }
+}
+
+void TracePerfTest::onDrawElementsInstancedBaseVertex(GLenum mode,
+                                                      GLsizei count,
+                                                      GLenum type,
+                                                      const void *indices,
+                                                      GLsizei instancecount,
+                                                      GLint basevertex)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawElementsInstancedBaseVertex(GL_POINTS, 1, type, indices, 1, basevertex);
+    }
+    else
+    {
+        glDrawElementsInstancedBaseVertex(mode, count, type, indices, instancecount, basevertex);
+    }
+}
+
+void TracePerfTest::onDrawRangeElements(GLenum mode,
+                                        GLuint start,
+                                        GLuint end,
+                                        GLsizei count,
+                                        GLenum type,
+                                        const void *indices)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawRangeElements(GL_POINTS, start, end, 1, type, indices);
+    }
+    else
+    {
+        glDrawRangeElements(mode, start, end, count, type, indices);
+    }
+}
+
+void TracePerfTest::onDrawArrays(GLenum mode, GLint first, GLsizei count)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawArrays(GL_POINTS, first, 1);
+    }
+    else
+    {
+        glDrawArrays(mode, first, count);
+    }
+}
+
+void TracePerfTest::onDrawArraysInstanced(GLenum mode,
+                                          GLint first,
+                                          GLsizei count,
+                                          GLsizei instancecount)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawArraysInstanced(GL_POINTS, first, 1, 1);
+    }
+    else
+    {
+        glDrawArraysInstanced(mode, first, count, instancecount);
+    }
+}
+
+void TracePerfTest::onDrawArraysIndirect(GLenum mode, const void *indirect)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDrawArraysInstanced(GL_POINTS, 0, 1, 1);
+    }
+    else
+    {
+        glDrawArraysIndirect(mode, indirect);
+    }
+}
+
+void TracePerfTest::onDispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDispatchCompute(1, 1, 1);
+    }
+    else
+    {
+        glDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
+    }
+}
+
+void TracePerfTest::onDispatchComputeIndirect(GLintptr indirect)
+{
+    if (gMinimizeGPUWork)
+    {
+        glDispatchCompute(1, 1, 1);
+    }
+    else
+    {
+        glDispatchComputeIndirect(indirect);
+    }
+}
+
+void TracePerfTest::onBufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage)
+{
+    if (gMinimizeGPUWork)
+    {
+        glBufferData(target, size, nullptr, usage);
+    }
+    else
+    {
+        glBufferData(target, size, data, usage);
+    }
+}
+
+void TracePerfTest::onBufferSubData(GLenum target,
+                                    GLintptr offset,
+                                    GLsizeiptr size,
+                                    const void *data)
+{
+    if (gMinimizeGPUWork)
+    {
+        glBufferSubData(target, offset, 1, data);
+    }
+    else
+    {
+        glBufferSubData(target, offset, size, data);
+    }
+}
+
+void TracePerfTest::onTexImage2D(GLenum target,
+                                 GLint level,
+                                 GLint internalformat,
+                                 GLsizei width,
+                                 GLsizei height,
+                                 GLint border,
+                                 GLenum format,
+                                 GLenum type,
+                                 const void *pixels)
+{
+    if (gMinimizeGPUWork)
+    {
+        glTexImage2D(target, level, internalformat, width, height, border, format, type, nullptr);
+    }
+    else
+    {
+        glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    }
+}
+
+void TracePerfTest::onTexSubImage2D(GLenum target,
+                                    GLint level,
+                                    GLint xoffset,
+                                    GLint yoffset,
+                                    GLsizei width,
+                                    GLsizei height,
+                                    GLenum format,
+                                    GLenum type,
+                                    const void *pixels)
+{
+    if (gMinimizeGPUWork)
+    {
+        glTexSubImage2D(target, level, xoffset, yoffset, 1, 1, format, type, pixels);
+    }
+    else
+    {
+        glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+    }
+}
+
+void TracePerfTest::onTexImage3D(GLenum target,
+                                 GLint level,
+                                 GLint internalformat,
+                                 GLsizei width,
+                                 GLsizei height,
+                                 GLsizei depth,
+                                 GLint border,
+                                 GLenum format,
+                                 GLenum type,
+                                 const void *pixels)
+{
+    if (gMinimizeGPUWork)
+    {
+        glTexImage3D(target, level, internalformat, width, height, depth, border, format, type,
+                     nullptr);
+    }
+    else
+    {
+        glTexImage3D(target, level, internalformat, width, height, depth, border, format, type,
+                     pixels);
+    }
+}
+
+void TracePerfTest::onTexSubImage3D(GLenum target,
+                                    GLint level,
+                                    GLint xoffset,
+                                    GLint yoffset,
+                                    GLint zoffset,
+                                    GLsizei width,
+                                    GLsizei height,
+                                    GLsizei depth,
+                                    GLenum format,
+                                    GLenum type,
+                                    const void *pixels)
+{
+    if (gMinimizeGPUWork)
+    {
+        glTexSubImage3D(target, level, xoffset, yoffset, zoffset, 1, 1, 1, format, type, pixels);
+    }
+    else
+    {
+        glTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format,
+                        type, pixels);
+    }
+}
+
+void TracePerfTest::onGenerateMipmap(GLenum target)
+{
+    if (!gMinimizeGPUWork)
+    {
+        glGenerateMipmap(target);
     }
 }
 
