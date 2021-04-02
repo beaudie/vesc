@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806dad99_e57604de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-04-02T04:39:32Z",
+      "side": 1,
+      "message": "Note the skip on Intel Linux (I don\u0027t have that available)",
+      "revId": "e6c9d4d08e244f6330418fe93aaafa6f34223f5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
