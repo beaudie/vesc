@@ -141,10 +141,12 @@ angle::Result TransformFeedback::begin(const Context *context,
     mState.mVerticesDrawn = 0;
     bindProgram(context, program);
 
-    if (program)
+    const ProgramExecutable *programExecutable =
+        (context) ? context->getState().getProgramExecutable() : nullptr;
+    if (programExecutable)
     {
         // Compute the number of vertices we can draw before overflowing the bound buffers.
-        auto strides = program->getTransformFeedbackStrides();
+        auto strides = programExecutable->getTransformFeedbackStrides();
         ASSERT(strides.size() <= mState.mIndexedBuffers.size() && !strides.empty());
         GLsizeiptr minCapacity = std::numeric_limits<GLsizeiptr>::max();
         for (size_t index = 0; index < strides.size(); index++)
