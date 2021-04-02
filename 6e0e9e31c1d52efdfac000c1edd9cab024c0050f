@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72fd1b0f_c98dae14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-04-02T06:46:11Z",
+      "side": 1,
+      "message": "Skipping on Pixel 2, good everywhere else.",
+      "revId": "6e0e9e31c1d52efdfac000c1edd9cab024c0050f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
