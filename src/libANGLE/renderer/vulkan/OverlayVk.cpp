@@ -8,6 +8,7 @@
 //
 
 #include "libANGLE/renderer/vulkan/OverlayVk.h"
+#include <iostream>
 
 #include "common/system_utils.h"
 #include "libANGLE/Context.h"
@@ -88,6 +89,7 @@ void OverlayVk::onDestroy(const gl::Context *context)
 
 angle::Result OverlayVk::createFont(ContextVk *contextVk)
 {
+    std::cout << "OverlayVk::createFont no protected flag" << std::endl;
     RendererVk *renderer = contextVk->getRenderer();
 
     // Create a buffer to stage font data upload.
@@ -153,6 +155,7 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
 
 angle::Result OverlayVk::cullWidgets(ContextVk *contextVk)
 {
+    std::cout << "OverlayVk::cullWidgets no protected flag" << std::endl;
     RendererVk *renderer = contextVk->getRenderer();
 
     // Release old culledWidgets image
