@@ -862,7 +862,10 @@ config("angle_frame_capture_enabled") {
 angle_source_set("libANGLE") {
   public_deps = [ ":libANGLE_base" ]
   public_configs = [ ":angle_frame_capture_disabled" ]
-  sources = [ "src/libANGLE/capture/FrameCapture_mock.cpp" ]
+  sources = [
+    "src/libANGLE/capture/FrameCapture_mock.cpp",
+    "src/libANGLE/capture/frame_capture_utils_mock.cpp",
+  ]
 
   # gl_enum_utils defaults included in with_capture build
   deps = []
@@ -921,32 +924,35 @@ group("angle_compression") {
       [ "$angle_zlib_compression_utils_dir:compression_utils_portable" ]
 }
 
-angle_source_set("libjson_serializer") {
-  sources = [ "src/libANGLE/serializer/JsonSerializer.h" ]
-
-  if (angle_has_build) {
-    defines = [ "ANGLE_HAVE_RAPIDJSON" ]
-    sources += [ "src/libANGLE/serializer/JsonSerializer.cpp" ]
+if (angle_has_build) {
+  config("angle_rapidjson_config") {
+    defines = [ "ANGLE_HAS_RAPIDJSON" ]
   }
-
-  public_deps = [
-    ":libANGLE_base",
-    "$angle_root/third_party/rapidjson",
-  ]
+  angle_source_set("angle_json_serializer") {
+    public_deps = [
+      ":libANGLE_base",
+      "$angle_root/third_party/rapidjson",
+    ]
+    sources = [
+      "src/libANGLE/serializer/JsonSerializer.cpp",
+      "src/libANGLE/serializer/JsonSerializer.h",
+    ]
+    public_configs = [ ":angle_rapidjson_config" ]
+  }
 }
 
 angle_source_set("libANGLE_with_capture") {
-  if (angle_has_build) {
-    defines = [ "ANGLE_HAVE_RAPIDJSON" ]
-  }
-
-  public_deps = [
-    ":libANGLE_base",
-    ":libjson_serializer",
-  ]
+  public_deps = [ ":libANGLE_base" ]
   deps = [ ":angle_compression" ]
   public_configs = [ ":angle_frame_capture_enabled" ]
   sources = libangle_capture_sources
+
+  if (angle_has_build) {
+    public_deps += [ ":angle_json_serializer" ]
+    sources += [ "src/libANGLE/capture/frame_capture_utils.cpp" ]
+  } else {
+    sources += [ "src/libANGLE/capture/frame_capture_utils_mock.cpp" ]
+  }
 }
 
 config("shared_library_public_config") {
@@ -1272,23 +1278,15 @@ if (angle_standalone || build_with_chromium) {
   }
 }
 
-if (is_android && symbol_level != 0) {
+if (!is_component_build && is_android && symbol_level != 0) {
   action_foreach("compressed_symbols") {
     sources = []
     foreach(_library, angle_libraries) {
-      if (is_component_build) {
-        sources += [ "$root_out_dir/${_library}${angle_libs_suffix}.cr.so" ]
-      } else {
-        sources += [ "$root_out_dir/${_library}${angle_libs_suffix}.so" ]
-      }
+      sources += [ "$root_out_dir/${_library}${angle_libs_suffix}.so" ]
     }
     if (angle_enable_vulkan_validation_layers) {
       foreach(_layer, vulkan_validation_layers) {
-        if (is_component_build) {
-          sources += [ "$root_out_dir/lib${_layer}.cr.so" ]
-        } else {
-          sources += [ "$root_out_dir/lib${_layer}.so" ]
-        }
+        sources += [ "$root_out_dir/lib${_layer}.so" ]
       }
     }
 
@@ -1326,7 +1324,7 @@ if (is_android && symbol_level != 0) {
   }
 }
 
-if (build_with_chromium && is_android &&
+if (build_with_chromium && !is_component_build && is_android &&
     current_toolchain == default_toolchain) {
   apk_version_code = "0"
   if (angle_enable_commit_id) {
