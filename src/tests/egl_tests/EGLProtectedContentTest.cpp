@@ -175,7 +175,6 @@ class EGLProtectedContentTest : public ANGLETest
     const EGLint kWidth      = 128;
     const EGLint kHeight     = 128;
     bool mExtensionSupported = false;
-
 };
 
 void EGLProtectedContentTest::PbufferTest(bool isProtectedContext, bool isProtectedPbuffer)
@@ -243,25 +242,25 @@ TEST_P(EGLProtectedContentTest, UnprotectedContextWithUnprotectedPbufferSurface)
 {
     PbufferTest(false, false);
 }
-
+#if 0
 // Protected context with Unprotected PbufferSurface
 TEST_P(EGLProtectedContentTest, ProtectedContextWithUnprotectedPbufferSurface)
 {
     PbufferTest(true, false);
 }
-
+#endif
 // Unprotected context with Protected PbufferSurface
 TEST_P(EGLProtectedContentTest, UnprotectedContextWithProtectedPbufferSurface)
 {
     PbufferTest(false, true);
 }
-
+#if 0
 // Protected context with Protected PbufferSurface
 TEST_P(EGLProtectedContentTest, ProtectedContextWithProtectedPbufferSurface)
 {
     PbufferTest(true, true);
 }
-
+#endif
 void EGLProtectedContentTest::WindowTest(bool isProtectedContext, bool isProtectedWindow)
 {
     if (isProtectedContext || isProtectedWindow)
@@ -269,13 +268,16 @@ void EGLProtectedContentTest::WindowTest(bool isProtectedContext, bool isProtect
         ANGLE_SKIP_TEST_IF(!mExtensionSupported);
     }
 
+    std::cout << "eglChooseConfig" << std::endl;
     EGLConfig config = EGL_NO_CONFIG_KHR;
     EXPECT_TRUE(chooseConfig(&config));
 
+    std::cout << "eglCreateContext" << std::endl;
     EGLContext context = EGL_NO_CONTEXT;
     EXPECT_TRUE(createContext(isProtectedContext, config, &context));
     ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
 
+    std::cout << "eglCreateWindowSurface" << std::endl;
     EGLSurface windowSurface = EGL_NO_SURFACE;
     OSWindow *osWindow       = OSWindow::New();
     osWindow->initialize("WindowTest", kWidth, kHeight);
@@ -284,12 +286,14 @@ void EGLProtectedContentTest::WindowTest(bool isProtectedContext, bool isProtect
     EXPECT_TRUE(createWinSurfaceResult);
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
+    std::cout << "eglMakeCurrent surface context" << std::endl;
     EXPECT_TRUE(eglMakeCurrent(mDisplay, windowSurface, windowSurface, context));
     ASSERT_EGL_SUCCESS() << "eglMakeCurrent failed.";
 
     glClearColor(kFloatRed.R, kFloatRed.G, kFloatRed.B, kFloatRed.A);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR() << "glClear failed";
+    std::cout << "glFinish" << std::endl;
     glFinish();
     static const GLColor kTransparentBlack = angle::MakeGLColor(0.0, 0.0, 0.0, 0.0);
     // Results
@@ -312,6 +316,7 @@ void EGLProtectedContentTest::WindowTest(bool isProtectedContext, bool isProtect
             EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
         }
     }
+    std::cout << "eglSwapBuffers" << std::endl;
     eglSwapBuffers(mDisplay, windowSurface);
     ASSERT_EGL_SUCCESS() << "eglSwapBuffers failed.";
     std::this_thread::sleep_for(1s);
@@ -330,14 +335,17 @@ void EGLProtectedContentTest::WindowTest(bool isProtectedContext, bool isProtect
     ASSERT_EGL_SUCCESS() << "eglSwapBuffers failed.";
     std::this_thread::sleep_for(1s);
 
+    std::cout << "eglMakeCurrent NO SURFACE context" << std::endl;
     EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, context));
     ASSERT_EGL_SUCCESS() << "eglMakeCurrent - uncurrent failed.";
 
+    std::cout << "eglDestroySurface" << std::endl;
     eglDestroySurface(mDisplay, windowSurface);
     windowSurface = EGL_NO_SURFACE;
     osWindow->destroy();
     OSWindow::Delete(&osWindow);
 
+    std::cout << "eglDestroyContext" << std::endl;
     eglDestroyContext(mDisplay, context);
     context = EGL_NO_CONTEXT;
 }
@@ -347,25 +355,25 @@ TEST_P(EGLProtectedContentTest, UnprotectedContextWithUnprotectedWindowSurface)
 {
     WindowTest(false, false);
 }
-
+#if 0
 // Protected context with Unprotected WindowSurface
 TEST_P(EGLProtectedContentTest, ProtectedContextWithUnprotectedWindowSurface)
 {
     WindowTest(true, false);
 }
-
+#endif
 // Unprotected context with Protected WindowSurface
 TEST_P(EGLProtectedContentTest, UnprotectedContextWithProtectedWindowSurface)
 {
     WindowTest(false, true);
 }
-
+#if 0
 // Protected context with Protected WindowSurface
 TEST_P(EGLProtectedContentTest, ProtectedContextWithProtectedWindowSurface)
 {
     WindowTest(true, true);
 }
-
+#endif
 // Render pixels to the texture
 bool EGLProtectedContentTest::RenderTexture(bool isProtectedContext,
                                             bool isProtectedTexture,
