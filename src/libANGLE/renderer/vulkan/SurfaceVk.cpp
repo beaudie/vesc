@@ -6,8 +6,8 @@
 // SurfaceVk.cpp:
 //    Implements the class methods for SurfaceVk.
 //
-
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
+#include <iostream>
 
 #include "common/debug.h"
 #include "libANGLE/Context.h"
@@ -611,6 +611,8 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
         mSurfaceCaps                = surfaceCaps2.surfaceCapabilities;
         mSupportsProtectedSwapchain = surfaceProtectedCaps.supportsProtected;
+        std::cout << "WinSurfInit ext supportsSurfaceProtectedSwapchains: "
+                  << mSupportsProtectedSwapchain << std::endl;
     }
     else
     {
@@ -621,6 +623,8 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     if (IsAndroid())
     {
         mSupportsProtectedSwapchain = true;
+        std::cout << "WinSurfVk::Init Android supportsSurfaceProtectedSwapchains: " << true
+                  << std::endl;
     }
 
     ANGLE_VK_CHECK(displayVk, (mState.isProtectedMemory ? mSupportsProtectedSwapchain : true),
