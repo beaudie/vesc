@@ -7,6 +7,7 @@
 //   Helper utilitiy classes that manage Vulkan resources.
 
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
+#include <iostream>
 #include "libANGLE/renderer/driver_utils.h"
 
 #include "common/utilities.h"
@@ -3424,6 +3425,7 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
 
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSize size)
 {
+    std::cout << "BufferHelper::initializeNonZeroMemory no protected flag" << std::endl;
     // Staging buffer memory is non-zero-initialized in 'init'.
     StagingBuffer stagingBuffer;
     ANGLE_TRY(stagingBuffer.init(context, size, StagingUsage::Both));

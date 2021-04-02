@@ -12,6 +12,7 @@
 
 #include <condition_variable>
 #include <deque>
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <queue>

@@ -8,6 +8,7 @@
 //
 
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include <iostream>
 
 // Placing this first seems to solve an intellisense bug.
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -118,6 +119,7 @@ VkResult VerifyExtensionsPresent(const vk::ExtensionNameList &haystack,
     {
         if (!ExtensionFound(needle, haystack))
         {
+            std::cout << "RendVk VerifyExtPresent not supported: " << needle << std::endl;
             ERR() << "Extension not supported: " << needle;
         }
     }
@@ -914,6 +916,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         enabledInstanceExtensions.push_back(VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
         ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceCapabilities2Extension, true);
+        std::cout << "VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME" << std::endl;
     }
 
     if (ExtensionFound(VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME,
@@ -921,6 +924,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         enabledInstanceExtensions.push_back(VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME);
         ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceProtectedCapabilitiesExtension, true);
+        std::cout << "VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME" << std::endl;
     }
 
     // Verify the required extensions are in the extension names set. Fail if not.
@@ -1081,6 +1085,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     mQueueFamilyProperties.resize(queueFamilyCount);
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount,
                                              mQueueFamilyProperties.data());
+    std::cout << "QueueFamilyCount: " << queueFamilyCount << std::endl;
 
     uint32_t graphicsQueueFamilyCount = 0;
     uint32_t firstGraphicsQueueFamily = vk::QueueFamily::findIndex(
@@ -1088,8 +1093,20 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         &graphicsQueueFamilyCount);
     ANGLE_VK_CHECK(displayVk, graphicsQueueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
+    std::cout << "graphicsQueueFamilyCount: " << graphicsQueueFamilyCount << std::endl;
+    std::cout << "firstGraphicsQueueFamily: " << firstGraphicsQueueFamily << std::endl;
+
+    ANGLE_VK_CHECK(displayVk, graphicsQueueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
+
+    uint32_t protectedGraphicsQueueFamilyCount = 0;
     uint32_t firstProtectedGraphicsQueueFamily = vk::QueueFamily::findIndex(
-        mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_PROTECTED_BIT), nullptr);
+        mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_PROTECTED_BIT),
+        &protectedGraphicsQueueFamilyCount);
+
+    std::cout << "protectedGraphicsQueueFamilyCount: " << protectedGraphicsQueueFamilyCount
+              << std::endl;
+    std::cout << "firstProtectedGraphicsQueueFamily: " << firstProtectedGraphicsQueueFamily
+              << std::endl;
 
     // If only one queue family, go ahead and initialize the device. If there is more than one
     // queue, we'll have to wait until we see a WindowSurface to know which supports present.
@@ -1290,11 +1307,15 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     // Query protected memory features and properties
     if (mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0))
     {
+        std::cout << "Attach pNext ProtectedMemFeatures and ProtectedMemProps to PhyDeviceFeatures2"
+                  << std::endl;
         vk::AddToPNextChain(&deviceFeatures, &mProtectedMemoryFeatures);
         vk::AddToPNextChain(&deviceProperties, &mProtectedMemoryProperties);
     }
 
+    std::cout << "vkGetPhysicalDeviceFeatures2KHR" << std::endl;
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
+    std::cout << "vkGetPhysicalDeviceProperties2KHR" << std::endl;
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
     // Fence properties
@@ -1342,6 +1363,9 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk,
                                            uint32_t graphicsQueueFamilyIndex,
                                            uint32_t protectedQueueFamilyIndex)
 {
+    std::cout << "RendererVk::initializeDevice graphicsQueueFamilyIndex: "
+              << graphicsQueueFamilyIndex
+              << " protectedQueueFamilyIndex: " << protectedQueueFamilyIndex << std::endl;
     uint32_t deviceLayerCount = 0;
     ANGLE_VK_TRY(displayVk,
                  vkEnumerateDeviceLayerProperties(mPhysicalDevice, &deviceLayerCount, nullptr));
@@ -1614,6 +1638,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk,
     // pNext chain VkPhysicalDeviceProtectedMemoryFeatures to enable ProtectedMemory
     if (mProtectedMemoryFeatures.protectedMemory)
     {
+        std::cout << "enable ProtectedMemoryFeature" << std::endl;
         mProtectedMemoryFeatures.pNext = enabledFeatures.pNext;
         enabledFeatures.pNext          = &mProtectedMemoryFeatures;
     }
@@ -1725,6 +1750,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk,
 
     uint32_t queueCount = std::min(mGraphicsQueueFamily.getActualQueueCount(),
                                    static_cast<uint32_t>(egl::ContextPriority::EnumCount));
+    std::cout << "queueCount: " << queueCount << std::endl;
 
     uint32_t queueCreateInfoCount              = 1;
     VkDeviceQueueCreateInfo queueCreateInfo[2] = {};
@@ -1751,6 +1777,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk,
             queueCreateInfoCount                = 2;
         }
     }
+    std::cout << "protectedQueueCount: " << protectedQueueCount << std::endl;
 
     // Create Device
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -1765,11 +1792,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk,
 
     if (mProtectedMemoryFeatures.protectedMemory)
     {
+        std::cout << "Chain enabled features including ProtectedMemoryFeature" << std::endl;
         // Need this for protected memory, assume VkPhysicalDeviceFeatures2KHR
         createInfo.pNext = &enabledFeatures;
     }
     else
     {
+        std::cout << "NOT enable ProtectedMemoryFeature" << std::endl;
         // Enable core features without assuming VkPhysicalDeviceFeatures2KHR is accepted in the
         // pNext chain of VkDeviceCreateInfo.
         createInfo.pEnabledFeatures = &enabledFeatures.features;
@@ -1907,8 +1936,10 @@ angle::Result RendererVk::selectPresentQueueForSurface(DisplayVk *displayVk,
     if (mQueueFamilyProperties[newPresentQueue.value()].queueFlags & VK_QUEUE_PROTECTED_BIT)
     {
         protectedQueueFamilyIndex = newPresentQueue.value();
+        std::cout << "New protectedQueueFamilyIndex: " << protectedQueueFamilyIndex << std::endl;
     }
 
+    std::cout << "New presentQueueFamilyIndex: " << newPresentQueue.value() << std::endl;
     ANGLE_TRY(initializeDevice(displayVk, newPresentQueue.value(), protectedQueueFamilyIndex));
 
     *presentQueueOut = newPresentQueue.value();
@@ -2160,6 +2191,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     if (IsAndroid())
     {
         ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceProtectedSwapchains, true);
+        std::cout << "RendVk::initFeatures Android supportsSurfaceProtectedSwapchains: " << true
+                  << std::endl;
     }
 
     // http://anglebug.com/2838

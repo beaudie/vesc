@@ -8,6 +8,7 @@
 //
 
 #include "libANGLE/renderer/vulkan/CommandProcessor.h"
+#include <iostream>
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/trace.h"
 
@@ -1031,9 +1032,12 @@ angle::Result CommandQueue::submitFrame(
 
     ANGLE_TRY(mFenceRecycler.newSharedFence(context, &batch.fence));
     batch.serial = submitQueueSerial;
+    std::cout << "CommandQueue::submitFrame queueSubmit" << std::endl;
+    std::cout << "CommandQueue::submitFrame isProtected: " << isProtectedMemory << std::endl;
 
     ANGLE_TRY(queueSubmit(context, isProtectedMemory, priority, submitInfo, &batch.fence.get(),
                           batch.serial));
+    std::cout << "CommandQueue::submitFrame queueSubmit return" << std::endl;
 
     if (!currentGarbage.empty())
     {
@@ -1192,7 +1196,11 @@ angle::Result CommandQueue::queueSubmit(Context *context,
 
     VkFence fenceHandle = fence ? fence->getHandle() : VK_NULL_HANDLE;
     VkQueue queue       = getQueue(isProtectedMemory, contextPriority);
-    ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fenceHandle));
+    std::cout << "CommandQueue::queueSubmit Calling vkQueueSubmit" << std::endl;
+    VkResult result = vkQueueSubmit(queue, 1, &submitInfo, fenceHandle);
+    std::cout << "vkQueueSubmit: " << result << std::endl;
+    ANGLE_VK_TRY(context, result);
+    //    ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fenceHandle));
     mLastSubmittedQueueSerial = submitQueueSerial;
 
     // Now that we've submitted work, clean up RendererVk garbage

@@ -4804,9 +4804,11 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 angle::Result ContextVk::finishImpl()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::finishImpl");
-
+    std::cout << "ContextVk::finishImpl() start" << std::endl;
     ANGLE_TRY(flushImpl(nullptr));
+    std::cout << "ContextVk::finishImpl() finish" << std::endl;
     ANGLE_TRY(mRenderer->finish(this));
+    std::cout << "ContextVk::finishImpl() end" << std::endl;
 
     clearAllGarbage();
 
