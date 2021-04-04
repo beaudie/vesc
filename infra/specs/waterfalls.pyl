@@ -1,0 +1,48 @@
+# Copyright 2021 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This is a .pyl, or "Python Literal", file. You can treat it just like a
+# .json file, with the following exceptions:
+# * all keys must be quoted (use single quotes, please);
+# * comments are allowed, using '#' syntax; and
+# * trailing commas are allowed.
+
+[
+  {
+    'name': 'angle-ci',
+    'forbid_script_tests': True,
+    'mixins': [
+      'angle-ci-service-account',
+      'swarming_containment_auto',
+    ],
+    'machines': {
+      'linux-intel': {
+        'os_type': 'linux',
+        'mixins': [
+          'linux_intel_hd_630_stable',
+        ],
+        'test_suites': {
+          'gtest_tests': 'linux_intel_gtests',
+        },
+      },
+      'linux-nvidia': {
+        'os_type': 'linux',
+        'mixins': [
+          'linux_nvidia_quadro_p400_stable',
+        ],
+        'test_suites': {
+          'gtest_tests': 'linux_nvidia_gtests',
+        },
+      },
+      'undefined': {
+        'mixins': [
+          'angle-try-service-account',
+        ],
+        'test_suites': {
+          'gtest_tests': 'undefined_extra_gtests',
+        },
+      },
+    },
+  },
+]
