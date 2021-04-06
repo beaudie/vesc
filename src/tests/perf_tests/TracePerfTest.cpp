@@ -309,6 +309,9 @@ TracePerfTest::TracePerfTest()
     {
         // Linux+Nvidia doesn't support GL_KHR_texture_compression_astc_ldr (possibly others also)
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+
+        // Intel doesn't support external images.
+        addExtensionPrerequisite("GL_OES_EGL_image_external");
     }
 
     if (param.testID == RestrictedTraceID::asphalt_8)
@@ -493,6 +496,20 @@ TracePerfTest::TracePerfTest()
         {
             mSkipTest = true;
         }
+    }
+
+    // Adreno gives a driver error with empty/small draw calls.
+    if (param.testID == RestrictedTraceID::hill_climb_racing)
+    {
+        if (IsAndroid() && IsPixel2() && param.driver == GLESDriverType::SystemEGL)
+        {
+            mSkipTest = true;
+        }
+    }
+
+    if (param.testID == RestrictedTraceID::avakin_life)
+    {
+        addExtensionPrerequisite("GL_OES_EGL_image_external");
     }
 
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
