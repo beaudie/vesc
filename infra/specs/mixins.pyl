@@ -1,0 +1,47 @@
+# Copyright 2021 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This is a .pyl, or "Python Literal", file. You can treat it just like a
+# .json file, with the following exceptions:
+# * all keys must be quoted (use single quotes, please);
+# * comments are allowed, using '#' syntax; and
+# * trailing commas are allowed.
+#
+# For more info see Chromium's mixins.pyl in testing/.
+
+{
+  'angle-ci-service-account': {
+    'swarming': {
+      'service_account': 'angle-ci-builder@chops-service-accounts.iam.gserviceaccount.com',
+    },
+  },
+  'angle-try-service-account': {
+    'swarming': {
+      'service_account': 'angle-try-builder@chops-service-accounts.iam.gserviceaccount.com',
+    },
+  },
+  'linux_intel_hd_630_stable': {
+    'swarming': {
+      'dimensions': {
+        'gpu': '8086:5912-19.0.2',
+        'os': 'Ubuntu-19.04',
+        'pool': 'chromium.tests.gpu',
+      }
+    }
+  },
+  'linux_nvidia_quadro_p400_stable': {
+    'swarming': {
+      'dimensions': {
+        'gpu': '10de:1cb3-418.56',
+        'os': 'Ubuntu-19.04',
+        'pool': 'chromium.tests.gpu',
+      }
+    }
+  },
+  'swarming_containment_auto': {
+    'swarming': {
+      'containment_type': 'AUTO',
+    },
+  },
+}
