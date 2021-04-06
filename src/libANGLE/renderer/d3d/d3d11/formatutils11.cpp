@@ -807,22 +807,25 @@ const VertexFormat &GetVertexFormatInfo(angle::FormatID vertexFormatID,
         // GL_INT_2_10_10_10_REV
         case angle::FormatID::R10G10B10A2_SSCALED:
         {
-            static constexpr VertexFormat info(VERTEX_CONVERT_CPU, DXGI_FORMAT_R32G32B32A32_FLOAT,
-                                               &CopyXYZ10W2ToXYZW32FVertexData<true, false, true>);
+            static constexpr VertexFormat info(
+                VERTEX_CONVERT_CPU, DXGI_FORMAT_R32G32B32A32_FLOAT,
+                &CopyXYZ10W2ToXYZW32FVertexData<true, false, true, false>);
             return info;
         }
         case angle::FormatID::R10G10B10A2_SNORM:
         {
-            static constexpr VertexFormat info(VERTEX_CONVERT_CPU, DXGI_FORMAT_R32G32B32A32_FLOAT,
-                                               &CopyXYZ10W2ToXYZW32FVertexData<true, true, true>);
+            static constexpr VertexFormat info(
+                VERTEX_CONVERT_CPU, DXGI_FORMAT_R32G32B32A32_FLOAT,
+                &CopyXYZ10W2ToXYZW32FVertexData<true, true, true, false>);
             return info;
         }
 
         // GL_UNSIGNED_INT_2_10_10_10_REV
         case angle::FormatID::R10G10B10A2_USCALED:
         {
-            static constexpr VertexFormat info(VERTEX_CONVERT_CPU, DXGI_FORMAT_R32G32B32A32_FLOAT,
-                                               &CopyXYZ10W2ToXYZW32FVertexData<false, false, true>);
+            static constexpr VertexFormat info(
+                VERTEX_CONVERT_CPU, DXGI_FORMAT_R32G32B32A32_FLOAT,
+                &CopyXYZ10W2ToXYZW32FVertexData<false, false, true, false>);
             return info;
         }
         case angle::FormatID::R10G10B10A2_UNORM:
@@ -995,8 +998,9 @@ const VertexFormat &GetVertexFormatInfo(angle::FormatID vertexFormatID,
         // GL_INT_2_10_10_10_REV
         case angle::FormatID::R10G10B10A2_SINT:
         {
-            static constexpr VertexFormat info(VERTEX_CONVERT_CPU, DXGI_FORMAT_R16G16B16A16_SINT,
-                                               &CopyXYZ10W2ToXYZW32FVertexData<true, true, false>);
+            static constexpr VertexFormat info(
+                VERTEX_CONVERT_CPU, DXGI_FORMAT_R16G16B16A16_SINT,
+                &CopyXYZ10W2ToXYZW32FVertexData<true, true, false, false>);
             return info;
         }
 
