@@ -1189,7 +1189,6 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     ]
     sources = deqp_libtester_sources
     if (is_android) {
-      sources += deqp_libtester_sources_android
       libs = [ "log" ]
     }
   }

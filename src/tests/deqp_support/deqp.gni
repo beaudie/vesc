@@ -101,6 +101,8 @@ deqp_gles2_sources = [
   "$deqp_path/modules/gles2/functional/es2fLightAmountTest.hpp",
   "$deqp_path/modules/gles2/functional/es2fMultisampleTests.cpp",
   "$deqp_path/modules/gles2/functional/es2fMultisampleTests.hpp",
+  "$deqp_path/modules/gles2/functional/es2fMultisampledRenderToTextureTests.cpp",
+  "$deqp_path/modules/gles2/functional/es2fMultisampledRenderToTextureTests.hpp",
   "$deqp_path/modules/gles2/functional/es2fNegativeBufferApiTests.cpp",
   "$deqp_path/modules/gles2/functional/es2fNegativeBufferApiTests.hpp",
   "$deqp_path/modules/gles2/functional/es2fNegativeFragmentApiTests.cpp",
@@ -2014,9 +2016,4 @@ deqp_libtester_sources = [
   # TODO(jmadill): integrate with dEQP
   "deqp_support/tcuRandomOrderExecutor.cpp",
   "deqp_support/tcuRandomOrderExecutor.h",
-]
-
-deqp_libtester_sources_android = [
-  "$deqp_path/framework/platform/android/tcuAndroidInternals.cpp",
-  "$deqp_path/framework/platform/android/tcuAndroidInternals.hpp",
 ]
