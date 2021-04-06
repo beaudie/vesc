@@ -205,7 +205,8 @@ def get_vertex_copy_function_and_default_alpha(src_format, dst_format):
                                        ' not to ' + dst_format)
         is_signed = 'true' if 'SINT' in src_format or 'SNORM' in src_format or 'SSCALED' in src_format else 'false'
         is_normal = 'true' if 'NORM' in src_format else 'false'
-        return 'CopyXYZ10W2ToXYZW32FVertexData<%s, %s, true>' % (is_signed, is_normal), 0, "false"
+        return 'CopyXYZ10W2ToXYZW32FVertexData<%s, %s, true, false>' % (is_signed,
+                                                                        is_normal), 0, "false"
 
     return angle_format_utils.get_vertex_copy_function(src_format, dst_format), 0, "false"
 

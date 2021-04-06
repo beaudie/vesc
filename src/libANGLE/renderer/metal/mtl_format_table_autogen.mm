@@ -2980,7 +2980,7 @@ void VertexFormat::init(angle::FormatID angleFormatId, bool tightlyPacked)
         case angle::FormatID::R10G10B10A2_SINT:
             this->metalFormat        = MTLVertexFormatFloat4;
             this->actualFormatId     = angle::FormatID::R32G32B32A32_FLOAT;
-            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<true, false, true>;
+            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<true, false, true, false>;
             this->defaultAlpha       = 0;
             this->actualSameGLType   = false;
             break;
@@ -2988,7 +2988,7 @@ void VertexFormat::init(angle::FormatID angleFormatId, bool tightlyPacked)
         case angle::FormatID::R10G10B10A2_SSCALED:
             this->metalFormat        = MTLVertexFormatFloat4;
             this->actualFormatId     = angle::FormatID::R32G32B32A32_FLOAT;
-            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<true, false, true>;
+            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<true, false, true, false>;
             this->defaultAlpha       = 0;
             this->actualSameGLType   = false;
             break;
@@ -2996,7 +2996,7 @@ void VertexFormat::init(angle::FormatID angleFormatId, bool tightlyPacked)
         case angle::FormatID::R10G10B10A2_UINT:
             this->metalFormat        = MTLVertexFormatFloat4;
             this->actualFormatId     = angle::FormatID::R32G32B32A32_FLOAT;
-            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<false, false, true>;
+            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<false, false, true, false>;
             this->defaultAlpha       = 0;
             this->actualSameGLType   = false;
             break;
@@ -3004,7 +3004,7 @@ void VertexFormat::init(angle::FormatID angleFormatId, bool tightlyPacked)
         case angle::FormatID::R10G10B10A2_USCALED:
             this->metalFormat        = MTLVertexFormatFloat4;
             this->actualFormatId     = angle::FormatID::R32G32B32A32_FLOAT;
-            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<false, false, true>;
+            this->vertexLoadFunction = CopyXYZ10W2ToXYZW32FVertexData<false, false, true, false>;
             this->defaultAlpha       = 0;
             this->actualSameGLType   = false;
             break;
