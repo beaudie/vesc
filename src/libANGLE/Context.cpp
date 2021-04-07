@@ -863,7 +863,13 @@ GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLcha
                     return 0u;
                 }
 
-                programObject->detachShader(this, shaderObject);
+                if (!getFrameCapture()->enabled())
+                {
+                    // Frame capture is enabled, so don't detach the shader since we need:
+                    // 1.) Shader ID
+                    // 2.) Shader source (technically available without the Shader attached)
+                    programObject->detachShader(this, shaderObject);
+                }
             }
 
             InfoLog &programInfoLog = programObject->getExecutable().getInfoLog();
