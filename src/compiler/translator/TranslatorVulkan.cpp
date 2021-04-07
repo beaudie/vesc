@@ -8,6 +8,8 @@
 //   glslang to spit out SPIR-V.
 //   See: https://www.khronos.org/registry/vulkan/specs/misc/GL_KHR_vulkan_glsl.txt
 //
+//   TODO: update
+//
 
 #include "compiler/translator/TranslatorVulkan.h"
 
@@ -17,6 +19,7 @@
 #include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/IntermNode.h"
+#include "compiler/translator/OutputSPIRV.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/glslang_wrapper.h"
@@ -648,7 +651,6 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
 
 ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
                                               ShCompileOptions compileOptions,
-                                              TInfoSinkBase &sink,
                                               TIntermBlock *root,
                                               TSymbolTable *symbolTable,
                                               SpecConst *specConst,
@@ -1039,7 +1041,7 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
 
             if ((compileOptions & SH_ADD_BRESENHAM_LINE_RASTER_EMULATION) != 0)
             {
-                if (!AddBresenhamEmulationFS(this, compileOptions, sink, root, &getSymbolTable(),
+                if (!AddBresenhamEmulationFS(this, compileOptions, root, &getSymbolTable(),
                                              specConst, driverUniforms, usesFragCoord))
                 {
                     return false;
@@ -1338,14 +1340,23 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
         }
     }
 
-    // Write translated shader.
-    TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
-                                 getNameMap(), &getSymbolTable(), getShaderType(),
-                                 getShaderVersion(), getOutputType(), precisionEmulation,
-                                 enablePrecision, compileOptions);
-    root->traverse(&outputGLSL);
+#if defined(ANGLE_ENABLE_DIRECT_SPIRV_GENERATION)
+    if ((compileOptions & SH_GENERATE_SPIRV_DIRECTLY) != 0 && getShaderType() == GL_VERTEX_SHADER)
+    {
+        return OutputSPIRV(this, root, compileOptions);
+    }
+    else
+#endif
+    {
+        // Write translated shader.
+        TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
+                                     getNameMap(), &getSymbolTable(), getShaderType(),
+                                     getShaderVersion(), getOutputType(), precisionEmulation,
+                                     enablePrecision, compileOptions);
+        root->traverse(&outputGLSL);
 
-    return compileToSpirv(sink);
+        return compileToSpirv(sink);
+    }
 }
 
 bool TranslatorVulkan::shouldFlattenPragmaStdglInvariantAll()
