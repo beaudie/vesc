@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/capture/gl_enum_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
@@ -578,6 +579,20 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
             if (vertexFormat.getVertexLoadRequiresConversion(compressed) || !bindingIsAligned)
             {
+                if (vertexFormat.getVertexLoadRequiresConversion(compressed))
+                {
+                    std::ostringstream stream;
+                    stream << "The Vulkan driver does not support the "
+                           << gl::GLenumToString(gl::GLenumGroup::InternalFormat,
+                                                 vertexFormat.intendedFormat().glInternalFormat)
+                           << " vertex attribute format; emulating with "
+                           << gl::GLenumToString(
+                                  gl::GLenumGroup::InternalFormat,
+                                  vertexFormat.actualBufferFormat(compressed).glInternalFormat);
+                    ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
+                                       stream.str().c_str());
+                    ANGLE_TRY(contextVk->insertEventMarker(0, stream.str().c_str()));
+                }
                 ConversionBuffer *conversion = bufferVk->getVertexConversionBuffer(
                     renderer, intendedFormat.id, binding.getStride(),
                     binding.getOffset() + attrib.relativeOffset, !bindingIsAligned);
