@@ -63,8 +63,6 @@ constexpr uint32_t kOverlayDrawFontBinding          = 4;
 constexpr uint32_t kGenerateMipmapDestinationBinding = 0;
 constexpr uint32_t kGenerateMipmapSourceBinding      = 1;
 
-constexpr uint32_t kFloatOneAsUint = 0x3F80'0000u;
-
 bool ValidateFloatOneAsUint()
 {
     union
@@ -72,7 +70,7 @@ bool ValidateFloatOneAsUint()
         uint32_t asUint;
         float asFloat;
     } one;
-    one.asUint = kFloatOneAsUint;
+    one.asUint = gl::Float32One;
     return one.asFloat == 1.0f;
 }
 
@@ -1842,7 +1840,7 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
 
         case ConvertVertex_comp::kFloatToFloat:
             ASSERT(ValidateFloatOneAsUint());
-            shaderParams.srcEmulatedAlpha = kFloatOneAsUint;
+            shaderParams.srcEmulatedAlpha = gl::Float32One;
             break;
 
         default:
@@ -2942,14 +2940,13 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     else if (shaderParams.Bd == 2)
     {
         ASSERT(dstImageFormat.isFloat());
-        // 1.0 in half-float is represented with 0 01111 0000000000
-        shaderParams.srcEmulatedAlpha = 0x3C00;
+        shaderParams.srcEmulatedAlpha = gl::Float16One;
     }
     else if (shaderParams.Bd == 4)
     {
         ASSERT(dstImageFormat.isFloat());
         ASSERT(ValidateFloatOneAsUint());
-        shaderParams.srcEmulatedAlpha = kFloatOneAsUint;
+        shaderParams.srcEmulatedAlpha = gl::Float32One;
     }
     else
     {
