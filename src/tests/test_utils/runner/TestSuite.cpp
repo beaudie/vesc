@@ -1235,12 +1235,10 @@ TestSuite::TestSuite(int *argc, char **argv)
     }
 
     {
+        char firstTestName[500];
+        testSet[0].sprintfName(firstTestName);
         std::stringstream fakeTestName;
-        fakeTestName << kArtifactsFakeTestName;
-        if (mShardIndex != -1)
-        {
-            fakeTestName << "-Shard" << std::setfill('0') << std::setw(2) << mShardIndex;
-        }
+        fakeTestName << kArtifactsFakeTestName << '-' << firstTestName;
         mTestResults.testArtifactsFakeTestName = fakeTestName.str();
     }
 
