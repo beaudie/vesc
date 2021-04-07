@@ -862,8 +862,6 @@ GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLcha
                     deleteProgram(programID);
                     return 0u;
                 }
-
-                programObject->detachShader(this, shaderObject);
             }
 
             InfoLog &programInfoLog = programObject->getExecutable().getInfoLog();
