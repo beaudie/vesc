@@ -1,0 +1,38 @@
+# Copyright 2021 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# This is a .pyl, or "Python Literal", file. You can treat it just like a
+# .json file, with the following exceptions:
+# * all keys must be quoted (use single quotes, please);
+# * comments are allowed, using '#' syntax; and
+# * trailing commas are allowed.
+
+{
+  # This is a map of builder group names -> builder names -> config names
+  # (where each config name is a key in the 'configs' dict, below). MB uses
+  # this dict to look up which config to use for a given bot.
+  'builder_groups': {
+    'angle': {
+      'linux-clang-rel': 'angle_release_bot',
+    },
+  },
+
+  # This is the list of configs that you can pass to mb; each config
+  # represents a particular combination of gn args that
+  # we must support. A given config *may* be platform-specific but
+  # is not necessarily so (i.e., we might have mac, win, and linux
+  # bots all using the 'release_bot' config).
+  'configs': {
+    'angle_release_bot': ['angle', 'release'],
+  },
+
+  # This is a dict mapping a given 'mixin' name to a dict of settings that
+  # mb should use. See //tools/mb/docs/user_guide.md for more information.
+  'mixins': {
+    'angle': {
+      'gn_args': 'build_angle_gles1_conform_tests=true build_angle_trace_perf_tests=true is_component_build=false'
+    },
+    'release': { 'gn_args': 'is_debug=false' },
+  },
+}
