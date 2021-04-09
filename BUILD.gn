@@ -350,7 +350,10 @@ angle_static_library("angle_common") {
     ":angle_version",
     ":includes",
   ]
-  public_configs += [ ":angle_common_config" ]
+  public_configs += [
+    ":angle_common_config",
+    ":angle_expose_non_conformant_extensions_and_versions_config",
+  ]
   if (angle_has_build && use_fuzzing_engine) {
     all_dependent_configs = [ ":angle_disable_pool_alloc" ]
   }
@@ -882,6 +885,12 @@ angle_source_set("angle_gl_enum_utils") {
     "src/libANGLE/capture/gl_enum_utils.cpp",
     "src/libANGLE/capture/gl_enum_utils_autogen.cpp",
   ]
+}
+
+config("angle_expose_non_conformant_extensions_and_versions_config") {
+  if (angle_expose_non_conformant_extensions_and_versions) {
+    defines = [ "ANGLE_EXPOSE_NON_CONFORMANT_EXTENSIONS_AND_VERSIONS" ]
+  }
 }
 
 if (!defined(angle_abseil_cpp_dir)) {

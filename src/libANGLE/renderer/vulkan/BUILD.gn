@@ -232,7 +232,10 @@ angle_source_set("angle_vulkan_backend") {
     "$angle_root/src/common/vulkan:angle_vulkan_entry_points",
     "$angle_root/src/common/vulkan:angle_vulkan_headers",
   ]
-  public_configs = [ ":angle_vulkan_backend_config" ]
+  public_configs = [
+    ":angle_vulkan_backend_config",
+    "$angle_root:angle_expose_non_conformant_extensions_and_versions_config",
+  ]
 
   data_deps = []
 
