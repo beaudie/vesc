@@ -42,6 +42,8 @@ ANGLE_CHROMIUM_DEPS = [
     'testing',
     'third_party/abseil-cpp',
     'third_party/catapult',
+    'third_party/jdk',
+    'third_party/jdk/extras',
     'third_party/libjpeg_turbo',
     'third_party/nasm',
     'third_party/protobuf',

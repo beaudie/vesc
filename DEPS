@@ -198,6 +198,30 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'third_party/jdk': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/jdk',
+              'version': 'JhpgSvTpgVUkoKe56yQmYaR1jXNcY8NqlltA0mKIO4EC',
+          },
+      ],
+      # Needed on Linux for use on chromium_presubmit (for checkstyle).
+      'condition': 'checkout_android and not build_with_chromium',
+      'dep_type': 'cipd',
+  },
+
+  'third_party/jdk/extras': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/jdk/extras',
+              'version': '-7m_pvgICYN60yQI3qmTj_8iKjtnT4NXicT0G_jJPqsC',
+          },
+      ],
+      # Needed on Linux for use on chromium_presubmit (for checkstyle).
+      'condition': 'checkout_android and not build_with_chromium',
+      'dep_type': 'cipd',
+  },
+
   'third_party/jsoncpp': {
     'url': '{chromium_git}/chromium/src/third_party/jsoncpp@{chromium_jsoncpp_revision}',
     'condition': 'not build_with_chromium',
