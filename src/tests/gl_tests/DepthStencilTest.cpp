@@ -106,7 +106,12 @@ class DepthStencilTest : public ANGLETest
 };
 
 class DepthStencilTestES3 : public DepthStencilTest
-{};
+{
+  protected:
+    void compareDepth(uint32_t expected);
+    void clearAndCompareDepth(GLfloat depth, uint32_t expected);
+    void drawAndCompareDepth(GLfloat depth, uint32_t expected);
+};
 
 void DepthStencilTest::ensureColor(GLColor color)
 {
@@ -307,6 +312,73 @@ TEST_P(DepthStencilTestES3, ClearThenDraw)
     EXPECT_PIXEL_COLOR_EQ(kSize - 1, 0, GLColor::red);
     EXPECT_PIXEL_COLOR_EQ(0, kSize - 1, GLColor::red);
     EXPECT_PIXEL_COLOR_EQ(kSize - 1, kSize - 1, GLColor::red);
+}
+
+void DepthStencilTestES3::compareDepth(uint32_t expected)
+{
+    std::vector<uint32_t> pixelData(getWindowWidth() * getWindowHeight());
+    glReadPixels(0, 0, getWindowWidth(), getWindowHeight(), GL_DEPTH_COMPONENT, GL_UNSIGNED_INT,
+                 pixelData.data());
+    for (uint32_t pixel : pixelData)
+    {
+        EXPECT_NEAR(pixel, expected, 1);
+    }
+}
+
+void DepthStencilTestES3::clearAndCompareDepth(GLfloat depth, uint32_t expected)
+{
+    glClearDepthf(depth);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    compareDepth(expected);
+}
+
+void DepthStencilTestES3::drawAndCompareDepth(GLfloat positionZ, uint32_t expected)
+{
+    ANGLE_GL_PROGRAM(depthTestProgram, essl3_shaders::vs::Simple(), essl3_shaders::fs::Green());
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+    drawQuad(depthTestProgram, essl3_shaders::PositionAttrib(), positionZ, 1.0f);
+    glDisable(GL_DEPTH_TEST);
+    compareDepth(expected);
+}
+
+TEST_P(DepthStencilTestES3, ReadPixelsDepth24)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 && !IsGLExtensionEnabled("GL_OES_depth24") &&
+                       !IsGLExtensionEnabled("GL_NV_read_depth"));
+
+    // Create GL_DEPTH_COMPONENT24 texture
+    GLTexture depthTexture;
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, getWindowWidth(), getWindowHeight(), 0,
+                 GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+
+    // Set up framebuffer
+    GLFramebuffer depthFBO;
+    GLRenderbuffer depthRenderbuffer;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, getWindowWidth(),
+                          getWindowHeight());
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                              depthRenderbuffer);
+
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    clearAndCompareDepth(0.0f, 0x0);
+    clearAndCompareDepth(0.125f, 0x20000000);
+    clearAndCompareDepth(0.5f, 0x80000000);
+    clearAndCompareDepth(1.0f, 0xffffffff);
+
+    drawAndCompareDepth(0.0f, 0x80000000);
+    drawAndCompareDepth(0.125f, 0x8fffffff);
+    drawAndCompareDepth(0.5f, 0xbfffffff);
+    drawAndCompareDepth(1.0f, 0xffffffff);
+
+    ASSERT_GL_NO_ERROR();
 }
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(DepthStencilTest);
