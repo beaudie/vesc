@@ -377,7 +377,29 @@ TEST_P(DepthStencilTestES3, ReadPixelsDepth24)
     ASSERT_GL_NO_ERROR();
 }
 
+class Depth24SurfaceTest : public ANGLETest
+{
+  protected:
+    Depth24SurfaceTest()
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+        setConfigStencilBits(0);  // Stencil set to 0
+    }
+};
+
+TEST_P(Depth24SurfaceTest, Check)
+{
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(DepthStencilTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(Depth24SurfaceTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(DepthStencilTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(DepthStencilTestES3);
