@@ -450,6 +450,7 @@ template("angle_trace_fixture") {
     include_dirs = [ "$angle_root/src/libANGLE/capture" ]
   }
   angle_source_set(target_name) {
+    forward_variables_from(invoker, [ "check_includes" ])
     testonly = true
     defines = [ "ANGLE_REPLAY_IMPLEMENTATION" ]
     suppressed_configs += [ "$angle_root:constructor_and_destructor_warnings" ]
