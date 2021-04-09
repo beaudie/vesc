@@ -2045,6 +2045,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, disableNativeParallelCompile,
                             isTSANBuild && IsLinux() && isNvidia);
 
+    // Android-X86 crashes with AMDGPU
+    // crbug.com/1192909
+    ANGLE_FEATURE_CONDITION(features, disableNativeParallelCompile, IsAndroid() && isAMD);
+
     // anglebug.com/4849
     // This workaround is definitely needed on Intel and AMD GPUs. To
     // determine whether it's needed on iOS and Apple Silicon, the
