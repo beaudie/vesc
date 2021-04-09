@@ -237,30 +237,39 @@ std::string AndroidWindow::GetExternalStorageDirectory()
         return "";
     }
 
+    // TODO(jmadill): Find how to pass the root test directory to ANGLE. http://crbug.com/1097957
     jstring stringPath = static_cast<jstring>(jni->CallObjectMethod(
-        intent, gseid, jni->NewStringUTF("org.chromium.base.test.util.UrlUtils.RootDirectory")));
+        intent, gseid, jni->NewStringUTF("android.os.Environment.getExternalStorageDirectory")));
     if (stringPath != 0)
     {
         const char *path = jni->GetStringUTFChars(stringPath, nullptr);
         return std::string(path) + "/chromium_tests_root";
     }
 
-    jclass environment = jni->FindClass("org/chromium/base/test/util/UrlUtils");
-    if (environment == 0)
-    {
-        WARN() << "GetExternalStorageDirectory: Failed to find Environment";
-        return "";
-    }
+    // jstring stringPath = static_cast<jstring>(jni->CallObjectMethod(
+    //     intent, gseid, jni->NewStringUTF("org.chromium.base.test.util.UrlUtils.RootDirectory")));
+    // if (stringPath != 0)
+    // {
+    //     const char *path = jni->GetStringUTFChars(stringPath, nullptr);
+    //     return std::string(path) + "/chromium_tests_root";
+    // }
 
-    jmethodID getDir =
-        jni->GetStaticMethodID(environment, "getIsolatedTestRoot", "()Ljava/lang/String;");
-    if (getDir == 0)
-    {
-        WARN() << "GetExternalStorageDirectory: Failed to get static method";
-        return "";
-    }
+    // jclass environment = jni->FindClass("org/chromium/base/test/util/UrlUtils");
+    // if (environment == 0)
+    // {
+    //     WARN() << "GetExternalStorageDirectory: Failed to find Environment";
+    //     return "";
+    // }
 
-    stringPath = static_cast<jstring>(jni->CallStaticObjectMethod(environment, getDir));
+    // jmethodID getDir =
+    //     jni->GetStaticMethodID(environment, "getIsolatedTestRoot", "()Ljava/lang/String;");
+    // if (getDir == 0)
+    // {
+    //     WARN() << "GetExternalStorageDirectory: Failed to get static method";
+    //     return "";
+    // }
+
+    // stringPath = static_cast<jstring>(jni->CallStaticObjectMethod(environment, getDir));
 
     jthrowable exception = jni->ExceptionOccurred();
     if (exception != 0)
