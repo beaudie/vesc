@@ -175,7 +175,6 @@ ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
     spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
     std::string readableSpirv;
     spirvTools.Disassemble(*spirvBlobOut, &readableSpirv, 0);
-    fprintf(stderr, "%s\n%s\n", shaderString, readableSpirv.c_str());
 #endif  // ANGLE_DEBUG_SPIRV_TRANSFORMER
 
     return true;
