@@ -16,6 +16,10 @@
 #define ANGLE_FEATURE_CONDITION(set, feature, cond)       \
     do                                                    \
     {                                                     \
+        if ((set)->feature.enabled)                       \
+        {                                                 \
+            break;                                        \
+        }                                                 \
         (set)->feature.enabled   = cond;                  \
         (set)->feature.condition = ANGLE_STRINGIFY(cond); \
     } while (0)
