@@ -185,6 +185,7 @@ TType::TType(const TPublicType &p)
       mInterfaceBlock(nullptr),
       mStructure(nullptr),
       mIsStructSpecifier(false),
+      mFieldIndex(0),
       mMangledName(nullptr)
 {
     ASSERT(primarySize <= 4);
@@ -236,6 +237,7 @@ TType &TType::operator=(const TType &t)
     mInterfaceBlock    = t.mInterfaceBlock;
     mStructure         = t.mStructure;
     mIsStructSpecifier = t.mIsStructSpecifier;
+    mFieldIndex        = t.mFieldIndex;
     mMangledName       = t.mMangledName;
 
     if (t.mArraySizesStorage)
@@ -705,6 +707,12 @@ void TType::setInterfaceBlock(const TInterfaceBlock *interfaceBlockIn)
         mInterfaceBlock = interfaceBlockIn;
         invalidateMangledName();
     }
+}
+
+void TType::setInterfaceBlockField(const TInterfaceBlock *interfaceBlockIn, size_t fieldIndex)
+{
+    setInterfaceBlock(interfaceBlockIn);
+    mFieldIndex = fieldIndex;
 }
 
 const char *TType::getMangledName() const
