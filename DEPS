@@ -159,6 +159,11 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'src/third_party/depot_tools': {
+    'url': '{chromium_git}/chromium/tools/depot_tools.git@1cabb17575917b73ec2e270d4187656c20b1ab0c',
+    'condition': 'not build_with_chromium',
+  },
+
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'third_party/dummy_chromium': {
@@ -1081,12 +1086,25 @@ deps = {
 }
 
 hooks = [
+  {
+    # Ensure that the DEPS'd "depot_tools" has its self-update capability
+    # disabled.
+    'name': 'disable_depot_tools_selfupdate',
+    'pattern': '.',
+    'condition': 'not build_with_chromium',
+    'action': [
+        'python',
+        'third_party/depot_tools/update_depot_tools_toggle.py',
+        '--disable',
+    ],
+  },
+
   # Pull clang-format binaries using checked-in hashes.
   {
     'name': 'clang_format_win',
     'pattern': '.',
     'condition': 'host_os == "win" and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--platform=win32',
                 '--no_auth',
@@ -1098,7 +1116,7 @@ hooks = [
     'name': 'clang_format_mac',
     'pattern': '.',
     'condition': 'host_os == "mac" and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--platform=darwin',
                 '--no_auth',
@@ -1110,7 +1128,7 @@ hooks = [
     'name': 'clang_format_linux',
     'pattern': '.',
     'condition': 'host_os == "linux" and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--platform=linux*',
                 '--no_auth',
@@ -1169,7 +1187,7 @@ hooks = [
     'name': 'rc_win',
     'pattern': '.',
     'condition': 'checkout_win and (host_os == "win" and not build_with_chromium)',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--no_auth',
                 '--bucket', 'chromium-browser-clang/rc',
@@ -1192,7 +1210,7 @@ hooks = [
     'name': 'linux_glslang_validator',
     'pattern': '.',
     'condition': 'checkout_linux and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--platform=linux*',
                 '--no_auth',
@@ -1206,7 +1224,7 @@ hooks = [
     'name': 'win_glslang_validator',
     'pattern': '.',
     'condition': 'checkout_win and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--platform=win32*',
                 '--no_auth',
@@ -1220,7 +1238,7 @@ hooks = [
     'name': 'linux_flex_bison',
     'pattern': '.',
     'condition': 'checkout_linux and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--platform=linux*',
                 '--no_auth',
@@ -1234,7 +1252,7 @@ hooks = [
     'name': 'win_flex_bison',
     'pattern': '.',
     'condition': 'checkout_win and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
+    'action': [ 'third_party/depot_tools/download_from_google_storage',
                 '--no_resume',
                 '--platform=win32*',
                 '--no_auth',
