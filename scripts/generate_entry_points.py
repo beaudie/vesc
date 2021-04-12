@@ -251,7 +251,11 @@ void CL_API_CALL CL_{name}({params})
 {{
     CL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
+    cl::Thread *thread = nullptr; // TODO
+
     // TODO: {name}
+
+    cl::{name}(thread{comma_if_needed}{internal_params});
 }}
 """
 
@@ -260,9 +264,11 @@ TEMPLATE_CL_ENTRY_POINT_WITH_RETURN = """\
 {{
     CL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
+    cl::Thread *thread = nullptr; // TODO
+
     // TODO: {name}
 
-    return ({return_type})0;
+    return cl::{name}(thread{comma_if_needed}{internal_params});
 }}
 """
 
@@ -833,11 +839,11 @@ using namespace egl;
 """
 
 LIBCL_EXPORT_INCLUDES_AND_PREAMBLE = """
-//#include "anglebase/no_destructor.h"
-//#include "common/system_utils.h"
+#include "anglebase/no_destructor.h"
+#include "common/system_utils.h"
 
 #include <iostream>
-//#include <memory>
+#include <memory>
 
 #include "cl_loader.h"
 
@@ -845,7 +851,6 @@ namespace
 {
 bool gLoaded = false;
 
-/* TODO(jplate): uncomment after entry points moved to GLESV2 lib http://anglebug.com/5759
 std::unique_ptr<angle::Library> &EntryPointsLib()
 {
     static angle::base::NoDestructor<std::unique_ptr<angle::Library>> sEntryPointsLib;
@@ -856,7 +861,6 @@ angle::GenericProc CL_API_CALL GlobalLoad(const char *symbol)
 {
     return reinterpret_cast<angle::GenericProc>(EntryPointsLib()->getSymbol(symbol));
 }
-*/
 
 void EnsureCLLoaded()
 {
@@ -865,10 +869,9 @@ void EnsureCLLoaded()
         return;
     }
 
-    // EntryPointsLib().reset(
-    //    angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
-    // angle::LoadCL(GlobalLoad);
-    angle::LoadCL(nullptr);
+    EntryPointsLib().reset(
+        angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
+    angle::LoadCL(GlobalLoad);
     if (!cl_loader.clGetDeviceIDs)
     {
         std::cerr << "Error loading CL entry points." << std::endl;
@@ -970,6 +973,8 @@ LIBCL_HEADER_INCLUDES = """\
 
 LIBCL_SOURCE_INCLUDES = """\
 #include "entry_points_cl_autogen.h"
+
+#include "cl_stubs_autogen.h"
 #include "entry_points_cl_utils.h"
 """
 
@@ -2474,8 +2479,6 @@ def main():
             EGL_STUBS_HEADER_PATH,
             EGL_EXT_STUBS_HEADER_PATH,
             '../src/libOpenCL/libOpenCL_autogen.cpp',
-            '../src/libOpenCL/entry_points_cl_autogen.cpp',
-            '../src/libOpenCL/entry_points_cl_autogen.h',
             '../src/common/entry_points_enum_autogen.cpp',
             '../src/common/entry_points_enum_autogen.h',
             '../src/libANGLE/Context_gl_1_autogen.h',
@@ -2516,6 +2519,8 @@ def main():
             '../src/libANGLE/validationGL4_autogen.h',
             '../src/libEGL/libEGL_autogen.cpp',
             '../src/libEGL/libEGL_autogen.def',
+            '../src/libGLESv2/entry_points_cl_autogen.cpp',
+            '../src/libGLESv2/entry_points_cl_autogen.h',
             '../src/libGLESv2/entry_points_egl_autogen.cpp',
             '../src/libGLESv2/entry_points_egl_autogen.h',
             '../src/libGLESv2/entry_points_egl_ext_autogen.cpp',
@@ -2857,9 +2862,9 @@ def main():
         libcl_windows_def_exports += [win_def_comment] + get_exports(clxml.commands[version])
 
     write_file("cl", "CL", TEMPLATE_ENTRY_POINT_HEADER, "\n".join(cl_decls), "h",
-               LIBCL_HEADER_INCLUDES, "libOpenCL", "cl.xml")
+               LIBCL_HEADER_INCLUDES, "libGLESv2", "cl.xml")
     write_file("cl", "CL", TEMPLATE_ENTRY_POINT_SOURCE, "\n".join(cl_defs), "cpp",
-               LIBCL_SOURCE_INCLUDES, "libOpenCL", "cl.xml")
+               LIBCL_SOURCE_INCLUDES, "libGLESv2", "cl.xml")
     write_stubs_header("CL", "cl", "CL", "cl.xml", CL_STUBS_HEADER_PATH, clxml.all_commands,
                        cl_commands, CLEntryPoints.get_packed_enums(), CL_PACKED_TYPES)
 
