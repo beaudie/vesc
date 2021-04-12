@@ -9,12 +9,22 @@
 #ifndef LIBCL_CL_LOADER_H_
 #define LIBCL_CL_LOADER_H_
 
-#include <export.h>
+#include "common/platform.h"
+#include "export.h"
 
 #ifndef CL_API_ENTRY
 #    define CL_API_ENTRY ANGLE_EXPORT
 #endif
 #include "angle_cl.h"
+
+#ifdef _WIN32
+
+// Clearing macro FAR, because at this point 'minwindef.h' defines 'FAR' as 'far',
+// which gets undefined somehow and causes compilation of D3D headers to fail.
+#    undef FAR
+#    define FAR
+
+#endif
 
 // 'angle_cl.h' has to be included before this to enable CL defines
 #include "CL/cl_icd.h"
