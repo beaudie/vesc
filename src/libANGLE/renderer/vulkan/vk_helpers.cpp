@@ -875,7 +875,6 @@ CommandBufferHelper::CommandBufferHelper()
       mRebindTransformFeedbackBuffers(false),
       mIsTransformFeedbackActiveUnpaused(false),
       mIsRenderPassCommandBuffer(false),
-      mReadOnlyDepthStencilMode(false),
       mHasShaderStorageOutput(false),
       mHasGLMemoryBarrierIssued(false),
       mDepthAccess(ResourceAccess::Unused),
@@ -939,7 +938,6 @@ void CommandBufferHelper::reset()
         mRenderPassUsedImages.clear();
         mDepthStencilImage        = nullptr;
         mDepthStencilResolveImage = nullptr;
-        mReadOnlyDepthStencilMode = false;
         mColorImages.reset();
         mColorResolveImages.reset();
         mImageOptimizeForPresent = nullptr;
@@ -1204,6 +1202,37 @@ bool CommandBufferHelper::onDepthStencilAccess(ResourceAccess access,
     }
 }
 
+void CommandBufferHelper::updateStartedRenderPassWithDepthMode(bool readOnlyDepthStencilMode)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(mRenderPassStarted);
+
+    if (mDepthStencilImage)
+    {
+        if (readOnlyDepthStencilMode)
+        {
+            mDepthStencilImage->setRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment);
+        }
+        else
+        {
+            mDepthStencilImage->clearRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment);
+        }
+    }
+
+    if (mDepthStencilResolveImage)
+    {
+        if (readOnlyDepthStencilMode)
+        {
+            mDepthStencilResolveImage->setRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment);
+        }
+        else
+        {
+            mDepthStencilResolveImage->clearRenderPassUsageFlag(
+                RenderPassUsage::ReadOnlyAttachment);
+        }
+    }
+}
+
 void CommandBufferHelper::restoreDepthContent()
 {
     // Note that the image may have been deleted since the render pass has started.
@@ -1336,7 +1365,7 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
                imageLayout == ImageLayout::DepthStencilReadOnly);
         barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
     }
-    else if (mReadOnlyDepthStencilMode)
+    else if (mDepthStencilImage->hasRenderPassUseFlag(RenderPassUsage::ReadOnlyAttachment))
     {
         imageLayout     = ImageLayout::DepthStencilReadOnly;
         barrierRequired = mDepthStencilImage->isReadBarrierNecessary(imageLayout);
@@ -1358,7 +1387,7 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
         updateImageLayoutAndBarrier(context, mDepthStencilImage, aspectFlags, imageLayout);
     }
 
-    if (!mReadOnlyDepthStencilMode)
+    if (!mDepthStencilImage->hasRenderPassUseFlag(RenderPassUsage::ReadOnlyAttachment))
     {
         ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
         const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
@@ -1387,7 +1416,7 @@ void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(Context *contex
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(mDepthStencilImage);
-    ASSERT(!mReadOnlyDepthStencilMode);
+    ASSERT(!mDepthStencilResolveImage->hasRenderPassUseFlag(RenderPassUsage::ReadOnlyAttachment));
 
     ImageLayout imageLayout     = ImageLayout::DepthStencilResolveAttachment;
     const angle::Format &format = mDepthStencilResolveImage->getFormat().actualImageFormat();
@@ -1396,7 +1425,7 @@ void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(Context *contex
 
     updateImageLayoutAndBarrier(context, mDepthStencilResolveImage, aspectFlags, imageLayout);
 
-    if (!mReadOnlyDepthStencilMode)
+    if (!mDepthStencilResolveImage->hasRenderPassUseFlag(RenderPassUsage::ReadOnlyAttachment))
     {
         ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
         const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
@@ -1535,7 +1564,7 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     // For read only depth stencil, we can use StoreOpNone if available. DONT_CARE is still
     // preferred, so do this after finish the DONT_CARE handling.
-    if (mReadOnlyDepthStencilMode &&
+    if (mDepthStencilImage->hasRenderPassUseFlag(RenderPassUsage::ReadOnlyAttachment) &&
         contextVk->getFeatures().supportsRenderPassStoreOpNoneQCOM.enabled)
     {
         if (dsOps.storeOp == RenderPassStoreOp::Store)
@@ -1562,7 +1591,7 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     }
 
     // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
-    ASSERT(!mReadOnlyDepthStencilMode ||
+    ASSERT(!mDepthStencilResolveImage->hasRenderPassUseFlag(RenderPassUsage::ReadOnlyAttachment) ||
            (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
 
     // Do depth stencil layout change.
@@ -4498,6 +4527,11 @@ bool ImageHelper::isDepthOrStencil() const
 void ImageHelper::setRenderPassUsageFlag(RenderPassUsage flag)
 {
     mRenderPassUseFlags.set(flag);
+}
+
+void ImageHelper::clearRenderPassUsageFlag(RenderPassUsage flag)
+{
+    mRenderPassUseFlags.reset(flag);
 }
 
 void ImageHelper::resetRenderPassUsageFlags()
