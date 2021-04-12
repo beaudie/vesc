@@ -493,6 +493,8 @@ if (is_win) {
 }
 
 libglesv2_sources = [
+  "src/libGLESv2/cl_stubs.cpp",
+  "src/libGLESv2/cl_stubs_autogen.h",
   "src/libGLESv2/egl_ext_stubs.cpp",
   "src/libGLESv2/egl_ext_stubs_autogen.h",
   "src/libGLESv2/egl_stubs.cpp",
@@ -524,6 +526,16 @@ libglesv2_sources = [
 if (is_win) {
   libglesv2_sources += [ "src/libGLESv2/libGLESv2.rc" ]
 }
+
+libglesv2_defines = [
+  "CL_TARGET_OPENCL_VERSION=300",
+  "CL_USE_DEPRECATED_OPENCL_2_2_APIS",
+  "CL_USE_DEPRECATED_OPENCL_2_1_APIS",
+  "CL_USE_DEPRECATED_OPENCL_2_0_APIS",
+  "CL_USE_DEPRECATED_OPENCL_1_2_APIS",
+  "CL_USE_DEPRECATED_OPENCL_1_1_APIS",
+  "CL_USE_DEPRECATED_OPENCL_1_0_APIS",
+]
 
 libglesv1_cm_sources = [
   "src/libGLESv1_CM/libGLESv1_CM.cpp",

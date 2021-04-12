@@ -1039,7 +1039,7 @@ template("angle_libGLESv2") {
       ":gl_prototypes",
     ]
 
-    defines = [ "LIBGLESV2_IMPLEMENTATION" ]
+    defines = libglesv2_defines + [ "LIBGLESV2_IMPLEMENTATION" ]
 
     deps = invoker.deps + [ ":includes" ]
 
@@ -1098,6 +1098,7 @@ angle_static_library("libGLESv2_static") {
   configs += [ ":debug_annotations_config" ]
 
   public_configs += [ ":angle_static" ]
+  defines = libglesv2_defines
   deps = [ ":includes" ]
   public_deps = [ ":libANGLE" ]
 }
