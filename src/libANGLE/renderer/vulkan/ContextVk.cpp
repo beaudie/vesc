@@ -1497,8 +1497,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
                 if (image.isDepthOrStencil())
                 {
-                    if (mRenderPassCommands->started() &&
-                        mRenderPassCommands->isReadOnlyDepthMode())
+                    if (image.hasRenderPassUseFlag(vk::RenderPassUsage::ReadOnlyAttachment))
                     {
                         textureLayout = vk::ImageLayout::DepthStencilReadOnly;
                     }
@@ -4574,7 +4573,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 
             if (hasStartedRenderPass())
             {
-                if (!mRenderPassCommands->isReadOnlyDepthMode())
+                vk::ImageHelper &image = mActiveTextures[textureUnit].texture->getImage();
+                if (!image.hasRenderPassUseFlag(vk::RenderPassUsage::ReadOnlyAttachment))
                 {
                     // To enter depth feedback loop, we must flush and start a new renderpass.
                     // Otherwise it will stick with writable layout and cause validation error.
