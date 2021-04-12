@@ -9,6 +9,8 @@
 //   Defines the CL entry points.
 
 #include "entry_points_cl_autogen.h"
+
+#include "cl_stubs_autogen.h"
 #include "entry_points_cl_utils.h"
 
 extern "C" {
@@ -22,9 +24,11 @@ cl_int CL_API_CALL CL_GetPlatformIDs(cl_uint num_entries,
              "num_entries = %u, platforms = 0x%016" PRIxPTR ", num_platforms = 0x%016" PRIxPTR "",
              num_entries, (uintptr_t)platforms, (uintptr_t)num_platforms);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetPlatformIDs
 
-    return (cl_int)0;
+    return cl::GetPlatformIDs(thread, num_entries, platforms, num_platforms);
 }
 
 cl_int CL_API_CALL CL_GetPlatformInfo(cl_platform_id platform,
@@ -40,9 +44,12 @@ cl_int CL_API_CALL CL_GetPlatformInfo(cl_platform_id platform,
              (uintptr_t)platform, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetPlatformInfo
 
-    return (cl_int)0;
+    return cl::GetPlatformInfo(thread, platform, param_name, param_value_size, param_value,
+                               param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_GetDeviceIDs(cl_platform_id platform,
@@ -58,9 +65,11 @@ cl_int CL_API_CALL CL_GetDeviceIDs(cl_platform_id platform,
              (uintptr_t)platform, device_type, num_entries, (uintptr_t)devices,
              (uintptr_t)num_devices);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetDeviceIDs
 
-    return (cl_int)0;
+    return cl::GetDeviceIDs(thread, platform, device_type, num_entries, devices, num_devices);
 }
 
 cl_int CL_API_CALL CL_GetDeviceInfo(cl_device_id device,
@@ -76,9 +85,12 @@ cl_int CL_API_CALL CL_GetDeviceInfo(cl_device_id device,
              (uintptr_t)device, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetDeviceInfo
 
-    return (cl_int)0;
+    return cl::GetDeviceInfo(thread, device, param_name, param_value_size, param_value,
+                             param_value_size_ret);
 }
 
 cl_context CL_API_CALL CL_CreateContext(const cl_context_properties *properties,
@@ -98,9 +110,12 @@ cl_context CL_API_CALL CL_CreateContext(const cl_context_properties *properties,
              (uintptr_t)properties, num_devices, (uintptr_t)devices, (uintptr_t)pfn_notify,
              (uintptr_t)user_data, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateContext
 
-    return (cl_context)0;
+    return cl::CreateContext(thread, properties, num_devices, devices, pfn_notify, user_data,
+                             errcode_ret);
 }
 
 cl_context CL_API_CALL
@@ -119,27 +134,34 @@ CL_CreateContextFromType(const cl_context_properties *properties,
              (uintptr_t)properties, device_type, (uintptr_t)pfn_notify, (uintptr_t)user_data,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateContextFromType
 
-    return (cl_context)0;
+    return cl::CreateContextFromType(thread, properties, device_type, pfn_notify, user_data,
+                                     errcode_ret);
 }
 
 cl_int CL_API_CALL CL_RetainContext(cl_context context)
 {
     CL_EVENT(RetainContext, "context = 0x%016" PRIxPTR "", (uintptr_t)context);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainContext
 
-    return (cl_int)0;
+    return cl::RetainContext(thread, context);
 }
 
 cl_int CL_API_CALL CL_ReleaseContext(cl_context context)
 {
     CL_EVENT(ReleaseContext, "context = 0x%016" PRIxPTR "", (uintptr_t)context);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseContext
 
-    return (cl_int)0;
+    return cl::ReleaseContext(thread, context);
 }
 
 cl_int CL_API_CALL CL_GetContextInfo(cl_context context,
@@ -155,27 +177,34 @@ cl_int CL_API_CALL CL_GetContextInfo(cl_context context,
              (uintptr_t)context, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetContextInfo
 
-    return (cl_int)0;
+    return cl::GetContextInfo(thread, context, param_name, param_value_size, param_value,
+                              param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_RetainCommandQueue(cl_command_queue command_queue)
 {
     CL_EVENT(RetainCommandQueue, "command_queue = 0x%016" PRIxPTR "", (uintptr_t)command_queue);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainCommandQueue
 
-    return (cl_int)0;
+    return cl::RetainCommandQueue(thread, command_queue);
 }
 
 cl_int CL_API_CALL CL_ReleaseCommandQueue(cl_command_queue command_queue)
 {
     CL_EVENT(ReleaseCommandQueue, "command_queue = 0x%016" PRIxPTR "", (uintptr_t)command_queue);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseCommandQueue
 
-    return (cl_int)0;
+    return cl::ReleaseCommandQueue(thread, command_queue);
 }
 
 cl_int CL_API_CALL CL_GetCommandQueueInfo(cl_command_queue command_queue,
@@ -191,9 +220,12 @@ cl_int CL_API_CALL CL_GetCommandQueueInfo(cl_command_queue command_queue,
              (uintptr_t)command_queue, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetCommandQueueInfo
 
-    return (cl_int)0;
+    return cl::GetCommandQueueInfo(thread, command_queue, param_name, param_value_size, param_value,
+                                   param_value_size_ret);
 }
 
 cl_mem CL_API_CALL CL_CreateBuffer(cl_context context,
@@ -207,27 +239,33 @@ cl_mem CL_API_CALL CL_CreateBuffer(cl_context context,
              ", errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)context, flags, size, (uintptr_t)host_ptr, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateBuffer
 
-    return (cl_mem)0;
+    return cl::CreateBuffer(thread, context, flags, size, host_ptr, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_RetainMemObject(cl_mem memobj)
 {
     CL_EVENT(RetainMemObject, "memobj = 0x%016" PRIxPTR "", (uintptr_t)memobj);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainMemObject
 
-    return (cl_int)0;
+    return cl::RetainMemObject(thread, memobj);
 }
 
 cl_int CL_API_CALL CL_ReleaseMemObject(cl_mem memobj)
 {
     CL_EVENT(ReleaseMemObject, "memobj = 0x%016" PRIxPTR "", (uintptr_t)memobj);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseMemObject
 
-    return (cl_int)0;
+    return cl::ReleaseMemObject(thread, memobj);
 }
 
 cl_int CL_API_CALL CL_GetSupportedImageFormats(cl_context context,
@@ -244,9 +282,12 @@ cl_int CL_API_CALL CL_GetSupportedImageFormats(cl_context context,
              (uintptr_t)context, flags, image_type, num_entries, (uintptr_t)image_formats,
              (uintptr_t)num_image_formats);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetSupportedImageFormats
 
-    return (cl_int)0;
+    return cl::GetSupportedImageFormats(thread, context, flags, image_type, num_entries,
+                                        image_formats, num_image_formats);
 }
 
 cl_int CL_API_CALL CL_GetMemObjectInfo(cl_mem memobj,
@@ -262,9 +303,12 @@ cl_int CL_API_CALL CL_GetMemObjectInfo(cl_mem memobj,
              (uintptr_t)memobj, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetMemObjectInfo
 
-    return (cl_int)0;
+    return cl::GetMemObjectInfo(thread, memobj, param_name, param_value_size, param_value,
+                                param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_GetImageInfo(cl_mem image,
@@ -280,27 +324,34 @@ cl_int CL_API_CALL CL_GetImageInfo(cl_mem image,
              (uintptr_t)image, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetImageInfo
 
-    return (cl_int)0;
+    return cl::GetImageInfo(thread, image, param_name, param_value_size, param_value,
+                            param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_RetainSampler(cl_sampler sampler)
 {
     CL_EVENT(RetainSampler, "sampler = 0x%016" PRIxPTR "", (uintptr_t)sampler);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainSampler
 
-    return (cl_int)0;
+    return cl::RetainSampler(thread, sampler);
 }
 
 cl_int CL_API_CALL CL_ReleaseSampler(cl_sampler sampler)
 {
     CL_EVENT(ReleaseSampler, "sampler = 0x%016" PRIxPTR "", (uintptr_t)sampler);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseSampler
 
-    return (cl_int)0;
+    return cl::ReleaseSampler(thread, sampler);
 }
 
 cl_int CL_API_CALL CL_GetSamplerInfo(cl_sampler sampler,
@@ -316,9 +367,12 @@ cl_int CL_API_CALL CL_GetSamplerInfo(cl_sampler sampler,
              (uintptr_t)sampler, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetSamplerInfo
 
-    return (cl_int)0;
+    return cl::GetSamplerInfo(thread, sampler, param_name, param_value_size, param_value,
+                              param_value_size_ret);
 }
 
 cl_program CL_API_CALL CL_CreateProgramWithSource(cl_context context,
@@ -333,9 +387,11 @@ cl_program CL_API_CALL CL_CreateProgramWithSource(cl_context context,
              (uintptr_t)context, count, (uintptr_t)strings, (uintptr_t)lengths,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateProgramWithSource
 
-    return (cl_program)0;
+    return cl::CreateProgramWithSource(thread, context, count, strings, lengths, errcode_ret);
 }
 
 cl_program CL_API_CALL CL_CreateProgramWithBinary(cl_context context,
@@ -353,27 +409,34 @@ cl_program CL_API_CALL CL_CreateProgramWithBinary(cl_context context,
              (uintptr_t)context, num_devices, (uintptr_t)device_list, (uintptr_t)lengths,
              (uintptr_t)binaries, (uintptr_t)binary_status, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateProgramWithBinary
 
-    return (cl_program)0;
+    return cl::CreateProgramWithBinary(thread, context, num_devices, device_list, lengths, binaries,
+                                       binary_status, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_RetainProgram(cl_program program)
 {
     CL_EVENT(RetainProgram, "program = 0x%016" PRIxPTR "", (uintptr_t)program);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainProgram
 
-    return (cl_int)0;
+    return cl::RetainProgram(thread, program);
 }
 
 cl_int CL_API_CALL CL_ReleaseProgram(cl_program program)
 {
     CL_EVENT(ReleaseProgram, "program = 0x%016" PRIxPTR "", (uintptr_t)program);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseProgram
 
-    return (cl_int)0;
+    return cl::ReleaseProgram(thread, program);
 }
 
 cl_int CL_API_CALL CL_BuildProgram(cl_program program,
@@ -391,9 +454,12 @@ cl_int CL_API_CALL CL_BuildProgram(cl_program program,
              (uintptr_t)program, num_devices, (uintptr_t)device_list, (uintptr_t)options,
              (uintptr_t)pfn_notify, (uintptr_t)user_data);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: BuildProgram
 
-    return (cl_int)0;
+    return cl::BuildProgram(thread, program, num_devices, device_list, options, pfn_notify,
+                            user_data);
 }
 
 cl_int CL_API_CALL CL_GetProgramInfo(cl_program program,
@@ -409,9 +475,12 @@ cl_int CL_API_CALL CL_GetProgramInfo(cl_program program,
              (uintptr_t)program, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetProgramInfo
 
-    return (cl_int)0;
+    return cl::GetProgramInfo(thread, program, param_name, param_value_size, param_value,
+                              param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_GetProgramBuildInfo(cl_program program,
@@ -428,9 +497,12 @@ cl_int CL_API_CALL CL_GetProgramBuildInfo(cl_program program,
              (uintptr_t)program, (uintptr_t)device, param_name, param_value_size,
              (uintptr_t)param_value, (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetProgramBuildInfo
 
-    return (cl_int)0;
+    return cl::GetProgramBuildInfo(thread, program, device, param_name, param_value_size,
+                                   param_value, param_value_size_ret);
 }
 
 cl_kernel CL_API_CALL CL_CreateKernel(cl_program program,
@@ -442,9 +514,11 @@ cl_kernel CL_API_CALL CL_CreateKernel(cl_program program,
              ", errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)program, (uintptr_t)kernel_name, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateKernel
 
-    return (cl_kernel)0;
+    return cl::CreateKernel(thread, program, kernel_name, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_CreateKernelsInProgram(cl_program program,
@@ -457,27 +531,33 @@ cl_int CL_API_CALL CL_CreateKernelsInProgram(cl_program program,
              ", num_kernels_ret = 0x%016" PRIxPTR "",
              (uintptr_t)program, num_kernels, (uintptr_t)kernels, (uintptr_t)num_kernels_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateKernelsInProgram
 
-    return (cl_int)0;
+    return cl::CreateKernelsInProgram(thread, program, num_kernels, kernels, num_kernels_ret);
 }
 
 cl_int CL_API_CALL CL_RetainKernel(cl_kernel kernel)
 {
     CL_EVENT(RetainKernel, "kernel = 0x%016" PRIxPTR "", (uintptr_t)kernel);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainKernel
 
-    return (cl_int)0;
+    return cl::RetainKernel(thread, kernel);
 }
 
 cl_int CL_API_CALL CL_ReleaseKernel(cl_kernel kernel)
 {
     CL_EVENT(ReleaseKernel, "kernel = 0x%016" PRIxPTR "", (uintptr_t)kernel);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseKernel
 
-    return (cl_int)0;
+    return cl::ReleaseKernel(thread, kernel);
 }
 
 cl_int CL_API_CALL CL_SetKernelArg(cl_kernel kernel,
@@ -490,9 +570,11 @@ cl_int CL_API_CALL CL_SetKernelArg(cl_kernel kernel,
              ", arg_index = %u, arg_size = %zu, arg_value = 0x%016" PRIxPTR "",
              (uintptr_t)kernel, arg_index, arg_size, (uintptr_t)arg_value);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetKernelArg
 
-    return (cl_int)0;
+    return cl::SetKernelArg(thread, kernel, arg_index, arg_size, arg_value);
 }
 
 cl_int CL_API_CALL CL_GetKernelInfo(cl_kernel kernel,
@@ -508,9 +590,12 @@ cl_int CL_API_CALL CL_GetKernelInfo(cl_kernel kernel,
              (uintptr_t)kernel, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetKernelInfo
 
-    return (cl_int)0;
+    return cl::GetKernelInfo(thread, kernel, param_name, param_value_size, param_value,
+                             param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_GetKernelWorkGroupInfo(cl_kernel kernel,
@@ -527,9 +612,12 @@ cl_int CL_API_CALL CL_GetKernelWorkGroupInfo(cl_kernel kernel,
              (uintptr_t)kernel, (uintptr_t)device, param_name, param_value_size,
              (uintptr_t)param_value, (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetKernelWorkGroupInfo
 
-    return (cl_int)0;
+    return cl::GetKernelWorkGroupInfo(thread, kernel, device, param_name, param_value_size,
+                                      param_value, param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_WaitForEvents(cl_uint num_events, const cl_event *event_list)
@@ -537,9 +625,11 @@ cl_int CL_API_CALL CL_WaitForEvents(cl_uint num_events, const cl_event *event_li
     CL_EVENT(WaitForEvents, "num_events = %u, event_list = 0x%016" PRIxPTR "", num_events,
              (uintptr_t)event_list);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: WaitForEvents
 
-    return (cl_int)0;
+    return cl::WaitForEvents(thread, num_events, event_list);
 }
 
 cl_int CL_API_CALL CL_GetEventInfo(cl_event event,
@@ -555,27 +645,34 @@ cl_int CL_API_CALL CL_GetEventInfo(cl_event event,
              (uintptr_t)event, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetEventInfo
 
-    return (cl_int)0;
+    return cl::GetEventInfo(thread, event, param_name, param_value_size, param_value,
+                            param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_RetainEvent(cl_event event)
 {
     CL_EVENT(RetainEvent, "event = 0x%016" PRIxPTR "", (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainEvent
 
-    return (cl_int)0;
+    return cl::RetainEvent(thread, event);
 }
 
 cl_int CL_API_CALL CL_ReleaseEvent(cl_event event)
 {
     CL_EVENT(ReleaseEvent, "event = 0x%016" PRIxPTR "", (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseEvent
 
-    return (cl_int)0;
+    return cl::ReleaseEvent(thread, event);
 }
 
 cl_int CL_API_CALL CL_GetEventProfilingInfo(cl_event event,
@@ -591,27 +688,34 @@ cl_int CL_API_CALL CL_GetEventProfilingInfo(cl_event event,
              (uintptr_t)event, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetEventProfilingInfo
 
-    return (cl_int)0;
+    return cl::GetEventProfilingInfo(thread, event, param_name, param_value_size, param_value,
+                                     param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_Flush(cl_command_queue command_queue)
 {
     CL_EVENT(Flush, "command_queue = 0x%016" PRIxPTR "", (uintptr_t)command_queue);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: Flush
 
-    return (cl_int)0;
+    return cl::Flush(thread, command_queue);
 }
 
 cl_int CL_API_CALL CL_Finish(cl_command_queue command_queue)
 {
     CL_EVENT(Finish, "command_queue = 0x%016" PRIxPTR "", (uintptr_t)command_queue);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: Finish
 
-    return (cl_int)0;
+    return cl::Finish(thread, command_queue);
 }
 
 cl_int CL_API_CALL CL_EnqueueReadBuffer(cl_command_queue command_queue,
@@ -632,9 +736,12 @@ cl_int CL_API_CALL CL_EnqueueReadBuffer(cl_command_queue command_queue,
              (uintptr_t)command_queue, (uintptr_t)buffer, blocking_read, offset, size,
              (uintptr_t)ptr, num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueReadBuffer
 
-    return (cl_int)0;
+    return cl::EnqueueReadBuffer(thread, command_queue, buffer, blocking_read, offset, size, ptr,
+                                 num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueWriteBuffer(cl_command_queue command_queue,
@@ -655,9 +762,12 @@ cl_int CL_API_CALL CL_EnqueueWriteBuffer(cl_command_queue command_queue,
              (uintptr_t)command_queue, (uintptr_t)buffer, blocking_write, offset, size,
              (uintptr_t)ptr, num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueWriteBuffer
 
-    return (cl_int)0;
+    return cl::EnqueueWriteBuffer(thread, command_queue, buffer, blocking_write, offset, size, ptr,
+                                  num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueCopyBuffer(cl_command_queue command_queue,
@@ -679,9 +789,12 @@ cl_int CL_API_CALL CL_EnqueueCopyBuffer(cl_command_queue command_queue,
              dst_offset, size, num_events_in_wait_list, (uintptr_t)event_wait_list,
              (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueCopyBuffer
 
-    return (cl_int)0;
+    return cl::EnqueueCopyBuffer(thread, command_queue, src_buffer, dst_buffer, src_offset,
+                                 dst_offset, size, num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueReadImage(cl_command_queue command_queue,
@@ -706,9 +819,13 @@ cl_int CL_API_CALL CL_EnqueueReadImage(cl_command_queue command_queue,
              (uintptr_t)region, row_pitch, slice_pitch, (uintptr_t)ptr, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueReadImage
 
-    return (cl_int)0;
+    return cl::EnqueueReadImage(thread, command_queue, image, blocking_read, origin, region,
+                                row_pitch, slice_pitch, ptr, num_events_in_wait_list,
+                                event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueWriteImage(cl_command_queue command_queue,
@@ -733,9 +850,13 @@ cl_int CL_API_CALL CL_EnqueueWriteImage(cl_command_queue command_queue,
              (uintptr_t)region, input_row_pitch, input_slice_pitch, (uintptr_t)ptr,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueWriteImage
 
-    return (cl_int)0;
+    return cl::EnqueueWriteImage(thread, command_queue, image, blocking_write, origin, region,
+                                 input_row_pitch, input_slice_pitch, ptr, num_events_in_wait_list,
+                                 event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueCopyImage(cl_command_queue command_queue,
@@ -758,9 +879,12 @@ cl_int CL_API_CALL CL_EnqueueCopyImage(cl_command_queue command_queue,
              (uintptr_t)src_origin, (uintptr_t)dst_origin, (uintptr_t)region,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueCopyImage
 
-    return (cl_int)0;
+    return cl::EnqueueCopyImage(thread, command_queue, src_image, dst_image, src_origin, dst_origin,
+                                region, num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueCopyImageToBuffer(cl_command_queue command_queue,
@@ -783,9 +907,13 @@ cl_int CL_API_CALL CL_EnqueueCopyImageToBuffer(cl_command_queue command_queue,
              (uintptr_t)src_origin, (uintptr_t)region, dst_offset, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueCopyImageToBuffer
 
-    return (cl_int)0;
+    return cl::EnqueueCopyImageToBuffer(thread, command_queue, src_image, dst_buffer, src_origin,
+                                        region, dst_offset, num_events_in_wait_list,
+                                        event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueCopyBufferToImage(cl_command_queue command_queue,
@@ -808,9 +936,13 @@ cl_int CL_API_CALL CL_EnqueueCopyBufferToImage(cl_command_queue command_queue,
              (uintptr_t)dst_origin, (uintptr_t)region, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueCopyBufferToImage
 
-    return (cl_int)0;
+    return cl::EnqueueCopyBufferToImage(thread, command_queue, src_buffer, dst_image, src_offset,
+                                        dst_origin, region, num_events_in_wait_list,
+                                        event_wait_list, event);
 }
 
 void *CL_API_CALL CL_EnqueueMapBuffer(cl_command_queue command_queue,
@@ -833,9 +965,12 @@ void *CL_API_CALL CL_EnqueueMapBuffer(cl_command_queue command_queue,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueMapBuffer
 
-    return (void *)0;
+    return cl::EnqueueMapBuffer(thread, command_queue, buffer, blocking_map, map_flags, offset,
+                                size, num_events_in_wait_list, event_wait_list, event, errcode_ret);
 }
 
 void *CL_API_CALL CL_EnqueueMapImage(cl_command_queue command_queue,
@@ -863,9 +998,13 @@ void *CL_API_CALL CL_EnqueueMapImage(cl_command_queue command_queue,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueMapImage
 
-    return (void *)0;
+    return cl::EnqueueMapImage(thread, command_queue, image, blocking_map, map_flags, origin,
+                               region, image_row_pitch, image_slice_pitch, num_events_in_wait_list,
+                               event_wait_list, event, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_EnqueueUnmapMemObject(cl_command_queue command_queue,
@@ -883,9 +1022,12 @@ cl_int CL_API_CALL CL_EnqueueUnmapMemObject(cl_command_queue command_queue,
              (uintptr_t)command_queue, (uintptr_t)memobj, (uintptr_t)mapped_ptr,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueUnmapMemObject
 
-    return (cl_int)0;
+    return cl::EnqueueUnmapMemObject(thread, command_queue, memobj, mapped_ptr,
+                                     num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueNDRangeKernel(cl_command_queue command_queue,
@@ -908,9 +1050,13 @@ cl_int CL_API_CALL CL_EnqueueNDRangeKernel(cl_command_queue command_queue,
              (uintptr_t)global_work_size, (uintptr_t)local_work_size, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueNDRangeKernel
 
-    return (cl_int)0;
+    return cl::EnqueueNDRangeKernel(thread, command_queue, kernel, work_dim, global_work_offset,
+                                    global_work_size, local_work_size, num_events_in_wait_list,
+                                    event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueNativeKernel(cl_command_queue command_queue,
@@ -935,9 +1081,13 @@ cl_int CL_API_CALL CL_EnqueueNativeKernel(cl_command_queue command_queue,
              num_mem_objects, (uintptr_t)mem_list, (uintptr_t)args_mem_loc, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueNativeKernel
 
-    return (cl_int)0;
+    return cl::EnqueueNativeKernel(thread, command_queue, user_func, args, cb_args, num_mem_objects,
+                                   mem_list, args_mem_loc, num_events_in_wait_list, event_wait_list,
+                                   event);
 }
 
 cl_int CL_API_CALL CL_SetCommandQueueProperty(cl_command_queue command_queue,
@@ -950,9 +1100,11 @@ cl_int CL_API_CALL CL_SetCommandQueueProperty(cl_command_queue command_queue,
              ", properties = %lu, enable = %u, old_properties = 0x%016" PRIxPTR "",
              (uintptr_t)command_queue, properties, enable, (uintptr_t)old_properties);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetCommandQueueProperty
 
-    return (cl_int)0;
+    return cl::SetCommandQueueProperty(thread, command_queue, properties, enable, old_properties);
 }
 
 cl_mem CL_API_CALL CL_CreateImage2D(cl_context context,
@@ -972,9 +1124,12 @@ cl_mem CL_API_CALL CL_CreateImage2D(cl_context context,
         (uintptr_t)context, flags, (uintptr_t)image_format, image_width, image_height,
         image_row_pitch, (uintptr_t)host_ptr, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateImage2D
 
-    return (cl_mem)0;
+    return cl::CreateImage2D(thread, context, flags, image_format, image_width, image_height,
+                             image_row_pitch, host_ptr, errcode_ret);
 }
 
 cl_mem CL_API_CALL CL_CreateImage3D(cl_context context,
@@ -996,9 +1151,13 @@ cl_mem CL_API_CALL CL_CreateImage3D(cl_context context,
         (uintptr_t)context, flags, (uintptr_t)image_format, image_width, image_height, image_depth,
         image_row_pitch, image_slice_pitch, (uintptr_t)host_ptr, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateImage3D
 
-    return (cl_mem)0;
+    return cl::CreateImage3D(thread, context, flags, image_format, image_width, image_height,
+                             image_depth, image_row_pitch, image_slice_pitch, host_ptr,
+                             errcode_ret);
 }
 
 cl_int CL_API_CALL CL_EnqueueMarker(cl_command_queue command_queue, cl_event *event)
@@ -1006,9 +1165,11 @@ cl_int CL_API_CALL CL_EnqueueMarker(cl_command_queue command_queue, cl_event *ev
     CL_EVENT(EnqueueMarker, "command_queue = 0x%016" PRIxPTR ", event = 0x%016" PRIxPTR "",
              (uintptr_t)command_queue, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueMarker
 
-    return (cl_int)0;
+    return cl::EnqueueMarker(thread, command_queue, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueWaitForEvents(cl_command_queue command_queue,
@@ -1019,36 +1180,44 @@ cl_int CL_API_CALL CL_EnqueueWaitForEvents(cl_command_queue command_queue,
              "command_queue = 0x%016" PRIxPTR ", num_events = %u, event_list = 0x%016" PRIxPTR "",
              (uintptr_t)command_queue, num_events, (uintptr_t)event_list);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueWaitForEvents
 
-    return (cl_int)0;
+    return cl::EnqueueWaitForEvents(thread, command_queue, num_events, event_list);
 }
 
 cl_int CL_API_CALL CL_EnqueueBarrier(cl_command_queue command_queue)
 {
     CL_EVENT(EnqueueBarrier, "command_queue = 0x%016" PRIxPTR "", (uintptr_t)command_queue);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueBarrier
 
-    return (cl_int)0;
+    return cl::EnqueueBarrier(thread, command_queue);
 }
 
 cl_int CL_API_CALL CL_UnloadCompiler()
 {
     CL_EVENT(UnloadCompiler, "");
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: UnloadCompiler
 
-    return (cl_int)0;
+    return cl::UnloadCompiler(thread);
 }
 
 void *CL_API_CALL CL_GetExtensionFunctionAddress(const char *func_name)
 {
     CL_EVENT(GetExtensionFunctionAddress, "func_name = 0x%016" PRIxPTR "", (uintptr_t)func_name);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetExtensionFunctionAddress
 
-    return (void *)0;
+    return cl::GetExtensionFunctionAddress(thread, func_name);
 }
 
 cl_command_queue CL_API_CALL CL_CreateCommandQueue(cl_context context,
@@ -1061,9 +1230,11 @@ cl_command_queue CL_API_CALL CL_CreateCommandQueue(cl_context context,
              ", properties = %lu, errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)device, properties, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateCommandQueue
 
-    return (cl_command_queue)0;
+    return cl::CreateCommandQueue(thread, context, device, properties, errcode_ret);
 }
 
 cl_sampler CL_API_CALL CL_CreateSampler(cl_context context,
@@ -1079,9 +1250,12 @@ cl_sampler CL_API_CALL CL_CreateSampler(cl_context context,
              (uintptr_t)context, normalized_coords, addressing_mode, filter_mode,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateSampler
 
-    return (cl_sampler)0;
+    return cl::CreateSampler(thread, context, normalized_coords, addressing_mode, filter_mode,
+                             errcode_ret);
 }
 
 cl_int CL_API_CALL CL_EnqueueTask(cl_command_queue command_queue,
@@ -1097,9 +1271,12 @@ cl_int CL_API_CALL CL_EnqueueTask(cl_command_queue command_queue,
              (uintptr_t)command_queue, (uintptr_t)kernel, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueTask
 
-    return (cl_int)0;
+    return cl::EnqueueTask(thread, command_queue, kernel, num_events_in_wait_list, event_wait_list,
+                           event);
 }
 
 // CL 1.1
@@ -1116,9 +1293,12 @@ cl_mem CL_API_CALL CL_CreateSubBuffer(cl_mem buffer,
              (uintptr_t)buffer, flags, buffer_create_type, (uintptr_t)buffer_create_info,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateSubBuffer
 
-    return (cl_mem)0;
+    return cl::CreateSubBuffer(thread, buffer, flags, buffer_create_type, buffer_create_info,
+                               errcode_ret);
 }
 
 cl_int CL_API_CALL CL_SetMemObjectDestructorCallback(cl_mem memobj,
@@ -1131,9 +1311,11 @@ cl_int CL_API_CALL CL_SetMemObjectDestructorCallback(cl_mem memobj,
              ", user_data = 0x%016" PRIxPTR "",
              (uintptr_t)memobj, (uintptr_t)pfn_notify, (uintptr_t)user_data);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetMemObjectDestructorCallback
 
-    return (cl_int)0;
+    return cl::SetMemObjectDestructorCallback(thread, memobj, pfn_notify, user_data);
 }
 
 cl_event CL_API_CALL CL_CreateUserEvent(cl_context context, cl_int *errcode_ret)
@@ -1141,9 +1323,11 @@ cl_event CL_API_CALL CL_CreateUserEvent(cl_context context, cl_int *errcode_ret)
     CL_EVENT(CreateUserEvent, "context = 0x%016" PRIxPTR ", errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateUserEvent
 
-    return (cl_event)0;
+    return cl::CreateUserEvent(thread, context, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_SetUserEventStatus(cl_event event, cl_int execution_status)
@@ -1151,9 +1335,11 @@ cl_int CL_API_CALL CL_SetUserEventStatus(cl_event event, cl_int execution_status
     CL_EVENT(SetUserEventStatus, "event = 0x%016" PRIxPTR ", execution_status = %d",
              (uintptr_t)event, execution_status);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetUserEventStatus
 
-    return (cl_int)0;
+    return cl::SetUserEventStatus(thread, event, execution_status);
 }
 
 cl_int CL_API_CALL CL_SetEventCallback(cl_event event,
@@ -1169,9 +1355,11 @@ cl_int CL_API_CALL CL_SetEventCallback(cl_event event,
         ", user_data = 0x%016" PRIxPTR "",
         (uintptr_t)event, command_exec_callback_type, (uintptr_t)pfn_notify, (uintptr_t)user_data);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetEventCallback
 
-    return (cl_int)0;
+    return cl::SetEventCallback(thread, event, command_exec_callback_type, pfn_notify, user_data);
 }
 
 cl_int CL_API_CALL CL_EnqueueReadBufferRect(cl_command_queue command_queue,
@@ -1202,9 +1390,14 @@ cl_int CL_API_CALL CL_EnqueueReadBufferRect(cl_command_queue command_queue,
              host_row_pitch, host_slice_pitch, (uintptr_t)ptr, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueReadBufferRect
 
-    return (cl_int)0;
+    return cl::EnqueueReadBufferRect(thread, command_queue, buffer, blocking_read, buffer_origin,
+                                     host_origin, region, buffer_row_pitch, buffer_slice_pitch,
+                                     host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list,
+                                     event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueWriteBufferRect(cl_command_queue command_queue,
@@ -1235,9 +1428,14 @@ cl_int CL_API_CALL CL_EnqueueWriteBufferRect(cl_command_queue command_queue,
              host_row_pitch, host_slice_pitch, (uintptr_t)ptr, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueWriteBufferRect
 
-    return (cl_int)0;
+    return cl::EnqueueWriteBufferRect(thread, command_queue, buffer, blocking_write, buffer_origin,
+                                      host_origin, region, buffer_row_pitch, buffer_slice_pitch,
+                                      host_row_pitch, host_slice_pitch, ptr,
+                                      num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueCopyBufferRect(cl_command_queue command_queue,
@@ -1266,9 +1464,14 @@ cl_int CL_API_CALL CL_EnqueueCopyBufferRect(cl_command_queue command_queue,
              src_slice_pitch, dst_row_pitch, dst_slice_pitch, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueCopyBufferRect
 
-    return (cl_int)0;
+    return cl::EnqueueCopyBufferRect(thread, command_queue, src_buffer, dst_buffer, src_origin,
+                                     dst_origin, region, src_row_pitch, src_slice_pitch,
+                                     dst_row_pitch, dst_slice_pitch, num_events_in_wait_list,
+                                     event_wait_list, event);
 }
 
 // CL 1.2
@@ -1285,27 +1488,34 @@ cl_int CL_API_CALL CL_CreateSubDevices(cl_device_id in_device,
              (uintptr_t)in_device, (uintptr_t)properties, num_devices, (uintptr_t)out_devices,
              (uintptr_t)num_devices_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateSubDevices
 
-    return (cl_int)0;
+    return cl::CreateSubDevices(thread, in_device, properties, num_devices, out_devices,
+                                num_devices_ret);
 }
 
 cl_int CL_API_CALL CL_RetainDevice(cl_device_id device)
 {
     CL_EVENT(RetainDevice, "device = 0x%016" PRIxPTR "", (uintptr_t)device);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: RetainDevice
 
-    return (cl_int)0;
+    return cl::RetainDevice(thread, device);
 }
 
 cl_int CL_API_CALL CL_ReleaseDevice(cl_device_id device)
 {
     CL_EVENT(ReleaseDevice, "device = 0x%016" PRIxPTR "", (uintptr_t)device);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: ReleaseDevice
 
-    return (cl_int)0;
+    return cl::ReleaseDevice(thread, device);
 }
 
 cl_mem CL_API_CALL CL_CreateImage(cl_context context,
@@ -1322,9 +1532,11 @@ cl_mem CL_API_CALL CL_CreateImage(cl_context context,
              (uintptr_t)context, flags, (uintptr_t)image_format, (uintptr_t)image_desc,
              (uintptr_t)host_ptr, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateImage
 
-    return (cl_mem)0;
+    return cl::CreateImage(thread, context, flags, image_format, image_desc, host_ptr, errcode_ret);
 }
 
 cl_program CL_API_CALL CL_CreateProgramWithBuiltInKernels(cl_context context,
@@ -1339,9 +1551,12 @@ cl_program CL_API_CALL CL_CreateProgramWithBuiltInKernels(cl_context context,
              (uintptr_t)context, num_devices, (uintptr_t)device_list, (uintptr_t)kernel_names,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateProgramWithBuiltInKernels
 
-    return (cl_program)0;
+    return cl::CreateProgramWithBuiltInKernels(thread, context, num_devices, device_list,
+                                               kernel_names, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_CompileProgram(cl_program program,
@@ -1364,9 +1579,12 @@ cl_int CL_API_CALL CL_CompileProgram(cl_program program,
              num_input_headers, (uintptr_t)input_headers, (uintptr_t)header_include_names,
              (uintptr_t)pfn_notify, (uintptr_t)user_data);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CompileProgram
 
-    return (cl_int)0;
+    return cl::CompileProgram(thread, program, num_devices, device_list, options, num_input_headers,
+                              input_headers, header_include_names, pfn_notify, user_data);
 }
 
 cl_program CL_API_CALL CL_LinkProgram(cl_context context,
@@ -1390,18 +1608,23 @@ cl_program CL_API_CALL CL_LinkProgram(cl_context context,
              num_input_programs, (uintptr_t)input_programs, (uintptr_t)pfn_notify,
              (uintptr_t)user_data, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: LinkProgram
 
-    return (cl_program)0;
+    return cl::LinkProgram(thread, context, num_devices, device_list, options, num_input_programs,
+                           input_programs, pfn_notify, user_data, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_UnloadPlatformCompiler(cl_platform_id platform)
 {
     CL_EVENT(UnloadPlatformCompiler, "platform = 0x%016" PRIxPTR "", (uintptr_t)platform);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: UnloadPlatformCompiler
 
-    return (cl_int)0;
+    return cl::UnloadPlatformCompiler(thread, platform);
 }
 
 cl_int CL_API_CALL CL_GetKernelArgInfo(cl_kernel kernel,
@@ -1419,9 +1642,12 @@ cl_int CL_API_CALL CL_GetKernelArgInfo(cl_kernel kernel,
         (uintptr_t)kernel, arg_index, param_name, param_value_size, (uintptr_t)param_value,
         (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetKernelArgInfo
 
-    return (cl_int)0;
+    return cl::GetKernelArgInfo(thread, kernel, arg_index, param_name, param_value_size,
+                                param_value, param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_EnqueueFillBuffer(cl_command_queue command_queue,
@@ -1442,9 +1668,12 @@ cl_int CL_API_CALL CL_EnqueueFillBuffer(cl_command_queue command_queue,
              (uintptr_t)command_queue, (uintptr_t)buffer, (uintptr_t)pattern, pattern_size, offset,
              size, num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueFillBuffer
 
-    return (cl_int)0;
+    return cl::EnqueueFillBuffer(thread, command_queue, buffer, pattern, pattern_size, offset, size,
+                                 num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueFillImage(cl_command_queue command_queue,
@@ -1465,9 +1694,12 @@ cl_int CL_API_CALL CL_EnqueueFillImage(cl_command_queue command_queue,
              (uintptr_t)region, num_events_in_wait_list, (uintptr_t)event_wait_list,
              (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueFillImage
 
-    return (cl_int)0;
+    return cl::EnqueueFillImage(thread, command_queue, image, fill_color, origin, region,
+                                num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueMigrateMemObjects(cl_command_queue command_queue,
@@ -1485,9 +1717,12 @@ cl_int CL_API_CALL CL_EnqueueMigrateMemObjects(cl_command_queue command_queue,
              (uintptr_t)command_queue, num_mem_objects, (uintptr_t)mem_objects, flags,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueMigrateMemObjects
 
-    return (cl_int)0;
+    return cl::EnqueueMigrateMemObjects(thread, command_queue, num_mem_objects, mem_objects, flags,
+                                        num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueMarkerWithWaitList(cl_command_queue command_queue,
@@ -1502,9 +1737,12 @@ cl_int CL_API_CALL CL_EnqueueMarkerWithWaitList(cl_command_queue command_queue,
              (uintptr_t)command_queue, num_events_in_wait_list, (uintptr_t)event_wait_list,
              (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueMarkerWithWaitList
 
-    return (cl_int)0;
+    return cl::EnqueueMarkerWithWaitList(thread, command_queue, num_events_in_wait_list,
+                                         event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueBarrierWithWaitList(cl_command_queue command_queue,
@@ -1519,9 +1757,12 @@ cl_int CL_API_CALL CL_EnqueueBarrierWithWaitList(cl_command_queue command_queue,
              (uintptr_t)command_queue, num_events_in_wait_list, (uintptr_t)event_wait_list,
              (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueBarrierWithWaitList
 
-    return (cl_int)0;
+    return cl::EnqueueBarrierWithWaitList(thread, command_queue, num_events_in_wait_list,
+                                          event_wait_list, event);
 }
 
 void *CL_API_CALL CL_GetExtensionFunctionAddressForPlatform(cl_platform_id platform,
@@ -1531,9 +1772,11 @@ void *CL_API_CALL CL_GetExtensionFunctionAddressForPlatform(cl_platform_id platf
              "platform = 0x%016" PRIxPTR ", func_name = 0x%016" PRIxPTR "", (uintptr_t)platform,
              (uintptr_t)func_name);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetExtensionFunctionAddressForPlatform
 
-    return (void *)0;
+    return cl::GetExtensionFunctionAddressForPlatform(thread, platform, func_name);
 }
 
 // CL 2.0
@@ -1548,9 +1791,11 @@ CL_CreateCommandQueueWithProperties(cl_context context,
              ", errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)device, (uintptr_t)properties, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateCommandQueueWithProperties
 
-    return (cl_command_queue)0;
+    return cl::CreateCommandQueueWithProperties(thread, context, device, properties, errcode_ret);
 }
 
 cl_mem CL_API_CALL CL_CreatePipe(cl_context context,
@@ -1568,9 +1813,12 @@ cl_mem CL_API_CALL CL_CreatePipe(cl_context context,
         (uintptr_t)context, flags, pipe_packet_size, pipe_max_packets, (uintptr_t)properties,
         (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreatePipe
 
-    return (cl_mem)0;
+    return cl::CreatePipe(thread, context, flags, pipe_packet_size, pipe_max_packets, properties,
+                          errcode_ret);
 }
 
 cl_int CL_API_CALL CL_GetPipeInfo(cl_mem pipe,
@@ -1586,9 +1834,12 @@ cl_int CL_API_CALL CL_GetPipeInfo(cl_mem pipe,
              (uintptr_t)pipe, param_name, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetPipeInfo
 
-    return (cl_int)0;
+    return cl::GetPipeInfo(thread, pipe, param_name, param_value_size, param_value,
+                           param_value_size_ret);
 }
 
 void *CL_API_CALL CL_SVMAlloc(cl_context context,
@@ -1599,9 +1850,11 @@ void *CL_API_CALL CL_SVMAlloc(cl_context context,
     CL_EVENT(SVMAlloc, "context = 0x%016" PRIxPTR ", flags = %lu, size = %zu, alignment = %u",
              (uintptr_t)context, flags, size, alignment);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SVMAlloc
 
-    return (void *)0;
+    return cl::SVMAlloc(thread, context, flags, size, alignment);
 }
 
 void CL_API_CALL CL_SVMFree(cl_context context, void *svm_pointer)
@@ -1609,7 +1862,11 @@ void CL_API_CALL CL_SVMFree(cl_context context, void *svm_pointer)
     CL_EVENT(SVMFree, "context = 0x%016" PRIxPTR ", svm_pointer = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)svm_pointer);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SVMFree
+
+    cl::SVMFree(thread, context, svm_pointer);
 }
 
 cl_sampler CL_API_CALL
@@ -1622,9 +1879,11 @@ CL_CreateSamplerWithProperties(cl_context context,
              ", errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)sampler_properties, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateSamplerWithProperties
 
-    return (cl_sampler)0;
+    return cl::CreateSamplerWithProperties(thread, context, sampler_properties, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_SetKernelArgSVMPointer(cl_kernel kernel,
@@ -1635,9 +1894,11 @@ cl_int CL_API_CALL CL_SetKernelArgSVMPointer(cl_kernel kernel,
              "kernel = 0x%016" PRIxPTR ", arg_index = %u, arg_value = 0x%016" PRIxPTR "",
              (uintptr_t)kernel, arg_index, (uintptr_t)arg_value);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetKernelArgSVMPointer
 
-    return (cl_int)0;
+    return cl::SetKernelArgSVMPointer(thread, kernel, arg_index, arg_value);
 }
 
 cl_int CL_API_CALL CL_SetKernelExecInfo(cl_kernel kernel,
@@ -1650,9 +1911,11 @@ cl_int CL_API_CALL CL_SetKernelExecInfo(cl_kernel kernel,
              ", param_name = %u, param_value_size = %zu, param_value = 0x%016" PRIxPTR "",
              (uintptr_t)kernel, param_name, param_value_size, (uintptr_t)param_value);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetKernelExecInfo
 
-    return (cl_int)0;
+    return cl::SetKernelExecInfo(thread, kernel, param_name, param_value_size, param_value);
 }
 
 cl_int CL_API_CALL CL_EnqueueSVMFree(cl_command_queue command_queue,
@@ -1677,9 +1940,12 @@ cl_int CL_API_CALL CL_EnqueueSVMFree(cl_command_queue command_queue,
              (uintptr_t)pfn_free_func, (uintptr_t)user_data, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueSVMFree
 
-    return (cl_int)0;
+    return cl::EnqueueSVMFree(thread, command_queue, num_svm_pointers, svm_pointers, pfn_free_func,
+                              user_data, num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueSVMMemcpy(cl_command_queue command_queue,
@@ -1699,9 +1965,12 @@ cl_int CL_API_CALL CL_EnqueueSVMMemcpy(cl_command_queue command_queue,
              (uintptr_t)command_queue, blocking_copy, (uintptr_t)dst_ptr, (uintptr_t)src_ptr, size,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueSVMMemcpy
 
-    return (cl_int)0;
+    return cl::EnqueueSVMMemcpy(thread, command_queue, blocking_copy, dst_ptr, src_ptr, size,
+                                num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueSVMMemFill(cl_command_queue command_queue,
@@ -1721,9 +1990,12 @@ cl_int CL_API_CALL CL_EnqueueSVMMemFill(cl_command_queue command_queue,
              (uintptr_t)command_queue, (uintptr_t)svm_ptr, (uintptr_t)pattern, pattern_size, size,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueSVMMemFill
 
-    return (cl_int)0;
+    return cl::EnqueueSVMMemFill(thread, command_queue, svm_ptr, pattern, pattern_size, size,
+                                 num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueSVMMap(cl_command_queue command_queue,
@@ -1743,9 +2015,12 @@ cl_int CL_API_CALL CL_EnqueueSVMMap(cl_command_queue command_queue,
              (uintptr_t)command_queue, blocking_map, flags, (uintptr_t)svm_ptr, size,
              num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueSVMMap
 
-    return (cl_int)0;
+    return cl::EnqueueSVMMap(thread, command_queue, blocking_map, flags, svm_ptr, size,
+                             num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL CL_EnqueueSVMUnmap(cl_command_queue command_queue,
@@ -1761,9 +2036,12 @@ cl_int CL_API_CALL CL_EnqueueSVMUnmap(cl_command_queue command_queue,
              (uintptr_t)command_queue, (uintptr_t)svm_ptr, num_events_in_wait_list,
              (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueSVMUnmap
 
-    return (cl_int)0;
+    return cl::EnqueueSVMUnmap(thread, command_queue, svm_ptr, num_events_in_wait_list,
+                               event_wait_list, event);
 }
 
 // CL 2.1
@@ -1776,9 +2054,11 @@ cl_int CL_API_CALL CL_SetDefaultDeviceCommandQueue(cl_context context,
              ", command_queue = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)device, (uintptr_t)command_queue);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetDefaultDeviceCommandQueue
 
-    return (cl_int)0;
+    return cl::SetDefaultDeviceCommandQueue(thread, context, device, command_queue);
 }
 
 cl_int CL_API_CALL CL_GetDeviceAndHostTimer(cl_device_id device,
@@ -1790,9 +2070,11 @@ cl_int CL_API_CALL CL_GetDeviceAndHostTimer(cl_device_id device,
              ", host_timestamp = 0x%016" PRIxPTR "",
              (uintptr_t)device, (uintptr_t)device_timestamp, (uintptr_t)host_timestamp);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetDeviceAndHostTimer
 
-    return (cl_int)0;
+    return cl::GetDeviceAndHostTimer(thread, device, device_timestamp, host_timestamp);
 }
 
 cl_int CL_API_CALL CL_GetHostTimer(cl_device_id device, cl_ulong *host_timestamp)
@@ -1800,9 +2082,11 @@ cl_int CL_API_CALL CL_GetHostTimer(cl_device_id device, cl_ulong *host_timestamp
     CL_EVENT(GetHostTimer, "device = 0x%016" PRIxPTR ", host_timestamp = 0x%016" PRIxPTR "",
              (uintptr_t)device, (uintptr_t)host_timestamp);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetHostTimer
 
-    return (cl_int)0;
+    return cl::GetHostTimer(thread, device, host_timestamp);
 }
 
 cl_program CL_API_CALL CL_CreateProgramWithIL(cl_context context,
@@ -1815,9 +2099,11 @@ cl_program CL_API_CALL CL_CreateProgramWithIL(cl_context context,
              ", length = %zu, errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)il, length, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateProgramWithIL
 
-    return (cl_program)0;
+    return cl::CreateProgramWithIL(thread, context, il, length, errcode_ret);
 }
 
 cl_kernel CL_API_CALL CL_CloneKernel(cl_kernel source_kernel, cl_int *errcode_ret)
@@ -1825,9 +2111,11 @@ cl_kernel CL_API_CALL CL_CloneKernel(cl_kernel source_kernel, cl_int *errcode_re
     CL_EVENT(CloneKernel, "source_kernel = 0x%016" PRIxPTR ", errcode_ret = 0x%016" PRIxPTR "",
              (uintptr_t)source_kernel, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CloneKernel
 
-    return (cl_kernel)0;
+    return cl::CloneKernel(thread, source_kernel, errcode_ret);
 }
 
 cl_int CL_API_CALL CL_GetKernelSubGroupInfo(cl_kernel kernel,
@@ -1848,9 +2136,13 @@ cl_int CL_API_CALL CL_GetKernelSubGroupInfo(cl_kernel kernel,
              (uintptr_t)input_value, param_value_size, (uintptr_t)param_value,
              (uintptr_t)param_value_size_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: GetKernelSubGroupInfo
 
-    return (cl_int)0;
+    return cl::GetKernelSubGroupInfo(thread, kernel, device, param_name, input_value_size,
+                                     input_value, param_value_size, param_value,
+                                     param_value_size_ret);
 }
 
 cl_int CL_API_CALL CL_EnqueueSVMMigrateMem(cl_command_queue command_queue,
@@ -1870,9 +2162,12 @@ cl_int CL_API_CALL CL_EnqueueSVMMigrateMem(cl_command_queue command_queue,
              (uintptr_t)command_queue, num_svm_pointers, (uintptr_t)svm_pointers, (uintptr_t)sizes,
              flags, num_events_in_wait_list, (uintptr_t)event_wait_list, (uintptr_t)event);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: EnqueueSVMMigrateMem
 
-    return (cl_int)0;
+    return cl::EnqueueSVMMigrateMem(thread, command_queue, num_svm_pointers, svm_pointers, sizes,
+                                    flags, num_events_in_wait_list, event_wait_list, event);
 }
 
 // CL 2.2
@@ -1886,9 +2181,11 @@ cl_int CL_API_CALL CL_SetProgramReleaseCallback(cl_program program,
              ", user_data = 0x%016" PRIxPTR "",
              (uintptr_t)program, (uintptr_t)pfn_notify, (uintptr_t)user_data);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetProgramReleaseCallback
 
-    return (cl_int)0;
+    return cl::SetProgramReleaseCallback(thread, program, pfn_notify, user_data);
 }
 
 cl_int CL_API_CALL CL_SetProgramSpecializationConstant(cl_program program,
@@ -1901,9 +2198,11 @@ cl_int CL_API_CALL CL_SetProgramSpecializationConstant(cl_program program,
              ", spec_id = %u, spec_size = %zu, spec_value = 0x%016" PRIxPTR "",
              (uintptr_t)program, spec_id, spec_size, (uintptr_t)spec_value);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetProgramSpecializationConstant
 
-    return (cl_int)0;
+    return cl::SetProgramSpecializationConstant(thread, program, spec_id, spec_size, spec_value);
 }
 
 // CL 3.0
@@ -1917,9 +2216,11 @@ cl_int CL_API_CALL CL_SetContextDestructorCallback(cl_context context,
              ", user_data = 0x%016" PRIxPTR "",
              (uintptr_t)context, (uintptr_t)pfn_notify, (uintptr_t)user_data);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: SetContextDestructorCallback
 
-    return (cl_int)0;
+    return cl::SetContextDestructorCallback(thread, context, pfn_notify, user_data);
 }
 
 cl_mem CL_API_CALL CL_CreateBufferWithProperties(cl_context context,
@@ -1936,9 +2237,12 @@ cl_mem CL_API_CALL CL_CreateBufferWithProperties(cl_context context,
              (uintptr_t)context, (uintptr_t)properties, flags, size, (uintptr_t)host_ptr,
              (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateBufferWithProperties
 
-    return (cl_mem)0;
+    return cl::CreateBufferWithProperties(thread, context, properties, flags, size, host_ptr,
+                                          errcode_ret);
 }
 
 cl_mem CL_API_CALL CL_CreateImageWithProperties(cl_context context,
@@ -1956,9 +2260,12 @@ cl_mem CL_API_CALL CL_CreateImageWithProperties(cl_context context,
              (uintptr_t)context, (uintptr_t)properties, flags, (uintptr_t)image_format,
              (uintptr_t)image_desc, (uintptr_t)host_ptr, (uintptr_t)errcode_ret);
 
+    cl::Thread *thread = nullptr;  // TODO
+
     // TODO: CreateImageWithProperties
 
-    return (cl_mem)0;
+    return cl::CreateImageWithProperties(thread, context, properties, flags, image_format,
+                                         image_desc, host_ptr, errcode_ret);
 }
 
 }  // extern "C"
