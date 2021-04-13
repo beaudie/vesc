@@ -2900,9 +2900,6 @@ TEST_P(FramebufferTest_ES3, ChangeAttachmentThenInvalidateAndDraw)
 // common intersection area are undefined.
 TEST_P(FramebufferTest_ES3, AttachmentWithUnequalDimensions)
 {
-    // TODO: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr GLsizei kSizeLarge = 32;
     constexpr GLsizei kSizeSmall = 16;
 
