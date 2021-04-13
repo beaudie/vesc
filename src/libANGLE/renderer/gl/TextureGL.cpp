@@ -1581,6 +1581,10 @@ angle::Result TextureGL::syncState(const gl::Context *context,
             case gl::Texture::DIRTY_BIT_USAGE:
                 break;
             case gl::Texture::DIRTY_BIT_LABEL:
+                ANGLE_GL_TRY(context, functions->objectLabel(
+                                          nativegl::GetTextureBindingTarget(getType()), GL_TEXTURE,
+                                          static_cast<GLsizei>(mState.getLabel().length()),
+                                          mState.getLabel().c_str()));
                 break;
 
             case gl::Texture::DIRTY_BIT_IMPLEMENTATION:
