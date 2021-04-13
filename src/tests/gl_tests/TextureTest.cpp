@@ -3007,6 +3007,61 @@ TEST_P(Texture2DTest, NPOTSubImageParameters)
     EXPECT_GL_NO_ERROR();
 }
 
+// This is part of tests that webgl_conformance_vulkan_passthrough_tests
+// conformance/textures/misc/texture-size.html does
+TEST_P(Texture2DTest, TextureSize)
+{
+    static constexpr size_t kMip0Size = 8;
+    std::array<GLColor, kMip0Size * kMip0Size> mipData;
+    const GLColor kNewMipColors[] = {
+        GLColor::green, GLColor::red, GLColor::blue, GLColor::magenta, GLColor::cyan,
+    };
+    GLuint colorCount = 0;
+
+    setUpProgram();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    std::fill(mipData.begin(), mipData.end(), kNewMipColors[colorCount]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kMip0Size, kMip0Size, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 mipData.data());
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(mProgram);
+    glUniform1i(mTexture2DUniformLocation, 0);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuad(mProgram, "position", 1.0f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, kNewMipColors[colorCount]);
+
+    colorCount++;
+    std::fill(mipData.begin(), mipData.end(), kNewMipColors[colorCount]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kMip0Size, kMip0Size, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 mipData.data());
+    EXPECT_GL_NO_ERROR();
+    glGenerateMipmap(GL_TEXTURE_2D);
+    EXPECT_GL_NO_ERROR();
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuad(mProgram, "position", 1.0f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, kNewMipColors[colorCount]);
+
+    colorCount++;
+    std::fill(mipData.begin(), mipData.end(), kNewMipColors[colorCount]);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kMip0Size, kMip0Size, GL_RGBA, GL_UNSIGNED_BYTE,
+                    mipData.data());
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuad(mProgram, "position", 1.0f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, kNewMipColors[colorCount]);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that drawing works correctly RGBA 3D texture
 TEST_P(Texture3DTestES2, RGBA)
 {
