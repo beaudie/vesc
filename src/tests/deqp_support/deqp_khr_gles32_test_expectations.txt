@@ -38,8 +38,6 @@
 5579 VULKAN WIN NVIDIA : KHR-GLES32.core.tessellation_shader.single.primitive_coverage = FAIL
 
 // Tessellation shader support
-// Failure in translator validation regarding varying arrayness
-5557 VULKAN WIN : KHR-GLES32.core.texture_cube_map_array.texture_size_tesselation_con_sh = FAIL
 // API validation bugs
 5557 VULKAN WIN : KHR-GLES32.core.tessellation_shader.vertex.vertex_ordering = FAIL
 5557 VULKAN WIN : KHR-GLES32.core.tessellation_shader.tessellation_control_to_tessellation_evaluation.gl_tessLevel = FAIL
@@ -103,8 +101,6 @@
 5579 VULKAN LINUX : KHR-GLES32.core.texture_cube_map_array.stencil_attachments_*mutable_layered = SKIP
 5579 VULKAN LINUX : KHR-GLES32.core.texture_cube_map_array.fbo_incompleteness = FAIL
 5557 VULKAN LINUX : KHR-GLES32.core.tessellation_shader.* = SKIP
-5557 VULKAN LINUX : KHR-GLES32.core.texture_cube_map_array.*tessellation* = SKIP
-5557 VULKAN LINUX : KHR-GLES32.core.texture_cube_map_array.*tesselation* = SKIP
 5557 VULKAN LINUX : KHR-GLES32.core.constant_expressions.*tess_control = SKIP
 5557 VULKAN LINUX : KHR-GLES32.core.constant_expressions.*tess_eval = SKIP
 5557 VULKAN LINUX : KHR-GLES32.core.separable_programs_tf.tessellation_active = SKIP

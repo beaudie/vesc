@@ -206,6 +206,11 @@ class TType
         ASSERT(isArray());
         return mArraySizes.back();
     }
+    bool isInitializedAsArraySizeStorage() const
+    {
+        ASSERT(isArray());
+        return (mArraySizesStorage != nullptr);
+    }
     void makeArray(unsigned int s);
 
     // sizes contain new outermost array sizes.

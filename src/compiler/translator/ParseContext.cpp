@@ -1210,8 +1210,10 @@ void TParseContext::checkCanBeDeclaredWithoutInitializer(const TSourceLoc &line,
             error(line, "variables with qualifier 'const' must be initialized", identifier);
         }
     }
-    checkIsNotUnsizedArray(line, "implicitly sized arrays need to be initialized", identifier,
-                           type);
+
+    // Make sure an unsized array initialized as a sized array.
+    ASSERT(!type->isArray() || type->getOutermostArraySize() ||
+           type->isInitializedAsArraySizeStorage());
 }
 
 // Do some simple checks that are shared between all variable declarations,
