@@ -3049,6 +3049,54 @@ TEST_P(FramebufferTest_ES3, ChangeAttachmentThenInvalidateAndDraw)
     EXPECT_PIXEL_RECT_EQ(0, 0, kSizeSmall, kSizeSmall, GLColor::blue);
 }
 
+// Test Framebuffer object with two attachments that have unequal size. In OpenGLES3.0, this is
+// a supported config. The common intersection area should be correctly rendered. The contents
+// outside common intersection area are undefined.
+TEST_P(FramebufferTest_ES3, AttachmentsWithUnequalDimensions)
+{
+    // TODO: https://issuetracker.google.com/181800403
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+    // TODO: https://anglebug.com/5866
+    ANGLE_SKIP_TEST_IF(IsD3D() || IsMetal());
+
+    constexpr GLsizei kSizeLarge = 32;
+    constexpr GLsizei kSizeSmall = 16;
+
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kSizeLarge, kSizeSmall, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 nullptr);
+
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kSizeSmall, kSizeLarge);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    ANGLE_GL_PROGRAM(drawColor, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(drawColor);
+    GLint colorUniformLocation =
+        glGetUniformLocation(drawColor, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(colorUniformLocation, -1);
+
+    glViewport(0, 0, kSizeLarge, kSizeLarge);
+    const GLenum discard[] = {GL_COLOR_ATTACHMENT0};
+    glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, discard);
+
+    // Draw red into the framebuffer.
+    glUniform4f(colorUniformLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    // Validate the result. The intersected common area should be red now
+    EXPECT_PIXEL_RECT_EQ(0, 0, kSizeSmall, kSizeSmall, GLColor::red);
+}
+
 class FramebufferTest : public ANGLETest
 {};
 
