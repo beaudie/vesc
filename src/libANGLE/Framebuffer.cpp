@@ -517,6 +517,45 @@ const FramebufferAttachment *FramebufferState::getDepthStencilAttachment() const
     return nullptr;
 }
 
+const Extents &FramebufferState::getCommonIntersectExtent() const
+{
+    Optional<Extents> intersectExtent;
+    for (const auto &attachment : mColorAttachments)
+    {
+        if (attachment.isAttached())
+        {
+            if (!intersectExtent.valid())
+            {
+                intersectExtent = attachment.getSize();
+            }
+            else
+            {
+                intersectExtent.value().width =
+                    std::min(intersectExtent.value().width, attachment.getSize().width);
+                intersectExtent.value().height =
+                    std::min(intersectExtent.value().height, attachment.getSize().height);
+            }
+        }
+    }
+
+    if (mDepthAttachment.isAttached())
+    {
+        if (!intersectExtent.valid())
+        {
+            intersectExtent = mDepthAttachment.getSize();
+        }
+        else
+        {
+            intersectExtent.value().width =
+                std::min(intersectExtent.value().width, mDepthAttachment.getSize().width);
+            intersectExtent.value().height =
+                std::min(intersectExtent.value().height, mDepthAttachment.getSize().height);
+        }
+    }
+
+    return intersectExtent.value();
+}
+
 bool FramebufferState::attachmentsHaveSameDimensions() const
 {
     Optional<Extents> attachmentSize;
@@ -673,11 +712,12 @@ Box FramebufferState::getDimensions() const
 
 Extents FramebufferState::getExtents() const
 {
-    ASSERT(attachmentsHaveSameDimensions());
+    // OpenGLES3.0 (https://www.khronos.org/registry/OpenGL/specs/es/3.0/es_spec_3.0.pdf
+    // section 4.4.4.2) allows attachments have unequal size.
     const FramebufferAttachment *first = getFirstNonNullAttachment();
     if (first)
     {
-        return first->getSize();
+        return getCommonIntersectExtent();
     }
     return Extents(getDefaultWidth(), getDefaultHeight(), 0);
 }
