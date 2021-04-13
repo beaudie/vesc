@@ -84,6 +84,10 @@
 
 #    undef near
 #    undef far
+#    undef NEAR
+#    undef FAR
+#    define NEAR
+#    define FAR
 #endif
 
 #if defined(_MSC_VER) && !defined(_M_ARM) && !defined(_M_ARM64)
