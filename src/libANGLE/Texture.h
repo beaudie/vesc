@@ -239,6 +239,8 @@ class TextureState final : private angle::NonCopyable
     mutable SamplerFormat mCachedSamplerFormat;
     mutable GLenum mCachedSamplerCompareMode;
     mutable bool mCachedSamplerFormatValid;
+
+    std::string mLabel;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);

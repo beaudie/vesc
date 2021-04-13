@@ -764,7 +764,8 @@ Texture::~Texture()
 
 void Texture::setLabel(const Context *context, const std::string &label)
 {
-    mLabel = label;
+    mLabel        = label;
+    mState.mLabel = mLabel;
     signalDirtyState(DIRTY_BIT_LABEL);
 }
 
