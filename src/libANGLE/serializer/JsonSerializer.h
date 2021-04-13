@@ -99,8 +99,6 @@ class JsonSerializer : public angle::NonCopyable
 
     using ValuePointer = std::unique_ptr<rapidjson::Value>;
 
-
-
     rapidjson::Document mDoc;
     rapidjson::Document::AllocatorType &mAllocator;
     std::stack<std::string> mGroupNameStack;

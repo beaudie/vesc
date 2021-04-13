@@ -133,6 +133,40 @@ TEST_F(JsonSerializerTest, IntVectorValue)
     check(expect);
 }
 
+// Test unsorted input gets sorted
+TEST_F(JsonSerializerTest, SortValues1)
+{
+    js.addScalar("b", 1.0);
+    js.addScalar("a", 2.0);
+
+    const std::string expect =
+        R"({
+    "context": {
+        "a": 2.0,
+        "b": 1.0
+    }
+})";
+
+    check(expect);
+}
+
+// Test adding the same key twice
+TEST_F(JsonSerializerTest, KeyUsedTwice)
+{
+    js.addScalar("a", 1.0);
+    js.addScalar("a", 1.0);
+
+    const std::string expect =
+        R"({
+    "context": {
+        "a": 1.0,
+        "a": 1.0
+    }
+})";
+
+    check(expect);
+}
+
 // Test writing boolean values
 TEST_F(JsonSerializerTest, NamedBoolValues)
 {
