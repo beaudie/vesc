@@ -12,6 +12,8 @@
 #include "libANGLE/renderer/SyncImpl.h"
 #include "tests/angle_unittests_utils.h"
 
+compile error!!!
+
 using namespace testing;
 
 namespace
