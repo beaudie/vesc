@@ -469,6 +469,18 @@ def UpdateDepsFile(deps_filename, rev_update, changed_deps, new_cr_content, auto
         with open(deps_filename, 'wb') as deps_file:
             deps_file.write(deps_content)
 
+    # Add and remove dependencies. For now: only generated android deps.
+    # Since gclient cannot add or remove deps, we on the fact that
+    # these android deps are located in one place we can copy/paste.
+    deps_re = re.compile(ANDROID_DEPS_START + '.*' + ANDROID_DEPS_END, re.DOTALL)
+    new_deps = deps_re.search(new_cr_content)
+    old_deps = deps_re.search(deps_content)
+    if not new_deps or not old_deps:
+        faulty = 'Chromium' if not new_deps else 'ANGLE'
+        raise RollError('Was expecting to find "%s" and "%s"\n'
+                        'in %s DEPS' % (ANDROID_DEPS_START, ANDROID_DEPS_END, faulty))
+    deps_content = deps_re.sub(new_deps.group(0), deps_content)
+
     # Update each individual DEPS entry.
     for dep in changed_deps:
         # We don't sync deps on autoroller, so ignore missing local deps
