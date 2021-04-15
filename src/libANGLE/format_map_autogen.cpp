@@ -652,14 +652,381 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
 
     switch (format)
     {
-        case GL_RGB_INTEGER:
+        case GL_RGBA:
             switch (type)
             {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA8:
+                        case GL_RGB5_A1:
+                        case GL_RGBA4:
+                        case GL_SRGB8_ALPHA8:
+                        case GL_RGBA:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA8_SNORM:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT_4_4_4_4:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA4:
+                        case GL_RGBA:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_INT_2_10_10_10_REV:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB10_A2:
+                        case GL_RGB5_A1:
+                        case GL_RGBA:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT_5_5_5_1:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB5_A1:
+                        case GL_RGBA:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA16F:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT_OES:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA16F:
+                        case GL_RGBA:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA32F:
+                        case GL_RGBA16F:
+                        case GL_RGBA:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA16_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA16_SNORM_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_RGBA_INTEGER:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA8UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA8I:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA16UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA16I:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_INT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGBA32UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
                 case GL_INT:
                 {
                     switch (internalFormat)
                     {
-                        case GL_RGB32I:
+                        case GL_RGBA32I:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_INT_2_10_10_10_REV:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB10_A2UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_RGB:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB8:
+                        case GL_RGB565:
+                        case GL_SRGB8:
+                        case GL_RGB:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB8_SNORM:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT_5_6_5:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB565:
+                        case GL_RGB:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_INT_10F_11F_11F_REV:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_R11F_G11F_B10F:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_INT_5_9_9_9_REV:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB9_E5:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB16F:
+                        case GL_R11F_G11F_B10F:
+                        case GL_RGB9_E5:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT_OES:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB16F:
+                        case GL_R11F_G11F_B10F:
+                        case GL_RGB9_E5:
+                        case GL_RGB:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB32F:
+                        case GL_RGB16F:
+                        case GL_R11F_G11F_B10F:
+                        case GL_RGB9_E5:
+                        case GL_RGB:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB16_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB16_SNORM_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_INT_2_10_10_10_REV:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_RGB_INTEGER:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB8UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RGB8I:
                             return true;
                         default:
                             break;
@@ -688,28 +1055,6 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     }
                     break;
                 }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB8UI:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB8I:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
                 case GL_UNSIGNED_INT:
                 {
                     switch (internalFormat)
@@ -721,63 +1066,31 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     }
                     break;
                 }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_RGBA_INTEGER:
-            switch (type)
-            {
                 case GL_INT:
                 {
                     switch (internalFormat)
                     {
-                        case GL_RGBA32I:
+                        case GL_RGB32I:
                             return true;
                         default:
                             break;
                     }
                     break;
                 }
-                case GL_UNSIGNED_SHORT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA16UI:
-                            return true;
-                        default:
-                            break;
-                    }
+                default:
                     break;
-                }
-                case GL_UNSIGNED_INT_2_10_10_10_REV:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB10_A2UI:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_SHORT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA16I:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
+            }
+            break;
+
+        case GL_RG:
+            switch (type)
+            {
                 case GL_UNSIGNED_BYTE:
                 {
                     switch (internalFormat)
                     {
-                        case GL_RGBA8UI:
+                        case GL_RG8:
+                        case GL_RG:
                             return true;
                         default:
                             break;
@@ -788,37 +1101,44 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                 {
                     switch (internalFormat)
                     {
-                        case GL_RGBA8I:
+                        case GL_RG8_SNORM:
                             return true;
                         default:
                             break;
                     }
                     break;
                 }
-                case GL_UNSIGNED_INT:
+                case GL_HALF_FLOAT:
                 {
                     switch (internalFormat)
                     {
-                        case GL_RGBA32UI:
+                        case GL_RG16F:
+                        case GL_RG:
                             return true;
                         default:
                             break;
                     }
                     break;
                 }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_RGB:
-            switch (type)
-            {
-                case GL_UNSIGNED_INT_10F_11F_11F_REV:
+                case GL_HALF_FLOAT_OES:
                 {
                     switch (internalFormat)
                     {
-                        case GL_R11F_G11F_B10F:
+                        case GL_RG16F:
+                        case GL_RG:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RG32F:
+                        case GL_RG16F:
+                        case GL_RG:
                             return true;
                         default:
                             break;
@@ -829,18 +1149,7 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                 {
                     switch (internalFormat)
                     {
-                        case GL_RGB16_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_INT_2_10_10_10_REV:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB:
+                        case GL_RG16_EXT:
                             return true;
                         default:
                             break;
@@ -851,394 +1160,7 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                 {
                     switch (internalFormat)
                     {
-                        case GL_RGB16_SNORM_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB:
-                        case GL_RGB32F:
-                        case GL_RGB16F:
-                        case GL_R11F_G11F_B10F:
-                        case GL_RGB9_E5:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_SHORT_5_6_5:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB:
-                        case GL_RGB565:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT_OES:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB:
-                        case GL_RGB16F:
-                        case GL_R11F_G11F_B10F:
-                        case GL_RGB9_E5:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB16F:
-                        case GL_R11F_G11F_B10F:
-                        case GL_RGB9_E5:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB:
-                        case GL_RGB8:
-                        case GL_RGB565:
-                        case GL_SRGB8:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB8_SNORM:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_INT_5_9_9_9_REV:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGB9_E5:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_LUMINANCE_ALPHA:
-            switch (type)
-            {
-                case GL_HALF_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE_ALPHA16F_EXT:
-                        case GL_LUMINANCE_ALPHA:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE_ALPHA:
-                        case GL_LUMINANCE8_ALPHA8_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE_ALPHA:
-                        case GL_LUMINANCE_ALPHA32F_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT_OES:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE_ALPHA16F_EXT:
-                        case GL_LUMINANCE_ALPHA:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_ALPHA:
-            switch (type)
-            {
-                case GL_HALF_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_ALPHA16F_EXT:
-                        case GL_ALPHA:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_ALPHA:
-                        case GL_ALPHA8_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_ALPHA:
-                        case GL_ALPHA32F_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT_OES:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_ALPHA16F_EXT:
-                        case GL_ALPHA:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_RGBA:
-            switch (type)
-            {
-                case GL_UNSIGNED_SHORT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA16_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_INT_2_10_10_10_REV:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA:
-                        case GL_RGB10_A2:
-                        case GL_RGB5_A1:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_SHORT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA16_SNORM_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_SHORT_4_4_4_4:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA:
-                        case GL_RGBA4:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA:
-                        case GL_RGBA32F:
-                        case GL_RGBA16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT_OES:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA:
-                        case GL_RGBA16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA:
-                        case GL_RGBA8:
-                        case GL_RGB5_A1:
-                        case GL_RGBA4:
-                        case GL_SRGB8_ALPHA8:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA8_SNORM:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_SHORT_5_5_5_1:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RGBA:
-                        case GL_RGB5_A1:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_LUMINANCE:
-            switch (type)
-            {
-                case GL_HALF_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE16F_EXT:
-                        case GL_LUMINANCE:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE:
-                        case GL_LUMINANCE8_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE:
-                        case GL_LUMINANCE32F_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT_OES:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_LUMINANCE16F_EXT:
-                        case GL_LUMINANCE:
+                        case GL_RG16_SNORM_EXT:
                             return true;
                         default:
                             break;
@@ -1253,11 +1175,22 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
         case GL_RG_INTEGER:
             switch (type)
             {
-                case GL_INT:
+                case GL_UNSIGNED_BYTE:
                 {
                     switch (internalFormat)
                     {
-                        case GL_RG32I:
+                        case GL_RG8UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RG8I:
                             return true;
                         default:
                             break;
@@ -1286,11 +1219,43 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     }
                     break;
                 }
+                case GL_UNSIGNED_INT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RG32UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_INT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_RG32I:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_RED:
+            switch (type)
+            {
                 case GL_UNSIGNED_BYTE:
                 {
                     switch (internalFormat)
                     {
-                        case GL_RG8UI:
+                        case GL_R8:
+                        case GL_RED:
+                        case GL_SR8_EXT:
                             return true;
                         default:
                             break;
@@ -1301,18 +1266,66 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                 {
                     switch (internalFormat)
                     {
-                        case GL_RG8I:
+                        case GL_R8_SNORM:
                             return true;
                         default:
                             break;
                     }
                     break;
                 }
-                case GL_UNSIGNED_INT:
+                case GL_HALF_FLOAT:
                 {
                     switch (internalFormat)
                     {
-                        case GL_RG32UI:
+                        case GL_R16F:
+                        case GL_RED:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT_OES:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_R16F:
+                        case GL_RED:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_R32F:
+                        case GL_R16F:
+                        case GL_RED:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_R16_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_SHORT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_R16_SNORM_EXT:
                             return true;
                         default:
                             break;
@@ -1327,11 +1340,22 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
         case GL_RED_INTEGER:
             switch (type)
             {
-                case GL_INT:
+                case GL_UNSIGNED_BYTE:
                 {
                     switch (internalFormat)
                     {
-                        case GL_R32I:
+                        case GL_R8UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_R8I:
                             return true;
                         default:
                             break;
@@ -1360,33 +1384,230 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     }
                     break;
                 }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_R8UI:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_R8I:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
                 case GL_UNSIGNED_INT:
                 {
                     switch (internalFormat)
                     {
                         case GL_R32UI:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_INT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_R32I:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_LUMINANCE_ALPHA:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE_ALPHA:
+                        case GL_LUMINANCE8_ALPHA8_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE_ALPHA:
+                        case GL_LUMINANCE_ALPHA32F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE_ALPHA:
+                        case GL_LUMINANCE_ALPHA16F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT_OES:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE_ALPHA:
+                        case GL_LUMINANCE_ALPHA16F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_LUMINANCE:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE:
+                        case GL_LUMINANCE8_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE:
+                        case GL_LUMINANCE32F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE:
+                        case GL_LUMINANCE16F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT_OES:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_LUMINANCE:
+                        case GL_LUMINANCE16F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_ALPHA:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_ALPHA:
+                        case GL_ALPHA8_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_ALPHA:
+                        case GL_ALPHA32F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_ALPHA:
+                        case GL_ALPHA16F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_HALF_FLOAT_OES:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_ALPHA:
+                        case GL_ALPHA16F_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_SRGB_ALPHA_EXT:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_SRGB_ALPHA_EXT:
+                        case GL_SRGB8_ALPHA8_EXT:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_SRGB_EXT:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_SRGB_EXT:
+                        case GL_SRGB8:
                             return true;
                         default:
                             break;
@@ -1429,118 +1650,28 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
             }
             break;
 
-        case GL_RED:
+        case GL_DEPTH_COMPONENT:
             switch (type)
             {
                 case GL_UNSIGNED_SHORT:
                 {
                     switch (internalFormat)
                     {
-                        case GL_R16_EXT:
+                        case GL_DEPTH_COMPONENT16:
+                        case GL_DEPTH_COMPONENT:
                             return true;
                         default:
                             break;
                     }
                     break;
                 }
-                case GL_SHORT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_R16_SNORM_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RED:
-                        case GL_R32F:
-                        case GL_R16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT_OES:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RED:
-                        case GL_R16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RED:
-                        case GL_R16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RED:
-                        case GL_SR8_EXT:
-                        case GL_R8:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_R8_SNORM:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_DEPTH_COMPONENT:
-            switch (type)
-            {
                 case GL_UNSIGNED_INT:
                 {
                     switch (internalFormat)
                     {
-                        case GL_DEPTH_COMPONENT:
                         case GL_DEPTH_COMPONENT24:
                         case GL_DEPTH_COMPONENT16:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_INT_24_8:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_DEPTH_COMPONENT32_OES:
+                        case GL_DEPTH_COMPONENT:
                             return true;
                         default:
                             break;
@@ -1558,12 +1689,55 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     }
                     break;
                 }
-                case GL_UNSIGNED_SHORT:
+                case GL_UNSIGNED_INT_24_8:
                 {
                     switch (internalFormat)
                     {
-                        case GL_DEPTH_COMPONENT:
-                        case GL_DEPTH_COMPONENT16:
+                        case GL_DEPTH_COMPONENT32_OES:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+
+        case GL_BGRA_EXT:
+            switch (type)
+            {
+                case GL_UNSIGNED_BYTE:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_BGRA_EXT:
+                        case GL_BGRA8_EXT:
+                        case GL_BGRA4_ANGLEX:
+                        case GL_BGR5_A1_ANGLEX:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_BGRA4_ANGLEX:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT:
+                {
+                    switch (internalFormat)
+                    {
+                        case GL_BGR5_A1_ANGLEX:
                             return true;
                         default:
                             break;
@@ -1583,180 +1757,6 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     switch (internalFormat)
                     {
                         case GL_STENCIL_INDEX8:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_SRGB_EXT:
-            switch (type)
-            {
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_SRGB_EXT:
-                        case GL_SRGB8:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_SRGB_ALPHA_EXT:
-            switch (type)
-            {
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_SRGB_ALPHA_EXT:
-                        case GL_SRGB8_ALPHA8_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_RG:
-            switch (type)
-            {
-                case GL_UNSIGNED_SHORT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RG16_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_SHORT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RG16_SNORM_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RG:
-                        case GL_RG32F:
-                        case GL_RG16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT_OES:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RG:
-                        case GL_RG16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_HALF_FLOAT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RG:
-                        case GL_RG16F:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RG:
-                        case GL_RG8:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_RG8_SNORM:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case GL_BGRA_EXT:
-            switch (type)
-            {
-                case GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_BGRA4_ANGLEX:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_BYTE:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_BGRA8_EXT:
-                        case GL_BGRA4_ANGLEX:
-                        case GL_BGR5_A1_ANGLEX:
-                        case GL_BGRA_EXT:
-                            return true;
-                        default:
-                            break;
-                    }
-                    break;
-                }
-                case GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT:
-                {
-                    switch (internalFormat)
-                    {
-                        case GL_BGR5_A1_ANGLEX:
                             return true;
                         default:
                             break;

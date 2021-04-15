@@ -102,7 +102,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
-                                         GL_RGBA16_EXT,
+                                         GL_RGB10_A2,
                                          nullptr);
             return info;
         }
@@ -2080,7 +2080,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
-                                         GL_RGBA16_EXT,
+                                         GL_RGB10_A2,
                                          nullptr);
             return info;
         }
@@ -2094,7 +2094,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R10G10B10A2_UINT,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UINT,
-                                         GL_RGBA16I,
+                                         GL_RGB10_A2UI,
                                          nullptr);
             return info;
         }
@@ -2108,7 +2108,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R10G10B10A2_UNORM,
-                                         GL_RGBA16_EXT,
+                                         GL_RGB10_UNORM_ANGLEX,
                                          nullptr);
             return info;
         }
@@ -2267,7 +2267,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_B5G5R5A1_UNORM,
-                                             GL_RGBA8,
+                                             GL_RGB5_A1,
                                              nullptr);
                 return info;
             }
