@@ -36,11 +36,16 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
     void destroyGL() override;
     bool isGLInitialized() const override;
 
+    // TODO - Returning an EGL context from WGL...?
+    EGLContext getContext() override;
     bool makeCurrent() override;
+    // TODO - Passing in an EGL context to WGL...?
+    bool makeCurrent(EGLContext context) override;
     void swap() override;
     bool hasError() const override;
     bool setSwapInterval(EGLint swapInterval) override;
     angle::GenericProc getProcAddress(const char *name) override;
+    bool isEGL() override { return false; }
 
   private:
     WGLWindow(int glesMajorVersion, int glesMinorVersion);
