@@ -38,6 +38,7 @@ void LoggingAnnotator::setMarker(const char *markerName)
 
 void LoggingAnnotator::logMessage(const gl::LogMessage &msg) const
 {
+#if 0  // TIMTIM
     auto *plat = ANGLEPlatformCurrent();
     if (plat != nullptr)
     {
@@ -57,6 +58,7 @@ void LoggingAnnotator::logMessage(const gl::LogMessage &msg) const
                 UNREACHABLE();
         }
     }
+#endif
     gl::Trace(msg.getSeverity(), msg.getMessage().c_str());
 }
 
