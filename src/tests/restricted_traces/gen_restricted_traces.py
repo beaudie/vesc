@@ -79,6 +79,7 @@ namespace trace_angle
 {{
 using GenericProc = void (*)();
 using LoadProc    = GenericProc(KHRONOS_APIENTRY *)(const char *);
+ANGLE_TRACE_LOADER_EXPORT void LoadEGL(LoadProc loadProc);
 ANGLE_TRACE_LOADER_EXPORT void LoadGLES(LoadProc loadProc);
 }}  // namespace trace_angle
 
@@ -219,16 +220,16 @@ def get_trace_info(trace):
 
 
 def get_context(trace):
-    "Returns the context number used by trace header file"
+    "Returns the context number used by trace txt file"
     for file in os.listdir(trace):
         # Load up the only header present for each trace
-        if fnmatch.fnmatch(file, '*.h'):
+        if fnmatch.fnmatch(file, '*.txt'):
             # Strip the extension to isolate the context by scanning
             # for numbers leading up to the last one, i.e.:
-            #     app_capture_context123.h
+            #     app_capture_context123_files.txt
             #                          ^^
             #                  start---||---end
-            start = len(file) - 3
+            start = len(file) - 11
             end = start + 1
             while file[start - 1].isdigit():
                 start -= 1

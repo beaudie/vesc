@@ -347,6 +347,22 @@ class FrameCapture final : angle::NonCopyable
     FrameCapture();
     ~FrameCapture();
 
+    std::vector<CallCapture> &getSetupCalls() { return mSetupCalls; }
+    void clearSetupCalls() { mSetupCalls.clear(); }
+
+    void reset();
+
+  private:
+    std::vector<CallCapture> mSetupCalls;
+};
+
+// Shared class for any items that need to be tracked by FrameCapture across shared contexts
+class FrameCaptureShared final : angle::NonCopyable
+{
+  public:
+    FrameCaptureShared();
+    ~FrameCaptureShared();
+
     void captureCall(const gl::Context *context, CallCapture &&call, bool isCallValid);
     void checkForCaptureTrigger();
     void onEndFrame(const gl::Context *context);
@@ -360,85 +376,6 @@ class FrameCapture final : angle::NonCopyable
 
     // Returns a frame index starting from "1" as the first frame.
     uint32_t getReplayFrameIndex() const;
-
-    void trackBufferMapping(CallCapture *call,
-                            gl::BufferID id,
-                            GLintptr offset,
-                            GLsizeiptr length,
-                            bool writable);
-
-    ResourceTracker &getResouceTracker() { return mResourceTracker; }
-
-  private:
-    void writeCppReplayIndexFiles(const gl::Context *, bool writeResetContextCall);
-
-    void captureClientArraySnapshot(const gl::Context *context,
-                                    size_t vertexCount,
-                                    size_t instanceCount);
-    void captureMappedBufferSnapshot(const gl::Context *context, const CallCapture &call);
-
-    void copyCompressedTextureData(const gl::Context *context, const CallCapture &call);
-    void captureCompressedTextureData(const gl::Context *context, const CallCapture &call);
-
-    void reset();
-    void maybeOverrideEntryPoint(const gl::Context *context, CallCapture &call);
-    void maybeCapturePreCallUpdates(const gl::Context *context, CallCapture &call);
-    void maybeCapturePostCallUpdates(const gl::Context *context);
-    void maybeCaptureDrawArraysClientData(const gl::Context *context,
-                                          CallCapture &call,
-                                          size_t instanceCount);
-    void maybeCaptureDrawElementsClientData(const gl::Context *context,
-                                            CallCapture &call,
-                                            size_t instanceCount);
-
-    static void ReplayCall(gl::Context *context,
-                           ReplayContext *replayContext,
-                           const CallCapture &call);
-
-    void setCaptureActive() { mCaptureActive = true; }
-    void setCaptureInactive() { mCaptureActive = false; }
-    bool isCaptureActive() { return mCaptureActive; }
-
-    std::vector<CallCapture> mSetupCalls;
-    std::vector<CallCapture> mFrameCalls;
-
-    // We save one large buffer of binary data for the whole CPP replay.
-    // This simplifies a lot of file management.
-    std::vector<uint8_t> mBinaryData;
-
-    bool mEnabled = false;
-    bool mSerializeStateEnabled;
-    std::string mOutDirectory;
-    std::string mCaptureLabel;
-    bool mCompression;
-    gl::AttribArray<int> mClientVertexArrayMap;
-    uint32_t mFrameIndex;
-    uint32_t mCaptureStartFrame;
-    uint32_t mCaptureEndFrame;
-    bool mIsFirstFrame   = true;
-    bool mWroteIndexFile = false;
-    SurfaceDimensions mDrawSurfaceDimensions;
-    gl::AttribArray<size_t> mClientArraySizes;
-    size_t mReadBufferSize;
-    HasResourceTypeMap mHasResourceType;
-    BufferDataMap mBufferDataMap;
-
-    ResourceTracker mResourceTracker;
-
-    // If you don't know which frame you want to start capturing at, use the capture trigger.
-    // Initialize it to the number of frames you want to capture, and then clear the value to 0 when
-    // you reach the content you want to capture. Currently only available on Android.
-    uint32_t mCaptureTrigger;
-
-    bool mCaptureActive = false;
-};
-
-// Shared class for any items that need to be tracked by FrameCapture across shared contexts
-class FrameCaptureShared final : angle::NonCopyable
-{
-  public:
-    FrameCaptureShared();
-    ~FrameCaptureShared();
 
     const std::string &getShaderSource(gl::ShaderProgramID id) const;
     void setShaderSource(gl::ShaderProgramID id, std::string sources);
@@ -468,14 +405,119 @@ class FrameCaptureShared final : angle::NonCopyable
     // Remove any cached texture levels on deletion
     void deleteCachedTextureLevelData(gl::TextureID id);
 
+    ResourceTracker &getResourceTracker() { return mResourceTracker; }
+
+    void trackBufferMapping(CallCapture *call,
+                            gl::BufferID id,
+                            GLintptr offset,
+                            GLsizeiptr length,
+                            bool writable);
+
+    void eraseBufferDataMapEntry(const gl::BufferID bufferId)
+    {
+        const auto &bufferDataInfo = mBufferDataMap.find(bufferId);
+        if (bufferDataInfo != mBufferDataMap.end())
+        {
+            mBufferDataMap.erase(bufferDataInfo);
+        }
+    }
+
+    bool hasBufferData(gl::BufferID bufferID)
+    {
+        const auto &bufferDataInfo = mBufferDataMap.find(bufferID);
+        if (bufferDataInfo != mBufferDataMap.end())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    std::pair<GLintptr, GLsizeiptr> getBufferDataOffsetAndLength(gl::BufferID bufferID)
+    {
+        const auto &bufferDataInfo = mBufferDataMap.find(bufferID);
+        ASSERT(bufferDataInfo != mBufferDataMap.end());
+        return bufferDataInfo->second;
+    }
+
+    void setCaptureActive() { mCaptureActive = true; }
+    void setCaptureInactive() { mCaptureActive = false; }
+    bool isCaptureActive() { return mCaptureActive; }
+
+    gl::ContextID getPresentationContextID() const { return mPresentationContextID; }
+
   private:
+    void writeCppReplayIndexFiles(const gl::Context *, bool writeResetContextCall);
+
+    void captureClientArraySnapshot(const gl::Context *context,
+                                    size_t vertexCount,
+                                    size_t instanceCount);
+    void captureMappedBufferSnapshot(const gl::Context *context, const CallCapture &call);
+
+    void copyCompressedTextureData(const gl::Context *context, const CallCapture &call);
+    void captureCompressedTextureData(const gl::Context *context, const CallCapture &call);
+
+    void reset();
+    void maybeOverrideEntryPoint(const gl::Context *context, CallCapture &call);
+    void maybeCapturePreCallUpdates(const gl::Context *context, CallCapture &call);
+    void maybeCapturePostCallUpdates(const gl::Context *context);
+    void maybeCaptureDrawArraysClientData(const gl::Context *context,
+                                          CallCapture &call,
+                                          size_t instanceCount);
+    void maybeCaptureDrawElementsClientData(const gl::Context *context,
+                                            CallCapture &call,
+                                            size_t instanceCount);
+
+    static void ReplayCall(gl::Context *context,
+                           ReplayContext *replayContext,
+                           const CallCapture &call);
+
+    std::vector<CallCapture> &getSetupCalls() { return mSetupCalls; }
+    void clearSetupCalls() { mSetupCalls.clear(); }
+
+    std::vector<CallCapture> mFrameCalls;
+    uint32_t mLastContextId;
+
+    // We save one large buffer of binary data for the whole CPP replay.
+    // This simplifies a lot of file management.
+    std::vector<uint8_t> mBinaryData;
+
+    bool mEnabled = false;
+    bool mSerializeStateEnabled;
+    std::string mOutDirectory;
+    std::string mCaptureLabel;
+    bool mCompression;
+    gl::AttribArray<int> mClientVertexArrayMap;
+    uint32_t mFrameIndex;
+    uint32_t mCaptureStartFrame;
+    uint32_t mCaptureEndFrame;
+    bool mIsFirstFrame   = true;
+    bool mWroteIndexFile = false;
+    SurfaceDimensions mDrawSurfaceDimensions;
+    gl::AttribArray<size_t> mClientArraySizes;
+    size_t mReadBufferSize;
+    HasResourceTypeMap mHasResourceType;
+    gl::ContextID mPresentationContextID;
+
+    // If you don't know which frame you want to start capturing at, use the capture trigger.
+    // Initialize it to the number of frames you want to capture, and then clear the value to 0 when
+    // you reach the content you want to capture. Currently only available on Android.
+    uint32_t mCaptureTrigger;
+
     // Cache most recently compiled and linked sources.
     ShaderSourceMap mCachedShaderSource;
     ProgramSourceMap mCachedProgramSources;
 
     // Cache a shadow copy of texture level data
-    TextureLevels mCachedTextureLevels;
     TextureLevelDataMap mCachedTextureLevelData;
+
+    // Resources shared by all of the Contexts
+    ResourceTracker mResourceTracker;
+
+    BufferDataMap mBufferDataMap;
+
+    bool mCaptureActive = false;
+
+    std::vector<CallCapture> mSetupCalls;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
@@ -484,15 +526,15 @@ void CaptureCallToFrameCapture(CaptureFuncT captureFunc,
                                gl::Context *context,
                                ArgsT... captureParams)
 {
-    FrameCapture *frameCapture = context->getFrameCapture();
-    if (!frameCapture->isCapturing())
+    FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
+    if (!frameCaptureShared->isCapturing())
     {
         return;
     }
 
     CallCapture call = captureFunc(context->getState(), isCallValid, captureParams...);
 
-    frameCapture->captureCall(context, std::move(call), isCallValid);
+    frameCaptureShared->captureCall(context, std::move(call), isCallValid);
 }
 
 template <typename T>
@@ -663,6 +705,21 @@ template <>
 void WriteParamValueReplay<ParamType::TGLsync>(std::ostream &os,
                                                const CallCapture &call,
                                                GLsync value);
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLContext>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   EGLContext value);
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLDisplay>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   EGLDisplay value);
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLSurface>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   EGLSurface value);
 
 // General fallback for any unspecific type.
 template <ParamType ParamT, typename T>

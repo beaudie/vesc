@@ -497,6 +497,9 @@ void Context::initializeDefaultResources()
 
     ANGLE_CONTEXT_TRY(mImplementation->initialize());
 
+    // Add context into the share group
+    mState.getShareGroup()->getShareContextSet()->insert(this);
+
     bindVertexArray({0});
 
     if (getClientVersion() >= Version(3, 0))
@@ -598,7 +601,7 @@ void Context::initializeDefaultResources()
 egl::Error Context::onDestroy(const egl::Display *display)
 {
     // Dump frame capture if enabled.
-    mFrameCapture->onDestroyContext(this);
+    getShareGroup()->getFrameCaptureShared()->onDestroyContext(this);
 
     if (mGLES1Renderer)
     {
@@ -731,7 +734,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
         ANGLE_TRY(unsetDefaultFramebuffer());
     }
 
-    mFrameCapture->onMakeCurrent(this, drawSurface);
+    getShareGroup()->getFrameCaptureShared()->onMakeCurrent(this, drawSurface);
 
     // TODO(jmadill): Rework this when we support ContextImpl
     mState.setAllDirtyBits();
@@ -867,7 +870,7 @@ GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLcha
                 // to recreate the Shader and Program during MEC setup:
                 // 1.) Shader ID
                 // 2.) Shader source
-                if (!getFrameCapture()->enabled())
+                if (!getShareGroup()->getFrameCaptureShared()->enabled())
                 {
                     programObject->detachShader(this, shaderObject);
                 }
@@ -3751,11 +3754,13 @@ void Context::initCaps()
 
     // If we're capturing application calls for replay, don't expose any binary formats to prevent
     // traces from trying to use cached results
-    if (getFrameCapture()->enabled() || getFrontendFeatures().captureLimits.enabled)
+    if (getShareGroup()->getFrameCaptureShared()->enabled() ||
+        getFrontendFeatures().captureLimits.enabled)
     {
         INFO() << "Limit some features because "
-               << (getFrameCapture()->enabled() ? "FrameCapture is enabled"
-                                                : "FrameCapture limits were forced")
+               << (getShareGroup()->getFrameCaptureShared()->enabled()
+                       ? "FrameCapture is enabled"
+                       : "FrameCapture limits were forced")
                << std::endl;
 
         INFO() << "Limiting binary format support count to zero";
@@ -8947,7 +8952,7 @@ egl::Error Context::unsetDefaultFramebuffer()
 void Context::onPreSwap() const
 {
     // Dump frame capture if enabled.
-    mFrameCapture->onEndFrame(this);
+    getShareGroup()->getFrameCaptureShared()->onEndFrame(this);
 }
 
 void Context::getTexImage(TextureTarget target,

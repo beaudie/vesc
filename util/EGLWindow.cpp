@@ -723,7 +723,12 @@ EGLBoolean EGLWindow::FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, E
 
 bool EGLWindow::makeCurrent()
 {
-    if (eglMakeCurrent(mDisplay, mSurface, mSurface, mContext) == EGL_FALSE ||
+    return makeCurrent(mContext);
+}
+
+bool EGLWindow::makeCurrent(EGLContext context)
+{
+    if (eglMakeCurrent(mDisplay, mSurface, mSurface, context) == EGL_FALSE ||
         eglGetError() != EGL_SUCCESS)
     {
         fprintf(stderr, "Error during eglMakeCurrent.\n");

@@ -104,6 +104,10 @@ ResourceMap gTextureMap;
 ResourceMap gTransformFeedbackMap;
 ResourceMap gVertexArrayMap;
 SyncResourceMap gSyncMap;
+EGLWindow *gEglWindow;
+EGLDisplay gEGLDisplay;
+EGLSurface gEGLSurface;
+ContextMap gContextMap;
 
 void SetBinaryDataDecompressCallback(DecompressCallback callback)
 {

@@ -13,6 +13,9 @@
 #include <EGL/egl.h>
 #include "angle_gl.h"
 
+#undef ANGLE_USE_UTIL_LOADER  // TIMTIM - don't reload function macros
+#include "util/EGLWindow.h"
+
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -39,7 +42,7 @@ using DecompressCallback = uint8_t *(*)(const std::vector<uint8_t> &);
 extern "C" {
 ANGLE_REPLAY_EXPORT void SetBinaryDataDecompressCallback(DecompressCallback callback);
 ANGLE_REPLAY_EXPORT void SetBinaryDataDir(const char *dataDir);
-ANGLE_REPLAY_EXPORT void SetupReplay();
+ANGLE_REPLAY_EXPORT void SetupReplay(EGLWindow *eglWindow);
 ANGLE_REPLAY_EXPORT void ReplayFrame(uint32_t frameIndex);
 ANGLE_REPLAY_EXPORT void ResetReplay();
 ANGLE_REPLAY_EXPORT void FinishReplay();
@@ -101,6 +104,11 @@ extern ResourceMap gTransformFeedbackMap;
 extern ResourceMap gVertexArrayMap;
 using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;
 extern SyncResourceMap gSyncMap;
+using ContextMap = std::unordered_map<uint32_t, EGLContext>;
+extern EGLWindow *gEglWindow;
+extern EGLDisplay gEGLDisplay;
+extern EGLSurface gEGLSurface;
+extern ContextMap gContextMap;  // TIMTIM: avoid std::unordered_map, it's slow
 
 void UpdateClientArrayPointer(int arrayIndex, const void *data, uint64_t size);
 using BufferHandleMap = std::unordered_map<GLuint, void *>;
