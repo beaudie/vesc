@@ -35,16 +35,22 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
                       const ConfigParameters &configParams) override;
     void destroyGL() override;
     bool isGLInitialized() const override;
-
     bool makeCurrent() override;
     void swap() override;
     bool hasError() const override;
     bool setSwapInterval(EGLint swapInterval) override;
     angle::GenericProc getProcAddress(const char *name) override;
+    // Initializes WGL resources.
+    void *getCurrentContext() override;
+    void *createContext(void *share) override;
+    bool makeCurrent(void *context) override;
 
   private:
     WGLWindow(int glesMajorVersion, int glesMinorVersion);
     ~WGLWindow() override;
+
+    HGLRC createContextImpl(const ConfigParameters &configParams, HGLRC shareContext);
+    bool makeCurrentImpl(HGLRC context);
 
     // OS resources.
     HDC mDeviceContext;
