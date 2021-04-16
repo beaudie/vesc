@@ -104,6 +104,7 @@ ResourceMap gTextureMap;
 ResourceMap gTransformFeedbackMap;
 ResourceMap gVertexArrayMap;
 SyncResourceMap gSyncMap;
+ContextMap gContextMap;
 
 void SetBinaryDataDecompressCallback(DecompressCallback callback)
 {

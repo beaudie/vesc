@@ -76,6 +76,12 @@ class TracePerfTest : public ANGLERenderTest
     void destroyBenchmark() override;
     void drawBenchmark() override;
 
+    EGLContext CreateContext(EGLDisplay display,
+                             EGLConfig config,
+                             EGLContext share_context,
+                             EGLint const *attrib_list);
+    void MakeCurrent(EGLDisplay display, EGLSurface draw, EGLSurface read, EGLContext context);
+    EGLContext GetCurrentContext();
     void onReplayFramebufferChange(GLenum target, GLuint framebuffer);
     void onReplayInvalidateFramebuffer(GLenum target,
                                        GLsizei numAttachments,
@@ -153,7 +159,28 @@ class TracePerfTest : public ANGLERenderTest
 
 TracePerfTest *gCurrentTracePerfTest = nullptr;
 
-// Don't forget to include KHRONOS_APIENTRY in override methods. Neccessary on Win/x86.
+// Don't forget to include KHRONOS_APIENTRY in override methods. Necessary on Win/x86.
+EGLContext KHRONOS_APIENTRY CreateContext(EGLDisplay display,
+                                          EGLConfig config,
+                                          EGLContext share_context,
+                                          EGLint const *attrib_list)
+{
+    return gCurrentTracePerfTest->CreateContext(display, config, share_context, attrib_list);
+}
+
+void KHRONOS_APIENTRY MakeCurrent(EGLDisplay display,
+                                  EGLSurface draw,
+                                  EGLSurface read,
+                                  EGLContext context)
+{
+    gCurrentTracePerfTest->MakeCurrent(display, draw, read, context);
+}
+
+EGLContext KHRONOS_APIENTRY GetCurrentContext()
+{
+    return gCurrentTracePerfTest->GetCurrentContext();
+}
+
 void KHRONOS_APIENTRY BindFramebufferProc(GLenum target, GLuint framebuffer)
 {
     gCurrentTracePerfTest->onReplayFramebufferChange(target, framebuffer);
@@ -437,6 +464,21 @@ void KHRONOS_APIENTRY BeginTransformFeedbackMinimizedProc(GLenum primitiveMode)
 
 angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
 {
+    // EGL
+    if (strcmp(procName, "eglCreateContext") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(CreateContext);
+    }
+    if (strcmp(procName, "eglMakeCurrent") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(MakeCurrent);
+    }
+    if (strcmp(procName, "eglGetCurrentContext") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(GetCurrentContext);
+    }
+
+    // GLES
     if (strcmp(procName, "glBindFramebuffer") == 0)
     {
         return reinterpret_cast<angle::GenericProc>(BindFramebufferProc);
@@ -987,6 +1029,12 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         }
     }
 
+    // TIMTIM
+    if (params.testID == RestrictedTraceID::asphalt_9)
+    {
+        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
@@ -1011,6 +1059,14 @@ void TracePerfTest::initializeBenchmark()
         angle::SetCWD(exeDir.c_str());
     }
 
+    if (!getGLWindow()->isEGL())
+    {
+        ERR() << "Only EGL is supported.";
+        mSkipTest = true;
+        return;
+    }
+
+    trace_angle::LoadEGL(TraceLoadProc);
     trace_angle::LoadGLES(TraceLoadProc);
 
     if (!mTraceLibrary->valid())
@@ -1352,6 +1408,29 @@ double TracePerfTest::getHostTimeFromGLTime(GLint64 glTime)
     // Lerp(t1, t2, t)
     double hostRange = end.hostTime - start.hostTime;
     return mTimeline[firstSampleIndex].hostTime + hostRange * t;
+}
+
+EGLContext TracePerfTest::CreateContext(EGLDisplay display,
+                                        EGLConfig config,
+                                        EGLContext share_context,
+                                        EGLint const *attrib_list)
+{
+    // TIMTIM - Assume EGL.
+    EGLWindow *eglWindow = static_cast<EGLWindow *>(getGLWindow());
+    return eglWindow->createContext(share_context);
+}
+
+void TracePerfTest::MakeCurrent(EGLDisplay display,
+                                EGLSurface draw,
+                                EGLSurface read,
+                                EGLContext context)
+{
+    getGLWindow()->makeCurrent(context);
+}
+
+EGLContext TracePerfTest::GetCurrentContext()
+{
+    return getGLWindow()->getContext();
 }
 
 // Triggered when the replay calls glBindFramebuffer.
