@@ -39,6 +39,7 @@
 #include "libANGLE/capture/capture_gles_ext_autogen.h"
 #include "libANGLE/capture/frame_capture_utils.h"
 #include "libANGLE/capture/gl_enum_utils.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
 
@@ -4969,6 +4970,32 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
 
     if (isCallValid)
     {
+        // If the context ID has changed, then we need to inject an eglMakeCurrent() call.
+        if (mLastContextId != context->id().value)
+        {
+            // Create the eglMakeCurrent() call
+            ParamBuffer paramBuffer;
+            // The EGLDisplay and EGLSurface values can't be known here, since we may not even be
+            // running the trace with ANGLE.
+            // The EGLContext value is actually the context ID, so we can look it up in
+            // 'gContextMap'.
+            paramBuffer.addValueParam("display", ParamType::TEGLDisplay,
+                                      reinterpret_cast<EGLDisplay>(0));
+            paramBuffer.addValueParam("draw", ParamType::TEGLSurface,
+                                      reinterpret_cast<EGLSurface>(0));
+            paramBuffer.addValueParam("read", ParamType::TEGLSurface,
+                                      reinterpret_cast<EGLSurface>(0));
+            // Need to go from uint32 -> uint64 -> EGLContext (void*) to handle MSVC compiler
+            // warning on 64b systems:
+            //   error C4312: 'reinterpret_cast': conversion from 'uint32_t' to 'EGLContext' of
+            //   greater size
+            uint64_t contextID = context->id().value;
+            paramBuffer.addValueParam("context", ParamType::TEGLContext,
+                                      reinterpret_cast<EGLContext>(contextID));
+            mFrameCalls.emplace_back("eglMakeCurrent", std::move(paramBuffer));
+            mLastContextId = context->id().value;
+        }
+
         maybeOverrideEntryPoint(context, call);
         maybeCapturePreCallUpdates(context, call);
         mFrameCalls.emplace_back(std::move(call));
@@ -5803,17 +5830,43 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         out << "\n";
         out << "void SetupReplay()\n";
         out << "{\n";
+        out << "    EGLContext context = eglGetCurrentContext();\n";
+        out << "    gContextMap[" << context->id().value << "] = context;\n";
+        out << "\n";
+
+        // Setup all of the shared objects.
         out << "    " << mCaptureLabel << "::InitReplay();\n";
+        out << "    " << mCaptureLabel << "::" << FmtSetupFunction(kNoPartId, kSharedContextId)
+            << ";\n";
 
-        // Setup all of the share group objects if we're using MEC.
-        if (mCaptureStartFrame != 1)
+        // Setup the presentation (this) context first.
+        out << "    " << FmtSetupFunction(kNoPartId, context->id()) << ";\n";
+        out << "\n";
+
+        // Setup each of the auxiliary contexts.
+        egl::ShareGroup *shareGroup            = context->getShareGroup();
+        const egl::ContextSet &shareContextSet = shareGroup->getContexts();
+        for (gl::Context *shareContext : shareContextSet)
         {
-            out << "    " << mCaptureLabel << "::" << FmtSetupFunction(kNoPartId, kSharedContextId)
-                << ";\n";
+            // Skip the presentation context, sicne that context was created by the test framework.
+            if (shareContext->id() == context->id())
+            {
+                continue;
+            }
 
-            // Setup the main (this) context before any other contexts in the share group.
-            out << "    " << FmtSetupFunction(kNoPartId, context->id()) << ";\n";
+            out << "    EGLContext context" << shareContext->id()
+                << " = eglCreateContext(nullptr, nullptr, context, nullptr);\n";
+            out << "    eglMakeCurrent(nullptr, nullptr, nullptr, context" << shareContext->id()
+                << ");\n";
+            out << "    gContextMap[" << shareContext->id().value << "] = context"
+                << shareContext->id() << ";\n";
+            out << "    " << mCaptureLabel
+                << "::" << FmtSetupFunction(kNoPartId, shareContext->id()) << ";\n";
         }
+
+        out << "\n";
+        out << "    eglMakeCurrent(nullptr, nullptr, nullptr, context);\n";
+
         out << "}\n";
         out << "\n";
     }
@@ -6443,6 +6496,14 @@ void WriteParamValueReplay<ParamType::TGLubyte>(std::ostream &os,
 {
     const int v = value;
     os << v;
+}
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLContext>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   EGLContext value)
+{
+    os << "gContextMap[" << reinterpret_cast<size_t>(value) << "]";
 }
 
 template <>
