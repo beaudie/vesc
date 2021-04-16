@@ -816,6 +816,9 @@ EXPORTS
     glTexStorage2DEXT
     glTexStorage3DEXT
 
+    ; GL_KHR_blend_equation_advanced
+    glBlendBarrierKHR
+
     ; GL_KHR_debug
     glDebugMessageCallbackKHR
     glDebugMessageControlKHR
@@ -1007,6 +1010,7 @@ EXPORTS
     glBindVertexArrayOESContextANGLE
     glBindVertexBufferContextANGLE
     glBlendBarrierContextANGLE
+    glBlendBarrierKHRContextANGLE
     glBlendColorContextANGLE
     glBlendEquationContextANGLE
     glBlendEquationSeparateContextANGLE
