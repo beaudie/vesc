@@ -12,6 +12,9 @@
 #define LIBANGLE_FRAME_CAPTURE_UTILS_AUTOGEN_H_
 
 #include "common/PackedEnums.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
+#include "libANGLE/Surface.h"
 
 namespace angle
 {
@@ -139,6 +142,9 @@ enum class ParamType
     TvoidConstPointerPointer,
     TvoidPointer,
     TvoidPointerPointer,
+    TEglDisplayPointer,
+    TEglSurfacePointer,
+    TGlContextID,
 };
 
 constexpr uint32_t kParamTypeCount = 122;
@@ -267,6 +273,9 @@ union ParamValue
     const void *const *voidConstPointerPointerVal;
     void *voidPointerVal;
     void **voidPointerPointerVal;
+    egl::Display *eglDisplayPointerVal;
+    egl::Surface *eglSurfacePointerVal;
+    uint32_t glContextIdVal;
 };
 
 template <ParamType PType, typename T>
@@ -1083,6 +1092,26 @@ inline void **GetParamVal<ParamType::TvoidPointerPointer, void **>(const ParamVa
     return value.voidPointerPointerVal;
 }
 
+template <>
+inline egl::Display *GetParamVal<ParamType::TEglDisplayPointer, egl::Display *>(
+    const ParamValue &value)
+{
+    return value.eglDisplayPointerVal;
+}
+
+template <>
+inline egl::Surface *GetParamVal<ParamType::TEglSurfacePointer, egl::Surface *>(
+    const ParamValue &value)
+{
+    return value.eglSurfacePointerVal;
+}
+
+template <>
+inline uint32_t GetParamVal<ParamType::TGlContextID, uint32_t>(const ParamValue &value)
+{
+    return value.glContextIdVal;
+}
+
 template <ParamType PType, typename T>
 T GetParamVal(const ParamValue &value)
 {
@@ -1339,6 +1368,12 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TvoidPointer, T>(value);
         case ParamType::TvoidPointerPointer:
             return GetParamVal<ParamType::TvoidPointerPointer, T>(value);
+        case ParamType::TEglDisplayPointer:
+            return GetParamVal<ParamType::TEglDisplayPointer, T>(value);
+        case ParamType::TEglSurfacePointer:
+            return GetParamVal<ParamType::TEglSurfacePointer, T>(value);
+        case ParamType::TGlContextID:
+            return GetParamVal<ParamType::TGlContextID, T>(value);
     }
 }
 
@@ -2134,6 +2169,24 @@ inline void SetParamVal<ParamType::TvoidPointerPointer>(void **valueIn, ParamVal
     valueOut->voidPointerPointerVal = valueIn;
 }
 
+template <>
+inline void SetParamVal<ParamType::TEglDisplayPointer>(egl::Display *valueIn, ParamValue *valueOut)
+{
+    valueOut->eglDisplayPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TEglSurfacePointer>(egl::Surface *valueIn, ParamValue *valueOut)
+{
+    valueOut->eglSurfacePointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TGlContextID>(uint32_t valueIn, ParamValue *valueOut)
+{
+    valueOut->glContextIdVal = valueIn;
+}
+
 template <ParamType PType, typename T>
 void SetParamVal(T valueIn, ParamValue *valueOut)
 {
@@ -2511,6 +2564,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TvoidPointerPointer:
             SetParamVal<ParamType::TvoidPointerPointer>(valueIn, valueOut);
             break;
+        case ParamType::TEglDisplayPointer:
+            SetParamVal<ParamType::TEglDisplayPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TEglSurfacePointer:
+            SetParamVal<ParamType::TEglSurfacePointer>(valueIn, valueOut);
+            break;
+        case ParamType::TGlContextID:
+            SetParamVal<ParamType::TGlContextID>(valueIn, valueOut);
+            break;
     }
 }
 
@@ -2524,6 +2586,7 @@ enum class ResourceIDType
 {
     Buffer,
     FenceNV,
+    FenceSync,
     Framebuffer,
     MemoryObject,
     ProgramPipeline,
