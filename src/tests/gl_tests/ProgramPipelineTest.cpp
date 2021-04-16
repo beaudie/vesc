@@ -1049,6 +1049,135 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::yellow);
 }
 
+class ProgramPipelineTest32 : public ProgramPipelineTest
+{
+  protected:
+    ~ProgramPipelineTest32()
+    {
+        glDeleteProgram(mVertProg);
+        glDeleteProgram(mFragProg);
+        glDeleteProgramPipelines(1, &mPipeline);
+    }
+
+    void bindProgramPipeline(const GLchar *vertString,
+                             const GLchar *fragString,
+                             const GLchar *geomString);
+    void drawQuadWithPPO(const std::string &positionAttribName,
+                         const GLfloat positionAttribZ,
+                         const GLfloat positionAttribXYScale);
+
+    GLuint mVertProg;
+    GLuint mFragProg;
+    GLuint mGeomProg;
+    GLuint mPipeline;
+};
+
+void ProgramPipelineTest32::bindProgramPipeline(const GLchar *vertString,
+                                                const GLchar *fragString,
+                                                const GLchar *geomString)
+{
+    mVertProg = createShaderProgram(GL_VERTEX_SHADER, vertString);
+    ASSERT_NE(mVertProg, 0u);
+    mFragProg = createShaderProgram(GL_FRAGMENT_SHADER, fragString);
+    ASSERT_NE(mFragProg, 0u);
+    mGeomProg = createShaderProgram(GL_GEOMETRY_SHADER, geomString);
+    ASSERT_NE(mGeomProg, 0u);
+
+    // Generate a program pipeline and attach the programs to their respective stages
+    glGenProgramPipelines(1, &mPipeline);
+    EXPECT_GL_NO_ERROR();
+    glUseProgramStages(mPipeline, GL_VERTEX_SHADER_BIT, mVertProg);
+    EXPECT_GL_NO_ERROR();
+    glUseProgramStages(mPipeline, GL_FRAGMENT_SHADER_BIT, mFragProg);
+    EXPECT_GL_NO_ERROR();
+    glUseProgramStages(mPipeline, GL_GEOMETRY_SHADER_BIT, mGeomProg);
+    EXPECT_GL_NO_ERROR();
+    glBindProgramPipeline(mPipeline);
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(ProgramPipelineTest32, MaxImageUniforms)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    GLint maxImageUnits;
+    glGetIntegerv(GL_MAX_IMAGE_UNITS, &maxImageUnits);
+
+    const GLchar *vertString = essl32_shaders::vs::Simple();
+    const GLchar *fragString = R"(#version 320 es
+precision highp float;
+out vec4 my_FragColor;
+void main()
+{
+    my_FragColor = vec4(1.0);
+})";
+
+    std::stringstream geomStringStream;
+
+    geomStringStream << R"(#version 320 es
+
+
+layout (points)                   in;
+layout (points, max_vertices = 1) out;
+
+precision highp iimage2D;
+
+ivec4 counter = ivec4(0);
+)";
+
+    for (GLint index = 0; index < maxImageUnits; ++index)
+    {
+        geomStringStream << "layout(binding = " << index << ", r32i) uniform iimage2D img" << index
+                         << ";" << std::endl;
+    }
+
+    geomStringStream << R"(
+void main()
+{
+)";
+
+    for (GLint index = 0; index < maxImageUnits; ++index)
+    {
+        geomStringStream << "counter += imageLoad(img" << index << ", ivec2(0, 0));" << std::endl;
+    }
+
+    geomStringStream << R"(
+    gl_Position = vec4(float(counter.x), 0.0, 0.0, 1.0);
+    EmitVertex();
+}
+)";
+
+    bindProgramPipeline(vertString, fragString, geomStringStream.str().c_str());
+
+    GLuint textures[maxImageUnits];
+    glGenTextures(maxImageUnits, textures);
+    for (GLint index = 0; index < maxImageUnits; ++index)
+    {
+        GLint texture = textures[index];
+        GLint value   = index + 1;
+
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glTexStorage2D(GL_TEXTURE_2D, 1 /*levels*/, GL_R32I, 1 /*width*/, 1 /*height*/);
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0 /*level*/, 0 /*xoffset*/, 0 /*yoffset*/, 1 /*width*/,
+                        1 /*height*/, GL_RED_INTEGER, GL_INT, &value);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glBindImageTexture(index, texture, 0 /*level*/, GL_FALSE /*is layered?*/, 0 /*layer*/,
+                           GL_READ_ONLY, GL_R32I);
+    }
+
+    glDrawArrays(GL_POINTS, 0, 6);
+    ASSERT_GL_NO_ERROR();
+
+    glDeleteProgram(mVertProg);
+    glDeleteProgram(mFragProg);
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ProgramPipelineTest);
 ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(ProgramPipelineTest);
 
@@ -1057,5 +1186,8 @@ ANGLE_INSTANTIATE_TEST_ES31(ProgramPipelineTest31);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ProgramPipelineXFBTest31);
 ANGLE_INSTANTIATE_TEST_ES31(ProgramPipelineXFBTest31);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ProgramPipelineTest32);
+ANGLE_INSTANTIATE_TEST_ES32(ProgramPipelineTest32);
 
 }  // namespace

@@ -538,8 +538,13 @@ void ProgramExecutableVk::addInterfaceBlockDescriptorSetDesc(
         const std::string blockName             = block.mappedName;
         const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, blockName);
 
-        descOut->update(info.binding, descType, arraySize, gl_vk::kShaderStageMap[shaderType],
-                        nullptr);
+        VkShaderStageFlags activeStages = gl_vk::kShaderStageMap[shaderType];
+        for (gl::ShaderType stage : info.activeStages)
+        {
+            activeStages |= gl_vk::kShaderStageMap[stage];
+        }
+
+        descOut->update(info.binding, descType, arraySize, activeStages, nullptr);
     }
 }
 
@@ -561,10 +566,15 @@ void ProgramExecutableVk::addAtomicCounterBufferDescriptorSetDesc(
         return;
     }
 
+    VkShaderStageFlags activeStages = gl_vk::kShaderStageMap[shaderType];
+    for (gl::ShaderType stage : info.activeStages)
+    {
+        activeStages |= gl_vk::kShaderStageMap[stage];
+    }
+
     // A single storage buffer array is used for all stages for simplicity.
     descOut->update(info.binding, kStorageBufferDescriptorType,
-                    gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS,
-                    gl_vk::kShaderStageMap[shaderType], nullptr);
+                    gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS, activeStages, nullptr);
 }
 
 void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramExecutable &executable,
@@ -607,6 +617,10 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramExecutable 
             GetImageNameWithoutIndices(&imageName);
             const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, imageName);
             VkShaderStageFlags activeStages         = gl_vk::kShaderStageMap[shaderType];
+            for (gl::ShaderType stage : info.activeStages)
+            {
+                activeStages |= gl_vk::kShaderStageMap[stage];
+            }
 
             const VkDescriptorType descType = imageBinding.textureType == gl::TextureType::Buffer
                                                   ? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
@@ -689,6 +703,10 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
 
             const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, samplerName);
             VkShaderStageFlags activeStages         = gl_vk::kShaderStageMap[shaderType];
+            for (gl::ShaderType stage : info.activeStages)
+            {
+                activeStages |= gl_vk::kShaderStageMap[stage];
+            }
 
             // TODO: https://issuetracker.google.com/issues/158215272: how do we handle array of
             // immutable samplers?
