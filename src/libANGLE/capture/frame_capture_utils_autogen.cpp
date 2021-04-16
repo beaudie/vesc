@@ -44,12 +44,109 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             WriteParamValueReplay<ParamType::TClientVertexArrayType>(
                 os, call, param.value.ClientVertexArrayTypeVal);
             break;
+        case ParamType::TCompositorTiming:
+            WriteParamValueReplay<ParamType::TCompositorTiming>(os, call,
+                                                                param.value.CompositorTimingVal);
+            break;
+        case ParamType::TConfigPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
         case ParamType::TCullFaceMode:
             WriteParamValueReplay<ParamType::TCullFaceMode>(os, call, param.value.CullFaceModeVal);
+            break;
+        case ParamType::TDevicePointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
             break;
         case ParamType::TDrawElementsType:
             WriteParamValueReplay<ParamType::TDrawElementsType>(os, call,
                                                                 param.value.DrawElementsTypeVal);
+            break;
+        case ParamType::TEGLAttribConstPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TEGLAttribPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TEGLClientBuffer:
+            WriteParamValueReplay<ParamType::TEGLClientBuffer>(os, call,
+                                                               param.value.EGLClientBufferVal);
+            break;
+        case ParamType::TEGLConfigPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TEGLDEBUGPROCKHR:
+            WriteParamValueReplay<ParamType::TEGLDEBUGPROCKHR>(os, call,
+                                                               param.value.EGLDEBUGPROCKHRVal);
+            break;
+        case ParamType::TEGLFrameTokenANGLE:
+            WriteParamValueReplay<ParamType::TEGLFrameTokenANGLE>(
+                os, call, param.value.EGLFrameTokenANGLEVal);
+            break;
+        case ParamType::TEGLGetBlobFuncANDROID:
+            WriteParamValueReplay<ParamType::TEGLGetBlobFuncANDROID>(
+                os, call, param.value.EGLGetBlobFuncANDROIDVal);
+            break;
+        case ParamType::TEGLLabelKHR:
+            WriteParamValueReplay<ParamType::TEGLLabelKHR>(os, call, param.value.EGLLabelKHRVal);
+            break;
+        case ParamType::TEGLNativeDisplayType:
+            WriteParamValueReplay<ParamType::TEGLNativeDisplayType>(
+                os, call, param.value.EGLNativeDisplayTypeVal);
+            break;
+        case ParamType::TEGLNativePixmapType:
+            WriteParamValueReplay<ParamType::TEGLNativePixmapType>(
+                os, call, param.value.EGLNativePixmapTypeVal);
+            break;
+        case ParamType::TEGLNativeWindowType:
+            WriteParamValueReplay<ParamType::TEGLNativeWindowType>(
+                os, call, param.value.EGLNativeWindowTypeVal);
+            break;
+        case ParamType::TEGLObjectKHR:
+            WriteParamValueReplay<ParamType::TEGLObjectKHR>(os, call, param.value.EGLObjectKHRVal);
+            break;
+        case ParamType::TEGLSetBlobFuncANDROID:
+            WriteParamValueReplay<ParamType::TEGLSetBlobFuncANDROID>(
+                os, call, param.value.EGLSetBlobFuncANDROIDVal);
+            break;
+        case ParamType::TEGLTime:
+            WriteParamValueReplay<ParamType::TEGLTime>(os, call, param.value.EGLTimeVal);
+            break;
+        case ParamType::TEGLTimeKHR:
+            WriteParamValueReplay<ParamType::TEGLTimeKHR>(os, call, param.value.EGLTimeKHRVal);
+            break;
+        case ParamType::TEGLenum:
+            WriteParamValueReplay<ParamType::TEGLenum>(os, call, param.value.EGLenumVal);
+            break;
+        case ParamType::TEGLint:
+            WriteParamValueReplay<ParamType::TEGLint>(os, call, param.value.EGLintVal);
+            break;
+        case ParamType::TEGLintConstPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TEGLintPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TEGLnsecsANDROID:
+            WriteParamValueReplay<ParamType::TEGLnsecsANDROID>(os, call,
+                                                               param.value.EGLnsecsANDROIDVal);
+            break;
+        case ParamType::TEGLnsecsANDROIDPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TEGLuint64KHR:
+            WriteParamValueReplay<ParamType::TEGLuint64KHR>(os, call, param.value.EGLuint64KHRVal);
+            break;
+        case ParamType::TEGLuint64KHRPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
             break;
         case ParamType::TFenceNVID:
             WriteParamValueReplay<ParamType::TFenceNVID>(os, call, param.value.FenceNVIDVal);
@@ -278,6 +375,10 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
         case ParamType::THandleType:
             WriteParamValueReplay<ParamType::THandleType>(os, call, param.value.HandleTypeVal);
             break;
+        case ParamType::TImagePointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
         case ParamType::TLightParameter:
             WriteParamValueReplay<ParamType::TLightParameter>(os, call,
                                                               param.value.LightParameterVal);
@@ -304,6 +405,9 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
         case ParamType::TMemoryObjectIDPointer:
             WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
                                                                 param.value.voidConstPointerVal);
+            break;
+        case ParamType::TObjectType:
+            WriteParamValueReplay<ParamType::TObjectType>(os, call, param.value.ObjectTypeVal);
             break;
         case ParamType::TPointParameter:
             WriteParamValueReplay<ParamType::TPointParameter>(os, call,
@@ -395,6 +499,18 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
         case ParamType::TShadingModel:
             WriteParamValueReplay<ParamType::TShadingModel>(os, call, param.value.ShadingModelVal);
             break;
+        case ParamType::TStreamPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TSurfacePointer:
+            WriteParamValueReplay<ParamType::TSurfacePointer>(os, call,
+                                                              param.value.SurfacePointerVal);
+            break;
+        case ParamType::TSyncPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
         case ParamType::TTextureEnvParameter:
             WriteParamValueReplay<ParamType::TTextureEnvParameter>(
                 os, call, param.value.TextureEnvParameterVal);
@@ -420,6 +536,9 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             break;
         case ParamType::TTextureType:
             WriteParamValueReplay<ParamType::TTextureType>(os, call, param.value.TextureTypeVal);
+            break;
+        case ParamType::TTimestamp:
+            WriteParamValueReplay<ParamType::TTimestamp>(os, call, param.value.TimestampVal);
             break;
         case ParamType::TTransformFeedbackID:
             WriteParamValueReplay<ParamType::TTransformFeedbackID>(
@@ -456,6 +575,22 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
         case ParamType::TVertexAttribType:
             WriteParamValueReplay<ParamType::TVertexAttribType>(os, call,
                                                                 param.value.VertexAttribTypeVal);
+            break;
+        case ParamType::TcharConstPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
+            break;
+        case ParamType::TeglDisplayPointer:
+            WriteParamValueReplay<ParamType::TeglDisplayPointer>(os, call,
+                                                                 param.value.eglDisplayPointerVal);
+            break;
+        case ParamType::TglContextPointer:
+            WriteParamValueReplay<ParamType::TglContextPointer>(os, call,
+                                                                param.value.glContextPointerVal);
+            break;
+        case ParamType::TAHardwareBufferConstPointer:
+            WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
+                                                                param.value.voidConstPointerVal);
             break;
         case ParamType::TvoidConstPointer:
             WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
@@ -497,10 +632,62 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLenum";
         case ParamType::TClientVertexArrayType:
             return "GLenum";
+        case ParamType::TCompositorTiming:
+            return "GLenum";
+        case ParamType::TConfigPointer:
+            return "GLenum *";
         case ParamType::TCullFaceMode:
             return "GLenum";
+        case ParamType::TDevicePointer:
+            return "GLenum *";
         case ParamType::TDrawElementsType:
             return "GLenum";
+        case ParamType::TEGLAttribConstPointer:
+            return "const GLenum *";
+        case ParamType::TEGLAttribPointer:
+            return "GLenum *";
+        case ParamType::TEGLClientBuffer:
+            return "GLenum";
+        case ParamType::TEGLConfigPointer:
+            return "GLenum *";
+        case ParamType::TEGLDEBUGPROCKHR:
+            return "GLenum";
+        case ParamType::TEGLFrameTokenANGLE:
+            return "GLenum";
+        case ParamType::TEGLGetBlobFuncANDROID:
+            return "GLuint";
+        case ParamType::TEGLLabelKHR:
+            return "GLenum";
+        case ParamType::TEGLNativeDisplayType:
+            return "GLenum";
+        case ParamType::TEGLNativePixmapType:
+            return "GLenum";
+        case ParamType::TEGLNativeWindowType:
+            return "GLenum";
+        case ParamType::TEGLObjectKHR:
+            return "GLenum";
+        case ParamType::TEGLSetBlobFuncANDROID:
+            return "GLuint";
+        case ParamType::TEGLTime:
+            return "GLenum";
+        case ParamType::TEGLTimeKHR:
+            return "GLenum";
+        case ParamType::TEGLenum:
+            return "GLenum";
+        case ParamType::TEGLint:
+            return "GLenum";
+        case ParamType::TEGLintConstPointer:
+            return "const GLenum *";
+        case ParamType::TEGLintPointer:
+            return "GLenum *";
+        case ParamType::TEGLnsecsANDROID:
+            return "GLuint";
+        case ParamType::TEGLnsecsANDROIDPointer:
+            return "GLuint *";
+        case ParamType::TEGLuint64KHR:
+            return "GLenum";
+        case ParamType::TEGLuint64KHRPointer:
+            return "GLenum *";
         case ParamType::TFenceNVID:
             return "GLuint";
         case ParamType::TFenceNVIDConstPointer:
@@ -625,6 +812,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLenum";
         case ParamType::THandleType:
             return "GLenum";
+        case ParamType::TImagePointer:
+            return "GLenum *";
         case ParamType::TLightParameter:
             return "GLenum";
         case ParamType::TLogicalOperation:
@@ -639,6 +828,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "const GLuint *";
         case ParamType::TMemoryObjectIDPointer:
             return "GLuint *";
+        case ParamType::TObjectType:
+            return "GLenum";
         case ParamType::TPointParameter:
             return "GLenum";
         case ParamType::TPrimitiveMode:
@@ -687,6 +878,12 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLenum";
         case ParamType::TShadingModel:
             return "GLenum";
+        case ParamType::TStreamPointer:
+            return "GLenum *";
+        case ParamType::TSurfacePointer:
+            return "EGLSurface";
+        case ParamType::TSyncPointer:
+            return "GLenum *";
         case ParamType::TTextureEnvParameter:
             return "GLenum";
         case ParamType::TTextureEnvTarget:
@@ -700,6 +897,8 @@ const char *ParamTypeToString(ParamType paramType)
         case ParamType::TTextureTarget:
             return "GLenum";
         case ParamType::TTextureType:
+            return "GLenum";
+        case ParamType::TTimestamp:
             return "GLenum";
         case ParamType::TTransformFeedbackID:
             return "GLuint";
@@ -719,6 +918,14 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLuint *";
         case ParamType::TVertexAttribType:
             return "GLenum";
+        case ParamType::TcharConstPointer:
+            return "const GLenum *";
+        case ParamType::TeglDisplayPointer:
+            return "EGLDisplay";
+        case ParamType::TglContextPointer:
+            return "EGLContext";
+        case ParamType::TAHardwareBufferConstPointer:
+            return "const GLenum *";
         case ParamType::TvoidConstPointer:
             return "const void *";
         case ParamType::TvoidConstPointerPointer:
@@ -743,6 +950,14 @@ ResourceIDType GetResourceIDTypeFromParamType(ParamType paramType)
             return ResourceIDType::Buffer;
         case ParamType::TBufferIDPointer:
             return ResourceIDType::Buffer;
+        case ParamType::TEGLGetBlobFuncANDROID:
+            return ResourceIDType::EGLGetBlobFuncANDRO;
+        case ParamType::TEGLSetBlobFuncANDROID:
+            return ResourceIDType::EGLSetBlobFuncANDRO;
+        case ParamType::TEGLnsecsANDROID:
+            return ResourceIDType::EGLnsecsANDRO;
+        case ParamType::TEGLnsecsANDROIDPointer:
+            return ResourceIDType::EGLnsecsANDRO;
         case ParamType::TFenceNVID:
             return ResourceIDType::FenceNV;
         case ParamType::TFenceNVIDConstPointer:
@@ -826,6 +1041,12 @@ const char *GetResourceIDTypeName(ResourceIDType resourceIDType)
     {
         case ResourceIDType::Buffer:
             return "Buffer";
+        case ResourceIDType::EGLGetBlobFuncANDRO:
+            return "EGLGetBlobFuncANDRO";
+        case ResourceIDType::EGLSetBlobFuncANDRO:
+            return "EGLSetBlobFuncANDRO";
+        case ResourceIDType::EGLnsecsANDRO:
+            return "EGLnsecsANDRO";
         case ResourceIDType::FenceNV:
             return "FenceNV";
         case ResourceIDType::Framebuffer:

@@ -605,7 +605,7 @@ using namespace gl;
 namespace angle
 {{
 
-void FrameCapture::ReplayCall(gl::Context *context,
+void FrameCaptureShared::ReplayCall(gl::Context *context,
                               ReplayContext *replayContext,
                               const CallCapture &call)
 {{
@@ -2232,6 +2232,38 @@ def write_capture_helper_header(all_param_types):
         out.close()
 
 
+def write_egl_capture_helper_header(all_param_types):
+
+    param_types = "\n    ".join(["T%s," % t for t in all_param_types])
+    param_union_values = "\n    ".join([format_param_type_union_type(t) for t in all_param_types])
+    get_param_val_specializations = "\n\n".join(
+        [format_get_param_val_specialization(t) for t in all_param_types])
+    access_param_value_cases = "\n".join(
+        [format_access_param_value_case(t) for t in all_param_types])
+    set_param_val_specializations = "\n\n".join(
+        [format_set_param_val_specialization(t) for t in all_param_types])
+    init_param_value_cases = "\n".join([format_init_param_value_case(t) for t in all_param_types])
+    resource_id_types = format_resource_id_types(all_param_types)
+
+    content = TEMPLATE_FRAME_CAPTURE_UTILS_HEADER.format(
+        script_name=os.path.basename(sys.argv[0]),
+        data_source_name="gl.xml and gl_angle_ext.xml",
+        param_types=param_types,
+        param_type_count=len(all_param_types),
+        param_union_values=param_union_values,
+        get_param_val_specializations=get_param_val_specializations,
+        access_param_value_cases=access_param_value_cases,
+        set_param_val_specializations=set_param_val_specializations,
+        init_param_value_cases=init_param_value_cases,
+        resource_id_types=resource_id_types)
+
+    path = path_to(os.path.join("libANGLE", "capture"), "egl_frame_capture_utils_autogen.h")
+
+    with open(path, "w") as out:
+        out.write(content)
+        out.close()
+
+
 def format_param_type_to_string_case(param_type):
     return TEMPLATE_PARAM_TYPE_TO_STRING_CASE.format(
         enum=param_type, type=get_gl_param_type_type(param_type))
@@ -2283,6 +2315,34 @@ def write_capture_helper_source(all_param_types):
         resource_id_type_name_cases=resource_id_type_name_cases)
 
     path = path_to(os.path.join("libANGLE", "capture"), "frame_capture_utils_autogen.cpp")
+
+    with open(path, "w") as out:
+        out.write(content)
+        out.close()
+
+
+def write_egl_capture_helper_source(all_param_types):
+
+    write_param_type_to_stream_cases = "\n".join(
+        [format_write_param_type_to_stream_case(t) for t in all_param_types])
+    param_type_to_string_cases = "\n".join(
+        [format_param_type_to_string_case(t) for t in all_param_types])
+
+    param_type_resource_id_cases = format_param_type_resource_id_cases(all_param_types)
+
+    resource_id_types = get_resource_id_types(all_param_types)
+    resource_id_type_name_cases = "\n".join(
+        [format_resource_id_type_name_case(t) for t in resource_id_types])
+
+    content = TEMPLATE_FRAME_CAPTURE_UTILS_SOURCE.format(
+        script_name=os.path.basename(sys.argv[0]),
+        data_source_name="gl.xml and gl_angle_ext.xml",
+        write_param_type_to_stream_cases=write_param_type_to_stream_cases,
+        param_type_to_string_cases=param_type_to_string_cases,
+        param_type_resource_id_cases=param_type_resource_id_cases,
+        resource_id_type_name_cases=resource_id_type_name_cases)
+
+    path = path_to(os.path.join("libANGLE", "capture"), "egl_frame_capture_utils_autogen.cpp")
 
     with open(path, "w") as out:
         out.write(content)
@@ -2371,6 +2431,33 @@ def write_capture_replay_source(api, all_commands_nodes, gles_command_names, cmd
     )
     source_file_path = registry_xml.script_relative(
         "../src/libANGLE/capture/frame_capture_replay_autogen.cpp")
+    with open(source_file_path, 'w') as f:
+        f.write(source_content)
+
+
+def write_egl_capture_replay_source(api, all_commands_nodes, egl_command_names,
+                                    cmd_packed_egl_enums, packed_param_types):
+    all_commands_names = set(egl_command_names)
+
+    command_to_param_types_mapping = dict()
+    for command_node in all_commands_nodes:
+        command_name = command_node.find('proto').find('name').text
+        if command_name not in all_commands_names:
+            continue
+
+        command_to_param_types_mapping[command_name] = get_command_params_text(
+            command_node, command_name)
+
+    call_replay_cases = format_capture_replay_call_case(api, command_to_param_types_mapping,
+                                                        cmd_packed_egl_enums, packed_param_types)
+
+    source_content = TEMPLATE_CAPTURE_REPLAY_SOURCE.format(
+        script_name=os.path.basename(sys.argv[0]),
+        data_source_name="gl.xml and gl_angle_ext.xml",
+        call_replay_cases=call_replay_cases,
+    )
+    source_file_path = registry_xml.script_relative(
+        "../src/libANGLE/capture/egl_frame_capture_replay_autogen.cpp")
     with open(source_file_path, 'w') as f:
         f.write(source_content)
 
@@ -3115,10 +3202,16 @@ def main():
                            libegl_windows_def_exports)
 
     all_gles_param_types = sorted(GLEntryPoints.all_param_types)
-    write_capture_helper_header(all_gles_param_types)
-    write_capture_helper_source(all_gles_param_types)
+    all_egl_param_types = sorted(EGLEntryPoints.all_param_types)
+    # Get a sorted list of param types without duplicates
+    all_param_types = sorted(list(set(all_gles_param_types + all_egl_param_types)))
+    write_capture_helper_header(all_param_types)
+    write_capture_helper_source(all_param_types)
     write_capture_replay_source(apis.GLES, xml.all_commands, all_commands_no_suffix,
                                 GLEntryPoints.get_packed_enums(), [])
+
+    # write_egl_capture_replay_source(apis.EGL, eglxml.all_commands, egl_commands,
+    #                                 EGLEntryPoints.get_packed_enums(), [])
 
 
 if __name__ == '__main__':
