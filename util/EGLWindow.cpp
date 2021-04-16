@@ -723,6 +723,21 @@ bool EGLWindow::makeCurrent()
     return true;
 }
 
+bool EGLWindow::makeCurrent(EGLContext context)
+{
+    if (eglMakeCurrent(mDisplay, mSurface, mSurface, context) == EGL_FALSE ||
+        eglGetError() != EGL_SUCCESS)
+    {
+        std::cout << "TIMTIM >> mDisplay = " << mDisplay << std::endl;
+        std::cout << "TIMTIM >> mSurface = " << mSurface << std::endl;
+        std::cout << "TIMTIM >> context = " << context << std::endl;
+        fprintf(stderr, "Error during eglMakeCurrent.\n");
+        return false;
+    }
+
+    return true;
+}
+
 bool EGLWindow::setSwapInterval(EGLint swapInterval)
 {
     if (eglSwapInterval(mDisplay, swapInterval) == EGL_FALSE || eglGetError() != EGL_SUCCESS)
