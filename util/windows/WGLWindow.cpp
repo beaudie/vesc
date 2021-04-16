@@ -206,7 +206,25 @@ bool WGLWindow::isGLInitialized() const
     return mWGLContext != nullptr;
 }
 
+// TODO - Returning an EGL context from WGL...?
+EGLContext EGLWindow::getContext()
+{
+    return nullptr;
+}
+
 bool WGLWindow::makeCurrent()
+{
+    if (_wglMakeCurrent(mDeviceContext, mWGLContext) == FALSE)
+    {
+        std::cerr << "Error during wglMakeCurrent.\n";
+        return false;
+    }
+
+    return true;
+}
+
+// TODO - Passing in an EGL context to WGL...?
+bool WGLWindow::makeCurrent(EGLContext context)
 {
     if (_wglMakeCurrent(mDeviceContext, mWGLContext) == FALSE)
     {
