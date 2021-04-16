@@ -923,14 +923,16 @@ class SamplerDesc final
 
     // 3 bits for compare op. (8 possible values)
     uint16_t mCompareOp : 3;
+    uint16_t mPadding;
 
-    // Border color and unnormalized coordinates implicitly set to contants.
+    // 20*8 bits for BorderColor
+    angle::ColorGeneric mBorderColor;
 
-    // 48 extra bits reserved for future use.
-    uint16_t mReserved[3];
+    // 128 extra bits reserved for future use.
+    uint64_t mReserved[2];
 };
 
-static_assert(sizeof(SamplerDesc) == 32, "Unexpected SamplerDesc size");
+static_assert(sizeof(SamplerDesc) == 64, "Unexpected SamplerDesc size");
 
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
