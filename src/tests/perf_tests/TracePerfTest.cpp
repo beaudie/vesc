@@ -982,6 +982,12 @@ TracePerfTest::TracePerfTest()
         }
     }
 
+    // TIMTIM - Remove
+    if (param.testID == RestrictedTraceID::asphalt_9)
+    {
+        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
@@ -1007,6 +1013,14 @@ void TracePerfTest::initializeBenchmark()
         angle::SetCWD(exeDir.c_str());
     }
 
+    if (!getGLWindow()->isEGL())
+    {
+        ERR() << "Only EGL is supported.";
+        mSkipTest = true;
+        return;
+    }
+
+    trace_angle::LoadEGL(TraceLoadProc);
     trace_angle::LoadGLES(TraceLoadProc);
 
     if (!mTraceLibrary->valid())
@@ -1088,7 +1102,11 @@ void TracePerfTest::initializeBenchmark()
     }
 
     // Potentially slow. Can load a lot of resources.
-    mTraceLibrary->setupReplay();
+    // Pass in the EGLWindow so we can create any additional contexts with
+    // EGLWindow::createContext().
+    ASSERT(getGLWindow()->isEGL());
+    EGLWindow *eglWindow = static_cast<EGLWindow *>(getGLWindow());
+    mTraceLibrary->setupReplay(eglWindow);
 
     glFinish();
 

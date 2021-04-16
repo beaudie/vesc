@@ -54,7 +54,7 @@ using DecompressCallback = uint8_t *(*)(const std::vector<uint8_t> &);
 
 using SetBinaryDataDecompressCallbackFunc = void (*)(DecompressCallback);
 using SetBinaryDataDirFunc                = void (*)(const char *);
-using SetupReplayFunc                     = void (*)();
+using SetupReplayFunc                     = void (*)(EGLWindow *);
 using ReplayFrameFunc                     = void (*)(uint32_t);
 using ResetReplayFunc                     = void (*)();
 using FinishReplayFunc                    = void (*)();
@@ -93,7 +93,7 @@ class TraceLibrary
 
     void replayFrame(uint32_t frameIndex) { callFunc<ReplayFrameFunc>("ReplayFrame", frameIndex); }
 
-    void setupReplay() { callFunc<SetupReplayFunc>("SetupReplay"); }
+    void setupReplay(EGLWindow *eglWindow) { callFunc<SetupReplayFunc>("SetupReplay", eglWindow); }
 
     void resetReplay() { callFunc<ResetReplayFunc>("ResetReplay"); }
 
