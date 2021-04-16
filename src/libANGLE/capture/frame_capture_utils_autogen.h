@@ -139,6 +139,7 @@ enum class ParamType
     TvoidConstPointerPointer,
     TvoidPointer,
     TvoidPointerPointer,
+    TGlContextID,
 };
 
 constexpr uint32_t kParamTypeCount = 122;
@@ -267,6 +268,7 @@ union ParamValue
     const void *const *voidConstPointerPointerVal;
     void *voidPointerVal;
     void **voidPointerPointerVal;
+    uint32_t glContextIdVal;
 };
 
 template <ParamType PType, typename T>
@@ -1083,6 +1085,12 @@ inline void **GetParamVal<ParamType::TvoidPointerPointer, void **>(const ParamVa
     return value.voidPointerPointerVal;
 }
 
+template <>
+inline uint32_t GetParamVal<ParamType::TGlContextID, uint32_t>(const ParamValue &value)
+{
+    return value.glContextIdVal;
+}
+
 template <ParamType PType, typename T>
 T GetParamVal(const ParamValue &value)
 {
@@ -1339,6 +1347,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TvoidPointer, T>(value);
         case ParamType::TvoidPointerPointer:
             return GetParamVal<ParamType::TvoidPointerPointer, T>(value);
+        case ParamType::TGlContextID:
+            return GetParamVal<ParamType::TGlContextID, T>(value);
     }
 }
 
@@ -2134,6 +2144,12 @@ inline void SetParamVal<ParamType::TvoidPointerPointer>(void **valueIn, ParamVal
     valueOut->voidPointerPointerVal = valueIn;
 }
 
+template <>
+inline void SetParamVal<ParamType::TGlContextID>(uint32_t valueIn, ParamValue *valueOut)
+{
+    valueOut->glContextIdVal = valueIn;
+}
+
 template <ParamType PType, typename T>
 void SetParamVal(T valueIn, ParamValue *valueOut)
 {
@@ -2510,6 +2526,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TvoidPointerPointer:
             SetParamVal<ParamType::TvoidPointerPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TGlContextID:
+            SetParamVal<ParamType::TGlContextID>(valueIn, valueOut);
             break;
     }
 }

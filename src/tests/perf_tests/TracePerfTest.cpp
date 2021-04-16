@@ -927,6 +927,11 @@ TracePerfTest::TracePerfTest()
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
 
+    if (param.testID == RestrictedTraceID::asphalt_9)
+    {
+        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+    }
+
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
     disableTestHarnessSwap();
 
@@ -1021,7 +1026,9 @@ void TracePerfTest::initializeBenchmark()
     }
 
     // Potentially slow. Can load a lot of resources.
-    mTraceLibrary->setupReplay();
+    // TIMTIM - Start of super hack time so we can create contexts.
+    EGLWindow *eglWindow = static_cast<EGLWindow *>(getGLWindow());
+    mTraceLibrary->setupReplay(eglWindow);
 
     glFinish();
 

@@ -42,6 +42,7 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessa
     if (usedInRecordedCommands())
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
+        ANGLE_TRY(finishRunningCommands(contextVk));
     }
 
     // Make sure the driver is done with the resource.

@@ -19,6 +19,7 @@
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/LoggingAnnotator.h"
@@ -71,6 +72,8 @@ struct DisplayState final : private angle::NonCopyable
     EGLNativeDisplayType displayId;
 };
 
+using ShareContextSet = std::set<gl::Context *>;
+
 class ShareGroup final : angle::NonCopyable
 {
   public:
@@ -86,6 +89,8 @@ class ShareGroup final : angle::NonCopyable
 
     angle::FrameCaptureShared *getFrameCaptureShared() { return mFrameCaptureShared.get(); }
 
+    ShareContextSet *getShareContextSet() { return &mShareContextSet; }
+
   protected:
     ~ShareGroup();
 
@@ -96,6 +101,9 @@ class ShareGroup final : angle::NonCopyable
 
     // Note: we use a raw pointer here so we can exclude frame capture sources from the build.
     std::unique_ptr<angle::FrameCaptureShared> mFrameCaptureShared;
+
+    // The list of contexts within the share group
+    ShareContextSet mShareContextSet;
 };
 
 // Constant coded here as a reasonable limit.

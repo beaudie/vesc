@@ -473,8 +473,12 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             WriteParamValueReplay<ParamType::TvoidConstPointer>(os, call,
                                                                 param.value.voidConstPointerVal);
             break;
+        case ParamType::TGlContextID:
+            WriteParamValueReplay<ParamType::TGlContextID>(os, call, param.value.glContextIdVal);
+            break;
         default:
             os << "unknown";
+            UNREACHABLE();
             break;
     }
 }
@@ -727,6 +731,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "void *";
         case ParamType::TvoidPointerPointer:
             return "void **";
+        case ParamType::TGlContextID:
+            return "uint32_t";
         default:
             UNREACHABLE();
             return "unknown";
