@@ -591,6 +591,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const angle::FrontendFeatures &getFrontendFeatures() const;
 
     angle::FrameCapture *getFrameCapture() { return mFrameCapture.get(); }
+    angle::FrameCapture *getFrameCapture() const { return mFrameCapture.get(); }
 
     const VertexArrayMap &getVertexArraysForCapture() const { return mVertexArrayMap; }
     const QueryMap &getQueriesForCapture() const { return mQueryMap; }

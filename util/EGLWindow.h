@@ -125,6 +125,7 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
     void swap() override;
     void destroyGL() override;
     bool makeCurrent() override;
+    bool makeCurrent(EGLContext context);
     bool hasError() const override;
     bool setSwapInterval(EGLint swapInterval) override;
     angle::GenericProc getProcAddress(const char *name) override;
