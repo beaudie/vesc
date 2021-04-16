@@ -102,6 +102,9 @@ extern ResourceMap gTransformFeedbackMap;
 extern ResourceMap gVertexArrayMap;
 using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;
 extern SyncResourceMap gSyncMap;
+using ContextMap = std::unordered_map<uint32_t, EGLContext>;
+extern ContextMap
+    gContextMap;  // TODO(http://www.anglebug.com/5878): avoid std::unordered_map, it's slow
 
 void UpdateClientArrayPointer(int arrayIndex, const void *data, uint64_t size);
 using BufferHandleMap = std::unordered_map<GLuint, void *>;
