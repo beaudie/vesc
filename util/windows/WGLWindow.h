@@ -35,7 +35,8 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
                       const ConfigParameters &configParams) override;
     void destroyGL() override;
     bool isGLInitialized() const override;
-
+    void *createContext(void *share) override;
+    bool makeCurrent(void *context) override;
     bool makeCurrent() override;
     void swap() override;
     bool hasError() const override;
@@ -45,6 +46,9 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
   private:
     WGLWindow(int glesMajorVersion, int glesMinorVersion);
     ~WGLWindow() override;
+
+    HGLRC createWglContext(const ConfigParameters &configParams, HGLRC shareContext);
+    bool makeWglCurrent(HGLRC context);
 
     // OS resources.
     HDC mDeviceContext;

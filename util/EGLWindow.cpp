@@ -467,7 +467,13 @@ bool EGLWindow::initializeSurface(OSWindow *osWindow,
     return true;
 }
 
-EGLContext EGLWindow::createContext(EGLContext share) const
+void *EGLWindow::createContext(void *share)
+{
+    EGLContext shareContext = reinterpret_cast<EGLContext>(share);
+    return reinterpret_cast<void *>(createEglContext(shareContext));
+}
+
+EGLContext EGLWindow::createEglContext(EGLContext share)
 {
     const char *displayExtensions = eglQueryString(mDisplay, EGL_EXTENSIONS);
 
@@ -652,7 +658,7 @@ EGLContext EGLWindow::createContext(EGLContext share) const
 
 bool EGLWindow::initializeContext()
 {
-    mContext = createContext(EGL_NO_CONTEXT);
+    mContext = createEglContext(EGL_NO_CONTEXT);
     if (mContext == EGL_NO_CONTEXT)
     {
         destroyGL();
@@ -750,9 +756,20 @@ EGLBoolean EGLWindow::FindEGLConfig(EGLDisplay dpy, const EGLint *attrib_list, E
     return EGL_FALSE;
 }
 
+bool EGLWindow::makeCurrent(void *context)
+{
+    EGLContext eglContext = reinterpret_cast<EGLContext>(context);
+    return makeEglCurrent(eglContext);
+}
+
 bool EGLWindow::makeCurrent()
 {
-    if (eglMakeCurrent(mDisplay, mSurface, mSurface, mContext) == EGL_FALSE ||
+    return makeEglCurrent(mContext);
+}
+
+bool EGLWindow::makeEglCurrent(EGLContext context)
+{
+    if (eglMakeCurrent(mDisplay, mSurface, mSurface, context) == EGL_FALSE ||
         eglGetError() != EGL_SUCCESS)
     {
         fprintf(stderr, "Error during eglMakeCurrent.\n");
