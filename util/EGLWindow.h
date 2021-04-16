@@ -81,6 +81,9 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
     virtual bool hasError() const                                   = 0;
     virtual bool setSwapInterval(EGLint swapInterval)               = 0;
     virtual angle::GenericProc getProcAddress(const char *name)     = 0;
+    // void* pointers can be EGLContext or HGLRC (WGL)
+    virtual void *createContext(void *share) = 0;
+    virtual bool makeCurrent(void *context)  = 0;
 
     bool isMultisample() const { return mConfigParams.multisample; }
     bool isDebugEnabled() const { return mConfigParams.debug; }
@@ -125,6 +128,8 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
     bool isGLInitialized() const override;
     void swap() override;
     void destroyGL() override;
+    void *createContext(void *share) override;
+    bool makeCurrent(void *context) override;
     bool makeCurrent() override;
     bool hasError() const override;
     bool setSwapInterval(EGLint swapInterval) override;
@@ -141,9 +146,6 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
                            angle::Library *glWindowingLibrary,
                            const ConfigParameters &params);
 
-    // Create an EGL context with this window's configuration
-    EGLContext createContext(EGLContext share) const;
-
     // Only initializes the Context.
     bool initializeContext();
 
@@ -154,8 +156,10 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
 
   private:
     EGLWindow(EGLint glesMajorVersion, EGLint glesMinorVersion);
-
     ~EGLWindow() override;
+
+    EGLContext createEglContext(EGLContext share);
+    bool makeEglCurrent(EGLContext context);
 
     EGLConfig mConfig;
     EGLDisplay mDisplay;

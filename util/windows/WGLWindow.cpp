@@ -116,8 +116,28 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
         }
     }
 
-    mWGLContext = _wglCreateContext(mDeviceContext);
-    if (!mWGLContext)
+    mWGLContext = createWglContext(nullptr);
+    if (mWGLContext == nullptr)
+    {
+        return false;
+    }
+
+    if (!makeCurrent())
+    {
+        return false;
+    }
+
+    mPlatform     = platformParams;
+    mConfigParams = configParams;
+
+    angle::LoadGLES(GetProcAddressWithFallback);
+    return true;
+}
+
+HGLRC WGLWindow::createWglContext(HGLRC shareContext)
+{
+    HGLRC context = _wglCreateContext(mDeviceContext);
+    if (!context)
     {
         std::cerr << "Failed to create a WGL context." << std::endl;
         return false;
@@ -125,6 +145,13 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
 
     if (!makeCurrent())
     {
+        std::cerr << "Failed to make WGL context current." << std::endl;
+        return false;
+    }
+
+    if (wglShareLists != nullptr && !wglShareLists(context, shareContext))
+    {
+        std::cerr << "Failed to add context to share list." << std::endl;
         return false;
     }
 
@@ -155,7 +182,7 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
     }
 
     // Tear down the context and create another with ES2 compatibility.
-    _wglDeleteContext(mWGLContext);
+    _wglDeleteContext(context);
 
     // This could be extended to cover ES1 compatiblity.
     int kCreateAttribs[] = {WGL_CONTEXT_MAJOR_VERSION_ARB,
@@ -167,23 +194,14 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
                             0,
                             0};
 
-    mWGLContext = _wglCreateContextAttribsARB(mDeviceContext, nullptr, kCreateAttribs);
-    if (!mWGLContext)
+    context = _wglCreateContextAttribsARB(mDeviceContext, shareContext, kCreateAttribs);
+    if (!context)
     {
         std::cerr << "Failed to create an ES2 compatible WGL context." << std::endl;
-        return false;
+        return nullptr;
     }
 
-    if (!makeCurrent())
-    {
-        return false;
-    }
-
-    mPlatform     = platformParams;
-    mConfigParams = configParams;
-
-    angle::LoadGLES(GetProcAddressWithFallback);
-    return true;
+    return context;
 }
 
 void WGLWindow::destroyGL()
@@ -206,9 +224,26 @@ bool WGLWindow::isGLInitialized() const
     return mWGLContext != nullptr;
 }
 
+void *createContext(void *share)
+{
+    HGLRC shareContext = reinterpret_cast<HGLRC>(share);
+    return reinterpret_cast<void *>(createWglContext(share));
+}
+
 bool WGLWindow::makeCurrent()
 {
-    if (_wglMakeCurrent(mDeviceContext, mWGLContext) == FALSE)
+    return makeWglCurrent(mWGLContext);
+}
+
+bool WGLWindow::makeCurrent(void *context)
+{
+    HGLRC wglContext = reinterpret_cast<HGLRC>(context);
+    return makeWglCurrent(wglContext);
+}
+
+bool WGLWindow::makeWglCurrent(HGLRC context)
+{
+    if (_wglMakeCurrent(mDeviceContext, context) == FALSE)
     {
         std::cerr << "Error during wglMakeCurrent.\n";
         return false;
