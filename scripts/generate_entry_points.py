@@ -635,7 +635,7 @@ using namespace gl;
 namespace angle
 {{
 
-void FrameCapture::ReplayCall(gl::Context *context,
+void FrameCaptureShared::ReplayCall(gl::Context *context,
                               ReplayContext *replayContext,
                               const CallCapture &call)
 {{
@@ -1604,17 +1604,25 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, is_explic
 
 
 def get_capture_param_type_name(param_type):
-
     pointer_count = param_type.count("*")
     is_const = "const" in param_type.split()
 
-    param_type = param_type.replace("*", "").strip()
-    param_type = " ".join([param for param in param_type.split() if param != "const"])
+    # EGL types are special
+    for egl_type, angle_type in EGL_PACKED_TYPES.items():
+        if angle_type == param_type:
+            return egl_type
 
-    if is_const:
-        param_type += "Const"
-    for x in range(pointer_count):
-        param_type += "Pointer"
+    param_type = param_type.replace("*", "")
+    param_type = param_type.replace("&", "")
+    param_type = param_type.replace("const", "")
+    param_type = param_type.replace("struct", "")
+    param_type = param_type.strip()
+
+    if "EGL" not in param_type:
+        if is_const and param_type != 'AttributeMap':
+            param_type += "Const"
+        for x in range(pointer_count):
+            param_type += "Pointer"
 
     return param_type
 
@@ -1637,6 +1645,11 @@ def format_capture_method(api, command, cmd_name, proto, params, all_param_types
 
         param_name = just_the_name_packed(param, packed_gl_enums)
         param_type = just_the_type_packed(param, packed_gl_enums).strip()
+
+        if 'AttributeMap' in param_type:
+            # egl::AttributeMap is too complex for ParamCapture to handle it.
+            continue
+
         pointer_count = param_type.count("*")
         capture_param_type = get_capture_param_type_name(param_type)
 
@@ -2144,6 +2157,36 @@ def is_packed_enum_param_type(param_type):
     return param_type[0:2] != "GL" and "void" not in param_type
 
 
+def add_namespace(param_type):
+    param_type = param_type.strip()
+
+    if param_type == 'AHardwareBufferConstPointer':
+        return param_type
+
+    if param_type[0:2] == "GL" or param_type[0:3] == "EGL" or "void" in param_type:
+        return param_type
+
+    primitive_types = [
+        'charConstPointer',
+    ]
+
+    # ANGLE namespaced EGL types
+    egl_namespace = [
+        'CompositorTiming',
+        'DevicePointer',
+        'ObjectType',
+        'StreamPointer',
+        'Timestamp',
+    ]
+
+    if param_type in primitive_types:
+        return param_type
+    elif param_type in egl_namespace:
+        return "egl::" + param_type
+    else:
+        return "gl::" + param_type
+
+
 def get_gl_pointer_type(param_type):
 
     if "ConstPointerPointer" in param_type:
@@ -2162,10 +2205,7 @@ def get_gl_pointer_type(param_type):
 
 
 def get_param_type_type(param_type):
-
-    if is_packed_enum_param_type(param_type):
-        param_type = "gl::" + param_type
-
+    param_type = add_namespace(param_type)
     return get_gl_pointer_type(param_type)
 
 
@@ -3171,8 +3211,11 @@ def main():
                            libegl_windows_def_exports)
 
     all_gles_param_types = sorted(GLEntryPoints.all_param_types)
-    write_capture_helper_header(all_gles_param_types)
-    write_capture_helper_source(all_gles_param_types)
+    all_egl_param_types = sorted(EGLEntryPoints.all_param_types)
+    # Get a sorted list of param types without duplicates
+    all_param_types = sorted(list(set(all_gles_param_types + all_egl_param_types)))
+    write_capture_helper_header(all_param_types)
+    write_capture_helper_source(all_param_types)
     write_capture_replay_source(apis.GLES, xml.all_commands, all_commands_no_suffix,
                                 GLEntryPoints.get_packed_enums(), [])
 
