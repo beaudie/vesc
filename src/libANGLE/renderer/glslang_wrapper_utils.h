@@ -17,6 +17,10 @@
 
 namespace rx
 {
+
+using UniformBindingIndexMap =
+    angle::HashMap<std::string, std::tuple<uint32_t, gl::ShaderBitSet, gl::ShaderType>>;
+
 constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Vertex, sh::vk::kDefaultUniformsNameVS},
     {gl::ShaderType::TessControl, sh::vk::kDefaultUniformsNameTCS},
@@ -119,6 +123,8 @@ struct ShaderInterfaceVariableInfo
     // vertex attribute aliasing transformation only.
     uint8_t attributeComponentCount = 0;
     uint8_t attributeLocationCount  = 0;
+    // Indicate if this variable has been deduplicated.
+    bool isDuplicate = false;
 };
 
 // TODO: http://anglebug.com/4524: Need a different hash key than a string, since that's slow to
@@ -135,6 +141,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
                                            const std::string &variableName) const;
     ShaderInterfaceVariableInfo &get(gl::ShaderType shaderType, const std::string &variableName);
     ShaderInterfaceVariableInfo &add(gl::ShaderType shaderType, const std::string &variableName);
+    void markAsDuplicate(gl::ShaderType shaderType, const std::string &variableName);
     ShaderInterfaceVariableInfo &addOrGet(gl::ShaderType shaderType,
                                           const std::string &variableName);
     size_t variableCount(gl::ShaderType shaderType) const { return mData[shaderType].size(); }
@@ -175,6 +182,7 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                             const gl::ShaderType frontShaderType,
                             bool isTransformFeedbackStage,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
+                            UniformBindingIndexMap *uniformBindingIndexMapOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
 void GlslangAssignTransformFeedbackLocations(gl::ShaderType shaderType,

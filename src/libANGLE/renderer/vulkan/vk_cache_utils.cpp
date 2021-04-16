@@ -22,6 +22,7 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
+#include <iostream>
 #include <type_traits>
 
 namespace rx

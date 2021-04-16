@@ -106,14 +106,12 @@ ShaderInterfaceVariableInfo *AddResourceInfoToAllStages(ShaderInterfaceVariableI
 }
 
 ShaderInterfaceVariableInfo *AddResourceInfo(ShaderInterfaceVariableInfoMap *infoMap,
+                                             gl::ShaderBitSet stages,
                                              gl::ShaderType shaderType,
                                              const std::string &varName,
                                              uint32_t descriptorSet,
                                              uint32_t binding)
 {
-    gl::ShaderBitSet stages;
-    stages.set(shaderType);
-
     ShaderInterfaceVariableInfo &info = infoMap->add(shaderType, varName);
     info.descriptorSet                = descriptorSet;
     info.binding                      = binding;
@@ -226,7 +224,8 @@ void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
     // set/binding.
     for (uint32_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
-        AddResourceInfo(variableInfoMapOut, shaderType, GetXfbBufferName(bufferIndex),
+        AddResourceInfo(variableInfoMapOut, gl::ShaderBitSet().set(shaderType), shaderType,
+                        GetXfbBufferName(bufferIndex),
                         programInterfaceInfo->uniformsAndXfbDescriptorSetIndex,
                         programInterfaceInfo->currentUniformBindingIndex);
         ++programInterfaceInfo->currentUniformBindingIndex;
@@ -672,7 +671,8 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
 {
     if (programExecutable.hasLinkedShaderStage(shaderType))
     {
-        AddResourceInfo(variableInfoMapOut, shaderType, kDefaultUniformNames[shaderType],
+        AddResourceInfo(variableInfoMapOut, gl::ShaderBitSet().set(shaderType), shaderType,
+                        kDefaultUniformNames[shaderType],
                         programInterfaceInfo->uniformsAndXfbDescriptorSetIndex,
                         programInterfaceInfo->currentUniformBindingIndex);
         ++programInterfaceInfo->currentUniformBindingIndex;
@@ -683,14 +683,27 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
     }
 }
 
-// TODO: http://anglebug.com/4512: Need to combine descriptor set bindings across
-// shader stages.
+bool InsertIfAbsent(UniformBindingIndexMap *uniformBindingIndexMapOut,
+                    const std::string &name,
+                    const uint32_t bindingIndex,
+                    const gl::ShaderType shaderType)
+{
+    if (uniformBindingIndexMapOut->count(name) == 0)
+    {
+        (*uniformBindingIndexMapOut)[name] = std::tuple<uint32_t, gl::ShaderBitSet, gl::ShaderType>(
+            bindingIndex, gl::ShaderBitSet(), shaderType);
+        return true;
+    }
+    return false;
+}
+
 void AssignInputAttachmentBindings(const GlslangSourceOptions &options,
                                    const gl::ProgramExecutable &programExecutable,
                                    const std::vector<gl::LinkedUniform> &uniforms,
                                    const gl::RangeUI &inputAttachmentUniformRange,
                                    const gl::ShaderType shaderType,
                                    GlslangProgramInterfaceInfo *programInterfaceInfo,
+                                   UniformBindingIndexMap *uniformBindingIndexMapOut,
                                    ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     const uint32_t baseInputAttachmentBindingIndex =
@@ -710,9 +723,23 @@ void AssignInputAttachmentBindings(const GlslangSourceOptions &options,
             const uint32_t inputAttachmentBindingIndex =
                 baseInputAttachmentBindingIndex + inputAttachmentUniform.location;
 
-            AddResourceInfo(variableInfoMapOut, shaderType, mappedInputAttachmentName,
-                            programInterfaceInfo->shaderResourceDescriptorSetIndex,
-                            inputAttachmentBindingIndex);
+            if (!InsertIfAbsent(uniformBindingIndexMapOut, mappedInputAttachmentName,
+                                inputAttachmentBindingIndex, shaderType))
+            {
+                // Mark the previous shader type used with this name as a duplicate and update the
+                // last added shaderType.
+                gl::ShaderType &previousShaderType =
+                    std::get<2>((*uniformBindingIndexMapOut)[mappedInputAttachmentName]);
+                variableInfoMapOut->markAsDuplicate(previousShaderType, mappedInputAttachmentName);
+                previousShaderType = shaderType;
+            }
+            gl::ShaderBitSet &shaderBitSet =
+                std::get<1>((*uniformBindingIndexMapOut)[mappedInputAttachmentName]);
+            shaderBitSet.set(shaderType);
+            const uint32_t bindingIndex =
+                std::get<0>((*uniformBindingIndexMapOut)[mappedInputAttachmentName]);
+            AddResourceInfo(variableInfoMapOut, shaderBitSet, shaderType, mappedInputAttachmentName,
+                            programInterfaceInfo->shaderResourceDescriptorSetIndex, bindingIndex);
 
             hasFragmentInOutVars = true;
         }
@@ -727,13 +754,12 @@ void AssignInputAttachmentBindings(const GlslangSourceOptions &options,
     }
 }
 
-// TODO: http://anglebug.com/4512: Need to combine descriptor set bindings across
-// shader stages.
 void AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
                                   const gl::ProgramExecutable &programExecutable,
                                   const std::vector<gl::InterfaceBlock> &blocks,
                                   const gl::ShaderType shaderType,
                                   GlslangProgramInterfaceInfo *programInterfaceInfo,
+                                  UniformBindingIndexMap *uniformBindingIndexMapOut,
                                   ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     for (const gl::InterfaceBlock &block : blocks)
@@ -743,22 +769,40 @@ void AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
             // TODO: http://anglebug.com/4523: All blocks should be active
             if (programExecutable.hasLinkedShaderStage(shaderType) && block.isActive(shaderType))
             {
-                AddResourceInfo(variableInfoMapOut, shaderType, block.mappedName,
+                uint32_t binding = programInterfaceInfo->currentShaderResourceBindingIndex;
+                if (InsertIfAbsent(uniformBindingIndexMapOut, block.mappedName, binding,
+                                   shaderType))
+                {
+                    ++programInterfaceInfo->currentShaderResourceBindingIndex;
+                }
+                else
+                {
+                    // Mark the previous shader type used with this name as a duplicate and update
+                    // the last added shaderType.
+                    gl::ShaderType &previousShaderType =
+                        std::get<2>((*uniformBindingIndexMapOut)[block.mappedName]);
+                    variableInfoMapOut->markAsDuplicate(previousShaderType, block.mappedName);
+                    previousShaderType = shaderType;
+                }
+                gl::ShaderBitSet &shaderBitSet =
+                    std::get<1>((*uniformBindingIndexMapOut)[block.mappedName]);
+                shaderBitSet.set(shaderType);
+                const uint32_t bindingIndex =
+                    std::get<0>((*uniformBindingIndexMapOut)[block.mappedName]);
+                AddResourceInfo(variableInfoMapOut, shaderBitSet, shaderType, block.mappedName,
                                 programInterfaceInfo->shaderResourceDescriptorSetIndex,
-                                programInterfaceInfo->currentShaderResourceBindingIndex);
-                ++programInterfaceInfo->currentShaderResourceBindingIndex;
+                                bindingIndex);
             }
         }
     }
 }
 
-// TODO: http://anglebug.com/4512: Need to combine descriptor set bindings across
-// shader stages.
 void AssignAtomicCounterBufferBindings(const GlslangSourceOptions &options,
                                        const gl::ProgramExecutable &programExecutable,
                                        const std::vector<gl::AtomicCounterBuffer> &buffers,
                                        const gl::ShaderType shaderType,
                                        GlslangProgramInterfaceInfo *programInterfaceInfo,
+                                       UniformBindingIndexMap *uniformBindingIndexMapOut,
                                        ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     if (buffers.size() == 0)
@@ -768,21 +812,39 @@ void AssignAtomicCounterBufferBindings(const GlslangSourceOptions &options,
 
     if (programExecutable.hasLinkedShaderStage(shaderType))
     {
-        AddResourceInfo(variableInfoMapOut, shaderType, sh::vk::kAtomicCountersBlockName,
-                        programInterfaceInfo->shaderResourceDescriptorSetIndex,
-                        programInterfaceInfo->currentShaderResourceBindingIndex);
-        ++programInterfaceInfo->currentShaderResourceBindingIndex;
+        if (InsertIfAbsent(uniformBindingIndexMapOut, sh::vk::kAtomicCountersBlockName,
+                           programInterfaceInfo->currentShaderResourceBindingIndex, shaderType))
+        {
+            ++programInterfaceInfo->currentShaderResourceBindingIndex;
+        }
+        else
+        {
+            // Mark the previous shader type used with this name as a duplicate and update the last
+            // added shaderType.
+            gl::ShaderType &previousShaderType =
+                std::get<2>((*uniformBindingIndexMapOut)[sh::vk::kAtomicCountersBlockName]);
+            variableInfoMapOut->markAsDuplicate(previousShaderType,
+                                                sh::vk::kAtomicCountersBlockName);
+            previousShaderType = shaderType;
+        }
+        gl::ShaderBitSet &shaderBitSet =
+            std::get<1>((*uniformBindingIndexMapOut)[sh::vk::kAtomicCountersBlockName]);
+        shaderBitSet.set(shaderType);
+        const uint32_t bindingIndex =
+            std::get<0>((*uniformBindingIndexMapOut)[sh::vk::kAtomicCountersBlockName]);
+        AddResourceInfo(variableInfoMapOut, shaderBitSet, shaderType,
+                        sh::vk::kAtomicCountersBlockName,
+                        programInterfaceInfo->shaderResourceDescriptorSetIndex, bindingIndex);
     }
 }
 
-// TODO: http://anglebug.com/4512: Need to combine descriptor set bindings across
-// shader stages.
 void AssignImageBindings(const GlslangSourceOptions &options,
                          const gl::ProgramExecutable &programExecutable,
                          const std::vector<gl::LinkedUniform> &uniforms,
                          const gl::RangeUI &imageUniformRange,
                          const gl::ShaderType shaderType,
                          GlslangProgramInterfaceInfo *programInterfaceInfo,
+                         UniformBindingIndexMap *uniformBindingIndexMapOut,
                          ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     for (unsigned int uniformIndex : imageUniformRange)
@@ -794,10 +856,27 @@ void AssignImageBindings(const GlslangSourceOptions &options,
         {
             if (programExecutable.hasLinkedShaderStage(shaderType))
             {
-                AddResourceInfo(variableInfoMapOut, shaderType, name,
+                if (InsertIfAbsent(uniformBindingIndexMapOut, name,
+                                   programInterfaceInfo->currentShaderResourceBindingIndex,
+                                   shaderType))
+                {
+                    ++programInterfaceInfo->currentShaderResourceBindingIndex;
+                }
+                else if (imageUniform.isActive(shaderType))
+                {
+                    // Mark the previous shader type used with this name as a duplicate and update
+                    // the last added shaderType.
+                    gl::ShaderType &previousShaderType =
+                        std::get<2>((*uniformBindingIndexMapOut)[name]);
+                    variableInfoMapOut->markAsDuplicate(previousShaderType, name);
+                    previousShaderType = shaderType;
+                }
+                gl::ShaderBitSet &shaderBitSet = std::get<1>((*uniformBindingIndexMapOut)[name]);
+                shaderBitSet.set(shaderType);
+                const uint32_t bindingIndex = std::get<0>((*uniformBindingIndexMapOut)[name]);
+                AddResourceInfo(variableInfoMapOut, shaderBitSet, shaderType, name,
                                 programInterfaceInfo->shaderResourceDescriptorSetIndex,
-                                programInterfaceInfo->currentShaderResourceBindingIndex);
-                ++programInterfaceInfo->currentShaderResourceBindingIndex;
+                                bindingIndex);
             }
         }
     }
@@ -807,38 +886,42 @@ void AssignNonTextureBindings(const GlslangSourceOptions &options,
                               const gl::ProgramExecutable &programExecutable,
                               const gl::ShaderType shaderType,
                               GlslangProgramInterfaceInfo *programInterfaceInfo,
+                              UniformBindingIndexMap *uniformBindingIndexMapOut,
                               ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     const std::vector<gl::LinkedUniform> &uniforms = programExecutable.getUniforms();
     const gl::RangeUI &inputAttachmentUniformRange = programExecutable.getFragmentInoutRange();
     AssignInputAttachmentBindings(options, programExecutable, uniforms, inputAttachmentUniformRange,
-                                  shaderType, programInterfaceInfo, variableInfoMapOut);
+                                  shaderType, programInterfaceInfo, uniformBindingIndexMapOut,
+                                  variableInfoMapOut);
 
     const std::vector<gl::InterfaceBlock> &uniformBlocks = programExecutable.getUniformBlocks();
     AssignInterfaceBlockBindings(options, programExecutable, uniformBlocks, shaderType,
-                                 programInterfaceInfo, variableInfoMapOut);
+                                 programInterfaceInfo, uniformBindingIndexMapOut,
+                                 variableInfoMapOut);
 
     const std::vector<gl::InterfaceBlock> &storageBlocks =
         programExecutable.getShaderStorageBlocks();
     AssignInterfaceBlockBindings(options, programExecutable, storageBlocks, shaderType,
-                                 programInterfaceInfo, variableInfoMapOut);
+                                 programInterfaceInfo, uniformBindingIndexMapOut,
+                                 variableInfoMapOut);
 
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
         programExecutable.getAtomicCounterBuffers();
     AssignAtomicCounterBufferBindings(options, programExecutable, atomicCounterBuffers, shaderType,
-                                      programInterfaceInfo, variableInfoMapOut);
+                                      programInterfaceInfo, uniformBindingIndexMapOut,
+                                      variableInfoMapOut);
 
     const gl::RangeUI &imageUniformRange = programExecutable.getImageUniformRange();
     AssignImageBindings(options, programExecutable, uniforms, imageUniformRange, shaderType,
-                        programInterfaceInfo, variableInfoMapOut);
+                        programInterfaceInfo, uniformBindingIndexMapOut, variableInfoMapOut);
 }
 
-// TODO: http://anglebug.com/4512: Need to combine descriptor set bindings across
-// shader stages.
 void AssignTextureBindings(const GlslangSourceOptions &options,
                            const gl::ProgramExecutable &programExecutable,
                            const gl::ShaderType shaderType,
                            GlslangProgramInterfaceInfo *programInterfaceInfo,
+                           UniformBindingIndexMap *uniformBindingIndexMapOut,
                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     // Assign textures to a descriptor set and binding.
@@ -862,10 +945,27 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
             if (programExecutable.hasLinkedShaderStage(shaderType) &&
                 samplerUniform.isActive(shaderType))
             {
-                AddResourceInfo(variableInfoMapOut, shaderType, samplerName,
-                                programInterfaceInfo->textureDescriptorSetIndex,
-                                programInterfaceInfo->currentTextureBindingIndex);
-                ++programInterfaceInfo->currentTextureBindingIndex;
+                if (InsertIfAbsent(uniformBindingIndexMapOut, samplerName,
+                                   programInterfaceInfo->currentTextureBindingIndex, shaderType))
+                {
+                    ++programInterfaceInfo->currentTextureBindingIndex;
+                }
+                else
+                {
+                    // Mark the previous shader type used with this name as a duplicate and update
+                    // the last added shaderType.
+                    gl::ShaderType &previousShaderType =
+                        std::get<2>((*uniformBindingIndexMapOut)[samplerName]);
+                    variableInfoMapOut->markAsDuplicate(previousShaderType, samplerName);
+                    previousShaderType = shaderType;
+                }
+                gl::ShaderBitSet &shaderBitSet =
+                    std::get<1>((*uniformBindingIndexMapOut)[samplerName]);
+                shaderBitSet.set(shaderType);
+                const uint32_t bindingIndex =
+                    std::get<0>((*uniformBindingIndexMapOut)[samplerName]);
+                AddResourceInfo(variableInfoMapOut, shaderBitSet, shaderType, samplerName,
+                                programInterfaceInfo->textureDescriptorSetIndex, bindingIndex);
             }
         }
     }
@@ -4654,6 +4754,13 @@ ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::get(gl::ShaderType 
     return it->second;
 }
 
+void ShaderInterfaceVariableInfoMap::markAsDuplicate(gl::ShaderType shaderType,
+                                                     const std::string &variableName)
+{
+    ASSERT(contains(shaderType, variableName));
+    mData[shaderType][variableName].isDuplicate = true;
+}
+
 ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::add(gl::ShaderType shaderType,
                                                                  const std::string &variableName)
 {
@@ -4740,6 +4847,7 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                             const gl::ShaderType frontShaderType,
                             bool isTransformFeedbackStage,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
+                            UniformBindingIndexMap *uniformBindingIndexMapOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     const gl::ProgramExecutable &programExecutable = programState.getExecutable();
@@ -4788,9 +4896,9 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
     AssignUniformBindings(options, programExecutable, shaderType, programInterfaceInfo,
                           variableInfoMapOut);
     AssignTextureBindings(options, programExecutable, shaderType, programInterfaceInfo,
-                          variableInfoMapOut);
+                          uniformBindingIndexMapOut, variableInfoMapOut);
     AssignNonTextureBindings(options, programExecutable, shaderType, programInterfaceInfo,
-                             variableInfoMapOut);
+                             uniformBindingIndexMapOut, variableInfoMapOut);
 
     if (options.supportsTransformFeedbackEmulation &&
         gl::ShaderTypeSupportsTransformFeedback(shaderType))
@@ -4879,14 +4987,14 @@ void GlslangGetShaderSpirvCode(const GlslangSourceOptions &options,
                                                     programInterfaceInfo, variableInfoMapOut);
         }
     }
-
+    UniformBindingIndexMap uniformBindingIndexMap;
     for (const gl::ShaderType shaderType : programState.getExecutable().getLinkedShaderStages())
     {
         const bool isXfbStage =
             shaderType == xfbStage && !programState.getLinkedTransformFeedbackVaryings().empty();
         GlslangAssignLocations(options, programState, resources.varyingPacking, shaderType,
                                frontShaderType, isXfbStage, programInterfaceInfo,
-                               variableInfoMapOut);
+                               &uniformBindingIndexMap, variableInfoMapOut);
 
         frontShaderType = shaderType;
     }
