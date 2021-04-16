@@ -39,8 +39,10 @@
 #include "libANGLE/capture/capture_gles_ext_autogen.h"
 #include "libANGLE/capture/frame_capture_utils.h"
 #include "libANGLE/capture/gl_enum_utils.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 
 #define USE_SYSTEM_ZLIB
 #include "compression_utils_portable.h"
@@ -1270,16 +1272,44 @@ void WriteWindowSurfaceContextCppReplay(bool compression,
         out << setupCallStream.str();
         out << "}\n";
         out << "\n";
+
         out << "void SetupReplay()\n";
         out << "{\n";
-        out << "    " << captureLabel << "::InitReplay();\n";
+        out << "    EGLContext context = eglGetCurrentContext();\n";
+        out << "    gContextMap[" << context->id().value << "] = context;\n";
+        out << "\n";
 
         // Setup all of the shared objects.
+        out << "    " << captureLabel << "::InitReplay();\n";
         out << "    " << captureLabel << "::" << FmtSetupFunction(kNoPartId, kSharedContextId)
             << ";\n";
 
-        // Setup the presentation (this) context before any other contexts in the share group.
+        // Setup the presentation (this) context first.
         out << "    " << FmtSetupFunction(kNoPartId, context->id()) << ";\n";
+        out << "\n";
+
+        // Setup each of the auxiliary contexts.
+        for (gl::Context *shareContext : *shareContextSet)
+        {
+            // Skip the presentation context, sicne that context was created by the test framework.
+            if (shareContext->id() == context->id())
+            {
+                continue;
+            }
+
+            out << "    EGLContext context" << shareContext->id()
+                << " = eglCreateContext(nullptr, nullptr, context, nullptr);\n";
+            out << "    eglMakeCurrent(nullptr, nullptr, nullptr, context" << shareContext->id()
+                << ");\n";
+            out << "    gContextMap[" << shareContext->id().value << "] = context"
+                << shareContext->id() << ";\n";
+            out << "    " << captureLabel << "::" << FmtSetupFunction(kNoPartId, shareContext->id())
+                << ";\n";
+        }
+
+        out << "\n";
+        out << "    eglMakeCurrent(nullptr, nullptr, nullptr, context);\n";
+
         out << "}\n";
         out << "\n";
     }
@@ -5046,6 +5076,27 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
 
     if (isCallValid)
     {
+        // If the context ID has changed, then we need to inject an eglMakeCurrent() call.
+        if (mLastContextId != context->id().value)
+        {
+            // Create the eglMakeCurrent() call
+            ParamBuffer paramBuffer;
+            // The EGLDisplay and EGLSurface values can't be known here, since we may not even be
+            // running the trace with ANGLE.
+            // The EGLContext value is actually the context ID, so we can look it up in
+            // 'gContextMap'.
+            paramBuffer.addValueParam("display", ParamType::TEGLDisplay,
+                                      reinterpret_cast<EGLDisplay>(0));
+            paramBuffer.addValueParam("draw", ParamType::TEGLSurface,
+                                      reinterpret_cast<EGLSurface>(0));
+            paramBuffer.addValueParam("read", ParamType::TEGLSurface,
+                                      reinterpret_cast<EGLSurface>(0));
+            paramBuffer.addValueParam("context", ParamType::TEGLContext,
+                                      reinterpret_cast<EGLContext>(context->id().value));
+            mFrameCalls.emplace_back("eglMakeCurrent", std::move(paramBuffer));
+            mLastContextId = context->id().value;
+        }
+
         mFrameCalls.emplace_back(std::move(call));
     }
     else
@@ -6361,6 +6412,14 @@ void WriteParamValueReplay<ParamType::TGLubyte>(std::ostream &os,
 {
     const int v = value;
     os << v;
+}
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLContext>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   EGLContext value)
+{
+    os << "gContextMap[" << reinterpret_cast<size_t>(value) << "]";
 }
 
 }  // namespace angle

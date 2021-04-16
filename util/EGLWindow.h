@@ -76,10 +76,13 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
     virtual bool isGLInitialized() const                            = 0;
     virtual void swap()                                             = 0;
     virtual void destroyGL()                                        = 0;
+    virtual EGLContext getContext()                                 = 0;
     virtual bool makeCurrent()                                      = 0;
+    virtual bool makeCurrent(EGLContext context)                    = 0;
     virtual bool hasError() const                                   = 0;
     virtual bool setSwapInterval(EGLint swapInterval)               = 0;
     virtual angle::GenericProc getProcAddress(const char *name)     = 0;
+    virtual bool isEGL()                                            = 0;
 
     bool isMultisample() const { return mConfigParams.multisample; }
     bool isDebugEnabled() const { return mConfigParams.debug; }
@@ -124,10 +127,13 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
     bool isGLInitialized() const override;
     void swap() override;
     void destroyGL() override;
+    EGLContext getContext() override;
     bool makeCurrent() override;
+    bool makeCurrent(EGLContext context) override;
     bool hasError() const override;
     bool setSwapInterval(EGLint swapInterval) override;
     angle::GenericProc getProcAddress(const char *name) override;
+    bool isEGL() override { return true; }
 
     // Only initializes the Display.
     bool initializeDisplay(OSWindow *osWindow,
