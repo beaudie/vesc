@@ -518,6 +518,7 @@ class FrameCaptureShared final : angle::NonCopyable
                            const CallCapture &call);
 
     std::vector<CallCapture> mFrameCalls;
+    uint32_t mLastContextId;
 
     // We save one large buffer of binary data for the whole CPP replay.
     // This simplifies a lot of file management.
@@ -539,6 +540,7 @@ class FrameCaptureShared final : angle::NonCopyable
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
     BufferDataMap mBufferDataMap;
+    gl::ContextID mPresentationContextID;
 
     ResourceTracker mResourceTracker;
 
@@ -555,7 +557,6 @@ class FrameCaptureShared final : angle::NonCopyable
     ProgramSourceMap mCachedProgramSources;
 
     // Cache a shadow copy of texture level data
-    TextureLevels mCachedTextureLevels;
     TextureLevelDataMap mCachedTextureLevelData;
 
     gl::ContextID mWindowSurfaceContextID;
@@ -787,6 +788,11 @@ template <>
 void WriteParamValueReplay<ParamType::TGLubyte>(std::ostream &os,
                                                 const CallCapture &call,
                                                 GLubyte value);
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLContext>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   EGLContext value);
 
 template <>
 void WriteParamValueReplay<ParamType::TEGLDEBUGPROCKHR>(std::ostream &os,
