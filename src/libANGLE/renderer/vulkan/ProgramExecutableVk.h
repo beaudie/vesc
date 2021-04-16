@@ -241,6 +241,7 @@ class ProgramExecutableVk
         VkDescriptorSet *descriptorSetOut);
     angle::Result updateBuffersDescriptorSet(
         ContextVk *contextVk,
+        std::unordered_set<std::string> &blockNames,
         const gl::ShaderType shaderType,
         const vk::ShaderBuffersDescriptorDesc &shaderBuffersDesc,
         const std::vector<gl::InterfaceBlock> &blocks,
