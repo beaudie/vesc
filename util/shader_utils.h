@@ -188,6 +188,42 @@ ANGLE_UTIL_EXPORT const char *RedGreenGradient();
 
 }  // namespace fs
 }  // namespace essl31_shaders
+
+namespace essl32_shaders
+{
+
+ANGLE_UTIL_EXPORT const char *PositionAttrib();
+
+namespace vs
+{
+
+// A shader that sets gl_Position to zero.
+ANGLE_UTIL_EXPORT const char *Zero();
+
+// A shader that sets gl_Position to attribute a_position.
+ANGLE_UTIL_EXPORT const char *Simple();
+
+// A shader that simply passes through attribute a_position, setting it to gl_Position and varying
+// v_position.
+ANGLE_UTIL_EXPORT const char *Passthrough();
+
+}  // namespace vs
+
+namespace fs
+{
+
+// A shader that fills with 100% opaque red.
+ANGLE_UTIL_EXPORT const char *Red();
+
+// A shader that fills with 100% opaque green.
+ANGLE_UTIL_EXPORT const char *Green();
+
+// A shader that renders a simple gradient of red to green. Needs varying v_position.
+ANGLE_UTIL_EXPORT const char *RedGreenGradient();
+
+}  // namespace fs
+}  // namespace essl32_shaders
+
 }  // namespace angle
 
 #endif  // SAMPLE_UTIL_SHADER_UTILS_H
