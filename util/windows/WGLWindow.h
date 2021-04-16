@@ -41,6 +41,7 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
     bool hasError() const override;
     bool setSwapInterval(EGLint swapInterval) override;
     angle::GenericProc getProcAddress(const char *name) override;
+    bool isEGL() override { return false; }
 
   private:
     WGLWindow(int glesMajorVersion, int glesMinorVersion);
