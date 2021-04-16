@@ -1377,6 +1377,9 @@ bool ValidateTexStorage3DEXT(const Context *context,
                              GLsizei height,
                              GLsizei depth);
 
+// GL_KHR_blend_equation_advanced
+bool ValidateBlendBarrierKHR(const Context *context);
+
 // GL_KHR_debug
 bool ValidateDebugMessageCallbackKHR(const Context *context,
                                      GLDEBUGPROCKHR callback,
