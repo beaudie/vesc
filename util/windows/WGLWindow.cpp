@@ -116,61 +116,9 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
         }
     }
 
-    mWGLContext = _wglCreateContext(mDeviceContext);
-    if (!mWGLContext)
+    mWGLContext = createContextImpl(configParams, nullptr);
+    if (mWGLContext == nullptr)
     {
-        std::cerr << "Failed to create a WGL context." << std::endl;
-        return false;
-    }
-
-    if (!makeCurrent())
-    {
-        return false;
-    }
-
-    // Reload entry points to capture extensions.
-    angle::LoadWGL(GetProcAddressWithFallback);
-
-    if (!_wglGetExtensionsStringARB)
-    {
-        std::cerr << "Driver does not expose wglGetExtensionsStringARB." << std::endl;
-        return false;
-    }
-
-    const char *extensionsString = _wglGetExtensionsStringARB(mDeviceContext);
-
-    std::vector<std::string> extensions;
-    angle::SplitStringAlongWhitespace(extensionsString, &extensions);
-
-    if (!HasExtension(extensions, "WGL_EXT_create_context_es2_profile"))
-    {
-        std::cerr << "Driver does not expose WGL_EXT_create_context_es2_profile." << std::endl;
-        return false;
-    }
-
-    if (configParams.webGLCompatibility.valid() || configParams.robustResourceInit.valid())
-    {
-        std::cerr << "WGLWindow does not support the requested feature set." << std::endl;
-        return false;
-    }
-
-    // Tear down the context and create another with ES2 compatibility.
-    _wglDeleteContext(mWGLContext);
-
-    // This could be extended to cover ES1 compatiblity.
-    int kCreateAttribs[] = {WGL_CONTEXT_MAJOR_VERSION_ARB,
-                            mClientMajorVersion,
-                            WGL_CONTEXT_MINOR_VERSION_ARB,
-                            mClientMinorVersion,
-                            WGL_CONTEXT_PROFILE_MASK_ARB,
-                            WGL_CONTEXT_ES2_PROFILE_BIT_EXT,
-                            0,
-                            0};
-
-    mWGLContext = _wglCreateContextAttribsARB(mDeviceContext, nullptr, kCreateAttribs);
-    if (!mWGLContext)
-    {
-        std::cerr << "Failed to create an ES2 compatible WGL context." << std::endl;
         return false;
     }
 
@@ -184,6 +132,70 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
 
     angle::LoadGLES(GetProcAddressWithFallback);
     return true;
+}
+
+HGLRC WGLWindow::createContextImpl(const ConfigParameters &configParams, HGLRC shareContext)
+{
+    HGLRC context = _wglCreateContext(mDeviceContext);
+    if (!context)
+    {
+        std::cerr << "Failed to create a WGL context." << std::endl;
+        return context;
+    }
+
+    if (!makeCurrentImpl(context))
+    {
+        std::cerr << "Failed to make WGL context current." << std::endl;
+        return context;
+    }
+
+    // Reload entry points to capture extensions.
+    angle::LoadWGL(GetProcAddressWithFallback);
+
+    if (!_wglGetExtensionsStringARB)
+    {
+        std::cerr << "Driver does not expose wglGetExtensionsStringARB." << std::endl;
+        return context;
+    }
+
+    const char *extensionsString = _wglGetExtensionsStringARB(mDeviceContext);
+
+    std::vector<std::string> extensions;
+    angle::SplitStringAlongWhitespace(extensionsString, &extensions);
+
+    if (!HasExtension(extensions, "WGL_EXT_create_context_es2_profile"))
+    {
+        std::cerr << "Driver does not expose WGL_EXT_create_context_es2_profile." << std::endl;
+        return context;
+    }
+
+    if (mConfigParams.webGLCompatibility.valid() || mConfigParams.robustResourceInit.valid())
+    {
+        std::cerr << "WGLWindow does not support the requested feature set." << std::endl;
+        return context;
+    }
+
+    // Tear down the context and create another with ES2 compatibility.
+    _wglDeleteContext(context);
+
+    // This could be extended to cover ES1 compatiblity.
+    int kCreateAttribs[] = {WGL_CONTEXT_MAJOR_VERSION_ARB,
+                            mClientMajorVersion,
+                            WGL_CONTEXT_MINOR_VERSION_ARB,
+                            mClientMinorVersion,
+                            WGL_CONTEXT_PROFILE_MASK_ARB,
+                            WGL_CONTEXT_ES2_PROFILE_BIT_EXT,
+                            0,
+                            0};
+
+    context = _wglCreateContextAttribsARB(mDeviceContext, shareContext, kCreateAttribs);
+    if (!context)
+    {
+        std::cerr << "Failed to create an ES2 compatible WGL context." << std::endl;
+        return context;
+    }
+
+    return context;
 }
 
 void WGLWindow::destroyGL()
@@ -206,9 +218,39 @@ bool WGLWindow::isGLInitialized() const
     return mWGLContext != nullptr;
 }
 
+GLWindowContext WGLWindow::getCurrentContext()
+{
+    return reinterpret_cast<GLWindowContext>(mWGLContext);
+}
+
+GLWindowContext WGLWindow::createContext(GLWindowContext share)
+{
+    HGLRC shareContext = reinterpret_cast<HGLRC>(share);
+    HGLRC newContext   = createContextImpl(mConfigParams, shareContext);
+
+    // createContextImpl() calls makeCurrent(newContext), so we need to restore the current context.
+    if (!makeCurrent())
+    {
+        return nullptr;
+    }
+
+    return reinterpret_cast<GLWindowContext>(newContext);
+}
+
 bool WGLWindow::makeCurrent()
 {
-    if (_wglMakeCurrent(mDeviceContext, mWGLContext) == FALSE)
+    return makeCurrentImpl(mWGLContext);
+}
+
+bool WGLWindow::makeCurrent(GLWindowContext context)
+{
+    HGLRC wglContext = reinterpret_cast<HGLRC>(context);
+    return makeCurrentImpl(wglContext);
+}
+
+bool WGLWindow::makeCurrentImpl(HGLRC context)
+{
+    if (_wglMakeCurrent(mDeviceContext, context) == FALSE)
     {
         std::cerr << "Error during wglMakeCurrent.\n";
         return false;
