@@ -518,6 +518,9 @@ class TestBatch():
             cmd = [test_exe_path]
         cmd += ['--gtest_filter=%s' % filt, '--angle-per-test-capture-label']
 
+        if self.verbose:
+            print("Run capture: {}".format(test_exe_path))
+
         returncode, output = child_processes_manager.RunSubprocess(
             cmd, env, timeout=SUBPROCESS_TIMEOUT)
         if returncode == -1:
@@ -575,6 +578,10 @@ class TestBatch():
         env = os.environ.copy()
         env['ANGLE_CAPTURE_ENABLED'] = '0'
         env['ANGLE_FEATURE_OVERRIDES_ENABLED'] = 'enable_capture_limits'
+
+        if self.verbose:
+            print("Run Replay: {}".format(replay_exe_path))
+
         returncode, output = child_processes_manager.RunSubprocess([replay_exe_path],
                                                                    env,
                                                                    timeout=SUBPROCESS_TIMEOUT)
