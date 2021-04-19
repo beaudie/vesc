@@ -3850,6 +3850,16 @@ angle::Result ImageHelper::init(Context *context,
                                 uint32_t layerCount,
                                 bool isRobustResourceInitEnabled)
 {
+    RendererVk *rendererVk = context->getRenderer();
+
+    // In some cases, EGL images can be allocated many times without an eglSwapBuffers() being
+    // issued to ANGLE, leading to lots of images in the garbage that need to be cleaned up so the
+    // memory can be reclaimed.
+    if (rendererVk->shouldCleanupGarbage())
+    {
+        ANGLE_TRY(rendererVk->finish(context));
+    }
+
     return initExternal(context, textureType, extents, format, samples, usage,
                         kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, firstLevel,
                         mipLevels, layerCount, isRobustResourceInitEnabled, nullptr);

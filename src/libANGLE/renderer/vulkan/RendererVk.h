@@ -369,6 +369,11 @@ class RendererVk : angle::NonCopyable
         return mSupportedVulkanPipelineStageMask;
     }
 
+    bool shouldCleanupGarbage()
+    {
+        return (mSharedGarbage.size() > mGarbageCollectionFlushThreshold);
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
