@@ -1216,8 +1216,18 @@ void TParseContext::checkCanBeDeclaredWithoutInitializer(const TSourceLoc &line,
             error(line, "variables with qualifier 'const' must be initialized", identifier);
         }
     }
-    checkIsNotUnsizedArray(line, "implicitly sized arrays need to be initialized", identifier,
-                           type);
+
+    // Implicitly declared arrays are disallowed for shaders other than tessellation shaders.
+    if (mShaderType != GL_TESS_CONTROL_SHADER && mShaderType != GL_TESS_EVALUATION_SHADER)
+    {
+        if (type->isArray() && !type->getOutermostArraySize())
+        {
+            error(
+                line,
+                "implicitly sized arrays disallowed for shaders that are not tessellation shaders",
+                identifier);
+        }
+    }
 }
 
 // Do some simple checks that are shared between all variable declarations,
