@@ -3061,8 +3061,9 @@ void ContextVk::updateScissor(const gl::State &glState)
 
     // Clip the render area to the viewport.
     gl::Rectangle viewportClippedRenderArea;
-    gl::ClipRectangle(renderArea, getCorrectedViewport(glState.getViewport()),
-                      &viewportClippedRenderArea);
+    bool viewportRenderAreaIntersects = gl::ClipRectangle(
+        renderArea, getCorrectedViewport(glState.getViewport()), &viewportClippedRenderArea);
+    ASSERT(viewportRenderAreaIntersects);
 
     gl::Rectangle scissoredArea = ClipRectToScissor(getState(), viewportClippedRenderArea, false);
     gl::Rectangle rotatedScissoredArea;
