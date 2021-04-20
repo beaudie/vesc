@@ -203,9 +203,15 @@ TEST_P(MultisampledRenderToTextureTest, RenderbufferParameterCheck)
 
         if (getClientMinorVersion() >= 1)
         {
-            glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, 4, GL_RGBA32I, 64, 64);
+            GLint maxIntegerSamples = 0;
+            glGetIntegerv(GL_MAX_INTEGER_SAMPLES, &maxIntegerSamples);
+            ASSERT_GE(maxIntegerSamples, 1);
+
+            glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, maxIntegerSamples, GL_RGBA32I, 64,
+                                                64);
             ASSERT_GL_NO_ERROR();
-            glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, 4, GL_RGBA32UI, 64, 64);
+            glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, maxIntegerSamples, GL_RGBA32UI, 64,
+                                                64);
             ASSERT_GL_NO_ERROR();
         }
     }
@@ -265,10 +271,13 @@ TEST_P(MultisampledRenderToTextureTest, Texture2DParameterCheck)
     ASSERT_GL_NO_ERROR();
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
 
-    // Attachment not COLOR_ATTACHMENT0.  Allowed only in EXT_multisampled_render_to_texture2
-    glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,
-                                         texture, 0, 4);
-    assertErrorIfNotMSRTT2(GL_INVALID_ENUM);
+    if (EnsureGLExtensionEnabled("GL_EXT_draw_buffers") || isES3)
+    {
+        // Attachment not COLOR_ATTACHMENT0.  Allowed only in EXT_multisampled_render_to_texture2
+        glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,
+                                             texture, 0, 4);
+        assertErrorIfNotMSRTT2(GL_INVALID_ENUM);
+    }
 
     // Depth/stencil attachment.  Allowed only in EXT_multisampled_render_to_texture2
     if (isES3)
@@ -321,6 +330,7 @@ TEST_P(MultisampledRenderToTextureTest, Texture2DParameterCheck)
 TEST_P(MultisampledRenderToTextureTest, TextureCubeMapParameterCheck)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    bool isES3 = getClientMajorVersion() >= 3;
 
     GLTexture texture;
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
@@ -346,10 +356,15 @@ TEST_P(MultisampledRenderToTextureTest, TextureCubeMapParameterCheck)
         ASSERT_GL_NO_ERROR();
         EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
 
-        // Attachment not COLOR_ATTACHMENT0.  Allowed only in EXT_multisampled_render_to_texture2
-        glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-                                             GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, texture, 0, 4);
-        assertErrorIfNotMSRTT2(GL_INVALID_ENUM);
+        if (EnsureGLExtensionEnabled("GL_EXT_draw_buffers") || isES3)
+        {
+            // Attachment not COLOR_ATTACHMENT0.  Allowed only in
+            // EXT_multisampled_render_to_texture2
+            glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+                                                 GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, texture, 0,
+                                                 4);
+            assertErrorIfNotMSRTT2(GL_INVALID_ENUM);
+        }
 
         // Target not framebuffer
         glFramebufferTexture2DMultisampleEXT(GL_RENDERBUFFER, GL_COLOR_ATTACHMENT0,
@@ -2697,6 +2712,7 @@ void MultisampledRenderToTextureES3Test::colorAttachment1Common(bool useRenderbu
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     // Qualcomm driver crashes in the presence of VK_ATTACHMENT_UNUSED.
     // http://anglebug.com/3423
@@ -2790,6 +2806,7 @@ void MultisampledRenderToTextureES3Test::colorAttachments0And3Common(bool useRen
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!useRenderbuffer &&
                        !EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     // Qualcomm driver crashes in the presence of VK_ATTACHMENT_UNUSED.
     // http://anglebug.com/3423
@@ -2969,6 +2986,7 @@ TEST_P(MultisampledRenderToTextureES31Test, MixedMultisampledAndMultisampledRend
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     constexpr GLsizei kSize = 64;
 
@@ -3046,6 +3064,7 @@ void MultisampledRenderToTextureES31Test::blitFramebufferAttachment1Common(bool 
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!useRenderbuffer &&
                        !EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     constexpr GLsizei kSize = 16;
 
@@ -3554,6 +3573,7 @@ void MultisampledRenderToTextureES3Test::renderbufferUnresolveColorAndDepthStenc
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     // http://anglebug.com/5083
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsVulkan());

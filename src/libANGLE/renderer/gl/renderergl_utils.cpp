@@ -1383,6 +1383,12 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->framebufferBlitANGLE =
         extensions->framebufferBlitNV || functions->hasGLESExtension("GL_ANGLE_framebuffer_blit");
     extensions->framebufferMultisample = extensions->framebufferBlitANGLE && caps->maxSamples > 0;
+    extensions->multisampledRenderToTexture =
+        functions->hasGLESExtension("GL_EXT_multisampled_render_to_texture") ||
+        functions->hasGLESExtension("GL_IMG_multisampled_render_to_texture");
+    extensions->multisampledRenderToTexture2 =
+        extensions->multisampledRenderToTexture &&
+        functions->hasGLESExtension("GL_EXT_multisampled_render_to_texture2");
     extensions->standardDerivativesOES = functions->isAtLeastGL(gl::Version(2, 0)) ||
                                          functions->hasGLExtension("GL_ARB_fragment_shader") ||
                                          functions->hasGLESExtension("GL_OES_standard_derivatives");
