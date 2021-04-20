@@ -998,8 +998,17 @@ void TracePerfTest::initializeBenchmark()
 
     mTraceLibrary->setBinaryDataDir(testDataDir);
 
-    mWindowWidth  = mTestParams.windowWidth;
-    mWindowHeight = mTestParams.windowHeight;
+    // If gMinimizeGPUWork is true, we shrink offscreen window tro 1x1.
+    if (gMinimizeGPUWork)
+    {
+        mWindowWidth  = 1;
+        mWindowHeight = 1;
+    }
+    else
+    {
+        mWindowWidth  = mTestParams.windowWidth;
+        mWindowHeight = mTestParams.windowHeight;
+    }
     mCurrentFrame = mStartFrame;
 
     if (IsAndroid())
