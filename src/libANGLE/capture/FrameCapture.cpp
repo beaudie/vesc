@@ -31,6 +31,7 @@
 #include "libANGLE/Shader.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/capture/capture_gles_1_0_autogen.h"
 #include "libANGLE/capture/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_1_autogen.h"
@@ -1890,6 +1891,89 @@ void CaptureVertexArrayData(std::vector<CallCapture> *setupCalls,
     }
 }
 
+void CaptureVertexArrayDataES1(std::vector<CallCapture> *setupCalls,
+                               const gl::Context *context,
+                               const gl::VertexArray *vertexArray,
+                               gl::State *replayState)
+{
+    const std::vector<gl::VertexAttribute> &vertexAttribs = vertexArray->getVertexAttributes();
+    const std::vector<gl::VertexBinding> &vertexBindings  = vertexArray->getVertexBindings();
+
+    for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
+    {
+        const gl::VertexAttribute defaultAttrib(attribIndex);
+        const gl::VertexBinding defaultBinding;
+
+        const gl::VertexAttribute &attrib = vertexAttribs[attribIndex];
+        const gl::VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
+
+        if (attrib.enabled != defaultAttrib.enabled)
+        {
+            Capture(setupCalls,
+                    CaptureEnableClientState(*replayState, false,
+                                             gl::GLES1Renderer::VertexArrayType(attribIndex)));
+        }
+
+        if (attrib.format != defaultAttrib.format || attrib.pointer != defaultAttrib.pointer ||
+            binding.getStride() != defaultBinding.getStride() ||
+            binding.getBuffer().get() != nullptr)
+        {
+            // Each attribute can pull from a separate buffer, so check the binding
+            gl::Buffer *buffer = binding.getBuffer().get();
+            if (buffer && buffer != replayState->getArrayBuffer())
+            {
+                replayState->setBufferBinding(context, gl::BufferBinding::Array, buffer);
+
+                Capture(setupCalls, CaptureBindBuffer(*replayState, true, gl::BufferBinding::Array,
+                                                      buffer->id()));
+            }
+
+            // Establish the relationship between currently bound buffer and the VAO
+            switch (gl::GLES1Renderer::VertexArrayType(attribIndex))
+            {
+                case gl::ClientVertexArrayType::Vertex:
+                    Capture(setupCalls,
+                            CaptureVertexPointer(*replayState, true, attrib.format->channelCount,
+                                                 attrib.format->vertexAttribType,
+                                                 binding.getStride(), attrib.pointer));
+                    break;
+                case gl::ClientVertexArrayType::Normal:
+                    Capture(setupCalls, CaptureNormalPointer(*replayState, true,
+                                                             attrib.format->vertexAttribType,
+                                                             binding.getStride(), attrib.pointer));
+                    break;
+                case gl::ClientVertexArrayType::Color:
+                    Capture(setupCalls,
+                            CaptureColorPointer(*replayState, true, attrib.format->channelCount,
+                                                attrib.format->vertexAttribType,
+                                                binding.getStride(), attrib.pointer));
+                    break;
+                case gl::ClientVertexArrayType::PointSize:
+                    Capture(setupCalls, CapturePointSizePointerOES(
+                                            *replayState, true, attrib.format->vertexAttribType,
+                                            binding.getStride(), attrib.pointer));
+                    break;
+                case gl::ClientVertexArrayType::TextureCoord:
+                    Capture(setupCalls,
+                            CaptureTexCoordPointer(*replayState, true, attrib.format->channelCount,
+                                                   attrib.format->vertexAttribType,
+                                                   binding.getStride(), attrib.pointer));
+                    break;
+                default:
+                    UNREACHABLE();
+            }
+        }
+    }
+
+    // The element array buffer is not per attribute, but per VAO
+    gl::Buffer *elementArrayBuffer = vertexArray->getElementArrayBuffer();
+    if (elementArrayBuffer)
+    {
+        Capture(setupCalls, CaptureBindBuffer(*replayState, true, gl::BufferBinding::ElementArray,
+                                              elementArrayBuffer->id()));
+    }
+}
+
 void CaptureTextureStorage(std::vector<CallCapture> *setupCalls,
                            gl::State *replayState,
                            const gl::Texture *texture)
@@ -3371,6 +3455,599 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     replayState.setBufferBinding(context, gl::BufferBinding::Array, nullptr);
 }
 
+void CaptureMidExecutionSetupES1(const gl::Context *context,
+                                 std::vector<CallCapture> *setupCalls,
+                                 ResourceTracker *resourceTracker,
+                                 FrameCapture *frameCapture)
+{
+    const gl::State &apiState = context->getState();
+    gl::State replayState(nullptr, nullptr, nullptr, nullptr, nullptr, EGL_OPENGL_ES_API,
+                          apiState.getClientVersion(), false, true, true, true, false,
+                          EGL_CONTEXT_PRIORITY_MEDIUM_IMG);
+
+    // Small helper function to make the code more readable.
+    auto cap = [setupCalls](CallCapture &&call) { setupCalls->emplace_back(std::move(call)); };
+
+    // Currently this code assumes we can use create-on-bind. It does not support 'Gen' usage.
+    // TODO(jmadill): Use handle mapping for captured objects. http://anglebug.com/3662
+
+    // Capture Buffer data.
+    const gl::BufferManager &buffers = apiState.getBufferManagerForCapture();
+    for (const auto &bufferIter : buffers)
+    {
+        gl::BufferID id    = {bufferIter.first};
+        gl::Buffer *buffer = bufferIter.second;
+
+        if (id.value == 0)
+        {
+            continue;
+        }
+
+        // glBufferData. Would possibly be better implemented using a getData impl method.
+        // Saving buffers that are mapped during a swap is not yet handled.
+        if (buffer->getSize() == 0)
+        {
+            continue;
+        }
+
+        // Remember if the buffer was already mapped
+        GLboolean bufferMapped = buffer->isMapped();
+
+        // If needed, map the buffer so we can capture its contents
+        if (!bufferMapped)
+        {
+            (void)buffer->mapRange(context, 0, static_cast<GLsizeiptr>(buffer->getSize()),
+                                   GL_MAP_READ_BIT);
+        }
+
+        // Generate binding.
+        cap(CaptureGenBuffers(replayState, true, 1, &id));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+
+        // Always use the array buffer binding point to upload data to keep things simple.
+        if (buffer != replayState.getArrayBuffer())
+        {
+            replayState.setBufferBinding(context, gl::BufferBinding::Array, buffer);
+            cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::Array, id));
+        }
+
+        if (buffer->isImmutable())
+        {
+            cap(CaptureBufferStorageEXT(replayState, true, gl::BufferBinding::Array,
+                                        static_cast<GLsizeiptr>(buffer->getSize()),
+                                        buffer->getMapPointer(),
+                                        buffer->getStorageExtUsageFlags()));
+        }
+        else
+        {
+            cap(CaptureBufferData(replayState, true, gl::BufferBinding::Array,
+                                  static_cast<GLsizeiptr>(buffer->getSize()),
+                                  buffer->getMapPointer(), buffer->getUsage()));
+        }
+
+        if (bufferMapped)
+        {
+            void *dontCare = nullptr;
+            Capture(setupCalls,
+                    CaptureMapBufferRange(replayState, true, gl::BufferBinding::Array,
+                                          static_cast<GLsizeiptr>(buffer->getMapOffset()),
+                                          static_cast<GLsizeiptr>(buffer->getMapLength()),
+                                          buffer->getAccessFlags(), dontCare));
+
+            frameCapture->getResouceTracker().setStartingBufferMapped(buffer->id(), true);
+
+            frameCapture->trackBufferMapping(&setupCalls->back(), buffer->id(),
+                                             static_cast<GLsizeiptr>(buffer->getMapOffset()),
+                                             static_cast<GLsizeiptr>(buffer->getMapLength()),
+                                             (buffer->getAccessFlags() & GL_MAP_WRITE_BIT) != 0);
+        }
+        else
+        {
+            frameCapture->getResouceTracker().setStartingBufferMapped(buffer->id(), false);
+        }
+
+        // Generate the calls needed to restore this buffer to original state for frame looping
+        CaptureBufferResetCalls(replayState, resourceTracker, &id, buffer);
+
+        // Unmap the buffer if it wasn't already mapped
+        if (!bufferMapped)
+        {
+            GLboolean dontCare;
+            (void)buffer->unmap(context, &dontCare);
+        }
+    }
+
+    // Vertex input states. Only handles GLES 2.0 states right now.
+    // Must happen after buffer data initialization.
+    // TODO(http://anglebug.com/3662): Complete state capture.
+
+    // Capture default vertex attribs
+
+    // TODO(Lubosz): I ported glVertexAttrib4fv to gl*Pointer functions here,
+    // to pass an array, but it does no much in the trace, as UpdateClientArrayPointer does not get
+    // called. The proper equivalent in GLES1 is passing each element as parameter, so without v,
+    // and is not available for every attrib type. We only have glNormal, glColor, glPointSize and
+    // glMultiTexCoord. And no glVertex.
+
+    const std::vector<gl::VertexAttribCurrentValueData> &currentValues =
+        apiState.getVertexAttribCurrentValues();
+
+    for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
+    {
+        const gl::VertexAttribCurrentValueData &defaultValue = currentValues[attribIndex];
+        if (!IsDefaultCurrentValue(defaultValue))
+        {
+            switch (gl::GLES1Renderer::VertexArrayType(attribIndex))
+            {
+                case gl::ClientVertexArrayType::Vertex:
+                    Capture(setupCalls,
+                            CaptureVertexPointer(replayState, true, 4, gl::VertexAttribType::Float,
+                                                 0, defaultValue.Values.FloatValues));
+                    break;
+                case gl::ClientVertexArrayType::Normal:
+                    Capture(setupCalls,
+                            CaptureNormalPointer(replayState, true, gl::VertexAttribType::Float, 0,
+                                                 defaultValue.Values.FloatValues));
+                    break;
+                case gl::ClientVertexArrayType::Color:
+                    Capture(setupCalls,
+                            CaptureColorPointer(replayState, true, 4, gl::VertexAttribType::Float,
+                                                0, defaultValue.Values.FloatValues));
+                    break;
+                case gl::ClientVertexArrayType::PointSize:
+                    Capture(setupCalls, CapturePointSizePointerOES(
+                                            replayState, true, gl::VertexAttribType::Float, 0,
+                                            defaultValue.Values.FloatValues));
+                    break;
+                case gl::ClientVertexArrayType::TextureCoord:
+                    Capture(setupCalls, CaptureTexCoordPointer(replayState, true, 4,
+                                                               gl::VertexAttribType::Float, 0,
+                                                               defaultValue.Values.FloatValues));
+                    break;
+                default:
+                    UNREACHABLE();
+            }
+        }
+    }
+
+    // Capture vertex array objects
+
+    // TODO(Lubosz): Capturing glGenVertexArrays and glBindVertexArray was removed here.
+    // I suppose this could be ported to glGenBuffers and glBindBuffer(GL_ARRAY_BUFFER, ...)
+    const gl::VertexArrayMap &vertexArrayMap = context->getVertexArraysForCapture();
+    for (const auto &vertexArrayIter : vertexArrayMap)
+    {
+        gl::VertexArrayID vertexArrayID = {vertexArrayIter.first};
+        if (vertexArrayID.value != 0)
+        {
+            MaybeCaptureUpdateResourceIDs(setupCalls);
+        }
+
+        if (vertexArrayIter.second)
+        {
+            const gl::VertexArray *vertexArray = vertexArrayIter.second;
+            CaptureVertexArrayDataES1(setupCalls, context, vertexArray, &replayState);
+        }
+    }
+
+    // Capture indexed buffer bindings.
+    const gl::BufferVector &atomicCounterIndexedBuffers =
+        apiState.getOffsetBindingPointerAtomicCounterBuffers();
+    CaptureIndexedBuffers(replayState, atomicCounterIndexedBuffers,
+                          gl::BufferBinding::AtomicCounter, setupCalls);
+
+    // Capture Buffer bindings.
+    const gl::BoundBufferMap &boundBuffers = apiState.getBoundBuffersForCapture();
+    for (gl::BufferBinding binding : angle::AllEnums<gl::BufferBinding>())
+    {
+        gl::BufferID bufferID = boundBuffers[binding].id();
+
+        // Filter out redundant buffer binding commands. Note that the code in the previous section
+        // only binds to ARRAY_BUFFER. Therefore we only check the array binding against the binding
+        // we set earlier.
+        bool isArray                  = binding == gl::BufferBinding::Array;
+        const gl::Buffer *arrayBuffer = replayState.getArrayBuffer();
+        if ((isArray && arrayBuffer && arrayBuffer->id() != bufferID) ||
+            (!isArray && bufferID.value != 0))
+        {
+            cap(CaptureBindBuffer(replayState, true, binding, bufferID));
+        }
+
+        // Restore all buffer bindings for Reset
+        if (bufferID.value != 0)
+        {
+            CaptureBufferBindingResetCalls(replayState, resourceTracker, binding, bufferID);
+        }
+    }
+
+    // Set a unpack alignment of 1.
+    gl::PixelUnpackState &currentUnpackState = replayState.getUnpackState();
+    if (currentUnpackState.alignment != 1)
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, 1));
+        currentUnpackState.alignment = 1;
+    }
+
+    // Capture Texture setup and data.
+    const gl::TextureManager &textures         = apiState.getTextureManagerForCapture();
+    const gl::TextureBindingMap &boundTextures = apiState.getBoundTexturesForCapture();
+
+    gl::TextureTypeMap<gl::TextureID> currentTextureBindings;
+
+    for (const auto &textureIter : textures)
+    {
+        gl::TextureID id     = {textureIter.first};
+        gl::Texture *texture = textureIter.second;
+
+        if (id.value == 0)
+        {
+            continue;
+        }
+
+        // Gen the Texture.
+        cap(CaptureGenTextures(replayState, true, 1, &id));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+        cap(CaptureBindTexture(replayState, true, texture->getType(), id));
+
+        currentTextureBindings[texture->getType()] = id;
+
+        // Capture sampler parameter states.
+        // TODO(jmadill): More sampler / texture states. http://anglebug.com/3662
+        gl::SamplerState defaultSamplerState =
+            gl::SamplerState::CreateDefaultForTarget(texture->getType());
+        const gl::SamplerState &textureSamplerState = texture->getSamplerState();
+
+        auto capTexParam = [cap, &replayState, texture](GLenum pname, GLint param) {
+            cap(CaptureTexParameteri(replayState, true, texture->getType(), pname, param));
+        };
+
+        if (textureSamplerState.getMinFilter() != defaultSamplerState.getMinFilter())
+        {
+            capTexParam(GL_TEXTURE_MIN_FILTER, textureSamplerState.getMinFilter());
+        }
+
+        if (textureSamplerState.getMagFilter() != defaultSamplerState.getMagFilter())
+        {
+            capTexParam(GL_TEXTURE_MAG_FILTER, textureSamplerState.getMagFilter());
+        }
+
+        if (textureSamplerState.getWrapS() != defaultSamplerState.getWrapS())
+        {
+            capTexParam(GL_TEXTURE_WRAP_S, textureSamplerState.getWrapS());
+        }
+
+        if (textureSamplerState.getWrapT() != defaultSamplerState.getWrapT())
+        {
+            capTexParam(GL_TEXTURE_WRAP_T, textureSamplerState.getWrapT());
+        }
+
+        // Texture parameters
+        if (texture->getBaseLevel() != 0)
+        {
+            capTexParam(GL_TEXTURE_BASE_LEVEL, texture->getBaseLevel());
+        }
+
+        // Iterate texture levels and layers.
+        gl::ImageIndexIterator imageIter = gl::ImageIndexIterator::MakeGeneric(
+            texture->getType(), 0, texture->getMipmapMaxLevel() + 1, gl::ImageIndex::kEntireLevel,
+            gl::ImageIndex::kEntireLevel);
+        while (imageIter.hasNext())
+        {
+            gl::ImageIndex index = imageIter.next();
+
+            const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
+
+            if (desc.size.empty())
+            {
+                continue;
+            }
+
+            const gl::InternalFormat &format = *desc.format.info;
+
+            // Check for supported textures
+            ASSERT(index.getType() == gl::TextureType::_2D);
+
+            if (format.compressed)
+            {
+                // For compressed images, we've tracked a copy of the incoming data, so we can
+                // use that rather than try to read data back that may have been converted.
+                const std::vector<uint8_t> &capturedTextureLevel =
+                    context->getShareGroup()->getFrameCaptureShared()->retrieveCachedTextureLevel(
+                        texture->id(), index.getTarget(), index.getLevelIndex());
+
+                // Use the shadow copy of the data to populate the call
+                CaptureTextureContents(setupCalls, &replayState, texture, index, desc,
+                                       static_cast<GLuint>(capturedTextureLevel.size()),
+                                       capturedTextureLevel.data());
+            }
+            else
+            {
+                // Use ANGLE_get_image to read back pixel data.
+                if (context->getExtensions().getImageANGLE)
+                {
+                    GLenum getFormat = format.format;
+                    GLenum getType   = format.type;
+
+                    angle::MemoryBuffer data;
+
+                    const gl::Extents size(desc.size.width, desc.size.height, desc.size.depth);
+                    const gl::PixelUnpackState &unpack = apiState.getUnpackState();
+
+                    GLuint endByte = 0;
+                    bool unpackSize =
+                        format.computePackUnpackEndByte(getType, size, unpack, true, &endByte);
+                    ASSERT(unpackSize);
+
+                    bool result = data.resize(endByte);
+                    ASSERT(result);
+
+                    gl::PixelPackState packState;
+                    packState.alignment = 1;
+
+                    (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                               index.getLevelIndex(), getFormat, getType,
+                                               data.data());
+
+                    CaptureTextureContents(setupCalls, &replayState, texture, index, desc,
+                                           static_cast<GLuint>(data.size()), data.data());
+                }
+                else
+                {
+                    CaptureTextureContents(setupCalls, &replayState, texture, index, desc, 0,
+                                           nullptr);
+                }
+            }
+        }
+    }
+
+    // Set Texture bindings.
+    size_t currentActiveTexture = 0;
+    for (gl::TextureType textureType : angle::AllEnums<gl::TextureType>())
+    {
+        const gl::TextureBindingVector &bindings = boundTextures[textureType];
+        for (size_t bindingIndex = 0; bindingIndex < bindings.size(); ++bindingIndex)
+        {
+            gl::TextureID textureID = bindings[bindingIndex].id();
+
+            if (textureID.value != 0)
+            {
+                if (currentActiveTexture != bindingIndex)
+                {
+                    cap(CaptureActiveTexture(replayState, true,
+                                             GL_TEXTURE0 + static_cast<GLenum>(bindingIndex)));
+                    currentActiveTexture = bindingIndex;
+                }
+
+                if (currentTextureBindings[textureType] != textureID)
+                {
+                    cap(CaptureBindTexture(replayState, true, textureType, textureID));
+                    currentTextureBindings[textureType] = textureID;
+                }
+            }
+        }
+    }
+
+    // Set active Texture.
+    size_t stateActiveTexture = apiState.getActiveSampler();
+    if (currentActiveTexture != stateActiveTexture)
+    {
+        cap(CaptureActiveTexture(replayState, true,
+                                 GL_TEXTURE0 + static_cast<GLenum>(stateActiveTexture)));
+    }
+
+    // Capture GL Context states.
+    // TODO(http://anglebug.com/3662): Complete state capture.
+    auto capCap = [cap, &replayState](GLenum capEnum, bool capValue) {
+        if (capValue)
+        {
+            cap(CaptureEnable(replayState, true, capEnum));
+        }
+        else
+        {
+            cap(CaptureDisable(replayState, true, capEnum));
+        }
+    };
+
+    // Rasterizer state. Missing ES 3.x features.
+    const gl::RasterizerState &defaultRasterState = replayState.getRasterizerState();
+    const gl::RasterizerState &currentRasterState = apiState.getRasterizerState();
+    if (currentRasterState.cullFace != defaultRasterState.cullFace)
+    {
+        capCap(GL_CULL_FACE, currentRasterState.cullFace);
+    }
+
+    if (currentRasterState.cullMode != defaultRasterState.cullMode)
+    {
+        cap(CaptureCullFace(replayState, true, currentRasterState.cullMode));
+    }
+
+    if (currentRasterState.frontFace != defaultRasterState.frontFace)
+    {
+        cap(CaptureFrontFace(replayState, true, currentRasterState.frontFace));
+    }
+
+    if (currentRasterState.polygonOffsetFill != defaultRasterState.polygonOffsetFill)
+    {
+        capCap(GL_POLYGON_OFFSET_FILL, currentRasterState.polygonOffsetFill);
+    }
+
+    if (currentRasterState.polygonOffsetFactor != defaultRasterState.polygonOffsetFactor ||
+        currentRasterState.polygonOffsetUnits != defaultRasterState.polygonOffsetUnits)
+    {
+        cap(CapturePolygonOffset(replayState, true, currentRasterState.polygonOffsetFactor,
+                                 currentRasterState.polygonOffsetUnits));
+    }
+
+    // pointDrawMode/multiSample are only used in the D3D back-end right now.
+
+    if (currentRasterState.dither != defaultRasterState.dither)
+    {
+        capCap(GL_DITHER, currentRasterState.dither);
+    }
+
+    // Depth/stencil state.
+    const gl::DepthStencilState &defaultDSState = replayState.getDepthStencilState();
+    const gl::DepthStencilState &currentDSState = apiState.getDepthStencilState();
+    if (defaultDSState.depthFunc != currentDSState.depthFunc)
+    {
+        cap(CaptureDepthFunc(replayState, true, currentDSState.depthFunc));
+    }
+
+    if (defaultDSState.depthMask != currentDSState.depthMask)
+    {
+        cap(CaptureDepthMask(replayState, true, gl::ConvertToGLBoolean(currentDSState.depthMask)));
+    }
+
+    if (defaultDSState.depthTest != currentDSState.depthTest)
+    {
+        capCap(GL_DEPTH_TEST, currentDSState.depthTest);
+    }
+
+    if (defaultDSState.stencilTest != currentDSState.stencilTest)
+    {
+        capCap(GL_STENCIL_TEST, currentDSState.stencilTest);
+    }
+
+    // TODO(Lubosz): Capturing glStencilFuncSeparate, glStencilOpSeparate and glStencilMaskSeparate
+    // was removed here, since it's unavailable in GLES1 and could be ported to the equivalent
+    // glStencilFunc, glStencilOp and glStencilMask.
+
+    // Blend state.
+    const gl::BlendState &defaultBlendState = replayState.getBlendState();
+    const gl::BlendState &currentBlendState = apiState.getBlendState();
+
+    if (currentBlendState.blend != defaultBlendState.blend)
+    {
+        capCap(GL_BLEND, currentBlendState.blend);
+    }
+
+    // TODO(Lubosz): Capturing glBlendFuncSeparate was removed here, as it's not available
+    // on GLES1. But glBlendFunc could be captured instead.
+
+    if (currentBlendState.colorMaskRed != defaultBlendState.colorMaskRed ||
+        currentBlendState.colorMaskGreen != defaultBlendState.colorMaskGreen ||
+        currentBlendState.colorMaskBlue != defaultBlendState.colorMaskBlue ||
+        currentBlendState.colorMaskAlpha != defaultBlendState.colorMaskAlpha)
+    {
+        cap(CaptureColorMask(replayState, true,
+                             gl::ConvertToGLBoolean(currentBlendState.colorMaskRed),
+                             gl::ConvertToGLBoolean(currentBlendState.colorMaskGreen),
+                             gl::ConvertToGLBoolean(currentBlendState.colorMaskBlue),
+                             gl::ConvertToGLBoolean(currentBlendState.colorMaskAlpha)));
+    }
+
+    // Pixel storage states.
+    gl::PixelPackState &currentPackState = replayState.getPackState();
+    if (currentPackState.alignment != apiState.getPackAlignment())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_PACK_ALIGNMENT, apiState.getPackAlignment()));
+        currentPackState.alignment = apiState.getPackAlignment();
+    }
+
+    if (currentPackState.rowLength != apiState.getPackRowLength())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_PACK_ROW_LENGTH, apiState.getPackRowLength()));
+        currentPackState.rowLength = apiState.getPackRowLength();
+    }
+
+    if (currentPackState.skipRows != apiState.getPackSkipRows())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_PACK_SKIP_ROWS, apiState.getPackSkipRows()));
+        currentPackState.skipRows = apiState.getPackSkipRows();
+    }
+
+    if (currentPackState.skipPixels != apiState.getPackSkipPixels())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_PACK_SKIP_PIXELS,
+                               apiState.getPackSkipPixels()));
+        currentPackState.skipPixels = apiState.getPackSkipPixels();
+    }
+
+    // We set unpack alignment above, no need to change it here
+    ASSERT(currentUnpackState.alignment == 1);
+    if (currentUnpackState.rowLength != apiState.getUnpackRowLength())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ROW_LENGTH,
+                               apiState.getUnpackRowLength()));
+        currentUnpackState.rowLength = apiState.getUnpackRowLength();
+    }
+
+    if (currentUnpackState.skipRows != apiState.getUnpackSkipRows())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_SKIP_ROWS,
+                               apiState.getUnpackSkipRows()));
+        currentUnpackState.skipRows = apiState.getUnpackSkipRows();
+    }
+
+    if (currentUnpackState.skipPixels != apiState.getUnpackSkipPixels())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_SKIP_PIXELS,
+                               apiState.getUnpackSkipPixels()));
+        currentUnpackState.skipPixels = apiState.getUnpackSkipPixels();
+    }
+
+    if (currentUnpackState.imageHeight != apiState.getUnpackImageHeight())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_IMAGE_HEIGHT,
+                               apiState.getUnpackImageHeight()));
+        currentUnpackState.imageHeight = apiState.getUnpackImageHeight();
+    }
+
+    if (currentUnpackState.skipImages != apiState.getUnpackSkipImages())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_SKIP_IMAGES,
+                               apiState.getUnpackSkipImages()));
+        currentUnpackState.skipImages = apiState.getUnpackSkipImages();
+    }
+
+    // Clear state. Missing ES 3.x features.
+    // TODO(http://anglebug.com/3662): Complete state capture.
+    const gl::ColorF &currentClearColor = apiState.getColorClearValue();
+    if (currentClearColor != gl::ColorF())
+    {
+        cap(CaptureClearColor(replayState, true, currentClearColor.red, currentClearColor.green,
+                              currentClearColor.blue, currentClearColor.alpha));
+    }
+
+    if (apiState.getDepthClearValue() != 1.0f)
+    {
+        cap(CaptureClearDepthf(replayState, true, apiState.getDepthClearValue()));
+    }
+
+    if (apiState.getStencilClearValue() != 0)
+    {
+        cap(CaptureClearStencil(replayState, true, apiState.getStencilClearValue()));
+    }
+
+    // Viewport / scissor / clipping planes.
+    const gl::Rectangle &currentViewport = apiState.getViewport();
+    if (currentViewport != gl::Rectangle())
+    {
+        cap(CaptureViewport(replayState, true, currentViewport.x, currentViewport.y,
+                            currentViewport.width, currentViewport.height));
+    }
+
+    if (apiState.getNearPlane() != 0.0f || apiState.getFarPlane() != 1.0f)
+    {
+        cap(CaptureDepthRangef(replayState, true, apiState.getNearPlane(), apiState.getFarPlane()));
+    }
+
+    if (apiState.isScissorTestEnabled())
+    {
+        capCap(GL_SCISSOR_TEST, apiState.isScissorTestEnabled());
+    }
+
+    const gl::Rectangle &currentScissor = apiState.getScissor();
+    if (currentScissor != gl::Rectangle())
+    {
+        cap(CaptureScissor(replayState, true, currentScissor.x, currentScissor.y,
+                           currentScissor.width, currentScissor.height));
+    }
+
+    // Allow the replayState object to be destroyed conveniently.
+    replayState.setBufferBinding(context, gl::BufferBinding::Array, nullptr);
+}
+
 bool SkipCall(EntryPoint entryPoint)
 {
     switch (entryPoint)
@@ -4554,7 +5231,14 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     if (enabled() && mFrameIndex == mCaptureStartFrame)
     {
         mSetupCalls.clear();
-        CaptureMidExecutionSetup(context, &mSetupCalls, &mResourceTracker, this);
+        if (context->isGLES1())
+        {
+            CaptureMidExecutionSetupES1(context, &mSetupCalls, &mResourceTracker, this);
+        }
+        else
+        {
+            CaptureMidExecutionSetup(context, &mSetupCalls, &mResourceTracker, this);
+        }
     }
 }
 
