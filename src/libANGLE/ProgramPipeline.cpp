@@ -533,12 +533,13 @@ angle::Result ProgramPipeline::link(const Context *context)
             return angle::Result::Stop;
         }
 
-        if (!LinkValidateProgramGlobalNames(infoLog, *this))
+        getExecutable().savePendingLinkInfo(mState);
+        if (!LinkValidateProgramGlobalNames(infoLog, getExecutable()))
         {
             return angle::Result::Stop;
         }
 
-        mergedVaryings = GetMergedVaryingsFromShaders(*this, getExecutable());
+        mergedVaryings = GetMergedVaryingsFromShaders(getExecutable());
         // If separable program objects are in use, the set of attributes captured is taken
         // from the program object active on the last vertex processing stage.
         ShaderType lastVertexProcessingStage =
@@ -559,9 +560,8 @@ angle::Result ProgramPipeline::link(const Context *context)
         const std::vector<std::string> &transformFeedbackVaryingNames =
             tfProgram->getState().getTransformFeedbackVaryingNames();
 
-        if (!mState.mExecutable->linkMergedVaryings(context, *this, mergedVaryings,
-                                                    transformFeedbackVaryingNames, false,
-                                                    &varyingPacking))
+        if (!mState.mExecutable->linkMergedVaryings(
+                context, mergedVaryings, transformFeedbackVaryingNames, false, &varyingPacking))
         {
             return angle::Result::Stop;
         }
@@ -689,11 +689,5 @@ void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::Sub
             UNREACHABLE();
             break;
     }
-}
-
-Shader *ProgramPipeline::getAttachedShader(ShaderType shaderType) const
-{
-    const Program *program = mState.mPrograms[shaderType];
-    return program ? program->getAttachedShader(shaderType) : nullptr;
 }
 }  // namespace gl

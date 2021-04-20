@@ -163,8 +163,6 @@ class ProgramExecutable final : public angle::Subject
                mLinkedGraphicsShaderStages[ShaderType::TessEvaluation];
     }
 
-    ShaderType getTransformFeedbackStage() const;
-
     ShaderType getLinkedTransformFeedbackStage() const;
 
     // A PPO can have both graphics and compute programs attached, so
@@ -312,6 +310,8 @@ class ProgramExecutable final : public angle::Subject
     GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
 
     void saveLinkedStateInfo(const ProgramState &state);
+    void savePendingLinkInfo(const ProgramState &state);
+    void savePendingLinkInfo(const ProgramPipelineState &state);
     const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(ShaderType shaderType) const
     {
         return mLinkedOutputVaryings[shaderType];
@@ -320,6 +320,43 @@ class ProgramExecutable final : public angle::Subject
     {
         return mLinkedInputVaryings[shaderType];
     }
+
+    const std::vector<sh::ShaderVariable> &getLinkedUniforms(ShaderType shaderType) const
+    {
+        return mLinkedUniforms[shaderType];
+    }
+
+    const std::vector<sh::InterfaceBlock> &getLinkedUniformBlocks(ShaderType shaderType) const
+    {
+        return mLinkedUniformBlocks[shaderType];
+    }
+
+    const std::vector<sh::ShaderVariable> &getPendingLinkOutputVaryings(ShaderType shaderType) const
+    {
+        return mPendingLinkOutputVaryings[shaderType];
+    }
+
+    const std::vector<sh::ShaderVariable> &getPendingLinkInputVaryings(ShaderType shaderType) const
+    {
+        return mPendingLinkInputVaryings[shaderType];
+    }
+
+    const std::vector<sh::ShaderVariable> &getPendingLinkUniforms(ShaderType shaderType) const
+    {
+        return mPendingLinkUniforms[shaderType];
+    }
+
+    const std::vector<sh::InterfaceBlock> &getPendingLinkUniformBlocks(ShaderType shaderType) const
+    {
+        return mPendingLinkUniformBlocks[shaderType];
+    }
+
+    bool isShaderStageUsed(ShaderType shaderType) const
+    {
+        return mPendingLinkGraphicsShaderStages[shaderType];
+    }
+
+    bool isPipelineProgramExecutable() const { return mIsPendingLinkExecutablePipeline; }
 
     int getLinkedShaderVersion(ShaderType shaderType) const
     {
@@ -371,8 +408,9 @@ class ProgramExecutable final : public angle::Subject
     void setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex,
                                                std::vector<SamplerBinding> &samplerBindings);
 
+    ShaderType getTransformFeedbackStage() const;
+
     bool linkMergedVaryings(const Context *context,
-                            const HasAttachedShaders &programOrPipeline,
                             const ProgramMergedVaryings &mergedVaryings,
                             const std::vector<std::string> &transformFeedbackVaryingNames,
                             bool isSeparable,
@@ -483,6 +521,16 @@ class ProgramExecutable final : public angle::Subject
 
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mLinkedUniforms;
+    ShaderMap<std::vector<sh::InterfaceBlock>> mLinkedUniformBlocks;
+
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkOutputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkInputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkUniforms;
+    ShaderMap<std::vector<sh::InterfaceBlock>> mPendingLinkUniformBlocks;
+    ShaderBitSet mPendingLinkGraphicsShaderStages;
+    bool mIsPendingLinkExecutablePipeline;
+
     ShaderMap<int> mLinkedShaderVersions;
 
     // GL_EXT_geometry_shader.
