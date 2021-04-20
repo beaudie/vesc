@@ -2697,6 +2697,7 @@ void MultisampledRenderToTextureES3Test::colorAttachment1Common(bool useRenderbu
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     // Qualcomm driver crashes in the presence of VK_ATTACHMENT_UNUSED.
     // http://anglebug.com/3423
@@ -2790,6 +2791,7 @@ void MultisampledRenderToTextureES3Test::colorAttachments0And3Common(bool useRen
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!useRenderbuffer &&
                        !EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     // Qualcomm driver crashes in the presence of VK_ATTACHMENT_UNUSED.
     // http://anglebug.com/3423
@@ -2969,6 +2971,7 @@ TEST_P(MultisampledRenderToTextureES31Test, MixedMultisampledAndMultisampledRend
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     constexpr GLsizei kSize = 64;
 
@@ -3046,6 +3049,7 @@ void MultisampledRenderToTextureES31Test::blitFramebufferAttachment1Common(bool 
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!useRenderbuffer &&
                        !EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     constexpr GLsizei kSize = 16;
 
@@ -3554,6 +3558,7 @@ void MultisampledRenderToTextureES3Test::renderbufferUnresolveColorAndDepthStenc
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     // http://anglebug.com/5083
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsVulkan());
