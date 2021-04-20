@@ -111,6 +111,9 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var);
 void WriteInterfaceBlock(BinaryOutputStream *stream, const InterfaceBlock &block);
 void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block);
 
+void WriteShInterfaceBlock(BinaryOutputStream *stream, const sh::InterfaceBlock &block);
+void LoadShInterfaceBlock(BinaryInputStream *stream, sh::InterfaceBlock *block);
+
 void WriteShaderVariableBuffer(BinaryOutputStream *stream, const ShaderVariableBuffer &var);
 void LoadShaderVariableBuffer(BinaryInputStream *stream, ShaderVariableBuffer *var);
 
@@ -445,7 +448,6 @@ struct ProgramVaryingRef
 
 using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
 
-// TODO: Copy necessary shader state into Program. http://anglebug.com/5506
 class HasAttachedShaders
 {
   public:

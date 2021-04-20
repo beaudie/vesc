@@ -312,6 +312,8 @@ class ProgramExecutable final : public angle::Subject
     GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
 
     void saveLinkedStateInfo(const ProgramState &state);
+    void savePendingLinkInfo(const ProgramState &state);
+    void savePendingLinkInfo(const ProgramPipelineState &state);
     const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(ShaderType shaderType) const
     {
         return mLinkedOutputVaryings[shaderType];
@@ -320,6 +322,39 @@ class ProgramExecutable final : public angle::Subject
     {
         return mLinkedInputVaryings[shaderType];
     }
+
+    const std::vector<sh::ShaderVariable> &getLinkedUniforms(ShaderType shaderType) const
+    {
+        return mLinkedUniforms[shaderType];
+    }
+
+    const std::vector<sh::InterfaceBlock> &getLinkedUniformBlocks(ShaderType shaderType) const
+    {
+        return mLinkedUniformBlocks[shaderType];
+    }
+
+    const std::vector<sh::ShaderVariable> &getPendingLinkingUniforms(ShaderType shaderType) const
+    {
+        return mPendingLinkUniforms[shaderType];
+    }
+
+    const std::vector<sh::InterfaceBlock> &getPendingLinkingUniformBlocks(
+        ShaderType shaderType) const
+    {
+        return mPendingLinkUniformBlocks[shaderType];
+    }
+
+    const std::vector<sh::ShaderVariable> &getPendingLinkingAttributes(ShaderType shaderType) const
+    {
+        return mPendingLinkAttributes[shaderType];
+    }
+
+    bool isShaderStageUsed(ShaderType shaderType) const
+    {
+        return mPendingLinkGraphicsShaderStages[shaderType];
+    }
+
+    bool isPipelineProgramExecutable() const { return mIsPendingLinkExecutablePipeline; }
 
     int getLinkedShaderVersion(ShaderType shaderType) const
     {
@@ -483,6 +518,15 @@ class ProgramExecutable final : public angle::Subject
 
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mLinkedUniforms;
+    ShaderMap<std::vector<sh::InterfaceBlock>> mLinkedUniformBlocks;
+
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkUniforms;
+    ShaderMap<std::vector<sh::InterfaceBlock>> mPendingLinkUniformBlocks;
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkAttributes;
+    ShaderBitSet mPendingLinkGraphicsShaderStages;
+    bool mIsPendingLinkExecutablePipeline;
+
     ShaderMap<int> mLinkedShaderVersions;
 
     // GL_EXT_geometry_shader.

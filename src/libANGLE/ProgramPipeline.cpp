@@ -533,7 +533,8 @@ angle::Result ProgramPipeline::link(const Context *context)
             return angle::Result::Stop;
         }
 
-        if (!LinkValidateProgramGlobalNames(infoLog, *this))
+        getExecutable().savePendingLinkInfo(mState);
+        if (!LinkValidateProgramGlobalNames(infoLog, getExecutable()))
         {
             return angle::Result::Stop;
         }
