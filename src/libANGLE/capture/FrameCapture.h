@@ -213,6 +213,9 @@ using BufferCalls = std::map<gl::BufferID, std::vector<CallCapture>>;
 // true means mapped, false means unmapped
 using BufferMapStatusMap = std::map<gl::BufferID, bool>;
 
+using FenceSyncSet   = std::set<GLsync>;
+using FenceSyncCalls = std::map<GLsync, std::vector<CallCapture>>;
+
 // Helper to track resource changes during the capture
 class ResourceTracker final : angle::NonCopyable
 {
@@ -258,6 +261,11 @@ class ResourceTracker final : angle::NonCopyable
     void onShaderProgramAccess(gl::ShaderProgramID shaderProgramID);
     uint32_t getMaxShaderPrograms() const { return mMaxShaderPrograms; }
 
+    FenceSyncSet &getFenceSyncsCreatedForMEC() { return mFenceSyncsCreatedForMEC; }
+    FenceSyncCalls &getFenceSyncRegenCalls() { return mFenceSyncRegenCalls; }
+    FenceSyncSet &getFenceSyncsToRegen() { return mFenceSyncsToRegen; }
+    void setDeletedFenceSync(GLsync sync);
+
   private:
     // Buffer regen calls will delete and gen a buffer
     BufferCalls mBufferRegenCalls;
@@ -287,6 +295,14 @@ class ResourceTracker final : angle::NonCopyable
 
     // Maximum accessed shader program ID.
     uint32_t mMaxShaderPrograms = 0;
+
+    // Fence sync objects created during MEC setup
+    FenceSyncSet mFenceSyncsCreatedForMEC;
+    // Fence sync regen calls will create a fence sync objects
+    FenceSyncCalls mFenceSyncRegenCalls;
+    // Fence syncs to regen are a list of starting fence sync objects that were deleted and need to
+    // be regen'ed.
+    FenceSyncSet mFenceSyncsToRegen;
 };
 
 // Used by the CPP replay to filter out unnecessary code.
@@ -336,6 +352,10 @@ class FrameCapture final : angle::NonCopyable
                             bool writable);
 
     ResourceTracker &getResouceTracker() { return mResourceTracker; }
+
+    void setCaptureActive() { mCaptureActive = true; }
+    void setCaptureInactive() { mCaptureActive = false; }
+    bool isCaptureActive() { return mCaptureActive; }
 
   private:
     void captureClientArraySnapshot(const gl::Context *context,
@@ -391,6 +411,8 @@ class FrameCapture final : angle::NonCopyable
     // Initialize it to the number of frames you want to capture, and then clear the value to 0 when
     // you reach the content you want to capture. Currently only available on Android.
     uint32_t mCaptureTrigger;
+
+    bool mCaptureActive = false;
 };
 
 // Shared class for any items that need to be tracked by FrameCapture across shared contexts
