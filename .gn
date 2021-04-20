@@ -42,4 +42,8 @@ default_args = {
 
   # Disable location tags in isolates.
   tests_have_location_tags = false
+
+  # Use base level API level 26 support for Vulkan.
+  android32_ndk_api_level = 26
+  android64_ndk_api_level = 26
 }
