@@ -92,6 +92,7 @@ class BitSetT final
     };
 
     using value_type = BitsT;
+    using param_type = ParamT;
 
     constexpr BitSetT();
     constexpr explicit BitSetT(BitsT value);
@@ -660,6 +661,8 @@ class BitSetArray final
     std::size_t count() const;
     bool intersects(const BitSetArray &other) const;
     BitSetArray<N> &flip();
+    BaseBitSet::param_type first() const;
+    BaseBitSet::param_type last() const;
 
     BaseBitSet::value_type bits(size_t index) const;
 
@@ -965,7 +968,7 @@ bool BitSetArray<N>::intersects(const BitSetArray<N> &other) const
 {
     for (std::size_t index = 0; index < kArraySize; index++)
     {
-        if (mBaseBitSetArray[index].bits() & other.mBaseBitSetArray[index].bits())
+        if ((mBaseBitSetArray[index].bits() & other.mBaseBitSetArray[index].bits()) != 0)
         {
             return true;
         }
@@ -984,6 +987,32 @@ BitSetArray<N> &BitSetArray<N>::flip()
     // The last element in mBaseBitSetArray may need special handling
     mBaseBitSetArray[kArraySize - 1] &= kLastElementMask;
     return *this;
+}
+
+template <std::size_t N>
+typename BitSetArray<N>::BaseBitSet::param_type BitSetArray<N>::first() const
+{
+    BaseBitSet::param_type firstValue = 0;
+    BaseBitSet::param_type offset     = 0;
+    for (const BaseBitSet &baseBitSet : mBaseBitSetArray)
+    {
+        firstValue = std::min(firstValue, baseBitSet.first() + offset);
+        offset += priv::kDefaultBitSetSize;
+    }
+    return firstValue;
+}
+
+template <std::size_t N>
+typename BitSetArray<N>::BaseBitSet::param_type BitSetArray<N>::last() const
+{
+    BaseBitSet::param_type lastValue = 0;
+    BaseBitSet::param_type offset    = 0;
+    for (const BaseBitSet &baseBitSet : mBaseBitSetArray)
+    {
+        lastValue = std::max(lastValue, baseBitSet.last() + offset);
+        offset += priv::kDefaultBitSetSize;
+    }
+    return lastValue;
 }
 
 template <std::size_t N>
