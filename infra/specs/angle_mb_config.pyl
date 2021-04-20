@@ -14,6 +14,10 @@
   # this dict to look up which config to use for a given bot.
   'builder_groups': {
     'angle': {
+      'android-x64-dbg': 'angle_goma_android_debug_bot',
+      'android-x64-rel': 'angle_goma_android_release_bot',
+      'android-x86-dbg': 'angle_goma_android_x86_debug_bot',
+      'android-x86-rel': 'angle_goma_android_x86_release_bot',
       'linux-clang-dbg': 'angle_goma_debug_bot',
       'linux-clang-rel': 'angle_goma_release_bot',
       'linux-gcc-dbg': 'angle_non_clang_debug_bot',
@@ -39,6 +43,10 @@
   # is not necessarily so (i.e., we might have mac, win, and linux
   # bots all using the 'release_bot' config).
   'configs': {
+    'angle_goma_android_debug_bot': ['angle', 'goma', 'android', 'debug'],
+    'angle_goma_android_release_bot': ['angle', 'goma', 'android', 'release'],
+    'angle_goma_android_x86_debug_bot': ['angle', 'goma', 'android', 'x86', 'debug'],
+    'angle_goma_android_x86_release_bot': ['angle', 'goma', 'android', 'x86', 'release'],
     'angle_goma_debug_bot': ['angle', 'goma', 'debug'],
     'angle_goma_release_bot': ['angle', 'goma', 'release'],
     'angle_goma_x86_debug_bot': ['angle', 'goma', 'x86', 'debug'],
@@ -54,6 +62,9 @@
   # This is a dict mapping a given 'mixin' name to a dict of settings that
   # mb should use. See //tools/mb/docs/user_guide.md for more information.
   'mixins': {
+    'android': {
+      'gn_args': 'target_os="android"'
+    },
     'angle': {
       'gn_args': 'build_angle_gles1_conform_tests=true build_angle_trace_perf_tests=true is_component_build=false'
     },
