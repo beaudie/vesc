@@ -1501,23 +1501,16 @@ void ProgramLinkedResourcesLinker::getAtomicCounterBufferSizeMap(
     }
 }
 
-// Note: this is broken for pipelines with modified/discarded shaders. http://anglebug.com/5506
-bool LinkValidateProgramGlobalNames(InfoLog &infoLog, const HasAttachedShaders &programOrPipeline)
+bool LinkValidateProgramGlobalNames(InfoLog &infoLog, const ProgramExecutable &executable)
 {
     angle::HashMap<std::string, const sh::ShaderVariable *> uniformMap;
     using BlockAndFieldPair = std::pair<const sh::InterfaceBlock *, const sh::ShaderVariable *>;
     angle::HashMap<std::string, std::vector<BlockAndFieldPair>> uniformBlockFieldMap;
 
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    for (ShaderType shaderType : executable.getLinkedShaderStages())
     {
-        Shader *shader = programOrPipeline.getAttachedShader(shaderType);
-        if (!shader)
-        {
-            continue;
-        }
-
         // Build a map of Uniforms
-        const std::vector<sh::ShaderVariable> uniforms = shader->getUniforms();
+        const std::vector<sh::ShaderVariable> &uniforms = executable.getLinkedUniforms(shaderType);
         for (const auto &uniform : uniforms)
         {
             uniformMap[uniform.name] = &uniform;
@@ -1526,7 +1519,9 @@ bool LinkValidateProgramGlobalNames(InfoLog &infoLog, const HasAttachedShaders &
         // Build a map of Uniform Blocks
         // This will also detect any field name conflicts between Uniform Blocks without instance
         // names
-        const std::vector<sh::InterfaceBlock> &uniformBlocks = shader->getUniformBlocks();
+        const std::vector<sh::InterfaceBlock> &uniformBlocks =
+            executable.getLinkedUniformBlocks(shaderType);
+
         for (const auto &uniformBlock : uniformBlocks)
         {
             // Only uniform blocks without an instance name can create a conflict with their field
@@ -1585,19 +1580,18 @@ bool LinkValidateProgramGlobalNames(InfoLog &infoLog, const HasAttachedShaders &
     }
 
     // Validate no uniform names conflict with attribute names
-    Shader *vertexShader = programOrPipeline.getAttachedShader(ShaderType::Vertex);
-    if (vertexShader)
+    if (executable.hasLinkedShaderStage(ShaderType::Vertex))
     {
         // ESSL 3.00.6 section 4.3.5:
         // If a uniform variable name is declared in one stage (e.g., a vertex shader)
         // but not in another (e.g., a fragment shader), then that name is still
         // available in the other stage for a different use.
         std::unordered_set<std::string> uniforms;
-        for (const sh::ShaderVariable &uniform : vertexShader->getUniforms())
+        for (const sh::ShaderVariable &uniform : executable.getLinkedUniforms(ShaderType::Vertex))
         {
             uniforms.insert(uniform.name);
         }
-        for (const auto &attrib : vertexShader->getActiveAttributes())
+        for (const auto &attrib : executable.getProgramInputs())
         {
             if (uniforms.count(attrib.name))
             {

@@ -88,6 +88,7 @@ ProgramExecutable::ProgramExecutable()
       mPipelineHasGraphicsImages(false),
       mPipelineHasComputeImages(false),
       mIsCompute(false),
+      mIsExecutableForPipeline(false),
       // [GL_EXT_geometry_shader] Table 20.22
       mGeometryShaderInputPrimitiveType(PrimitiveMode::Triangles),
       mGeometryShaderOutputPrimitiveType(PrimitiveMode::TriangleStrip),
@@ -148,7 +149,8 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mPipelineHasComputeTextures(other.mPipelineHasComputeTextures),
       mPipelineHasGraphicsImages(other.mPipelineHasGraphicsImages),
       mPipelineHasComputeImages(other.mPipelineHasComputeImages),
-      mIsCompute(other.mIsCompute)
+      mIsCompute(other.mIsCompute),
+      mIsExecutableForPipeline(other.mIsExecutableForPipeline)
 {
     reset();
 }
@@ -228,6 +230,7 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
     mLinkedGraphicsShaderStages = ShaderBitSet(stream->readInt<uint8_t>());
     mLinkedComputeShaderStages  = ShaderBitSet(stream->readInt<uint8_t>());
     mIsCompute                  = stream->readBool();
+    mIsExecutableForPipeline    = stream->readBool();
 
     mPipelineHasGraphicsUniformBuffers       = stream->readBool();
     mPipelineHasComputeUniformBuffers        = stream->readBool();
@@ -431,6 +434,16 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
             {
                 LoadShaderVar(stream, &variable);
             }
+            mLinkedUniforms[shaderType].resize(stream->readInt<size_t>());
+            for (sh::ShaderVariable &variable : mLinkedUniforms[shaderType])
+            {
+                LoadShaderVar(stream, &variable);
+            }
+            mLinkedUniformBlocks[shaderType].resize(stream->readInt<size_t>());
+            for (sh::InterfaceBlock &shaderStorageBlock : mLinkedUniformBlocks[shaderType])
+            {
+                LoadShInterfaceBlock(stream, &shaderStorageBlock);
+            }
             mLinkedShaderVersions[shaderType] = stream->readInt<int>();
         }
         for (ShaderType shaderType : mLinkedComputeShaderStages)
@@ -444,6 +457,11 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
             for (sh::ShaderVariable &variable : mLinkedInputVaryings[shaderType])
             {
                 LoadShaderVar(stream, &variable);
+            }
+            mLinkedUniformBlocks[shaderType].resize(stream->readInt<size_t>());
+            for (sh::InterfaceBlock &shaderStorageBlock : mLinkedUniformBlocks[shaderType])
+            {
+                LoadShInterfaceBlock(stream, &shaderStorageBlock);
             }
             mLinkedShaderVersions[shaderType] = stream->readInt<int>();
         }
@@ -465,6 +483,7 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
     stream->writeInt(mLinkedGraphicsShaderStages.bits());
     stream->writeInt(mLinkedComputeShaderStages.bits());
     stream->writeBool(mIsCompute);
+    stream->writeBool(mIsExecutableForPipeline);
 
     stream->writeBool(mPipelineHasGraphicsUniformBuffers);
     stream->writeBool(mPipelineHasComputeUniformBuffers);
@@ -612,6 +631,16 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
             {
                 WriteShaderVar(stream, shaderVariable);
             }
+            stream->writeInt(mLinkedUniforms[shaderType].size());
+            for (const sh::ShaderVariable &shaderVariable : mLinkedUniforms[shaderType])
+            {
+                WriteShaderVar(stream, shaderVariable);
+            }
+            stream->writeInt(mLinkedUniformBlocks[shaderType].size());
+            for (const sh::InterfaceBlock &shaderStorageBlock : mLinkedUniformBlocks[shaderType])
+            {
+                WriteShInterfaceBlock(stream, shaderStorageBlock);
+            }
             stream->writeInt(mLinkedShaderVersions[shaderType]);
         }
         for (ShaderType shaderType : mLinkedComputeShaderStages)
@@ -625,6 +654,16 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
             for (const sh::ShaderVariable &shaderVariable : mLinkedInputVaryings[shaderType])
             {
                 WriteShaderVar(stream, shaderVariable);
+            }
+            stream->writeInt(mLinkedUniforms[shaderType].size());
+            for (const sh::ShaderVariable &shaderVariable : mLinkedUniforms[shaderType])
+            {
+                WriteShaderVar(stream, shaderVariable);
+            }
+            stream->writeInt(mLinkedUniformBlocks[shaderType].size());
+            for (const sh::InterfaceBlock &shaderStorageBlock : mLinkedUniformBlocks[shaderType])
+            {
+                WriteShInterfaceBlock(stream, shaderStorageBlock);
             }
             stream->writeInt(mLinkedShaderVersions[shaderType]);
         }
@@ -858,7 +897,24 @@ void ProgramExecutable::saveLinkedStateInfo(const ProgramState &state)
         mLinkedOutputVaryings[shaderType] = shader->getOutputVaryings();
         mLinkedInputVaryings[shaderType]  = shader->getInputVaryings();
         mLinkedShaderVersions[shaderType] = shader->getShaderVersion();
+        mLinkedUniforms[shaderType]       = shader->getUniforms();
+        mLinkedUniformBlocks[shaderType]  = shader->getUniformBlocks();
     }
+    mIsExecutableForPipeline = false;
+}
+
+void ProgramExecutable::saveLinkedStateInfo(const ProgramPipelineState &state)
+{
+    for (ShaderType shaderType : getLinkedShaderStages())
+    {
+        const Program *program = state.getShaderProgram(shaderType);
+        ASSERT(program);
+        mLinkedUniforms[shaderType] =
+            program->getState().getExecutable().getLinkedUniforms(shaderType);
+        mLinkedUniformBlocks[shaderType] =
+            program->getState().getExecutable().getLinkedUniformBlocks(shaderType);
+    }
+    mIsExecutableForPipeline = true;
 }
 
 bool ProgramExecutable::isYUVOutput() const
@@ -871,15 +927,27 @@ ShaderType ProgramExecutable::getLinkedTransformFeedbackStage() const
     return GetLastPreFragmentStage(mLinkedGraphicsShaderStages);
 }
 
+ShaderType ProgramExecutable::getTransformFeedbackStage() const
+{
+    if (hasLinkedShaderStage(ShaderType::Geometry))
+    {
+        return ShaderType::Geometry;
+    }
+    if (hasLinkedShaderStage(ShaderType::TessEvaluation))
+    {
+        return ShaderType::TessEvaluation;
+    }
+    return ShaderType::Vertex;
+}
+
 bool ProgramExecutable::linkMergedVaryings(
     const Context *context,
-    const HasAttachedShaders &programOrPipeline,
     const ProgramMergedVaryings &mergedVaryings,
     const std::vector<std::string> &transformFeedbackVaryingNames,
     bool isSeparable,
     ProgramVaryingPacking *varyingPacking)
 {
-    ShaderType tfStage = programOrPipeline.getTransformFeedbackStage();
+    ShaderType tfStage = getTransformFeedbackStage();
 
     if (!linkValidateTransformFeedback(context, mergedVaryings, tfStage,
                                        transformFeedbackVaryingNames))
@@ -904,12 +972,7 @@ bool ProgramExecutable::linkMergedVaryings(
     ShaderBitSet activeShadersMask;
     for (ShaderType shaderType : kAllGraphicsShaderTypes)
     {
-        // - Check for attached shaders to handle the case of a Program linking the currently
-        // attached shaders.
-        // - Check for linked shaders to handle the case of a PPO linking separable programs before
-        // drawing.
-        if (programOrPipeline.getAttachedShader(shaderType) ||
-            getLinkedShaderStages().test(shaderType))
+        if (hasLinkedShaderStage(shaderType))
         {
             activeShadersMask[shaderType] = true;
         }
