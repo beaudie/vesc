@@ -89,9 +89,30 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
                 texture->getType() == TextureType::Rectangle ||
                 texture->getType() == TextureType::External)
             {
-                functions->framebufferTexture2D(GL_FRAMEBUFFER, attachmentPoint,
-                                                ToGLenum(texture->getType()),
-                                                textureGL->getTextureID(), attachment->mipLevel());
+                if (attachment->isRenderToTexture())
+                {
+                    if (functions->framebufferTexture2DMultisampleEXT)
+                    {
+                        functions->framebufferTexture2DMultisampleEXT(
+                            GL_FRAMEBUFFER, attachmentPoint, ToGLenum(texture->getType()),
+                            textureGL->getTextureID(), attachment->mipLevel(),
+                            attachment->getSamples());
+                    }
+                    else
+                    {
+                        ASSERT(functions->framebufferTexture2DMultisampleIMG);
+                        functions->framebufferTexture2DMultisampleIMG(
+                            GL_FRAMEBUFFER, attachmentPoint, ToGLenum(texture->getType()),
+                            textureGL->getTextureID(), attachment->mipLevel(),
+                            attachment->getSamples());
+                    }
+                }
+                else
+                {
+                    functions->framebufferTexture2D(
+                        GL_FRAMEBUFFER, attachmentPoint, ToGLenum(texture->getType()),
+                        textureGL->getTextureID(), attachment->mipLevel());
+                }
             }
             else if (attachment->isLayered())
             {
@@ -652,6 +673,9 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
 
     GLenum framebufferTarget =
         stateManager->getHasSeparateFramebufferBindings() ? GL_READ_FRAMEBUFFER : GL_FRAMEBUFFER;
+
+    stateManager->bindFramebuffer(framebufferTarget, 0);
+    functions->finish();
     stateManager->bindFramebuffer(framebufferTarget, mFramebufferID);
 
     bool useOverlappingRowsWorkaround = features.packOverlappingRowsSeparatelyPackBuffer.enabled &&
