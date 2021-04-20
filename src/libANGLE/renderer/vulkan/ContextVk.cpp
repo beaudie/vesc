@@ -289,17 +289,33 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
     return egl::FromEGLenum<egl::ContextPriority>(state.getContextPriority());
 }
 
-template <typename MaskT>
+template <typename BitIndexT>
 void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
                               const gl::BufferVector &buffers,
-                              const MaskT &mask,
+                              BitIndexT lastBufferIndex,
                               bool appendOffset)
 {
-    for (size_t bufferIndex : mask)
+    for (BitIndexT bufferIndex = 0; bufferIndex < lastBufferIndex; ++bufferIndex)
     {
         const gl::OffsetBindingPointer<gl::Buffer> &binding = buffers[bufferIndex];
         const gl::Buffer *bufferGL                          = binding.get();
-        BufferVk *bufferVk                                  = vk::GetImpl(bufferGL);
+
+        if (!bufferGL)
+        {
+            desc->append32BitValue(0);
+            desc->append32BitValue(0);
+            continue;
+        }
+
+        BufferVk *bufferVk = vk::GetImpl(bufferGL);
+
+        if (!bufferVk->isBufferValid())
+        {
+            desc->append32BitValue(0);
+            desc->append32BitValue(0);
+            continue;
+        }
+
         vk::BufferSerial bufferSerial = bufferVk->getBuffer().getBufferSerial();
 
         desc->appendBufferSerial(bufferSerial);
@@ -313,6 +329,8 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
             desc->append32BitValue(static_cast<uint32_t>(binding.getOffset()));
         }
     }
+
+    desc->append64BitValue(std::numeric_limits<uint64_t>::max());
 }
 }  // anonymous namespace
 
@@ -3918,20 +3936,6 @@ angle::Result ContextVk::invalidateCurrentShaderResources()
     {
         mShaderBuffersDescriptorDesc.reset();
 
-#if defined(ANGLE_IS_64_BIT_CPU)
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getUniformBuffersMask().bits(0));
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getUniformBuffersMask().bits(1));
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getShaderStorageBuffersMask().bits());
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getAtomicCounterBuffersMask().bits());
-#else
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(0));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(1));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(2));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(0));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(1));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getAtomicCounterBuffersMask().bits());
-#endif  // defined(ANGLE_IS_64_BIT_CPU)
-
         ProgramExecutableVk *executableVk = nullptr;
         if (mState.getProgram())
         {
@@ -3947,18 +3951,18 @@ angle::Result ContextVk::invalidateCurrentShaderResources()
 
         const gl::BufferVector &uniformBuffers = mState.getOffsetBindingPointerUniformBuffers();
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, uniformBuffers,
-                                 mState.getUniformBuffersMask(),
+                                 mState.getUniformBuffersMask().last(),
                                  !executableVk->usesDynamicUniformBufferDescriptors());
 
         const gl::BufferVector &shaderStorageBuffers =
             mState.getOffsetBindingPointerShaderStorageBuffers();
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, shaderStorageBuffers,
-                                 mState.getShaderStorageBuffersMask(), true);
+                                 mState.getShaderStorageBuffersMask().last(), true);
 
         const gl::BufferVector &atomicCounterBuffers =
             mState.getOffsetBindingPointerAtomicCounterBuffers();
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, atomicCounterBuffers,
-                                 mState.getAtomicCounterBuffersMask(), true);
+                                 mState.getAtomicCounterBuffersMask().last(), true);
     }
 
     return angle::Result::Continue;
