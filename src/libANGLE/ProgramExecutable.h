@@ -163,8 +163,6 @@ class ProgramExecutable final : public angle::Subject
                mLinkedGraphicsShaderStages[ShaderType::TessEvaluation];
     }
 
-    ShaderType getTransformFeedbackStage() const;
-
     ShaderType getLinkedTransformFeedbackStage() const;
 
     // A PPO can have both graphics and compute programs attached, so
@@ -312,6 +310,7 @@ class ProgramExecutable final : public angle::Subject
     GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
 
     void saveLinkedStateInfo(const ProgramState &state);
+
     const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(ShaderType shaderType) const
     {
         return mLinkedOutputVaryings[shaderType];
@@ -319,6 +318,16 @@ class ProgramExecutable final : public angle::Subject
     const std::vector<sh::ShaderVariable> &getLinkedInputVaryings(ShaderType shaderType) const
     {
         return mLinkedInputVaryings[shaderType];
+    }
+
+    const std::vector<sh::ShaderVariable> &getLinkedUniforms(ShaderType shaderType) const
+    {
+        return mLinkedUniforms[shaderType];
+    }
+
+    const std::vector<sh::InterfaceBlock> &getLinkedUniformBlocks(ShaderType shaderType) const
+    {
+        return mLinkedUniformBlocks[shaderType];
     }
 
     int getLinkedShaderVersion(ShaderType shaderType) const
@@ -371,10 +380,12 @@ class ProgramExecutable final : public angle::Subject
     void setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex,
                                                std::vector<SamplerBinding> &samplerBindings);
 
+    ShaderType getTransformFeedbackStage(const LinkingVariables &linkingVariables) const;
+
     bool linkMergedVaryings(const Context *context,
-                            const HasAttachedShaders &programOrPipeline,
                             const ProgramMergedVaryings &mergedVaryings,
                             const std::vector<std::string> &transformFeedbackVaryingNames,
+                            const LinkingVariables &LinkingVariables,
                             bool isSeparable,
                             ProgramVaryingPacking *varyingPacking);
 
@@ -483,6 +494,9 @@ class ProgramExecutable final : public angle::Subject
 
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mLinkedUniforms;
+    ShaderMap<std::vector<sh::InterfaceBlock>> mLinkedUniformBlocks;
+
     ShaderMap<int> mLinkedShaderVersions;
 
     // GL_EXT_geometry_shader.

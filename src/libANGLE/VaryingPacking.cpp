@@ -1079,27 +1079,22 @@ bool ProgramVaryingPacking::collectAndPackUserVaryings(InfoLog &infoLog,
     return true;
 }
 
-ProgramMergedVaryings GetMergedVaryingsFromShaders(const HasAttachedShaders &programOrPipeline,
-                                                   const ProgramExecutable &programExecutable)
+ProgramMergedVaryings GetMergedVaryingsFromLinkingVariables(
+    const LinkingVariables &linkingVariables)
 {
     ShaderType frontShaderType = ShaderType::InvalidEnum;
     ProgramMergedVaryings merged;
 
     for (ShaderType backShaderType : kAllGraphicsShaderTypes)
     {
-        Shader *backShader = programOrPipeline.getAttachedShader(backShaderType);
-
-        if (!backShader && !programExecutable.hasLinkedShaderStage(backShaderType))
+        if (!linkingVariables.mIsShaderStageUsedBitset[backShaderType])
         {
             continue;
         }
-
         const std::vector<sh::ShaderVariable> &backShaderOutputVaryings =
-            backShader ? backShader->getOutputVaryings()
-                       : programExecutable.getLinkedOutputVaryings(backShaderType);
+            linkingVariables.mPendingLinkOutputVaryings[backShaderType];
         const std::vector<sh::ShaderVariable> &backShaderInputVaryings =
-            backShader ? backShader->getInputVaryings()
-                       : programExecutable.getLinkedInputVaryings(backShaderType);
+            linkingVariables.mPendingLinkInputVaryings[backShaderType];
 
         // Add outputs. These are always unmatched since we walk shader stages sequentially.
         for (const sh::ShaderVariable &frontVarying : backShaderOutputVaryings)

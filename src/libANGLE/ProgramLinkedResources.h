@@ -39,6 +39,7 @@ struct InterfaceBlock;
 enum class LinkMismatchError;
 struct LinkedUniform;
 class ProgramState;
+class ProgramPipelineState;
 class ProgramBindings;
 class ProgramAliasedBindings;
 class Shader;
@@ -236,6 +237,21 @@ struct ProgramLinkedResources
     std::vector<std::string> unusedInterfaceBlocks;
 };
 
+struct LinkingVariables
+{
+    LinkingVariables();
+    ~LinkingVariables();
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkOutputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkInputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mPendingLinkUniforms;
+    ShaderMap<std::vector<sh::InterfaceBlock>> mPendingLinkUniformBlocks;
+    ShaderBitSet mIsShaderStageUsedBitset;
+
+    void savePendingLinkInfo(const ProgramState &state);
+    void savePendingLinkInfo(const ProgramPipelineState &state,
+                             const ProgramExecutable &programExecutable);
+};
+
 class CustomBlockLayoutEncoderFactory : angle::NonCopyable
 {
   public:
@@ -263,7 +279,9 @@ class ProgramLinkedResourcesLinker final : angle::NonCopyable
     CustomBlockLayoutEncoderFactory *mCustomEncoderFactory;
 };
 
-bool LinkValidateProgramGlobalNames(InfoLog &infoLog, const HasAttachedShaders &programOrPipeline);
+bool LinkValidateProgramGlobalNames(InfoLog &infoLog,
+                                    const ProgramExecutable &executable,
+                                    const LinkingVariables &linkingVariables);
 bool LinkValidateShaderInterfaceMatching(const std::vector<sh::ShaderVariable> &outputVaryings,
                                          const std::vector<sh::ShaderVariable> &inputVaryings,
                                          ShaderType frontShaderType,
