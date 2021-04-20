@@ -931,6 +931,28 @@ void MaybeResetResources(std::stringstream &out,
     }
 }
 
+void ResetFenceSyncObjects(std::stringstream &out,
+                           DataTracker *dataTracker,
+                           std::stringstream &header,
+                           ResourceTracker *resourceTracker,
+                           std::vector<uint8_t> *binaryData)
+{
+    FenceSyncCalls &fenceSyncRegenCalls = resourceTracker->getFenceSyncRegenCalls();
+
+    // If any of our starting fence sync objects were deleted during the run, recreate them
+    FenceSyncSet &fenceSyncsToRegen = resourceTracker->getFenceSyncsToRegen();
+    for (const GLsync sync : fenceSyncsToRegen)
+    {
+        // Emit their regen calls
+        for (CallCapture &call : fenceSyncRegenCalls[sync])
+        {
+            out << "    ";
+            WriteCppReplayForCall(call, dataTracker, out, header, binaryData);
+            out << ";\n";
+        }
+    }
+}
+
 void WriteCppReplayFunctionWithParts(const gl::Context *context,
                                      ReplayFunc replayFunc,
                                      DataTracker *dataTracker,
@@ -1058,8 +1080,10 @@ void WriteCppReplay(bool compression,
                                 resourceTracker, binaryData);
         }
 
-        out << restoreCallStream.str();
+        // Fence Sync objects aren't Resources with IDs, so reset them separately.
+        ResetFenceSyncObjects(restoreCallStream, &dataTracker, header, resourceTracker, binaryData);
 
+        out << restoreCallStream.str();
         out << "}\n";
     }
 
@@ -2099,6 +2123,18 @@ void CaptureBufferResetCalls(const gl::State &replayState,
             CaptureUnmapBuffer(replayState, true, gl::BufferBinding::Array, GL_TRUE));
 }
 
+void CaptureFenceSyncResetCalls(const gl::State &replayState,
+                                ResourceTracker *resourceTracker,
+                                GLsync syncID,
+                                const gl::Sync *sync)
+{
+    // Track calls to regenerate a given fence sync
+    FenceSyncCalls &fenceSyncRegenCalls = resourceTracker->getFenceSyncRegenCalls();
+    Capture(&fenceSyncRegenCalls[syncID],
+            CaptureFenceSync(replayState, true, sync->getCondition(), sync->getFlags(), syncID));
+    MaybeCaptureUpdateResourceIDs(&fenceSyncRegenCalls[syncID]);
+}
+
 void CaptureBufferBindingResetCalls(const gl::State &replayState,
                                     ResourceTracker *resourceTracker,
                                     gl::BufferBinding binding,
@@ -3068,6 +3104,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             continue;
         }
         cap(CaptureFenceSync(replayState, true, sync->getCondition(), sync->getFlags(), syncID));
+        CaptureFenceSyncResetCalls(replayState, resourceTracker, syncID, sync);
+        resourceTracker->getFenceSyncsCreatedForMEC().insert(syncID);
     }
 
     // Capture Image Texture bindings
@@ -4042,7 +4080,7 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
                     mBufferDataMap.erase(bufferDataInfo);
                 }
                 // If we're capturing, track what buffers have been deleted
-                if (mFrameIndex >= mCaptureStartFrame)
+                if (isCaptureActive())
                 {
                     mResourceTracker.setDeletedBuffer(bufferIDs[i]);
                 }
@@ -4059,10 +4097,21 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
             for (GLsizei i = 0; i < count; i++)
             {
                 // If we're capturing, track what new buffers have been genned
-                if (mFrameIndex >= mCaptureStartFrame)
+                if (isCaptureActive())
                 {
                     mResourceTracker.setGennedBuffer(bufferIDs[i]);
                 }
+            }
+            break;
+        }
+
+        case EntryPoint::GLDeleteSync:
+        {
+            GLsync sync = call.params.getParam("sync", ParamType::TGLsync, 0).value.GLsyncVal;
+            // If we're capturing, track which fence sync has been deleted
+            if (isCaptureActive())
+            {
+                mResourceTracker.setDeletedFenceSync(sync);
             }
             break;
         }
@@ -4501,11 +4550,17 @@ void FrameCapture::checkForCaptureTrigger()
 
 void FrameCapture::onEndFrame(const gl::Context *context)
 {
+    if (mFrameIndex > mCaptureEndFrame)
+    {
+        setCaptureInactive();
+        return;
+    }
+
     // On Android, we can trigger a capture during the run
     checkForCaptureTrigger();
 
     // Note that we currently capture before the start frame to collect shader and program sources.
-    if (!mFrameCalls.empty() && mFrameIndex >= mCaptureStartFrame)
+    if (!mFrameCalls.empty() && isCaptureActive())
     {
         if (mIsFirstFrame)
         {
@@ -4550,6 +4605,8 @@ void FrameCapture::onEndFrame(const gl::Context *context)
 
     if (enabled() && mFrameIndex == mCaptureStartFrame)
     {
+        setCaptureActive();
+
         mSetupCalls.clear();
         CaptureMidExecutionSetup(context, &mSetupCalls, &mResourceTracker, this);
     }
@@ -4654,6 +4711,19 @@ void ResourceTracker::setDeletedBuffer(gl::BufferID id)
     // In this case, the app is deleting a buffer we started with, we need to regen on loop
     mBuffersToRegen.insert(id);
     mBuffersToRestore.insert(id);
+}
+
+void ResourceTracker::setDeletedFenceSync(GLsync sync)
+{
+    ASSERT(sync != nullptr);
+    if (mFenceSyncsCreatedForMEC.find(sync) == mFenceSyncsCreatedForMEC.end())
+    {
+        // This is a fence sync created after MEC was initialized. Ignore it.
+        return;
+    }
+
+    // In this case, the app is deleting a fence sync we started with, we need to regen on loop.
+    mFenceSyncsToRegen.insert(sync);
 }
 
 void ResourceTracker::setGennedBuffer(gl::BufferID id)
