@@ -23,7 +23,7 @@ vars = {
   'checkout_angle_restricted_traces': 'checkout_angle_internal',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'cb5ad5e674faa902af4cd38404c908e43ca1680a',
+  'chromium_revision': 'ba4862010a33bc28223dbad420ac6d4a4b1120b1',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -68,7 +68,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': 'd6284252dc903e79c8575ad721ce395a45440e1c',
+  'catapult_revision': '09248fe4327ccc493cd70a49f741d044bf33e1be',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
@@ -79,7 +79,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@5658f225b488f2c5d0e2f7feab6dd7210dd315c1',
+    'url': '{chromium_git}/chromium/src/build.git@bdd4e9dcbc4955812bd1b4d2242bb322eeab0de2',
     'condition': 'not build_with_chromium',
   },
 
@@ -137,7 +137,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@db4fc48f3749fae75660192c09489cc6cb98ea25',
+    'url': '{chromium_git}/chromium/src/testing@33f1c989a0b39f6fad1c1d20ca5bdfec7a1cd714',
     'condition': 'not build_with_chromium',
   },
 
@@ -168,7 +168,7 @@ deps = {
   },
 
   'third_party/depot_tools': {
-    'url': '{chromium_git}/chromium/tools/depot_tools.git@efd29f6f5c4ce52cec970b00348a064e608512a7',
+    'url': '{chromium_git}/chromium/tools/depot_tools.git@93d80d868650767ac978301658ada7c37c6973b3',
     'condition': 'not build_with_chromium',
   },
 
@@ -339,7 +339,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': '{chromium_git}/chromium/src/tools/mb@f4ded123d0f7f90e8e13a7afd2861350b1206d0b',
+    'url': '{chromium_git}/chromium/src/tools/mb@b6d37787d20a8a84a20c9cd4a98b52fc54c22831',
     'condition': 'not build_with_chromium',
   },
 
