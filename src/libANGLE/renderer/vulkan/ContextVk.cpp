@@ -3918,20 +3918,6 @@ angle::Result ContextVk::invalidateCurrentShaderResources()
     {
         mShaderBuffersDescriptorDesc.reset();
 
-#if defined(ANGLE_IS_64_BIT_CPU)
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getUniformBuffersMask().bits(0));
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getUniformBuffersMask().bits(1));
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getShaderStorageBuffersMask().bits());
-        mShaderBuffersDescriptorDesc.append64BitValue(mState.getAtomicCounterBuffersMask().bits());
-#else
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(0));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(1));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getUniformBuffersMask().bits(2));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(0));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(1));
-        mShaderBuffersDescriptorDesc.append32BitValue(mState.getAtomicCounterBuffersMask().bits());
-#endif  // defined(ANGLE_IS_64_BIT_CPU)
-
         ProgramExecutableVk *executableVk = nullptr;
         if (mState.getProgram())
         {
@@ -3945,10 +3931,50 @@ angle::Result ContextVk::invalidateCurrentShaderResources()
             executableVk                  = &pipelineVk->getExecutable();
         }
 
-        const gl::BufferVector &uniformBuffers = mState.getOffsetBindingPointerUniformBuffers();
-        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, uniformBuffers,
-                                 mState.getUniformBuffersMask(),
-                                 !executableVk->usesDynamicUniformBufferDescriptors());
+        gl::ShaderMap<const gl::ProgramState *> programStates;
+        executableVk->fillProgramStateMap(this, &programStates);
+
+        for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
+        {
+            const gl::ProgramState *programState = programStates[shaderType];
+            ASSERT(programState);
+            const std::vector<gl::InterfaceBlock> &blocks = programState->getUniformBlocks();
+            for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+            {
+                const gl::InterfaceBlock &block = blocks[bufferIndex];
+                const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
+                    mState.getIndexedUniformBuffer(block.binding);
+
+                if (!block.isActive(shaderType))
+                {
+                    mShaderBuffersDescriptorDesc.append32BitValue(0);
+                    continue;
+                }
+
+                if (bufferBinding.get() == nullptr)
+                {
+                    mShaderBuffersDescriptorDesc.append32BitValue(0);
+                    continue;
+                }
+
+                const gl::Buffer *bufferGL    = bufferBinding.get();
+                BufferVk *bufferVk            = vk::GetImpl(bufferGL);
+                vk::BufferSerial bufferSerial = bufferVk->getBuffer().getBufferSerial();
+
+                mShaderBuffersDescriptorDesc.appendBufferSerial(bufferSerial);
+            }
+        }
+
+        mShaderBuffersDescriptorDesc.append32BitValue(std::numeric_limits<uint32_t>::max());
+
+#if defined(ANGLE_IS_64_BIT_CPU)
+        mShaderBuffersDescriptorDesc.append64BitValue(mState.getShaderStorageBuffersMask().bits());
+        mShaderBuffersDescriptorDesc.append64BitValue(mState.getAtomicCounterBuffersMask().bits());
+#else
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(0));
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getShaderStorageBuffersMask().bits(1));
+        mShaderBuffersDescriptorDesc.append32BitValue(mState.getAtomicCounterBuffersMask().bits());
+#endif  // defined(ANGLE_IS_64_BIT_CPU)
 
         const gl::BufferVector &shaderStorageBuffers =
             mState.getOffsetBindingPointerShaderStorageBuffers();
