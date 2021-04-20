@@ -138,6 +138,13 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
 
     // HasAttachedShaders implementation
     Shader *getAttachedShader(ShaderType shaderType) const override;
+    bool isShaderStageUsed(ShaderType shaderType) const override;
+    bool isPipelineProgramObject() const override;
+    const std::vector<sh::ShaderVariable> &getUniformsForLink(ShaderType shaderType) const override;
+    const std::vector<sh::InterfaceBlock> &getUniformBlocksForLink(
+        ShaderType shaderType) const override;
+    const std::vector<sh::ShaderVariable> &getAttributesForLink(
+        ShaderType shaderType) const override;
 
   private:
     void updateLinkedShaderStages();

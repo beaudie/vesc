@@ -1093,13 +1093,16 @@ ProgramMergedVaryings GetMergedVaryingsFromShaders(const HasAttachedShaders &pro
         {
             continue;
         }
-
+        bool shouldCombineAllAttachedProgramVaryings =
+            !programOrPipeline.isPipelineProgramObject() && backShader;
         const std::vector<sh::ShaderVariable> &backShaderOutputVaryings =
-            backShader ? backShader->getOutputVaryings()
-                       : programExecutable.getLinkedOutputVaryings(backShaderType);
+            shouldCombineAllAttachedProgramVaryings
+                ? backShader->getOutputVaryings()
+                : programExecutable.getLinkedOutputVaryings(backShaderType);
         const std::vector<sh::ShaderVariable> &backShaderInputVaryings =
-            backShader ? backShader->getInputVaryings()
-                       : programExecutable.getLinkedInputVaryings(backShaderType);
+            shouldCombineAllAttachedProgramVaryings
+                ? backShader->getInputVaryings()
+                : programExecutable.getLinkedInputVaryings(backShaderType);
 
         // Add outputs. These are always unmatched since we walk shader stages sequentially.
         for (const sh::ShaderVariable &frontVarying : backShaderOutputVaryings)

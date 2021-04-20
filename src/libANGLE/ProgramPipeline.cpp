@@ -696,4 +696,35 @@ Shader *ProgramPipeline::getAttachedShader(ShaderType shaderType) const
     const Program *program = mState.mPrograms[shaderType];
     return program ? program->getAttachedShader(shaderType) : nullptr;
 }
+
+bool ProgramPipeline::isShaderStageUsed(ShaderType shaderType) const
+{
+    return getExecutable().hasLinkedShaderStage(shaderType);
+}
+
+bool ProgramPipeline::isPipelineProgramObject() const
+{
+    return true;
+}
+
+const std::vector<sh::ShaderVariable> &ProgramPipeline::getUniformsForLink(
+    ShaderType shaderType) const
+{
+    const Program *program = mState.mPrograms[shaderType];
+    return program->getState().getExecutable().getLinkedUniforms(shaderType);
+}
+
+const std::vector<sh::InterfaceBlock> &ProgramPipeline::getUniformBlocksForLink(
+    ShaderType shaderType) const
+{
+    const Program *program = mState.mPrograms[shaderType];
+    return program->getState().getExecutable().getLinkedUniformBlocks(shaderType);
+}
+
+const std::vector<sh::ShaderVariable> &ProgramPipeline::getAttributesForLink(
+    ShaderType shaderType) const
+{
+    const Program *program = mState.mPrograms[shaderType];
+    return program->getState().getProgramInputs();
+}
 }  // namespace gl

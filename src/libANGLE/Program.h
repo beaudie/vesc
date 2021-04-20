@@ -111,6 +111,9 @@ void LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var);
 void WriteInterfaceBlock(BinaryOutputStream *stream, const InterfaceBlock &block);
 void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block);
 
+void WriteShInterfaceBlock(BinaryOutputStream *stream, const sh::InterfaceBlock &block);
+void LoadShInterfaceBlock(BinaryInputStream *stream, sh::InterfaceBlock *block);
+
 void WriteShaderVariableBuffer(BinaryOutputStream *stream, const ShaderVariableBuffer &var);
 void LoadShaderVariableBuffer(BinaryInputStream *stream, ShaderVariableBuffer *var);
 
@@ -441,11 +444,18 @@ struct ProgramVaryingRef
 
 using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
 
-// TODO: Copy necessary shader state into Program. http://anglebug.com/5506
 class HasAttachedShaders
 {
   public:
     virtual Shader *getAttachedShader(ShaderType shaderType) const = 0;
+    virtual bool isShaderStageUsed(ShaderType shaderType) const    = 0;
+    virtual bool isPipelineProgramObject() const                   = 0;
+    virtual const std::vector<sh::ShaderVariable> &getUniformsForLink(
+        ShaderType shaderType) const = 0;
+    virtual const std::vector<sh::InterfaceBlock> &getUniformBlocksForLink(
+        ShaderType shaderType) const = 0;
+    virtual const std::vector<sh::ShaderVariable> &getAttributesForLink(
+        ShaderType shaderType) const = 0;
 
     ShaderType getTransformFeedbackStage() const;
 
@@ -476,6 +486,13 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
 
     // HasAttachedShaders implementation
     Shader *getAttachedShader(ShaderType shaderType) const override;
+    bool isPipelineProgramObject() const override;
+    bool isShaderStageUsed(ShaderType shaderType) const override;
+    const std::vector<sh::ShaderVariable> &getUniformsForLink(ShaderType shaderType) const override;
+    const std::vector<sh::InterfaceBlock> &getUniformBlocksForLink(
+        ShaderType shaderType) const override;
+    const std::vector<sh::ShaderVariable> &getAttributesForLink(
+        ShaderType shaderType) const override;
 
     void bindAttributeLocation(GLuint index, const char *name);
     void bindUniformLocation(UniformLocation location, const char *name);

@@ -788,6 +788,46 @@ void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
     LoadShaderVariableBuffer(stream, block);
 }
 
+void WriteShInterfaceBlock(BinaryOutputStream *stream, const sh::InterfaceBlock &block)
+{
+    stream->writeString(block.name);
+    stream->writeString(block.mappedName);
+    stream->writeString(block.instanceName);
+    stream->writeInt(block.arraySize);
+    stream->writeEnum(block.layout);
+    stream->writeBool(block.isRowMajorLayout);
+    stream->writeInt(block.binding);
+    stream->writeBool(block.staticUse);
+    stream->writeBool(block.active);
+    stream->writeEnum(block.blockType);
+
+    stream->writeInt<size_t>(block.fields.size());
+    for (const sh::ShaderVariable &shaderVariable : block.fields)
+    {
+        WriteShaderVar(stream, shaderVariable);
+    }
+}
+
+void LoadShInterfaceBlock(BinaryInputStream *stream, sh::InterfaceBlock *block)
+{
+    block->name             = stream->readString();
+    block->mappedName       = stream->readString();
+    block->instanceName     = stream->readString();
+    block->arraySize        = stream->readInt<unsigned int>();
+    block->layout           = stream->readEnum<sh::BlockLayoutType>();
+    block->isRowMajorLayout = stream->readBool();
+    block->binding          = stream->readInt<int>();
+    block->staticUse        = stream->readBool();
+    block->active           = stream->readBool();
+    block->blockType        = stream->readEnum<sh::BlockType>();
+
+    block->fields.resize(stream->readInt<size_t>());
+    for (sh::ShaderVariable &variable : block->fields)
+    {
+        LoadShaderVar(stream, &variable);
+    }
+}
+
 // Saves the linking context for later use in resolveLink().
 struct Program::LinkingState
 {
@@ -1412,6 +1452,34 @@ Shader *Program::getAttachedShader(ShaderType shaderType) const
 {
     ASSERT(!mLinkingState);
     return mState.getAttachedShader(shaderType);
+}
+
+bool Program::isShaderStageUsed(ShaderType shaderType) const
+{
+    return getAttachedShader(shaderType) != nullptr;
+}
+
+bool Program::isPipelineProgramObject() const
+{
+    return false;
+}
+
+const std::vector<sh::ShaderVariable> &Program::getUniformsForLink(ShaderType shaderType) const
+{
+    Shader *shader = getAttachedShader(shaderType);
+    return shader->getUniforms();
+}
+
+const std::vector<sh::InterfaceBlock> &Program::getUniformBlocksForLink(ShaderType shaderType) const
+{
+    Shader *shader = getAttachedShader(shaderType);
+    return shader->getUniformBlocks();
+}
+
+const std::vector<sh::ShaderVariable> &Program::getAttributesForLink(ShaderType shaderType) const
+{
+    Shader *shader = getAttachedShader(shaderType);
+    return shader->getActiveAttributes();
 }
 
 void Program::bindAttributeLocation(GLuint index, const char *name)

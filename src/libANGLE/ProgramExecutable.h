@@ -321,6 +321,16 @@ class ProgramExecutable final : public angle::Subject
         return mLinkedInputVaryings[shaderType];
     }
 
+    const std::vector<sh::ShaderVariable> &getLinkedUniforms(ShaderType shaderType) const
+    {
+        return mLinkedUniforms[shaderType];
+    }
+
+    const std::vector<sh::InterfaceBlock> &getLinkedUniformBlocks(ShaderType shaderType) const
+    {
+        return mLinkedUniformBlocks[shaderType];
+    }
+
     int getLinkedShaderVersion(ShaderType shaderType) const
     {
         return mLinkedShaderVersions[shaderType];
@@ -483,6 +493,9 @@ class ProgramExecutable final : public angle::Subject
 
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;
+    ShaderMap<std::vector<sh::ShaderVariable>> mLinkedUniforms;
+    ShaderMap<std::vector<sh::InterfaceBlock>> mLinkedUniformBlocks;
+
     ShaderMap<int> mLinkedShaderVersions;
 
     // GL_EXT_geometry_shader.
