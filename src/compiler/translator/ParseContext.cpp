@@ -4243,6 +4243,15 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                   getQualifierString(typeQualifier.qualifier));
         }
     }
+    else if (typeQualifier.qualifier == EvqGeometryIn || typeQualifier.qualifier == EvqGeometryOut)
+    {
+        if ((!isExtensionEnabled(TExtension::EXT_geometry_shader) && mShaderVersion < 320) ||
+            mShaderType != GL_GEOMETRY_SHADER)
+        {
+            error(typeQualifier.line, "invalid qualifier: requires a geometry shader",
+                  getQualifierString(typeQualifier.qualifier));
+        }
+    }
     else if (typeQualifier.qualifier != EvqUniform && typeQualifier.qualifier != EvqBuffer)
     {
         if (isShaderIoBlock)
@@ -4430,8 +4439,13 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
             case EvqFlat:
             case EvqNoPerspective:
             case EvqCentroid:
+            case EvqGeometryIn:
+            case EvqGeometryOut:
                 if (!IsShaderIoBlock(typeQualifier.qualifier) &&
-                    typeQualifier.qualifier != EvqPatchIn && typeQualifier.qualifier != EvqPatchOut)
+                    typeQualifier.qualifier != EvqPatchIn &&
+                    typeQualifier.qualifier != EvqPatchOut &&
+                    typeQualifier.qualifier != EvqGeometryIn &&
+                    typeQualifier.qualifier != EvqGeometryOut)
                 {
                     error(field->line(), "invalid qualifier on interface block member",
                           getQualifierString(qualifier));

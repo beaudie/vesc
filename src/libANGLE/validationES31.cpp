@@ -1898,6 +1898,8 @@ bool ValidateGetProgramPipelineivBase(const Context *context,
         case GL_FRAGMENT_SHADER:
         case GL_COMPUTE_SHADER:
             break;
+        case GL_GEOMETRY_SHADER:
+            return context->getExtensions().geometryShader || context->getClientVersion() >= ES_3_2;
 
         default:
             context->validationError(GL_INVALID_ENUM, kInvalidPname);
