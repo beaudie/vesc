@@ -699,6 +699,10 @@ angle::Result TextureD3D::syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits,
                                     gl::Command source)
 {
+    if (DIRTY_BIT_LABEL)
+    {
+        mTexStorage->setLabel(mState.mLabel);
+    }
     // This could be improved using dirty bits.
     return angle::Result::Continue;
 }
