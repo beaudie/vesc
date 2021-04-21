@@ -1126,7 +1126,6 @@ angle_shared_library("libGLESv1_CM") {
 }
 
 angle_static_library("libGLESv1_CM_static") {
-  sources = libglesv1_cm_sources
   configs += [ ":debug_annotations_config" ]
   public_configs += [ ":angle_static" ]
   deps = [
