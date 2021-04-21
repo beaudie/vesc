@@ -704,6 +704,7 @@ RendererVk::RendererVk()
       mInstance(VK_NULL_HANDLE),
       mEnableValidationLayers(false),
       mEnableDebugUtils(false),
+      mEnableLogAPIEvents(false),
       mEnabledICD(angle::vk::ICD::Default),
       mDebugUtilsMessenger(VK_NULL_HANDLE),
       mDebugReportCallback(VK_NULL_HANDLE),
@@ -2817,6 +2818,7 @@ void RendererVk::setGlobalDebugAnnotator()
             kEnableDebugMarkersVarName, kEnableDebugMarkersPropertyName);
         if (!enabled.empty() && enabled.compare("0") != 0)
         {
+            mEnableLogAPIEvents    = true;
             enableDebugAnnotatorVk = true;
         }
     }

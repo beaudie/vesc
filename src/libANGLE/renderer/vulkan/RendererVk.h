@@ -321,6 +321,7 @@ class RendererVk : angle::NonCopyable
     }
 
     bool enableDebugUtils() const { return mEnableDebugUtils; }
+    bool enableLogAPIEvents() const { return mEnableLogAPIEvents; }
 
     SamplerCache &getSamplerCache() { return mSamplerCache; }
     SamplerYcbcrConversionCache &getYuvConversionCache() { return mYuvConversionCache; }
@@ -420,6 +421,7 @@ class RendererVk : angle::NonCopyable
     VkInstance mInstance;
     bool mEnableValidationLayers;
     bool mEnableDebugUtils;
+    bool mEnableLogAPIEvents;
     angle::vk::ICD mEnabledICD;
     VkDebugUtilsMessengerEXT mDebugUtilsMessenger;
     VkDebugReportCallbackEXT mDebugReportCallback;

@@ -1252,7 +1252,7 @@ angle::Result ContextVk::handleDirtyComputeEventLog()
 
 angle::Result ContextVk::handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffer)
 {
-    if (mEventLog.empty() || !mRenderer->enableDebugUtils())
+    if (mEventLog.empty() || !mRenderer->enableLogAPIEvents())
     {
         return angle::Result::Continue;
     }
@@ -2910,7 +2910,7 @@ void ContextVk::logEvent(const char *eventString)
 
 void ContextVk::endEventLog(angle::EntryPoint entryPoint)
 {
-    if (!mRenderer->enableDebugUtils())
+    if (!mRenderer->enableLogAPIEvents())
     {
         return;
     }
