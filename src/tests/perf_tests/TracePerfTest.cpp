@@ -288,6 +288,36 @@ void KHRONOS_APIENTRY BufferSubDataMinimizedProc(GLenum target,
     // Noop it. SubImage calls are pure data copies, we ignore it here.
 }
 
+void *KHRONOS_APIENTRY MapBufferRangeMinimizedProc(GLenum target,
+                                                   GLintptr offset,
+                                                   GLsizeiptr length,
+                                                   GLbitfield access)
+{
+    // Noop it. The map call involves CPU/GPU synchronization which each driver implements
+    // differently and even depends on data size and GPU progress etc. This should be considered as
+    // part of the overall performance of angle, not the CPU overhead. For CPU overhead, we just
+    // ignore it.
+    static std::vector<GLubyte> clientBufferData(65536);
+    if (length > static_cast<GLsizeiptr>(clientBufferData.size()))
+    {
+        clientBufferData.resize(length);
+    }
+    return clientBufferData.data();
+}
+
+GLboolean KHRONOS_APIENTRY UnmapBufferMinimizedProc(GLenum target)
+{
+    // Noop it. See MapBufferRangeMinimizedProc for explanation.
+    return GL_TRUE;
+}
+
+void KHRONOS_APIENTRY FlushMappedBufferRangeMinimizedProc(GLenum target,
+                                                          GLintptr offset,
+                                                          GLsizeiptr length)
+{
+    // Noop it. We don't care about actual data, so no need.
+}
+
 void KHRONOS_APIENTRY TexImage2DMinimizedProc(GLenum target,
                                               GLint level,
                                               GLint internalformat,
@@ -502,6 +532,20 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
         if (strcmp(procName, "glBufferSubData") == 0)
         {
             return reinterpret_cast<angle::GenericProc>(BufferSubDataMinimizedProc);
+        }
+        if (strcmp(procName, "glMapBufferRange") == 0 ||
+            strcmp(procName, "glMapBufferRangeEXT") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(MapBufferRangeMinimizedProc);
+        }
+        if (strcmp(procName, "glUnmapBuffer") == 0 || strcmp(procName, "glUnmapBufferOES") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(UnmapBufferMinimizedProc);
+        }
+        if (strcmp(procName, "glFlushMappedBufferRange") == 0 ||
+            strcmp(procName, "glFlushMappedBufferRangeEXT") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(FlushMappedBufferRangeMinimizedProc);
         }
         if (strcmp(procName, "glTexImage2D") == 0)
         {
