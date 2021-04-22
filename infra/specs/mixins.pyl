@@ -10,4 +10,38 @@
 #
 # For more info see Chromium's mixins.pyl in testing/buildbot.
 
-{}
+{
+  'angle-ci-service-account': {
+    'swarming': {
+      'service_account': 'angle-ci-builder@chops-service-accounts.iam.gserviceaccount.com',
+    },
+  },
+  'angle-try-service-account': {
+    'swarming': {
+      'service_account': 'angle-try-builder@chops-service-accounts.iam.gserviceaccount.com',
+    },
+  },
+  'linux_intel_hd_630_stable': {
+    'swarming': {
+      'dimensions': {
+        'gpu': '8086:5912-19.0.2',
+        'os': 'Ubuntu-19.04',
+        'pool': 'chromium.tests.gpu',
+      }
+    }
+  },
+  'linux_nvidia_quadro_p400_stable': {
+    'swarming': {
+      'dimensions': {
+        'gpu': '10de:1cb3-418.56',
+        'os': 'Ubuntu-19.04',
+        'pool': 'chromium.tests.gpu',
+      }
+    }
+  },
+  'swarming_containment_auto': {
+    'swarming': {
+      'containment_type': 'AUTO',
+    },
+  },
+}
