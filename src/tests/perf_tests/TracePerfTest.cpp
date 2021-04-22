@@ -1146,54 +1146,62 @@ void TracePerfTest::drawBenchmark()
 
     if (params.surfaceType == SurfaceType::Offscreen)
     {
-        GLint currentDrawFBO, currentReadFBO;
-        glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
-        glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
-
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, mOffscreenFramebuffer);
-
-        uint32_t frameX  = (mOffscreenFrameCount % kFramesPerXY) % kFramesPerX;
-        uint32_t frameY  = (mOffscreenFrameCount % kFramesPerXY) / kFramesPerX;
-        uint32_t windowX = kOffscreenOffsetX + frameX * kOffscreenFrameWidth;
-        uint32_t windowY = kOffscreenOffsetY + frameY * kOffscreenFrameHeight;
-
-        if (gVerboseLogging)
+        if (gMinimizeGPUWork)
         {
-            printf("Frame %d: x %d y %d (screen x %d, screen y %d)\n", mOffscreenFrameCount, frameX,
-                   frameY, windowX, windowY);
-        }
-
-        GLboolean scissorTest = GL_FALSE;
-        glGetBooleanv(GL_SCISSOR_TEST, &scissorTest);
-
-        if (scissorTest)
-        {
-            glDisable(GL_SCISSOR_TEST);
-        }
-
-        glBlitFramebuffer(0, 0, mWindowWidth, mWindowHeight, windowX, windowY,
-                          windowX + kOffscreenFrameWidth, windowY + kOffscreenFrameHeight,
-                          GL_COLOR_BUFFER_BIT, GL_NEAREST);
-
-        if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
-        {
-            swap();
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glClear(GL_COLOR_BUFFER_BIT);
-            mOffscreenFrameCount = 0;
+            // To keep GPU work minimum, we will keep render into the same FBO over and over again.
+            glFlush();
         }
         else
         {
-            mOffscreenFrameCount++;
-        }
+            GLint currentDrawFBO, currentReadFBO;
+            glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
+            glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
 
-        if (scissorTest)
-        {
-            glEnable(GL_SCISSOR_TEST);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, mOffscreenFramebuffer);
+
+            uint32_t frameX  = (mOffscreenFrameCount % kFramesPerXY) % kFramesPerX;
+            uint32_t frameY  = (mOffscreenFrameCount % kFramesPerXY) / kFramesPerX;
+            uint32_t windowX = kOffscreenOffsetX + frameX * kOffscreenFrameWidth;
+            uint32_t windowY = kOffscreenOffsetY + frameY * kOffscreenFrameHeight;
+
+            if (gVerboseLogging)
+            {
+                printf("Frame %d: x %d y %d (screen x %d, screen y %d)\n", mOffscreenFrameCount,
+                       frameX, frameY, windowX, windowY);
+            }
+
+            GLboolean scissorTest = GL_FALSE;
+            glGetBooleanv(GL_SCISSOR_TEST, &scissorTest);
+
+            if (scissorTest)
+            {
+                glDisable(GL_SCISSOR_TEST);
+            }
+
+            glBlitFramebuffer(0, 0, mWindowWidth, mWindowHeight, windowX, windowY,
+                              windowX + kOffscreenFrameWidth, windowY + kOffscreenFrameHeight,
+                              GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+            if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
+            {
+                swap();
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                glClear(GL_COLOR_BUFFER_BIT);
+                mOffscreenFrameCount = 0;
+            }
+            else
+            {
+                mOffscreenFrameCount++;
+            }
+
+            if (scissorTest)
+            {
+                glEnable(GL_SCISSOR_TEST);
+            }
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
         }
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
     }
     else
     {
