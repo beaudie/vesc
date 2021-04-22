@@ -285,7 +285,7 @@ void KHRONOS_APIENTRY BufferSubDataMinimizedProc(GLenum target,
                                                  GLsizeiptr size,
                                                  const void *data)
 {
-    glBufferSubData(target, offset, 1, data);
+    // Noop it. SubImage calls are pure data copies, we ignore it here.
 }
 
 void KHRONOS_APIENTRY TexImage2DMinimizedProc(GLenum target,
@@ -298,7 +298,17 @@ void KHRONOS_APIENTRY TexImage2DMinimizedProc(GLenum target,
                                               GLenum type,
                                               const void *pixels)
 {
+    GLint unpackBuffer = 0;
+    glGetIntegerv(GL_PIXEL_UNPACK_BUFFER_BINDING, &unpackBuffer);
+    if (unpackBuffer)
+    {
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    }
     glTexImage2D(target, level, internalformat, width, height, border, format, type, nullptr);
+    if (unpackBuffer)
+    {
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer);
+    }
 }
 
 void KHRONOS_APIENTRY TexSubImage2DMinimizedProc(GLenum target,
@@ -311,7 +321,7 @@ void KHRONOS_APIENTRY TexSubImage2DMinimizedProc(GLenum target,
                                                  GLenum type,
                                                  const void *pixels)
 {
-    glTexSubImage2D(target, level, xoffset, yoffset, 1, 1, format, type, pixels);
+    // Noop it. SubImage calls are pure data copies, we ignore it here.
 }
 
 void KHRONOS_APIENTRY TexImage3DMinimizedProc(GLenum target,
@@ -325,8 +335,18 @@ void KHRONOS_APIENTRY TexImage3DMinimizedProc(GLenum target,
                                               GLenum type,
                                               const void *pixels)
 {
+    GLint unpackBuffer = 0;
+    glGetIntegerv(GL_PIXEL_UNPACK_BUFFER_BINDING, &unpackBuffer);
+    if (unpackBuffer)
+    {
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    }
     glTexImage3D(target, level, internalformat, width, height, depth, border, format, type,
                  nullptr);
+    if (unpackBuffer)
+    {
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer);
+    }
 }
 
 void KHRONOS_APIENTRY TexSubImage3DMinimizedProc(GLenum target,
@@ -341,7 +361,7 @@ void KHRONOS_APIENTRY TexSubImage3DMinimizedProc(GLenum target,
                                                  GLenum type,
                                                  const void *pixels)
 {
-    glTexSubImage3D(target, level, xoffset, yoffset, zoffset, 1, 1, 1, format, type, pixels);
+    // Noop it. SubImage calls are pure data copies, we ignore it here.
 }
 
 void KHRONOS_APIENTRY GenerateMipmapMinimizedProc(GLenum target)
