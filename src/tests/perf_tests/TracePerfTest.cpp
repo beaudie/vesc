@@ -1150,7 +1150,12 @@ void TracePerfTest::drawBenchmark()
     mTraceLibrary->replayFrame(mCurrentFrame);
     stopGpuTimer();
 
-    if (params.surfaceType == SurfaceType::Offscreen)
+    if (gMinimizeGPUWork)
+    {
+        // Do nothing. We are only interested in CPU overhead. We will keep render into the same
+        // FBO.
+    }
+    else if (params.surfaceType == SurfaceType::Offscreen)
     {
         GLint currentDrawFBO, currentReadFBO;
         glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
