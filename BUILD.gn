@@ -209,10 +209,15 @@ config("extra_warnings") {
     if (!use_xcode_clang) {
       # Mac catalyst uses a clang version that doesn't have these.
       cflags += [
-        "-Wdeprecated-copy",
         "-Wsuggest-destructor-override",
         "-Wsuggest-override",
       ]
+      if (!build_with_chromium) {
+        cflags += [
+          # This fires with Chromium's Clang (https://crbug.com/1201858)
+          "-Wdeprecated-copy",
+        ]
+      }
     }
   }
 
