@@ -9,11 +9,14 @@
 #ifndef LIBANGLE_CLKERNEL_H_
 #define LIBANGLE_CLKERNEL_H_
 
+#include "libANGLE/CLtypes.h"
+
 namespace cl
 {
 class Kernel final
 {
   public:
+    using is_cl_object_type = std::true_type;
 };
 
 }  // namespace cl

@@ -11,6 +11,7 @@
 
 #include <cinttypes>
 #include <cstdio>
+#include <type_traits>
 
 #if defined(ANGLE_TRACE_ENABLED)
 #    define CL_EVENT(entryPoint, ...)                    \
@@ -19,5 +20,40 @@
 #else
 #    define CL_EVENT(entryPoint, ...) (void(0))
 #endif
+
+namespace cl
+{
+// First case: handling packed enums.
+template <typename PackedT, typename FromT>
+typename std::enable_if_t<std::is_enum<PackedT>::value, PackedT> PackParam(FromT from)
+{
+    return FromCLenum<PackedT>(from);
+}
+
+// Cast CL object types to ANGLE types marked with 'using is_cl_object_type = std::true_type;'
+template <typename PackedT, typename FromT>
+inline std::enable_if_t<
+    std::remove_pointer_t<std::remove_pointer_t<PackedT>>::is_cl_object_type::value,
+    PackedT>
+PackParam(FromT from)
+{
+    return reinterpret_cast<PackedT>(from);
+}
+
+// First case: handling packed enums.
+template <typename UnpackedT, typename FromT>
+typename std::enable_if_t<std::is_enum<FromT>::value, UnpackedT> UnpackParam(FromT from)
+{
+    return ToCLenum(from);
+}
+
+// Cast ANGLE types marked with 'using is_cl_object_type = std::true_type;' to CL object types
+template <typename UnpackedT, typename FromT>
+inline typename std::enable_if_t<std::remove_pointer_t<FromT>::is_cl_object_type::value, UnpackedT>
+UnpackParam(FromT from)
+{
+    return reinterpret_cast<UnpackedT>(from);
+}
+}  // namespace cl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_CL_UTILS_H_

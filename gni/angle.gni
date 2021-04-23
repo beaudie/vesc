@@ -190,8 +190,8 @@ declare_args() {
 }
 
 declare_args() {
-  # Build OpenCL support by default.
-  angle_enable_cl = true
+  # Enables OpenCL support, off by default.
+  angle_enable_cl = false
 }
 
 if (!defined(angle_zlib_compression_utils_dir)) {
