@@ -47,6 +47,10 @@ void ImageVk::onDestroy(const egl::Display *display)
             GetImplAs<ExternalImageSiblingVk>(GetAs<egl::ExternalImageSibling>(mState.source));
         externalImageSibling->release(renderer);
         mImage = nullptr;
+
+        // Cleanup garbage since the caller may never issue another draw call that uses this EGL
+        // image and it needs to be freed to reclaim the memory.
+        (void)renderer->cleanupGarbage(Serial::Infinite());
     }
 }
 
