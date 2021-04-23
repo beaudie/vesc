@@ -47,6 +47,14 @@ void ImageVk::onDestroy(const egl::Display *display)
             GetImplAs<ExternalImageSiblingVk>(GetAs<egl::ExternalImageSibling>(mState.source));
         externalImageSibling->release(renderer);
         mImage = nullptr;
+
+        // Cleanup garbage since the caller may never issue another draw call that uses this EGL
+        // image and it needs to be freed to reclaim the memory.
+
+        // This is called as a special case where resources may be allocated by the caller, without
+        // the caller ever issuing a draw command to free them. Specifically, SurfaceFlinger
+        // optimistically allocates EGLImages that it may never draw to.
+        renderer->cleanupCompletedCommandsGarbage();
     }
 }
 
