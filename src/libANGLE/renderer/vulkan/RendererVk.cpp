@@ -2778,6 +2778,11 @@ angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
     return angle::Result::Continue;
 }
 
+void RendererVk::cleanupCompletedCommandsGarbage()
+{
+    (void)cleanupGarbage(getLastCompletedQueueSerial());
+}
+
 void RendererVk::onNewValidationMessage(const std::string &message)
 {
     mLastValidationMessage = message;
