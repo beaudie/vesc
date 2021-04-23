@@ -623,6 +623,7 @@ class ANGLETestWithParam : public ANGLETestBase, public ::testing::TestWithParam
 
     void TearDown() final
     {
+        ANGLETestBase::swapBuffers();
         testTearDown();
         ANGLETestBase::ANGLETestTearDown();
     }
