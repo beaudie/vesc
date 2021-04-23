@@ -758,7 +758,14 @@ PackParam(FromT from)
 
 // Third case: handling pointer resource ids.
 template <typename EnumT, typename FromT>
-typename std::enable_if<std::is_pointer<FromT>::value && !std::is_enum<EnumT>::value, EnumT>::type
+typename std::enable_if<
+    std::is_pointer<FromT>::value && !std::is_enum<EnumT>::value &&
+        sizeof(typename std::remove_pointer<EnumT>::type) ==
+            sizeof(typename std::remove_pointer<FromT>::type) &&
+        std::is_same<
+            decltype(std::remove_pointer<EnumT>::type::value),
+            typename std::remove_const<typename std::remove_pointer<FromT>::type>::type>::value,
+    EnumT>::type
 PackParam(FromT from)
 {
     return reinterpret_cast<EnumT>(from);
