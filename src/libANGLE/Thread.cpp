@@ -92,6 +92,11 @@ void Thread::setCurrent(gl::Context *context)
     mContext = context;
 }
 
+void Thread::setDisplay(Display *display)
+{
+    mDisplay = display;
+}
+
 Surface *Thread::getCurrentDrawSurface() const
 {
     if (mContext)
@@ -117,11 +122,7 @@ gl::Context *Thread::getContext() const
 
 Display *Thread::getDisplay() const
 {
-    if (mContext)
-    {
-        return mContext->getDisplay();
-    }
-    return nullptr;
+    return mDisplay;
 }
 
 void EnsureDebugAllocated()
