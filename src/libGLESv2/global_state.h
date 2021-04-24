@@ -97,6 +97,7 @@ void SetGlobalLastContext(gl::Context *context);
 Thread *GetCurrentThread();
 Debug *GetDebug();
 void SetContextCurrent(Thread *thread, gl::Context *context);
+void SetDisplay(Display *display);
 }  // namespace egl
 
 #define ANGLE_SCOPED_GLOBAL_LOCK() \

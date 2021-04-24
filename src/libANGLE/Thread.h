@@ -53,6 +53,7 @@ class Thread : public LabeledObject
     EGLenum getAPI() const;
 
     void setCurrent(gl::Context *context);
+    void setDisplay(Display *display);
     Surface *getCurrentDrawSurface() const;
     Surface *getCurrentReadSurface() const;
     gl::Context *getContext() const;
@@ -63,6 +64,7 @@ class Thread : public LabeledObject
     EGLint mError;
     EGLenum mAPI;
     gl::Context *mContext;
+    Display *mDisplay;
 };
 
 void EnsureDebugAllocated();

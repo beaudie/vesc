@@ -482,6 +482,8 @@ EGLBoolean Initialize(Thread *thread, Display *display, EGLint *major, EGLint *m
     if (minor)
         *minor = 5;
 
+    SetDisplay(display);
+
     thread->setSuccess();
     return EGL_TRUE;
 }
@@ -685,6 +687,8 @@ EGLBoolean Terminate(Thread *thread, Display *display)
     SetContextCurrent(thread, nullptr);
     ANGLE_EGL_TRY_RETURN(thread, display->terminate(thread), "eglTerminate",
                          GetDisplayIfValid(display), EGL_FALSE);
+
+    SetDisplay(nullptr);
 
     thread->setSuccess();
     return EGL_TRUE;
