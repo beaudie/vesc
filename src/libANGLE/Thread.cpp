@@ -28,7 +28,8 @@ Thread::Thread()
     : mLabel(nullptr),
       mError(EGL_SUCCESS),
       mAPI(EGL_OPENGL_ES_API),
-      mContext(static_cast<gl::Context *>(EGL_NO_CONTEXT))
+      mContext(static_cast<gl::Context *>(EGL_NO_CONTEXT)),
+      mDisplay(nullptr)
 {}
 
 void Thread::setLabel(EGLLabelKHR label)
@@ -92,6 +93,11 @@ void Thread::setCurrent(gl::Context *context)
     mContext = context;
 }
 
+void Thread::setDisplay(Display *display)
+{
+    mDisplay = display;
+}
+
 Surface *Thread::getCurrentDrawSurface() const
 {
     if (mContext)
@@ -117,11 +123,7 @@ gl::Context *Thread::getContext() const
 
 Display *Thread::getDisplay() const
 {
-    if (mContext)
-    {
-        return mContext->getDisplay();
-    }
-    return nullptr;
+    return mDisplay;
 }
 
 void EnsureDebugAllocated()

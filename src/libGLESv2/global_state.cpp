@@ -104,6 +104,11 @@ void SetContextCurrent(Thread *thread, gl::Context *context)
 #endif
 }
 
+void SetDisplay(Display *display)
+{
+    ASSERT(gCurrentThread);
+    gCurrentThread->setDisplay(display);
+}
 }  // namespace egl
 
 namespace gl
