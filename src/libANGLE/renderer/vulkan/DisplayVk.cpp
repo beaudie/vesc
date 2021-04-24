@@ -104,6 +104,14 @@ std::string DisplayVk::getVersionString()
 egl::Error DisplayVk::waitClient(const gl::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "DisplayVk::waitClient");
+    if (context == nullptr)
+    {
+        // EGL spec says this about eglWaitClient -
+        //    If there is no current context for the current rendering API,
+        //    the function has no effect but still returns EGL_TRUE.
+        return egl::NoError();
+    }
+
     ContextVk *contextVk = vk::GetImpl(context);
     return angle::ToEGL(contextVk->finishImpl(), this, EGL_BAD_ACCESS);
 }
@@ -111,6 +119,13 @@ egl::Error DisplayVk::waitClient(const gl::Context *context)
 egl::Error DisplayVk::waitNative(const gl::Context *context, EGLint engine)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "DisplayVk::waitNative");
+    if (context == nullptr)
+    {
+        // EGL spec says this about eglWaitNative -
+        //    eglWaitNative is ignored if there is no current EGL rendering context.
+        return egl::NoError();
+    }
+
     return angle::ResultToEGL(waitNativeImpl());
 }
 
