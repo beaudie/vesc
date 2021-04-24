@@ -1565,11 +1565,26 @@ Error Display::CreateNativeClientBuffer(const egl::AttributeMap &attribMap,
 
 Error Display::waitClient(const gl::Context *context)
 {
+    if (context == nullptr)
+    {
+        // EGL spec says this about eglWaitClient -
+        //    If there is no current context for the current rendering API,
+        //    the function has no effect but still returns EGL_TRUE.
+        return egl::NoError();
+    }
+
     return mImplementation->waitClient(context);
 }
 
 Error Display::waitNative(const gl::Context *context, EGLint engine)
 {
+    if (context == nullptr)
+    {
+        // EGL spec says this about eglWaitNative -
+        //    eglWaitNative is ignored if there is no current EGL rendering context.
+        return egl::NoError();
+    }
+
     return mImplementation->waitNative(context, engine);
 }
 
