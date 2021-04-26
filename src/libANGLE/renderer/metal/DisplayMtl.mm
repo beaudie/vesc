@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 
+#include "common/system_utils.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
@@ -26,8 +27,61 @@
 
 #include "EGL/eglext.h"
 
+#if defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
+constexpr char kANGLEPreferredDeviceEnv[] = "ANGLE_PREFERRED_DEVICE";
+#endif
+
 namespace rx
 {
+
+static EGLint GetDepthSize(GLint internalformat)
+{
+    switch (internalformat)
+    {
+        case GL_STENCIL_INDEX8:
+            return 0;
+        case GL_DEPTH_COMPONENT16:
+            return 16;
+        case GL_DEPTH_COMPONENT24:
+            return 24;
+        case GL_DEPTH_COMPONENT32_OES:
+            return 32;
+        case GL_DEPTH_COMPONENT32F:
+            return 32;
+        case GL_DEPTH24_STENCIL8:
+            return 24;
+        case GL_DEPTH32F_STENCIL8:
+            return 32;
+        default:
+            //    UNREACHABLE(internalformat);
+            return 0;
+    }
+}
+
+static EGLint GetStencilSize(GLint internalformat)
+{
+    switch (internalformat)
+    {
+        case GL_STENCIL_INDEX8:
+            return 8;
+        case GL_DEPTH_COMPONENT16:
+            return 0;
+        case GL_DEPTH_COMPONENT24:
+            return 0;
+        case GL_DEPTH_COMPONENT32_OES:
+            return 0;
+        case GL_DEPTH_COMPONENT32F:
+            return 0;
+        case GL_DEPTH24_STENCIL8:
+            return 8;
+        case GL_DEPTH32F_STENCIL8:
+            return 8;
+        default:
+            //    UNREACHABLE(internalformat);
+            return 0;
+    }
+}
+
 bool IsMetalDisplayAvailable()
 {
     // We only support macos 10.13+ and 11 for now. Since they are requirements for Metal 2.0.
@@ -59,8 +113,9 @@ struct DefaultShaderAsyncInfoMtl
     bool compiled = false;
 };
 
-// DisplayMtl implementation
-DisplayMtl::DisplayMtl(const egl::DisplayState &state) : DisplayImpl(state), mUtils(this) {}
+DisplayMtl::DisplayMtl(const egl::DisplayState &state)
+    : DisplayImpl(state), mStateCache(mFeatures), mUtils(this)
+{}
 
 DisplayMtl::~DisplayMtl() {}
 
@@ -80,8 +135,10 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
 {
     ANGLE_MTL_OBJC_SCOPE
     {
-        mMetalDevice = [MTLCreateSystemDefaultDevice() ANGLE_MTL_AUTORELEASE];
-        if (!mMetalDevice)
+        mMetalDevice =
+            [getMetalDeviceMatchingAttribute(display->getAttributeMap()) ANGLE_MTL_AUTORELEASE];
+        // If we can't create a device, fail initialization.
+        if (!mMetalDevice.get())
         {
             return angle::Result::Stop;
         }
@@ -91,11 +148,10 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
         mCmdQueue.set([[mMetalDevice.get() newCommandQueue] ANGLE_MTL_AUTORELEASE]);
 
         mCapsInitialized = false;
-
-        {
-            ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
-            sh::InitializeGlslang();
-        }
+#if ANGLE_ENABLE_METAL_SPIRV
+        ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
+        sh::InitializeGlslang();
+#endif
 
         if (!mState.featuresAllDisabled)
         {
@@ -121,8 +177,9 @@ void DisplayMtl::terminate()
     mCapsInitialized = false;
 
     mMetalDeviceVendorId = 0;
-
-    sh::FinalizeGlslang();
+#if ANGLE_ENABLE_METAL_SPIRV
+    FinalizeGlslang();
+#endif
 }
 
 bool DisplayMtl::testDeviceLost()
@@ -273,12 +330,17 @@ ExternalImageSiblingImpl *DisplayMtl::createExternalImageSibling(const gl::Conte
 
 gl::Version DisplayMtl::getMaxSupportedESVersion() const
 {
-    // NOTE(hqle): Supports GLES 3.0 on iOS GPU family 4+ for now.
+    // NOTE(hqle): Supports GLES 3.0 on iOS GPU Family 4+ for now.
+#if TARGET_OS_SIMULATOR  // Simulator should be able to support ES3, despite not supporting iOS GPU
+                         // Family 4 in its entirety.
+    return gl::Version(3, 0);
+#else
     if (supportsEitherGPUFamily(4, 1))
     {
         return mtl::kMaxSupportedGLVersion;
     }
     return gl::Version(2, 0);
+#endif
 }
 
 gl::Version DisplayMtl::getMaxConformantESVersion() const
@@ -289,6 +351,11 @@ gl::Version DisplayMtl::getMaxConformantESVersion() const
 EGLSyncImpl *DisplayMtl::createSync(const egl::AttributeMap &attribs)
 {
     return new EGLSyncMtl(attribs);
+}
+
+ShareGroupImpl *DisplayMtl::createShareGroup()
+{
+    return new ShareGroupImpl();
 }
 
 egl::Error DisplayMtl::makeCurrent(egl::Display *display,
@@ -324,6 +391,7 @@ void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // this extension so that ANGLE can be initialized in Chrome. WebGL will fail to use
     // this extension (anglebug.com/4929)
     outExtensions->robustResourceInitialization = true;
+    outExtensions->powerPreference              = true;
 
     // EGL_KHR_image
     outExtensions->image     = true;
@@ -422,11 +490,11 @@ egl::ConfigSet DisplayMtl::generateConfigs()
         config.stencilSize = 8;
         configs.add(config);
 
-        // No DS
-        config.depthSize   = 0;
-        config.stencilSize = 0;
-        configs.add(config);
-    }
+    // Tests like dEQP-GLES2.functional.depth_range.* assume EGL_DEPTH_SIZE is properly set even if
+    // renderConfig attributes are set to glu::RenderConfig::DONT_CARE
+    config.depthSize   = GetDepthSize(config.depthStencilFormat);
+    config.stencilSize = GetStencilSize(config.depthStencilFormat);
+    configs.add(config);
 
     return configs;
 }
@@ -650,6 +718,9 @@ void DisplayMtl::ensureCapsInitialized() const
     mNativeCaps.maxTransformFeedbackSeparateComponents =
         gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS;
 
+    // GL_OES_get_program_binary
+    mNativeCaps.programBinaryFormats.push_back(GL_PROGRAM_BINARY_ANGLE);
+
     // GL_APPLE_clip_distance
     mNativeCaps.maxClipDistances = 8;
 
@@ -688,9 +759,17 @@ void DisplayMtl::initializeExtensions() const
     // backend to be used in Chrome (http://anglebug.com/4946)
     mNativeExtensions.debugMarker = true;
 
-    mNativeExtensions.robustness            = true;
-    mNativeExtensions.textureBorderClampOES = false;  // not implemented yet
-    mNativeExtensions.discardFramebuffer    = true;
+    mNativeExtensions.robustness             = true;
+    mNativeExtensions.textureBorderClampOES  = false;  // not implemented yet
+    mNativeExtensions.translatedShaderSource = true;
+    mNativeExtensions.discardFramebuffer     = true;
+
+    // EXT_multisampled_render_to_texture
+    if (mFeatures.allowMultisampleStoreAndResolve.enabled &&
+        mFeatures.hasDepthAutoResolve.enabled && mFeatures.hasStencilAutoResolve.enabled)
+    {
+        mNativeExtensions.multisampledRenderToTexture = true;
+    }
 
     // Enable EXT_blend_minmax
     mNativeExtensions.blendMinMax = true;
@@ -729,6 +808,9 @@ void DisplayMtl::initializeExtensions() const
     mNativeExtensions.standardDerivativesOES = true;
 
     mNativeExtensions.elementIndexUintOES = true;
+
+    // GL_OES_get_program_binary
+    mNativeExtensions.getProgramBinaryOES = true;
 
     // GL_APPLE_clip_distance
     mNativeExtensions.clipDistanceAPPLE = true;
@@ -785,6 +867,12 @@ void DisplayMtl::initializeTextureCaps() const
     mNativeExtensions.readDepthNV         = false;
     mNativeExtensions.readStencilNV       = false;
     mNativeExtensions.depthBufferFloat2NV = false;
+    mNativeExtensions.textureCompressionASTCLDRKHR &= supportsIOSGPUFamily(2);
+}
+
+void DisplayMtl::initializeLimitations()
+{
+    mNativeLimitations.noVertexAttributeAliasing = true;
 }
 
 void DisplayMtl::initializeFeatures()
@@ -818,13 +906,19 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), allowMultisampleStoreAndResolve,
                             supportsEitherGPUFamily(3, 1));
 
+    ANGLE_FEATURE_CONDITION((&mFeatures), allowRuntimeSamplerCompareMode,
+                            supportsEitherGPUFamily(3, 1));
+    ANGLE_FEATURE_CONDITION((&mFeatures), allowSamplerCompareGradient,
+                            supportsEitherGPUFamily(3, 1));
+    ANGLE_FEATURE_CONDITION((&mFeatures), allowSamplerCompareLod, supportsEitherGPUFamily(3, 1));
+
     // http://anglebug.com/4919
     // Stencil blit shader is not compiled on Intel & NVIDIA, need investigation.
     ANGLE_FEATURE_CONDITION((&mFeatures), hasStencilOutput,
                             isMetal2_1 && !isIntel() && !isNVIDIA());
 
     ANGLE_FEATURE_CONDITION((&mFeatures), hasTextureSwizzle,
-                            isMetal2_2 && supportsEitherGPUFamily(1, 2));
+                            isMetal2_2 && supportsEitherGPUFamily(3, 2) && !isSimulator);
 
     // http://crbug.com/1136673
     // Fence sync is flaky on Nvidia
@@ -845,6 +939,10 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), allowSeparatedDepthStencilBuffers,
                             !isOSX && !isCatalyst && !isSimulator);
+    ANGLE_FEATURE_CONDITION((&mFeatures), rewriteRowMajorMatrices, true);
+    ANGLE_FEATURE_CONDITION((&mFeatures), emulateTransformFeedback, true);
+
+    ANGLE_FEATURE_CONDITION((&mFeatures), intelThinMipmapWorkaround, isIntel());
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesMtl(platform, &mFeatures);
@@ -854,6 +952,27 @@ void DisplayMtl::initializeFeatures()
 
 angle::Result DisplayMtl::initializeShaderLibrary()
 {
+#ifdef ANGLE_METAL_XCODE_BUILDS_SHADERS
+    mDefaultShadersAsyncInfo.reset(new DefaultShaderAsyncInfoMtl);
+
+    NSString *path = [NSBundle bundleWithIdentifier:@"com.apple.WebKit"].bundlePath;
+    NSError *error = nullptr;
+    mDefaultShadersAsyncInfo->defaultShaders =
+        [getMetalDevice() newDefaultLibraryWithBundle:[NSBundle bundleWithPath:path] error:&error];
+
+    if (error && !mDefaultShadersAsyncInfo->defaultShaders)
+    {
+        ANGLE_MTL_OBJC_SCOPE
+        {
+            ERR() << "Internal error: newDefaultLibraryWithBundle failed. "
+                  << error.localizedDescription.UTF8String;
+        }
+        mDefaultShadersAsyncInfo->defaultShadersCompileError = std::move(error);
+        return angle::Result::Stop;
+    }
+    mDefaultShadersAsyncInfo->compiled = true;
+
+#else
     mDefaultShadersAsyncInfo.reset(new DefaultShaderAsyncInfoMtl);
 
     // Create references to async info struct since it might be released in terminate(), but the
@@ -882,7 +1001,7 @@ angle::Result DisplayMtl::initializeShaderLibrary()
 
         [nsSource ANGLE_MTL_AUTORELEASE];
     }
-
+#endif
     return angle::Result::Continue;
 }
 

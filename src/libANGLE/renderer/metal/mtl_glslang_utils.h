@@ -14,19 +14,10 @@
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
-
+#include "libANGLE/renderer/metal/mtl_glslang_mtl_utils.h"
 namespace rx
 {
 namespace mtl
-{
-
-struct SamplerBinding
-{
-    uint32_t textureBinding = 0;
-    uint32_t samplerBinding = 0;
-};
-
-struct TranslatedShaderInfo
 {
     void reset();
 
@@ -54,6 +45,13 @@ angle::Result GlslangTransformSpirvCode(const gl::ShaderBitSet &linkedShaderStag
                                         const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<angle::spirv::Blob> *shaderCodeOut);
 
+angle::Result MSLGetShaderSpirvCode(ErrorHandler *context,
+                                    const gl::ShaderBitSet &linkedShaderStages,
+                                    const gl::Caps &glCaps,
+                                    const gl::ShaderMap<std::string> &shaderSources,
+                                    const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                                    gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut);
+
 // Translate from SPIR-V code to Metal shader source code.
 // - spirvShaderCode is SPIRV code per shader stage when XFB emulation is turned off.
 // - xfbOnlySpirvCode is  vertex shader's SPIRV code when XFB emulation is turned on.
@@ -66,6 +64,23 @@ angle::Result SpirvCodeToMsl(Context *context,
                              angle::spirv::Blob *xfbOnlySpirvCode /** nullable */,
                              gl::ShaderMap<TranslatedShaderInfo> *mslShaderInfoOut,
                              TranslatedShaderInfo *mslXfbOnlyShaderInfoOut /** nullable */);
+
+void MSLGetShaderSource(const gl::ProgramState &programState,
+                        const gl::ProgramLinkedResources &resources,
+                        gl::ShaderMap<std::string> *shaderSourcesOut,
+                        ShaderMapInterfaceVariableInfoMap *variableInfoMapOut);
+
+angle::Result GlslangGetMSL(Context *context,
+                            const gl::ShaderBitSet &linkedShaderStages,
+                            const gl::Caps &glCaps,
+                            const gl::ShaderMap<std::string> &shaderSources,
+                            const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                            gl::ShaderMap<TranslatedShaderInfo> *mslShaderInfoOut,
+                            gl::ShaderMap<std::string> *mslCodeOut,
+                            size_t xfbBufferCount);
+
+// Get equivalent shadow compare mode that is used in translated msl shader.
+uint MslGetShaderShadowCompareMode(GLenum mode, GLenum func);
 
 }  // namespace mtl
 }  // namespace rx

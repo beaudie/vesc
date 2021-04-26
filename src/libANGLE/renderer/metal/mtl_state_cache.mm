@@ -17,6 +17,7 @@
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
+#include "platform/FeaturesMtl.h"
 
 #define ANGLE_OBJC_CP_PROPERTY(DST, SRC, PROPERTY) \
     (DST).PROPERTY = static_cast<__typeof__((DST).PROPERTY)>(ToObjC((SRC).PROPERTY))
@@ -75,6 +76,7 @@ MTLSamplerDescriptor *ToObjC(const SamplerDesc &desc)
     ANGLE_OBJC_CP_PROPERTY(objCDesc, desc, mipFilter);
     ANGLE_OBJC_CP_PROPERTY(objCDesc, desc, maxAnisotropy);
     ANGLE_OBJC_CP_PROPERTY(objCDesc, desc, compareFunction);
+    ANGLE_OBJC_CP_PROPERTY(objCDesc, desc, normalizedCoordinates);
 
     return [objCDesc ANGLE_MTL_AUTORELEASE];
 }
@@ -185,7 +187,7 @@ id<MTLTexture> ToObjC(const TextureRef &texture)
 void BaseRenderPassAttachmentDescToObjC(const RenderPassAttachmentDesc &src,
                                         MTLRenderPassAttachmentDescriptor *dst)
 {
-    const TextureRef &implicitMsTexture = src.implicitMSTexture;
+    auto implicitMsTexture = src.implicitMSTexture();
 
     if (implicitMsTexture)
     {
@@ -193,31 +195,31 @@ void BaseRenderPassAttachmentDescToObjC(const RenderPassAttachmentDesc &src,
         dst.level          = 0;
         dst.slice          = 0;
         dst.depthPlane     = 0;
-        dst.resolveTexture = ToObjC(src.texture);
-        dst.resolveLevel   = src.level.get();
+        dst.resolveTexture = ToObjC(src.texture());
+        dst.resolveLevel   = src.level().get();
         if (dst.resolveTexture.textureType == MTLTextureType3D)
         {
-            dst.resolveDepthPlane = src.sliceOrDepth;
+            dst.resolveDepthPlane = src.sliceOrDepth();
             dst.resolveSlice      = 0;
         }
         else
         {
-            dst.resolveSlice      = src.sliceOrDepth;
+            dst.resolveSlice      = src.sliceOrDepth();
             dst.resolveDepthPlane = 0;
         }
     }
     else
     {
-        dst.texture = ToObjC(src.texture);
-        dst.level   = src.level.get();
+        dst.texture = ToObjC(src.texture());
+        dst.level   = src.level().get();
         if (dst.texture.textureType == MTLTextureType3D)
         {
-            dst.depthPlane = src.sliceOrDepth;
+            dst.depthPlane = src.sliceOrDepth();
             dst.slice      = 0;
         }
         else
         {
-            dst.slice      = src.sliceOrDepth;
+            dst.slice      = src.sliceOrDepth();
             dst.depthPlane = 0;
         }
         dst.resolveTexture    = nil;
@@ -462,6 +464,8 @@ SamplerDesc::SamplerDesc(const gl::SamplerState &glState) : SamplerDesc()
     maxAnisotropy = static_cast<uint32_t>(glState.getMaxAnisotropy());
 
     compareFunction = GetCompareFunc(glState.getCompareFunc());
+
+    normalizedCoordinates = YES;
 }
 
 SamplerDesc &SamplerDesc::operator=(const SamplerDesc &src)
@@ -483,6 +487,8 @@ void SamplerDesc::reset()
     maxAnisotropy = 1;
 
     compareFunction = MTLCompareFunctionNever;
+
+    normalizedCoordinates = YES;
 }
 
 bool SamplerDesc::operator==(const SamplerDesc &rhs) const
@@ -562,6 +568,44 @@ void BlendDesc::updateWriteMask(const uint8_t angleMask)
     */
     writeMask = ((((angleMask * 0x41) & 0x14A) * 0x111) >> 7) & 0xF;
 #endif
+void BlendDesc::updateWriteMask(const gl::BlendState &blendState)
+{
+    writeMask = MTLColorWriteMaskNone;
+    if (blendState.colorMaskRed)
+    {
+        writeMask |= MTLColorWriteMaskRed;
+    }
+    if (blendState.colorMaskGreen)
+    {
+        writeMask |= MTLColorWriteMaskGreen;
+    }
+    if (blendState.colorMaskBlue)
+    {
+        writeMask |= MTLColorWriteMaskBlue;
+    }
+    if (blendState.colorMaskAlpha)
+    {
+        writeMask |= MTLColorWriteMaskAlpha;
+    }
+}
+
+void BlendDesc::updateBlendFactors(const gl::BlendState &blendState)
+{
+    sourceRGBBlendFactor        = GetBlendFactor(blendState.sourceBlendRGB);
+    sourceAlphaBlendFactor      = GetBlendFactor(blendState.sourceBlendAlpha);
+    destinationRGBBlendFactor   = GetBlendFactor(blendState.destBlendRGB);
+    destinationAlphaBlendFactor = GetBlendFactor(blendState.destBlendAlpha);
+}
+
+void BlendDesc::updateBlendOps(const gl::BlendState &blendState)
+{
+    rgbBlendOperation   = GetBlendOp(blendState.blendEquationRGB);
+    alphaBlendOperation = GetBlendOp(blendState.blendEquationAlpha);
+}
+
+void BlendDesc::updateBlendEnabled(const gl::BlendState &blendState)
+{
+    blendingEnabled = blendState.blend;
 }
 
 // RenderPipelineColorAttachmentDesc implementation
@@ -685,11 +729,7 @@ RenderPassAttachmentDesc::RenderPassAttachmentDesc()
 
 void RenderPassAttachmentDesc::reset()
 {
-    texture.reset();
-    implicitMSTexture.reset();
-    level              = mtl::kZeroNativeMipLevel;
-    sliceOrDepth       = 0;
-    blendable          = false;
+    renderTarget       = nullptr;
     loadAction         = MTLLoadActionLoad;
     storeAction        = MTLStoreActionStore;
     storeActionOptions = MTLStoreActionOptionNone;
@@ -698,8 +738,9 @@ void RenderPassAttachmentDesc::reset()
 bool RenderPassAttachmentDesc::equalIgnoreLoadStoreOptions(
     const RenderPassAttachmentDesc &other) const
 {
-    return texture == other.texture && implicitMSTexture == other.implicitMSTexture &&
-           level == other.level && sliceOrDepth == other.sliceOrDepth;
+    return renderTarget == other.renderTarget ||
+           (texture() == other.texture() && level() == other.level() &&
+            sliceOrDepth() == other.sliceOrDepth());
 }
 
 bool RenderPassAttachmentDesc::operator==(const RenderPassAttachmentDesc &other) const
@@ -711,6 +752,30 @@ bool RenderPassAttachmentDesc::operator==(const RenderPassAttachmentDesc &other)
 
     return loadAction == other.loadAction && storeAction == other.storeAction &&
            storeActionOptions == other.storeActionOptions;
+}
+// Convert to Metal object
+void RenderPassDesc::convertToMetalDesc(MTLRenderPassDescriptor *objCDesc) const
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        for (uint32_t i = 0; i < numColorAttachments; ++i)
+        {
+            ToObjC(objCDesc.colorAttachments[i], colorAttachments[i]);
+        }
+        for (uint32_t i = numColorAttachments; i < kMaxRenderTargets; ++i)
+        {
+            // Inactive render target
+            objCDesc.colorAttachments[i].texture     = nil;
+            objCDesc.colorAttachments[i].level       = 0;
+            objCDesc.colorAttachments[i].slice       = 0;
+            objCDesc.colorAttachments[i].depthPlane  = 0;
+            objCDesc.colorAttachments[i].loadAction  = MTLLoadActionDontCare;
+            objCDesc.colorAttachments[i].storeAction = MTLStoreActionDontCare;
+        }
+
+        ToObjC(objCDesc.depthAttachment, depthAttachment);
+        ToObjC(objCDesc.stencilAttachment, stencilAttachment);
+    }
 }
 
 void RenderPassDesc::populateRenderPipelineOutputDesc(RenderPipelineOutputDesc *outDesc) const
@@ -741,11 +806,11 @@ void RenderPassDesc::populateRenderPipelineOutputDesc(const BlendDescArray &blen
     for (uint32_t i = 0; i < this->numColorAttachments; ++i)
     {
         auto &renderPassColorAttachment = this->colorAttachments[i];
-        auto texture                    = renderPassColorAttachment.texture;
+        auto texture                    = renderPassColorAttachment.texture();
 
         if (texture)
         {
-            if (renderPassColorAttachment.blendable)
+            if (renderPassColorAttachment.blendable())
             {
                 // Copy parameters from blend state
                 outputDescriptor.colorAttachments[i].reset(texture->pixelFormat(),
@@ -778,11 +843,11 @@ void RenderPassDesc::populateRenderPipelineOutputDesc(const BlendDescArray &blen
         outputDescriptor.colorAttachments[i].reset();
     }
 
-    auto depthTexture = this->depthAttachment.texture;
+    auto depthTexture = this->depthAttachment.texture();
     outputDescriptor.depthAttachmentPixelFormat =
         depthTexture ? depthTexture->pixelFormat() : MTLPixelFormatInvalid;
 
-    auto stencilTexture = this->stencilAttachment.texture;
+    auto stencilTexture = this->stencilAttachment.texture();
     outputDescriptor.stencilAttachmentPixelFormat =
         stencilTexture ? stencilTexture->pixelFormat() : MTLPixelFormatInvalid;
 }
@@ -1001,7 +1066,25 @@ AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::createRenderPipelin
 
         // Convert to Objective-C desc:
         AutoObjCObj<MTLRenderPipelineDescriptor> objCDesc = ToObjC(vertShader, fragShader, desc);
-
+        // Validate Render Pipeline State:
+        if (DeviceHasMaximumRenderTargetSize(metalDevice))
+        {
+            NSUInteger maxSize = GetMaxRenderTargetSizeForDeviceInBytes(metalDevice);
+            NSUInteger renderTargetSize =
+                ComputeTotalSizeUsedForMTLRenderPipelineDescriptor(objCDesc, context, metalDevice);
+            if (renderTargetSize > maxSize)
+            {
+                NSString *errorString =
+                    [NSString stringWithFormat:@"This set of render targets requires %lu bytes of "
+                                               @"pixel storage. This device supports %lu bytes.",
+                                               (unsigned long)renderTargetSize, (unsigned long)maxSize];
+                NSError *err = [NSError errorWithDomain:@"MTLValidationError"
+                                                   code:-1
+                                               userInfo:@{NSLocalizedDescriptionKey : errorString}];
+                context->handleError(err, __FILE__, ANGLE_FUNCTION, __LINE__);
+                return nil;
+            }
+        }
         // Special attribute slot for default attribute
         if (insertDefaultAttribLayout)
         {
@@ -1059,7 +1142,7 @@ void RenderPipelineCache::clearPipelineStates()
 }
 
 // StateCache implementation
-StateCache::StateCache() {}
+StateCache::StateCache(const angle::FeaturesMtl &features) : mFeatures(features) {}
 
 StateCache::~StateCache() {}
 
@@ -1110,6 +1193,11 @@ AutoObjCPtr<id<MTLSamplerState>> StateCache::getSamplerState(id<MTLDevice> metal
         if (ite == mSamplerStates.end())
         {
             AutoObjCObj<MTLSamplerDescriptor> objCDesc = ToObjC(desc);
+            if (!mFeatures.allowRuntimeSamplerCompareMode.enabled)
+            {
+                // Runtime sampler compare mode is not supported, fallback to never.
+                objCDesc.get().compareFunction = MTLCompareFunctionNever;
+            }
             AutoObjCPtr<id<MTLSamplerState>> newState =
                 [[metalDevice newSamplerStateWithDescriptor:objCDesc] ANGLE_MTL_AUTORELEASE];
 
