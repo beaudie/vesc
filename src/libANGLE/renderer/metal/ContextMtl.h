@@ -157,6 +157,12 @@ class ContextMtl : public ContextImpl, public mtl::Context
                                                                    const GLint *baseVertices,
                                                                    const GLuint *baseInstances,
                                                                    GLsizei drawcount) override;
+    angle::Result drawElementsSimpleTypesPrimitiveRestart(const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          GLsizei count,
+                                                          gl::DrawElementsType type,
+                                                          const void *indices,
+                                                          GLsizei instances);
 
     // Device loss
     gl::GraphicsResetStatus getResetStatus() override;
@@ -191,6 +197,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
     const gl::TextureCapsMap &getNativeTextureCaps() const override;
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
+
+    const ProgramMtl *getProgram() const { return mProgram; }
 
     // Shader creation
     CompilerImpl *createCompiler() override;
@@ -245,6 +253,18 @@ class ContextMtl : public ContextImpl, public mtl::Context
     angle::Result memoryBarrier(const gl::Context *context, GLbitfield barriers) override;
     angle::Result memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers) override;
 
+    void invalidateCurrentTransformFeedbackBuffers();
+    void onTransformFeedbackStateChanged();
+    angle::Result onBeginTransformFeedback(
+        size_t bufferCount,
+        const gl::TransformFeedbackBuffersArray<BufferMtl *> &buffers);
+
+    void onEndTransformFeedback();
+    angle::Result onPauseTransformFeedback();
+
+    void populateTransformFeedbackBufferSet(
+        size_t bufferCount,
+        const gl::TransformFeedbackBuffersArray<BufferMtl *> &buffers);
     // override mtl::ErrorHandler
     void handleError(GLenum error,
                      const char *file,
@@ -439,6 +459,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
     angle::Result fillDriverXFBUniforms(GLint drawCallFirstVertex,
                                         uint32_t verticesPerInstance,
                                         uint32_t skippedInstances);
+    angle::Result handleDirtyGraphicsTransformFeedbackBuffersEmulation(const gl::Context *context);
     angle::Result handleDirtyDepthStencilState(const gl::Context *context);
     angle::Result handleDirtyDepthBias(const gl::Context *context);
     angle::Result handleDirtyRenderPass(const gl::Context *context);
@@ -467,7 +488,10 @@ class ContextMtl : public ContextImpl, public mtl::Context
         DIRTY_BIT_RENDER_PIPELINE,
         DIRTY_BIT_UNIFORM_BUFFERS_BINDING,
         DIRTY_BIT_RASTERIZER_DISCARD,
-        DIRTY_BIT_MAX,
+        DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
+
+        DIRTY_BIT_INVALID,
+        DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };
 
     // See compiler/translator/TranslatorVulkan.cpp: AddDriverUniformsToShader()
@@ -508,6 +532,13 @@ class ContextMtl : public ContextImpl, public mtl::Context
     mtl::RenderCommandEncoder mRenderEncoder;
     mtl::BlitCommandEncoder mBlitEncoder;
     mtl::ComputeCommandEncoder mComputeEncoder;
+    // TODO(jcunningham):
+    // Cache the current draw call's firstVertex to be passed to
+    // TransformFeedbackMtl::getBufferOffsets.  We should switch
+    // to using gl_BaseVertex -> base_vertex in MSL
+    GLint mXfbBaseVertex;
+    // Cache the current draw call's vertex count as well to support instanced draw calls
+    GLuint mXfbVertexCountPerInstance;
 
     // Cached back-end objects
     FramebufferMtl *mDrawFramebuffer = nullptr;
@@ -548,6 +579,9 @@ class ContextMtl : public ContextImpl, public mtl::Context
     DriverUniforms mDriverUniforms;
 
     DefaultAttribute mDefaultAttributes[mtl::kMaxVertexAttribs];
+
+    // Transform feedback buffers.
+    std::unordered_set<const BufferMtl *> mCurrentTransformFeedbackBuffers;
 
     IncompleteTextureSet mIncompleteTextures;
     bool mIncompleteTexturesInitialized = false;
