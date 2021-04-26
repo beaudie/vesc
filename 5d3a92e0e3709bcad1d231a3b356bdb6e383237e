@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c39222f8_a8d9dbf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-04-26T23:36:39Z",
+      "side": 1,
+      "message": "PTAL\n\nPS1-\u003ePS2 shows the necessary fix.\n\nAll of the tests appear to be running and passing now:\n\nhttps://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket.appspot.com/8848858465443948992/+/steps/Run_trace_tests/0/stdout\n    INFO:root:Elapsed time: 730.77 seconds\n    INFO:root:Passed: 744, Comparison Failed: 0, Crashed: 0, CompileFailed 0, Skipped: 0, Timeout: 0\n",
+      "revId": "5d3a92e0e3709bcad1d231a3b356bdb6e383237e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
