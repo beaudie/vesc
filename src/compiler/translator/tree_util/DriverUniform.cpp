@@ -36,6 +36,7 @@ constexpr const char kNumSamples[]             = "numSamples";
 constexpr const char kHalfRenderArea[] = "halfRenderArea";
 constexpr const char kFlipXY[]         = "flipXY";
 constexpr const char kNegFlipXY[]      = "negFlipXY";
+constexpr const char kPreRotation[]    = "preRotation";
 constexpr const char kFragRotation[]   = "fragRotation";
 }  // anonymous namespace
 
@@ -275,6 +276,11 @@ TIntermSwizzle *DriverUniformExtended::getNegFlipYRef() const
     TVector<int> swizzleOffsetY = {1};
     TIntermSwizzle *negFlipY    = new TIntermSwizzle(negFlipXY, swizzleOffsetY);
     return negFlipY;
+}
+
+TIntermBinary *DriverUniformExtended::getPreRotationMatrixRef() const
+{
+    return createDriverUniformRef(kPreRotation);
 }
 
 TIntermBinary *DriverUniformExtended::getFragRotationMatrixRef() const
