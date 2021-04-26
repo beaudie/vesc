@@ -49,6 +49,7 @@ struct GlslangSourceOptions
     bool supportsTransformFeedbackEmulation = false;
     bool enableTransformFeedbackEmulation   = false;
     bool emulateBresenhamLines              = false;
+    bool transformFeedbackEarlyReturn       = false;
 };
 
 struct GlslangSpirvOptions

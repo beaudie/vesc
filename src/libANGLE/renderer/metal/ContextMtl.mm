@@ -84,11 +84,11 @@ angle::Result AllocateTriangleFanBufferFromPool(ContextMtl *context,
     return angle::Result::Continue;
 }
 
-angle::Result AllocateLineLoopBufferFromPool(ContextMtl *context,
-                                             GLsizei indicesToReserve,
-                                             mtl::BufferPool *pool,
-                                             mtl::BufferRef *bufferOut,
-                                             uint32_t *offsetOut)
+angle::Result AllocateBufferFromPool(ContextMtl *context,
+                                     GLsizei indicesToReserve,
+                                     mtl::BufferPool *pool,
+                                     mtl::BufferRef *bufferOut,
+                                     uint32_t *offsetOut)
 {
     size_t offset;
     pool->releaseInFlightBuffers(context);
@@ -191,7 +191,8 @@ ContextMtl::ContextMtl(const gl::State &state, gl::ErrorSet *errorSet, DisplayMt
       mCmdBuffer(&display->cmdQueue()),
       mRenderEncoder(&mCmdBuffer, mOcclusionQueryPool),
       mBlitEncoder(&mCmdBuffer),
-      mComputeEncoder(&mCmdBuffer)
+      mComputeEncoder(&mCmdBuffer),
+      mXfbVertexCountPerInstance(0)
 {}
 
 ContextMtl::~ContextMtl() {}
@@ -632,7 +633,6 @@ angle::Result ContextMtl::drawElementsBaseVertex(const gl::Context *context,
                                                  const void *indices,
                                                  GLint baseVertex)
 {
-    // NOTE(hqle): ES 3.2
     UNIMPLEMENTED();
     return angle::Result::Stop;
 }
@@ -720,6 +720,64 @@ angle::Result ContextMtl::drawElementsIndirect(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+void ContextMtl::execDrawInstanced(MTLPrimitiveType primitiveType,
+                                   uint32_t vertexStart,
+                                   uint32_t vertexCount,
+                                   uint32_t instances)
+{
+    if (getDisplay()->getFeatures().hasBaseVertexInstancedDraw.enabled)
+    {
+        mRenderEncoder.drawInstanced(primitiveType, vertexStart, vertexCount, instances);
+    }
+    else
+    {
+        mRenderEncoder.draw(primitiveType, vertexStart, vertexCount);
+        for (uint32_t inst = 1; inst < instances; ++inst)
+        {
+            mDriverUniforms.emulatedInstanceID = inst;
+
+            mRenderEncoder.setVertexData(mDriverUniforms, mtl::kDriverUniformsBindingIndex);
+
+            mVertexArray->emulateInstanceDrawStep(&mRenderEncoder, inst);
+
+            mRenderEncoder.draw(primitiveType, vertexStart, vertexCount);
+        }
+        // Reset instance ID to zero
+        mVertexArray->emulateInstanceDrawStep(&mRenderEncoder, 0);
+    }
+}
+
+void ContextMtl::execDrawIndexedInstanced(MTLPrimitiveType primitiveType,
+                                          uint32_t indexCount,
+                                          MTLIndexType indexType,
+                                          const mtl::BufferRef &indexBuffer,
+                                          size_t bufferOffset,
+                                          uint32_t instances)
+{
+    if (getDisplay()->getFeatures().hasBaseVertexInstancedDraw.enabled)
+    {
+        mRenderEncoder.drawIndexedInstanced(primitiveType, indexCount, indexType, indexBuffer,
+                                            bufferOffset, instances);
+    }
+    else
+    {
+        mRenderEncoder.drawIndexed(primitiveType, indexCount, indexType, indexBuffer, bufferOffset);
+        for (uint32_t inst = 1; inst < instances; ++inst)
+        {
+            mDriverUniforms.emulatedInstanceID = inst;
+
+            mRenderEncoder.setVertexData(mDriverUniforms, mtl::kDriverUniformsBindingIndex);
+
+            mVertexArray->emulateInstanceDrawStep(&mRenderEncoder, inst);
+
+            mRenderEncoder.drawIndexed(primitiveType, indexCount, indexType, indexBuffer,
+                                       bufferOffset);
+        }
+        // Reset instance ID to zero
+        mVertexArray->emulateInstanceDrawStep(&mRenderEncoder, 0);
+    }
+}
+
 angle::Result ContextMtl::multiDrawArrays(const gl::Context *context,
                                           gl::PrimitiveMode mode,
                                           const GLint *firsts,
@@ -794,6 +852,16 @@ angle::Result ContextMtl::multiDrawElementsInstancedBaseVertexBaseInstance(
 gl::GraphicsResetStatus ContextMtl::getResetStatus()
 {
     return gl::GraphicsResetStatus::NoError;
+}
+
+// Vendor and description strings.
+std::string ContextMtl::getVendorString() const
+{
+    return getDisplay()->getVendorString();
+}
+std::string ContextMtl::getRendererDescription() const
+{
+    return getDisplay()->getRendererDescription();
 }
 
 // EXT_debug_marker
@@ -1217,6 +1285,69 @@ OverlayImpl *ContextMtl::createOverlay(const gl::OverlayState &state)
     return nullptr;
 }
 
+void ContextMtl::invalidateCurrentTransformFeedbackBuffers()
+{
+    if (getDisplay()->getFeatures().emulateTransformFeedback.enabled)
+    {
+        mDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
+    }
+}
+
+void ContextMtl::onTransformFeedbackStateChanged()
+{
+    if (getDisplay()->getFeatures().emulateTransformFeedback.enabled)
+    {
+        invalidateDriverUniforms();
+    }
+}
+
+angle::Result ContextMtl::onBeginTransformFeedback(
+    size_t bufferCount,
+    const gl::TransformFeedbackBuffersArray<BufferMtl *> &buffers)
+{
+    onTransformFeedbackStateChanged();
+
+    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    {
+        if (mCurrentTransformFeedbackBuffers.count(buffers[bufferIndex]) != 0)
+        {
+            endEncoding(mRenderEncoder);
+            break;
+        }
+    }
+
+    populateTransformFeedbackBufferSet(bufferCount, buffers);
+
+    return angle::Result::Continue;
+}
+
+void ContextMtl::populateTransformFeedbackBufferSet(
+    size_t bufferCount,
+    const gl::TransformFeedbackBuffersArray<BufferMtl *> &buffers)
+{
+    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    {
+        mCurrentTransformFeedbackBuffers.insert(buffers[bufferIndex]);
+    }
+}
+
+void ContextMtl::onEndTransformFeedback()
+{
+    if (getDisplay()->getFeatures().emulateTransformFeedback.enabled)
+    {
+        onTransformFeedbackStateChanged();
+    }
+}
+
+angle::Result ContextMtl::onPauseTransformFeedback()
+{
+    if (getDisplay()->getFeatures().emulateTransformFeedback.enabled)
+    {
+        onTransformFeedbackStateChanged();
+    }
+    return angle::Result::Continue;
+}
+
 angle::Result ContextMtl::dispatchCompute(const gl::Context *context,
                                           GLuint numGroupsX,
                                           GLuint numGroupsY,
@@ -1467,6 +1598,27 @@ mtl::RenderCommandEncoder *ContextMtl::getRenderPassCommandEncoder(const mtl::Re
     // Need to re-apply everything on next draw call.
     mDirtyBits.set();
 
+    id<MTLDevice> metalDevice = getDisplay()->getMetalDevice();
+    if (mtl::DeviceHasMaximumRenderTargetSize(metalDevice))
+    {
+        MTLRenderPassDescriptor *objCDesc = [MTLRenderPassDescriptor renderPassDescriptor];
+        desc.convertToMetalDesc(objCDesc);
+        NSUInteger maxSize = mtl::GetMaxRenderTargetSizeForDeviceInBytes(metalDevice);
+        NSUInteger renderTargetSize =
+            ComputeTotalSizeUsedForMTLRenderPassDescriptor(objCDesc, this, metalDevice);
+        if (renderTargetSize > maxSize)
+        {
+            NSString *errorString =
+                [NSString stringWithFormat:@"This set of render targets requires %lu bytes of "
+                                           @"pixel storage. This device supports %lu bytes.",
+                                           (unsigned long)renderTargetSize, (unsigned long)maxSize];
+            NSError *err = [NSError errorWithDomain:@"MTLValidationError"
+                                               code:-1
+                                           userInfo:@{NSLocalizedDescriptionKey : errorString}];
+            this->handleError(err, __FILE__, ANGLE_FUNCTION, __LINE__);
+            return nil;
+        }
+    }
     return &mRenderEncoder.restart(desc);
 }
 
@@ -1733,6 +1885,9 @@ void ContextMtl::onBackbufferResized(const gl::Context *context, WindowSurfaceMt
         return;
     }
 
+    updateViewport(framebuffer, glState.getViewport(), glState.getNearPlane(),
+                   glState.getFarPlane());
+    updateScissor(glState);
     onDrawFrameBufferChangedState(context, framebuffer, true);
 }
 

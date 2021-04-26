@@ -25,10 +25,20 @@
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/metal/mtl_constants.h"
 
 #if TARGET_OS_IPHONE
+#    if !defined(__IPHONE_11_0)
+#        define __IPHONE_11_0 110000
+#    endif
 #    if !defined(ANGLE_IOS_DEPLOY_TARGET)
 #        define ANGLE_IOS_DEPLOY_TARGET __IPHONE_11_0
+#    endif
+#    if !defined(__IPHONE_OS_VERSION_MAX_ALLOWED)
+#        define __IPHONE_OS_VERSION_MAX_ALLOWED __IPHONE_11_0
+#    endif
+#    if !defined(__TV_OS_VERSION_MAX_ALLOWED)
+#        define __TV_OS_VERSION_MAX_ALLOWED __IPHONE_11_0
 #    endif
 #endif
 
@@ -66,6 +76,7 @@ namespace egl
 {
 class Display;
 class Image;
+class Surface;
 }  // namespace egl
 
 #define ANGLE_GL_OBJECTS_X(PROC) \

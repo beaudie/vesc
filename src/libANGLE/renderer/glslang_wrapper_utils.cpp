@@ -26,6 +26,10 @@ namespace rx
 {
 namespace
 {
+constexpr char kXfbDeclMarker[]    = "@@ XFB-DECL @@";
+constexpr char kXfbOutMarker[]     = "@@ XFB-OUT @@;";
+constexpr char kXfbBuiltInPrefix[] = "xfbANGLE";
+
 template <size_t N>
 constexpr size_t ConstStrLen(const char (&)[N])
 {
@@ -157,6 +161,89 @@ void AddVaryingLocationInfo(ShaderInterfaceVariableInfoMap *infoMap,
 {
     const std::string &name = isStructField ? ref.parentStructMappedName : ref.varying->mappedName;
     AddLocationInfo(infoMap, ref.stage, name, location, component, 0, 0);
+}
+
+std::string SubstituteTransformFeedbackMarkers(const std::string &originalSource,
+                                               const std::string &xfbDecl,
+                                               const std::string &xfbOut)
+{
+    const size_t xfbDeclMarkerStart = originalSource.find(kXfbDeclMarker);
+    ASSERT(xfbDeclMarkerStart != std::string::npos);
+    const size_t xfbDeclMarkerEnd = xfbDeclMarkerStart + ConstStrLen(kXfbDeclMarker);
+
+    const size_t xfbOutMarkerStart = originalSource.find(kXfbOutMarker, xfbDeclMarkerStart);
+    ASSERT(xfbOutMarkerStart != std::string::npos);
+    const size_t xfbOutMarkerEnd = xfbOutMarkerStart + ConstStrLen(kXfbOutMarker);
+
+    // The shader is the following form:
+    //
+    // ..part1..
+    // @@ XFB-DECL @@
+    // ..part2..
+    // @@ XFB-OUT @@;
+    // ..part3..
+    //
+    // Construct the string by concatenating these five pieces, replacing the markers with the given
+    // values.
+    std::string result;
+
+    result.append(&originalSource[0], &originalSource[xfbDeclMarkerStart]);
+    result.append(xfbDecl);
+    result.append(&originalSource[xfbDeclMarkerEnd], &originalSource[xfbOutMarkerStart]);
+    result.append(xfbOut);
+    result.append(&originalSource[xfbOutMarkerEnd], &originalSource[originalSource.size()]);
+
+    return result;
+}
+std::string GenerateTransformFeedbackVaryingOutput(const gl::TransformFeedbackVarying &varying,
+                                                   const gl::UniformTypeInfo &info,
+                                                   size_t strideBytes,
+                                                   size_t offset,
+                                                   const std::string &bufferIndex)
+{
+    std::ostringstream result;
+
+    ASSERT(strideBytes % 4 == 0);
+    size_t stride = strideBytes / 4;
+
+    const size_t arrayIndexStart = varying.arrayIndex == GL_INVALID_INDEX ? 0 : varying.arrayIndex;
+    const size_t arrayIndexEnd   = arrayIndexStart + varying.size();
+
+    for (size_t arrayIndex = arrayIndexStart; arrayIndex < arrayIndexEnd; ++arrayIndex)
+    {
+        for (int col = 0; col < info.columnCount; ++col)
+        {
+            for (int row = 0; row < info.rowCount; ++row)
+            {
+                result << "xfbOut" << bufferIndex << "[" << sh::vk::kDriverUniformsVarName
+                       << ".xfbBufferOffsets[" << bufferIndex
+                       << "] + (gl_VertexIndex + gl_InstanceIndex * "
+                       << sh::vk::kDriverUniformsVarName << ".xfbVerticesPerDraw) * " << stride
+                       << " + " << offset << "] = " << info.glslAsFloat << "("
+                       << varying.mappedName;
+
+                if (varying.isArray())
+                {
+                    result << "[" << arrayIndex << "]";
+                }
+
+                if (info.columnCount > 1)
+                {
+                    result << "[" << col << "]";
+                }
+
+                if (info.rowCount > 1)
+                {
+                    result << "[" << row << "]";
+                }
+
+                result << ");\n";
+                ++offset;
+            }
+        }
+    }
+
+    return result.str();
 }
 
 // Modify an existing out variable and add transform feedback information.

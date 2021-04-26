@@ -6,6 +6,9 @@
 
 // State.cpp: Implements the State class, encapsulating raw GL state.
 
+// Older clang versions have a false positive on this warning here.
+#pragma clang diagnostic ignored "-Wglobal-constructors"
+
 #include "libANGLE/State.h"
 
 #include <string.h>

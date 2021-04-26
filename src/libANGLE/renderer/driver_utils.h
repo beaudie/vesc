@@ -181,6 +181,15 @@ inline bool IsApple()
 #endif
 }
 
+inline bool IsMac()
+{
+#if defined(ANGLE_PLATFORM_APPLE) && defined(ANGLE_PLATFORM_MACOS)
+    return true;
+#else
+    return false;
+#endif
+}
+
 inline bool IsFuchsia()
 {
 #if defined(ANGLE_PLATFORM_FUCHSIA)
@@ -217,6 +226,8 @@ bool operator<(const OSVersion &a, const OSVersion &b);
 bool operator>=(const OSVersion &a, const OSVersion &b);
 
 OSVersion GetMacOSVersion();
+
+OSVersion GetiOSVersion();
 
 OSVersion GetLinuxOSVersion();
 
