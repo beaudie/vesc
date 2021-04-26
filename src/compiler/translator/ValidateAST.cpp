@@ -121,12 +121,13 @@ void ValidateAST::visitNode(Visit visit, TIntermNode *node)
         size_t childCount = node->getChildCount();
         for (size_t i = 0; i < childCount; ++i)
         {
-            TIntermNode *child = node->getChildNode(i);
-            if (mParent.find(child) != mParent.end())
+            TIntermNode *child   = node->getChildNode(i);
+            TIntermNode *&parent = mParent[child];
+            if (parent)
             {
                 // If child is visited twice but through the same parent, the problem is in one of
                 // the ancestors.
-                if (mParent[child] != node)
+                if (parent != node)
                 {
                     mDiagnostics->error(node->getLine(), "Found child with two parents",
                                         "<validateSingleParent>");
@@ -134,7 +135,7 @@ void ValidateAST::visitNode(Visit visit, TIntermNode *node)
                 }
             }
 
-            mParent[child] = node;
+            parent = node;
         }
     }
 }
