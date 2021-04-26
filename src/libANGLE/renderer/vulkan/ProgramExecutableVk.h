@@ -31,7 +31,8 @@ class ShaderInfo final : angle::NonCopyable
 
     angle::Result initShaders(const gl::ShaderBitSet &linkedShaderStages,
                               const gl::ShaderMap<const angle::spirv::Blob *> &spirvBlobs,
-                              const ShaderInterfaceVariableInfoMap &variableInfoMap);
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                              const bool retainSpirvDebugInfo);
     void release(ContextVk *contextVk);
 
     ANGLE_INLINE bool valid() const { return mIsInitialized; }

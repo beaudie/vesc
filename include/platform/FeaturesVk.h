@@ -515,6 +515,12 @@ struct FeaturesVk : FeatureSetBase
         "forceFragmentShaderPrecisionHighpToMediump", FeatureCategory::VulkanWorkarounds,
         "Forces highp precision in fragment shader to mediump.", &members,
         "https://issuetracker.google.com/184850002"};
+
+    // Whether we retain SPIR-V debug information, it is useful while analyzing shader code.
+    // This feature toggles removal of debug info from SPIR-V blob.
+    Feature retainSpirvDebugInfo = {"retainSpirvDebugInfo", FeatureCategory::VulkanFeatures,
+                                    "Retain debug info in SPIR-V blob.", &members,
+                                    "http://anglebug.com/5901"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

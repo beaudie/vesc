@@ -2114,6 +2114,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     bool isPowerVR  = IsPowerVR(mPhysicalDeviceProperties.vendorID);
     bool isSwiftShader =
         IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
+    bool isSamsung = IsSamsung(mPhysicalDeviceProperties.vendorID);
 
     bool supportsNegativeViewport =
         ExtensionFound(VK_KHR_MAINTENANCE1_EXTENSION_NAME, deviceExtensionNames) ||
@@ -2416,6 +2417,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Disabled by default. Only enable it for experimental purpose, as this will cause various
     // tests to fail.
     ANGLE_FEATURE_CONDITION(&mFeatures, forceFragmentShaderPrecisionHighpToMediump, false);
+
+    // Retain debug info in SPIR-V blob.
+    ANGLE_FEATURE_CONDITION(&mFeatures, retainSpirvDebugInfo, isSamsung);
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);

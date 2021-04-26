@@ -62,7 +62,8 @@ void SaveShaderInterfaceVariableXfbInfo(const ShaderInterfaceVariableXfbInfo &xf
 
 bool ValidateTransformedSpirV(const gl::ShaderBitSet &linkedShaderStages,
                               const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                              const gl::ShaderMap<angle::spirv::Blob> &spirvBlobs)
+                              const gl::ShaderMap<angle::spirv::Blob> &spirvBlobs,
+                              const bool retainSpirvDebugInfo)
 {
     const gl::ShaderType lastPreFragmentStage = gl::GetLastPreFragmentStage(linkedShaderStages);
 
@@ -73,7 +74,7 @@ bool ValidateTransformedSpirV(const gl::ShaderBitSet &linkedShaderStages,
         options.preRotation                        = SurfaceRotation::FlippedRotated90Degrees;
         options.negativeViewportSupported          = false;
         options.transformPositionToVulkanClipSpace = true;
-        options.removeDebugInfo                    = true;
+        options.removeDebugInfo                    = !retainSpirvDebugInfo;
         options.isTransformFeedbackStage           = shaderType == lastPreFragmentStage;
 
         angle::spirv::Blob transformed;
@@ -112,7 +113,8 @@ ShaderInfo::~ShaderInfo() = default;
 
 angle::Result ShaderInfo::initShaders(const gl::ShaderBitSet &linkedShaderStages,
                                       const gl::ShaderMap<const angle::spirv::Blob *> &spirvBlobs,
-                                      const ShaderInterfaceVariableInfoMap &variableInfoMap)
+                                      const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                      const bool retainSpirvDebugInfo)
 {
     ASSERT(!valid());
 
@@ -125,7 +127,8 @@ angle::Result ShaderInfo::initShaders(const gl::ShaderBitSet &linkedShaderStages
     }
 
     // Assert that SPIR-V transformation is correct, even if the test never issues a draw call.
-    ASSERT(ValidateTransformedSpirV(linkedShaderStages, variableInfoMap, mSpirvBlobs));
+    ASSERT(ValidateTransformedSpirV(linkedShaderStages, variableInfoMap, mSpirvBlobs,
+                                    retainSpirvDebugInfo));
 
     mIsInitialized = true;
     return angle::Result::Continue;
@@ -190,7 +193,8 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     options.shaderType = shaderType;
     options.removeEarlyFragmentTestsOptimization =
         shaderType == gl::ShaderType::Fragment && optionBits.removeEarlyFragmentTestsOptimization;
-    options.removeDebugInfo             = !contextVk->getRenderer()->getEnableValidationLayers();
+    options.removeDebugInfo             = !(contextVk->getRenderer()->getEnableValidationLayers() ||
+                                contextVk->getFeatures().retainSpirvDebugInfo.enabled);
     options.isTransformFeedbackStage    = isLastPreFragmentStage && isTransformFeedbackProgram;
     options.isTransformFeedbackEmulated = contextVk->getFeatures().emulateTransformFeedback.enabled;
     options.negativeViewportSupported   = contextVk->getFeatures().supportsNegativeViewport.enabled;
