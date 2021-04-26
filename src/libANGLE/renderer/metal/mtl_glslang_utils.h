@@ -14,32 +14,23 @@
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
-
+#include "libANGLE/renderer/metal/mtl_glslang_mtl_utils.h"
 namespace rx
 {
 namespace mtl
 {
+void reset();
 
-struct SamplerBinding
-{
-    uint32_t textureBinding = 0;
-    uint32_t samplerBinding = 0;
-};
+// Translated Metal source code
+std::string metalShaderSource;
+// Metal library compiled from source code above. Used by ProgramMtl.
+AutoObjCPtr<id<MTLLibrary>> metalLibrary;
 
-struct TranslatedShaderInfo
-{
-    void reset();
-
-    // Translated Metal source code
-    std::string metalShaderSource;
-    // Metal library compiled from source code above. Used by ProgramMtl.
-    AutoObjCPtr<id<MTLLibrary>> metalLibrary;
-
-    std::array<SamplerBinding, kMaxGLSamplerBindings> actualSamplerBindings;
-    std::array<uint32_t, kMaxGLUBOBindings> actualUBOBindings;
-    std::array<uint32_t, kMaxShaderXFBs> actualXFBBindings;
-    bool hasUBOArgumentBuffer;
-};
+std::array<SamplerBinding, kMaxGLSamplerBindings> actualSamplerBindings;
+std::array<uint32_t, kMaxGLUBOBindings> actualUBOBindings;
+std::array<uint32_t, kMaxShaderXFBs> actualXFBBindings;
+bool hasUBOArgumentBuffer;
+};  // namespace mtl
 
 // spirvBlobsOut is the SPIR-V code per shader stage.
 void GlslangGetShaderSpirvCode(const gl::ProgramState &programState,
@@ -54,6 +45,13 @@ angle::Result GlslangTransformSpirvCode(const gl::ShaderBitSet &linkedShaderStag
                                         const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<angle::spirv::Blob> *shaderCodeOut);
 
+angle::Result MSLGetShaderSpirvCode(ErrorHandler *context,
+                                    const gl::ShaderBitSet &linkedShaderStages,
+                                    const gl::Caps &glCaps,
+                                    const gl::ShaderMap<std::string> &shaderSources,
+                                    const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                                    gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut);
+
 // Translate from SPIR-V code to Metal shader source code.
 // - spirvShaderCode is SPIRV code per shader stage when XFB emulation is turned off.
 // - xfbOnlySpirvCode is  vertex shader's SPIRV code when XFB emulation is turned on.
@@ -67,7 +65,24 @@ angle::Result SpirvCodeToMsl(Context *context,
                              gl::ShaderMap<TranslatedShaderInfo> *mslShaderInfoOut,
                              TranslatedShaderInfo *mslXfbOnlyShaderInfoOut /** nullable */);
 
-}  // namespace mtl
+void MSLGetShaderSource(const gl::ProgramState &programState,
+                        const gl::ProgramLinkedResources &resources,
+                        gl::ShaderMap<std::string> *shaderSourcesOut,
+                        ShaderMapInterfaceVariableInfoMap *variableInfoMapOut);
+
+angle::Result GlslangGetMSL(Context *context,
+                            const gl::ShaderBitSet &linkedShaderStages,
+                            const gl::Caps &glCaps,
+                            const gl::ShaderMap<std::string> &shaderSources,
+                            const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                            gl::ShaderMap<TranslatedShaderInfo> *mslShaderInfoOut,
+                            gl::ShaderMap<std::string> *mslCodeOut,
+                            size_t xfbBufferCount);
+
+// Get equivalent shadow compare mode that is used in translated msl shader.
+uint MslGetShaderShadowCompareMode(GLenum mode, GLenum func);
+
+}  // namespace rx
 }  // namespace rx
 
 #endif /* LIBANGLE_RENDERER_METAL_GLSLANGWRAPPER_H_ */
