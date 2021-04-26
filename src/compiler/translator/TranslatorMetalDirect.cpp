@@ -483,18 +483,6 @@ TranslatorMetalDirect::TranslatorMetalDirect(sh::GLenum type,
     : TCompiler(type, spec, output)
 {}
 
-// static
-const char *TranslatorMetalDirect::GetCoverageMaskEnabledConstName()
-{
-    return constant_names::kCoverageMaskEnabled.rawName().data();
-}
-
-// static
-const char *TranslatorMetalDirect::GetRasterizationDiscardEnabledConstName()
-{
-    return constant_names::kRasterizationDiscardEnabled.rawName().data();
-}
-
 // Add sample_mask writing to main, guarded by the function constant
 // kCoverageMaskEnabledName
 ANGLE_NO_DISCARD bool TranslatorMetalDirect::insertSampleMaskWritingLogic(
