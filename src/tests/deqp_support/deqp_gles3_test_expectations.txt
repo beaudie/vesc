@@ -949,6 +949,27 @@
 4235 METAL INTEL : dEQP-GLES3.* = SKIP
 4235 METAL NVIDIA : dEQP-GLES3.* = SKIP
 
+// Test failures introduced by Apple's changes (anglebug.com/5505)
+5505 METAL AMD : dEQP-GLES3.functional.fbo.invalidate.sub.unbind_blit_msaa_color = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.fbo.invalidate.sub.unbind_blit_msaa_stencil = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_color = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_stencil = FAIL
+
+5505 METAL AMD : dEQP-GLES3.functional.fbo.msaa.*_samples.depth* = FAIL
+
+5505 METAL AMD : dEQP-GLES3.functional.fragment_ops.scissor.outside_render_* = FAIL
+
+5505 METAL AMD : dEQP-GLES3.functional.shaders.builtin_functions.precision.normalize.*vec* = FAIL
+
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.2d.nearest.*depth* = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.2d.linear.*depth* = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.2d.nearest_mipmap_linear.*depth* = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.2d.linear_mipmap_linear.*depth* = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.cube.nearest.*depth* = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.cube.linear.*depth* = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.cube.nearest_mipmap_linear.*depth* = FAIL
+5505 METAL AMD : dEQP-GLES3.functional.texture.shadow.cube.linear_mipmap_linear.*depth* = FAIL
+
 /////////////////////////////////////
 
 // Pixel 4 expectations.

@@ -405,6 +405,9 @@ TEST_P(MultisampledRenderToTextureTest, FramebufferCompleteness)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
 
+    // Test failure introduced by Apple's changes (anglebug.com/5505)
+    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
+
     // Checking that Renderbuffer and texture2d having different number of samples results
     // in a FRAMEBUFFER_INCOMPLETE_MULTISAMPLE
     GLTexture texture;
@@ -1711,6 +1714,9 @@ void MultisampledRenderToTextureES3Test::drawCopyDrawAttachDepthStencilClearThen
 // and render pass will result in an ASSERT.
 TEST_P(MultisampledRenderToTextureES3Test, DrawCopyDrawAttachDepthStencilClearThenDraw)
 {
+    // Test failure introduced by Apple's changes (anglebug.com/5505)
+    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
+
     drawCopyDrawAttachDepthStencilClearThenDrawCommon(false);
 }
 
