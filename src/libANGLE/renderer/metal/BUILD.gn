@@ -53,6 +53,7 @@ _metal_backend_sources = [
   "mtl_command_buffer.mm",
   "mtl_common.h",
   "mtl_common.mm",
+  "mtl_constants.h",
   "mtl_format_table_autogen.mm",
   "mtl_format_utils.h",
   "mtl_format_utils.mm",
