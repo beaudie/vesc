@@ -17,6 +17,7 @@
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
+#include "platform/FeaturesMtl.h"
 
 #define ANGLE_OBJC_CP_PROPERTY(DST, SRC, PROPERTY) \
     (DST).PROPERTY = static_cast<__typeof__((DST).PROPERTY)>(ToObjC((SRC).PROPERTY))
@@ -1059,7 +1060,7 @@ void RenderPipelineCache::clearPipelineStates()
 }
 
 // StateCache implementation
-StateCache::StateCache() {}
+StateCache::StateCache(const angle::FeaturesMtl &features) {}
 
 StateCache::~StateCache() {}
 
