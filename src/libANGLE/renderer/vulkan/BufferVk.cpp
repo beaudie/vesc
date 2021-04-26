@@ -293,7 +293,16 @@ angle::Result BufferVk::setDataWithUsageFlags(const gl::Context *context,
 
     if (isExternalBuffer)
     {
-        return setExternalBufferData(context, target, clientBuffer, size, memoryPropertyFlags);
+        ANGLE_TRY(setExternalBufferData(context, target, clientBuffer, size, memoryPropertyFlags));
+        if (!mBuffer->isHostVisible())
+        {
+            ANGLE_CHECK(context->getImplementation(), (!persistentMapRequired),
+                        "external buffer is not allocated in a way which permits persistent "
+                        "mapping on the CPU.",
+                        GL_INVALID_OPERATION);
+        }
+
+        return angle::Result::Continue;
     }
     return setDataWithMemoryType(context, target, data, size, memoryPropertyFlags,
                                  persistentMapRequired);
