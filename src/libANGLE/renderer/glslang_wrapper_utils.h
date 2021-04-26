@@ -49,6 +49,8 @@ struct GlslangSourceOptions
     bool supportsTransformFeedbackEmulation = false;
     bool enableTransformFeedbackEmulation   = false;
     bool emulateBresenhamLines              = false;
+    // TODO(jonahr) anglebug.com/6083: Move this to a separate metal-only struct
+    bool transformFeedbackEarlyReturn = false;
 };
 
 struct GlslangSpirvOptions
