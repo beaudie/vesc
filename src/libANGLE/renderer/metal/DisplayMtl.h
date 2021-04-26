@@ -122,7 +122,7 @@ class DisplayMtl : public DisplayImpl
 
     // Check whether either of the specified iOS or Mac GPU family is supported
     bool supportsEitherGPUFamily(uint8_t iOSFamily, uint8_t macFamily) const;
-    bool supportsAppleGPUFamily(uint8_t iOSFamily) const;
+    bool supportsIOSGPUFamily(uint8_t iOSFamily) const;
     bool supportsMacGPUFamily(uint8_t macFamily) const;
     bool isAMD() const;
     bool isIntel() const;
@@ -175,6 +175,8 @@ class DisplayMtl : public DisplayImpl
     void initializeExtensions() const;
     void initializeTextureCaps() const;
     void initializeFeatures();
+    void initializeLimitations();
+    id<MTLDevice> getMetalDeviceMatchingAttribute(const egl::AttributeMap &attribs);
     angle::Result initializeShaderLibrary();
 
     mtl::AutoObjCPtr<id<MTLDevice>> mMetalDevice = nil;
