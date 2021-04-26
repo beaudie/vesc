@@ -2030,6 +2030,9 @@ TEST_P(RobustResourceInitTest, SurfaceInitializedAfterSwap)
 {
     ANGLE_SKIP_TEST_IF(!hasRobustSurfaceInit());
 
+    // Test failure introduced by Apple's changes (anglebug.com/5505)
+    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
+
     EGLint swapBehaviour = 0;
     ASSERT_TRUE(eglQuerySurface(getEGLWindow()->getDisplay(), getEGLWindow()->getSurface(),
                                 EGL_SWAP_BEHAVIOR, &swapBehaviour));
