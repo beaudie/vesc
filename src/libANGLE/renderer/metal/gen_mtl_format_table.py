@@ -332,7 +332,7 @@ def gen_image_map_switch_es3_case(angle_format, actual_angle_format_info, angle_
             mtl_format_fallback=angle_to_mtl_map[actual_angle_format_fallback],
             init_function_fallback=angle_format_utils.get_internal_format_initializer(
                 gl_format, actual_angle_format_fallback),
-            fallback_condition="display->supportsAppleGPUFamily(1)")
+            fallback_condition="display->supportsIOSGPUFamily(1)")
 
     return gen_image_map_switch_case(angle_format, actual_angle_format_info, angle_to_mtl_map,
                                      gen_format_assign_code)
@@ -352,7 +352,7 @@ def gen_image_map_switch_astc_case(angle_format, angle_to_gl, angle_to_mtl_map):
             mtl_format_fallback=angle_to_mtl_map[actual_angle_format] + "LDR",
             init_function_fallback=angle_format_utils.get_internal_format_initializer(
                 gl_format, actual_angle_format),
-            fallback_condition="display->supportsAppleGPUFamily(6)")
+            fallback_condition="display->supportsIOSGPUFamily(6)")
 
     return gen_image_map_switch_case(angle_format, angle_format, angle_to_mtl_map,
                                      gen_format_assign_code)
