@@ -1011,6 +1011,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     validationFeatures.sType                         = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT;
     validationFeatures.enabledValidationFeatureCount = 1;
     validationFeatures.pEnabledValidationFeatures    = enabledFeatures;
+    // TODO(anglebug.com/5902): Prevent unique handles validation from altering the rendering output
+    VkValidationFeatureDisableEXT disabledFeatures[] = {
+        VK_VALIDATION_FEATURE_DISABLE_UNIQUE_HANDLES_EXT};
+    validationFeatures.disabledValidationFeatureCount = 1;
+    validationFeatures.pDisabledValidationFeatures    = disabledFeatures;
 
     if (mEnableValidationLayers)
     {
