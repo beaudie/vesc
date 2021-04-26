@@ -793,7 +793,10 @@ ANGLE_INLINE bool ValidateDrawAttribs(const Context *context, int64_t maxVertex)
     return true;
 }
 
-ANGLE_INLINE bool ValidateDrawArraysAttribs(const Context *context, GLint first, GLsizei count)
+ANGLE_INLINE bool ValidateDrawArraysAttribs(const Context *context,
+                                            GLint first,
+                                            GLsizei count,
+                                            GLsizei primcount)
 {
     if (!context->isBufferAccessValidationEnabled())
     {
@@ -873,7 +876,7 @@ ANGLE_INLINE bool ValidateDrawArraysCommon(const Context *context,
         }
     }
 
-    return ValidateDrawArraysAttribs(context, first, count);
+    return ValidateDrawArraysAttribs(context, first, count, primcount);
 }
 
 ANGLE_INLINE bool ValidateDrawElementsBase(const Context *context,
