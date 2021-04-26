@@ -27,6 +27,8 @@
 #    import <QuartzCore/QuartzCore.h>
 #    import <dlfcn.h>
 
+#    import "libANGLE/renderer/gl/eagl/EAGLFunctions.h"
+
 namespace
 {
 
@@ -113,6 +115,7 @@ void DisplayEAGL::terminate()
     if (mContext != nullptr)
     {
         [getEAGLContextClass() setCurrentContext:nil];
+        [mContext release];
         mContext = nullptr;
         mThreadsWithContextCurrent.clear();
     }
@@ -275,7 +278,7 @@ egl::Error DisplayEAGL::restoreLostDevice(const egl::Display *display)
 
 bool DisplayEAGL::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    NSObject *layer = (__bridge NSObject *)window;
+    NSObject *layer = reinterpret_cast<NSObject *>(window);
     return [layer isKindOfClass:[CALayer class]];
 }
 
@@ -304,7 +307,7 @@ void DisplayEAGL::generateExtensions(egl::DisplayExtensions *outExtensions) cons
     outExtensions->iosurfaceClientBuffer = true;
     outExtensions->surfacelessContext    = true;
 
-    // Contexts are virtualized so textures ans semaphores can be shared globally
+    // Contexts are virtualized so textures and semaphores can be shared globally
     outExtensions->displayTextureShareGroup   = true;
     outExtensions->displaySemaphoreShareGroup = true;
 

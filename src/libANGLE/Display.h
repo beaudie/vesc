@@ -175,6 +175,10 @@ class Display final : public LabeledObject,
                       Surface *drawSurface,
                       Surface *readSurface,
                       gl::Context *context);
+    Error makeCurrent(const Thread *thread,
+                      Surface *drawSurface,
+                      Surface *readSurface,
+                      gl::Context *context);
 
     Error destroySurface(Surface *surface);
     void destroyImage(Image *image);
