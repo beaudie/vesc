@@ -515,6 +515,8 @@ libangle_mac_sources = [
   "src/libANGLE/renderer/gl/apple/DisplayApple_api.h",
 ]
 
+libangle_ios_sources = [ "src/libANGLE/renderer/driver_utils_ios.mm" ]
+
 # The frame capture headers are always visible to libANGLE.
 libangle_sources += [
   "src/libANGLE/capture/FrameCapture.h",

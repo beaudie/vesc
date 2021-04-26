@@ -319,7 +319,6 @@ struct BlitParams
     float2 srcTexCoords[3];
     int srcLevel;
     int srcLayer;
-
     bool dstFlipViewportX;
     bool dstFlipViewportY;
     bool dstLuminance;

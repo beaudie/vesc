@@ -14,7 +14,6 @@
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.h"
 #include "compiler/translator/TranslatorMetalDirect/AstHelpers.h"
-#include "compiler/translator/TranslatorMetalDirect/ConstantNames.h"
 #include "compiler/translator/TranslatorMetalDirect/EmitMetal.h"
 #include "compiler/translator/TranslatorMetalDirect/FixTypeConstructors.h"
 #include "compiler/translator/TranslatorMetalDirect/HoistConstants.h"
@@ -482,18 +481,6 @@ TranslatorMetalDirect::TranslatorMetalDirect(sh::GLenum type,
                                              ShShaderOutput output)
     : TCompiler(type, spec, output)
 {}
-
-// static
-const char *TranslatorMetalDirect::GetCoverageMaskEnabledConstName()
-{
-    return constant_names::kCoverageMaskEnabled.rawName().data();
-}
-
-// static
-const char *TranslatorMetalDirect::GetRasterizationDiscardEnabledConstName()
-{
-    return constant_names::kRasterizationDiscardEnabled.rawName().data();
-}
 
 // Add sample_mask writing to main, guarded by the function constant
 // kCoverageMaskEnabledName
