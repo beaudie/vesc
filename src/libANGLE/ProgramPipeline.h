@@ -30,6 +30,7 @@ namespace gl
 class Context;
 class ProgramPipeline;
 
+using ProgramUsedStagesMap = angle::HashMap<GLuint, gl::ShaderBitSet>;
 class ProgramPipelineState final : angle::NonCopyable
 {
   public:
@@ -50,6 +51,9 @@ class ProgramPipelineState final : angle::NonCopyable
     }
 
     void activeShaderProgram(Program *shaderProgram);
+
+    bool verifyProgramStagesUsage();
+
     void useProgramStages(const Context *context,
                           GLbitfield stages,
                           Program *shaderProgram,
@@ -87,6 +91,8 @@ class ProgramPipelineState final : angle::NonCopyable
     ProgramExecutable *mExecutable;
 
     bool mIsLinked;
+
+    ProgramUsedStagesMap mProgramUsedStagesMap;
 };
 
 class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,

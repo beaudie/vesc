@@ -3905,12 +3905,8 @@ const char *ValidateDrawStates(const Context *context)
 
             bool goodResult = programPipeline->link(context) == angle::Result::Continue;
 
-            //  If there is no active program for the vertex or fragment shader stages, the results
-            //  of vertex and fragment shader execution will respectively be undefined. However,
-            //  this is not an error, so ANGLE only signals PPO link failures if both VS and FS
-            //  stages are present.
             ASSERT(executable);
-            if (!goodResult && executable->hasVertexAndFragmentShader())
+            if (!goodResult)
             {
                 return kProgramPipelineLinkFailed;
             }
