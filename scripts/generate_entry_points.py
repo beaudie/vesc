@@ -247,7 +247,7 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
 """
 
 TEMPLATE_CL_ENTRY_POINT_NO_RETURN = """\
-void CL_API_CALL CL_{name}({params})
+void CL_API_CALL cl{name}({params})
 {{
     CL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
@@ -260,7 +260,7 @@ void CL_API_CALL CL_{name}({params})
 """
 
 TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_ERROR = """\
-cl_int CL_API_CALL CL_{name}({params})
+cl_int CL_API_CALL cl{name}({params})
 {{
     CL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
@@ -268,12 +268,12 @@ cl_int CL_API_CALL CL_{name}({params})
 
     ANGLE_CL_VALIDATE_ERROR({name}{comma_if_needed}{internal_params});
 
-    return {return_cast}({name}({internal_params}));
+    return {name}({internal_params});
 }}
 """
 
 TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_POINTER = """\
-{return_type} CL_API_CALL CL_{name}({params})
+{return_type} CL_API_CALL cl{name}({params})
 {{
     CL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
@@ -281,7 +281,7 @@ TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_POINTER = """\
 
     ANGLE_CL_VALIDATE_POINTER({name}{comma_if_needed}{internal_params});
 
-    return {return_cast}({name}({internal_params}));
+    return {name}({internal_params});
 }}
 """
 
@@ -373,8 +373,7 @@ CONTEXT_DECL_FORMAT = """    {return_type} {name_lower_no_suffix}({internal_para
 TEMPLATE_CL_ENTRY_POINT_EXPORT = """\
 {return_type} CL_API_CALL cl{name}({params})
 {{
-    EnsureCLLoaded();
-    return cl_loader.cl{name}({internal_params});
+    return cl::GetDispatch().cl{name}({internal_params});
 }}
 """
 
@@ -875,50 +874,8 @@ EGL_EXT_SOURCE_INCLUDES = """\
 using namespace egl;
 """
 
-LIBCL_EXPORT_INCLUDES_AND_PREAMBLE = """
-#include "cl_loader.h"
-
-#include "anglebase/no_destructor.h"
-#include "common/system_utils.h"
-
-#include <iostream>
-#include <memory>
-
-namespace
-{
-bool gLoaded = false;
-
-std::unique_ptr<angle::Library> &EntryPointsLib()
-{
-    static angle::base::NoDestructor<std::unique_ptr<angle::Library>> sEntryPointsLib;
-    return *sEntryPointsLib;
-}
-
-angle::GenericProc CL_API_CALL GlobalLoad(const char *symbol)
-{
-    return reinterpret_cast<angle::GenericProc>(EntryPointsLib()->getSymbol(symbol));
-}
-
-void EnsureCLLoaded()
-{
-    if (gLoaded)
-    {
-        return;
-    }
-
-    EntryPointsLib().reset(
-        angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
-    angle::LoadCL(GlobalLoad);
-    if (!cl_loader.clGetDeviceIDs)
-    {
-        std::cerr << "Error loading CL entry points." << std::endl;
-    }
-    else
-    {
-        gLoaded = true;
-    }
-}
-}  // anonymous namespace
+LIBCL_EXPORT_INCLUDES = """
+#include "libOpenCL/dispatch.h"
 """
 
 LIBGLESV2_EXPORT_INCLUDES = """
@@ -999,17 +956,8 @@ void EnsureEGLLoaded() {}
 }  // anonymous namespace
 """
 
-LIBCL_HEADER_INCLUDES = """\
-#include "export.h"
-
-#ifndef CL_API_ENTRY
-#    define CL_API_ENTRY ANGLE_EXPORT
-#endif
-#include "angle_cl.h"
-"""
-
 LIBCL_SOURCE_INCLUDES = """\
-#include "entry_points_cl_autogen.h"
+#include "angle_cl_no_export.h"
 
 #include "cl_stubs_autogen.h"
 #include "entry_points_cl_utils.h"
@@ -1571,7 +1519,6 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, is_explic
     pass_params = [param_print_argument(command_node, param) for param in params]
     format_params = [param_format_string(param) for param in params]
     return_type = proto[:-len(cmd_name)].strip()
-    return_cast = "UnpackParam<" + return_type + ">" if return_type in packed_param_types else ""
     default_return = default_return_value(cmd_name, return_type)
     event_comment = TEMPLATE_EVENT_COMMENT if cmd_name in NO_EVENT_MARKER_EXCEPTIONS_LIST else ""
     name_lower_no_suffix = strip_suffix(api, cmd_name[2:3].lower() + cmd_name[3:])
@@ -1583,8 +1530,6 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, is_explic
             name_lower_no_suffix,
         "return_type":
             return_type,
-        "return_cast":
-            return_cast,
         "params":
             ", ".join(params),
         "internal_params":
@@ -2617,7 +2562,6 @@ def main():
             '../src/libEGL/libEGL_autogen.cpp',
             '../src/libEGL/libEGL_autogen.def',
             '../src/libGLESv2/entry_points_cl_autogen.cpp',
-            '../src/libGLESv2/entry_points_cl_autogen.h',
             '../src/libGLESv2/entry_points_egl_autogen.cpp',
             '../src/libGLESv2/entry_points_egl_autogen.h',
             '../src/libGLESv2/entry_points_egl_ext_autogen.cpp',
@@ -2958,8 +2902,6 @@ def main():
         cl_validation_protos += [comment] + eps.validation_protos
         libcl_windows_def_exports += [win_def_comment] + get_exports(clxml.commands[version])
 
-    write_file("cl", "CL", TEMPLATE_ENTRY_POINT_HEADER, "\n".join(cl_decls), "h",
-               LIBCL_HEADER_INCLUDES, "libGLESv2", "cl.xml")
     write_file("cl", "CL", TEMPLATE_ENTRY_POINT_SOURCE, "\n".join(cl_defs), "cpp",
                LIBCL_SOURCE_INCLUDES, "libGLESv2", "cl.xml")
     write_validation_header("CL", "CL", cl_validation_protos, "cl.xml",
@@ -3133,8 +3075,8 @@ def main():
     write_export_files("\n".join([item for item in libegl_ep_defs]),
                        LIBEGL_EXPORT_INCLUDES_AND_PREAMBLE, "egl.xml and egl_angle_ext.xml",
                        "libEGL", "EGL")
-    write_export_files("\n".join([item for item in libcl_ep_defs]),
-                       LIBCL_EXPORT_INCLUDES_AND_PREAMBLE, "cl.xml", "libOpenCL", "CL")
+    write_export_files("\n".join([item for item in libcl_ep_defs]), LIBCL_EXPORT_INCLUDES,
+                       "cl.xml", "libOpenCL", "CL")
 
     libgles_ep_exports += get_egl_exports()
 

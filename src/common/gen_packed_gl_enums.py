@@ -32,7 +32,7 @@ Generators = [
     {
         'json': 'packed_cl_enums.json',
         'output': 'PackedCLEnums',
-        'includes': '#include <angle_cl.h>\ntypedef cl_uint CLenum;',
+        'includes': '#include <angle_cl_no_export.h>\ntypedef cl_uint CLenum;',
         'namespace': 'cl',
         'enum_type': 'CLenum',
     },
