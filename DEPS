@@ -558,6 +558,11 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'tools/perf': {
+    'url': '{chromium_git}/chromium/src/tools/perf@b880b32ae2b48a787e1883abe71856e06c40feea',
+    'condition': 'not build_with_chromium',
+  },
+
   'tools/protoc_wrapper': {
     'url': '{chromium_git}/chromium/src/tools/protoc_wrapper@4d4e1824fc1a93147a2f640a25812d1db9d3c2d2',
     'condition': 'not build_with_chromium',
