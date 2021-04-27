@@ -9462,8 +9462,8 @@ void StateCache::updateActiveImageUnitIndices(Context *context)
 
 void StateCache::updateCanDraw(Context *context)
 {
-    mCachedCanDraw = (context->isGLES1() ||
-                      (context->getState().getProgramExecutable() &&
-                       context->getState().getProgramExecutable()->hasVertexAndFragmentShader()));
+    mCachedCanDraw =
+        (context->isGLES1() || (context->getState().getProgramExecutable() &&
+                                context->getState().getProgramExecutable()->hasVertexShader()));
 }
 }  // namespace gl

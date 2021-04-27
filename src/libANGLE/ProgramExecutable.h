@@ -229,7 +229,9 @@ class ProgramExecutable final : public angle::Subject
     size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
 
     void updateCanDrawWith();
-    bool hasVertexAndFragmentShader() const { return mCanDrawWith; }
+    void updateHasFragmentAndVertexShader();
+    bool hasVertexShader() const { return mCanDrawWith; }
+    bool hasVertexAndFragmentShader() const { return mHasVertexAndFragmentShader; }
 
     const std::vector<sh::ShaderVariable> &getProgramInputs() const { return mProgramInputs; }
     const std::vector<sh::ShaderVariable> &getOutputVariables() const { return mOutputVariables; }
@@ -417,6 +419,7 @@ class ProgramExecutable final : public angle::Subject
     ActiveTextureArray<ShaderBitSet> mActiveImageShaderBits;
 
     bool mCanDrawWith;
+    bool mHasVertexAndFragmentShader;
 
     // Names and mapped names of output variables that are arrays include [0] in the end, similarly
     // to uniforms.

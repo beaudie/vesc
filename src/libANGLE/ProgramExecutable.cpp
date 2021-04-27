@@ -69,6 +69,7 @@ ProgramExecutable::ProgramExecutable()
       mAttributesMask(0),
       mActiveSamplerRefCounts{},
       mCanDrawWith(false),
+      mHasVertexAndFragmentShader(false),
       mYUVOutput(false),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mDefaultUniformRange(0, 0),
@@ -118,6 +119,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mActiveImagesMask(other.mActiveImagesMask),
       mActiveImageShaderBits(other.mActiveImageShaderBits),
       mCanDrawWith(other.mCanDrawWith),
+      mHasVertexAndFragmentShader(other.mHasVertexAndFragmentShader),
       mOutputVariables(other.mOutputVariables),
       mOutputLocations(other.mOutputLocations),
       mSecondaryOutputLocations(other.mSecondaryOutputLocations),
@@ -845,7 +847,12 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
 
 void ProgramExecutable::updateCanDrawWith()
 {
-    mCanDrawWith =
+    mCanDrawWith = hasLinkedShaderStage(ShaderType::Vertex);
+}
+
+void ProgramExecutable::updateHasFragmentAndVertexShader()
+{
+    mHasVertexAndFragmentShader =
         (hasLinkedShaderStage(ShaderType::Vertex) && hasLinkedShaderStage(ShaderType::Fragment));
 }
 
