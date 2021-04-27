@@ -10,14 +10,16 @@
 #ifndef LIBANGLE_CLCONTEXT_H_
 #define LIBANGLE_CLCONTEXT_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Context final
+
+class Context final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Context(const cl_icd_dispatch &dispatch) : Object(dispatch) {}
+    ~Context() = default;
 };
 
 }  // namespace cl

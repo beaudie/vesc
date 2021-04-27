@@ -9,14 +9,16 @@
 #ifndef LIBANGLE_CLKERNEL_H_
 #define LIBANGLE_CLKERNEL_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Kernel final
+
+class Kernel final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Kernel(const cl_icd_dispatch &dispatch) : Object(dispatch) {}
+    ~Kernel() = default;
 };
 
 }  // namespace cl

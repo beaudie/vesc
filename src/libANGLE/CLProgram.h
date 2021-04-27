@@ -9,14 +9,16 @@
 #ifndef LIBANGLE_CLPROGRAM_H_
 #define LIBANGLE_CLPROGRAM_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Program final
+
+class Program final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Program(const cl_icd_dispatch &dispatch) : Object(dispatch) {}
+    ~Program() = default;
 };
 
 }  // namespace cl

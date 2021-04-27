@@ -7,7 +7,12 @@
 //
 // libOpenCL_autogen.cpp: Implements the exported CL functions.
 
-#include "cl_loader.h"
+#include "export.h"
+
+#ifndef CL_API_ENTRY
+#    define CL_API_ENTRY ANGLE_EXPORT
+#endif
+#include "angle_cl.h"
 
 #include "anglebase/no_destructor.h"
 #include "common/system_utils.h"
@@ -17,37 +22,36 @@
 
 namespace
 {
-bool gLoaded = false;
-
 std::unique_ptr<angle::Library> &EntryPointsLib()
 {
     static angle::base::NoDestructor<std::unique_ptr<angle::Library>> sEntryPointsLib;
     return *sEntryPointsLib;
 }
 
-angle::GenericProc CL_API_CALL GlobalLoad(const char *symbol)
+cl_icd_dispatch &GetDispatch()
 {
-    return reinterpret_cast<angle::GenericProc>(EntryPointsLib()->getSymbol(symbol));
-}
+    static cl_icd_dispatch *sDispatch = nullptr;
 
-void EnsureCLLoaded()
-{
-    if (gLoaded)
+    if (sDispatch == nullptr)
     {
-        return;
+        EntryPointsLib().reset(
+            angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
+        if (EntryPointsLib())
+        {
+            sDispatch = reinterpret_cast<cl_icd_dispatch *>(
+                EntryPointsLib()->getSymbol("gCLIcdDispatchTable"));
+            if (sDispatch == nullptr)
+            {
+                std::cerr << "Error loading CL dispatch table." << std::endl;
+            }
+        }
+        else
+        {
+            std::cerr << "Error opening GLESv2 library." << std::endl;
+        }
     }
 
-    EntryPointsLib().reset(
-        angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
-    angle::LoadCL(GlobalLoad);
-    if (!cl_loader.clGetDeviceIDs)
-    {
-        std::cerr << "Error loading CL entry points." << std::endl;
-    }
-    else
-    {
-        gLoaded = true;
-    }
+    return *sDispatch;
 }
 }  // anonymous namespace
 
@@ -58,8 +62,7 @@ cl_int CL_API_CALL clGetPlatformIDs(cl_uint num_entries,
                                     cl_platform_id *platforms,
                                     cl_uint *num_platforms)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetPlatformIDs(num_entries, platforms, num_platforms);
+    return GetDispatch().clGetPlatformIDs(num_entries, platforms, num_platforms);
 }
 
 cl_int CL_API_CALL clGetPlatformInfo(cl_platform_id platform,
@@ -68,9 +71,8 @@ cl_int CL_API_CALL clGetPlatformInfo(cl_platform_id platform,
                                      void *param_value,
                                      size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetPlatformInfo(platform, param_name, param_value_size, param_value,
-                                       param_value_size_ret);
+    return GetDispatch().clGetPlatformInfo(platform, param_name, param_value_size, param_value,
+                                           param_value_size_ret);
 }
 
 cl_int CL_API_CALL clGetDeviceIDs(cl_platform_id platform,
@@ -79,8 +81,7 @@ cl_int CL_API_CALL clGetDeviceIDs(cl_platform_id platform,
                                   cl_device_id *devices,
                                   cl_uint *num_devices)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetDeviceIDs(platform, device_type, num_entries, devices, num_devices);
+    return GetDispatch().clGetDeviceIDs(platform, device_type, num_entries, devices, num_devices);
 }
 
 cl_int CL_API_CALL clGetDeviceInfo(cl_device_id device,
@@ -89,9 +90,8 @@ cl_int CL_API_CALL clGetDeviceInfo(cl_device_id device,
                                    void *param_value,
                                    size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetDeviceInfo(device, param_name, param_value_size, param_value,
-                                     param_value_size_ret);
+    return GetDispatch().clGetDeviceInfo(device, param_name, param_value_size, param_value,
+                                         param_value_size_ret);
 }
 
 cl_context CL_API_CALL clCreateContext(const cl_context_properties *properties,
@@ -104,9 +104,8 @@ cl_context CL_API_CALL clCreateContext(const cl_context_properties *properties,
                                        void *user_data,
                                        cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateContext(properties, num_devices, devices, pfn_notify, user_data,
-                                     errcode_ret);
+    return GetDispatch().clCreateContext(properties, num_devices, devices, pfn_notify, user_data,
+                                         errcode_ret);
 }
 
 cl_context CL_API_CALL
@@ -119,21 +118,18 @@ clCreateContextFromType(const cl_context_properties *properties,
                         void *user_data,
                         cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateContextFromType(properties, device_type, pfn_notify, user_data,
-                                             errcode_ret);
+    return GetDispatch().clCreateContextFromType(properties, device_type, pfn_notify, user_data,
+                                                 errcode_ret);
 }
 
 cl_int CL_API_CALL clRetainContext(cl_context context)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainContext(context);
+    return GetDispatch().clRetainContext(context);
 }
 
 cl_int CL_API_CALL clReleaseContext(cl_context context)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseContext(context);
+    return GetDispatch().clReleaseContext(context);
 }
 
 cl_int CL_API_CALL clGetContextInfo(cl_context context,
@@ -142,21 +138,18 @@ cl_int CL_API_CALL clGetContextInfo(cl_context context,
                                     void *param_value,
                                     size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetContextInfo(context, param_name, param_value_size, param_value,
-                                      param_value_size_ret);
+    return GetDispatch().clGetContextInfo(context, param_name, param_value_size, param_value,
+                                          param_value_size_ret);
 }
 
 cl_int CL_API_CALL clRetainCommandQueue(cl_command_queue command_queue)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainCommandQueue(command_queue);
+    return GetDispatch().clRetainCommandQueue(command_queue);
 }
 
 cl_int CL_API_CALL clReleaseCommandQueue(cl_command_queue command_queue)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseCommandQueue(command_queue);
+    return GetDispatch().clReleaseCommandQueue(command_queue);
 }
 
 cl_int CL_API_CALL clGetCommandQueueInfo(cl_command_queue command_queue,
@@ -165,9 +158,8 @@ cl_int CL_API_CALL clGetCommandQueueInfo(cl_command_queue command_queue,
                                          void *param_value,
                                          size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetCommandQueueInfo(command_queue, param_name, param_value_size, param_value,
-                                           param_value_size_ret);
+    return GetDispatch().clGetCommandQueueInfo(command_queue, param_name, param_value_size,
+                                               param_value, param_value_size_ret);
 }
 
 cl_mem CL_API_CALL clCreateBuffer(cl_context context,
@@ -176,20 +168,17 @@ cl_mem CL_API_CALL clCreateBuffer(cl_context context,
                                   void *host_ptr,
                                   cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateBuffer(context, flags, size, host_ptr, errcode_ret);
+    return GetDispatch().clCreateBuffer(context, flags, size, host_ptr, errcode_ret);
 }
 
 cl_int CL_API_CALL clRetainMemObject(cl_mem memobj)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainMemObject(memobj);
+    return GetDispatch().clRetainMemObject(memobj);
 }
 
 cl_int CL_API_CALL clReleaseMemObject(cl_mem memobj)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseMemObject(memobj);
+    return GetDispatch().clReleaseMemObject(memobj);
 }
 
 cl_int CL_API_CALL clGetSupportedImageFormats(cl_context context,
@@ -199,9 +188,8 @@ cl_int CL_API_CALL clGetSupportedImageFormats(cl_context context,
                                               cl_image_format *image_formats,
                                               cl_uint *num_image_formats)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetSupportedImageFormats(context, flags, image_type, num_entries,
-                                                image_formats, num_image_formats);
+    return GetDispatch().clGetSupportedImageFormats(context, flags, image_type, num_entries,
+                                                    image_formats, num_image_formats);
 }
 
 cl_int CL_API_CALL clGetMemObjectInfo(cl_mem memobj,
@@ -210,9 +198,8 @@ cl_int CL_API_CALL clGetMemObjectInfo(cl_mem memobj,
                                       void *param_value,
                                       size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetMemObjectInfo(memobj, param_name, param_value_size, param_value,
-                                        param_value_size_ret);
+    return GetDispatch().clGetMemObjectInfo(memobj, param_name, param_value_size, param_value,
+                                            param_value_size_ret);
 }
 
 cl_int CL_API_CALL clGetImageInfo(cl_mem image,
@@ -221,21 +208,18 @@ cl_int CL_API_CALL clGetImageInfo(cl_mem image,
                                   void *param_value,
                                   size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetImageInfo(image, param_name, param_value_size, param_value,
-                                    param_value_size_ret);
+    return GetDispatch().clGetImageInfo(image, param_name, param_value_size, param_value,
+                                        param_value_size_ret);
 }
 
 cl_int CL_API_CALL clRetainSampler(cl_sampler sampler)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainSampler(sampler);
+    return GetDispatch().clRetainSampler(sampler);
 }
 
 cl_int CL_API_CALL clReleaseSampler(cl_sampler sampler)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseSampler(sampler);
+    return GetDispatch().clReleaseSampler(sampler);
 }
 
 cl_int CL_API_CALL clGetSamplerInfo(cl_sampler sampler,
@@ -244,9 +228,8 @@ cl_int CL_API_CALL clGetSamplerInfo(cl_sampler sampler,
                                     void *param_value,
                                     size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetSamplerInfo(sampler, param_name, param_value_size, param_value,
-                                      param_value_size_ret);
+    return GetDispatch().clGetSamplerInfo(sampler, param_name, param_value_size, param_value,
+                                          param_value_size_ret);
 }
 
 cl_program CL_API_CALL clCreateProgramWithSource(cl_context context,
@@ -255,8 +238,7 @@ cl_program CL_API_CALL clCreateProgramWithSource(cl_context context,
                                                  const size_t *lengths,
                                                  cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateProgramWithSource(context, count, strings, lengths, errcode_ret);
+    return GetDispatch().clCreateProgramWithSource(context, count, strings, lengths, errcode_ret);
 }
 
 cl_program CL_API_CALL clCreateProgramWithBinary(cl_context context,
@@ -267,21 +249,18 @@ cl_program CL_API_CALL clCreateProgramWithBinary(cl_context context,
                                                  cl_int *binary_status,
                                                  cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateProgramWithBinary(context, num_devices, device_list, lengths, binaries,
-                                               binary_status, errcode_ret);
+    return GetDispatch().clCreateProgramWithBinary(context, num_devices, device_list, lengths,
+                                                   binaries, binary_status, errcode_ret);
 }
 
 cl_int CL_API_CALL clRetainProgram(cl_program program)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainProgram(program);
+    return GetDispatch().clRetainProgram(program);
 }
 
 cl_int CL_API_CALL clReleaseProgram(cl_program program)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseProgram(program);
+    return GetDispatch().clReleaseProgram(program);
 }
 
 cl_int CL_API_CALL clBuildProgram(cl_program program,
@@ -292,9 +271,8 @@ cl_int CL_API_CALL clBuildProgram(cl_program program,
                                                                 void *user_data),
                                   void *user_data)
 {
-    EnsureCLLoaded();
-    return cl_loader.clBuildProgram(program, num_devices, device_list, options, pfn_notify,
-                                    user_data);
+    return GetDispatch().clBuildProgram(program, num_devices, device_list, options, pfn_notify,
+                                        user_data);
 }
 
 cl_int CL_API_CALL clGetProgramInfo(cl_program program,
@@ -303,9 +281,8 @@ cl_int CL_API_CALL clGetProgramInfo(cl_program program,
                                     void *param_value,
                                     size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetProgramInfo(program, param_name, param_value_size, param_value,
-                                      param_value_size_ret);
+    return GetDispatch().clGetProgramInfo(program, param_name, param_value_size, param_value,
+                                          param_value_size_ret);
 }
 
 cl_int CL_API_CALL clGetProgramBuildInfo(cl_program program,
@@ -315,17 +292,15 @@ cl_int CL_API_CALL clGetProgramBuildInfo(cl_program program,
                                          void *param_value,
                                          size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetProgramBuildInfo(program, device, param_name, param_value_size,
-                                           param_value, param_value_size_ret);
+    return GetDispatch().clGetProgramBuildInfo(program, device, param_name, param_value_size,
+                                               param_value, param_value_size_ret);
 }
 
 cl_kernel CL_API_CALL clCreateKernel(cl_program program,
                                      const char *kernel_name,
                                      cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateKernel(program, kernel_name, errcode_ret);
+    return GetDispatch().clCreateKernel(program, kernel_name, errcode_ret);
 }
 
 cl_int CL_API_CALL clCreateKernelsInProgram(cl_program program,
@@ -333,20 +308,17 @@ cl_int CL_API_CALL clCreateKernelsInProgram(cl_program program,
                                             cl_kernel *kernels,
                                             cl_uint *num_kernels_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateKernelsInProgram(program, num_kernels, kernels, num_kernels_ret);
+    return GetDispatch().clCreateKernelsInProgram(program, num_kernels, kernels, num_kernels_ret);
 }
 
 cl_int CL_API_CALL clRetainKernel(cl_kernel kernel)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainKernel(kernel);
+    return GetDispatch().clRetainKernel(kernel);
 }
 
 cl_int CL_API_CALL clReleaseKernel(cl_kernel kernel)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseKernel(kernel);
+    return GetDispatch().clReleaseKernel(kernel);
 }
 
 cl_int CL_API_CALL clSetKernelArg(cl_kernel kernel,
@@ -354,8 +326,7 @@ cl_int CL_API_CALL clSetKernelArg(cl_kernel kernel,
                                   size_t arg_size,
                                   const void *arg_value)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetKernelArg(kernel, arg_index, arg_size, arg_value);
+    return GetDispatch().clSetKernelArg(kernel, arg_index, arg_size, arg_value);
 }
 
 cl_int CL_API_CALL clGetKernelInfo(cl_kernel kernel,
@@ -364,9 +335,8 @@ cl_int CL_API_CALL clGetKernelInfo(cl_kernel kernel,
                                    void *param_value,
                                    size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetKernelInfo(kernel, param_name, param_value_size, param_value,
-                                     param_value_size_ret);
+    return GetDispatch().clGetKernelInfo(kernel, param_name, param_value_size, param_value,
+                                         param_value_size_ret);
 }
 
 cl_int CL_API_CALL clGetKernelWorkGroupInfo(cl_kernel kernel,
@@ -376,15 +346,13 @@ cl_int CL_API_CALL clGetKernelWorkGroupInfo(cl_kernel kernel,
                                             void *param_value,
                                             size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetKernelWorkGroupInfo(kernel, device, param_name, param_value_size,
-                                              param_value, param_value_size_ret);
+    return GetDispatch().clGetKernelWorkGroupInfo(kernel, device, param_name, param_value_size,
+                                                  param_value, param_value_size_ret);
 }
 
 cl_int CL_API_CALL clWaitForEvents(cl_uint num_events, const cl_event *event_list)
 {
-    EnsureCLLoaded();
-    return cl_loader.clWaitForEvents(num_events, event_list);
+    return GetDispatch().clWaitForEvents(num_events, event_list);
 }
 
 cl_int CL_API_CALL clGetEventInfo(cl_event event,
@@ -393,21 +361,18 @@ cl_int CL_API_CALL clGetEventInfo(cl_event event,
                                   void *param_value,
                                   size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetEventInfo(event, param_name, param_value_size, param_value,
-                                    param_value_size_ret);
+    return GetDispatch().clGetEventInfo(event, param_name, param_value_size, param_value,
+                                        param_value_size_ret);
 }
 
 cl_int CL_API_CALL clRetainEvent(cl_event event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainEvent(event);
+    return GetDispatch().clRetainEvent(event);
 }
 
 cl_int CL_API_CALL clReleaseEvent(cl_event event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseEvent(event);
+    return GetDispatch().clReleaseEvent(event);
 }
 
 cl_int CL_API_CALL clGetEventProfilingInfo(cl_event event,
@@ -416,21 +381,18 @@ cl_int CL_API_CALL clGetEventProfilingInfo(cl_event event,
                                            void *param_value,
                                            size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetEventProfilingInfo(event, param_name, param_value_size, param_value,
-                                             param_value_size_ret);
+    return GetDispatch().clGetEventProfilingInfo(event, param_name, param_value_size, param_value,
+                                                 param_value_size_ret);
 }
 
 cl_int CL_API_CALL clFlush(cl_command_queue command_queue)
 {
-    EnsureCLLoaded();
-    return cl_loader.clFlush(command_queue);
+    return GetDispatch().clFlush(command_queue);
 }
 
 cl_int CL_API_CALL clFinish(cl_command_queue command_queue)
 {
-    EnsureCLLoaded();
-    return cl_loader.clFinish(command_queue);
+    return GetDispatch().clFinish(command_queue);
 }
 
 cl_int CL_API_CALL clEnqueueReadBuffer(cl_command_queue command_queue,
@@ -443,9 +405,8 @@ cl_int CL_API_CALL clEnqueueReadBuffer(cl_command_queue command_queue,
                                        const cl_event *event_wait_list,
                                        cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueReadBuffer(command_queue, buffer, blocking_read, offset, size, ptr,
-                                         num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueReadBuffer(command_queue, buffer, blocking_read, offset, size,
+                                             ptr, num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueWriteBuffer(cl_command_queue command_queue,
@@ -458,9 +419,8 @@ cl_int CL_API_CALL clEnqueueWriteBuffer(cl_command_queue command_queue,
                                         const cl_event *event_wait_list,
                                         cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueWriteBuffer(command_queue, buffer, blocking_write, offset, size, ptr,
-                                          num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueWriteBuffer(command_queue, buffer, blocking_write, offset, size,
+                                              ptr, num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueCopyBuffer(cl_command_queue command_queue,
@@ -473,10 +433,9 @@ cl_int CL_API_CALL clEnqueueCopyBuffer(cl_command_queue command_queue,
                                        const cl_event *event_wait_list,
                                        cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueCopyBuffer(command_queue, src_buffer, dst_buffer, src_offset,
-                                         dst_offset, size, num_events_in_wait_list, event_wait_list,
-                                         event);
+    return GetDispatch().clEnqueueCopyBuffer(command_queue, src_buffer, dst_buffer, src_offset,
+                                             dst_offset, size, num_events_in_wait_list,
+                                             event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueReadImage(cl_command_queue command_queue,
@@ -491,10 +450,9 @@ cl_int CL_API_CALL clEnqueueReadImage(cl_command_queue command_queue,
                                       const cl_event *event_wait_list,
                                       cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueReadImage(command_queue, image, blocking_read, origin, region,
-                                        row_pitch, slice_pitch, ptr, num_events_in_wait_list,
-                                        event_wait_list, event);
+    return GetDispatch().clEnqueueReadImage(command_queue, image, blocking_read, origin, region,
+                                            row_pitch, slice_pitch, ptr, num_events_in_wait_list,
+                                            event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueWriteImage(cl_command_queue command_queue,
@@ -509,10 +467,9 @@ cl_int CL_API_CALL clEnqueueWriteImage(cl_command_queue command_queue,
                                        const cl_event *event_wait_list,
                                        cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueWriteImage(command_queue, image, blocking_write, origin, region,
-                                         input_row_pitch, input_slice_pitch, ptr,
-                                         num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueWriteImage(command_queue, image, blocking_write, origin, region,
+                                             input_row_pitch, input_slice_pitch, ptr,
+                                             num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueCopyImage(cl_command_queue command_queue,
@@ -525,9 +482,9 @@ cl_int CL_API_CALL clEnqueueCopyImage(cl_command_queue command_queue,
                                       const cl_event *event_wait_list,
                                       cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueCopyImage(command_queue, src_image, dst_image, src_origin, dst_origin,
-                                        region, num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueCopyImage(command_queue, src_image, dst_image, src_origin,
+                                            dst_origin, region, num_events_in_wait_list,
+                                            event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueCopyImageToBuffer(cl_command_queue command_queue,
@@ -540,10 +497,9 @@ cl_int CL_API_CALL clEnqueueCopyImageToBuffer(cl_command_queue command_queue,
                                               const cl_event *event_wait_list,
                                               cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueCopyImageToBuffer(command_queue, src_image, dst_buffer, src_origin,
-                                                region, dst_offset, num_events_in_wait_list,
-                                                event_wait_list, event);
+    return GetDispatch().clEnqueueCopyImageToBuffer(
+        command_queue, src_image, dst_buffer, src_origin, region, dst_offset,
+        num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueCopyBufferToImage(cl_command_queue command_queue,
@@ -556,10 +512,9 @@ cl_int CL_API_CALL clEnqueueCopyBufferToImage(cl_command_queue command_queue,
                                               const cl_event *event_wait_list,
                                               cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueCopyBufferToImage(command_queue, src_buffer, dst_image, src_offset,
-                                                dst_origin, region, num_events_in_wait_list,
-                                                event_wait_list, event);
+    return GetDispatch().clEnqueueCopyBufferToImage(
+        command_queue, src_buffer, dst_image, src_offset, dst_origin, region,
+        num_events_in_wait_list, event_wait_list, event);
 }
 
 void *CL_API_CALL clEnqueueMapBuffer(cl_command_queue command_queue,
@@ -573,10 +528,9 @@ void *CL_API_CALL clEnqueueMapBuffer(cl_command_queue command_queue,
                                      cl_event *event,
                                      cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueMapBuffer(command_queue, buffer, blocking_map, map_flags, offset,
-                                        size, num_events_in_wait_list, event_wait_list, event,
-                                        errcode_ret);
+    return GetDispatch().clEnqueueMapBuffer(command_queue, buffer, blocking_map, map_flags, offset,
+                                            size, num_events_in_wait_list, event_wait_list, event,
+                                            errcode_ret);
 }
 
 void *CL_API_CALL clEnqueueMapImage(cl_command_queue command_queue,
@@ -592,8 +546,7 @@ void *CL_API_CALL clEnqueueMapImage(cl_command_queue command_queue,
                                     cl_event *event,
                                     cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueMapImage(
+    return GetDispatch().clEnqueueMapImage(
         command_queue, image, blocking_map, map_flags, origin, region, image_row_pitch,
         image_slice_pitch, num_events_in_wait_list, event_wait_list, event, errcode_ret);
 }
@@ -605,9 +558,8 @@ cl_int CL_API_CALL clEnqueueUnmapMemObject(cl_command_queue command_queue,
                                            const cl_event *event_wait_list,
                                            cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueUnmapMemObject(command_queue, memobj, mapped_ptr,
-                                             num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueUnmapMemObject(command_queue, memobj, mapped_ptr,
+                                                 num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueNDRangeKernel(cl_command_queue command_queue,
@@ -620,10 +572,9 @@ cl_int CL_API_CALL clEnqueueNDRangeKernel(cl_command_queue command_queue,
                                           const cl_event *event_wait_list,
                                           cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueNDRangeKernel(command_queue, kernel, work_dim, global_work_offset,
-                                            global_work_size, local_work_size,
-                                            num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueNDRangeKernel(command_queue, kernel, work_dim, global_work_offset,
+                                                global_work_size, local_work_size,
+                                                num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueNativeKernel(cl_command_queue command_queue,
@@ -637,10 +588,9 @@ cl_int CL_API_CALL clEnqueueNativeKernel(cl_command_queue command_queue,
                                          const cl_event *event_wait_list,
                                          cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueNativeKernel(command_queue, user_func, args, cb_args, num_mem_objects,
-                                           mem_list, args_mem_loc, num_events_in_wait_list,
-                                           event_wait_list, event);
+    return GetDispatch().clEnqueueNativeKernel(command_queue, user_func, args, cb_args,
+                                               num_mem_objects, mem_list, args_mem_loc,
+                                               num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clSetCommandQueueProperty(cl_command_queue command_queue,
@@ -648,8 +598,8 @@ cl_int CL_API_CALL clSetCommandQueueProperty(cl_command_queue command_queue,
                                              cl_bool enable,
                                              cl_command_queue_properties *old_properties)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetCommandQueueProperty(command_queue, properties, enable, old_properties);
+    return GetDispatch().clSetCommandQueueProperty(command_queue, properties, enable,
+                                                   old_properties);
 }
 
 cl_mem CL_API_CALL clCreateImage2D(cl_context context,
@@ -661,9 +611,8 @@ cl_mem CL_API_CALL clCreateImage2D(cl_context context,
                                    void *host_ptr,
                                    cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateImage2D(context, flags, image_format, image_width, image_height,
-                                     image_row_pitch, host_ptr, errcode_ret);
+    return GetDispatch().clCreateImage2D(context, flags, image_format, image_width, image_height,
+                                         image_row_pitch, host_ptr, errcode_ret);
 }
 
 cl_mem CL_API_CALL clCreateImage3D(cl_context context,
@@ -677,42 +626,36 @@ cl_mem CL_API_CALL clCreateImage3D(cl_context context,
                                    void *host_ptr,
                                    cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateImage3D(context, flags, image_format, image_width, image_height,
-                                     image_depth, image_row_pitch, image_slice_pitch, host_ptr,
-                                     errcode_ret);
+    return GetDispatch().clCreateImage3D(context, flags, image_format, image_width, image_height,
+                                         image_depth, image_row_pitch, image_slice_pitch, host_ptr,
+                                         errcode_ret);
 }
 
 cl_int CL_API_CALL clEnqueueMarker(cl_command_queue command_queue, cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueMarker(command_queue, event);
+    return GetDispatch().clEnqueueMarker(command_queue, event);
 }
 
 cl_int CL_API_CALL clEnqueueWaitForEvents(cl_command_queue command_queue,
                                           cl_uint num_events,
                                           const cl_event *event_list)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueWaitForEvents(command_queue, num_events, event_list);
+    return GetDispatch().clEnqueueWaitForEvents(command_queue, num_events, event_list);
 }
 
 cl_int CL_API_CALL clEnqueueBarrier(cl_command_queue command_queue)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueBarrier(command_queue);
+    return GetDispatch().clEnqueueBarrier(command_queue);
 }
 
 cl_int CL_API_CALL clUnloadCompiler()
 {
-    EnsureCLLoaded();
-    return cl_loader.clUnloadCompiler();
+    return GetDispatch().clUnloadCompiler();
 }
 
 void *CL_API_CALL clGetExtensionFunctionAddress(const char *func_name)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetExtensionFunctionAddress(func_name);
+    return GetDispatch().clGetExtensionFunctionAddress(func_name);
 }
 
 cl_command_queue CL_API_CALL clCreateCommandQueue(cl_context context,
@@ -720,8 +663,7 @@ cl_command_queue CL_API_CALL clCreateCommandQueue(cl_context context,
                                                   cl_command_queue_properties properties,
                                                   cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateCommandQueue(context, device, properties, errcode_ret);
+    return GetDispatch().clCreateCommandQueue(context, device, properties, errcode_ret);
 }
 
 cl_sampler CL_API_CALL clCreateSampler(cl_context context,
@@ -730,9 +672,8 @@ cl_sampler CL_API_CALL clCreateSampler(cl_context context,
                                        cl_filter_mode filter_mode,
                                        cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateSampler(context, normalized_coords, addressing_mode, filter_mode,
-                                     errcode_ret);
+    return GetDispatch().clCreateSampler(context, normalized_coords, addressing_mode, filter_mode,
+                                         errcode_ret);
 }
 
 cl_int CL_API_CALL clEnqueueTask(cl_command_queue command_queue,
@@ -741,9 +682,8 @@ cl_int CL_API_CALL clEnqueueTask(cl_command_queue command_queue,
                                  const cl_event *event_wait_list,
                                  cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueTask(command_queue, kernel, num_events_in_wait_list, event_wait_list,
-                                   event);
+    return GetDispatch().clEnqueueTask(command_queue, kernel, num_events_in_wait_list,
+                                       event_wait_list, event);
 }
 
 // CL 1.1
@@ -753,9 +693,8 @@ cl_mem CL_API_CALL clCreateSubBuffer(cl_mem buffer,
                                      const void *buffer_create_info,
                                      cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateSubBuffer(buffer, flags, buffer_create_type, buffer_create_info,
-                                       errcode_ret);
+    return GetDispatch().clCreateSubBuffer(buffer, flags, buffer_create_type, buffer_create_info,
+                                           errcode_ret);
 }
 
 cl_int CL_API_CALL clSetMemObjectDestructorCallback(cl_mem memobj,
@@ -763,20 +702,17 @@ cl_int CL_API_CALL clSetMemObjectDestructorCallback(cl_mem memobj,
                                                                                   void *user_data),
                                                     void *user_data)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetMemObjectDestructorCallback(memobj, pfn_notify, user_data);
+    return GetDispatch().clSetMemObjectDestructorCallback(memobj, pfn_notify, user_data);
 }
 
 cl_event CL_API_CALL clCreateUserEvent(cl_context context, cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateUserEvent(context, errcode_ret);
+    return GetDispatch().clCreateUserEvent(context, errcode_ret);
 }
 
 cl_int CL_API_CALL clSetUserEventStatus(cl_event event, cl_int execution_status)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetUserEventStatus(event, execution_status);
+    return GetDispatch().clSetUserEventStatus(event, execution_status);
 }
 
 cl_int CL_API_CALL clSetEventCallback(cl_event event,
@@ -786,8 +722,8 @@ cl_int CL_API_CALL clSetEventCallback(cl_event event,
                                                                     void *user_data),
                                       void *user_data)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetEventCallback(event, command_exec_callback_type, pfn_notify, user_data);
+    return GetDispatch().clSetEventCallback(event, command_exec_callback_type, pfn_notify,
+                                            user_data);
 }
 
 cl_int CL_API_CALL clEnqueueReadBufferRect(cl_command_queue command_queue,
@@ -805,11 +741,10 @@ cl_int CL_API_CALL clEnqueueReadBufferRect(cl_command_queue command_queue,
                                            const cl_event *event_wait_list,
                                            cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueReadBufferRect(command_queue, buffer, blocking_read, buffer_origin,
-                                             host_origin, region, buffer_row_pitch,
-                                             buffer_slice_pitch, host_row_pitch, host_slice_pitch,
-                                             ptr, num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueReadBufferRect(
+        command_queue, buffer, blocking_read, buffer_origin, host_origin, region, buffer_row_pitch,
+        buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list,
+        event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueWriteBufferRect(cl_command_queue command_queue,
@@ -827,11 +762,10 @@ cl_int CL_API_CALL clEnqueueWriteBufferRect(cl_command_queue command_queue,
                                             const cl_event *event_wait_list,
                                             cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueWriteBufferRect(command_queue, buffer, blocking_write, buffer_origin,
-                                              host_origin, region, buffer_row_pitch,
-                                              buffer_slice_pitch, host_row_pitch, host_slice_pitch,
-                                              ptr, num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueWriteBufferRect(
+        command_queue, buffer, blocking_write, buffer_origin, host_origin, region, buffer_row_pitch,
+        buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list,
+        event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueCopyBufferRect(cl_command_queue command_queue,
@@ -848,11 +782,10 @@ cl_int CL_API_CALL clEnqueueCopyBufferRect(cl_command_queue command_queue,
                                            const cl_event *event_wait_list,
                                            cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueCopyBufferRect(command_queue, src_buffer, dst_buffer, src_origin,
-                                             dst_origin, region, src_row_pitch, src_slice_pitch,
-                                             dst_row_pitch, dst_slice_pitch,
-                                             num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueCopyBufferRect(command_queue, src_buffer, dst_buffer, src_origin,
+                                                 dst_origin, region, src_row_pitch, src_slice_pitch,
+                                                 dst_row_pitch, dst_slice_pitch,
+                                                 num_events_in_wait_list, event_wait_list, event);
 }
 
 // CL 1.2
@@ -862,21 +795,18 @@ cl_int CL_API_CALL clCreateSubDevices(cl_device_id in_device,
                                       cl_device_id *out_devices,
                                       cl_uint *num_devices_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateSubDevices(in_device, properties, num_devices, out_devices,
-                                        num_devices_ret);
+    return GetDispatch().clCreateSubDevices(in_device, properties, num_devices, out_devices,
+                                            num_devices_ret);
 }
 
 cl_int CL_API_CALL clRetainDevice(cl_device_id device)
 {
-    EnsureCLLoaded();
-    return cl_loader.clRetainDevice(device);
+    return GetDispatch().clRetainDevice(device);
 }
 
 cl_int CL_API_CALL clReleaseDevice(cl_device_id device)
 {
-    EnsureCLLoaded();
-    return cl_loader.clReleaseDevice(device);
+    return GetDispatch().clReleaseDevice(device);
 }
 
 cl_mem CL_API_CALL clCreateImage(cl_context context,
@@ -886,8 +816,8 @@ cl_mem CL_API_CALL clCreateImage(cl_context context,
                                  void *host_ptr,
                                  cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateImage(context, flags, image_format, image_desc, host_ptr, errcode_ret);
+    return GetDispatch().clCreateImage(context, flags, image_format, image_desc, host_ptr,
+                                       errcode_ret);
 }
 
 cl_program CL_API_CALL clCreateProgramWithBuiltInKernels(cl_context context,
@@ -896,9 +826,8 @@ cl_program CL_API_CALL clCreateProgramWithBuiltInKernels(cl_context context,
                                                          const char *kernel_names,
                                                          cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateProgramWithBuiltInKernels(context, num_devices, device_list,
-                                                       kernel_names, errcode_ret);
+    return GetDispatch().clCreateProgramWithBuiltInKernels(context, num_devices, device_list,
+                                                           kernel_names, errcode_ret);
 }
 
 cl_int CL_API_CALL clCompileProgram(cl_program program,
@@ -912,9 +841,9 @@ cl_int CL_API_CALL clCompileProgram(cl_program program,
                                                                   void *user_data),
                                     void *user_data)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCompileProgram(program, num_devices, device_list, options, num_input_headers,
-                                      input_headers, header_include_names, pfn_notify, user_data);
+    return GetDispatch().clCompileProgram(program, num_devices, device_list, options,
+                                          num_input_headers, input_headers, header_include_names,
+                                          pfn_notify, user_data);
 }
 
 cl_program CL_API_CALL clLinkProgram(cl_context context,
@@ -928,15 +857,14 @@ cl_program CL_API_CALL clLinkProgram(cl_context context,
                                      void *user_data,
                                      cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clLinkProgram(context, num_devices, device_list, options, num_input_programs,
-                                   input_programs, pfn_notify, user_data, errcode_ret);
+    return GetDispatch().clLinkProgram(context, num_devices, device_list, options,
+                                       num_input_programs, input_programs, pfn_notify, user_data,
+                                       errcode_ret);
 }
 
 cl_int CL_API_CALL clUnloadPlatformCompiler(cl_platform_id platform)
 {
-    EnsureCLLoaded();
-    return cl_loader.clUnloadPlatformCompiler(platform);
+    return GetDispatch().clUnloadPlatformCompiler(platform);
 }
 
 cl_int CL_API_CALL clGetKernelArgInfo(cl_kernel kernel,
@@ -946,9 +874,8 @@ cl_int CL_API_CALL clGetKernelArgInfo(cl_kernel kernel,
                                       void *param_value,
                                       size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetKernelArgInfo(kernel, arg_index, param_name, param_value_size,
-                                        param_value, param_value_size_ret);
+    return GetDispatch().clGetKernelArgInfo(kernel, arg_index, param_name, param_value_size,
+                                            param_value, param_value_size_ret);
 }
 
 cl_int CL_API_CALL clEnqueueFillBuffer(cl_command_queue command_queue,
@@ -961,9 +888,8 @@ cl_int CL_API_CALL clEnqueueFillBuffer(cl_command_queue command_queue,
                                        const cl_event *event_wait_list,
                                        cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueFillBuffer(command_queue, buffer, pattern, pattern_size, offset, size,
-                                         num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueFillBuffer(command_queue, buffer, pattern, pattern_size, offset,
+                                             size, num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueFillImage(cl_command_queue command_queue,
@@ -975,9 +901,8 @@ cl_int CL_API_CALL clEnqueueFillImage(cl_command_queue command_queue,
                                       const cl_event *event_wait_list,
                                       cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueFillImage(command_queue, image, fill_color, origin, region,
-                                        num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueFillImage(command_queue, image, fill_color, origin, region,
+                                            num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueMigrateMemObjects(cl_command_queue command_queue,
@@ -988,9 +913,9 @@ cl_int CL_API_CALL clEnqueueMigrateMemObjects(cl_command_queue command_queue,
                                               const cl_event *event_wait_list,
                                               cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueMigrateMemObjects(command_queue, num_mem_objects, mem_objects, flags,
-                                                num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueMigrateMemObjects(command_queue, num_mem_objects, mem_objects,
+                                                    flags, num_events_in_wait_list, event_wait_list,
+                                                    event);
 }
 
 cl_int CL_API_CALL clEnqueueMarkerWithWaitList(cl_command_queue command_queue,
@@ -998,9 +923,8 @@ cl_int CL_API_CALL clEnqueueMarkerWithWaitList(cl_command_queue command_queue,
                                                const cl_event *event_wait_list,
                                                cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueMarkerWithWaitList(command_queue, num_events_in_wait_list,
-                                                 event_wait_list, event);
+    return GetDispatch().clEnqueueMarkerWithWaitList(command_queue, num_events_in_wait_list,
+                                                     event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueBarrierWithWaitList(cl_command_queue command_queue,
@@ -1008,16 +932,14 @@ cl_int CL_API_CALL clEnqueueBarrierWithWaitList(cl_command_queue command_queue,
                                                 const cl_event *event_wait_list,
                                                 cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueBarrierWithWaitList(command_queue, num_events_in_wait_list,
-                                                  event_wait_list, event);
+    return GetDispatch().clEnqueueBarrierWithWaitList(command_queue, num_events_in_wait_list,
+                                                      event_wait_list, event);
 }
 
 void *CL_API_CALL clGetExtensionFunctionAddressForPlatform(cl_platform_id platform,
                                                            const char *func_name)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetExtensionFunctionAddressForPlatform(platform, func_name);
+    return GetDispatch().clGetExtensionFunctionAddressForPlatform(platform, func_name);
 }
 
 // CL 2.0
@@ -1027,8 +949,8 @@ clCreateCommandQueueWithProperties(cl_context context,
                                    const cl_queue_properties *properties,
                                    cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateCommandQueueWithProperties(context, device, properties, errcode_ret);
+    return GetDispatch().clCreateCommandQueueWithProperties(context, device, properties,
+                                                            errcode_ret);
 }
 
 cl_mem CL_API_CALL clCreatePipe(cl_context context,
@@ -1038,9 +960,8 @@ cl_mem CL_API_CALL clCreatePipe(cl_context context,
                                 const cl_pipe_properties *properties,
                                 cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreatePipe(context, flags, pipe_packet_size, pipe_max_packets, properties,
-                                  errcode_ret);
+    return GetDispatch().clCreatePipe(context, flags, pipe_packet_size, pipe_max_packets,
+                                      properties, errcode_ret);
 }
 
 cl_int CL_API_CALL clGetPipeInfo(cl_mem pipe,
@@ -1049,9 +970,8 @@ cl_int CL_API_CALL clGetPipeInfo(cl_mem pipe,
                                  void *param_value,
                                  size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetPipeInfo(pipe, param_name, param_value_size, param_value,
-                                   param_value_size_ret);
+    return GetDispatch().clGetPipeInfo(pipe, param_name, param_value_size, param_value,
+                                       param_value_size_ret);
 }
 
 void *CL_API_CALL clSVMAlloc(cl_context context,
@@ -1059,14 +979,12 @@ void *CL_API_CALL clSVMAlloc(cl_context context,
                              size_t size,
                              cl_uint alignment)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSVMAlloc(context, flags, size, alignment);
+    return GetDispatch().clSVMAlloc(context, flags, size, alignment);
 }
 
 void CL_API_CALL clSVMFree(cl_context context, void *svm_pointer)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSVMFree(context, svm_pointer);
+    return GetDispatch().clSVMFree(context, svm_pointer);
 }
 
 cl_sampler CL_API_CALL
@@ -1074,16 +992,14 @@ clCreateSamplerWithProperties(cl_context context,
                               const cl_sampler_properties *sampler_properties,
                               cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateSamplerWithProperties(context, sampler_properties, errcode_ret);
+    return GetDispatch().clCreateSamplerWithProperties(context, sampler_properties, errcode_ret);
 }
 
 cl_int CL_API_CALL clSetKernelArgSVMPointer(cl_kernel kernel,
                                             cl_uint arg_index,
                                             const void *arg_value)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetKernelArgSVMPointer(kernel, arg_index, arg_value);
+    return GetDispatch().clSetKernelArgSVMPointer(kernel, arg_index, arg_value);
 }
 
 cl_int CL_API_CALL clSetKernelExecInfo(cl_kernel kernel,
@@ -1091,8 +1007,7 @@ cl_int CL_API_CALL clSetKernelExecInfo(cl_kernel kernel,
                                        size_t param_value_size,
                                        const void *param_value)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetKernelExecInfo(kernel, param_name, param_value_size, param_value);
+    return GetDispatch().clSetKernelExecInfo(kernel, param_name, param_value_size, param_value);
 }
 
 cl_int CL_API_CALL clEnqueueSVMFree(cl_command_queue command_queue,
@@ -1107,9 +1022,9 @@ cl_int CL_API_CALL clEnqueueSVMFree(cl_command_queue command_queue,
                                     const cl_event *event_wait_list,
                                     cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueSVMFree(command_queue, num_svm_pointers, svm_pointers, pfn_free_func,
-                                      user_data, num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueSVMFree(command_queue, num_svm_pointers, svm_pointers,
+                                          pfn_free_func, user_data, num_events_in_wait_list,
+                                          event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueSVMMemcpy(cl_command_queue command_queue,
@@ -1121,9 +1036,8 @@ cl_int CL_API_CALL clEnqueueSVMMemcpy(cl_command_queue command_queue,
                                       const cl_event *event_wait_list,
                                       cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueSVMMemcpy(command_queue, blocking_copy, dst_ptr, src_ptr, size,
-                                        num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueSVMMemcpy(command_queue, blocking_copy, dst_ptr, src_ptr, size,
+                                            num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueSVMMemFill(cl_command_queue command_queue,
@@ -1135,9 +1049,8 @@ cl_int CL_API_CALL clEnqueueSVMMemFill(cl_command_queue command_queue,
                                        const cl_event *event_wait_list,
                                        cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueSVMMemFill(command_queue, svm_ptr, pattern, pattern_size, size,
-                                         num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueSVMMemFill(command_queue, svm_ptr, pattern, pattern_size, size,
+                                             num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueSVMMap(cl_command_queue command_queue,
@@ -1149,9 +1062,8 @@ cl_int CL_API_CALL clEnqueueSVMMap(cl_command_queue command_queue,
                                    const cl_event *event_wait_list,
                                    cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueSVMMap(command_queue, blocking_map, flags, svm_ptr, size,
-                                     num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueSVMMap(command_queue, blocking_map, flags, svm_ptr, size,
+                                         num_events_in_wait_list, event_wait_list, event);
 }
 
 cl_int CL_API_CALL clEnqueueSVMUnmap(cl_command_queue command_queue,
@@ -1160,9 +1072,8 @@ cl_int CL_API_CALL clEnqueueSVMUnmap(cl_command_queue command_queue,
                                      const cl_event *event_wait_list,
                                      cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueSVMUnmap(command_queue, svm_ptr, num_events_in_wait_list,
-                                       event_wait_list, event);
+    return GetDispatch().clEnqueueSVMUnmap(command_queue, svm_ptr, num_events_in_wait_list,
+                                           event_wait_list, event);
 }
 
 // CL 2.1
@@ -1170,22 +1081,19 @@ cl_int CL_API_CALL clSetDefaultDeviceCommandQueue(cl_context context,
                                                   cl_device_id device,
                                                   cl_command_queue command_queue)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetDefaultDeviceCommandQueue(context, device, command_queue);
+    return GetDispatch().clSetDefaultDeviceCommandQueue(context, device, command_queue);
 }
 
 cl_int CL_API_CALL clGetDeviceAndHostTimer(cl_device_id device,
                                            cl_ulong *device_timestamp,
                                            cl_ulong *host_timestamp)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetDeviceAndHostTimer(device, device_timestamp, host_timestamp);
+    return GetDispatch().clGetDeviceAndHostTimer(device, device_timestamp, host_timestamp);
 }
 
 cl_int CL_API_CALL clGetHostTimer(cl_device_id device, cl_ulong *host_timestamp)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetHostTimer(device, host_timestamp);
+    return GetDispatch().clGetHostTimer(device, host_timestamp);
 }
 
 cl_program CL_API_CALL clCreateProgramWithIL(cl_context context,
@@ -1193,14 +1101,12 @@ cl_program CL_API_CALL clCreateProgramWithIL(cl_context context,
                                              size_t length,
                                              cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateProgramWithIL(context, il, length, errcode_ret);
+    return GetDispatch().clCreateProgramWithIL(context, il, length, errcode_ret);
 }
 
 cl_kernel CL_API_CALL clCloneKernel(cl_kernel source_kernel, cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCloneKernel(source_kernel, errcode_ret);
+    return GetDispatch().clCloneKernel(source_kernel, errcode_ret);
 }
 
 cl_int CL_API_CALL clGetKernelSubGroupInfo(cl_kernel kernel,
@@ -1212,10 +1118,9 @@ cl_int CL_API_CALL clGetKernelSubGroupInfo(cl_kernel kernel,
                                            void *param_value,
                                            size_t *param_value_size_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clGetKernelSubGroupInfo(kernel, device, param_name, input_value_size,
-                                             input_value, param_value_size, param_value,
-                                             param_value_size_ret);
+    return GetDispatch().clGetKernelSubGroupInfo(kernel, device, param_name, input_value_size,
+                                                 input_value, param_value_size, param_value,
+                                                 param_value_size_ret);
 }
 
 cl_int CL_API_CALL clEnqueueSVMMigrateMem(cl_command_queue command_queue,
@@ -1227,9 +1132,9 @@ cl_int CL_API_CALL clEnqueueSVMMigrateMem(cl_command_queue command_queue,
                                           const cl_event *event_wait_list,
                                           cl_event *event)
 {
-    EnsureCLLoaded();
-    return cl_loader.clEnqueueSVMMigrateMem(command_queue, num_svm_pointers, svm_pointers, sizes,
-                                            flags, num_events_in_wait_list, event_wait_list, event);
+    return GetDispatch().clEnqueueSVMMigrateMem(command_queue, num_svm_pointers, svm_pointers,
+                                                sizes, flags, num_events_in_wait_list,
+                                                event_wait_list, event);
 }
 
 // CL 2.2
@@ -1238,8 +1143,7 @@ cl_int CL_API_CALL clSetProgramReleaseCallback(cl_program program,
                                                                              void *user_data),
                                                void *user_data)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetProgramReleaseCallback(program, pfn_notify, user_data);
+    return GetDispatch().clSetProgramReleaseCallback(program, pfn_notify, user_data);
 }
 
 cl_int CL_API_CALL clSetProgramSpecializationConstant(cl_program program,
@@ -1247,8 +1151,8 @@ cl_int CL_API_CALL clSetProgramSpecializationConstant(cl_program program,
                                                       size_t spec_size,
                                                       const void *spec_value)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetProgramSpecializationConstant(program, spec_id, spec_size, spec_value);
+    return GetDispatch().clSetProgramSpecializationConstant(program, spec_id, spec_size,
+                                                            spec_value);
 }
 
 // CL 3.0
@@ -1257,8 +1161,7 @@ cl_int CL_API_CALL clSetContextDestructorCallback(cl_context context,
                                                                                 void *user_data),
                                                   void *user_data)
 {
-    EnsureCLLoaded();
-    return cl_loader.clSetContextDestructorCallback(context, pfn_notify, user_data);
+    return GetDispatch().clSetContextDestructorCallback(context, pfn_notify, user_data);
 }
 
 cl_mem CL_API_CALL clCreateBufferWithProperties(cl_context context,
@@ -1268,9 +1171,8 @@ cl_mem CL_API_CALL clCreateBufferWithProperties(cl_context context,
                                                 void *host_ptr,
                                                 cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateBufferWithProperties(context, properties, flags, size, host_ptr,
-                                                  errcode_ret);
+    return GetDispatch().clCreateBufferWithProperties(context, properties, flags, size, host_ptr,
+                                                      errcode_ret);
 }
 
 cl_mem CL_API_CALL clCreateImageWithProperties(cl_context context,
@@ -1281,9 +1183,8 @@ cl_mem CL_API_CALL clCreateImageWithProperties(cl_context context,
                                                void *host_ptr,
                                                cl_int *errcode_ret)
 {
-    EnsureCLLoaded();
-    return cl_loader.clCreateImageWithProperties(context, properties, flags, image_format,
-                                                 image_desc, host_ptr, errcode_ret);
+    return GetDispatch().clCreateImageWithProperties(context, properties, flags, image_format,
+                                                     image_desc, host_ptr, errcode_ret);
 }
 
 }  // extern "C"

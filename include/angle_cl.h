@@ -18,6 +18,6 @@
 #define CL_USE_DEPRECATED_OPENCL_2_1_APIS
 #define CL_USE_DEPRECATED_OPENCL_2_2_APIS
 
-#include "CL/opencl.h"
+#include "CL/cl_icd.h"
 
 #endif  // ANGLECL_H_

@@ -10,14 +10,16 @@
 #ifndef LIBANGLE_CLDEVICE_H_
 #define LIBANGLE_CLDEVICE_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Device final
+
+class Device final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Device(const cl_icd_dispatch &dispatch) : Object(dispatch) {}
+    ~Device() = default;
 };
 
 }  // namespace cl

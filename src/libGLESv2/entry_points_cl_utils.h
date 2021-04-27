@@ -23,6 +23,7 @@
 
 namespace cl
 {
+
 // First case: handling packed enums.
 template <typename PackedT, typename FromT>
 typename std::enable_if_t<std::is_enum<PackedT>::value, PackedT> PackParam(FromT from)
@@ -30,10 +31,10 @@ typename std::enable_if_t<std::is_enum<PackedT>::value, PackedT> PackParam(FromT
     return FromCLenum<PackedT>(from);
 }
 
-// Cast CL object types to ANGLE types marked with 'using IsCLObjectType = std::true_type;'
+// Cast CL object types to ANGLE CL object types
 template <typename PackedT, typename FromT>
 inline std::enable_if_t<
-    std::remove_pointer_t<std::remove_pointer_t<PackedT>>::IsCLObjectType::value,
+    std::is_base_of<cl::Object, std::remove_pointer_t<std::remove_pointer_t<PackedT>>>::value,
     PackedT>
 PackParam(FromT from)
 {
@@ -47,13 +48,15 @@ typename std::enable_if_t<std::is_enum<FromT>::value, UnpackedT> UnpackParam(Fro
     return ToCLenum(from);
 }
 
-// Cast ANGLE types marked with 'using IsCLObjectType = std::true_type;' to CL object types
+// Cast ANGLE CL object types to CL object types
 template <typename UnpackedT, typename FromT>
-inline typename std::enable_if_t<std::remove_pointer_t<FromT>::IsCLObjectType::value, UnpackedT>
+inline typename std::enable_if_t<std::is_base_of<cl::Object, std::remove_pointer_t<FromT>>::value,
+                                 UnpackedT>
 UnpackParam(FromT from)
 {
     return reinterpret_cast<UnpackedT>(from);
 }
+
 }  // namespace cl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_CL_UTILS_H_
