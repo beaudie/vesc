@@ -11,11 +11,7 @@ assert(angle_enable_cl)
 angle_shared_library("OpenCL") {
   defines = [ "LIBCL_IMPLEMENTATION" ]
 
-  sources = [
-    "cl_loader.h",
-    "cl_loader_autogen.cpp",
-    "libOpenCL_autogen.cpp",
-  ]
+  sources = [ "libOpenCL_autogen.cpp" ]
 
   configs += [
     "$angle_root:debug_annotations_config",

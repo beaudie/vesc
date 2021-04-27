@@ -10,14 +10,16 @@
 #ifndef LIBANGLE_CLMEMORY_H_
 #define LIBANGLE_CLMEMORY_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Memory final
+
+class Memory final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Memory(const cl_icd_dispatch &dispatch) : Object(dispatch) {}
+    ~Memory() = default;
 };
 
 }  // namespace cl
