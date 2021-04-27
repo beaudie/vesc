@@ -11,6 +11,7 @@
 
 #include "angle_cl.h"
 
+#include <memory>
 #include <type_traits>
 
 namespace cl
@@ -21,6 +22,7 @@ class Device;
 class Event;
 class Kernel;
 class Memory;
+class Object;
 class Platform;
 class Program;
 class Sampler;

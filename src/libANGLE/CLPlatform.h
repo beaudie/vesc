@@ -10,15 +10,25 @@
 #ifndef LIBANGLE_CLPLATFORM_H_
 #define LIBANGLE_CLPLATFORM_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Platform final
+
+class Platform final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Platform(const cl_icd_dispatch &dispatch) : Object(&dispatch) {}
+    ~Platform() = default;
+
+  private:
+    constexpr Platform() : Object(nullptr) {}
+
+    template <typename T>
+    friend bool constexpr isIcdCompatible();
 };
+
+static_assert(isIcdCompatible<Platform>(), "Not ICD compatible");
 
 }  // namespace cl
 

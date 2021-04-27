@@ -10,15 +10,25 @@
 #ifndef LIBANGLE_CLEVENT_H_
 #define LIBANGLE_CLEVENT_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Event final
+
+class Event final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Event(const cl_icd_dispatch &dispatch) : Object(&dispatch) {}
+    ~Event() = default;
+
+  private:
+    constexpr Event() : Object(nullptr) {}
+
+    template <typename T>
+    friend bool constexpr isIcdCompatible();
 };
+
+static_assert(isIcdCompatible<Event>(), "Not ICD compatible");
 
 }  // namespace cl
 

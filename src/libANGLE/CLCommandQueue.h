@@ -10,15 +10,25 @@
 #ifndef LIBANGLE_CLCOMMANDQUEUE_H_
 #define LIBANGLE_CLCOMMANDQUEUE_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class CommandQueue final
+
+class CommandQueue final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    CommandQueue(const cl_icd_dispatch &dispatch) : Object(&dispatch) {}
+    ~CommandQueue() = default;
+
+  private:
+    constexpr CommandQueue() : Object(nullptr) {}
+
+    template <typename T>
+    friend bool constexpr isIcdCompatible();
 };
+
+static_assert(isIcdCompatible<CommandQueue>(), "Not ICD compatible");
 
 }  // namespace cl
 
