@@ -206,6 +206,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
     rx::SpecConstUsageBits getSpecConstUsageBits() const { return mState.mSpecConstUsageBits; }
 
     int getShaderVersion();
+    static constexpr int kInvalidShaderVersion = -1;
 
     const std::vector<sh::ShaderVariable> &getInputVaryings();
     const std::vector<sh::ShaderVariable> &getOutputVaryings();

@@ -1863,7 +1863,9 @@ bool LinkValidateBuiltInVaryings(const std::vector<sh::ShaderVariable> &outputVa
                                  int inputShaderVersion,
                                  InfoLog &infoLog)
 {
-    ASSERT(outputShaderVersion == inputShaderVersion);
+    ASSERT(outputShaderVersion == Shader::kInvalidShaderVersion ||
+           inputShaderVersion == Shader::kInvalidShaderVersion ||
+           outputShaderVersion == inputShaderVersion);
 
     // Only ESSL 1.0 has restrictions on matching input and output invariance
     if (inputShaderVersion == 100 && outputShaderType == ShaderType::Vertex &&
