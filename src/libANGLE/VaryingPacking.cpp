@@ -1062,8 +1062,6 @@ bool ProgramVaryingPacking::collectAndPackUserVaryings(InfoLog &infoLog,
     // Special case for stop-before-fragment.
     if (frontShaderStage != ShaderType::Fragment)
     {
-        ASSERT(isSeparableProgram);
-
         if (!mVaryingPackings[frontShaderStage].collectAndPackUserVaryings(
                 infoLog, GetMaxShaderOutputVectors(caps, frontShaderStage), packMode,
                 frontShaderStage, ShaderType::InvalidEnum, mergedVaryings, tfVaryings,
