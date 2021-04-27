@@ -10,14 +10,16 @@
 #ifndef LIBANGLE_CLPLATFORM_H_
 #define LIBANGLE_CLPLATFORM_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Platform final
+
+class Platform final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Platform(const cl_icd_dispatch &dispatch) : Object(dispatch) {}
+    ~Platform() = default;
 };
 
 }  // namespace cl
