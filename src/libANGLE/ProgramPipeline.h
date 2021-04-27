@@ -18,6 +18,7 @@
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/ResourceMap.h"
 
 namespace rx
 {
@@ -50,6 +51,9 @@ class ProgramPipelineState final : angle::NonCopyable
     }
 
     void activeShaderProgram(Program *shaderProgram);
+
+    bool verifyProgramStagesUsage();
+
     void useProgramStages(const Context *context,
                           GLbitfield stages,
                           Program *shaderProgram,
@@ -87,6 +91,8 @@ class ProgramPipelineState final : angle::NonCopyable
     ProgramExecutable *mExecutable;
 
     bool mIsLinked;
+
+    ResourceMap<gl::ShaderBitSet, gl::ShaderProgramID> mProgramUsedStagesMap;
 };
 
 class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,

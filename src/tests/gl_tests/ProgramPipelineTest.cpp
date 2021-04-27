@@ -327,6 +327,28 @@ TEST_P(ProgramPipelineTest31, UseCreateShaderProgramv)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
+// Test pipeline without vertex shader
+TEST_P(ProgramPipelineTest31, PipelineWithoutVertexShader)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    // Create a separable program object with a fragment shader
+    const GLchar *fragString = essl31_shaders::fs::Red();
+    mFragProg                = glCreateShaderProgramv(GL_FRAGMENT_SHADER, 1, &fragString);
+    ASSERT_NE(mFragProg, 0u);
+
+    // Generate a program pipeline and attach the program to it's respective stage
+    glGenProgramPipelines(1, &mPipeline);
+    EXPECT_GL_NO_ERROR();
+    glUseProgramStages(mPipeline, GL_FRAGMENT_SHADER_BIT, mFragProg);
+    EXPECT_GL_NO_ERROR();
+    glBindProgramPipeline(mPipeline);
+    EXPECT_GL_NO_ERROR();
+
+    glDrawArrays(GL_POINTS, 0, 3);
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test glUniform
 TEST_P(ProgramPipelineTest31, FragmentStageUniformTest)
 {
