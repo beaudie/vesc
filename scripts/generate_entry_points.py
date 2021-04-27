@@ -373,8 +373,7 @@ CONTEXT_DECL_FORMAT = """    {return_type} {name_lower_no_suffix}({internal_para
 TEMPLATE_CL_ENTRY_POINT_EXPORT = """\
 {return_type} CL_API_CALL cl{name}({params})
 {{
-    EnsureCLLoaded();
-    return cl_loader.cl{name}({internal_params});
+    return getDispatch().cl{name}({internal_params});
 }}
 """
 
@@ -876,7 +875,15 @@ using namespace egl;
 """
 
 LIBCL_EXPORT_INCLUDES_AND_PREAMBLE = """
-#include "cl_loader.h"
+#include "export.h"
+
+#ifndef CL_API_ENTRY
+#    define CL_API_ENTRY ANGLE_EXPORT
+#endif
+#include "angle_cl.h"
+
+// 'angle_cl.h' has to be included before this to enable CL defines
+#include "CL/cl_icd.h"
 
 #include "anglebase/no_destructor.h"
 #include "common/system_utils.h"
@@ -886,37 +893,36 @@ LIBCL_EXPORT_INCLUDES_AND_PREAMBLE = """
 
 namespace
 {
-bool gLoaded = false;
-
 std::unique_ptr<angle::Library> &EntryPointsLib()
 {
     static angle::base::NoDestructor<std::unique_ptr<angle::Library>> sEntryPointsLib;
     return *sEntryPointsLib;
 }
 
-angle::GenericProc CL_API_CALL GlobalLoad(const char *symbol)
+cl_icd_dispatch& getDispatch()
 {
-    return reinterpret_cast<angle::GenericProc>(EntryPointsLib()->getSymbol(symbol));
-}
+    static cl_icd_dispatch *sDispatch = nullptr;
 
-void EnsureCLLoaded()
-{
-    if (gLoaded)
+    if (sDispatch == nullptr)
     {
-        return;
+        EntryPointsLib().reset(
+            angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
+        if (EntryPointsLib())
+        {
+            sDispatch = reinterpret_cast<cl_icd_dispatch*>(
+                EntryPointsLib()->getSymbol("gCLIcdDispatchTable"));
+            if (sDispatch == nullptr)
+            {
+                std::cerr << "Error loading CL dispatch table." << std::endl;
+            }
+        }
+        else
+        {
+            std::cerr << "Error opening GLESv2 library." << std::endl;
+        }
     }
 
-    EntryPointsLib().reset(
-        angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
-    angle::LoadCL(GlobalLoad);
-    if (!cl_loader.clGetDeviceIDs)
-    {
-        std::cerr << "Error loading CL entry points." << std::endl;
-    }
-    else
-    {
-        gLoaded = true;
-    }
+    return *sDispatch;
 }
 }  // anonymous namespace
 """

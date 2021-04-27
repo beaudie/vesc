@@ -9,15 +9,25 @@
 #ifndef LIBANGLE_CLSAMPLER_H_
 #define LIBANGLE_CLSAMPLER_H_
 
-#include "libANGLE/CLtypes.h"
+#include "libANGLE/CLObject.h"
 
 namespace cl
 {
-class Sampler final
+
+class Sampler final : public Object
 {
   public:
-    using IsCLObjectType = std::true_type;
+    Sampler(const cl_icd_dispatch &dispatch) : Object(&dispatch) {}
+    ~Sampler() = default;
+
+  private:
+    constexpr Sampler() : Object(nullptr) {}
+
+    template <typename T>
+    friend bool constexpr isIcdCompatible();
 };
+
+static_assert(isIcdCompatible<Sampler>(), "Not ICD compatible");
 
 }  // namespace cl
 
