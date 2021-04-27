@@ -16,7 +16,8 @@
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/FlagStd140Structs.h"
 #include "compiler/translator/ImmutableString.h"
-#include "compiler/translator/ShaderStorageBlockOutputHLSL.h"
+#include "compiler/translator/ShaderStorageBlockFunctionHLSL.h"
+#include "compiler/translator/blocklayout.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
 class BuiltInFunctionEmulator;
@@ -31,6 +32,22 @@ class TextureFunctionHLSL;
 class TSymbolTable;
 class TVariable;
 class UnfoldShortCircuit;
+
+struct TReferencedBlock : angle::NonCopyable
+{
+    POOL_ALLOCATOR_NEW_DELETE
+    TReferencedBlock(const TInterfaceBlock *block, const TVariable *instanceVariable);
+    const TInterfaceBlock *block;
+    const TVariable *instanceVariable;  // May be nullptr if the block is not instanced.
+};
+
+// Used to save shader storage block field member information.
+using BlockMemberInfoMap = std::map<const TField *, BlockMemberInfo>;
+
+// Maps from uniqueId to a variable.
+using ReferencedInterfaceBlocks = std::map<int, const TReferencedBlock *>;
+
+using ShaderVarToFieldMap = std::map<std::string, const TField *>;
 
 using ReferencedVariables = std::map<int, const TVariable *>;
 
@@ -153,6 +170,34 @@ class OutputHLSL : public TIntermTraverser
 
     bool shaderNeedsGenerateOutput() const;
     const char *generateOutputCall() const;
+
+    // This writes part of the function call to store a value to a SSBO to the output stream. After
+    // calling this, ", <stored value>)" should be written to the output stream to complete the
+    // function call.
+    void outputSSBOStoreFunctionCallPrefix(TIntermTyped *node);
+    // This writes the function call to load a SSBO value to the output stream.
+    void outputSSBOLoadFunctionCall(TIntermTyped *node);
+    // This writes the function call to get the lengh of unsized array member of SSBO.
+    void outputSSBOLengthFunctionCall(TIntermTyped *node);
+    // Writes the atomic memory function calls for SSBO.
+    void outputSSBOAtomicMemoryFunctionCallPrefix(TIntermTyped *node, TOperator op);
+
+    void writeShaderStorageBlocksHeader(TInfoSinkBase &out) const;
+
+    void traverseSSBOAccess(TIntermTyped *node, SSBOMethod method);
+    TIntermTyped *traverseSSBONode(TInfoSinkBase &out,
+                                   TIntermTyped *node,
+                                   BlockMemberInfo *blockMemberInfo);
+    int getMatrixStride(TIntermTyped *node,
+                        TLayoutBlockStorage storage,
+                        bool rowMajor,
+                        bool *isRowMajor) const;
+    TIntermTyped *writeEOpIndexDirectOrIndirectOutput(TInfoSinkBase &out,
+                                                      TIntermBinary *node,
+                                                      BlockMemberInfo *blockMemberInfo);
+    // Common part in dot operations.
+    TIntermTyped *createFieldOffset(const TField *field, BlockMemberInfo *blockMemberInfo);
+    void collectShaderStorageBlocks(TIntermTyped *node);
 
     sh::GLenum mShaderType;
     ShShaderSpec mShaderSpec;
@@ -279,7 +324,11 @@ class OutputHLSL : public TIntermTraverser
     // assignment.
     bool needStructMapping(TIntermTyped *node);
 
-    ShaderStorageBlockOutputHLSL *mSSBOOutputHLSL;
+    ReferencedInterfaceBlocks mRefrencedShaderStorageBlocks;
+    ShaderStorageBlockFunctionHLSL *mSSBOFunctionHLSL;
+    ReferencedInterfaceBlocks mReferencedShaderStorageBlocks;
+    BlockMemberInfoMap mBlockMemberInfoMap;
+    const std::vector<InterfaceBlock> &mShaderStorageBlocks;
     bool mNeedStructMapping;
 };
 }  // namespace sh
