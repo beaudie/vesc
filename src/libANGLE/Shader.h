@@ -56,6 +56,8 @@ enum class CompileStatus
     COMPILED,
 };
 
+static constexpr int kInvalidShaderVersion = -1;
+
 class ShaderState final : angle::NonCopyable
 {
   public:
