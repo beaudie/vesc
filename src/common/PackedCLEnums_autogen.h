@@ -12,7 +12,7 @@
 #ifndef COMMON_PACKEDCLENUMS_AUTOGEN_H_
 #define COMMON_PACKEDCLENUMS_AUTOGEN_H_
 
-#include <angle_cl.h>
+#include <angle_cl_no_export.h>
 typedef cl_uint CLenum;
 
 #include <cstdint>
