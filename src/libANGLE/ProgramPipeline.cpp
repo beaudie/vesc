@@ -545,7 +545,10 @@ angle::Result ProgramPipeline::link(const Context *context)
             gl::GetLastPreFragmentStage(getExecutable().getLinkedShaderStages());
         if (lastVertexProcessingStage == ShaderType::InvalidEnum)
         {
-            return angle::Result::Stop;
+            //  If there is no active program for the vertex or fragment shader stages, the results
+            //  of vertex and fragment shader execution will respectively be undefined. However,
+            //  this is not an error.
+            return angle::Result::Continue;
         }
 
         Program *tfProgram = getShaderProgram(lastVertexProcessingStage);
@@ -609,7 +612,7 @@ bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
     Program *fragmentProgram = mState.mPrograms[ShaderType::Fragment];
     if (!vertexProgram || !fragmentProgram)
     {
-        return false;
+        return true;
     }
     ProgramExecutable &vertexExecutable   = vertexProgram->getExecutable();
     ProgramExecutable &fragmentExecutable = fragmentProgram->getExecutable();
@@ -649,6 +652,35 @@ void ProgramPipeline::validate(const gl::Context *context)
                 return;
             }
         }
+    }
+
+    // GLES spec 3.2, Section 7.4 "Program Pipeline Objects"
+    // If pipeline is a name that has been generated (without subsequent deletion) by
+    // GenProgramPipelines, but refers to a program pipeline object that has not been
+    // previously bound, the GL first creates a new state vector in the same manner as
+    // when BindProgramPipeline creates a new program pipeline object.
+    //
+    // void BindProgramPipeline( uint pipeline );
+    // pipeline is the program pipeline object name. The resulting program pipeline
+    // object is a new state vector, comprising all the state and with the same initial values
+    // listed in table 21.20.
+    //
+    // Table 21.20 Marks the default value for VALIDATE_STATUS as false.
+    if (context->getState().getProgramPipeline() != this)
+    {
+        mState.mValid = false;
+        infoLog << "The pipeline is not bound."
+                << "\n";
+        return;
+    }
+
+    intptr_t drawStatesError = context->getStateCache().getBasicDrawStatesError(context);
+    if (drawStatesError)
+    {
+        mState.mValid            = false;
+        const char *errorMessage = reinterpret_cast<const char *>(drawStatesError);
+        infoLog << errorMessage << "\n";
+        return;
     }
 
     if (!linkVaryings(infoLog))
