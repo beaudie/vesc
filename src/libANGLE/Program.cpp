@@ -4771,6 +4771,7 @@ angle::Result Program::deserialize(const Context *context,
 
     postResolveLink(context);
     mState.mExecutable->updateCanDrawWith();
+    mState.mExecutable->updateHasVertexAndFragmentShader();
 
     return angle::Result::Continue;
 }

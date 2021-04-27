@@ -221,6 +221,7 @@ void ProgramPipeline::updateLinkedShaderStages()
     }
 
     mState.mExecutable->updateCanDrawWith();
+    mState.mExecutable->updateHasVertexAndFragmentShader();
 }
 
 void ProgramPipeline::updateExecutableAttributes()
@@ -607,17 +608,34 @@ bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
     // can be redeclared in Geometry or Tessellation shaders as well.
     Program *vertexProgram   = mState.mPrograms[ShaderType::Vertex];
     Program *fragmentProgram = mState.mPrograms[ShaderType::Fragment];
-    if (!vertexProgram || !fragmentProgram)
+
+    if (!vertexProgram)
     {
         return false;
     }
-    ProgramExecutable &vertexExecutable   = vertexProgram->getExecutable();
-    ProgramExecutable &fragmentExecutable = fragmentProgram->getExecutable();
-    return LinkValidateBuiltInVaryings(
-        vertexExecutable.getLinkedOutputVaryings(ShaderType::Vertex),
-        fragmentExecutable.getLinkedInputVaryings(ShaderType::Fragment), ShaderType::Vertex,
-        ShaderType::Fragment, vertexExecutable.getLinkedShaderVersion(ShaderType::Vertex),
-        fragmentExecutable.getLinkedShaderVersion(ShaderType::Fragment), infoLog);
+
+    const std::vector<sh::ShaderVariable> emptyVector;
+    const std::vector<sh::ShaderVariable> *linkedOutputVaryings = &emptyVector;
+    const std::vector<sh::ShaderVariable> *linkedInputVaryings  = &emptyVector;
+    int vertexVersion                                           = Shader::kInvalidShaderVersion;
+    int fragmentVersion                                         = Shader::kInvalidShaderVersion;
+
+    if (vertexProgram)
+    {
+        ProgramExecutable &vertexExecutable = vertexProgram->getExecutable();
+        linkedOutputVaryings = &vertexExecutable.getLinkedOutputVaryings(ShaderType::Vertex);
+        vertexVersion        = vertexExecutable.getLinkedShaderVersion(ShaderType::Vertex);
+    }
+    if (fragmentProgram)
+    {
+        ProgramExecutable &fragmentExecutable = fragmentProgram->getExecutable();
+        linkedInputVaryings = &fragmentExecutable.getLinkedInputVaryings(ShaderType::Fragment);
+        fragmentVersion     = fragmentExecutable.getLinkedShaderVersion(ShaderType::Fragment);
+    }
+
+    return LinkValidateBuiltInVaryings(*linkedOutputVaryings, *linkedInputVaryings,
+                                       ShaderType::Vertex, ShaderType::Fragment, vertexVersion,
+                                       fragmentVersion, infoLog);
 }
 
 void ProgramPipeline::validate(const gl::Context *context)
@@ -651,7 +669,9 @@ void ProgramPipeline::validate(const gl::Context *context)
         }
     }
 
-    if (!linkVaryings(infoLog))
+    // Validation status is set to false if either linking would fail or if the ProgramPipeline
+    // doesn't have both the vertex and fragment shader attached
+    if (!linkVaryings(infoLog) || !mState.mExecutable->hasVertexAndFragmentShader())
     {
         mState.mValid = false;
 
