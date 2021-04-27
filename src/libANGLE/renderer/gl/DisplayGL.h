@@ -59,6 +59,7 @@ class DisplayGL : public DisplayImpl
 
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
+    virtual std::string getVersionStringSuffix() const = 0;
 
   private:
     virtual egl::Error makeCurrentSurfaceless(gl::Context *context);

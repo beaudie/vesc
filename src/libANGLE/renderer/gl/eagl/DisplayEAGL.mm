@@ -406,6 +406,11 @@ RendererGL *DisplayEAGL::getRenderer() const
     return mRenderer.get();
 }
 
+std::string DisplayEAGL::getVersionStringSuffix() const
+{
+    return "EAGL";
+}
+
 }
 
 #endif  // defined(ANGLE_ENABLE_EAGL)

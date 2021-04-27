@@ -582,6 +582,11 @@ RendererGL *DisplayCGL::getRenderer() const
     return mRenderer.get();
 }
 
+std::string DisplayCGL::getVersionStringSuffix() const
+{
+    return "CGL";
+}
+
 egl::Error DisplayCGL::referenceDiscreteGPU()
 {
     // Should have been rejected by validation if not supported.

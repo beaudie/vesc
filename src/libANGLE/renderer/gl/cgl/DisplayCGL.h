@@ -106,6 +106,9 @@ class DisplayCGL : public DisplayGL
     egl::Error unreferenceDiscreteGPU();
     egl::Error handleGPUSwitch() override;
 
+  protected:
+    std::string getVersionStringSuffix() const override;
+
   private:
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 

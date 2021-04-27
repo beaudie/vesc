@@ -93,14 +93,20 @@ EGLPlatformParameters D3D11_FL9_3_REFERENCE();
 
 EGLPlatformParameters OPENGL();
 EGLPlatformParameters OPENGL(EGLint major, EGLint minor);
+EGLPlatformParameters OPENGL_EGL();
+EGLPlatformParameters OPENGL_EGL(EGLint major, EGLint minor);
 EGLPlatformParameters OPENGL_NULL();
 
 EGLPlatformParameters OPENGLES();
 EGLPlatformParameters OPENGLES(EGLint major, EGLint minor);
+EGLPlatformParameters OPENGLES_EGL();
+EGLPlatformParameters OPENGLES_EGL(EGLint major, EGLint minor);
 EGLPlatformParameters OPENGLES_NULL();
 
 EGLPlatformParameters OPENGL_OR_GLES();
 EGLPlatformParameters OPENGL_OR_GLES(EGLint major, EGLint minor);
+EGLPlatformParameters OPENGL_OR_GLES_EGL();
+EGLPlatformParameters OPENGL_OR_GLES_EGL(EGLint major, EGLint minor);
 EGLPlatformParameters OPENGL_OR_GLES_NULL();
 
 EGLPlatformParameters VULKAN();
@@ -154,6 +160,14 @@ PlatformParameters ES3_OPENGL(EGLint major, EGLint minor);
 PlatformParameters ES31_OPENGL();
 PlatformParameters ES31_OPENGL(EGLint major, EGLint minor);
 
+PlatformParameters ES1_OPENGL_EGL();
+PlatformParameters ES2_OPENGL_EGL();
+PlatformParameters ES2_OPENGL_EGL(EGLint major, EGLint minor);
+PlatformParameters ES3_OPENGL_EGL();
+PlatformParameters ES3_OPENGL_EGL(EGLint major, EGLint minor);
+PlatformParameters ES31_OPENGL_EGL();
+PlatformParameters ES31_OPENGL_EGL(EGLint major, EGLint minor);
+
 PlatformParameters ES1_OPENGLES();
 PlatformParameters ES2_OPENGLES();
 PlatformParameters ES2_OPENGLES(EGLint major, EGLint minor);
@@ -161,6 +175,14 @@ PlatformParameters ES3_OPENGLES();
 PlatformParameters ES3_OPENGLES(EGLint major, EGLint minor);
 PlatformParameters ES31_OPENGLES();
 PlatformParameters ES31_OPENGLES(EGLint major, EGLint minor);
+
+PlatformParameters ES1_OPENGLES_EGL();
+PlatformParameters ES2_OPENGLES_EGL();
+PlatformParameters ES2_OPENGLES_EGL(EGLint major, EGLint minor);
+PlatformParameters ES3_OPENGLES_EGL();
+PlatformParameters ES3_OPENGLES_EGL(EGLint major, EGLint minor);
+PlatformParameters ES31_OPENGLES_EGL();
+PlatformParameters ES31_OPENGLES_EGL(EGLint major, EGLint minor);
 
 PlatformParameters ES1_NULL();
 PlatformParameters ES2_NULL();

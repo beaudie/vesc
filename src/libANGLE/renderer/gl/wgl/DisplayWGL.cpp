@@ -1054,4 +1054,9 @@ RendererGL *DisplayWGL::getRenderer() const
     return reinterpret_cast<RendererGL *>(mRenderer.get());
 }
 
+std::string DisplayWGL::getVersionStringSuffix() const
+{
+    return "WGL";
+}
+
 }  // namespace rx

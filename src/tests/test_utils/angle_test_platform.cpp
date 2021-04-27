@@ -60,6 +60,12 @@ bool IsOpenGL()
     return (rendererString.find("OpenGL") != std::string::npos);
 }
 
+bool IsEGL()
+{
+    std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+    return (rendererString.find("EGL") != std::string::npos);
+}
+
 bool IsNULL()
 {
     std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));

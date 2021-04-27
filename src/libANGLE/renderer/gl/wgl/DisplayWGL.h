@@ -88,6 +88,9 @@ class DisplayWGL : public DisplayGL
 
     RendererGL *getRenderer() const override;
 
+  protected:
+    std::string getVersionStringSuffix() const override;
+
   private:
     egl::Error initializeImpl(egl::Display *display);
     void destroy();

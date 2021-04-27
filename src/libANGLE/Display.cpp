@@ -280,15 +280,6 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             break;
 
 #    elif defined(ANGLE_PLATFORM_LINUX)
-#        if defined(ANGLE_USE_GBM)
-            if (platformType == 0)
-            {
-                // If platformType is unknown, use DisplayGbm now. In the future, it should use
-                // DisplayEGL letting native EGL decide what display to use.
-                impl = new rx::DisplayGbm(state);
-                break;
-            }
-#        endif
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
                 impl = new rx::DisplayEGL(state);
@@ -304,6 +295,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                 }
 #        endif
             }
+            impl = new rx::DisplayEGL(state);
+            break;
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             // No GL support on this platform, fail display creation.
             impl = nullptr;
@@ -321,15 +314,6 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
 #    if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayWGL(state);
 #    elif defined(ANGLE_PLATFORM_LINUX)
-#        if defined(ANGLE_USE_GBM)
-            if (platformType == 0)
-            {
-                // If platformType is unknown, use DisplayGbm now. In the future, it should use
-                // DisplayEGL letting native EGL decide what display to use.
-                impl = new rx::DisplayGbm(state);
-                break;
-            }
-#        endif
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
                 impl = new rx::DisplayEGL(state);
@@ -345,6 +329,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                 }
 #        endif
             }
+            impl = new rx::DisplayEGL(state);
+            break;
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             impl = new rx::DisplayAndroid(state);
 #    else

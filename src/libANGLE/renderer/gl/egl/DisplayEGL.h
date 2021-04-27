@@ -140,6 +140,8 @@ class DisplayEGL : public DisplayGL
     };
     angle::HashMap<std::thread::id, CurrentNativeContext> mCurrentNativeContexts;
 
+    std::string getVersionStringSuffix() const override;
+
   private:
     void generateCaps(egl::Caps *outCaps) const override;
 

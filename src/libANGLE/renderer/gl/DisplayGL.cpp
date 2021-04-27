@@ -165,6 +165,10 @@ std::string DisplayGL::getVendorString()
 std::string DisplayGL::getVersionString()
 {
     std::string versionString = GetVersionString(getRenderer()->getFunctions());
+    if (!getVersionStringSuffix().empty())
+    {
+        versionString.append(" (" + getVersionStringSuffix() + ")");
+    }
     return SanitizeVersionString(versionString,
                                  getRenderer()->getFunctions()->standard == STANDARD_GL_ES);
 }

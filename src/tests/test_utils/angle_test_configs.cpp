@@ -157,6 +157,10 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
             stream << "_SwiftShader";
             break;
 
+        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE:
+            stream << "_EGL";
+            break;
+
         default:
             stream << "_Error";
             break;
@@ -440,6 +444,18 @@ EGLPlatformParameters OPENGL(EGLint major, EGLint minor)
     return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE, major, minor, EGL_DONT_CARE);
 }
 
+EGLPlatformParameters OPENGL_EGL()
+{
+    return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE, EGL_DONT_CARE, EGL_DONT_CARE,
+                                 EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE);
+}
+
+EGLPlatformParameters OPENGL_EGL(EGLint major, EGLint minor)
+{
+    return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE, major, minor,
+                                 EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE);
+}
+
 EGLPlatformParameters OPENGL_NULL()
 {
     return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE, EGL_DONT_CARE, EGL_DONT_CARE,
@@ -455,6 +471,18 @@ EGLPlatformParameters OPENGLES(EGLint major, EGLint minor)
 {
     return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE, major, minor,
                                  EGL_DONT_CARE);
+}
+
+EGLPlatformParameters OPENGLES_EGL()
+{
+    return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE, EGL_DONT_CARE,
+                                 EGL_DONT_CARE, EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE);
+}
+
+EGLPlatformParameters OPENGLES_EGL(EGLint major, EGLint minor)
+{
+    return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE, major, minor,
+                                 EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE);
 }
 
 EGLPlatformParameters OPENGLES_NULL()
@@ -478,6 +506,24 @@ EGLPlatformParameters OPENGL_OR_GLES(EGLint major, EGLint minor)
     return OPENGLES(major, minor);
 #else
     return OPENGL(major, minor);
+#endif
+}
+
+EGLPlatformParameters OPENGL_OR_GLES_EGL()
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    return OPENGLES_EGL();
+#else
+    return OPENGL_EGL();
+#endif
+}
+
+EGLPlatformParameters OPENGL_OR_GLES_EGL(EGLint major, EGLint minor)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    return OPENGLES_EGL(major, minor);
+#else
+    return OPENGL_EGL(major, minor);
 #endif
 }
 
@@ -699,6 +745,41 @@ PlatformParameters ES31_OPENGLES(EGLint major, EGLint minor)
     return PlatformParameters(3, 1, egl_platform::OPENGLES(major, minor));
 }
 
+PlatformParameters ES1_OPENGLES_EGL()
+{
+    return PlatformParameters(1, 0, egl_platform::OPENGLES_EGL());
+}
+
+PlatformParameters ES2_OPENGLES_EGL()
+{
+    return PlatformParameters(2, 0, egl_platform::OPENGLES_EGL());
+}
+
+PlatformParameters ES2_OPENGLES_EGL(EGLint major, EGLint minor)
+{
+    return PlatformParameters(2, 0, egl_platform::OPENGLES_EGL(major, minor));
+}
+
+PlatformParameters ES3_OPENGLES_EGL()
+{
+    return PlatformParameters(3, 0, egl_platform::OPENGLES_EGL());
+}
+
+PlatformParameters ES3_OPENGLES_EGL(EGLint major, EGLint minor)
+{
+    return PlatformParameters(3, 0, egl_platform::OPENGLES_EGL(major, minor));
+}
+
+PlatformParameters ES31_OPENGLES_EGL()
+{
+    return PlatformParameters(3, 1, egl_platform::OPENGLES_EGL());
+}
+
+PlatformParameters ES31_OPENGLES_EGL(EGLint major, EGLint minor)
+{
+    return PlatformParameters(3, 1, egl_platform::OPENGLES_EGL(major, minor));
+}
+
 PlatformParameters ES1_OPENGL()
 {
     return PlatformParameters(1, 0, egl_platform::OPENGL());
@@ -732,6 +813,41 @@ PlatformParameters ES31_OPENGL()
 PlatformParameters ES31_OPENGL(EGLint major, EGLint minor)
 {
     return PlatformParameters(3, 1, egl_platform::OPENGL(major, minor));
+}
+
+PlatformParameters ES1_OPENGL_EGL()
+{
+    return PlatformParameters(1, 0, egl_platform::OPENGL_EGL());
+}
+
+PlatformParameters ES2_OPENGL_EGL()
+{
+    return PlatformParameters(2, 0, egl_platform::OPENGL_EGL());
+}
+
+PlatformParameters ES2_OPENGL_EGL(EGLint major, EGLint minor)
+{
+    return PlatformParameters(2, 0, egl_platform::OPENGL_EGL(major, minor));
+}
+
+PlatformParameters ES3_OPENGL_EGL()
+{
+    return PlatformParameters(3, 0, egl_platform::OPENGL_EGL());
+}
+
+PlatformParameters ES3_OPENGL_EGL(EGLint major, EGLint minor)
+{
+    return PlatformParameters(3, 0, egl_platform::OPENGL_EGL(major, minor));
+}
+
+PlatformParameters ES31_OPENGL_EGL()
+{
+    return PlatformParameters(3, 1, egl_platform::OPENGL_EGL());
+}
+
+PlatformParameters ES31_OPENGL_EGL(EGLint major, EGLint minor)
+{
+    return PlatformParameters(3, 1, egl_platform::OPENGL_EGL(major, minor));
 }
 
 PlatformParameters ES1_NULL()

@@ -25,6 +25,7 @@ bool IsD3DSM3();
 bool IsDesktopOpenGL();
 bool IsOpenGLES();
 bool IsOpenGL();
+bool IsEGL();
 bool IsNULL();
 bool IsVulkan();
 bool IsMetal();

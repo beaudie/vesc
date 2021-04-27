@@ -1079,4 +1079,9 @@ RendererGL *DisplayGLX::getRenderer() const
     return mRenderer.get();
 }
 
+std::string DisplayGLX::getVersionStringSuffix() const
+{
+    return "GLX";
+}
+
 }  // namespace rx

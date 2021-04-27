@@ -538,7 +538,9 @@ bool IsConfigAllowlisted(const SystemInfo &systemInfo, const PlatformParameters 
         switch (param.getRenderer())
         {
             case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
-                return true;
+                return (param.getDeviceType() != EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE);
+            case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
+                return (param.getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE);
             case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
                 // http://issuetracker.google.com/173004081
                 return !IsIntel() || param.eglParameters.asyncCommandQueueFeatureVulkan != EGL_TRUE;

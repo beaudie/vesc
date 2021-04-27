@@ -88,6 +88,9 @@ class DisplayEAGL : public DisplayGL
 
     RendererGL *getRenderer() const override;
 
+  protected:
+    std::string getVersionStringSuffix() const override;
+
   private:
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 

@@ -254,7 +254,7 @@ egl::Error DisplayEGL::initialize(egl::Display *display)
     }
 
     std::vector<EGLint> configAttribListBase = {
-        EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER, EGL_SURFACE_TYPE, EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
+        EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER, EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
         EGL_CONFIG_CAVEAT,     EGL_NONE,       EGL_CONFORMANT,   esBit,
         EGL_RENDERABLE_TYPE,   esBit,          EGL_NONE};
 
@@ -498,8 +498,8 @@ egl::ConfigSet DisplayEGL::generateConfigs()
             }
             else
             {
-                ERR() << "RGBA(" << config.redSize << "," << config.greenSize << ","
-                      << config.blueSize << "," << config.alphaSize << ") not handled";
+                WARN() << "RGBA(" << config.redSize << "," << config.greenSize << ","
+                       << config.blueSize << "," << config.alphaSize << ") not handled";
                 continue;
             }
         }
@@ -776,6 +776,11 @@ void DisplayEGL::populateFeatureList(angle::FeatureList *features)
 RendererGL *DisplayEGL::getRenderer() const
 {
     return reinterpret_cast<RendererGL *>(mRenderer.get());
+}
+
+std::string DisplayEGL::getVersionStringSuffix() const
+{
+    return "EGL";
 }
 
 egl::Error DisplayEGL::validateImageClientBuffer(const gl::Context *context,
