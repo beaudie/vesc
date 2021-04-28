@@ -3922,16 +3922,13 @@ angle::Result ImageHelper::initExternal(Context *context,
     RendererVk *rendererVk                             = context->getRenderer();
     VkImageFormatListCreateInfoKHR imageFormatListInfo = {};
     angle::FormatID imageFormat                        = format.actualImageFormatID;
-    angle::FormatID additionalFormat                   = format.actualImageFormat().isSRGB
-                                           ? ConvertToLinear(imageFormat)
-                                           : ConvertToSRGB(imageFormat);
-    constexpr uint32_t kImageListFormatCount = 2;
-    VkFormat imageListFormats[kImageListFormatCount];
-    imageListFormats[0] = vk::GetVkFormatFromFormatID(imageFormat);
-    imageListFormats[1] = vk::GetVkFormatFromFormatID(additionalFormat);
+    angle::FormatID imageListFormat                    = format.actualImageFormat().isSRGB
+                                          ? ConvertToLinear(imageFormat)
+                                          : ConvertToSRGB(imageFormat);
+    VkFormat imageListVkFormat = vk::GetVkFormatFromFormatID(imageListFormat);
 
     if (rendererVk->getFeatures().supportsImageFormatList.enabled &&
-        rendererVk->haveSameFormatFeatureBits(imageFormat, additionalFormat))
+        rendererVk->haveSameFormatFeatureBits(imageFormat, imageListFormat))
     {
         imageFormatListEnabled = true;
 
@@ -3942,8 +3939,8 @@ angle::Result ImageHelper::initExternal(Context *context,
         // VkImage
         imageFormatListInfo.sType           = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
         imageFormatListInfo.pNext           = externalImageCreateInfo;
-        imageFormatListInfo.viewFormatCount = kImageListFormatCount;
-        imageFormatListInfo.pViewFormats    = imageListFormats;
+        imageFormatListInfo.viewFormatCount = 1;
+        imageFormatListInfo.pViewFormats    = &imageListVkFormat;
     }
 
     if (imageFormatListEnabledOut)
