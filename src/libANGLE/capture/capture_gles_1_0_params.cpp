@@ -173,7 +173,8 @@ void CaptureLightModelfv_params(const State &glState,
                                 const GLfloat *params,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size = pname == GL_LIGHT_MODEL_AMBIENT ? 4 : 1;
+    CaptureMemory(params, sizeof(GLfloat) * size, paramCapture);
 }
 
 void CaptureLightModelxv_param(const State &glState,
@@ -182,7 +183,8 @@ void CaptureLightModelxv_param(const State &glState,
                                const GLfixed *param,
                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size = pname == GL_LIGHT_MODEL_AMBIENT ? 4 : 1;
+    CaptureMemory(param, sizeof(GLfixed) * size, paramCapture);
 }
 
 void CaptureLightfv_params(const State &glState,
@@ -192,7 +194,23 @@ void CaptureLightfv_params(const State &glState,
                            const GLfloat *params,
                            ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size;
+    switch (pnamePacked)
+    {
+        case LightParameter::Ambient:
+        case LightParameter::Diffuse:
+        case LightParameter::AmbientAndDiffuse:
+        case LightParameter::Specular:
+        case LightParameter::Position:
+            size = 4;
+            break;
+        case LightParameter::SpotDirection:
+            size = 3;
+            break;
+        default:
+            size = 1;
+    }
+    CaptureMemory(params, sizeof(GLfloat) * size, paramCapture);
 }
 
 void CaptureLightxv_params(const State &glState,
@@ -202,7 +220,23 @@ void CaptureLightxv_params(const State &glState,
                            const GLfixed *params,
                            ParamCapture *paramCapture)
 {
-    CaptureMemory(params, sizeof(GLfixed), paramCapture);
+    GLsizei size;
+    switch (pnamePacked)
+    {
+        case LightParameter::Ambient:
+        case LightParameter::Diffuse:
+        case LightParameter::AmbientAndDiffuse:
+        case LightParameter::Specular:
+        case LightParameter::Position:
+            size = 4;
+            break;
+        case LightParameter::SpotDirection:
+            size = 3;
+            break;
+        default:
+            size = 1;
+    }
+    CaptureMemory(params, sizeof(GLfixed) * size, paramCapture);
 }
 
 void CaptureLoadMatrixf_m(const State &glState,
@@ -228,7 +262,16 @@ void CaptureMaterialfv_params(const State &glState,
                               const GLfloat *params,
                               ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size;
+    switch (pnamePacked)
+    {
+        case MaterialParameter::Shininess:
+            size = 1;
+            break;
+        default:
+            size = 4;
+    }
+    CaptureMemory(params, sizeof(GLfloat) * size, paramCapture);
 }
 
 void CaptureMaterialxv_param(const State &glState,
@@ -238,7 +281,16 @@ void CaptureMaterialxv_param(const State &glState,
                              const GLfixed *param,
                              ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size;
+    switch (pnamePacked)
+    {
+        case MaterialParameter::Shininess:
+            size = 1;
+            break;
+        default:
+            size = 4;
+    }
+    CaptureMemory(param, sizeof(GLfixed) * size, paramCapture);
 }
 
 void CaptureMultMatrixf_m(const State &glState,
