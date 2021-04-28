@@ -137,7 +137,7 @@ declare_args() {
   angle_enable_metal = is_mac
 
   # Enables the OpenCL pass-through back end
-  angle_enable_cl_passthrough = angle_enable_cl
+  angle_enable_cl_passthrough = false
 }
 
 # OpenCL is not supported on Windows UWP, because the CL headers include DXD9, which is not
