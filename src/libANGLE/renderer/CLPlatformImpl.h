@@ -9,7 +9,10 @@
 #ifndef LIBANGLE_RENDERER_CLPLATFORMIMPL_H_
 #define LIBANGLE_RENDERER_CLPLATFORMIMPL_H_
 
-#include "common/angleutils.h"
+#include "libANGLE/renderer/CLtypes.h"
+
+#include <list>
+#include <vector>
 
 namespace rx
 {
@@ -17,8 +20,20 @@ namespace rx
 class CLPlatformImpl : angle::NonCopyable
 {
   public:
-    CLPlatformImpl() {}
-    virtual ~CLPlatformImpl() {}
+    using Ptr           = std::unique_ptr<CLPlatformImpl>;
+    using ImplList      = std::list<Ptr>;
+    using ExtensionList = std::vector<cl_name_version>;
+
+    CLPlatformImpl()          = default;
+    virtual ~CLPlatformImpl() = default;
+
+    virtual const char *getProfile() const                        = 0;
+    virtual const char *getVersionString() const                  = 0;
+    virtual cl_version getVersion() const                         = 0;
+    virtual const char *getName() const                           = 0;
+    virtual const char *getExtensions() const                     = 0;
+    virtual const ExtensionList &getExtensionsWithVersion() const = 0;
+    virtual cl_ulong getHostTimerResolution() const               = 0;
 };
 
 }  // namespace rx
