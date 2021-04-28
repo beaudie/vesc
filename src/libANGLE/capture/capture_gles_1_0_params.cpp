@@ -167,13 +167,28 @@ void CaptureGetTexParameterxv_params(const State &glState,
     UNIMPLEMENTED();
 }
 
+static GLsizei getLightModelParamSize(GLenum pname)
+{
+    switch (pname)
+    {
+        case GL_LIGHT_MODEL_AMBIENT:
+            return 4;
+        case GL_LIGHT_MODEL_TWO_SIDE:
+            return 1;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 void CaptureLightModelfv_params(const State &glState,
                                 bool isCallValid,
                                 GLenum pname,
                                 const GLfloat *params,
                                 ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size = getLightModelParamSize(pname);
+    CaptureMemory(params, sizeof(GLfloat) * size, paramCapture);
 }
 
 void CaptureLightModelxv_param(const State &glState,
@@ -182,7 +197,32 @@ void CaptureLightModelxv_param(const State &glState,
                                const GLfixed *param,
                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size = getLightModelParamSize(pname);
+    CaptureMemory(param, sizeof(GLfixed) * size, paramCapture);
+}
+
+static GLsizei getLightParamSize(LightParameter pnamePacked)
+{
+    switch (pnamePacked)
+    {
+        case LightParameter::Ambient:
+        case LightParameter::Diffuse:
+        case LightParameter::AmbientAndDiffuse:
+        case LightParameter::Specular:
+        case LightParameter::Position:
+            return 4;
+        case LightParameter::SpotDirection:
+            return 3;
+        case LightParameter::SpotExponent:
+        case LightParameter::SpotCutoff:
+        case LightParameter::ConstantAttenuation:
+        case LightParameter::LinearAttenuation:
+        case LightParameter::QuadraticAttenuation:
+            return 1;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
 }
 
 void CaptureLightfv_params(const State &glState,
@@ -192,7 +232,8 @@ void CaptureLightfv_params(const State &glState,
                            const GLfloat *params,
                            ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size = getLightParamSize(pnamePacked);
+    CaptureMemory(params, sizeof(GLfloat) * size, paramCapture);
 }
 
 void CaptureLightxv_params(const State &glState,
@@ -202,7 +243,8 @@ void CaptureLightxv_params(const State &glState,
                            const GLfixed *params,
                            ParamCapture *paramCapture)
 {
-    CaptureMemory(params, sizeof(GLfixed), paramCapture);
+    GLsizei size = getLightParamSize(pnamePacked);
+    CaptureMemory(params, sizeof(GLfixed) * size, paramCapture);
 }
 
 void CaptureLoadMatrixf_m(const State &glState,
@@ -221,6 +263,24 @@ void CaptureLoadMatrixx_m(const State &glState,
     UNIMPLEMENTED();
 }
 
+static GLsizei getMaterialParamSize(MaterialParameter pnamePacked)
+{
+    switch (pnamePacked)
+    {
+        case MaterialParameter::Ambient:
+        case MaterialParameter::Diffuse:
+        case MaterialParameter::AmbientAndDiffuse:
+        case MaterialParameter::Specular:
+        case MaterialParameter::Emission:
+            return 4;
+        case MaterialParameter::Shininess:
+            return 1;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 void CaptureMaterialfv_params(const State &glState,
                               bool isCallValid,
                               GLenum face,
@@ -228,7 +288,8 @@ void CaptureMaterialfv_params(const State &glState,
                               const GLfloat *params,
                               ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size = getMaterialParamSize(pnamePacked);
+    CaptureMemory(params, sizeof(GLfloat) * size, paramCapture);
 }
 
 void CaptureMaterialxv_param(const State &glState,
@@ -238,7 +299,8 @@ void CaptureMaterialxv_param(const State &glState,
                              const GLfixed *param,
                              ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLsizei size = getMaterialParamSize(pnamePacked);
+    CaptureMemory(param, sizeof(GLfixed) * size, paramCapture);
 }
 
 void CaptureMultMatrixf_m(const State &glState,
