@@ -15,6 +15,11 @@ cl_int ValidateGetPlatformIDs(cl_uint num_entries,
                               Platform *const *platformsPacked,
                               const cl_uint *num_platforms)
 {
+    if ((num_entries == 0u && platformsPacked != nullptr) ||
+        (platformsPacked == nullptr && num_platforms == nullptr))
+    {
+        return CL_INVALID_VALUE;
+    }
     return CL_SUCCESS;
 }
 
@@ -24,6 +29,15 @@ cl_int ValidateGetPlatformInfo(const Platform *platformPacked,
                                const void *param_value,
                                const size_t *param_value_size_ret)
 {
+    if (!Platform::IsValid(platformPacked))
+    {
+        return CL_INVALID_PLATFORM;
+    }
+    if (param_namePacked == PlatformInfo::InvalidEnum ||
+        (param_value_size == 0u && param_value != nullptr))
+    {
+        return CL_INVALID_VALUE;
+    }
     return CL_SUCCESS;
 }
 
