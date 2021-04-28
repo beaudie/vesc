@@ -13,41 +13,51 @@
 #include <iostream>
 #include <memory>
 
+extern "C" {
+// This exported symbol allows our back end to identify this library
+ANGLE_EXPORT int gANGLE = 0;
+}  // extern "C"
+
 namespace cl
 {
 
 namespace
 {
+
 std::unique_ptr<angle::Library> &EntryPointsLib()
 {
     static angle::base::NoDestructor<std::unique_ptr<angle::Library>> sEntryPointsLib;
     return *sEntryPointsLib;
 }
-}  // anonymous namespace
 
-cl_icd_dispatch &GetDispatch()
+IcdDispatch CreateDispatch()
 {
-    static cl_icd_dispatch *sDispatch = nullptr;
-
-    if (sDispatch == nullptr)
+    EntryPointsLib().reset(
+        angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
+    if (!EntryPointsLib())
     {
-        EntryPointsLib().reset(
-            angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
-        if (EntryPointsLib())
-        {
-            sDispatch = reinterpret_cast<cl_icd_dispatch *>(
-                EntryPointsLib()->getSymbol("gCLIcdDispatchTable"));
-            if (sDispatch == nullptr)
-            {
-                std::cerr << "Error loading CL dispatch table." << std::endl;
-            }
-        }
-        else
-        {
-            std::cerr << "Error opening GLESv2 library." << std::endl;
-        }
+        std::cerr << "Error opening GLESv2 library." << std::endl;
+        return IcdDispatch();
     }
 
+    auto clIcdDispatch = reinterpret_cast<const cl_icd_dispatch *>(
+        EntryPointsLib()->getSymbol("gCLIcdDispatchTable"));
+    if (clIcdDispatch == nullptr)
+    {
+        std::cerr << "Error loading CL dispatch table." << std::endl;
+        return IcdDispatch();
+    }
+
+    return IcdDispatch(*clIcdDispatch,
+                       reinterpret_cast<clIcdGetPlatformIDsKHR_fn>(
+                           clIcdDispatch->clGetExtensionFunctionAddress("clIcdGetPlatformIDsKHR")));
+}
+
+}  // anonymous namespace
+
+const IcdDispatch &GetDispatch()
+{
+    static angle::base::NoDestructor<IcdDispatch> sDispatch(CreateDispatch());
     return *sDispatch;
 }
 

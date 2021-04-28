@@ -18,7 +18,18 @@
 namespace cl
 {
 
-cl_icd_dispatch &GetDispatch();
+struct IcdDispatch : public _cl_icd_dispatch
+{
+    IcdDispatch() = default;
+    explicit IcdDispatch(const _cl_icd_dispatch &clIcdDispatch,
+                         clIcdGetPlatformIDsKHR_fn clIcdGetPlatformIDsKHR)
+        : _cl_icd_dispatch(clIcdDispatch), clIcdGetPlatformIDsKHR(clIcdGetPlatformIDsKHR)
+    {}
+
+    clIcdGetPlatformIDsKHR_fn clIcdGetPlatformIDsKHR;
+};
+
+const IcdDispatch &GetDispatch();
 
 }  // namespace cl
 
