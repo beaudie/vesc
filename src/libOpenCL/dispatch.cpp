@@ -13,6 +13,11 @@
 #include <iostream>
 #include <memory>
 
+extern "C" {
+// This exported symbol allows our back end to identify this library
+ANGLE_EXPORT int gANGLE = 0;
+}  // extern "C"
+
 namespace cl
 {
 
