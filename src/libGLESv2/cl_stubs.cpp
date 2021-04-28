@@ -4,15 +4,75 @@
 // found in the LICENSE file.
 //
 // cl_stubs.cpp: Stubs for CL entry points.
-//
 
 #include "libGLESv2/cl_stubs_autogen.h"
 
+#include "libANGLE/CLPlatform.h"
+#include "libGLESv2/cl_dispatch_table.h"
+
+#ifdef ANGLE_ENABLE_CL_PASSTHROUGH
+#    include "libANGLE/renderer/cl/CLPlatformCL.h"
+#endif
+#ifdef ANGLE_ENABLE_VULKAN
+#    include "libANGLE/renderer/vulkan/CLPlatformVk.h"
+#endif
+
+#include "libANGLE/Debug.h"
+
+#include <cstring>
+
 namespace cl
 {
+
+namespace
+{
+const Platform::List &InitializePlatforms()
+{
+    static bool initialized = false;
+    if (!initialized)
+    {
+        initialized = true;
+
+#ifdef ANGLE_ENABLE_CL_PASSTHROUGH
+        rx::CLPlatformImpl::ImplList implListCL = rx::CLPlatformCL::GetPlatforms();
+        while (!implListCL.empty())
+        {
+            Platform::CreatePlatform(gCLIcdDispatchTable, std::move(implListCL.front()));
+            implListCL.pop_front();
+        }
+#endif
+
+#ifdef ANGLE_ENABLE_VULKAN
+        rx::CLPlatformImpl::ImplList implListVk = rx::CLPlatformVk::GetPlatforms();
+        while (!implListVk.empty())
+        {
+            Platform::CreatePlatform(gCLIcdDispatchTable, std::move(implListVk.front()));
+            implListVk.pop_front();
+        }
+#endif
+    }
+    return Platform::GetPlatforms();
+}
+}  // anonymous namespace
+
 cl_int GetPlatformIDs(cl_uint num_entries, Platform **platforms, cl_uint *num_platforms)
 {
-    return 0;
+    ERR() << std::endl << "ANGLE GetPlatformIDs" << std::endl;
+    const Platform::List &platformList = InitializePlatforms();
+    if (num_platforms != nullptr)
+    {
+        *num_platforms = static_cast<cl_uint>(platformList.size());
+    }
+    if (platforms != nullptr)
+    {
+        cl_uint entry   = 0u;
+        auto platformIt = platformList.cbegin();
+        while (entry < num_entries && platformIt != platformList.cend())
+        {
+            platforms[entry++] = (*platformIt++).get();
+        }
+    }
+    return CL_SUCCESS;
 }
 
 cl_int GetPlatformInfo(Platform *platform,
@@ -21,7 +81,69 @@ cl_int GetPlatformInfo(Platform *platform,
                        void *param_value,
                        size_t *param_value_size_ret)
 {
-    return 0;
+    cl_version version    = 0u;
+    cl_ulong hostTimerRes = 0u;
+    const void *value     = nullptr;
+    size_t value_size     = 0u;
+    switch (param_name)
+    {
+        case PlatformInfo::Profile:
+            value      = platform->getProfile();
+            value_size = std::strlen(platform->getProfile()) + 1u;
+            break;
+        case PlatformInfo::Version:
+            value      = platform->getVersionString();
+            value_size = std::strlen(platform->getVersionString()) + 1u;
+            break;
+        case PlatformInfo::NumericVersion:
+            version    = platform->getVersion();
+            value      = &version;
+            value_size = sizeof(version);
+            break;
+        case PlatformInfo::Name:
+            value      = platform->getName();
+            value_size = std::strlen(platform->getName()) + 1u;
+            break;
+        case PlatformInfo::Vendor:
+            value      = Platform::GetVendor();
+            value_size = std::strlen(Platform::GetVendor()) + 1u;
+            break;
+        case PlatformInfo::Extensions:
+            value      = platform->getExtensions();
+            value_size = std::strlen(platform->getExtensions()) + 1u;
+            break;
+        case PlatformInfo::ExtensionsWithVersion:
+            if (platform->getExtensionsWithVersion().empty())
+            {
+                return CL_INVALID_VALUE;
+            }
+            value      = platform->getExtensionsWithVersion().data();
+            value_size = platform->getExtensionsWithVersion().size() * sizeof(cl_name_version);
+            break;
+        case PlatformInfo::HostTimerResolution:
+            hostTimerRes = platform->getHostTimerResolution();
+            value        = &hostTimerRes;
+            value_size   = sizeof(hostTimerRes);
+            break;
+        default:
+            return CL_INVALID_VALUE;
+    }
+    if (param_value != nullptr)
+    {
+        if (param_value_size < value_size)
+        {
+            return CL_INVALID_VALUE;
+        }
+        if (value != nullptr)
+        {
+            std::memcpy(param_value, value, value_size);
+        }
+    }
+    if (param_value_size_ret != nullptr)
+    {
+        *param_value_size_ret = value_size;
+    }
+    return CL_SUCCESS;
 }
 
 cl_int GetDeviceIDs(Platform *platform,
@@ -1013,4 +1135,5 @@ cl_int EnqueueTask(CommandQueue *command_queue,
 {
     return 0;
 }
+
 }  // namespace cl
