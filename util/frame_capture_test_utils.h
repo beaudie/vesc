@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "common/angleutils.h"
+#include "common/debug.h"
 #include "common/system_utils.h"
 
 #define USE_SYSTEM_ZLIB

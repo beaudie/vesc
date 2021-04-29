@@ -480,6 +480,9 @@ template("angle_trace_fixture") {
       public_deps += invoker.public_deps
     }
     include_dirs = [ "." ]
+    if (defined(invoker.include_dirs)) {
+      include_dirs += invoker.include_dirs
+    }
     public_configs = [ ":${_config_name}" ]
     if (defined(invoker.public_configs)) {
       public_configs += invoker.public_configs

@@ -15,17 +15,6 @@
 // This will expand to "angle_capture_context<#>.h"
 #include ANGLE_MACRO_STRINGIZE(ANGLE_CAPTURE_REPLAY_SAMPLE_HEADER)
 
-// Assign the context numbered functions based on GN arg selecting replay ID
-std::function<void()> SetupContextReplay = reinterpret_cast<void (*)()>(
-    ANGLE_MACRO_CONCAT(SetupContext,
-                       ANGLE_MACRO_CONCAT(ANGLE_CAPTURE_REPLAY_SAMPLE_CONTEXT_ID, Replay)));
-std::function<void(int)> ReplayContextFrame = reinterpret_cast<void (*)(int)>(
-    ANGLE_MACRO_CONCAT(ReplayContext,
-                       ANGLE_MACRO_CONCAT(ANGLE_CAPTURE_REPLAY_SAMPLE_CONTEXT_ID, Frame)));
-std::function<void()> ResetContextReplay = reinterpret_cast<void (*)()>(
-    ANGLE_MACRO_CONCAT(ResetContext,
-                       ANGLE_MACRO_CONCAT(ANGLE_CAPTURE_REPLAY_SAMPLE_CONTEXT_ID, Replay)));
-
 class CaptureReplaySample : public SampleApplication
 {
   public:
@@ -45,16 +34,19 @@ class CaptureReplaySample : public SampleApplication
         std::string exeDir = angle::GetExecutableDirectory();
         if (!angle::SetCWD(exeDir.c_str()))
             return false;
+
+        mTraceLibrary.reset(new angle::TraceLibrary("capture_replay_sample"));
+
         if (kIsBinaryDataCompressed)
         {
-            SetBinaryDataDecompressCallback(angle::DecompressBinaryData);
+            mTraceLibrary->setBinaryDataDecompressCallback(angle::DecompressBinaryData);
         }
-        SetBinaryDataDir(ANGLE_CAPTURE_REPLAY_SAMPLE_DATA_DIR);
-        SetupContextReplay();
+        mTraceLibrary->setBinaryDataDir(ANGLE_CAPTURE_REPLAY_SAMPLE_DATA_DIR);
+        mTraceLibrary->setupReplay();
         return true;
     }
 
-    void destroy() override {}
+    void destroy() override { mTraceLibrary.reset(nullptr); }
 
     void draw() override
     {
@@ -63,9 +55,9 @@ class CaptureReplaySample : public SampleApplication
             kReplayFrameStart + (mCurrentFrame % ((kReplayFrameEnd - kReplayFrameStart) + 1));
         if (mPreviousFrame > frame)
         {
-            ResetContextReplay();
+            mTraceLibrary->resetReplay();
         }
-        ReplayContextFrame(frame);
+        mTraceLibrary->replayFrame(frame);
         mPreviousFrame = frame;
         mCurrentFrame++;
     }
@@ -73,6 +65,7 @@ class CaptureReplaySample : public SampleApplication
   private:
     uint32_t mCurrentFrame  = 0;
     uint32_t mPreviousFrame = 0;
+    std::unique_ptr<angle::TraceLibrary> mTraceLibrary;
 };
 
 int main(int argc, char **argv)
