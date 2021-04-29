@@ -260,7 +260,8 @@ const char *DisplayVk::getWSILayer() const
     return nullptr;
 }
 
-bool DisplayVk::isUsingSwapchain() const {
+bool DisplayVk::isUsingSwapchain() const
+{
     return true;
 }
 

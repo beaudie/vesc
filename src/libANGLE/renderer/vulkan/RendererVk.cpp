@@ -928,7 +928,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     vk::ExtensionNameList enabledInstanceExtensions;
     if (displayVk->isUsingSwapchain())
     {
-            enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+        enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
     }
 
     if (wsiExtension)

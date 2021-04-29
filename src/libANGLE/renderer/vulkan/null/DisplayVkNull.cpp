@@ -30,11 +30,13 @@ SurfaceImpl *DisplayVkNull::createWindowSurfaceVk(const egl::SurfaceState &state
     return new WindowSurfaceVkNull(state, window);
 }
 
-const char *DisplayVkNull::getWSIExtension() const {
+const char *DisplayVkNull::getWSIExtension() const
+{
     return nullptr;
 }
 
-bool DisplayVkNull::isUsingSwapchain() const {
+bool DisplayVkNull::isUsingSwapchain() const
+{
     return false;
 }
 
