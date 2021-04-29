@@ -1708,17 +1708,35 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         vk::AddToPNextChain(&createInfo, &mMultisampledRenderToSingleSampledFeatures);
     }
 
-    if (mMemoryReportFeatures.deviceMemoryReport &&
-        (getFeatures().logMemoryReportCallbacks.enabled ||
-         getFeatures().logMemoryReportStats.enabled))
+    if (getFeatures().logMemoryReportCallbacks.enabled ||
+        getFeatures().logMemoryReportStats.enabled)
     {
-        enabledDeviceExtensions.push_back(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME);
+        if (mMemoryReportFeatures.deviceMemoryReport)
+        {
+            enabledDeviceExtensions.push_back(VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME);
 
-        mMemoryReportCallback       = {};
-        mMemoryReportCallback.sType = VK_STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT;
-        mMemoryReportCallback.pfnUserCallback = &MemoryReportCallback;
-        mMemoryReportCallback.pUserData       = this;
-        vk::AddToPNextChain(&createInfo, &mMemoryReportCallback);
+            mMemoryReportCallback = {};
+            mMemoryReportCallback.sType =
+                VK_STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT;
+            mMemoryReportCallback.pfnUserCallback = &MemoryReportCallback;
+            mMemoryReportCallback.pUserData       = this;
+            vk::AddToPNextChain(&createInfo, &mMemoryReportCallback);
+        }
+        else
+        {
+            if (getFeatures().logMemoryReportStats.enabled)
+            {
+                WARN() << "logMemoryReportStats ";
+            }
+            if (getFeatures().logMemoryReportCallbacks.enabled)
+            {
+                WARN() << "logMemoryReportCallbacks ";
+            }
+            WARN() << "feature(s) is enabled, but driver does not support "
+                      "VK_EXT_DEVICE_MEMORY_REPORT_EXTENSION. Disabling the feature(s) now.";
+            ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportCallbacks, false);
+            ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportStats, false);
+        }
     }
 
     if (getFeatures().supportsExternalMemoryHost.enabled)
