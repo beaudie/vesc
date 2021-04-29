@@ -4066,7 +4066,25 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
             }
             else
             {
-                index = call.params.getClientArrayPointerParameter().arrayClientPointerIndex;
+                gl::ClientVertexArrayType type;
+                switch (call.entryPoint)
+                {
+                    case EntryPoint::GLColorPointer:
+                        type = gl::ClientVertexArrayType::Color;
+                        break;
+                    case EntryPoint::GLTexCoordPointer:
+                        type = gl::ClientVertexArrayType::TextureCoord;
+                        break;
+                    case EntryPoint::GLNormalPointer:
+                        type = gl::ClientVertexArrayType::Normal;
+                        break;
+                    case EntryPoint::GLPointSizePointerOES:
+                        type = gl::ClientVertexArrayType::PointSize;
+                        break;
+                    default:
+                        type = gl::ClientVertexArrayType::Vertex;
+                }
+                index = gl::GLES1Renderer::VertexArrayIndex(type, context->getState().gles1());
             }
 
             if (call.params.hasClientArrayData())
@@ -5060,8 +5078,11 @@ void CaptureVertexPointerGLES1(const gl::State &glState,
                                ParamCapture *paramCapture)
 {
     paramCapture->value.voidConstPointerVal = pointer;
-    paramCapture->arrayClientPointerIndex =
-        gl::GLES1Renderer::VertexArrayIndex(type, glState.gles1());
+    if (!glState.getTargetBuffer(gl::BufferBinding::Array))
+    {
+        paramCapture->arrayClientPointerIndex =
+            gl::GLES1Renderer::VertexArrayIndex(type, glState.gles1());
+    }
 }
 
 gl::Program *GetProgramForCapture(const gl::State &glState, gl::ShaderProgramID handle)
