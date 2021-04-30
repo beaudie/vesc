@@ -17,7 +17,6 @@ root_targets = [
     "//:libGLESv2",
     "//:libGLESv1_CM",
     "//:libEGL",
-    "//:libfeature_support",
 ]
 
 sdk_version = '28'
