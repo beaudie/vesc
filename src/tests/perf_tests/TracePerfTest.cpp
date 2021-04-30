@@ -1186,6 +1186,7 @@ void TracePerfTest::drawBenchmark()
         else
         {
             mOffscreenFrameCount++;
+            glFlush();
         }
 
         if (scissorTest)
