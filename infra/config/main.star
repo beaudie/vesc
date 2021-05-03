@@ -10,9 +10,9 @@ lucicfg.config(fail_on_warnings = True)
 
 # Enable LUCI Realms support.
 lucicfg.enable_experiment("crbug.com/1085650")
-# Launch 0% of Swarming tasks for builds in "realms-aware mode"
+# Launch 5% of Swarming tasks for builds in "realms-aware mode"
 # TODO(https://crbug.com/1204972): ramp up to 100%.
-# luci.builder.defaults.experiments.set({"luci.use_realms": 0})
+luci.builder.defaults.experiments.set({"luci.use_realms": 5})
 
 luci.project(
     name = "angle",
