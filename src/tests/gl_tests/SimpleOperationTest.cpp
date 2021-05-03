@@ -6,6 +6,8 @@
 // SimpleOperationTest:
 //   Basic GL commands such as linking a program, initializing a buffer, etc.
 
+// Comment change to triger tests.
+
 #include "test_utils/ANGLETest.h"
 
 #include <vector>
