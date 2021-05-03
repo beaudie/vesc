@@ -219,7 +219,7 @@ angle::Result InputLayoutCache::createInputLayout(
 
         angle::FormatID vertexFormatID =
             gl::GetVertexFormatID(*attrib.attribute, attrib.currentValueType);
-        const auto &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormatID, featureLevel);
+        const auto vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormatID, featureLevel);
 
         auto *inputElement = &inputElements[inputElementCount];
 

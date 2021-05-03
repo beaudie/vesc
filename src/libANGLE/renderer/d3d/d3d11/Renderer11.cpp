@@ -3915,7 +3915,7 @@ VertexConversionType Renderer11::getVertexConversionType(angle::FormatID vertexF
 
 GLenum Renderer11::getVertexComponentType(angle::FormatID vertexFormatID) const
 {
-    const auto &format =
+    const auto format =
         d3d11::GetVertexFormatInfo(vertexFormatID, mRenderer11DeviceCaps.featureLevel);
     return d3d11::GetComponentType(format.nativeFormat);
 }
@@ -3951,7 +3951,7 @@ angle::Result Renderer11::getVertexSpaceRequired(const gl::Context *context,
     ASSERT(elementCount > 0);
 
     const D3D_FEATURE_LEVEL featureLevel = mRenderer11DeviceCaps.featureLevel;
-    const d3d11::VertexFormat &vertexFormatInfo =
+    const d3d11::VertexFormat vertexFormatInfo =
         d3d11::GetVertexFormatInfo(attrib.format->id, featureLevel);
     const d3d11::DXGIFormatSize &dxgiFormatInfo =
         d3d11::GetDXGIFormatSizeInfo(vertexFormatInfo.nativeFormat);

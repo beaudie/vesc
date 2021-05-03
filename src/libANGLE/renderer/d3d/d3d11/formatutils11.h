@@ -43,7 +43,7 @@ struct DXGIFormatSize
 };
 const DXGIFormatSize &GetDXGIFormatSizeInfo(DXGI_FORMAT format);
 
-struct VertexFormat : private angle::NonCopyable
+struct VertexFormat
 {
     constexpr VertexFormat();
     constexpr VertexFormat(VertexConversionType conversionType,
@@ -55,8 +55,8 @@ struct VertexFormat : private angle::NonCopyable
     VertexCopyFunction copyFunction;
 };
 
-const VertexFormat &GetVertexFormatInfo(angle::FormatID vertexFormatID,
-                                        D3D_FEATURE_LEVEL featureLevel);
+const VertexFormat GetVertexFormatInfo(angle::FormatID vertexFormatID,
+                                       D3D_FEATURE_LEVEL featureLevel);
 }  // namespace d3d11
 
 }  // namespace rx
