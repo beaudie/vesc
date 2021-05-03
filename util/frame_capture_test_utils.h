@@ -77,6 +77,8 @@ class TraceLibrary
 #endif  // defined(ANGLE_PLATFORM_ANDROID) && defined(COMPONENT_BUILD)
         std::string traceName = traceNameStr.str();
         mTraceLibrary.reset(OpenSharedLibrary(traceName.c_str(), SearchType::ApplicationDir));
+        if (!mTraceLibrary)
+            mTraceLibrary.reset(OpenSharedLibrary(traceName.c_str(), SearchType::SystemDir));
     }
 
     bool valid() const { return mTraceLibrary != nullptr; }
