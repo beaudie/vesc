@@ -74,6 +74,9 @@ enum ShShaderOutput
 
     // Output SPIR-V to be cross compiled to Metal.
     SH_SPIRV_METAL_OUTPUT = 0x8B4C,
+
+    // Output for MSL
+    SH_MSL_METAL_OUTPUT = 0x8B4D,
 };
 
 // Compile options.

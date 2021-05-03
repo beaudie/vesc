@@ -42,10 +42,11 @@ const char kRasterizerDiscardEnabledConstName[] = "ANGLERasterizerDisabled";
 namespace
 {
 // Metal specific driver uniforms
-constexpr const char kHalfRenderArea[] = "halfRenderArea";
-constexpr const char kFlipXY[]         = "flipXY";
-constexpr const char kNegFlipXY[]      = "negFlipXY";
-constexpr const char kCoverageMask[]   = "coverageMask";
+constexpr const char kDiscardWrapperFuncName[] = "DiscardWrapper";
+constexpr const char kHalfRenderArea[]         = "halfRenderArea";
+constexpr const char kFlipXY[]                 = "flipXY";
+constexpr const char kNegFlipXY[]              = "negFlipXY";
+constexpr const char kCoverageMask[]           = "coverageMask";
 
 constexpr ImmutableString kSampleMaskWriteFuncName = ImmutableString("ANGLEWriteSampleMask");
 
@@ -213,6 +214,15 @@ bool TranslatorMetal::translate(TIntermBlock *root,
     }
     else if (getShaderType() == GL_FRAGMENT_SHADER)
     {
+        // For non void MSL fragment functions replace discard
+        // with ANGLEDiscardWrapper()
+        if (mOutputVariables.size() > 0)
+        {
+            if (!replaceAllMainDiscardUses(root))
+            {
+                return false;
+            }
+        }
         if (!insertSampleMaskWritingLogic(sink, root, &driverUniforms))
         {
             return false;
@@ -387,6 +397,81 @@ ANGLE_NO_DISCARD bool TranslatorMetal::insertRasterizerDiscardLogic(TInfoSinkBas
     TIntermIfElse *ifCall         = new TIntermIfElse(discardEnabled, discardBlock, nullptr);
 
     return RunAtTheEndOfShader(this, root, ifCall, symbolTable);
+}
+
+// If the MSL fragment shader is non-void, we need to ensure
+// that there is a return at the end. The MSL compiler
+// will error out if there's no return at the end, even if all
+// paths lead to discard_fragment(). So wrap discard in a wrapper function.
+// Fixes dEQP-GLES3.functional.shaders.discard.basic_always
+ANGLE_NO_DISCARD bool TranslatorMetal::replaceAllMainDiscardUses(TIntermBlock *root)
+{
+    // before
+    // void main (void)
+    // {
+    //     o_color = v_color;
+    //     discard;
+    // }
+
+    // after
+    // void ANGLEDiscardWrapper()
+    // {
+    //    discard;
+    // }
+    // void main (void)
+    // {
+    //     o_color = v_color;
+    //     ANGLEDiscardWrapper();
+    // }
+
+    TIntermFunctionDefinition *main   = FindMain(root);
+    TIntermBlock *mainBody            = main->getBody();
+    TIntermSequence *functionSequence = mainBody->getSequence();
+    TIntermAggregate *discardFunc     = nullptr;
+    // Iterate over all branches in main function, and replace all uses
+    // of discard with ANGLEDiscardWrapper().
+    for (size_t index = 0; index < functionSequence->size(); ++index)
+    {
+        TIntermNode *functionNode = (*functionSequence)[index];
+        TIntermBranch *branchNode = functionNode->getAsBranchNode();
+        if (branchNode != nullptr)
+        {
+            if (branchNode->getFlowOp() == EOpKill)
+            {
+                if (discardFunc == nullptr)
+                {
+                    discardFunc = createDiscardWrapperFunc(root);
+                }
+                bool replaced = mainBody->replaceChildNode(branchNode, discardFunc);
+                if (!replaced)
+                {
+                    return false;
+                }
+            }
+        }
+    }
+    return validateAST(root);
+}
+
+// Create discard_wrapper function to ensure that SPIRV-Cross will always have a return at the end
+// of fragment shaders
+ANGLE_NO_DISCARD TIntermAggregate *TranslatorMetal::createDiscardWrapperFunc(TIntermBlock *root)
+{
+    TInfoSinkBase &sink       = getInfoSink().obj;
+    TSymbolTable *symbolTable = &getSymbolTable();
+
+    sink << "void " << kDiscardWrapperFuncName << "()\n";
+    sink << "{\n";
+    sink << "   discard;\n";
+    sink << "}\n";
+
+    TFunction *discardWrapperFunc =
+        new TFunction(symbolTable, ImmutableString(kDiscardWrapperFuncName),
+                      SymbolType::AngleInternal, StaticType::GetBasic<EbtVoid>(), true);
+
+    TIntermAggregate *callDiscardWrapperFunc =
+        TIntermAggregate::CreateFunctionCall(*discardWrapperFunc, new TIntermSequence());
+    return callDiscardWrapperFunc;
 }
 
 }  // namespace sh
