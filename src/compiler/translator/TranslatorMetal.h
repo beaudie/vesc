@@ -56,6 +56,9 @@ class TranslatorMetal : public TranslatorVulkan
   public:
     TranslatorMetal(sh::GLenum type, ShShaderSpec spec);
 
+    static const char *GetCoverageMaskEnabledConstName();
+    static const char *GetRasterizationDiscardEnabledConstName();
+
   protected:
     ANGLE_NO_DISCARD bool translate(TIntermBlock *root,
                                     ShCompileOptions compileOptions,
@@ -69,6 +72,10 @@ class TranslatorMetal : public TranslatorVulkan
                                                        TIntermBlock *root,
                                                        const DriverUniformMetal *driverUniforms);
     ANGLE_NO_DISCARD bool insertRasterizerDiscardLogic(TInfoSinkBase &sink, TIntermBlock *root);
+
+    ANGLE_NO_DISCARD bool replaceAllMainDiscardUses(TIntermBlock *root);
+
+    ANGLE_NO_DISCARD TIntermAggregate *createDiscardWrapperFunc(TIntermBlock *root);
 };
 
 }  // namespace sh
