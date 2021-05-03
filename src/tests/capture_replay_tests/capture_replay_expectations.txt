@@ -13,28 +13,13 @@ FramebufferTest.MultiContextNoRenderingFeedbackLoops/*
 PbufferTest.BindTexImage/*
 PbufferTest.Clearing/*
 PbufferTest.TextureSizeReset/*
-SimpleStateChangeTest.DrawAndClearTextureRepeatedly/*
-SimpleStateChangeTest.RebindTranslatedAttribute/*
 WebGL2ReadOutsideFramebufferTest.CopyTexSubImage3D/*
 WebGLDrawElementsTest.DrawElementsTypeAlignment/*
 WebGLGLSLTest.*
 WebGLReadOutsideFramebufferTest.*
 
-# Has undefined framebuffer pixels. This fails comparison checks.
-SimpleOperationTest.ClearAndSwap/*
-SimpleOperationTest.DrawQuadAndSwap/*
-
 # Crashed tests
-BlendMinMaxTest.*
-BlitFramebufferANGLETest.*
-BufferDataTest.*
 ClipDistanceTest.*
-ColorMaskTest.*
-CopyCompressedTextureTest.InternalFormat/*
-DebugMarkerTest.*
-DebugTest.*
-DepthStencilTest.*
-DrawBuffersTest.*
 EGLPrintEGLinfoTest.PrintGLESCapabilities/*
 EGLStreamTest.*
 ExternalWrapTest.*
