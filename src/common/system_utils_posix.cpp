@@ -72,7 +72,11 @@ std::string GetHelperExecutableDir()
 class PosixLibrary : public Library
 {
   public:
-    PosixLibrary(const std::string &fullPath) : mModule(dlopen(fullPath.c_str(), RTLD_NOW)) {}
+    static PosixLibrary *load(const std::string &fullPath)
+    {
+        void *module = dlopen(fullPath.c_str(), RTLD_NOW);
+        return module ? new PosixLibrary(module) : nullptr;
+    }
 
     ~PosixLibrary() override
     {
@@ -95,6 +99,8 @@ class PosixLibrary : public Library
     void *getNative() const override { return mModule; }
 
   private:
+    PosixLibrary(void *module) : mModule(module) {}
+
     void *mModule = nullptr;
 };
 
@@ -116,12 +122,12 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
     // On iOS, dlopen needs a suffix on the framework name to work.
     fullPath = fullPath + "/" + libraryName;
 #endif
-    return new PosixLibrary(fullPath);
+    return PosixLibrary::load(fullPath);
 }
 
 Library *OpenSharedLibraryWithExtension(const char *libraryName)
 {
-    return new PosixLibrary(libraryName);
+    return PosixLibrary::load(libraryName);
 }
 
 bool IsDirectory(const char *filename)
