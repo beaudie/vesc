@@ -105,17 +105,13 @@ ANDROID_DEPS_END = r'=== ANDROID_DEPS Generated Code End ==='
 # Location of automically gathered android deps.
 ANDROID_DEPS_PATH = 'src/third_party/android_deps/'
 
-# TODO(jmadill): Update this with ANGLE wrangler. http://anglebug.com/4059
-NOTIFY_EMAIL = 'jmadill@chromium.org'
+NOTIFY_EMAIL = 'angle-wrangler@grotations.appspotmail.com'
 
+CLANG_TOOLS_URL = 'https://chromium.googlesource.com/chromium/src/tools/clang'
+CLANG_FILE_TEMPLATE = CLANG_TOOLS_URL + '/+/%s/%s'
 
-def add_depot_tools_to_path():
-    sys.path.append(os.path.join(CHECKOUT_SRC_DIR, 'build'))
-    import find_depot_tools
-    find_depot_tools.add_depot_tools_to_path()
-
-
-CLANG_UPDATE_SCRIPT_URL_PATH = 'tools/clang/scripts/update.py'
+CLANG_TOOLS_PATH = 'tools/clang'
+CLANG_UPDATE_SCRIPT_URL_PATH = 'scripts/update.py'
 CLANG_UPDATE_SCRIPT_LOCAL_PATH = os.path.join(CHECKOUT_SRC_DIR, 'tools', 'clang', 'scripts',
                                               'update.py')
 
@@ -127,6 +123,12 @@ ChangedCipdPackage = collections.namedtuple('ChangedCipdPackage',
 
 ChromiumRevisionUpdate = collections.namedtuple('ChromiumRevisionUpdate', ('current_chromium_rev '
                                                                            'new_chromium_rev '))
+
+
+def AddDepotToolsToPath():
+    sys.path.append(os.path.join(CHECKOUT_SRC_DIR, 'build'))
+    import find_depot_tools
+    find_depot_tools.add_depot_tools_to_path()
 
 
 class RollError(Exception):
@@ -226,6 +228,7 @@ def _GetBranches():
 def _ReadGitilesContent(url):
     # Download and decode BASE64 content until
     # https://code.google.com/p/gitiles/issues/detail?id=7 is fixed.
+    logging.debug('Reading gitiles URL %s' % url)
     base64_content = ReadUrlContent(url + '?format=TEXT')
     return base64.b64decode(base64_content[0])
 
@@ -238,6 +241,11 @@ def ReadRemoteCrFile(path_below_src, revision):
 def ReadRemoteCrCommit(revision):
     """Reads a remote Chromium commit message. Returns a string."""
     return _ReadGitilesContent(CHROMIUM_COMMIT_TEMPLATE % revision)
+
+
+def ReadRemoteClangFile(path_below_src, revision):
+    """Reads a remote Chromium file of a specific revision. Returns a string."""
+    return _ReadGitilesContent(CLANG_FILE_TEMPLATE % (revision, path_below_src))
 
 
 def ReadUrlContent(url):
@@ -384,7 +392,13 @@ def CalculateChangedDeps(angle_deps, new_cr_deps):
     return sorted(result)
 
 
-def CalculateChangedClang(cur_cr_rev, new_cr_rev, autoroll):
+def CalculateChangedClang(changed_deps, autoroll):
+
+    clang_change = [change for change in changed_deps if change.path == CLANG_TOOLS_PATH]
+    if not clang_change:
+        return None
+
+    clang_change = clang_change[0]
 
     def GetClangRev(lines):
         for line in lines:
@@ -393,19 +407,16 @@ def CalculateChangedClang(cur_cr_rev, new_cr_rev, autoroll):
                 return match.group(1)
         raise RollError('Could not parse Clang revision!')
 
-    # We don't have locally sync'ed deps on autoroller
-    if not autoroll:
-        with open(CLANG_UPDATE_SCRIPT_LOCAL_PATH, 'rb') as f:
-            current_lines = f.readlines()
-        current_rev = GetClangRev(current_lines)
-    else:
-        cur_clang_update_py = ReadRemoteCrFile(CLANG_UPDATE_SCRIPT_URL_PATH,
-                                               cur_cr_rev).splitlines()
-        current_rev = GetClangRev(cur_clang_update_py)
+    old_clang_update_py = ReadRemoteClangFile(CLANG_UPDATE_SCRIPT_URL_PATH,
+                                              clang_change.current_rev).splitlines()
+    old_clang_rev = GetClangRev(old_clang_update_py)
+    logging.debug('Found old clang rev: %s' % old_clang_rev)
 
-    new_clang_update_py = ReadRemoteCrFile(CLANG_UPDATE_SCRIPT_URL_PATH, new_cr_rev).splitlines()
-    new_rev = GetClangRev(new_clang_update_py)
-    return ChangedDep(CLANG_UPDATE_SCRIPT_LOCAL_PATH, None, current_rev, new_rev)
+    new_clang_update_py = ReadRemoteClangFile(CLANG_UPDATE_SCRIPT_URL_PATH,
+                                              clang_change.new_rev).splitlines()
+    new_clang_rev = GetClangRev(new_clang_update_py)
+    logging.debug('Found new clang rev: %s' % new_clang_rev)
+    return ChangedDep(CLANG_UPDATE_SCRIPT_LOCAL_PATH, None, old_clang_rev, new_clang_rev)
 
 
 def GenerateCommitMessage(
@@ -457,7 +468,8 @@ def GenerateCommitMessage(
     if clang_change and clang_change.current_rev != clang_change.new_rev:
         commit_msg.append('Clang version changed %s:%s' %
                           (clang_change.current_rev, clang_change.new_rev))
-        change_url = CHROMIUM_FILE_TEMPLATE % (rev_interval, CLANG_UPDATE_SCRIPT_URL_PATH)
+        change_url = CHROMIUM_FILE_TEMPLATE % (rev_interval, CLANG_TOOLS_PATH + '/' +
+                                               CLANG_UPDATE_SCRIPT_URL_PATH)
         commit_msg.append('Details: %s\n' % change_url)
     else:
         commit_msg.append('No update to Clang.\n')
@@ -694,7 +706,7 @@ def main():
     # We don't have locally sync'ed deps on autoroller,
     # so trust it to have depot_tools in path
     if not opts.autoroll:
-        add_depot_tools_to_path()
+        AddDepotToolsToPath()
 
     if not opts.ignore_unclean_workdir and not _IsTreeClean():
         logging.error('Please clean your local checkout first.')
@@ -717,8 +729,7 @@ def main():
     new_cr_content = ReadRemoteCrFile('DEPS', rev_update.new_chromium_rev)
     new_cr_deps = ParseDepsDict(new_cr_content)
     changed_deps = CalculateChangedDeps(angle_deps, new_cr_deps)
-    clang_change = CalculateChangedClang(rev_update.current_chromium_rev,
-                                         rev_update.new_chromium_rev, opts.autoroll)
+    clang_change = CalculateChangedClang(changed_deps, opts.autoroll)
     commit_msg = GenerateCommitMessage(
         rev_update,
         current_commit_pos,
