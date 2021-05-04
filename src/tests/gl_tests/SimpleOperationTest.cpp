@@ -317,7 +317,8 @@ TEST_P(SimpleOperationTest, DrawQuad)
 
     ASSERT_GL_NO_ERROR();
 
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    // Intentional test failure for testing.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
 // Simple quad test with data in client memory, not vertex buffer.
