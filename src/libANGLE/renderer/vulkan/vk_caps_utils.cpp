@@ -879,6 +879,12 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.shaderFramebufferFetchNonCoherentEXT =
         mNativeCaps.maxDrawBuffers >= gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
 
+    // Enable GL_EXT_shader_framebuffer_fetch if supporting BOTH non-conformant extensions AND
+    // GL_EXT_shader_framebuffer_fetch_non_coherent
+    mNativeExtensions.shaderFramebufferFetchEXT =
+        mNativeExtensions.shaderFramebufferFetchNonCoherentEXT &&
+        mNativeExtensions.shaderFramebufferFetchNonCoherentEXT;
+
     // Enable Program Binary extension.
     mNativeExtensions.getProgramBinaryOES = true;
     mNativeCaps.programBinaryFormats.push_back(GL_PROGRAM_BINARY_ANGLE);
