@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e3660ef_9f91c77d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-05-05T19:13:21Z",
+      "side": 1,
+      "message": "The reland should declare is_chromeos_lacros in gni/angle.gni in the else block of `if (has_angle_build)`. See for example how is_apple is defined there. I\u0027d do it, except I have no idea how to determine if it\u0027s a lacros build based on the variables that are available.",
+      "revId": "dfa62b45976616056f3f8d66b52b9d3b407c981e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
