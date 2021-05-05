@@ -52,12 +52,9 @@ namespace
     !defined(ANGLE_PLATFORM_GGP)
 const std::string WrapICDEnvironment(const char *icdEnvironment)
 {
-#    if defined(ANGLE_PLATFORM_APPLE)
-    // On MacOS the libraries are bundled into the application directory
-    std::string ret = angle::GetHelperExecutableDir() + icdEnvironment;
+    // The libraries are bundled into the module directory
+    std::string ret = angle::GetModuleDirectory() + icdEnvironment;
     return ret;
-#    endif  // defined(ANGLE_PLATFORM_APPLE)
-    return icdEnvironment;
 }
 
 constexpr char kLoaderLayersPathEnv[] = "VK_LAYER_PATH";
@@ -107,7 +104,7 @@ ICDFilterFunc GetFilterForICD(vk::ICD preferredICD)
 }  // namespace
 
 // If we're loading the validation layers, we could be running from any random directory.
-// Change to the executable directory so we can find the layers, then change back to the
+// Change to the module directory so we can find the layers, then change back to the
 // previous directory to be safe we don't disrupt the application.
 ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers, vk::ICD icd)
     : mEnableValidationLayers(enableValidationLayers),
@@ -147,9 +144,9 @@ ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers
         }
         else
         {
-            mPreviousCWD       = cwd.value();
-            std::string exeDir = angle::GetExecutableDirectory();
-            mChangedCWD        = angle::SetCWD(exeDir.c_str());
+            mPreviousCWD          = cwd.value();
+            std::string moduleDir = angle::GetModuleDirectory();
+            mChangedCWD           = angle::SetCWD(moduleDir.c_str());
             if (!mChangedCWD)
             {
                 ERR() << "Error setting CWD for Vulkan layers init.";
