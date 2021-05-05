@@ -52,12 +52,9 @@ namespace
     !defined(ANGLE_PLATFORM_GGP)
 const std::string WrapICDEnvironment(const char *icdEnvironment)
 {
-#    if defined(ANGLE_PLATFORM_APPLE)
-    // On MacOS the libraries are bundled into the application directory
-    std::string ret = angle::GetHelperExecutableDir() + icdEnvironment;
+    // The libraries are bundled into the module directory
+    std::string ret = angle::GetModuleDirectory() + icdEnvironment;
     return ret;
-#    endif  // defined(ANGLE_PLATFORM_APPLE)
-    return icdEnvironment;
 }
 
 constexpr char kLoaderLayersPathEnv[] = "VK_LAYER_PATH";
