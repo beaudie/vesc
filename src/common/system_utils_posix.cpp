@@ -56,7 +56,7 @@ const char *GetPathSeparatorForEnvironmentVar()
     return ":";
 }
 
-std::string GetHelperExecutableDir()
+std::string GetModuleDirectory()
 {
     std::string directory;
     static int placeholderSymbol = 0;
