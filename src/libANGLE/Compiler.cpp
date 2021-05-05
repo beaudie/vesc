@@ -151,6 +151,10 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     // GL_EXT_YUV_target
     mResources.EXT_YUV_target = extensions.yuvTargetEXT;
 
+    // GL_EXT_shader_framebuffer_fetch
+    mResources.EXT_shader_framebuffer_fetch = extensions.shaderFramebufferFetchEXT;
+
+    // GL_EXT_shader_framebuffer_fetch_non_coherent
     mResources.EXT_shader_framebuffer_fetch_non_coherent =
         extensions.shaderFramebufferFetchNonCoherentEXT;
 

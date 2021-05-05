@@ -4737,8 +4737,8 @@ class BuiltInId
     static constexpr const TSymbolUniqueId gl_SecondaryFragColorEXT     = TSymbolUniqueId(2920);
     static constexpr const TSymbolUniqueId gl_SecondaryFragDataEXT      = TSymbolUniqueId(2921);
     static constexpr const TSymbolUniqueId gl_FragDepthEXT              = TSymbolUniqueId(2922);
-    static constexpr const TSymbolUniqueId gl_LastFragData              = TSymbolUniqueId(2923);
-    static constexpr const TSymbolUniqueId gl_LastFragDataNonCoherent   = TSymbolUniqueId(2924);
+    static constexpr const TSymbolUniqueId gl_LastFragDataNonCoherent   = TSymbolUniqueId(2923);
+    static constexpr const TSymbolUniqueId gl_LastFragData              = TSymbolUniqueId(2924);
     static constexpr const TSymbolUniqueId gl_LastFragColor             = TSymbolUniqueId(2925);
     static constexpr const TSymbolUniqueId gl_LastFragDataNV            = TSymbolUniqueId(2926);
     static constexpr const TSymbolUniqueId gl_LastFragColorARM          = TSymbolUniqueId(2927);
