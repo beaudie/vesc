@@ -1221,6 +1221,7 @@ class CommandBufferHelper : angle::NonCopyable
                                   bool isResolveImage);
     void finalizeDepthStencilImageLayout(Context *context);
     void finalizeDepthStencilResolveImageLayout(Context *context);
+    void finalizeDepthStencilLoadStore(Context *context);
 
     void updateImageLayoutAndBarrier(Context *context,
                                      ImageHelper *image,
