@@ -455,6 +455,24 @@ int GLES1Renderer::VertexArrayIndex(ClientVertexArrayType type, const GLES1State
 }
 
 // static
+ClientVertexArrayType GLES1Renderer::VertexArrayType(int attribIndex)
+{
+    switch (attribIndex)
+    {
+        case kVertexAttribIndex:
+            return ClientVertexArrayType::Vertex;
+        case kNormalAttribIndex:
+            return ClientVertexArrayType::Normal;
+        case kColorAttribIndex:
+            return ClientVertexArrayType::Color;
+        case kPointSizeAttribIndex:
+            return ClientVertexArrayType::PointSize;
+        default:
+            return ClientVertexArrayType::TextureCoord;
+    }
+}
+
+// static
 int GLES1Renderer::TexCoordArrayIndex(unsigned int unit)
 {
     return kTextureCoordAttribIndexBase + unit;
