@@ -7,6 +7,8 @@
 //   Base class for google test performance tests
 //
 
+// Comment change.
+
 #include "ANGLEPerfTest.h"
 
 #include "ANGLEPerfTestArgs.h"
