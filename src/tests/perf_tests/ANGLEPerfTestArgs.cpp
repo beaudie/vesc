@@ -22,6 +22,7 @@ const char *gScreenShotDir     = nullptr;
 bool gVerboseLogging           = false;
 double gCalibrationTimeSeconds = 1.0;
 double gMaxTestSeconds         = 10.0;
+double gFixedTestSeconds       = 0.0;
 int gTestTrials                = 3;
 bool gNoFinish                 = false;
 bool gEnableAllTraceTests      = false;
@@ -89,6 +90,15 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
             gWarmupLoops       = 0;
             gTestTrials        = 1;
             gMaxTestSeconds    = 36000;
+            // Skip an additional argument.
+            argIndex++;
+        }
+        else if (strcmp("--fixed-test-time", argv[argIndex]) == 0 && argIndex < *argc - 1)
+        {
+            gFixedTestSeconds = ReadIntArgument(argv[argIndex + 1]);
+            gWarmupLoops      = 0;
+            gTestTrials       = 1;
+            gMaxTestSeconds   = gFixedTestSeconds;
             // Skip an additional argument.
             argIndex++;
         }

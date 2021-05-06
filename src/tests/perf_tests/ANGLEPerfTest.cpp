@@ -251,6 +251,11 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
     {
         mStory = mStory.substr(1);
     }
+    if (gFixedTestSeconds > 0.0)
+    {
+        // Run MAX_INT steps if we only care about duration
+        mStepsToRun = std::numeric_limits<int>::max();
+    }
     mReporter = std::make_unique<perf_test::PerfResultReporter>(mName + mBackend, mStory);
     mReporter->RegisterImportantMetric(".wall_time", units);
     mReporter->RegisterImportantMetric(".gpu_time", units);
@@ -355,11 +360,15 @@ void ANGLEPerfTest::doRunLoop(double maxRunTime, int maxStepsToRun, RunLoopPolic
             {
                 mRunning = false;
             }
-            else if (mTimer.getElapsedTime() > maxRunTime)
+            else if (gFixedTestSeconds == 0.0 && mTimer.getElapsedTime() > maxRunTime)
             {
                 mRunning = false;
             }
             else if (mTrialNumStepsPerformed >= maxStepsToRun)
+            {
+                mRunning = false;
+            }
+            else if (gFixedTestSeconds > 0.0 && mTimer.getElapsedTime() > gFixedTestSeconds)
             {
                 mRunning = false;
             }

@@ -24,6 +24,7 @@ extern bool gVerboseLogging;
 extern int gWarmupLoops;
 extern double gCalibrationTimeSeconds;
 extern double gMaxTestSeconds;
+extern double gFixedTestSeconds;
 extern int gTestTrials;
 extern bool gNoFinish;
 extern bool gEnableAllTraceTests;
