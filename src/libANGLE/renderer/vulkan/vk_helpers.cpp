@@ -1530,8 +1530,22 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
         return;
     }
 
+    // Do depth stencil layout change.
+    if (mDepthStencilImage)
+    {
+        finalizeDepthStencilImageLayout(contextVk);
+    }
+    if (mDepthStencilResolveImage)
+    {
+        finalizeDepthStencilResolveImageLayout(contextVk);
+    }
+
     PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
+
     // Depth/Stencil buffer optimizations:
+    // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
+    ASSERT(dsOps.initialLayout != static_cast<uint16_t>(ImageLayout::DepthStencilReadOnly) ||
+           (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
 
     // If the attachment is invalidated, skip the store op.  If we are not loading or clearing the
     // attachment and the attachment has not been used, auto-invalidate it.
@@ -1590,20 +1604,6 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
         dsOps.stencilStoreOp == RenderPassStoreOp::DontCare)
     {
         dsOps.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    }
-
-    // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
-    ASSERT(dsOps.initialLayout != static_cast<uint16_t>(ImageLayout::DepthStencilReadOnly) ||
-           (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
-
-    // Do depth stencil layout change.
-    if (mDepthStencilImage)
-    {
-        finalizeDepthStencilImageLayout(contextVk);
-    }
-    if (mDepthStencilResolveImage)
-    {
-        finalizeDepthStencilResolveImageLayout(contextVk);
     }
 }
 
