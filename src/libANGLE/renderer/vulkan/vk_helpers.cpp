@@ -1343,8 +1343,6 @@ void CommandBufferHelper::finalizeColorImageLayout(Context *context,
                     mImageOptimizeForPresent->getCurrentImageLayout());
         mImageOptimizeForPresent = nullptr;
     }
-
-    image->resetRenderPassUsageFlags();
 }
 
 void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
@@ -1388,30 +1386,6 @@ void CommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
         VkImageAspectFlags aspectFlags = GetDepthStencilAspectFlags(format);
         updateImageLayoutAndBarrier(context, mDepthStencilImage, aspectFlags, imageLayout);
     }
-
-    if (!mDepthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment))
-    {
-        ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
-        const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
-
-        // If the image is being written to, mark its contents defined.
-        VkImageAspectFlags definedAspects = 0;
-        if (dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE)
-        {
-            definedAspects |= VK_IMAGE_ASPECT_DEPTH_BIT;
-        }
-        if (dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE)
-        {
-            definedAspects |= VK_IMAGE_ASPECT_STENCIL_BIT;
-        }
-        if (definedAspects != 0)
-        {
-            mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
-                                        mDepthStencilLayerCount, definedAspects);
-        }
-    }
-
-    mDepthStencilImage->resetRenderPassUsageFlags();
 }
 
 void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(Context *context)
@@ -1448,8 +1422,6 @@ void CommandBufferHelper::finalizeDepthStencilResolveImageLayout(Context *contex
                                                mDepthStencilLayerCount, definedAspects);
         }
     }
-
-    mDepthStencilResolveImage->resetRenderPassUsageFlags();
 }
 
 void CommandBufferHelper::finalizeImageLayout(Context *context, const ImageHelper *image)
@@ -1463,11 +1435,13 @@ void CommandBufferHelper::finalizeImageLayout(Context *context, const ImageHelpe
             if (mColorImages[index] == image)
             {
                 finalizeColorImageLayout(context, mColorImages[index], index, false);
+                mColorImages[index]->resetRenderPassUsageFlags();
                 mColorImages[index] = nullptr;
             }
             else if (mColorResolveImages[index] == image)
             {
                 finalizeColorImageLayout(context, mColorResolveImages[index], index, true);
+                mColorResolveImages[index]->resetRenderPassUsageFlags();
                 mColorResolveImages[index] = nullptr;
             }
         }
@@ -1476,6 +1450,8 @@ void CommandBufferHelper::finalizeImageLayout(Context *context, const ImageHelpe
     if (mDepthStencilImage == image)
     {
         finalizeDepthStencilImageLayout(context);
+        finalizeDepthStencilLoadStore(context);
+        mDepthStencilImage->resetRenderPassUsageFlags();
         mDepthStencilImage = nullptr;
     }
 
@@ -1483,55 +1459,22 @@ void CommandBufferHelper::finalizeImageLayout(Context *context, const ImageHelpe
     {
         finalizeDepthStencilResolveImageLayout(context);
         mDepthStencilResolveImage = nullptr;
+        mDepthStencilResolveImage->resetRenderPassUsageFlags();
     }
 }
 
-void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
-                                          const gl::Rectangle &renderArea,
-                                          const RenderPassDesc &renderPassDesc,
-                                          const AttachmentOpsArray &renderPassAttachmentOps,
-                                          const vk::PackedAttachmentCount colorAttachmentCount,
-                                          const PackedAttachmentIndex depthStencilAttachmentIndex,
-                                          const PackedClearValuesArray &clearValues,
-                                          CommandBuffer **commandBufferOut)
+void CommandBufferHelper::finalizeDepthStencilLoadStore(Context *context)
 {
-    ASSERT(mIsRenderPassCommandBuffer);
-    ASSERT(empty());
-
-    mRenderPassDesc              = renderPassDesc;
-    mAttachmentOps               = renderPassAttachmentOps;
-    mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
-    mColorImagesCount            = colorAttachmentCount;
-    mFramebuffer.setHandle(framebuffer.getHandle());
-    mRenderArea       = renderArea;
-    mClearValues      = clearValues;
-    *commandBufferOut = &mCommandBuffer;
-
-    mRenderPassStarted = true;
-    mCounter++;
-}
-
-void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
-{
-    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
-    {
-        if (mColorImages[index])
-        {
-            finalizeColorImageLayout(contextVk, mColorImages[index], index, false);
-        }
-        if (mColorResolveImages[index])
-        {
-            finalizeColorImageLayout(contextVk, mColorResolveImages[index], index, true);
-        }
-    }
-
-    if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
-    {
-        return;
-    }
+    ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
 
     PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
-    // Depth/Stencil buffer optimizations:
+
+    // This has to be called after layout been finalized
+    ASSERT(dsOps.initialLayout != static_cast<uint16_t>(ImageLayout::Undefined));
+
+    // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
+    ASSERT(dsOps.initialLayout != static_cast<uint16_t>(ImageLayout::DepthStencilReadOnly) ||
+           (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
 
     // If the attachment is invalidated, skip the store op.  If we are not loading or clearing the
     // attachment and the attachment has not been used, auto-invalidate it.
@@ -1567,7 +1510,7 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     // For read only depth stencil, we can use StoreOpNone if available. DONT_CARE is still
     // preferred, so do this after finish the DONT_CARE handling.
     if (dsOps.initialLayout == static_cast<uint16_t>(ImageLayout::DepthStencilReadOnly) &&
-        contextVk->getFeatures().supportsRenderPassStoreOpNoneQCOM.enabled)
+        context->getRenderer()->getFeatures().supportsRenderPassStoreOpNoneQCOM.enabled)
     {
         if (dsOps.storeOp == RenderPassStoreOp::Store)
         {
@@ -1592,18 +1535,83 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
         dsOps.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     }
 
-    // Ensure we don't write to a read-only RenderPass. (ReadOnly -> !Write)
-    ASSERT(dsOps.initialLayout != static_cast<uint16_t>(ImageLayout::DepthStencilReadOnly) ||
-           (mDepthAccess != ResourceAccess::Write && mStencilAccess != ResourceAccess::Write));
+    if (!mDepthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment))
+    {
+        // If the image is being written to, mark its contents defined.
+        VkImageAspectFlags definedAspects = 0;
+        if (dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE)
+        {
+            definedAspects |= VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        if (dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE)
+        {
+            definedAspects |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+        if (definedAspects != 0)
+        {
+            mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
+                                        mDepthStencilLayerCount, definedAspects);
+        }
+    }
+}
 
-    // Do depth stencil layout change.
+void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
+                                          const gl::Rectangle &renderArea,
+                                          const RenderPassDesc &renderPassDesc,
+                                          const AttachmentOpsArray &renderPassAttachmentOps,
+                                          const vk::PackedAttachmentCount colorAttachmentCount,
+                                          const PackedAttachmentIndex depthStencilAttachmentIndex,
+                                          const PackedClearValuesArray &clearValues,
+                                          CommandBuffer **commandBufferOut)
+{
+    ASSERT(mIsRenderPassCommandBuffer);
+    ASSERT(empty());
+
+    mRenderPassDesc              = renderPassDesc;
+    mAttachmentOps               = renderPassAttachmentOps;
+    mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
+    mColorImagesCount            = colorAttachmentCount;
+    mFramebuffer.setHandle(framebuffer.getHandle());
+    mRenderArea       = renderArea;
+    mClearValues      = clearValues;
+    *commandBufferOut = &mCommandBuffer;
+
+    mRenderPassStarted = true;
+    mCounter++;
+}
+
+void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
+{
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    {
+        if (mColorImages[index])
+        {
+            finalizeColorImageLayout(contextVk, mColorImages[index], index, false);
+            mColorImages[index]->resetRenderPassUsageFlags();
+        }
+        if (mColorResolveImages[index])
+        {
+            finalizeColorImageLayout(contextVk, mColorResolveImages[index], index, true);
+            mColorResolveImages[index]->resetRenderPassUsageFlags();
+        }
+    }
+
+    if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
+    {
+        return;
+    }
+
+    // Do depth stencil layout change and load store optimization.
     if (mDepthStencilImage)
     {
         finalizeDepthStencilImageLayout(contextVk);
+        finalizeDepthStencilLoadStore(contextVk);
+        mDepthStencilImage->resetRenderPassUsageFlags();
     }
     if (mDepthStencilResolveImage)
     {
         finalizeDepthStencilResolveImageLayout(contextVk);
+        mDepthStencilResolveImage->resetRenderPassUsageFlags();
     }
 }
 
