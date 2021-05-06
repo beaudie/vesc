@@ -52,7 +52,7 @@ CLPlatformCL::ImplList CLPlatformCL::GetPlatforms(bool isIcd)
         // the khrIcdVendors list, because the ICD Loader skips the libries which are already in
         // the list as it assumes they were already enumerated.
         static angle::base::NoDestructor<KHRicdVendor> sVendorAngle({});
-        sVendorAngle->library = khrIcdOsLibraryLoad(ANGLE_OPENCL_ICD_LIB_NAME);
+        sVendorAngle->library = khrIcdOsLibraryLoad(ANGLE_OPENCL_LIB_NAME);
         khrIcdVendors         = sVendorAngle.get();
         if (khrIcdVendors->library != nullptr)
         {
