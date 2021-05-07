@@ -21,7 +21,7 @@ const char *gTraceFile         = "ANGLETrace.json";
 const char *gScreenShotDir     = nullptr;
 bool gVerboseLogging           = false;
 double gCalibrationTimeSeconds = 1.0;
-double gTestTimeSeconds        = 10.0;
+double gMaxTestSeconds         = 10.0;
 int gTestTrials                = 3;
 bool gNoFinish                 = false;
 bool gEnableAllTraceTests      = false;
@@ -88,7 +88,7 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
             gMaxStepsPerformed = ReadIntArgument(argv[argIndex + 1]);
             gWarmupLoops       = 0;
             gTestTrials        = 1;
-            gTestTimeSeconds   = 36000;
+            gMaxTestSeconds    = 36000;
             // Skip an additional argument.
             argIndex++;
         }
@@ -122,9 +122,9 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
             // Skip an additional argument.
             argIndex++;
         }
-        else if (strcmp("--test-time", argv[argIndex]) == 0)
+        else if (strcmp("--max-test-time", argv[argIndex]) == 0)
         {
-            gTestTimeSeconds = ReadIntArgument(argv[argIndex + 1]);
+            gMaxTestSeconds = ReadIntArgument(argv[argIndex + 1]);
             // Skip an additional argument.
             argIndex++;
         }
