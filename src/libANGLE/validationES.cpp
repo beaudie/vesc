@@ -640,10 +640,6 @@ bool ValidTextureTarget(const Context *context, TextureType type)
         case TextureType::VideoImage:
             return context->getExtensions().webglVideoTexture;
 
-        case TextureType::Buffer:
-            return (context->getClientVersion() >= Version(3, 2) ||
-                    context->getExtensions().textureBufferAny());
-
         default:
             return false;
     }
