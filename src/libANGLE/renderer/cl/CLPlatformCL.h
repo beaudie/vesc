@@ -3,16 +3,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// CLPlatformCL.h:
-//    Defines the class interface for CLPlatformCL, implementing CLPlatformImpl.
-//
+// CLPlatformCL.h: Defines the class interface for CLPlatformCL, implementing CLPlatformImpl.
 
 #ifndef LIBANGLE_RENDERER_CL_CLPLATFORMCL_H_
 #define LIBANGLE_RENDERER_CL_CLPLATFORMCL_H_
 
 #include "libANGLE/renderer/CLPlatformImpl.h"
-
-#include <string>
 
 namespace rx
 {
@@ -23,6 +19,8 @@ class CLPlatformCL : public CLPlatformImpl
     ~CLPlatformCL() override;
 
     cl_platform_id getNative();
+
+    CLDeviceImpl::ImplList getDevices() override;
 
     static ImplList GetPlatforms(bool isIcd);
 
