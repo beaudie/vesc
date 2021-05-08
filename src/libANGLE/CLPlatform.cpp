@@ -7,18 +7,81 @@
 
 #include "libANGLE/CLPlatform.h"
 
+#include <cstring>
+
 namespace cl
 {
 
 Platform::~Platform() = default;
 
-void Platform::CreatePlatform(const cl_icd_dispatch &dispatch, rx::CLPlatformImpl::Ptr &&impl)
+cl_int Platform::getInfo(PlatformInfo name, size_t valueSize, void *value, size_t *sizeRet)
 {
-    rx::CLDeviceImpl::ImplList deviceImplList = impl->getDevices();
-    if (!deviceImplList.empty())
+    const void *copyValue = nullptr;
+    size_t copySize       = 0u;
+
+    switch (name)
     {
-        GetList().emplace_back(new Platform(dispatch, std::move(impl), std::move(deviceImplList)));
+        case PlatformInfo::Profile:
+            copyValue = mInfo.mProfile.c_str();
+            copySize  = mInfo.mProfile.length() + 1u;
+            break;
+        case PlatformInfo::Version:
+            copyValue = mInfo.mVersionStr.c_str();
+            copySize  = mInfo.mVersionStr.length() + 1u;
+            break;
+        case PlatformInfo::NumericVersion:
+            copyValue = &mInfo.mVersion;
+            copySize  = sizeof(mInfo.mVersion);
+            break;
+        case PlatformInfo::Name:
+            copyValue = mInfo.mName.c_str();
+            copySize  = mInfo.mName.length() + 1u;
+            break;
+        case PlatformInfo::Vendor:
+            copyValue = kVendor;
+            copySize  = sizeof(kVendor);
+            break;
+        case PlatformInfo::Extensions:
+            copyValue = mInfo.mExtensions.c_str();
+            copySize  = mInfo.mExtensions.length() + 1u;
+            break;
+        case PlatformInfo::ExtensionsWithVersion:
+            if (mInfo.mExtensionsWithVersion.empty())
+            {
+                return CL_INVALID_VALUE;
+            }
+            copyValue = mInfo.mExtensionsWithVersion.data();
+            copySize  = mInfo.mExtensionsWithVersion.size() *
+                       sizeof(decltype(mInfo.mExtensionsWithVersion)::value_type);
+            break;
+        case PlatformInfo::HostTimerResolution:
+            copyValue = &mInfo.mHostTimerRes;
+            copySize  = sizeof(mInfo.mHostTimerRes);
+            break;
+        case PlatformInfo::IcdSuffix:
+            copyValue = kIcdSuffix;
+            copySize  = sizeof(kIcdSuffix);
+            break;
+        default:
+            return CL_INVALID_VALUE;
     }
+
+    if (value != nullptr)
+    {
+        if (valueSize < copySize)
+        {
+            return CL_INVALID_VALUE;
+        }
+        if (copyValue != nullptr)
+        {
+            std::memcpy(value, copyValue, copySize);
+        }
+    }
+    if (sizeRet != nullptr)
+    {
+        *sizeRet = copySize;
+    }
+    return CL_SUCCESS;
 }
 
 cl_int Platform::getDeviceIDs(cl_device_type deviceType,
@@ -48,11 +111,25 @@ cl_int Platform::getDeviceIDs(cl_device_type deviceType,
     return found == 0u ? CL_DEVICE_NOT_FOUND : CL_SUCCESS;
 }
 
+void Platform::CreatePlatform(const cl_icd_dispatch &dispatch,
+                              rx::CLPlatformImpl::Ptr &&impl,
+                              rx::CLPlatformImpl::Info &&info)
+{
+    rx::CLDeviceImpl::ImplList deviceImplList = impl->getDevices();
+    if (!deviceImplList.empty())
+    {
+        GetList().emplace_back(
+            new Platform(dispatch, std::move(impl), std::move(info), std::move(deviceImplList)));
+    }
+}
+
 Platform::Platform(const cl_icd_dispatch &dispatch,
                    rx::CLPlatformImpl::Ptr &&impl,
+                   rx::CLPlatformImpl::Info &&info,
                    rx::CLDeviceImpl::ImplList &&deviceImplList)
     : _cl_platform_id(dispatch),
       mImpl(std::move(impl)),
+      mInfo(std::move(info)),
       mDevices(Device::CreateDevices(*this, std::move(deviceImplList)))
 {}
 
