@@ -13,16 +13,32 @@ On all platforms:
  * [depot_tools](https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up)
    * Required to download dependencies (with gclient), generate build files (with GN), and compile ANGLE (with ninja).
    * Ensure `depot_tools` is in your path as it provides ninja for compilation.
+   * Windows 10 notes:
+     * Download the depot_tools [bundle](https://storage.googleapis.com/chrome-infra/depot_tools.zip)
+       * Copy the zip file to where you want your depot_tools folder to live, and unzip it there.
+       * Do not use drag-n-drop or copy-n-paste from Windows Explorer, as the hidden ".git" folder will be missing.
+     * Add depot_tools to the **front** of your PATH environment variable
+       * Use `Settings->Advanced system settings`
+       * Click on `Environment Variables`
+       * Under `System variables`, select the `Path` variable and click `Edit`
+       * Click on `New` and add the path (e.g. "C:\src\depot_tools")
+       * Move the new variable to the top of the list
  * For Googlers, run `download_from_google_storage --config` to login to Google Storage.
+   * Windows 10 notes:
+     * After adding depot_tools to the PATH, start a Command Prompt (cmd.exe) window
+     * Run `gclient`
+     * Run `download_from_google_storage --config` and follow instructions
 
 On Windows:
 
- * ***IMPORTANT: Set `DEPOT_TOOLS_WIN_TOOLCHAIN=0` in your environment if you are not a Googler.***
+ * ***IMPORTANT if you are NOT a Googler: set `DEPOT_TOOLS_WIN_TOOLCHAIN=0` in your environment.***
+   * If you are a Googler, there is no need to set this environment variable
  * Install [Visual Studio Community 2019](https://visualstudio.microsoft.com/vs/)
  * Install the [Windows 10 SDK, latest version](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
-   * You can install it through Visual Studio Installer if available.
+   * It should be installed as part of installing Visual Studio.
+   * If not, you can install it through Visual Studio Installer if available.
    * Required for GN-generated Visual Studio projects, the Debug runtime for D3D11, and the D3D Compiler DLL.
- * (optional) See the [Chromium Windows build instructions](https://chromium.googlesource.com/chromium/src/+/master/docs/windows_build_instructions.md) for more info.
+ * (optional and not normally needed) See the [Chromium Windows build instructions](https://chromium.googlesource.com/chromium/src/+/master/docs/windows_build_instructions.md) for more info.
 
 On Linux:
 
@@ -79,20 +95,27 @@ Ensure `depot_tools` is in your path as it provides ninja.
 
 ### Building with Goma (Google employees only)
 
-In addition, Google employees should use goma, a distributed compilation
-system. Detailed information is available internally but the relevant gn arg
-is:
+In addition, Google employees should use Goma, a distributed compilation system.  Detailed information is available internally.
+
+Here are some Windows 10 short-cuts (run the commands in a `Command Prompt` window):
+
+* You can check current login state with:
+  * `goma_auth info`
+* You will need to run the following the first time, and may possibly need to run it in the future:
+  * `goma_auth login`
+* After each reboot, run this before running autoninja:
+  * `goma_ctl ensure_start`
+
+Once Goma is setup, re-run the `gn args` command that you ran earlier (see above) and add the the following:
 
 ```
 use_goma = true
 ```
 
-To get any benefit from goma it is important to pass a large -j value to
-ninja. A good default is 10*numCores to 20*numCores. If you run autoninja then
-it will automatically pass an appropriate -j value to ninja for goma or not.
+To get any benefit from goma it is important to pass a large -j value to ninja. A good default is 10*numCores to 20*numCores. If you run autoninja then it will automatically pass an appropriate -j value to ninja for goma or not.
 
 ```
-$ autoninja -C out\Debug
+$ autoninja -C out/Debug
 ```
 
 ### Building and Debugging with Visual Studio
