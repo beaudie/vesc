@@ -11,6 +11,7 @@
 #include "libANGLE/renderer/CLDeviceImpl.h"
 
 #include <list>
+#include <string>
 
 namespace rx
 {
@@ -18,9 +19,6 @@ namespace rx
 class CLPlatformImpl : angle::NonCopyable
 {
   public:
-    using Ptr      = std::unique_ptr<CLPlatformImpl>;
-    using ImplList = std::list<Ptr>;
-
     struct Info
     {
         Info();
@@ -32,38 +30,25 @@ class CLPlatformImpl : angle::NonCopyable
         Info(Info &&);
         Info &operator=(Info &&);
 
-        Info(std::string &&profile,
-             std::string &&versionStr,
-             cl_version version,
-             std::string &&name,
-             std::string &&extensions,
-             NameVersionArray &&extensionList,
-             cl_ulong hostTimerRes);
+        bool isValid() const;
 
         std::string mProfile;
         std::string mVersionStr;
         cl_version mVersion;
         std::string mName;
         std::string mExtensions;
-        NameVersionArray mExtensionList;
+        NameVersionArray mExtensionsWithVersion;
         cl_ulong mHostTimerRes;
     };
 
-    explicit CLPlatformImpl(Info &&info);
-    virtual ~CLPlatformImpl();
+    using Ptr      = std::unique_ptr<CLPlatformImpl>;
+    using ImplList = std::list<std::pair<Ptr, Info>>;
 
-    const Info &getInfo();
+    CLPlatformImpl()          = default;
+    virtual ~CLPlatformImpl() = default;
 
     virtual CLDeviceImpl::ImplList getDevices() = 0;
-
-  protected:
-    const Info mInfo;
 };
-
-inline const CLPlatformImpl::Info &CLPlatformImpl::getInfo()
-{
-    return mInfo;
-}
 
 }  // namespace rx
 

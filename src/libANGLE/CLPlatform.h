@@ -15,7 +15,6 @@
 #include "anglebase/no_destructor.h"
 
 #include <algorithm>
-#include <string>
 
 namespace cl
 {
@@ -28,79 +27,42 @@ class Platform final : public _cl_platform_id, public Object
 
     ~Platform();
 
-    const char *getProfile() const;
-    const char *getVersionString() const;
-    cl_version getVersion() const;
-    const char *getName() const;
-    const char *getExtensions() const;
-    const rx::NameVersionArray &getExtensionsWithVersion() const;
-    cl_ulong getHostTimerResolution() const;
-
     bool hasDevice(const Device *device) const;
     const Device::List &getDevices() const;
+
+    cl_int getInfo(PlatformInfo name, size_t valueSize, void *value, size_t *sizeRet);
 
     cl_int getDeviceIDs(cl_device_type deviceType,
                         cl_uint numEntries,
                         Device **devices,
                         cl_uint *numDevices) const;
 
-    static void CreatePlatform(const cl_icd_dispatch &dispatch, rx::CLPlatformImpl::Ptr &&impl);
+    static void CreatePlatform(const cl_icd_dispatch &dispatch,
+                               rx::CLPlatformImpl::Ptr &&impl,
+                               rx::CLPlatformImpl::Info &&info);
+
     static const List &GetPlatforms();
     static Platform *GetDefault();
     static bool IsValid(const Platform *platform);
     static bool IsValidOrDefault(const Platform *platform);
 
     static constexpr const char *GetVendor();
-    static constexpr const char *GetIcdSuffix();
 
   private:
     Platform(const cl_icd_dispatch &dispatch,
              rx::CLPlatformImpl::Ptr &&impl,
+             rx::CLPlatformImpl::Info &&info,
              rx::CLDeviceImpl::ImplList &&deviceImplList);
 
     static List &GetList();
 
     const rx::CLPlatformImpl::Ptr mImpl;
+    const rx::CLPlatformImpl::Info mInfo;
     const Device::List mDevices;
 
     static constexpr char kVendor[]    = "ANGLE";
     static constexpr char kIcdSuffix[] = "ANGLE";
 };
-
-inline const char *Platform::getProfile() const
-{
-    return mImpl->getInfo().mProfile.c_str();
-}
-
-inline const char *Platform::getVersionString() const
-{
-    return mImpl->getInfo().mVersionStr.c_str();
-}
-
-inline cl_version Platform::getVersion() const
-{
-    return mImpl->getInfo().mVersion;
-}
-
-inline const char *Platform::getName() const
-{
-    return mImpl->getInfo().mName.c_str();
-}
-
-inline const char *Platform::getExtensions() const
-{
-    return mImpl->getInfo().mExtensions.c_str();
-}
-
-inline const rx::NameVersionArray &Platform::getExtensionsWithVersion() const
-{
-    return mImpl->getInfo().mExtensionList;
-}
-
-inline cl_ulong Platform::getHostTimerResolution() const
-{
-    return mImpl->getInfo().mHostTimerRes;
-}
 
 inline bool Platform::hasDevice(const Device *device) const
 {
@@ -145,11 +107,6 @@ inline bool Platform::IsValidOrDefault(const Platform *platform)
 constexpr const char *Platform::GetVendor()
 {
     return kVendor;
-}
-
-constexpr const char *Platform::GetIcdSuffix()
-{
-    return kIcdSuffix;
 }
 
 }  // namespace cl
