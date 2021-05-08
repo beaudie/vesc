@@ -7,12 +7,16 @@
 
 #include "libANGLE/CLPlatform.h"
 
+#include <cstdint>
 #include <cstring>
 
 namespace cl
 {
 
-Platform::~Platform() = default;
+Platform::~Platform()
+{
+    removeRef();
+}
 
 cl_int Platform::getInfo(PlatformInfo name, size_t valueSize, void *value, size_t *sizeRet)
 {
@@ -131,7 +135,9 @@ Platform::Platform(const cl_icd_dispatch &dispatch,
       mImpl(std::move(impl)),
       mInfo(std::move(info)),
       mDevices(Device::CreateDevices(*this, std::move(deviceImplList)))
-{}
+{
+    ASSERT(isCompatible(this));
+}
 
 constexpr char Platform::kVendor[];
 constexpr char Platform::kIcdSuffix[];

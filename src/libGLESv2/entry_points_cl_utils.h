@@ -9,6 +9,8 @@
 #ifndef LIBGLESV2_ENTRY_POINTS_CL_UTILS_H_
 #define LIBGLESV2_ENTRY_POINTS_CL_UTILS_H_
 
+#include "libANGLE/Debug.h"
+
 #include <cinttypes>
 #include <cstdio>
 #include <type_traits>
