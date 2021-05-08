@@ -2444,6 +2444,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // tests to fail.
     ANGLE_FEATURE_CONDITION(&mFeatures, forceFragmentShaderPrecisionHighpToMediump, false);
 
+    // ARM GPU appears like more frequent flushes. With this enabled, Manhattan 3.1 offscreen score
+    // improves 10%
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary, isARM);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
