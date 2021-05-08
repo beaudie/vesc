@@ -24,10 +24,19 @@ class Device final : public _cl_device_id, public Object
     ~Device();
 
     Platform &getPlatform() const;
+    bool isRoot() const;
+    bool hasSubDevice(const Device *device) const;
+
+    void retain();
+    bool release();
 
     cl_int getInfoULong(DeviceInfo name, cl_ulong *value) const;
-
     cl_int getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *valueSizeRet);
+
+    cl_int createSubDevices(const cl_device_partition_property *properties,
+                            cl_uint numDevices,
+                            Device **devices,
+                            cl_uint *numDevicesRet);
 
     static List CreateDevices(Platform &platform, rx::CLDeviceImpl::ImplList &&implList);
 
@@ -40,15 +49,39 @@ class Device final : public _cl_device_id, public Object
            rx::CLDeviceImpl::Ptr &&impl,
            rx::CLDeviceImpl::Info &&info);
 
+    void destroySubDevice(Device *device);
+
     Platform &mPlatform;
     Device *const mParent;
     const rx::CLDeviceImpl::Ptr mImpl;
     const rx::CLDeviceImpl::Info mInfo;
+
+    List mSubDevices;
 };
 
 inline Platform &Device::getPlatform() const
 {
     return mPlatform;
+}
+
+inline bool Device::isRoot() const
+{
+    return mParent == nullptr;
+}
+
+inline bool Device::hasSubDevice(const Device *device) const
+{
+    return std::find_if(mSubDevices.cbegin(), mSubDevices.cend(), [=](const Device::Ptr &ptr) {
+               return ptr.get() == device || ptr->hasSubDevice(device);
+           }) != mSubDevices.cend();
+}
+
+inline void Device::retain()
+{
+    if (!isRoot())
+    {
+        addRef();
+    }
 }
 
 inline cl_int Device::getInfoULong(DeviceInfo name, cl_ulong *value) const

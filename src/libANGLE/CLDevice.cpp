@@ -8,12 +8,31 @@
 #include "libANGLE/CLDevice.h"
 
 #include "libANGLE/CLPlatform.h"
-#include "libANGLE/Debug.h"
 
 namespace cl
 {
 
-Device::~Device() = default;
+Device::~Device()
+{
+    if (isRoot())
+    {
+        removeRef();
+    }
+}
+
+bool Device::release()
+{
+    if (isRoot())
+    {
+        return false;
+    }
+    const bool released = removeRef();
+    if (released)
+    {
+        mParent->destroySubDevice(this);
+    }
+    return released;
+}
 
 cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *valueSizeRet)
 {
@@ -91,7 +110,6 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
         case DeviceInfo::NumericVersion:
         case DeviceInfo::PreferredInteropUserSync:
         case DeviceInfo::PartitionMaxSubDevices:
-        case DeviceInfo::ReferenceCount:
         case DeviceInfo::PreferredPlatformAtomicAlignment:
         case DeviceInfo::PreferredGlobalAtomicAlignment:
         case DeviceInfo::PreferredLocalAtomicAlignment:
@@ -158,7 +176,6 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
         case DeviceInfo::Profile:
         case DeviceInfo::Version:
         case DeviceInfo::OpenCL_C_Version:
-        case DeviceInfo::Extensions:
         case DeviceInfo::LatestConformanceVersionPassed:
             result = mImpl->getInfoStringLength(name, &copySize);
             if (result != CL_SUCCESS)
@@ -170,7 +187,7 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
             copyValue = valString.data();
             break;
 
-        // Handle all array types
+        // Handle all cached values
         case DeviceInfo::MaxWorkItemDimensions:
             valUInt   = static_cast<cl_uint>(mInfo.mMaxWorkItemSizes.size());
             copyValue = &valUInt;
@@ -217,6 +234,10 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
             copySize  = mInfo.mOpenCL_C_Features.size() *
                        sizeof(decltype(mInfo.mOpenCL_C_Features)::value_type);
             break;
+        case DeviceInfo::Extensions:
+            copyValue = mInfo.mExtensions.c_str();
+            copySize  = mInfo.mExtensions.length() + 1u;
+            break;
         case DeviceInfo::ExtensionsWithVersion:
             if (!mInfo.mIsSupportedExtensionsWithVersion)
             {
@@ -237,7 +258,7 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
                 mInfo.mPartitionType.size() * sizeof(decltype(mInfo.mPartitionType)::value_type);
             break;
 
-        // Handle all special types
+        // Handle all mapped values
         case DeviceInfo::Platform:
             valPointer = &mPlatform;
             copyValue  = &valPointer;
@@ -246,6 +267,10 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
         case DeviceInfo::ParentDevice:
             copyValue = &mParent;
             copySize  = sizeof(mParent);
+            break;
+        case DeviceInfo::ReferenceCount:
+            copyValue = getRefCountPtr();
+            copySize  = sizeof(*getRefCountPtr());
             break;
 
         default:
@@ -273,6 +298,30 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
         *valueSizeRet = copySize;
     }
     return CL_SUCCESS;
+}
+
+cl_int Device::createSubDevices(const cl_device_partition_property *properties,
+                                cl_uint numDevices,
+                                Device **devices,
+                                cl_uint *numDevicesRet)
+{
+    if (devices == nullptr)
+    {
+        numDevices = 0u;
+    }
+    rx::CLDeviceImpl::ImplList implList;
+    const cl_int result = mImpl->createSubDevices(properties, numDevices, implList, numDevicesRet);
+    if (result == CL_SUCCESS)
+    {
+        while (!implList.empty())
+        {
+            mSubDevices.emplace_back(new Device(mPlatform, this, std::move(implList.front().first),
+                                                std::move(implList.front().second)));
+            *devices++ = mSubDevices.back().get();
+            implList.pop_front();
+        }
+    }
+    return result;
 }
 
 Device::List Device::CreateDevices(Platform &platform, rx::CLDeviceImpl::ImplList &&implList)
@@ -305,5 +354,23 @@ Device::Device(Platform &platform,
       mImpl(std::move(impl)),
       mInfo(std::move(info))
 {}
+
+void Device::destroySubDevice(Device *device)
+{
+    auto deviceIt = mSubDevices.cbegin();
+    while (deviceIt != mSubDevices.cend() && deviceIt->get() != device)
+    {
+        ++deviceIt;
+    }
+    if (deviceIt != mSubDevices.cend())
+    {
+        mSubDevices.erase(deviceIt);
+        release();
+    }
+    else
+    {
+        ERR() << "Sub-device not found";
+    }
+}
 
 }  // namespace cl
