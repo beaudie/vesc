@@ -3,11 +3,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// CLPlatformCL.cpp:
-//    Implements the class methods for CLPlatformCL.
-//
+// CLPlatformCL.cpp: Implements the class methods for CLPlatformCL.
 
 #include "libANGLE/renderer/cl/CLPlatformCL.h"
+
+#include "libANGLE/renderer/cl/CLDeviceCL.h"
 
 #include "libANGLE/CLPlatform.h"
 #include "libANGLE/Debug.h"
@@ -21,7 +21,6 @@ extern "C" {
 
 #include <cstdlib>
 #include <unordered_set>
-#include <vector>
 
 namespace rx
 {
@@ -39,6 +38,41 @@ const ExtensionSet &GetSupportedExtensions()
 }  // namespace
 
 CLPlatformCL::~CLPlatformCL() = default;
+
+CLDeviceImpl::ImplList CLPlatformCL::getDevices()
+{
+    CLDeviceImpl::ImplList implList;
+
+    // Fetch all regular devices. This does not include CL_DEVICE_TYPE_CUSTOM.
+    cl_uint numDevices = 0u;
+    if (mPlatform->getDispatch().clGetDeviceIDs(mPlatform, CL_DEVICE_TYPE_ALL, 0u, nullptr,
+                                                &numDevices) == CL_SUCCESS)
+    {
+        std::vector<cl_device_id> devices(numDevices, nullptr);
+        if (mPlatform->getDispatch().clGetDeviceIDs(mPlatform, CL_DEVICE_TYPE_ALL, numDevices,
+                                                    devices.data(), nullptr) == CL_SUCCESS)
+        {
+            for (cl_device_id device : devices)
+            {
+                CLDeviceImpl::Info info = CLDeviceCL::GetInfo(device);
+                if (info.isValid())
+                {
+                    implList.emplace_back(new CLDeviceCL(device), std::move(info));
+                }
+            }
+        }
+        else
+        {
+            ERR() << "Failed to query CL devices";
+        }
+    }
+    else
+    {
+        ERR() << "Failed to query CL devices";
+    }
+
+    return implList;
+}
 
 CLPlatformCL::ImplList CLPlatformCL::GetPlatforms(bool isIcd)
 {
@@ -105,6 +139,12 @@ std::unique_ptr<CLPlatformCL> CLPlatformCL::Create(cl_platform_id platform)
     size_t paramSize = 0u;
     std::vector<std::string::value_type> param;
     CLPlatformImpl::Info info;
+
+    // Verify that the platform is valid
+    ASSERT(platform != nullptr);
+    ASSERT(platform->getDispatch().clGetPlatformInfo != nullptr);
+    ASSERT(platform->getDispatch().clGetDeviceIDs != nullptr);
+    ASSERT(platform->getDispatch().clGetDeviceInfo != nullptr);
 
     // Skip ANGLE CL implementation to prevent passthrough loop
     ANGLE_TRY_GET_INFO(CL_PLATFORM_VENDOR, 0u, nullptr, &paramSize);
@@ -214,8 +254,8 @@ std::unique_ptr<CLPlatformCL> CLPlatformCL::Create(cl_platform_id platform)
                            info.mExtensionList.data(), nullptr);
 
         // Filter out extensions which are not (yet) supported to be passed through
-        const ExtensionSet &supported       = GetSupportedExtensions();
-        ExtensionList::const_iterator extIt = info.mExtensionList.cbegin();
+        const ExtensionSet &supported          = GetSupportedExtensions();
+        NameVersionArray::const_iterator extIt = info.mExtensionList.cbegin();
         while (extIt != info.mExtensionList.cend())
         {
             if (supported.find(extIt->name) != supported.cend())

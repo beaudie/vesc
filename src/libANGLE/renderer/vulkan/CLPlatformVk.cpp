@@ -3,11 +3,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// CLPlatformVk.cpp:
-//    Implements the class methods for CLPlatformVk.
-//
+// CLPlatformVk.cpp: Implements the class methods for CLPlatformVk.
 
 #include "libANGLE/renderer/vulkan/CLPlatformVk.h"
+
+#include "libANGLE/renderer/vulkan/CLDeviceVk.h"
 
 #include "anglebase/no_destructor.h"
 #include "common/angle_version.h"
@@ -19,7 +19,7 @@ namespace rx
 
 namespace
 {
-std::string CreateExtensionString(const CLPlatformImpl::ExtensionList &extList)
+std::string CreateExtensionString(const NameVersionArray &extList)
 {
     std::string extensions;
     for (const cl_name_version &ext : extList)
@@ -39,9 +39,20 @@ CLPlatformVk::CLPlatformVk(Info &&info) : CLPlatformImpl(std::move(info)) {}
 
 CLPlatformVk::~CLPlatformVk() = default;
 
+CLDeviceImpl::ImplList CLPlatformVk::getDevices()
+{
+    CLDeviceImpl::ImplList implList;
+    CLDeviceImpl::Info info = CLDeviceVk::GetInfo();
+    if (info.isValid())
+    {
+        implList.emplace_back(new CLDeviceVk(), std::move(info));
+    }
+    return implList;
+}
+
 CLPlatformVk::ImplList CLPlatformVk::GetPlatforms()
 {
-    ExtensionList extList = {
+    NameVersionArray extList = {
         cl_name_version{CL_MAKE_VERSION(1, 0, 0), "cl_khr_icd"},
         cl_name_version{CL_MAKE_VERSION(1, 0, 0), "cl_khr_extended_versioning"}};
     std::string extensions = CreateExtensionString(extList);

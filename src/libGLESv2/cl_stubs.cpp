@@ -7,6 +7,7 @@
 
 #include "libGLESv2/cl_stubs_autogen.h"
 
+#include "libANGLE/CLDevice.h"
 #include "libANGLE/CLPlatform.h"
 #include "libGLESv2/cl_dispatch_table.h"
 #include "libGLESv2/proc_table_cl.h"
@@ -179,8 +180,8 @@ cl_int GetDeviceIDs(Platform *platform,
                     Device **devices,
                     cl_uint *num_devices)
 {
-    WARN_NOT_SUPPORTED(GetDeviceIDs);
-    return 0;
+    return (platform != nullptr ? platform : Platform::GetDefault())
+        ->getDeviceIDs(device_type, num_entries, devices, num_devices);
 }
 
 cl_int GetDeviceInfo(Device *device,
@@ -189,8 +190,7 @@ cl_int GetDeviceInfo(Device *device,
                      void *param_value,
                      size_t *param_value_size_ret)
 {
-    WARN_NOT_SUPPORTED(GetDeviceInfo);
-    return 0;
+    return device->getInfo(param_name, param_value_size, param_value, param_value_size_ret);
 }
 
 cl_int CreateSubDevices(Device *in_device,
