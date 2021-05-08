@@ -9,12 +9,19 @@
 
 #include "libANGLE/Debug.h"
 
+#include <cstdlib>
+
 namespace rx
 {
 
-CLDeviceCL::CLDeviceCL(cl_device_id device) : mDevice(device) {}
-
-CLDeviceCL::~CLDeviceCL() = default;
+CLDeviceCL::~CLDeviceCL()
+{
+    if (mVersion >= CL_MAKE_VERSION(1, 2, 0) &&
+        mDevice->getDispatch().clReleaseDevice(mDevice) != CL_SUCCESS)
+    {
+        ERR() << "Error while releasing CL device";
+    }
+}
 
 cl_int CLDeviceCL::getInfoUInt(cl::DeviceInfo name, cl_uint *value) const
 {
@@ -45,6 +52,61 @@ cl_int CLDeviceCL::getInfoString(cl::DeviceInfo name, size_t size, char *value) 
                                                   nullptr);
 }
 
+cl_int CLDeviceCL::createSubDevices(const cl_device_partition_property *properties,
+                                    cl_uint numDevices,
+                                    ImplList &deviceImplList,
+                                    cl_uint *numDevicesRet)
+{
+    if (mVersion < CL_MAKE_VERSION(1, 2, 0))
+    {
+        return CL_INVALID_VALUE;
+    }
+    if (numDevices == 0u)
+    {
+        return mDevice->getDispatch().clCreateSubDevices(mDevice, properties, 0u, nullptr,
+                                                         numDevicesRet);
+    }
+    std::vector<cl_device_id> devices(numDevices, nullptr);
+    const cl_int result = mDevice->getDispatch().clCreateSubDevices(mDevice, properties, numDevices,
+                                                                    devices.data(), nullptr);
+    if (result == CL_SUCCESS)
+    {
+        for (cl_device_id device : devices)
+        {
+            CLDeviceImpl::Ptr impl(CLDeviceCL::Create(device));
+            CLDeviceImpl::Info info = CLDeviceCL::GetInfo(device);
+            if (impl && info.isValid())
+            {
+                deviceImplList.emplace_back(std::move(impl), std::move(info));
+            }
+        }
+        if (deviceImplList.size() != devices.size())
+        {
+            return CL_INVALID_VALUE;
+        }
+    }
+    return result;
+}
+
+cl_version CLDeviceCL::ExtractVersion(const std::string &version)
+{
+    const std::string::size_type spacePos = version.find(' ');
+    const std::string::size_type dotPos   = version.find('.');
+    if (spacePos == std::string::npos || dotPos == std::string::npos)
+    {
+        ERR() << "Failed to extract version from OpenCL version string: " << version;
+        return 0u;
+    }
+    const cl_uint major = static_cast<cl_uint>(std::strtol(&version[spacePos + 1u], nullptr, 10));
+    const cl_uint minor = static_cast<cl_uint>(std::strtol(&version[dotPos + 1u], nullptr, 10));
+    if (major == 0u)
+    {
+        ERR() << "Failed to extract version from OpenCL version string: " << version;
+        return 0u;
+    }
+    return CL_MAKE_VERSION(major, minor, 0);
+}
+
 #define ANGLE_GET_INFO_SIZE(name, size_ret) \
     device->getDispatch().clGetDeviceInfo(device, name, 0u, nullptr, size_ret)
 
@@ -60,6 +122,24 @@ cl_int CLDeviceCL::getInfoString(cl::DeviceInfo name, size_t size, char *value) 
             return info;                                            \
         }                                                           \
     } while (0)
+
+CLDeviceCL *CLDeviceCL::Create(cl_device_id device)
+{
+    size_t valueSize = 0u;
+    if (ANGLE_GET_INFO_SIZE(CL_DEVICE_VERSION, &valueSize) == CL_SUCCESS)
+    {
+        std::vector<char> valString(valueSize, '\0');
+        if (ANGLE_GET_INFO(CL_DEVICE_VERSION, valueSize, valString.data()) == CL_SUCCESS)
+        {
+            const cl_version version = ExtractVersion(valString.data());
+            if (version != 0u)
+            {
+                return new CLDeviceCL(device, version);
+            }
+        }
+    }
+    return nullptr;
+}
 
 CLDeviceImpl::Info CLDeviceCL::GetInfo(cl_device_id device)
 {
@@ -140,5 +220,8 @@ CLDeviceImpl::Info CLDeviceCL::GetInfo(cl_device_id device)
 
     return info;
 }
+
+CLDeviceCL::CLDeviceCL(cl_device_id device, cl_version version) : mDevice(device), mVersion(version)
+{}
 
 }  // namespace rx
