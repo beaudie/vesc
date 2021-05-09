@@ -673,18 +673,45 @@ void main()
 
 TEST_P(GLSLTest, ScopedStructsOrderBug)
 {
-    // TODO(geofflang): Find out why this doesn't compile on Apple OpenGL drivers
-    // (http://anglebug.com/1292)
-    // TODO(geofflang): Find out why this doesn't compile on AMD OpenGL drivers
-    // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL() && (IsOSX() || !IsNVIDIA()));
-
     constexpr char kFS[] = R"(precision mediump float;
 
 struct T
 {
     float f;
 };
+
+void main()
+{
+    T a;
+
+    struct T
+    {
+        float q;
+    };
+
+    T b;
+
+    gl_FragColor = vec4(1, 0, 0, 1);
+    gl_FragColor.a += a.f;
+    gl_FragColor.a += b.q;
+})";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
+}
+
+// Test that defining a struct together with an inactive uniform, then using it in a scope that has
+// another struct with the same name declared works.
+TEST_P(GLSLTest, ScopedStructsOrderBug2)
+{
+    // http://anglebug.com/5936
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kFS[] = R"(precision mediump float;
+
+uniform struct T
+{
+    float f;
+} x;
 
 void main()
 {
