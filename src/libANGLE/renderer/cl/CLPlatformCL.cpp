@@ -7,6 +7,7 @@
 
 #include "libANGLE/renderer/cl/CLPlatformCL.h"
 
+#include "libANGLE/renderer/cl/CLContextCL.h"
 #include "libANGLE/renderer/cl/CLDeviceCL.h"
 #include "libANGLE/renderer/cl/cl_util.h"
 
@@ -23,29 +24,35 @@ extern "C" {
 namespace rx
 {
 
-CLPlatformCL::~CLPlatformCL() = default;
-
-CLDeviceImpl::ImplList CLPlatformCL::getDevices()
+namespace
 {
-    CLDeviceImpl::ImplList implList;
+
+CLDeviceImpl::Array CreateDevices(CLPlatformCL &platform,
+                                  cl_platform_id native,
+                                  CLDeviceImpl::List &implList)
+{
+    CLDeviceImpl::Array implArray;
 
     // Fetch all regular devices. This does not include CL_DEVICE_TYPE_CUSTOM.
     cl_uint numDevices = 0u;
-    if (mPlatform->getDispatch().clGetDeviceIDs(mPlatform, CL_DEVICE_TYPE_ALL, 0u, nullptr,
-                                                &numDevices) == CL_SUCCESS)
+    if (native->getDispatch().clGetDeviceIDs(native, CL_DEVICE_TYPE_ALL, 0u, nullptr,
+                                             &numDevices) == CL_SUCCESS)
     {
         std::vector<cl_device_id> devices(numDevices, nullptr);
-        if (mPlatform->getDispatch().clGetDeviceIDs(mPlatform, CL_DEVICE_TYPE_ALL, numDevices,
-                                                    devices.data(), nullptr) == CL_SUCCESS)
+        if (native->getDispatch().clGetDeviceIDs(native, CL_DEVICE_TYPE_ALL, numDevices,
+                                                 devices.data(), nullptr) == CL_SUCCESS)
         {
             for (cl_device_id device : devices)
             {
-                CLDeviceImpl::Ptr impl(CLDeviceCL::Create(device));
-                CLDeviceImpl::Info info = CLDeviceCL::GetInfo(device);
-                if (impl && info.isValid())
+                CLDeviceImpl::Ptr impl(CLDeviceCL::Create(platform, nullptr, device));
+                if (!impl)
                 {
-                    implList.emplace_back(std::move(impl), std::move(info));
+                    ERR() << "Failed to query CL devices";
+                    implList.clear();
+                    return CLDeviceImpl::Array{};
                 }
+                implArray.emplace_back(impl.get());
+                implList.emplace_back(std::move(impl));
             }
         }
         else
@@ -58,7 +65,104 @@ CLDeviceImpl::ImplList CLPlatformCL::getDevices()
         ERR() << "Failed to query CL devices";
     }
 
-    return implList;
+    return implArray;
+}
+
+}  // namespace
+
+CLPlatformCL::~CLPlatformCL() = default;
+
+CLContextImpl::Ptr CLPlatformCL::createContext(CLDeviceImpl::Array &&deviceImpls,
+                                               cl::ContextErrorCB notify,
+                                               void *userData,
+                                               bool userSync,
+                                               cl_int *errcodeRet)
+{
+    cl_context_properties properties[] = {
+        CL_CONTEXT_PLATFORM, reinterpret_cast<cl_context_properties>(mPlatform),
+        userSync && mVersion >= CL_MAKE_VERSION(1, 2, 0) ? CL_CONTEXT_INTEROP_USER_SYNC : 0,
+        CL_TRUE, 0};
+
+    std::vector<cl_device_id> devices;
+    for (CLDeviceImpl *deviceImpl : deviceImpls)
+    {
+        devices.emplace_back(static_cast<CLDeviceCL *>(deviceImpl)->getNative());
+    }
+
+    CLContextImpl::Ptr contextImpl;
+    cl_context context =
+        mPlatform->getDispatch().clCreateContext(properties, static_cast<cl_uint>(devices.size()),
+                                                 devices.data(), notify, userData, errcodeRet);
+    if (context != nullptr)
+    {
+        contextImpl.reset(new CLContextCL(*this, std::move(deviceImpls), context));
+        mContexts.emplace_back(contextImpl.get());
+    }
+    return contextImpl;
+}
+
+CLContextImpl::Ptr CLPlatformCL::createContextFromType(cl_device_type deviceType,
+                                                       cl::ContextErrorCB notify,
+                                                       void *userData,
+                                                       bool userSync,
+                                                       cl_int *errcodeRet)
+{
+    cl_context_properties properties[] = {
+        CL_CONTEXT_PLATFORM, reinterpret_cast<cl_context_properties>(mPlatform),
+        userSync && mVersion >= CL_MAKE_VERSION(1, 2, 0) ? CL_CONTEXT_INTEROP_USER_SYNC : 0,
+        CL_TRUE, 0};
+    cl_context context = mPlatform->getDispatch().clCreateContextFromType(
+        properties, deviceType, notify, userData, errcodeRet);
+    if (context == nullptr)
+    {
+        return CLContextImpl::Ptr{};
+    }
+
+    size_t valueSize = 0u;
+    cl_int result    = context->getDispatch().clGetContextInfo(context, CL_CONTEXT_DEVICES, 0u,
+                                                            nullptr, &valueSize);
+    if (result == CL_SUCCESS && (valueSize % sizeof(cl_device_id)) == 0u)
+    {
+        std::vector<cl_device_id> devices(valueSize / sizeof(cl_device_id), nullptr);
+        result = context->getDispatch().clGetContextInfo(context, CL_CONTEXT_DEVICES, valueSize,
+                                                         devices.data(), nullptr);
+        if (result == CL_SUCCESS)
+        {
+            CLDeviceImpl::Array deviceImpls;
+            for (cl_device_id device : devices)
+            {
+                auto it = mDevices.cbegin();
+                while (it != mDevices.cend() &&
+                       static_cast<CLDeviceCL *>(*it)->getNative() != device)
+                {
+                    ++it;
+                }
+                if (it != mDevices.cend())
+                {
+                    deviceImpls.emplace_back(*it);
+                }
+                else
+                {
+                    ERR() << "Device not found in platform list";
+                }
+            }
+            if (deviceImpls.size() == devices.size())
+            {
+                CLContextImpl::Ptr contextImpl(
+                    new CLContextCL(*this, std::move(deviceImpls), context));
+                mContexts.emplace_back(contextImpl.get());
+                return contextImpl;
+            }
+            result = CL_INVALID_VALUE;
+        }
+    }
+
+    context->getDispatch().clReleaseContext(context);
+    if (errcodeRet != nullptr)
+    {
+        *errcodeRet = result;
+    }
+    return CLContextImpl::Ptr{};
 }
 
 CLPlatformCL::ImplList CLPlatformCL::GetPlatforms(bool isIcd)
@@ -87,7 +191,7 @@ CLPlatformCL::ImplList CLPlatformCL::GetPlatforms(bool isIcd)
 
     // Iterating through the singly linked list khrIcdVendors to create an ANGLE CL pass-through
     // platform for each found ICD platform. Skipping our dummy entry that has an invalid platform.
-    ImplList implList;
+    ImplList list;
     for (KHRicdVendor *vendorIt = khrIcdVendors; vendorIt != nullptr; vendorIt = vendorIt->next)
     {
         if (vendorIt->platform != nullptr)
@@ -95,14 +199,23 @@ CLPlatformCL::ImplList CLPlatformCL::GetPlatforms(bool isIcd)
             Info info = GetInfo(vendorIt->platform);
             if (info.isValid())
             {
-                implList.emplace_back(new CLPlatformCL(vendorIt->platform), std::move(info));
+                CLDeviceImpl::List devices;
+                Ptr platform(new CLPlatformCL(vendorIt->platform, info.mVersion, devices));
+                if (!devices.empty())
+                {
+                    list.emplace_back(std::move(platform), std::move(info), std::move(devices));
+                }
             }
         }
     }
-    return implList;
+    return list;
 }
 
-CLPlatformCL::CLPlatformCL(cl_platform_id platform) : mPlatform(platform) {}
+CLPlatformCL::CLPlatformCL(cl_platform_id platform, cl_version version, CLDeviceImpl::List &devices)
+    : CLPlatformImpl(CreateDevices(*this, platform, devices)),
+      mPlatform(platform),
+      mVersion(version)
+{}
 
 #define ANGLE_GET_INFO_SIZE(name, size_ret) \
     platform->getDispatch().clGetPlatformInfo(platform, name, 0u, nullptr, size_ret)

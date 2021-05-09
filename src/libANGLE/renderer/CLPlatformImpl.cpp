@@ -23,4 +23,8 @@ bool CLPlatformImpl::Info::isValid() const
     return !mProfile.empty();
 }
 
+CLPlatformImpl::CLPlatformImpl(CLDeviceImpl::Array &&devices) : mDevices(std::move(devices)) {}
+
+CLPlatformImpl::~CLPlatformImpl() = default;
+
 }  // namespace rx

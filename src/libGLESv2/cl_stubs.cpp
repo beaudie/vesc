@@ -49,8 +49,7 @@ const Platform::List &InitializePlatforms(bool isIcd)
         rx::CLPlatformImpl::ImplList implListCL = rx::CLPlatformCL::GetPlatforms(isIcd);
         while (!implListCL.empty())
         {
-            Platform::CreatePlatform(gCLIcdDispatchTable, std::move(implListCL.front().first),
-                                     std::move(implListCL.front().second));
+            Platform::CreatePlatform(gCLIcdDispatchTable, implListCL.front());
             implListCL.pop_front();
         }
 #endif
@@ -59,8 +58,7 @@ const Platform::List &InitializePlatforms(bool isIcd)
         rx::CLPlatformImpl::ImplList implListVk = rx::CLPlatformVk::GetPlatforms();
         while (!implListVk.empty())
         {
-            Platform::CreatePlatform(gCLIcdDispatchTable, std::move(implListVk.front().first),
-                                     std::move(implListVk.front().second));
+            Platform::CreatePlatform(gCLIcdDispatchTable, implListVk.front());
             implListVk.pop_front();
         }
 #endif
@@ -85,6 +83,41 @@ cl_int GetPlatforms(cl_uint num_entries, Platform **platforms, cl_uint *num_plat
         }
     }
     return CL_SUCCESS;
+}
+
+Context::PropArray ParseContextProperties(const cl_context_properties *properties,
+                                          Platform *&platform,
+                                          bool &userSync)
+{
+    Context::PropArray propArray;
+    if (properties != nullptr)
+    {
+        // Count the trailing zero
+        size_t propSize                     = 1u;
+        const cl_context_properties *propIt = properties;
+        while (*propIt != 0)
+        {
+            ++propSize;
+            switch (*propIt++)
+            {
+                case CL_CONTEXT_PLATFORM:
+                    platform = reinterpret_cast<Platform *>(*propIt++);
+                    ++propSize;
+                    break;
+                case CL_CONTEXT_INTEROP_USER_SYNC:
+                    userSync = *propIt++ != CL_FALSE;
+                    ++propSize;
+                    break;
+            }
+        }
+        propArray.reserve(propSize);
+        propArray.insert(propArray.cend(), properties, properties + propSize);
+    }
+    if (platform == nullptr)
+    {
+        platform = Platform::GetDefault();
+    }
+    return propArray;
 }
 
 }  // anonymous namespace
@@ -177,8 +210,15 @@ Context *CreateContext(const cl_context_properties *properties,
                        void *user_data,
                        cl_int *errcode_ret)
 {
-    WARN_NOT_SUPPORTED(CreateContext);
-    return 0;
+    Platform *platform           = nullptr;
+    bool userSync                = false;
+    Context::PropArray propArray = ParseContextProperties(properties, platform, userSync);
+    if (platform == nullptr)
+    {
+        return nullptr;
+    }
+    return platform->createContext(std::move(propArray), num_devices, devices, pfn_notify,
+                                   user_data, userSync, errcode_ret);
 }
 
 Context *CreateContextFromType(const cl_context_properties *properties,
@@ -190,20 +230,27 @@ Context *CreateContextFromType(const cl_context_properties *properties,
                                void *user_data,
                                cl_int *errcode_ret)
 {
-    WARN_NOT_SUPPORTED(CreateContextFromType);
-    return 0;
+    Platform *platform           = nullptr;
+    bool userSync                = false;
+    Context::PropArray propArray = ParseContextProperties(properties, platform, userSync);
+    if (platform == nullptr)
+    {
+        return nullptr;
+    }
+    return platform->createContextFromType(std::move(propArray), device_type, pfn_notify, user_data,
+                                           userSync, errcode_ret);
 }
 
 cl_int RetainContext(Context *context)
 {
-    WARN_NOT_SUPPORTED(RetainContext);
-    return 0;
+    context->retain();
+    return CL_SUCCESS;
 }
 
 cl_int ReleaseContext(Context *context)
 {
-    WARN_NOT_SUPPORTED(ReleaseContext);
-    return 0;
+    context->release();
+    return CL_SUCCESS;
 }
 
 cl_int GetContextInfo(Context *context,
@@ -212,8 +259,7 @@ cl_int GetContextInfo(Context *context,
                       void *param_value,
                       size_t *param_value_size_ret)
 {
-    WARN_NOT_SUPPORTED(GetContextInfo);
-    return 0;
+    return context->getInfo(param_name, param_value_size, param_value, param_value_size_ret);
 }
 
 cl_int SetContextDestructorCallback(Context *context,

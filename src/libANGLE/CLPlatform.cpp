@@ -18,7 +18,33 @@ Platform::~Platform()
     removeRef();
 }
 
-cl_int Platform::getInfo(PlatformInfo name, size_t valueSize, void *value, size_t *sizeRet)
+Device::RefList Platform::mapDevices(const rx::CLDeviceImpl::Array &deviceImpls) const
+{
+    Device::RefList devices;
+    for (rx::CLDeviceImpl *impl : deviceImpls)
+    {
+        auto it = mDevices.cbegin();
+        while (it != mDevices.cend() && (*it)->mImpl.get() != impl)
+        {
+            ++it;
+        }
+        if (it != mDevices.cend())
+        {
+            devices.emplace_back(it->get());
+        }
+        else
+        {
+            ERR() << "Device not found in platform list";
+        }
+    }
+    if (devices.size() != deviceImpls.size())
+    {
+        devices.clear();
+    }
+    return devices;
+}
+
+cl_int Platform::getInfo(PlatformInfo name, size_t valueSize, void *value, size_t *valueSizeRet)
 {
     const void *copyValue = nullptr;
     size_t copySize       = 0u;
@@ -81,9 +107,9 @@ cl_int Platform::getInfo(PlatformInfo name, size_t valueSize, void *value, size_
             std::memcpy(value, copyValue, copySize);
         }
     }
-    if (sizeRet != nullptr)
+    if (valueSizeRet != nullptr)
     {
-        *sizeRet = copySize;
+        *valueSizeRet = copySize;
     }
     return CL_SUCCESS;
 }
@@ -115,28 +141,94 @@ cl_int Platform::getDeviceIDs(cl_device_type deviceType,
     return found == 0u ? CL_DEVICE_NOT_FOUND : CL_SUCCESS;
 }
 
-void Platform::CreatePlatform(const cl_icd_dispatch &dispatch,
-                              rx::CLPlatformImpl::Ptr &&impl,
-                              rx::CLPlatformImpl::Info &&info)
+Context *Platform::createContext(Context::PropArray &&properties,
+                                 cl_uint numDevices,
+                                 Device *const *devices,
+                                 ContextErrorCB notify,
+                                 void *userData,
+                                 bool userSync,
+                                 cl_int *errcodeRet)
 {
-    rx::CLDeviceImpl::ImplList deviceImplList = impl->getDevices();
-    if (!deviceImplList.empty())
+    Device::RefList refDevices;
+    while (numDevices-- != 0u)
     {
-        GetList().emplace_back(
-            new Platform(dispatch, std::move(impl), std::move(info), std::move(deviceImplList)));
+        refDevices.emplace_back(*devices++);
+    }
+    mContexts.emplace_back(new Context(*this, std::move(properties), std::move(refDevices), notify,
+                                       userData, userSync, errcodeRet));
+    if (!mContexts.back()->mImpl)
+    {
+        mContexts.back()->release();
+        return nullptr;
+    }
+    return mContexts.back().get();
+}
+
+Context *Platform::createContextFromType(Context::PropArray &&properties,
+                                         cl_device_type deviceType,
+                                         ContextErrorCB notify,
+                                         void *userData,
+                                         bool userSync,
+                                         cl_int *errcodeRet)
+{
+    mContexts.emplace_back(new Context(*this, std::move(properties), deviceType, notify, userData,
+                                       userSync, errcodeRet));
+    if (!mContexts.back()->mImpl || mContexts.back()->mDevices.empty())
+    {
+        mContexts.back()->release();
+        return nullptr;
+    }
+    return mContexts.back().get();
+}
+
+void Platform::CreatePlatform(const cl_icd_dispatch &dispatch,
+                              rx::CLPlatformImpl::ImplTuple &implTuple)
+{
+    Ptr platform(new Platform(dispatch, implTuple));
+    if (!platform->mDevices.empty())
+    {
+        GetList().emplace_back(std::move(platform));
     }
 }
 
-Platform::Platform(const cl_icd_dispatch &dispatch,
-                   rx::CLPlatformImpl::Ptr &&impl,
-                   rx::CLPlatformImpl::Info &&info,
-                   rx::CLDeviceImpl::ImplList &&deviceImplList)
+Platform::Platform(const cl_icd_dispatch &dispatch, rx::CLPlatformImpl::ImplTuple &implTuple)
     : _cl_platform_id(dispatch),
-      mImpl(std::move(impl)),
-      mInfo(std::move(info)),
-      mDevices(Device::CreateDevices(*this, std::move(deviceImplList)))
+      mImpl(std::move(std::get<0>(implTuple))),
+      mInfo(std::move(std::get<1>(implTuple))),
+      mDevices(Device::CreateDevices(*this, std::move(std::get<2>(implTuple))))
 {
     ASSERT(isCompatible(this));
+}
+
+rx::CLContextImpl::Ptr Platform::createContext(const Device::RefList &devices,
+                                               ContextErrorCB notify,
+                                               void *userData,
+                                               bool userSync,
+                                               cl_int *errcodeRet)
+{
+    rx::CLDeviceImpl::Array deviceImpls;
+    for (const Device::RefPtr &device : devices)
+    {
+        deviceImpls.emplace_back(device->mImpl.get());
+    }
+    return mImpl->createContext(std::move(deviceImpls), notify, userData, userSync, errcodeRet);
+}
+
+void Platform::destroyContext(Context *context)
+{
+    auto contextIt = mContexts.cbegin();
+    while (contextIt != mContexts.cend() && contextIt->get() != context)
+    {
+        ++contextIt;
+    }
+    if (contextIt != mContexts.cend())
+    {
+        mContexts.erase(contextIt);
+    }
+    else
+    {
+        ERR() << "Context not found";
+    }
 }
 
 constexpr char Platform::kVendor[];

@@ -8,10 +8,12 @@
 #ifndef LIBANGLE_RENDERER_CLPLATFORMIMPL_H_
 #define LIBANGLE_RENDERER_CLPLATFORMIMPL_H_
 
+#include "libANGLE/renderer/CLContextImpl.h"
 #include "libANGLE/renderer/CLDeviceImpl.h"
 
 #include <list>
 #include <string>
+#include <tuple>
 
 namespace rx
 {
@@ -41,14 +43,39 @@ class CLPlatformImpl : angle::NonCopyable
         cl_ulong mHostTimerRes;
     };
 
-    using Ptr      = std::unique_ptr<CLPlatformImpl>;
-    using ImplList = std::list<std::pair<Ptr, Info>>;
+    using Ptr       = std::unique_ptr<CLPlatformImpl>;
+    using ImplTuple = std::tuple<Ptr, Info, CLDeviceImpl::List>;
+    using ImplList  = std::list<ImplTuple>;
 
-    CLPlatformImpl()          = default;
-    virtual ~CLPlatformImpl() = default;
+    explicit CLPlatformImpl(CLDeviceImpl::Array &&devices);
+    virtual ~CLPlatformImpl();
 
-    virtual CLDeviceImpl::ImplList getDevices() = 0;
+    const CLDeviceImpl::Array &getDevices() const;
+
+    virtual CLContextImpl::Ptr createContext(CLDeviceImpl::Array &&devices,
+                                             cl::ContextErrorCB notify,
+                                             void *userData,
+                                             bool userSync,
+                                             cl_int *errcodeRet) = 0;
+
+    virtual CLContextImpl::Ptr createContextFromType(cl_device_type deviceType,
+                                                     cl::ContextErrorCB notify,
+                                                     void *userData,
+                                                     bool userSync,
+                                                     cl_int *errcodeRet) = 0;
+
+  protected:
+    const CLDeviceImpl::Array mDevices;
+
+    CLContextImpl::Array mContexts;
+
+    friend class CLContextImpl;
 };
+
+inline const CLDeviceImpl::Array &CLPlatformImpl::getDevices() const
+{
+    return mDevices;
+}
 
 }  // namespace rx
 

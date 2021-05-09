@@ -10,6 +10,7 @@
 
 #include "libANGLE/renderer/CLtypes.h"
 
+#include <list>
 #include <string>
 
 namespace rx
@@ -48,11 +49,20 @@ class CLDeviceImpl : angle::NonCopyable
         bool mIsSupportedExtensionsWithVersion     = false;
     };
 
-    using Ptr      = std::unique_ptr<CLDeviceImpl>;
-    using ImplList = std::list<std::pair<Ptr, Info>>;
+    using Ptr   = std::unique_ptr<CLDeviceImpl>;
+    using List  = std::list<Ptr>;
+    using Array = std::vector<CLDeviceImpl *>;
 
-    CLDeviceImpl()          = default;
-    virtual ~CLDeviceImpl() = default;
+    CLDeviceImpl(CLPlatformImpl &platform, CLDeviceImpl *parent);
+    virtual ~CLDeviceImpl();
+
+    template <typename T>
+    T &getPlatform() const
+    {
+        return static_cast<T &>(mPlatform);
+    }
+
+    virtual Info createInfo() const = 0;
 
     virtual cl_int getInfoUInt(cl::DeviceInfo name, cl_uint *value) const             = 0;
     virtual cl_int getInfoULong(cl::DeviceInfo name, cl_ulong *value) const           = 0;
@@ -62,8 +72,13 @@ class CLDeviceImpl : angle::NonCopyable
 
     virtual cl_int createSubDevices(const cl_device_partition_property *properties,
                                     cl_uint numDevices,
-                                    ImplList &deviceImplList,
+                                    List &deviceImplList,
                                     cl_uint *numDevicesRet) = 0;
+
+  protected:
+    CLPlatformImpl &mPlatform;
+    CLDeviceImpl *const mParent;
+    Array mSubDevices;
 };
 
 }  // namespace rx

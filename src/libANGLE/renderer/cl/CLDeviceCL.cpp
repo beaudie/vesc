@@ -7,6 +7,7 @@
 
 #include "libANGLE/renderer/cl/CLDeviceCL.h"
 
+#include "libANGLE/renderer/cl/CLPlatformCL.h"
 #include "libANGLE/renderer/cl/cl_util.h"
 
 #include "libANGLE/Debug.h"
@@ -23,73 +24,8 @@ CLDeviceCL::~CLDeviceCL()
     }
 }
 
-cl_int CLDeviceCL::getInfoUInt(cl::DeviceInfo name, cl_uint *value) const
-{
-    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), sizeof(*value),
-                                                  value, nullptr);
-}
-
-cl_int CLDeviceCL::getInfoULong(cl::DeviceInfo name, cl_ulong *value) const
-{
-    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), sizeof(*value),
-                                                  value, nullptr);
-}
-
-cl_int CLDeviceCL::getInfoSizeT(cl::DeviceInfo name, size_t *value) const
-{
-    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), sizeof(*value),
-                                                  value, nullptr);
-}
-
-cl_int CLDeviceCL::getInfoStringLength(cl::DeviceInfo name, size_t *value) const
-{
-    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), 0u, nullptr, value);
-}
-
-cl_int CLDeviceCL::getInfoString(cl::DeviceInfo name, size_t size, char *value) const
-{
-    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), size, value,
-                                                  nullptr);
-}
-
-cl_int CLDeviceCL::createSubDevices(const cl_device_partition_property *properties,
-                                    cl_uint numDevices,
-                                    ImplList &deviceImplList,
-                                    cl_uint *numDevicesRet)
-{
-    if (mVersion < CL_MAKE_VERSION(1, 2, 0))
-    {
-        return CL_INVALID_VALUE;
-    }
-    if (numDevices == 0u)
-    {
-        return mDevice->getDispatch().clCreateSubDevices(mDevice, properties, 0u, nullptr,
-                                                         numDevicesRet);
-    }
-    std::vector<cl_device_id> devices(numDevices, nullptr);
-    const cl_int result = mDevice->getDispatch().clCreateSubDevices(mDevice, properties, numDevices,
-                                                                    devices.data(), nullptr);
-    if (result == CL_SUCCESS)
-    {
-        for (cl_device_id device : devices)
-        {
-            CLDeviceImpl::Ptr impl(CLDeviceCL::Create(device));
-            CLDeviceImpl::Info info = CLDeviceCL::GetInfo(device);
-            if (impl && info.isValid())
-            {
-                deviceImplList.emplace_back(std::move(impl), std::move(info));
-            }
-        }
-        if (deviceImplList.size() != devices.size())
-        {
-            return CL_INVALID_VALUE;
-        }
-    }
-    return result;
-}
-
 #define ANGLE_GET_INFO_SIZE(name, size_ret) \
-    device->getDispatch().clGetDeviceInfo(device, name, 0u, nullptr, size_ret)
+    mDevice->getDispatch().clGetDeviceInfo(mDevice, name, 0u, nullptr, size_ret)
 
 #define ANGLE_GET_INFO_SIZE_RET(name, size_ret)                     \
     do                                                              \
@@ -102,7 +38,7 @@ cl_int CLDeviceCL::createSubDevices(const cl_device_partition_property *properti
     } while (0)
 
 #define ANGLE_GET_INFO(name, size, param) \
-    device->getDispatch().clGetDeviceInfo(device, name, size, param, nullptr)
+    mDevice->getDispatch().clGetDeviceInfo(mDevice, name, size, param, nullptr)
 
 #define ANGLE_GET_INFO_RET(name, size, param)                       \
     do                                                              \
@@ -114,25 +50,7 @@ cl_int CLDeviceCL::createSubDevices(const cl_device_partition_property *properti
         }                                                           \
     } while (0)
 
-CLDeviceCL *CLDeviceCL::Create(cl_device_id device)
-{
-    size_t valueSize = 0u;
-    if (ANGLE_GET_INFO_SIZE(CL_DEVICE_VERSION, &valueSize) == CL_SUCCESS)
-    {
-        std::vector<char> valString(valueSize, '\0');
-        if (ANGLE_GET_INFO(CL_DEVICE_VERSION, valueSize, valString.data()) == CL_SUCCESS)
-        {
-            const cl_version version = ExtractCLVersion(valString.data());
-            if (version != 0u)
-            {
-                return new CLDeviceCL(device, version);
-            }
-        }
-    }
-    return nullptr;
-}
-
-CLDeviceImpl::Info CLDeviceCL::GetInfo(cl_device_id device)
+CLDeviceImpl::Info CLDeviceCL::createInfo() const
 {
     CLDeviceImpl::Info info;
     size_t valueSize = 0u;
@@ -220,7 +138,94 @@ CLDeviceImpl::Info CLDeviceCL::GetInfo(cl_device_id device)
     return info;
 }
 
-CLDeviceCL::CLDeviceCL(cl_device_id device, cl_version version) : mDevice(device), mVersion(version)
+cl_int CLDeviceCL::getInfoUInt(cl::DeviceInfo name, cl_uint *value) const
+{
+    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), sizeof(*value),
+                                                  value, nullptr);
+}
+
+cl_int CLDeviceCL::getInfoULong(cl::DeviceInfo name, cl_ulong *value) const
+{
+    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), sizeof(*value),
+                                                  value, nullptr);
+}
+
+cl_int CLDeviceCL::getInfoSizeT(cl::DeviceInfo name, size_t *value) const
+{
+    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), sizeof(*value),
+                                                  value, nullptr);
+}
+
+cl_int CLDeviceCL::getInfoStringLength(cl::DeviceInfo name, size_t *value) const
+{
+    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), 0u, nullptr, value);
+}
+
+cl_int CLDeviceCL::getInfoString(cl::DeviceInfo name, size_t size, char *value) const
+{
+    return mDevice->getDispatch().clGetDeviceInfo(mDevice, cl::ToCLenum(name), size, value,
+                                                  nullptr);
+}
+
+cl_int CLDeviceCL::createSubDevices(const cl_device_partition_property *properties,
+                                    cl_uint numDevices,
+                                    List &deviceImplList,
+                                    cl_uint *numDevicesRet)
+{
+    if (mVersion < CL_MAKE_VERSION(1, 2, 0))
+    {
+        return CL_INVALID_VALUE;
+    }
+    if (numDevices == 0u)
+    {
+        return mDevice->getDispatch().clCreateSubDevices(mDevice, properties, 0u, nullptr,
+                                                         numDevicesRet);
+    }
+    std::vector<cl_device_id> devices(numDevices, nullptr);
+    const cl_int result = mDevice->getDispatch().clCreateSubDevices(mDevice, properties, numDevices,
+                                                                    devices.data(), nullptr);
+    if (result == CL_SUCCESS)
+    {
+        for (cl_device_id device : devices)
+        {
+            deviceImplList.emplace_back(
+                CLDeviceCL::Create(getPlatform<CLPlatformCL>(), this, device));
+            if (!deviceImplList.back())
+            {
+                deviceImplList.clear();
+                return CL_INVALID_VALUE;
+            }
+            mSubDevices.emplace_back(deviceImplList.back().get());
+        }
+    }
+    return result;
+}
+
+CLDeviceCL *CLDeviceCL::Create(CLPlatformCL &platform, CLDeviceCL *parent, cl_device_id device)
+{
+    size_t valueSize = 0u;
+    if (device->getDispatch().clGetDeviceInfo(device, CL_DEVICE_VERSION, 0u, nullptr, &valueSize) ==
+        CL_SUCCESS)
+    {
+        std::vector<char> valString(valueSize, '\0');
+        if (device->getDispatch().clGetDeviceInfo(device, CL_DEVICE_VERSION, valueSize,
+                                                  valString.data(), nullptr) == CL_SUCCESS)
+        {
+            const cl_version version = ExtractCLVersion(valString.data());
+            if (version != 0u)
+            {
+                return new CLDeviceCL(platform, parent, device, version);
+            }
+        }
+    }
+    return nullptr;
+}
+
+CLDeviceCL::CLDeviceCL(CLPlatformCL &platform,
+                       CLDeviceCL *parent,
+                       cl_device_id device,
+                       cl_version version)
+    : CLDeviceImpl(platform, parent), mDevice(device), mVersion(version)
 {}
 
 }  // namespace rx

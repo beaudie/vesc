@@ -9,6 +9,8 @@
 
 #include "libANGLE/CLPlatform.h"
 
+#include <cstring>
+
 namespace cl
 {
 
@@ -309,14 +311,19 @@ cl_int Device::createSubDevices(const cl_device_partition_property *properties,
     {
         numDevices = 0u;
     }
-    rx::CLDeviceImpl::ImplList implList;
+    rx::CLDeviceImpl::List implList;
     const cl_int result = mImpl->createSubDevices(properties, numDevices, implList, numDevicesRet);
     if (result == CL_SUCCESS)
     {
         while (!implList.empty())
         {
-            mSubDevices.emplace_back(new Device(mPlatform, this, std::move(implList.front().first),
-                                                std::move(implList.front().second)));
+            rx::CLDeviceImpl::Info info = implList.front()->createInfo();
+            if (!info.isValid())
+            {
+                return CL_INVALID_VALUE;
+            }
+            mSubDevices.emplace_back(
+                new Device(mPlatform, this, std::move(implList.front()), std::move(info)));
             *devices++ = mSubDevices.back().get();
             implList.pop_front();
         }
@@ -324,13 +331,18 @@ cl_int Device::createSubDevices(const cl_device_partition_property *properties,
     return result;
 }
 
-Device::List Device::CreateDevices(Platform &platform, rx::CLDeviceImpl::ImplList &&implList)
+Device::List Device::CreateDevices(Platform &platform, rx::CLDeviceImpl::List &&implList)
 {
     List devices;
     while (!implList.empty())
     {
-        devices.emplace_back(new Device(platform, nullptr, std::move(implList.front().first),
-                                        std::move(implList.front().second)));
+        rx::CLDeviceImpl::Info info = implList.front()->createInfo();
+        if (!info.isValid())
+        {
+            return Device::List{};
+        }
+        devices.emplace_back(
+            new Device(platform, nullptr, std::move(implList.front()), std::move(info)));
         implList.pop_front();
     }
     return devices;

@@ -7,6 +7,8 @@
 
 #include "libANGLE/renderer/CLDeviceImpl.h"
 
+#include "libANGLE/Debug.h"
+
 namespace rx
 {
 
@@ -22,6 +24,26 @@ bool CLDeviceImpl::Info::isValid() const
 {
     return mMaxWorkItemSizes.size() >= 3u && mMaxWorkItemSizes[0] >= 1u &&
            mMaxWorkItemSizes[1] >= 1u && mMaxWorkItemSizes[2] >= 1u;
+}
+
+CLDeviceImpl::CLDeviceImpl(CLPlatformImpl &platform, CLDeviceImpl *parent)
+    : mPlatform(platform), mParent(parent)
+{}
+
+CLDeviceImpl::~CLDeviceImpl()
+{
+    if (mParent != nullptr)
+    {
+        auto it = std::find(mParent->mSubDevices.cbegin(), mParent->mSubDevices.cend(), this);
+        if (it != mParent->mSubDevices.cend())
+        {
+            mParent->mSubDevices.erase(it);
+        }
+        else
+        {
+            ERR() << "Sub-device not in parent's list";
+        }
+    }
 }
 
 }  // namespace rx

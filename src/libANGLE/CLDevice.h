@@ -10,6 +10,7 @@
 #define LIBANGLE_CLDEVICE_H_
 
 #include "libANGLE/CLObject.h"
+#include "libANGLE/CLRefPointer.h"
 #include "libANGLE/renderer/CLDeviceImpl.h"
 
 namespace cl
@@ -18,16 +19,18 @@ namespace cl
 class Device final : public _cl_device_id, public Object
 {
   public:
-    using Ptr  = std::unique_ptr<Device>;
-    using List = std::vector<Ptr>;
+    using Ptr     = std::unique_ptr<Device>;
+    using List    = std::vector<Ptr>;
+    using RefPtr  = RefPointer<Device>;
+    using RefList = std::vector<RefPtr>;
 
     ~Device();
 
-    Platform &getPlatform() const;
-    bool isRoot() const;
+    Platform &getPlatform() const noexcept;
+    bool isRoot() const noexcept;
     bool hasSubDevice(const Device *device) const;
 
-    void retain();
+    void retain() noexcept;
     bool release();
 
     cl_int getInfoULong(DeviceInfo name, cl_ulong *value) const;
@@ -38,7 +41,7 @@ class Device final : public _cl_device_id, public Object
                             Device **devices,
                             cl_uint *numDevicesRet);
 
-    static List CreateDevices(Platform &platform, rx::CLDeviceImpl::ImplList &&implList);
+    static List CreateDevices(Platform &platform, rx::CLDeviceImpl::List &&implList);
 
     static bool IsValid(const Device *device);
     static bool IsValidType(cl_device_type type);
@@ -57,14 +60,16 @@ class Device final : public _cl_device_id, public Object
     const rx::CLDeviceImpl::Info mInfo;
 
     List mSubDevices;
+
+    friend class Platform;
 };
 
-inline Platform &Device::getPlatform() const
+inline Platform &Device::getPlatform() const noexcept
 {
     return mPlatform;
 }
 
-inline bool Device::isRoot() const
+inline bool Device::isRoot() const noexcept
 {
     return mParent == nullptr;
 }
@@ -76,7 +81,7 @@ inline bool Device::hasSubDevice(const Device *device) const
            }) != mSubDevices.cend();
 }
 
-inline void Device::retain()
+inline void Device::retain() noexcept
 {
     if (!isRoot())
     {
