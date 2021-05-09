@@ -49,6 +49,8 @@ class ValidateAST : public TIntermTraverser
 
     // Visit as a generic node
     void visitNode(Visit visit, TIntermNode *node);
+    // Visit a structure or interface block, and recursively visit its fields of structure type.
+    void visitStructureOrInterfaceBlock(const TType &type);
 
     void scope(Visit visit);
     bool isVariableDeclared(const TVariable *variable);
@@ -72,6 +74,10 @@ class ValidateAST : public TIntermTraverser
 
     // For validateNullNodes:
     bool mNullNodesFailed = false;
+
+    // For validateStructAndInterfaceBlockUsage:
+    std::map<ImmutableString, const TFieldListCollection *> mStructsAndBlocksByName;
+    bool mStructAndInterfaceBlockUsageFailed = false;
 
     // For validateMultiDeclarations:
     bool mMultiDeclarationsFailed = false;
@@ -127,6 +133,66 @@ void ValidateAST::visitNode(Visit visit, TIntermNode *node)
 
             mParent[child] = node;
         }
+    }
+}
+
+void ValidateAST::visitStructureOrInterfaceBlock(const TType &type)
+{
+    const TStructure *structure           = type.getStruct();
+    const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
+
+    if (structure == nullptr && interfaceBlock == nullptr)
+    {
+        return;
+    }
+
+    // Make sure the structure or interface block is not doubly defined.
+    ImmutableString typeName("");
+    const TFieldListCollection *structOrBlock = nullptr;
+    if (structure != nullptr && structure->symbolType() != SymbolType::Empty)
+    {
+        structOrBlock = structure;
+        typeName      = structure->name();
+    }
+    else if (interfaceBlock != nullptr)
+    {
+        structOrBlock = interfaceBlock;
+        typeName      = interfaceBlock->name();
+    }
+
+    if (structOrBlock)
+    {
+        ASSERT(!typeName.empty());
+        auto iter = mStructsAndBlocksByName.find(typeName);
+        if (iter == mStructsAndBlocksByName.end())
+        {
+            // First encounter.
+            mStructsAndBlocksByName[typeName] = structOrBlock;
+        }
+        else
+        {
+            // Make sure this structure or interface block is not doubly defined.
+            if (iter->second == structOrBlock)
+            {
+                return;
+            }
+
+            mStructAndInterfaceBlockUsageFailed = true;
+        }
+    }
+
+    // Recurse the fields of the structure or interface block and check members of structure type.
+    // Note that structOrBlock was previously only set for named structures, so make sure nameless
+    // structs are also recursed.
+    if (structOrBlock == nullptr)
+    {
+        structOrBlock = structure;
+    }
+    ASSERT(structOrBlock != nullptr);
+
+    for (const TField *field : structOrBlock->fields())
+    {
+        visitStructureOrInterfaceBlock(*field->type());
     }
 }
 
@@ -246,6 +312,11 @@ void ValidateAST::visitSymbol(TIntermSymbol *node)
                 mVariableReferencesFailed = true;
             }
         }
+    }
+
+    if (mOptions.validateStructAndInterfaceBlockUsage)
+    {
+        visitStructureOrInterfaceBlock(type);
     }
 }
 
@@ -431,7 +502,7 @@ void ValidateAST::visitPreprocessorDirective(TIntermPreprocessorDirective *node)
 bool ValidateAST::validateInternal()
 {
     return !mSingleParentFailed && !mVariableReferencesFailed && !mNullNodesFailed &&
-           !mMultiDeclarationsFailed;
+           !mStructAndInterfaceBlockUsageFailed && !mMultiDeclarationsFailed;
 }
 
 }  // anonymous namespace

@@ -42,9 +42,9 @@ struct ValidateASTOptions
     // Check that there is only one TFunction with each function name referenced in the nodes (no
     // two TFunctions with the same name, taking internal/non-internal namespaces into account).
     bool validateUniqueFunctions = true;  // TODO
-    // Check that references to user-defined structs are matched with the corresponding struct
-    // declaration.
-    bool validateStructUsage = true;  // TODO
+    // Check that references to structs and interface blocks are matched with the corresponding
+    // struct and interface block declaration.
+    bool validateStructAndInterfaceBlockUsage = true;
     // Check that expression nodes have the correct type considering their operand(s).
     bool validateExpressionTypes = true;  // TODO
     // If SeparateDeclarations has been run, check for the absence of multi declarations as well.
