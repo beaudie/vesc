@@ -18,11 +18,22 @@
     'forbid_script_tests': True,
     'mixins': [
       'chromium-tester-service-account',
+      'gpu-swarming-pool',
       'swarming_containment_auto',
     ],
     'machines': {
       'android-arm-builder': {},
       'android-arm64-builder': {},
+      'android-arm64-pixel4': {
+        'os_type': 'android',
+        'mixins': [
+          'android_r',
+          'flame',
+        ],
+        'test_suites': {
+          'gtest_tests': 'android_gtests',
+        },
+      },
       'linux-builder': {},
       'linux-intel': {
         'os_type': 'linux',
