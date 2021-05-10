@@ -12,7 +12,7 @@
   "infra/specs/variants.pyl":
     "8cfcaa99fa07ad2a2d5d14f220fd5037",
   "infra/specs/waterfalls.pyl":
-    "4db77bf53ae1d0587bc1508e94e567f2",
+    "680dc1603dd1078cca12fcf59157d25c",
   "testing/buildbot/generate_buildbot_json.py":
     "c04d166b1cee26a4db52c1b1613c8462",
   "testing/buildbot/mixins.pyl":
