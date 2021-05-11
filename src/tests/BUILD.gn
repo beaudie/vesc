@@ -333,6 +333,7 @@ template("angle_perftests_common") {
       "test_utils/runner/TestSuite.h",
     ]
     public_deps = [
+      "$angle_root/src/tests:angle_test_expectations",
       "$angle_root/third_party/rapidjson:rapidjson",
       "${invoker.test_utils}",
     ]
@@ -1263,7 +1264,6 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     angle_test("angle_deqp_${_api}_tests") {
       deps = [
         ":${shared_library_name}",
-        ":angle_test_expectations",
         "$angle_root:angle_common",
         "$angle_root/util:angle_util",
       ]
