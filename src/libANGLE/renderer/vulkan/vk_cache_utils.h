@@ -1109,11 +1109,18 @@ class UniformsAndXfbDescriptorDesc
         mBufferSerials[kDefaultUniformBufferIndex] = bufferSerial;
         mBufferCount = std::max(mBufferCount, static_cast<uint32_t>(1));
     }
-    void updateTransformFeedbackBuffer(size_t xfbIndex, BufferSerial bufferSerial)
+    void updateTransformFeedbackBuffer(size_t xfbIndex,
+                                       BufferSerial bufferSerial,
+                                       VkDeviceSize bufferOffset)
     {
         uint32_t bufferIndex        = static_cast<uint32_t>(xfbIndex) + 1;
         mBufferSerials[bufferIndex] = bufferSerial;
-        mBufferCount                = std::max(mBufferCount, (bufferIndex + 1));
+
+        ASSERT(static_cast<uint64_t>(bufferOffset) <=
+               static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        mXfbBufferOffsets[xfbIndex] = static_cast<uint32_t>(bufferOffset);
+
+        mBufferCount = std::max(mBufferCount, (bufferIndex + 1));
     }
     size_t hash() const;
     void reset();
@@ -1126,6 +1133,7 @@ class UniformsAndXfbDescriptorDesc
     static constexpr size_t kDefaultUniformBufferIndex = 0;
     static constexpr size_t kMaxBufferCount = 1 + gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS;
     std::array<BufferSerial, kMaxBufferCount> mBufferSerials;
+    std::array<uint32_t, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> mXfbBufferOffsets;
 };
 
 class ShaderBuffersDescriptorDesc
@@ -1147,8 +1155,6 @@ class ShaderBuffersDescriptorDesc
         mPayload.push_back(bufferSerial.getValue());
     }
     ANGLE_INLINE void append32BitValue(uint32_t value) { mPayload.push_back(value); }
-
-    void append64BitValue(uint64_t value);
 
   private:
     // After a preliminary minimum size, use heap memory.

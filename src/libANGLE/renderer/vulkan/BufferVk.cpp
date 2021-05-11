@@ -210,6 +210,17 @@ void BufferVk::destroy(const gl::Context *context)
 void BufferVk::release(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
+
+    releaseBuffer(contextVk);
+
+    // Release pools as well
+    mBufferPool.release(renderer);
+    mHostVisibleBufferPool.release(renderer);
+}
+
+void BufferVk::releaseBuffer(ContextVk *contextVk)
+{
+    RendererVk *renderer = contextVk->getRenderer();
     // For external buffers, mBuffer is not a reference to a chunk in mBufferPool.
     // It was allocated explicitly and needs to be deallocated during release(...)
     if (mBuffer && mBuffer->isExternalBuffer())
@@ -217,8 +228,6 @@ void BufferVk::release(ContextVk *contextVk)
         mBuffer->release(renderer);
     }
     mShadowBuffer.release();
-    mBufferPool.release(renderer);
-    mHostVisibleBufferPool.release(renderer);
     mBuffer       = nullptr;
     mBufferOffset = 0;
 
@@ -401,13 +410,9 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    // BufferData call is re-specifying the entire buffer
-    // Release and init a new mBuffer with this new size
-    if (size != static_cast<size_t>(mState.getSize()))
+    // If the data pool is not initialized, do it.
+    if (!mBufferPool.valid())
     {
-        // Release and re-create the memory and buffer.
-        release(contextVk);
-
         // We could potentially use multiple backing buffers for different usages.
         // For now keep a single buffer with all relevant usage flags.
         VkImageUsageFlags usageFlags =
@@ -429,8 +434,26 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
                                   bufferHelperPoolInitialSize, memoryPropertyFlags,
                                   vk::DynamicBufferPolicy::FrequentSmallAllocations);
+    }
+
+    bool synchronize = true;
+
+    // BufferData call is re-specifying the entire buffer
+    // Release and init a new mBuffer with this new size
+    if (size != static_cast<size_t>(mState.getSize()))
+    {
+        // Release and re-create the memory and buffer.
+        releaseBuffer(contextVk);
 
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
+
+        // There was a new buffer allocation, so no need for synchronization.  Since buffers are
+        // allocated from a pool, the BufferHelper object may seem in-use by the GPU, but is not
+        // really.
+        //
+        // TODO: Remove this by creating a new resource type which includes the buffer + offset and
+        // have that be tracked for usage on the GPU.  http://anglebug.com/5720
+        synchronize = false;
 
         // persistentMapRequired may request that the server read from or write to the buffer while
         // it is mapped. The client's pointer to the data store remains valid so long as the data
@@ -444,7 +467,7 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
 
     if (data)
     {
-        ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, 0));
+        ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, 0, synchronize));
     }
 
     return angle::Result::Continue;
@@ -459,7 +482,7 @@ angle::Result BufferVk::setSubData(const gl::Context *context,
     ASSERT(mBuffer && mBuffer->valid());
 
     ContextVk *contextVk = vk::GetImpl(context);
-    ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, offset));
+    ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, offset, true));
 
     return angle::Result::Continue;
 }
@@ -856,7 +879,8 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
 angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
                                     const uint8_t *data,
                                     size_t size,
-                                    size_t offset)
+                                    size_t offset,
+                                    bool synchronize)
 {
     // Update shadow buffer
     updateShadowBuffer(data, size, offset);
@@ -866,7 +890,7 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     //          acquire a new BufferHelper from the pool
     //     else stage the update
     // else update the buffer directly
-    if (mBuffer->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+    if (synchronize && mBuffer->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
     {
         if (!mBuffer->isExternalBuffer() &&
             SubDataSizeMeetsThreshold(size, static_cast<size_t>(mState.getSize())))
