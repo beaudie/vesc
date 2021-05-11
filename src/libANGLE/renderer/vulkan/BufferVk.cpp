@@ -210,6 +210,17 @@ void BufferVk::destroy(const gl::Context *context)
 void BufferVk::release(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
+
+    releaseBuffer(contextVk);
+
+    // Release pools as well
+    mBufferPool.release(renderer);
+    mHostVisibleBufferPool.release(renderer);
+}
+
+void BufferVk::releaseBuffer(ContextVk *contextVk)
+{
+    RendererVk *renderer = contextVk->getRenderer();
     // For external buffers, mBuffer is not a reference to a chunk in mBufferPool.
     // It was allocated explicitly and needs to be deallocated during release(...)
     if (mBuffer && mBuffer->isExternalBuffer())
@@ -217,8 +228,6 @@ void BufferVk::release(ContextVk *contextVk)
         mBuffer->release(renderer);
     }
     mShadowBuffer.release();
-    mBufferPool.release(renderer);
-    mHostVisibleBufferPool.release(renderer);
     mBuffer       = nullptr;
     mBufferOffset = 0;
 
@@ -395,13 +404,9 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    // BufferData call is re-specifying the entire buffer
-    // Release and init a new mBuffer with this new size
-    if (size > 0 && size != static_cast<size_t>(mState.getSize()))
+    // If the data pool is not initialized, do it.
+    if (size > 0 && !mBufferPool.valid())
     {
-        // Release and re-create the memory and buffer.
-        release(contextVk);
-
         // We could potentially use multiple backing buffers for different usages.
         // For now keep a single buffer with all relevant usage flags.
         VkImageUsageFlags usageFlags =
@@ -423,6 +428,14 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
                                   bufferHelperPoolInitialSize, memoryPropertyFlags,
                                   vk::DynamicBufferPolicy::FrequentSmallAllocations);
+    }
+
+    // BufferData call is re-specifying the entire buffer
+    // Release and init a new mBuffer with this new size
+    if (size > 0 && size != static_cast<size_t>(mState.getSize()))
+    {
+        // Release and re-create the memory and buffer.
+        releaseBuffer(contextVk);
 
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
 

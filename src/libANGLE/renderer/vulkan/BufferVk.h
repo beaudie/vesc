@@ -180,6 +180,7 @@ class BufferVk : public BufferImpl
                               size_t size,
                               size_t offset);
     void release(ContextVk *context);
+    void releaseBuffer(ContextVk *context);
     void markConversionBuffersDirty();
 
     angle::Result acquireBufferHelper(ContextVk *contextVk, size_t sizeInBytes);
