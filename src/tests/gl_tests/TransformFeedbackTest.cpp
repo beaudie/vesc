@@ -2827,6 +2827,9 @@ TEST_P(TransformFeedbackTestES32, PrimitivesWrittenAndGenerated)
     // No ES3.2 support on out bots.  http://anglebug.com/5435
     ANGLE_SKIP_TEST_IF(IsPixel2() && IsVulkan());
 
+    // ASSERT failure on Pixel 4. http://anglebug.com/5946
+    ANGLE_SKIP_TEST_IF(IsPixel4() && IsVulkan());
+
     // No VK_EXT_transform_feedback support on the following configurations.
     // http://anglebug.com/5435
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsAMD() && IsWindows());
