@@ -66,6 +66,11 @@ std::string GetModuleDirectory()
         std::string moduleName = dlInfo.dli_fname;
         directory              = moduleName.substr(0, moduleName.find_last_of('/') + 1);
     }
+    // Ensure we return the full path to the module, not the relative path
+    if (directory.at(0) != '/')
+    {
+        directory = GetCWD().value() + GetPathSeparator() + directory;
+    }
     return directory;
 }
 
