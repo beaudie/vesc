@@ -2901,6 +2901,9 @@ angle::Result ContextVk::insertEventMarker(GLsizei length, const char *marker)
         return angle::Result::Continue;
     }
 
+    // TODO(syoussefi): Remove this.  This is part of an investigation to resolve crbug.com/1205999.
+    ASSERT(vkCmdInsertDebugUtilsLabelEXT);
+
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(GL_DEBUG_SOURCE_APPLICATION, marker, &label);
     mOutsideRenderPassCommands->getCommandBuffer().insertDebugUtilsLabelEXT(label);
