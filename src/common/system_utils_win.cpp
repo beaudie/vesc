@@ -123,9 +123,9 @@ std::string GetModuleDirectory()
 #if !defined(ANGLE_IS_WINUWP)
     static int placeholderSymbol = 0;
     HMODULE module               = nullptr;
-    if (GetModuleHandleEx(
+    if (GetModuleHandleExA(
             GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-            reinterpret_cast<LPCWSTR>(&placeholderSymbol), &module))
+            reinterpret_cast<LPCSTR>(&placeholderSymbol), &module))
     {
         return GetDirectory(module);
     }
