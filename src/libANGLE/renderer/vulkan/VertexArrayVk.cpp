@@ -66,7 +66,7 @@ angle::Result WarnOnVertexFormatConversion(ContextVk *contextVk,
            << vertexFormat.actualBufferFormat(compressed).glInternalFormat;
     ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW, stream.str().c_str());
 
-    if (insertEventMarker)
+    if (insertEventMarker && vkCmdInsertDebugUtilsLabelEXT)
     {
         ANGLE_TRY(contextVk->insertEventMarker(0, stream.str().c_str()));
     }
