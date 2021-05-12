@@ -874,10 +874,26 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeCaps.subPixelBits = limitsVk.subPixelPrecisionBits;
 
-    // Enable GL_EXT_shader_framebuffer_fetch_non_coherent
-    // For supporting this extension, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS is used.
-    mNativeExtensions.shaderFramebufferFetchNonCoherentEXT =
-        mNativeCaps.maxDrawBuffers >= gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+    if (mNativeCaps.maxDrawBuffers >= gl::IMPLEMENTATION_MAX_DRAW_BUFFERS)
+    {
+        // Enable either the GL_EXT_shader_framebuffer_fetch_non_coherent or
+        // GL_EXT_shader_framebuffer_fetch extension based on whether the underlying Vulkan driver
+        // can support the coherent semantics.
+        //
+        // For supporting either extension, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS is used.
+        if (getFeatures().exposeNonConformantExtensionsAndVersions.enabled &&
+            (IsARM(mPhysicalDeviceProperties.vendorID) ||
+             IsQualcomm(mPhysicalDeviceProperties.vendorID)))
+        {
+            // Enable GL_EXT_shader_framebuffer_fetch
+            mNativeExtensions.shaderFramebufferFetchEXT = true;
+        }
+        else
+        {
+            // Enable GL_EXT_shader_framebuffer_fetch_non_coherent
+            mNativeExtensions.shaderFramebufferFetchNonCoherentEXT = true;
+        }
+    }
 
     // Enable Program Binary extension.
     mNativeExtensions.getProgramBinaryOES = true;
