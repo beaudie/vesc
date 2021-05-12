@@ -247,19 +247,16 @@ class IOSurfaceClientBufferTest : public ANGLETest
         ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
         EXPECT_GL_NO_ERROR();
 
-        glClearColor(1.0f / 255.0f, 2.0f / 255.0f, 3.0f / 255.0f, 4.0f / 255.0f);
+        glClearColor(data[0] / 255.0f, data[1] / 255.0f, data[2] / 255.0f, data[3] / 255.0f);
         EXPECT_GL_NO_ERROR();
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_GL_NO_ERROR();
+        glFlush();
 
         // Unbind pbuffer and check content.
         EGLBoolean result = eglReleaseTexImage(mDisplay, pbuffer, EGL_BACK_BUFFER);
         EXPECT_EGL_TRUE(result);
         EXPECT_EGL_SUCCESS();
-
-        // IOSurface client buffer's rendering doesn't automatically finish after
-        // eglReleaseTexImage(). Need to explicitly call glFinish().
-        glFinish();
 
         IOSurfaceLock(ioSurface.get(), kIOSurfaceLockReadOnly, nullptr);
         std::array<T, dataSize> iosurfaceData;
