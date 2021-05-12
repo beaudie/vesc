@@ -1975,8 +1975,7 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, clipSrcRegionBlitFramebuffer,
                             IsApple() || (IsLinux() && isAMD));
 
-    ANGLE_FEATURE_CONDITION(features, resettingTexturesGeneratesErrors,
-                            IsApple() || (IsWindows() && isAMD));
+    ANGLE_FEATURE_CONDITION(features, resettingTexturesGeneratesErrors, IsWindows() && isAMD);
 
     ANGLE_FEATURE_CONDITION(features, rgbDXT1TexturesSampleZeroAlpha, IsApple());
 
