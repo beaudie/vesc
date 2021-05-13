@@ -1062,11 +1062,8 @@ void WriteCppReplay(bool compression,
 
         setupCallStream << "void " << FmtSetupFunction(kNoPartId) << "\n";
         setupCallStream << "{\n";
+        setupCallStream << "    " << captureLabel << "::InitReplay();\n";
 
-        size_t maxClientArraySize = MaxClientArraySize(clientArraySizes);
-
-        WriteInitReplayCall(compression, setupCallStream, context->id(), captureLabel,
-                            maxClientArraySize, readBufferSize);
         WriteCppReplayFunctionWithParts(context, ReplayFunc::Setup, &dataTracker, frameIndex,
                                         binaryData, setupCalls, header, setupCallStream, out);
 
@@ -4898,6 +4895,8 @@ void FrameCapture::writeCppReplayIndexFiles(const gl::Context *context,
         header << "\n";
     }
 
+    header << "void InitReplay();\n";
+
     source << "#include \"" << FmtCapturePrefix(contextId, mCaptureLabel) << ".h\"\n";
     source << "#include \"trace_fixture.h\"\n";
     source << "\n";
@@ -4907,6 +4906,12 @@ void FrameCapture::writeCppReplayIndexFiles(const gl::Context *context,
         source << "using namespace " << mCaptureLabel << ";\n";
         source << "\n";
     }
+
+    source << "void " << mCaptureLabel << "::InitReplay()\n";
+    source << "{\n";
+    WriteInitReplayCall(mCompression, source, context->id(), mCaptureLabel,
+                        MaxClientArraySize(mClientArraySizes), mReadBufferSize);
+    source << "}\n";
 
     source << "extern \"C\" {\n";
     source << "void ReplayFrame(uint32_t frameIndex)\n";
