@@ -26,6 +26,7 @@ angle_shared_library(cl_library_name) {
     "dispatch.h",
     "libOpenCL_autogen.cpp",
   ]
+  inputs = [ "libOpenCL_autogen.map" ]
 
   configs += [
     "$angle_root:debug_annotations_config",
@@ -36,6 +37,11 @@ angle_shared_library(cl_library_name) {
     "$angle_root:angle_common",
     "$angle_root:cl_includes",
   ]
+
+  if (is_linux) {
+    ldflags = [ "-Wl,--version-script=" +
+                rebase_path("libOpenCL_autogen.map", root_build_dir) ]
+  }
 }
 
 group("angle_cl") {
