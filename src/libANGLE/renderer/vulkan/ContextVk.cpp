@@ -2989,6 +2989,24 @@ void ContextVk::endEventLog(angle::EntryPoint entryPoint)
     mRenderPassCommands->getCommandBuffer().endDebugUtilsLabelEXT();
 }
 
+void ContextVk::handleNoopDrawEvent()
+{
+
+    if (!mRenderer->angleDebuggerMode())
+    {
+        return;
+    }
+
+    VkDebugUtilsLabelEXT label = {VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+                                  nullptr,
+                                  mEventLog.back().c_str(),
+                                  {0.0f, 0.0f, 0.0f, 0.0f}};
+    ASSERT(mRenderPassCommandBuffer);
+    // Emit a balancing CmdBeginDebugUtilsLabel in lieu of the skipped
+    // event processing for aborted draw calls
+    mRenderPassCommandBuffer->beginDebugUtilsLabelEXT(label);
+}
+
 bool ContextVk::isViewportFlipEnabledForDrawFBO() const
 {
     return mFlipViewportForDrawFramebuffer && mFlipYForCurrentSurface;
