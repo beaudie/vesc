@@ -354,6 +354,8 @@ class FrameCapture final : angle::NonCopyable
     ResourceTracker &getResouceTracker() { return mResourceTracker; }
 
   private:
+    void writeCppReplayIndexFiles(const gl::Context *, bool writeResetContextCall) const;
+
     void captureClientArraySnapshot(const gl::Context *context,
                                     size_t vertexCount,
                                     size_t instanceCount);
