@@ -56,48 +56,35 @@ class VertexArrayVk : public VertexArrayImpl
 
     angle::Result handleLineLoopIndexIndirect(ContextVk *contextVk,
                                               gl::DrawElementsType glIndexType,
-                                              vk::BufferHelper *srcIndirectBuf,
-                                              VkDeviceSize indirectBufferOffset,
-                                              vk::BufferHelper **indirectBufferOut,
-                                              VkDeviceSize *indirectBufferOffsetOut);
+                                              const vk::BufferAndOffset *indirectBufferAndOffset,
+                                              const vk::BufferHelper **indirectBufferAndOffsetOut);
 
     angle::Result handleLineLoopIndirectDraw(const gl::Context *context,
-                                             vk::BufferHelper *indirectBufferVk,
-                                             VkDeviceSize indirectBufferOffset,
-                                             vk::BufferHelper **indirectBufferOut,
-                                             VkDeviceSize *indirectBufferOffsetOut);
+                                             const vk::BufferAndOffset *indirectBufferAndOffset,
+                                             const vk::BufferHelper **indirectBufferAndOffsetOut);
 
     const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const
     {
         return mCurrentArrayBufferHandles;
     }
 
-    const gl::AttribArray<VkDeviceSize> &getCurrentArrayBufferOffsets() const
+    const gl::AttribArray<const vk::BufferAndOffset *> &getCurrentArrayBuffersAndOffsets() const
     {
-        return mCurrentArrayBufferOffsets;
+        return mCurrentArrayBuffersAndOffsets;
     }
 
-    const gl::AttribArray<vk::BufferHelper *> &getCurrentArrayBuffers() const
+    const vk::BufferAndOffset *getCurrentIndexBufferAndOffset() const
     {
-        return mCurrentArrayBuffers;
+        return mCurrentIndexBufferAndOffset;
     }
-
-    VkDeviceSize getCurrentElementArrayBufferOffset() const
-    {
-        return mCurrentElementArrayBufferOffset;
-    }
-
-    vk::BufferHelper *getCurrentElementArrayBuffer() const { return mCurrentElementArrayBuffer; }
 
     angle::Result convertIndexBufferGPU(ContextVk *contextVk,
                                         BufferVk *bufferVk,
                                         const void *indices);
 
     angle::Result convertIndexBufferIndirectGPU(ContextVk *contextVk,
-                                                vk::BufferHelper *srcIndirectBuf,
-                                                VkDeviceSize srcIndirectBufOffset,
-                                                vk::BufferHelper **indirectBufferVkOut,
-                                                VkDeviceSize *indirectBufferVkOffsetOut);
+                                                const vk::BufferAndOffset *srcIndirectBuf,
+                                                const vk::BufferAndOffset **indirectBufferOut);
 
     angle::Result convertIndexBufferCPU(ContextVk *contextVk,
                                         gl::DrawElementsType indexType,
@@ -135,21 +122,35 @@ class VertexArrayVk : public VertexArrayImpl
                                   size_t attribIndex,
                                   bool bufferOnly);
 
-    gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
-    gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     // The offset into the buffer to the first attrib
     gl::AttribArray<GLuint> mCurrentArrayBufferRelativeOffsets;
-    gl::AttribArray<vk::BufferHelper *> mCurrentArrayBuffers;
+    // |mCurrentArrayBuffersAndOffsets| holds the pointer to where buffer and offset (and its
+    // resource use) are stored.  This could be either |mStreamedBuffersAndOffsets| for streamed
+    // attributes, |VertexConversionBuffer::bufferAndOffset| if a conversion buffer is used, or
+    // |BufferVk::mBufferAndOffset|.
+    gl::AttribArray<const vk::BufferAndOffset *> mCurrentArrayBuffersAndOffsets;
     // Cache strides of attributes for a fast pipeline cache update when VAOs are changed
     gl::AttribArray<GLuint> mCurrentArrayBufferStrides;
     gl::AttributesMask mCurrentArrayBufferCompressed;
-    VkDeviceSize mCurrentElementArrayBufferOffset;
-    vk::BufferHelper *mCurrentElementArrayBuffer;
+    // |mCurrentIndexBufferAndOffset| holds the pointer to where buffer and offset for the index
+    // buffer are stored.  This could be either |mTranslatedIndexBufferAndOffset| if emulated, or
+    // |BufferVk::mBufferAndOffset|.
+    const vk::BufferAndOffset *mCurrentIndexBufferAndOffset;
+
+    // Convenience arrays passed to Vulkan functions to bind multiple vertex arrays.
+    gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
+    // TODO: mCurrentArrayBufferOffsets was briefly removed, check with mCurrentArrayBufferHandles
+    // and make sure it's always set
+    gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
 
     vk::DynamicBuffer mDynamicVertexData;
     vk::DynamicBuffer mDynamicIndexData;
     vk::DynamicBuffer mTranslatedByteIndexData;
     vk::DynamicBuffer mTranslatedByteIndirectData;
+
+    gl::AttribArray<vk::BufferAndOffset> mStreamedBuffersAndOffsets;
+    vk::BufferAndOffset mTranslatedIndexBufferAndOffset;
+    vk::BufferAndOffset mTranslatedIndirectBufferAndOffset;
 
     vk::LineLoopHelper mLineLoopHelper;
     Optional<GLint> mLineLoopBufferFirstIndex;

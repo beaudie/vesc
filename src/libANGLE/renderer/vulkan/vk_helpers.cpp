@@ -1898,6 +1898,52 @@ void CommandBufferHelper::growRenderArea(ContextVk *contextVk, const gl::Rectang
     }
 }
 
+// BufferAndOffset implementation.
+BufferAndOffset::BufferAndOffset() : mBuffer(nullptr), mOffset(0) {}
+
+BufferAndOffset::~BufferAndOffset()
+{
+    release();
+}
+
+BufferAndOffset::BufferAndOffset(BufferAndOffset &&other)
+    : Resource(std::move(other)), mBuffer(other.mBuffer), mOffset(other.mOffset)
+{
+    other.mBuffer = nullptr;
+    other.mOffset = 0;
+}
+
+void BufferAndOffset::init(BufferHelper *buffer, VkDeviceSize offset)
+{
+    // Release reference to previous buffer and offset if any
+    release();
+
+    mUse.init();
+
+    ASSERT(buffer != nullptr);
+
+    mBuffer = buffer;
+    mOffset = offset;
+
+    mBuffer->addBufferAndOffsetRef();
+}
+
+void BufferAndOffset::release()
+{
+    if (!mUse.valid())
+    {
+        return;
+    }
+
+    mUse.release();
+
+    ASSERT(mBuffer != nullptr);
+    mBuffer->releaseBufferAndOffsetRef();
+
+    mBuffer = nullptr;
+    mOffset = 0;
+}
+
 // DynamicBuffer implementation.
 DynamicBuffer::DynamicBuffer()
     : mUsage(0),
@@ -2031,9 +2077,8 @@ bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes,
 angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
                                                    size_t sizeInBytes,
                                                    size_t alignment,
+                                                   vk::BufferAndOffset *bufferAndOffsetOut,
                                                    uint8_t **ptrOut,
-                                                   VkBuffer *bufferOut,
-                                                   VkDeviceSize *offsetOut,
                                                    bool *newBufferAllocatedOut)
 {
     mNextAllocationOffset =
@@ -2094,11 +2139,6 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
 
     ASSERT(mBuffer != nullptr);
 
-    if (bufferOut != nullptr)
-    {
-        *bufferOut = mBuffer->getBuffer().getHandle();
-    }
-
     // Optionally map() the buffer if possible
     if (ptrOut)
     {
@@ -2108,10 +2148,8 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
         *ptrOut = mappedMemory + mNextAllocationOffset;
     }
 
-    if (offsetOut != nullptr)
-    {
-        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
-    }
+    // Return the allocated buffer pointer and offset.
+    bufferAndOffsetOut->init(mBuffer.get(), static_cast<VkDeviceSize>(mNextAllocationOffset));
 
     mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
     return angle::Result::Continue;
@@ -3017,20 +3055,19 @@ LineLoopHelper::LineLoopHelper(RendererVk *renderer)
 
 LineLoopHelper::~LineLoopHelper() = default;
 
-angle::Result LineLoopHelper::getIndexBufferForDrawArrays(ContextVk *contextVk,
-                                                          uint32_t clampedVertexCount,
-                                                          GLint firstVertex,
-                                                          BufferHelper **bufferOut,
-                                                          VkDeviceSize *offsetOut)
+angle::Result LineLoopHelper::getIndexBufferForDrawArrays(
+    ContextVk *contextVk,
+    uint32_t clampedVertexCount,
+    GLint firstVertex,
+    const BufferAndOffset **bufferAndOffsetOut)
 {
     uint32_t *indices    = nullptr;
     size_t allocateBytes = sizeof(uint32_t) * (static_cast<size_t>(clampedVertexCount) + 1);
 
     mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
-                                           reinterpret_cast<uint8_t **>(&indices), nullptr,
-                                           offsetOut, nullptr));
-    *bufferOut = mDynamicIndexBuffer.getCurrentBuffer();
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, &mIndexBufferAndOffset,
+                                           reinterpret_cast<uint8_t **>(&indices), nullptr));
+    *bufferAndOffsetOut = &mIndexBufferAndOffset;
 
     // Note: there could be an overflow in this addition.
     uint32_t unsignedFirstVertex = static_cast<uint32_t>(firstVertex);
@@ -3049,14 +3086,14 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
-                                                                  BufferVk *elementArrayBufferVk,
-                                                                  gl::DrawElementsType glIndexType,
-                                                                  int indexCount,
-                                                                  intptr_t elementArrayOffset,
-                                                                  BufferHelper **bufferOut,
-                                                                  VkDeviceSize *bufferOffsetOut,
-                                                                  uint32_t *indexCountOut)
+angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(
+    ContextVk *contextVk,
+    BufferVk *elementArrayBufferVk,
+    gl::DrawElementsType glIndexType,
+    int indexCount,
+    intptr_t elementArrayOffset,
+    const BufferAndOffset **bufferAndOffsetOut,
+    uint32_t *indexCountOut)
 {
     if (glIndexType == gl::DrawElementsType::UnsignedByte ||
         contextVk->getState().isPrimitiveRestartEnabled())
@@ -3067,7 +3104,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
         ANGLE_TRY(elementArrayBufferVk->mapImpl(contextVk, &srcDataMapping));
         ANGLE_TRY(streamIndices(contextVk, glIndexType, indexCount,
                                 static_cast<const uint8_t *>(srcDataMapping) + elementArrayOffset,
-                                bufferOut, bufferOffsetOut, indexCountOut));
+                                bufferAndOffsetOut, indexCountOut));
         ANGLE_TRY(elementArrayBufferVk->unmapImpl(contextVk));
         return angle::Result::Continue;
     }
@@ -3079,31 +3116,32 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     size_t allocateBytes = unitSize * (indexCount + 1) + 1;
 
     mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
-                                           reinterpret_cast<uint8_t **>(&indices), nullptr,
-                                           bufferOffsetOut, nullptr));
-    *bufferOut = mDynamicIndexBuffer.getCurrentBuffer();
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, &mIndexBufferAndOffset,
+                                           reinterpret_cast<uint8_t **>(&indices), nullptr));
+    *bufferAndOffsetOut = &mIndexBufferAndOffset;
 
-    VkDeviceSize sourceBufferOffset = 0;
-    BufferHelper *sourceBuffer = &elementArrayBufferVk->getBufferAndOffset(&sourceBufferOffset);
+    const BufferAndOffset *sourceBufferAndOffset = elementArrayBufferVk->getBufferAndOffset();
 
-    VkDeviceSize sourceOffset = static_cast<VkDeviceSize>(elementArrayOffset) + sourceBufferOffset;
-    uint64_t unitCount        = static_cast<VkDeviceSize>(indexCount);
+    VkDeviceSize sourceOffset =
+        static_cast<VkDeviceSize>(elementArrayOffset) + sourceBufferAndOffset->getOffset();
+    VkDeviceSize destOffset                    = mIndexBufferAndOffset.getOffset();
+    uint64_t unitCount                         = static_cast<VkDeviceSize>(indexCount);
     angle::FixedVector<VkBufferCopy, 3> copies = {
-        {sourceOffset, *bufferOffsetOut, unitCount * unitSize},
-        {sourceOffset, *bufferOffsetOut + unitCount * unitSize, unitSize},
+        {sourceOffset, destOffset, unitCount * unitSize},
+        {sourceOffset, destOffset + unitCount * unitSize, unitSize},
     };
     if (contextVk->getRenderer()->getFeatures().extraCopyBufferRegion.enabled)
-        copies.push_back({sourceOffset, *bufferOffsetOut + (unitCount + 1) * unitSize, 1});
+        copies.push_back({sourceOffset, destOffset + (unitCount + 1) * unitSize, 1});
 
     vk::CommandBufferAccess access;
-    access.onBufferTransferWrite(*bufferOut);
-    access.onBufferTransferRead(sourceBuffer);
+    access.onBufferTransferWrite(&mIndexBufferAndOffset);
+    access.onBufferTransferRead(sourceBufferAndOffset);
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    commandBuffer->copyBuffer(sourceBuffer->getBuffer(), (*bufferOut)->getBuffer(),
+    commandBuffer->copyBuffer(sourceBufferAndOffset->getBuffer()->getBuffer(),
+                              mIndexBufferAndOffset.getBuffer(),
                               static_cast<uint32_t>(copies.size()), copies.data());
 
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
@@ -3114,8 +3152,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                             gl::DrawElementsType glIndexType,
                                             GLsizei indexCount,
                                             const uint8_t *srcPtr,
-                                            BufferHelper **bufferOut,
-                                            VkDeviceSize *bufferOffsetOut,
+                                            const BufferAndOffset **bufferAndOffsetOut,
                                             uint32_t *indexCountOut)
 {
     size_t unitSize = contextVk->getVkIndexTypeSize(glIndexType);
@@ -3129,10 +3166,9 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
     }
     *indexCountOut       = numOutIndices;
     size_t allocateBytes = unitSize * numOutIndices;
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
-                                           reinterpret_cast<uint8_t **>(&indices), nullptr,
-                                           bufferOffsetOut, nullptr));
-    *bufferOut = mDynamicIndexBuffer.getCurrentBuffer();
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, &mIndexBufferAndOffset,
+                                           reinterpret_cast<uint8_t **>(&indices), nullptr));
+    *bufferAndOffsetOut = &mIndexBufferAndOffset;
 
     if (contextVk->getState().isPrimitiveRestartEnabled())
     {
@@ -3164,19 +3200,17 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
-                                                    gl::DrawElementsType glIndexType,
-                                                    BufferHelper *indexBuffer,
-                                                    VkDeviceSize indexBufferOffset,
-                                                    BufferHelper *indirectBuffer,
-                                                    VkDeviceSize indirectBufferOffset,
-                                                    BufferHelper **indexBufferOut,
-                                                    VkDeviceSize *indexBufferOffsetOut,
-                                                    BufferHelper **indirectBufferOut,
-                                                    VkDeviceSize *indirectBufferOffsetOut)
+angle::Result LineLoopHelper::streamIndicesIndirect(
+    ContextVk *contextVk,
+    gl::DrawElementsType glIndexType,
+    const BufferAndOffset *indexBufferAndOffset,
+    const BufferAndOffset *indirectBufferAndOffset,
+    const BufferAndOffset **indexBufferAndOffsetOut,
+    const BufferAndOffset **indirectBufferAndOffsetOut)
 {
-    size_t unitSize      = contextVk->getVkIndexTypeSize(glIndexType);
-    size_t allocateBytes = static_cast<size_t>(indexBuffer->getSize() + unitSize);
+    size_t unitSize = contextVk->getVkIndexTypeSize(glIndexType);
+    size_t allocateBytes =
+        static_cast<size_t>(indexBufferAndOffset->getBuffer()->getSize() + unitSize);
 
     if (contextVk->getState().isPrimitiveRestartEnabled())
     {
@@ -3195,40 +3229,31 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
     mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
     mDynamicIndirectBuffer.releaseInFlightBuffers(contextVk);
 
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, nullptr, nullptr,
-                                           indexBufferOffsetOut, nullptr));
-    *indexBufferOut = mDynamicIndexBuffer.getCurrentBuffer();
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, &mIndexBufferAndOffset,
+                                           nullptr, nullptr));
+    *indexBufferAndOffsetOut = &mIndexBufferAndOffset;
 
     ANGLE_TRY(mDynamicIndirectBuffer.allocate(contextVk, sizeof(VkDrawIndexedIndirectCommand),
-                                              nullptr, nullptr, indirectBufferOffsetOut, nullptr));
-    *indirectBufferOut = mDynamicIndirectBuffer.getCurrentBuffer();
+                                              mIndirectBufferAndOffset, nullptr, nullptr));
+    *indirectBufferAndOffsetOut = &mIndirectBufferAndOffset;
 
-    BufferHelper *destIndexBuffer    = mDynamicIndexBuffer.getCurrentBuffer();
-    BufferHelper *destIndirectBuffer = mDynamicIndirectBuffer.getCurrentBuffer();
-
-    // Copy relevant section of the source into destination at allocated offset.  Note that the
-    // offset returned by allocate() above is in bytes. As is the indices offset pointer.
+    // Copy relevant section of the source into destination at allocated offset.
     UtilsVk::ConvertLineLoopIndexIndirectParameters params = {};
-    params.indirectBufferOffset    = static_cast<uint32_t>(indirectBufferOffset);
-    params.dstIndirectBufferOffset = static_cast<uint32_t>(*indirectBufferOffsetOut);
-    params.srcIndexBufferOffset    = static_cast<uint32_t>(indexBufferOffset);
-    params.dstIndexBufferOffset    = static_cast<uint32_t>(*indexBufferOffsetOut);
-    params.indicesBitsWidth        = static_cast<uint32_t>(unitSize * 8);
+    params.indicesBitsWidth                                = static_cast<uint32_t>(unitSize * 8);
 
     ANGLE_TRY(contextVk->getUtils().convertLineLoopIndexIndirectBuffer(
-        contextVk, indirectBuffer, destIndirectBuffer, destIndexBuffer, indexBuffer, params));
+        contextVk, indirectBufferAndOffset, indexBufferAndOffset, &mIndirectBufferAndOffset,
+        &mIndexBufferAndOffset, params));
 
     return angle::Result::Continue;
 }
 
-angle::Result LineLoopHelper::streamArrayIndirect(ContextVk *contextVk,
-                                                  size_t vertexCount,
-                                                  BufferHelper *arrayIndirectBuffer,
-                                                  VkDeviceSize arrayIndirectBufferOffset,
-                                                  BufferHelper **indexBufferOut,
-                                                  VkDeviceSize *indexBufferOffsetOut,
-                                                  BufferHelper **indexIndirectBufferOut,
-                                                  VkDeviceSize *indexIndirectBufferOffsetOut)
+angle::Result LineLoopHelper::streamArrayIndirect(
+    ContextVk *contextVk,
+    size_t vertexCount,
+    const BufferAndOffset *arrayIndirectBufferAndOffset,
+    const BufferAndOffset **indexBufferAndOffsetOut,
+    const BufferAndOffset **indexIndirectBufferAndOffsetOut)
 {
     auto unitSize        = sizeof(uint32_t);
     size_t allocateBytes = static_cast<size_t>((vertexCount + 1) * unitSize);
@@ -3236,39 +3261,38 @@ angle::Result LineLoopHelper::streamArrayIndirect(ContextVk *contextVk,
     mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
     mDynamicIndirectBuffer.releaseInFlightBuffers(contextVk);
 
-    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, nullptr, nullptr,
-                                           indexBufferOffsetOut, nullptr));
-    *indexBufferOut = mDynamicIndexBuffer.getCurrentBuffer();
+    ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes, &mIndexBufferAndOffset,
+                                           nullptr, nullptr));
+    *indexBufferAndOffsetOut = &mIndexBufferAndOffset;
 
     ANGLE_TRY(mDynamicIndirectBuffer.allocate(contextVk, sizeof(VkDrawIndexedIndirectCommand),
-                                              nullptr, nullptr, indexIndirectBufferOffsetOut,
-                                              nullptr));
-    *indexIndirectBufferOut = mDynamicIndirectBuffer.getCurrentBuffer();
+                                              &mIndirectBufferAndOffset, nullptr, nullptr));
+    *indexIndirectBufferAndOffsetOut = &mIndirectBufferAndOffset;
 
-    BufferHelper *destIndexBuffer    = mDynamicIndexBuffer.getCurrentBuffer();
-    BufferHelper *destIndirectBuffer = mDynamicIndirectBuffer.getCurrentBuffer();
-
-    // Copy relevant section of the source into destination at allocated offset.  Note that the
-    // offset returned by allocate() above is in bytes. As is the indices offset pointer.
+    // Copy relevant section of the source into destination at allocated offset.
     UtilsVk::ConvertLineLoopArrayIndirectParameters params = {};
-    params.indirectBufferOffset    = static_cast<uint32_t>(arrayIndirectBufferOffset);
-    params.dstIndirectBufferOffset = static_cast<uint32_t>(*indexIndirectBufferOffsetOut);
-    params.dstIndexBufferOffset    = static_cast<uint32_t>(*indexBufferOffsetOut);
 
     ANGLE_TRY(contextVk->getUtils().convertLineLoopArrayIndirectBuffer(
-        contextVk, arrayIndirectBuffer, destIndirectBuffer, destIndexBuffer, params));
+        contextVk, arrayIndirectBufferAndOffset, &mIndirectBufferAndOffset, &mIndexBufferAndOffset,
+        params));
 
     return angle::Result::Continue;
 }
 
 void LineLoopHelper::release(ContextVk *contextVk)
 {
+    mIndexBufferAndOffset.release();
+    mIndirectBufferAndOffset.release();
+
     mDynamicIndexBuffer.release(contextVk->getRenderer());
     mDynamicIndirectBuffer.release(contextVk->getRenderer());
 }
 
 void LineLoopHelper::destroy(RendererVk *renderer)
 {
+    mIndexBufferAndOffset.release();
+    mIndirectBufferAndOffset.release();
+
     mDynamicIndexBuffer.destroy(renderer);
     mDynamicIndirectBuffer.destroy(renderer);
 }
@@ -3304,7 +3328,8 @@ BufferHelper::BufferHelper()
       mCurrentReadAccess(0),
       mCurrentWriteStages(0),
       mCurrentReadStages(0),
-      mSerial()
+      mSerial(),
+      mBufferAndOffsetRefCount(0)
 {}
 
 BufferMemory::BufferMemory() : mClientBuffer(nullptr), mMappedMemory(nullptr) {}
@@ -3557,6 +3582,9 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSi
 
 void BufferHelper::destroy(RendererVk *renderer)
 {
+    // Make sure the buffers are not destroyed while there are suballocation references to it.
+    ASSERT(mBufferAndOffsetRefCount > 0);
+
     VkDevice device = renderer->getDevice();
     unmap(renderer);
     mSize = 0;
@@ -3567,6 +3595,9 @@ void BufferHelper::destroy(RendererVk *renderer)
 
 void BufferHelper::release(RendererVk *renderer)
 {
+    // Make sure the buffers are not released while there are suballocation references to it.
+    ASSERT(mBufferAndOffsetRefCount > 0);
+
     unmap(renderer);
     mSize = 0;
 
@@ -3574,6 +3605,7 @@ void BufferHelper::release(RendererVk *renderer)
                                       mMemory.getMemoryObject());
 }
 
+// TODO: remove this function and turn local to BufferVk
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            BufferHelper *srcBuffer,
                                            uint32_t regionCount,
@@ -3717,6 +3749,17 @@ bool BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
     mCurrentWriteStages = writeStage;
     mCurrentReadStages  = 0;
     return barrierModified;
+}
+
+void BufferHelper::addBufferAndOffsetRef()
+{
+    ++mBufferAndOffsetRefCount;
+}
+
+void BufferHelper::releaseBufferAndOffsetRef()
+{
+    ASSERT(mBufferAndOffsetRefCount > 0);
+    --mBufferAndOffsetRefCount;
 }
 
 // ImageHelper implementation.
@@ -5186,6 +5229,7 @@ void ImageHelper::removeStagedUpdates(Context *context,
     }
 }
 
+// TODO: from here
 angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                       const gl::ImageIndex &index,
                                                       const gl::Extents &glExtents,

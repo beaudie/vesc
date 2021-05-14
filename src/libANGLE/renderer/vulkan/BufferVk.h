@@ -34,11 +34,11 @@ struct ConversionBuffer
     // One state value determines if we need to re-stream vertex data.
     bool dirty;
 
-    // One additional state value keeps the last allocation offset.
-    VkDeviceSize lastAllocationOffset;
-
     // The conversion is stored in a dynamic buffer.
     vk::DynamicBuffer data;
+
+    // Reference to suballocation made from data.
+    vk::BufferAndOffset bufferAndOffset;
 };
 
 class BufferVk : public BufferImpl
@@ -98,21 +98,16 @@ class BufferVk : public BufferImpl
 
     void onDataChanged() override;
 
-    const vk::BufferHelper &getBufferAndOffset(VkDeviceSize *offsetOut) const
+    const vk::BufferAndOffset *getBufferAndOffset() const
     {
         ASSERT(isBufferValid());
-        *offsetOut = mBufferOffset;
-        return *mBuffer;
+        return &mBufferAndOffset;
     }
 
-    vk::BufferHelper &getBufferAndOffset(VkDeviceSize *offsetOut)
+    bool isBufferValid() const
     {
-        ASSERT(isBufferValid());
-        *offsetOut = mBufferOffset;
-        return *mBuffer;
+        return mBufferAndOffset.getBuffer() && mBufferAndOffset.getBuffer()->valid();
     }
-
-    bool isBufferValid() const { return mBuffer && mBuffer->valid(); }
 
     angle::Result mapImpl(ContextVk *contextVk, void **mapPtr);
     angle::Result mapRangeImpl(ContextVk *contextVk,
@@ -201,15 +196,14 @@ class BufferVk : public BufferImpl
         size_t offset;
     };
 
-    vk::BufferHelper *mBuffer;
-    VkDeviceSize mBufferOffset;
+    vk::BufferAndOffset mBufferAndOffset;
 
     // Pool of BufferHelpers for mBuffer to acquire from
     vk::DynamicBuffer mBufferPool;
 
     // DynamicBuffer to aid map operations of buffers when they are not host visible.
     vk::DynamicBuffer mHostVisibleBufferPool;
-    VkDeviceSize mHostVisibleBufferOffset;
+    vk::BufferAndOffset mHostVisibleBufferAndOffset;
 
     // For GPU-read only buffers glMap* latency is reduced by maintaining a copy
     // of the buffer which is writeable only by the CPU. The contents are updated on all

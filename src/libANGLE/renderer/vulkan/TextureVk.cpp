@@ -2041,6 +2041,7 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
     // First, flush any pending updates so we have good data in the current mImage
     if (mImage->valid() && mImage->hasStagedUpdatesInAllocatedLevels())
     {
+        // TODO: when refactorying things here, remove this except for !ownsCurrentImage.
         ANGLE_TRY(flushImageStagedUpdates(contextVk));
     }
 

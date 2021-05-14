@@ -47,6 +47,42 @@ struct TextureUnit final
     GLenum srgbDecode;
 };
 
+// A helper class to allow distinguishing suballocations of the same BufferHelper and track their
+// usage individually.  For example, if a DynamicBuffer suballocation is in use by the GPU, the next
+// suballocation from the same buffer shouldn't be considered in use.
+//
+// There is no tracking of the suballocation size, and it's not intended for this class to be used
+// to implement complex overlapping range tracking.  As such, it's assumed that the {buffer, offset}
+// pair uniquely identifies a non-overlapping range of the buffer.
+class BufferHelper;
+class BufferAndOffset final : public Resource
+{
+  public:
+    BufferAndOffset();
+    ~BufferAndOffset() override;
+
+    // TODO: might not need this
+    BufferAndOffset(BufferAndOffset &&other);
+
+    void init(BufferHelper *buffer, VkDeviceSize offset);
+    void release();
+
+    BufferHelper *getBuffer() const { return mBuffer; }
+    VkDeviceSize getOffset() const { return mOffset; }
+
+    // TODO: move barrier tracking to BufferAndOffset.  http://anglebug.com/TODO
+    // TODO: add a helper for map() to automatically add offset
+
+    bool operator==(const BufferAndOffset &other) const
+    {
+        return mBuffer == other.mBuffer && mOffset == other.mOffset;
+    }
+
+  private:
+    BufferHelper *mBuffer;
+    VkDeviceSize mOffset;
+};
+
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
 // you will always write to a previously unused portion. After a series of writes, you must flush
 // the buffer data to the device. Buffer lifetime currently assumes that each new allocation will
@@ -58,7 +94,6 @@ struct TextureUnit final
 // Internally dynamic buffers keep a collection of VkBuffers. When we write past the end of a
 // currently active VkBuffer we keep it until it is no longer in use. We then mark it available
 // for future allocations in a free list.
-class BufferHelper;
 using BufferHelperPointerVector = std::vector<std::unique_ptr<BufferHelper>>;
 
 enum class DynamicBufferPolicy
@@ -104,26 +139,26 @@ class DynamicBuffer : angle::NonCopyable
 
     // This call will allocate a new region at the end of the buffer. It internally may trigger
     // a new buffer to be created (which is returned in the optional parameter
-    // `newBufferAllocatedOut`).  The new region will be in the returned buffer at given offset. If
-    // a memory pointer is given, the buffer will be automatically map()ed.
+    // |newBufferAllocatedOut|). If a memory pointer is given, the buffer will be automatically
+    // map()ed.
+    //
+    // |bufferAndOffsetOut| will be used to return the buffer and offset.
     angle::Result allocateWithAlignment(ContextVk *contextVk,
                                         size_t sizeInBytes,
                                         size_t alignment,
+                                        vk::BufferAndOffset *bufferAndOffsetOut,
                                         uint8_t **ptrOut,
-                                        VkBuffer *bufferOut,
-                                        VkDeviceSize *offsetOut,
                                         bool *newBufferAllocatedOut);
 
     // Allocate with default alignment
     angle::Result allocate(ContextVk *contextVk,
                            size_t sizeInBytes,
+                           vk::BufferAndOffset *bufferAndOffsetOut,
                            uint8_t **ptrOut,
-                           VkBuffer *bufferOut,
-                           VkDeviceSize *offsetOut,
                            bool *newBufferAllocatedOut)
     {
-        return allocateWithAlignment(contextVk, sizeInBytes, mAlignment, ptrOut, bufferOut,
-                                     offsetOut, newBufferAllocatedOut);
+        return allocateWithAlignment(contextVk, sizeInBytes, mAlignment, bufferAndOffsetOut, ptrOut,
+                                     newBufferAllocatedOut);
     }
 
     // After a sequence of writes, call flush to ensure the data is visible to the device.
@@ -143,8 +178,6 @@ class DynamicBuffer : angle::NonCopyable
 
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
-
-    BufferHelper *getCurrentBuffer() const { return mBuffer.get(); }
 
     // **Accumulate** an alignment requirement.  A dynamic buffer is used as the staging buffer for
     // image uploads, which can contain updates to unrelated mips, possibly with different formats.
@@ -587,45 +620,35 @@ class LineLoopHelper final : angle::NonCopyable
     angle::Result getIndexBufferForDrawArrays(ContextVk *contextVk,
                                               uint32_t clampedVertexCount,
                                               GLint firstVertex,
-                                              BufferHelper **bufferOut,
-                                              VkDeviceSize *offsetOut);
+                                              const BufferAndOffset **bufferAndOffsetOut);
 
     angle::Result getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
                                                       BufferVk *elementArrayBufferVk,
                                                       gl::DrawElementsType glIndexType,
                                                       int indexCount,
                                                       intptr_t elementArrayOffset,
-                                                      BufferHelper **bufferOut,
-                                                      VkDeviceSize *bufferOffsetOut,
+                                                      const BufferAndOffset **bufferAndOffsetOut,
                                                       uint32_t *indexCountOut);
 
     angle::Result streamIndices(ContextVk *contextVk,
                                 gl::DrawElementsType glIndexType,
                                 GLsizei indexCount,
                                 const uint8_t *srcPtr,
-                                BufferHelper **bufferOut,
-                                VkDeviceSize *bufferOffsetOut,
+                                const BufferAndOffset **bufferAndOffsetOut,
                                 uint32_t *indexCountOut);
 
     angle::Result streamIndicesIndirect(ContextVk *contextVk,
                                         gl::DrawElementsType glIndexType,
-                                        BufferHelper *indexBuffer,
-                                        VkDeviceSize indexBufferOffset,
-                                        BufferHelper *indirectBuffer,
-                                        VkDeviceSize indirectBufferOffset,
-                                        BufferHelper **indexBufferOut,
-                                        VkDeviceSize *indexBufferOffsetOut,
-                                        BufferHelper **indirectBufferOut,
-                                        VkDeviceSize *indirectBufferOffsetOut);
+                                        const BufferAndOffset *indexBufferAndOffset,
+                                        const BufferAndOffset *indirectBufferAndOffset,
+                                        const BufferAndOffset **indexBufferAndOffsetOut,
+                                        const BufferAndOffset **indirectBufferAndOffsetOut);
 
     angle::Result streamArrayIndirect(ContextVk *contextVk,
                                       size_t vertexCount,
-                                      BufferHelper *arrayIndirectBuffer,
-                                      VkDeviceSize arrayIndirectBufferOffset,
-                                      BufferHelper **indexBufferOut,
-                                      VkDeviceSize *indexBufferOffsetOut,
-                                      BufferHelper **indexIndirectBufferOut,
-                                      VkDeviceSize *indexIndirectBufferOffsetOut);
+                                      const BufferAndOffset *arrayIndirectBufferAndOffset,
+                                      const BufferAndOffset **indexBufferAndOffsetOut,
+                                      const BufferAndOffset **indexIndirectBufferAndOffsetOut);
 
     void release(ContextVk *contextVk);
     void destroy(RendererVk *renderer);
@@ -635,6 +658,9 @@ class LineLoopHelper final : angle::NonCopyable
   private:
     DynamicBuffer mDynamicIndexBuffer;
     DynamicBuffer mDynamicIndirectBuffer;
+
+    BufferAndOffset mIndexBufferAndOffset;
+    BufferAndOffset mIndirectBufferAndOffset;
 };
 
 // This defines enum for VkPipelineStageFlagBits so that we can use it to compare and index into
@@ -926,6 +952,9 @@ class BufferHelper final : public Resource
                             VkPipelineStageFlags writeStage,
                             PipelineBarrier *barrier);
 
+    void addBufferAndOffsetRef();
+    void releaseBufferAndOffsetRef();
+
   private:
     angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
 
@@ -945,6 +974,10 @@ class BufferHelper final : public Resource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+
+    // Used for validation that BufferHelper is not released while there are BufferAndOffset objects
+    // referencing it.
+    uint32_t mBufferAndOffsetRefCount;
 };
 
 enum class BufferAccess
@@ -1903,6 +1936,9 @@ class ImageHelper final : public Resource, public angle::Subject
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
     struct BufferUpdate
     {
+        // TODO: turn to BufferAndOffset, and move out of union.  It will have a cpp object now.
+        // Or turn into `new` like image is, so it can be moved around.  It should have the
+        // BufferAndOffset by copy.
         BufferHelper *bufferHelper;
         VkBufferImageCopy copyRegion;
     };

@@ -1519,8 +1519,8 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
 }
 
 angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
-                                          vk::BufferHelper *dest,
-                                          vk::BufferHelper *src,
+                                          const vk::BufferAndOffset *dest,
+                                          const vk::BufferAndOffset *src,
                                           const ConvertIndexParameters &params)
 {
     ANGLE_TRY(ensureConvertIndexResourcesInitialized(contextVk));
@@ -1538,8 +1538,8 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
                                     &descriptorSet));
 
     std::array<VkDescriptorBufferInfo, 2> buffers = {{
-        {dest->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {src->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {dest->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {src->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
     }};
 
     VkWriteDescriptorSet writeInfo = {};
@@ -1552,7 +1552,8 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
 
     vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
 
-    ConvertIndexShaderParams shaderParams = {params.srcOffset, params.dstOffset >> 2,
+    ConvertIndexShaderParams shaderParams = {params.srcOffset + src->getOffset(),
+                                             (params.dstOffset + dest->getOffset()) >> 2,
                                              params.maxIndex, 0};
 
     uint32_t flags = 0;
@@ -1581,10 +1582,10 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
 }
 
 angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
-                                                  vk::BufferHelper *srcIndirectBuf,
-                                                  vk::BufferHelper *srcIndexBuf,
-                                                  vk::BufferHelper *dstIndirectBuf,
-                                                  vk::BufferHelper *dstIndexBuf,
+                                                  const vk::BufferAndOffset *srcIndirectBuf,
+                                                  const vk::BufferAndOffset *srcIndexBuf,
+                                                  const vk::BufferAndOffset *dstIndirectBuf,
+                                                  const vk::BufferAndOffset *dstIndexBuf,
                                                   const ConvertIndexIndirectParameters &params)
 {
     ANGLE_TRY(ensureConvertIndexIndirectResourcesInitialized(contextVk));
@@ -1604,10 +1605,10 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
                                     &descriptorPoolBinding, &descriptorSet));
 
     std::array<VkDescriptorBufferInfo, 4> buffers = {{
-        {dstIndexBuf->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {srcIndexBuf->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {srcIndirectBuf->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {dstIndirectBuf->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {dstIndexBuf->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {srcIndexBuf->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {srcIndirectBuf->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {dstIndirectBuf->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
     }};
 
     VkWriteDescriptorSet writeInfo = {};
@@ -1621,8 +1622,10 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
     vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
 
     ConvertIndexIndirectShaderParams shaderParams = {
-        params.srcIndirectBufOffset >> 2, params.srcIndexBufOffset, params.dstIndexBufOffset >> 2,
-        params.maxIndex, params.dstIndirectBufOffset >> 2};
+        (params.srcIndirectBufOffset + srcIndirectBuf->getOffset()) >> 2,
+        params.srcIndexBufOffset + srcIndexBuf->getOffset(),
+        (params.dstIndexBufOffset + dstIndexBuf->getOffset()) >> 2, params.maxIndex,
+        (params.dstIndirectBufOffset + dstIndirectBuf->getOffset()) >> 2};
 
     uint32_t flags = vk::InternalShader::ConvertIndex_comp::kIsIndirect;
     if (contextVk->getState().isPrimitiveRestartEnabled())
@@ -1651,10 +1654,10 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
 
 angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
     ContextVk *contextVk,
-    vk::BufferHelper *srcIndirectBuffer,
-    vk::BufferHelper *dstIndirectBuffer,
-    vk::BufferHelper *dstIndexBuffer,
-    vk::BufferHelper *srcIndexBuffer,
+    const vk::BufferAndOffset *srcIndirectBuffer,
+    const vk::BufferAndOffset *srcIndexBuffer,
+    const vk::BufferAndOffset *dstIndirectBuffer,
+    const vk::BufferAndOffset *dstIndexBuffer,
     const ConvertLineLoopIndexIndirectParameters &params)
 {
     ANGLE_TRY(ensureConvertIndexIndirectLineLoopResourcesInitialized(contextVk));
@@ -1674,10 +1677,10 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
                                     &descriptorPoolBinding, &descriptorSet));
 
     std::array<VkDescriptorBufferInfo, 4> buffers = {{
-        {dstIndexBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {srcIndexBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {srcIndirectBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {dstIndirectBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {dstIndexBuffer->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {srcIndexBuffer->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {srcIndirectBuffer->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {dstIndirectBuffer->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
     }};
 
     VkWriteDescriptorSet writeInfo = {};
@@ -1691,8 +1694,10 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
     vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
 
     ConvertIndexIndirectLineLoopShaderParams shaderParams = {
-        params.indirectBufferOffset >> 2, params.dstIndirectBufferOffset >> 2,
-        params.srcIndexBufferOffset, params.dstIndexBufferOffset >> 2,
+        (params.srcIndirectOffset + srcIndirectBuffer->getOffset()) >> 2,
+        (params.dstIndirectOffset + dstIndirectBuffer->getOffset()) >> 2,
+        params.srcIndexOffset + srcIndexBuffer->getOffset(),
+        (params.dstIndexOffset + dstIndexBuffer->getOffset()) >> 2,
         contextVk->getState().isPrimitiveRestartEnabled()};
 
     uint32_t flags = GetConvertIndexIndirectLineLoopFlag(params.indicesBitsWidth);
@@ -1715,9 +1720,9 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
 
 angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
     ContextVk *contextVk,
-    vk::BufferHelper *srcIndirectBuffer,
-    vk::BufferHelper *destIndirectBuffer,
-    vk::BufferHelper *destIndexBuffer,
+    const vk::BufferAndOffset *srcIndirectBuffer,
+    const vk::BufferAndOffset *destIndirectBuffer,
+    const vk::BufferAndOffset *destIndexBuffer,
     const ConvertLineLoopArrayIndirectParameters &params)
 {
     ANGLE_TRY(ensureConvertIndirectLineLoopResourcesInitialized(contextVk));
@@ -1736,9 +1741,9 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
                                     &descriptorPoolBinding, &descriptorSet));
 
     std::array<VkDescriptorBufferInfo, 3> buffers = {{
-        {srcIndirectBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {destIndirectBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {destIndexBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {srcIndirectBuffer->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {destIndirectBuffer->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {destIndexBuffer->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
     }};
 
     VkWriteDescriptorSet writeInfo = {};
@@ -1751,9 +1756,10 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
 
     vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
 
-    ConvertIndirectLineLoopShaderParams shaderParams = {params.indirectBufferOffset >> 2,
-                                                        params.dstIndirectBufferOffset >> 2,
-                                                        params.dstIndexBufferOffset >> 2};
+    ConvertIndirectLineLoopShaderParams shaderParams = {
+        (params.srcIndirectOffset + srcIndirectBuffer->getOffset()) >> 2,
+        (params.dstIndirectOffset + dstIndirectBuffer->getOffset()) >> 2,
+        (params.dstIndexOffset + dstIndexBuffer->getOffset()) >> 2};
 
     uint32_t flags = 0;
 
@@ -1774,8 +1780,8 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
 }
 
 angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
-                                           vk::BufferHelper *dest,
-                                           vk::BufferHelper *src,
+                                           const vk::BufferAndOffset *dest,
+                                           const vk::BufferAndOffset *src,
                                            const ConvertVertexParameters &params)
 {
     vk::CommandBufferAccess access;
@@ -1803,8 +1809,8 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
     // Total number of 4-byte outputs is the number of components divided by how many components can
     // fit in a 4-byte value.  Note that this value is also the invocation size of the shader.
     shaderParams.outputCount = UnsignedCeilDivide(shaderParams.componentCount, shaderParams.Ed);
-    shaderParams.srcOffset   = static_cast<uint32_t>(params.srcOffset);
-    shaderParams.destOffset  = static_cast<uint32_t>(params.destOffset);
+    shaderParams.srcOffset   = static_cast<uint32_t>(params.srcOffset + src->getOffset());
+    shaderParams.destOffset  = static_cast<uint32_t>(params.destOffset + dest->getOffset());
 
     bool isSrcA2BGR10 =
         params.srcFormat->vertexAttribType == gl::VertexAttribType::UnsignedInt2101010 ||
@@ -1884,8 +1890,8 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
 }
 
 angle::Result UtilsVk::convertVertexBufferImpl(ContextVk *contextVk,
-                                               vk::BufferHelper *dest,
-                                               vk::BufferHelper *src,
+                                               vk::BufferAndOffset *dest,
+                                               vk::BufferAndOffset *src,
                                                uint32_t flags,
                                                vk::CommandBuffer *commandBuffer,
                                                const ConvertVertexShaderParams &shaderParams)
@@ -1899,8 +1905,8 @@ angle::Result UtilsVk::convertVertexBufferImpl(ContextVk *contextVk,
 
     VkWriteDescriptorSet writeInfo    = {};
     VkDescriptorBufferInfo buffers[2] = {
-        {dest->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
-        {src->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {dest->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {src->getBuffer()->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
     };
     static_assert(kConvertVertexDestinationBinding + 1 == kConvertVertexSourceBinding,
                   "Update write info");
@@ -2989,7 +2995,13 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     // Use UintToUint conversion to preserve the bit pattern during transfer.
     const uint32_t flags = ConvertVertex_comp::kUintToUint;
 
-    ANGLE_TRY(convertVertexBufferImpl(contextVk, &dstBuffer.get(), &srcBuffer.get(), flags,
+    vk::BufferAndOffset srcBufferAndOffset;
+    vk::BufferAndOffset dstBufferAndOffset;
+
+    srcBufferAndOffset.init(srcBuffer.get(), 0);
+    dstBufferAndOffset.init(dstBuffer.get(), 0);
+
+    ANGLE_TRY(convertVertexBufferImpl(contextVk, &srcBufferAndOffset, &srcBufferAndOffset, flags,
                                       commandBuffer, shaderParams));
 
     // Add a barrier prior to copy.

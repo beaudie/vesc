@@ -66,18 +66,18 @@ class UtilsVk : angle::NonCopyable
 
     struct ConvertLineLoopIndexIndirectParameters
     {
-        uint32_t indirectBufferOffset    = 0;
-        uint32_t dstIndirectBufferOffset = 0;
-        uint32_t srcIndexBufferOffset    = 0;
-        uint32_t dstIndexBufferOffset    = 0;
-        uint32_t indicesBitsWidth        = 0;
+        uint32_t srcIndirectOffset = 0;
+        uint32_t dstIndirectOffset = 0;
+        uint32_t srcIndexOffset    = 0;
+        uint32_t dstIndexOffset    = 0;
+        uint32_t indicesBitsWidth  = 0;
     };
 
     struct ConvertLineLoopArrayIndirectParameters
     {
-        uint32_t indirectBufferOffset    = 0;
-        uint32_t dstIndirectBufferOffset = 0;
-        uint32_t dstIndexBufferOffset    = 0;
+        uint32_t srcIndirectOffset = 0;
+        uint32_t dstIndirectOffset = 0;
+        uint32_t dstIndexOffset    = 0;
     };
 
     struct ConvertVertexParameters
@@ -113,7 +113,7 @@ class UtilsVk : angle::NonCopyable
 
     struct BlitResolveParameters
     {
-        // |srcOffset| and |dstIndexBufferOffset| define the original blit/resolve offsets, possibly
+        // |srcOffset| and |dstOffset| define the original blit/resolve offsets, possibly
         // flipped.
         int srcOffset[2];
         int destOffset[2];
@@ -191,34 +191,34 @@ class UtilsVk : angle::NonCopyable
     static uint32_t GetGenerateMipmapMaxLevels(ContextVk *contextVk);
 
     angle::Result convertIndexBuffer(ContextVk *contextVk,
-                                     vk::BufferHelper *dest,
-                                     vk::BufferHelper *src,
+                                     const vk::BufferAndOffset *dest,
+                                     const vk::BufferAndOffset *src,
                                      const ConvertIndexParameters &params);
     angle::Result convertIndexIndirectBuffer(ContextVk *contextVk,
-                                             vk::BufferHelper *srcIndirectBuf,
-                                             vk::BufferHelper *srcIndexBuf,
-                                             vk::BufferHelper *dstIndirectBuf,
-                                             vk::BufferHelper *dstIndexBuf,
+                                             const vk::BufferAndOffset *srcIndirectBuf,
+                                             const vk::BufferAndOffset *srcIndexBuf,
+                                             const vk::BufferAndOffset *dstIndirectBuf,
+                                             const vk::BufferAndOffset *dstIndexBuf,
                                              const ConvertIndexIndirectParameters &params);
 
     angle::Result convertLineLoopIndexIndirectBuffer(
         ContextVk *contextVk,
-        vk::BufferHelper *srcIndirectBuffer,
-        vk::BufferHelper *destIndirectBuffer,
-        vk::BufferHelper *destIndexBuffer,
-        vk::BufferHelper *srcIndexBuffer,
+        const vk::BufferAndOffset *srcIndirectBuffer,
+        const vk::BufferAndOffset *srcIndexBuffer,
+        const vk::BufferAndOffset *destIndirectBuffer,
+        const vk::BufferAndOffset *destIndexBuffer,
         const ConvertLineLoopIndexIndirectParameters &params);
 
     angle::Result convertLineLoopArrayIndirectBuffer(
         ContextVk *contextVk,
-        vk::BufferHelper *srcIndirectBuffer,
-        vk::BufferHelper *destIndirectBuffer,
-        vk::BufferHelper *destIndexBuffer,
+        const vk::BufferAndOffset *srcIndirectBuffer,
+        const vk::BufferAndOffset *destIndirectBuffer,
+        const vk::BufferAndOffset *destIndexBuffer,
         const ConvertLineLoopArrayIndirectParameters &params);
 
     angle::Result convertVertexBuffer(ContextVk *contextVk,
-                                      vk::BufferHelper *dest,
-                                      vk::BufferHelper *src,
+                                      const vk::BufferAndOffset *dest,
+                                      const vk::BufferAndOffset *src,
                                       const ConvertVertexParameters &params);
 
     angle::Result clearFramebuffer(ContextVk *contextVk,
@@ -520,8 +520,8 @@ class UtilsVk : angle::NonCopyable
 
     // Set up descriptor set and call dispatch.
     angle::Result convertVertexBufferImpl(ContextVk *contextVk,
-                                          vk::BufferHelper *dest,
-                                          vk::BufferHelper *src,
+                                          const vk::BufferAndOffset *dest,
+                                          const vk::BufferAndOffset *src,
                                           uint32_t flags,
                                           vk::CommandBuffer *commandBuffer,
                                           const ConvertVertexShaderParams &shaderParams);
