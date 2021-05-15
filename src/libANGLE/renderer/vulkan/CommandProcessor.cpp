@@ -62,6 +62,8 @@ bool CommandsHaveValidOrdering(const std::vector<vk::CommandBatch> &commands)
 angle::Result FenceRecycler::newSharedFence(vk::Context *context,
                                             vk::Shared<vk::Fence> *sharedFenceOut)
 {
+    ASSERT(sharedFenceOut);
+
     bool gotRecycledFence = false;
     vk::Fence fence;
     {
