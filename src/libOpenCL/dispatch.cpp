@@ -8,10 +8,14 @@
 #include "libOpenCL/dispatch.h"
 
 #include "anglebase/no_destructor.h"
+#include "common/debug.h"
 #include "common/system_utils.h"
 
-#include <iostream>
 #include <memory>
+
+#ifdef _WIN32
+#    include <windows.h>
+#endif
 
 namespace cl
 {
@@ -27,30 +31,64 @@ std::unique_ptr<angle::Library> &EntryPointsLib()
 
 IcdDispatch CreateDispatch()
 {
-    IcdDispatch dispatch;
+    const cl_icd_dispatch *clIcdDispatch = nullptr;
+    const char *error                    = nullptr;
 
+    INFO() << "Module directory: " << angle::GetModuleDirectory();
+
+    // Try to find ANGLE's GLESv2 library in the consistent way
     EntryPointsLib().reset(
         angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ApplicationDir));
-    if (EntryPointsLib())
+    if (EntryPointsLib() && EntryPointsLib()->getNative() != nullptr)
     {
-        auto clIcdDispatch = reinterpret_cast<const cl_icd_dispatch *>(
-            EntryPointsLib()->getSymbol("gCLIcdDispatchTable"));
-        if (clIcdDispatch != nullptr)
+        EntryPointsLib()->getAs("gCLIcdDispatchTable", &clIcdDispatch);
+        if (clIcdDispatch == nullptr)
         {
-            static_cast<cl_icd_dispatch &>(dispatch) = *clIcdDispatch;
-            dispatch.clIcdGetPlatformIDsKHR          = reinterpret_cast<clIcdGetPlatformIDsKHR_fn>(
-                clIcdDispatch->clGetExtensionFunctionAddress("clIcdGetPlatformIDsKHR"));
-        }
-        else
-        {
-            std::cerr << "Error loading CL dispatch table." << std::endl;
+            INFO() << "Found system's instead of ANGLE's GLESv2 library";
         }
     }
     else
     {
-        std::cerr << "Error opening GLESv2 library." << std::endl;
+        error = "Not able to find GLESv2 library";
     }
 
+#ifdef _WIN32
+    // If not found try to find ANGLE's GLESv2 library in build path
+    if (clIcdDispatch == nullptr)
+    {
+        const char path[] = ANGLE_GLESV2_LIBRARY_PATH "\\" ANGLE_GLESV2_LIBRARY_NAME ".dll";
+        HMODULE handle    = LoadLibraryExA(path, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+        if (handle != nullptr)
+        {
+            clIcdDispatch = reinterpret_cast<const cl_icd_dispatch *>(
+                GetProcAddress(handle, "gCLIcdDispatchTable"));
+            if (clIcdDispatch == nullptr)
+            {
+                error = "Error loading CL dispatch table.";
+            }
+            else
+            {
+                INFO() << "Found ANGLE's GLESv2 library in " << path;
+            }
+        }
+        else
+        {
+            INFO() << "Could not open ANGLE's GLESv2 library in " << path;
+        }
+    }
+#endif
+
+    IcdDispatch dispatch;
+    if (clIcdDispatch != nullptr)
+    {
+        static_cast<cl_icd_dispatch &>(dispatch) = *clIcdDispatch;
+        dispatch.clIcdGetPlatformIDsKHR          = reinterpret_cast<clIcdGetPlatformIDsKHR_fn>(
+            clIcdDispatch->clGetExtensionFunctionAddress("clIcdGetPlatformIDsKHR"));
+    }
+    else if (error != nullptr)
+    {
+        ERR() << error;
+    }
     return dispatch;
 }
 
