@@ -34,7 +34,6 @@ SimpleOperationTest.DrawQuadAndSwap/*
 
 # Crashed tests
 BlitFramebufferANGLETest.*
-BufferDataTest.*
 ClipDistanceTest.*
 ColorMaskTest.*
 CopyCompressedTextureTest.InternalFormat/*
