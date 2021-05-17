@@ -600,6 +600,9 @@ TEST_P(FramebufferFetchNonCoherentES31, DrawNonFetchDrawFetchWithDifferentAttach
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
+    // http://anglebug.com/5947
+    ANGLE_SKIP_TEST_IF(IsPixel4() && IsVulkan());
+
     constexpr char kVS[] = R"(#version 310 es
 in highp vec4 a_position;
 
@@ -759,6 +762,9 @@ void main (void)
 TEST_P(FramebufferFetchNonCoherentES31, DrawNonFetchDrawFetchWithDifferentPrograms)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+
+    // http://anglebug.com/5947
+    ANGLE_SKIP_TEST_IF(IsPixel4() && IsVulkan());
 
     constexpr char kVS[] = R"(#version 310 es
 in highp vec4 a_position;
@@ -920,6 +926,9 @@ void main (void)
 TEST_P(FramebufferFetchNonCoherentES31, DrawFetchBlitDrawFetch)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+
+    // http://anglebug.com/5947
+    ANGLE_SKIP_TEST_IF(IsPixel4() && IsVulkan());
 
     constexpr char kVS[] = R"(#version 310 es
 in highp vec4 a_position;
