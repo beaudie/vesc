@@ -32,6 +32,11 @@ IndexBufferOffsetTest.UInt8IndexSmallUpdates/*
 SimpleOperationTest.ClearAndSwap/*
 SimpleOperationTest.DrawQuadAndSwap/*
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> a4c861e0d (Capture/Replay: clear with alpha channel set to 1.0)
 # Crashed tests
 BlitFramebufferANGLETest.*
 BufferDataTest.*
