@@ -51,6 +51,7 @@ void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_
 {
     unsigned char hash[angle::base::kSHA1Length];
     angle::base::SHA1HashBytes(blob, length, hash);
+
     std::ostringstream os;
 
     // Since we don't want to de-serialize the data we just store a checksume
@@ -61,7 +62,17 @@ void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_
     {
         os << kASCII[hash[i] & 0xf] << kASCII[hash[i] >> 4];
     }
-    addString(name, os.str());
+
+    std::ostringstream hash_name;
+    hash_name << name << "-hash";
+    addString(hash_name.str(), os.str());
+
+    std::vector<uint8_t> data(length < 16 ? length : (size_t)16);
+    std::copy(blob, blob + data.size(), data.begin());
+
+    std::ostringstream raw_name;
+    raw_name << name << "-raw[0-" << data.size() - 1 << ']';
+    addVector(raw_name.str(), data);
 }
 
 void JsonSerializer::addCString(const std::string &name, const char *value)
