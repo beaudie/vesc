@@ -101,18 +101,18 @@ class BufferVk : public BufferImpl
     const vk::BufferHelper &getBufferAndOffset(VkDeviceSize *offsetOut) const
     {
         ASSERT(isBufferValid());
-        *offsetOut = mBufferOffset;
-        return *mBuffer;
+        *offsetOut = 0;
+        return mBuffer;
     }
 
     vk::BufferHelper &getBufferAndOffset(VkDeviceSize *offsetOut)
     {
         ASSERT(isBufferValid());
-        *offsetOut = mBufferOffset;
-        return *mBuffer;
+        *offsetOut = 0;
+        return mBuffer;
     }
 
-    bool isBufferValid() const { return mBuffer && mBuffer->valid(); }
+    bool isBufferValid() const { return mBuffer.valid(); }
 
     angle::Result mapImpl(ContextVk *contextVk, void **mapPtr);
     angle::Result mapRangeImpl(ContextVk *contextVk,
@@ -157,10 +157,6 @@ class BufferVk : public BufferImpl
                                const uint8_t *data,
                                size_t size,
                                size_t offset);
-    angle::Result acquireAndUpdate(ContextVk *contextVk,
-                                   const uint8_t *data,
-                                   size_t updateSize,
-                                   size_t offset);
     angle::Result setDataWithMemoryType(const gl::Context *context,
                                         gl::BufferBinding target,
                                         const void *data,
@@ -201,11 +197,8 @@ class BufferVk : public BufferImpl
         size_t offset;
     };
 
-    vk::BufferHelper *mBuffer;
-    VkDeviceSize mBufferOffset;
-
-    // Pool of BufferHelpers for mBuffer to acquire from
-    vk::DynamicBuffer mBufferPool;
+    vk::BufferHelper mBuffer;
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
 
     // DynamicBuffer to aid map operations of buffers when they are not host visible.
     vk::DynamicBuffer mHostVisibleBufferPool;
