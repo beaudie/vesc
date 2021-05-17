@@ -1370,7 +1370,21 @@ angle::Result TextureGL::bindTexImage(const gl::Context *context, egl::Surface *
 
 angle::Result TextureGL::releaseTexImage(const gl::Context *context)
 {
-    ANGLE_TRY(recreateTexture(context));
+    ASSERT(getType() == gl::TextureType::_2D || getType() == gl::TextureType::Rectangle);
+
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
+    if (!features.resettingTexturesGeneratesErrors.enabled)
+    {
+        // Not all Surface implementations reset the size of mip 0 when releasing, do it manually
+        const FunctionsGL *functions = GetFunctionsGL(context);
+        StateManagerGL *stateManager = GetStateManagerGL(context);
+
+        stateManager->bindTexture(getType(), mTextureID);
+        ASSERT(nativegl::UseTexImage2D(getType()));
+        ANGLE_GL_TRY(context, functions->texImage2D(ToGLenum(getType()), 0, GL_RGBA, 0, 0, 0,
+                                                    GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1411,14 +1425,13 @@ angle::Result TextureGL::syncState(const gl::Context *context,
 
     stateManager->bindTexture(getType(), mTextureID);
 
-    gl::Texture::DirtyBits syncDirtyBits = dirtyBits | mLocalDirtyBits;
     if (dirtyBits[gl::Texture::DIRTY_BIT_BASE_LEVEL] || dirtyBits[gl::Texture::DIRTY_BIT_MAX_LEVEL])
     {
         // Don't know if the previous base level was using any workarounds, always re-sync the
         // workaround dirty bits
-        syncDirtyBits |= GetLevelWorkaroundDirtyBits();
+        mLocalDirtyBits |= GetLevelWorkaroundDirtyBits();
     }
-    for (auto dirtyBit : syncDirtyBits)
+    for (auto dirtyBit : (dirtyBits | mLocalDirtyBits))
     {
 
         switch (dirtyBit)
@@ -1583,7 +1596,6 @@ angle::Result TextureGL::syncState(const gl::Context *context,
         }
     }
 
-    mAllModifiedDirtyBits |= syncDirtyBits;
     mLocalDirtyBits.reset();
     return angle::Result::Continue;
 }
@@ -1745,33 +1757,6 @@ bool TextureGL::hasEmulatedAlphaChannel(const gl::ImageIndex &index) const
 {
     return getLevelInfo(index.getTargetOrFirstCubeFace(), index.getLevelIndex())
         .emulatedAlphaChannel;
-}
-
-angle::Result TextureGL::recreateTexture(const gl::Context *context)
-{
-    const FunctionsGL *functions = GetFunctionsGL(context);
-    StateManagerGL *stateManager = GetStateManagerGL(context);
-
-    stateManager->bindTexture(getType(), mTextureID);
-    stateManager->deleteTexture(mTextureID);
-
-    functions->genTextures(1, &mTextureID);
-    stateManager->bindTexture(getType(), mTextureID);
-
-    mLevelInfo.clear();
-    mLevelInfo.resize(GetMaxLevelInfoCountForTextureType(getType()));
-
-    mAppliedSwizzle = gl::SwizzleState();
-    mAppliedSampler = gl::SamplerState::CreateDefaultForTarget(getType());
-
-    mAppliedBaseLevel = 0;
-    mAppliedBaseLevel = gl::kInitialMaxLevel;
-
-    mLocalDirtyBits = mAllModifiedDirtyBits;
-
-    onStateChange(angle::SubjectMessage::SubjectChanged);
-
-    return angle::Result::Continue;
 }
 
 angle::Result TextureGL::syncTextureStateSwizzle(const gl::Context *context,
