@@ -837,9 +837,21 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const char *wsiExtension,
                                      const char *wsiLayer)
 {
+    bool canLoadDebugUtils = true;
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Set all vk* function ptrs
     ANGLE_VK_TRY(displayVk, volkInitialize());
+
+    uint32_t ver = volkGetInstanceVersion();
+    if (VK_API_VERSION_MAJOR(ver) == 1 && VK_API_VERSION_MINOR(ver) < 2)
+    {
+        // http://crbug.com/1205999 - Vulkan Loader versions before 1.1.91 have a bug,
+        // which prevents loading VK_EXT_debug_utils function pointers.
+        // Alas, Bionic's loader 1.1.70 doesn't report patch version, only 1.1.0,
+        // thus, we allow using VK_EXT_debug_utils only for loaders >= 1.2.0,
+        // or statically linked Vulkan.
+        canLoadDebugUtils = false;
+    }
 #endif  // defined(ANGLE_SHARED_LIBVULKAN)
 
     mDisplay                         = display;
@@ -928,7 +940,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     vk::ExtensionNameList enabledInstanceExtensions;
     enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
     enabledInstanceExtensions.push_back(wsiExtension);
-    mEnableDebugUtils = mEnableValidationLayers &&
+    mEnableDebugUtils = canLoadDebugUtils && mEnableValidationLayers &&
                         ExtensionFound(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, instanceExtensionNames);
 
     bool enableDebugReport =
