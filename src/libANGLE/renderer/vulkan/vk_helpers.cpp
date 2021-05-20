@@ -5135,9 +5135,10 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
             barrier.subresourceRange.baseMipLevel = mipLevel.get() - 1;
             barrier.oldLayout                     = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
             barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            barrier.dstAccessMask                 = 0;
             // We can do it for all layers at once.
             commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                        VK_PIPELINE_STAGE_TRANSFER_BIT, barrier);
+                                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, barrier);
         }
         mipWidth  = nextMipWidth;
         mipHeight = nextMipHeight;
