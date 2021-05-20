@@ -2140,7 +2140,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         return;
     }
 
-    constexpr uint32_t kPixel2DriverWithRelaxedPrecision        = 0x801EA000;
     constexpr uint32_t kPixel4DriverWithWorkingSpecConstSupport = 0x80201000;
 
     bool isAMD      = IsAMD(mPhysicalDeviceProperties.vendorID);
@@ -2357,10 +2356,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             IsAndroid() && supportsNegativeViewport);
 
     // Currently disabled by default: http://anglebug.com/3078
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, enablePrecisionQualifiers,
-        !(IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) &&
-          (mPhysicalDeviceProperties.driverVersion < kPixel2DriverWithRelaxedPrecision)));
+    ANGLE_FEATURE_CONDITION(&mFeatures, enablePrecisionQualifiers, !isQualcomm);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, isNvidia || isAMD || isIntel);
 
