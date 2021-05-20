@@ -1570,6 +1570,7 @@ class ImageHelper final : public Resource, public angle::Subject
     uint32_t getLevelCount() const { return mLevelCount; }
     const Format &getFormat() const { return *mFormat; }
     GLint getSamples() const { return mSamples; }
+    bool hasMutableFormatBit() const { return mCreatedWithMutableFormatBit; }
 
     ImageSerial getImageSerial() const
     {
@@ -2052,6 +2053,7 @@ class ImageHelper final : public Resource, public angle::Subject
     DeviceMemory mDeviceMemory;
 
     // Image properties.
+    bool mCreatedWithMutableFormatBit;
     VkImageType mImageType;
     VkImageTiling mTilingMode;
     VkImageUsageFlags mUsage;

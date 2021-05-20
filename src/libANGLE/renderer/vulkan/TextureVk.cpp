@@ -1305,8 +1305,6 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
                    imageVk->getImageLevel().get(), imageVk->getImageLayer(),
                    gl::LevelIndex(mState.getEffectiveBaseLevel()), false);
 
-    initImageUsageFlags(contextVk, format);
-
     ASSERT(type != gl::TextureType::CubeMap);
     ANGLE_TRY(initImageViews(contextVk, format, image->getFormat().info->sized, 1, 1));
 
@@ -1478,6 +1476,15 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
             renderTargetLevels.clear();
         }
         renderTargets.clear();
+    }
+
+    // Inherit a few image properties if it was created with VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT bit.
+    if (mImage->hasMutableFormatBit())
+    {
+        // Update texture's cached image create and usage flags
+        mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        mImageUsageFlags        = mImage->getUsage();
+        mRequiresMutableStorage = true;
     }
 
     RendererVk *renderer = contextVk->getRenderer();
