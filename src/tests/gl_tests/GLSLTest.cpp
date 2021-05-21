@@ -1482,6 +1482,25 @@ TEST_P(GLSLTest_ES3, MissingReturnStructOfArrays)
     EXPECT_NE(0u, program);
 }
 
+// Verify that non-const index used on an array returned by a function compiles
+TEST_P(GLSLTest_ES3, ReturnArrayOfStructsThenNonConstIndex)
+{
+    constexpr char kVS[] = R"(#version 300 es
+in float v_varying;
+struct s { float a; int b; vec2 c; };
+s[2] f()
+{
+    return s[2](s(v_varying, 1, vec2(1.0, 1.0)), s(v_varying / 2.0, 1, vec2(1.0, 1.0)));
+}
+void main()
+{
+    gl_Position = vec4(f()[uint(v_varying)].a, 0, 0, 1);
+})";
+
+    GLuint program = CompileProgram(kVS, essl3_shaders::fs::Red());
+    EXPECT_NE(0u, program);
+}
+
 // Verify that using invariant(all) in both shaders fails in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantAllBoth)
 {
