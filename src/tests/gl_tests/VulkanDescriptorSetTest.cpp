@@ -62,6 +62,10 @@ TEST_P(VulkanDescriptorSetTest, AtomicCounterReadLimitedDescriptorPool)
     // http://anglebug.com/1729
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
+    // There is a known bug that buffer storage chnages appears not propogating to contetx state
+    // properly. http://b/195678877
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     // Must be before program creation to limit the descriptor pool sizes when creating the pipeline
     // layout.
     limitMaxSets();
