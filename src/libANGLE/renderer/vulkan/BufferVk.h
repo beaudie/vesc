@@ -133,6 +133,15 @@ class BufferVk : public BufferImpl
                                                 size_t offset,
                                                 bool hostVisible);
 
+    void usedAsDescriptorSetCacheKey()
+    {
+        // If this buffer is been used as key for DescriptorSetCache, we prefer each allocations
+        // cycle through a limited set of {Buffer, offset} pair so that we will have better chance
+        // to hit cache. We use local DynamicBuffer pool to achieve the repeatability between
+        // allocations.
+        mUseDynamicBufferPool = true;
+    }
+
   private:
     angle::Result initializeShadowBuffer(ContextVk *contextVk,
                                          gl::BufferBinding target,
@@ -213,8 +222,17 @@ class BufferVk : public BufferImpl
     vk::BufferHelper *mBuffer;
     VkDeviceSize mBufferOffset;
 
-    // Pool of BufferHelpers for mBuffer to acquire from
-    vk::DynamicBuffer mBufferPool;
+    // If true, a request is made to allocate mBuffer from mBufferPool when next time
+    // acquireBufferHelper is called.
+    bool mUseDynamicBufferPool;
+    // Memory/Usage property that will be used for memory allocation.
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
+    gl::BufferUsage mBufferUsage;
+
+    // Pool of BufferHelpers for mBuffer to acquire from. This is lazy initialized only when we
+    // decided to allocate from this pool. If this is null, mBuffer is allocated directly by
+    // BufferMemoryAllocator.
+    std::unique_ptr<vk::DynamicBuffer> mBufferPool;
 
     // DynamicBuffer to aid map operations of buffers when they are not host visible.
     vk::DynamicBuffer mHostVisibleBufferPool;
