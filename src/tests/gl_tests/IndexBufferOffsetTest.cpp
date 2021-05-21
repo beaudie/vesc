@@ -186,6 +186,7 @@ void main()
 
         EXPECT_GL_NO_ERROR();
         swapBuffers();
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
     GLuint mProgram;
