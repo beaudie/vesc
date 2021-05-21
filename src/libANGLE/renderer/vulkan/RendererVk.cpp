@@ -2452,7 +2452,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Testing shows that on ARM GPU, doing implicit flush at framebuffer boundary improves
     // performance. Most app traces shows frame time reduced and manhattan 3.1 offscreen score
     // improves 7%.
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary, isARM);
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary, true);
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
