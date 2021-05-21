@@ -195,7 +195,12 @@ BufferVk::VertexConversionBuffer::~VertexConversionBuffer() = default;
 
 // BufferVk implementation.
 BufferVk::BufferVk(const gl::BufferState &state)
-    : BufferImpl(state), mBuffer(nullptr), mBufferOffset(0)
+    : BufferImpl(state),
+      mBuffer(nullptr),
+      mBufferOffset(0),
+      mUseDynamicBufferPool(false),
+      mMemoryPropertyFlags(0),
+      mBufferUsage(gl::BufferUsage::InvalidEnum)
 {}
 
 BufferVk::~BufferVk() {}
@@ -212,8 +217,9 @@ void BufferVk::release(ContextVk *contextVk)
     RendererVk *renderer = contextVk->getRenderer();
     // For external buffers, mBuffer is not a reference to a chunk in mBufferPool.
     // It was allocated explicitly and needs to be deallocated during release(...)
-    if (mBuffer && mBuffer->isExternalBuffer())
+    if (mBuffer && !mBufferPool.valid())
     {
+        ASSERT(!mBuffer->isExternalBuffer());
         mBuffer->release(renderer);
     }
     mShadowBuffer.release();
@@ -393,7 +399,6 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
                                               gl::BufferUsage usage)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     if (size == 0)
     {
@@ -408,27 +413,8 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         // Release and re-create the memory and buffer.
         release(contextVk);
 
-        // We could potentially use multiple backing buffers for different usages.
-        // For now keep a single buffer with all relevant usage flags.
-        VkImageUsageFlags usageFlags =
-            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-            VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
-            VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-            VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
-            VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
-
-        if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
-        {
-            usageFlags |= VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT;
-        }
-
-        size_t bufferHelperAlignment = 0;
-        const size_t bufferHelperPoolInitialSize =
-            GetPreferredDynamicBufferInitialSize(renderer, size, usage, &bufferHelperAlignment);
-
-        mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
-                                  bufferHelperPoolInitialSize, memoryPropertyFlags,
-                                  vk::DynamicBufferPolicy::FrequentSmallAllocations);
+        mMemoryPropertyFlags = memoryPropertyFlags;
+        mBufferUsage         = usage;
 
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
 
@@ -923,19 +909,73 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
     // This method should not be called if it is an ExternalBuffer
     ASSERT(mBuffer == nullptr || mBuffer->isExternalBuffer() == false);
 
-    bool needToReleasePreviousBuffers = false;
-    size_t size                       = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
+    RendererVk *renderer = contextVk->getRenderer();
+    size_t size          = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
 
-    ANGLE_TRY(mBufferPool.allocate(contextVk, size, nullptr, nullptr, &mBufferOffset,
-                                   &needToReleasePreviousBuffers));
-
-    if (needToReleasePreviousBuffers)
+    // We could potentially use multiple backing buffers for different usages.
+    // For now keep a single buffer with all relevant usage flags.
+    VkImageUsageFlags usageFlags =
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+        VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+        VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+    if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        // Release previous buffers
-        mBufferPool.releaseInFlightBuffers(contextVk);
+        usageFlags |= VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT;
     }
 
-    mBuffer = mBufferPool.getCurrentBuffer();
+    if (mUseDynamicBufferPool && !mBufferPool.valid())
+    {
+        size_t bufferHelperAlignment             = 0;
+        const size_t bufferHelperPoolInitialSize = GetPreferredDynamicBufferInitialSize(
+            renderer, size, mBufferUsage, &bufferHelperAlignment);
+
+        mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
+                                  bufferHelperPoolInitialSize, mMemoryPropertyFlags,
+                                  vk::DynamicBufferPolicy::FrequentSmallAllocations);
+    }
+
+    if (mBufferPool.valid())
+    {
+        // Allocate buffer from dynamic buffer pool
+        bool needToReleasePreviousBuffers = false;
+        ANGLE_TRY(mBufferPool.allocate(contextVk, size, nullptr, nullptr, &mBufferOffset,
+                                       &needToReleasePreviousBuffers));
+
+        if (needToReleasePreviousBuffers)
+        {
+            // Release previous buffers
+            mBufferPool.releaseInFlightBuffers(contextVk);
+        }
+
+        mBuffer = mBufferPool.getCurrentBuffer();
+    }
+    else
+    {
+        if (mBuffer)
+        {
+            mBuffer->release(renderer);
+            mBuffer = nullptr;
+        }
+        // Allocate the buffer directly
+        std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
+
+        VkBufferCreateInfo createInfo    = {};
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.flags                 = 0;
+        createInfo.size                  = size;
+        createInfo.usage                 = usageFlags;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+
+        ANGLE_TRY(buffer->init(contextVk, createInfo, mMemoryPropertyFlags));
+        ASSERT(buffer->valid());
+
+        mBuffer = buffer.release();
+    }
+
     ASSERT(mBuffer);
 
     return angle::Result::Continue;

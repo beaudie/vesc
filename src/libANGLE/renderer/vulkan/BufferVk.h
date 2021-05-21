@@ -128,6 +128,8 @@ class BufferVk : public BufferImpl
                                                 size_t offset,
                                                 bool hostVisible);
 
+    void usedByDescriptorSetCache() { mUseDynamicBufferPool = true; }
+
   private:
     angle::Result initializeShadowBuffer(ContextVk *contextVk,
                                          gl::BufferBinding target,
@@ -203,6 +205,10 @@ class BufferVk : public BufferImpl
 
     vk::BufferHelper *mBuffer;
     VkDeviceSize mBufferOffset;
+
+    bool mUseDynamicBufferPool;
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
+    gl::BufferUsage mBufferUsage;
 
     // Pool of BufferHelpers for mBuffer to acquire from
     vk::DynamicBuffer mBufferPool;
