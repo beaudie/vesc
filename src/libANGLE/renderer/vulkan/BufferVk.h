@@ -101,14 +101,14 @@ class BufferVk : public BufferImpl
     const vk::BufferHelper &getBufferAndOffset(VkDeviceSize *offsetOut) const
     {
         ASSERT(isBufferValid());
-        *offsetOut = mBufferOffset;
+        *offsetOut = 0;
         return *mBuffer;
     }
 
     vk::BufferHelper &getBufferAndOffset(VkDeviceSize *offsetOut)
     {
         ASSERT(isBufferValid());
-        *offsetOut = mBufferOffset;
+        *offsetOut = 0;
         return *mBuffer;
     }
 
@@ -202,10 +202,7 @@ class BufferVk : public BufferImpl
     };
 
     vk::BufferHelper *mBuffer;
-    VkDeviceSize mBufferOffset;
-
-    // Pool of BufferHelpers for mBuffer to acquire from
-    vk::DynamicBuffer mBufferPool;
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
 
     // DynamicBuffer to aid map operations of buffers when they are not host visible.
     vk::DynamicBuffer mHostVisibleBufferPool;
