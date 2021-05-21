@@ -20,14 +20,6 @@ WebGLDrawElementsTest.DrawElementsTypeAlignment/*
 WebGLGLSLTest.*
 WebGLReadOutsideFramebufferTest.*
 
-# http://anglebug.com/5974 New tests, need triage
-IndexBufferOffsetTest.UInt16Index/*
-IndexBufferOffsetTest.UInt16IndexSmallUpdates/*
-IndexBufferOffsetTest.UInt32Index/*
-IndexBufferOffsetTest.UInt32IndexSmallUpdates/*
-IndexBufferOffsetTest.UInt8Index/*
-IndexBufferOffsetTest.UInt8IndexSmallUpdates/*
-
 # Flanky tests, pass standalone, but fail in a group
 ColorMaskTest.AMDZeroColorMaskBug/ES3_OpenGL
 

@@ -185,7 +185,6 @@ void main()
         }
 
         EXPECT_GL_NO_ERROR();
-        swapBuffers();
     }
 
     GLuint mProgram;
