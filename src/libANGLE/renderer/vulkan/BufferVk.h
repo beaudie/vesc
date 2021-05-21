@@ -203,9 +203,7 @@ class BufferVk : public BufferImpl
 
     vk::BufferHelper *mBuffer;
     VkDeviceSize mBufferOffset;
-
-    // Pool of BufferHelpers for mBuffer to acquire from
-    vk::DynamicBuffer mBufferPool;
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
 
     // DynamicBuffer to aid map operations of buffers when they are not host visible.
     vk::DynamicBuffer mHostVisibleBufferPool;
