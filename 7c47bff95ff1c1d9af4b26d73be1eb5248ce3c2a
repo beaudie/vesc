@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b83d802b_8d6c50be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-05-21T00:57:50Z",
+      "side": 1,
+      "message": "TBR\n\nPS2 resolves merge conflicts in src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+      "revId": "7c47bff95ff1c1d9af4b26d73be1eb5248ce3c2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
