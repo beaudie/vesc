@@ -105,44 +105,6 @@ ANGLE_INLINE VkMemoryPropertyFlags GetStorageMemoryType(GLbitfield storageFlags,
     return kDeviceLocalHostVisibleFlags;
 }
 
-size_t GetPreferredDynamicBufferInitialSize(RendererVk *renderer,
-                                            size_t dataSize,
-                                            gl::BufferUsage usage,
-                                            size_t *alignmentOut)
-{
-    // The buffer may be used for a number of different operations, so its allocations should
-    // have an alignment that satisifies all.
-    const VkPhysicalDeviceLimits &limitsVk = renderer->getPhysicalDeviceProperties().limits;
-
-    // All known vendors have power-of-2 alignment requirements, so std::max can work instead of
-    // lcm.
-    ASSERT(gl::isPow2(limitsVk.minUniformBufferOffsetAlignment));
-    ASSERT(gl::isPow2(limitsVk.minStorageBufferOffsetAlignment));
-    ASSERT(gl::isPow2(limitsVk.minTexelBufferOffsetAlignment));
-    ASSERT(gl::isPow2(limitsVk.minMemoryMapAlignment));
-
-    *alignmentOut = std::max({static_cast<size_t>(limitsVk.minUniformBufferOffsetAlignment),
-                              static_cast<size_t>(limitsVk.minStorageBufferOffsetAlignment),
-                              static_cast<size_t>(limitsVk.minTexelBufferOffsetAlignment),
-                              limitsVk.minMemoryMapAlignment});
-
-    // mBuffer will be allocated through a DynamicBuffer.  If hinted to be DYNAMIC, have
-    // DynamicBuffer allocate bigger blocks to suballocate from.  Otherwise, let it adapt to the
-    // buffer size automatically (which will allocate BufferHelpers with the same size as this
-    // buffer).
-    const bool isDynamic = usage == gl::BufferUsage::DynamicDraw ||
-                           usage == gl::BufferUsage::DynamicCopy ||
-                           usage == gl::BufferUsage::DynamicRead;
-    // Sub-allocate from a 4KB buffer.  If the buffer allocations are bigger, the dynamic buffer
-    // will adapt to it automatically (and stop sub-allocating).
-    constexpr size_t kDynamicBufferMaxSize = 4 * 1024;
-    const size_t alignedSize               = roundUp(dataSize, *alignmentOut);
-    const size_t suballocationCount        = kDynamicBufferMaxSize / alignedSize;
-    const size_t initialSize               = isDynamic ? alignedSize * suballocationCount : 0;
-
-    return initialSize;
-}
-
 ANGLE_INLINE bool SubDataSizeMeetsThreshold(size_t subDataSize, size_t bufferSize)
 {
     // A sub data update with size > 50% of buffer size meets the threshold
@@ -194,9 +156,7 @@ BufferVk::VertexConversionBuffer::VertexConversionBuffer(VertexConversionBuffer 
 BufferVk::VertexConversionBuffer::~VertexConversionBuffer() = default;
 
 // BufferVk implementation.
-BufferVk::BufferVk(const gl::BufferState &state)
-    : BufferImpl(state), mBuffer(nullptr), mBufferOffset(0)
-{}
+BufferVk::BufferVk(const gl::BufferState &state) : BufferImpl(state), mBuffer(nullptr) {}
 
 BufferVk::~BufferVk() {}
 
@@ -210,17 +170,13 @@ void BufferVk::destroy(const gl::Context *context)
 void BufferVk::release(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
-    // For external buffers, mBuffer is not a reference to a chunk in mBufferPool.
-    // It was allocated explicitly and needs to be deallocated during release(...)
-    if (mBuffer && mBuffer->isExternalBuffer())
+    if (mBuffer)
     {
         mBuffer->release(renderer);
+        mBuffer = nullptr;
     }
     mShadowBuffer.release();
-    mBufferPool.release(renderer);
     mHostVisibleBufferPool.release(renderer);
-    mBuffer       = nullptr;
-    mBufferOffset = 0;
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
@@ -317,8 +273,7 @@ angle::Result BufferVk::setExternalBufferData(const gl::Context *context,
     ANGLE_TRY(buffer->initExternal(contextVk, memoryPropertyFlags, createInfo, clientBuffer));
 
     ASSERT(!mBuffer);
-    mBuffer       = buffer.release();
-    mBufferOffset = 0;
+    mBuffer = buffer.release();
 
     return angle::Result::Continue;
 }
@@ -393,7 +348,6 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
                                               gl::BufferUsage usage)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     if (size == 0)
     {
@@ -401,35 +355,12 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    // BufferData call is re-specifying the entire buffer
-    // Release and init a new mBuffer with this new size
-    if (size != static_cast<size_t>(mState.getSize()))
+    if (size > static_cast<size_t>(mState.getSize()))
     {
         // Release and re-create the memory and buffer.
         release(contextVk);
 
-        // We could potentially use multiple backing buffers for different usages.
-        // For now keep a single buffer with all relevant usage flags.
-        VkImageUsageFlags usageFlags =
-            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-            VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
-            VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-            VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
-            VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
-
-        if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
-        {
-            usageFlags |= VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT;
-        }
-
-        size_t bufferHelperAlignment = 0;
-        const size_t bufferHelperPoolInitialSize =
-            GetPreferredDynamicBufferInitialSize(renderer, size, usage, &bufferHelperAlignment);
-
-        mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
-                                  bufferHelperPoolInitialSize, memoryPropertyFlags,
-                                  vk::DynamicBufferPolicy::FrequentSmallAllocations);
-
+        mMemoryPropertyFlags = memoryPropertyFlags;
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
 
         // persistentMapRequired may request that the server read from or write to the buffer while
@@ -511,7 +442,7 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
 
     // Enqueue a copy command on the GPU.
     const VkBufferCopy copyRegion = {static_cast<VkDeviceSize>(sourceOffset) + sourceBufferOffset,
-                                     static_cast<VkDeviceSize>(destOffset) + mBufferOffset,
+                                     static_cast<VkDeviceSize>(destOffset),
                                      static_cast<VkDeviceSize>(size)};
 
     commandBuffer->copyBuffer(sourceBuffer.getBuffer(), mBuffer->getBuffer(), 1, &copyRegion);
@@ -542,7 +473,7 @@ angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
     vk::BufferHelper *hostVisibleBuffer = mHostVisibleBufferPool.getCurrentBuffer();
     ASSERT(hostVisibleBuffer && hostVisibleBuffer->valid());
 
-    VkBufferCopy copyRegion = {mBufferOffset + offset, mHostVisibleBufferOffset, size};
+    VkBufferCopy copyRegion = {offset, mHostVisibleBufferOffset, size};
     ANGLE_TRY(hostVisibleBuffer->copyFromBuffer(contextVk, mBuffer, 1, &copyRegion));
     ANGLE_TRY(
         hostVisibleBuffer->waitForIdle(contextVk, "GPU stall due to mapping device local buffer"));
@@ -558,7 +489,7 @@ angle::Result BufferVk::handleDeviceLocalBufferUnmap(ContextVk *contextVk,
     vk::BufferHelper *hostVisibleBuffer = mHostVisibleBufferPool.getCurrentBuffer();
     ASSERT(hostVisibleBuffer && hostVisibleBuffer->valid());
 
-    VkBufferCopy copyRegion = {mHostVisibleBufferOffset, mBufferOffset + offset, size};
+    VkBufferCopy copyRegion = {mHostVisibleBufferOffset, offset, size};
     ANGLE_TRY(mBuffer->copyFromBuffer(contextVk, hostVisibleBuffer, 1, &copyRegion));
 
     return angle::Result::Continue;
@@ -600,6 +531,9 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
             mBuffer->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()) &&
             !mBuffer->isExternalBuffer())
         {
+            mBuffer->release(contextVk->getRenderer());
+            mBuffer = nullptr;
+
             // We try to map buffer, but buffer is busy. Caller has told us it doesn't care about
             // previous content. Instead of wait for GPU to finish, we just allocate a new buffer.
             ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize())));
@@ -614,7 +548,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         {
             // If the buffer is host visible, map and return.
             ANGLE_TRY(mBuffer->mapWithOffset(contextVk, reinterpret_cast<uint8_t **>(mapPtr),
-                                             static_cast<size_t>(mBufferOffset + offset)));
+                                             static_cast<size_t>(offset)));
         }
         else
         {
@@ -763,8 +697,7 @@ angle::Result BufferVk::directUpdate(ContextVk *contextVk,
 {
     uint8_t *mapPointer = nullptr;
 
-    ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &mapPointer,
-                                     static_cast<size_t>(mBufferOffset) + offset));
+    ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &mapPointer, offset));
     ASSERT(mapPointer);
 
     memcpy(mapPointer, data, size);
@@ -800,7 +733,7 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
     ANGLE_TRY(stagingBuffer->flush(contextVk));
 
     // Enqueue a copy command on the GPU.
-    VkBufferCopy copyRegion = {stagingBufferOffset, mBufferOffset + offset, size};
+    VkBufferCopy copyRegion = {stagingBufferOffset, offset, size};
     ANGLE_TRY(
         mBuffer->copyFromBuffer(contextVk, stagingBuffer->getCurrentBuffer(), 1, &copyRegion));
 
@@ -815,16 +748,13 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     // Here we acquire a new BufferHelper and directUpdate() the new buffer.
     // If the subData size was less than the buffer's size we additionally enqueue
     // a GPU copy of the remaining regions from the old mBuffer to the new one.
-    vk::BufferHelper *src          = mBuffer;
     size_t bufferSize              = static_cast<size_t>(mState.getSize());
     size_t offsetAfterSubdata      = (offset + updateSize);
     bool updateRegionBeforeSubData = (offset > 0);
     bool updateRegionAfterSubData  = (offsetAfterSubdata < bufferSize);
-
-    if (updateRegionBeforeSubData || updateRegionAfterSubData)
-    {
-        src->retain(&contextVk->getResourceUseList());
-    }
+    // Stash mBuffer for copy and release afterwe issue copyBuffer call.
+    vk::BufferHelper *src = mBuffer;
+    mBuffer               = nullptr;
 
     ANGLE_TRY(acquireBufferHelper(contextVk, bufferSize));
     ANGLE_TRY(updateBuffer(contextVk, data, updateSize, offset));
@@ -834,12 +764,12 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
 
     if (updateRegionBeforeSubData)
     {
-        copyRegions.push_back({0, mBufferOffset, offset});
+        copyRegions.push_back({0, 0, offset});
     }
     if (updateRegionAfterSubData)
     {
-        copyRegions.push_back({offsetAfterSubdata, mBufferOffset + offsetAfterSubdata,
-                               (bufferSize - offsetAfterSubdata)});
+        copyRegions.push_back(
+            {offsetAfterSubdata, 0 + offsetAfterSubdata, (bufferSize - offsetAfterSubdata)});
     }
 
     if (!copyRegions.empty())
@@ -847,6 +777,8 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
         ANGLE_TRY(mBuffer->copyFromBuffer(contextVk, src, static_cast<uint32_t>(copyRegions.size()),
                                           copyRegions.data()));
     }
+
+    src->release(contextVk->getRenderer());
 
     return angle::Result::Continue;
 }
@@ -922,20 +854,36 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
 {
     // This method should not be called if it is an ExternalBuffer
     ASSERT(mBuffer == nullptr || mBuffer->isExternalBuffer() == false);
+    // We could potentially use multiple backing buffers for different usages.
+    // For now keep a single buffer with all relevant usage flags.
+    VkImageUsageFlags usageFlags =
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+        VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+        VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
 
-    bool needToReleasePreviousBuffers = false;
-    size_t size                       = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
-
-    ANGLE_TRY(mBufferPool.allocate(contextVk, size, nullptr, nullptr, &mBufferOffset,
-                                   &needToReleasePreviousBuffers));
-
-    if (needToReleasePreviousBuffers)
+    if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        // Release previous buffers
-        mBufferPool.releaseInFlightBuffers(contextVk);
+        usageFlags |= VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT;
     }
 
-    mBuffer = mBufferPool.getCurrentBuffer();
+    // Allocate the buffer
+    std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
+
+    VkBufferCreateInfo createInfo    = {};
+    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.flags                 = 0;
+    createInfo.size                  = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
+    createInfo.usage                 = usageFlags;
+    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+
+    ANGLE_TRY(buffer->init(contextVk, createInfo, mMemoryPropertyFlags));
+    ASSERT(buffer->valid());
+
+    mBuffer = buffer.release();
     ASSERT(mBuffer);
 
     return angle::Result::Continue;
