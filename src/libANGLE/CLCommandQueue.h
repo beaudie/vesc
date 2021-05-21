@@ -25,7 +25,7 @@ class CommandQueue final : public _cl_command_queue, public Object
 
     static constexpr cl_uint kNoSize = std::numeric_limits<cl_uint>::max();
 
-    ~CommandQueue();
+    ~CommandQueue() override;
 
     const Context &getContext() const;
     const Device &getDevice() const;

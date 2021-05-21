@@ -112,7 +112,6 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
         case DeviceInfo::QueueOnDeviceMaxSize:
         case DeviceInfo::MaxOnDeviceQueues:
         case DeviceInfo::MaxOnDeviceEvents:
-        case DeviceInfo::NumericVersion:
         case DeviceInfo::PreferredInteropUserSync:
         case DeviceInfo::PartitionMaxSubDevices:
         case DeviceInfo::PreferredPlatformAtomicAlignment:
@@ -130,7 +129,6 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
             break;
 
         // Handle all cl_ulong and aliased types
-        case DeviceInfo::MaxMemAllocSize:
         case DeviceInfo::SingleFpConfig:
         case DeviceInfo::DoubleFpConfig:
         case DeviceInfo::GlobalMemCacheSize:
@@ -178,7 +176,6 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
         case DeviceInfo::Vendor:
         case DeviceInfo::DriverVersion:
         case DeviceInfo::Profile:
-        case DeviceInfo::Version:
         case DeviceInfo::OpenCL_C_Version:
         case DeviceInfo::LatestConformanceVersionPassed:
             result = mImpl->getInfoStringLength(name, &copySize);
@@ -206,38 +203,34 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
             copySize  = mInfo.mMaxWorkItemSizes.size() *
                        sizeof(decltype(mInfo.mMaxWorkItemSizes)::value_type);
             break;
+        case DeviceInfo::MaxMemAllocSize:
+            copyValue = &mInfo.mMaxMemAllocSize;
+            copySize  = sizeof(mInfo.mMaxMemAllocSize);
+            break;
         case DeviceInfo::ILsWithVersion:
-            if (mInfo.mVersion < CL_MAKE_VERSION(3, 0, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = mInfo.mILsWithVersion.data();
             copySize =
                 mInfo.mILsWithVersion.size() * sizeof(decltype(mInfo.mILsWithVersion)::value_type);
             break;
         case DeviceInfo::BuiltInKernelsWithVersion:
-            if (mInfo.mVersion < CL_MAKE_VERSION(3, 0, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = mInfo.mBuiltInKernelsWithVersion.data();
             copySize  = mInfo.mBuiltInKernelsWithVersion.size() *
                        sizeof(decltype(mInfo.mBuiltInKernelsWithVersion)::value_type);
             break;
+        case DeviceInfo::Version:
+            copyValue = mInfo.mVersionStr.c_str();
+            copySize  = mInfo.mVersionStr.length() + 1u;
+            break;
+        case DeviceInfo::NumericVersion:
+            copyValue = &mInfo.mVersion;
+            copySize  = sizeof(mInfo.mVersion);
+            break;
         case DeviceInfo::OpenCL_C_AllVersions:
-            if (mInfo.mVersion < CL_MAKE_VERSION(3, 0, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = mInfo.mOpenCL_C_AllVersions.data();
             copySize  = mInfo.mOpenCL_C_AllVersions.size() *
                        sizeof(decltype(mInfo.mOpenCL_C_AllVersions)::value_type);
             break;
         case DeviceInfo::OpenCL_C_Features:
-            if (mInfo.mVersion < CL_MAKE_VERSION(3, 0, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = mInfo.mOpenCL_C_Features.data();
             copySize  = mInfo.mOpenCL_C_Features.size() *
                        sizeof(decltype(mInfo.mOpenCL_C_Features)::value_type);
@@ -247,28 +240,16 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
             copySize  = mInfo.mExtensions.length() + 1u;
             break;
         case DeviceInfo::ExtensionsWithVersion:
-            if (mInfo.mVersion < CL_MAKE_VERSION(3, 0, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = mInfo.mExtensionsWithVersion.data();
             copySize  = mInfo.mExtensionsWithVersion.size() *
                        sizeof(decltype(mInfo.mExtensionsWithVersion)::value_type);
             break;
         case DeviceInfo::PartitionProperties:
-            if (mInfo.mVersion < CL_MAKE_VERSION(1, 2, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = mInfo.mPartitionProperties.data();
             copySize  = mInfo.mPartitionProperties.size() *
                        sizeof(decltype(mInfo.mPartitionProperties)::value_type);
             break;
         case DeviceInfo::PartitionType:
-            if (mInfo.mVersion < CL_MAKE_VERSION(1, 2, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = mInfo.mPartitionType.data();
             copySize =
                 mInfo.mPartitionType.size() * sizeof(decltype(mInfo.mPartitionType)::value_type);
@@ -281,19 +262,11 @@ cl_int Device::getInfo(DeviceInfo name, size_t valueSize, void *value, size_t *v
             copySize   = sizeof(valPointer);
             break;
         case DeviceInfo::ParentDevice:
-            if (mInfo.mVersion < CL_MAKE_VERSION(1, 2, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             valPointer = static_cast<cl_device_id>(mParent.get());
             copyValue  = &valPointer;
             copySize   = sizeof(valPointer);
             break;
         case DeviceInfo::ReferenceCount:
-            if (mInfo.mVersion < CL_MAKE_VERSION(1, 2, 0))
-            {
-                return CL_INVALID_VALUE;
-            }
             copyValue = getRefCountPtr();
             copySize  = sizeof(*getRefCountPtr());
             break;
