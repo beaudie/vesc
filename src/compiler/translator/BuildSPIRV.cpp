@@ -1173,6 +1173,12 @@ spirv::Blob SPIRVBuilder::getSpirv()
     }
     result.insert(result.end(), mSpirvExecutionModes.begin(), mSpirvExecutionModes.end());
 
+    // - OpSource instruction.
+    //
+    // This is to support debuggers and capture/replay tools and isn't strictly necessary.
+    spirv::WriteSource(&result, spv::SourceLanguageGLSL, spirv::LiteralInteger(450), nullptr,
+                       nullptr);
+
     // Append the already generated sections in order
     result.insert(result.end(), mSpirvDebug.begin(), mSpirvDebug.end());
     result.insert(result.end(), mSpirvDecorations.begin(), mSpirvDecorations.end());
