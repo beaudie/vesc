@@ -1885,6 +1885,15 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
     gl::LevelIndex maxLevel(mState.getEffectiveMaxLevel());
     ASSERT(baseLevel <= maxLevel);
 
+    if (!mState.getImmutableFormat() &&
+        !(baseLevel != mImage->getFirstAllocatedLevel() ||
+          maxLevel != (mImage->getFirstAllocatedLevel() + mImage->getLevelCount() - 1)))
+    {
+        // This scenario is a noop, most likely maxLevel has been lowered to a level that already
+        // reflects the current state of the image
+        return angle::Result::Continue;
+    }
+
     if (!mImage->valid())
     {
         // Track the levels in our ImageHelper
