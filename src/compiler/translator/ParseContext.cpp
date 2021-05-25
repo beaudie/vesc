@@ -4213,7 +4213,10 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     const TVector<unsigned int> *arraySizes,
     const TSourceLoc &arraySizesLine)
 {
-    checkIsNotReserved(nameLine, blockName);
+    if (blockName != "gl_PerVertex")
+    {
+        checkIsNotReserved(nameLine, blockName);
+    }
 
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
 
@@ -5571,7 +5574,10 @@ TLayoutQualifier TParseContext::joinLayoutQualifiers(TLayoutQualifier leftQualif
 TDeclarator *TParseContext::parseStructDeclarator(const ImmutableString &identifier,
                                                   const TSourceLoc &loc)
 {
-    checkIsNotReserved(loc, identifier);
+    if (mShaderType != GL_GEOMETRY_SHADER_EXT || identifier != "gl_Position")
+    {
+        checkIsNotReserved(loc, identifier);
+    }
     return new TDeclarator(identifier, loc);
 }
 

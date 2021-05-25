@@ -460,8 +460,6 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
         varyingPacking.getInactiveVaryingMappedNames();
     for (const std::string &varyingName : inactiveVaryingMappedNames[shaderType])
     {
-        ASSERT(!gl::IsBuiltInName(varyingName));
-
         // If name is already in the map, it will automatically have marked all other stages
         // inactive.
         if (variableInfoMapOut->contains(shaderType, varyingName))
