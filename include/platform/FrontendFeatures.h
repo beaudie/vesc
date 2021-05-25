@@ -76,6 +76,10 @@ struct FrontendFeatures : angle::FeatureSetBase
     angle::Feature enableCompressingPipelineCacheInThreadPool = {
         "enableCompressingPipelineCacheInThreadPool", angle::FeatureCategory::FrontendWorkarounds,
         "Enable compressing pipeline cache in thread pool.", &members, "http://anglebug.com/4722"};
+
+    angle::Feature syncStateOnFlush = {
+        "syncStateOnFlush", angle::FeatureCategory::FrontendWorkarounds,
+        "Sync all backend state on glFlush", &members, "http://crbug.com/1181068"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
