@@ -3263,7 +3263,12 @@ angle::Result State::syncTexturesInit(const Context *context, Command command)
 angle::Result State::syncImagesInit(const Context *context, Command command)
 {
     ASSERT(mRobustResourceInit);
-    ASSERT(mProgram);
+
+    if (!mProgram)
+    {
+        return angle::Result::Continue;
+    }
+
     for (size_t imageUnitIndex : mExecutable->getActiveImagesMask())
     {
         Texture *texture = mImageUnits[imageUnitIndex].texture.get();

@@ -943,6 +943,10 @@ void StateManagerGL::updateProgramStorageBufferBindings(const gl::Context *conte
 {
     const gl::State &glState   = context->getState();
     const gl::Program *program = glState.getProgram();
+    if (!program)
+    {
+        return;
+    }
 
     for (size_t blockIndex = 0; blockIndex < program->getActiveShaderStorageBlockCount();
          blockIndex++)
@@ -972,6 +976,10 @@ void StateManagerGL::updateProgramUniformBufferBindings(const gl::Context *conte
     // Sync the current program state
     const gl::State &glState   = context->getState();
     const gl::Program *program = glState.getProgram();
+    if (!program)
+    {
+        return;
+    }
 
     for (size_t uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount();
          uniformBlockIndex++)
@@ -1000,6 +1008,10 @@ void StateManagerGL::updateProgramAtomicCounterBufferBindings(const gl::Context 
 {
     const gl::State &glState   = context->getState();
     const gl::Program *program = glState.getProgram();
+    if (!program)
+    {
+        return;
+    }
 
     for (const auto &atomicCounterBuffer : program->getState().getAtomicCounterBuffers())
     {

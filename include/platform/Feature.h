@@ -189,6 +189,15 @@ struct FeatureSetBase
         }
     }
 
+    void reset()
+    {
+        for (auto &feature : members)
+        {
+            feature.second->enabled   = false;
+            feature.second->condition = "";
+        }
+    }
+
     const FeatureMap &getFeatures() const { return members; }
 };
 

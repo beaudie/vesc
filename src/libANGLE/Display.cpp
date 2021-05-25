@@ -958,6 +958,8 @@ Error Display::terminate(const Thread *thread)
 
     mDeviceLost = false;
 
+    mFrontendFeatures.reset();
+
     mInitialized = false;
 
     gl::UninitializeDebugAnnotations();
