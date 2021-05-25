@@ -382,6 +382,9 @@ struct Extensions
     // GL_EXT_shader_texture_lod
     bool shaderTextureLOD = false;
 
+    // GL_EXT_shader_framebuffer_fetch
+    bool shaderFramebufferFetchEXT = false;
+
     // GL_EXT_shader_framebuffer_fetch_non_coherent
     bool shaderFramebufferFetchNonCoherentEXT = false;
 
