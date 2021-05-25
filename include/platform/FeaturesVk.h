@@ -529,6 +529,14 @@ struct FeaturesVk : FeatureSetBase
         "Forces highp precision in fragment shader to mediump.", &members,
         "https://issuetracker.google.com/184850002"};
 
+    // Whether we should enable the GL_EXT_shader_framebuffer_fetch extension on devices that
+    // support coherent semantics in hardware, but there is not yet a Vulkan extension to advertise
+    // that support.
+    Feature enableNonCompliantShaderFramebufferFetchExtension = {
+        "enableNonCompliantShaderFramebufferFetchExtension", FeatureCategory::VulkanFeatures,
+        "Enable non-compliant GL_EXT_shader_framebuffer_fetch extension.", &members,
+        "https://issuetracker.google.com/issues/188095445"};
+
     // Whether we should submit at each FBO boundary.
     Feature preferSubmitAtFBOBoundary = {
         "preferSubmitAtFBOBoundary", FeatureCategory::VulkanWorkarounds,
