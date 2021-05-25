@@ -451,7 +451,8 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 3
         },
         "test_id_prefix": "ninja://src/tests/restricted_traces:angle_restricted_trace_gold_tests/"
       }
@@ -630,7 +631,8 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 3
         },
         "test_id_prefix": "ninja://src/tests/restricted_traces:angle_restricted_trace_gold_tests/"
       }
@@ -1257,7 +1259,8 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 3
         },
         "test_id_prefix": "ninja://src/tests/restricted_traces:angle_restricted_trace_gold_tests/"
       }
@@ -1984,7 +1987,8 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 3
         },
         "test_id_prefix": "ninja://src/tests/restricted_traces:angle_restricted_trace_gold_tests/"
       }
@@ -2742,7 +2746,8 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chrome-gpu-gold@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 3
         },
         "test_id_prefix": "ninja://src/tests/restricted_traces:angle_restricted_trace_gold_tests/"
       }
