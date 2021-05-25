@@ -529,6 +529,15 @@ void Context::initializeDefaultResources()
     // Initialize dirty bit masks
     mAllDirtyBits.set();
 
+    mAllDirtyObjects.set();
+    if (!mState.isRobustResourceInitEnabled())
+    {
+        mAllDirtyObjects.reset(State::DIRTY_OBJECT_TEXTURES_INIT);
+        mAllDirtyObjects.reset(State::DIRTY_OBJECT_IMAGES_INIT);
+        mAllDirtyObjects.reset(State::DIRTY_OBJECT_READ_ATTACHMENTS);
+        mAllDirtyObjects.reset(State::DIRTY_OBJECT_DRAW_ATTACHMENTS);
+    }
+
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
@@ -2575,6 +2584,10 @@ void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, co
 
 void Context::flush()
 {
+    if (getFrontendFeatures().syncStateOnFlush.enabled)
+    {
+        ANGLE_CONTEXT_TRY(syncState(mAllDirtyBits, mAllDirtyObjects, Command::Other));
+    }
     ANGLE_CONTEXT_TRY(mImplementation->flush(this));
 }
 
