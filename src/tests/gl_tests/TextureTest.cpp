@@ -4139,7 +4139,7 @@ TEST_P(Texture2DBaseMaxTestES3, StageInvalidLevels)
 TEST_P(Texture2DBaseMaxTestES3, Fuzz545ImmutableTexRenderFeedback)
 {
     // http://crbug.com/1212206
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsMetal());
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
 
