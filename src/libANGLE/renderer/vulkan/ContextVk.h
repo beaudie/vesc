@@ -1080,7 +1080,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     bool mEGLSyncObjectPendingFlush;
     bool mHasDeferredFlush;
 
-    // GL_EXT_shader_framebuffer_fetch_non_coherent
+    // GL_EXT_shader_framebuffer_fetch and GL_EXT_shader_framebuffer_fetch_non_coherent
     bool mLastProgramUsesFramebufferFetch;
 
     // Semaphores that must be waited on in the next submission.
