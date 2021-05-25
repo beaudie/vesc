@@ -2472,6 +2472,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // tests to fail.
     ANGLE_FEATURE_CONDITION(&mFeatures, forceFragmentShaderPrecisionHighpToMediump, false);
 
+    // Recent Vulkan-capable Android tiler-based GPUs support the coherent extension.
+    // https://issuetracker.google.com/issues/188095445
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableNonCompliantShaderFramebufferFetchExtension,
+                            kExposeNonConformantExtensionsAndVersions && IsAndroid() &&
+                                (isQualcomm || isARM || isPowerVR));
+
     // Testing shows that on ARM GPU, doing implicit flush at framebuffer boundary improves
     // performance. Most app traces shows frame time reduced and manhattan 3.1 offscreen score
     // improves 7%.
