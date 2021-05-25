@@ -749,6 +749,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const bool mExtensionsEnabled;
     MemoryProgramCache *mMemoryProgramCache;
 
+    State::DirtyObjects mAllDirtyObjects;
     State::DirtyObjects mDrawDirtyObjects;
 
     StateCache mStateCache;

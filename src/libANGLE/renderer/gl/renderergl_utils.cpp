@@ -2124,6 +2124,7 @@ void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFea
     ANGLE_FEATURE_CONDITION(features, disableProgramCachingForTransformFeedback,
                             IsAndroid() && isQualcomm);
     ANGLE_FEATURE_CONDITION(features, syncFramebufferBindingsOnTexImage, false);
+    ANGLE_FEATURE_CONDITION(features, syncStateOnFlush, IsApple());
 }
 
 void ReInitializeFeaturesAtGPUSwitch(const FunctionsGL *functions, angle::FeaturesGL *features)
