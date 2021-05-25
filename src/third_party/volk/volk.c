@@ -44,27 +44,22 @@ static PFN_vkVoidFunction vkGetDeviceProcAddrStub(void* context, const char* nam
 
 VkResult volkInitialize(void)
 {
+    // ANGLE overrides the default loader name here to avoid conflicts with the system loader.
 #if defined(_WIN32)
-    HMODULE module = LoadLibraryA("vulkan-1.dll");
+    HMODULE module = LoadLibraryA("vkloader.dll");
     if (!module)
         return VK_ERROR_INITIALIZATION_FAILED;
 
     // note: function pointer is cast through void function pointer to silence cast-function-type warning on gcc8
     vkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)(void(*)(void))GetProcAddress(module, "vkGetInstanceProcAddr");
 #elif defined(__APPLE__)
-    void* module = dlopen("libvulkan.dylib", RTLD_NOW | RTLD_LOCAL);
-    if (!module)
-        module = dlopen("libvulkan.1.dylib", RTLD_NOW | RTLD_LOCAL);
-    if (!module)
-        module = dlopen("libMoltenVK.dylib", RTLD_NOW | RTLD_LOCAL);
+    void* module = dlopen("vkloader.dylib", RTLD_NOW | RTLD_LOCAL);
     if (!module)
         return VK_ERROR_INITIALIZATION_FAILED;
 
     vkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)dlsym(module, "vkGetInstanceProcAddr");
 #else
-    void* module = dlopen("libvulkan.so.1", RTLD_NOW | RTLD_LOCAL);
-    if (!module)
-        module = dlopen("libvulkan.so", RTLD_NOW | RTLD_LOCAL);
+    void* module = dlopen("libvkloader.so", RTLD_NOW | RTLD_LOCAL);
     if (!module)
         return VK_ERROR_INITIALIZATION_FAILED;
 
