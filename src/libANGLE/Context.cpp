@@ -528,6 +528,7 @@ void Context::initializeDefaultResources()
 
     // Initialize dirty bit masks
     mAllDirtyBits.set();
+    mAllDirtyObjects.set();
 
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
@@ -2575,6 +2576,10 @@ void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, co
 
 void Context::flush()
 {
+    if (getFrontendFeatures().syncStateOnFlush.enabled)
+    {
+        ANGLE_CONTEXT_TRY(syncState(mAllDirtyBits, mAllDirtyObjects, Command::Other));
+    }
     ANGLE_CONTEXT_TRY(mImplementation->flush(this));
 }
 
@@ -3953,6 +3958,11 @@ void Context::updateCaps()
         mReadPixelsDirtyObjects.set(State::DIRTY_OBJECT_READ_ATTACHMENTS);
         mCopyImageDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
         mCopyImageDirtyObjects.set(State::DIRTY_OBJECT_READ_ATTACHMENTS);
+    }
+    else
+    {
+        mAllDirtyObjects.reset(State::DIRTY_OBJECT_TEXTURES_INIT);
+        mAllDirtyObjects.reset(State::DIRTY_OBJECT_IMAGES_INIT);
     }
 
     // We need to validate buffer bounds if we are in a WebGL or robust access context and the
