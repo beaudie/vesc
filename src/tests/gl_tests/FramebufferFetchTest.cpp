@@ -3,8 +3,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ExternalBufferTest:
-//   Tests the correctness of EXT_shader_framebuffer_fetch_non_coherent extension.
+// FramebufferFetchTest:
+//   Tests the correctness of the EXT_shader_framebuffer_fetch and the
+//   EXT_shader_framebuffer_fetch_non_coherent extensions.
 //
 
 #include "test_utils/ANGLETest.h"
@@ -14,14 +15,14 @@
 namespace angle
 {
 
-class FramebufferFetchNonCoherentES31 : public ANGLETest
+class FramebufferFetchES31 : public ANGLETest
 {
   protected:
     static constexpr GLuint kMaxColorBuffer = 4u;
     static constexpr GLuint kViewportWidth  = 16u;
     static constexpr GLuint kViewportHeight = 16u;
 
-    FramebufferFetchNonCoherentES31()
+    FramebufferFetchES31()
     {
         setWindowWidth(16);
         setWindowHeight(16);
@@ -30,7 +31,102 @@ class FramebufferFetchNonCoherentES31 : public ANGLETest
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
         setConfigDepthBits(24);
+
+        mCoherentExtension = false;
     }
+
+    void setWhichExtension(bool coherent) { mCoherentExtension = coherent; }
+
+    enum FragmentShaderTypes
+    {
+        GLSL100,
+        GLSL310_1ATTACHMENT,
+    };
+    const char *getFragmentShader(FragmentShaderTypes which)
+    {
+        if (mCoherentExtension)
+        {
+            switch (which)
+            {
+                case GLSL100:
+                    return k100CoherentFS;
+                case GLSL310_1ATTACHMENT:
+                    return k310Coherent1AttachmentFS;
+            }
+        }
+        else
+        {
+            switch (which)
+            {
+                case GLSL100:
+                    return k100NonCoherentFS;
+                case GLSL310_1ATTACHMENT:
+                    return k310NonCoherent1AttachmentFS;
+            }
+        }
+    }
+
+    // A 1.0 GLSL vertex shader
+    static constexpr char k100VS[] = R"(#version 100
+attribute vec4 a_position;
+
+void main (void)
+{
+    gl_Position = a_position;
+})";
+
+    // A 3.1 GLSL vertex shader
+    static constexpr char k310VS[] = R"(#version 310 es
+in highp vec4 a_position;
+
+void main (void)
+{
+    gl_Position = a_position;
+})";
+
+    // Coherent version of a 1.0 GLSL fragment shader that uses gl_LastFragData
+    static constexpr char k100CoherentFS[] = R"(#version 100
+#extension GL_EXT_shader_framebuffer_fetch : require
+mediump vec4 gl_LastFragData[gl_MaxDrawBuffers];
+uniform highp vec4 u_color;
+
+void main (void)
+{
+    gl_FragColor = u_color + gl_LastFragData[0];
+})";
+
+    // Coherent version of a 3.1 GLSL fragment shader that writes to 1 attachment
+    static constexpr char k310Coherent1AttachmentFS[] = R"(#version 310 es
+#extension GL_EXT_shader_framebuffer_fetch : require
+layout(location = 0) inout highp vec4 o_color;
+
+uniform highp vec4 u_color;
+void main (void)
+{
+    o_color += u_color;
+})";
+
+    // Non-coherent version of a 1.0 GLSL fragment shader that uses gl_LastFragData
+    static constexpr char k100NonCoherentFS[] = R"(#version 100
+#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require
+layout(noncoherent) mediump vec4 gl_LastFragData[gl_MaxDrawBuffers];
+uniform highp vec4 u_color;
+
+void main (void)
+{
+    gl_FragColor = u_color + gl_LastFragData[0];
+})";
+
+    // Non-coherent version of a 3.1 GLSL fragment shader that writes to 1 attachment
+    static constexpr char k310NonCoherent1AttachmentFS[] = R"(#version 310 es
+#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require
+layout(noncoherent, location = 0) inout highp vec4 o_color;
+
+uniform highp vec4 u_color;
+void main (void)
+{
+    o_color += u_color;
+})";
 
     void render(GLuint coordLoc, GLboolean isFramebufferFetchProgram)
     {
@@ -65,119 +161,105 @@ class FramebufferFetchNonCoherentES31 : public ANGLETest
 
         ASSERT_GL_NO_ERROR();
     }
+
+    void BasicTest(GLProgram program)
+    {
+        GLFramebuffer framebuffer;
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        std::vector<GLColor> greenColor(kViewportWidth * kViewportHeight, GLColor::green);
+        GLTexture colorBufferTex;
+        glBindTexture(GL_TEXTURE_2D, colorBufferTex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, greenColor.data());
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferTex,
+                               0);
+
+        ASSERT_GL_NO_ERROR();
+
+        float color[4]      = {1.0f, 0.0f, 0.0f, 1.0f};
+        GLint colorLocation = glGetUniformLocation(program, "u_color");
+        glUniform4fv(colorLocation, 1, color);
+
+        GLint positionLocation = glGetAttribLocation(program, "a_position");
+        render(positionLocation, GL_TRUE);
+
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::yellow);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    bool mCoherentExtension;
 };
 
-// Testing EXT_shader_framebuffer_fetch_non_coherent with inout qualifier
-TEST_P(FramebufferFetchNonCoherentES31, BasicInout)
+// Testing EXT_shader_framebuffer_fetch with inout qualifier
+TEST_P(FramebufferFetchES31, BasicInout_Coherent)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch"));
 
-    constexpr char kVS[] = R"(#version 310 es
-in highp vec4 a_position;
-
-void main (void)
-{
-    gl_Position = a_position;
-})";
-
-    constexpr char kFS[] = R"(#version 310 es
-#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require
-layout(noncoherent, location = 0) inout highp vec4 o_color;
-
-uniform highp vec4 u_color;
-void main (void)
-{
-    o_color += u_color;
-})";
+    setWhichExtension(true);
 
     GLProgram program;
-    program.makeRaster(kVS, kFS);
+    program.makeRaster(k310VS, getFragmentShader(GLSL310_1ATTACHMENT));
     glUseProgram(program);
 
     ASSERT_GL_NO_ERROR();
 
-    GLFramebuffer framebuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    std::vector<GLColor> greenColor(kViewportWidth * kViewportHeight, GLColor::green);
-    GLTexture colorBufferTex;
-    glBindTexture(GL_TEXTURE_2D, colorBufferTex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, greenColor.data());
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferTex, 0);
+    BasicTest(program);
+}
+
+// Testing EXT_shader_framebuffer_fetch_non_coherent with inout qualifier
+TEST_P(FramebufferFetchES31, BasicInout_NonCoherent)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+
+    setWhichExtension(false);
+
+    GLProgram program;
+    program.makeRaster(k310VS, getFragmentShader(GLSL310_1ATTACHMENT));
+    glUseProgram(program);
 
     ASSERT_GL_NO_ERROR();
 
-    float color[4]      = {1.0f, 0.0f, 0.0f, 1.0f};
-    GLint colorLocation = glGetUniformLocation(program, "u_color");
-    glUniform4fv(colorLocation, 1, color);
+    BasicTest(program);
+}
 
-    GLint positionLocation = glGetAttribLocation(program, "a_position");
-    render(positionLocation, GL_TRUE);
+// Testing EXT_shader_framebuffer_fetch with gl_LastFragData
+TEST_P(FramebufferFetchES31, BasicLastFragData_Coherent)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch"));
+
+    setWhichExtension(true);
+
+    GLProgram program;
+    program.makeRaster(k100VS, getFragmentShader(GLSL100));
+    glUseProgram(program);
 
     ASSERT_GL_NO_ERROR();
 
-    EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::yellow);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    BasicTest(program);
 }
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with gl_LastFragData
-TEST_P(FramebufferFetchNonCoherentES31, BasicLastFragData)
+TEST_P(FramebufferFetchES31, BasicLastFragData_NonCoherent)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
-    constexpr char kVS[] = R"(#version 100
-attribute vec4 a_position;
-
-void main (void)
-{
-    gl_Position = a_position;
-})";
-
-    constexpr char kFS[] = R"(#version 100
-#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require
-layout(noncoherent) mediump vec4 gl_LastFragData[gl_MaxDrawBuffers];
-uniform highp vec4 u_color;
-
-void main (void)
-{
-    gl_FragColor = u_color + gl_LastFragData[0];
-})";
+    setWhichExtension(false);
 
     GLProgram program;
-    program.makeRaster(kVS, kFS);
+    program.makeRaster(k100VS, getFragmentShader(GLSL100));
     glUseProgram(program);
 
     ASSERT_GL_NO_ERROR();
 
-    GLFramebuffer framebuffer;
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    std::vector<GLColor> greenColor(kViewportWidth * kViewportHeight, GLColor::green);
-    GLTexture colorBufferTex;
-    glBindTexture(GL_TEXTURE_2D, colorBufferTex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kViewportWidth, kViewportHeight, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, greenColor.data());
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferTex, 0);
-
-    ASSERT_GL_NO_ERROR();
-
-    float color[4]      = {1.0f, 0.0f, 0.0f, 1.0f};
-    GLint colorLocation = glGetUniformLocation(program, "u_color");
-    glUniform4fv(colorLocation, 1, color);
-
-    GLint positionLocation = glGetAttribLocation(program, "a_position");
-    render(positionLocation, GL_TRUE);
-
-    ASSERT_GL_NO_ERROR();
-
-    EXPECT_PIXEL_COLOR_EQ(kViewportWidth / 2, kViewportHeight / 2, GLColor::yellow);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    BasicTest(program);
 }
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with multiple render target
-TEST_P(FramebufferFetchNonCoherentES31, MultipleRenderTarget)
+TEST_P(FramebufferFetchES31, MultipleRenderTarget)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -264,7 +346,7 @@ void main (void)
 }
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with multiple render target using inout array
-TEST_P(FramebufferFetchNonCoherentES31, MultipleRenderTargetWithInoutArray)
+TEST_P(FramebufferFetchES31, MultipleRenderTargetWithInoutArray)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -348,7 +430,7 @@ void main (void)
 }
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with multiple draw
-TEST_P(FramebufferFetchNonCoherentES31, MultipleDraw)
+TEST_P(FramebufferFetchES31, MultipleDraw)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -408,7 +490,7 @@ void main (void)
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with the order of non-fetch program and fetch
 // program
-TEST_P(FramebufferFetchNonCoherentES31, DrawNonFetchDrawFetch)
+TEST_P(FramebufferFetchES31, DrawNonFetchDrawFetch)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -502,7 +584,7 @@ void main (void)
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with the order of fetch program and non-fetch
 // program
-TEST_P(FramebufferFetchNonCoherentES31, DrawFetchDrawNonFetch)
+TEST_P(FramebufferFetchES31, DrawFetchDrawNonFetch)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -596,7 +678,7 @@ void main (void)
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with the order of non-fetch program and fetch
 // program with different attachments
-TEST_P(FramebufferFetchNonCoherentES31, DrawNonFetchDrawFetchWithDifferentAttachments)
+TEST_P(FramebufferFetchES31, DrawNonFetchDrawFetchWithDifferentAttachments)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -756,7 +838,7 @@ void main (void)
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with the order of non-fetch program and fetch
 // with different programs
-TEST_P(FramebufferFetchNonCoherentES31, DrawNonFetchDrawFetchWithDifferentPrograms)
+TEST_P(FramebufferFetchES31, DrawNonFetchDrawFetchWithDifferentPrograms)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -917,7 +999,7 @@ void main (void)
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with the order of draw fetch, blit and draw
 // fetch
-TEST_P(FramebufferFetchNonCoherentES31, DrawFetchBlitDrawFetch)
+TEST_P(FramebufferFetchES31, DrawFetchBlitDrawFetch)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -1045,7 +1127,7 @@ void main (void)
 }
 
 // Testing EXT_shader_framebuffer_fetch_non_coherent with program pipeline
-TEST_P(FramebufferFetchNonCoherentES31, ProgramPipeline)
+TEST_P(FramebufferFetchES31, ProgramPipeline)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -1187,7 +1269,7 @@ void main (void)
 }
 
 // TODO: http://anglebug.com/5792
-TEST_P(FramebufferFetchNonCoherentES31, DISABLED_UniformUsageCombinations)
+TEST_P(FramebufferFetchES31, DISABLED_UniformUsageCombinations)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -1346,7 +1428,7 @@ void main()
 
 // Testing that binding the location value using GLES API is conflicted to the location value of the
 // fragment inout.
-TEST_P(FramebufferFetchNonCoherentES31, FixedUniformLocation)
+TEST_P(FramebufferFetchES31, FixedUniformLocation)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
 
@@ -1399,6 +1481,6 @@ void main (void)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(FramebufferFetchNonCoherentES31);
-ANGLE_INSTANTIATE_TEST_ES31(FramebufferFetchNonCoherentES31);
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(FramebufferFetchES31);
+ANGLE_INSTANTIATE_TEST_ES31(FramebufferFetchES31);
 }  // namespace angle
