@@ -87,7 +87,12 @@ void SetGlobalLastContext(gl::Context *context)
     g_LastContext = context;
 }
 
-Thread *GetCurrentThread()
+// This function causes an MSAN false positive, which is muted. See https://crbug.com/1211047
+#if defined(__clang__) && defined(MEMORY_SANITIZER)
+__attribute__((no_sanitize_memory))
+#endif
+Thread *
+GetCurrentThread()
 {
     Thread *current = gCurrentThread;
     return (current ? current : AllocateCurrentThread());
