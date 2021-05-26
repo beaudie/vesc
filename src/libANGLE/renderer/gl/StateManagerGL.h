@@ -272,6 +272,8 @@ class StateManagerGL final : angle::NonCopyable
                             const gl::State::DirtyBits &glDirtyBits,
                             const gl::State::DirtyBits &bitMask);
 
+    angle::Result resyncState(const gl::Context *context);
+
     ANGLE_INLINE void updateMultiviewBaseViewLayerIndexUniform(
         const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const
@@ -363,6 +365,8 @@ class StateManagerGL final : angle::NonCopyable
                                            ExternalContextState *state);
     void restoreVertexArraysNativeContext(const gl::Extensions &extensions,
                                           const ExternalContextState *state);
+
+    void unbindAllObjects();
 
     const FunctionsGL *mFunctions;
     const angle::FeaturesGL &mFeatures;
