@@ -616,6 +616,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
+    ANGLE_INLINE void invalidatePipelineLayout() { mInvalidatePipelineLayout = true; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1039,6 +1041,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // signature for each descriptor set. This allows us to keep a cache of descriptor sets and
     // avoid calling vkAllocateDesctiporSets each texture update.
     vk::TextureDescriptorDesc mActiveTexturesDesc;
+
+    // Immutable sampler state changes in textures requires the recreation of pipeline layout.
+    bool mInvalidatePipelineLayout;
 
     vk::ShaderBuffersDescriptorDesc mShaderBuffersDescriptorDesc;
 

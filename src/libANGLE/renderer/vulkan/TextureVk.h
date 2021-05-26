@@ -469,9 +469,20 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     angle::Result refreshImageViews(ContextVk *contextVk);
     bool shouldDecodeSRGB(ContextVk *contextVk, GLenum srgbDecode, bool texelFetchStaticUse) const;
     void initImageUsageFlags(ContextVk *contextVk, const vk::Format &format);
+    void handleImmutableSamplerTransition(const vk::ImageHelper *previousImage,
+                                          const vk::ImageHelper *nextImage);
 
     bool mOwnsImage;
     bool mRequiresMutableStorage;
+
+    enum ExtendedDirtyBitType
+    {
+        // Immutable sampler state
+        DIRTY_BIT_IMMUTABLE_SAMPLER,
+        DIRTY_BIT_COUNT,
+    };
+    using ExtendedDirtyBits = angle::BitSet<ExtendedDirtyBitType::DIRTY_BIT_COUNT>;
+    ExtendedDirtyBits mExtendedDirtyBits;
 
     gl::TextureType mImageNativeType;
 
