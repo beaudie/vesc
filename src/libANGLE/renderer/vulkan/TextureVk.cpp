@@ -1289,18 +1289,40 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+void TextureVk::handleImmutableSamplerTransition(const vk::ImageHelper *previousImage,
+                                                 const vk::ImageHelper *nextImage)
+{
+    // Did the previous image have an immutable sampler
+    bool previousImageHadImmutableSampler =
+        previousImage && previousImage->valid() && previousImage->hasImmutableSampler();
+
+    // Does the next image require an immutable sampler?
+    bool nextImageRequiresImmutableSampler =
+        nextImage && nextImage->valid() && nextImage->hasImmutableSampler();
+
+    // Handle transition of immutable sampler state
+    if (previousImageHadImmutableSampler != nextImageRequiresImmutableSampler)
+    {
+        // The immutable sampler state is dirty.
+        mExtendedDirtyBits.set(DIRTY_BIT_IMMUTABLE_SAMPLER);
+    }
+}
+
 angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
                                            gl::TextureType type,
                                            egl::Image *image)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
+    ImageVk *imageVk     = vk::GetImpl(image);
+
+    // TODO: Textures other than EGLImage targets can have immutable samplers.
+    // http://anglebug.com/5773
+    handleImmutableSamplerTransition(mImage, (imageVk) ? imageVk->getImage() : nullptr);
 
     releaseAndDeleteImageAndViews(contextVk);
 
     const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
-
-    ImageVk *imageVk = vk::GetImpl(image);
     setImageHelper(contextVk, imageVk->getImage(), imageVk->getImageTextureType(), format,
                    imageVk->getImageLevel().get(), imageVk->getImageLayer(),
                    gl::LevelIndex(mState.getEffectiveBaseLevel()), false);
@@ -2482,6 +2504,22 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // Initialize the image storage and flush the pixel buffer.
     ANGLE_TRY(ensureImageInitialized(contextVk, isGenerateMipmap ? ImageMipLevels::FullMipChain
                                                                  : ImageMipLevels::EnabledLevels));
+
+    // Handle extended dirty bits, if any
+    for (auto extendedDirtyBit : mExtendedDirtyBits)
+    {
+        switch (extendedDirtyBit)
+        {
+            case DIRTY_BIT_IMMUTABLE_SAMPLER:
+                contextVk->invalidatePipelineLayout();
+                mSampler.reset();
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+    mExtendedDirtyBits.reset();
 
     // Mask out the IMPLEMENTATION dirty bit to avoid unnecessary syncs.
     gl::Texture::DirtyBits localBits = dirtyBits;

@@ -616,6 +616,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
+    ANGLE_INLINE void invalidatePipelineLayout()
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_LAYOUT);
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -628,6 +633,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         // The pipeline has changed and needs to be recreated.  This dirty bit may close the render
         // pass.
         DIRTY_BIT_PIPELINE_DESC,
+        // The pipeline layout has changed and needs to be recreated.
+        DIRTY_BIT_PIPELINE_LAYOUT,
 
         // Start the render pass.
         DIRTY_BIT_RENDER_PASS,
