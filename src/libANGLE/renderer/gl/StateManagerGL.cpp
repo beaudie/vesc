@@ -3174,4 +3174,67 @@ void StateManagerGL::setDefaultVAOStateDirty()
     mLocalDirtyBits.set(gl::State::DIRTY_BIT_VERTEX_ARRAY_BINDING);
 }
 
+void StateManagerGL::unbindAllObjects()
+{
+    useProgram(0);
+    bindVertexArray(0, &mDefaultVAOState);
+    for (gl::BufferBinding bufferBinding : angle::AllEnums<gl::BufferBinding>())
+    {
+        if (mBuffers[bufferBinding] != 0)
+        {
+            bindBuffer(bufferBinding, 0);
+        }
+
+        for (size_t index = 0; index < mIndexedBuffers[bufferBinding].size(); index++)
+        {
+            if (mIndexedBuffers[bufferBinding][index].buffer != 0)
+            {
+                bindBufferBase(bufferBinding, index, 0);
+            }
+        }
+    }
+
+    for (size_t textureUnit = 0; textureUnit < gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES;
+         textureUnit++)
+    {
+        for (gl::TextureType textureType : angle::AllEnums<gl::TextureType>())
+        {
+            if (mTextures[textureType][textureUnit] != 0)
+            {
+                activeTexture(textureUnit);
+                bindTexture(textureType, 0);
+            }
+        }
+    }
+
+    for (size_t samplerUnit = 0; samplerUnit < gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES;
+         samplerUnit++)
+    {
+        if (mSamplers[samplerUnit] != 0)
+        {
+            bindSampler(samplerUnit, 0);
+        }
+    }
+
+    for (size_t imageUnit = 0; imageUnit < mImages.size(); imageUnit++)
+    {
+        if (mImages[imageUnit].texture != 0)
+        {
+            bindImageTexture(imageUnit, 0, 0, false, 0, GL_READ_ONLY, GL_R32UI);
+        }
+    }
+
+    bindFramebuffer(GL_FRAMEBUFFER, 0);
+    bindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
+angle::Result StateManagerGL::resyncState(const gl::Context *context)
+{
+    unbindAllObjects();
+
+    gl::State::DirtyBits dirtyBits;
+    dirtyBits.set();
+    return syncState(context, gl::State::DirtyBits(), dirtyBits);
+}
+
 }  // namespace rx

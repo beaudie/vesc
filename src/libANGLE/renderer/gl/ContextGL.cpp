@@ -311,6 +311,9 @@ angle::Result ContextGL::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
+    ANGLE_TRY(mRenderer->getStateManager()->resyncState(context));
+    ANGLE_TRY(mRenderer->finish());
+
     const gl::Program *program  = context->getState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
@@ -329,6 +332,8 @@ angle::Result ContextGL::drawArrays(const gl::Context *context,
         ANGLE_GL_TRY(context, getFunctions()->drawArraysInstanced(ToGLenum(mode), first, count,
                                                                   instanceCount));
     }
+    ANGLE_TRY(mRenderer->finish());
+
     return angle::Result::Continue;
 }
 
@@ -478,6 +483,9 @@ angle::Result ContextGL::drawElements(const gl::Context *context,
                                       gl::DrawElementsType type,
                                       const void *indices)
 {
+    ANGLE_TRY(mRenderer->getStateManager()->resyncState(context));
+    ANGLE_TRY(mRenderer->finish());
+
     const gl::State &glState    = context->getState();
     const gl::Program *program  = glState.getProgram();
     const bool usesMultiview    = program->usesMultiview();
@@ -500,6 +508,9 @@ angle::Result ContextGL::drawElements(const gl::Context *context,
                      getFunctions()->drawElementsInstanced(ToGLenum(mode), count, ToGLenum(type),
                                                            drawIndexPtr, instanceCount));
     }
+
+    ANGLE_TRY(mRenderer->finish());
+
     return angle::Result::Continue;
 }
 
