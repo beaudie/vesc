@@ -1878,6 +1878,73 @@ void ImageTest::SourceAHBTarget2D_helper(const EGLint *attribs)
     glDeleteTextures(1, &target);
 }
 
+// Testing source AHB EGL image, target 2D texture when cycling through RGB and YUV sources.
+TEST_P(ImageTest, SourceAHBTarget2DCycleThroughRgbAndYuvSources)
+{
+    ANGLE_SKIP_TEST_IF(!IsAndroid());
+
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    // Create RGB Image
+    GLubyte rgbColor[4] = {0, 0, 255, 255};
+
+    AHardwareBuffer *rgbSource;
+    EGLImageKHR rgbImage;
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+                                              kDefaultAttribs, {{rgbColor, 4}}, &rgbSource,
+                                              &rgbImage);
+
+    // Create YUV Image
+    // 3 planes of data
+    GLubyte dataY[4]  = {7, 51, 197, 231};
+    GLubyte dataCb[1] = {
+        128,
+    };
+    GLubyte dataCr[1] = {
+        192,
+    };
+
+    GLubyte expectedRgbColor[4] = {197, 128, 192, 255};
+
+    AHardwareBuffer *yuvSource;
+    EGLImageKHR yuvImage;
+    createEGLImageAndroidHardwareBufferSource(
+        2, 2, 1, AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420, kDefaultAttribs,
+        {{dataY, 1}, {dataCb, 1}, {dataCr, 1}}, &yuvSource, &yuvImage);
+
+    // Create a texture target to bind the egl image
+    GLTexture target;
+    glBindTexture(GL_TEXTURE_EXTERNAL_OES, target);
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // Bind YUV image
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, yuvImage);
+    // Expect render target to have the same color as expectedRgbColor
+    verifyResultsExternal(target, expectedRgbColor);
+
+    // Bind RGB image
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, rgbImage);
+    // Expect render target to have the same color as rgbColor
+    verifyResultsExternal(target, rgbColor);
+
+    // Bind YUV image
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, yuvImage);
+    // Expect render target to have the same color as expectedRgbColor
+    verifyResultsExternal(target, expectedRgbColor);
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), yuvImage);
+    destroyAndroidHardwareBuffer(yuvSource);
+    eglDestroyImageKHR(window->getDisplay(), rgbImage);
+    destroyAndroidHardwareBuffer(rgbSource);
+}
+
 // Testing source AHB EGL image, target 2D texture retaining initial data.
 TEST_P(ImageTest, SourceAHBTarget2DRetainInitialData)
 {
