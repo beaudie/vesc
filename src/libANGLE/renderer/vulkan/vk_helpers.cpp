@@ -23,6 +23,11 @@
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/trace.h"
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 namespace vk
@@ -1526,13 +1531,41 @@ void CommandBufferHelper::finalizeDepthStencilLoadStore(Context *context)
     if (mDepthAccess == ResourceAccess::Unused && dsOps.storeOp == VK_ATTACHMENT_STORE_OP_DONT_CARE)
     {
         dsOps.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        INFO("\tCommandBufferHelper::%s(Depth): mDepthStencilAttachment: loadOp=%s, storeOp=%s",
+             __FUNCTION__, "DONT_CARE", "DONT_CARE");
     }
 
     if (mStencilAccess == ResourceAccess::Unused &&
         dsOps.stencilStoreOp == RenderPassStoreOp::DontCare)
     {
         dsOps.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        INFO("\tCommandBufferHelper::%s(Stenc): mDepthStencilAttachment: loadOp=%s, storeOp=%s",
+             __FUNCTION__, "DONT_CARE", "DONT_CARE");
     }
+
+    // Temporary debug code:
+    for (PackedAttachmentIndex i = kAttachmentIndexZero; i != mDepthStencilAttachmentIndex; ++i)
+    {
+        const PackedAttachmentOpsDesc &colorOps = mAttachmentOps[i];
+        INFO("\tCommandBufferHelper::%s(): \t\t colorAttachment[%2u]: loadOp=%s, storeOp=%s",
+             __FUNCTION__, i.get(),
+             (colorOps.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+                 ? "CLEAR    "
+                 : (colorOps.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD) ? "LOAD     " : "DONT_CARE",
+             (colorOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE) ? "STORE" : "DONT_CARE");
+    }
+    INFO("\tCommandBufferHelper::%s(): \t\t     depthAttachment: loadOp=%s, storeOp=%s",
+         __FUNCTION__,
+         (dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+             ? "CLEAR    "
+             : (dsOps.loadOp == VK_ATTACHMENT_LOAD_OP_LOAD) ? "LOAD     " : "DONT_CARE",
+         (dsOps.storeOp == VK_ATTACHMENT_STORE_OP_STORE) ? "STORE" : "DONT_CARE");
+    INFO("\tCommandBufferHelper::%s(): \t\t   stencilAttachment: loadOp=%s, storeOp=%s",
+         __FUNCTION__,
+         (dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+             ? "CLEAR    "
+             : (dsOps.stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD) ? "LOAD     " : "DONT_CARE",
+         (dsOps.stencilStoreOp == VK_ATTACHMENT_STORE_OP_STORE) ? "STORE" : "DONT_CARE");
 
     // This has to be done after storeOp has been finalized.
     if (!mDepthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment))
@@ -1573,6 +1606,8 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());
+    INFO("\tCommandBufferHelper::%s():\t Render Area:\t x = %d, y = %d, width = %d, height = %d",
+         __FUNCTION__, renderArea.x, renderArea.y, renderArea.width, renderArea.height);
 
     mRenderPassDesc              = renderPassDesc;
     mAttachmentOps               = renderPassAttachmentOps;
@@ -1693,6 +1728,8 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
     {
         ASSERT(renderPass != nullptr);
 
+        INFO("CommandBufferHelper::%s(): Render Area:\t x = %d, y = %d, width = %d, height = %d",
+             __FUNCTION__, mRenderArea.x, mRenderArea.y, mRenderArea.width, mRenderArea.height);
         VkRenderPassBeginInfo beginInfo    = {};
         beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         beginInfo.renderPass               = renderPass->getHandle();
@@ -1702,7 +1739,11 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
         beginInfo.renderArea.extent.width  = static_cast<uint32_t>(mRenderArea.width);
         beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
         beginInfo.clearValueCount = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
-        beginInfo.pClearValues    = mClearValues.data();
+        INFO("CommandBufferHelper::%s(): pClearValues:\t red= %f, green= %f, blue= %f, alpha= %f",
+             __FUNCTION__, mClearValues.data()->color.float32[0],
+             mClearValues.data()->color.float32[1], mClearValues.data()->color.float32[2],
+             mClearValues.data()->color.float32[3]);
+        beginInfo.pClearValues = mClearValues.data();
 
         // Run commands inside the RenderPass.
         primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -3931,6 +3972,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     ASSERT(!IsAnySubresourceContentDefined(mContentDefined));
     ASSERT(!IsAnySubresourceContentDefined(mStencilContentDefined));
 
+    INFO("\tImageHelper::%s(): this=%p; incoming extents:\t width = %4d, height = %4d, depth = %d",
+         __FUNCTION__, this, extents.width, extents.height, extents.depth);
     mImageType           = gl_vk::GetImageType(textureType);
     mExtents             = extents;
     mRotatedAspectRatio  = false;
@@ -4397,6 +4440,8 @@ void ImageHelper::init2DWeakReference(Context *context,
     ASSERT(!IsAnySubresourceContentDefined(mContentDefined));
     ASSERT(!IsAnySubresourceContentDefined(mStencilContentDefined));
 
+    INFO("\tImageHelper::%s(): this=%p; incoming extents: width = %4d, height = %4d, depth = %d",
+         __FUNCTION__, this, glExtents.width, glExtents.height, glExtents.depth);
     gl_vk::GetExtent(glExtents, &mExtents);
     mRotatedAspectRatio = rotatedAspectRatio;
     mFormat             = &format;
@@ -5859,6 +5904,9 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
 
 void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled)
 {
+    INFO("\t\tImageHelper::%s(%s): this=%p ENTER with mFormat->hasEmulatedImageChannels() = %s",
+         __FUNCTION__, isRobustResourceInitEnabled ? "true" : "false", this,
+         mFormat->hasEmulatedImageChannels() ? "true" : "false");
     // Skip staging extra clears if robust resource init is enabled.
     if (!mFormat->hasEmulatedImageChannels() || isRobustResourceInitEnabled)
     {
@@ -5874,6 +5922,9 @@ void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled)
     {
         clearValue.color = kEmulatedInitColorValue;
     }
+    INFO("\t\tImageHelper::%s(): this=%p; clearValue: red= %f, green= %f, blue= %f, alpha= %f",
+         __FUNCTION__, this, clearValue.color.float32[0], clearValue.color.float32[1],
+         clearValue.color.float32[2], clearValue.color.float32[3]);
 
     const VkImageAspectFlags aspectFlags = getAspectFlags();
 
@@ -5885,6 +5936,8 @@ void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled)
         gl::LevelIndex updateLevelGL = toGLLevel(level);
         gl::ImageIndex index =
             gl::ImageIndex::Make2DArrayRange(updateLevelGL.get(), 0, mLayerCount);
+        INFO("\t\tImageHelper::%s(): this=%p;   alling prependSubresourceUpdate()", __FUNCTION__,
+             this);
         prependSubresourceUpdate(updateLevelGL, SubresourceUpdate(aspectFlags, clearValue, index));
     }
 }
@@ -5985,6 +6038,10 @@ angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contex
                 const uint32_t updateLayerCount = isClear ? update.data.clear.layerCount : 0;
                 const uint32_t imageLayerCount =
                     mImageType == VK_IMAGE_TYPE_3D ? getLevelExtents(levelVk).depth : mLayerCount;
+                if (isClear)
+                {
+                    INFO("ImageHelper::%s(): this=%p; start:  FOUND A CLEAR", __FUNCTION__, this);
+                }
 
                 if (!isClear || (updateLayerCount != layerCount &&
                                  !(update.data.clear.layerCount == VK_REMAINING_ARRAY_LAYERS &&
@@ -6008,6 +6065,8 @@ angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contex
             // Note that this set command handles combined or separate depth/stencil clears.
             deferredClears->store(deferredClearIndex, update.aspectFlags, update.value);
 
+            INFO("ImageHelper::%s(): this=%p; STORING DEFERRED CLEAR & REMOVING Subresource CLEAR",
+                 __FUNCTION__, this);
             // Do not call onWrite as it removes mCurrentSingleClearValue, but instead call
             // setContentDefined directly.
             setContentDefined(toVkLevel(levelGL), 1, layer, layerCount, update.aspectFlags);
@@ -6046,12 +6105,18 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         if (levelUpdates && levelUpdates->size() == 1)
         {
             SubresourceUpdate &update = (*levelUpdates)[0];
+            if (update.updateSource == UpdateSource::Clear)
+            {
+                INFO("ImageHelper::%s(): this=%p; start:  FOUND A CLEAR", __FUNCTION__, this);
+            }
             if (update.updateSource == UpdateSource::Clear &&
                 mCurrentSingleClearValue.value() == update.data.clear)
             {
                 ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
                                    "Repeated Clear on framebuffer attachment dropped");
                 update.release(contextVk->getRenderer());
+                INFO("ImageHelper::%s(): this=%p; start:  About to call levelUpdates->clear()",
+                     __FUNCTION__, this);
                 levelUpdates->clear();
                 return angle::Result::Continue;
             }
@@ -6168,6 +6233,13 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             if (update.updateSource == UpdateSource::Clear)
             {
+                INFO(
+                    "ImageHelper::%s(): this=%p; start:  About to call clear() with values: "
+                    "red = %f, green= %f, blue= %f, alpha= %f",
+                    __FUNCTION__, this, update.data.clear.value.color.float32[0],
+                    update.data.clear.value.color.float32[1],
+                    update.data.clear.value.color.float32[2],
+                    update.data.clear.value.color.float32[3]);
                 clear(update.data.clear.aspectFlags, update.data.clear.value, updateMipLevelVk,
                       updateBaseLayer, updateLayerCount, commandBuffer);
                 // Remember the latest operation is a clear call
@@ -6746,6 +6818,10 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         resolveRegion.dstSubresource.layerCount     = 1;
         resolveRegion.dstOffset                     = {};
         resolveRegion.extent                        = srcExtent;
+        INFO("\tImageHelper(%p)::%s(): MSAA mExtents:        width = %4d, height = %4d, depth = %d",
+             this, __FUNCTION__, mExtents.width, mExtents.height, mExtents.depth);
+        INFO("\tImageHelper(%p)::%s(): MSAA srcExtent:       width = %4d, height = %4d, depth = %d",
+             this, __FUNCTION__, srcExtent.width, srcExtent.height, srcExtent.depth);
 
         resolve(&resolvedImage.get(), resolveRegion, commandBuffer);
 
@@ -7021,8 +7097,12 @@ void ImageHelper::appendSubresourceUpdate(gl::LevelIndex level, SubresourceUpdat
     {
         mSubresourceUpdates.resize(level.get() + 1);
     }
+    INFO("\t\t\tImageHelper::%s(): this=%p; start:  mSubresourceUpdates: size()=%zu()",
+         __FUNCTION__, this, mSubresourceUpdates[level.get()].size());
 
     mSubresourceUpdates[level.get()].emplace_back(std::move(update));
+    INFO("\t\t\tImageHelper::%s(): this=%p;   end:  mSubresourceUpdates: size()=%zu()",
+         __FUNCTION__, this, mSubresourceUpdates[level.get()].size());
     onStateChange(angle::SubjectMessage::SubjectChanged);
 }
 
@@ -7032,9 +7112,13 @@ void ImageHelper::prependSubresourceUpdate(gl::LevelIndex level, SubresourceUpda
     {
         mSubresourceUpdates.resize(level.get() + 1);
     }
+    INFO("\t\t\tImageHelper::%s(): this=%p; start:  mSubresourceUpdates: size()=%zu()",
+         __FUNCTION__, this, mSubresourceUpdates[level.get()].size());
 
     mSubresourceUpdates[level.get()].insert(mSubresourceUpdates[level.get()].begin(),
                                             std::move(update));
+    INFO("\t\t\tImageHelper::%s(): this=%p;   end:  mSubresourceUpdates: size()=%zu()",
+         __FUNCTION__, this, mSubresourceUpdates[level.get()].size());
     onStateChange(angle::SubjectMessage::SubjectChanged);
 }
 

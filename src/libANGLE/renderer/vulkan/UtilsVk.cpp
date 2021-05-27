@@ -19,6 +19,11 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 
@@ -384,6 +389,16 @@ void CalculateBlitOffset(const UtilsVk::BlitResolveParameters &params, float off
     int srcOffsetFactorX = params.flipX ? -1 : 1;
     int srcOffsetFactorY = params.flipY ? -1 : 1;
 
+    INFO(
+        "%s(): (destOffset[0] = %3d * stretch[0] = %5f) - "
+        "(srcOffset[0] = %4d) * (srcOffsetFactorX = %2d)",
+        __FUNCTION__, params.destOffset[0], params.stretch[0], params.srcOffset[0],
+        srcOffsetFactorX);
+    INFO(
+        "%s(): (destOffset[1] = %3d * stretch[1] = %5f) - "
+        "(srcOffset[1] = %4d) * (srcOffsetFactorY = %2d)",
+        __FUNCTION__, params.destOffset[1], params.stretch[1], params.srcOffset[1],
+        srcOffsetFactorY);
     offset[0] = params.destOffset[0] * params.stretch[0] - params.srcOffset[0] * srcOffsetFactorX;
     offset[1] = params.destOffset[1] * params.stretch[1] - params.srcOffset[1] * srcOffsetFactorY;
 }
@@ -393,6 +408,10 @@ void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_
     int srcOffsetFactorX = params.flipX ? -1 : 1;
     int srcOffsetFactorY = params.flipY ? -1 : 1;
 
+    INFO("%s(): destOffset[0] = %3d - (srcOffset[0] = %4d) * (srcOffsetFactorX = %2d)",
+         __FUNCTION__, params.destOffset[0], params.srcOffset[0], srcOffsetFactorX);
+    INFO("%s(): destOffset[1] = %3d - (srcOffset[1] = %4d) * (srcOffsetFactorY = %2d)",
+         __FUNCTION__, params.destOffset[1], params.srcOffset[1], srcOffsetFactorY);
     // There's no stretching in resolve.
     offset[0] = params.destOffset[0] - params.srcOffset[0] * srcOffsetFactorX;
     offset[1] = params.destOffset[1] - params.srcOffset[1] * srcOffsetFactorY;
@@ -1935,6 +1954,8 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        const gl::Rectangle &renderArea,
                                        vk::CommandBuffer **commandBufferOut)
 {
+    INFO("UtilsVk::%s(): Render Area:\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         renderArea.x, renderArea.y, renderArea.width, renderArea.height);
     vk::RenderPass *compatibleRenderPass = nullptr;
     ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
 
@@ -1978,6 +1999,10 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     const gl::Rectangle &scissoredRenderArea = params.clearArea;
     vk::Framebuffer *currentFramebuffer      = nullptr;
+    INFO("%s(): scissoredRenderArea:\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         scissoredRenderArea.x, scissoredRenderArea.y, scissoredRenderArea.width,
+         scissoredRenderArea.height);
+
     vk::CommandBuffer *commandBuffer;
 
     // Start a new render pass if not already started
@@ -2074,11 +2099,18 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     const float clearDepthValue = params.depthStencilClearValue.depth;
     gl_vk::GetViewport(completeRenderArea, clearDepthValue, clearDepthValue, invertViewport,
                        clipSpaceOriginUpperLeft, completeRenderArea.height, &viewport);
+    INFO("%s(): completeRenderArea:\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         completeRenderArea.x, completeRenderArea.y, completeRenderArea.width,
+         completeRenderArea.height);
+    INFO("%s():\t\t CALCULATED VIEWPORT:\t\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         (int)viewport.x, (int)viewport.y, (int)viewport.width, (int)viewport.height);
     pipelineDesc.setViewport(viewport);
 
     // Scissored clears can create a large number of pipelines in some tests.  Use dynamic state for
     // scissors.
     pipelineDesc.setDynamicScissor();
+    INFO("%s(): scissor: params.clearArea:\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         params.clearArea.x, params.clearArea.y, params.clearArea.width, params.clearArea.height);
     const VkRect2D scissor = gl_vk::GetRect(params.clearArea);
 
     vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
@@ -2214,14 +2246,31 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     // Potentially make adjustments for pre-rotatation.  Depending on the angle some of the
     // shaderParams need to be adjusted.
+    //
+    INFO("%s():\t\t Initial values of shaderParams:\t\t\t shaderParams.rotateXY = %d", __FUNCTION__,
+         shaderParams.rotateXY);
+    if (isResolve)
+        INFO("%s():\t\t\t shaderParams.offset.resolve: x\t = %4d,\t y\t  = %4d", __FUNCTION__,
+             shaderParams.offset.resolve[0], shaderParams.offset.resolve[1]);
+    else
+        INFO("%s():\t\t\t shaderParams.offset.blit: x\t = %5f,\t y\t  = %5f", __FUNCTION__,
+             shaderParams.offset.blit[0], shaderParams.offset.blit[1]);
+    INFO("%s():\t\t\t shaderParams.stretch[0]\t = %5f, shaderParams.stretch[1]\t  = %5f",
+         __FUNCTION__, shaderParams.stretch[0], shaderParams.stretch[1]);
+    INFO("%s():\t\t\t shaderParams.invSrcExtent[0]\t = %5f, shaderParams.invSrcExtent[1] = %5f",
+         __FUNCTION__, shaderParams.invSrcExtent[0], shaderParams.invSrcExtent[1]);
+    INFO("%s():\t\t\t shaderParams.flipX\t\t = %5s,\t shaderParams.flipY\t  = %5s", __FUNCTION__,
+         shaderParams.flipX ? "true" : "false", shaderParams.flipY ? "true" : "false");
     switch (params.rotation)
     {
         case SurfaceRotation::Identity:
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Making shaderParams changes for 90-degree rotation", __FUNCTION__);
             shaderParams.rotateXY = 1;
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Making shaderParams changes for 180-degree rotation", __FUNCTION__);
             if (isResolve)
             {
                 shaderParams.offset.resolve[0] += params.rotatedOffsetFactor[0];
@@ -2234,6 +2283,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
             }
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Making shaderParams changes for 270-degree rotation", __FUNCTION__);
             if (isResolve)
             {
                 shaderParams.offset.resolve[0] += params.rotatedOffsetFactor[0];
@@ -2250,6 +2300,20 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
             UNREACHABLE();
             break;
     }
+    INFO("%s():\t\t Post-rotated values of shaderParams:\t\t\t shaderParams.rotateXY = %d:",
+         __FUNCTION__, shaderParams.rotateXY);
+    if (isResolve)
+        INFO("%s():\t\t\t shaderParams.offset.resolve: x\t = %4d,\t y\t  = %4d", __FUNCTION__,
+             shaderParams.offset.resolve[0], shaderParams.offset.resolve[1]);
+    else
+        INFO("%s():\t\t\t shaderParams.offset.blit: x\t = %5f,\t y\t  = %5f", __FUNCTION__,
+             shaderParams.offset.blit[0], shaderParams.offset.blit[1]);
+    INFO("%s():\t\t\t shaderParams.stretch[0]\t = %5f, shaderParams.stretch[1]\t  = %5f",
+         __FUNCTION__, shaderParams.stretch[0], shaderParams.stretch[1]);
+    INFO("%s():\t\t\t shaderParams.invSrcExtent[0]\t = %5f, shaderParams.invSrcExtent[1] = %5f",
+         __FUNCTION__, shaderParams.invSrcExtent[0], shaderParams.invSrcExtent[1]);
+    INFO("%s():\t\t\t shaderParams.flipX\t\t = %5s,\t shaderParams.flipY\t  = %5s", __FUNCTION__,
+         shaderParams.flipX ? "true" : "false", shaderParams.flipY ? "true" : "false");
 
     bool blitColor   = srcColorView != nullptr;
     bool blitDepth   = srcDepthView != nullptr;
@@ -2301,10 +2365,17 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     VkViewport viewport;
     gl::Rectangle completeRenderArea = framebuffer->getRotatedCompleteRenderArea(contextVk);
+    INFO("%s(): completeRenderArea:\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         completeRenderArea.x, completeRenderArea.y, completeRenderArea.width,
+         completeRenderArea.height);
     gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, false, false, completeRenderArea.height,
                        &viewport);
+    INFO("%s():\t\t CALCULATED VIEWPORT:\t\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         (int)viewport.x, (int)viewport.y, (int)viewport.width, (int)viewport.height);
     pipelineDesc.setViewport(viewport);
 
+    INFO("%s(): scissor: params.blitArea:\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         params.blitArea.x, params.blitArea.y, params.blitArea.width, params.blitArea.height);
     pipelineDesc.setScissor(gl_vk::GetRect(params.blitArea));
 
     vk::CommandBuffer *commandBuffer;
@@ -2424,6 +2495,8 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
 
     uint32_t bufferRowLengthInUints = UnsignedCeilDivide(params.blitArea.width, sizeof(uint32_t));
     VkDeviceSize bufferSize = bufferRowLengthInUints * sizeof(uint32_t) * params.blitArea.height;
+    INFO("%s():\t bufferRowLengthInUints = %d; bufferSize = %" PRIu64, __FUNCTION__,
+         bufferRowLengthInUints, bufferSize);
 
     VkBufferCreateInfo blitBufferInfo = {};
     blitBufferInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -2466,14 +2539,31 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
 
     // Potentially make adjustments for pre-rotatation.  Depending on the angle some of the
     // shaderParams need to be adjusted.
+    //
+    INFO("%s():\t\t Initial values of shaderParams:\t\t\t shaderParams.rotateXY = %d", __FUNCTION__,
+         shaderParams.rotateXY);
+    if (isResolve)
+        INFO("%s():\t\t shaderParams.offset.resolve: x\t = %4d,\t y\t  = %4d", __FUNCTION__,
+             shaderParams.offset.resolve[0], shaderParams.offset.resolve[1]);
+    else
+        INFO("%s():\t\t shaderParams.offset.blit: x\t = %5f,\t y\t  = %5f", __FUNCTION__,
+             shaderParams.offset.blit[0], shaderParams.offset.blit[1]);
+    INFO("%s():\t\t shaderParams.stretch[0]\t = %5f, shaderParams.stretch[1]\t  = %5f",
+         __FUNCTION__, shaderParams.stretch[0], shaderParams.stretch[1]);
+    INFO("%s():\t\t shaderParams.invSrcExtent[0]\t = %5f, shaderParams.invSrcExtent[1] = %5f",
+         __FUNCTION__, shaderParams.invSrcExtent[0], shaderParams.invSrcExtent[1]);
+    INFO("%s():\t\t shaderParams.flipX\t\t = %5s,\t shaderParams.flipY\t  = %5s", __FUNCTION__,
+         shaderParams.flipX ? "true" : "false", shaderParams.flipY ? "true" : "false");
     switch (params.rotation)
     {
         case SurfaceRotation::Identity:
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Making shaderParams changes for 90-degree rotation", __FUNCTION__);
             shaderParams.rotateXY = 1;
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Making shaderParams changes for 180-degree rotation", __FUNCTION__);
             if (isResolve)
             {
                 // Align the offset with minus 1, or the sample position near the edge will be
@@ -2488,6 +2578,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
             }
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Making shaderParams changes for 270-degree rotation", __FUNCTION__);
             if (isResolve)
             {
                 shaderParams.offset.resolve[0] += params.rotatedOffsetFactor[0] - 1;
@@ -2504,6 +2595,20 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
             UNREACHABLE();
             break;
     }
+    INFO("%s():\t\t Post-rotated values of shaderParams:\t\t\t shaderParams.rotateXY = %d:",
+         __FUNCTION__, shaderParams.rotateXY);
+    if (isResolve)
+        INFO("%s():\t\t shaderParams.offset.resolve: x\t = %4d,\t y\t  = %4d", __FUNCTION__,
+             shaderParams.offset.resolve[0], shaderParams.offset.resolve[1]);
+    else
+        INFO("%s():\t\t shaderParams.offset.blit: x\t = %5f,\t y\t  = %5f", __FUNCTION__,
+             shaderParams.offset.blit[0], shaderParams.offset.blit[1]);
+    INFO("%s():\t\t shaderParams.stretch[0]\t = %5f, shaderParams.stretch[1]\t  = %5f",
+         __FUNCTION__, shaderParams.stretch[0], shaderParams.stretch[1]);
+    INFO("%s():\t\t shaderParams.invSrcExtent[0]\t = %5f, shaderParams.invSrcExtent[1] = %5f",
+         __FUNCTION__, shaderParams.invSrcExtent[0], shaderParams.invSrcExtent[1]);
+    INFO("%s():\t\t shaderParams.flipX\t\t = %5s,\t shaderParams.flipY\t  = %5s", __FUNCTION__,
+         shaderParams.flipX ? "true" : "false", shaderParams.flipY ? "true" : "false");
 
     // Linear sampling is only valid with color blitting.
     ASSERT(!params.linear);
@@ -2598,6 +2703,11 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     region.imageExtent.width               = params.blitArea.width;
     region.imageExtent.height              = params.blitArea.height;
     region.imageExtent.depth               = 1;
+    INFO("%s(): VkBufferImageCopy region: bufferRowLengthInUints = %d; imageHeight = %d",
+         __FUNCTION__, region.bufferRowLength, region.bufferImageHeight);
+    INFO("%s(): VkBufferImageCopy region: image*: x = %d; y = %d; width = %d; height = %d",
+         __FUNCTION__, region.imageOffset.x, region.imageOffset.y, region.imageExtent.width,
+         region.imageExtent.height);
 
     commandBuffer->copyBufferToImage(blitBuffer.get().getBuffer().getHandle(),
                                      depthStencilImage->getImage(),
@@ -2634,6 +2744,12 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     shaderParams.destOffset[0]           = params.destOffset[0];
     shaderParams.destOffset[1]           = params.destOffset[1];
     shaderParams.rotateXY                = 0;
+    INFO(
+        "%s(): Incoming params:\t srcOffset(%d, %d), destOffset(%d, %d), Extents(%d, %d), "
+        "srcFlipY=%5s, destFlipY=%5s",
+        __FUNCTION__, params.srcOffset[0], params.srcOffset[1], params.destOffset[0],
+        params.destOffset[1], params.srcExtents[0], params.srcExtents[1],
+        params.srcFlipY ? "true" : "false", params.destFlipY ? "true" : "false");
 
     shaderParams.srcIsSRGB =
         gl::GetSizedInternalFormatInfo(srcFormat.intendedGLFormat).colorEncoding == GL_SRGB;
@@ -2668,9 +2784,11 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
         case SurfaceRotation::Identity:
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Making params changes for 90-degree rotation", __FUNCTION__);
             shaderParams.rotateXY = 1;
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Making params changes for 180-degree rotation", __FUNCTION__);
             shaderParams.flipX = true;
             ASSERT(shaderParams.flipY);
             shaderParams.flipY = false;
@@ -2678,6 +2796,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
             shaderParams.srcOffset[1] -= params.srcExtents[1];
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Making params changes for 270-degree rotation", __FUNCTION__);
             shaderParams.flipX = true;
             ASSERT(!shaderParams.flipY);
             shaderParams.flipY = true;
@@ -2689,6 +2808,13 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
             UNREACHABLE();
             break;
     }
+    INFO(
+        "%s(): Post-rotation:\t\t srcOffset(%d, %d), destOffset(%d, %d), Extents(%d, %d), "
+        "flipX=%5s, flipY=%5s",
+        __FUNCTION__, shaderParams.srcOffset[0], shaderParams.srcOffset[1],
+        shaderParams.destOffset[0], shaderParams.destOffset[1], params.srcExtents[0],
+        params.srcExtents[1], shaderParams.flipX ? "true" : "false",
+        shaderParams.flipY ? "true" : "false");
 
     uint32_t flags = GetImageCopyFlags(srcFormat, dstFormat);
     if (src->getType() == VK_IMAGE_TYPE_3D)
@@ -2727,19 +2853,27 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     renderArea.y      = params.destOffset[1];
     renderArea.width  = params.srcExtents[0];
     renderArea.height = params.srcExtents[1];
+    INFO("%s(): Render Area:\t\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         renderArea.x, renderArea.y, renderArea.width, renderArea.height);
     if ((params.srcRotation == SurfaceRotation::Rotated90Degrees) ||
         (params.srcRotation == SurfaceRotation::Rotated270Degrees))
     {
         // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
         std::swap(renderArea.x, renderArea.y);
         std::swap(renderArea.width, renderArea.height);
+        INFO("%s(): Swapped Render Area:\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+             renderArea.x, renderArea.y, renderArea.width, renderArea.height);
     }
 
     VkViewport viewport;
     gl_vk::GetViewport(renderArea, 0.0f, 1.0f, false, false, dest->getExtents().height, &viewport);
+    INFO("%s():\t\t CALCULATED VIEWPORT:\t\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         (int)viewport.x, (int)viewport.y, (int)viewport.width, (int)viewport.height);
     pipelineDesc.setViewport(viewport);
 
     VkRect2D scissor = gl_vk::GetRect(renderArea);
+    INFO("%s(): scissor:\t\t x = %d, y = %d, width = %d, height = %d", __FUNCTION__,
+         scissor.offset.x, scissor.offset.y, scissor.extent.width, scissor.extent.height);
     pipelineDesc.setScissor(scissor);
 
     vk::CommandBuffer *commandBuffer;
@@ -3490,8 +3624,8 @@ void UtilsVk::outputCumulativePerfCounters()
         return;
     }
 
-    INFO() << "Utils Descriptor Set Allocations: "
-           << mCumulativePerfCounters.descriptorSetsAllocated;
+    INFO("ContextVk::%s():     Utils Descriptor Set Allocations: %d", __FUNCTION__,
+         mCumulativePerfCounters.descriptorSetsAllocated);
 }
 
 InternalShaderPerfCounters UtilsVk::getAndResetObjectPerfCounters()

@@ -743,6 +743,9 @@ class GraphicsPipelineDesc final
                             uint32_t height);
     const PackedExtent &getDrawableSize() const { return mDrawableSize; }
 
+    VkViewport getViewport() const { return mViewport; }
+    PackedScissor getScissor() const { return mScissor; }
+
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
 
@@ -1552,6 +1555,17 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         {
             *descPtrOut  = &item->first;
             *pipelineOut = &item->second;
+            INFO() << "GraphicsPipelineCache(" << this
+                   << ")::getPipeline():\t&item->first=" << &item->first
+                   << ", &item->second=" << &item->second;
+            INFO() << "GraphicsPipelineCache(" << this << ")::getPipeline(): &desc=" << &desc
+                   << ", *descPtrOut=" << *descPtrOut << ", *pipelineOut" << *pipelineOut;
+            INFO() << "GraphicsPipelineCache(" << this << ")::getPipeline(): desc.viewport = ("
+                   << desc.getViewport().x << ", " << desc.getViewport().y << ", "
+                   << desc.getViewport().width << ", " << desc.getViewport().height << ")";
+            INFO() << "GraphicsPipelineCache(" << this << ")::getPipeline(): desc.scissor  = ("
+                   << desc.getScissor().x << ", " << desc.getScissor().y << ", "
+                   << desc.getScissor().width << ", " << desc.getScissor().height << ")";
             mCacheStats.hit();
             return angle::Result::Continue;
         }

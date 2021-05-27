@@ -27,6 +27,11 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 
@@ -109,15 +114,19 @@ void EarlyAdjustFlipYForPreRotation(SurfaceRotation blitAngleIn,
     {
         case SurfaceRotation::Identity:
             // No adjustments needed
+            INFO("%s(): Doing NO 0-degree rotation of blitArea", __FUNCTION__);
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Doing 90-degree rotation of blitArea", __FUNCTION__);
             *blitAngleOut = SurfaceRotation::Rotated90Degrees;
             *blitFlipYOut = false;
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Doing 180-degree rotation of blitArea", __FUNCTION__);
             *blitAngleOut = SurfaceRotation::Rotated180Degrees;
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Doing 270-degree rotation of blitArea", __FUNCTION__);
             *blitAngleOut = SurfaceRotation::Rotated270Degrees;
             *blitFlipYOut = false;
             break;
@@ -136,17 +145,21 @@ void AdjustBlitAreaForPreRotation(SurfaceRotation framebufferAngle,
     {
         case SurfaceRotation::Identity:
             // No adjustments needed
+            INFO("%s(): Doing NO 0-degree rotation of blitArea", __FUNCTION__);
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Doing 90-degree rotation of blitArea", __FUNCTION__);
             blitAreaOut->x = blitAreaIn.y;
             blitAreaOut->y = blitAreaIn.x;
             std::swap(blitAreaOut->width, blitAreaOut->height);
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Doing 180-degree rotation of blitArea", __FUNCTION__);
             blitAreaOut->x = framebufferDimensions.width - blitAreaIn.x - blitAreaIn.width;
             blitAreaOut->y = framebufferDimensions.height - blitAreaIn.y - blitAreaIn.height;
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Doing 270-degree rotation of blitArea", __FUNCTION__);
             blitAreaOut->x = framebufferDimensions.height - blitAreaIn.y - blitAreaIn.height;
             blitAreaOut->y = framebufferDimensions.width - blitAreaIn.x - blitAreaIn.width;
             std::swap(blitAreaOut->width, blitAreaOut->height);
@@ -166,14 +179,18 @@ void AdjustDimensionsAndFlipForPreRotation(SurfaceRotation framebufferAngle,
     {
         case SurfaceRotation::Identity:
             // No adjustments needed
+            INFO("%s(): Doing NO 0-degree rotation of paramArea", __FUNCTION__);
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Doing 90-degree rotation of paramArea", __FUNCTION__);
             std::swap(framebufferDimensions->width, framebufferDimensions->height);
             std::swap(*flipX, *flipY);
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Doing 180-degree rotation of paramArea", __FUNCTION__);
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Doing 270-degree rotation of paramArea", __FUNCTION__);
             std::swap(framebufferDimensions->width, framebufferDimensions->height);
             std::swap(*flipX, *flipY);
             break;
@@ -225,11 +242,14 @@ void AdjustBlitResolveParametersForPreRotation(SurfaceRotation framebufferAngle,
                                                SurfaceRotation srcFramebufferAngle,
                                                UtilsVk::BlitResolveParameters *params)
 {
+    INFO("%s(): Before final rotation: rotatedOffsetFactor[0]: %3d, rotatedOffsetFactor[1]: %3d",
+         __FUNCTION__, params->rotatedOffsetFactor[0], params->rotatedOffsetFactor[1]);
     switch (framebufferAngle)
     {
         case SurfaceRotation::Identity:
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Making params changes for 90-degree rotation", __FUNCTION__);
             std::swap(params->stretch[0], params->stretch[1]);
             std::swap(params->srcOffset[0], params->srcOffset[1]);
             std::swap(params->rotatedOffsetFactor[0], params->rotatedOffsetFactor[1]);
@@ -241,11 +261,13 @@ void AdjustBlitResolveParametersForPreRotation(SurfaceRotation framebufferAngle,
             }
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Making params changes for 180-degree rotation", __FUNCTION__);
             // Combine flip info with api flip.
             params->flipX = !params->flipX;
             params->flipY = !params->flipY;
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Making params changes for 270-degree rotation", __FUNCTION__);
             std::swap(params->stretch[0], params->stretch[1]);
             std::swap(params->srcOffset[0], params->srcOffset[1]);
             std::swap(params->rotatedOffsetFactor[0], params->rotatedOffsetFactor[1]);
@@ -263,6 +285,8 @@ void AdjustBlitResolveParametersForPreRotation(SurfaceRotation framebufferAngle,
             UNREACHABLE();
             break;
     }
+    INFO("%s():  After final rotation: rotatedOffsetFactor[0]: %3d, rotatedOffsetFactor[1]: %3d",
+         __FUNCTION__, params->rotatedOffsetFactor[0], params->rotatedOffsetFactor[1]);
 }
 
 bool HasResolveAttachment(const gl::AttachmentArray<RenderTargetVk *> &colorRenderTargets,
@@ -342,6 +366,7 @@ FramebufferVk::FramebufferVk(RendererVk *renderer,
       mActiveColorComponentMasksForClear(0),
       mReadOnlyDepthFeedbackLoopMode(false)
 {
+    INFO("FramebufferVk(%p)::%s(backbuffer = %p): CONSTRUCTOR", this, __FUNCTION__, backbuffer);
     mReadPixelBuffer.init(renderer, VK_BUFFER_USAGE_TRANSFER_DST_BIT, kReadPixelsBufferAlignment,
                           kMinReadPixelsBufferSize, true, vk::DynamicBufferPolicy::OneShotUse);
 }
@@ -712,6 +737,8 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
                                         gl::Buffer *packBuffer,
                                         void *pixels)
 {
+    INFO("%s(): INCOMING \t format = 0x%x; type = 0x%x; area: (%3d, %3d, %3d, %3d)", __FUNCTION__,
+         format, type, area.x, area.y, area.width, area.height);
     // Clip read area to framebuffer.
     const gl::Extents &fbSize = getState().getReadPixelsAttachment(format)->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
@@ -932,6 +959,18 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
     gl::Rectangle srcFramebufferDimensions  = srcFramebufferVk->getNonRotatedCompleteRenderArea();
     gl::Rectangle destFramebufferDimensions = getNonRotatedCompleteRenderArea();
+    INFO(
+        "%s():    srcFramebufferDimensions:\t x: %3d, y: %3d, w: %3d, h: %3d;"
+        "       destFbDims:  x: %3d, y: %3d, w: %3d, h: %3d",
+        __FUNCTION__, srcFramebufferDimensions.x, srcFramebufferDimensions.y,
+        srcFramebufferDimensions.width, srcFramebufferDimensions.height,
+        destFramebufferDimensions.x, destFramebufferDimensions.y, destFramebufferDimensions.width,
+        destFramebufferDimensions.height);
+    INFO(
+        "%s(): INCOMING \t    sourceArea:\t x: %3d, y: %3d, w: %3d, h: %3d;"
+        "\t destArea:  x: %3d, y: %3d, w: %3d, h: %3d",
+        __FUNCTION__, sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height, destArea.x,
+        destArea.y, destArea.width, destArea.height);
 
     // If the destination is flipped in either direction, we will flip the source instead so that
     // the destination area is always unflipped.
@@ -943,6 +982,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         std::abs(sourceArea.width / static_cast<double>(destArea.width)),
         std::abs(sourceArea.height / static_cast<double>(destArea.height)),
     };
+    INFO("%s(): flipY src = %5s,   dst = %5s;\t\t stretch: x: %5f, y: %5f", __FUNCTION__,
+         srcFramebufferFlippedY ? "TRUE" : "FALSE", destFramebufferFlippedY ? "TRUE" : "FALSE",
+         stretch[0], stretch[1]);
 
     // Potentially make adjustments for pre-rotatation.  To handle various cases (e.g. clipping)
     // and to not interrupt the normal flow of the code, different adjustments are made in
@@ -958,6 +1000,12 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
            (destFramebufferRotation == SurfaceRotation::Identity));
     EarlyAdjustFlipYForPreRotation(srcFramebufferRotation, &rotation, &srcFramebufferFlippedY);
     EarlyAdjustFlipYForPreRotation(destFramebufferRotation, &rotation, &destFramebufferFlippedY);
+
+    INFO(
+        "%s(): Post-rotation    sourceArea:\t x: %3d, y: %3d, w: %3d, h: %3d;"
+        "\t destArea:  x: %3d, y: %3d, w: %3d, h: %3d",
+        __FUNCTION__, sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height, destArea.x,
+        destArea.y, destArea.width, destArea.height);
 
     // First, clip the source area to framebuffer.  That requires transforming the dest area to
     // match the clipped source.
@@ -977,6 +1025,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         srcClippedDestArea = clippedSourceArea;
         AdjustBlitAreaForPreRotation(destFramebufferRotation, clippedSourceArea,
                                      destFramebufferDimensions, &srcClippedDestArea);
+        INFO("%s():\t\t\t\t\tisResolve srcClippedDestArea:\t x: %3d, y: %3d, w: %3d, h: %3d",
+             __FUNCTION__, srcClippedDestArea.x, srcClippedDestArea.y, srcClippedDestArea.width,
+             srcClippedDestArea.height);
     }
     else if (clippedSourceArea == absSourceArea)
     {
@@ -984,6 +1035,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         srcClippedDestArea = destArea;
         AdjustBlitAreaForPreRotation(destFramebufferRotation, destArea, destFramebufferDimensions,
                                      &srcClippedDestArea);
+        INFO("%s():\t\t\t\t\t destArea srcClippedDestArea:\t x: %3d, y: %3d, w: %3d, h: %3d",
+             __FUNCTION__, srcClippedDestArea.x, srcClippedDestArea.y, srcClippedDestArea.width,
+             srcClippedDestArea.height);
     }
     else
     {
@@ -1014,6 +1068,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
         srcClippedDestArea.width  = x1 - srcClippedDestArea.x;
         srcClippedDestArea.height = y1 - srcClippedDestArea.y;
+        INFO("%s():\t\t\t\t\t Complex srcClippedDestArea:\t x: %3d, y: %3d, w: %3d, h: %3d",
+             __FUNCTION__, srcClippedDestArea.x, srcClippedDestArea.y, srcClippedDestArea.width,
+             srcClippedDestArea.height);
 
         // Rotate srcClippedDestArea if the destination is rotated
         if (destFramebufferRotation != SurfaceRotation::Identity)
@@ -1039,10 +1096,20 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
         srcClippedDestArea.y =
             destFramebufferDimensions.height - srcClippedDestArea.y - srcClippedDestArea.height;
+        INFO("%s():\t\t\t\t\t Flipped srcClippedDestArea:\t x: %3d, y: %3d, w: %3d, h: %3d",
+             __FUNCTION__, srcClippedDestArea.x, srcClippedDestArea.y, srcClippedDestArea.width,
+             srcClippedDestArea.height);
     }
+    INFO(
+        "%s(): After 2nd flip   sourceArea:\t x: %3d, y: %3d, w: %3d, h: %3d;"
+        "\t destArea:  x: %3d, y: %3d, w: %3d, h: %3d",
+        __FUNCTION__, sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height, destArea.x,
+        destArea.y, destArea.width, destArea.height);
 
     bool flipX = sourceArea.isReversedX() != destArea.isReversedX();
     bool flipY = sourceArea.isReversedY() != destArea.isReversedY();
+    INFO("%s():     flipX = %5s, flipY = %5s", __FUNCTION__, flipX ? "TRUE" : "FALSE",
+         flipY ? "TRUE" : "FALSE");
 
     // GLES doesn't allow flipping the parameters of glBlitFramebuffer if performing a resolve.
     ASSERT(!isResolve ||
@@ -1053,9 +1120,18 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     ASSERT(!destArea.isReversedX());
     sourceArea = sourceArea.flip(false, destArea.isReversedY());
     destArea   = destArea.removeReversal();
-
+    INFO(
+        "%s(): After 3rd flip   sourceArea:\t x: %3d, y: %3d, w: %3d, h: %3d;"
+        "\t destArea:  x: %3d, y: %3d, w: %3d, h: %3d",
+        __FUNCTION__, sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height, destArea.x,
+        destArea.y, destArea.width, destArea.height);
     // Now that clipping and flipping is done, rotate certain values that will be used for
     // UtilsVk::BlitResolveParameters
+    INFO(
+        "%s(): BEFORE rotation  sourceArea:\t x: %3d, y: %3d, w: %3d, h: %3d;"
+        "\t destArea:  x: %3d, y: %3d, w: %3d, h: %3d",
+        __FUNCTION__, sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height, destArea.x,
+        destArea.y, destArea.width, destArea.height);
     gl::Rectangle sourceAreaOld = sourceArea;
     gl::Rectangle destAreaOld   = destArea;
     if (srcFramebufferRotation == rotation)
@@ -1073,6 +1149,11 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     AdjustBlitAreaForPreRotation(destFramebufferRotation, destAreaOld, destFramebufferDimensions,
                                  &destArea);
     destFramebufferRotation = rememberDestFramebufferRotation;
+    INFO(
+        "%s(): After rotation   sourceArea:\t x: %3d, y: %3d, w: %3d, h: %3d;"
+        "\t destArea:  x: %3d, y: %3d, w: %3d, h: %3d",
+        __FUNCTION__, sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height, destArea.x,
+        destArea.y, destArea.width, destArea.height);
 
     // Clip the destination area to the framebuffer size and scissor.  Note that we don't care
     // about the source area anymore.  The offset translation is done based on the original source
@@ -1104,6 +1185,15 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     commonParams.flipX                  = flipX;
     commonParams.flipY                  = flipY;
     commonParams.rotation               = rotation;
+    INFO(
+        "%s(): Initial params:\t srcOffset: (%4d, %4d), destOffset: (%4d, %4d), "
+        "rotatedOffsetFactor: (%4d, %4d), stretch: (%f, %f), srcExtents: (%4d, %4d), "
+        "flipX = %d, flipY = %d",
+        __FUNCTION__, commonParams.srcOffset[0], commonParams.srcOffset[1],
+        commonParams.destOffset[0], commonParams.destOffset[1], commonParams.rotatedOffsetFactor[0],
+        commonParams.rotatedOffsetFactor[1], commonParams.stretch[0], commonParams.stretch[1],
+        commonParams.srcExtents[0], commonParams.srcExtents[1], commonParams.flipX,
+        commonParams.flipY);
 
     if (blitColorBuffer)
     {
@@ -1146,14 +1236,29 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         if (isColorResolve)
         {
             AdjustBlitResolveParametersForResolve(sourceArea, destArea, &params);
+            INFO(
+                "%s(): After AdjustBlitResolveParametersForResolve() params:\t "
+                "srcOffset: (%4d, %4d), destOffset: (%4d, %4d), ",
+                __FUNCTION__, params.srcOffset[0], params.srcOffset[1], params.destOffset[0],
+                params.destOffset[1]);
         }
         AdjustBlitResolveParametersForPreRotation(rotation, srcFramebufferRotation, &params);
+        INFO(
+            "%s(): After AdjustBlitResolveParametersForPreRotation() params:\t "
+            "srcOffset: (%4d, %4d), destOffset: (%4d, %4d), "
+            "rotatedOffsetFactor: (%4d, %4d), stretch: (%f, %f), srcExtents: (%4d, %4d), "
+            "flipX = %d, flipY = %d",
+            __FUNCTION__, params.srcOffset[0], params.srcOffset[1], params.destOffset[0],
+            params.destOffset[1], params.rotatedOffsetFactor[0], params.rotatedOffsetFactor[1],
+            params.stretch[0], params.stretch[1], params.srcExtents[0], params.srcExtents[1],
+            params.flipX, params.flipY);
 
         if (canBlitWithCommand && areChannelsBlitCompatible && !reinterpretsColorspace)
         {
             for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
             {
                 RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+                INFO("%s(): Using blitWithCommand()", __FUNCTION__);
                 ANGLE_TRY(blitWithCommand(contextVk, sourceArea, destArea, readRenderTarget,
                                           drawRenderTarget, filter, true, false, false, flipX,
                                           flipY));
@@ -1192,10 +1297,12 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 // multisample attachments to resolve attachments in the render pass subpass.
                 // Due to this, we currently only support using resolve attachments when there is a
                 // single draw attachment enabled.
+                INFO("%s(): Using resolveColorWithSubpass()", __FUNCTION__);
                 ANGLE_TRY(resolveColorWithSubpass(contextVk, params));
             }
             else
             {
+                INFO("%s(): Using resolveColorWithCommand()", __FUNCTION__);
                 ANGLE_TRY(resolveColorWithCommand(contextVk, params,
                                                   &readRenderTarget->getImageForCopy()));
             }
@@ -1205,6 +1312,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         {
             const vk::ImageView *copyImageView = nullptr;
             ANGLE_TRY(readRenderTarget->getAndRetainCopyImageView(contextVk, &copyImageView));
+            INFO("%s(): Using utilsVk.colorBlitResolve()", __FUNCTION__);
             ANGLE_TRY(utilsVk.colorBlitResolve(
                 contextVk, this, &readRenderTarget->getImageForCopy(), copyImageView, params));
         }
@@ -1234,6 +1342,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
         if (canBlitWithCommand && areChannelsBlitCompatible)
         {
+            INFO("%s(): Using blitWithCommand()", __FUNCTION__);
             ANGLE_TRY(blitWithCommand(contextVk, sourceArea, destArea, readRenderTarget,
                                       drawRenderTarget, filter, false, blitDepthBuffer,
                                       blitStencilBuffer, flipX, flipY));
@@ -1285,6 +1394,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 const vk::ImageView *stencil =
                     blitStencilBuffer && hasShaderStencilExport ? &stencilView.get() : nullptr;
 
+                INFO("%s(): Using utilsVk.depthStencilBlitResolve()", __FUNCTION__);
                 ANGLE_TRY(utilsVk.depthStencilBlitResolve(contextVk, this, depthStencilImage, depth,
                                                           stencil, params));
             }
@@ -1295,6 +1405,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
                                    "Inefficient BlitFramebuffer operation on the stencil aspect "
                                    "due to lack of shader stencil export support");
+                INFO("%s(): Using utilsVk.stencilBlitResolveNoShaderExport()", __FUNCTION__);
                 ANGLE_TRY(utilsVk.stencilBlitResolveNoShaderExport(
                     contextVk, this, depthStencilImage, &stencilView.get(), params));
             }
@@ -1491,13 +1602,16 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
         {
             case GL_DEPTH:
             case GL_DEPTH_ATTACHMENT:
+                INFO("\tFramebufferVk(%p)::%s(): Invalidate DEPTH", this, __FUNCTION__);
                 invalidateDepthBuffer = true;
                 break;
             case GL_STENCIL:
             case GL_STENCIL_ATTACHMENT:
+                INFO("\tFramebufferVk(%p)::%s(): Invalidate STENCIL", this, __FUNCTION__);
                 invalidateStencilBuffer = true;
                 break;
             case GL_DEPTH_STENCIL_ATTACHMENT:
+                INFO("\tFramebufferVk(%p)::%s(): Invalidate DEPTH_STENCIL", this, __FUNCTION__);
                 invalidateDepthBuffer   = true;
                 invalidateStencilBuffer = true;
                 break;
@@ -1505,6 +1619,7 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
                 ASSERT(
                     (attachment >= GL_COLOR_ATTACHMENT0 && attachment <= GL_COLOR_ATTACHMENT15) ||
                     (attachment == GL_COLOR));
+                INFO("\tFramebufferVk(%p)::%s(): Invalidate COLOR", this, __FUNCTION__);
 
                 invalidateColorBuffers.set(
                     attachment == GL_COLOR ? 0u : (attachment - GL_COLOR_ATTACHMENT0));
@@ -1631,13 +1746,19 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
     RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
     if (renderTarget)
     {
+        INFO("FramebufferVk(%p)::%s(): renderTarget = %p, mBackbuffer = %p", this, __FUNCTION__,
+             renderTarget, mBackbuffer);
         const angle::Format &actualFormat = renderTarget->getImageFormat().actualImageFormat();
         updateActiveColorMasks(colorIndexGL, actualFormat.redBits > 0, actualFormat.greenBits > 0,
                                actualFormat.blueBits > 0, actualFormat.alphaBits > 0);
 
         const angle::Format &intendedFormat = renderTarget->getImageFormat().intendedFormat();
+        INFO("FramebufferVk(%p)::%s(): intendedFormat.alphaBits = %d, actualFormat.alphaBits = %d",
+             this, __FUNCTION__, intendedFormat.alphaBits, actualFormat.alphaBits);
         mEmulatedAlphaAttachmentMask.set(
             colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
+        INFO("FramebufferVk(%p)::%s(): mEmulatedAlphaAttachmentMask = %d", this, __FUNCTION__,
+             mEmulatedAlphaAttachmentMask.bits());
 
         contextVk->updateColorMasks(context->getState().getBlendStateExt());
     }
@@ -1713,20 +1834,30 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
                                                          bool deferClears,
                                                          uint32_t colorIndexGL)
 {
+    INFO("FramebufferVk(%p)::%s(): Entry with this=%p", this, __FUNCTION__, this);
     ContextVk *contextVk = vk::GetImpl(context);
 
     RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
     if (renderTarget == nullptr)
     {
+        INFO("FramebufferVk(%p)::%s(): EARLY EXIT with this=%p", this, __FUNCTION__, this);
         return angle::Result::Continue;
     }
 
     if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
     {
+        INFO(
+            "FramebufferVk(%p)::%s(): Calling/returning renderTarget->flushStagedUpdates("
+            "&mDeferredClears, colorIndexGL) with this=%p",
+            this, __FUNCTION__, this);
         return renderTarget->flushStagedUpdates(contextVk, &mDeferredClears, colorIndexGL,
                                                 mCurrentFramebufferDesc.getLayerCount());
     }
 
+    INFO(
+        "FramebufferVk(%p)::%s(): Calling/returning renderTarget->flushStagedUpdates("
+        "nullptr, 0) with this=%p",
+        this, __FUNCTION__, this);
     return renderTarget->flushStagedUpdates(contextVk, nullptr, 0,
                                             mCurrentFramebufferDesc.getLayerCount());
 }
@@ -1758,6 +1889,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                                        const gl::Framebuffer::DirtyBits &dirtyBits,
                                        gl::Command command)
 {
+    INFO("FramebufferVk(%p)::%s(): Entry with this=%p", this, __FUNCTION__, this);
     ContextVk *contextVk = vk::GetImpl(context);
 
     vk::FramebufferDesc priorFramebufferDesc = mCurrentFramebufferDesc;
@@ -1882,6 +2014,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     // No-op redundant changes to prevent closing the RenderPass.
     if (mCurrentFramebufferDesc == priorFramebufferDesc)
     {
+        INFO("FramebufferVk(%p)::%s(): EARLY EXIT with this=%p", this, __FUNCTION__, this);
         return angle::Result::Continue;
     }
 
@@ -1893,6 +2026,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         // multisampled-render-to-texture, then srcFramebuffer->getSamples(context) gives > 1, but
         // there's no resolve happening as the read buffer's singlesampled image will be used as
         // blit src. FramebufferVk::blit() will handle those details for us.
+        INFO("FramebufferVk(%p)::%s(): calling contextVk->flushCommandsAndEndRenderPass()", this,
+             __FUNCTION__);
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
     }
 
@@ -1902,7 +2037,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     mFramebuffer = nullptr;
 
     // Notify the ContextVk to update the pipeline desc.
-    return contextVk->onFramebufferChange(this);
+    angle::Result rtn = contextVk->onFramebufferChange(this);
+
+    INFO("FramebufferVk(%p)::%s(): EXIT with this=%p", this, __FUNCTION__, this);
+    return rtn;
 }
 
 void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
@@ -2018,6 +2156,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
     if (mBackbuffer)
     {
+        INFO("FramebufferVk(%p)::%s() calling mBackbuffer(%p)->getCurrentFramebuffer()", this,
+             __FUNCTION__, mBackbuffer);
         return mBackbuffer->getCurrentFramebuffer(contextVk, *compatibleRenderPass, framebufferOut);
     }
 
@@ -2367,6 +2507,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 vk::CommandBuffer **commandBufferOut,
                                                 bool *renderPassDescChangedOut)
 {
+    INFO("\tFramebufferVk(%p)::%s():\t Render Area:\t x = %d, y = %d, width = %d, height = %d",
+         this, __FUNCTION__, scissoredRenderArea.x, scissoredRenderArea.y,
+         scissoredRenderArea.width, scissoredRenderArea.height);
     ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
 
     // Initialize RenderPass info.
@@ -2399,6 +2542,15 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
         if (mDeferredClears.test(colorIndexGL))
         {
+            INFO(
+                "\tFramebufferVk(%p)::%s():\t   colorIndexGL=%2zu: loadOp=%s, storeOp=%s"
+                " RGBA(%4.2f,%4.2f,%4.2f,%4.2f)",
+                this, __FUNCTION__, colorIndexGL, "CLEAR    ",
+                (storeOp == vk::RenderPassStoreOp::Store) ? "STORE    " : "DONT_CARE",
+                mDeferredClears[colorIndexGL].color.float32[0],
+                mDeferredClears[colorIndexGL].color.float32[1],
+                mDeferredClears[colorIndexGL].color.float32[2],
+                mDeferredClears[colorIndexGL].color.float32[3]);
             renderPassAttachmentOps.setOps(colorIndexVk, VK_ATTACHMENT_LOAD_OP_CLEAR, storeOp);
             packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                     mDeferredClears[colorIndexGL]);
@@ -2413,6 +2565,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             if (loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
                 mEmulatedAlphaAttachmentMask[colorIndexGL])
             {
+                INFO(
+                    "\tFramebufferVk(%p)::%s():\t   colorIndexGL=%2zu: loadOp=%s, storeOp=%s"
+                    " RGBA(%4.2f,%4.2f,%4.2f,%4.2f)",
+                    this, __FUNCTION__, colorIndexGL, "CLEAR    ",
+                    (storeOp == vk::RenderPassStoreOp::Store) ? "STORE    " : "DONT_CARE", 0.0, 0.0,
+                    0.0, 1.0);
                 // This color attachment has a format with no alpha channel, but is emulated with a
                 // format that does have an alpha channel, which must be cleared to 1.0 in order to
                 // be visible.
@@ -2424,6 +2582,10 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             }
             else
             {
+                INFO("\tFramebufferVk(%p)::%s():\t   colorIndexGL=%2zu: loadOp=%s, storeOp=%s",
+                     this, __FUNCTION__, colorIndexGL,
+                     colorRenderTarget->hasDefinedContent() ? "LOAD     " : "DONT_CARE",
+                     (storeOp == vk::RenderPassStoreOp::Store) ? "STORE    " : "DONT_CARE");
                 renderPassAttachmentOps.setOps(colorIndexVk, loadOp, storeOp);
                 packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                         kUninitializedClearValue);
@@ -2585,6 +2747,18 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         renderPassAttachmentOps.setOps(depthStencilAttachmentIndex, depthLoadOp, depthStoreOp);
         renderPassAttachmentOps.setStencilOps(depthStencilAttachmentIndex, stencilLoadOp,
                                               stencilStoreOp);
+        INFO("\tFramebufferVk(%p)::%s(): \t   depthAttachment: loadOp=%s, storeOp=%s", this,
+             __FUNCTION__,
+             (depthLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+                 ? "CLEAR    "
+                 : (depthLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD) ? "LOAD     " : "DONT_CARE",
+             (depthStoreOp == vk::RenderPassStoreOp::Store) ? "STORE    " : "DONT_CARE");
+        INFO("\tFramebufferVk(%p)::%s(): \t stencilAttachment: loadOp=%s, storeOp=%s", this,
+             __FUNCTION__,
+             (stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+                 ? "CLEAR    "
+                 : (stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD) ? "LOAD     " : "DONT_CARE",
+             (stencilStoreOp == vk::RenderPassStoreOp::Store) ? "STORE    " : "DONT_CARE");
     }
 
     // If render pass description is changed, the previous render pass desc is no longer compatible.
@@ -2713,11 +2887,22 @@ gl::Rectangle FramebufferVk::getNonRotatedCompleteRenderArea() const
 gl::Rectangle FramebufferVk::getRotatedCompleteRenderArea(ContextVk *contextVk) const
 {
     gl::Rectangle renderArea = getNonRotatedCompleteRenderArea();
+
+    // Temporary INFO() to see render area:
+    INFO("FramebufferVk(%p)::%s(): Non-rotated render area:\t  x: %3d, y: %3d, w: %3d, h: %3d;",
+         this, __FUNCTION__, renderArea.x, renderArea.y, renderArea.width, renderArea.height);
+
     if (contextVk->isRotatedAspectRatioForDrawFBO())
     {
+        INFO("FramebufferVk(%p)::%s(): Rotating render area", this, __FUNCTION__);
         // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
         std::swap(renderArea.width, renderArea.height);
     }
+
+    // Temporary INFO() to see render area:
+    INFO("FramebufferVk(%p)::%s(): Final rotated render area: x: %3d, y: %3d, w: %3d, h: %3d;",
+         this, __FUNCTION__, renderArea.x, renderArea.y, renderArea.width, renderArea.height);
+
     return renderArea;
 }
 
@@ -2730,11 +2915,27 @@ gl::Rectangle FramebufferVk::getRotatedCompleteRenderArea(ContextVk *contextVk) 
 gl::Rectangle FramebufferVk::getRotatedScissoredRenderArea(ContextVk *contextVk) const
 {
     const gl::Rectangle renderArea = getNonRotatedCompleteRenderArea();
-    bool invertViewport            = contextVk->isViewportFlipEnabledForDrawFBO();
-    gl::Rectangle scissoredArea    = ClipRectToScissor(contextVk->getState(), renderArea, false);
+
+    // Temporary INFO() to see render area:
+    INFO("FramebufferVk(%p)::%s(): Non-rotated render area:\t  x: %3d, y: %3d, w: %3d, h: %3d;",
+         this, __FUNCTION__, renderArea.x, renderArea.y, renderArea.width, renderArea.height);
+
+    bool invertViewport         = contextVk->isViewportFlipEnabledForDrawFBO();
+    gl::Rectangle scissoredArea = ClipRectToScissor(contextVk->getState(), renderArea, false);
     gl::Rectangle rotatedScissoredArea;
+
+    // Temporary INFO() to see render area:
+    INFO("FramebufferVk(%p)::%s(): scissoredArea:\t\t  x: %3d, y: %3d, w: %3d, h: %3d;", this,
+         __FUNCTION__, scissoredArea.x, scissoredArea.y, scissoredArea.width, scissoredArea.height);
+
     RotateRectangle(contextVk->getRotationDrawFramebuffer(), invertViewport, renderArea.width,
                     renderArea.height, scissoredArea, &rotatedScissoredArea);
+
+    // Temporary INFO() to see render area:
+    INFO("FramebufferVk(%p)::%s(): RotatedScissoredRenderArea:x: %3d, y: %3d, w: %3d, h: %3d;",
+         this, __FUNCTION__, rotatedScissoredArea.x, rotatedScissoredArea.y,
+         rotatedScissoredArea.width, rotatedScissoredArea.height);
+
     return rotatedScissoredArea;
 }
 

@@ -27,6 +27,11 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 namespace
@@ -1058,15 +1063,32 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
 
+    INFO("%s(): INCOMING \t sourceBox:\t x = %3d, y = %3d, width = %3d, height = %d", __FUNCTION__,
+         sourceBox.x, sourceBox.y, sourceBox.width, sourceBox.height);
+    INFO("%s(): INCOMING \t destOffset:\t x = %3d, y = %d", __FUNCTION__, destOffset.x,
+         destOffset.y);
+    INFO("%s(): isSrcFlipY = %5s, unpackFlipY = %5s", __FUNCTION__, isSrcFlipY ? "true" : "false",
+         unpackFlipY ? "true" : "false");
+
     // Potentially make adjustments for pre-rotatation.
     gl::Box rotatedSourceBox = sourceBox;
     gl::Extents srcExtents   = srcImage->getLevelExtents2D(vk::LevelIndex(0));
+    INFO("%s():\t srcFramebufferRotation=%s", __FUNCTION__,
+         srcFramebufferRotation == SurfaceRotation::Identity
+             ? "  0"
+             : srcFramebufferRotation == SurfaceRotation::Rotated90Degrees
+                   ? " 90"
+                   : srcFramebufferRotation == SurfaceRotation::Rotated180Degrees ? "180" : "270");
+    INFO("%s(): INCOMING \t srcExtents:\t width = %3d, height = %d", __FUNCTION__, srcExtents.width,
+         srcExtents.height);
     switch (srcFramebufferRotation)
     {
         case SurfaceRotation::Identity:
             // No adjustments needed
+            INFO("%s(): Doing NO 0-degree rotation of blitArea", __FUNCTION__);
             break;
         case SurfaceRotation::Rotated90Degrees:
+            INFO("%s(): Doing 90-degree rotation of blitArea", __FUNCTION__);
             // Turn off y-flip for 90 degrees, as we don't want it affecting the
             // shaderParams.srcOffset calculation done in UtilsVk::copyImage().
             ASSERT(isSrcFlipY);
@@ -1076,11 +1098,13 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
             std::swap(srcExtents.width, srcExtents.height);
             break;
         case SurfaceRotation::Rotated180Degrees:
+            INFO("%s(): Doing 180-degree rotation of blitArea", __FUNCTION__);
             ASSERT(isSrcFlipY);
             rotatedSourceBox.x = srcExtents.width - sourceBox.x - sourceBox.width - 1;
             rotatedSourceBox.y = srcExtents.height - sourceBox.y - sourceBox.height - 1;
             break;
         case SurfaceRotation::Rotated270Degrees:
+            INFO("%s(): Doing 270-degree rotation of blitArea", __FUNCTION__);
             // Turn off y-flip for 270 degrees, as we don't want it affecting the
             // shaderParams.srcOffset calculation done in UtilsVk::copyImage().  It is needed
             // within the shader (when it will affect how the shader looks-up the source pixel),
@@ -1097,6 +1121,11 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
             UNREACHABLE();
             break;
     }
+    INFO("%s():\t Post-rotation sourceBox:\t x = %3d, y = %3d, width = %3d, height = %d",
+         __FUNCTION__, rotatedSourceBox.x, rotatedSourceBox.y, rotatedSourceBox.width,
+         rotatedSourceBox.height);
+    INFO("%s(): isSrcFlipY = %5s, unpackFlipY = %5s", __FUNCTION__, isSrcFlipY ? "true" : "false",
+         unpackFlipY ? "true" : "false");
 
     gl::LevelIndex level(index.getLevelIndex());
 
@@ -1134,6 +1163,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     // If destination is valid, copy the source directly into it.
     if (mImage->valid() && !shouldUpdateBeStaged(level) && !isSelfCopy)
     {
+        INFO("%s(): GOT TO HERE 1", __FUNCTION__);
         // Make sure any updates to the image are already flushed.
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
