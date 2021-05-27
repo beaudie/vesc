@@ -259,6 +259,7 @@ bool ValidateConfigAttribute(const ValidationContext *val,
             break;
 
         default:
+            INFO() << "Unknown attribute is: " << attribute;
             val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute.");
             return false;
     }
@@ -1990,6 +1991,7 @@ bool ValidateCreateContext(const ValidationContext *val,
                 }
                 break;
             default:
+                INFO() << "Unknown attribute is: " << attribute;
                 val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute.");
                 return false;
         }
@@ -2045,8 +2047,23 @@ bool ValidateCreateContext(const ValidationContext *val,
                 gl::Version(static_cast<GLuint>(clientMajorVersion),
                             static_cast<GLuint>(clientMinorVersion)))
             {
+                // Temporary debug code:
+                gl::Version max = display->getMaxSupportedESVersion();
+                INFO() << "App requested version " << clientMajorVersion << "."
+                       << clientMinorVersion;
+                INFO() << "getMaxSupportedESVersion() returned " << max.major << "." << max.minor;
+
                 val->setError(EGL_BAD_ATTRIBUTE, "Requested GLES version is not supported.");
                 return false;
+            }
+            else
+            {
+                // Temporary debug code:
+                gl::Version max = display->getMaxSupportedESVersion();
+                INFO() << "App requested version " << clientMajorVersion << "."
+                       << clientMinorVersion;
+                INFO() << "getMaxSupportedESVersion() returned " << max.major << "." << max.minor;
+                INFO() << "Requested GLES version IS SUPPORTED";
             }
             break;
         default:
@@ -2740,6 +2757,7 @@ bool ValidateCreatePixmapSurface(const ValidationContext *val,
                 break;
 
             default:
+                INFO() << "Unknown attribute is: " << attribute;
                 val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute");
                 return false;
         }
@@ -5134,6 +5152,7 @@ bool ValidateQueryDebugKHR(const ValidationContext *val, EGLint attribute, const
             break;
 
         default:
+            INFO() << "Unknown attribute is: " << attribute;
             val->setError(EGL_BAD_ATTRIBUTE, "unknown attribute.");
             return false;
     }
