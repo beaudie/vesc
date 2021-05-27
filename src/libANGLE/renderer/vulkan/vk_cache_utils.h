@@ -1528,6 +1528,11 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         {
             *descPtrOut  = &item->first;
             *pipelineOut = &item->second;
+            INFO() << "GraphicsPipelineCache(" << this
+                   << ")::getPipeline():\t&item->first=" << &item->first
+                   << ", &item->second=" << &item->second;
+            INFO() << "GraphicsPipelineCache(" << this << ")::getPipeline(): &desc=" << &desc
+                   << ", *descPtrOut=" << *descPtrOut << ", *pipelineOut" << *pipelineOut;
             mCacheStats.hit();
             return angle::Result::Continue;
         }
