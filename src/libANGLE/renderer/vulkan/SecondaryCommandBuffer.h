@@ -986,6 +986,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::clearAttachments(uint32_t attachmentCo
                                                            uint32_t rectCount,
                                                            const VkClearRect *rects)
 {
+    INFO() << "SecondaryCommandBuffer::clearAttachments(): GOT TO HERE";
     ASSERT(rectCount == 1);
     uint8_t *writePtr;
     size_t attachSize = attachmentCount * sizeof(VkClearAttachment);
@@ -1003,6 +1004,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::clearColorImage(const Image &image,
                                                           uint32_t rangeCount,
                                                           const VkImageSubresourceRange *ranges)
 {
+    INFO() << "SecondaryCommandBuffer::clearColorImage(): GOT TO HERE";
     ASSERT(rangeCount == 1);
     ClearColorImageParams *paramStruct =
         initCommand<ClearColorImageParams>(CommandID::ClearColorImage);
