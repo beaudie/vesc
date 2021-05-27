@@ -294,11 +294,12 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
     ASSERT(mImage->valid() && (!isResolveImageOwnerOfData() || mResolveImage->valid()));
     ASSERT(framebufferLayerCount != 0);
 
-    // Note that the layer index for 3D textures is always zero according to Vulkan.
-    uint32_t layerIndex = mLayerIndex;
+    // It's impossible to defer clears to slices of a 3D images, as the clear applies to all the
+    // slices, while deferred clears only clear a single slice (where the framebuffer is attached).
     if (mImage->getType() == VK_IMAGE_TYPE_3D)
     {
-        layerIndex = 0;
+        deferredClears     = nullptr;
+        deferredClearIndex = 0;
     }
 
     vk::ImageHelper *image = getOwnerOfData();
@@ -311,16 +312,16 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
     // is a clear, it will accumulate it in the |deferredClears| array.  Later, when the render pass
     // is started, the deferred clears are applied to the transient multisampled image.
     ASSERT(!isResolveImageOwnerOfData() ||
-           !mImage->hasStagedUpdatesForSubresource(mLevelIndexGL, layerIndex, mLayerCount));
+           !mImage->hasStagedUpdatesForSubresource(mLevelIndexGL, mLayerIndex, mLayerCount));
     ASSERT(isResolveImageOwnerOfData() || mResolveImage == nullptr ||
-           !mResolveImage->hasStagedUpdatesForSubresource(mLevelIndexGL, layerIndex, mLayerCount));
+           !mResolveImage->hasStagedUpdatesForSubresource(mLevelIndexGL, mLayerIndex, mLayerCount));
 
-    if (!image->hasStagedUpdatesForSubresource(mLevelIndexGL, layerIndex, framebufferLayerCount))
+    if (!image->hasStagedUpdatesForSubresource(mLevelIndexGL, mLayerIndex, framebufferLayerCount))
     {
         return angle::Result::Continue;
     }
 
-    return image->flushSingleSubresourceStagedUpdates(contextVk, mLevelIndexGL, layerIndex,
+    return image->flushSingleSubresourceStagedUpdates(contextVk, mLevelIndexGL, mLayerIndex,
                                                       framebufferLayerCount, deferredClears,
                                                       deferredClearIndex);
 }

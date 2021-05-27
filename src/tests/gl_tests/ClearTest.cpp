@@ -2482,6 +2482,50 @@ TEST_P(ClearTest, DISABLED_ClearReachesWindow)
     angle::Sleep(2000);
 }
 
+TEST_P(ClearTestES3, ClearAndReadPixels3DTexture)
+{
+    constexpr uint32_t kWidth  = 128;
+    constexpr uint32_t kHeight = 128;
+    constexpr uint32_t kDepth  = 7;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, kWidth, kHeight, kDepth);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, 4 * kWidth * kHeight * kDepth, nullptr, GL_STATIC_DRAW);
+
+    {
+        GLFramebuffer framebuffer;
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+
+        std::array<GLfloat, 4> fClearColorData;
+        fClearColorData.fill(1.f);
+
+        for (uint32_t z = 0; z < kDepth; ++z)
+        {
+            glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, z);
+            glClearBufferfv(GL_COLOR, 0, fClearColorData.data());
+        }
+    }
+    {
+        uint8_t *offset = nullptr;
+        GLFramebuffer framebuffer;
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, buffer);
+        glPixelStorei(GL_PACK_ROW_LENGTH, 4 * kWidth);
+
+        for (uint32_t z = 0; z < kDepth; ++z)
+        {
+            glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, z);
+            glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, offset);
+            offset += 4 * kWidth * kHeight;
+        }
+    }
+}
+
 #ifdef Bool
 // X11 craziness.
 #    undef Bool
