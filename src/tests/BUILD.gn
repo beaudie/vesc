@@ -382,7 +382,10 @@ if (build_angle_perftests) {
 
   angle_source_set("angle_trace_perftests") {
     testonly = true
-    if (build_angle_trace_perf_tests) {
+
+    # TODO(http://anglebug.com/6009): Traces with long shaders are hitting string literal
+    #     limit in MSVC, so only compile them when using clang
+    if (build_angle_trace_perf_tests && is_clang) {
       if (is_ios) {
         # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
         check_includes = false
