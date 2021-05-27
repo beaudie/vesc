@@ -243,6 +243,12 @@ bool TConstantUnion::cast(TBasicType newType, const TConstantUnion &constant)
     return true;
 }
 
+TConstantUnion &TConstantUnion::operator=(const TConstantUnion &other)
+{
+    memcpy(this, &other, sizeof(*this));
+    return *this;
+}
+
 bool TConstantUnion::operator==(const int i) const
 {
     switch (type)

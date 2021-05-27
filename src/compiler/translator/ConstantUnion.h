@@ -57,6 +57,8 @@ class TConstantUnion
     bool isZero() const;
     TYuvCscStandardEXT getYuvCscStandardEXTConst() const;
 
+    TConstantUnion &operator=(const TConstantUnion &other);
+
     bool operator==(const int i) const;
     bool operator==(const unsigned int u) const;
     bool operator==(const float f) const;

@@ -652,6 +652,9 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
 
     TIntermAggregate(const TIntermAggregate &node);  // note: not deleted, just private!
 
+    // Transforms the constant arguments to the required type, avoiding the need to later cast them.
+    void correctConstantArgumentsTypes();
+
     void setPrecisionAndQualifier();
 
     bool areChildrenConstQualified();
