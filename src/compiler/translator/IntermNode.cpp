@@ -580,7 +580,62 @@ TIntermAggregate::TIntermAggregate(const TFunction *func,
         mArguments.swap(*arguments);
     }
     ASSERT(mFunction == nullptr || mFunction->symbolType() != SymbolType::Empty);
+    correctConstantArgumentsTypes();
     setPrecisionAndQualifier();
+}
+
+void TIntermAggregate::correctConstantArgumentsTypes()
+{
+    // For each argument, if a constant is provided that doesn't match the expected type, cast it
+    // right away.
+    for (size_t argumentIndex = 0; argumentIndex < mArguments.size(); ++argumentIndex)
+    {
+        TIntermConstantUnion *constantArg = mArguments[argumentIndex]->getAsConstantUnion();
+        if (constantArg == nullptr)
+        {
+            // Only interested in constant arguments
+            continue;
+        }
+
+        TBasicType expectedType;
+        if (isConstructor())
+        {
+            const TStructure *structure = getType().getStruct();
+            if (structure != nullptr)
+            {
+                expectedType = structure->fields()[argumentIndex]->type()->getBasicType();
+            }
+            else
+            {
+                expectedType = getType().getBasicType();
+            }
+        }
+        else
+        {
+            expectedType = mFunction->getParam(argumentIndex)->getType().getBasicType();
+        }
+
+        const TType &argType       = constantArg->getType();
+        TBasicType actualType                       = argType.getBasicType();
+
+        if (expectedType == actualType)
+        {
+            // If the types already match, there's nothing to do.  Similarly, if the constant
+            continue;
+        }
+
+        const TConstantUnion *argumentConstantValue = constantArg->getConstantValue();
+        size_t argumentSize        = argType.getObjectSize();
+        TConstantUnion *constArray = new TConstantUnion[argumentSize];
+        for (size_t constantIndex = 0; constantIndex < argumentSize; ++constantIndex)
+        {
+            bool valid =
+                constArray[constantIndex].cast(expectedType, argumentConstantValue[constantIndex]);
+            ASSERT(valid);
+        }
+
+        mArguments[argumentIndex] = new TIntermConstantUnion(constArray, argType);
+    }
 }
 
 void TIntermAggregate::setPrecisionAndQualifier()
@@ -762,9 +817,8 @@ const TConstantUnion *TIntermAggregate::getConstantValue() const
         return constArray;
     }
 
-    size_t resultSize    = getType().getObjectSize();
-    constArray           = new TConstantUnion[resultSize];
-    TBasicType basicType = getBasicType();
+    size_t resultSize = getType().getObjectSize();
+    constArray        = new TConstantUnion[resultSize];
 
     size_t resultIndex = 0u;
 
@@ -787,7 +841,7 @@ const TConstantUnion *TIntermAggregate::getConstantValue() const
                     {
                         if (col == row)
                         {
-                            constArray[resultIndex].cast(basicType, argumentConstantValue[0]);
+                            constArray[resultIndex] = argumentConstantValue[0];
                         }
                         else
                         {
@@ -801,7 +855,7 @@ const TConstantUnion *TIntermAggregate::getConstantValue() const
             {
                 while (resultIndex < resultSize)
                 {
-                    constArray[resultIndex].cast(basicType, argumentConstantValue[0]);
+                    constArray[resultIndex] = argumentConstantValue[0];
                     ++resultIndex;
                 }
             }
@@ -821,8 +875,7 @@ const TConstantUnion *TIntermAggregate::getConstantValue() const
                 {
                     if (col < argumentCols && row < argumentRows)
                     {
-                        constArray[resultIndex].cast(
-                            basicType, argumentConstantValue[col * argumentRows + row]);
+                        constArray[resultIndex] = argumentConstantValue[col * argumentRows + row];
                     }
                     else if (col == row)
                     {
@@ -849,7 +902,7 @@ const TConstantUnion *TIntermAggregate::getConstantValue() const
         {
             if (resultIndex >= resultSize)
                 break;
-            constArray[resultIndex].cast(basicType, argumentConstantValue[i]);
+            constArray[resultIndex] = argumentConstantValue[i];
             ++resultIndex;
         }
     }

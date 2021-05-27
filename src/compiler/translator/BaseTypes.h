@@ -53,11 +53,14 @@ inline const char *getPrecisionString(TPrecision p)
 enum TBasicType
 {
     EbtVoid,
-    EbtFloat,
+
+    EbtGuardScalarBegin,  // non type: see implementation of IsScalar()
+    EbtFloat = EbtGuardScalarBegin,
     EbtDouble,
     EbtInt,
     EbtUInt,
     EbtBool,
+    EbtGuardScalarEnd = EbtBool,  // non type: see implementation of IsScalar()
 
     EbtAtomicCounter,
     EbtYuvCscStandardEXT,  // Only valid if EXT_YUV_target exists.
@@ -205,6 +208,11 @@ class TBasicMangledName
 };
 
 const char *getBasicString(TBasicType t);
+
+inline bool IsScalar(TBasicType type)
+{
+    return type >= EbtGuardScalarBegin && type <= EbtGuardScalarEnd;
+}
 
 inline bool IsSampler(TBasicType type)
 {
