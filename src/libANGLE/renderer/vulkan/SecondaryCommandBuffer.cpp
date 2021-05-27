@@ -261,6 +261,7 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 }
                 case CommandID::ClearAttachments:
                 {
+                    INFO() << "Executing CommandID::ClearAttachments GOT TO HERE";
                     const ClearAttachmentsParams *params =
                         getParamPtr<ClearAttachmentsParams>(currentCommand);
                     const VkClearAttachment *attachments =
@@ -271,6 +272,7 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 }
                 case CommandID::ClearColorImage:
                 {
+                    INFO() << "Executing CommandID::ClearColorImage GOT TO HERE";
                     const ClearColorImageParams *params =
                         getParamPtr<ClearColorImageParams>(currentCommand);
                     vkCmdClearColorImage(cmdBuffer, params->image, params->imageLayout,
