@@ -24,6 +24,11 @@
 
 #include <type_traits>
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 namespace vk
@@ -3569,12 +3574,23 @@ angle::Result GraphicsPipelineCache::insertPipeline(
             activeAttribLocationsMask, programAttribsTypeMask, vertexModule, fragmentModule,
             geometryModule, tessControlModule, tessEvaluationModule, specConsts, &newPipeline));
     }
+    INFO("GraphicsPipelineCache(%p)::%s():\t&desc=%p, newPipeline=%p", this, __FUNCTION__, &desc,
+         &newPipeline);
 
     // The Serial will be updated outside of this query.
     auto insertedItem = mPayload.emplace(desc, std::move(newPipeline));
     *descPtrOut       = &insertedItem.first->first;
     *pipelineOut      = &insertedItem.first->second;
 
+    INFO(
+        "GraphicsPipelineCache(%p)::%s():\t&insertedItem.first->first=%p, "
+        "&insertedItem.first->second=%p",
+        this, __FUNCTION__, &insertedItem.first->first, &insertedItem.first->second);
+    INFO("GraphicsPipelineCache(%p)::%s():\t&desc=%p, *descPtrOut=%p, *pipelineOut=%p", this,
+         __FUNCTION__, &desc, *descPtrOut, *pipelineOut);
+    INFO("GraphicsPipelineCache(%p)::%s():\t desc.viewport = (%f, %f, %f, %f)", this, __FUNCTION__,
+         desc.getViewport().x, desc.getViewport().y, desc.getViewport().width,
+         desc.getViewport().height);
     return angle::Result::Continue;
 }
 

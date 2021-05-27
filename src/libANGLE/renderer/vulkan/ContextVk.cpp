@@ -44,6 +44,11 @@
 
 #include <iostream>
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 
@@ -230,6 +235,14 @@ SurfaceRotation DetermineSurfaceRotation(gl::Framebuffer *framebuffer,
 {
     if (windowSurface && framebuffer->isDefault())
     {
+        INFO("%s():\t Window surface %p rotation=%s", __FUNCTION__, windowSurface,
+             windowSurface->getPreTransform() == VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR
+                 ? "  0"
+                 : windowSurface->getPreTransform() == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR
+                       ? " 90"
+                       : windowSurface->getPreTransform() == VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR
+                             ? "180"
+                             : "270");
         switch (windowSurface->getPreTransform())
         {
             case VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR:
@@ -252,6 +265,7 @@ SurfaceRotation DetermineSurfaceRotation(gl::Framebuffer *framebuffer,
     else
     {
         // Do not rotate gl_Position (offscreen framebuffer):
+        INFO("%s():\t Offscreen surface rotation=0", __FUNCTION__);
         return SurfaceRotation::Identity;
     }
 }
@@ -453,6 +467,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
+    INFO("ContextVk(%p)::%s(): CONSTRUCTOR", this, __FUNCTION__);
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
@@ -844,11 +859,14 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    const void *indices,
                                    DirtyBits dirtyBitMask)
 {
+    INFO("ContextVk(%p)::%s(): Entry", this, __FUNCTION__);
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
         invalidateCurrentGraphicsPipeline();
         mCurrentDrawMode = mode;
+        INFO("ContextVk(%p)::%s(): Calling mGraphicsPipelineDesc(%p)->updateTopology()", this,
+             __FUNCTION__, mGraphicsPipelineDesc.get());
         mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
     }
 
@@ -895,6 +913,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     if (dirtyBits.none())
     {
         ASSERT(mRenderPassCommandBuffer);
+        INFO("ContextVk(%p)::%s(): Early Exit", this, __FUNCTION__);
         return angle::Result::Continue;
     }
 
@@ -911,6 +930,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // Render pass must be always available at this point.
     ASSERT(mRenderPassCommandBuffer);
 
+    INFO("ContextVk(%p)::%s(): Exit", this, __FUNCTION__);
     return angle::Result::Continue;
 }
 
@@ -1371,6 +1391,8 @@ angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *
 angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *dirtyBitsIterator,
                                                          DirtyBits dirtyBitMask)
 {
+    INFO("ContextVk(%p)::%s(): Entry  mGraphicsPipelineDesc=%p", this, __FUNCTION__,
+         mGraphicsPipelineDesc.get());
     const VkPipeline previousPipeline = mCurrentGraphicsPipeline
                                             ? mCurrentGraphicsPipeline->getPipeline().getHandle()
                                             : VK_NULL_HANDLE;
@@ -1413,6 +1435,17 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 
         mGraphicsPipelineTransition.reset();
     }
+#ifdef OLD_CODE
+    // The getViewport() and getScissor() methods disappeared
+    INFO("ContextVk(%p)::%s(): mid-way:  mGraphicsPipelineDesc=%p with viewport (%f, %f, %f, %f)",
+         this, __FUNCTION__, mGraphicsPipelineDesc.get(), mGraphicsPipelineDesc->getViewport().x,
+         mGraphicsPipelineDesc->getViewport().y, mGraphicsPipelineDesc->getViewport().width,
+         mGraphicsPipelineDesc->getViewport().height);
+    INFO("ContextVk(%p)::%s():                                    with scissor  (%d, %d, %d, %d)",
+         this, __FUNCTION__, mGraphicsPipelineDesc->getScissor().x,
+         mGraphicsPipelineDesc->getScissor().y, mGraphicsPipelineDesc->getScissor().width,
+         mGraphicsPipelineDesc->getScissor().height);
+#endif  // OLD_CODE
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
     // TODO: https://issuetracker.google.com/issues/169788986: Need to change this so that we get
@@ -1425,6 +1458,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BINDING.
     if (newPipeline == previousPipeline)
     {
+        INFO("ContextVk(%p)::%s(): early exit", this, __FUNCTION__);
         return angle::Result::Continue;
     }
 
@@ -1442,6 +1476,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // The pipeline needs to rebind because it's changed.
     dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
 
+    INFO("ContextVk(%p)::%s(): Exit", this, __FUNCTION__);
     return angle::Result::Continue;
 }
 
@@ -3255,6 +3290,19 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
     // Ensure viewport is within Vulkan requirements
     vk::ClampViewport(&mViewport);
 
+    INFO(
+        "ContextVk(%p)::%s():\tVIEWPORT(%s): incoming(%4d,%4d,%4d,%4d); FB(%4d,%4d); "
+        "calculated(%4d,%4d,%5d,%5d)",
+        this, __FUNCTION__,
+        getRotationDrawFramebuffer() == SurfaceRotation::Identity
+            ? "  0"
+            : getRotationDrawFramebuffer() == SurfaceRotation::Rotated90Degrees
+                  ? " 90"
+                  : getRotationDrawFramebuffer() == SurfaceRotation::Rotated180Degrees ? "180"
+                                                                                       : "270",
+        viewport.x, viewport.y, viewport.width, viewport.height, fbDimensions.width,
+        fbDimensions.height, (int)mViewport.x, (int)mViewport.y, (int)mViewport.width,
+        (int)mViewport.height);
     invalidateGraphicsDriverUniforms();
     mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
 }
@@ -3289,6 +3337,20 @@ void ContextVk::updateScissor(const gl::State &glState)
     gl::Rectangle rotatedScissoredArea;
     RotateRectangle(getRotationDrawFramebuffer(), isViewportFlipEnabledForDrawFBO(),
                     renderArea.width, renderArea.height, scissoredArea, &rotatedScissoredArea);
+    INFO(
+        "ContextVk(%p)::%s():\tSCISSOR(%s):  incoming(%4d,%4d,%4d,%4d); FB(%4d,%4d); "
+        "calculated(%4d,%4d,%5d,%5d)",
+        this, __FUNCTION__,
+        getRotationDrawFramebuffer() == SurfaceRotation::Identity
+            ? "  0"
+            : getRotationDrawFramebuffer() == SurfaceRotation::Rotated90Degrees
+                  ? " 90"
+                  : getRotationDrawFramebuffer() == SurfaceRotation::Rotated180Degrees ? "180"
+                                                                                       : "270",
+        scissoredArea.x, scissoredArea.y, scissoredArea.width, scissoredArea.height,
+        renderArea.width, renderArea.height, rotatedScissoredArea.x, rotatedScissoredArea.y,
+        rotatedScissoredArea.width, rotatedScissoredArea.height);
+
     mScissor = gl_vk::GetRect(rotatedScissoredArea);
     mGraphicsDirtyBits.set(DIRTY_BIT_SCISSOR);
 
@@ -3299,6 +3361,7 @@ void ContextVk::updateScissor(const gl::State &glState)
         !mRenderPassCommands->getRenderArea().encloses(rotatedScissoredArea))
     {
         ASSERT(mRenderPassCommands->started());
+        INFO("%s(): Calling mRenderPassCommands->growRenderArea", __FUNCTION__);
         mRenderPassCommands->growRenderArea(this, rotatedScissoredArea);
     }
 }
@@ -3381,8 +3444,17 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         ASSERT(mExecutable);
         mExecutable->updateEarlyFragmentTestsOptimization(this);
 
+        INFO(
+            "ContextVk()::%s(): mLastProgramUsesFramebufferFetch = %s, "
+            "executable->usesFramebufferFetch() = %s",
+            __FUNCTION__, mLastProgramUsesFramebufferFetch ? "true" : "false",
+            executable->usesFramebufferFetch() ? "true" : "false");
         if (mLastProgramUsesFramebufferFetch != executable->usesFramebufferFetch())
         {
+            INFO(
+                "ContextVk()::%s(): Calling flushCommandsAndEndRenderPass() & "
+                "mDrawFramebuffer->onSwitchProgramFramebufferFetch()",
+                __FUNCTION__);
             mLastProgramUsesFramebufferFetch = executable->usesFramebufferFetch();
             ANGLE_TRY(flushCommandsAndEndRenderPass());
 
@@ -3399,6 +3471,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask)
 {
+    INFO("ContextVk(%p)::%s(): Entry", this, __FUNCTION__);
     const gl::State &glState                       = context->getState();
     const gl::ProgramExecutable *programExecutable = glState.getProgramExecutable();
 
@@ -3774,6 +3847,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
         }
     }
 
+    INFO("ContextVk(%p)::%s(): EXIT", this, __FUNCTION__);
     return angle::Result::Continue;
 }
 
@@ -3797,6 +3871,7 @@ GLint64 ContextVk::getTimestamp()
 
 angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 {
+    INFO("ContextVk(%p)::%s(): ENTER", this, __FUNCTION__);
     mRenderer->reloadVolkIfNeeded();
 
     // Flip viewports if the user did not request that the surface is flipped.
@@ -3842,6 +3917,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
         }
     }
 
+    INFO("ContextVk(%p)::%s(): EXIT", this, __FUNCTION__);
     return angle::Result::Continue;
 }
 
@@ -3954,6 +4030,13 @@ void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState)
     gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
     mCurrentRotationDrawFramebuffer =
         DetermineSurfaceRotation(drawFramebuffer, mCurrentWindowSurface);
+    INFO("ContextVk(%p)::%s():\t mCurrentRotationDrawFramebuffer=%s", this, __FUNCTION__,
+         mCurrentRotationDrawFramebuffer == SurfaceRotation::Identity
+             ? "  0"
+             : mCurrentRotationDrawFramebuffer == SurfaceRotation::Rotated90Degrees
+                   ? " 90"
+                   : mCurrentRotationDrawFramebuffer == SurfaceRotation::Rotated180Degrees ? "180"
+                                                                                           : "270");
 }
 
 void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
@@ -3961,6 +4044,13 @@ void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
     gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mCurrentRotationReadFramebuffer =
         DetermineSurfaceRotation(readFramebuffer, mCurrentWindowSurface);
+    INFO("ContextVk(%p)::%s():\t mCurrentRotationReadFramebuffer=%s", this, __FUNCTION__,
+         mCurrentRotationReadFramebuffer == SurfaceRotation::Identity
+             ? "  0"
+             : mCurrentRotationReadFramebuffer == SurfaceRotation::Rotated90Degrees
+                   ? " 90"
+                   : mCurrentRotationReadFramebuffer == SurfaceRotation::Rotated180Degrees ? "180"
+                                                                                           : "270");
 }
 
 gl::Caps ContextVk::getNativeCaps() const
@@ -4215,6 +4305,8 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk)
 void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk,
                                                       bool *renderPassDescChangedOut)
 {
+    INFO("ContextVk(%p)::%s(): Entry mGraphicsPipelineDesc=%p", this, __FUNCTION__,
+         mGraphicsPipelineDesc.get());
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
                                                 framebufferVk->getRenderPassDesc());
     const gl::Box &dimensions = framebufferVk->getState().getDimensions();
@@ -5455,6 +5547,8 @@ angle::Result ContextVk::beginNewRenderPass(
     // Next end any currently outstanding renderPass
     ANGLE_TRY(flushCommandsAndEndRenderPass());
 
+    INFO("ContextVk(%p)::%s():\t Render Area:\t x = %d, y = %d, width = %d, height = %d", this,
+         __FUNCTION__, renderArea.x, renderArea.y, renderArea.width, renderArea.height);
     mRenderPassCommands->beginRenderPass(
         framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps, colorAttachmentCount,
         depthStencilAttachmentIndex, clearValues, commandBufferOut);
@@ -5467,6 +5561,9 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
                                          vk::CommandBuffer **commandBufferOut,
                                          bool *renderPassDescChangedOut)
 {
+    INFO("ContextVk(%p)::%s():\t\t Render Area:\t x = %d, y = %d, width = %d, height = %d", this,
+         __FUNCTION__, renderArea.x, renderArea.y, renderArea.width, renderArea.height);
+
     ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer,
                                                    renderPassDescChangedOut));
 
@@ -5536,9 +5633,11 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
 
     if (!mRenderPassCommands->started())
     {
+        INFO("ContextVk(%p)::%s(): RenderPass not started", this, __FUNCTION__);
         onRenderPassFinished();
         return angle::Result::Continue;
     }
+    INFO("ContextVk(%p)::%s(): ENDING RenderPass", this, __FUNCTION__);
 
     mCurrentTransformFeedbackBuffers.clear();
 
@@ -5601,6 +5700,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass()
 {
+    INFO("ContextVk(%p)::%s(): Entry mGraphicsPipelineDesc=%p", this, __FUNCTION__,
+         mGraphicsPipelineDesc.get());
     bool isRenderPassStarted = mRenderPassCommands->started();
 
     ANGLE_TRY(flushCommandsAndEndRenderPassImpl());
@@ -5620,6 +5721,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass()
 angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                       DirtyBits dirtyBitMask)
 {
+    INFO("ContextVk(%p)::%s(): Entry mGraphicsPipelineDesc=%p", this, __FUNCTION__,
+         mGraphicsPipelineDesc.get());
     ASSERT(mRenderPassCommands->started());
 
     ANGLE_TRY(flushCommandsAndEndRenderPassImpl());
@@ -6179,14 +6282,16 @@ void ContextVk::outputCumulativePerfCounters()
         return;
     }
 
-    INFO() << "Context Descriptor Set Allocations: ";
+    INFO("ContextVk::%s(): Context Descriptor Set Allocations: ", __FUNCTION__);
 
     for (PipelineType pipelineType : angle::AllEnums<PipelineType>())
     {
         uint32_t count = mCumulativeContextPerfCounters.descriptorSetsAllocated[pipelineType];
         if (count > 0)
         {
-            INFO() << "    PipelineType " << ToUnderlying(pipelineType) << ": " << count;
+            //            INFO("ContextVk::%s():     PipelineType %zu : %d", __FUNCTION__,
+            //                 ToUnderlying(pipelineType), count);
+            INFO("ContextVk::%s():     PipelineType %d : %d", __FUNCTION__, pipelineType, count);
         }
     }
 }
