@@ -121,6 +121,7 @@ class OutputSPIRVTraverser : public TIntermTraverser
 {
   public:
     OutputSPIRVTraverser(TCompiler *compiler, ShCompileOptions compileOptions);
+    ~OutputSPIRVTraverser() override;
 
     spirv::Blob getSpirv();
 
@@ -173,6 +174,37 @@ class OutputSPIRVTraverser : public TIntermTraverser
                             spv::StorageClass storageClass,
                             TLayoutBlockStorage blockStorage) const;
     void nodeDataInitRValue(NodeData *data, spirv::IdRef baseId, spirv::IdRef typeId) const;
+
+    spirv::IdRef createConstant(const TType &type,
+                                TBasicType expectedBasicType,
+                                const TConstantUnion *constUnion);
+    spirv::IdRef createConstructor(TIntermAggregate *node,
+                                   spirv::IdRef typeId,
+                                   const std::vector<SpirvIdOrLiteral> &parameters);
+    spirv::IdRef createArrayOrStructConstructor(TIntermAggregate *node,
+                                                spirv::IdRef typeId,
+                                                const std::vector<SpirvIdOrLiteral> &parameters);
+    spirv::IdRef createConstructorVectorFromScalar(TIntermAggregate *node,
+                                                   spirv::IdRef typeId,
+                                                   const std::vector<SpirvIdOrLiteral> &parameters);
+    spirv::IdRef createConstructorVectorFromNonScalar(
+        TIntermAggregate *node,
+        spirv::IdRef typeId,
+        const std::vector<SpirvIdOrLiteral> &parameters);
+    spirv::IdRef createConstructorMatrixFromScalar(TIntermAggregate *node,
+                                                   spirv::IdRef typeId,
+                                                   const std::vector<SpirvIdOrLiteral> &parameters);
+    spirv::IdRef createConstructorMatrixFromVectors(
+        TIntermAggregate *node,
+        spirv::IdRef typeId,
+        const std::vector<SpirvIdOrLiteral> &parameters);
+    spirv::IdRef createConstructorMatrixFromMatrix(TIntermAggregate *node,
+                                                   spirv::IdRef typeId,
+                                                   const std::vector<SpirvIdOrLiteral> &parameters);
+    void extractComponents(TIntermAggregate *node,
+                           size_t componentCount,
+                           const std::vector<SpirvIdOrLiteral> &parameters,
+                           spirv::IdRefList *extractedComponentsOut);
 
     ANGLE_MAYBE_UNUSED TCompiler *mCompiler;
     ANGLE_MAYBE_UNUSED ShCompileOptions mCompileOptions;
@@ -245,6 +277,11 @@ OutputSPIRVTraverser::OutputSPIRVTraverser(TCompiler *compiler, ShCompileOptions
                compiler->getHashFunction(),
                compiler->getNameMap())
 {}
+
+OutputSPIRVTraverser::~OutputSPIRVTraverser()
+{
+    ASSERT(mNodeData.empty());
+}
 
 void OutputSPIRVTraverser::nodeDataInitLValue(NodeData *data,
                                               spirv::IdRef baseId,
@@ -625,8 +662,510 @@ spirv::IdRef OutputSPIRVTraverser::getAccessChainTypeId(NodeData *data)
     return accessChain.preSwizzleTypeId;
 }
 
+spirv::IdRef OutputSPIRVTraverser::createConstant(const TType &type,
+                                                  TBasicType expectedBasicType,
+                                                  const TConstantUnion *constUnion)
+{
+    const spirv::IdRef typeId = mBuilder.getTypeData(type, EbsUnspecified).id;
+    spirv::IdRefList componentIds;
+
+    if (type.getBasicType() == EbtStruct)
+    {
+        // If it's a struct constant, get the constant id for each field.
+        for (const TField *field : type.getStruct()->fields())
+        {
+            const TType *fieldType = field->type();
+            componentIds.push_back(
+                createConstant(*fieldType, fieldType->getBasicType(), constUnion));
+
+            constUnion += fieldType->getObjectSize();
+        }
+    }
+    else
+    {
+        // Otherwise get the constant id for each component.
+        const size_t size = type.getObjectSize();
+        ASSERT(expectedBasicType == EbtFloat || expectedBasicType == EbtInt ||
+               expectedBasicType == EbtUInt || expectedBasicType == EbtBool);
+
+        for (size_t component = 0; component < size; ++component, ++constUnion)
+        {
+            spirv::IdRef componentId;
+
+            // If the constant has a different type than expected, cast it right away.
+            TConstantUnion castConstant;
+            bool valid = castConstant.cast(expectedBasicType, *constUnion);
+            ASSERT(valid);
+
+            switch (castConstant.getType())
+            {
+                case EbtFloat:
+                    componentId = mBuilder.getFloatConstant(castConstant.getFConst());
+                    break;
+                case EbtInt:
+                    componentId = mBuilder.getIntConstant(castConstant.getIConst());
+                    break;
+                case EbtUInt:
+                    componentId = mBuilder.getUintConstant(castConstant.getUConst());
+                    break;
+                case EbtBool:
+                    componentId = mBuilder.getBoolConstant(castConstant.getBConst());
+                    break;
+                default:
+                    UNREACHABLE();
+            }
+            componentIds.push_back(componentId);
+        }
+    }
+
+    // If this is a composite, create a composite constant from the components.
+    if (type.getBasicType() == EbtStruct || componentIds.size() > 1)
+    {
+        return mBuilder.getCompositeConstant(typeId, componentIds);
+    }
+
+    // Otherwise return the sole component.
+    ASSERT(componentIds.size() == 1);
+    return componentIds[0];
+}
+
+spirv::IdRef OutputSPIRVTraverser::createConstructor(
+    TIntermAggregate *node,
+    spirv::IdRef typeId,
+    const std::vector<SpirvIdOrLiteral> &parameters)
+{
+    const TType &type                = node->getType();
+    const TIntermSequence &arguments = *node->getSequence();
+    const TType &arg0Type            = arguments[0]->getAsTyped()->getType();
+
+    // Constructors in GLSL can take various shapes, resulting in different translations to SPIR-V
+    // (in each case, if the parameter doesn't match the type being constructed, it must be cast):
+    //
+    // - float(f): This should translate to just f
+    // - vecN(f): This should translate to OpCompositeConstruct %vecN %f %f .. %f
+    // - vecN(v1.zy, v2.x): This can technically translate to OpCompositeConstruct with two ids; the
+    //   results of v1.zy and v2.x.  However, for simplicity it's easier to generate that
+    //   instruction with three ids; the results of v1.z, v1.y and v2.x (see below where a matrix is
+    //   used as parameter).
+    // - vecN(m): This takes N components of m in column-major order (for example, vec4 constructed
+    //   out of a 4x3 matrix would select components (0,0), (0,1), (0,2) and (1,0)).  This
+    //   translates to OpCompositeConstruct with the id of the indiviual components extracted from
+    //   m.
+    // - matNxM(f): This creates a diagonal matrix.  It generates N OpCompositeConstruct
+    //   instructions for each column (which are vecM), followed by an OpCompositeConstruct that
+    //   constructs the final result.
+    // - matNxM(m): With m larger than NxM, this extracts a submatrix out of m.  It generates
+    //   OpCompositeExtracts for N columns of m, followed by an OpVectorShuffle (swizzle) if the
+    //   rows of m are more than M.  OpCompositeConstruct is used to construct the final result.
+    // - matNxM(v1.zy, v2.x, ...): Similarly to constructing a vector, a list of single components
+    //   are extracted from the parameters, which are divided up and used to construct each column,
+    //   which is finally constructed into the final result.
+    //
+    // Additionally, array and structs are constructed by OpCompositeConstruct followed by ids of
+    // each parameter which must enumerate every individual element / field.
+
+    if (type.isArray() || type.getStruct() != nullptr)
+    {
+        return createArrayOrStructConstructor(node, typeId, parameters);
+    }
+
+    if (type.isScalar())
+    {
+        // TODO: handle casting.  http://anglebug.com/4889.
+        return parameters[0].id;
+    }
+
+    if (type.isVector())
+    {
+        if (arguments.size() == 1 && arg0Type.isScalar())
+        {
+            return createConstructorVectorFromScalar(node, typeId, parameters);
+        }
+
+        return createConstructorVectorFromNonScalar(node, typeId, parameters);
+    }
+
+    ASSERT(type.isMatrix());
+
+    if (arg0Type.isScalar())
+    {
+        return createConstructorMatrixFromScalar(node, typeId, parameters);
+    }
+    if (arg0Type.isMatrix())
+    {
+        return createConstructorMatrixFromMatrix(node, typeId, parameters);
+    }
+    return createConstructorMatrixFromVectors(node, typeId, parameters);
+}
+
+spirv::IdRef OutputSPIRVTraverser::createArrayOrStructConstructor(
+    TIntermAggregate *node,
+    spirv::IdRef typeId,
+    const std::vector<SpirvIdOrLiteral> &parameters)
+{
+    // TODO: handle mismatching types.  http://anglebug.com/6000
+
+    spirv::IdRefList parameterIds;
+    for (const SpirvIdOrLiteral &parameter : parameters)
+    {
+        parameterIds.push_back(parameter.id);
+    }
+
+    spirv::IdRef result = mBuilder.getNewId();
+    spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), typeId, result, parameterIds);
+    return result;
+}
+
+spirv::IdRef OutputSPIRVTraverser::createConstructorVectorFromScalar(
+    TIntermAggregate *node,
+    spirv::IdRef typeId,
+    const std::vector<SpirvIdOrLiteral> &parameters)
+{
+    // vecN(f) translates to OpCompositeConstruct %vecN %f ... %f
+    ASSERT(parameters.size() == 1);
+    spirv::IdRefList replicatedParameter(node->getType().getNominalSize(), parameters[0].id);
+
+    const spirv::IdRef result = mBuilder.getNewId();
+    spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), typeId, result,
+                                   replicatedParameter);
+    return result;
+}
+
+spirv::IdRef OutputSPIRVTraverser::createConstructorVectorFromNonScalar(
+    TIntermAggregate *node,
+    spirv::IdRef typeId,
+    const std::vector<SpirvIdOrLiteral> &parameters)
+{
+    // vecN(v1.zy, v2.x) translates to OpCompositeConstruct %vecN %v1.z %v1.y %v2.x
+    // vecN(m) translates to OpCompositeConstruct %vecN %m[0][0] %m[0][1] ...
+    spirv::IdRefList extractedComponents;
+    extractComponents(node, node->getType().getNominalSize(), parameters, &extractedComponents);
+
+    const spirv::IdRef result = mBuilder.getNewId();
+    spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), typeId, result,
+                                   extractedComponents);
+    return result;
+}
+
+spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromScalar(
+    TIntermAggregate *node,
+    spirv::IdRef typeId,
+    const std::vector<SpirvIdOrLiteral> &parameters)
+{
+    // matNxM(f) translates to
+    //
+    //     %c0 = OpCompositeConstruct %vecM %f %zero %zero ..
+    //     %c1 = OpCompositeConstruct %vecM %zero %f %zero ..
+    //     %c2 = OpCompositeConstruct %vecM %zero %zero %f ..
+    //     ...
+    //     %m  = OpCompositeConstruct %matNxM %c0 %c1 %c2 ...
+
+    const TType &type = node->getType();
+    // TODO: handle casting.  http://anglebug.com/4889.
+    const spirv::IdRef scalarId = parameters[0].id;
+    spirv::IdRef zeroId;
+
+    switch (type.getBasicType())
+    {
+        case EbtFloat:
+            zeroId = mBuilder.getFloatConstant(0);
+            break;
+        case EbtInt:
+            zeroId = mBuilder.getIntConstant(0);
+            break;
+        case EbtUInt:
+            zeroId = mBuilder.getUintConstant(0);
+            break;
+        case EbtBool:
+            zeroId = mBuilder.getBoolConstant(0);
+            break;
+        default:
+            UNREACHABLE();
+    }
+
+    spirv::IdRefList componentIds(type.getRows(), zeroId);
+    spirv::IdRefList columnIds;
+
+    SpirvType columnType            = mBuilder.getSpirvType(type, EbsUnspecified);
+    columnType.secondarySize        = 1;
+    const spirv::IdRef columnTypeId = mBuilder.getSpirvTypeData(columnType, "").id;
+
+    for (int columnIndex = 0; columnIndex < type.getCols(); ++columnIndex)
+    {
+        columnIds.push_back(mBuilder.getNewId());
+
+        // Place the scalar at the correct index (diagonal of the matrix, i.e. row == col).
+        componentIds[columnIndex] = scalarId;
+        if (columnIndex > 0)
+        {
+            componentIds[columnIndex - 1] = zeroId;
+        }
+
+        // Create the column.
+        spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), columnTypeId, columnIds.back(),
+                                       componentIds);
+    }
+
+    // Create the matrix out of the columns.
+    const spirv::IdRef result = mBuilder.getNewId();
+    spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), typeId, result, columnIds);
+    return result;
+}
+
+spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromVectors(
+    TIntermAggregate *node,
+    spirv::IdRef typeId,
+    const std::vector<SpirvIdOrLiteral> &parameters)
+{
+    // matNxM(v1.zy, v2.x, ...) translates to:
+    //
+    //     %c0 = OpCompositeConstruct %vecM %v1.z %v1.y %v2.x ..
+    //     ...
+    //     %m  = OpCompositeConstruct %matNxM %c0 %c1 %c2 ...
+
+    const TType &type = node->getType();
+
+    spirv::IdRefList extractedComponents;
+    extractComponents(node, type.getCols() * type.getRows(), parameters, &extractedComponents);
+
+    spirv::IdRefList columnIds;
+
+    SpirvType columnType            = mBuilder.getSpirvType(type, EbsUnspecified);
+    columnType.secondarySize        = 1;
+    const spirv::IdRef columnTypeId = mBuilder.getSpirvTypeData(columnType, "").id;
+
+    // Chunk up the extracted components by column and construct intermediary vectors.
+    for (int columnIndex = 0; columnIndex < type.getCols(); ++columnIndex)
+    {
+        columnIds.push_back(mBuilder.getNewId());
+
+        auto componentsStart = extractedComponents.begin() + columnIndex * type.getRows();
+        const spirv::IdRefList componentIds(componentsStart, componentsStart + type.getRows());
+
+        // Create the column.
+        spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), columnTypeId, columnIds.back(),
+                                       componentIds);
+    }
+
+    const spirv::IdRef result = mBuilder.getNewId();
+    spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), typeId, result, columnIds);
+    return result;
+}
+
+spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromMatrix(
+    TIntermAggregate *node,
+    spirv::IdRef typeId,
+    const std::vector<SpirvIdOrLiteral> &parameters)
+{
+    // matNxM(m) translates to:
+    //
+    // - If m is SxR where S>=N and R>=M:
+    //
+    //     %c0 = OpCompositeExtract %vecR %m 0
+    //     %c1 = OpCompositeExtract %vecR %m 1
+    //     ...
+    //     // If R (column size of m) != M, OpVectorShuffle to extract M components out of %ci.
+    //     ...
+    //     %m  = OpCompositeConstruct %matNxM %c0 %c1 %c2 ...
+    //
+    // - Otherwise, an identity matrix is created and super imposed by m:
+    //
+    //     %c0 = OpCompositeConstruct %vecM %m[0][0] %m[0][1] %0 %0
+    //     %c1 = OpCompositeConstruct %vecM %m[1][0] %m[1][1] %0 %0
+    //     %c2 = OpCompositeConstruct %vecM %m[2][0] %m[2][1] %1 %0
+    //     %c3 = OpCompositeConstruct %vecM       %0       %0 %0 %1
+    //     %m  = OpCompositeConstruct %matNxM %c0 %c1 %c2 %c3
+
+    const TType &type          = node->getType();
+    const TType &parameterType = (*node->getSequence())[0]->getAsTyped()->getType();
+
+    // TODO: handle casting.  http://anglebug.com/4889.
+
+    ASSERT(parameters.size() == 1);
+
+    spirv::IdRefList columnIds;
+
+    SpirvType columnType            = mBuilder.getSpirvType(type, EbsUnspecified);
+    columnType.secondarySize        = 1;
+    const spirv::IdRef columnTypeId = mBuilder.getSpirvTypeData(columnType, "").id;
+
+    if (parameterType.getCols() >= type.getCols() && parameterType.getRows() >= type.getRows())
+    {
+        // If the parameter is a larger matrix than the constructor type, extract the columns
+        // directly and potentially swizzle them.
+        SpirvType paramColumnType            = mBuilder.getSpirvType(parameterType, EbsUnspecified);
+        paramColumnType.secondarySize        = 1;
+        const spirv::IdRef paramColumnTypeId = mBuilder.getSpirvTypeData(paramColumnType, "").id;
+
+        const bool needsSwizzle           = parameterType.getRows() > type.getRows();
+        spirv::LiteralIntegerList swizzle = {spirv::LiteralInteger(0), spirv::LiteralInteger(1),
+                                             spirv::LiteralInteger(2), spirv::LiteralInteger(3)};
+        swizzle.resize(type.getRows());
+
+        for (int columnIndex = 0; columnIndex < type.getCols(); ++columnIndex)
+        {
+            // Extract the column.
+            spirv::IdRef parameterColumnId = mBuilder.getNewId();
+            spirv::WriteCompositeExtract(mBuilder.getSpirvFunctions(), paramColumnTypeId,
+                                         parameterColumnId, parameters[0].id,
+                                         {spirv::LiteralInteger(columnIndex)});
+
+            // If the column has too many components, select the appropriate number of components.
+            spirv::IdRef constructorColumnId = parameterColumnId;
+            if (needsSwizzle)
+            {
+                constructorColumnId = mBuilder.getNewId();
+                spirv::WriteVectorShuffle(mBuilder.getSpirvFunctions(), columnTypeId,
+                                          constructorColumnId, parameterColumnId, parameterColumnId,
+                                          swizzle);
+            }
+
+            columnIds.push_back(constructorColumnId);
+        }
+    }
+    else
+    {
+        // Otherwise create an identity matrix and fill in the components that can be taken from the
+        // given parameter.
+        SpirvType paramComponentType     = mBuilder.getSpirvType(parameterType, EbsUnspecified);
+        paramComponentType.primarySize   = 1;
+        paramComponentType.secondarySize = 1;
+        const spirv::IdRef paramComponentTypeId =
+            mBuilder.getSpirvTypeData(paramComponentType, "").id;
+
+        for (int columnIndex = 0; columnIndex < type.getCols(); ++columnIndex)
+        {
+            spirv::IdRefList componentIds;
+
+            for (int componentIndex = 0; componentIndex < type.getRows(); ++componentIndex)
+            {
+                // Take the component from the constructor parameter if possible.
+                spirv::IdRef componentId;
+                if (componentIndex < parameterType.getRows())
+                {
+                    componentId = mBuilder.getNewId();
+                    spirv::WriteCompositeExtract(mBuilder.getSpirvFunctions(), paramComponentTypeId,
+                                                 componentId, parameters[0].id,
+                                                 {spirv::LiteralInteger(columnIndex),
+                                                  spirv::LiteralInteger(componentIndex)});
+                }
+                else
+                {
+                    const bool isOnDiagonal = columnIndex == componentIndex;
+                    switch (type.getBasicType())
+                    {
+                        case EbtFloat:
+                            componentId = mBuilder.getFloatConstant(isOnDiagonal ? 0.0f : 1.0f);
+                            break;
+                        case EbtInt:
+                            componentId = mBuilder.getIntConstant(isOnDiagonal ? 0 : 1);
+                            break;
+                        case EbtUInt:
+                            componentId = mBuilder.getUintConstant(isOnDiagonal ? 0 : 1);
+                            break;
+                        case EbtBool:
+                            componentId = mBuilder.getBoolConstant(isOnDiagonal);
+                            break;
+                        default:
+                            UNREACHABLE();
+                    }
+                }
+
+                componentIds.push_back(componentId);
+            }
+
+            // Create the column vector.
+            columnIds.push_back(mBuilder.getNewId());
+            spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), columnTypeId,
+                                           columnIds.back(), componentIds);
+        }
+    }
+
+    const spirv::IdRef result = mBuilder.getNewId();
+    spirv::WriteCompositeConstruct(mBuilder.getSpirvFunctions(), typeId, result, columnIds);
+    return result;
+}
+
+void OutputSPIRVTraverser::extractComponents(TIntermAggregate *node,
+                                             size_t componentCount,
+                                             const std::vector<SpirvIdOrLiteral> &parameters,
+                                             spirv::IdRefList *extractedComponentsOut)
+{
+    // A helper function that takes the list of parameters passed to a constructor (which may have
+    // more components than necessary) and extracts the first componentCount components.
+    const TIntermSequence &arguments = *node->getSequence();
+
+    // TODO: handle casting.  http://anglebug.com/4889.
+
+    ASSERT(arguments.size() == parameters.size());
+
+    for (size_t argumentIndex = 0;
+         argumentIndex < arguments.size() && extractedComponentsOut->size() < componentCount;
+         ++argumentIndex)
+    {
+        const TType &argumentType      = arguments[argumentIndex]->getAsTyped()->getType();
+        const spirv::IdRef parameterId = parameters[argumentIndex].id;
+
+        if (argumentType.isScalar())
+        {
+            // For scalar parameters, there's nothing to do.
+            extractedComponentsOut->push_back(parameterId);
+            continue;
+        }
+        if (argumentType.isVector())
+        {
+            SpirvType componentType   = mBuilder.getSpirvType(argumentType, EbsUnspecified);
+            componentType.primarySize = 1;
+            const spirv::IdRef componentTypeId = mBuilder.getSpirvTypeData(componentType, "").id;
+
+            // For vector parameters, take components out of the vector one by one.
+            for (int componentIndex = 0; componentIndex < argumentType.getNominalSize() &&
+                                         extractedComponentsOut->size() < componentCount;
+                 ++componentIndex)
+            {
+                const spirv::IdRef componentId = mBuilder.getNewId();
+                spirv::WriteCompositeExtract(mBuilder.getSpirvFunctions(), componentTypeId,
+                                             componentId, parameterId,
+                                             {spirv::LiteralInteger(componentIndex)});
+
+                extractedComponentsOut->push_back(componentId);
+            }
+            continue;
+        }
+
+        ASSERT(argumentType.isMatrix());
+
+        SpirvType componentType            = mBuilder.getSpirvType(argumentType, EbsUnspecified);
+        componentType.primarySize          = 1;
+        componentType.secondarySize        = 1;
+        const spirv::IdRef componentTypeId = mBuilder.getSpirvTypeData(componentType, "").id;
+
+        // For matrix parameters, take components out of the matrix one by one in column-major
+        // order.
+        for (int columnIndex = 0; columnIndex < argumentType.getCols() &&
+                                  extractedComponentsOut->size() < componentCount;
+             ++columnIndex)
+        {
+            for (int componentIndex = 0; componentIndex < argumentType.getRows() &&
+                                         extractedComponentsOut->size() < componentCount;
+                 ++componentIndex)
+            {
+                const spirv::IdRef componentId = mBuilder.getNewId();
+                spirv::WriteCompositeExtract(
+                    mBuilder.getSpirvFunctions(), componentTypeId, componentId, parameterId,
+                    {spirv::LiteralInteger(columnIndex), spirv::LiteralInteger(componentIndex)});
+
+                extractedComponentsOut->push_back(componentId);
+            }
+        }
+    }
+}
+
 void OutputSPIRVTraverser::visitSymbol(TIntermSymbol *node)
 {
+    // Constants are expected to be folded.
+    ASSERT(!node->hasConstantValue());
+
     mNodeData.emplace_back();
 
     // The symbol is either:
@@ -670,8 +1209,51 @@ void OutputSPIRVTraverser::visitSymbol(TIntermSymbol *node)
 
 void OutputSPIRVTraverser::visitConstantUnion(TIntermConstantUnion *node)
 {
-    // TODO: http://anglebug.com/4889
-    UNIMPLEMENTED();
+    mNodeData.emplace_back();
+
+    const TType &type = node->getType();
+
+    // Find out the expected type for this constant, so it can be cast right away and not need an
+    // instruction to do that.
+    TIntermNode *parent     = getParentNode();
+    const size_t childIndex = getParentChildIndex();
+
+    TBasicType expectedBasicType = type.getBasicType();
+    if (parent->getAsAggregate())
+    {
+        TIntermAggregate *parentAggregate = parent->getAsAggregate();
+
+        // There are three possibilities:
+        //
+        // - It's a struct constructor: The basic type must match that of the corresponding field of
+        //   the struct.
+        // - It's a non struct constructor: The basic type must match that of the the type being
+        //   constructed.
+        // - It's a function call: The basic type must match that of the corresponding argument.
+        if (parentAggregate->isConstructor())
+        {
+            const TStructure *structure = parentAggregate->getType().getStruct();
+            if (structure != nullptr)
+            {
+                expectedBasicType = structure->fields()[childIndex]->type()->getBasicType();
+            }
+            else
+            {
+                expectedBasicType = parentAggregate->getType().getBasicType();
+            }
+        }
+        else
+        {
+            expectedBasicType =
+                parentAggregate->getFunction()->getParam(childIndex)->getType().getBasicType();
+        }
+    }
+    // TODO: other node types such as binary, ternary etc.  http://anglebug.com/4889
+
+    const spirv::IdRef typeId  = mBuilder.getTypeData(type, EbsUnspecified).id;
+    const spirv::IdRef constId = createConstant(type, expectedBasicType, node->getConstantValue());
+
+    nodeDataInitRValue(&mNodeData.back(), constId, typeId);
 }
 
 bool OutputSPIRVTraverser::visitSwizzle(Visit visit, TIntermSwizzle *node)
@@ -684,6 +1266,9 @@ bool OutputSPIRVTraverser::visitSwizzle(Visit visit, TIntermSwizzle *node)
 
 bool OutputSPIRVTraverser::visitBinary(Visit visit, TIntermBinary *node)
 {
+    // Constants are expected to be folded.
+    ASSERT(!node->hasConstantValue());
+
     if (visit == PreVisit)
     {
         // Don't add an entry to the stack.  The left child will create one, which we won't pop.
@@ -696,7 +1281,7 @@ bool OutputSPIRVTraverser::visitBinary(Visit visit, TIntermBinary *node)
         ASSERT(mNodeData.size() >= 1);
 
         // As an optimization, if the index is EOpIndexDirect*, take the constant index directly and
-        // add it to the access chain as constant.
+        // add it to the access chain as literal.
         switch (node->getOp())
         {
             case EOpIndexDirect:
@@ -822,6 +1407,13 @@ bool OutputSPIRVTraverser::visitBlock(Visit visit, TIntermBlock *node)
         mNodeData.pop_back();
     }
 
+    if (visit != PostVisit)
+    {
+        return true;
+    }
+
+    mNodeData.pop_back();
+
     return true;
 }
 
@@ -901,6 +1493,41 @@ void OutputSPIRVTraverser::visitFunctionPrototype(TIntermFunctionPrototype *node
 
 bool OutputSPIRVTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
+    // Constants are expected to be folded.
+    ASSERT(!node->hasConstantValue());
+
+    if (visit == PreVisit)
+    {
+        mNodeData.emplace_back();
+        return true;
+    }
+
+    // Take each constructor/function parameter that is visited, evaluate it as rvalue and
+    // accumulate it in the list of parameters.
+    ASSERT(mNodeData.size() >= 2);
+
+    const spirv::IdRef paramValue = accessChainLoad(&mNodeData.back());
+    mNodeData.pop_back();
+
+    mNodeData.back().idList.push_back(paramValue);
+
+    if (visit == InVisit)
+    {
+        return true;
+    }
+
+    // Expect to have accumulated as many parameters as the node requires.
+    ASSERT(mNodeData.back().idList.size() == node->getChildCount());
+
+    if (node->isConstructor())
+    {
+        // Construct a value out of the accumulated parameters.
+        const spirv::IdRef typeId = mBuilder.getTypeData(node->getType(), EbsUnspecified).id;
+        const spirv::IdRef result = createConstructor(node, typeId, mNodeData.back().idList);
+        nodeDataInitRValue(&mNodeData.back(), result, typeId);
+        return true;
+    }
+
     // TODO: http://anglebug.com/4889
     UNIMPLEMENTED();
 
