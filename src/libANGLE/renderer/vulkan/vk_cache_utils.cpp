@@ -24,6 +24,11 @@
 
 #include <type_traits>
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 namespace vk
@@ -1924,6 +1929,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
 
     // 0-sized viewports are invalid in Vulkan.  We always use a scissor that at least matches the
     // requested viewport, so it's safe to adjust the viewport size here.
+    INFO("GraphicsPipelineDesc(%p)::%s():\t mViewport(%f, %f, %f, %f)", this, __FUNCTION__,
+         mViewport.x, mViewport.y, mViewport.width, mViewport.height);
     VkViewport viewport = mViewport;
     if (viewport.width == 0)
     {
@@ -1953,6 +1960,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         scissor.extent.width    = mScissor.width;
         scissor.extent.height   = mScissor.height;
     }
+    INFO("GraphicsPipelineDesc(%p)::%s():\t mScissor(%d, %d, %d, %d)", this, __FUNCTION__,
+         mScissor.x, mScissor.y, mScissor.width, mScissor.height);
 
     const PackedRasterizationAndMultisampleStateInfo &rasterAndMS =
         mRasterizationAndMultisampleStateInfo;
@@ -3675,12 +3684,23 @@ angle::Result GraphicsPipelineCache::insertPipeline(
             activeAttribLocationsMask, programAttribsTypeMask, vertexModule, fragmentModule,
             geometryModule, tessControlModule, tessEvaluationModule, specConsts, &newPipeline));
     }
+    INFO("GraphicsPipelineCache(%p)::%s():\t&desc=%p, newPipeline=%p", this, __FUNCTION__, &desc,
+         &newPipeline);
 
     // The Serial will be updated outside of this query.
     auto insertedItem = mPayload.emplace(desc, std::move(newPipeline));
     *descPtrOut       = &insertedItem.first->first;
     *pipelineOut      = &insertedItem.first->second;
 
+    INFO(
+        "GraphicsPipelineCache(%p)::%s():\t&insertedItem.first->first=%p, "
+        "&insertedItem.first->second=%p",
+        this, __FUNCTION__, &insertedItem.first->first, &insertedItem.first->second);
+    INFO("GraphicsPipelineCache(%p)::%s():\t&desc=%p, *descPtrOut=%p, *pipelineOut=%p", this,
+         __FUNCTION__, &desc, *descPtrOut, *pipelineOut);
+    INFO("GraphicsPipelineCache(%p)::%s():\t desc.viewport = (%f, %f, %f, %f)", this, __FUNCTION__,
+         desc.getViewport().x, desc.getViewport().y, desc.getViewport().width,
+         desc.getViewport().height);
     return angle::Result::Continue;
 }
 
