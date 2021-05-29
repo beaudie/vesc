@@ -7,7 +7,9 @@
 
 #include "libANGLE/CLPlatform.h"
 
-#include <cstdint>
+#include "libANGLE/CLContext.h"
+#include "libANGLE/CLDevice.h"
+
 #include <cstring>
 
 namespace cl
@@ -37,7 +39,7 @@ Context::PropArray ParseContextProperties(const cl_context_properties *propertie
             switch (*propIt++)
             {
                 case CL_CONTEXT_PLATFORM:
-                    platform = reinterpret_cast<Platform *>(*propIt++);
+                    platform = &reinterpret_cast<cl_platform_id>(*propIt++)->cast<Platform>();
                     break;
                 case CL_CONTEXT_INTEROP_USER_SYNC:
                     userSync = *propIt++ != CL_FALSE;
@@ -58,10 +60,7 @@ Context::PropArray ParseContextProperties(const cl_context_properties *propertie
 
 }  // namespace
 
-Platform::~Platform()
-{
-    removeRef();
-}
+Platform::~Platform() = default;
 
 cl_int Platform::getInfo(PlatformInfo name,
                          size_t valueSize,
@@ -166,12 +165,36 @@ cl_int Platform::getDeviceIDs(DeviceType deviceType,
     return CL_SUCCESS;
 }
 
-void Platform::CreatePlatform(const cl_icd_dispatch &dispatch, const CreateImplFunc &createImplFunc)
+void Platform::Initialize(const cl_icd_dispatch &dispatch,
+                          rx::CLPlatformImpl::CreateFuncs &&createFuncs)
 {
-    PlatformPtr platform(new Platform(dispatch, createImplFunc));
-    if (platform->mInfo.isValid() && !platform->mDevices.empty())
+    PlatformPtrs &platforms = GetPointers();
+    ASSERT(_cl_platform_id::sDispatch == nullptr && platforms.empty());
+    if (_cl_platform_id::sDispatch != nullptr || !platforms.empty())
     {
-        GetList().emplace_back(std::move(platform));
+        ERR() << "Already initialized";
+        return;
+    }
+
+    _cl_platform_id::sDispatch   = &dispatch;
+    _cl_device_id::sDispatch     = &dispatch;
+    _cl_context::sDispatch       = &dispatch;
+    _cl_command_queue::sDispatch = &dispatch;
+    _cl_mem::sDispatch           = &dispatch;
+    _cl_program::sDispatch       = &dispatch;
+    _cl_kernel::sDispatch        = &dispatch;
+    _cl_event::sDispatch         = &dispatch;
+    _cl_sampler::sDispatch       = &dispatch;
+
+    platforms.reserve(createFuncs.size());
+    while (!createFuncs.empty())
+    {
+        platforms.emplace_back(new Platform(createFuncs.front()));
+        if (!platforms.back()->mInfo.isValid() || platforms.back()->mDevices.empty())
+        {
+            platforms.pop_back();
+        }
+        createFuncs.pop_front();
     }
 }
 
@@ -179,16 +202,16 @@ cl_int Platform::GetPlatformIDs(cl_uint numEntries,
                                 cl_platform_id *platforms,
                                 cl_uint *numPlatforms)
 {
-    const PtrList &platformList = GetPlatforms();
+    const PlatformPtrs &availPlatforms = GetPlatforms();
     if (numPlatforms != nullptr)
     {
-        *numPlatforms = static_cast<cl_uint>(platformList.size());
+        *numPlatforms = static_cast<cl_uint>(availPlatforms.size());
     }
     if (platforms != nullptr)
     {
         cl_uint entry   = 0u;
-        auto platformIt = platformList.cbegin();
-        while (entry < numEntries && platformIt != platformList.cend())
+        auto platformIt = availPlatforms.cbegin();
+        while (entry < numEntries && platformIt != availPlatforms.cend())
         {
             platforms[entry++] = (*platformIt++).get();
         }
@@ -207,15 +230,14 @@ cl_context Platform::CreateContext(const cl_context_properties *properties,
     bool userSync                = false;
     Context::PropArray propArray = ParseContextProperties(properties, platform, userSync);
     ASSERT(platform != nullptr);
-    DeviceRefs refDevices;
+    DevicePtrs devs;
+    devs.reserve(numDevices);
     while (numDevices-- != 0u)
     {
-        refDevices.emplace_back(static_cast<Device *>(*devices++));
+        devs.emplace_back(&(*devices++)->cast<Device>());
     }
-    return platform->createContext(
-        new Context(*platform, std::move(propArray), std::move(refDevices), notify, userData,
-                    userSync, errorCode),
-        errorCode);
+    return Object::Create<Context>(errorCode, *platform, std::move(propArray), std::move(devs),
+                                   notify, userData, userSync);
 }
 
 cl_context Platform::CreateContextFromType(const cl_context_properties *properties,
@@ -228,44 +250,31 @@ cl_context Platform::CreateContextFromType(const cl_context_properties *properti
     bool userSync                = false;
     Context::PropArray propArray = ParseContextProperties(properties, platform, userSync);
     ASSERT(platform != nullptr);
-    return platform->createContext(new Context(*platform, std::move(propArray), deviceType, notify,
-                                               userData, userSync, errorCode),
-                                   errorCode);
+    return Object::Create<Context>(errorCode, *platform, std::move(propArray), deviceType, notify,
+                                   userData, userSync);
 }
 
-Platform::Platform(const cl_icd_dispatch &dispatch, const CreateImplFunc &createImplFunc)
-    : _cl_platform_id(dispatch),
-      mImpl(createImplFunc(*this)),
+Platform::Platform(const rx::CLPlatformImpl::CreateFunc &createFunc)
+    : mImpl(createFunc(*this)),
       mInfo(mImpl->createInfo()),
-      mDevices(mImpl->createDevices(*this))
+      mDevices(createDevices(mImpl->createDevices()))
 {}
 
-cl_context Platform::createContext(Context *context, cl_int errorCode)
+DevicePtrs Platform::createDevices(rx::CLDeviceImpl::CreateDatas &&createDatas)
 {
-    mContexts.emplace_back(context);
-    if (errorCode != CL_SUCCESS)
+    DevicePtrs devices;
+    devices.reserve(createDatas.size());
+    while (!createDatas.empty())
     {
-        mContexts.back()->release();
-        return nullptr;
+        devices.emplace_back(
+            new Device(*this, nullptr, createDatas.front().first, createDatas.front().second));
+        if (!devices.back()->mInfo.isValid())
+        {
+            devices.pop_back();
+        }
+        createDatas.pop_front();
     }
-    return mContexts.back().get();
-}
-
-void Platform::destroyContext(Context *context)
-{
-    auto contextIt = mContexts.cbegin();
-    while (contextIt != mContexts.cend() && contextIt->get() != context)
-    {
-        ++contextIt;
-    }
-    if (contextIt != mContexts.cend())
-    {
-        mContexts.erase(contextIt);
-    }
-    else
-    {
-        ERR() << "Context not found";
-    }
+    return devices;
 }
 
 constexpr char Platform::kVendor[];
