@@ -2114,6 +2114,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // http://crbug.com/1181068 and http://crbug.com/783979
     ANGLE_FEATURE_CONDITION(features, flushOnFramebufferChange,
                             IsApple() && Has9thGenIntelGPU(systemInfo));
+
+    // http://crbug.com/1181068
+    ANGLE_FEATURE_CONDITION(features, uploadTextureDataInChunks, true);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

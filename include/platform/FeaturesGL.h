@@ -549,6 +549,13 @@ struct FeaturesGL : FeatureSetBase
                                         "Switching framebuffers without a flush can lead to "
                                         "crashes on Intel 9th Generation GPU Macs.",
                                         &members, "http://crbug.com/1181068"};
+
+    // Mac OpenGL drivers often hang when calling glTexSubImage with >240kb of data. Instead, upload
+    // the data in <240kb chunks.
+    Feature uploadTextureDataInChunks = {
+        "chunked_texture_upload", FeatureCategory::OpenGLWorkarounds,
+        "Upload texture data in <240kb chunks to work around Mac driver hangs and crashes.",
+        &members, "http://crbug.com/1181068"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
