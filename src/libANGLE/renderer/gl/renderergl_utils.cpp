@@ -2159,6 +2159,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
                             isAdreno4xxOnAndroidLessThan51 || isAdreno4xxOnAndroid70 ||
                                 isAdreno5xxOnAndroidLessThan70 || isAdreno5xxOnAndroid71 ||
                                 isLinuxVivante);
+
+    // http://crbug.com/1181068
+    ANGLE_FEATURE_CONDITION(features, uploadTextureDataInChunks, true);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
