@@ -92,11 +92,6 @@ struct AccessChain
     TLayoutBlockStorage baseBlockStorage;
 };
 
-bool IsAccessChainRValue(const AccessChain &accessChain)
-{
-    return accessChain.storageClass == spv::StorageClassMax;
-}
-
 // As each node is traversed, it produces data.  When visiting back the parent, this data is used to
 // complete the data of the parent.  For example, the children of a function call (i.e. the
 // arguments) each produce a SPIR-V id corresponding to the result of their expression.  The
@@ -115,6 +110,17 @@ struct NodeData
     // For constructing access chains.
     AccessChain accessChain;
 };
+
+bool IsAccessChainRValue(const AccessChain &accessChain)
+{
+    return accessChain.storageClass == spv::StorageClassMax;
+}
+
+bool IsAccessChainUnindexedLValue(const NodeData &data)
+{
+    return !IsAccessChainRValue(data.accessChain) && data.idList.empty() &&
+           data.accessChain.swizzles.empty() && !data.accessChain.dynamicComponent.valid();
+}
 
 // A traverser that generates SPIR-V as it walks the AST.
 class OutputSPIRVTraverser : public TIntermTraverser
@@ -147,6 +153,10 @@ class OutputSPIRVTraverser : public TIntermTraverser
     void visitPreprocessorDirective(TIntermPreprocessorDirective *node) override;
 
   private:
+    spirv::IdRef getSymbolIdAndStorageClass(const TSymbol *symbol,
+                                            const TType &type,
+                                            spv::StorageClass *storageClass);
+
     // Access chain handling.
     void accessChainPush(NodeData *data, spirv::IdRef index, spirv::IdRef typeId) const;
     void accessChainPushLiteral(NodeData *data,
@@ -216,6 +226,7 @@ class OutputSPIRVTraverser : public TIntermTraverser
     // A map of TSymbol to its SPIR-V id.  This could be a:
     //
     // - TVariable, or
+    // - TFunction, or
     // - TInterfaceBlock: because TIntermSymbols referencing a field of an unnamed interface block
     //   don't reference the TVariable that defines the struct, but the TInterfaceBlock itself.
     angle::HashMap<const TSymbol *, spirv::IdRef> mSymbolIdMap;
@@ -229,14 +240,16 @@ spv::StorageClass GetStorageClass(const TType &type)
         return spv::StorageClassUniformConstant;
     }
 
+    const TQualifier qualifier = type.getQualifier();
+
     // Input varying and IO blocks have the Input storage class
-    if (IsShaderIn(type.getQualifier()))
+    if (IsShaderIn(qualifier))
     {
         return spv::StorageClassInput;
     }
 
     // Output varying and IO blocks have the Input storage class
-    if (IsShaderOut(type.getQualifier()))
+    if (IsShaderOut(qualifier))
     {
         return spv::StorageClassOutput;
     }
@@ -245,25 +258,38 @@ spv::StorageClass GetStorageClass(const TType &type)
     if (type.isInterfaceBlock())
     {
         // I/O blocks must have already been classified as input or output above.
-        ASSERT(!IsShaderIoBlock(type.getQualifier()));
+        ASSERT(!IsShaderIoBlock(qualifier));
         return spv::StorageClassUniform;
     }
 
-    // Compute shader shared memory has the Workgroup storage class
-    if (type.getQualifier() == EvqShared)
+    switch (qualifier)
     {
-        return spv::StorageClassWorkgroup;
+        case EvqShared:
+            // Compute shader shared memory has the Workgroup storage class
+            return spv::StorageClassWorkgroup;
+
+        case EvqGlobal:
+            // Global variables have the Private class.
+            return spv::StorageClassPrivate;
+
+        case EvqTemporary:
+        case EvqIn:
+        case EvqOut:
+        case EvqInOut:
+            // Function-local variables have the Function class
+            return spv::StorageClassFunction;
+
+        case EvqVertexID:
+        case EvqInstanceID:
+            return spv::StorageClassInput;
+
+        default:
+            // TODO: http://anglebug.com/4889
+            UNIMPLEMENTED();
     }
 
-    // All other variables are either Private or Function, based on whether they are global or
-    // function-local.
-    if (type.getQualifier() == EvqGlobal)
-    {
-        return spv::StorageClassPrivate;
-    }
-
-    ASSERT(type.getQualifier() == EvqTemporary);
-    return spv::StorageClassFunction;
+    UNREACHABLE();
+    return spv::StorageClassPrivate;
 }
 
 OutputSPIRVTraverser::OutputSPIRVTraverser(TCompiler *compiler, ShCompileOptions compileOptions)
@@ -278,6 +304,50 @@ OutputSPIRVTraverser::OutputSPIRVTraverser(TCompiler *compiler, ShCompileOptions
 OutputSPIRVTraverser::~OutputSPIRVTraverser()
 {
     ASSERT(mNodeData.empty());
+}
+
+spirv::IdRef OutputSPIRVTraverser::getSymbolIdAndStorageClass(const TSymbol *symbol,
+                                                              const TType &type,
+                                                              spv::StorageClass *storageClass)
+{
+    *storageClass = GetStorageClass(type);
+    auto iter     = mSymbolIdMap.find(symbol);
+    if (iter != mSymbolIdMap.end())
+    {
+        return iter->second;
+    }
+
+    // This must be an implicitly defined variable, define it now.
+    const char *name               = nullptr;
+    spv::BuiltIn builtInDecoration = spv::BuiltInMax;
+    SpirvType spirvType;
+
+    switch (type.getQualifier())
+    {
+        case EvqVertexID:
+            name              = "gl_VertexIndex";
+            builtInDecoration = spv::BuiltInVertexIndex;
+            spirvType.type    = EbtInt;
+            break;
+        case EvqInstanceID:
+            name              = "gl_InstanceIndex";
+            builtInDecoration = spv::BuiltInInstanceIndex;
+            spirvType.type    = EbtInt;
+            break;
+        default:
+            // TODO: more built-ins.  http://anglebug.com/4889
+            UNIMPLEMENTED();
+    }
+
+    const spirv::IdRef typeId = mBuilder.getSpirvTypeData(spirvType, "").id;
+    const spirv::IdRef varId  = mBuilder.declareVariable(typeId, *storageClass, nullptr, name);
+
+    mBuilder.addEntryPointInterfaceVariableId(varId);
+    spirv::WriteDecorate(mBuilder.getSpirvDecorations(), varId, spv::DecorationBuiltIn,
+                         {spirv::LiteralInteger(builtInDecoration)});
+
+    mSymbolIdMap.insert({symbol, varId});
+    return varId;
 }
 
 void OutputSPIRVTraverser::nodeDataInitLValue(NodeData *data,
@@ -1192,10 +1262,21 @@ void OutputSPIRVTraverser::visitSymbol(TIntermSymbol *node)
         }
     }
 
-    spirv::IdRef typeId = mBuilder.getTypeData(type, blockStorage).id;
+    const spirv::IdRef typeId = mBuilder.getTypeData(type, blockStorage).id;
 
-    nodeDataInitLValue(&mNodeData.back(), mSymbolIdMap[symbol], typeId, GetStorageClass(type),
-                       blockStorage);
+    // If the symbol is a const variable, such as a const function parameter, create an rvalue.
+    if (type.getQualifier() == EvqConst)
+    {
+        ASSERT(mSymbolIdMap.count(symbol) > 0);
+        nodeDataInitRValue(&mNodeData.back(), mSymbolIdMap[symbol], typeId);
+        return;
+    }
+
+    // Otherwise create an lvalue.
+    spv::StorageClass storageClass;
+    const spirv::IdRef symbolId = getSymbolIdAndStorageClass(symbol, type, &storageClass);
+
+    nodeDataInitLValue(&mNodeData.back(), symbolId, typeId, storageClass, blockStorage);
 
     // If a field of a nameless interface block, create an access chain.
     if (interfaceBlock && !type.isInterfaceBlock())
@@ -1335,19 +1416,23 @@ bool OutputSPIRVTraverser::visitBinary(Visit visit, TIntermBinary *node)
     ASSERT(mNodeData.size() >= 2);
 
     // Load the result of the right node right away.
-    const spirv::IdRef rightTypeId = getAccessChainTypeId(&mNodeData.back());
-    const spirv::IdRef rightValue  = accessChainLoad(&mNodeData.back());
+    spirv::IdRef typeId     = getAccessChainTypeId(&mNodeData.back());
+    spirv::IdRef rightValue = accessChainLoad(&mNodeData.back());
     mNodeData.pop_back();
 
     // For EOpIndex* operations, push the right value as an index to the left value's access chain.
     // For the other operations, evaluate the expression.
     NodeData &left = mNodeData.back();
-    spirv::IdRef typeId;
 
     const TBasicType leftBasicType = node->getLeft()->getType().getBasicType();
     const bool isFloat             = leftBasicType == EbtFloat || leftBasicType == EbtDouble;
     const bool isUnsigned          = leftBasicType == EbtUInt;
     const bool isBool              = leftBasicType == EbtBool;
+
+    // Whether the operands need to be swapped in the instruction
+    bool swapOperands = false;
+    // Whether the scalar operand needs to be extended to match the other operand which is a vector.
+    bool extendScalarToVector = true;
 
     using WriteBinaryOp =
         void (*)(spirv::Blob * blob, spirv::IdResultType idResultType, spirv::IdResult idResult,
@@ -1377,7 +1462,74 @@ bool OutputSPIRVTraverser::visitBinary(Visit visit, TIntermBinary *node)
             // Store into the access chain.  Since the result of the (a = b) expression is b, change
             // the access chain to an unindexed rvalue which is |rightValue|.
             accessChainStore(&left, rightValue);
-            nodeDataInitRValue(&left, rightValue, rightTypeId);
+            nodeDataInitRValue(&left, rightValue, typeId);
+            return true;
+
+        case EOpAdd:
+        case EOpAddAssign:
+            if (isFloat)
+                writeBinaryOp = spirv::WriteFAdd;
+            else
+                writeBinaryOp = spirv::WriteIAdd;
+            break;
+        case EOpSub:
+        case EOpSubAssign:
+            if (isFloat)
+                writeBinaryOp = spirv::WriteFSub;
+            else
+                writeBinaryOp = spirv::WriteISub;
+            break;
+        case EOpMul:
+        case EOpMulAssign:
+            if (isFloat)
+                writeBinaryOp = spirv::WriteFMul;
+            else
+                writeBinaryOp = spirv::WriteIMul;
+            break;
+        case EOpDiv:
+        case EOpDivAssign:
+            if (isFloat)
+                writeBinaryOp = spirv::WriteFDiv;
+            else if (isUnsigned)
+                writeBinaryOp = spirv::WriteUDiv;
+            else
+                writeBinaryOp = spirv::WriteSDiv;
+            break;
+        case EOpIMod:
+        case EOpIModAssign:
+            if (isFloat)
+                writeBinaryOp = spirv::WriteFMod;
+            else if (isUnsigned)
+                writeBinaryOp = spirv::WriteUMod;
+            else
+                writeBinaryOp = spirv::WriteSMod;
+            break;
+
+        case EOpVectorTimesScalar:
+        case EOpVectorTimesScalarAssign:
+            if (isFloat)
+            {
+                writeBinaryOp        = spirv::WriteVectorTimesScalar;
+                swapOperands         = node->getRight()->getType().isVector();
+                extendScalarToVector = false;
+            }
+            else
+                writeBinaryOp = spirv::WriteIMul;
+            break;
+        case EOpVectorTimesMatrix:
+        case EOpVectorTimesMatrixAssign:
+            writeBinaryOp = spirv::WriteVectorTimesMatrix;
+            break;
+        case EOpMatrixTimesVector:
+            writeBinaryOp = spirv::WriteMatrixTimesVector;
+            break;
+        case EOpMatrixTimesScalar:
+        case EOpMatrixTimesScalarAssign:
+            writeBinaryOp = spirv::WriteMatrixTimesScalar;
+            break;
+        case EOpMatrixTimesMatrix:
+        case EOpMatrixTimesMatrixAssign:
+            writeBinaryOp = spirv::WriteMatrixTimesMatrix;
             break;
 
         case EOpEqual:
@@ -1442,18 +1594,47 @@ bool OutputSPIRVTraverser::visitBinary(Visit visit, TIntermBinary *node)
     if (writeBinaryOp)
     {
         // Load the left value.
-        const spirv::IdRef leftValue = accessChainLoad(&left);
+        spirv::IdRef leftValue = accessChainLoad(&left);
 
-        ASSERT(!typeId.valid());
         typeId = mBuilder.getTypeData(node->getType(), EbsUnspecified).id;
+
+        // For vector<op>scalar operations that require it, turn the scalar into a vector of the
+        // same size.
+        if (extendScalarToVector)
+        {
+            const TType &leftType  = node->getLeft()->getType();
+            const TType &rightType = node->getRight()->getType();
+
+            if (leftType.isScalar() && rightType.isVector())
+            {
+                leftValue = createConstructorVectorFromScalar(rightType, typeId, {{leftValue}});
+            }
+            else if (rightType.isScalar() && leftType.isVector())
+            {
+                rightValue = createConstructorVectorFromScalar(leftType, typeId, {{rightValue}});
+            }
+        }
+
+        if (swapOperands)
+        {
+            std::swap(leftValue, rightValue);
+        }
 
         // Write the operation that combines the left and right values.
         spirv::IdRef result = mBuilder.getNewId();
         writeBinaryOp(mBuilder.getSpirvCurrentFunctionBlock(), typeId, result, leftValue,
                       rightValue);
 
+        // If it's an assignment, store the calculated value.
+        if (IsAssignment(node->getOp()))
+        {
+            accessChainStore(&left, result);
+        }
+
         // Replace the access chain with an rvalue that's the result.
         nodeDataInitRValue(&left, result, typeId);
+
+        // TODO: Handle NoContraction decoration.  http://anglebug.com/4889
     }
 
     return true;
@@ -1601,8 +1782,18 @@ bool OutputSPIRVTraverser::visitFunctionDefinition(Visit visit, TIntermFunctionD
         spirv::IdRefList paramTypeIds;
         for (size_t paramIndex = 0; paramIndex < function->getParamCount(); ++paramIndex)
         {
-            paramTypeIds.push_back(
-                mBuilder.getTypeData(function->getParam(paramIndex)->getType(), EbsUnspecified).id);
+            const TType &paramType = function->getParam(paramIndex)->getType();
+
+            spirv::IdRef paramId = mBuilder.getTypeData(paramType, EbsUnspecified).id;
+
+            // const function parameters are intermediate values, while the rest are "variables"
+            // with the Function storage class.
+            if (paramType.getQualifier() != EvqConst)
+            {
+                paramId = mBuilder.getTypePointerId(paramId, spv::StorageClassFunction);
+            }
+
+            paramTypeIds.push_back(paramId);
         }
 
         const spirv::IdRef functionTypeId = mBuilder.getFunctionTypeId(returnTypeId, paramTypeIds);
@@ -1618,8 +1809,10 @@ bool OutputSPIRVTraverser::visitFunctionDefinition(Visit visit, TIntermFunctionD
             spirv::WriteFunctionParameter(mBuilder.getSpirvFunctions(), paramTypeIds[paramIndex],
                                           paramId);
 
-            // TODO: Add to TVariable to variableId map so references to this variable can discover
-            // the ID.  http://anglebug.com/4889
+            // Remember the id of the variable for future look up.
+            const TVariable *paramVariable = function->getParam(paramIndex);
+            ASSERT(mSymbolIdMap.count(paramVariable) == 0);
+            mSymbolIdMap[paramVariable] = paramId;
         }
 
         // Remember the ID of main() for the sake of OpEntryPoint.
@@ -1628,7 +1821,11 @@ bool OutputSPIRVTraverser::visitFunctionDefinition(Visit visit, TIntermFunctionD
             mBuilder.setEntryPointId(functionId);
         }
 
-        mBuilder.startNewFunction();
+        mBuilder.startNewFunction(functionId, mBuilder.hashFunctionName(function).data());
+
+        // Remember the id of the function for future look up.
+        ASSERT(mSymbolIdMap.count(function) == 0);
+        mSymbolIdMap[function] = functionId;
 
         return true;
     }
@@ -1714,8 +1911,117 @@ bool OutputSPIRVTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
         return true;
     }
 
-    // TODO: http://anglebug.com/4889
-    UNIMPLEMENTED();
+    // Create a call to the function.
+    const TFunction *function = node->getFunction();
+    ASSERT(function);
+
+    ASSERT(mSymbolIdMap.count(function) > 0);
+    const spirv::IdRef functionId = mSymbolIdMap[function];
+
+    // Get the list of parameters passed to the function.  The function parameters can only be
+    // memory variables, or if the function argument is |const|, an rvalue.
+    //
+    // For in variables:
+    //
+    // - If the parameter is const, pass it directly as rvalue, otherwise
+    // - If the parameter is an unindexed lvalue, pass it directly, otherwise
+    // - Write it to a temp variable first and pass that.
+    //
+    // For out variables:
+    //
+    // - If the parameter is an unindexed lvalue, pass it directly, otherwise
+    // - Pass a temporary variable.  After the function call, copy that variable to the parameter.
+    //
+    // For inout variables:
+    //
+    // - If the parameter is an unindexed lvalue, pass it directly, otherwise
+    // - Write the parameter to a temp variable and pass that.  After the function call, copy that
+    //   variable back to the parameter.
+    //
+    // - For opaque uniforms, pass it directly as lvalue,
+    //
+    spirv::IdRefList parameters;
+    spirv::IdRefList tempVarIds(parameterCount);
+    spirv::IdRefList tempVarTypeIds(parameterCount);
+
+    for (size_t paramIndex = 0; paramIndex < parameterCount; ++paramIndex)
+    {
+        const TType &paramType           = function->getParam(paramIndex)->getType();
+        const TQualifier &paramQualifier = paramType.getQualifier();
+        NodeData &param = mNodeData[mNodeData.size() - parameterCount + paramIndex];
+
+        spirv::IdRef paramValue;
+
+        if (IsOpaqueType(paramType.getBasicType()) || paramQualifier == EvqConst ||
+            IsAccessChainUnindexedLValue(param))
+        {
+            // The following parameters are passed directly:
+            //
+            // - Opaque uniforms,
+            // - const parameters,
+            // - unindexed lvalues.
+            paramValue = accessChainLoad(&param);
+        }
+        else
+        {
+            ASSERT(paramQualifier == EvqIn || paramQualifier == EvqOut ||
+                   paramQualifier == EvqInOut);
+
+            // Need to create a temp variable and pass that.
+            tempVarTypeIds[paramIndex] = mBuilder.getTypeData(paramType, EbsUnspecified).id;
+            tempVarIds[paramIndex]     = mBuilder.declareVariable(
+                tempVarTypeIds[paramIndex], spv::StorageClassFunction, nullptr, "param");
+
+            // If it's an in or inpout parameter, the temp variable needs to be initialized with the
+            // value of the parameter first.
+            //
+            // TODO: handle mismatching types.  http://anglebug.com/6000
+            if (paramQualifier == EvqIn || paramQualifier == EvqInOut)
+            {
+                paramValue = accessChainLoad(&param);
+                spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), tempVarIds[paramIndex],
+                                  paramValue, nullptr);
+            }
+
+            paramValue = tempVarIds[paramIndex];
+        }
+
+        parameters.push_back(paramValue);
+    }
+
+    // Make the actual function call.
+    const spirv::IdRef result = mBuilder.getNewId();
+    spirv::WriteFunctionCall(mBuilder.getSpirvCurrentFunctionBlock(), typeId, result, functionId,
+                             parameters);
+
+    // Copy from the out and inout temp variables back to the original parameters.
+    for (size_t paramIndex = 0; paramIndex < parameterCount; ++paramIndex)
+    {
+        if (!tempVarIds[paramIndex].valid())
+        {
+            continue;
+        }
+
+        const TQualifier &paramQualifier = function->getParam(paramIndex)->getType().getQualifier();
+        NodeData &param = mNodeData[mNodeData.size() - parameterCount + paramIndex];
+
+        if (paramQualifier == EvqIn)
+        {
+            continue;
+        }
+
+        // Copy from the temp variable to the parameter.
+        //
+        // TODO: handle mismatching types.  http://anglebug.com/6000
+        NodeData tempVarData;
+        nodeDataInitLValue(&tempVarData, tempVarIds[paramIndex], tempVarTypeIds[paramIndex],
+                           spv::StorageClassFunction, EbsUnspecified);
+        const spirv::IdRef result = accessChainLoad(&tempVarData);
+        accessChainStore(&param, result);
+    }
+
+    // Pop the parameters.
+    mNodeData.resize(mNodeData.size() - parameterCount);
 
     return false;
 }
@@ -1814,8 +2120,52 @@ bool OutputSPIRVTraverser::visitLoop(Visit visit, TIntermLoop *node)
 
 bool OutputSPIRVTraverser::visitBranch(Visit visit, TIntermBranch *node)
 {
-    // TODO: http://anglebug.com/4889
-    UNIMPLEMENTED();
+    if (visit == PreVisit)
+    {
+        mNodeData.emplace_back();
+        return true;
+    }
+
+    // There is only ever one child at most.
+    ASSERT(visit != InVisit);
+
+    switch (node->getFlowOp())
+    {
+        case EOpKill:
+            // TODO: http://anglebug.com/4889
+            UNIMPLEMENTED();
+            break;
+        case EOpBreak:
+            // TODO: http://anglebug.com/4889
+            UNIMPLEMENTED();
+            break;
+        case EOpContinue:
+            // TODO: http://anglebug.com/4889
+            UNIMPLEMENTED();
+            break;
+        case EOpReturn:
+            // Evaluate the expression if any, and return.
+            if (node->getExpression() != nullptr)
+            {
+                ASSERT(mNodeData.size() >= 1);
+
+                const spirv::IdRef expressionValue = accessChainLoad(&mNodeData.back());
+                mNodeData.pop_back();
+
+                // TODO: handle mismatching types.  http://anglebug.com/6000
+
+                spirv::WriteReturnValue(mBuilder.getSpirvCurrentFunctionBlock(), expressionValue);
+                mBuilder.terminateCurrentFunctionBlock();
+            }
+            else
+            {
+                spirv::WriteReturn(mBuilder.getSpirvCurrentFunctionBlock());
+                mBuilder.terminateCurrentFunctionBlock();
+            }
+            break;
+        default:
+            UNREACHABLE();
+    }
 
     return true;
 }
