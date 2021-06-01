@@ -5189,6 +5189,76 @@ TEST_P(WebGL2CompatibilityTest, RenderToLevelsOfSampledTexture)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that ANGLE handles used but unbound UBO. Assumes we are running on ANGLE and produce
+// optional but not mandatory errors.
+TEST_P(WebGL2CompatibilityTest, ANGLEUnboundUniformBuffer)
+{
+    const char *kFS = R"(#version 300 es
+precision highp float;
+uniform uni { vec4 color; };
+out vec4 fragColor;
+void main()
+{
+    fragColor = color;
+})";
+
+    GLuint program = CompileProgram(essl3_shaders::vs::Simple(), kFS);
+    ASSERT_NE(program, 0u);
+
+    GLint uniformBufferIndex = glGetUniformBlockIndex(program, "uni");
+    ASSERT_NE(uniformBufferIndex, -1);
+
+    GLuint uniformBuffer;
+    glGenBuffers(1, &uniformBuffer);
+    ASSERT_GL_NO_ERROR();
+
+    glUniformBlockBinding(program, uniformBufferIndex, 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, 0);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Compile uniform buffer with large array member.
+TEST_P(WebGL2CompatibilityTest, LargeArrayOfStructs)
+{
+    constexpr char kVertexShader[] = R"(
+        struct InstancingData
+        {
+            mat4 transformation;
+        };
+
+        layout(std140) uniform InstanceBlock
+        {
+            InstancingData instances[MAX_INSTANCE_COUNT];
+        };
+
+        void main()
+        {
+            gl_Position = vec4(1.0) * instances[gl_InstanceID].transformation;
+        })";
+
+    constexpr char kFragmentShader[] = R"(#version 300 es
+        precision mediump float;
+        out vec4 outFragColor;
+        void main()
+        {
+            outFragColor = vec4(0.0);
+        })";
+
+    int maxUniformBlockSize;
+    glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &maxUniformBlockSize);
+
+    std::string vs = "#version 300 es\n#define MAX_INSTANCE_COUNT " +
+                     std::to_string(std::min(800, maxUniformBlockSize / 64)) + kVertexShader;
+
+    ANGLE_GL_PROGRAM(program, vs.c_str(), kFragmentShader);
+    // Add a draw call for the sake of the Vulkan backend that currently really builds shaders at
+    // draw time.
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(WebGLCompatibilityTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(WebGL2CompatibilityTest);
