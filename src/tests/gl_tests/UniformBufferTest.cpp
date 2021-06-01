@@ -201,7 +201,7 @@ TEST_P(UniformBufferTest, ANGLEUnboundUniformBuffer)
     EXPECT_GL_NO_ERROR();
 
     drawQuad(mProgram, essl3_shaders::PositionAttrib(), 0.5f);
-    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    EXPECT_GL_NO_ERROR();
 }
 
 // Update a UBO many time and verify that ANGLE uses the latest version of the data.
