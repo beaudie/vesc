@@ -192,18 +192,6 @@ TEST_P(UniformBufferTest, UniformBufferBindings)
     EXPECT_PIXEL_EQ(px, py, 10, 20, 30, 40);
 }
 
-// Test that ANGLE handles used but unbound UBO. Assumes we are running on ANGLE and produce
-// optional but not mandatory errors.
-TEST_P(UniformBufferTest, ANGLEUnboundUniformBuffer)
-{
-    glUniformBlockBinding(mProgram, mUniformBufferIndex, 0);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, 0);
-    EXPECT_GL_NO_ERROR();
-
-    drawQuad(mProgram, essl3_shaders::PositionAttrib(), 0.5f);
-    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
-}
-
 // Update a UBO many time and verify that ANGLE uses the latest version of the data.
 // https://code.google.com/p/angleproject/issues/detail?id=965
 TEST_P(UniformBufferTest, UniformBufferManyUpdates)

@@ -5189,6 +5189,37 @@ TEST_P(WebGL2CompatibilityTest, RenderToLevelsOfSampledTexture)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that ANGLE handles used but unbound UBO. Assumes we are running on ANGLE and produce
+// optional but not mandatory errors.
+TEST_P(WebGL2CompatibilityTest, ANGLEUnboundUniformBuffer)
+{
+    const char *kFS = R"(#version 300 es
+precision highp float;
+uniform uni { vec4 color; };
+out vec4 fragColor;
+void main()
+{
+    fragColor = color;
+})";
+
+    GLuint program = CompileProgram(essl3_shaders::vs::Simple(), kFS);
+    ASSERT_NE(program, 0u);
+
+    GLint uniformBufferIndex = glGetUniformBlockIndex(program, "uni");
+    ASSERT_NE(uniformBufferIndex, -1);
+
+    GLuint uniformBuffer;
+    glGenBuffers(1, &uniformBuffer);
+    ASSERT_GL_NO_ERROR();
+
+    glUniformBlockBinding(program, uniformBufferIndex, 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, 0);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(WebGLCompatibilityTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(WebGL2CompatibilityTest);
