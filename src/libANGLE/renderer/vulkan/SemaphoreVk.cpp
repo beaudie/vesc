@@ -7,6 +7,8 @@
 
 #include "libANGLE/renderer/vulkan/SemaphoreVk.h"
 
+#include <vulkan/vulkan.h>
+
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
@@ -247,6 +249,7 @@ angle::Result SemaphoreVk::importOpaqueFd(ContextVk *contextVk, GLint fd)
 
 angle::Result SemaphoreVk::importZirconEvent(ContextVk *contextVk, GLuint handle)
 {
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     RendererVk *renderer = contextVk->getRenderer();
 
     if (!mSemaphore.valid())
@@ -258,11 +261,11 @@ angle::Result SemaphoreVk::importZirconEvent(ContextVk *contextVk, GLuint handle
 
     VkImportSemaphoreZirconHandleInfoFUCHSIA importSemaphoreZirconHandleInfo = {};
     importSemaphoreZirconHandleInfo.sType =
-        VK_STRUCTURE_TYPE_TEMP_IMPORT_SEMAPHORE_ZIRCON_HANDLE_INFO_FUCHSIA;
+        VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_ZIRCON_HANDLE_INFO_FUCHSIA;
     importSemaphoreZirconHandleInfo.semaphore = mSemaphore.getHandle();
     importSemaphoreZirconHandleInfo.flags     = 0;
     importSemaphoreZirconHandleInfo.handleType =
-        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TEMP_ZIRCON_EVENT_BIT_FUCHSIA;
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA;
     importSemaphoreZirconHandleInfo.zirconHandle = handle;
 
     // TODO(spang): Add vkImportSemaphoreZirconHandleFUCHSIA to volk.
@@ -274,6 +277,10 @@ angle::Result SemaphoreVk::importZirconEvent(ContextVk *contextVk, GLuint handle
                                                                  &importSemaphoreZirconHandleInfo));
 
     return angle::Result::Continue;
+#else
+    NOTREACHED();
+    return angle::Result::Stop;
+#endif
 }
 
 }  // namespace rx
