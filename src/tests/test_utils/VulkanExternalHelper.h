@@ -9,7 +9,6 @@
 #define ANGLE_TESTS_TESTUTILS_VULKANEXTERNALHELPER_H_
 
 #include "common/vulkan/vk_headers.h"
-#include "vulkan/vulkan_fuchsia_ext.h"
 
 namespace angle
 {

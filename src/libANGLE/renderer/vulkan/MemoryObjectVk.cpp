@@ -12,7 +12,6 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
-#include "vulkan/vulkan_fuchsia_ext.h"
 
 #if !defined(ANGLE_PLATFORM_WINDOWS)
 #    include <unistd.h>
@@ -66,7 +65,7 @@ VkExternalMemoryHandleTypeFlagBits ToVulkanHandleType(gl::HandleType handleType)
         case gl::HandleType::OpaqueFd:
             return VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT;
         case gl::HandleType::ZirconVmo:
-            return VK_EXTERNAL_MEMORY_HANDLE_TYPE_TEMP_ZIRCON_VMO_BIT_FUCHSIA;
+            return VK_EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA;
         default:
             // Not a memory handle type.
             UNREACHABLE();
@@ -237,7 +236,7 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
         case gl::HandleType::ZirconVmo:
             ASSERT(mZirconHandle != ZX_HANDLE_INVALID);
             importMemoryZirconHandleInfo.sType =
-                VK_STRUCTURE_TYPE_TEMP_IMPORT_MEMORY_ZIRCON_HANDLE_INFO_FUCHSIA;
+                VK_STRUCTURE_TYPE_IMPORT_MEMORY_ZIRCON_HANDLE_INFO_FUCHSIA;
             importMemoryZirconHandleInfo.pNext      = importMemoryInfo;
             importMemoryZirconHandleInfo.handleType = ToVulkanHandleType(mHandleType);
             ANGLE_TRY(
