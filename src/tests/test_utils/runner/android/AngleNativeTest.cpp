@@ -14,7 +14,52 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "common/angleutils.h"
 #include "common/string_utils.h"
+
+namespace android
+{
+namespace base
+{
+
+class unique_fd final : angle::NonCopyable
+{
+  public:
+    unique_fd() : value_(-1) {}
+    explicit unique_fd(int value) : value_(value) {}
+    ~unique_fd() { clear(); }
+    unique_fd(unique_fd &&other) : value_(other.release()) {}
+    unique_fd &operator=(unique_fd &&s)
+    {
+        reset(s.release());
+        return *this;
+    }
+    void reset(int new_value)
+    {
+        if (value_ != -1)
+        {
+            // Even if close(2) fails with EINTR, the fd will have been closed.
+            // Using TEMP_FAILURE_RETRY will either lead to EBADF or closing someone else's fd.
+            // http://lkml.indiana.edu/hypermail/linux/kernel/0509.1/0877.html
+            close(value_);
+        }
+        value_ = new_value;
+    }
+    void clear() { reset(-1); }
+    int get() const { return value_; }
+    int release() __attribute__((warn_unused_result))
+    {
+        int ret = value_;
+        value_  = -1;
+        return ret;
+    }
+
+  private:
+    int value_;
+};
+
+}  // namespace base
+}  // namespace android
 
 // The main function of the program to be wrapped as a test apk.
 extern int main(int argc, char **argv);
@@ -141,6 +186,9 @@ Java_com_android_angle_test_AngleNativeTest_nativeRunTests(JNIEnv *env,
     }
     angle::SplitStringAlongWhitespace(commandLineFlags, &args);
 
+    // dup stdout to avoid fdsan race conditions.
+    android::base::unique_fd oldStdout(dup(STDOUT_FILENO));
+
     // A few options, such "--gtest_list_tests", will just use printf directly
     // Always redirect stdout to a known file.
     if (freopen(stdoutFilePath.c_str(), "a+", stdout) == NULL)
@@ -157,4 +205,6 @@ Java_com_android_angle_test_AngleNativeTest_nativeRunTests(JNIEnv *env,
 
     ScopedMainEntryLogger scoped_main_entry_logger;
     main(static_cast<int>(argc), &argv[0]);
+
+    fclose(stdout);
 }
