@@ -12,7 +12,6 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
-#include "vulkan/vulkan_fuchsia_ext.h"
 
 #if !defined(ANGLE_PLATFORM_WINDOWS)
 #    include <unistd.h>
@@ -38,26 +37,21 @@ int close(int fd)
 }
 #endif
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 void CloseZirconVmo(zx_handle_t handle)
 {
-#if defined(ANGLE_PLATFORM_FUCHSIA)
     zx_handle_close(handle);
-#else
-    UNREACHABLE();
-#endif
 }
+#endif
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 angle::Result DuplicateZirconVmo(ContextVk *contextVk, zx_handle_t handle, zx_handle_t *duplicate)
 {
-#if defined(ANGLE_PLATFORM_FUCHSIA)
     zx_status_t status = zx_handle_duplicate(handle, ZX_RIGHT_SAME_RIGHTS, duplicate);
     ANGLE_VK_CHECK(contextVk, status == ZX_OK, VK_ERROR_INVALID_EXTERNAL_HANDLE);
     return angle::Result::Continue;
-#else
-    UNREACHABLE();
-    return angle::Result::Stop;
-#endif
 }
+#endif
 
 VkExternalMemoryHandleTypeFlagBits ToVulkanHandleType(gl::HandleType handleType)
 {
@@ -66,7 +60,7 @@ VkExternalMemoryHandleTypeFlagBits ToVulkanHandleType(gl::HandleType handleType)
         case gl::HandleType::OpaqueFd:
             return VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT;
         case gl::HandleType::ZirconVmo:
-            return VK_EXTERNAL_MEMORY_HANDLE_TYPE_TEMP_ZIRCON_VMO_BIT_FUCHSIA;
+            return VK_EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA;
         default:
             // Not a memory handle type.
             UNREACHABLE();
@@ -88,11 +82,13 @@ void MemoryObjectVk::onDestroy(const gl::Context *context)
         mFd = kInvalidFd;
     }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     if (mZirconHandle != ZX_HANDLE_INVALID)
     {
         CloseZirconVmo(mZirconHandle);
         mZirconHandle = ZX_HANDLE_INVALID;
     }
+#endif
 }
 
 angle::Result MemoryObjectVk::setDedicatedMemory(const gl::Context *context, bool dedicatedMemory)
@@ -150,6 +146,7 @@ angle::Result MemoryObjectVk::importOpaqueFd(ContextVk *contextVk, GLuint64 size
 
 angle::Result MemoryObjectVk::importZirconVmo(ContextVk *contextVk, GLuint64 size, GLuint handle)
 {
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     ASSERT(mHandleType == gl::HandleType::InvalidEnum);
     ASSERT(mZirconHandle == ZX_HANDLE_INVALID);
     ASSERT(handle != ZX_HANDLE_INVALID);
@@ -157,6 +154,10 @@ angle::Result MemoryObjectVk::importZirconVmo(ContextVk *contextVk, GLuint64 siz
     mZirconHandle = handle;
     mSize         = size;
     return angle::Result::Continue;
+#else
+    NOTREACHED();
+    return angle::Result::Stop;
+#endif
 }
 
 angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
@@ -222,8 +223,12 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
         importMemoryInfo                  = &memoryDedicatedAllocateInfo;
     }
 
-    VkImportMemoryFdInfoKHR importMemoryFdInfo                         = {};
+    VkImportMemoryFdInfoKHR importMemoryFdInfo = {};
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     VkImportMemoryZirconHandleInfoFUCHSIA importMemoryZirconHandleInfo = {};
+#endif
+
     switch (mHandleType)
     {
         case gl::HandleType::OpaqueFd:
@@ -234,16 +239,18 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
             importMemoryFdInfo.fd         = dup(mFd);
             importMemoryInfo              = &importMemoryFdInfo;
             break;
+#if defined(ANGLE_PLATFORM_FUCHSIA)
         case gl::HandleType::ZirconVmo:
             ASSERT(mZirconHandle != ZX_HANDLE_INVALID);
             importMemoryZirconHandleInfo.sType =
-                VK_STRUCTURE_TYPE_TEMP_IMPORT_MEMORY_ZIRCON_HANDLE_INFO_FUCHSIA;
+                VK_STRUCTURE_TYPE_IMPORT_MEMORY_ZIRCON_HANDLE_INFO_FUCHSIA;
             importMemoryZirconHandleInfo.pNext      = importMemoryInfo;
             importMemoryZirconHandleInfo.handleType = ToVulkanHandleType(mHandleType);
             ANGLE_TRY(
                 DuplicateZirconVmo(contextVk, mZirconHandle, &importMemoryZirconHandleInfo.handle));
             importMemoryInfo = &importMemoryZirconHandleInfo;
             break;
+#endif
         default:
             UNREACHABLE();
     }

@@ -12,6 +12,10 @@
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+#include <zircon/types.h>
+#endif
+
 namespace rx
 {
 
@@ -57,7 +61,9 @@ class MemoryObjectVk : public MemoryObjectImpl
     gl::HandleType mHandleType = gl::HandleType::InvalidEnum;
     int mFd                    = kInvalidFd;
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     zx_handle_t mZirconHandle = ZX_HANDLE_INVALID;
+#endif
 };
 
 }  // namespace rx

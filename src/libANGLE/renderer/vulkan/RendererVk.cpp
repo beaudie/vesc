@@ -13,6 +13,7 @@
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 #include <EGL/eglext.h>
+#include <vulkan/vulkan.h>
 
 #include "common/debug.h"
 #include "common/platform.h"
@@ -1554,10 +1555,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
     }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     if (getFeatures().supportsExternalMemoryFuchsia.enabled)
     {
         enabledDeviceExtensions.push_back(VK_FUCHSIA_EXTERNAL_MEMORY_EXTENSION_NAME);
     }
+#endif
 
     if (getFeatures().supportsExternalSemaphoreFd.enabled ||
         getFeatures().supportsExternalSemaphoreFuchsia.enabled)
@@ -1607,10 +1610,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
     }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     if (getFeatures().supportsExternalSemaphoreFuchsia.enabled)
     {
         enabledDeviceExtensions.push_back(VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
     }
+#endif
 
     if (getFeatures().supportsShaderStencilExport.enabled)
     {
@@ -2249,9 +2254,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, supportsExternalMemoryFd,
         ExtensionFound(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME, deviceExtensionNames));
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsExternalMemoryFuchsia,
         ExtensionFound(VK_FUCHSIA_EXTERNAL_MEMORY_EXTENSION_NAME, deviceExtensionNames));
+#endif
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsFilteringPrecision,
@@ -2269,9 +2276,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, supportsExternalSemaphoreFd,
         ExtensionFound(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME, deviceExtensionNames));
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsExternalSemaphoreFuchsia,
         ExtensionFound(VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME, deviceExtensionNames));
+#endif
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsExternalFenceFd,

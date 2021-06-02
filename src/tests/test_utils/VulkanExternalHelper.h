@@ -9,7 +9,6 @@
 #define ANGLE_TESTS_TESTUTILS_VULKANEXTERNALHELPER_H_
 
 #include "common/vulkan/vk_headers.h"
-#include "vulkan/vulkan_fuchsia_ext.h"
 
 namespace angle
 {
@@ -57,6 +56,12 @@ class VulkanExternalHelper
                                    VkDeviceSize *deviceMemorySizeOut);
     VkResult exportMemoryOpaqueFd(VkDeviceMemory deviceMemory, int *fd);
 
+    // VK_KHR_external_semaphore_fd
+    bool canCreateSemaphoreOpaqueFd() const;
+    VkResult createSemaphoreOpaqueFd(VkSemaphore *semaphore);
+    VkResult exportSemaphoreOpaqueFd(VkSemaphore semaphore, int *fd);
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
     // VK_FUCHSIA_external_memory
     bool canCreateImageZirconVmo(VkFormat format,
                                  VkImageType type,
@@ -72,15 +77,11 @@ class VulkanExternalHelper
                                     VkDeviceSize *deviceMemorySizeOut);
     VkResult exportMemoryZirconVmo(VkDeviceMemory deviceMemory, zx_handle_t *vmo);
 
-    // VK_KHR_external_semaphore_fd
-    bool canCreateSemaphoreOpaqueFd() const;
-    VkResult createSemaphoreOpaqueFd(VkSemaphore *semaphore);
-    VkResult exportSemaphoreOpaqueFd(VkSemaphore semaphore, int *fd);
-
     // VK_FUCHSIA_external_semaphore
     bool canCreateSemaphoreZirconEvent() const;
     VkResult createSemaphoreZirconEvent(VkSemaphore *semaphore);
     VkResult exportSemaphoreZirconEvent(VkSemaphore semaphore, zx_handle_t *event);
+#endif
 
     // Performs a queue ownership transfer to VK_QUEUE_FAMILY_EXTERNAL on an
     // image owned by our instance. The current image layout must be |oldLayout|
@@ -122,17 +123,20 @@ class VulkanExternalHelper
     uint32_t mGraphicsQueueFamilyIndex = UINT32_MAX;
 
     bool mHasExternalMemoryFd         = false;
-    bool mHasExternalMemoryFuchsia    = false;
     bool mHasExternalSemaphoreFd      = false;
-    bool mHasExternalSemaphoreFuchsia = false;
     PFN_vkGetPhysicalDeviceImageFormatProperties2 vkGetPhysicalDeviceImageFormatProperties2 =
         nullptr;
     PFN_vkGetMemoryFdKHR vkGetMemoryFdKHR       = nullptr;
-    PFN_vkGetSemaphoreFdKHR vkGetSemaphoreFdKHR = nullptr;
+    PFN_vkGetSemaphoreFdKHR vkGetSemaphoreFdKHR  = nullptr;
     PFN_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR
-        vkGetPhysicalDeviceExternalSemaphorePropertiesKHR                   = nullptr;
+        vkGetPhysicalDeviceExternalSemaphorePropertiesKHR = nullptr;
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    bool mHasExternalMemoryFuchsia                                          = false;
+    bool mHasExternalSemaphoreFuchsia                                       = false;
     PFN_vkGetMemoryZirconHandleFUCHSIA vkGetMemoryZirconHandleFUCHSIA       = nullptr;
     PFN_vkGetSemaphoreZirconHandleFUCHSIA vkGetSemaphoreZirconHandleFUCHSIA = nullptr;
+#endif
 };
 
 }  // namespace angle
