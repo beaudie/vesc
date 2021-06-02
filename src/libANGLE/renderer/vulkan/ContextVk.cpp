@@ -3019,12 +3019,12 @@ void ContextVk::endEventLog(angle::EntryPoint entryPoint)
 
 angle::Result ContextVk::handleNoopDrawEvent()
 {
-    if (!mRenderer->angleDebuggerMode())
+    if (!mRenderer->angleDebuggerMode() || !mRenderPassCommandBuffer)
     {
+        // Return if there if not creating debug-util markers or if there's no command buffer
         return angle::Result::Continue;
     }
 
-    ASSERT(mRenderPassCommandBuffer);
     // Even though this draw call is being no-op'd, we still must handle the dirty event log
     return handleDirtyEventLogImpl(mRenderPassCommandBuffer);
 }
