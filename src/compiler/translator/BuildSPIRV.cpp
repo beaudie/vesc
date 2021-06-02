@@ -1187,7 +1187,7 @@ spirv::Blob SPIRVBuilder::getSpirv()
     // - OpExecutionMode instructions
     for (spv::ExecutionMode executionMode : mExecutionModes)
     {
-        spirv::WriteExecutionMode(&result, mEntryPointId, executionMode);
+        spirv::WriteExecutionMode(&result, mEntryPointId, executionMode, {});
     }
     result.insert(result.end(), mSpirvExecutionModes.begin(), mSpirvExecutionModes.end());
 
