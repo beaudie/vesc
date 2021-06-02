@@ -124,6 +124,7 @@ struct OpaqueFdTraits
     }
 };
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 struct FuchsiaTraits
 {
     using Handle = zx_handle_t;
@@ -191,6 +192,7 @@ struct FuchsiaTraits
                                         handle);
     }
 };
+#endif
 
 }  // namespace
 
@@ -272,6 +274,8 @@ TEST_P(VulkanExternalImageTest, ShouldImportMemoryOpaqueFd)
                                               isSwiftshader(), enableDebugLayers());
 }
 
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 // glImportMemoryZirconHandleANGLE must be able to import a valid vmo.
 TEST_P(VulkanExternalImageTest, ShouldImportMemoryZirconVmo)
 {
@@ -279,6 +283,7 @@ TEST_P(VulkanExternalImageTest, ShouldImportMemoryZirconVmo)
     RunShouldImportMemoryTest<FuchsiaTraits>(kDefaultImageCreateFlags, kDefaultImageUsageFlags,
                                              isSwiftshader(), enableDebugLayers());
 }
+#endif
 
 template <typename Traits>
 void RunShouldImportSemaphoreTest(bool isSwiftshader, bool enableDebugLayers)
@@ -316,12 +321,14 @@ TEST_P(VulkanExternalImageTest, ShouldImportSemaphoreOpaqueFd)
     RunShouldImportSemaphoreTest<OpaqueFdTraits>(isSwiftshader(), enableDebugLayers());
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 // glImportSemaphoreZirconHandleANGLE must be able to import a valid handle.
 TEST_P(VulkanExternalImageTest, ShouldImportSemaphoreZirconEvent)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_semaphore_fuchsia"));
     RunShouldImportSemaphoreTest<FuchsiaTraits>(isSwiftshader(), enableDebugLayers());
 }
+#endif
 
 template <typename Traits>
 void RunShouldClearTest(bool useMemoryObjectFlags,
@@ -427,6 +434,7 @@ TEST_P(VulkanExternalImageTest, ShouldClearMutableNoStorageUsageOpaqueFdRGBA8)
                                        isSwiftshader(), enableDebugLayers());
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 // Test creating and clearing a simple RGBA8 texture in a zircon vmo.
 TEST_P(VulkanExternalImageTest, ShouldClearZirconVmoRGBA8)
 {
@@ -463,6 +471,7 @@ TEST_P(VulkanExternalImageTest, ShouldClearMutableNoStorageUsageZirconVmoRGBA8)
     RunShouldClearTest<FuchsiaTraits>(true, kMutableImageCreateFlags, kNoStorageImageUsageFlags,
                                       isSwiftshader(), enableDebugLayers());
 }
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
 
 template <typename Traits>
 void RunTextureFormatCompatChromiumTest(bool useMemoryObjectFlags,
@@ -583,6 +592,7 @@ TEST_P(VulkanExternalImageTest, TextureFormatCompatChromiumMutableNoStorageFd)
                                                        enableDebugLayers());
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 // Test all format combinations used by Chrome import successfully (fuchsia).
 TEST_P(VulkanExternalImageTest, TextureFormatCompatChromiumZirconVmo)
 {
@@ -623,6 +633,7 @@ TEST_P(VulkanExternalImageTest, TextureFormatCompatChromiumMutableNoStorageZirco
                                                       kNoStorageImageUsageFlags, isSwiftshader(),
                                                       enableDebugLayers());
 }
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
 
 template <typename Traits>
 void RunShouldClearWithSemaphoresTest(bool useMemoryObjectFlags,
@@ -820,6 +831,7 @@ TEST_P(VulkanExternalImageTest, ShouldClearOpaqueFdWithSemaphoresMutableNoStorag
                                                      enableDebugLayers());
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 // Test creating and clearing RGBA8 texture in zircon vmo with acquire/release.
 TEST_P(VulkanExternalImageTest, ShouldClearZirconVmoWithSemaphores)
 {
@@ -865,6 +877,7 @@ TEST_P(VulkanExternalImageTest, ShouldClearZirconVmoWithSemaphoresMutableNoStora
                                                     kNoStorageImageUsageFlags, isSwiftshader(),
                                                     enableDebugLayers());
 }
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
 
 template <typename Traits>
 void VulkanExternalImageTest::runShouldDrawTest(bool isSwiftshader, bool enableDebugLayers)
@@ -1009,6 +1022,7 @@ TEST_P(VulkanExternalImageTest, ShouldDrawOpaqueFdWithSemaphores)
     runShouldDrawTest<OpaqueFdTraits>(isSwiftshader(), enableDebugLayers());
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 // Test drawing to RGBA8 texture in zircon vmo with acquire/release multiple times.
 TEST_P(VulkanExternalImageTest, ShouldDrawZirconVmoWithSemaphores)
 {
@@ -1016,6 +1030,7 @@ TEST_P(VulkanExternalImageTest, ShouldDrawZirconVmoWithSemaphores)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_semaphore_fuchsia"));
     runShouldDrawTest<FuchsiaTraits>(isSwiftshader(), enableDebugLayers());
 }
+#endif
 
 template <typename Traits>
 void VulkanExternalImageTest::runWaitSemaphoresRetainsContentTest(bool isSwiftshader,
@@ -1180,6 +1195,7 @@ TEST_P(VulkanExternalImageTest, WaitSemaphoresRetainsContentOpaqueFd)
     runWaitSemaphoresRetainsContentTest<OpaqueFdTraits>(isSwiftshader(), enableDebugLayers());
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 // Test drawing to RGBA8 texture in zircon vmo with acquire/release multiple times.
 TEST_P(VulkanExternalImageTest, WaitSemaphoresRetainsContentZirconVmo)
 {
@@ -1201,6 +1217,7 @@ TEST_P(VulkanExternalImageTest, ShouldSupportExternalHandlesFuchsia)
                                                VK_IMAGE_TILING_OPTIMAL, kDefaultImageCreateFlags,
                                                kDefaultImageUsageFlags));
 }
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.

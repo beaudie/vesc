@@ -264,9 +264,14 @@ void VulkanExternalHelper::initialize(bool useSwiftshader, bool enableValidation
         EnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr);
 
     std::vector<const char *> requestedDeviceExtensions = {
-        VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME,  VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME,
-        VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME,     VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
-        VK_FUCHSIA_EXTERNAL_MEMORY_EXTENSION_NAME, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+        VK_FUCHSIA_EXTERNAL_MEMORY_EXTENSION_NAME,
+        VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME,
+#endif
     };
 
     std::vector<const char *> enabledDeviceExtensions;
@@ -346,10 +351,6 @@ void VulkanExternalHelper::initialize(bool useSwiftshader, bool enableValidation
         HasExtension(enabledDeviceExtensions, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
     mHasExternalSemaphoreFd =
         HasExtension(enabledDeviceExtensions, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
-    mHasExternalMemoryFuchsia =
-        HasExtension(enabledDeviceExtensions, VK_FUCHSIA_EXTERNAL_MEMORY_EXTENSION_NAME);
-    mHasExternalSemaphoreFuchsia =
-        HasExtension(enabledDeviceExtensions, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
 
     vkGetPhysicalDeviceImageFormatProperties2 =
         reinterpret_cast<PFN_vkGetPhysicalDeviceImageFormatProperties2>(
@@ -363,12 +364,19 @@ void VulkanExternalHelper::initialize(bool useSwiftshader, bool enableValidation
     vkGetPhysicalDeviceExternalSemaphorePropertiesKHR =
         reinterpret_cast<PFN_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR>(
             vkGetInstanceProcAddr(mInstance, "vkGetPhysicalDeviceExternalSemaphorePropertiesKHR"));
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    mHasExternalMemoryFuchsia =
+        HasExtension(enabledDeviceExtensions, VK_FUCHSIA_EXTERNAL_MEMORY_EXTENSION_NAME);
+    mHasExternalSemaphoreFuchsia =
+        HasExtension(enabledDeviceExtensions, VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
     vkGetMemoryZirconHandleFUCHSIA = reinterpret_cast<PFN_vkGetMemoryZirconHandleFUCHSIA>(
         vkGetInstanceProcAddr(mInstance, "vkGetMemoryZirconHandleFUCHSIA"));
     ASSERT(!mHasExternalMemoryFuchsia || vkGetMemoryZirconHandleFUCHSIA);
     vkGetSemaphoreZirconHandleFUCHSIA = reinterpret_cast<PFN_vkGetSemaphoreZirconHandleFUCHSIA>(
         vkGetInstanceProcAddr(mInstance, "vkGetSemaphoreZirconHandleFUCHSIA"));
     ASSERT(!mHasExternalSemaphoreFuchsia || vkGetSemaphoreZirconHandleFUCHSIA);
+#endif
 }
 
 bool VulkanExternalHelper::canCreateImageExternal(
@@ -553,6 +561,7 @@ VkResult VulkanExternalHelper::exportMemoryOpaqueFd(VkDeviceMemory deviceMemory,
     return vkGetMemoryFdKHR(mDevice, &memoryGetFdInfo, fd);
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 bool VulkanExternalHelper::canCreateImageZirconVmo(VkFormat format,
                                                    VkImageType type,
                                                    VkImageTiling tiling,
@@ -565,7 +574,7 @@ bool VulkanExternalHelper::canCreateImageZirconVmo(VkFormat format,
     }
 
     return canCreateImageExternal(format, type, tiling, createFlags, usageFlags,
-                                  VK_EXTERNAL_MEMORY_HANDLE_TYPE_TEMP_ZIRCON_VMO_BIT_FUCHSIA);
+                                  VK_EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA);
 }
 
 VkResult VulkanExternalHelper::createImage2DZirconVmo(VkFormat format,
@@ -577,8 +586,8 @@ VkResult VulkanExternalHelper::createImage2DZirconVmo(VkFormat format,
                                                       VkDeviceSize *deviceMemorySizeOut)
 {
     return createImage2DExternal(format, createFlags, usageFlags, extent,
-                                 VK_EXTERNAL_MEMORY_HANDLE_TYPE_TEMP_ZIRCON_VMO_BIT_FUCHSIA,
-                                 imageOut, deviceMemoryOut, deviceMemorySizeOut);
+                                 VK_EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA, imageOut,
+                                 deviceMemoryOut, deviceMemorySizeOut);
 }
 
 VkResult VulkanExternalHelper::exportMemoryZirconVmo(VkDeviceMemory deviceMemory, zx_handle_t *vmo)
@@ -587,11 +596,12 @@ VkResult VulkanExternalHelper::exportMemoryZirconVmo(VkDeviceMemory deviceMemory
         /* .sType = */ VK_STRUCTURE_TYPE_TEMP_MEMORY_GET_ZIRCON_HANDLE_INFO_FUCHSIA,
         /* .pNext = */ nullptr,
         /* .memory = */ deviceMemory,
-        /* .handleType = */ VK_EXTERNAL_MEMORY_HANDLE_TYPE_TEMP_ZIRCON_VMO_BIT_FUCHSIA,
+        /* .handleType = */ VK_EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA,
     };
 
     return vkGetMemoryZirconHandleFUCHSIA(mDevice, &memoryGetZirconHandleInfo, vmo);
 }
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
 
 bool VulkanExternalHelper::canCreateSemaphoreOpaqueFd() const
 {
@@ -653,6 +663,7 @@ VkResult VulkanExternalHelper::exportSemaphoreOpaqueFd(VkSemaphore semaphore, in
     return vkGetSemaphoreFdKHR(mDevice, &semaphoreGetFdInfo, fd);
 }
 
+#if defined(ANGLE_PLATFORM_FUCHSIA)
 bool VulkanExternalHelper::canCreateSemaphoreZirconEvent() const
 {
     if (!mHasExternalSemaphoreFuchsia || !vkGetPhysicalDeviceExternalSemaphorePropertiesKHR)
@@ -663,7 +674,7 @@ bool VulkanExternalHelper::canCreateSemaphoreZirconEvent() const
     VkPhysicalDeviceExternalSemaphoreInfo externalSemaphoreInfo = {
         /* .sType = */ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO,
         /* .pNext = */ nullptr,
-        /* .handleType = */ VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TEMP_ZIRCON_EVENT_BIT_FUCHSIA,
+        /* .handleType = */ VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA,
     };
 
     VkExternalSemaphoreProperties externalSemaphoreProperties = {
@@ -689,7 +700,7 @@ VkResult VulkanExternalHelper::createSemaphoreZirconEvent(VkSemaphore *semaphore
     VkExportSemaphoreCreateInfo exportSemaphoreCreateInfo = {
         /* .sType = */ VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO,
         /* .pNext = */ nullptr,
-        /* .handleTypes = */ VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TEMP_ZIRCON_EVENT_BIT_FUCHSIA,
+        /* .handleTypes = */ VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA,
     };
 
     VkSemaphoreCreateInfo semaphoreCreateInfo = {
@@ -707,11 +718,12 @@ VkResult VulkanExternalHelper::exportSemaphoreZirconEvent(VkSemaphore semaphore,
         /* .sType = */ VK_STRUCTURE_TYPE_TEMP_SEMAPHORE_GET_ZIRCON_HANDLE_INFO_FUCHSIA,
         /* .pNext = */ nullptr,
         /* .semaphore = */ semaphore,
-        /* .handleType = */ VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TEMP_ZIRCON_EVENT_BIT_FUCHSIA,
+        /* .handleType = */ VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA,
     };
 
     return vkGetSemaphoreZirconHandleFUCHSIA(mDevice, &semaphoreGetZirconHandleInfo, event);
 }
+#endif
 
 void VulkanExternalHelper::releaseImageAndSignalSemaphore(VkImage image,
                                                           VkImageLayout oldLayout,
