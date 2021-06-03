@@ -7,6 +7,9 @@
 
 package com.android.angle.test;
 
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +25,10 @@ import android.view.View;
 import org.chromium.build.gtest_apk.NativeTestIntent;
 
 import java.io.File;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class AngleNativeTest
 {
@@ -157,9 +164,25 @@ public class AngleNativeTest
 
     private void runTests(Activity activity)
     {
-        nativeRunTests(mCommandLineFlags.toString(), mCommandLineFilePath, mStdoutFilePath);
-        activity.finish();
-        mReporter.testRunFinished(Process.myPid());
+        try
+        {
+            Path stdoutPath = Paths.get(mStdoutFilePath);
+            PrintStream stdoutStream =
+                    new PrintStream(Files.newOutputStream(stdoutPath, CREATE, APPEND));
+            PrintStream oldOut = System.out;
+            System.setOut(stdoutStream);
+
+            nativeRunTests(mCommandLineFlags.toString(), mCommandLineFilePath);
+            activity.finish();
+
+            mReporter.testRunFinished(Process.myPid());
+
+            System.setOut(oldOut);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     // Signal a failure of the native test loader to python scripts
@@ -170,6 +193,5 @@ public class AngleNativeTest
         Log.e(TAG, "[ RUNNER_FAILED ] could not load native library");
     }
 
-    private native void nativeRunTests(
-            String commandLineFlags, String commandLineFilePath, String stdoutFilePath);
+    private native void nativeRunTests(String commandLineFlags, String commandLineFilePath);
 }
