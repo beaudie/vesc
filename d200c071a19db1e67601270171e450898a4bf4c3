@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0888011_ca68cc8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-06-03T19:48:37Z",
+      "side": 1,
+      "message": "Looks like Rubber Stamper doesn\u0027t work for ANGLE.\nTBR.",
+      "revId": "d200c071a19db1e67601270171e450898a4bf4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
