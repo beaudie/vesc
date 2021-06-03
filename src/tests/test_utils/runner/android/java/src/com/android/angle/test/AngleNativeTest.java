@@ -157,9 +157,18 @@ public class AngleNativeTest
 
     private void runTests(Activity activity)
     {
-        nativeRunTests(mCommandLineFlags.toString(), mCommandLineFilePath, mStdoutFilePath);
+        Path stdoutPath = Paths.get(mStdoutFilePath);
+        OutputStream stdoutStream =
+                new BufferedOutputStream(Files.newOutputStream(stdoutPath, CREATE, APPEND));
+
+        PrintStream oldOut = System.out;
+        System.setOut(stdoutStream);
+
+        nativeRunTests(mCommandLineFlags.toString(), mCommandLineFilePath);
         activity.finish();
         mReporter.testRunFinished(Process.myPid());
+
+        System.setOut(oldOut);
     }
 
     // Signal a failure of the native test loader to python scripts
@@ -170,6 +179,5 @@ public class AngleNativeTest
         Log.e(TAG, "[ RUNNER_FAILED ] could not load native library");
     }
 
-    private native void nativeRunTests(
-            String commandLineFlags, String commandLineFilePath, String stdoutFilePath);
+    private native void nativeRunTests(String commandLineFlags, String commandLineFilePath);
 }
