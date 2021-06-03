@@ -157,9 +157,18 @@ public class AngleNativeTest
 
     private void runTests(Activity activity)
     {
+        Path stdoutPath = Paths.get(mStdoutFilePath);
+        OutputStream stdoutStream =
+                new BufferedOutputStream(Files.newOutputStream(stdoutPath, CREATE, APPEND));
+
+        PrintStream oldOut = System.out;
+        System.setOut(stdoutStream);
+
         nativeRunTests(mCommandLineFlags.toString(), mCommandLineFilePath, mStdoutFilePath);
         activity.finish();
         mReporter.testRunFinished(Process.myPid());
+
+        System.setOut(oldOut);
     }
 
     // Signal a failure of the native test loader to python scripts
