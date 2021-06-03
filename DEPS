@@ -27,7 +27,7 @@ vars = {
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'b078d3ef5de802f59d52b770e95650eeb472ff6f',
+  'chromium_revision': 'refs/changes/04/2935104/1',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
