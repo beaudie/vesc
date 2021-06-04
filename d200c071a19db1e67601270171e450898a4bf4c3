@@ -16,6 +16,24 @@
       "message": "Looks like Rubber Stamper doesn\u0027t work for ANGLE.\nTBR.",
       "revId": "d200c071a19db1e67601270171e450898a4bf4c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c05129fc_c5c869db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-06-04T14:23:51Z",
+      "side": 1,
+      "message": "Thanks for reverting Yuly, I\u0027m investigating. I\u0027m pretty sure it\u0027s because of clamp of integers not being available in glsl es100, so a couple casts to float should do (which is what the original code did too)",
+      "parentUuid": "d0888011_ca68cc8f",
+      "revId": "d200c071a19db1e67601270171e450898a4bf4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
