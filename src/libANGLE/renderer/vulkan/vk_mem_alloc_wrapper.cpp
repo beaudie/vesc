@@ -15,6 +15,8 @@
 
 namespace vma
 {
+VmaPool DeviceMemorySmallPools[16] = {};
+VmaPool DeviceMemoryLargePools[16] = {};
 std::atomic<VkDeviceSize> totalDeviceMemorySize;
 std::atomic<VkDeviceSize> peakDeviceMemorySize;
 
@@ -104,6 +106,22 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
 
 void DestroyAllocator(VmaAllocator allocator)
 {
+    for (int i = 0; i < 16; i++)
+    {
+        if (DeviceMemorySmallPools[i])
+        {
+            vmaDestroyPool(allocator, DeviceMemorySmallPools[i]);
+            DeviceMemorySmallPools[i] = nullptr;
+        }
+    }
+    for (int i = 0; i < 16; i++)
+    {
+        if (DeviceMemoryLargePools[i])
+        {
+            vmaDestroyPool(allocator, DeviceMemoryLargePools[i]);
+            DeviceMemoryLargePools[i] = nullptr;
+        }
+    }
     vmaDestroyAllocator(allocator);
 }
 
@@ -127,6 +145,53 @@ VkResult CreateBuffer(VmaAllocator allocator,
     allocationCreateInfo.preferredFlags          = preferredFlags;
     allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
     VmaAllocationInfo allocationInfo = {};
+
+    uint32_t memoryTypeIndex = *pMemoryTypeIndexOut;
+    if (pBufferCreateInfo->size <= 4096)
+    {
+        if (!DeviceMemorySmallPools[memoryTypeIndex])
+        {
+            // Create a custom pool.
+            VmaPoolCreateInfo poolCreateInfo = {};
+            poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
+            poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT |
+                                   VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT;
+            poolCreateInfo.blockSize     = 128ull * 1024;  // 128K
+            poolCreateInfo.maxBlockCount = -1;
+
+            VmaPool pool;
+            result = vmaCreatePool(allocator, &poolCreateInfo, &pool);
+            if (VK_SUCCESS != result)
+            {
+                return result;
+            }
+            DeviceMemorySmallPools[*pMemoryTypeIndexOut] = pool;
+        }
+        allocationCreateInfo.pool = DeviceMemorySmallPools[*pMemoryTypeIndexOut];
+    }
+    else if (pBufferCreateInfo->size <= 1ull * 1024 * 1024)
+    {
+        if (!DeviceMemoryLargePools[memoryTypeIndex])
+        {
+            // Create a custom pool.
+            VmaPoolCreateInfo poolCreateInfo = {};
+            poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
+            poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT;
+            poolCreateInfo.blockSize         = 4ull * 1024 * 1024;  // 4M
+            poolCreateInfo.maxBlockCount     = -1;
+
+            VmaPool pool;
+            result = vmaCreatePool(allocator, &poolCreateInfo, &pool);
+            if (VK_SUCCESS != result)
+            {
+                return result;
+            }
+            DeviceMemoryLargePools[*pMemoryTypeIndexOut] = pool;
+        }
+        allocationCreateInfo.pool = DeviceMemoryLargePools[*pMemoryTypeIndexOut];
+    }
+    else
+    {}
 
     result = vmaCreateBuffer(allocator, pBufferCreateInfo, &allocationCreateInfo, pBuffer,
                              pAllocation, &allocationInfo);
