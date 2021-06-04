@@ -103,7 +103,7 @@ class TransformFeedbackVk : public TransformFeedbackImpl
     void writeDescriptorSet(ContextVk *contextVk,
                             const ShaderInterfaceVariableInfoMap &variableInfoMap,
                             size_t xfbBufferCount,
-                            VkDescriptorBufferInfo *bufferInfo,
+                            const std::vector<VkDescriptorBufferInfo> &bufferInfos,
                             VkDescriptorSet descSet) const;
 
     void initializeXFBBuffersDesc(ContextVk *contextVk, size_t xfbBufferCount);
