@@ -100,11 +100,11 @@ class TransformFeedbackVk : public TransformFeedbackImpl
     vk::UniformsAndXfbDescriptorDesc &getTransformFeedbackDesc() { return mXFBBuffersDesc; }
 
   private:
-    void writeDescriptorSet(ContextVk *contextVk,
-                            const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                            size_t xfbBufferCount,
-                            VkDescriptorBufferInfo *bufferInfo,
-                            VkDescriptorSet descSet) const;
+    void updateVkWriteDescriptorSet(ContextVk *contextVk,
+                                    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                    size_t xfbBufferCount,
+                                    VkWriteDescriptorSet *writeInfo,
+                                    VkDescriptorSet descSet) const;
 
     void initializeXFBBuffersDesc(ContextVk *contextVk, size_t xfbBufferCount);
 

@@ -63,6 +63,64 @@ enum class GraphicsEventCmdBuf
     EnumCount   = 3,
 };
 
+template <typename T>
+class WriteDescriptorSetIndicesAndInfos
+{
+  public:
+    void init(size_t initialSize)
+    {
+        mInfos.reserve(initialSize);
+        mIndices.reserve(initialSize);
+    }
+
+    bool empty() { return mInfos.empty() && mIndices.empty(); }
+
+    void clear()
+    {
+        mInfos.clear();
+        mIndices.clear();
+    }
+
+    void getDescriptorAndWriteInfo(std::vector<VkWriteDescriptorSet> *writeDescriptorSets,
+                                   size_t numBufferViews,
+                                   T **descriptorInfoOut,
+                                   VkWriteDescriptorSet **writeInfoOut)
+    {
+        size_t writeDescriptorSetsIndex = writeDescriptorSets->size();
+        IndexAndSize indexAndSize       = {writeDescriptorSetsIndex, numBufferViews};
+        mIndices.emplace_back(indexAndSize);
+
+        writeDescriptorSets->emplace_back();
+        *writeInfoOut = &writeDescriptorSets->back();
+
+        size_t oldSize = mInfos.size();
+        mInfos.resize(oldSize + numBufferViews);
+        *descriptorInfoOut = &mInfos[oldSize];
+    }
+
+    template <const T *VkWriteDescriptorSet::*pInfo>
+    void setImageInfoPointers(std::vector<VkWriteDescriptorSet> *writeDescriptorSets)
+    {
+        size_t totalInfos = 0;
+        for (const IndexAndSize &it : mIndices)
+        {
+            VkWriteDescriptorSet &writeDescriptorSet = writeDescriptorSets->at(it.index);
+            writeDescriptorSet.*pInfo                = &mInfos[totalInfos];
+            totalInfos += it.numInfos;
+        }
+    }
+
+  private:
+    struct IndexAndSize
+    {
+        size_t index;
+        size_t numInfos;
+    };
+
+    std::vector<T> mInfos;
+    std::vector<IndexAndSize> mIndices;
+};
+
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
 {
   public:
@@ -596,13 +654,15 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void addOverlayUsedBuffersCount(vk::CommandBufferHelper *commandBuffer);
 
     // DescriptorSet writes
-    VkDescriptorBufferInfo *allocDescriptorBufferInfos(size_t count);
-    VkDescriptorImageInfo *allocDescriptorImageInfos(size_t count);
-    VkWriteDescriptorSet *allocWriteDescriptorSets(size_t count);
-
-    VkDescriptorBufferInfo &allocDescriptorBufferInfo() { return *allocDescriptorBufferInfos(1); }
-    VkDescriptorImageInfo &allocDescriptorImageInfo() { return *allocDescriptorImageInfos(1); }
-    VkWriteDescriptorSet &allocWriteDescriptorSet() { return *allocWriteDescriptorSets(1); }
+    void getImageInfosAndWriteInfo(size_t numImageInfos,
+                                   VkDescriptorImageInfo **imageInfosOut,
+                                   VkWriteDescriptorSet **writeInfoOut);
+    void getBufferInfosAndWriteInfo(size_t numBufferInfos,
+                                    VkDescriptorBufferInfo **bufferInfosOut,
+                                    VkWriteDescriptorSet **writeInfoOut);
+    void getBufferViewsAndWriteInfo(size_t numBufferViews,
+                                    VkBufferView **bufferViewsOut,
+                                    VkWriteDescriptorSet **writeInfoOut);
 
     vk::DynamicBuffer *getDefaultUniformStorage() { return &mDefaultUniformStorage; }
     // For testing only.
@@ -628,6 +688,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
     angle::Result handleGraphicsEventLog(GraphicsEventCmdBuf queryEventType);
+
+    void flushDescriptorSetUpdates();
 
   private:
     // Dirty bits.
@@ -896,7 +958,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result flushCommandsAndEndRenderPassImpl();
     angle::Result flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                DirtyBits dirtyBitMask);
-    void flushDescriptorSetUpdates();
 
     void onRenderPassFinished();
 
@@ -922,12 +983,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void populateTransformFeedbackBufferSet(
         size_t bufferCount,
         const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
-
-    // DescriptorSet writes
-    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-    T *allocDescriptorInfos(std::vector<T> *descriptorVector, size_t count);
-    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-    void growDesciptorCapacity(std::vector<T> *descriptorVector, size_t newSize);
 
     angle::Result updateRenderPassDepthStencilAccess();
     bool shouldSwitchToReadOnlyDepthFeedbackLoopMode(const gl::Context *context,
@@ -1132,9 +1187,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     egl::ContextPriority mContextPriority;
 
     // Storage for vkUpdateDescriptorSets
-    std::vector<VkDescriptorBufferInfo> mDescriptorBufferInfos;
-    std::vector<VkDescriptorImageInfo> mDescriptorImageInfos;
     std::vector<VkWriteDescriptorSet> mWriteDescriptorSets;
+
+    WriteDescriptorSetIndicesAndInfos<VkDescriptorImageInfo> mDescriptorImageInfos;
+    WriteDescriptorSetIndicesAndInfos<VkDescriptorBufferInfo> mDescriptorBufferInfos;
+    WriteDescriptorSetIndicesAndInfos<VkBufferView> mBufferViews;
 
     ShareGroupVk *mShareGroupVk;
 

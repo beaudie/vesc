@@ -716,16 +716,15 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
     }
 }
 
-void WriteBufferDescriptorSetBinding(const vk::BufferHelper &buffer,
+void WriteBufferDescriptorSetBinding(ContextVk *contextVk,
+                                     const vk::BufferHelper &buffer,
                                      VkDeviceSize offset,
                                      VkDeviceSize size,
                                      VkDescriptorSet descSet,
                                      VkDescriptorType descType,
                                      uint32_t bindingIndex,
                                      uint32_t arrayElement,
-                                     VkDeviceSize requiredOffsetAlignment,
-                                     VkDescriptorBufferInfo *bufferInfoOut,
-                                     VkWriteDescriptorSet *writeInfoOut)
+                                     VkDeviceSize requiredOffsetAlignment)
 {
     // If requiredOffsetAlignment is 0, the buffer offset is guaranteed to have the necessary
     // alignment through other means (the backend specifying the alignment through a GLES limit that
@@ -740,21 +739,20 @@ void WriteBufferDescriptorSetBinding(const vk::BufferHelper &buffer,
         size += offsetDiff;
     }
 
-    bufferInfoOut->buffer = buffer.getBuffer().getHandle();
-    bufferInfoOut->offset = offset;
-    bufferInfoOut->range  = size;
+    VkDescriptorBufferInfo *bufferInfos = nullptr;
+    VkWriteDescriptorSet *writeInfo     = nullptr;
+    contextVk->getBufferInfosAndWriteInfo(1, &bufferInfos, &writeInfo);
 
-    writeInfoOut->sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfoOut->pNext            = nullptr;
-    writeInfoOut->dstSet           = descSet;
-    writeInfoOut->dstBinding       = bindingIndex;
-    writeInfoOut->dstArrayElement  = arrayElement;
-    writeInfoOut->descriptorCount  = 1;
-    writeInfoOut->descriptorType   = descType;
-    writeInfoOut->pImageInfo       = nullptr;
-    writeInfoOut->pBufferInfo      = bufferInfoOut;
-    writeInfoOut->pTexelBufferView = nullptr;
-    ASSERT(writeInfoOut->pBufferInfo[0].buffer != VK_NULL_HANDLE);
+    bufferInfos[0].buffer = buffer.getBuffer().getHandle();
+    bufferInfos[0].offset = offset;
+    bufferInfos[0].range  = size;
+
+    writeInfo->sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo->dstSet          = descSet;
+    writeInfo->dstBinding      = bindingIndex;
+    writeInfo->dstArrayElement = arrayElement;
+    writeInfo->descriptorCount = 1;
+    writeInfo->descriptorType  = descType;
 }
 
 void ProgramExecutableVk::updateEarlyFragmentTestsOptimization(ContextVk *contextVk)
@@ -1112,9 +1110,6 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
         return;
     }
 
-    VkWriteDescriptorSet &writeInfo    = contextVk->allocWriteDescriptorSet();
-    VkDescriptorBufferInfo &bufferInfo = contextVk->allocDescriptorBufferInfo();
-
     vk::BufferHelper *bufferHelper = defaultUniformBuffer;
     if (defaultUniformBlock.uniformData.empty())
     {
@@ -1122,9 +1117,9 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
         bufferHelper->retain(&contextVk->getResourceUseList());
     }
 
-    WriteBufferDescriptorSetBinding(
-        *bufferHelper, 0, VK_WHOLE_SIZE, mDescriptorSets[DescriptorSetIndex::UniformsAndXfb],
-        VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, info.binding, 0, 0, &bufferInfo, &writeInfo);
+    WriteBufferDescriptorSetBinding(contextVk, *bufferHelper, 0, VK_WHOLE_SIZE,
+                                    mDescriptorSets[DescriptorSetIndex::UniformsAndXfb],
+                                    VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, info.binding, 0, 0);
 }
 
 // Lazily allocate the descriptor set. We may not need one if all of the buffers are inactive.
@@ -1219,17 +1214,13 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
 
         if (!cacheHit)
         {
-            VkDescriptorBufferInfo &bufferInfo = contextVk->allocDescriptorBufferInfo();
-            VkWriteDescriptorSet &writeInfo    = contextVk->allocWriteDescriptorSet();
-
             VkDescriptorSet descriptorSet;
             ANGLE_TRY(getOrAllocateShaderResourcesDescriptorSet(contextVk, &shaderBuffersDesc,
                                                                 &descriptorSet));
             VkDeviceSize offset =
                 IsDynamicDescriptor(descriptorType) ? 0 : bufferOffset + bufferBinding.getOffset();
-            WriteBufferDescriptorSetBinding(bufferHelper, offset, size, descriptorSet,
-                                            descriptorType, binding, arrayElement, 0, &bufferInfo,
-                                            &writeInfo);
+            WriteBufferDescriptorSetBinding(contextVk, bufferHelper, offset, size, descriptorSet,
+                                            descriptorType, binding, arrayElement, 0);
         }
         if (IsDynamicDescriptor(descriptorType))
         {
@@ -1292,18 +1283,15 @@ angle::Result ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
                       "updateAtomicCounterBuffersDescriptorSet needs an update to handle dynamic "
                       "descriptors");
 
-        VkDescriptorBufferInfo &bufferInfo = contextVk->allocDescriptorBufferInfo();
-        VkWriteDescriptorSet &writeInfo    = contextVk->allocWriteDescriptorSet();
-
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         VkDeviceSize bufferOffset      = 0;
         vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
 
         VkDeviceSize size = gl::GetBoundBufferAvailableSize(bufferBinding);
         WriteBufferDescriptorSetBinding(
-            bufferHelper, static_cast<uint32_t>(bufferOffset + bufferBinding.getOffset()), size,
-            descriptorSet, kStorageBufferDescriptorType, info.binding, binding,
-            requiredOffsetAlignment, &bufferInfo, &writeInfo);
+            contextVk, bufferHelper,
+            static_cast<uint32_t>(bufferOffset + bufferBinding.getOffset()), size, descriptorSet,
+            kStorageBufferDescriptorType, info.binding, binding, requiredOffsetAlignment);
 
         writtenBindings.set(binding);
     }
@@ -1311,17 +1299,11 @@ angle::Result ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
     // Bind the empty buffer to every array slot that's unused.
     vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
     emptyBuffer.retain(&contextVk->getResourceUseList());
-    size_t count                        = (~writtenBindings).count();
-    VkDescriptorBufferInfo *bufferInfos = contextVk->allocDescriptorBufferInfos(count);
-    VkWriteDescriptorSet *writeInfos    = contextVk->allocWriteDescriptorSets(count);
-    size_t writeCount                   = 0;
     for (size_t binding : ~writtenBindings)
     {
-        WriteBufferDescriptorSetBinding(emptyBuffer, 0, VK_WHOLE_SIZE, descriptorSet,
+        WriteBufferDescriptorSetBinding(contextVk, emptyBuffer, 0, VK_WHOLE_SIZE, descriptorSet,
                                         kStorageBufferDescriptorType, info.binding,
-                                        static_cast<uint32_t>(binding), 0, &bufferInfos[writeCount],
-                                        &writeInfos[writeCount]);
-        writeCount++;
+                                        static_cast<uint32_t>(binding), 0);
     }
 
     return angle::Result::Continue;
@@ -1373,8 +1355,6 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
         // time we process a nested array.
         mappedImageNameToArrayOffset[mappedImageName] += arraySize;
 
-        VkWriteDescriptorSet *writeInfos = contextVk->allocWriteDescriptorSets(arraySize);
-
         // Texture buffers use buffer views, so they are especially handled.
         if (imageBinding.textureType == gl::TextureType::Buffer)
         {
@@ -1397,21 +1377,22 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
                 const ShaderInterfaceVariableInfo &info =
                     mVariableInfoMap.get(shaderType, mappedImageName);
 
-                writeInfos[arrayElement].sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                writeInfos[arrayElement].pNext            = nullptr;
-                writeInfos[arrayElement].dstSet           = descriptorSet;
-                writeInfos[arrayElement].dstBinding       = info.binding;
-                writeInfos[arrayElement].dstArrayElement  = arrayOffset + arrayElement;
-                writeInfos[arrayElement].descriptorCount  = 1;
-                writeInfos[arrayElement].descriptorType   = VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER;
-                writeInfos[arrayElement].pImageInfo       = nullptr;
-                writeInfos[arrayElement].pBufferInfo      = nullptr;
-                writeInfos[arrayElement].pTexelBufferView = view->ptr();
+                VkBufferView *bufferViews       = nullptr;
+                VkWriteDescriptorSet *writeInfo = nullptr;
+                contextVk->getBufferViewsAndWriteInfo(1, &bufferViews, &writeInfo);
+
+                bufferViews[0] = view->getHandle();
+
+                writeInfo->sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                writeInfo->dstSet          = descriptorSet;
+                writeInfo->dstBinding      = info.binding;
+                writeInfo->dstArrayElement = arrayOffset + arrayElement;
+                writeInfo->descriptorCount = 1;
+                writeInfo->descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER;
             }
             continue;
         }
 
-        VkDescriptorImageInfo *imageInfos = contextVk->allocDescriptorImageInfos(arraySize);
         for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
         {
             GLuint imageUnit             = imageBinding.boundImageUnits[arrayElement];
@@ -1425,23 +1406,23 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
 
             // Note: binding.access is unused because it is implied by the shader.
 
-            imageInfos[arrayElement].sampler     = VK_NULL_HANDLE;
-            imageInfos[arrayElement].imageView   = imageView->getHandle();
-            imageInfos[arrayElement].imageLayout = image->getCurrentLayout();
+            VkDescriptorImageInfo *imageInfos;
+            VkWriteDescriptorSet *writeInfo;
+            contextVk->getImageInfosAndWriteInfo(1, &imageInfos, &writeInfo);
+
+            imageInfos[0].sampler     = VK_NULL_HANDLE;
+            imageInfos[0].imageView   = imageView->getHandle();
+            imageInfos[0].imageLayout = image->getCurrentLayout();
 
             const std::string imageName = GlslangGetMappedSamplerName(imageUniform.name);
             const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, imageName);
 
-            writeInfos[arrayElement].sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            writeInfos[arrayElement].pNext            = nullptr;
-            writeInfos[arrayElement].dstSet           = descriptorSet;
-            writeInfos[arrayElement].dstBinding       = info.binding;
-            writeInfos[arrayElement].dstArrayElement  = arrayOffset + arrayElement;
-            writeInfos[arrayElement].descriptorCount  = 1;
-            writeInfos[arrayElement].descriptorType   = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-            writeInfos[arrayElement].pImageInfo       = &imageInfos[arrayElement];
-            writeInfos[arrayElement].pBufferInfo      = nullptr;
-            writeInfos[arrayElement].pTexelBufferView = nullptr;
+            writeInfo->sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writeInfo->dstSet          = descriptorSet;
+            writeInfo->dstBinding      = info.binding;
+            writeInfo->dstArrayElement = arrayOffset + arrayElement;
+            writeInfo->descriptorCount = 1;
+            writeInfo->descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
         }
     }
 
@@ -1530,27 +1511,25 @@ angle::Result ProgramExecutableVk::updateInputAttachmentDescriptorSet(
         VkDescriptorSet descriptorSet;
         ANGLE_TRY(getOrAllocateShaderResourcesDescriptorSet(contextVk, nullptr, &descriptorSet));
 
-        VkWriteDescriptorSet *writeInfos  = contextVk->allocWriteDescriptorSets(1);
-        VkDescriptorImageInfo *imageInfos = contextVk->allocDescriptorImageInfos(1);
-        RenderTargetVk *renderTargetVk    = framebufferVk->getColorDrawRenderTarget(colorIndex);
-        const vk::ImageView *imageView    = nullptr;
+        RenderTargetVk *renderTargetVk = framebufferVk->getColorDrawRenderTarget(colorIndex);
+        const vk::ImageView *imageView = nullptr;
 
         ANGLE_TRY(renderTargetVk->getImageView(contextVk, &imageView));
+
+        VkDescriptorImageInfo *imageInfos;
+        VkWriteDescriptorSet *writeInfo;
+        contextVk->getImageInfosAndWriteInfo(1, &imageInfos, &writeInfo);
 
         imageInfos[0].sampler     = VK_NULL_HANDLE;
         imageInfos[0].imageView   = imageView->getHandle();
         imageInfos[0].imageLayout = VK_IMAGE_LAYOUT_GENERAL;
 
-        writeInfos[0].sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writeInfos[0].pNext            = nullptr;
-        writeInfos[0].dstSet           = descriptorSet;
-        writeInfos[0].dstBinding       = baseBinding + static_cast<uint32_t>(colorIndex);
-        writeInfos[0].dstArrayElement  = 0;
-        writeInfos[0].descriptorCount  = 1;
-        writeInfos[0].descriptorType   = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
-        writeInfos[0].pImageInfo       = &imageInfos[0];
-        writeInfos[0].pBufferInfo      = nullptr;
-        writeInfos[0].pTexelBufferView = nullptr;
+        writeInfo->sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writeInfo->dstSet          = descriptorSet;
+        writeInfo->dstBinding      = baseBinding + static_cast<uint32_t>(colorIndex);
+        writeInfo->dstArrayElement = 0;
+        writeInfo->descriptorCount = 1;
+        writeInfo->descriptorType  = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
     }
 
     return angle::Result::Continue;
@@ -1691,8 +1670,6 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             // time we process a nested array.
             mappedSamplerNameToArrayOffset[mappedSamplerName] += arraySize;
 
-            VkWriteDescriptorSet *writeInfos = contextVk->allocWriteDescriptorSets(arraySize);
-
             // Texture buffers use buffer views, so they are especially handled.
             if (samplerBinding.textureType == gl::TextureType::Buffer)
             {
@@ -1709,22 +1686,22 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
                     const ShaderInterfaceVariableInfo &info =
                         mVariableInfoMap.get(shaderType, samplerName);
 
-                    writeInfos[arrayElement].sType      = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    writeInfos[arrayElement].pNext      = nullptr;
-                    writeInfos[arrayElement].dstSet     = descriptorSet;
-                    writeInfos[arrayElement].dstBinding = info.binding;
-                    writeInfos[arrayElement].dstArrayElement = arrayOffset + arrayElement;
-                    writeInfos[arrayElement].descriptorCount = 1;
-                    writeInfos[arrayElement].descriptorType =
-                        VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
-                    writeInfos[arrayElement].pImageInfo       = nullptr;
-                    writeInfos[arrayElement].pBufferInfo      = nullptr;
-                    writeInfos[arrayElement].pTexelBufferView = view->ptr();
+                    VkBufferView *bufferViews       = nullptr;
+                    VkWriteDescriptorSet *writeInfo = nullptr;
+                    contextVk->getBufferViewsAndWriteInfo(1, &bufferViews, &writeInfo);
+
+                    bufferViews[0] = view->getHandle();
+
+                    writeInfo->sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    writeInfo->dstSet          = descriptorSet;
+                    writeInfo->dstBinding      = info.binding;
+                    writeInfo->dstArrayElement = arrayOffset + arrayElement;
+                    writeInfo->descriptorCount = 1;
+                    writeInfo->descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
                 }
                 continue;
             }
 
-            VkDescriptorImageInfo *imageInfos = contextVk->allocDescriptorImageInfos(arraySize);
             for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
             {
                 GLuint textureUnit          = samplerBinding.boundTextureUnits[arrayElement];
@@ -1734,8 +1711,12 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
                 vk::ImageHelper &image = textureVk->getImage();
 
-                imageInfos[arrayElement].sampler     = samplerHelper.get().getHandle();
-                imageInfos[arrayElement].imageLayout = image.getCurrentLayout();
+                VkDescriptorImageInfo *imageInfos;
+                VkWriteDescriptorSet *writeInfo;
+                contextVk->getImageInfosAndWriteInfo(1, &imageInfos, &writeInfo);
+
+                imageInfos[0].sampler     = samplerHelper.get().getHandle();
+                imageInfos[0].imageLayout = image.getCurrentLayout();
 
                 if (emulateSeamfulCubeMapSampling)
                 {
@@ -1744,33 +1725,29 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
                     // cube maps.
                     const vk::ImageView &imageView = textureVk->getFetchImageViewAndRecordUse(
                         contextVk, unit.srgbDecode, samplerUniform.texelFetchStaticUse);
-                    imageInfos[arrayElement].imageView = imageView.getHandle();
+                    imageInfos[0].imageView = imageView.getHandle();
                 }
                 else
                 {
                     const vk::ImageView &imageView = textureVk->getReadImageViewAndRecordUse(
                         contextVk, unit.srgbDecode, samplerUniform.texelFetchStaticUse);
-                    imageInfos[arrayElement].imageView = imageView.getHandle();
+                    imageInfos[0].imageView = imageView.getHandle();
                 }
 
                 if (textureVk->getImage().hasImmutableSampler())
                 {
-                    imageInfos[arrayElement].sampler = textureVk->getSampler().get().getHandle();
+                    imageInfos[0].sampler = textureVk->getSampler().get().getHandle();
                 }
                 const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
                 const ShaderInterfaceVariableInfo &info =
                     mVariableInfoMap.get(shaderType, samplerName);
 
-                writeInfos[arrayElement].sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                writeInfos[arrayElement].pNext           = nullptr;
-                writeInfos[arrayElement].dstSet          = descriptorSet;
-                writeInfos[arrayElement].dstBinding      = info.binding;
-                writeInfos[arrayElement].dstArrayElement = arrayOffset + arrayElement;
-                writeInfos[arrayElement].descriptorCount = 1;
-                writeInfos[arrayElement].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                writeInfos[arrayElement].pImageInfo     = &imageInfos[arrayElement];
-                writeInfos[arrayElement].pBufferInfo    = nullptr;
-                writeInfos[arrayElement].pTexelBufferView = nullptr;
+                writeInfo->sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                writeInfo->dstSet          = descriptorSet;
+                writeInfo->dstBinding      = info.binding;
+                writeInfo->dstArrayElement = arrayOffset + arrayElement;
+                writeInfo->descriptorCount = 1;
+                writeInfo->descriptorType  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             }
         }
     }
