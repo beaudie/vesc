@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2fa7ec6_a2d58443",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-06-04T15:42:44Z",
+      "side": 1,
+      "message": "The bug didn\u0027t manifest itself on ANGLE\u0027s CQ because WebGL1 disallows dynamic indices. On the GL backend, we enable this transformation outside WebGL too on a few platforms, so I added a few basic end2end tests.",
+      "revId": "2bfbfc9c616aac2cec8a2acb87274c0562057c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
