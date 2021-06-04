@@ -13,6 +13,8 @@
 
 namespace vma
 {
+VmaPool DeviceMemoryPools[16] = {};
+
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
                        VkInstance instance,
@@ -69,6 +71,11 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
 
 void DestroyAllocator(VmaAllocator allocator)
 {
+    for (int i = 0; i < 16; i++)
+    {
+        vmaDestroyPool(allocator, DeviceMemoryPools[i]);
+        DeviceMemoryPools[i] = nullptr;
+    }
     vmaDestroyAllocator(allocator);
 }
 
@@ -92,6 +99,30 @@ VkResult CreateBuffer(VmaAllocator allocator,
     allocationCreateInfo.preferredFlags          = preferredFlags;
     allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
     VmaAllocationInfo allocationInfo = {};
+
+    uint32_t memoryTypeIndex = *pMemoryTypeIndexOut;
+    if (!DeviceMemoryPools[memoryTypeIndex])
+    {
+        const VkDeviceSize preferredBlockSize =
+            32ull * 1024 * 1024;  // CalcPreferredBlockSize(memoryTypeIndex);
+
+        // Create a custom pool.
+        VmaPoolCreateInfo poolCreateInfo = {};
+        poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
+        poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT |
+                               VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT;
+        poolCreateInfo.blockSize     = preferredBlockSize;
+        poolCreateInfo.maxBlockCount = -1;
+
+        VmaPool pool;
+        result = vmaCreatePool(allocator, &poolCreateInfo, &pool);
+        if (VK_SUCCESS != result)
+        {
+            return result;
+        }
+        DeviceMemoryPools[*pMemoryTypeIndexOut] = pool;
+    }
+    allocationCreateInfo.pool = DeviceMemoryPools[*pMemoryTypeIndexOut];
 
     result = vmaCreateBuffer(allocator, pBufferCreateInfo, &allocationCreateInfo, pBuffer,
                              pAllocation, &allocationInfo);
