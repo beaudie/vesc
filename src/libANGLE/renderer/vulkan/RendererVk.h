@@ -411,6 +411,15 @@ class RendererVk : angle::NonCopyable
     VkDeviceSize getBufferPeakSize() const { return mPeakBufferSize; }
     VkDeviceSize getBufferTotalSize() const { return mTotalBufferSize; }
 
+    void onDeviceMemoryAllocate(VkDeviceSize size)
+    {
+        vma::totalDeviceMemorySize += size;
+        // This is race prone, but don't want to eat extra cost of lock just because of this
+        vma::peakDeviceMemorySize.store(
+            std::max(vma::peakDeviceMemorySize, vma::totalDeviceMemorySize),
+            std::memory_order_relaxed);
+    }
+    void onDeviceMemoryRelease(VkDeviceSize size) { vma::totalDeviceMemorySize -= size; }
     VkDeviceSize getDeviceMemoryPeakSize() const { return vma::peakDeviceMemorySize; }
     VkDeviceSize getDeviceMemoryTotalSize() const { return vma::totalDeviceMemorySize; }
     void getBufferAllocationStats(GLint64 *params) const;

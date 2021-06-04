@@ -3373,7 +3373,7 @@ void BufferMemory::unmap(RendererVk *renderer)
 {
     if (mMappedMemory != nullptr)
     {
-        if (isExternalBuffer())
+        if (mExternalMemory.valid())
         {
             mExternalMemory.unmap(renderer->getDevice());
         }
@@ -3388,7 +3388,7 @@ void BufferMemory::unmap(RendererVk *renderer)
 
 void BufferMemory::destroy(RendererVk *renderer)
 {
-    if (isExternalBuffer())
+    if (mExternalMemory.valid())
     {
         mExternalMemory.destroy(renderer->getDevice());
         ReleaseAndroidExternalMemory(renderer, mClientBuffer);
@@ -3404,7 +3404,7 @@ void BufferMemory::flush(RendererVk *renderer,
                          VkDeviceSize offset,
                          VkDeviceSize size)
 {
-    if (isExternalBuffer())
+    if (mExternalMemory.valid())
     {
         // if the memory type is not host coherent, we perform an explicit flush
         if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
@@ -3428,7 +3428,7 @@ void BufferMemory::invalidate(RendererVk *renderer,
                               VkDeviceSize offset,
                               VkDeviceSize size)
 {
-    if (isExternalBuffer())
+    if (mExternalMemory.valid())
     {
         // if the memory type is not device coherent, we perform an explicit invalidate
         if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD) == 0)
@@ -3449,7 +3449,7 @@ void BufferMemory::invalidate(RendererVk *renderer,
 
 angle::Result BufferMemory::mapImpl(ContextVk *contextVk, VkDeviceSize size)
 {
-    if (isExternalBuffer())
+    if (mExternalMemory.valid())
     {
         ANGLE_VK_TRY(contextVk, mExternalMemory.map(contextVk->getRenderer()->getDevice(), 0, size,
                                                     0, &mMappedMemory));
@@ -3505,9 +3505,25 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 
     ANGLE_VK_CHECK(contextVk, createInfo->size <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
-    ANGLE_VK_TRY(contextVk, allocator.createBuffer(*createInfo, requiredFlags, preferredFlags,
-                                                   persistentlyMapped, &memoryTypeIndex, &mBuffer,
-                                                   mMemory.getMemoryObject()));
+    if (mSize > 1ull * 1024 * 1024)
+    {
+        // for large allocation, don't use sub-allocator
+        ANGLE_VK_TRY(contextVk, mBuffer.init(contextVk->getDevice(), *createInfo));
+        VkDeviceSize sizeOut = 0;
+        ANGLE_TRY(AllocateBufferMemory(contextVk, memoryPropertyFlags, &mMemoryPropertyFlags,
+                                       nullptr, &mBuffer, mMemory.getExternalMemoryObject(),
+                                       &sizeOut));
+        ASSERT(sizeOut >= mSize);
+        // This really should be sizeOut. But since I don't know sizeOut at release time, to ensure
+        // they are balanced, I am using mSize here. These two values should be close.
+        renderer->onDeviceMemoryAllocate(mSize);
+    }
+    else
+    {
+        ANGLE_VK_TRY(contextVk, allocator.createBuffer(*createInfo, requiredFlags, preferredFlags,
+                                                       persistentlyMapped, &memoryTypeIndex,
+                                                       &mBuffer, mMemory.getMemoryObject()));
+    }
     renderer->onBufferAllocate(mSize);
     allocator.getMemoryTypeProperties(memoryTypeIndex, &mMemoryPropertyFlags);
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
@@ -3607,6 +3623,11 @@ void BufferHelper::destroy(RendererVk *renderer)
     unmap(renderer);
     if (!mMemory.isExternalBuffer())
     {
+        if (mMemory.getExternalMemoryObject()->valid())
+        {
+            ASSERT(!mMemory.getMemoryObject()->valid());
+            renderer->onDeviceMemoryRelease(mSize);
+        }
         renderer->onBufferRelease(mSize);
     }
     mSize = 0;
@@ -3620,6 +3641,11 @@ void BufferHelper::release(RendererVk *renderer)
     unmap(renderer);
     if (!mMemory.isExternalBuffer())
     {
+        if (mMemory.getExternalMemoryObject()->valid())
+        {
+            ASSERT(!mMemory.getMemoryObject()->valid());
+            renderer->onDeviceMemoryRelease(mSize);
+        }
         renderer->onBufferRelease(mSize);
     }
     mSize = 0;
