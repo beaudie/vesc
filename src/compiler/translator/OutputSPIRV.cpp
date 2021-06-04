@@ -1217,7 +1217,7 @@ void OutputSPIRVTraverser::visitConstantUnion(TIntermConstantUnion *node)
     // Find out the expected type for this constant, so it can be cast right away and not need an
     // instruction to do that.
     TIntermNode *parent     = getParentNode();
-    const size_t childIndex = getParentChildIndex();
+    const size_t childIndex = getParentChildIndex(PreVisit);
 
     TBasicType expectedBasicType = type.getBasicType();
     if (parent->getAsAggregate())
