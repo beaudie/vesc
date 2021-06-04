@@ -240,6 +240,7 @@ bool ValidateImageFormat(const cl_image_format *imageFormat, const Platform &pla
 }
 
 cl_int ValidateCommandQueueAndEventWaitList(cl_command_queue commandQueue,
+                                            bool validateImageSupport,
                                             cl_uint numEvents,
                                             const cl_event *events)
 {
@@ -252,6 +253,15 @@ cl_int ValidateCommandQueueAndEventWaitList(cl_command_queue commandQueue,
     if (!queue.isOnHost())
     {
         return CL_INVALID_COMMAND_QUEUE;
+    }
+
+    if (validateImageSupport)
+    {
+        // CL_INVALID_OPERATION if the device associated with command_queue does not support images.
+        if (queue.getDevice().getInfo().mImageSupport == CL_FALSE)
+        {
+            return CL_INVALID_OPERATION;
+        }
     }
 
     // CL_INVALID_EVENT_WAIT_LIST if event_wait_list is NULL and num_events_in_wait_list > 0,
@@ -408,6 +418,140 @@ cl_int ValidateHostRect(const size_t *hostOrigin,
         (hostSlicePitch < region[1] * hostRowPitch || (hostSlicePitch % hostRowPitch) != 0u))
     {
         return CL_INVALID_VALUE;
+    }
+
+    // CL_INVALID_VALUE if ptr is NULL.
+    if (ptr == nullptr)
+    {
+        return CL_INVALID_VALUE;
+    }
+
+    return CL_SUCCESS;
+}
+
+cl_int ValidateEnqueueImage(const CommandQueue &queue, cl_mem image, bool hostRead, bool hostWrite)
+{
+    // CL_INVALID_MEM_OBJECT if image is not a valid image object.
+    if (!Image::IsValid(image))
+    {
+        return CL_INVALID_MEM_OBJECT;
+    }
+    const Image &img = image->cast<Image>();
+
+    // CL_INVALID_CONTEXT if the context associated with command_queue and image are not the same.
+    if (&queue.getContext() != &img.getContext())
+    {
+        return CL_INVALID_CONTEXT;
+    }
+
+    // CL_INVALID_OPERATION if a read function is called on image which
+    // has been created with CL_MEM_HOST_WRITE_ONLY or CL_MEM_HOST_NO_ACCESS.
+    if (hostRead && img.getEffectiveFlags().isSet(CL_MEM_HOST_WRITE_ONLY | CL_MEM_HOST_NO_ACCESS))
+    {
+        return CL_INVALID_OPERATION;
+    }
+
+    // CL_INVALID_OPERATION if a write function is called on image which
+    // has been created with CL_MEM_HOST_READ_ONLY or CL_MEM_HOST_NO_ACCESS.
+    if (hostWrite && img.getEffectiveFlags().isSet(CL_MEM_HOST_READ_ONLY | CL_MEM_HOST_NO_ACCESS))
+    {
+        return CL_INVALID_OPERATION;
+    }
+
+    return CL_SUCCESS;
+}
+
+cl_int ValidateImageForDevice(const Image &image,
+                              const Device &device,
+                              const size_t *origin,
+                              const size_t *region)
+{
+    // CL_INVALID_VALUE if origin or region is NULL.
+    if (origin == nullptr || region == nullptr)
+    {
+        return CL_INVALID_VALUE;
+    }
+
+    // CL_INVALID_VALUE if values in origin and region do not follow rules
+    // described in the argument description for origin and region.
+    // The values in region cannot be 0.
+    if (region[0] == 0u || region[1] == 0u || region[2] == 0u)
+    {
+        return CL_INVALID_VALUE;
+    }
+    switch (image.getType())
+    {
+        // If image is a 1D image or 1D image buffer object,
+        // origin[1] and origin[2] must be 0 and region[1] and region[2] must be 1.
+        case CL_MEM_OBJECT_IMAGE1D:
+        case CL_MEM_OBJECT_IMAGE1D_BUFFER:
+            if (origin[1] != 0u || origin[2] != 0u || region[1] != 1u || region[2] != 1u)
+            {
+                return CL_INVALID_VALUE;
+            }
+            break;
+        // If image is a 2D image object or a 1D image array object,
+        // origin[2] must be 0 and region[2] must be 1.
+        case CL_MEM_OBJECT_IMAGE2D:
+        case CL_MEM_OBJECT_IMAGE1D_ARRAY:
+            if (origin[2] != 0u || region[2] != 1u)
+            {
+                return CL_INVALID_VALUE;
+            }
+            break;
+        case CL_MEM_OBJECT_IMAGE3D:
+        case CL_MEM_OBJECT_IMAGE2D_ARRAY:
+            break;
+        default:
+            ASSERT(false);
+            return CL_INVALID_IMAGE_DESCRIPTOR;
+    }
+
+    // CL_INVALID_VALUE if the region being read or written
+    // specified by origin and region is out of bounds.
+    if (!image.isRegionValid(origin, region))
+    {
+        return CL_INVALID_VALUE;
+    }
+
+    // CL_INVALID_IMAGE_SIZE if image dimensions (image width, height, specified or compute
+    // row and/or slice pitch) for image are not supported by device associated with queue.
+    if (!device.supportsImageDimensions(image.getDescriptor()))
+    {
+        return CL_INVALID_IMAGE_SIZE;
+    }
+
+    return CL_SUCCESS;
+}
+
+cl_int ValidateHostRegionForImage(const Image &image,
+                                  size_t rowPitch,
+                                  size_t slicePitch,
+                                  const void *ptr)
+{
+    // CL_INVALID_VALUE if row_pitch is not 0 and is less than the element size in bytes x width.
+    if (rowPitch == 0u)
+    {
+        rowPitch = image.getRowSize();
+    }
+    else if (rowPitch < image.getRowSize())
+    {
+        return CL_INVALID_VALUE;
+    }
+    if (slicePitch != 0u)
+    {
+        // slice_pitch must be 0 if image is a 1D or 2D image.
+        if (image.getType() == CL_MEM_OBJECT_IMAGE1D ||
+            image.getType() == CL_MEM_OBJECT_IMAGE1D_BUFFER ||
+            image.getType() == CL_MEM_OBJECT_IMAGE2D)
+        {
+            return CL_INVALID_VALUE;
+        }
+        // CL_INVALID_VALUE if slice_pitch is not 0 and is less than row_pitch x height.
+        if (slicePitch < rowPitch * image.getDescriptor().height)
+        {
+            return CL_INVALID_VALUE;
+        }
     }
 
     // CL_INVALID_VALUE if ptr is NULL.
@@ -1305,8 +1449,8 @@ cl_int ValidateEnqueueReadBuffer(cl_command_queue command_queue,
                                  const cl_event *event_wait_list,
                                  const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -1338,8 +1482,8 @@ cl_int ValidateEnqueueWriteBuffer(cl_command_queue command_queue,
                                   const cl_event *event_wait_list,
                                   const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -1371,8 +1515,8 @@ cl_int ValidateEnqueueCopyBuffer(cl_command_queue command_queue,
                                  const cl_event *event_wait_list,
                                  const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -1412,8 +1556,7 @@ cl_int ValidateEnqueueCopyBuffer(cl_command_queue command_queue,
 
         // The regions overlap if src_offset <= dst_offset <= src_offset + size - 1
         // or if dst_offset <= src_offset <= dst_offset + size - 1.
-        if ((src_offset <= dst_offset && dst_offset <= src_offset + size - 1u) ||
-            (dst_offset <= src_offset && src_offset <= dst_offset + size - 1u))
+        if (OverlapRanges(src_offset, dst_offset, size))
         {
             return CL_MEM_COPY_OVERLAP;
         }
@@ -1434,6 +1577,33 @@ cl_int ValidateEnqueueReadImage(cl_command_queue command_queue,
                                 const cl_event *event_wait_list,
                                 const cl_event *event)
 {
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, true, num_events_in_wait_list, event_wait_list);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    errorCode = ValidateEnqueueImage(queue, image, true, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &img = image->cast<Image>();
+
+    errorCode = ValidateImageForDevice(img, queue.getDevice(), origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    errorCode = ValidateHostRegionForImage(img, row_pitch, slice_pitch, ptr);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
     return CL_SUCCESS;
 }
 
@@ -1449,6 +1619,33 @@ cl_int ValidateEnqueueWriteImage(cl_command_queue command_queue,
                                  const cl_event *event_wait_list,
                                  const cl_event *event)
 {
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, true, num_events_in_wait_list, event_wait_list);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    errorCode = ValidateEnqueueImage(queue, image, false, true);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &img = image->cast<Image>();
+
+    errorCode = ValidateImageForDevice(img, queue.getDevice(), origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    errorCode = ValidateHostRegionForImage(img, input_row_pitch, input_slice_pitch, ptr);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
     return CL_SUCCESS;
 }
 
@@ -1462,6 +1659,77 @@ cl_int ValidateEnqueueCopyImage(cl_command_queue command_queue,
                                 const cl_event *event_wait_list,
                                 const cl_event *event)
 {
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, true, num_events_in_wait_list, event_wait_list);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    errorCode = ValidateEnqueueImage(queue, src_image, false, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &src = src_image->cast<Image>();
+
+    errorCode = ValidateEnqueueImage(queue, dst_image, false, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &dst = dst_image->cast<Image>();
+
+    // CL_IMAGE_FORMAT_MISMATCH if src_image and dst_image do not use the same image format.
+    if (src.getFormat().image_channel_order != dst.getFormat().image_channel_order ||
+        src.getFormat().image_channel_data_type != dst.getFormat().image_channel_data_type)
+    {
+        return CL_IMAGE_FORMAT_MISMATCH;
+    }
+
+    errorCode = ValidateImageForDevice(src, queue.getDevice(), src_origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    errorCode = ValidateImageForDevice(dst, queue.getDevice(), dst_origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    // CL_MEM_COPY_OVERLAP if src_image and dst_image are the same image object
+    // and the source and destination regions overlap.
+    if (&src == &dst)
+    {
+        const cl_mem_object_type type = src.getType();
+        // Check overlap in first dimension
+        if (OverlapRanges(src_origin[0], dst_origin[0], region[0]))
+        {
+            if (type == CL_MEM_OBJECT_IMAGE1D || type == CL_MEM_OBJECT_IMAGE1D_BUFFER)
+            {
+                return CL_MEM_COPY_OVERLAP;
+            }
+
+            // Check overlap in second dimension
+            if (OverlapRanges(src_origin[1], dst_origin[1], region[1]))
+            {
+                if (type == CL_MEM_OBJECT_IMAGE2D || type == CL_MEM_OBJECT_IMAGE1D_ARRAY)
+                {
+                    return CL_MEM_COPY_OVERLAP;
+                }
+
+                // Check overlap in third dimension
+                if (OverlapRanges(src_origin[2], dst_origin[2], region[2]))
+                {
+                    return CL_MEM_COPY_OVERLAP;
+                }
+            }
+        }
+    }
+
     return CL_SUCCESS;
 }
 
@@ -1475,6 +1743,57 @@ cl_int ValidateEnqueueCopyImageToBuffer(cl_command_queue command_queue,
                                         const cl_event *event_wait_list,
                                         const cl_event *event)
 {
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, true, num_events_in_wait_list, event_wait_list);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    errorCode = ValidateEnqueueImage(queue, src_image, false, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &src = src_image->cast<Image>();
+
+    errorCode = ValidateEnqueueBuffer(queue, dst_buffer, false, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Buffer &dst = dst_buffer->cast<Buffer>();
+
+    // CL_INVALID_MEM_OBJECT if src_image is a 1D image buffer object created from dst_buffer.
+    if (src.getType() == CL_MEM_OBJECT_IMAGE1D_BUFFER && src.getParent().get() == &dst)
+    {
+        return CL_INVALID_MEM_OBJECT;
+    }
+
+    errorCode = ValidateImageForDevice(src, queue.getDevice(), src_origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    // CL_INVALID_VALUE if the region specified by dst_offset and dst_offset + dst_cb
+    // refer to a region outside dst_buffer.
+    const cl_mem_object_type type = src.getType();
+    size_t dst_cb                 = src.getElementSize() * region[0];
+    if (type != CL_MEM_OBJECT_IMAGE1D && type != CL_MEM_OBJECT_IMAGE1D_BUFFER)
+    {
+        dst_cb *= region[1];
+        if (type != CL_MEM_OBJECT_IMAGE2D && type != CL_MEM_OBJECT_IMAGE1D_ARRAY)
+        {
+            dst_cb *= region[2];
+        }
+    }
+    if (!dst.isRegionValid(dst_offset, dst_cb))
+    {
+        return CL_INVALID_VALUE;
+    }
+
     return CL_SUCCESS;
 }
 
@@ -1488,6 +1807,57 @@ cl_int ValidateEnqueueCopyBufferToImage(cl_command_queue command_queue,
                                         const cl_event *event_wait_list,
                                         const cl_event *event)
 {
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, true, num_events_in_wait_list, event_wait_list);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    errorCode = ValidateEnqueueBuffer(queue, src_buffer, false, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Buffer &src = src_buffer->cast<Buffer>();
+
+    errorCode = ValidateEnqueueImage(queue, dst_image, false, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &dst = dst_image->cast<Image>();
+
+    // CL_INVALID_MEM_OBJECT if dst_image is a 1D image buffer object created from src_buffer.
+    if (dst.getType() == CL_MEM_OBJECT_IMAGE1D_BUFFER && dst.getParent().get() == &src)
+    {
+        return CL_INVALID_MEM_OBJECT;
+    }
+
+    errorCode = ValidateImageForDevice(dst, queue.getDevice(), dst_origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    // CL_INVALID_VALUE if the region specified by src_offset and src_offset + src_cb
+    // refer to a region outside src_buffer.
+    const cl_mem_object_type type = dst.getType();
+    size_t src_cb                 = dst.getElementSize() * region[0];
+    if (type != CL_MEM_OBJECT_IMAGE1D && type != CL_MEM_OBJECT_IMAGE1D_BUFFER)
+    {
+        src_cb *= region[1];
+        if (type != CL_MEM_OBJECT_IMAGE2D && type != CL_MEM_OBJECT_IMAGE1D_ARRAY)
+        {
+            src_cb *= region[2];
+        }
+    }
+    if (!src.isRegionValid(src_offset, src_cb))
+    {
+        return CL_INVALID_VALUE;
+    }
+
     return CL_SUCCESS;
 }
 
@@ -1501,8 +1871,8 @@ cl_int ValidateEnqueueMapBuffer(cl_command_queue command_queue,
                                 const cl_event *event_wait_list,
                                 const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -1544,6 +1914,54 @@ cl_int ValidateEnqueueMapImage(cl_command_queue command_queue,
                                const cl_event *event_wait_list,
                                const cl_event *event)
 {
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, true, num_events_in_wait_list, event_wait_list);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    // CL_INVALID_OPERATION if image has been created with CL_MEM_HOST_WRITE_ONLY or
+    // CL_MEM_HOST_NO_ACCESS and CL_MAP_READ is set in map_flags
+    // or if image has been created with CL_MEM_HOST_READ_ONLY or CL_MEM_HOST_NO_ACCESS
+    // and CL_MAP_WRITE or CL_MAP_WRITE_INVALIDATE_REGION is set in map_flags.
+    errorCode =
+        ValidateEnqueueImage(queue, image, map_flags.isSet(CL_MAP_READ),
+                             map_flags.isSet(CL_MAP_WRITE | CL_MAP_WRITE_INVALIDATE_REGION));
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &img = image->cast<Image>();
+
+    errorCode = ValidateImageForDevice(img, queue.getDevice(), origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    // CL_INVALID_VALUE if values specified in map_flags are not valid.
+    if (!ValidateMapFlags(map_flags, queue.getContext().getPlatform()))
+    {
+        return CL_INVALID_VALUE;
+    }
+
+    // CL_INVALID_VALUE if image_row_pitch is NULL.
+    if (image_row_pitch == nullptr)
+    {
+        return CL_INVALID_VALUE;
+    }
+
+    // CL_INVALID_VALUE if image is a 3D image, 1D or 2D image array object
+    // and image_slice_pitch is NULL.
+    if ((img.getType() == CL_MEM_OBJECT_IMAGE3D || img.getType() == CL_MEM_OBJECT_IMAGE1D_ARRAY ||
+         img.getType() == CL_MEM_OBJECT_IMAGE2D_ARRAY) &&
+        image_slice_pitch == nullptr)
+    {
+        return CL_INVALID_VALUE;
+    }
+
     return CL_SUCCESS;
 }
 
@@ -1884,8 +2302,8 @@ cl_int ValidateEnqueueReadBufferRect(cl_command_queue command_queue,
                                      const cl_event *event_wait_list,
                                      const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -1933,8 +2351,8 @@ cl_int ValidateEnqueueWriteBufferRect(cl_command_queue command_queue,
                                       const cl_event *event_wait_list,
                                       const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -1981,8 +2399,8 @@ cl_int ValidateEnqueueCopyBufferRect(cl_command_queue command_queue,
                                      const cl_event *event_wait_list,
                                      const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -2235,31 +2653,7 @@ cl_int ValidateCreateImage(cl_context context,
     // image dimensions described in the Device Queries table for all devices in context.
     const DevicePtrs &devices = ctx.getDevices();
     if (std::find_if(devices.cbegin(), devices.cend(), [&](const DevicePtr &ptr) {
-            switch (image_desc->image_type)
-            {
-                case CL_MEM_OBJECT_IMAGE1D:
-                    return image_desc->image_width <= ptr->getInfo().mImage2D_MaxWidth;
-                case CL_MEM_OBJECT_IMAGE2D:
-                    return image_desc->image_width <= ptr->getInfo().mImage2D_MaxWidth &&
-                           image_desc->image_height <= ptr->getInfo().mImage2D_MaxHeight;
-                case CL_MEM_OBJECT_IMAGE3D:
-                    return image_desc->image_width <= ptr->getInfo().mImage3D_MaxWidth &&
-                           image_desc->image_height <= ptr->getInfo().mImage3D_MaxHeight &&
-                           image_desc->image_depth <= ptr->getInfo().mImage3D_MaxDepth;
-                case CL_MEM_OBJECT_IMAGE1D_ARRAY:
-                    return image_desc->image_width <= ptr->getInfo().mImage2D_MaxWidth &&
-                           image_desc->image_array_size <= ptr->getInfo().mImageMaxArraySize;
-                case CL_MEM_OBJECT_IMAGE2D_ARRAY:
-                    return image_desc->image_width <= ptr->getInfo().mImage2D_MaxWidth &&
-                           image_desc->image_height <= ptr->getInfo().mImage2D_MaxHeight &&
-                           image_desc->image_array_size <= ptr->getInfo().mImageMaxArraySize;
-                case CL_MEM_OBJECT_IMAGE1D_BUFFER:
-                    return image_desc->image_width <= ptr->getInfo().mImageMaxBufferSize;
-                default:
-                    ASSERT(false);
-                    break;
-            }
-            return false;
+            return ptr->supportsImageDimensions(*image_desc);
         }) == devices.cend())
     {
         return CL_INVALID_IMAGE_SIZE;
@@ -2404,8 +2798,8 @@ cl_int ValidateEnqueueFillBuffer(cl_command_queue command_queue,
                                  const cl_event *event_wait_list,
                                  const cl_event *event)
 {
-    cl_int errorCode = ValidateCommandQueueAndEventWaitList(command_queue, num_events_in_wait_list,
-                                                            event_wait_list);
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, false, num_events_in_wait_list, event_wait_list);
     if (errorCode != CL_SUCCESS)
     {
         return errorCode;
@@ -2455,6 +2849,37 @@ cl_int ValidateEnqueueFillImage(cl_command_queue command_queue,
                                 const cl_event *event_wait_list,
                                 const cl_event *event)
 {
+    cl_int errorCode = ValidateCommandQueueAndEventWaitList(
+        command_queue, true, num_events_in_wait_list, event_wait_list);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const CommandQueue &queue = command_queue->cast<CommandQueue>();
+    if (!queue.getContext().getPlatform().isVersionOrNewer(1u, 2u))
+    {
+        return CL_INVALID_COMMAND_QUEUE;
+    }
+
+    errorCode = ValidateEnqueueImage(queue, image, false, false);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+    const Image &img = image->cast<Image>();
+
+    errorCode = ValidateImageForDevice(img, queue.getDevice(), origin, region);
+    if (errorCode != CL_SUCCESS)
+    {
+        return errorCode;
+    }
+
+    // CL_INVALID_VALUE if fill_color is NULL.
+    if (fill_color == nullptr)
+    {
+        return CL_INVALID_VALUE;
+    }
+
     return CL_SUCCESS;
 }
 
