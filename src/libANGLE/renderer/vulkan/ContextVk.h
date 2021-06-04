@@ -585,13 +585,15 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void addOverlayUsedBuffersCount(vk::CommandBufferHelper *commandBuffer);
 
     // DescriptorSet writes
-    VkDescriptorBufferInfo *allocDescriptorBufferInfos(size_t count);
-    VkDescriptorImageInfo *allocDescriptorImageInfos(size_t count);
-    VkWriteDescriptorSet *allocWriteDescriptorSets(size_t count);
-
-    VkDescriptorBufferInfo &allocDescriptorBufferInfo() { return *allocDescriptorBufferInfos(1); }
-    VkDescriptorImageInfo &allocDescriptorImageInfo() { return *allocDescriptorImageInfos(1); }
-    VkWriteDescriptorSet &allocWriteDescriptorSet() { return *allocWriteDescriptorSets(1); }
+    void getImageInfosAndWriteInfo(size_t numImageInfos,
+                                   VkDescriptorImageInfo **imageInfosOut,
+                                   VkWriteDescriptorSet **writeInfoOut);
+    void getBufferInfosAndWriteInfo(size_t numBufferInfos,
+                                    VkDescriptorBufferInfo **bufferInfosOut,
+                                    VkWriteDescriptorSet **writeInfoOut);
+    void getBufferViewsAndWriteInfo(size_t numBufferViews,
+                                    VkBufferView **bufferViewsOut,
+                                    VkWriteDescriptorSet **writeInfoOut);
 
     vk::DynamicBuffer *getDefaultUniformStorage() { return &mDefaultUniformStorage; }
     // For testing only.
@@ -617,6 +619,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
     angle::Result handleMidRenderPassClearEvent();
+
+    void flushDescriptorSetUpdates();
 
   private:
     // Dirty bits.
@@ -885,7 +889,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result flushCommandsAndEndRenderPassImpl();
     angle::Result flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                DirtyBits dirtyBitMask);
-    void flushDescriptorSetUpdates();
 
     void onRenderPassFinished();
 
@@ -911,12 +914,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void populateTransformFeedbackBufferSet(
         size_t bufferCount,
         const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
-
-    // DescriptorSet writes
-    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-    T *allocDescriptorInfos(std::vector<T> *descriptorVector, size_t count);
-    template <typename T, const T *VkWriteDescriptorSet::*pInfo>
-    void growDesciptorCapacity(std::vector<T> *descriptorVector, size_t newSize);
 
     angle::Result updateRenderPassDepthStencilAccess();
     bool shouldSwitchToReadOnlyDepthFeedbackLoopMode(const gl::Context *context,
@@ -1110,9 +1107,22 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     egl::ContextPriority mContextPriority;
 
     // Storage for vkUpdateDescriptorSets
-    std::vector<VkDescriptorBufferInfo> mDescriptorBufferInfos;
-    std::vector<VkDescriptorImageInfo> mDescriptorImageInfos;
     std::vector<VkWriteDescriptorSet> mWriteDescriptorSets;
+
+    std::vector<VkDescriptorImageInfo> mVkDescriptorImageInfos;
+    // First element: Index into mWriteDescriptorSets.
+    // Second element: Number of mVkDescriptorImageInfos elements.
+    std::vector<std::pair<size_t, size_t>> mImageInfoIndices;
+
+    std::vector<VkDescriptorBufferInfo> mVkDescriptorBufferInfos;
+    // First element: Index into mWriteDescriptorSets.
+    // Second element: Number of mVkDescriptorBufferInfos elements.
+    std::vector<std::pair<size_t, size_t>> mBufferInfoIndices;
+
+    std::vector<VkBufferView> mVkBufferViews;
+    // First element: Index into mWriteDescriptorSets.
+    // Second element: Number of mVkBufferViews elements.
+    std::vector<std::pair<size_t, size_t>> mBufferViewIndices;
 
     ShareGroupVk *mShareGroupVk;
 
