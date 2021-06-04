@@ -353,14 +353,30 @@ ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
     {
         ASSERT(mDescriptorBufferInfos.empty());
         ASSERT(mDescriptorImageInfos.empty());
+        ASSERT(mVkBufferViews.empty());
         return;
+    }
+
+    for (const auto &it : mVkDescriptorBufferInfos)
+    {
+        mWriteDescriptorSets[it.first].pBufferInfo = it.second.data();
+    }
+    for (const auto &it : mVkDescriptorImageInfos)
+    {
+        mWriteDescriptorSets[it.first].pImageInfo = it.second.data();
+    }
+    for (const auto &it : mVkBufferViews)
+    {
+        mWriteDescriptorSets[it.first].pTexelBufferView = it.second.data();
     }
 
     vkUpdateDescriptorSets(getDevice(), static_cast<uint32_t>(mWriteDescriptorSets.size()),
                            mWriteDescriptorSets.data(), 0, nullptr);
+
     mWriteDescriptorSets.clear();
     mDescriptorBufferInfos.clear();
     mDescriptorImageInfos.clear();
+    mVkBufferViews.clear();
 }
 
 ANGLE_INLINE void ContextVk::onRenderPassFinished()
@@ -852,10 +868,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
-    // Create a local object to ensure we flush the descriptor updates to device when we leave this
-    // function
-    ScopedDescriptorSetUpdates descriptorSetUpdates(this);
-
     if (mProgram && mProgram->dirtyUniforms())
     {
         ANGLE_TRY(mProgram->updateUniforms(this));
@@ -1096,10 +1108,6 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     // the dispatch call.  Flush the outside render pass command buffer as a workaround.
     // TODO: Remove this and fix tests.  http://anglebug.com/5070
     ANGLE_TRY(flushOutsideRenderPassCommands());
-
-    // Create a local object to ensure we flush the descriptor updates to device when we leave this
-    // function
-    ScopedDescriptorSetUpdates descriptorSetUpdates(this);
 
     if (mProgram && mProgram->dirtyUniforms())
     {
@@ -4762,21 +4770,23 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     }
 
     // Update the driver uniform descriptor set.
-    VkDescriptorBufferInfo &bufferInfo = allocDescriptorBufferInfo();
-    bufferInfo.buffer                  = buffer->getBuffer().getHandle();
-    bufferInfo.offset                  = 0;
-    bufferInfo.range                   = driverUniformsSize;
+    VkDescriptorBufferInfo bufferInfo = {};
+    bufferInfo.buffer                 = buffer->getBuffer().getHandle();
+    bufferInfo.offset                 = 0;
+    bufferInfo.range                  = driverUniformsSize;
 
-    VkWriteDescriptorSet &writeInfo = allocWriteDescriptorSet();
-    writeInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet                = driverUniforms->descriptorSet;
-    writeInfo.dstBinding            = 0;
-    writeInfo.dstArrayElement       = 0;
-    writeInfo.descriptorCount       = 1;
-    writeInfo.descriptorType        = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-    writeInfo.pImageInfo            = nullptr;
-    writeInfo.pTexelBufferView      = nullptr;
-    writeInfo.pBufferInfo           = &bufferInfo;
+    VkWriteDescriptorSet writeInfo = {};
+    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet               = driverUniforms->descriptorSet;
+    writeInfo.dstBinding           = 0;
+    writeInfo.dstArrayElement      = 0;
+    writeInfo.descriptorCount      = 1;
+    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+    writeInfo.pImageInfo           = nullptr;
+    writeInfo.pTexelBufferView     = nullptr;
+    writeInfo.pBufferInfo          = &bufferInfo;
+
+    recordWriteInfoAndBufferInfo(writeInfo, {bufferInfo});
 
     // Add into descriptor set cache
     driverUniforms->descriptorSetCache.insert(bufferSerial.getValue(),
@@ -5475,6 +5485,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
     ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
                                    mRenderPassCommands->getAttachmentOps(), &renderPass));
 
+    flushDescriptorSetUpdates();
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, *renderPass, &mRenderPassCommands));
 
     if (mGpuEventsEnabled)
@@ -5616,6 +5627,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
         mOutsideRenderPassCommands->addCommandDiagnostics(this);
     }
 
+    flushDescriptorSetUpdates();
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, &mOutsideRenderPassCommands));
 
     // Make sure appropriate dirty bits are set, in case another thread makes a submission before
@@ -5734,26 +5746,29 @@ T *ContextVk::allocDescriptorInfos(std::vector<T> *descriptorVector, size_t coun
     return &(*descriptorVector)[oldSize];
 }
 
-VkDescriptorBufferInfo *ContextVk::allocDescriptorBufferInfos(size_t count)
+void ContextVk::recordWriteInfoAndBufferInfo(const VkWriteDescriptorSet &writeInfo,
+                                             const std::vector<VkDescriptorBufferInfo> &bufferInfos)
 {
-    return allocDescriptorInfos<VkDescriptorBufferInfo, &VkWriteDescriptorSet::pBufferInfo>(
-        &mDescriptorBufferInfos, count);
+    size_t index = mWriteDescriptorSets.size();
+    mWriteDescriptorSets.emplace_back(writeInfo);
+    ASSERT(!mVkDescriptorBufferInfos.contains(index));
+    mVkDescriptorBufferInfos.emplace(index, bufferInfos);
 }
-
-VkDescriptorImageInfo *ContextVk::allocDescriptorImageInfos(size_t count)
+void ContextVk::recordWriteInfoAndImageInfo(const VkWriteDescriptorSet &writeInfo,
+                                            const std::vector<VkDescriptorImageInfo> &imageInfos)
 {
-    return allocDescriptorInfos<VkDescriptorImageInfo, &VkWriteDescriptorSet::pImageInfo>(
-        &mDescriptorImageInfos, count);
+    size_t index = mWriteDescriptorSets.size();
+    mWriteDescriptorSets.emplace_back(writeInfo);
+    ASSERT(!mVkDescriptorImageInfos.contains(index));
+    mVkDescriptorImageInfos.emplace(index, imageInfos);
 }
-
-VkWriteDescriptorSet *ContextVk::allocWriteDescriptorSets(size_t count)
+void ContextVk::recordWriteInfoAndBufferView(const VkWriteDescriptorSet &writeInfo,
+                                             const std::vector<VkBufferView> &bufferViews)
 {
-    mPerfCounters.writeDescriptorSets += count;
-
-    size_t oldSize = mWriteDescriptorSets.size();
-    size_t newSize = oldSize + count;
-    mWriteDescriptorSets.resize(newSize);
-    return &mWriteDescriptorSets[oldSize];
+    size_t index = mWriteDescriptorSets.size();
+    mWriteDescriptorSets.emplace_back(writeInfo);
+    ASSERT(!mVkBufferViews.contains(index));
+    mVkBufferViews.emplace(index, bufferViews);
 }
 
 void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)

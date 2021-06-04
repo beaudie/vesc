@@ -585,13 +585,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void addOverlayUsedBuffersCount(vk::CommandBufferHelper *commandBuffer);
 
     // DescriptorSet writes
-    VkDescriptorBufferInfo *allocDescriptorBufferInfos(size_t count);
-    VkDescriptorImageInfo *allocDescriptorImageInfos(size_t count);
-    VkWriteDescriptorSet *allocWriteDescriptorSets(size_t count);
-
-    VkDescriptorBufferInfo &allocDescriptorBufferInfo() { return *allocDescriptorBufferInfos(1); }
-    VkDescriptorImageInfo &allocDescriptorImageInfo() { return *allocDescriptorImageInfos(1); }
-    VkWriteDescriptorSet &allocWriteDescriptorSet() { return *allocWriteDescriptorSets(1); }
+    void recordWriteInfoAndBufferInfo(const VkWriteDescriptorSet &writeInfo,
+                                      const std::vector<VkDescriptorBufferInfo> &bufferInfos);
+    void recordWriteInfoAndImageInfo(const VkWriteDescriptorSet &writeInfo,
+                                     const std::vector<VkDescriptorImageInfo> &imageInfos);
+    void recordWriteInfoAndBufferView(const VkWriteDescriptorSet &writeInfo,
+                                      const std::vector<VkBufferView> &bufferViews);
 
     vk::DynamicBuffer *getDefaultUniformStorage() { return &mDefaultUniformStorage; }
     // For testing only.
@@ -615,6 +614,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void resetCurrentGraphicsPipeline() { mCurrentGraphicsPipeline = nullptr; }
 
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
+
+    void flushDescriptorSetUpdates();
 
   private:
     // Dirty bits.
@@ -883,7 +884,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result flushCommandsAndEndRenderPassImpl();
     angle::Result flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                DirtyBits dirtyBitMask);
-    void flushDescriptorSetUpdates();
 
     void onRenderPassFinished();
 
@@ -1111,6 +1111,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     std::vector<VkDescriptorBufferInfo> mDescriptorBufferInfos;
     std::vector<VkDescriptorImageInfo> mDescriptorImageInfos;
     std::vector<VkWriteDescriptorSet> mWriteDescriptorSets;
+    angle::HashMap<size_t, const std::vector<VkDescriptorImageInfo>> mVkDescriptorImageInfos;
+    angle::HashMap<size_t, const std::vector<VkDescriptorBufferInfo>> mVkDescriptorBufferInfos;
+    angle::HashMap<size_t, const std::vector<VkBufferView>> mVkBufferViews;
 
     ShareGroupVk *mShareGroupVk;
 
