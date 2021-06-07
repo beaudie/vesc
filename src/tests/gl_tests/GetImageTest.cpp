@@ -33,6 +33,12 @@ class GetImageTest : public ANGLETest
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
     }
+
+    void testSetUp() override
+    {
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
 };
 
 class GetImageTestNoExtensions : public ANGLETest
