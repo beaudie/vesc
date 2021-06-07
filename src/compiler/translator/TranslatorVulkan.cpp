@@ -1341,11 +1341,8 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     }
 
 #if defined(ANGLE_ENABLE_DIRECT_SPIRV_GENERATION)
-    constexpr ShCompileOptions kUnsupportedTransformations = SH_ADD_BRESENHAM_LINE_RASTER_EMULATION;
     if ((compileOptions & SH_GENERATE_SPIRV_DIRECTLY) != 0 &&
-        ((getShaderType() == GL_VERTEX_SHADER &&
-          (compileOptions & kUnsupportedTransformations) == 0) ||
-         getShaderType() == GL_COMPUTE_SHADER))
+        (getShaderType() == GL_VERTEX_SHADER || getShaderType() == GL_COMPUTE_SHADER))
     {
         // Declare the implicitly defined gl_PerVertex I/O blocks if not already.  This will help
         // SPIR-V generation treat them mostly like usual I/O blocks.
@@ -1354,7 +1351,7 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
             return false;
         }
 
-        return OutputSPIRV(this, root, compileOptions);
+        return OutputSPIRV(this, root, compileOptions, precisionEmulation);
     }
 #endif
 
