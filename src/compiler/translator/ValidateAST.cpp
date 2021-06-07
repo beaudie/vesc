@@ -61,6 +61,8 @@ class ValidateAST : public TIntermTraverser
 
     void expectNonNullChildren(Visit visit, TIntermNode *node, size_t least_count);
 
+    void expectNonConstantValue(Visit visit, TIntermTyped *node, const char *name);
+
     bool validateInternal();
 
     ValidateASTOptions mOptions;
@@ -84,6 +86,9 @@ class ValidateAST : public TIntermTraverser
 
     // For validateMultiDeclarations:
     bool mMultiDeclarationsFailed = false;
+
+    // For validateConstantExpressionsUseConstantUnion:
+    bool mConstantExpressionsUseConstantUnionFailed = false;
 };
 
 bool ValidateAST::validate(TIntermNode *root,
@@ -335,9 +340,23 @@ void ValidateAST::expectNonNullChildren(Visit visit, TIntermNode *node, size_t l
     }
 }
 
+void ValidateAST::expectNonConstantValue(Visit visit, TIntermTyped *node, const char *name)
+{
+    if (visit == PreVisit && mOptions.validateConstantExpressionsUseConstantUnion &&
+        node->hasConstantValue())
+    {
+        mDiagnostics->error(node->getLine(),
+                            "Constant expression not optimized as TConstantUnion "
+                            "<validateConstantExpressionsUseConstantUnion>",
+                            name);
+        mConstantExpressionsUseConstantUnionFailed = true;
+    }
+}
+
 void ValidateAST::visitSymbol(TIntermSymbol *node)
 {
     visitNode(PreVisit, node);
+    expectNonConstantValue(PreVisit, node, node->getName().data());
 
     const TVariable *variable = &node->variable();
     const TType &type         = node->getType();
@@ -400,6 +419,7 @@ bool ValidateAST::visitSwizzle(Visit visit, TIntermSwizzle *node)
 bool ValidateAST::visitBinary(Visit visit, TIntermBinary *node)
 {
     visitNode(visit, node);
+    expectNonConstantValue(visit, node, GetOperatorString(node->getOp()));
     return true;
 }
 
@@ -473,6 +493,20 @@ bool ValidateAST::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     visitNode(visit, node);
     expectNonNullChildren(visit, node, 0);
+
+    const char *nodeName = "";
+    if (node->isConstructor())
+    {
+        const TType &type = node->getType();
+        nodeName          = type.getStruct() != nullptr ? type.getStruct()->name().data()
+                                               : type.getBuiltInTypeNameString();
+    }
+    else
+    {
+        nodeName = node->functionName();
+    }
+
+    expectNonConstantValue(visit, node, nodeName);
     return true;
 }
 
@@ -500,6 +534,17 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
 
     if (mOptions.validateMultiDeclarations && sequence.size() > 1)
     {
+        TIntermSymbol *symbol = sequence.front()->getAsSymbolNode();
+        if (symbol == nullptr)
+        {
+            symbol = sequence.front()->getAsBinaryNode()->getLeft()->getAsSymbolNode();
+        }
+        ASSERT(symbol != nullptr);
+
+        mDiagnostics->error(
+            node->getLine(),
+            "Multiple declarations found in one statement <validateMultiDeclarations>",
+            symbol->getName().data());
         mMultiDeclarationsFailed = true;
     }
 
@@ -583,7 +628,8 @@ void ValidateAST::visitPreprocessorDirective(TIntermPreprocessorDirective *node)
 bool ValidateAST::validateInternal()
 {
     return !mSingleParentFailed && !mVariableReferencesFailed && !mNullNodesFailed &&
-           !mStructUsageFailed && !mMultiDeclarationsFailed;
+           !mStructUsageFailed && !mMultiDeclarationsFailed &&
+           !mConstantExpressionsUseConstantUnionFailed;
 }
 
 }  // anonymous namespace
