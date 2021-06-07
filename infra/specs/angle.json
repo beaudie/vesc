@@ -1420,6 +1420,7 @@
         "args": [
           "angle_deqp_gles3_tests",
           "--use-angle=metal",
+          "--flaky-retries=2",
           "--bot-mode"
         ],
         "merge": {
@@ -1649,6 +1650,7 @@
         "args": [
           "angle_deqp_gles3_tests",
           "--use-angle=metal",
+          "--flaky-retries=2",
           "--bot-mode"
         ],
         "merge": {
