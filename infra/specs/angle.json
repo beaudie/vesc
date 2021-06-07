@@ -981,7 +981,7 @@
             }
           ],
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 2
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -1410,7 +1410,7 @@
             }
           ],
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 2
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -1441,7 +1441,7 @@
             }
           ],
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 2
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -1640,7 +1640,7 @@
             }
           ],
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 2
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -1669,7 +1669,7 @@
             }
           ],
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 2
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -2445,7 +2445,7 @@
             }
           ],
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 2
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
