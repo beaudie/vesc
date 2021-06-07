@@ -1354,7 +1354,7 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
             return false;
         }
 
-        return OutputSPIRV(this, root, compileOptions);
+        return OutputSPIRV(this, root, compileOptions, precisionEmulation);
     }
 #endif
 
