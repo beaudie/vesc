@@ -54,6 +54,9 @@ struct ValidateASTOptions
     bool validateExpressionTypes = true;  // TODO
     // If SeparateDeclarations has been run, check for the absence of multi declarations as well.
     bool validateMultiDeclarations = false;
+    // Check that anything that can be turned into a TConstantUnion is turned into a TConstantUnion,
+    // ensuring that no such opportunity is missed.
+    bool validateConstantExpressionsUseConstantUnion = true;
 };
 
 // Check for errors and output error messages on the context.
