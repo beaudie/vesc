@@ -986,7 +986,7 @@ void SerializeVariableLocationsVector(JsonSerializer *json,
 
 void SerializeBlockMemberInfo(JsonSerializer *json, const sh::BlockMemberInfo &blockMemberInfo)
 {
-    GroupScope(json, "BlockMemberInfo");
+    GroupScope group(json, "BlockMemberInfo");
     json->addScalar("Offset", blockMemberInfo.offset);
     json->addScalar("Stride", blockMemberInfo.arrayStride);
     json->addScalar("MatrixStride", blockMemberInfo.matrixStride);
