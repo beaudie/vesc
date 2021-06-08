@@ -705,7 +705,7 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 // externalFormat
                 const TextureVk *textureVk          = (*activeTextures)[textureUnit].texture;
                 const vk::Sampler &immutableSampler = textureVk->getSampler().get();
-                uint64_t externalFormat             = textureVk->getImage().getExternalFormat();
+                uint64_t immutableSamplerFormat     = textureVk->getImmutableSamplerFormat();
                 descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
                                 activeStages, &immutableSampler);
                 // The Vulkan spec has the following note -
@@ -714,7 +714,8 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 // uniform stride for dynamic indexing of the descriptors in the binding.
                 uint32_t formatDescriptorCount = 0;
                 angle::Result result           = contextVk->getRenderer()->getFormatDescriptorCount(
-                    contextVk, externalFormat, true, &formatDescriptorCount);
+                    contextVk, immutableSamplerFormat,
+                    textureVk->getImage().getExternalFormat() != 0, &formatDescriptorCount);
                 if (result != angle::Result::Continue)
                 {
                     // There was an error querying the descriptor count for this format, treat it as
@@ -723,7 +724,7 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 }
                 mImmutableSamplersMaxDescriptorCount =
                     std::max(mImmutableSamplersMaxDescriptorCount, formatDescriptorCount);
-                mSupportedImmutableSamplerFormatIndexMap[externalFormat] = textureIndex;
+                mSupportedImmutableSamplerFormatIndexMap[immutableSamplerFormat] = textureIndex;
             }
             else
             {
