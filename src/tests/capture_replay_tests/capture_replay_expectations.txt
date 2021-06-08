@@ -57,7 +57,7 @@ GLSLTest.InactiveSamplersInStruct/*
 GLSLTest.MixedShaderLengths/*
 GLSLTest.ZeroShaderLength/*
 GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
-ImageTest.*
+ImageTest.SourceCubeTargetExternal/*
 IndexedPointsTestUByte.*
 IndexedPointsTestUInt.*
 IndexedPointsTestUShort.*
