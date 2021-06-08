@@ -280,6 +280,13 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return isDirty;
     }
 
+    uint64_t getImmutableSamplerFormat() const
+    {
+        return mImage->getFormat().actualImageFormat().isYUV
+                   ? mImage->getFormat().actualImageVkFormat()
+                   : mImage->getExternalFormat();
+    }
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
