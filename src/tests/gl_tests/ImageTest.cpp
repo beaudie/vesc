@@ -1169,6 +1169,11 @@ TEST_P(ImageTest, ValidationGLImage)
     EGLContext context = window->getContext();
     EGLImageKHR image  = EGL_NO_IMAGE_KHR;
 
+    const char data[] = {
+        0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,
+        4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
+    };
+
     if (has2DTextureExt())
     {
         // If <target> is EGL_GL_TEXTURE_2D_KHR, EGL_GL_TEXTURE_CUBE_MAP_*_KHR or
@@ -1180,7 +1185,7 @@ TEST_P(ImageTest, ValidationGLImage)
         for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
              face++)
         {
-            glTexImage2D(face, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage2D(face, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         }
 
         image = eglCreateImageKHR(display, context, EGL_GL_TEXTURE_2D_KHR,
@@ -1195,8 +1200,8 @@ TEST_P(ImageTest, ValidationGLImage)
         GLuint incompleteTexture;
         glGenTextures(1, &incompleteTexture);
         glBindTexture(GL_TEXTURE_2D, incompleteTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
         EGLint level0Attribute[] = {
             EGL_GL_TEXTURE_LEVEL_KHR,
@@ -1212,7 +1217,7 @@ TEST_P(ImageTest, ValidationGLImage)
         // If EGL_GL_TEXTURE_LEVEL_KHR is 0, <target> is EGL_GL_TEXTURE_2D_KHR or
         // EGL_GL_TEXTURE_3D_KHR, <buffer> is not the name of a complete GL texture object, and
         // mipmap level 0 is not specified, the error EGL_BAD_PARAMETER is generated.
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         image = eglCreateImageKHR(display, context, EGL_GL_TEXTURE_2D_KHR,
                                   reinterpretHelper<EGLClientBuffer>(incompleteTexture), nullptr);
         EXPECT_EQ(image, EGL_NO_IMAGE_KHR);
@@ -1246,7 +1251,7 @@ TEST_P(ImageTest, ValidationGLImage)
         GLuint texture2D;
         glGenTextures(1, &texture2D);
         glBindTexture(GL_TEXTURE_2D, texture2D);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
         // From EGL_KHR_image_base:
         // If <target> is not one of the values in Table aaa, the error EGL_BAD_PARAMETER is
@@ -1266,15 +1271,15 @@ TEST_P(ImageTest, ValidationGLImage)
         glGenTextures(1, &incompleteTextureCube);
         glBindTexture(GL_TEXTURE_CUBE_MAP, incompleteTextureCube);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     nullptr);
+                     data);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     nullptr);
+                     data);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     nullptr);
+                     data);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     nullptr);
+                     data);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     nullptr);
+                     data);
 
         EGLint level0Attribute[] = {
             EGL_GL_TEXTURE_LEVEL_KHR,
@@ -1295,7 +1300,7 @@ TEST_P(ImageTest, ValidationGLImage)
         for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
              face++)
         {
-            glTexImage2D(face, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage2D(face, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         }
 
         // From EGL_KHR_image_base:
@@ -1315,7 +1320,7 @@ TEST_P(ImageTest, ValidationGLImage)
         GLuint texture3D;
         glGenTextures(1, &texture3D);
         glBindTexture(GL_TEXTURE_3D, texture3D);
-        glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
         EGLint zOffset3Parameter[] = {
             EGL_GL_TEXTURE_ZOFFSET_KHR,
@@ -1345,7 +1350,7 @@ TEST_P(ImageTest, ValidationGLImage)
             GLuint texture2D;
             glGenTextures(1, &texture2D);
             glBindTexture(GL_TEXTURE_2D, texture2D);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
             // Verify EGL_GL_TEXTURE_ZOFFSET_KHR is not a valid parameter
             EGLint zOffset0Parameter[] = {
@@ -1366,7 +1371,7 @@ TEST_P(ImageTest, ValidationGLImage)
             GLuint texture3D;
             glGenTextures(1, &texture3D);
             glBindTexture(GL_TEXTURE_3D, texture3D);
-            glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 1, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 1, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
             // From EGL_KHR_image_base:
             // If <target> is not one of the values in Table aaa, the error EGL_BAD_PARAMETER is
