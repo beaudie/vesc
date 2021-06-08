@@ -149,6 +149,7 @@ class Context final : public _cl_context, public Object
     const rx::CLContextImpl::Ptr mImpl;
     const DevicePtrs mDevices;
 
+    friend class CommandQueue;
     friend class Object;
 };
 
@@ -172,9 +173,7 @@ inline const DevicePtrs &Context::getDevices() const
 
 inline bool Context::hasDevice(const _cl_device_id *device) const
 {
-    return std::find_if(mDevices.cbegin(), mDevices.cend(), [=](const DevicePtr &ptr) {
-               return ptr.get() == device;
-           }) != mDevices.cend();
+    return std::find(mDevices.cbegin(), mDevices.cend(), device) != mDevices.cend();
 }
 
 template <typename T>
