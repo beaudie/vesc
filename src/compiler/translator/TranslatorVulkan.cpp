@@ -238,7 +238,7 @@ ANGLE_NO_DISCARD bool RotateAndFlipBuiltinVariable(TCompiler *compiler,
     sequence.push_back(builtinRef->deepCopy());
     TIntermAggregate *aggregate =
         TIntermAggregate::CreateConstructor(builtin->getType(), &sequence);
-    TIntermBinary *assignment = new TIntermBinary(EOpInitialize, flippedBuiltinRef, aggregate);
+    TIntermBinary *assignment = new TIntermBinary(EOpAssign, flippedBuiltinRef, aggregate);
 
     // Create an assignment to the replaced variable's .xy.
     TIntermSwizzle *correctedXY =
