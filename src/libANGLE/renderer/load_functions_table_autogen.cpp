@@ -1613,7 +1613,7 @@ LoadImageFunctionInfo G8_B8R8_2PLANE_420_UNORM_ANGLEX_to_default(GLenum type)
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
-            return LoadImageFunctionInfo(UnimplementedLoadFunction, true);
+            return LoadImageFunctionInfo(LoadYuvToNative, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);

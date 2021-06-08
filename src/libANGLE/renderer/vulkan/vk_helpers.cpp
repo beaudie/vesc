@@ -4022,6 +4022,46 @@ angle::Result ImageHelper::initExternal(Context *context,
         *imageFormatListEnabledOut = imageFormatListEnabled;
     }
 
+    mYuvConversionSampler.reset();
+    mExternalFormat = 0;
+    if (format.actualImageFormat().isYUV)
+    {
+        // The Vulkan spec states: If sampler is used and the VkFormat of the image is a
+        // multi-planar format, the image must have been created with
+        // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT
+        mCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+
+        RendererVk *rendererVk = context->getRenderer();
+        // The Vulkan spec states: The potential format features of the sampler YCBCR conversion
+        // must support VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT or
+        // VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT
+        constexpr VkFormatFeatureFlags kChromaSubSampleFeatureBits =
+            VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT |
+            VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT;
+
+        VkFormatFeatureFlags supportedChromaSubSampleFeatureBits =
+            rendererVk->getImageFormatFeatureBits(format.actualImageFormatID,
+                                                  kChromaSubSampleFeatureBits);
+
+        VkChromaLocation supportedLocation = ((supportedChromaSubSampleFeatureBits &
+                                               VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
+                                                 ? VK_CHROMA_LOCATION_COSITED_EVEN
+                                                 : VK_CHROMA_LOCATION_MIDPOINT;
+
+        // Create the VkSamplerYcbcrConversion to associate with image views and samplers
+        VkSamplerYcbcrConversionCreateInfo yuvConversionInfo = {};
+        yuvConversionInfo.sType         = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO;
+        yuvConversionInfo.format        = format.actualImageVkFormat();
+        yuvConversionInfo.xChromaOffset = supportedLocation;
+        yuvConversionInfo.yChromaOffset = supportedLocation;
+        yuvConversionInfo.ycbcrModel    = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
+        yuvConversionInfo.ycbcrRange    = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
+        yuvConversionInfo.chromaFilter  = VK_FILTER_NEAREST;
+
+        ANGLE_TRY(rendererVk->getYuvConversionCache().getYuvConversion(
+            context, format.actualImageVkFormat(), yuvConversionInfo, &mYuvConversionSampler));
+    }
+
     VkImageCreateInfo imageInfo = {};
     imageInfo.sType             = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.pNext     = (imageFormatListEnabled) ? &imageFormatListInfo : externalImageCreateInfo;
@@ -4040,9 +4080,6 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(initialLayout);
 
     mCurrentLayout = initialLayout;
-
-    mYuvConversionSampler.reset();
-    mExternalFormat = 0;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -5402,6 +5439,51 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                   inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
                                   outputDepthPitch);
 
+    // YUV formats need special handling.
+    if (vkFormat.actualImageFormat().isYUV)
+    {
+        gl::YuvFormatInfo yuvInfo(formatInfo.internalFormat);
+
+        std::array<gl::Extents, 3> planeExtents = {glExtents, glExtents, glExtents};
+        // The chroma planes could be subsampled, update extents accordingly
+        planeExtents[1].width /= yuvInfo.widthSubSampleFactor;
+        planeExtents[1].height /= yuvInfo.heightSubSampleFactor;
+        planeExtents[2].width /= yuvInfo.widthSubSampleFactor;
+        planeExtents[2].height /= yuvInfo.heightSubSampleFactor;
+
+        uint32_t yPlaneRowPitch      = planeExtents[0].width * yuvInfo.yPlaneBpp;
+        uint32_t yPlaneSize          = yPlaneRowPitch * planeExtents[0].height;
+        uint32_t chromaPlaneRowPitch = planeExtents[1].width * yuvInfo.chromaPlaneBpp;
+        uint32_t chromaPlaneSize     = chromaPlaneRowPitch * planeExtents[1].height;
+
+        std::array<size_t, 3> planeOffsets = {0};
+        planeOffsets[1]                    = yPlaneSize;
+        planeOffsets[2]                    = yPlaneSize + chromaPlaneSize;
+
+        VkImageAspectFlagBits planeAspectFlags[3] = {
+            VK_IMAGE_ASPECT_PLANE_0_BIT, VK_IMAGE_ASPECT_PLANE_1_BIT, VK_IMAGE_ASPECT_PLANE_2_BIT};
+
+        for (uint32_t plane = 0; plane < yuvInfo.planeCount; plane++)
+        {
+            VkBufferImageCopy copy = {};
+
+            copy.bufferOffset      = stagingOffset + planeOffsets[plane];
+            copy.bufferRowLength   = 0;
+            copy.bufferImageHeight = 0;
+
+            // We only support mip level 0 and layerCount of 1
+            copy.imageSubresource.mipLevel   = 0;
+            copy.imageSubresource.layerCount = 1;
+            gl_vk::GetOffset(offset, &copy.imageOffset);
+            gl_vk::GetExtent(planeExtents[plane], &copy.imageExtent);
+            copy.imageSubresource.baseArrayLayer = 0;
+            copy.imageSubresource.aspectMask     = planeAspectFlags[plane];
+            appendSubresourceUpdate(gl::LevelIndex(0), SubresourceUpdate(currentBuffer, copy));
+        }
+
+        return angle::Result::Continue;
+    }
+
     VkBufferImageCopy copy         = {};
     VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.actualImageFormat());
 
@@ -5495,6 +5577,27 @@ angle::Result ImageHelper::CalculateBufferInfo(ContextVk *contextVk,
                                                GLuint *inputDepthPitch,
                                                GLuint *inputSkipBytes)
 {
+    // YUV formats need special handling.
+    if (gl::IsYuvFormat(formatInfo.internalFormat))
+    {
+        gl::YuvFormatInfo yuvInfo(formatInfo.internalFormat);
+
+        uint32_t yPlaneRowPitch = glExtents.width * yuvInfo.yPlaneBpp;
+        uint32_t yPlaneSize     = yPlaneRowPitch * glExtents.height;
+        uint32_t chromaPlaneRowPitch =
+            (glExtents.width / yuvInfo.widthSubSampleFactor) * yuvInfo.chromaPlaneBpp;
+        uint32_t chromaPlaneSize =
+            chromaPlaneRowPitch * (glExtents.height / yuvInfo.heightSubSampleFactor);
+
+        // row pitch = Y plane row pitch
+        *inputRowPitch = yPlaneRowPitch;
+        // depth pitch = Y plane size + chroma plane size
+        *inputDepthPitch = yPlaneSize + chromaPlaneSize;
+        *inputSkipBytes  = 0;
+
+        return angle::Result::Continue;
+    }
+
     ANGLE_VK_CHECK_MATH(contextVk,
                         formatInfo.computeRowPitch(type, glExtents.width, unpack.alignment,
                                                    unpack.rowLength, inputRowPitch));
@@ -5508,6 +5611,11 @@ angle::Result ImageHelper::CalculateBufferInfo(ContextVk *contextVk,
                                                inputSkipBytes));
 
     return angle::Result::Continue;
+}
+
+bool ImageHelper::hasImmutableSampler() const
+{
+    return mExternalFormat != 0 || mFormat->actualImageFormat().isYUV;
 }
 
 void ImageHelper::onWrite(gl::LevelIndex levelStart,
@@ -6437,7 +6545,9 @@ void ImageHelper::removeSupersededUpdates(ContextVk *contextVk, gl::TexLevelMask
 
         const VkImageAspectFlags aspectMask = update.getDestAspectFlags();
         const bool hasColorOrDepth =
-            (aspectMask & (VK_IMAGE_ASPECT_COLOR_BIT | VK_IMAGE_ASPECT_DEPTH_BIT)) != 0;
+            (aspectMask & (VK_IMAGE_ASPECT_COLOR_BIT | VK_IMAGE_ASPECT_PLANE_0_BIT |
+                           VK_IMAGE_ASPECT_PLANE_1_BIT | VK_IMAGE_ASPECT_PLANE_2_BIT |
+                           VK_IMAGE_ASPECT_DEPTH_BIT)) != 0;
         const bool hasStencil = (aspectMask & VK_IMAGE_ASPECT_STENCIL_BIT) != 0;
 
         // Test if the update is to layers that are all superseded.  In that case, drop the update.
