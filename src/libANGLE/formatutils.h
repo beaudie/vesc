@@ -486,6 +486,127 @@ ANGLE_INLINE ComponentType GetVertexAttributeComponentType(bool pureInteger, Ver
         return ComponentType::Float;
     }
 }
+
+constexpr std::size_t kMaxYuvPlaneCount = 3;
+struct YuvFormatInfo
+{
+    // Sized types only.
+    explicit YuvFormatInfo(GLenum internalFormat, const Extents &yPlaneExtent);
+
+    GLenum glInternalFormat;
+    uint32_t planeCount;
+    std::array<uint32_t, kMaxYuvPlaneCount> planeBpp;
+    std::array<Extents, kMaxYuvPlaneCount> planeExtent;
+    std::array<uint32_t, kMaxYuvPlaneCount> planePitch;
+    std::array<uint32_t, kMaxYuvPlaneCount> planeSize;
+    std::array<uint32_t, kMaxYuvPlaneCount> planeOffset;
+};
+
+ANGLE_INLINE bool IsYuvFormat(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+ANGLE_INLINE uint32_t GetPlaneCount(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+            return 2;
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return 3;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+ANGLE_INLINE uint32_t GetYPlaneBpp(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+            return 1;
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return 2;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+ANGLE_INLINE uint32_t GetChromaPlaneBpp(GLenum format)
+{
+    // 2 plane 420 YUV formats have CbCr channels interleaved.
+    // 3 plane 420 YUV formats have separate Cb and Cr planes.
+    switch (format)
+    {
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+            return 1;
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return 2;
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+            return 4;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+ANGLE_INLINE void GetSubSampleFactor(GLenum format,
+                                     int *horizontalSubsampleFactor,
+                                     int *verticalSubsampleFactor)
+{
+    ASSERT(horizontalSubsampleFactor && verticalSubsampleFactor);
+
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            *horizontalSubsampleFactor = 2;
+            *verticalSubsampleFactor   = 2;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
 }  // namespace gl
 
 #endif  // LIBANGLE_FORMATUTILS_H_
