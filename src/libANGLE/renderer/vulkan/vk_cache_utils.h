@@ -865,13 +865,13 @@ class SamplerDesc final
     float mMinLod;
     float mMaxLod;
 
-    // If the sampler needs to convert the image content (e.g. from YUV to RGB) then mExternalFormat
-    // will be non-zero and match the external format as returned from
-    // vkGetAndroidHardwareBufferPropertiesANDROID.
-    // The externalFormat is guaranteed to be unique and any image with the same externalFormat can
-    // use the same conversion sampler. Thus externalFormat works as a Serial() used elsewhere in
-    // ANGLE.
-    uint64_t mExternalFormat;
+    // If the sampler needs to convert the image content (e.g. from YUV to RGB) then
+    // mExternalOrVkFormat will be non-zero. The value is either the external format
+    // as returned by vkGetAndroidHardwareBufferPropertiesANDROID or a YUV VkFormat.
+    // The format is guaranteed to be unique in that any image with the same mExternalOrVkFormat
+    // can use the same conversion sampler. Thus mExternalOrVkFormat along with mIsExternalFormat
+    // works as a Serial() used elsewhere in ANGLE.
+    uint64_t mExternalOrVkFormat;
 
     // 16 bits for modes + states.
     // 1 bit per filter (only 2 possible values in GL: linear/nearest)
@@ -890,7 +890,10 @@ class SamplerDesc final
     // 3 bits for compare op. (8 possible values)
     uint16_t mCompareOp : 3;
 
-    uint16_t mPadding : 15;
+    // 1 bit to identify if external format is used
+    uint16_t mIsExternalFormat : 1;
+
+    uint16_t mPadding : 14;
 
     // Values from angle::ColorGeneric::Type. Float is 0 and others are 1.
     uint16_t mBorderColorType : 1;

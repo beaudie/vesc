@@ -3109,26 +3109,27 @@ SamplerDesc::SamplerDesc(ContextVk *contextVk,
 
 void SamplerDesc::reset()
 {
-    mMipLodBias        = 0.0f;
-    mMaxAnisotropy     = 0.0f;
-    mMinLod            = 0.0f;
-    mMaxLod            = 0.0f;
-    mExternalFormat    = 0;
-    mMagFilter         = 0;
-    mMinFilter         = 0;
-    mMipmapMode        = 0;
-    mAddressModeU      = 0;
-    mAddressModeV      = 0;
-    mAddressModeW      = 0;
-    mCompareEnabled    = 0;
-    mCompareOp         = 0;
-    mPadding           = 0;
-    mBorderColorType   = 0;
-    mBorderColor.red   = 0.0f;
-    mBorderColor.green = 0.0f;
-    mBorderColor.blue  = 0.0f;
-    mBorderColor.alpha = 0.0f;
-    mReserved          = 0;
+    mMipLodBias         = 0.0f;
+    mMaxAnisotropy      = 0.0f;
+    mMinLod             = 0.0f;
+    mMaxLod             = 0.0f;
+    mExternalOrVkFormat = 0;
+    mMagFilter          = 0;
+    mMinFilter          = 0;
+    mMipmapMode         = 0;
+    mAddressModeU       = 0;
+    mAddressModeV       = 0;
+    mAddressModeW       = 0;
+    mCompareEnabled     = 0;
+    mCompareOp          = 0;
+    mIsExternalFormat   = 0;
+    mPadding            = 0;
+    mBorderColorType    = 0;
+    mBorderColor.red    = 0.0f;
+    mBorderColor.green  = 0.0f;
+    mBorderColor.blue   = 0.0f;
+    mBorderColor.alpha  = 0.0f;
+    mReserved           = 0;
 }
 
 void SamplerDesc::update(ContextVk *contextVk,
@@ -3155,7 +3156,13 @@ void SamplerDesc::update(ContextVk *contextVk,
     mMaxLod        = samplerState.getMaxLod();
 
     // GL has no notion of external format, this must be provided from metadata from the image
-    mExternalFormat = externalFormat;
+    const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(formatID);
+    mIsExternalFormat          = (externalFormat != 0) ? 1 : 0;
+    mExternalOrVkFormat        = (externalFormat != 0)
+                              ? externalFormat
+                              : (vkFormat.intendedFormat().isYUV)
+                                    ? static_cast<uint64_t>(vkFormat.actualImageVkFormat())
+                                    : 0;
 
     bool compareEnable    = samplerState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
     VkCompareOp compareOp = gl_vk::GetCompareOp(samplerState.getCompareFunc());
@@ -3203,8 +3210,7 @@ void SamplerDesc::update(ContextVk *contextVk,
     mBorderColorType =
         (samplerState.getBorderColor().type == angle::ColorGeneric::Type::Float) ? 0 : 1;
 
-    mBorderColor               = samplerState.getBorderColor().colorF;
-    const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(formatID);
+    mBorderColor = samplerState.getBorderColor().colorF;
     if (vkFormat.intendedFormatID != angle::FormatID::NONE)
     {
         LoadTextureBorderFunctionInfo loadFunction = vkFormat.textureBorderLoadFunctions();
@@ -3254,14 +3260,14 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
     }
 
     VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
-    if (mExternalFormat)
+    if (mExternalOrVkFormat)
     {
         ASSERT((contextVk->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
         yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
         yuvConversionInfo.pNext = nullptr;
         yuvConversionInfo.conversion =
             contextVk->getRenderer()->getYuvConversionCache().getYuvConversionFromExternalFormat(
-                mExternalFormat);
+                mExternalOrVkFormat);
         AddToPNextChain(&createInfo, &yuvConversionInfo);
 
         // Vulkan spec requires these settings:
