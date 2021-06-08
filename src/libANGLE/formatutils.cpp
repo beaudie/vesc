@@ -597,6 +597,21 @@ void InsertFormatInfo(InternalFormatInfoMap *map, const InternalFormat &formatIn
     (*map)[formatInfo.internalFormat][formatInfo.type] = formatInfo;
 }
 
+// YuvFormatInfo implementation
+YuvFormatInfo::YuvFormatInfo(GLenum internalFormat)
+{
+    glInternalFormat = internalFormat;
+
+    if (gl::IsYuvFormat(internalFormat))
+    {
+        planeCount = gl::GetPlaneCount(internalFormat);
+        gl::GetSubSampleFactor(internalFormat, &horizontalSubsampleFactor,
+                               &verticalSubsampleFactor);
+        yPlaneBpp      = gl::GetYPlaneBpp(internalFormat);
+        chromaPlaneBpp = gl::GetChromaPlaneBpp(internalFormat);
+    }
+}
+
 void AddRGBAFormat(InternalFormatInfoMap *map,
                    GLenum internalFormat,
                    bool sized,

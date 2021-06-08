@@ -486,6 +486,125 @@ ANGLE_INLINE ComponentType GetVertexAttributeComponentType(bool pureInteger, Ver
         return ComponentType::Float;
     }
 }
+
+struct YuvFormatInfo
+{
+    // Sized types only.
+    explicit YuvFormatInfo(GLenum internalFormat);
+
+    GLenum glInternalFormat;
+    uint32_t planeCount;
+    uint32_t horizontalSubsampleFactor;
+    uint32_t verticalSubsampleFactor;
+    uint32_t yPlaneBpp;
+    uint32_t chromaPlaneBpp;
+};
+
+ANGLE_INLINE bool IsYuvFormat(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLEX:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLEX:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLEX:
+            return true;
+        default:
+            return false;
+    }
+}
+
+ANGLE_INLINE uint32_t GetPlaneCount(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLEX:
+            return 2;
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLEX:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLEX:
+            return 3;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+ANGLE_INLINE uint32_t GetYPlaneBpp(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLEX:
+            return 1;
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLEX:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLEX:
+            return 2;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+ANGLE_INLINE uint32_t GetChromaPlaneBpp(GLenum format)
+{
+    // 2 plane 420 YUV formats have CbCr channels interleaved.
+    // 3 plane 420 YUV formats have separate Cb and Cr planes.
+    switch (format)
+    {
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLEX:
+            return 1;
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLEX:
+            return 2;
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLEX:
+            return 4;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+ANGLE_INLINE void GetSubSampleFactor(GLenum format,
+                                     uint32_t *horizontalSubsampleFactor,
+                                     uint32_t *verticalSubsampleFactor)
+{
+    ASSERT(horizontalSubsampleFactor && verticalSubsampleFactor);
+
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLEX:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLEX:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLEX:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLEX:
+            *horizontalSubsampleFactor = 2;
+            *verticalSubsampleFactor   = 2;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
 }  // namespace gl
 
 #endif  // LIBANGLE_FORMATUTILS_H_
