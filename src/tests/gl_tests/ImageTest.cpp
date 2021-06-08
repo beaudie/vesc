@@ -1405,6 +1405,7 @@ TEST_P(ImageTest, ValidationGLImage)
                                       reinterpret_cast<EGLClientBuffer>(0), nullptr);
             EXPECT_EQ(image, EGL_NO_IMAGE_KHR);
             EXPECT_EGL_ERROR(EGL_BAD_PARAMETER);
+            glDeleteRenderbuffers(1, &renderbuffer);
         }
     }
     else
@@ -1421,6 +1422,7 @@ TEST_P(ImageTest, ValidationGLImage)
                                   reinterpretHelper<EGLClientBuffer>(renderbuffer), nullptr);
         EXPECT_EQ(image, EGL_NO_IMAGE_KHR);
         EXPECT_EGL_ERROR(EGL_BAD_PARAMETER);
+        glDeleteRenderbuffers(1, &renderbuffer);
     }
 }
 
