@@ -708,15 +708,16 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 const vk::Sampler &immutableSampler = textureVk->getSampler().get();
                 descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
                                 activeStages, &immutableSampler);
+                uint64_t immutableSamplerFormat = textureVk->getImmutableSamplerFormat();
                 // The Vulkan spec has the following note -
                 // All descriptors in a binding use the same maximum
                 // combinedImageSamplerDescriptorCount descriptors to allow implementations to use a
                 // uniform stride for dynamic indexing of the descriptors in the binding.
+                uint32_t formatDescriptorCount = contextVk->getRenderer()->getFormatDescriptorCount(
+                    immutableSamplerFormat, textureVk->getImage().getExternalFormat() != 0);
                 mImmutableSamplersMaxDescriptorCount =
-                    std::max(mImmutableSamplersMaxDescriptorCount,
-                             contextVk->getRenderer()->getFormatDescriptorCount(
-                                 textureVk->getImage().getExternalFormat(), true));
-                mSupportedImmutableSamplerFormats.insert(textureVk->getImage().getExternalFormat());
+                    std::max(mImmutableSamplersMaxDescriptorCount, formatDescriptorCount);
+                mSupportedImmutableSamplerFormats.insert(immutableSamplerFormat);
             }
             else
             {

@@ -5078,7 +5078,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         if (textureVk->getImage().hasImmutableSampler())
         {
             anyTextureHasImmutableSampler = true;
-            formats.insert(textureVk->getImage().getExternalFormat());
+            formats.insert(textureVk->getImmutableSamplerFormat());
         }
         recreatePipelineLayout =
             textureVk->getAndResetImmutableSamplerDirtyState() || recreatePipelineLayout;
