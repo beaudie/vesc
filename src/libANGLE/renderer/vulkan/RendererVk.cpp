@@ -775,6 +775,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mPipelineCache.destroy(mDevice);
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
+    mVkFormatDescriptorCountMap.clear();
 
     for (vk::CommandBufferHelper *commandBufferHelper : mCommandBufferHelperFreeList)
     {
@@ -3234,6 +3235,44 @@ void RendererVk::logCacheStats() const
     {
         INFO() << "    CacheType " << cacheType++ << ": " << stats.getHitRatio();
     }
+}
+
+angle::Result RendererVk::getFormatDescriptorCount(ContextVk *contextVk,
+                                                   VkFormat format,
+                                                   uint32_t *descriptorCountOut)
+{
+    if (mVkFormatDescriptorCountMap.count(format) == 0)
+    {
+        // Query device for descriptor count with basic values for most of
+        // VkPhysicalDeviceImageFormatInfo2 members.
+        VkPhysicalDeviceImageFormatInfo2 imageFormatInfo = {};
+        imageFormatInfo.sType  = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
+        imageFormatInfo.format = format;
+        imageFormatInfo.type   = VK_IMAGE_TYPE_2D;
+        imageFormatInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+        imageFormatInfo.usage  = VK_IMAGE_USAGE_SAMPLED_BIT;
+        imageFormatInfo.flags  = 0;
+
+        VkImageFormatProperties imageFormatProperties                            = {};
+        VkSamplerYcbcrConversionImageFormatProperties ycbcrImageFormatProperties = {};
+        ycbcrImageFormatProperties.sType =
+            VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES;
+
+        VkImageFormatProperties2 imageFormatProperties2 = {};
+        imageFormatProperties2.sType                 = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2;
+        imageFormatProperties2.pNext                 = &ycbcrImageFormatProperties;
+        imageFormatProperties2.imageFormatProperties = imageFormatProperties;
+
+        ANGLE_VK_TRY(contextVk, vkGetPhysicalDeviceImageFormatProperties2(
+                                    mPhysicalDevice, &imageFormatInfo, &imageFormatProperties2));
+
+        mVkFormatDescriptorCountMap[format] =
+            ycbcrImageFormatProperties.combinedImageSamplerDescriptorCount;
+    }
+
+    ASSERT(descriptorCountOut);
+    *descriptorCountOut = mVkFormatDescriptorCountMap[format];
+    return angle::Result::Continue;
 }
 
 angle::Result RendererVk::getFormatDescriptorCountForExternalFormats(ContextVk *contextVk,
