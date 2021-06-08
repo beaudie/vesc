@@ -1163,10 +1163,17 @@ Result SerializeTextureData(JsonSerializer *json,
         gl::PixelPackState packState;
         packState.alignment = 1;
 
-        ANGLE_TRY(texture->getTexImage(context, packState, nullptr, index.getTarget(),
-                                       index.getLevelIndex(), getFormat, getType,
-                                       texelsPtr->data()));
-        json->addBlob("Texels", texelsPtr->data(), texelsPtr->size());
+        if (texture->getType() != gl::TextureType::CubeMap || texture->getState().isCubeComplete())
+        {
+            ANGLE_TRY(texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                           index.getLevelIndex(), getFormat, getType,
+                                           texelsPtr->data()));
+            json->addBlob("Texels", texelsPtr->data(), texelsPtr->size());
+        }
+        else
+        {
+            json->addCString("Remark", "Incomplete cube map texels are not serialized");
+        }
     }
     return Result::Continue;
 }
