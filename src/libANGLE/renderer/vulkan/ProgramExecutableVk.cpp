@@ -705,27 +705,40 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 // externalFormat
                 const TextureVk *textureVk          = (*activeTextures)[textureUnit].texture;
                 const vk::Sampler &immutableSampler = textureVk->getSampler().get();
-                uint64_t externalFormat             = textureVk->getImage().getExternalFormat();
                 descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
                                 activeStages, &immutableSampler);
                 // The Vulkan spec has the following note -
                 // All descriptors in a binding use the same maximum
                 // combinedImageSamplerDescriptorCount descriptors to allow implementations to use a
                 // uniform stride for dynamic indexing of the descriptors in the binding.
-                uint32_t formatDescriptorCount = 0;
-                angle::Result result =
-                    contextVk->getRenderer()->getFormatDescriptorCountForExternalFormats(
+                uint64_t externalFormat         = textureVk->getImage().getExternalFormat();
+                uint64_t immutableSamplerFormat = textureVk->getImmutableSamplerFormat();
+                uint32_t formatDescriptorCount  = 0;
+                angle::Result result            = angle::Result::Stop;
+
+                if (externalFormat != 0)
+                {
+                    result = contextVk->getRenderer()->getFormatDescriptorCountForExternalFormats(
                         externalFormat, &formatDescriptorCount);
+                }
+                else
+                {
+                    result = contextVk->getRenderer()->getFormatDescriptorCount(
+                        contextVk, textureVk->getImage().getFormat().actualImageVkFormat(),
+                        &formatDescriptorCount);
+                }
+
                 if (result != angle::Result::Continue)
                 {
                     // There was an error querying the descriptor count for this format, treat it as
                     // a non-fatal error and move on.
                     formatDescriptorCount = 1;
                 }
+
                 ASSERT(formatDescriptorCount > 0);
                 mImmutableSamplersMaxDescriptorCount =
                     std::max(mImmutableSamplersMaxDescriptorCount, formatDescriptorCount);
-                mSupportedImmutableSamplerFormatIndexMap[externalFormat] = textureIndex;
+                mSupportedImmutableSamplerFormatIndexMap[immutableSamplerFormat] = textureIndex;
             }
             else
             {
