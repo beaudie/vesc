@@ -708,7 +708,7 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
                                 activeStages, &immutableSampler);
                 mUsesImmutableSamplers = true;
-                mSupportedImmutableSamplerFormats.insert(textureVk->getImage().getExternalFormat());
+                mSupportedImmutableSamplerFormats.insert(textureVk->getImmutableSamplerFormat());
             }
             else
             {

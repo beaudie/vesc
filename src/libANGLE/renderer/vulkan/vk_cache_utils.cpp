@@ -3108,26 +3108,26 @@ SamplerDesc::SamplerDesc(const angle::FeaturesVk &featuresVk,
 
 void SamplerDesc::reset()
 {
-    mMipLodBias        = 0.0f;
-    mMaxAnisotropy     = 0.0f;
-    mMinLod            = 0.0f;
-    mMaxLod            = 0.0f;
-    mExternalFormat    = 0;
-    mMagFilter         = 0;
-    mMinFilter         = 0;
-    mMipmapMode        = 0;
-    mAddressModeU      = 0;
-    mAddressModeV      = 0;
-    mAddressModeW      = 0;
-    mCompareEnabled    = 0;
-    mCompareOp         = 0;
-    mPadding           = 0;
-    mBorderColorType   = 0;
-    mBorderColor.red   = 0.0f;
-    mBorderColor.green = 0.0f;
-    mBorderColor.blue  = 0.0f;
-    mBorderColor.alpha = 0.0f;
-    mReserved          = 0;
+    mMipLodBias             = 0.0f;
+    mMaxAnisotropy          = 0.0f;
+    mMinLod                 = 0.0f;
+    mMaxLod                 = 0.0f;
+    mImmutableSamplerFormat = 0;
+    mMagFilter              = 0;
+    mMinFilter              = 0;
+    mMipmapMode             = 0;
+    mAddressModeU           = 0;
+    mAddressModeV           = 0;
+    mAddressModeW           = 0;
+    mCompareEnabled         = 0;
+    mCompareOp              = 0;
+    mPadding                = 0;
+    mBorderColorType        = 0;
+    mBorderColor.red        = 0.0f;
+    mBorderColor.green      = 0.0f;
+    mBorderColor.blue       = 0.0f;
+    mBorderColor.alpha      = 0.0f;
+    mReserved               = 0;
 }
 
 void SamplerDesc::update(const angle::FeaturesVk &featuresVk,
