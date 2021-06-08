@@ -260,6 +260,20 @@ bool HasTextureBufferSupport(const RendererVk *rendererVk)
 
     return true;
 }
+
+bool CanSupportYuvInternalFormat(const RendererVk *rendererVk)
+{
+    // The following formats are not mandatory in Vulkan, even when VK_KHR_sampler_ycbcr_conversion
+    // is supported. GL_ANGLE_yuv_internal_format requires support for sampling only the
+    // 8-bit 2-plane YUV format, if the ICD supports that we can expose the extension.
+    //
+    //     VK_FORMAT_G8_B8R8_2PLANE_420_UNORM
+
+    const Format &formatVk = rendererVk->getFormat(GL_G8_B8R8_2PLANE_420_UNORM_ANGLE);
+
+    return rendererVk->hasImageFormatFeatureBits(formatVk.actualImageFormatID,
+                                                 VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT);
+}
 }  // namespace
 }  // namespace vk
 
@@ -1041,6 +1055,10 @@ void RendererVk::ensureCapsInitialized() const
         mMultiviewFeatures.multiview && mFeatures.bresenhamLineRasterization.enabled;
     mNativeExtensions.multiview2 = mNativeExtensions.multiview;
     mNativeExtensions.maxViews   = mMultiviewProperties.maxMultiviewViewCount;
+
+    // GL_ANGLE_yuv_internal_format
+    mNativeExtensions.yuvInternalFormatANGLE =
+        getFeatures().supportsYUVSamplerConversion.enabled && vk::CanSupportYuvInternalFormat(this);
 }
 
 namespace vk
