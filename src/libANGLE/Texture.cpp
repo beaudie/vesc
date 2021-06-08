@@ -259,7 +259,6 @@ bool TextureState::isCubeComplete() const
 
 const ImageDesc &TextureState::getBaseLevelDesc() const
 {
-    ASSERT(mType != TextureType::CubeMap || isCubeComplete());
     return getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
 }
 
