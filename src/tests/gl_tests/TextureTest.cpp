@@ -2906,6 +2906,35 @@ TEST_P(Texture2DTestES3, TexStorage2DCycleThroughYuvAndRgbSources)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test functionality of GL_ANGLE_yuv_internal_format with large number of YUV sources
+TEST_P(Texture2DTestES3, TexStorage2DLargeYuvTextureCount)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_yuv_internal_format"));
+
+    constexpr uint32_t kTextureCount = 16;
+
+    // Create YUV texture
+    GLubyte yuvColor[6] = {40, 40, 40, 40, 240, 109};
+    GLTexture yuvTexture[kTextureCount];
+    for (uint32_t i = 0; i < kTextureCount; i++)
+    {
+        // Create 2 plan YCbCr 420 texture
+        createImmutableTexture2D(yuvTexture[i], 2, 2, GL_G8_B8R8_2PLANE_420_UNORM_ANGLE,
+                                 GL_G8_B8R8_2PLANE_420_UNORM_ANGLE, GL_UNSIGNED_BYTE, 1, yuvColor);
+    }
+
+    // Cycle through YUV source textures
+    glUseProgram(mProgram);
+    glUniform1i(mTexture2DUniformLocation, 0);
+
+    for (uint32_t i = 0; i < kTextureCount; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, yuvTexture[i]);
+        drawQuad(mProgram, "position", 0.5f);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
 // Tests CopySubImage for float formats
 TEST_P(Texture2DTest, CopySubImageFloat_R_R)
 {
