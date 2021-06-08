@@ -2554,8 +2554,11 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         ANGLE_TRY(refreshImageViews(contextVk));
     }
 
+    uint64_t externalFormat = mImage->getFormat().actualImageFormat().isYUV
+                                  ? mImage->getFormat().actualImageVkFormat()
+                                  : mImage->getExternalFormat();
     vk::SamplerDesc samplerDesc(contextVk->getFeatures(), mState.getSamplerState(),
-                                mState.isStencilMode(), mImage->getExternalFormat());
+                                mState.isStencilMode(), externalFormat);
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &mSampler));
 
     return angle::Result::Continue;
