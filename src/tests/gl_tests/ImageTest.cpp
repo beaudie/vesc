@@ -12,6 +12,7 @@
 #include "util/EGLWindow.h"
 
 #include "common/android_util.h"
+#include "common/angleutils.h"
 
 #if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
 #    define ANGLE_AHARDWARE_BUFFER_SUPPORT
@@ -308,6 +309,45 @@ class ImageTest : public ANGLETest
         ASSERT_EGL_SUCCESS();
 
         *outSourceTexture = source;
+        *outSourceImage   = image;
+    }
+
+    void createEGLImage2DTextureImmutableSource(size_t width,
+                                                size_t height,
+                                                GLenum format,
+                                                GLenum type,
+                                                GLsizei levels,
+                                                const EGLint *attribs,
+                                                void *data,
+                                                GLuint *outSourceTexture,
+                                                EGLImageKHR *outSourceImage)
+    {
+        // Create a source 2D texture
+        GLuint immutableSource;
+        glGenTextures(1, &immutableSource);
+        glBindTexture(GL_TEXTURE_2D, immutableSource);
+
+        glTexStorage2D(GL_TEXTURE_2D, levels, format, width, height);
+        ASSERT_GL_NO_ERROR();
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, data);
+        ASSERT_GL_NO_ERROR();
+
+        // Disable mipmapping
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        // Create an image from the source texture
+        EGLWindow *window = getEGLWindow();
+
+        EGLImageKHR image =
+            eglCreateImageKHR(window->getDisplay(), window->getContext(), EGL_GL_TEXTURE_2D_KHR,
+                              reinterpretHelper<EGLClientBuffer>(immutableSource), attribs);
+
+        ASSERT_EGL_SUCCESS();
+
+        *outSourceTexture = immutableSource;
         *outSourceImage   = image;
     }
 
@@ -1598,6 +1638,53 @@ TEST_P(ImageTest, ValidationGLEGLImageExternalESSL3)
 TEST_P(ImageTest, Source2DTarget2D)
 {
     Source2DTarget2D_helper(kDefaultAttribs);
+}
+
+TEST_P(ImageTestES3, Source2DYUVTarget2D)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_texture_external_yuv_sampling"));
+
+    // Create the Image
+    GLuint source;
+    EGLImageKHR image;
+    GLubyte yuvColor[6]         = {40, 40, 40, 40, 240, 109};
+    GLubyte expectedRgbColor[4] = {0, 0, 255, 255};
+    createEGLImage2DTextureImmutableSource(2, 2, GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX,
+                                           GL_UNSIGNED_BYTE, 1, kDefaultAttribs,
+                                           static_cast<void *>(&yuvColor), &source, &image);
+
+    // Create a texture target to bind the egl image
+    GLTexture target;
+    glBindTexture(GL_TEXTURE_EXTERNAL_OES, target);
+    // Disable mipmapping
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // Bind YUV image
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, image);
+    // Expect render target to have the same color as expectedRgbColor
+    verifyResultsExternal(target, expectedRgbColor);
+
+    // Upload new data and check again
+    GLubyte newYuvColor[6]         = {106, 106, 106, 106, 202, 222};
+    GLubyte newExpectedRgbColor[4] = {255, 0, 255, 255};
+
+    // Upload new data to source texture
+    glBindTexture(GL_TEXTURE_2D, source);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2, 2, GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX,
+                    GL_UNSIGNED_BYTE, static_cast<void *>(&newYuvColor));
+    ASSERT_GL_NO_ERROR();
+    // Rebind YUV image
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, image);
+    // Expect render target to have the same color as newExpectedRgbColor
+    verifyResultsExternal(target, newExpectedRgbColor);
+
+    // Clean up
+    glDeleteTextures(1, &source);
+    eglDestroyImageKHR(window->getDisplay(), image);
 }
 
 TEST_P(ImageTest, Source2DTarget2D_Colorspace)
