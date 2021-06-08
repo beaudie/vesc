@@ -3109,32 +3109,33 @@ SamplerDesc::SamplerDesc(ContextVk *contextVk,
 
 void SamplerDesc::reset()
 {
-    mMipLodBias        = 0.0f;
-    mMaxAnisotropy     = 0.0f;
-    mMinLod            = 0.0f;
-    mMaxLod            = 0.0f;
-    mExternalFormat    = 0;
-    mMagFilter         = 0;
-    mMinFilter         = 0;
-    mMipmapMode        = 0;
-    mAddressModeU      = 0;
-    mAddressModeV      = 0;
-    mAddressModeW      = 0;
-    mCompareEnabled    = 0;
-    mCompareOp         = 0;
-    mPadding           = 0;
-    mBorderColorType   = 0;
-    mBorderColor.red   = 0.0f;
-    mBorderColor.green = 0.0f;
-    mBorderColor.blue  = 0.0f;
-    mBorderColor.alpha = 0.0f;
-    mReserved          = 0;
+    mMipLodBias             = 0.0f;
+    mMaxAnisotropy          = 0.0f;
+    mMinLod                 = 0.0f;
+    mMaxLod                 = 0.0f;
+    mImmutableSamplerFormat = 0;
+    mMagFilter              = 0;
+    mMinFilter              = 0;
+    mMipmapMode             = 0;
+    mAddressModeU           = 0;
+    mAddressModeV           = 0;
+    mAddressModeW           = 0;
+    mCompareEnabled         = 0;
+    mCompareOp              = 0;
+    mPadding                = 0;
+    mBorderColorType        = 0;
+    mBorderColor.red        = 0.0f;
+    mBorderColor.green      = 0.0f;
+    mBorderColor.blue       = 0.0f;
+    mBorderColor.alpha      = 0.0f;
+    mReserved               = 0;
 }
 
 void SamplerDesc::update(ContextVk *contextVk,
                          const gl::SamplerState &samplerState,
                          bool stencilMode,
                          uint64_t externalFormat,
+                         uint64_t immutableSamplerFormat,
                          angle::FormatID formatID)
 {
     const angle::FeaturesVk &featuresVk = contextVk->getFeatures();
@@ -3155,7 +3156,7 @@ void SamplerDesc::update(ContextVk *contextVk,
     mMaxLod        = samplerState.getMaxLod();
 
     // GL has no notion of external format, this must be provided from metadata from the image
-    mExternalFormat = externalFormat;
+    mImmutableSamplerFormat = immutableSamplerFormat;
 
     bool compareEnable    = samplerState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
     VkCompareOp compareOp = gl_vk::GetCompareOp(samplerState.getCompareFunc());
@@ -3254,14 +3255,14 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
     }
 
     VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
-    if (mExternalFormat)
+    if (mImmutableSamplerFormat)
     {
         ASSERT((contextVk->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
         yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
         yuvConversionInfo.pNext = nullptr;
         yuvConversionInfo.conversion =
             contextVk->getRenderer()->getYuvConversionCache().getYuvConversionFromExternalFormat(
-                mExternalFormat);
+                mImmutableSamplerFormat);
         AddToPNextChain(&createInfo, &yuvConversionInfo);
 
         // Vulkan spec requires these settings:
