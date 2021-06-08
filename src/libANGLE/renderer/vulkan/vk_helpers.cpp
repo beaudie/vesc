@@ -819,7 +819,7 @@ bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
                              DynamicBufferPolicy policy,
                              size_t freeListSize)
 {
-    constexpr size_t kLimitedFreeListMaxSize = 1;
+    constexpr size_t kLimitedFreeListMaxSize = 0;
 
     // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
     // only reuse the buffer if specifically requested.
