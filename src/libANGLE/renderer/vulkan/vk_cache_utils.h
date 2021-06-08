@@ -839,7 +839,7 @@ class SamplerDesc final
     SamplerDesc(ContextVk *contextVk,
                 const gl::SamplerState &samplerState,
                 bool stencilMode,
-                uint64_t externalFormat,
+                uint64_t immutableSamplerFormat,
                 angle::FormatID formatID);
     ~SamplerDesc();
 
@@ -849,7 +849,7 @@ class SamplerDesc final
     void update(ContextVk *contextVk,
                 const gl::SamplerState &samplerState,
                 bool stencilMode,
-                uint64_t externalFormat,
+                uint64_t immutableSamplerFormat,
                 angle::FormatID formatID);
     void reset();
     angle::Result init(ContextVk *contextVk, Sampler *sampler) const;
@@ -865,13 +865,13 @@ class SamplerDesc final
     float mMinLod;
     float mMaxLod;
 
-    // If the sampler needs to convert the image content (e.g. from YUV to RGB) then mExternalFormat
-    // will be non-zero and match the external format as returned from
-    // vkGetAndroidHardwareBufferPropertiesANDROID.
-    // The externalFormat is guaranteed to be unique and any image with the same externalFormat can
-    // use the same conversion sampler. Thus externalFormat works as a Serial() used elsewhere in
-    // ANGLE.
-    uint64_t mExternalFormat;
+    // If the sampler needs to convert the image content (e.g. from YUV to RGB) then
+    // mImmutableSamplerFormat will be non-zero. The value is either the external format
+    // as returned from vkGetAndroidHardwareBufferPropertiesANDROID or a YUV VkFormat.
+    // The format is guaranteed to be unique in that any image with the same mImmutableSamplerFormat
+    // can use the same conversion sampler. Thus mImmutableSamplerFormat works as a Serial() used
+    // elsewhere in ANGLE.
+    uint64_t mImmutableSamplerFormat;
 
     // 16 bits for modes + states.
     // 1 bit per filter (only 2 possible values in GL: linear/nearest)
