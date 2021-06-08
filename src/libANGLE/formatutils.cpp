@@ -597,6 +597,47 @@ void InsertFormatInfo(InternalFormatInfoMap *map, const InternalFormat &formatIn
     (*map)[formatInfo.internalFormat][formatInfo.type] = formatInfo;
 }
 
+// YuvFormatInfo implementation
+YuvFormatInfo::YuvFormatInfo(GLenum internalFormat, const Extents &yPlaneExtent)
+{
+    ASSERT(gl::IsYuvFormat(internalFormat));
+    ASSERT((gl::GetPlaneCount(internalFormat) > 0) && (gl::GetPlaneCount(internalFormat) <= 3));
+
+    glInternalFormat = internalFormat;
+    planeCount       = gl::GetPlaneCount(internalFormat);
+
+    // Chroma planes of a YUV format can be subsampled
+    int horizontalSubsampleFactor = 0;
+    int verticalSubsampleFactor   = 0;
+    gl::GetSubSampleFactor(internalFormat, &horizontalSubsampleFactor, &verticalSubsampleFactor);
+
+    // Compute plane Bpp
+    planeBpp[0] = gl::GetYPlaneBpp(internalFormat);
+    planeBpp[1] = gl::GetChromaPlaneBpp(internalFormat);
+    planeBpp[2] = (planeCount > 2) ? planeBpp[1] : 0;
+
+    // Compute plane extent
+    planeExtent[0] = yPlaneExtent;
+    planeExtent[1] = {(yPlaneExtent.width / horizontalSubsampleFactor),
+                      (yPlaneExtent.height / verticalSubsampleFactor), yPlaneExtent.depth};
+    planeExtent[2] = (planeCount > 2) ? planeExtent[1] : Extents();
+
+    // Compute plane pitch
+    planePitch[0] = planeExtent[0].width * planeBpp[0];
+    planePitch[1] = planeExtent[1].width * planeBpp[1];
+    planePitch[2] = planeExtent[2].width * planeBpp[2];
+
+    // Compute plane size
+    planeSize[0] = planePitch[0] * planeExtent[0].height;
+    planeSize[1] = planePitch[1] * planeExtent[1].height;
+    planeSize[2] = planePitch[2] * planeExtent[2].height;
+
+    // Compute plane offset
+    planeOffset[0] = 0;
+    planeOffset[1] = planeSize[0];
+    planeOffset[2] = planeSize[0] + planeSize[1];
+}
+
 void AddRGBAFormat(InternalFormatInfoMap *map,
                    GLenum internalFormat,
                    bool sized,
