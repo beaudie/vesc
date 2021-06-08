@@ -8,10 +8,24 @@
 #include "libANGLE/renderer/cl/CLCommandQueueCL.h"
 
 #include "libANGLE/renderer/cl/CLEventCL.h"
+#include "libANGLE/renderer/cl/CLKernelCL.h"
 #include "libANGLE/renderer/cl/CLMemoryCL.h"
 
 #include "libANGLE/CLBuffer.h"
 #include "libANGLE/CLImage.h"
+#include "libANGLE/CLKernel.h"
+#include "libANGLE/CLMemory.h"
+
+#define ANGLE_TRY_CREATE_EVENT()                                            \
+    do                                                                      \
+    {                                                                       \
+        if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)          \
+        {                                                                   \
+            *eventCreateFunc = [nativeEvent](const cl::Event &event) {      \
+                return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent)); \
+            };                                                              \
+        }                                                                   \
+    } while (0)
 
 namespace rx
 {
@@ -54,12 +68,7 @@ cl_int CLCommandQueueCL::enqueueReadBuffer(const cl::Buffer &buffer,
         mNative->getDispatch().clEnqueueReadBuffer(mNative, nativeBuffer, block, offset, size, ptr,
                                                    numEvents, nativeEventsPtr, nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -83,12 +92,7 @@ cl_int CLCommandQueueCL::enqueueWriteBuffer(const cl::Buffer &buffer,
         mNative->getDispatch().clEnqueueWriteBuffer(mNative, nativeBuffer, block, offset, size, ptr,
                                                     numEvents, nativeEventsPtr, nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -118,12 +122,7 @@ cl_int CLCommandQueueCL::enqueueReadBufferRect(const cl::Buffer &buffer,
         bufferSlicePitch, hostRowPitch, hostSlicePitch, ptr, numEvents, nativeEventsPtr,
         nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -153,12 +152,7 @@ cl_int CLCommandQueueCL::enqueueWriteBufferRect(const cl::Buffer &buffer,
         bufferSlicePitch, hostRowPitch, hostSlicePitch, ptr, numEvents, nativeEventsPtr,
         nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -182,12 +176,7 @@ cl_int CLCommandQueueCL::enqueueCopyBuffer(const cl::Buffer &srcBuffer,
         mNative, nativeSrc, nativeDst, srcOffset, dstOffset, size, numEvents, nativeEventsPtr,
         nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -215,12 +204,7 @@ cl_int CLCommandQueueCL::enqueueCopyBufferRect(const cl::Buffer &srcBuffer,
         mNative, nativeSrc, nativeDst, srcOrigin, dstOrigin, region, srcRowPitch, srcSlicePitch,
         dstRowPitch, dstSlicePitch, numEvents, nativeEventsPtr, nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -243,12 +227,7 @@ cl_int CLCommandQueueCL::enqueueFillBuffer(const cl::Buffer &buffer,
         mNative, nativeBuffer, pattern, patternSize, offset, size, numEvents, nativeEventsPtr,
         nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -273,12 +252,7 @@ void *CLCommandQueueCL::enqueueMapBuffer(const cl::Buffer &buffer,
         mNative, nativeBuffer, block, mapFlags.get(), offset, size, numEvents, nativeEventsPtr,
         nativeEventPtr, &errorCode);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return map;
 }
 
@@ -304,12 +278,7 @@ cl_int CLCommandQueueCL::enqueueReadImage(const cl::Image &image,
         mNative, nativeImage, block, origin, region, rowPitch, slicePitch, ptr, numEvents,
         nativeEventsPtr, nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -335,12 +304,7 @@ cl_int CLCommandQueueCL::enqueueWriteImage(const cl::Image &image,
         mNative, nativeImage, block, origin, region, inputRowPitch, inputSlicePitch, ptr, numEvents,
         nativeEventsPtr, nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -364,12 +328,7 @@ cl_int CLCommandQueueCL::enqueueCopyImage(const cl::Image &srcImage,
         mNative, nativeSrc, nativeDst, srcOrigin, dstOrigin, region, numEvents, nativeEventsPtr,
         nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -391,12 +350,7 @@ cl_int CLCommandQueueCL::enqueueFillImage(const cl::Image &image,
         mNative->getDispatch().clEnqueueFillImage(mNative, nativeImage, fillColor, origin, region,
                                                   numEvents, nativeEventsPtr, nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -420,12 +374,7 @@ cl_int CLCommandQueueCL::enqueueCopyImageToBuffer(const cl::Image &srcImage,
         mNative, nativeSrc, nativeDst, srcOrigin, region, dstOffset, numEvents, nativeEventsPtr,
         nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -449,12 +398,7 @@ cl_int CLCommandQueueCL::enqueueCopyBufferToImage(const cl::Buffer &srcBuffer,
         mNative, nativeSrc, nativeDst, srcOffset, dstOrigin, region, numEvents, nativeEventsPtr,
         nativeEventPtr);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
-    {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
-            return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
-        };
-    }
+    ANGLE_TRY_CREATE_EVENT();
     return errorCode;
 }
 
@@ -481,13 +425,220 @@ void *CLCommandQueueCL::enqueueMapImage(const cl::Image &image,
         mNative, nativeImage, block, mapFlags.get(), origin, region, imageRowPitch, imageSlicePitch,
         numEvents, nativeEventsPtr, nativeEventPtr, &errorCode);
 
-    if (errorCode == CL_SUCCESS && eventCreateFunc != nullptr)
+    ANGLE_TRY_CREATE_EVENT();
+    return map;
+}
+
+cl_int CLCommandQueueCL::enqueueUnmapMemObject(const cl::Memory &memory,
+                                               void *mappedPtr,
+                                               const cl::EventPtrs &waitEvents,
+                                               CLEventImpl::CreateFunc *eventCreateFunc)
+{
+    const cl_mem nativeMemory                = memory.getImpl<CLMemoryCL>().getNative();
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(waitEvents);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+    const cl_event *const nativeEventsPtr    = nativeEvents.empty() ? nullptr : nativeEvents.data();
+    cl_event nativeEvent                     = nullptr;
+    cl_event *const nativeEventPtr           = eventCreateFunc != nullptr ? &nativeEvent : nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueUnmapMemObject(
+        mNative, nativeMemory, mappedPtr, numEvents, nativeEventsPtr, nativeEventPtr);
+
+    ANGLE_TRY_CREATE_EVENT();
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueMigrateMemObjects(const cl::MemoryPtrs &memObjects,
+                                                  cl::MemMigrationFlags flags,
+                                                  const cl::EventPtrs &waitEvents,
+                                                  CLEventImpl::CreateFunc *eventCreateFunc)
+{
+    std::vector<cl_mem> nativeMemories;
+    nativeMemories.reserve(memObjects.size());
+    for (const cl::MemoryPtr &memory : memObjects)
     {
-        *eventCreateFunc = [nativeEvent](const cl::Event &event) {
+        nativeMemories.emplace_back(memory->getImpl<CLMemoryCL>().getNative());
+    }
+    const cl_uint numMemories                = static_cast<cl_uint>(nativeMemories.size());
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(waitEvents);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+    const cl_event *const nativeEventsPtr    = nativeEvents.empty() ? nullptr : nativeEvents.data();
+    cl_event nativeEvent                     = nullptr;
+    cl_event *const nativeEventPtr           = eventCreateFunc != nullptr ? &nativeEvent : nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueMigrateMemObjects(
+        mNative, numMemories, nativeMemories.data(), flags.get(), numEvents, nativeEventsPtr,
+        nativeEventPtr);
+
+    ANGLE_TRY_CREATE_EVENT();
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueNDRangeKernel(const cl::Kernel &kernel,
+                                              cl_uint workDim,
+                                              const size_t *globalWorkOffset,
+                                              const size_t *globalWorkSize,
+                                              const size_t *localWorkSize,
+                                              const cl::EventPtrs &waitEvents,
+                                              CLEventImpl::CreateFunc *eventCreateFunc)
+{
+    const cl_kernel nativeKernel             = kernel.getImpl<CLKernelCL>().getNative();
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(waitEvents);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+    const cl_event *const nativeEventsPtr    = nativeEvents.empty() ? nullptr : nativeEvents.data();
+    cl_event nativeEvent                     = nullptr;
+    cl_event *const nativeEventPtr           = eventCreateFunc != nullptr ? &nativeEvent : nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueNDRangeKernel(
+        mNative, nativeKernel, workDim, globalWorkOffset, globalWorkSize, localWorkSize, numEvents,
+        nativeEventsPtr, nativeEventPtr);
+
+    ANGLE_TRY_CREATE_EVENT();
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueTask(const cl::Kernel &kernel,
+                                     const cl::EventPtrs &waitEvents,
+                                     CLEventImpl::CreateFunc *eventCreateFunc)
+{
+    const cl_kernel nativeKernel             = kernel.getImpl<CLKernelCL>().getNative();
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(waitEvents);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+    const cl_event *const nativeEventsPtr    = nativeEvents.empty() ? nullptr : nativeEvents.data();
+    cl_event nativeEvent                     = nullptr;
+    cl_event *const nativeEventPtr           = eventCreateFunc != nullptr ? &nativeEvent : nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueTask(mNative, nativeKernel, numEvents,
+                                                                  nativeEventsPtr, nativeEventPtr);
+
+    ANGLE_TRY_CREATE_EVENT();
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueNativeKernel(cl::UserFunc userFunc,
+                                             void *args,
+                                             size_t cbArgs,
+                                             const cl::BufferPtrs &buffers,
+                                             const std::vector<size_t> bufferPtrOffsets,
+                                             const cl::EventPtrs &waitEvents,
+                                             CLEventImpl::CreateFunc *eventCreateFunc)
+{
+    std::vector<unsigned char> funcArgs;
+    std::vector<const void *> locs;
+    if (!bufferPtrOffsets.empty())
+    {
+        // If argument memory block contains buffers, make a copy.
+        funcArgs.resize(cbArgs);
+        std::memcpy(funcArgs.data(), args, cbArgs);
+
+        locs.reserve(bufferPtrOffsets.size());
+        for (size_t offset : bufferPtrOffsets)
+        {
+            // Fetch location of buffer in copied function argument memory block.
+            void *const loc = &funcArgs[offset];
+            locs.emplace_back(loc);
+
+            // Cast cl::Buffer to native cl_mem object in place.
+            cl::Buffer *const buffer         = *reinterpret_cast<cl::Buffer **>(loc);
+            *reinterpret_cast<cl_mem *>(loc) = buffer->getImpl<CLMemoryCL>().getNative();
+        }
+
+        // Use copied argument memory block.
+        args = funcArgs.data();
+    }
+
+    std::vector<cl_mem> nativeBuffers;
+    nativeBuffers.reserve(buffers.size());
+    for (const cl::BufferPtr &buffer : buffers)
+    {
+        nativeBuffers.emplace_back(buffer->getImpl<CLMemoryCL>().getNative());
+    }
+    const cl_uint numBuffers             = static_cast<cl_uint>(nativeBuffers.size());
+    const cl_mem *const nativeBuffersPtr = nativeBuffers.empty() ? nullptr : nativeBuffers.data();
+    const void **const locsPtr           = locs.empty() ? nullptr : locs.data();
+
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(waitEvents);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+    const cl_event *const nativeEventsPtr    = nativeEvents.empty() ? nullptr : nativeEvents.data();
+    cl_event nativeEvent                     = nullptr;
+    cl_event *const nativeEventPtr           = eventCreateFunc != nullptr ? &nativeEvent : nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueNativeKernel(
+        mNative, userFunc, args, cbArgs, numBuffers, nativeBuffersPtr, locsPtr, numEvents,
+        nativeEventsPtr, nativeEventPtr);
+
+    ANGLE_TRY_CREATE_EVENT();
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueMarkerWithWaitList(const cl::EventPtrs &waitEvents,
+                                                   CLEventImpl::CreateFunc *eventCreateFunc)
+{
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(waitEvents);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+    const cl_event *const nativeEventsPtr    = nativeEvents.empty() ? nullptr : nativeEvents.data();
+    cl_event nativeEvent                     = nullptr;
+    cl_event *const nativeEventPtr           = eventCreateFunc != nullptr ? &nativeEvent : nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueMarkerWithWaitList(
+        mNative, numEvents, nativeEventsPtr, nativeEventPtr);
+
+    ANGLE_TRY_CREATE_EVENT();
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueMarker(CLEventImpl::CreateFunc &eventCreateFunc)
+{
+    cl_event nativeEvent = nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueMarker(mNative, &nativeEvent);
+
+    if (errorCode == CL_SUCCESS)
+    {
+        eventCreateFunc = [nativeEvent](const cl::Event &event) {
             return CLEventImpl::Ptr(new CLEventCL(event, nativeEvent));
         };
     }
-    return map;
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueWaitForEvents(const cl::EventPtrs &events)
+{
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(events);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+
+    return mNative->getDispatch().clEnqueueWaitForEvents(mNative, numEvents, nativeEvents.data());
+}
+
+cl_int CLCommandQueueCL::enqueueBarrierWithWaitList(const cl::EventPtrs &waitEvents,
+                                                    CLEventImpl::CreateFunc *eventCreateFunc)
+{
+    const std::vector<cl_event> nativeEvents = CLEventCL::Cast(waitEvents);
+    const cl_uint numEvents                  = static_cast<cl_uint>(nativeEvents.size());
+    const cl_event *const nativeEventsPtr    = nativeEvents.empty() ? nullptr : nativeEvents.data();
+    cl_event nativeEvent                     = nullptr;
+    cl_event *const nativeEventPtr           = eventCreateFunc != nullptr ? &nativeEvent : nullptr;
+
+    const cl_int errorCode = mNative->getDispatch().clEnqueueBarrierWithWaitList(
+        mNative, numEvents, nativeEventsPtr, nativeEventPtr);
+
+    ANGLE_TRY_CREATE_EVENT();
+    return errorCode;
+}
+
+cl_int CLCommandQueueCL::enqueueBarrier()
+{
+    return mNative->getDispatch().clEnqueueBarrier(mNative);
+}
+
+cl_int CLCommandQueueCL::flush()
+{
+    return mNative->getDispatch().clFlush(mNative);
+}
+
+cl_int CLCommandQueueCL::finish()
+{
+    return mNative->getDispatch().clFinish(mNative);
 }
 
 }  // namespace rx
