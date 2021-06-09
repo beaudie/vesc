@@ -209,6 +209,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Record GL API calls for debuggers
     void logEvent(const char *eventString);
     void endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType);
+    void endEventLogForQuery();
 
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
@@ -573,8 +574,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Queries that begin and end automatically with render pass start and end
     angle::Result beginRenderPassQuery(QueryVk *queryVk);
-    void endRenderPassQuery(QueryVk *queryVk);
-    void pauseRenderPassQueriesIfActive();
+    angle::Result endRenderPassQuery(QueryVk *queryVk);
+    angle::Result pauseRenderPassQueriesIfActive();
     angle::Result resumeRenderPassQueriesIfActive();
 
     // Used by QueryVk to share query helpers between transform feedback queries.
@@ -617,6 +618,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
     angle::Result handleMidRenderPassClearEvent();
+    angle::Result handleQueryEvent(vk::CommandBuffer *commandBuffer);
 
   private:
     // Dirty bits.
@@ -887,7 +889,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                DirtyBits dirtyBitMask);
     void flushDescriptorSetUpdates();
 
-    void onRenderPassFinished();
+    angle::Result onRenderPassFinished();
 
     void initIndexTypeMap();
 
@@ -1059,6 +1061,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::CommandBufferHelper *mOutsideRenderPassCommands;
     vk::CommandBufferHelper *mRenderPassCommands;
+    vk::CommandBuffer *mQueryEventCommands;
 
     // Transform feedback buffers.
     angle::FastUnorderedSet<const vk::BufferHelper *,
