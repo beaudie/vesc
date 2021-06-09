@@ -2139,7 +2139,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     contextVk->pauseTransformFeedbackIfActiveUnpaused();
 
     // Make sure this draw call doesn't count towards occlusion query results.
-    contextVk->pauseRenderPassQueriesIfActive();
+    ANGLE_TRY(contextVk->pauseRenderPassQueriesIfActive());
     commandBuffer->setScissor(0, 1, &scissor);
     commandBuffer->draw(3, 0);
     ANGLE_TRY(contextVk->resumeRenderPassQueriesIfActive());
