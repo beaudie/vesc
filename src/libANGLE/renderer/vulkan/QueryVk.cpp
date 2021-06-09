@@ -188,7 +188,7 @@ angle::Result QueryVk::onRenderPassStart(ContextVk *contextVk)
     return mQueryHelper.get().beginRenderPassQuery(contextVk);
 }
 
-void QueryVk::onRenderPassEnd(ContextVk *contextVk)
+angle::Result QueryVk::onRenderPassEnd(ContextVk *contextVk)
 {
     ASSERT(IsRenderPassQuery(contextVk, mType));
     ASSERT(mQueryHelper.isReferenced());
@@ -198,8 +198,10 @@ void QueryVk::onRenderPassEnd(ContextVk *contextVk)
     // If present, share query has already taken care of ending the query.
     if (shareQuery == nullptr)
     {
-        mQueryHelper.get().endRenderPassQuery(contextVk);
+        ANGLE_TRY(mQueryHelper.get().endRenderPassQuery(contextVk));
     }
+
+    return angle::Result::Continue;
 }
 
 angle::Result QueryVk::accumulateStashedQueryResult(ContextVk *contextVk, vk::QueryResult *result)
@@ -247,7 +249,7 @@ angle::Result QueryVk::setupBegin(ContextVk *contextVk)
                 // - PG starts <-- QueryHelper1 stashed in TF, TF starts QueryHelper2,
                 //                                             PG shares QueryHelper2
                 // - Draw
-                shareQuery->onRenderPassEnd(contextVk);
+                ANGLE_TRY(shareQuery->onRenderPassEnd(contextVk));
                 shareQuery->stashQueryHelper();
                 ANGLE_TRY(shareQuery->allocateQuery(contextVk));
 
@@ -353,7 +355,7 @@ angle::Result QueryVk::end(const gl::Context *context)
             QueryVk *shareQuery = GetShareQuery(contextVk, mType);
             ASSERT(shareQuery == nullptr || &mQueryHelper.get() == &shareQuery->mQueryHelper.get());
 
-            contextVk->endRenderPassQuery(this);
+            ANGLE_TRY(contextVk->endRenderPassQuery(this));
 
             // If another query shares its query helper with this one, its query has just ended!
             // Make it stash its query and create a new one so it can continue.

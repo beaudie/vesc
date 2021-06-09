@@ -482,7 +482,7 @@ class QueryHelper final : public Resource
     angle::Result endQuery(ContextVk *contextVk);
     // Begin/end queries within a started render pass.
     angle::Result beginRenderPassQuery(ContextVk *contextVk);
-    void endRenderPassQuery(ContextVk *contextVk);
+    angle::Result endRenderPassQuery(ContextVk *contextVk);
 
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
     // When syncing gpu/cpu time, main thread accesses primary directly
