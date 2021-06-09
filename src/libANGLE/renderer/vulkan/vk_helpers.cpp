@@ -2841,6 +2841,8 @@ angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
     CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 
+    ANGLE_TRY(contextVk->handleQueryEvent(commandBuffer));
+
     beginQueryImpl(contextVk, commandBuffer, commandBuffer);
 
     return angle::Result::Continue;
@@ -2856,6 +2858,8 @@ angle::Result QueryHelper::endQuery(ContextVk *contextVk)
     CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 
+    ANGLE_TRY(contextVk->handleQueryEvent(commandBuffer));
+
     endQueryImpl(contextVk, commandBuffer);
 
     return angle::Result::Continue;
@@ -2869,14 +2873,21 @@ angle::Result QueryHelper::beginRenderPassQuery(ContextVk *contextVk)
     CommandBuffer *renderPassCommandBuffer =
         &contextVk->getStartedRenderPassCommands().getCommandBuffer();
 
+    ANGLE_TRY(contextVk->handleQueryEvent(renderPassCommandBuffer));
+
     beginQueryImpl(contextVk, outsideRenderPassCommandBuffer, renderPassCommandBuffer);
 
     return angle::Result::Continue;
 }
 
-void QueryHelper::endRenderPassQuery(ContextVk *contextVk)
+angle::Result QueryHelper::endRenderPassQuery(ContextVk *contextVk)
 {
+    ANGLE_TRY(
+        contextVk->handleQueryEvent(&contextVk->getStartedRenderPassCommands().getCommandBuffer()));
+
     endQueryImpl(contextVk, &contextVk->getStartedRenderPassCommands().getCommandBuffer());
+
+    return angle::Result::Continue;
 }
 
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
