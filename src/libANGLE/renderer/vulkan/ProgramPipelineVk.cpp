@@ -223,15 +223,31 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
 
         if (newDescriptorSetAllocated)
         {
+            offsetIndex = 0;
             for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
             {
                 ProgramVk *programVk = getShaderProgram(glState, shaderType);
                 mExecutable.updateDefaultUniformsDescriptorSet(
                     shaderType, programVk->getDefaultUniformBlocks()[shaderType],
-                    defaultUniformBuffer, contextVk);
+                    defaultUniformBuffer, contextVk, offsetIndex);
                 mExecutable.updateTransformFeedbackDescriptorSetImpl(programVk->getState(),
                                                                      contextVk);
+                ++offsetIndex;
             }
+        }
+    }
+    else
+    {
+        // Update the descriptor set with new bufferInfo as mDynamicUniformDescriptorOffsets might
+        // have changed
+        offsetIndex = 0;
+        for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+        {
+            ProgramVk *programVk = getShaderProgram(glState, shaderType);
+            mExecutable.updateDefaultUniformsDescriptorSet(
+                shaderType, programVk->getDefaultUniformBlocks()[shaderType], defaultUniformBuffer,
+                contextVk, offsetIndex);
+            ++offsetIndex;
         }
     }
 
