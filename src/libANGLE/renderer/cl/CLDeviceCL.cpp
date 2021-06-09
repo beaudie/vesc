@@ -101,6 +101,10 @@ CLDeviceImpl::Info CLDeviceCL::createInfo(cl::DeviceType type) const
         return Info{};
     }
     info.mVersionStr.assign(valString.data());
+
+    info.mVersionStr[7] = '1';
+    info.mVersionStr[9] = '2';
+
     info.mVersion = ExtractCLVersion(info.mVersionStr);
     if (info.mVersion == 0u)
     {

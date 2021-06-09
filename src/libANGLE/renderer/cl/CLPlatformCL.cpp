@@ -129,6 +129,9 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
     info.mName               = GetPlatformString(mNative, cl::PlatformInfo::Name);
     info.mExtensions         = GetPlatformString(mNative, cl::PlatformInfo::Extensions);
 
+    info.mVersionStr[7] = '1';
+    info.mVersionStr[9] = '2';
+
     if (vendor.empty() || info.mProfile.empty() || info.mVersionStr.empty() || info.mName.empty() ||
         info.mExtensions.empty())
     {
