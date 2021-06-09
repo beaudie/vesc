@@ -456,6 +456,9 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+    // Emit debug-util markers for this clear
+    ANGLE_TRY(contextVk->handleMidRenderPassClearEvent());
+
     const gl::Rectangle scissoredRenderArea = getRotatedScissoredRenderArea(contextVk);
     ASSERT(scissoredRenderArea.width != 0 && scissoredRenderArea.height != 0);
 
@@ -2343,9 +2346,6 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
         // now.
         updateRenderPassReadOnlyDepthMode(contextVk, renderpassCommands);
     }
-
-    // Emit debug-util markers for this mid-render-pass clear
-    ANGLE_TRY(contextVk->handleMidRenderPassClearEvent());
 
     VkClearRect rect                           = {};
     rect.rect.extent.width                     = scissoredRenderArea.width;

@@ -1073,6 +1073,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // command buffer to call endDebugUtilsLabelEXT() for.
     vk::CommandBuffer *mQueryEventCommands;
 
+    // The following allows a mid-render-pass glClear* to be treated the same as glDraw*, while
+    // skipping special handling of a glClear* outside of a render pass.
+    bool mSkippedLoggingAClear;
+
     // Transform feedback buffers.
     angle::FastUnorderedSet<const vk::BufferHelper *,
                             gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>
