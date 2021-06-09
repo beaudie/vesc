@@ -457,6 +457,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
       mQueryEventCommands(nullptr),
+      mSkippedLoggingAClear(false),
       mGpuEventsEnabled(false),
       mEGLSyncObjectPendingFlush(false),
       mHasDeferredFlush(false),
@@ -3050,6 +3051,7 @@ void ContextVk::logEvent(const char *eventString)
         return;
     }
 
+
     // Save this event (about an OpenGL ES command being called).
     mEventLog.push_back(eventString);
 
@@ -3060,8 +3062,10 @@ void ContextVk::logEvent(const char *eventString)
 
 void ContextVk::endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType)
 {
-    if (!mRenderer->angleDebuggerMode())
+    if (!mRenderer->angleDebuggerMode() || mRenderPassCommandBuffer == nullptr ||
+        mSkippedLoggingAClear)
     {
+        mSkippedLoggingAClear = false;
         return;
     }
 
@@ -3097,6 +3101,11 @@ angle::Result ContextVk::handleNoopDrawEvent()
 
 angle::Result ContextVk::handleMidRenderPassClearEvent()
 {
+    if (mRenderPassCommandBuffer == nullptr)
+    {
+        mSkippedLoggingAClear = true;
+        return angle::Result::Continue;
+    }
     return handleDirtyEventLogImpl(mRenderPassCommandBuffer);
 }
 
