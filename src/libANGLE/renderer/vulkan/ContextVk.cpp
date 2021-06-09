@@ -457,6 +457,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
       mQueryEventCommands(nullptr),
+      mEventCounter(0),
       mSkippedLoggingAClear(false),
       mGpuEventsEnabled(false),
       mEGLSyncObjectPendingFlush(false),
@@ -1313,6 +1314,7 @@ angle::Result ContextVk::handleDirtyComputeEventLog()
 
 angle::Result ContextVk::handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffer)
 {
+    INFO("%s():\t GOT TO HERE 3.0\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     // This method is called when a draw or dispatch command is being processed.  It's purpose is
     // to call the vkCmd*DebugUtilsLabelEXT functions in order to communicate to debuggers
     // (e.g. AGI) the OpenGL ES commands that the application uses.
@@ -1321,8 +1323,11 @@ angle::Result ContextVk::handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffe
     // draw), or if calling the vkCmd*DebugUtilsLabelEXT functions is not enabled.
     if (mEventLog.empty() || commandBuffer == nullptr || !mRenderer->angleDebuggerMode())
     {
+        INFO("%s():\t GOT TO HERE 3.0.1--commandBuffer=%p", __FUNCTION__, commandBuffer);
         return angle::Result::Continue;
     }
+    ASSERT(++mEventCounter == 1);
+    INFO("%s():\t GOT TO HERE 3.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
 
     // Insert OpenGL ES commands into debug label.  We create a 3-level cascade here for
     // OpenGL-ES-first debugging in AGI.  Here's the general outline of commands:
@@ -3046,11 +3051,14 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
 
 void ContextVk::logEvent(const char *eventString)
 {
+    INFO("%s():\t\t\t GOT TO HERE 1.0\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     if (!mRenderer->angleDebuggerMode())
     {
+        INFO("%s():\t GOT TO HERE 1.0.1", __FUNCTION__);
         return;
     }
 
+    INFO("%s():\t\t\t GOT TO HERE 1.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
 
     // Save this event (about an OpenGL ES command being called).
     mEventLog.push_back(eventString);
@@ -3062,12 +3070,19 @@ void ContextVk::logEvent(const char *eventString)
 
 void ContextVk::endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType)
 {
+    INFO("%s():\t\t GOT TO HERE 5.1\t mEventCounter = %d, mSkippedLoggingAClear = %s", __FUNCTION__,
+         mEventCounter, mSkippedLoggingAClear ? "true" : "false");
     if (!mRenderer->angleDebuggerMode() || mRenderPassCommandBuffer == nullptr ||
         mSkippedLoggingAClear)
     {
+        INFO("%s():\t\t GOT TO HERE 5.1.1\t mEventCounter = %d, mSkippedLoggingAClear = %s",
+             __FUNCTION__, mEventCounter, mSkippedLoggingAClear ? "true" : "false");
         mSkippedLoggingAClear = false;
         return;
     }
+    INFO("%s():\t\t GOT TO HERE 5.2\t mEventCounter = %d, mSkippedLoggingAClear = %s", __FUNCTION__,
+         mEventCounter, mSkippedLoggingAClear ? "true" : "false");
+    ASSERT(--mEventCounter == 0);
 
     if (pipelineType == PipelineType::Graphics)
     {
@@ -3083,10 +3098,14 @@ void ContextVk::endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineT
 }
 void ContextVk::endEventLogForQuery()
 {
+    INFO("%s():\t GOT TO HERE 5.0c.0\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     if (!mRenderer->angleDebuggerMode() && mQueryEventCommands == nullptr)
     {
+        INFO("%s():\t GOT TO HERE 5.0c.0.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
         return;
     }
+    INFO("%s():\t GOT TO HERE 5.0c.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
+    ASSERT(--mEventCounter == 0);
 
     mQueryEventCommands->endDebugUtilsLabelEXT();
 
@@ -3096,16 +3115,22 @@ void ContextVk::endEventLogForQuery()
 angle::Result ContextVk::handleNoopDrawEvent()
 {
     // Even though this draw call is being no-op'd, we still must handle the dirty event log
+    INFO("%s():\t GOT TO HERE 2a\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     return handleDirtyEventLogImpl(mRenderPassCommandBuffer);
 }
 
 angle::Result ContextVk::handleMidRenderPassClearEvent()
 {
+    INFO("%s():\t GOT TO HERE 2b.0\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     if (mRenderPassCommandBuffer == nullptr)
     {
         mSkippedLoggingAClear = true;
+        INFO("%s():\t\t GOT TO HERE 2b.0.1\t mEventCounter = %d, mSkippedLoggingAClear = %s",
+             __FUNCTION__, mEventCounter, mSkippedLoggingAClear ? "true" : "false");
         return angle::Result::Continue;
     }
+    INFO("%s():\t\t GOT TO HERE 2b.1\t mEventCounter = %d, mSkippedLoggingAClear = %s",
+         __FUNCTION__, mEventCounter, mSkippedLoggingAClear ? "true" : "false");
     return handleDirtyEventLogImpl(mRenderPassCommandBuffer);
 }
 
@@ -3118,6 +3143,7 @@ angle::Result ContextVk::handleQueryEvent(vk::CommandBuffer *commandBuffer)
     ASSERT(mQueryEventCommands == nullptr);
     mQueryEventCommands = commandBuffer;
 
+    INFO("%s():\t GOT TO HERE 2c\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     return handleDirtyEventLogImpl(commandBuffer);
 }
 

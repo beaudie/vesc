@@ -12,6 +12,11 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 
@@ -40,16 +45,20 @@ void DebugAnnotatorVk::endEvent(gl::Context *context,
     if (vkCmdBeginDebugUtilsLabelEXT && context)
     {
         ContextVk *contextVk = vk::GetImpl(static_cast<gl::Context *>(context));
+        INFO("%s():\t GOT TO HERE 5.0", __FUNCTION__);
         if (isDrawOrClearEntryPoint(entryPoint))
         {
+            INFO("%s():\t GOT TO HERE 5.0a", __FUNCTION__);
             contextVk->endEventLog(entryPoint, PipelineType::Graphics);
         }
         else if (isDispatchEntryPoint(entryPoint))
         {
+            INFO("%s():\t GOT TO HERE 5.0b", __FUNCTION__);
             contextVk->endEventLog(entryPoint, PipelineType::Compute);
         }
         else if (isQueryEntryPoint(entryPoint))
         {
+            INFO("%s():\t GOT TO HERE 5.0c", __FUNCTION__);
             contextVk->endEventLogForQuery();
         }
     }

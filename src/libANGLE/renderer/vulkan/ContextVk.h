@@ -1077,6 +1077,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // skipping special handling of a glClear* outside of a render pass.
     bool mSkippedLoggingAClear;
 
+    // For debugging AGI hierarchy issues:
+    int mEventCounter;
+
     // Transform feedback buffers.
     angle::FastUnorderedSet<const vk::BufferHelper *,
                             gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>
