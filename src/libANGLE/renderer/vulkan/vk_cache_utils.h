@@ -1533,6 +1533,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
 
     void destroy(RendererVk *rendererVk);
     void release(ContextVk *context);
+    void trim(ContextVk *context);
 
     void populate(const vk::GraphicsPipelineDesc &desc, vk::Pipeline &&pipeline);
 
@@ -1562,6 +1563,16 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         }
 
         mCacheStats.miss();
+        INFO() << "CLN: CACHE MISS";
+
+        // CLN HACK HACK HACk
+        // Keep the cache under 1000 entries
+        if (mPayload.size() > 1000)
+        {
+            trim(contextVk);
+            INFO() << "CLN: mPayload.size() = " << mPayload.size();
+        }
+
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
                               fragmentModule, geometryModule, tessControlModule,

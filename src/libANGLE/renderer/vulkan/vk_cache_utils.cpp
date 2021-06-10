@@ -3726,6 +3726,36 @@ void GraphicsPipelineCache::release(ContextVk *context)
     mPayload.clear();
 }
 
+void GraphicsPipelineCache::trim(ContextVk *context)
+{
+    // TODO: Clear more than one pipeline...
+
+    // Find the oldest pipeline using serials
+    Serial oldestSerial                                = Serial::Infinite();
+    vk::PipelineHelper *oldestPipeline                 = nullptr;
+    const vk::GraphicsPipelineDesc *oldestPipelineDesc = nullptr;
+
+    // Walk through all the pipelines we're tracking and find the oldest
+    for (auto item = mPayload.begin(); item != mPayload.end(); ++item)
+    {
+        vk::PipelineHelper &pipeline = item->second;
+
+        if (pipeline.getSerial() <= oldestSerial)
+        {
+            // Track the oldest
+            oldestSerial       = pipeline.getSerial();
+            oldestPipeline     = &pipeline;
+            oldestPipelineDesc = &item->first;
+        }
+    }
+
+    ASSERT(oldestPipeline != nullptr && oldestPipelineDesc != nullptr);
+
+    // Clear the oldest pipeline
+    context->addGarbage(&oldestPipeline->getPipeline());
+    mPayload.erase(*oldestPipelineDesc);
+}
+
 angle::Result GraphicsPipelineCache::insertPipeline(
     ContextVk *contextVk,
     const vk::PipelineCache &pipelineCacheVk,
