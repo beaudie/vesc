@@ -2688,8 +2688,6 @@ TEST_P(ImageTest, Source2DTargetRenderbuffer_Colorspace)
 {
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
-    // Need to add support for VK_KHR_image_format_list to Renderbuffer: http://anglebug.com/5281
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     Source2DTargetRenderbuffer_helper(kColorspaceAttribs);
 }
 
@@ -2792,8 +2790,6 @@ TEST_P(ImageTest, SourceNativeClientBufferTargetRenderbuffer_Colorspace)
     ANGLE_SKIP_TEST_IF(!IsAndroid());
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
-    // Need to add support for VK_KHR_image_format_list to Renderbuffer: http://anglebug.com/5281
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     SourceNativeClientBufferTargetRenderbuffer_helper(kColorspaceAttribs);
 }
 
@@ -2979,8 +2975,6 @@ TEST_P(ImageTest, SourceCubeTargetRenderbuffer_Colorspace)
 {
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
-    // Need to add support for VK_KHR_image_format_list to Renderbuffer: http://anglebug.com/5281
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     SourceCubeTargetRenderbuffer_helper(kColorspaceAttribs);
 }
 
@@ -3185,8 +3179,6 @@ TEST_P(ImageTest, Source3DTargetRenderbuffer_Colorspace)
 {
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
-    // Need to add support for VK_KHR_image_format_list to Renderbuffer: http://anglebug.com/5281
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     Source3DTargetRenderbuffer_helper(true);
 }
 
@@ -3488,8 +3480,6 @@ TEST_P(ImageTest, SourceRenderbufferTargetRenderbuffer_Colorspace)
 {
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 && !IsGLExtensionEnabled("GL_EXT_sRGB"));
     ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
-    // Need to add support for VK_KHR_image_format_list to Renderbuffer: http://anglebug.com/5281
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     SourceRenderbufferTargetRenderbuffer_helper(kColorspaceAttribs);
 }
 
