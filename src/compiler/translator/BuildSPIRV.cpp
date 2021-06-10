@@ -1537,6 +1537,10 @@ void SPIRVBuilder::generateExecutionModes(spirv::Blob *blob)
 {
     switch (mShaderType)
     {
+        case gl::ShaderType::Fragment:
+            spirv::WriteExecutionMode(blob, mEntryPointId, spv::ExecutionModeOriginUpperLeft, {});
+            break;
+
         case gl::ShaderType::Compute:
         {
             const sh::WorkGroupSize &localSize = mCompiler->getComputeShaderLocalSize();
