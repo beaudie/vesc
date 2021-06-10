@@ -28,6 +28,12 @@ class ClipPlaneTest : public ANGLETest
         setConfigAlphaBits(8);
         setConfigDepthBits(24);
     }
+
+    void testTearDown()
+    {
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
 };
 
 // Checks that disable / enable works as expected.
