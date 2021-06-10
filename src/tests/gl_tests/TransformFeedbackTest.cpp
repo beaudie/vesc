@@ -3309,6 +3309,7 @@ ANGLE_INSTANTIATE_TEST_ES3(TransformFeedbackLifetimeTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TransformFeedbackTestES31);
 ANGLE_INSTANTIATE_TEST_ES31_AND(TransformFeedbackTestES31,
+                                ES31_VULKAN(),
                                 WithDirectSPIRVGeneration(ES31_VULKAN()));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TransformFeedbackTestIOBlocks);
