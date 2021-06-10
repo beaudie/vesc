@@ -2833,9 +2833,11 @@ angle::Result QueryHelper::beginRenderPassQuery(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
-void QueryHelper::endRenderPassQuery(ContextVk *contextVk)
+angle::Result QueryHelper::endRenderPassQuery(ContextVk *contextVk)
 {
     endQueryImpl(contextVk, &contextVk->getStartedRenderPassCommands().getCommandBuffer());
+
+    return angle::Result::Continue;
 }
 
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)

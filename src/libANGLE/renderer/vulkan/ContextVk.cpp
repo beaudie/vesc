@@ -363,12 +363,14 @@ ANGLE_INLINE void ContextVk::flushDescriptorSetUpdates()
     mDescriptorImageInfos.clear();
 }
 
-ANGLE_INLINE void ContextVk::onRenderPassFinished()
+ANGLE_INLINE angle::Result ContextVk::onRenderPassFinished()
 {
-    pauseRenderPassQueriesIfActive();
+    ANGLE_TRY(pauseRenderPassQueriesIfActive());
 
     mRenderPassCommandBuffer = nullptr;
     mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
+
+    return angle::Result::Continue;
 }
 
 // ContextVk::ScopedDescriptorSetUpdates implementation.
@@ -440,6 +442,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mEmulateSeamfulCubeMapSampling(false),
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
+      mQueryEventType(QueryEventCmdBuf::NotInQueryCommand),
       mGpuEventsEnabled(false),
       mEGLSyncObjectPendingFlush(false),
       mHasDeferredFlush(false),
@@ -2129,7 +2132,7 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore)
                                      getShareGroupVk()->releaseResourceUseLists(),
                                      std::move(mCurrentGarbage), &mCommandPool));
 
-    onRenderPassFinished();
+    ANGLE_TRY(onRenderPassFinished());
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     if (mGpuEventsEnabled)
@@ -3039,6 +3042,33 @@ void ContextVk::endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineT
         mOutsideRenderPassCommands->getCommandBuffer().endDebugUtilsLabelEXT();
     }
 }
+void ContextVk::endEventLogForQuery()
+{
+    ASSERT(mQueryEventType == QueryEventCmdBuf::InOuterCmdBufQueryCommand ||
+           mQueryEventType == QueryEventCmdBuf::InRenderPassCmdBufQueryCommand);
+    if (!mRenderer->angleDebuggerMode())
+    {
+        return;
+    }
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    switch (mQueryEventType)
+    {
+        case QueryEventCmdBuf::InOuterCmdBufQueryCommand:
+            ASSERT(mRenderPassCommands);
+            commandBuffer = &mRenderPassCommands->getCommandBuffer();
+            break;
+        case QueryEventCmdBuf::InRenderPassCmdBufQueryCommand:
+            ASSERT(mOutsideRenderPassCommands);
+            commandBuffer = &mOutsideRenderPassCommands->getCommandBuffer();
+            break;
+        default:
+            UNREACHABLE();
+    }
+    commandBuffer->endDebugUtilsLabelEXT();
+
+    mQueryEventType = QueryEventCmdBuf::NotInQueryCommand;
+}
 
 angle::Result ContextVk::handleNoopDrawEvent()
 {
@@ -3049,6 +3079,33 @@ angle::Result ContextVk::handleNoopDrawEvent()
 angle::Result ContextVk::handleMidRenderPassClearEvent()
 {
     return handleDirtyEventLogImpl(mRenderPassCommandBuffer);
+}
+
+angle::Result ContextVk::handleQueryEvent(QueryEventCmdBuf queryEventType)
+{
+    ASSERT(mQueryEventType == QueryEventCmdBuf::NotInQueryCommand);
+    if (!mRenderer->angleDebuggerMode())
+    {
+        return angle::Result::Continue;
+    }
+
+    mQueryEventType = queryEventType;
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    switch (mQueryEventType)
+    {
+        case QueryEventCmdBuf::InOuterCmdBufQueryCommand:
+            ASSERT(mRenderPassCommands);
+            commandBuffer = &mRenderPassCommands->getCommandBuffer();
+            break;
+        case QueryEventCmdBuf::InRenderPassCmdBufQueryCommand:
+            ASSERT(mOutsideRenderPassCommands);
+            commandBuffer = &mOutsideRenderPassCommands->getCommandBuffer();
+            break;
+        default:
+            UNREACHABLE();
+    }
+    return handleDirtyEventLogImpl(commandBuffer);
 }
 
 bool ContextVk::isViewportFlipEnabledForDrawFBO() const
@@ -3510,7 +3567,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // as some optimizations in non-draw commands require the render pass to remain
                 // open, such as invalidate or blit. Note that we always start a new command buffer
                 // because we currently can only support one open RenderPass at a time.
-                onRenderPassFinished();
+                ANGLE_TRY(onRenderPassFinished());
                 if (mRenderer->getFeatures().preferSubmitAtFBOBoundary.enabled)
                 {
                     // This will behave as if user called glFlush, but the actual flush will be
@@ -5445,7 +5502,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
 
     if (!mRenderPassCommands->started())
     {
-        onRenderPassFinished();
+        ANGLE_TRY(onRenderPassFinished());
         return angle::Result::Continue;
     }
 
@@ -5464,7 +5521,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
         populateTransformFeedbackBufferSet(xfbBufferCount, transformFeedbackVk->getBufferHelpers());
     }
 
-    onRenderPassFinished();
+    ANGLE_TRY(onRenderPassFinished());
 
     if (mGpuEventsEnabled)
     {
@@ -5657,33 +5714,37 @@ angle::Result ContextVk::beginRenderPassQuery(QueryVk *queryVk)
     return angle::Result::Continue;
 }
 
-void ContextVk::endRenderPassQuery(QueryVk *queryVk)
+angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
 {
     if (mRenderPassCommandBuffer)
     {
-        queryVk->getQueryHelper()->endRenderPassQuery(this);
+        ANGLE_TRY(queryVk->getQueryHelper()->endRenderPassQuery(this));
     }
 
     gl::QueryType type = queryVk->getType();
 
     ASSERT(mActiveRenderPassQueries[type] == queryVk);
     mActiveRenderPassQueries[type] = nullptr;
+
+    return angle::Result::Continue;
 }
 
-void ContextVk::pauseRenderPassQueriesIfActive()
+angle::Result ContextVk::pauseRenderPassQueriesIfActive()
 {
     if (mRenderPassCommandBuffer == nullptr)
     {
-        return;
+        return angle::Result::Continue;
     }
 
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
         if (activeQuery)
         {
-            activeQuery->onRenderPassEnd(this);
+            ANGLE_TRY(activeQuery->onRenderPassEnd(this));
         }
     }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::resumeRenderPassQueriesIfActive()

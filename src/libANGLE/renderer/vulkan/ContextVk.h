@@ -53,6 +53,16 @@ struct ContextVkPerfCounters
     ContextVkDescriptorSetList descriptorSetsAllocated;
 };
 
+enum class QueryEventCmdBuf
+{
+    NotInQueryCommand              = 0,
+    InOuterCmdBufQueryCommand      = 1,
+    InRenderPassCmdBufQueryCommand = 2,
+
+    InvalidEnum = 3,
+    EnumCount   = 3,
+};
+
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
 {
   public:
@@ -209,6 +219,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Record GL API calls for debuggers
     void logEvent(const char *eventString);
     void endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType);
+    void endEventLogForQuery();
 
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
@@ -573,8 +584,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Queries that begin and end automatically with render pass start and end
     angle::Result beginRenderPassQuery(QueryVk *queryVk);
-    void endRenderPassQuery(QueryVk *queryVk);
-    void pauseRenderPassQueriesIfActive();
+    angle::Result endRenderPassQuery(QueryVk *queryVk);
+    angle::Result pauseRenderPassQueriesIfActive();
     angle::Result resumeRenderPassQueriesIfActive();
 
     // Used by QueryVk to share query helpers between transform feedback queries.
@@ -617,6 +628,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
     angle::Result handleMidRenderPassClearEvent();
+    angle::Result handleQueryEvent(QueryEventCmdBuf queryEventType);
 
   private:
     // Dirty bits.
@@ -887,7 +899,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                DirtyBits dirtyBitMask);
     void flushDescriptorSetUpdates();
 
-    void onRenderPassFinished();
+    angle::Result onRenderPassFinished();
 
     void initIndexTypeMap();
 
@@ -1059,6 +1071,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::CommandBufferHelper *mOutsideRenderPassCommands;
     vk::CommandBufferHelper *mRenderPassCommands;
+
+    // The following is used when creating debug-util markers for graphics debuggers (e.g. AGI).  A
+    // given gl{Begin|End}Query command may result in commands being submitted to the outer or
+    // render-pass command buffer.  The ContextVk::handleQueryEvent() method records the
+    // appropriate command buffer for use by ContextVk::endEventLogForQuery().  The knowledge of
+    // which command buffer to use depends on the particular type of query (e.g. samples
+    // vs. timestamp), and is only known by the query code, which is what calls
+    // ContextVk::handleQueryEvent().  After all back-end processing of the gl*Query command is
+    // complete, the front-end calls ContextVk::endEventLogForQuery(), which needs to know which
+    // command buffer to call endDebugUtilsLabelEXT() for.
+    QueryEventCmdBuf mQueryEventType;
 
     // Transform feedback buffers.
     angle::FastUnorderedSet<const vk::BufferHelper *,
