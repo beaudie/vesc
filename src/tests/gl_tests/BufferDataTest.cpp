@@ -834,6 +834,9 @@ TEST_P(BufferDataTestES3, MapInvalidateThenBufferSubData)
     // http://anglebug.com/5985
     ANGLE_SKIP_TEST_IF(IsNexus5X() && IsOpenGLES());
 
+    // TODO: support non-unary built-ins in direct SPIR-V generation path.  http://anglebug.com/4889
+    ANGLE_SKIP_TEST_IF(GetParam().eglParameters.directSPIRVGeneration == EGL_TRUE);
+
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData1 = {GLColor::white, GLColor::white, GLColor::white,
