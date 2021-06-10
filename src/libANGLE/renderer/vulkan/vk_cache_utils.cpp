@@ -2744,6 +2744,85 @@ void GraphicsPipelineDesc::updateRenderPassDesc(GraphicsPipelineTransitionBits *
     }
 }
 
+void GraphicsPipelineDesc::getTransitionRanges(uint32_t *ranges, std::string *names)
+{
+    // Track where each transition bit begins
+    ranges[0] = ANGLE_GET_TRANSITION_BIT(mVertexInputAttribs, attribs);
+    ranges[1] = offsetof(GraphicsPipelineDesc, mRenderPassDesc) >> kTransitionByteShift;
+    ranges[2] = ANGLE_GET_TRANSITION_BIT(mRasterizationAndMultisampleStateInfo, bits);
+    ranges[3] = ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, enable);
+    ranges[4] = ANGLE_GET_TRANSITION_BIT(mInputAssemblyAndColorBlendStateInfo, colorWriteMaskBits);
+    ranges[5] = ANGLE_GET_TRANSITION_BIT(mViewport, x);
+    ranges[6] = ANGLE_GET_TRANSITION_BIT(mScissor, x);
+    ranges[7] = ANGLE_GET_TRANSITION_BIT(mDrawableSize, width);
+
+    names[0] = "VertexInputAttribs";
+    names[1] = "RenderPassDesc";
+    names[2] = "RasterizationAndMultisampleStateInfo";
+    names[3] = "DepthStencilStateInfo";
+    names[4] = "InputAssemblyAndColorBlendStateInfo";
+    names[5] = "Viewport";
+    names[6] = "Scissor";
+    names[7] = "DrawableSize";
+}
+
+std::string GraphicsPipelineDesc::getTransitionTypes(GraphicsPipelineTransitionBits &bits)
+{
+    // This function generates a string that lists all the transitions that are set,
+    // indicating why a new graphics pipeline is being loaded.
+    //
+    // In logcat, you'll see something like this:
+    // INFO: transition bits: VertexInputAttribs(15)
+    // INFO: transition bits: VertexInputAttribs(0) RenderPassDesc(24)
+    // INFO: transition bits: VertexInputAttribs(15) DepthStencilStateInfo(35)
+    // INFO: transition bits: InputAssemblyAndColorBlendStateInfo(40) Scissor(60)
+
+    uint32_t ranges[kGraphicsPipelineTransitions];
+    std::string rangeNames[kGraphicsPipelineTransitions];
+    getTransitionRanges(ranges, rangeNames);
+
+    static bool debugPrint = true;
+    if (debugPrint)
+    {
+        // Print them once to sanity check
+        debugPrint = false;
+
+        // Walk through all the transitions and print their names and bit ranges
+        std::string transitionRanges = "GraphicsPipelineDesc transition ranges:";
+        for (size_t i = 0; i < kGraphicsPipelineTransitions; ++i)
+        {
+            size_t rangeEnd =
+                (i == kGraphicsPipelineTransitions - 1) ? (bits.size() - 1) : (ranges[i + 1] - 1);
+            transitionRanges += " " + rangeNames[i] + " " + std::to_string(ranges[i]) + "-" +
+                                std::to_string(rangeEnd);
+        }
+        INFO() << transitionRanges;
+    }
+
+    // Walk through each transition
+    std::string transitionTypes;
+    for (size_t i = 0; i < kGraphicsPipelineTransitions; ++i)
+    {
+        size_t rangeEnd =
+            (i == kGraphicsPipelineTransitions - 1) ? (bits.size() - 1) : (ranges[i + 1] - 1);
+        for (size_t j = ranges[i]; j < rangeEnd; ++j)
+        {
+            // If any of the bits in the range are set, add the name to the list
+            if (bits[j])
+            {
+                transitionTypes += " ";
+                transitionTypes += rangeNames[i];
+                transitionTypes += "(";
+                transitionTypes += std::to_string(j);
+                transitionTypes += ")";
+                break;
+            }
+        }
+    }
+
+    return transitionTypes;
+}
+
 // AttachmentOpsArray implementation.
 AttachmentOpsArray::AttachmentOpsArray()
 {

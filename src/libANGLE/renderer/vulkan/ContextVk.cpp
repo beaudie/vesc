@@ -1385,6 +1385,10 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     else if (mGraphicsPipelineTransition.any())
     {
         ASSERT(mCurrentGraphicsPipeline->valid());
+
+        INFO() << "handleDirtyGraphicsPipelineDesc transition bits: "
+               << mGraphicsPipelineDesc->getTransitionTypes(mGraphicsPipelineTransition);
+
         if (!mCurrentGraphicsPipeline->findTransition(
                 mGraphicsPipelineTransition, *mGraphicsPipelineDesc, &mCurrentGraphicsPipeline))
         {

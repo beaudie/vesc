@@ -562,6 +562,8 @@ static_assert(kNumGraphicsPipelineDirtyBits <= 64, "Too many pipeline dirty bits
 // Set of dirty bits. Each bit represents kGraphicsPipelineDirtyBitBytes in the desc.
 using GraphicsPipelineTransitionBits = angle::BitSet<kNumGraphicsPipelineDirtyBits>;
 
+constexpr size_t kGraphicsPipelineTransitions = 8;
+
 // State changes are applied through the update methods. Each update method can also have a
 // sibling method that applies the update without marking a state transition. The non-transition
 // update methods are used for internal shader pipelines. Not every non-transition update method
@@ -742,6 +744,9 @@ class GraphicsPipelineDesc final
                             uint32_t width,
                             uint32_t height);
     const PackedExtent &getDrawableSize() const { return mDrawableSize; }
+
+    std::string getTransitionTypes(GraphicsPipelineTransitionBits &bits);
+    void getTransitionRanges(uint32_t *ranges, std::string *names);
 
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
