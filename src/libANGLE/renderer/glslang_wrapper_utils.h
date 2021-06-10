@@ -17,6 +17,9 @@
 
 namespace rx
 {
+
+using UniformBindingIndexMap = angle::HashMap<std::string, uint32_t>;
+
 constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Vertex, sh::vk::kDefaultUniformsNameVS},
     {gl::ShaderType::TessControl, sh::vk::kDefaultUniformsNameTCS},
@@ -175,6 +178,7 @@ void GlslangAssignLocations(const GlslangSourceOptions &options,
                             const gl::ShaderType frontShaderType,
                             bool isTransformFeedbackStage,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
+                            UniformBindingIndexMap *uniformBindingIndexMapOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
 void GlslangAssignTransformFeedbackLocations(gl::ShaderType shaderType,
