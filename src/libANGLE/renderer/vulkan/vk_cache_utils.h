@@ -1528,6 +1528,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
 
     void destroy(RendererVk *rendererVk);
     void release(ContextVk *context);
+    void trim(ContextVk *context);
 
     void populate(const vk::GraphicsPipelineDesc &desc, vk::Pipeline &&pipeline);
 
@@ -1557,6 +1558,14 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         }
 
         mCacheStats.miss();
+        INFO() << "CLN: CACHE MISS";
+
+        if (mPayload.size() > kGraphicsPipelineCacheLimit)
+        {
+            trim(contextVk);
+            INFO() << "CLN: mPayload.size() after trim = " << mPayload.size();
+        }
+
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
                               fragmentModule, geometryModule, tessControlModule,
@@ -1579,6 +1588,12 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
+
+    // How many entries to store before trimming
+    const uint32_t kGraphicsPipelineCacheLimit = 1000;
+
+    // How many entries to delete when trimming
+    const float kGraphicsPipelineCacheClearRatio = 0.5;
 
     std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper> mPayload;
 };

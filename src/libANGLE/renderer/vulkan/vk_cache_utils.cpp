@@ -3647,6 +3647,100 @@ void GraphicsPipelineCache::release(ContextVk *context)
     mPayload.clear();
 }
 
+void GraphicsPipelineCache::trim(ContextVk *context)
+{
+    //
+    // Trim the cache, removing oldest serials first
+    //
+
+    INFO() << "CLN: cache size before trim = " << mPayload.size();
+
+    // Walk through the cache and track by serial
+    using PipePair   = std::pair<const vk::GraphicsPipelineDesc *, vk::PipelineHelper *>;
+    using SerialData = std::pair<Serial, PipePair>;
+    std::vector<SerialData> descriptors;
+    for (auto item = mPayload.begin(); item != mPayload.end(); ++item)
+    {
+        // INFO() << "CLN: checking serial = " << item->second.getSerial().getValue();
+
+        // Create a vector of unused serials paired with desc and pipeline
+        if (!context->isSerialInUse(item->second.getSerial()))
+        {
+            PipePair pair(&item->first, &item->second);
+            SerialData current(item->second.getSerial(), pair);
+            descriptors.push_back(current);
+        }
+    }
+
+    // Sort the vector by serial
+    std::sort(descriptors.begin(), descriptors.end());
+
+    // Clear out the smallest entries (earliest serials) in the cache
+    size_t entriesToClear = static_cast<size_t>(static_cast<float>(descriptors.size()) *
+                                                kGraphicsPipelineCacheClearRatio);
+
+    size_t cachePos = 0;
+    for (auto desc = descriptors.begin(); desc != descriptors.end() && cachePos < entriesToClear;
+         ++desc, ++cachePos)
+    {
+        INFO() << "CLN: descriptorsSize = " << descriptors.size()
+               << ", entriesToClear = " << entriesToClear << ", cachePos = " << cachePos
+               << ", cacheSize = " << mPayload.size();
+
+        // Walk through the sorted vector and delete the smallest (oldest) serials
+        INFO() << "CLN: Deleting serial " << desc->first.getValue();
+
+        // Destroy the cache entry to free up space
+        desc->second.second->getPipeline().destroy(context->getDevice());
+        mPayload.erase(*desc->second.first);
+    }
+}
+
+// void GraphicsPipelineCache::trim(ContextVk *context)
+// {
+//     // TODO: Clear more than one pipeline...
+
+//     // Find the oldest pipeline using serials
+//     Serial oldestSerial                                = Serial::Infinite();
+//     vk::PipelineHelper *oldestPipeline                 = nullptr;
+//     const vk::GraphicsPipelineDesc *oldestPipelineDesc = nullptr;
+
+//     Serial secondOldestSerial                                = Serial::Infinite();
+//     vk::PipelineHelper *secondOldestPipeline                 = nullptr;
+//     const vk::GraphicsPipelineDesc *secondOldestPipelineDesc = nullptr;
+
+//     // Walk through all the pipelines we're tracking and find the oldest 1000
+//     for (auto item = mPayload.begin(); item != mPayload.end(); ++item)
+//     {
+//         vk::PipelineHelper &pipeline = item->second;
+//         Serial currentSerial = pipeline.getSerial();
+//         if (!context->isSerialInUse(currentSerial) && currentSerial <= oldestSerial)
+//         {
+//             // Track the second oldest
+//             secondOldestSerial       = oldestSerial;
+//             secondOldestPipeline     = oldestPipeline;
+//             secondOldestPipelineDesc = oldestPipelineDesc;
+
+//             // Track the oldest
+//             oldestSerial       = currentSerial;
+//             oldestPipeline     = &pipeline;
+//             oldestPipelineDesc = &item->first;
+//         }
+//     }
+
+//     ASSERT(oldestPipeline != nullptr && oldestPipelineDesc != nullptr);
+
+//     // Clear the second oldest
+//     //context->addGarbage(&secondOldestPipeline->getPipeline());
+//     secondOldestPipeline->getPipeline().destroy(context->getDevice());
+//     mPayload.erase(*secondOldestPipelineDesc);
+
+//     // Clear the oldest pipeline
+//     //context->addGarbage(&oldestPipeline->getPipeline());
+//     oldestPipeline->getPipeline().destroy(context->getDevice());
+//     mPayload.erase(*oldestPipelineDesc);
+// }
+
 angle::Result GraphicsPipelineCache::insertPipeline(
     ContextVk *contextVk,
     const vk::PipelineCache &pipelineCacheVk,
