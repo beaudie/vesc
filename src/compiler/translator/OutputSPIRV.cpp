@@ -315,12 +315,19 @@ spv::StorageClass GetStorageClass(const TType &type)
 
         case EvqVertexID:
         case EvqInstanceID:
+        case EvqFragCoord:
+        case EvqFrontFacing:
+        case EvqPointCoord:
+        case EvqHelperInvocation:
         case EvqNumWorkGroups:
         case EvqWorkGroupID:
         case EvqLocalInvocationID:
         case EvqGlobalInvocationID:
         case EvqLocalInvocationIndex:
             return spv::StorageClassInput;
+
+        case EvqFragDepth:
+            return spv::StorageClassOutput;
 
         default:
             // TODO: http://anglebug.com/4889
@@ -363,55 +370,67 @@ spirv::IdRef OutputSPIRVTraverser::getSymbolIdAndStorageClass(const TSymbol *sym
     // This must be an implicitly defined variable, define it now.
     const char *name               = nullptr;
     spv::BuiltIn builtInDecoration = spv::BuiltInMax;
-    SpirvType spirvType;
 
     switch (type.getQualifier())
     {
         case EvqVertexID:
             name              = "gl_VertexIndex";
             builtInDecoration = spv::BuiltInVertexIndex;
-            spirvType.type    = EbtInt;
             break;
         case EvqInstanceID:
             name              = "gl_InstanceIndex";
             builtInDecoration = spv::BuiltInInstanceIndex;
-            spirvType.type    = EbtInt;
             break;
+
+        // Fragment shader built-ins
+        case EvqFragCoord:
+            name              = "gl_FragCoord";
+            builtInDecoration = spv::BuiltInFragCoord;
+            break;
+        case EvqFrontFacing:
+            name              = "gl_FrontFacing";
+            builtInDecoration = spv::BuiltInFragCoord;
+            break;
+        case EvqPointCoord:
+            name              = "gl_PointCoord";
+            builtInDecoration = spv::BuiltInPointCoord;
+            break;
+        case EvqFragDepth:
+            name              = "gl_FragDepth";
+            builtInDecoration = spv::BuiltInFragDepth;
+            break;
+        case EvqHelperInvocation:
+            name              = "gl_HelperInvocation";
+            builtInDecoration = spv::BuiltInHelperInvocation;
+            break;
+
+        // Compute shader built-ins
         case EvqNumWorkGroups:
-            name                  = "gl_NumWorkGroups";
-            builtInDecoration     = spv::BuiltInNumWorkgroups;
-            spirvType.type        = EbtUInt;
-            spirvType.primarySize = 3;
+            name              = "gl_NumWorkGroups";
+            builtInDecoration = spv::BuiltInNumWorkgroups;
             break;
         case EvqWorkGroupID:
-            name                  = "gl_WorkGroupID";
-            builtInDecoration     = spv::BuiltInWorkgroupId;
-            spirvType.type        = EbtUInt;
-            spirvType.primarySize = 3;
+            name              = "gl_WorkGroupID";
+            builtInDecoration = spv::BuiltInWorkgroupId;
             break;
         case EvqLocalInvocationID:
-            name                  = "gl_LocalInvocationID";
-            builtInDecoration     = spv::BuiltInLocalInvocationId;
-            spirvType.type        = EbtUInt;
-            spirvType.primarySize = 3;
+            name              = "gl_LocalInvocationID";
+            builtInDecoration = spv::BuiltInLocalInvocationId;
             break;
         case EvqGlobalInvocationID:
-            name                  = "gl_GlobalInvocationID";
-            builtInDecoration     = spv::BuiltInGlobalInvocationId;
-            spirvType.type        = EbtUInt;
-            spirvType.primarySize = 3;
+            name              = "gl_GlobalInvocationID";
+            builtInDecoration = spv::BuiltInGlobalInvocationId;
             break;
         case EvqLocalInvocationIndex:
             name              = "gl_LocalInvocationIndex";
             builtInDecoration = spv::BuiltInLocalInvocationIndex;
-            spirvType.type    = EbtUInt;
             break;
         default:
             // TODO: more built-ins.  http://anglebug.com/4889
             UNIMPLEMENTED();
     }
 
-    const spirv::IdRef typeId = mBuilder.getSpirvTypeData(spirvType, nullptr).id;
+    const spirv::IdRef typeId = mBuilder.getTypeData(type, EbsUnspecified).id;
     const spirv::IdRef varId  = mBuilder.declareVariable(
         typeId, *storageClass, mBuilder.getDecorations(type), nullptr, name);
 
