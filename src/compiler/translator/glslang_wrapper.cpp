@@ -148,6 +148,7 @@ ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
     const char *shaderString = shaderSource.c_str();
     int shaderLength         = static_cast<int>(shaderSource.size());
 
+    printf("%s\n", shaderString);
     shader.setStringsWithLengths(&shaderString, &shaderLength, 1);
     shader.setEntryPoint("main");
 
@@ -178,6 +179,7 @@ ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
     fprintf(stderr, "%s\n%s\n", shaderString, readableSpirv.c_str());
 #endif  // ANGLE_DEBUG_SPIRV_GENERATION
 
-    return true;
+    // return true;
+    return false;
 }
 }  // namespace sh
