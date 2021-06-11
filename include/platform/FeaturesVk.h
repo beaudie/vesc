@@ -534,6 +534,12 @@ struct FeaturesVk : FeatureSetBase
         "preferSubmitAtFBOBoundary", FeatureCategory::VulkanWorkarounds,
         "Submit commands to driver at each FBO boundary for performance improvements.", &members,
         "https://issuetracker.google.com/187425444"};
+
+    // Whether to use dynamic viewport/scissor
+    Feature useDynamicViewportAndScissor = {
+        "useDynamicViewportAndScissor", FeatureCategory::VulkanFeatures,
+        "Whether to use dynamic state for viewport and scissor vs graphics pipeline.", &members,
+        "https://issuetracker.google.com/??"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
