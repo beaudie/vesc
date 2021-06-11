@@ -365,6 +365,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     const VkClearValue &getClearColorValue() const;
     const VkClearValue &getClearDepthStencilValue() const;
     gl::BlendStateExt::ColorMaskStorage::Type getClearColorMasks() const;
+    const VkRect2D &getScissor() const { return mScissor; }
     angle::Result getIncompleteTexture(const gl::Context *context,
                                        gl::TextureType type,
                                        gl::SamplerFormat format,
@@ -649,6 +650,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER,
+        // Dynamic viewport/scissor
+        DIRTY_BIT_VIEWPORT,
+        DIRTY_BIT_SCISSOR,
         DIRTY_BIT_MAX,
     };
 
@@ -777,6 +781,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         // Note: DIRTY_BIT_PIPELINE_BINDING will be automatically set if pipeline bind is necessary.
         mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+        mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
+        mGraphicsDirtyBits.set(DIRTY_BIT_SCISSOR);
     }
 
     ANGLE_INLINE void invalidateCurrentComputePipeline()
@@ -830,6 +836,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                              DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsDescriptorSets(DirtyBits::Iterator *dirtyBitsIterator,
                                                     DirtyBits dirtyBitMask);
+    angle::Result handleDirtyGraphicsViewport(DirtyBits::Iterator *dirtyBitsIterator,
+                                              DirtyBits dirtyBitMask);
+    angle::Result handleDirtyGraphicsScissor(DirtyBits::Iterator *dirtyBitsIterator,
+                                             DirtyBits dirtyBitMask);
 
     // Handlers for compute pipeline dirty bits.
     angle::Result handleDirtyComputeMemoryBarrier();
@@ -852,6 +862,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                               VkPipelineBindPoint bindPoint,
                                               DriverUniformsDescriptorSet *driverUniforms);
     angle::Result handleDirtyDescriptorSetsImpl(vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyViewportImpl(vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyScissorImpl(vk::CommandBuffer *commandBuffer);
+
     angle::Result allocateDriverUniforms(size_t driverUniformsSize,
                                          DriverUniformsDescriptorSet *driverUniforms,
                                          uint8_t **ptrOut,
@@ -1130,6 +1143,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Record GL API calls for debuggers
     std::vector<std::string> mEventLog;
+
+    // Viewport and scissor are handled as dynamic state.
+    VkViewport mViewport;
+    VkRect2D mScissor;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
