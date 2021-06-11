@@ -813,6 +813,20 @@ uint32_t ResourceSerialFactory::issueSerial()
     }
 
 ANGLE_VK_SERIAL_OP(ANGLE_DEFINE_GEN_VK_SERIAL)
+
+void ClampViewport(VkViewport &viewport)
+{
+    // 0-sized viewports are invalid in Vulkan.
+    if (viewport.width == 0.0f)
+    {
+        viewport.width = 1.0f;
+    }
+    if (viewport.height == 0.0f)
+    {
+        viewport.height = 1.0f;
+    }
+}
+
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
