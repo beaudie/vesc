@@ -524,6 +524,7 @@ class TestBatch():
             cmd = [test_exe_path]
         filter_string = '--gtest_filter=%s' % filt
         cmd += [filter_string, '--angle-per-test-capture-label']
+        cmd += ['--force-robust-resource-init']
 
         if self.verbose:
             info("Run capture: '{} {}'".format(test_exe_path, filter_string))

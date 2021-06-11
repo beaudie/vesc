@@ -349,11 +349,14 @@ TestPlatformContext gPlatformContext;
 // After a fixed number of iterations we reset the test window. This works around some driver bugs.
 constexpr uint32_t kWindowReuseLimit = 50;
 
+bool gForceRobustResourceInit = false;
+
 constexpr char kUseConfig[]                      = "--use-config=";
 constexpr char kReuseDisplays[]                  = "--reuse-displays";
 constexpr char kEnableANGLEPerTestCaptureLabel[] = "--angle-per-test-capture-label";
 constexpr char kBatchId[]                        = "--batch-id=";
 constexpr char kDelayTestStart[]                 = "--delay-test-start=";
+constexpr char kForceRobustResourceInit[]        = "--force-robust-resource-init";
 
 void SetupEnvironmentVarsForCaptureReplay()
 {
@@ -554,6 +557,9 @@ void ANGLETestBase::ANGLETestSetUp()
     gPlatformContext.ignoreMessages   = false;
     gPlatformContext.warningsAsErrors = false;
     gPlatformContext.currentTest      = this;
+
+    if (gForceRobustResourceInit)
+        setRobustResourceInit(true);
 
     const testing::TestInfo *testInfo = testing::UnitTest::GetInstance()->current_test_info();
 
@@ -1521,6 +1527,11 @@ void ANGLEProcessTestArgs(int *argc, char *argv[])
         else if (strncmp(argv[argIndex], kDelayTestStart, strlen(kDelayTestStart)) == 0)
         {
             SetTestStartDelay(argv[argIndex] + strlen(kDelayTestStart));
+        }
+        else if (strncmp(argv[argIndex], kForceRobustResourceInit,
+                         strlen(kForceRobustResourceInit)) == 0)
+        {
+            gForceRobustResourceInit = true;
         }
     }
 }
