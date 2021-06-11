@@ -5274,7 +5274,7 @@ void Context::activeTexture(GLenum texture)
 
 void Context::blendBarrier()
 {
-    UNIMPLEMENTED();
+    mImplementation->blendBarrier();
 }
 
 void Context::blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)

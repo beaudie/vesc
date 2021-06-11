@@ -504,6 +504,10 @@ void RendererVk::ensureCapsInitialized() const
     // Enable NV_pack_subimage
     mNativeExtensions.packSubimage = true;
 
+    // Enable KHR_blend_equation_advanced
+    // KHR_blend_equation_advanced needs the MSAA supporting
+    mNativeExtensions.blendEquationAdvancedKHR = supportSampleRateShading;
+
     mNativeCaps.minInterpolationOffset          = limitsVk.minInterpolationOffset;
     mNativeCaps.maxInterpolationOffset          = limitsVk.maxInterpolationOffset;
     mNativeCaps.subPixelInterpolationOffsetBits = limitsVk.subPixelInterpolationOffsetBits;
