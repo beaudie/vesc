@@ -2066,6 +2066,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         pipelineDesc.setStencilBackWriteMask(params.stencilMask);
     }
 
+    // TODO: Keep viewport fixed or move to dynamic?  Scissors below is already dynamic
     VkViewport viewport;
     gl::Rectangle completeRenderArea = framebuffer->getRotatedCompleteRenderArea(contextVk);
     bool invertViewport              = contextVk->isViewportFlipEnabledForDrawFBO();
@@ -2108,6 +2109,8 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     // Make sure this draw call doesn't count towards occlusion query results.
     contextVk->pauseRenderPassQueriesIfActive();
+
+    // TODO: Add viewport here too?
     commandBuffer->setScissor(0, 1, &scissor);
     commandBuffer->draw(3, 0);
     ANGLE_TRY(contextVk->resumeRenderPassQueriesIfActive());

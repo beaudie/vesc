@@ -2477,6 +2477,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // improves 7%.
     ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary, isARM);
 
+    // For testing whether dynamic viewport/scissor is a win
+    ANGLE_FEATURE_CONDITION(&mFeatures, useDynamicViewportAndScissor, true);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 

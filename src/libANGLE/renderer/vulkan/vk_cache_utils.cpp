@@ -1696,18 +1696,21 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
     SetBitField(inputAndBlend.primitive.patchVertices, 3);
     inputAndBlend.primitive.restartEnable = 0;
 
-    // Viewport and scissor will be set to valid values when framebuffer being binded
-    mViewport.x        = 0.0f;
-    mViewport.y        = 0.0f;
-    mViewport.width    = 0.0f;
-    mViewport.height   = 0.0f;
-    mViewport.minDepth = 0.0f;
-    mViewport.maxDepth = 1.0f;
+    // Viewport and scissor will be set to valid values when framebuffer is bound
+    if (!contextVk->getFeatures().useDynamicViewportAndScissor.enabled)
+    {
+        mViewport.x        = 0.0f;
+        mViewport.y        = 0.0f;
+        mViewport.width    = 0.0f;
+        mViewport.height   = 0.0f;
+        mViewport.minDepth = 0.0f;
+        mViewport.maxDepth = 1.0f;
 
-    mScissor.x      = 0;
-    mScissor.y      = 0;
-    mScissor.width  = 0;
-    mScissor.height = 0;
+        mScissor.x      = 0;
+        mScissor.y      = 0;
+        mScissor.width  = 0;
+        mScissor.height = 0;
+    }
 
     mDrawableSize.width  = 1;
     mDrawableSize.height = 1;
@@ -1922,36 +1925,39 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
 
     // Set initial viewport and scissor state.
 
-    // 0-sized viewports are invalid in Vulkan.  We always use a scissor that at least matches the
-    // requested viewport, so it's safe to adjust the viewport size here.
-    VkViewport viewport = mViewport;
-    if (viewport.width == 0)
+    if (!contextVk->getFeatures().useDynamicViewportAndScissor.enabled)
     {
-        viewport.width = 1;
-    }
-    if (viewport.height == 0)
-    {
-        viewport.height = 1;
-    }
+        // 0-sized viewports are invalid in Vulkan.  We always use a scissor that at least matches
+        // the requested viewport, so it's safe to adjust the viewport size here.
+        VkViewport viewport = mViewport;
+        if (viewport.width == 0)
+        {
+            viewport.width = 1;
+        }
+        if (viewport.height == 0)
+        {
+            viewport.height = 1;
+        }
 
-    viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    viewportState.flags         = 0;
-    viewportState.viewportCount = 1;
-    viewportState.pViewports    = &viewport;
+        viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+        viewportState.flags         = 0;
+        viewportState.viewportCount = 1;
+        viewportState.pViewports    = &viewport;
 
-    viewportState.scissorCount = 1;
-    VkRect2D scissor;
-    if (IsScissorStateDynamic(mScissor))
-    {
-        viewportState.pScissors = nullptr;
-    }
-    else
-    {
-        viewportState.pScissors = &scissor;
-        scissor.offset.x        = mScissor.x;
-        scissor.offset.y        = mScissor.y;
-        scissor.extent.width    = mScissor.width;
-        scissor.extent.height   = mScissor.height;
+        viewportState.scissorCount = 1;
+        VkRect2D scissor;
+        if (IsScissorStateDynamic(mScissor))
+        {
+            viewportState.pScissors = nullptr;
+        }
+        else
+        {
+            viewportState.pScissors = &scissor;
+            scissor.offset.x        = mScissor.x;
+            scissor.offset.y        = mScissor.y;
+            scissor.extent.width    = mScissor.width;
+            scissor.extent.height   = mScissor.height;
+        }
     }
 
     const PackedRasterizationAndMultisampleStateInfo &rasterAndMS =
@@ -2114,10 +2120,19 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     }
 
     // Dynamic state
-    angle::FixedVector<VkDynamicState, 1> dynamicStateList;
-    if (IsScissorStateDynamic(mScissor))
+    angle::FixedVector<VkDynamicState, 2> dynamicStateList;
+    if (contextVk->getFeatures().useDynamicViewportAndScissor.enabled)
     {
+        dynamicStateList.push_back(VK_DYNAMIC_STATE_VIEWPORT);
         dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
+    }
+    else
+    {
+        dynamicStateList.resize(1);
+        if (IsScissorStateDynamic(mScissor))
+        {
+            dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
+        }
     }
 
     VkPipelineDynamicStateCreateInfo dynamicState = {};
@@ -2641,12 +2656,6 @@ void GraphicsPipelineDesc::updateDepthRange(GraphicsPipelineTransitionBits *tran
                                             float nearPlane,
                                             float farPlane)
 {
-    // GLES2.0 Section 2.12.1: Each of n and f are clamped to lie within [0, 1], as are all
-    // arguments of type clampf.
-    ASSERT(nearPlane >= 0.0f && nearPlane <= 1.0f);
-    ASSERT(farPlane >= 0.0f && farPlane <= 1.0f);
-    mViewport.minDepth = nearPlane;
-    mViewport.maxDepth = farPlane;
     transition->set(ANGLE_GET_TRANSITION_BIT(mViewport, minDepth));
     transition->set(ANGLE_GET_TRANSITION_BIT(mViewport, maxDepth));
 }
