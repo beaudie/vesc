@@ -124,20 +124,13 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
     // Fetch common platform info
     Info info;
     const std::string vendor = GetPlatformString(mNative, cl::PlatformInfo::Vendor);
-    info.mProfile            = GetPlatformString(mNative, cl::PlatformInfo::Profile);
-    info.mVersionStr         = GetPlatformString(mNative, cl::PlatformInfo::Version);
-    info.mName               = GetPlatformString(mNative, cl::PlatformInfo::Name);
-    info.mExtensions         = GetPlatformString(mNative, cl::PlatformInfo::Extensions);
+    info.profile             = GetPlatformString(mNative, cl::PlatformInfo::Profile);
+    info.versionStr          = GetPlatformString(mNative, cl::PlatformInfo::Version);
+    info.name                = GetPlatformString(mNative, cl::PlatformInfo::Name);
+    std::string extensionStr = GetPlatformString(mNative, cl::PlatformInfo::Extensions);
 
-    // Limit version number to supported version
-    if (info.mVersionStr[7] != '1')
-    {
-        info.mVersionStr[7] = '1';
-        info.mVersionStr[9] = '2';
-    }
-
-    if (vendor.empty() || info.mProfile.empty() || info.mVersionStr.empty() || info.mName.empty() ||
-        info.mExtensions.empty())
+    if (vendor.empty() || info.profile.empty() || info.versionStr.empty() || info.name.empty() ||
+        extensionStr.empty())
     {
         return Info{};
     }
@@ -149,27 +142,37 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
         return Info{};
     }
 
-    // Skip platform if it is not ICD compatible
-    if (info.mExtensions.find("cl_khr_icd") == std::string::npos)
-    {
-        WARN() << "CL platform is not ICD compatible";
-        return Info{};
-    }
-
-    const cl_version version = ExtractCLVersion(info.mVersionStr);
+    const cl_version version = ExtractCLVersion(info.versionStr);
     if (version == 0u)
     {
         return Info{};
     }
 
-    // Customize version string and name, and remove unsupported extensions
-    info.mVersionStr += " (ANGLE " ANGLE_VERSION_STRING ")";
-    info.mName.insert(0u, "ANGLE pass-through -> ");
-    RemoveUnsupportedCLExtensions(info.mExtensions);
+    // Remove unsupported and initialize extensions
+    RemoveUnsupportedCLExtensions(extensionStr);
+    info.initializeExtensions(std::move(extensionStr));
+
+    // Skip platform if it is not ICD compatible
+    if (!info.khrICD)
+    {
+        WARN() << "CL platform is not ICD compatible";
+        return Info{};
+    }
+
+    // Customize version string and name
+    info.versionStr += " (ANGLE " ANGLE_VERSION_STRING ")";
+    info.name.insert(0u, "ANGLE pass-through -> ");
+
+    // Limit version number to supported version
+    if (info.versionStr[7] != '1')
+    {
+        info.versionStr[7] = '1';
+        info.versionStr[9] = '2';
+    }
 
     if (version >= CL_MAKE_VERSION(2, 1, 0) &&
         mNative->getDispatch().clGetPlatformInfo(mNative, CL_PLATFORM_HOST_TIMER_RESOLUTION,
-                                                 sizeof(info.mHostTimerRes), &info.mHostTimerRes,
+                                                 sizeof(info.hostTimerRes), &info.hostTimerRes,
                                                  nullptr) != CL_SUCCESS)
     {
         ERR() << "Failed to query CL platform info for CL_PLATFORM_HOST_TIMER_RESOLUTION";
@@ -178,46 +181,46 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
 
     if (version < CL_MAKE_VERSION(3, 0, 0))
     {
-        info.mVersion = version;
+        info.version = version;
     }
     else
     {
         if (mNative->getDispatch().clGetPlatformInfo(mNative, CL_PLATFORM_NUMERIC_VERSION,
-                                                     sizeof(info.mVersion), &info.mVersion,
+                                                     sizeof(info.version), &info.version,
                                                      nullptr) != CL_SUCCESS)
         {
             ERR() << "Failed to query CL platform info for CL_PLATFORM_NUMERIC_VERSION";
             return Info{};
         }
-        else if (CL_VERSION_MAJOR(info.mVersion) != CL_VERSION_MAJOR(version) ||
-                 CL_VERSION_MINOR(info.mVersion) != CL_VERSION_MINOR(version))
+        else if (CL_VERSION_MAJOR(info.version) != CL_VERSION_MAJOR(version) ||
+                 CL_VERSION_MINOR(info.version) != CL_VERSION_MINOR(version))
         {
-            WARN() << "CL_PLATFORM_NUMERIC_VERSION = " << CL_VERSION_MAJOR(info.mVersion) << '.'
-                   << CL_VERSION_MINOR(info.mVersion)
-                   << " does not match version string: " << info.mVersionStr;
+            WARN() << "CL_PLATFORM_NUMERIC_VERSION = " << CL_VERSION_MAJOR(info.version) << '.'
+                   << CL_VERSION_MINOR(info.version)
+                   << " does not match version string: " << info.versionStr;
         }
 
         size_t valueSize = 0u;
         if (mNative->getDispatch().clGetPlatformInfo(mNative, CL_PLATFORM_EXTENSIONS_WITH_VERSION,
                                                      0u, nullptr, &valueSize) != CL_SUCCESS ||
-            (valueSize % sizeof(decltype(info.mExtensionsWithVersion)::value_type)) != 0u)
+            (valueSize % sizeof(decltype(info.extensionsWithVersion)::value_type)) != 0u)
         {
             ERR() << "Failed to query CL platform info for CL_PLATFORM_EXTENSIONS_WITH_VERSION";
             return Info{};
         }
-        info.mExtensionsWithVersion.resize(
-            valueSize / sizeof(decltype(info.mExtensionsWithVersion)::value_type));
+        info.extensionsWithVersion.resize(valueSize /
+                                          sizeof(decltype(info.extensionsWithVersion)::value_type));
         if (mNative->getDispatch().clGetPlatformInfo(mNative, CL_PLATFORM_EXTENSIONS_WITH_VERSION,
-                                                     valueSize, info.mExtensionsWithVersion.data(),
+                                                     valueSize, info.extensionsWithVersion.data(),
                                                      nullptr) != CL_SUCCESS)
         {
             ERR() << "Failed to query CL platform info for CL_PLATFORM_EXTENSIONS_WITH_VERSION";
             return Info{};
         }
-        RemoveUnsupportedCLExtensions(info.mExtensionsWithVersion);
+        RemoveUnsupportedCLExtensions(info.extensionsWithVersion);
     }
 
-    if (info.mVersion >= CL_MAKE_VERSION(1, 1, 0) &&
+    if (info.version >= CL_MAKE_VERSION(1, 1, 0) &&
         (mNative->getDispatch().clSetEventCallback == nullptr ||
          mNative->getDispatch().clCreateSubBuffer == nullptr ||
          mNative->getDispatch().clSetMemObjectDestructorCallback == nullptr ||
@@ -231,7 +234,7 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
         return Info{};
     }
 
-    if (info.mVersion >= CL_MAKE_VERSION(1, 2, 0) &&
+    if (info.version >= CL_MAKE_VERSION(1, 2, 0) &&
         (mNative->getDispatch().clCreateSubDevices == nullptr ||
          mNative->getDispatch().clRetainDevice == nullptr ||
          mNative->getDispatch().clReleaseDevice == nullptr ||
@@ -252,7 +255,7 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
         return Info{};
     }
 
-    if (info.mVersion >= CL_MAKE_VERSION(2, 0, 0) &&
+    if (info.version >= CL_MAKE_VERSION(2, 0, 0) &&
         (mNative->getDispatch().clCreateCommandQueueWithProperties == nullptr ||
          mNative->getDispatch().clCreatePipe == nullptr ||
          mNative->getDispatch().clGetPipeInfo == nullptr ||
@@ -271,7 +274,7 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
         return Info{};
     }
 
-    if (info.mVersion >= CL_MAKE_VERSION(2, 1, 0) &&
+    if (info.version >= CL_MAKE_VERSION(2, 1, 0) &&
         (mNative->getDispatch().clCloneKernel == nullptr ||
          mNative->getDispatch().clCreateProgramWithIL == nullptr ||
          mNative->getDispatch().clEnqueueSVMMigrateMem == nullptr ||
@@ -284,7 +287,7 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
         return Info{};
     }
 
-    if (info.mVersion >= CL_MAKE_VERSION(2, 2, 0) &&
+    if (info.version >= CL_MAKE_VERSION(2, 2, 0) &&
         (mNative->getDispatch().clSetProgramReleaseCallback == nullptr ||
          mNative->getDispatch().clSetProgramSpecializationConstant == nullptr))
     {
@@ -292,7 +295,7 @@ CLPlatformImpl::Info CLPlatformCL::createInfo() const
         return Info{};
     }
 
-    if (info.mVersion >= CL_MAKE_VERSION(3, 0, 0) &&
+    if (info.version >= CL_MAKE_VERSION(3, 0, 0) &&
         (mNative->getDispatch().clCreateBufferWithProperties == nullptr ||
          mNative->getDispatch().clCreateImageWithProperties == nullptr ||
          mNative->getDispatch().clSetContextDestructorCallback == nullptr))
