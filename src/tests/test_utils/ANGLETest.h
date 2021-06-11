@@ -456,6 +456,8 @@ class ANGLETestBase
     int getClientMajorVersion() const;
     int getClientMinorVersion() const;
 
+    bool getRobustResourceInit() const;
+
     GLWindowBase *getGLWindow() const;
     EGLWindow *getEGLWindow() const;
     int getWindowWidth() const;
@@ -610,6 +612,10 @@ class ANGLETestWithParam : public ANGLETestBase, public ::testing::TestWithParam
         ANGLETestBase::ANGLETestSetUp();
         if (mIsSetUp)
         {
+            if (!getRobustResourceInit())
+            {
+                glClear(GL_COLOR_BUFFER_BIT);
+            }
             testSetUp();
         }
     }
