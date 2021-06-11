@@ -14,8 +14,6 @@
 
 #include <unordered_set>
 
-#define ANGLE_SUPPORTED_OPENCL_EXTENSIONS "cl_khr_extended_versioning", "cl_khr_icd"
-
 namespace rx
 {
 
@@ -27,8 +25,25 @@ using CLExtensionSet = std::unordered_set<std::string>;
 // Get a set of OpenCL extensions which are supported to be passed through
 inline const CLExtensionSet &GetSupportedCLExtensions()
 {
-    static angle::base::NoDestructor<CLExtensionSet> sExtensions(
-        {ANGLE_SUPPORTED_OPENCL_EXTENSIONS});
+    static angle::base::NoDestructor<const CLExtensionSet> sExtensions({
+        // clang-format off
+
+        // These Khronos extension names must be returned by all devices that support OpenCL 1.1
+        "cl_khr_byte_addressable_store",
+        "cl_khr_global_int32_base_atomics",
+        "cl_khr_global_int32_extended_atomics",
+        "cl_khr_local_int32_base_atomics",
+        "cl_khr_local_int32_extended_atomics",
+
+        // Optional extensions
+        "cl_khr_extended_versioning",
+        "cl_khr_fp64",
+        "cl_khr_icd",
+        "cl_khr_int64_base_atomics",
+        "cl_khr_int64_extended_atomics"
+
+        // clang-format on
+    });
     return *sExtensions;
 }
 

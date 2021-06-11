@@ -197,6 +197,7 @@ supported_egl_extensions = [
 
 supported_cl_extensions = [
     "cl_khr_extended_versioning",
+    "cl_khr_fp64",
     "cl_khr_icd",
 ]
 
