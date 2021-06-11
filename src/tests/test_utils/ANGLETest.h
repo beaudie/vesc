@@ -610,6 +610,8 @@ class ANGLETestWithParam : public ANGLETestBase, public ::testing::TestWithParam
         ANGLETestBase::ANGLETestSetUp();
         if (mIsSetUp)
         {
+            glClearColor(0xDE / 255.0f, 0xAD / 255.0f, 0xBE / 255.0f, 0xEF / 255.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
             testSetUp();
         }
     }
