@@ -1359,6 +1359,11 @@ int ANGLETestBase::getClientMinorVersion() const
     return getGLWindow()->getClientMinorVersion();
 }
 
+bool ANGLETestBase::getRobustResourceInit() const
+{
+    return mFixture->configParams.robustResourceInit.value();
+}
+
 EGLWindow *ANGLETestBase::getEGLWindow() const
 {
     return mFixture->eglWindow;
