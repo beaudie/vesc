@@ -455,6 +455,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
+    memset(&mViewport, 0, sizeof(mViewport));
+    memset(&mScissor, 0, sizeof(mScissor));
 
     mNonIndexedDirtyBitsMask.set();
     mNonIndexedDirtyBitsMask.reset(DIRTY_BIT_INDEX_BUFFER);
@@ -468,10 +470,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Note that currently these dirty bits are set every time a new render pass command buffer is
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
-    mNewGraphicsCommandBufferDirtyBits = DirtyBits{
-        DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING,       DIRTY_BIT_TEXTURES,
-        DIRTY_BIT_VERTEX_BUFFERS,  DIRTY_BIT_INDEX_BUFFER,           DIRTY_BIT_SHADER_RESOURCES,
-        DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
+    mNewGraphicsCommandBufferDirtyBits =
+        DirtyBits{DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING,
+                  DIRTY_BIT_TEXTURES,        DIRTY_BIT_VERTEX_BUFFERS,
+                  DIRTY_BIT_INDEX_BUFFER,    DIRTY_BIT_SHADER_RESOURCES,
+                  DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
+                  DIRTY_BIT_VIEWPORT,        DIRTY_BIT_SCISSOR};
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
@@ -518,6 +522,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyGraphicsDescriptorSets;
+
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_VIEWPORT] = &ContextVk::handleDirtyGraphicsViewport;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_SCISSOR]  = &ContextVk::handleDirtyGraphicsScissor;
 
     mComputeDirtyBitHandlers[DIRTY_BIT_MEMORY_BARRIER] =
         &ContextVk::handleDirtyComputeMemoryBarrier;
@@ -1980,6 +1987,17 @@ angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(DirtyBits::Iterator *
     return handleDirtyDescriptorSetsImpl(mRenderPassCommandBuffer);
 }
 
+angle::Result ContextVk::handleDirtyGraphicsViewport(DirtyBits::Iterator *dirtyBitsIterator,
+                                                     DirtyBits dirtyBitMask)
+{
+    return handleDirtyViewportImpl(mRenderPassCommandBuffer);
+}
+angle::Result ContextVk::handleDirtyGraphicsScissor(DirtyBits::Iterator *dirtyBitsIterator,
+                                                    DirtyBits dirtyBitMask)
+{
+    return handleDirtyScissorImpl(mRenderPassCommandBuffer);
+}
+
 angle::Result ContextVk::handleDirtyComputeDescriptorSets()
 {
     return handleDirtyDescriptorSetsImpl(&mOutsideRenderPassCommands->getCommandBuffer());
@@ -1988,6 +2006,18 @@ angle::Result ContextVk::handleDirtyComputeDescriptorSets()
 angle::Result ContextVk::handleDirtyDescriptorSetsImpl(vk::CommandBuffer *commandBuffer)
 {
     return mExecutable->updateDescriptorSets(this, commandBuffer);
+}
+
+angle::Result ContextVk::handleDirtyViewportImpl(vk::CommandBuffer *commandBuffer)
+{
+    commandBuffer->setViewport(0, 1, &mViewport);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyScissorImpl(vk::CommandBuffer *commandBuffer)
+{
+    commandBuffer->setScissor(0, 1, &mScissor);
+    return angle::Result::Continue;
 }
 
 void ContextVk::syncObjectPerfCounters()
@@ -3166,7 +3196,6 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
     bool invertViewport =
         isViewportFlipEnabledForDrawFBO() && getFeatures().supportsNegativeViewport.enabled;
 
-    VkViewport vkViewport;
     gl_vk::GetViewport(
         rotatedRect, nearPlane, farPlane, invertViewport,
         // If clip space origin is upper left, viewport origin's y value will be offset by the
@@ -3174,16 +3203,39 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
         mState.getClipSpaceOrigin() == gl::ClipSpaceOrigin::UpperLeft,
         // If the surface is rotated 90/270 degrees, use the framebuffer's width instead of the
         // height for calculating the final viewport.
-        isRotatedAspectRatioForDrawFBO() ? fbDimensions.width : fbDimensions.height, &vkViewport);
+        isRotatedAspectRatioForDrawFBO() ? fbDimensions.width : fbDimensions.height, &mViewport);
 
-    mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, vkViewport);
     invalidateGraphicsDriverUniforms();
+
+    if (mRenderer->getFeatures().useDynamicViewportAndScissor.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
+    }
+    else
+    {
+        mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, mViewport);
+    }
 }
 
 void ContextVk::updateDepthRange(float nearPlane, float farPlane)
 {
+    // GLES2.0 Section 2.12.1: Each of n and f are clamped to lie within [0, 1], as are all
+    // arguments of type clampf.
+    ASSERT(nearPlane >= 0.0f && nearPlane <= 1.0f);
+    ASSERT(farPlane >= 0.0f && farPlane <= 1.0f);
+    mViewport.minDepth = nearPlane;
+    mViewport.maxDepth = farPlane;
+
     invalidateGraphicsDriverUniforms();
-    mGraphicsPipelineDesc->updateDepthRange(&mGraphicsPipelineTransition, nearPlane, farPlane);
+
+    if (mRenderer->getFeatures().useDynamicViewportAndScissor.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
+    }
+    else
+    {
+        mGraphicsPipelineDesc->updateDepthRange(&mGraphicsPipelineTransition, nearPlane, farPlane);
+    }
 }
 
 void ContextVk::updateScissor(const gl::State &glState)
@@ -3204,8 +3256,16 @@ void ContextVk::updateScissor(const gl::State &glState)
     RotateRectangle(getRotationDrawFramebuffer(), isViewportFlipEnabledForDrawFBO(),
                     renderArea.width, renderArea.height, scissoredArea, &rotatedScissoredArea);
 
-    mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition,
-                                         gl_vk::GetRect(rotatedScissoredArea));
+    mScissor = gl_vk::GetRect(rotatedScissoredArea);
+
+    if (mRenderer->getFeatures().useDynamicViewportAndScissor.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_SCISSOR);
+    }
+    else
+    {
+        mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition, mScissor);
+    }
 
     // If the scissor has grown beyond the previous scissoredRenderArea, grow the render pass render
     // area.  The only undesirable effect this may have is that if the render area does not cover a

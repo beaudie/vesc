@@ -2076,7 +2076,10 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     const float clearDepthValue = params.depthStencilClearValue.depth;
     gl_vk::GetViewport(completeRenderArea, clearDepthValue, clearDepthValue, invertViewport,
                        clipSpaceOriginUpperLeft, completeRenderArea.height, &viewport);
-    pipelineDesc.setViewport(viewport);
+    if (!contextVk->getRenderer()->getFeatures().useDynamicViewportAndScissor.enabled)
+    {
+        pipelineDesc.setViewport(viewport);
+    }
 
     // Scissored clears can create a large number of pipelines in some tests.  Use dynamic state for
     // scissors.
@@ -2108,6 +2111,11 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     // Make sure this draw call doesn't count towards occlusion query results.
     contextVk->pauseRenderPassQueriesIfActive();
+
+    if (contextVk->getRenderer()->getFeatures().useDynamicViewportAndScissor.enabled)
+    {
+        commandBuffer->setViewport(0, 1, &viewport);
+    }
     commandBuffer->setScissor(0, 1, &scissor);
     commandBuffer->draw(3, 0);
     ANGLE_TRY(contextVk->resumeRenderPassQueriesIfActive());

@@ -77,6 +77,7 @@ enum class CommandID : uint16_t
     ResolveImage,
     SetEvent,
     SetScissor,
+    SetViewport,
     WaitEvents,
     WriteTimestamp,
 };
@@ -421,6 +422,12 @@ struct SetScissorParams
 };
 VERIFY_4_BYTE_ALIGNMENT(SetScissorParams)
 
+struct SetViewportParams
+{
+    VkViewport viewport;
+};
+VERIFY_4_BYTE_ALIGNMENT(SetViewportParams)
+
 struct WaitEventsParams
 {
     uint32_t eventCount;
@@ -645,6 +652,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                       const VkImageResolve *regions);
 
     void setEvent(VkEvent event, VkPipelineStageFlags stageMask);
+
+    void setViewport(uint32_t firstViewport, uint32_t viewportCount, const VkViewport *viewports);
 
     void setScissor(uint32_t firstScissor, uint32_t scissorCount, const VkRect2D *scissors);
 
@@ -1392,6 +1401,17 @@ ANGLE_INLINE void SecondaryCommandBuffer::setScissor(uint32_t firstScissor,
     ASSERT(scissors != nullptr);
     SetScissorParams *paramStruct = initCommand<SetScissorParams>(CommandID::SetScissor);
     paramStruct->scissor          = scissors[0];
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setViewport(uint32_t firstViewport,
+                                                      uint32_t viewportCount,
+                                                      const VkViewport *viewports)
+{
+    ASSERT(firstViewport == 0);
+    ASSERT(viewportCount == 1);
+    ASSERT(viewports != nullptr);
+    SetViewportParams *paramStruct = initCommand<SetViewportParams>(CommandID::SetViewport);
+    paramStruct->viewport          = viewports[0];
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::waitEvents(

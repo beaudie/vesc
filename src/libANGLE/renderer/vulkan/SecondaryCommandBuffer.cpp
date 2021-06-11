@@ -547,6 +547,13 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                     vkCmdSetScissor(cmdBuffer, 0, 1, &params->scissor);
                     break;
                 }
+                case CommandID::SetViewport:
+                {
+                    const SetViewportParams *params =
+                        getParamPtr<SetViewportParams>(currentCommand);
+                    vkCmdSetViewport(cmdBuffer, 0, 1, &params->viewport);
+                    break;
+                }
                 case CommandID::WaitEvents:
                 {
                     const WaitEventsParams *params = getParamPtr<WaitEventsParams>(currentCommand);
