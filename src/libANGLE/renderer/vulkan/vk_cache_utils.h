@@ -541,8 +541,6 @@ struct PackedExtent final
     uint16_t width;
     uint16_t height;
 };
-// This is invalid value for PackedScissor.x. It is used to indicate scissor is a dynamic state
-constexpr int32_t kDynamicScissorSentinel = std::numeric_limits<decltype(PackedScissor::x)>::max();
 
 constexpr size_t kPackedInputAssemblyAndColorBlendStateSize =
     sizeof(PackedInputAssemblyAndColorBlendStateInfo);
@@ -717,7 +715,6 @@ class GraphicsPipelineDesc final
     void updateDepthRange(GraphicsPipelineTransitionBits *transition,
                           float nearPlane,
                           float farPlane);
-    void setDynamicScissor();
     void setScissor(const VkRect2D &scissor);
     void updateScissor(GraphicsPipelineTransitionBits *transition, const VkRect2D &scissor);
 

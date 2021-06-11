@@ -31,10 +31,6 @@ namespace vk
 
 namespace
 {
-bool IsScissorStateDynamic(const PackedScissor &scissor)
-{
-    return scissor.x == kDynamicScissorSentinel;
-}
 
 uint8_t PackGLBlendOp(GLenum blendOp)
 {
@@ -1696,7 +1692,7 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
     SetBitField(inputAndBlend.primitive.patchVertices, 3);
     inputAndBlend.primitive.restartEnable = 0;
 
-    // Viewport and scissor will be set to valid values when framebuffer being binded
+    // Viewport and scissor will be set to valid values when framebuffer is bound
     mViewport.x        = 0.0f;
     mViewport.y        = 0.0f;
     mViewport.width    = 0.0f;
@@ -1921,38 +1917,12 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         static_cast<VkBool32>(mInputAssemblyAndColorBlendStateInfo.primitive.restartEnable);
 
     // Set initial viewport and scissor state.
-
-    // 0-sized viewports are invalid in Vulkan.  We always use a scissor that at least matches the
-    // requested viewport, so it's safe to adjust the viewport size here.
-    VkViewport viewport = mViewport;
-    if (viewport.width == 0)
-    {
-        viewport.width = 1;
-    }
-    if (viewport.height == 0)
-    {
-        viewport.height = 1;
-    }
-
     viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
     viewportState.flags         = 0;
     viewportState.viewportCount = 1;
-    viewportState.pViewports    = &viewport;
-
-    viewportState.scissorCount = 1;
-    VkRect2D scissor;
-    if (IsScissorStateDynamic(mScissor))
-    {
-        viewportState.pScissors = nullptr;
-    }
-    else
-    {
-        viewportState.pScissors = &scissor;
-        scissor.offset.x        = mScissor.x;
-        scissor.offset.y        = mScissor.y;
-        scissor.extent.width    = mScissor.width;
-        scissor.extent.height   = mScissor.height;
-    }
+    viewportState.pViewports    = nullptr;
+    viewportState.scissorCount  = 1;
+    viewportState.pScissors     = nullptr;
 
     const PackedRasterizationAndMultisampleStateInfo &rasterAndMS =
         mRasterizationAndMultisampleStateInfo;
@@ -2114,11 +2084,9 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     }
 
     // Dynamic state
-    angle::FixedVector<VkDynamicState, 1> dynamicStateList;
-    if (IsScissorStateDynamic(mScissor))
-    {
-        dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
-    }
+    angle::FixedVector<VkDynamicState, 2> dynamicStateList;
+    dynamicStateList.push_back(VK_DYNAMIC_STATE_VIEWPORT);
+    dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
 
     VkPipelineDynamicStateCreateInfo dynamicState = {};
     dynamicState.sType             = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
@@ -2641,30 +2609,12 @@ void GraphicsPipelineDesc::updateDepthRange(GraphicsPipelineTransitionBits *tran
                                             float nearPlane,
                                             float farPlane)
 {
-    // GLES2.0 Section 2.12.1: Each of n and f are clamped to lie within [0, 1], as are all
-    // arguments of type clampf.
-    ASSERT(nearPlane >= 0.0f && nearPlane <= 1.0f);
-    ASSERT(farPlane >= 0.0f && farPlane <= 1.0f);
-    mViewport.minDepth = nearPlane;
-    mViewport.maxDepth = farPlane;
     transition->set(ANGLE_GET_TRANSITION_BIT(mViewport, minDepth));
     transition->set(ANGLE_GET_TRANSITION_BIT(mViewport, maxDepth));
 }
 
-void GraphicsPipelineDesc::setDynamicScissor()
-{
-    mScissor.x      = kDynamicScissorSentinel;
-    mScissor.y      = 0;
-    mScissor.width  = 0;
-    mScissor.height = 0;
-}
-
 void GraphicsPipelineDesc::setScissor(const VkRect2D &scissor)
 {
-    ASSERT(scissor.offset.x < kDynamicScissorSentinel &&
-           scissor.offset.y < kDynamicScissorSentinel &&
-           scissor.extent.width < kDynamicScissorSentinel &&
-           scissor.extent.height < kDynamicScissorSentinel);
     SetBitField(mScissor.x, scissor.offset.x);
     SetBitField(mScissor.y, scissor.offset.y);
     SetBitField(mScissor.width, scissor.extent.width);
