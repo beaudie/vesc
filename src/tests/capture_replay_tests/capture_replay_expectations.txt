@@ -101,9 +101,6 @@ FramebufferObjectTest.TextureObjectDifferentFormats/*
 BootAnimationTest.DefaultBootAnimation/*
 
 # ES1 compile failed tests
-MaterialsTest.InitialState/*
-MaterialsTest.InvalidParameter/*
-MaterialsTest.SetParameters/*
 MatrixModeTest.InitialState/*
 PointParameterTest.NegativeEnum/*
 PointParameterTest.NegativeValue/*
