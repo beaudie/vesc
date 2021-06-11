@@ -150,13 +150,14 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
             return angle::Result::Stop;
         }
     }
+    else
+    {
+        ASSERT(context != nullptr);
+        ContextVk *contextVk = vk::GetImpl(context);
 
-    // Grab a fence from the releasing context to know when the image is no longer used
-    ASSERT(context != nullptr);
-    ContextVk *contextVk = vk::GetImpl(context);
-
-    // Flush the context to make sure the fence has been submitted.
-    ANGLE_TRY(contextVk->flushImpl(nullptr));
+        // Flush the context to make sure the fence has been submitted.
+        ANGLE_TRY(contextVk->flushImpl(nullptr));
+    }
 
     return angle::Result::Continue;
 }
