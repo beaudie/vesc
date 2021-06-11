@@ -683,6 +683,11 @@ void ANGLETestBase::ANGLETestSetUp()
     // in their UIs
     glViewport(0, 0, mWidth, mHeight);
 
+    if (!getRobustResourceInit())
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
     mIsSetUp = true;
 }
 
@@ -1357,6 +1362,13 @@ int ANGLETestBase::getClientMajorVersion() const
 int ANGLETestBase::getClientMinorVersion() const
 {
     return getGLWindow()->getClientMinorVersion();
+}
+
+bool ANGLETestBase::getRobustResourceInit() const
+{
+    return (mFixture && mFixture->configParams.robustResourceInit.valid())
+               ? mFixture->configParams.robustResourceInit.value()
+               : false;
 }
 
 EGLWindow *ANGLETestBase::getEGLWindow() const
