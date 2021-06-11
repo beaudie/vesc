@@ -127,37 +127,6 @@ egl::Error ImageVk::initialize(const egl::Display *display)
 
 angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sibling)
 {
-    if (sibling == mState.source)
-    {
-        if (egl::IsTextureTarget(mState.target))
-        {
-            TextureVk *textureVk = GetImplAs<TextureVk>(GetAs<gl::Texture>(mState.source));
-            ASSERT(mImage == &textureVk->getImage());
-            textureVk->releaseOwnershipOfImage(context);
-            mOwnsImage = true;
-        }
-        else if (egl::IsRenderbufferTarget(mState.target))
-        {
-            RenderbufferVk *renderbufferVk =
-                GetImplAs<RenderbufferVk>(GetAs<gl::Renderbuffer>(mState.source));
-            ASSERT(mImage == renderbufferVk->getImage());
-            renderbufferVk->releaseOwnershipOfImage(context);
-            mOwnsImage = true;
-        }
-        else
-        {
-            ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-            return angle::Result::Stop;
-        }
-    }
-
-    // Grab a fence from the releasing context to know when the image is no longer used
-    ASSERT(context != nullptr);
-    ContextVk *contextVk = vk::GetImpl(context);
-
-    // Flush the context to make sure the fence has been submitted.
-    ANGLE_TRY(contextVk->flushImpl(nullptr));
-
     return angle::Result::Continue;
 }
 

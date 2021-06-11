@@ -358,6 +358,7 @@ Context::Context(egl::Display *display,
       mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
       mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
+      mOrphanedImages(new egl::OrphanedImageHelper),
       mThreadPool(nullptr),
       mFrameCapture(new angle::FrameCapture),
       mRefCount(0),
@@ -9014,6 +9015,11 @@ bool Context::supportsGeometryOrTesselation() const
 {
     return mState.getClientVersion() == ES_3_2 || mState.getExtensions().geometryShaderAny() ||
            mState.getExtensions().tessellationShaderEXT;
+}
+
+void Context::flushWithOrphanedImageRelease() const
+{
+    ANGLE_CONTEXT_TRY(mImplementation->flush(this));
 }
 
 void Context::dirtyAllState()

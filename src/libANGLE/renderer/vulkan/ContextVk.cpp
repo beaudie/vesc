@@ -836,12 +836,16 @@ angle::Result ContextVk::flush(const gl::Context *context)
         return angle::Result::Continue;
     }
 
-    return flushImpl(nullptr);
+    ANGLE_TRY(flushImpl(nullptr));
+    context->getOrphanedImageHelper()->releaseAll(context);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
 {
-    return finishImpl();
+    ANGLE_TRY(finishImpl());
+    context->getOrphanedImageHelper()->releaseAll(context);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::setupDraw(const gl::Context *context,
@@ -5231,6 +5235,12 @@ bool ContextVk::hasRecordedCommands()
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
+
+    if (!hasRecordedCommands() && !mHasDeferredFlush && !mIsAnyHostVisibleBufferWritten &&
+        !signalSemaphore)
+    {
+        return angle::Result::Continue;
+    }
 
     // We must set this to false before calling flushCommandsAndEndRenderPass to prevent it from
     // calling back to flushImpl.
