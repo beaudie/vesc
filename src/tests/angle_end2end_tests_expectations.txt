@@ -23,8 +23,15 @@
 // Linux
 6065 LINUX INTEL VULKAN : SimpleStateChangeTestES31.DrawThenUpdateUBOThenDrawThenDrawIndexed/* = SKIP
 // Fails in older mesa
-6109 LINUX INTEL : GLSLTestLoops.BasicDoWhile/ES3_* = SKIP
-6109 LINUX INTEL : GLSLTestLoops.BasicWhile/ES3_* = SKIP
+6109 LINUX INTEL : GLSLTestLoops.*While*/ES3_* = SKIP
+
+// Nvidia
+6115 NVIDIA OPENGL : GLSLTestLoops.DoWhileContinue/ES3_OpenGL = SKIP
+6115 NVIDIA OPENGL : GLSLTestLoops.DoWhileUnconditionalContinue/ES3_OpenGL = SKIP
+6115 NVIDIA OPENGL : GLSLTestLoops.WhileBreak/ES3_OpenGL = SKIP
+6115 NVIDIA GLES : GLSLTestLoops.DoWhileContinue/ES3_OpenGL = SKIP
+6115 NVIDIA GLES : GLSLTestLoops.DoWhileUnconditionalContinue/ES3_OpenGL = SKIP
+6115 NVIDIA GLES : GLSLTestLoops.WhileBreak/ES3_OpenGL = SKIP
 
 // Intel Vulkan
 
@@ -53,6 +60,7 @@
 
 // Android
 6095 ANDROID GLES : GLSLTest_ES3.InitGlobalComplexConstant/ES3_OpenGLES = SKIP
+6116 ANDROID GLES : GLSLTestLoops.ForNoCondition/ES3_OpenGLES = SKIP
 
 // Pixel 4 expectations.
 5981 PIXEL4ORXL GLES : BlitFramebufferTest.BlitSRGBToRGBOversizedDestArea/* = SKIP
