@@ -605,6 +605,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     //   2. Literal statements: "1.0;". The ESSL output doesn't define a default precision
     //      for float, so float literal statements would end up with no precision which is
     //      invalid ESSL.
+    //   3. Any unreachable statement after a discard, return, break or continue.
     // After this empty declarations are not allowed in the AST.
     if (!PruneNoOps(this, root, &mSymbolTable))
     {
