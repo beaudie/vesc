@@ -283,7 +283,7 @@ void CapturePointParameterfv_params(const State &glState,
                                     const GLfloat *params,
                                     ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(params, sizeof(GLfloat), paramCapture);
 }
 
 void CapturePointParameterxv_params(const State &glState,
