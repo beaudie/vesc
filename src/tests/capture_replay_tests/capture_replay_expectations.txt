@@ -101,9 +101,6 @@ FramebufferObjectTest.TextureObjectDifferentFormats/*
 BootAnimationTest.DefaultBootAnimation/*
 
 # ES1 compile failed tests
-PointParameterTest.NegativeEnum/*
-PointParameterTest.NegativeValue/*
-PointParameterTest.Set/*
 TextureEnvTest.InitialState/*
 TextureEnvTest.Set/*
 TextureParameterTest.SetFixedPoint/*
