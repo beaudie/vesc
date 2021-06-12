@@ -226,9 +226,14 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
             for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
             {
                 ProgramVk *programVk = getShaderProgram(glState, shaderType);
+                VkDeviceSize size = programVk->getDefaultUniformAlignedSize(contextVk, shaderType);
+                if (size == 0)
+                {
+                    size = VK_WHOLE_SIZE;
+                }
                 mExecutable.updateDefaultUniformsDescriptorSet(
                     shaderType, programVk->getDefaultUniformBlocks()[shaderType],
-                    defaultUniformBuffer, contextVk);
+                    defaultUniformBuffer, contextVk, size);
                 mExecutable.updateTransformFeedbackDescriptorSetImpl(programVk->getState(),
                                                                      contextVk);
             }

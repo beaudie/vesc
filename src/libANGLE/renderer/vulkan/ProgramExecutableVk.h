@@ -230,7 +230,8 @@ class ProgramExecutableVk
     void updateDefaultUniformsDescriptorSet(const gl::ShaderType shaderType,
                                             const DefaultUniformBlock &defaultUniformBlock,
                                             vk::BufferHelper *defaultUniformBuffer,
-                                            ContextVk *contextVk);
+                                            ContextVk *contextVk,
+                                            VkDeviceSize size);
     void updateTransformFeedbackDescriptorSetImpl(const gl::ProgramState &programState,
                                                   ContextVk *contextVk);
     angle::Result getOrAllocateShaderResourcesDescriptorSet(

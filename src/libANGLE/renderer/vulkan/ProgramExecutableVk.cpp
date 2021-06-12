@@ -1103,7 +1103,8 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
     const gl::ShaderType shaderType,
     const DefaultUniformBlock &defaultUniformBlock,
     vk::BufferHelper *defaultUniformBuffer,
-    ContextVk *contextVk)
+    ContextVk *contextVk,
+    VkDeviceSize size)
 {
     const std::string uniformBlockName      = kDefaultUniformNames[shaderType];
     const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, uniformBlockName);
@@ -1123,7 +1124,7 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
     }
 
     WriteBufferDescriptorSetBinding(
-        *bufferHelper, 0, VK_WHOLE_SIZE, mDescriptorSets[DescriptorSetIndex::UniformsAndXfb],
+        *bufferHelper, 0, size, mDescriptorSets[DescriptorSetIndex::UniformsAndXfb],
         VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, info.binding, 0, 0, &bufferInfo, &writeInfo);
 }
 
@@ -1575,7 +1576,7 @@ angle::Result ProgramExecutableVk::updateTransformFeedbackDescriptorSet(
         for (const gl::ShaderType shaderType : executable.getLinkedShaderStages())
         {
             updateDefaultUniformsDescriptorSet(shaderType, defaultUniformBlocks[shaderType],
-                                               defaultUniformBuffer, contextVk);
+                                               defaultUniformBuffer, contextVk, VK_WHOLE_SIZE);
         }
         updateTransformFeedbackDescriptorSetImpl(programState, contextVk);
     }

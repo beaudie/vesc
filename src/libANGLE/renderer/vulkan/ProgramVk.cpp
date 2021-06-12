@@ -798,8 +798,14 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
             // Update the descriptor set with the bufferInfo
             for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
             {
+                VkDeviceSize size = getDefaultUniformAlignedSize(contextVk, shaderType);
+                if (size == 0)
+                {
+                    size = VK_WHOLE_SIZE;
+                }
                 mExecutable.updateDefaultUniformsDescriptorSet(
-                    shaderType, mDefaultUniformBlocks[shaderType], defaultUniformBuffer, contextVk);
+                    shaderType, mDefaultUniformBlocks[shaderType], defaultUniformBuffer, contextVk,
+                    size);
             }
             mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
         }
