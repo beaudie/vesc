@@ -138,7 +138,8 @@ void CaptureGetTexEnvfv_params(const State &glState,
                                GLfloat *params,
                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    int count = GetTextureEnvParameterCount(pnamePacked);
+    CaptureMemory(params, count * sizeof(GLfloat), paramCapture);
 }
 
 void CaptureGetTexEnviv_params(const State &glState,
@@ -313,7 +314,8 @@ void CaptureTexEnvfv_params(const State &glState,
                             const GLfloat *params,
                             ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    int count = GetTextureEnvParameterCount(pnamePacked);
+    CaptureMemory(params, count * sizeof(GLfloat), paramCapture);
 }
 
 void CaptureTexEnviv_params(const State &glState,
