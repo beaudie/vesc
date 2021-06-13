@@ -27,17 +27,8 @@ bool IsBinaryBlob(const std::string &code)
 ImmutableString GetSymbolTableMangledName(TIntermAggregate *node)
 {
     ASSERT(!node->isConstructor());
-    switch (node->getOp())
-    {
-        case EOpCallInternalRawFunction:
-        case EOpCallBuiltInFunction:
-        case EOpCallFunctionInAST:
-            return TFunctionLookup::GetMangledName(node->getFunction()->name().data(),
-                                                   *node->getSequence());
-        default:
-            const char *opString = GetOperatorString(node->getOp());
-            return TFunctionLookup::GetMangledName(opString, *node->getSequence());
-    }
+    return TFunctionLookup::GetMangledName(node->getFunction()->name().data(),
+                                           *node->getSequence());
 }
 
 class FunctionCallFinder : public TIntermTraverser

@@ -242,7 +242,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
 
     bool visitAggregate(Visit visit, TIntermAggregate *node) override
     {
-        if (node->getOp() == EOpCallBuiltInFunction)
+        if (BuiltInGroup::IsBuiltIn(node->getOp()))
         {
             bool converted = convertBuiltinFunction(node);
             return !converted;
