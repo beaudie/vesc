@@ -336,7 +336,7 @@ bool TOutputTraverser::visitUnary(Visit visit, TIntermUnary *node)
             mOut << "Array length";
             break;
 
-        case EOpLogicalNotComponentWise:
+        case EOpNotComponentWise:
             mOut << "component-wise not";
             break;
 
@@ -393,7 +393,9 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     OutputTreeText(mOut, node, getCurrentIndentDepth());
 
-    if (node->getOp() == EOpNull)
+    const TOperator op = node->getOp();
+
+    if (op == EOpNull)
     {
         mOut.prefix(SH_ERROR);
         mOut << "node is still EOpNull!\n";
@@ -402,7 +404,7 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 
     // Give verbose names for some built-in functions that are easy to confuse with others, but
     // mostly use GLSL names for functions.
-    switch (node->getOp())
+    switch (op)
     {
         case EOpCallFunctionInAST:
             OutputFunction(mOut, "Call a user-defined function", node->getFunction());
@@ -410,9 +412,6 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
         case EOpCallInternalRawFunction:
             OutputFunction(mOut, "Call an internal function with raw implementation",
                            node->getFunction());
-            break;
-        case EOpCallBuiltInFunction:
-            OutputFunction(mOut, "Call a built-in function", node->getFunction());
             break;
 
         case EOpConstruct:
@@ -445,12 +444,19 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
         case EOpCross:
             mOut << "cross product";
             break;
-        case EOpMulMatrixComponentWise:
+        case EOpMatrixCompMult:
             mOut << "component-wise multiply";
             break;
 
         default:
-            mOut << GetOperatorString(node->getOp());
+            if (BuiltInGroup::IsBuiltIn(op))
+            {
+                OutputFunction(mOut, "Call a built-in function", node->getFunction());
+            }
+            else
+            {
+                mOut << GetOperatorString(node->getOp());
+            }
             break;
     }
 

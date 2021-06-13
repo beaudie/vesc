@@ -346,7 +346,7 @@ TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
     const TFunction *fn = LookUpBuiltInFunction(name, arguments, symbolTable, shaderVersion);
     ASSERT(fn);
     TOperator op = fn->getBuiltInOp();
-    if (op != EOpCallBuiltInFunction && arguments->size() == 1)
+    if (arguments->size() == 1)
     {
         return new TIntermUnary(op, arguments->at(0)->getAsTyped(), fn);
     }
