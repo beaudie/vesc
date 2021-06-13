@@ -115,7 +115,7 @@ TIntermTyped *RewriteBuiltinFunctionCall(TCompiler *compiler,
                                          TIntermAggregate *node,
                                          const ImageMap &imageMap)
 {
-    if (node->getOp() != EOpCallBuiltInFunction)
+    if (!BuiltInGroup::IsBuiltIn(node->getOp()))
     {
         // AST functions don't require modification as r32f image function parameters are removed by
         // MonomorphizeUnsupportedFunctionsInVulkanGLSL.

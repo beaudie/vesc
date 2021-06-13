@@ -2051,7 +2051,7 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
         case EOpAll:
             outputTriplet(out, visit, "all(", "", ")");
             break;
-        case EOpLogicalNotComponentWise:
+        case EOpNotComponentWise:
             outputTriplet(out, visit, "(!", "", ")");
             break;
         case EOpBitfieldReverse:
@@ -2397,9 +2397,9 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
     switch (node->getOp())
     {
-        case EOpCallBuiltInFunction:
         case EOpCallFunctionInAST:
         case EOpCallInternalRawFunction:
+        default:
         {
             TIntermSequence *arguments = node->getSequence();
 
@@ -2602,7 +2602,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             ASSERT(node->getUseEmulatedFunction());
             writeEmulatedFunctionTriplet(out, visit, node->getOp());
             break;
-        case EOpMulMatrixComponentWise:
+        case EOpMatrixCompMult:
             outputTriplet(out, visit, "(", " * ", ")");
             break;
         case EOpBitfieldExtract:
@@ -2695,8 +2695,6 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
             break;
         }
-        default:
-            UNREACHABLE();
     }
 
     return true;
