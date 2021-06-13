@@ -337,7 +337,8 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationVS(TCompiler *compiler,
     TIntermConstantUnion *scaleConstant = CreateFloatNode(static_cast<float>(1 << subpixelBits));
     TIntermBinary *windowScaled =
         new TIntermBinary(EOpVectorTimesScalar, CreateTempSymbolNode(windowCoords), scaleConstant);
-    TIntermUnary *windowRounded = new TIntermUnary(EOpRound, windowScaled, nullptr);
+    TIntermTyped *windowRounded =
+        CreateBuiltInUnaryFunctionCallNode("round", windowScaled, *symbolTable, 300);
     TIntermBinary *windowRoundedBack =
         new TIntermBinary(EOpDiv, windowRounded, scaleConstant->deepCopy());
     TVariable *clampedWindowCoords = CreateTempVariable(symbolTable, vec2Type);
@@ -675,8 +676,10 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     TIntermDeclaration *pDecl     = CreateTempInitDeclarationNode(p, windowPosition);
 
     // vec2 d = dFdx(p) + dFdy(p)
-    TIntermUnary *dfdx        = new TIntermUnary(EOpDFdx, new TIntermSymbol(p), nullptr);
-    TIntermUnary *dfdy        = new TIntermUnary(EOpDFdy, new TIntermSymbol(p), nullptr);
+    TIntermTyped *dfdx =
+        CreateBuiltInUnaryFunctionCallNode("dFdx", new TIntermSymbol(p), *symbolTable, 300);
+    TIntermTyped *dfdy =
+        CreateBuiltInUnaryFunctionCallNode("dFdy", new TIntermSymbol(p), *symbolTable, 300);
     TIntermBinary *dfsum      = new TIntermBinary(EOpAdd, dfdx, dfdy);
     TVariable *d              = CreateTempVariable(symbolTable, vec2Type);
     TIntermDeclaration *dDecl = CreateTempInitDeclarationNode(d, dfsum);

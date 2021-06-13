@@ -381,8 +381,8 @@ class TFunction : public TSymbol
     const TVariable *const *mParameters;
     const TType *const returnType;
     mutable ImmutableString mMangledName;
-    size_t mParamCount : 16;
-    const TOperator mOp : 8;  // Only set for built-ins
+    size_t mParamCount : 15;
+    const TOperator mOp : 9;  // Only set for built-ins
     bool defined : 1;
     bool mHasPrototypeDeclaration : 1;
     bool mKnownToNotHaveSideEffects : 1;

@@ -154,7 +154,7 @@ bool CanFoldAggregateBuiltInOp(TOperator op)
         case EOpSmoothstep:
         case EOpFma:
         case EOpLdexp:
-        case EOpMulMatrixComponentWise:
+        case EOpMatrixCompMult:
         case EOpOuterProduct:
         case EOpEqualComponentWise:
         case EOpNotEqualComponentWise:
@@ -595,7 +595,7 @@ TIntermAggregate *TIntermAggregate::CreateRawFunctionCall(const TFunction &func,
 TIntermAggregate *TIntermAggregate::CreateBuiltInFunctionCall(const TFunction &func,
                                                               TIntermSequence *arguments)
 {
-    // op should be either EOpCallBuiltInFunction or a specific math op.
+    // Every built-in function should have an op.
     ASSERT(func.getBuiltInOp() != EOpNull);
     return new TIntermAggregate(&func, func.getReturnType(), func.getBuiltInOp(), arguments);
 }
@@ -625,7 +625,7 @@ TIntermAggregate::TIntermAggregate(const TFunction *func,
 void TIntermAggregate::setPrecisionAndQualifier()
 {
     mType.setQualifier(EvqTemporary);
-    if (mOp == EOpCallBuiltInFunction)
+    if (BuiltInGroup::IsBuiltIn(mOp) && !BuiltInGroup::IsMath(mOp))
     {
         setBuiltInFunctionPrecision();
     }
@@ -642,7 +642,7 @@ void TIntermAggregate::setPrecisionAndQualifier()
         }
         else
         {
-            setPrecisionForBuiltInOp();
+            setPrecisionForMathBuiltInOp();
         }
         if (areChildrenConstQualified())
         {
@@ -685,10 +685,9 @@ void TIntermAggregate::setPrecisionFromChildren()
     mType.setPrecision(precision);
 }
 
-void TIntermAggregate::setPrecisionForBuiltInOp()
+void TIntermAggregate::setPrecisionForMathBuiltInOp()
 {
-    ASSERT(!isConstructor());
-    ASSERT(!isFunctionCall());
+    ASSERT(BuiltInGroup::IsMath(mOp));
     if (!setPrecisionForSpecialBuiltInOp())
     {
         setPrecisionFromChildren();
@@ -719,9 +718,9 @@ bool TIntermAggregate::setPrecisionForSpecialBuiltInOp()
 
 void TIntermAggregate::setBuiltInFunctionPrecision()
 {
-    // All built-ins returning bool should be handled as ops, not functions.
+    // All built-ins returning bool are math operations.
     ASSERT(getBasicType() != EbtBool);
-    ASSERT(mOp == EOpCallBuiltInFunction);
+    ASSERT(!isFunctionCall() && !isConstructor() && !BuiltInGroup::IsMath(mOp));
 
     TPrecision precision = EbpUndefined;
     for (TIntermNode *arg : mArguments)
@@ -736,7 +735,7 @@ void TIntermAggregate::setBuiltInFunctionPrecision()
     }
     // ESSL 3.0 spec section 8: textureSize always gets highp precision.
     // All other functions that take a sampler are assumed to be texture functions.
-    if (mFunction->name() == "textureSize")
+    if (mOp == EOpTextureSize)
         mType.setPrecision(EbpHigh);
     else
         mType.setPrecision(precision);
@@ -748,10 +747,13 @@ const char *TIntermAggregate::functionName() const
     switch (mOp)
     {
         case EOpCallInternalRawFunction:
-        case EOpCallBuiltInFunction:
         case EOpCallFunctionInAST:
             return mFunction->name().data();
         default:
+            if (BuiltInGroup::IsBuiltIn(mOp))
+            {
+                return mFunction->name().data();
+            }
             return GetOperatorString(mOp);
     }
 }
@@ -902,21 +904,25 @@ bool TIntermAggregate::hasSideEffects() const
     {
         return false;
     }
-    bool calledFunctionHasNoSideEffects =
-        isFunctionCall() && mFunction != nullptr && mFunction->isKnownToNotHaveSideEffects();
-    if (calledFunctionHasNoSideEffects || isConstructor())
+
+    // If the function itself is known to have a side effect, the expression has a side effect.
+    const bool calledFunctionHasSideEffects =
+        mFunction != nullptr && !mFunction->isKnownToNotHaveSideEffects();
+
+    if (calledFunctionHasSideEffects)
     {
-        for (TIntermNode *arg : mArguments)
-        {
-            if (arg->getAsTyped()->hasSideEffects())
-            {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
-    // Conservatively assume most aggregate operators have side-effects
-    return true;
+
+    // Otherwise it only has a side effect if one of the arguments does.
+    for (TIntermNode *arg : mArguments)
+    {
+        if (arg->getAsTyped()->hasSideEffects())
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void TIntermBlock::appendStatement(TIntermNode *statement)
@@ -1173,7 +1179,6 @@ bool TIntermOperator::isFunctionCall() const
     switch (mOp)
     {
         case EOpCallFunctionInAST:
-        case EOpCallBuiltInFunction:
         case EOpCallInternalRawFunction:
             return true;
         default:
@@ -1369,6 +1374,7 @@ TIntermUnary::TIntermUnary(TOperator op, TIntermTyped *operand, const TFunction 
     : TIntermOperator(op), mOperand(operand), mUseEmulatedFunction(false), mFunction(function)
 {
     ASSERT(mOperand);
+    ASSERT(!BuiltInGroup::IsBuiltIn(op) || function != nullptr);
     promote();
 }
 
@@ -3044,7 +3050,7 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                 }
                 break;
 
-            case EOpLogicalNotComponentWise:
+            case EOpNotComponentWise:
                 ASSERT(getType().getBasicType() == EbtBool);
                 resultArray[i].setBConst(!operandArray[i].getBConst());
                 break;
@@ -3540,7 +3546,7 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
             break;
         }
 
-        case EOpMulMatrixComponentWise:
+        case EOpMatrixCompMult:
         {
             ASSERT(basicType == EbtFloat && (*arguments)[0]->getAsTyped()->isMatrix() &&
                    (*arguments)[1]->getAsTyped()->isMatrix());
