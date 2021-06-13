@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/Operator.h"
+#include "compiler/translator/Operator_autogen.h"
 
 const char *GetOperatorString(TOperator op)
 {
@@ -57,6 +57,8 @@ const char *GetOperatorString(TOperator op)
         case EOpGreaterThanEqual:
             return ">=";
 
+            // TODO: remove the non-special-syntax ops.  Basically anything coming from
+            // TIntermAggregate should use the function name.  TIntermUnary ones too.
         case EOpEqualComponentWise:
             return "equal";
         case EOpNotEqualComponentWise:

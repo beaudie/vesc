@@ -271,6 +271,8 @@ const char *GetOperatorString(TOperator op);
 bool IsAssignment(TOperator op);
 
 // Say whether or not an operator represents an atomic function.
+// TODO: remove this, the ParseContext_ESSL_autogen.h isAtomicMemory says the same thing more
+// efficiently.
 bool IsAtomicFunction(TOperator op);
 
 #endif  // COMPILER_TRANSLATOR_OPERATOR_H_
