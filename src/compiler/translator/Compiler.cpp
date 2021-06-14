@@ -12,6 +12,7 @@
 #include "common/utilities.h"
 #include "compiler/translator/CallDAG.h"
 #include "compiler/translator/CollectVariables.h"
+#include "compiler/translator/DeferredSetGeometryShader.h"
 #include "compiler/translator/Initialize.h"
 #include "compiler/translator/IsASTDepthBelowLimit.h"
 #include "compiler/translator/OutputTree.h"
@@ -678,7 +679,14 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         mDiagnostics.globalError("Precision emulation not supported for this output type.");
         return false;
     }
-
+    if (mShaderType == GL_GEOMETRY_SHADER_EXT &&
+        parseContext.hasDeferredSetOfArraySizeInGeometryShader())
+    {
+        if (!DeferredSetGeometryShaderArrayInputSize(this, root, &mSymbolTable))
+        {
+            return false;
+        }
+    }
     if (parseContext.isExtensionEnabled(TExtension::EXT_clip_cull_distance))
     {
         if (!ValidateClipCullDistance(root, &mDiagnostics,

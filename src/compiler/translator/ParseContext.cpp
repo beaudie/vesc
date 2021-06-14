@@ -32,7 +32,8 @@ namespace sh
 namespace
 {
 
-const int kWebGLMaxStructNesting = 4;
+const int kWebGLMaxStructNesting               = 4;
+const int kInputArraySizeForTrianglesAdjacency = 6u;
 
 bool ContainsSampler(const TStructure *structType);
 
@@ -241,6 +242,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxGeometryShaderInvocations(resources.MaxGeometryShaderInvocations),
       mMaxGeometryShaderMaxVertices(resources.MaxGeometryOutputVertices),
       mGeometryInputArraySize(0),
+      isDeferredGeometryShaderInputSize(false),
       mMaxPatchVertices(resources.MaxPatchVertices),
       mTessControlShaderOutputVertices(0),
       mTessEvaluationShaderInputPrimitiveType(EtetUndefined),
@@ -2748,10 +2750,13 @@ void TParseContext::checkGeometryShaderInputAndSetArraySize(const TSourceLoc &lo
                 // [GLSL ES 3.2 SPEC Chapter 4.4.1.2]
                 // An input can be declared without an array size if there is a previous layout
                 // which specifies the size.
-                error(location,
-                      "Missing a valid input primitive declaration before declaring an unsized "
-                      "array input",
-                      token);
+                warning(location,
+                        "Missing a valid input primitive declaration before declaring an unsized ",
+                        "Defered");
+                // TrianglesAdjacency is the largest value (6) among the Primitive types
+                // that can be entered as an input value.
+                type->sizeOutermostUnsizedArray(kInputArraySizeForTrianglesAdjacency);
+                mGeometryShaderDeferredSetOfArraySize = true;
             }
         }
         else if (type->isArray())
