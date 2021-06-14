@@ -475,6 +475,10 @@ class TParseContext : angle::NonCopyable
     {
         return mGeometryShaderOutputPrimitiveType;
     }
+    bool hasDeferredSetOfArraySizeInGeometryShader() const
+    {
+        return mGeometryShaderDeferredSetOfArraySize;
+    }
     int getTessControlShaderOutputVertices() const { return mTessControlShaderOutputVertices; }
     TLayoutTessEvaluationType getTessEvaluationShaderInputPrimitiveType() const
     {
@@ -722,7 +726,7 @@ class TParseContext : angle::NonCopyable
     int mMaxGeometryShaderInvocations;
     int mMaxGeometryShaderMaxVertices;
     unsigned int mGeometryInputArraySize;
-
+    bool mGeometryShaderDeferredSetOfArraySize;
     int mMaxPatchVertices;
     int mTessControlShaderOutputVertices;
     TLayoutTessEvaluationType mTessEvaluationShaderInputPrimitiveType;
@@ -745,6 +749,8 @@ int PaParseStrings(size_t count,
                    const char *const string[],
                    const int length[],
                    TParseContext *context);
+
+GLuint GetGeometryShaderInputArraySize(TLayoutPrimitiveType primitiveType);
 
 }  // namespace sh
 
