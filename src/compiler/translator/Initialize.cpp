@@ -173,6 +173,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::EXT_clip_cull_distance] = EBhUndefined;
     }
+    if (resources.KHR_blend_equation_advanced)
+    {
+        extBehavior[TExtension::KHR_blend_equation_advanced] = EBhUndefined;
+    }
 }
 
 void ResetExtensionBehavior(const ShBuiltInResources &resources,
