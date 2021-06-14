@@ -13,6 +13,7 @@
 // Mac
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8Index/ES3_OpenGL = SKIP
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8IndexSmallUpdates/ES3_OpenGL = SKIP
+6060 MAC METAL : MaskedScissoredClearTest.Test/*__clear_ds = SKIP
 
 // Pixel 4 expectations.
 5981 PIXEL4ORXL GLES : BlitFramebufferTest.BlitSRGBToRGBOversizedDestArea/* = SKIP
