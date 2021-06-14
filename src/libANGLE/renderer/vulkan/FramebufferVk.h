@@ -124,6 +124,7 @@ class FramebufferVk : public FramebufferImpl
                                  const gl::Rectangle &area,
                                  const PackPixelsParams &packPixelsParams,
                                  VkImageAspectFlagBits copyAspectFlags,
+                                 angle::FormatID overrideSourceFormat,
                                  RenderTargetVk *renderTarget,
                                  void *pixels);
 

@@ -783,8 +783,10 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
         params.reverseRowOrder = !params.reverseRowOrder;
     }
 
+    angle::FormatID overrideSourceFormat = angle::Format::InternalFormatToID(
+        getState().getReadPixelsAttachment(format)->getFormat().info->sizedInternalFormat);
     ANGLE_TRY(readPixelsImpl(contextVk, params.area, params, getReadPixelsAspectFlags(format),
-                             getReadPixelsRenderTarget(format),
+                             overrideSourceFormat, getReadPixelsRenderTarget(format),
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
     mReadPixelBuffer.releaseInFlightBuffers(contextVk);
     return angle::Result::Continue;
@@ -2692,15 +2694,17 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                             const gl::Rectangle &area,
                                             const PackPixelsParams &packPixelsParams,
                                             VkImageAspectFlagBits copyAspectFlags,
+                                            angle::FormatID overrideSourceFormat,
                                             RenderTargetVk *renderTarget,
                                             void *pixels)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
     gl::LevelIndex levelGL = renderTarget->getLevelIndex();
     uint32_t layer         = renderTarget->getLayerIndex();
-    return renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams,
-                                                      copyAspectFlags, levelGL, layer, pixels,
-                                                      &mReadPixelBuffer);
+
+    return renderTarget->getImageForCopy().readPixels(
+        contextVk, area, packPixelsParams, copyAspectFlags, levelGL, layer, overrideSourceFormat,
+        pixels, &mReadPixelBuffer);
 }
 
 gl::Extents FramebufferVk::getReadImageExtents() const

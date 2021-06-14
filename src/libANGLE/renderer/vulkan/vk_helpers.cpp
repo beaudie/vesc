@@ -5741,6 +5741,8 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
 
     RenderTargetVk *readRenderTarget = framebufferVk->getColorReadRenderTarget();
 
+    angle::FormatID sourceFormat = readRenderTarget->getImageFormat().actualImageFormatID;
+
     // 2- copy the source image region to the pixel buffer using a cpu readback
     if (loadFunction.requiresConversion)
     {
@@ -5753,8 +5755,8 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
 
         // Read into the scratch buffer
         ANGLE_TRY(framebufferVk->readPixelsImpl(contextVk, clippedRectangle, params,
-                                                VK_IMAGE_ASPECT_COLOR_BIT, readRenderTarget,
-                                                memoryBuffer->data()));
+                                                VK_IMAGE_ASPECT_COLOR_BIT, sourceFormat,
+                                                readRenderTarget, memoryBuffer->data()));
 
         // Load from scratch buffer to our pixel buffer
         loadFunction.loadFunction(clippedRectangle.width, clippedRectangle.height, 1,
@@ -5765,8 +5767,8 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     {
         // We read directly from the framebuffer into our pixel buffer.
         ANGLE_TRY(framebufferVk->readPixelsImpl(contextVk, clippedRectangle, params,
-                                                VK_IMAGE_ASPECT_COLOR_BIT, readRenderTarget,
-                                                stagingPointer));
+                                                VK_IMAGE_ASPECT_COLOR_BIT, sourceFormat,
+                                                readRenderTarget, stagingPointer));
     }
 
     gl::LevelIndex updateLevelGL(index.getLevelIndex());
@@ -6706,9 +6708,9 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
         // Depth > 1 means this is a 3D texture and we need to copy all layers
         for (layer = 0; layer < static_cast<uint32_t>(mipExtents.depth); layer++)
         {
-            ANGLE_TRY(readPixels(contextVk, area, params, aspectFlags, levelGL, layer,
-                                 static_cast<uint8_t *>(pixels) + outputSkipBytes,
-                                 &stagingBuffer.get()));
+            ANGLE_TRY(readPixels(
+                contextVk, area, params, aspectFlags, levelGL, layer, mFormat->actualImageFormatID,
+                static_cast<uint8_t *>(pixels) + outputSkipBytes, &stagingBuffer.get()));
 
             outputSkipBytes += mipExtents.width * mipExtents.height *
                                gl::GetInternalFormatInfo(format, type).pixelBytes;
@@ -6716,11 +6718,174 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     }
     else
     {
-        ANGLE_TRY(readPixels(contextVk, area, params, aspectFlags, levelGL, layer,
-                             static_cast<uint8_t *>(pixels) + outputSkipBytes,
-                             &stagingBuffer.get()));
+        ANGLE_TRY(readPixels(
+            contextVk, area, params, aspectFlags, levelGL, layer, mFormat->actualImageFormatID,
+            static_cast<uint8_t *>(pixels) + outputSkipBytes, &stagingBuffer.get()));
     }
 
+    return angle::Result::Continue;
+}
+
+// This will create and fill 2 temporary images to perform a colorspace conversion.
+// Example usage: the source texture's vkImage was created with linear format but the vkImageView of
+// the target texture is in non-linear colorspace due to a colorspace override from
+// EXT_image_gl_colorspace
+// 1. This starts with src already containing linear data (colorA)
+// 2. Then, perform a no-transformation copy from src to srcImageWithOverrideFormat, which was
+//    created in a nonlinear colorspace (still colorA)
+// 3. Then, perform a blit with colorspace conversion from srcImageWithOverrideFormat to
+//    srcImageWithReadFormat. colorA will be treated as if it's nonlinear, and converted to colorB
+// 4. Finally, the calling function can then perform a no-transformation copy from
+//    srcImageWithReadFormat to the readPixels buffer (colorB)
+angle::Result handleColorspaceConversion(ContextVk *contextVk,
+                                         ImageHelper *srcImageWithOverrideFormat,
+                                         ImageHelper *srcImageWithReadFormat,
+                                         vk::ImageHelper *src,
+                                         uint32_t layerCount,
+                                         angle::FormatID overrideSourceFormat,
+                                         angle::FormatID readFormat,
+                                         CommandBuffer *readbackCommandBuffer)
+{
+    // Create 2 vkImages -
+    // srcImageWithOverrideFormat - created with format <overrideSourceFormat> with data copied from
+    // <src> srcImageWithReadFormat - created with format <readFormat> with data blit from
+    // <srcImageOverrideFormat>
+    ASSERT(!srcImageWithOverrideFormat->valid());
+    ASSERT(!srcImageWithReadFormat->valid());
+
+    VkImageCreateInfo imageCreateInfo = {};
+    imageCreateInfo.sType             = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageCreateInfo.pNext             = nullptr;
+    imageCreateInfo.flags             = 0;
+    imageCreateInfo.imageType         = src->getType();
+    imageCreateInfo.format =
+        contextVk->getRenderer()->getFormat(overrideSourceFormat).actualImageVkFormat();
+    imageCreateInfo.extent                = src->getExtents();
+    imageCreateInfo.mipLevels             = src->getLevelCount();
+    imageCreateInfo.arrayLayers           = src->getLayerCount();
+    imageCreateInfo.samples               = VK_SAMPLE_COUNT_1_BIT;
+    imageCreateInfo.tiling                = src->getTilingMode();
+    imageCreateInfo.usage                 = src->getUsage();
+    imageCreateInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    imageCreateInfo.queueFamilyIndexCount = 0;
+    imageCreateInfo.pQueueFamilyIndices   = nullptr;
+    imageCreateInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
+
+    ANGLE_TRY(srcImageWithOverrideFormat->init(
+        contextVk, gl::TextureType::_2D, src->getExtents(),
+        contextVk->getRenderer()->getFormat(overrideSourceFormat), VK_SAMPLE_COUNT_1_BIT,
+        src->getUsage(), src->getFirstAllocatedLevel(), src->getLevelCount(), src->getLayerCount(),
+        false));
+    ANGLE_TRY(srcImageWithOverrideFormat->initMemory(
+        contextVk, contextVk->getRenderer()->getMemoryProperties(),
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+
+    imageCreateInfo.format = contextVk->getRenderer()->getFormat(readFormat).actualImageVkFormat();
+
+    ANGLE_TRY(srcImageWithReadFormat->init(
+        contextVk, gl::TextureType::_2D, src->getExtents(),
+        contextVk->getRenderer()->getFormat(readFormat), VK_SAMPLE_COUNT_1_BIT, src->getUsage(),
+        src->getFirstAllocatedLevel(), src->getLevelCount(), src->getLayerCount(), false));
+    ANGLE_TRY(srcImageWithReadFormat->initMemory(contextVk,
+                                                 contextVk->getRenderer()->getMemoryProperties(),
+                                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+
+    VkImageMemoryBarrier barriers[2]            = {{}, {}};  // src, dest
+    barriers[0].sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    barriers[0].image                           = src->getImage().getHandle();
+    barriers[0].srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+    barriers[0].dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+    barriers[0].oldLayout                       = src->getCurrentLayout();
+    barriers[0].newLayout                       = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+    barriers[0].subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    barriers[0].subresourceRange.baseArrayLayer = 0;
+    barriers[0].subresourceRange.layerCount     = layerCount;
+    barriers[0].subresourceRange.levelCount     = 1;
+
+    barriers[1].sType                       = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    barriers[1].image                       = srcImageWithOverrideFormat->getImage().getHandle();
+    barriers[1].srcQueueFamilyIndex         = VK_QUEUE_FAMILY_IGNORED;
+    barriers[1].dstQueueFamilyIndex         = VK_QUEUE_FAMILY_IGNORED;
+    barriers[1].oldLayout                   = VK_IMAGE_LAYOUT_UNDEFINED;
+    barriers[1].newLayout                   = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+    barriers[1].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    barriers[1].subresourceRange.baseArrayLayer = 0;
+    barriers[1].subresourceRange.layerCount     = layerCount;
+    barriers[1].subresourceRange.levelCount     = 1;
+
+    // Barrier due to dependency between the contents of the source image and the copy operation
+    readbackCommandBuffer->pipelineBarrier(
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 2, barriers);
+
+    VkOffset3D extent = {static_cast<int32_t>(src->getExtents().width),
+                         static_cast<int32_t>(src->getExtents().height),
+                         static_cast<int32_t>(src->getExtents().depth)};
+
+    // Copy from <src> to <srcImageWithOverrideFormat> without any transformation
+    VkImageCopy copy                   = {};
+    copy.srcOffset                     = {0, 0, 0};
+    copy.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.srcSubresource.mipLevel       = 0;
+    copy.srcSubresource.baseArrayLayer = 0;
+    copy.srcSubresource.layerCount     = layerCount;
+    copy.dstOffset                     = {0, 0, 0};
+    copy.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.dstSubresource.mipLevel       = 0;
+    copy.dstSubresource.baseArrayLayer = 0;
+    copy.dstSubresource.layerCount     = layerCount;
+    copy.extent                        = src->getExtents();
+    readbackCommandBuffer->copyImage(src->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                     srcImageWithOverrideFormat->getImage(),
+                                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
+
+    barriers[0].image     = srcImageWithReadFormat->getImage().getHandle();
+    barriers[0].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    barriers[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+    barriers[1].image     = srcImageWithOverrideFormat->getImage().getHandle();
+    barriers[1].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+    barriers[1].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+
+    // Barrier due to dependency between the results of the copy and the following blit
+    readbackCommandBuffer->pipelineBarrier(
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 2, barriers);
+
+    // Blit from <srcImageWithOverrideFormat> to <srcImageWithReadFormat> with colorspace
+    // transformation
+    VkImageBlit blit                   = {};
+    blit.srcOffsets[0]                 = {0, 0, 0};
+    blit.srcOffsets[1]                 = extent;
+    blit.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    blit.srcSubresource.mipLevel       = 0;
+    blit.srcSubresource.baseArrayLayer = 0;
+    blit.srcSubresource.layerCount     = layerCount;
+    blit.dstOffsets[0]                 = {0, 0, 0};
+    blit.dstOffsets[1]                 = extent;
+    blit.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    blit.dstSubresource.mipLevel       = 0;
+    blit.dstSubresource.baseArrayLayer = 0;
+    blit.dstSubresource.layerCount     = layerCount;
+    readbackCommandBuffer->blitImage(
+        srcImageWithOverrideFormat->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+        srcImageWithReadFormat->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
+        VK_FILTER_NEAREST);
+
+    VkImageMemoryBarrier dstbarrier            = {};
+    dstbarrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    dstbarrier.image                           = srcImageWithReadFormat->getImage().getHandle();
+    dstbarrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+    dstbarrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+    dstbarrier.oldLayout                       = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+    dstbarrier.newLayout                       = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+    dstbarrier.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    dstbarrier.subresourceRange.baseArrayLayer = 0;
+    dstbarrier.subresourceRange.layerCount     = layerCount;
+    dstbarrier.subresourceRange.levelCount     = 1;
+    readbackCommandBuffer->pipelineBarrier(
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 1, &dstbarrier);
+    srcImageWithReadFormat->setCurrentImageLayout(vk::ImageLayout::TransferSrc);
     return angle::Result::Continue;
 }
 
@@ -6730,6 +6895,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                       VkImageAspectFlagBits copyAspectFlags,
                                       gl::LevelIndex levelGL,
                                       uint32_t layer,
+                                      angle::FormatID overrideSourceFormat,
                                       void *pixels,
                                       DynamicBuffer *stagingBuffer)
 {
@@ -6875,6 +7041,25 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     CommandBuffer *readbackCommandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readbackAccess, &readbackCommandBuffer));
 
+    vk::RendererScoped<vk::ImageHelper> srcImageWithOverrideFormat(contextVk->getRenderer());
+    vk::RendererScoped<vk::ImageHelper> srcImageWithReadFormat(contextVk->getRenderer());
+
+    // If we are reading from a texture with an overridden colorspace via EXT_image_gl_colorspace,
+    // then we will need to convert the colorspace now by performing a blit
+    if ((ConvertToSRGB(overrideSourceFormat) == readFormat->id) ||
+        (overrideSourceFormat == ConvertToSRGB(readFormat->id)))
+    {
+        // It should not be possible for a multisampled image to require colorspace conversion here
+        ASSERT(!isMultisampled);
+
+        ANGLE_TRY(handleColorspaceConversion(
+            contextVk, &srcImageWithOverrideFormat.get(), &srcImageWithReadFormat.get(), src,
+            mLayerCount, overrideSourceFormat, readFormat->id, readbackCommandBuffer));
+
+        src = &srcImageWithReadFormat.get();
+    }
+
+    ASSERT(src->getCurrentLayout() == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
     readbackCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(), bufferHandle,
                                              1, &region);
 
@@ -6907,7 +7092,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
-}
+}  // namespace vk
 
 // ImageHelper::SubresourceUpdate implementation
 ImageHelper::SubresourceUpdate::SubresourceUpdate()
