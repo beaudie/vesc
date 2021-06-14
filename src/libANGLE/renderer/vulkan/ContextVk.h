@@ -324,6 +324,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // EXT_shader_framebuffer_fetch_non_coherent
     void framebufferFetchBarrier() override;
 
+    // KHR_blend_equation_advanced
+    void blendBarrier() override;
+
     VkDevice getDevice() const;
     egl::ContextPriority getPriority() const { return mContextPriority; }
 
@@ -1103,9 +1106,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // vulkan.
     bool mEGLSyncObjectPendingFlush;
     bool mHasDeferredFlush;
-
-    // GL_EXT_shader_framebuffer_fetch_non_coherent
-    bool mLastProgramUsesFramebufferFetch;
 
     // Semaphores that must be waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;

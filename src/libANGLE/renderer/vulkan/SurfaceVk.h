@@ -346,6 +346,9 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
+
+    // Check if the render pass is changed using this handle
+    VkRenderPass mCurrentRenderPassHandle;
 };
 
 }  // namespace rx

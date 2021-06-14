@@ -272,6 +272,7 @@ class StateCache final : angle::NonCopyable
     void onColorMaskChange(Context *context);
     void onBufferBindingChange(Context *context);
     void onBlendFuncIndexedChange(Context *context);
+    void onBlendEquationChange(Context *context);
 
   private:
     // Cache update functions.

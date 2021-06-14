@@ -98,6 +98,8 @@ struct GraphicsDriverUniformsExtended
     // Used to pre-rotate gl_FragCoord for swapchain images on Android (a mat2, which is padded to
     // the size of two vec4's).
     std::array<float, 8> fragRotation;
+
+    uint32_t blendEquation;
 };
 
 struct ComputeDriverUniforms
@@ -444,7 +446,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuEventsEnabled(false),
       mEGLSyncObjectPendingFlush(false),
       mHasDeferredFlush(false),
-      mLastProgramUsesFramebufferFetch(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mPerfCounters{},
@@ -1716,6 +1717,16 @@ angle::Result ContextVk::handleDirtyGraphicsFramebufferFetchBarrier(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (!executable->usesFramebufferFetch())
+    {
+        // When the gl barrier call is called at the case that the framebuffer fetch or the advanced
+        // blend equation is used, the barrier call should be ignored.
+        return angle::Result::Continue;
+    }
+
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
     memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
@@ -3346,9 +3357,9 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         ASSERT(mExecutable);
         mExecutable->updateEarlyFragmentTestsOptimization(this);
 
-        if (mLastProgramUsesFramebufferFetch != executable->usesFramebufferFetch())
+        if (mDrawFramebuffer->getRenderPassDesc().getFramebufferFetchMode() !=
+            executable->usesFramebufferFetch())
         {
-            mLastProgramUsesFramebufferFetch = executable->usesFramebufferFetch();
             ANGLE_TRY(flushCommandsAndEndRenderPass());
 
             ASSERT(mDrawFramebuffer);
@@ -4495,6 +4506,14 @@ void ContextVk::framebufferFetchBarrier()
     mGraphicsDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER);
 }
 
+void ContextVk::blendBarrier()
+{
+    // For implementing KHR_blend_equation_advanced, InputAttachment is used. And
+    // EXT_shader_framebuffer_fetch_non_coherent also use InputAttachment. So, blendBarrier reuses
+    // the feature of the framebuffer fetch
+    mGraphicsDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER);
+}
+
 vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||
@@ -4648,6 +4667,9 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
                 break;
         }
 
+        gl::BlendEquationType blendEquation = gl::FromGLenum<gl::BlendEquationType>(
+            getState().getBlendStateExt().getEquationColorIndexed(0));
+
         GraphicsDriverUniformsExtended *driverUniformsExt =
             reinterpret_cast<GraphicsDriverUniformsExtended *>(ptr);
         driverUniformsExt->halfRenderArea = {halfRenderAreaWidth, halfRenderAreaHeight};
@@ -4656,7 +4678,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
         memcpy(&driverUniformsExt->fragRotation,
                &kFragRotationMatrices[mCurrentRotationDrawFramebuffer],
                sizeof(PreRotationMatrixValues));
-        driverUniforms = &driverUniformsExt->common;
+        driverUniformsExt->blendEquation = static_cast<uint32_t>(blendEquation);
+        driverUniforms                   = &driverUniformsExt->common;
     }
     else
     {
