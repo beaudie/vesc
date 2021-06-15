@@ -711,7 +711,7 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     TIntermBinary *ddfp = new TIntermBinary(EOpMul, dd, fp);
     TIntermBinary *pf   = new TIntermBinary(EOpSub, new TIntermSymbol(p), new TIntermSymbol(f));
     TIntermBinary *expr = new TIntermBinary(EOpAdd, pf, ddfp);
-    TIntermUnary *absd  = new TIntermUnary(EOpAbs, expr, nullptr);
+    TIntermTyped *absd  = CreateBuiltInUnaryFunctionCallNode("abs", expr, *symbolTable, 100);
     TVariable *i        = CreateTempVariable(symbolTable, vec2Type);
     TIntermDeclaration *iDecl = CreateTempInitDeclarationNode(i, absd);
 
