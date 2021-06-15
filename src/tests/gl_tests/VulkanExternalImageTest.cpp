@@ -475,8 +475,19 @@ void RunTextureFormatCompatChromiumTest(bool useMemoryObjectFlags,
 
     VulkanExternalHelper helper;
     helper.initialize(isSwiftshader, enableDebugLayers);
+
+    bool isPixel4VulkanMutable = createFlags & VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT &&
+                                 (IsPixel4() || IsPixel4XL()) && IsVulkan();
+
     for (const ImageFormatPair &format : kChromeFormats)
     {
+        if ((format.vkFormat == VK_FORMAT_R8G8B8A8_UNORM ||
+             format.vkFormat == VK_FORMAT_R8G8_UNORM) &&
+            isPixel4VulkanMutable)
+        {
+            continue;
+        }
+
         // https://crbug.com/angleproject/5046
         if (format.vkFormat == VK_FORMAT_R4G4B4A4_UNORM_PACK16 && IsIntel())
         {
