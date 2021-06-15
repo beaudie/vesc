@@ -1374,7 +1374,7 @@ TIntermUnary::TIntermUnary(TOperator op, TIntermTyped *operand, const TFunction 
     : TIntermOperator(op), mOperand(operand), mUseEmulatedFunction(false), mFunction(function)
 {
     ASSERT(mOperand);
-    ASSERT(!BuiltInGroup::IsBuiltIn(op) || function != nullptr);
+    ASSERT(!BuiltInGroup::IsBuiltIn(op) || (function != nullptr && function->getBuiltInOp() == op));
     promote();
 }
 
