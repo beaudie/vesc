@@ -1051,6 +1051,11 @@ void RendererVk::ensureCapsInitialized() const
 
     // GL_ANGLE_relaxed_vertex_attribute_type
     mNativeExtensions.relaxedVertexAttributeTypeANGLE = true;
+
+    // GL_OVR_multiview*
+    mNativeExtensions.multiview  = mMultiviewFeatures.multiview;
+    mNativeExtensions.multiview2 = mMultiviewFeatures.multiview;
+    mNativeExtensions.maxViews   = mMultiviewProperties.maxMultiviewViewCount;
 }
 
 namespace vk

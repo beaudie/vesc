@@ -46,9 +46,6 @@ void RenderTargetVk::init(vk::ImageHelper *image,
                           uint32_t layerCount,
                           RenderTargetTransience transience)
 {
-    // Either single-layered, or includes all layers.
-    ASSERT(layerCount == 1 || layerIndex == 0);
-
     mImage             = image;
     mImageViews        = imageViews;
     mResolveImage      = resolveImage;
@@ -80,7 +77,7 @@ vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
 
     vk::ImageOrBufferViewSubresourceSerial imageViewSerial = imageViews->getSubresourceSerial(
         mLevelIndexGL, 1, mLayerIndex,
-        mLayerCount == 1 ? vk::LayerMode::Single : vk::LayerMode::All,
+        vk::GetLayerMode(mLayerCount == mImage->getLayerCount(), mLayerCount),
         vk::SrgbDecodeMode::SkipDecode, gl::SrgbOverride::Default);
     return imageViewSerial;
 }
@@ -176,10 +173,9 @@ angle::Result RenderTargetVk::getImageViewImpl(ContextVk *contextVk,
                                                       imageViewOut);
     }
 
-    ASSERT(mode == gl::SrgbWriteControlMode::Default);
-
-    // Layered render targets view the whole level
-    return imageViews->getLevelDrawImageView(contextVk, image, levelVk, imageViewOut);
+    // Layered render targets view the whole level or a handful of layers in case of multiview.
+    return imageViews->getLevelDrawImageView(contextVk, image, levelVk, mLayerIndex, mLayerCount,
+                                             mode, imageViewOut);
 }
 
 angle::Result RenderTargetVk::getImageView(ContextVk *contextVk,
