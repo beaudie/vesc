@@ -325,17 +325,17 @@ enum TOperator : uint16_t
     EOpTextureQueryLod,
 
     // Group TextureOffsetNoBias
-    EOpTextureOffsetNoBias,
-    EOpTextureProjOffsetNoBias,
-    EOpTextureLodOffsetNoBias,
-    EOpTextureProjLodOffsetNoBias,
-    EOpTexelFetchOffsetNoBias,
-    EOpTextureGradOffsetNoBias,
-    EOpTextureProjGradOffsetNoBias,
-
-    // Group TextureOffsetBias
     EOpTextureOffset,
     EOpTextureProjOffset,
+    EOpTextureLodOffset,
+    EOpTextureProjLodOffset,
+    EOpTexelFetchOffset,
+    EOpTextureGradOffset,
+    EOpTextureProjGradOffset,
+
+    // Group TextureOffsetBias
+    EOpTextureOffsetBias,
+    EOpTextureProjOffsetBias,
 
     // Group EXT_yuv_target
     EOpRgb_2_yuv,
@@ -477,11 +477,11 @@ static inline bool IsMath(TOperator op)
 }
 static inline bool IsTextureOffsetNoBias(TOperator op)
 {
-    return op >= EOpTextureOffsetNoBias && op <= EOpTextureProjGradOffsetNoBias;
+    return op >= EOpTextureOffset && op <= EOpTextureProjGradOffset;
 }
 static inline bool IsTextureOffsetBias(TOperator op)
 {
-    return op >= EOpTextureOffset && op <= EOpTextureProjOffset;
+    return op >= EOpTextureOffsetBias && op <= EOpTextureProjOffsetBias;
 }
 static inline bool IsTextureGatherOffsetNoComp(TOperator op)
 {
