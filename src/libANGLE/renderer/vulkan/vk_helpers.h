@@ -2113,12 +2113,24 @@ using ImageViewVector = std::vector<ImageView>;
 // A vector of vector of image views.  Primary index is layer, secondary index is level.
 using LayerLevelImageViewVector = std::vector<ImageViewVector>;
 
-// Address mode for layers: only possible to access either 1 layer or all layers.
+// Address mode for layers: only possible to access either all layers, or up to
+// IMPLEMENTATION_ANGLE_MULTIVIEW_MAX_VIEWS layers.  This enum uses 0 for all layers and the rest of
+// the values conveniently alias the number of layers.
 enum LayerMode
 {
-    Single,
-    All
+    All,
+    _1,
+    _2,
+    _3,
+    _4,
 };
+static_assert(gl::IMPLEMENTATION_ANGLE_MULTIVIEW_MAX_VIEWS == 4, "Update LayerMode");
+
+inline LayerMode GetLayerMode(bool allLayers, uint32_t layerCount)
+{
+    ASSERT(allLayers || layerCount > 0 && layerCount <= gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS);
+    return allLayers ? LayerMode::All : static_cast<LayerMode>(layerCount);
+}
 
 // Sampler decode mode indicating if an attachment needs to be decoded in linear colorspace or sRGB
 enum class SrgbDecodeMode
@@ -2254,10 +2266,13 @@ class ImageViewHelper final : public Resource
                                                 angle::FormatID formatID,
                                                 const ImageView **imageViewOut);
 
-    // Creates a draw view with all layers of the level.
+    // Creates a draw view with a range of layers of the level.
     angle::Result getLevelDrawImageView(ContextVk *contextVk,
                                         const ImageHelper &image,
                                         LevelIndex levelVk,
+                                        uint32_t layer,
+                                        uint32_t layerCount,
+                                        gl::SrgbWriteControlMode mode,
                                         const ImageView **imageViewOut);
 
     // Creates a draw view with a single layer of the level.
@@ -2358,11 +2373,9 @@ class ImageViewHelper final : public Resource
     bool mLinearColorspace;
 
     // Draw views
-    ImageViewVector mLevelDrawImageViews;
     LayerLevelImageViewVector mLayerLevelDrawImageViews;
-
-    ImageViewVector mLevelDrawImageViewsLinear;
     LayerLevelImageViewVector mLayerLevelDrawImageViewsLinear;
+    angle::HashMap<ImageSubresourceRange, std::unique_ptr<ImageView>> mSubresourceDrawImageViews;
 
     // Storage views
     ImageViewVector mLevelStorageImageViews;
@@ -2371,6 +2384,17 @@ class ImageViewHelper final : public Resource
     // Serial for the image view set. getSubresourceSerial combines it with subresource info.
     ImageOrBufferViewSerial mImageViewSerial;
 };
+
+ImageSubresourceRange MakeImageSubresourceReadRange(gl::LevelIndex level,
+                                                    uint32_t levelCount,
+                                                    uint32_t layer,
+                                                    LayerMode layerMode,
+                                                    SrgbDecodeMode srgbDecodeMode,
+                                                    gl::SrgbOverride srgbOverrideMode);
+ImageSubresourceRange MakeImageSubresourceDrawRange(gl::LevelIndex level,
+                                                    uint32_t layer,
+                                                    LayerMode layerMode,
+                                                    gl::SrgbWriteControlMode srgbWriteControlMode);
 
 class BufferViewHelper final : public Resource
 {
