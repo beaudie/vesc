@@ -835,23 +835,14 @@ ANGLE_NO_DISCARD bool ReplaceInOutVariables(TCompiler *compiler,
         const unsigned int inputAttachmentIndex = originInOutVarIter.first;
         const TIntermSymbol *originInOutVar     = originInOutVarIter.second;
 
-        const TBasicType loadVarBasicType = originInOutVar->getType().getBasicType();
-        const TPrecision loadVarPrecision = originInOutVar->getType().getPrecision();
-        const unsigned int loadVarVecSize = originInOutVar->getType().getNominalSize();
-        const unsigned int loadVarArraySize =
-            (originInOutVar->isArray() ? originInOutVar->getOutermostArraySize() : 0);
-
-        TType *newOutVarType = new TType(loadVarBasicType, loadVarPrecision, EvqGlobal,
-                                         static_cast<unsigned char>(loadVarVecSize));
+        TType *newOutVarType = new TType(originInOutVar->getType());
 
         // We just want to use the original variable decorated with a inout qualifier, except
         // the qualifier itself. The qualifier will be changed from inout to out.
+        sh::TLayoutQualifier modifiedLayoutQualifier = newOutVarType->getLayoutQualifier();
+        modifiedLayoutQualifier.noncoherent          = false;
+        newOutVarType->setLayoutQualifier(modifiedLayoutQualifier);
         newOutVarType->setQualifier(TQualifier::EvqFragmentOut);
-
-        if (loadVarArraySize > 0)
-        {
-            newOutVarType->makeArray(loadVarArraySize);
-        }
 
         TVariable *newOutVar = new TVariable(symbolTable, originInOutVar->getName(), newOutVarType,
                                              SymbolType::UserDefined);

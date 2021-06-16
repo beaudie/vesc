@@ -192,6 +192,11 @@ class TParseContext : angle::NonCopyable
                                         const TSourceLoc &qualifierLocation);
     void checkLocalVariableConstStorageQualifier(const TQualifierWrapperBase &qualifier);
     void checkTCSOutVarIndexIsValid(TIntermBinary *binaryExpression, const TSourceLoc &location);
+
+    void checkBlendEquationIsNotSpecified(const TSourceLoc &location,
+                                          const AdvancedBlendEquation &blendEquation,
+                                          const TQualifier &qualifier);
+
     const TPragma &pragma() const { return mDirectiveHandler.pragma(); }
     const TExtensionBehavior &extensionBehavior() const
     {
@@ -489,6 +494,8 @@ class TParseContext : angle::NonCopyable
         return mTessEvaluationShaderInputPointType;
     }
 
+    AdvancedBlendEquation getBlendEquation() const { return mBlendEquation; }
+
     ShShaderOutput getOutputType() const { return mOutputType; }
 
     // TODO(jmadill): make this private
@@ -722,6 +729,8 @@ class TParseContext : angle::NonCopyable
     TLayoutTessEvaluationType mTessEvaluationShaderInputVertexSpacingType;
     TLayoutTessEvaluationType mTessEvaluationShaderInputOrderingType;
     TLayoutTessEvaluationType mTessEvaluationShaderInputPointType;
+
+    AdvancedBlendEquation mBlendEquation;
 
     // Track when we add new scope for func body in ESSL 1.00 spec
     bool mFunctionBodyNewScope;

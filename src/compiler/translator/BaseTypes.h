@@ -1212,7 +1212,8 @@ struct TLayoutQualifier
                invocations == 0 && maxVertices == -1 && vertices == 0 &&
                tesPrimitiveType == EtetUndefined && tesVertexSpacingType == EtetUndefined &&
                tesOrderingType == EtetUndefined && tesPointType == EtetUndefined && index == -1 &&
-               inputAttachmentIndex == -1 && noncoherent == false;
+               inputAttachmentIndex == -1 && noncoherent == false &&
+               !blendEquation.isAnyBlendEquation();
     }
 
     bool isCombinationValid() const
@@ -1225,6 +1226,7 @@ struct TLayoutQualifier
         bool otherLayoutQualifiersSpecified =
             (location != -1 || binding != -1 || index != -1 || matrixPacking != EmpUnspecified ||
              blockStorage != EbsUnspecified || imageInternalFormat != EiifUnspecified);
+        bool blendEquationSpecified = blendEquation.isAnyBlendEquation();
 
         // we can have either the work group size specified, or number of views,
         // or yuv layout qualifier, or early_fragment_tests layout qualifier, or the other layout
@@ -1232,7 +1234,7 @@ struct TLayoutQualifier
         return (workGroupSizeSpecified ? 1 : 0) + (numViewsSet ? 1 : 0) + (yuv ? 1 : 0) +
                    (earlyFragmentTests ? 1 : 0) + (otherLayoutQualifiersSpecified ? 1 : 0) +
                    (geometryShaderSpecified ? 1 : 0) + (subpassInputSpecified ? 1 : 0) +
-                   (noncoherent ? 1 : 0) <=
+                   (noncoherent ? 1 : 0) + (blendEquationSpecified ? 1 : 0) <=
                1;
     }
 
@@ -1283,6 +1285,9 @@ struct TLayoutQualifier
     int inputAttachmentIndex;
     bool noncoherent;
 
+    // KHR_blend_equation_advanced layout qualifiers.
+    AdvancedBlendEquation blendEquation;
+
   private:
     explicit constexpr TLayoutQualifier(int /*placeholder*/)
         : location(-1),
@@ -1306,7 +1311,8 @@ struct TLayoutQualifier
           tesPointType(EtetUndefined),
           index(-1),
           inputAttachmentIndex(-1),
-          noncoherent(false)
+          noncoherent(false),
+          blendEquation(0)
     {}
 };
 
