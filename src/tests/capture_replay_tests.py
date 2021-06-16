@@ -474,11 +474,13 @@ class Test():
                 source_txt_count += 1
             elif f.endswith(".h"):
                 context_header_count += 1
-                context_id = int(f.split(TRACE_FILE_SUFFIX)[1][:-2])
+                context = f.split(TRACE_FILE_SUFFIX)[1][:-2]
+                if context != "_shared":
+                    context_id = int(context)
             elif f.endswith(".cpp"):
                 context_source_count += 1
-        can_run_replay = frame_files_count >= 1 and context_header_count == 1 \
-            and context_source_count == 1 and source_txt_count == 1
+        can_run_replay = frame_files_count >= 1 and context_header_count >= 1 \
+            and context_source_count >= 1 and source_txt_count == 1
         if not can_run_replay:
             return False
         self.context_id = context_id
