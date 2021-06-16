@@ -121,6 +121,18 @@ void InitializeReplay(const char *binaryDataFileName,
 {
     LoadBinaryData(binaryDataFileName);
 
+    // TODO(http://anglebug.com/5878) - Remove once all existing traces have been recaptured, since
+    // newly captured traces will call AllocateGlobalMemory() where necessary.
+    if (maxClientArraySize > 0 || readBufferSize > 0)
+    {
+        AllocateGlobalMemory(maxClientArraySize, readBufferSize);
+    }
+}
+
+void AllocateGlobalMemory(size_t maxClientArraySize, size_t readBufferSize)
+{
+    FreeGlobalMemory();
+
     for (uint8_t *&clientArray : gClientArrays)
     {
         clientArray = new uint8_t[maxClientArraySize];
@@ -129,13 +141,18 @@ void InitializeReplay(const char *binaryDataFileName,
     gReadBuffer = new uint8_t[readBufferSize];
 }
 
-void FinishReplay()
+void FreeGlobalMemory()
 {
     for (uint8_t *&clientArray : gClientArrays)
     {
         delete[] clientArray;
     }
     delete[] gReadBuffer;
+}
+
+void FinishReplay()
+{
+    FreeGlobalMemory();
 }
 
 void UpdateClientArrayPointer(int arrayIndex, const void *data, uint64_t size)
