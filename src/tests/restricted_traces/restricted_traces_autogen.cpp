@@ -61,7 +61,7 @@
 #include "lego_legacy/lego_legacy_capture_context1.h"
 #include "lineage_m/lineage_m_capture_context1.h"
 #include "ludo_king/ludo_king_capture_context1.h"
-#include "magic_tiles_3/magic_tiles_3_capture_context1.h"
+#include "magic_tiles_3/magic_tiles_3_capture_context2.h"
 #include "manhattan_10/manhattan_10_capture_context1.h"
 #include "manhattan_31/manhattan_31_capture_context1.h"
 #include "marvel_contest_of_champions/marvel_contest_of_champions_capture_context1.h"
@@ -98,7 +98,7 @@
 #include "trex_200/trex_200_capture_context1.h"
 #include "whatsapp/whatsapp_capture_context1.h"
 #include "world_of_tanks_blitz/world_of_tanks_blitz_capture_context1.h"
-#include "world_war_doh/world_war_doh_capture_context1.h"
+#include "world_war_doh/world_war_doh_capture_context2.h"
 #include "worms_zone_io/worms_zone_io_capture_context1.h"
 
 namespace angle
