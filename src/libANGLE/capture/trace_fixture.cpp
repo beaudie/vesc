@@ -115,11 +115,18 @@ void SetBinaryDataDir(const char *dataDir)
     gBinaryDataDir = dataDir;
 }
 
+// TODO(http://anglebug.com/5878) - Remove unused parameters, which requires recapturing all
+// existing traces.
 void InitializeReplay(const char *binaryDataFileName,
                       size_t maxClientArraySize,
                       size_t readBufferSize)
 {
     LoadBinaryData(binaryDataFileName);
+}
+
+void AllocateGlobalMemory(size_t maxClientArraySize, size_t readBufferSize)
+{
+    FreeGlobalMemory();
 
     for (uint8_t *&clientArray : gClientArrays)
     {
@@ -129,13 +136,18 @@ void InitializeReplay(const char *binaryDataFileName,
     gReadBuffer = new uint8_t[readBufferSize];
 }
 
-void FinishReplay()
+void FreeGlobalMemory()
 {
     for (uint8_t *&clientArray : gClientArrays)
     {
         delete[] clientArray;
     }
     delete[] gReadBuffer;
+}
+
+void FinishReplay()
+{
+    FreeGlobalMemory();
 }
 
 void UpdateClientArrayPointer(int arrayIndex, const void *data, uint64_t size)

@@ -79,6 +79,10 @@ void InitializeReplay(const char *binaryDataFileName,
                       size_t maxClientArraySize,
                       size_t readBufferSize);
 
+void AllocateGlobalMemory(size_t maxClientArraySize, size_t readBufferSize);
+
+void FreeGlobalMemory();
+
 // Global state
 
 constexpr size_t kMaxClientArrays = 16;
