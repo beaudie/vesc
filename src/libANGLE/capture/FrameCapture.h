@@ -347,6 +347,22 @@ class FrameCapture final : angle::NonCopyable
     FrameCapture();
     ~FrameCapture();
 
+    std::vector<CallCapture> &getSetupCalls() { return mSetupCalls; }
+    void clearSetupCalls() { mSetupCalls.clear(); }
+
+    void reset();
+
+  private:
+    std::vector<CallCapture> mSetupCalls;
+};
+
+// Shared class for any items that need to be tracked by FrameCapture across shared contexts
+class FrameCaptureShared final : angle::NonCopyable
+{
+  public:
+    FrameCaptureShared();
+    ~FrameCaptureShared();
+
     void captureCall(const gl::Context *context, CallCapture &&call, bool isCallValid);
     void checkForCaptureTrigger();
     void onEndFrame(const gl::Context *context);
@@ -361,13 +377,73 @@ class FrameCapture final : angle::NonCopyable
     // Returns a frame index starting from "1" as the first frame.
     uint32_t getReplayFrameIndex() const;
 
+    ResourceTracker &getResourceTracker() { return mResourceTracker; }
+
     void trackBufferMapping(CallCapture *call,
                             gl::BufferID id,
                             GLintptr offset,
                             GLsizeiptr length,
                             bool writable);
 
-    ResourceTracker &getResouceTracker() { return mResourceTracker; }
+    const std::string &getShaderSource(gl::ShaderProgramID id) const;
+    void setShaderSource(gl::ShaderProgramID id, std::string sources);
+
+    const ProgramSources &getProgramSources(gl::ShaderProgramID id) const;
+    void setProgramSources(gl::ShaderProgramID id, ProgramSources sources);
+
+    // Load data from a previously stored texture level
+    const std::vector<uint8_t> &retrieveCachedTextureLevel(gl::TextureID id,
+                                                           gl::TextureTarget target,
+                                                           GLint level);
+
+    // Create new texture level data and copy the source into it
+    void copyCachedTextureLevel(const gl::Context *context,
+                                gl::TextureID srcID,
+                                GLint srcLevel,
+                                gl::TextureID dstID,
+                                GLint dstLevel,
+                                const CallCapture &call);
+
+    // Create the location that should be used to cache texture level data
+    std::vector<uint8_t> &getCachedTextureLevelData(gl::Texture *texture,
+                                                    gl::TextureTarget target,
+                                                    GLint level,
+                                                    EntryPoint entryPoint);
+
+    // Remove any cached texture levels on deletion
+    void deleteCachedTextureLevelData(gl::TextureID id);
+
+    void eraseBufferDataMapEntry(const gl::BufferID bufferId)
+    {
+        const auto &bufferDataInfo = mBufferDataMap.find(bufferId);
+        if (bufferDataInfo != mBufferDataMap.end())
+        {
+            mBufferDataMap.erase(bufferDataInfo);
+        }
+    }
+
+    bool hasBufferData(gl::BufferID bufferID)
+    {
+        const auto &bufferDataInfo = mBufferDataMap.find(bufferID);
+        if (bufferDataInfo != mBufferDataMap.end())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    std::pair<GLintptr, GLsizeiptr> getBufferDataOffsetAndLength(gl::BufferID bufferID)
+    {
+        const auto &bufferDataInfo = mBufferDataMap.find(bufferID);
+        ASSERT(bufferDataInfo != mBufferDataMap.end());
+        return bufferDataInfo->second;
+    }
+
+    void setCaptureActive() { mCaptureActive = true; }
+    void setCaptureInactive() { mCaptureActive = false; }
+    bool isCaptureActive() { return mCaptureActive; }
+
+    gl::ContextID getPresentationContextID() const { return mPresentationContextID; }
 
   private:
     void writeCppReplayIndexFiles(const gl::Context *, bool writeResetContextCall);
@@ -395,9 +471,8 @@ class FrameCapture final : angle::NonCopyable
                            ReplayContext *replayContext,
                            const CallCapture &call);
 
-    void setCaptureActive() { mCaptureActive = true; }
-    void setCaptureInactive() { mCaptureActive = false; }
-    bool isCaptureActive() { return mCaptureActive; }
+    std::vector<CallCapture> &getSetupCalls() { return mSetupCalls; }
+    void clearSetupCalls() { mSetupCalls.clear(); }
 
     std::vector<CallCapture> mSetupCalls;
     std::vector<CallCapture> mFrameCalls;
@@ -431,44 +506,7 @@ class FrameCapture final : angle::NonCopyable
     uint32_t mCaptureTrigger;
 
     bool mCaptureActive = false;
-};
 
-// Shared class for any items that need to be tracked by FrameCapture across shared contexts
-class FrameCaptureShared final : angle::NonCopyable
-{
-  public:
-    FrameCaptureShared();
-    ~FrameCaptureShared();
-
-    const std::string &getShaderSource(gl::ShaderProgramID id) const;
-    void setShaderSource(gl::ShaderProgramID id, std::string sources);
-
-    const ProgramSources &getProgramSources(gl::ShaderProgramID id) const;
-    void setProgramSources(gl::ShaderProgramID id, ProgramSources sources);
-
-    // Load data from a previously stored texture level
-    const std::vector<uint8_t> &retrieveCachedTextureLevel(gl::TextureID id,
-                                                           gl::TextureTarget target,
-                                                           GLint level);
-
-    // Create new texture level data and copy the source into it
-    void copyCachedTextureLevel(const gl::Context *context,
-                                gl::TextureID srcID,
-                                GLint srcLevel,
-                                gl::TextureID dstID,
-                                GLint dstLevel,
-                                const CallCapture &call);
-
-    // Create the location that should be used to cache texture level data
-    std::vector<uint8_t> &getCachedTextureLevelData(gl::Texture *texture,
-                                                    gl::TextureTarget target,
-                                                    GLint level,
-                                                    EntryPoint entryPoint);
-
-    // Remove any cached texture levels on deletion
-    void deleteCachedTextureLevelData(gl::TextureID id);
-
-  private:
     // Cache most recently compiled and linked sources.
     ShaderSourceMap mCachedShaderSource;
     ProgramSourceMap mCachedProgramSources;
@@ -476,6 +514,8 @@ class FrameCaptureShared final : angle::NonCopyable
     // Cache a shadow copy of texture level data
     TextureLevels mCachedTextureLevels;
     TextureLevelDataMap mCachedTextureLevelData;
+
+    gl::ContextID mPresentationContextID;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
@@ -484,15 +524,15 @@ void CaptureCallToFrameCapture(CaptureFuncT captureFunc,
                                gl::Context *context,
                                ArgsT... captureParams)
 {
-    FrameCapture *frameCapture = context->getFrameCapture();
-    if (!frameCapture->isCapturing())
+    FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
+    if (!frameCaptureShared->isCapturing())
     {
         return;
     }
 
     CallCapture call = captureFunc(context->getState(), isCallValid, captureParams...);
 
-    frameCapture->captureCall(context, std::move(call), isCallValid);
+    frameCaptureShared->captureCall(context, std::move(call), isCallValid);
 }
 
 template <typename T>
