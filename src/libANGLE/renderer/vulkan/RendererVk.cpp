@@ -2477,6 +2477,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // improves 7%.
     ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary, isARM);
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, ignoreInputAttachmentUsageForSurface, isSwiftShader);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 

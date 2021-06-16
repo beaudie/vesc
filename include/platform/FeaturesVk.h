@@ -534,6 +534,12 @@ struct FeaturesVk : FeatureSetBase
         "preferSubmitAtFBOBoundary", FeatureCategory::VulkanWorkarounds,
         "Submit commands to driver at each FBO boundary for performance improvements.", &members,
         "https://issuetracker.google.com/187425444"};
+
+    // If a surface doesn't support VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT usage, surface will be
+    // created without the input attachment usage.
+    Feature ignoreInputAttachmentUsageForSurface = {
+        "ignoreInputAttachmentUsageForSurface", FeatureCategory::VulkanWorkarounds,
+        "Ignore an input attachmeng usage for a surface", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
