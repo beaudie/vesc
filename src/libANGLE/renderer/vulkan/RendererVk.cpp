@@ -718,6 +718,8 @@ RendererVk::RendererVk()
       mSupportedVulkanPipelineStageMask(0),
       mTotalDynamicBufferSize(0),
       mPeakDynamicBufferSize(0),
+      mTotalDynamicBufferSizeActualDynamicUsage(0),
+      mPeakDynamicBufferSizeActualDynamicUsage(0),
       mTotalBufferSize(0),
       mPeakBufferSize(0)
 {

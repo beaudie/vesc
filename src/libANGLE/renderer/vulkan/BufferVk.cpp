@@ -268,7 +268,7 @@ void BufferVk::initializeHostVisibleBufferPool(ContextVk *contextVk)
 
     mHostVisibleBufferPool.initWithFlags(
         contextVk->getRenderer(), kUsageFlags, kBufferHelperAlignment, kBufferHelperPoolInitialSize,
-        kDeviceLocalHostCoherentFlags, vk::DynamicBufferPolicy::SporadicTextureUpload);
+        kDeviceLocalHostCoherentFlags, vk::DynamicBufferPolicy::SporadicTextureUpload, false);
 }
 
 void BufferVk::updateShadowBuffer(const uint8_t *data, size_t size, size_t offset)
@@ -428,7 +428,8 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
 
         mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
                                   bufferHelperPoolInitialSize, memoryPropertyFlags,
-                                  vk::DynamicBufferPolicy::FrequentSmallAllocations);
+                                  vk::DynamicBufferPolicy::FrequentSmallAllocations,
+                                  IsUsageDynamic(usage));
 
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
 

@@ -95,7 +95,8 @@ class DynamicBuffer : angle::NonCopyable
                        size_t alignment,
                        size_t initialSize,
                        VkMemoryPropertyFlags memoryProperty,
-                       DynamicBufferPolicy policy);
+                       DynamicBufferPolicy policy,
+                       bool dynamic);
 
     // This call will allocate a new region at the end of the current buffer. If it can't find
     // enough space in the current buffer, it returns false. This gives caller a chance to deal with
@@ -169,6 +170,7 @@ class DynamicBuffer : angle::NonCopyable
 
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
+    bool mIsDynamicUsage;
     DynamicBufferPolicy mPolicy;
     size_t mInitialSize;
     std::unique_ptr<BufferHelper> mBuffer;

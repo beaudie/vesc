@@ -796,21 +796,23 @@ bool CanCopyWithTransformForReadPixels(const PackPixelsParams &packPixelsParams,
            isPitchMultipleOfTexelSize;
 }
 
-void ReleaseBufferListToRenderer(RendererVk *renderer, BufferHelperPointerVector *buffers)
+void ReleaseBufferListToRenderer(RendererVk *renderer,
+                                 BufferHelperPointerVector *buffers,
+                                 bool dynamic)
 {
     for (std::unique_ptr<BufferHelper> &toFree : *buffers)
     {
-        renderer->onDynamicBufferRelease(toFree->getSize());
+        renderer->onDynamicBufferRelease(toFree->getSize(), dynamic);
         toFree->release(renderer);
     }
     buffers->clear();
 }
 
-void DestroyBufferList(RendererVk *renderer, BufferHelperPointerVector *buffers)
+void DestroyBufferList(RendererVk *renderer, BufferHelperPointerVector *buffers, bool dynamic)
 {
     for (std::unique_ptr<BufferHelper> &toDestroy : *buffers)
     {
-        renderer->onDynamicBufferRelease(toDestroy->getSize());
+        renderer->onDynamicBufferRelease(toDestroy->getSize(), dynamic);
         toDestroy->destroy(renderer);
     }
     buffers->clear();
@@ -1940,6 +1942,7 @@ void CommandBufferHelper::growRenderArea(ContextVk *contextVk, const gl::Rectang
 DynamicBuffer::DynamicBuffer()
     : mUsage(0),
       mHostVisible(false),
+      mIsDynamicUsage(false),
       mPolicy(DynamicBufferPolicy::OneShotUse),
       mInitialSize(0),
       mNextAllocationOffset(0),
@@ -1952,6 +1955,7 @@ DynamicBuffer::DynamicBuffer()
 DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
     : mUsage(other.mUsage),
       mHostVisible(other.mHostVisible),
+      mIsDynamicUsage(other.mIsDynamicUsage),
       mPolicy(other.mPolicy),
       mInitialSize(other.mInitialSize),
       mBuffer(std::move(other.mBuffer)),
@@ -1974,7 +1978,7 @@ void DynamicBuffer::init(RendererVk *renderer,
     VkMemoryPropertyFlags memoryPropertyFlags =
         (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
-    initWithFlags(renderer, usage, alignment, initialSize, memoryPropertyFlags, policy);
+    initWithFlags(renderer, usage, alignment, initialSize, memoryPropertyFlags, policy, false);
 }
 
 void DynamicBuffer::initWithFlags(RendererVk *renderer,
@@ -1982,10 +1986,12 @@ void DynamicBuffer::initWithFlags(RendererVk *renderer,
                                   size_t alignment,
                                   size_t initialSize,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
-                                  DynamicBufferPolicy policy)
+                                  DynamicBufferPolicy policy,
+                                  bool dynamic)
 {
     mUsage               = usage;
     mHostVisible         = ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0);
+    mIsDynamicUsage      = dynamic;
     mMemoryPropertyFlags = memoryPropertyFlags;
     mPolicy              = policy;
 
@@ -2038,7 +2044,7 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
     createInfo.pQueueFamilyIndices   = nullptr;
 
     ANGLE_TRY(mBuffer->init(contextVk, createInfo, mMemoryPropertyFlags));
-    contextVk->getRenderer()->onDynamicBufferAllocate(mBuffer->getSize());
+    contextVk->getRenderer()->onDynamicBufferAllocate(mBuffer->getSize(), mIsDynamicUsage);
 
     return angle::Result::Continue;
 }
@@ -2102,7 +2108,8 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
             mSize = std::max(mInitialSize, sizeToAllocate);
 
             // Clear the free list since the free buffers are now too small.
-            ReleaseBufferListToRenderer(contextVk->getRenderer(), &mBufferFreeList);
+            ReleaseBufferListToRenderer(contextVk->getRenderer(), &mBufferFreeList,
+                                        mIsDynamicUsage);
         }
 
         // The front of the free list should be the oldest. Thus if it is in use the rest of the
@@ -2186,12 +2193,12 @@ void DynamicBuffer::release(RendererVk *renderer)
 {
     reset();
 
-    ReleaseBufferListToRenderer(renderer, &mInFlightBuffers);
-    ReleaseBufferListToRenderer(renderer, &mBufferFreeList);
+    ReleaseBufferListToRenderer(renderer, &mInFlightBuffers, mIsDynamicUsage);
+    ReleaseBufferListToRenderer(renderer, &mBufferFreeList, mIsDynamicUsage);
 
     if (mBuffer)
     {
-        renderer->onDynamicBufferRelease(mBuffer->getSize());
+        renderer->onDynamicBufferRelease(mBuffer->getSize(), mIsDynamicUsage);
         mBuffer->release(renderer);
         mBuffer.reset(nullptr);
     }
@@ -2206,7 +2213,8 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
 
         if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
         {
-            contextVk->getRenderer()->onDynamicBufferRelease(bufferHelper->getSize());
+            contextVk->getRenderer()->onDynamicBufferRelease(bufferHelper->getSize(),
+                                                             mIsDynamicUsage);
             bufferHelper->release(contextVk->getRenderer());
         }
         else
@@ -2224,7 +2232,7 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
     {
         if (ShouldReleaseFreeBuffer(*toRelease, mSize, mPolicy, mBufferFreeList.size()))
         {
-            contextVk->getRenderer()->onDynamicBufferRelease(toRelease->getSize());
+            contextVk->getRenderer()->onDynamicBufferRelease(toRelease->getSize(), mIsDynamicUsage);
             toRelease->release(contextVk->getRenderer());
         }
         else
@@ -2241,12 +2249,12 @@ void DynamicBuffer::destroy(RendererVk *renderer)
 {
     reset();
 
-    DestroyBufferList(renderer, &mInFlightBuffers);
-    DestroyBufferList(renderer, &mBufferFreeList);
+    DestroyBufferList(renderer, &mInFlightBuffers, mIsDynamicUsage);
+    DestroyBufferList(renderer, &mBufferFreeList, mIsDynamicUsage);
 
     if (mBuffer)
     {
-        renderer->onDynamicBufferRelease(mBuffer->getSize());
+        renderer->onDynamicBufferRelease(mBuffer->getSize(), mIsDynamicUsage);
         mBuffer->unmap(renderer);
         mBuffer->destroy(renderer);
         mBuffer.reset(nullptr);
