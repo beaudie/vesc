@@ -17,6 +17,16 @@ config("angle_libvulkan_config") {
   }
 }
 
+angle_source_set("angle_libvulkan_loader") {
+  public_configs = [ ":angle_libvulkan_config" ]
+  sources = [
+    "libvulkan_loader.cpp",
+    "libvulkan_loader.h",
+  ]
+
+  deps = [ "$angle_root:angle_common" ]
+}
+
 group("angle_libvulkan") {
   public_configs = [ ":angle_libvulkan_config" ]
   data_deps = []
