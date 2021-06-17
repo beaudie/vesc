@@ -1,0 +1,21 @@
+{
+  "GL_LUMINANCE8_ALPHA8_EXT": {
+    "R8G8_UNORM": {
+      "GL_UNSIGNED_BYTE": "LoadLA8ToR8G8"
+    },
+    "R8G8B8A8_UNORM": {
+      "GL_UNSIGNED_BYTE": "LoadLA8ToRGBA8"
+    }
+  },
+  "GL_ALPHA8_EXT": {
+    "R8_UNORM": {
+      "GL_UNSIGNED_BYTE": "LoadA8ToR8"
+    },
+    "A8_UNORM": {
+      "GL_UNSIGNED_BYTE": "LoadA8ToA8"
+    },
+    "R8G8B8A8_UNORM": {
+      "GL_UNSIGNED_BYTE": "LoadA8ToRGBA8"
+    }
+  }
+}
