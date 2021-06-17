@@ -616,7 +616,8 @@ angle::Result GLES1Renderer::linkProgram(Context *context,
 
 angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *glState)
 {
-    if (mRendererProgramInitialized)
+    GLES1State &gles1State = glState->gles1();
+    if (mRendererProgramInitialized && !gles1State.isDirty(GLES1State::DIRTY_GLES1_PROGRAM))
     {
         return angle::Result::Continue;
     }
@@ -781,6 +782,7 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
     glState->setObjectDirty(GL_PROGRAM);
 
     mRendererProgramInitialized = true;
+    gles1State.clearDirtyBits(GLES1State::DIRTY_GLES1_PROGRAM);
     return angle::Result::Continue;
 }
 

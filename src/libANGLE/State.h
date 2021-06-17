@@ -717,12 +717,17 @@ class State : angle::NonCopyable
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
     const DirtyBits &getDirtyBits() const { return mDirtyBits; }
-    void clearDirtyBits() { mDirtyBits.reset(); }
+    void clearDirtyBits()
+    {
+        mDirtyBits.reset();
+        gles1().clearDirty();
+    }
     void clearDirtyBits(const DirtyBits &bitset) { mDirtyBits &= ~bitset; }
     void setAllDirtyBits()
     {
         mDirtyBits.set();
         mDirtyCurrentValues.set();
+        gles1().setAllDirty();
     }
 
     using ExtendedDirtyBits = angle::BitSet32<EXTENDED_DIRTY_BIT_MAX>;

@@ -565,24 +565,4 @@ GLenum GLES1State::getHint(GLenum target) const
     }
 }
 
-void GLES1State::setDirty(DirtyGles1Type type)
-{
-    mDirtyBits.set(type);
-}
-
-void GLES1State::setAllDirty()
-{
-    mDirtyBits.set();
-}
-
-void GLES1State::clearDirty()
-{
-    mDirtyBits.reset();
-}
-
-bool GLES1State::isDirty(DirtyGles1Type type) const
-{
-    return mDirtyBits.test(type);
-}
-
 }  // namespace gl
