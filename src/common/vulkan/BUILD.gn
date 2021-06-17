@@ -47,6 +47,8 @@ angle_source_set("vulkan") {
   sources = [
     "vulkan_icd.cpp",
     "vulkan_icd.h",
+    "vulkan_library.cpp",
+    "vulkan_library.h",
   ]
 
   public_deps = [
