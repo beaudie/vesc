@@ -199,6 +199,7 @@ Note: The oddly named `is_official_build` is a more aggressive optimization leve
 ```
 target_os = "android"
 target_cpu = "arm64"
+angle_enable_vulkan = true
 is_component_build = false
 is_official_build = true
 is_debug = false
