@@ -32,9 +32,8 @@ cl_int Program::build(cl_uint numDevices,
     {
         // This program has to be retained until the notify callback is called.
         retain();
-        mCallback = pfnNotify;
-        mUserData = userData;
-        notify    = this;
+        *mCallback = CallbackData(pfnNotify, userData);
+        notify     = this;
     }
     return mImpl->build(devices, options, notify);
 }
@@ -65,9 +64,8 @@ cl_int Program::compile(cl_uint numDevices,
     {
         // This program has to be retained until the notify callback is called.
         retain();
-        mCallback = pfnNotify;
-        mUserData = userData;
-        notify    = this;
+        *mCallback = CallbackData(pfnNotify, userData);
+        notify     = this;
     }
     return mImpl->compile(devices, options, programs, headerIncludeNames, notify);
 }
@@ -192,11 +190,11 @@ Program::~Program() = default;
 
 void Program::callback()
 {
-    ASSERT(mCallback != nullptr);
-    const ProgramCB callback = mCallback;
-    void *const userData     = mUserData;
-    mCallback                = nullptr;
-    mUserData                = nullptr;
+    CallbackData callbackData;
+    mCallback->swap(callbackData);
+    const ProgramCB callback = callbackData.first;
+    void *const userData     = callbackData.second;
+    ASSERT(callback != nullptr);
     callback(this, userData);
     // This program can be released after the callback was called.
     if (release())
@@ -260,11 +258,10 @@ Program::Program(Context &context,
                                           pfnNotify != nullptr ? this : nullptr,
                                           errorCode)),
       mSource(mImpl ? mImpl->getSource(errorCode) : std::string{}),
-      mCallback(pfnNotify),
-      mUserData(userData),
+      mCallback(CallbackData(pfnNotify, userData)),
       mNumAttachedKernels(0u)
 {
-    if (mCallback != nullptr)
+    if (mCallback->first != nullptr)
     {
         // This program has to be retained until the notify callback is called.
         retain();
