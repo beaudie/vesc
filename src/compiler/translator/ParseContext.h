@@ -471,6 +471,10 @@ class TParseContext : angle::NonCopyable
     {
         return mGeometryShaderOutputPrimitiveType;
     }
+    bool hasDeferredSetOfArraySizeInGeometryShader() const
+    {
+        return mGeometryShaderDeferredSetOfArraySize;
+    }
     int getTessControlShaderOutputVertices() const { return mTessControlShaderOutputVertices; }
     TLayoutTessEvaluationType getTessEvaluationShaderInputPrimitiveType() const
     {
@@ -715,7 +719,7 @@ class TParseContext : angle::NonCopyable
     int mMaxGeometryShaderInvocations;
     int mMaxGeometryShaderMaxVertices;
     unsigned int mGeometryInputArraySize;
-
+    bool mGeometryShaderDeferredSetOfArraySize;
     int mMaxPatchVertices;
     int mTessControlShaderOutputVertices;
     TLayoutTessEvaluationType mTessEvaluationShaderInputPrimitiveType;

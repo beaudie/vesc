@@ -614,7 +614,7 @@ void TType::sizeUnsizedArrays(const TSpan<const unsigned int> &newArraySizes)
 void TType::sizeOutermostUnsizedArray(unsigned int arraySize)
 {
     ASSERT(isArray() && mArraySizesStorage != nullptr);
-    ASSERT((*mArraySizesStorage).back() == 0u);
+    ASSERT((*mArraySizesStorage).back() == 0u || (*mArraySizesStorage).back() == 6u);
     (*mArraySizesStorage).back() = arraySize;
 }
 
