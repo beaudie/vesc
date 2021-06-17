@@ -2879,7 +2879,7 @@ bool ValidateCopyImageSubDataTarget(const Context *context, GLuint name, GLenum 
             Texture *textureObject = context->getTexture(texture);
             if (textureObject && textureObject->getType() != PackParam<TextureType>(target))
             {
-                context->validationError(GL_INVALID_VALUE, err::kTextureTypeMismatch);
+                context->validationError(GL_INVALID_ENUM, err::kTextureTypeMismatch);
                 return false;
             }
             break;
@@ -3326,8 +3326,16 @@ bool ValidateCopyImageSubDataBase(const Context *context,
     {
         return false;
     }
+
     if (!ValidateCopyImageSubDataTarget(context, dstName, dstTarget))
     {
+        return false;
+    }
+
+    if (!ValidMipLevel(context, PackParam<TextureType>(srcTarget), srcLevel) ||
+        !ValidMipLevel(context, PackParam<TextureType>(dstTarget), dstLevel))
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
         return false;
     }
 
@@ -3335,6 +3343,13 @@ bool ValidateCopyImageSubDataBase(const Context *context,
         GetTargetFormatInfo(context, srcName, srcTarget, srcLevel);
     const InternalFormat &dstFormatInfo =
         GetTargetFormatInfo(context, dstName, dstTarget, dstLevel);
+
+    if (srcFormatInfo.internalFormat == GL_NONE || dstFormatInfo.internalFormat == GL_NONE)
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidTextureLevel);
+        return false;
+    }
+
     GLsizei dstWidth   = srcWidth;
     GLsizei dstHeight  = srcHeight;
     GLsizei srcSamples = 1;
