@@ -5,8 +5,6 @@
 import("//build_overrides/swiftshader.gni")
 import("../../../gni/angle.gni")
 
-assert(angle_enable_vulkan)
-
 config("angle_vulkan_headers_config") {
   if (angle_shared_libvulkan) {
     defines = [ "ANGLE_SHARED_LIBVULKAN=1" ]
@@ -41,6 +39,15 @@ group("angle_vulkan_entry_points") {
       deps = [ "$angle_vulkan_loader_dir:libvulkan" ]
     }
   }
+}
+
+angle_source_set("angle_vulkan_library") {
+  sources = [
+    "vulkan_library.cpp",
+    "vulkan_library.h",
+  ]
+
+  public_deps = [ "$angle_root:angle_common" ]
 }
 
 angle_source_set("vulkan") {
