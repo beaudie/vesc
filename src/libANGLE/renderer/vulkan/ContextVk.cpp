@@ -684,6 +684,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     mShareGroupVk->getContexts()->erase(this);
 
     // Enable if needed to log the peak dynamic buffer usage
+    WARN() << "DynamicUsage Buffer(Total:" << mRenderer->getDynamicBufferActualDynamicTotalSize()
+           << " Peak:" << mRenderer->getDynamicBufferActualDynamicPeakSize() << ")";
     WARN() << "DynamicBuffer(Total:" << mRenderer->getDynamicBufferTotalSize()
            << " Peak:" << mRenderer->getDynamicBufferPeakSize() << ")";
     WARN() << "Buffer(Total:" << mRenderer->getBufferTotalSize()

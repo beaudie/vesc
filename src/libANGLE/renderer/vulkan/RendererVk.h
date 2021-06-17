@@ -504,16 +504,40 @@ class RendererVk : angle::NonCopyable
         return mEnabledDeviceExtensions;
     }
 
-    void onDynamicBufferAllocate(VkDeviceSize size)
+    void onDynamicBufferAllocate(VkDeviceSize size, bool dynamic)
     {
         mTotalDynamicBufferSize += size;
         // This is race prone, but don't want to eat extra cost of lock just because of this
         mPeakDynamicBufferSize.store(std::max(mPeakDynamicBufferSize, mTotalDynamicBufferSize),
                                      std::memory_order_relaxed);
+        if (dynamic)
+        {
+            mTotalDynamicBufferSizeActualDynamicUsage += size;
+            // This is race prone, but don't want to eat extra cost of lock just because of this
+            mPeakDynamicBufferSizeActualDynamicUsage.store(
+                std::max(mPeakDynamicBufferSizeActualDynamicUsage,
+                         mTotalDynamicBufferSizeActualDynamicUsage),
+                std::memory_order_relaxed);
+        }
     }
-    void onDynamicBufferRelease(VkDeviceSize size) { mTotalDynamicBufferSize -= size; }
+    void onDynamicBufferRelease(VkDeviceSize size, bool dynamic)
+    {
+        mTotalDynamicBufferSize -= size;
+        if (dynamic)
+        {
+            mTotalDynamicBufferSizeActualDynamicUsage -= size;
+        }
+    }
     VkDeviceSize getDynamicBufferPeakSize() const { return mPeakDynamicBufferSize; }
     VkDeviceSize getDynamicBufferTotalSize() const { return mTotalDynamicBufferSize; }
+    VkDeviceSize getDynamicBufferActualDynamicPeakSize() const
+    {
+        return mPeakDynamicBufferSizeActualDynamicUsage;
+    }
+    VkDeviceSize getDynamicBufferActualDynamicTotalSize() const
+    {
+        return mTotalDynamicBufferSizeActualDynamicUsage;
+    }
 
     void onBufferAllocate(VkDeviceSize size)
     {
@@ -700,6 +724,8 @@ class RendererVk : angle::NonCopyable
     // statistics of allocation
     std::atomic<VkDeviceSize> mTotalDynamicBufferSize;
     std::atomic<VkDeviceSize> mPeakDynamicBufferSize;
+    std::atomic<VkDeviceSize> mTotalDynamicBufferSizeActualDynamicUsage;
+    std::atomic<VkDeviceSize> mPeakDynamicBufferSizeActualDynamicUsage;
     std::atomic<VkDeviceSize> mTotalBufferSize;
     std::atomic<VkDeviceSize> mPeakBufferSize;
 };
