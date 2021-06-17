@@ -1007,6 +1007,10 @@ std::vector<const Config *> Display::chooseConfig(const egl::AttributeMap &attri
         attribsWithDefaults.insert(attribIter->first, attribIter->second);
     }
 
+    if (mFrontendFeatures.forceRobustResourceInit.enabled)
+    {
+        attribsWithDefaults.insert(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_TRUE);
+    }
     return mConfigSet.filter(attribsWithDefaults);
 }
 
@@ -1020,7 +1024,8 @@ Error Display::createWindowSurface(const Config *configuration,
         ANGLE_TRY(restoreLostDevice());
     }
 
-    SurfacePointer surface(new WindowSurface(mImplementation, configuration, window, attribs),
+    SurfacePointer surface(new WindowSurface(mImplementation, configuration, window, attribs,
+                                             mFrontendFeatures.forceRobustResourceInit.enabled),
                            this);
     ANGLE_TRY(surface->initialize(this));
 
@@ -1048,7 +1053,9 @@ Error Display::createPbufferSurface(const Config *configuration,
         ANGLE_TRY(restoreLostDevice());
     }
 
-    SurfacePointer surface(new PbufferSurface(mImplementation, configuration, attribs), this);
+    SurfacePointer surface(new PbufferSurface(mImplementation, configuration, attribs,
+                                              mFrontendFeatures.forceRobustResourceInit.enabled),
+                           this);
     ANGLE_TRY(surface->initialize(this));
 
     ASSERT(outSurface != nullptr);
@@ -1072,7 +1079,9 @@ Error Display::createPbufferFromClientBuffer(const Config *configuration,
     }
 
     SurfacePointer surface(
-        new PbufferSurface(mImplementation, configuration, buftype, clientBuffer, attribs), this);
+        new PbufferSurface(mImplementation, configuration, buftype, clientBuffer, attribs,
+                           mFrontendFeatures.forceRobustResourceInit.enabled),
+        this);
     ANGLE_TRY(surface->initialize(this));
 
     ASSERT(outSurface != nullptr);
@@ -1094,7 +1103,8 @@ Error Display::createPixmapSurface(const Config *configuration,
         ANGLE_TRY(restoreLostDevice());
     }
 
-    SurfacePointer surface(new PixmapSurface(mImplementation, configuration, nativePixmap, attribs),
+    SurfacePointer surface(new PixmapSurface(mImplementation, configuration, nativePixmap, attribs,
+                                             mFrontendFeatures.forceRobustResourceInit.enabled),
                            this);
     ANGLE_TRY(surface->initialize(this));
 
