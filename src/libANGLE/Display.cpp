@@ -1007,6 +1007,10 @@ std::vector<const Config *> Display::chooseConfig(const egl::AttributeMap &attri
         attribsWithDefaults.insert(attribIter->first, attribIter->second);
     }
 
+    if (mFrontendFeatures.forceRobustResourceInit.enabled)
+    {
+        attribsWithDefaults.insert(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_TRUE);
+    }
     return mConfigSet.filter(attribsWithDefaults);
 }
 
