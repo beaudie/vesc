@@ -424,7 +424,6 @@ ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
         withMethods.eglParameters.debugLayersEnabled = false;
 #endif
     }
-
     auto iter = gFixtures.find(withMethods);
     if (iter != gFixtures.end())
     {

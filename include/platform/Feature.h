@@ -190,6 +190,10 @@ struct FeatureSetBase
     }
 
     const FeatureMap &getFeatures() const { return members; }
+
+    angle::Feature forceRobustResourceInit = {
+        "force_robust_resource_init", angle::FeatureCategory::FrontendWorkarounds,
+        "Force-enable robust resource init", &members, "http://anglebug.com/6041"};
 };
 
 inline FeatureSetBase::FeatureSetBase()  = default;
