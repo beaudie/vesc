@@ -58,6 +58,7 @@ class Library : angle::NonCopyable
     virtual ~Library() {}
     virtual void *getSymbol(const char *symbolName) = 0;
     virtual void *getNative() const                 = 0;
+    virtual std::string getPath() const             = 0;
 
     template <typename FuncT>
     void getAs(const char *symbolName, FuncT *funcOut)
@@ -70,8 +71,10 @@ class Library : angle::NonCopyable
 // (e.g. opengl32.dll)
 enum class SearchType
 {
-    // Try to find the library in the application directory
-    ApplicationDir,
+    // Try to load the library in the system-dependant default way without any extra arguments
+    Default,
+    // Try to find the library in the same directory as the current module
+    ModuleDir,
     // Load the library from the system directories
     SystemDir,
     // Get a reference to an already loaded shared library.

@@ -44,9 +44,17 @@ class Win32Library : public Library
     {
         switch (searchType)
         {
-            case SearchType::ApplicationDir:
+            case SearchType::Default:
                 mModule = LoadLibraryA(libraryName);
                 break;
+
+            case SearchType::ModuleDir:
+            {
+                std::string moduleRelativePath = ConcatenatePath(GetModuleDirectory(), libraryName);
+                mModule                        = LoadLibraryA(moduleRelativePath.c_str());
+                break;
+            }
+
             case SearchType::SystemDir:
                 mModule = LoadLibraryExA(libraryName, nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
                 break;
@@ -76,6 +84,22 @@ class Win32Library : public Library
     }
 
     void *getNative() const override { return reinterpret_cast<void *>(mModule); }
+
+    std::string getPath() const override
+    {
+        if (!mModule)
+        {
+            return "";
+        }
+
+        std::array<char, MAX_PATH> buffer;
+        if (GetModuleFileNameA(mModule, buffer.data(), buffer.size()) == 0)
+        {
+            return "";
+        }
+
+        return std::string(buffer.data());
+    }
 
   private:
     HMODULE mModule = nullptr;
