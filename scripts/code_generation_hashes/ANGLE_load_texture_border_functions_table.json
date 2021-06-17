@@ -1,0 +1,10 @@
+{
+  "src/libANGLE/renderer/angle_format.py":
+    "74d6c9842128293118ccf128aeae896a",
+  "src/libANGLE/renderer/gen_load_texture_border_functions_table.py":
+    "43159f3048c6faa2a0c7eb0816f3c75e",
+  "src/libANGLE/renderer/load_texture_border_functions_data.json":
+    "66cf51a4acdac9be88c97a41336a2093",
+  "src/libANGLE/renderer/load_texture_border_functions_table_autogen.cpp":
+    "95ae9e91dddb4a5d86f8f27d94979009"
+}

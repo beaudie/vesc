@@ -1,0 +1,8 @@
+{
+  "GL_ALPHA8_EXT": {
+    "R8_UNORM": "LoadA8ToR8"
+  },
+  "GL_LUMINANCE8_ALPHA8_EXT": {
+    "R8G8_UNORM": "LoadLA8ToR8G8"
+  }
+}
