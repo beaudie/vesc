@@ -1462,8 +1462,7 @@ Library *ANGLETestEnvironment::GetAngleEGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER)
     if (!gAngleEGLLibrary)
     {
-        gAngleEGLLibrary.reset(
-            OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SearchType::ApplicationDir));
+        gAngleEGLLibrary.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SearchType::ModuleDir));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gAngleEGLLibrary.get();
@@ -1475,8 +1474,8 @@ Library *ANGLETestEnvironment::GetSystemEGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER)
     if (!gSystemEGLLibrary)
     {
-        gSystemEGLLibrary.reset(
-            OpenSharedLibraryWithExtension(GetNativeEGLLibraryNameWithExtension()));
+        gSystemEGLLibrary.reset(OpenSharedLibraryWithExtension(
+            GetNativeEGLLibraryNameWithExtension(), SearchType::SystemDir));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gSystemEGLLibrary.get();

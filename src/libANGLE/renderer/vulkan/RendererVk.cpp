@@ -19,6 +19,7 @@
 #include "common/system_utils.h"
 #include "common/vulkan/vk_google_filtering_precision.h"
 #include "common/vulkan/vulkan_icd.h"
+#include "common/vulkan/vulkan_library.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
@@ -837,6 +838,13 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 {
     bool canLoadDebugUtils = true;
 #if defined(ANGLE_SHARED_LIBVULKAN)
+    mLibVulkanLibrary = angle::vk::OpenLibVulkan();
+    ANGLE_VK_CHECK(displayVk, mLibVulkanLibrary, VK_ERROR_INITIALIZATION_FAILED);
+    INFO() << "Using Vulkan loader: " << mLibVulkanLibrary->getPath();
+
+    PFN_vkGetInstanceProcAddr vulkanLoaderGetInstanceProcAddr = nullptr;
+    mLibVulkanLibrary->getAs("vkGetInstanceProcAddr", &vulkanLoaderGetInstanceProcAddr);
+
     // Set all vk* function ptrs
     ANGLE_VK_TRY(displayVk, volkInitialize());
 
