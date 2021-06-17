@@ -12,6 +12,7 @@
 
 #include <string.h>
 
+#include "common/string_utils.h"
 #include "common/system_utils.h"
 #include "platform/PlatformMethods.h"
 #include "util/OSWindow.h"
@@ -33,7 +34,24 @@ ConfigParameters::ConfigParameters()
       robustAccess(false),
       samples(-1),
       resetStrategy(EGL_NO_RESET_NOTIFICATION_EXT)
-{}
+{
+    constexpr char kAngleFeatureOverridesEnabledEnvName[] = "ANGLE_FEATURE_OVERRIDES_ENABLED";
+    constexpr char kAngleFeatureOverridesEnabledPropertyName[] =
+        "debug.angle.feature_overrides_enabled";
+
+    std::vector<std::string> overridesEnabledFromEnv =
+        angle::GetCachedStringsFromEnvironmentVarOrAndroidProperty(
+            kAngleFeatureOverridesEnabledEnvName, kAngleFeatureOverridesEnabledPropertyName, ":");
+
+    for (const auto &feature : overridesEnabledFromEnv)
+    {
+        if (feature == "force_robust_resource_init")
+        {
+            robustResourceInit = true;
+            break;
+        }
+    }
+}
 
 ConfigParameters::~ConfigParameters() = default;
 
