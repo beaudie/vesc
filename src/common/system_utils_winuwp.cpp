@@ -40,7 +40,8 @@ class UwpLibrary : public Library
 
         switch (searchType)
         {
-            case SearchType::ApplicationDir:
+            case SearchType::Default:
+            case SearchType::ModuleDir:
                 mModule = LoadPackagedLibrary(wideBuffer.c_str(), 0);
                 break;
             case SearchType::SystemDir:
@@ -70,6 +71,22 @@ class UwpLibrary : public Library
 
     void *getNative() const override { return reinterpret_cast<void *>(mModule); }
 
+    std::string getPath() const override
+    {
+        if (!mModule)
+        {
+            return "";
+        }
+
+        std::array<char, MAX_PATH> buffer;
+        if (GetModuleFileNameA(mModule, buffer.data(), buffer.size()) == 0)
+        {
+            return "";
+        }
+
+        return std::string(buffer.data());
+    }
+
   private:
     HMODULE mModule = nullptr;
 };
@@ -81,7 +98,7 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
 
     if (ret > 0 && ret < MAX_PATH)
     {
-        return new UwpLibrary(buffer, searchType);
+        return OpenSharedLibraryWithExtension(buffer, searchType);
     }
     else
     {
@@ -90,10 +107,8 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
     }
 }
 
-Library *OpenSharedLibraryWithExtension(const char *libraryName)
+Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
 {
-    // SystemDir is not implemented in UWP.
-    fprintf(stderr, "Error loading shared library with extension.\n");
-    return nullptr;
+    return new UwpLibrary(libraryName, searchType);
 }
 }  // namespace angle
