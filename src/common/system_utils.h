@@ -58,6 +58,7 @@ class Library : angle::NonCopyable
     virtual ~Library() {}
     virtual void *getSymbol(const char *symbolName) = 0;
     virtual void *getNative() const                 = 0;
+    virtual std::string getPath() const             = 0;
 
     template <typename FuncT>
     void getAs(const char *symbolName, FuncT *funcOut)
@@ -70,12 +71,13 @@ class Library : angle::NonCopyable
 // (e.g. opengl32.dll)
 enum class SearchType
 {
-    ApplicationDir,
+    Default,
+    ModuleDir,
     SystemDir
 };
 
 Library *OpenSharedLibrary(const char *libraryName, SearchType searchType);
-Library *OpenSharedLibraryWithExtension(const char *libraryName);
+Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType);
 
 // Returns true if the process is currently being debugged.
 bool IsDebuggerAttached();
