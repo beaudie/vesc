@@ -457,6 +457,8 @@ class ANGLETestBase
     int getClientMajorVersion() const;
     int getClientMinorVersion() const;
 
+    bool getRobustResourceInit() const;
+
     GLWindowBase *getGLWindow() const;
     EGLWindow *getEGLWindow() const;
     int getWindowWidth() const;
