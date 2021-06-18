@@ -2477,6 +2477,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // improves 7%.
     ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary, isARM);
 
+    // If the backend driver doesn't support an input attachment usage for the surface, advanced
+    // blend is disabled.
+    ANGLE_FEATURE_CONDITION(&mFeatures, ignoreInputAttachmentUsageForSurface,
+                            isSwiftShader || isIntel);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
