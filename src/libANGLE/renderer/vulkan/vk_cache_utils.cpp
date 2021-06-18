@@ -2024,7 +2024,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         rasterStreamState.rasterizationStream = 0;
-        rasterState.pNext                     = &rasterLineState;
+        *pNextPtr                             = &rasterStreamState;
+        pNextPtr                              = &rasterStreamState.pNext;
     }
 
     // Multisample state.
