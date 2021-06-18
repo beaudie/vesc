@@ -115,10 +115,6 @@ inline Error NoError()
 
 }  // namespace egl
 
-#define ANGLE_CONCAT1(x, y) x##y
-#define ANGLE_CONCAT2(x, y) ANGLE_CONCAT1(x, y)
-#define ANGLE_LOCAL_VAR ANGLE_CONCAT2(_localVar, __LINE__)
-
 #define ANGLE_TRY_TEMPLATE(EXPR, FUNC)                \
     do                                                \
     {                                                 \
