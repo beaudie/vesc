@@ -30,6 +30,7 @@
 #include "compiler/translator/tree_ops/vulkan/DeclarePerVertexBlocks.h"
 #include "compiler/translator/tree_ops/vulkan/FlagSamplersWithTexelFetch.h"
 #include "compiler/translator/tree_ops/vulkan/MonomorphizeUnsupportedFunctionsInVulkanGLSL.h"
+#include "compiler/translator/tree_ops/vulkan/ReplaceForAdvancedBlendEquation.h"
 #include "compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.h"
 #include "compiler/translator/tree_ops/vulkan/RewriteArrayOfArrayOfOpaqueUniforms.h"
 #include "compiler/translator/tree_ops/vulkan/RewriteInterpolateAtOffset.h"
@@ -1178,6 +1179,17 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
             }
 
             if (!ReplaceInOutVariables(this, root, &getSymbolTable(), &mUniforms))
+            {
+                return false;
+            }
+
+            // This should be operated after doing ReplaceLastFragData and ReplaceInOutVariables,
+            // because they will create the input attachment variables. AddBlendMainCaller will
+            // check the existing input attachment variables and if there is no existing input
+            // attachment variable then create a new one.
+            if (getBlendEquation().isAnyBlendEquation() &&
+                !AddBlendMainCaller(this, sink, root, &getSymbolTable(), specConst, driverUniforms,
+                                    &mUniforms, getBlendEquation()))
             {
                 return false;
             }

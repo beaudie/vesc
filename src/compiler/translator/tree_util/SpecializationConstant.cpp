@@ -25,6 +25,7 @@ constexpr ImmutableString kSurfaceRotationSpecConstVarName =
     ImmutableString("ANGLESurfaceRotation");
 constexpr ImmutableString kDrawableWidthSpecConstVarName  = ImmutableString("ANGLEDrawableWidth");
 constexpr ImmutableString kDrawableHeightSpecConstVarName = ImmutableString("ANGLEDrawableHeight");
+constexpr ImmutableString kBlendEquationSpecConstVarName  = ImmutableString("ANGLEBlendEquation");
 
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
 // rotate gl_Position in the vertex shader and gl_FragCoord in the fragment shader.  The following
@@ -253,7 +254,8 @@ SpecConst::SpecConst(TSymbolTable *symbolTable, ShCompileOptions compileOptions,
       mLineRasterEmulationVar(nullptr),
       mSurfaceRotationVar(nullptr),
       mDrawableWidthVar(nullptr),
-      mDrawableHeightVar(nullptr)
+      mDrawableHeightVar(nullptr),
+      mBlendEquationVar(nullptr)
 {
     if (shaderType == GL_FRAGMENT_SHADER || shaderType == GL_COMPUTE_SHADER)
     {
@@ -307,6 +309,15 @@ void SpecConst::declareSpecConsts(TIntermBlock *root)
         decl->appendDeclarator(
             new TIntermBinary(EOpInitialize, getDrawableHeight(), CreateFloatNode(0)));
         root->insertStatement(1, decl);
+    }
+
+    if (mBlendEquationVar != nullptr)
+    {
+        TIntermDeclaration *decl = new TIntermDeclaration();
+        decl->appendDeclarator(
+            new TIntermBinary(EOpInitialize, getBlendEquation(), CreateUIntNode(0)));
+
+        root->insertStatement(0, decl);
     }
 }
 
@@ -537,5 +548,23 @@ TIntermBinary *SpecConst::getHalfRenderArea()
         new TIntermBinary(EOpMatrixTimesVector, getHalfRenderAreaRotationMatrix(), halfRenderArea);
 
     return rotatedHalfRenderArea;
+}
+
+TIntermSymbol *SpecConst::getBlendEquation()
+{
+    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
+    {
+        return nullptr;
+    }
+    if (mBlendEquationVar == nullptr)
+    {
+        const TType *type = MakeSpecConst(*StaticType::GetBasic<EbtUInt>(),
+                                          vk::SpecializationConstantId::BlendEquation);
+
+        mBlendEquationVar = new TVariable(mSymbolTable, kBlendEquationSpecConstVarName, type,
+                                          SymbolType::AngleInternal);
+        mUsageBits.set(vk::SpecConstUsage::BlendEquation);
+    }
+    return new TIntermSymbol(mBlendEquationVar);
 }
 }  // namespace sh
