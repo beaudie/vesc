@@ -468,6 +468,7 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     const VkClearDepthStencilValue &clearDepthStencilValue =
         contextVk->getClearDepthStencilValue().depthStencil;
 
+    INFO("%s():\t GOT TO HERE 4", __FUNCTION__);
     return clearImpl(context, clearColorBuffers, clearDepth, clearStencil, clearColorValue,
                      clearDepthStencilValue);
 }
@@ -480,6 +481,8 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                                        const VkClearDepthStencilValue &clearDepthStencilValue)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+
+    INFO("%s():\t GOT TO HERE 4.1", __FUNCTION__);
 
     const gl::Rectangle scissoredRenderArea = getRotatedScissoredRenderArea(contextVk);
     ASSERT(scissoredRenderArea.width != 0 && scissoredRenderArea.height != 0);
@@ -665,6 +668,7 @@ angle::Result FramebufferVk::clearBufferfv(const gl::Context *context,
         clearValue.color.float32[3] = values[3];
     }
 
+    INFO("%s():\t GOT TO HERE 4", __FUNCTION__);
     return clearImpl(context, clearColorBuffers, clearDepth, false, clearValue.color,
                      clearValue.depthStencil);
 }
@@ -684,6 +688,7 @@ angle::Result FramebufferVk::clearBufferuiv(const gl::Context *context,
     clearValue.color.uint32[2] = values[2];
     clearValue.color.uint32[3] = values[3];
 
+    INFO("%s():\t GOT TO HERE 4", __FUNCTION__);
     return clearImpl(context, clearColorBuffers, false, false, clearValue.color,
                      clearValue.depthStencil);
 }
@@ -712,6 +717,7 @@ angle::Result FramebufferVk::clearBufferiv(const gl::Context *context,
         clearValue.color.int32[3] = values[3];
     }
 
+    INFO("%s():\t GOT TO HERE 4", __FUNCTION__);
     return clearImpl(context, clearColorBuffers, false, clearStencil, clearValue.color,
                      clearValue.depthStencil);
 }
@@ -727,6 +733,7 @@ angle::Result FramebufferVk::clearBufferfi(const gl::Context *context,
     clearValue.depthStencil.depth   = depth;
     clearValue.depthStencil.stencil = static_cast<uint8_t>(stencil);
 
+    INFO("%s():\t GOT TO HERE 4", __FUNCTION__);
     return clearImpl(context, gl::DrawBufferMask(), true, true, clearValue.color,
                      clearValue.depthStencil);
 }

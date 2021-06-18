@@ -455,6 +455,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
       mQueryEventType(GraphicsEventCmdBuf::NotInQueryCmd),
+      mEventCounter(0),
       mGpuEventsEnabled(false),
       mEGLSyncObjectPendingFlush(false),
       mHasDeferredFlush(false),
@@ -1320,6 +1321,7 @@ angle::Result ContextVk::handleDirtyComputeEventLog()
 
 angle::Result ContextVk::handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffer)
 {
+    INFO("%s():\t GOT TO HERE 3.0\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     // This method is called when a draw or dispatch command is being processed.  It's purpose is
     // to call the vkCmd*DebugUtilsLabelEXT functions in order to communicate to debuggers
     // (e.g. AGI) the OpenGL ES commands that the application uses.
@@ -1328,8 +1330,11 @@ angle::Result ContextVk::handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffe
     // draw), or if calling the vkCmd*DebugUtilsLabelEXT functions is not enabled.
     if (mEventLog.empty() || commandBuffer == nullptr || !mRenderer->angleDebuggerMode())
     {
+        INFO("%s():\t GOT TO HERE 3.0.1--commandBuffer=%p", __FUNCTION__, commandBuffer);
         return angle::Result::Continue;
     }
+    ASSERT(++mEventCounter == 1);
+    INFO("%s():\t GOT TO HERE 3.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
 
     // Insert OpenGL ES commands into debug label.  We create a 3-level cascade here for
     // OpenGL-ES-first debugging in AGI.  Here's the general outline of commands:
@@ -3066,10 +3071,14 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
 
 void ContextVk::logEvent(const char *eventString)
 {
+    INFO("%s():\t\t\t GOT TO HERE 1.0\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     if (!mRenderer->angleDebuggerMode())
     {
+        INFO("%s():\t GOT TO HERE 1.0.1", __FUNCTION__);
         return;
     }
+
+    INFO("%s():\t\t\t GOT TO HERE 1.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
 
     // Save this event (about an OpenGL ES command being called).
     mEventLog.push_back(eventString);
@@ -3081,10 +3090,14 @@ void ContextVk::logEvent(const char *eventString)
 
 void ContextVk::endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType)
 {
+    INFO("%s():\t\t GOT TO HERE 5.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     if (!mRenderer->angleDebuggerMode())
     {
+        INFO("%s():\t\t GOT TO HERE 5.1.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
         return;
     }
+    ASSERT(--mEventCounter == 0);
+    INFO("%s():\t\t GOT TO HERE 5.2\t mEventCounter = %d", __FUNCTION__, mEventCounter);
 
     if (pipelineType == PipelineType::Graphics)
     {
@@ -3100,10 +3113,21 @@ void ContextVk::endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineT
 }
 void ContextVk::endEventLogForClearOrQuery()
 {
+    INFO("%s():\t GOT TO HERE 5.0c.0\t mEventCounter = %d, mQueryEventType = %s", __FUNCTION__,
+         mEventCounter,
+         ((mQueryEventType == GraphicsEventCmdBuf::InOutsideCmdBufQueryCmd)
+              ? "InOutsideCmdBufQueryCmd"
+              : (mQueryEventType == GraphicsEventCmdBuf::InRenderPassCmdBufQueryCmd)
+                    ? "InRenderPassCmdBufQueryCmd"
+                    : (mQueryEventType == GraphicsEventCmdBuf::NotInQueryCmd)
+                          ? "NotInQueryCmd"
+                          : "SOMETHING ELSE!!!"));
     if (!mRenderer->angleDebuggerMode())
     {
+        INFO("%s():\t GOT TO HERE 5.0c.0.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
         return;
     }
+    INFO("%s():\t GOT TO HERE 5.0c.1\t mEventCounter = %d", __FUNCTION__, mEventCounter);
 
     vk::CommandBuffer *commandBuffer = nullptr;
     switch (mQueryEventType)
@@ -3117,6 +3141,7 @@ void ContextVk::endEventLogForClearOrQuery()
             commandBuffer = &mRenderPassCommands->getCommandBuffer();
             break;
         case GraphicsEventCmdBuf::NotInQueryCmd:
+            INFO("%s():\t GOT TO HERE 5.0c.0.1.1\t Noop Clear or Query", __FUNCTION__);
             // The glClear* or gl*Query* command was noop'd or otherwise ended early.  We could
             // call handleDirtyEventLogImpl() to start the hierarchy, but it isn't clear which (if
             // any) command buffer to use.  We'll just skip processing this command (other than to
@@ -3125,6 +3150,8 @@ void ContextVk::endEventLogForClearOrQuery()
         default:
             UNREACHABLE();
     }
+    ASSERT(--mEventCounter == 0);
+    INFO("%s():\t GOT TO HERE 5.0c.2\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     commandBuffer->endDebugUtilsLabelEXT();
 
     mQueryEventType = GraphicsEventCmdBuf::NotInQueryCmd;
@@ -3133,11 +3160,21 @@ void ContextVk::endEventLogForClearOrQuery()
 angle::Result ContextVk::handleNoopDrawEvent()
 {
     // Even though this draw call is being no-op'd, we still must handle the dirty event log
+    INFO("%s():\t GOT TO HERE 2a\t mEventCounter = %d", __FUNCTION__, mEventCounter);
     return handleDirtyEventLogImpl(mRenderPassCommandBuffer);
 }
 
 angle::Result ContextVk::handleGraphicsEventLog(GraphicsEventCmdBuf queryEventType)
 {
+    INFO(
+        "%s():\t GOT TO HERE 2c\t mEventCounter = %d, queryEventType = %s", __FUNCTION__,
+        mEventCounter,
+        ((queryEventType == GraphicsEventCmdBuf::InOutsideCmdBufQueryCmd)
+             ? "InOutsideCmdBufQueryCmd"
+             : (queryEventType == GraphicsEventCmdBuf::InRenderPassCmdBufQueryCmd)
+                   ? "InRenderPassCmdBufQueryCmd"
+                   : (queryEventType == GraphicsEventCmdBuf::NotInQueryCmd) ? "NotInQueryCmd"
+                                                                            : "SOMETHING ELSE!!!"));
     ASSERT(mQueryEventType == GraphicsEventCmdBuf::NotInQueryCmd);
     if (!mRenderer->angleDebuggerMode())
     {
