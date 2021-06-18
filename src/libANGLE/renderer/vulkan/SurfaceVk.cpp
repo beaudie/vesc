@@ -428,6 +428,57 @@ vk::ImageHelper *OffscreenSurfaceVk::getColorAttachmentImage()
     return &mColorAttachment.image;
 }
 
+egl::Error OffscreenSurfaceVk::lockSurface(const egl::Display *display,
+                                           EGLint usageHint,
+                                           bool preservePixels,
+                                           uint8_t **bufferPtrOut,
+                                           EGLint *bufferPitchOut)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "OffscreenSurfaceVk::lockSurface");
+
+    DisplayVk *displayVk = vk::GetImpl(display);
+
+    vk::ImageHelper *image = &mColorAttachment.image;
+    ASSERT(image->valid());
+
+    gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
+    gl::LevelIndex sourceLevelGL(0);
+
+    angle::Result result = image->copySurfaceImageToBuffer(
+        displayVk, preservePixels, sourceLevelGL, 1, 0, sourceArea, bufferPtrOut, bufferPitchOut);
+    if (result == angle::Result::Stop)
+    {
+        return angle::ToEGL(result, displayVk, EGL_BAD_ACCESS);
+    }
+    return egl::NoError();
+}
+
+egl::Error OffscreenSurfaceVk::unlockSurface(const egl::Display *display, bool preservePixels)
+{
+    DisplayVk *displayVk = vk::GetImpl(display);
+
+    vk::ImageHelper *image = &mColorAttachment.image;
+    ASSERT(image->valid());
+
+    gl::Box destArea(0, 0, 0, getWidth(), getHeight(), 1);
+    gl::LevelIndex destLevelGL(0);
+
+    angle::Result result =
+        image->copyBufferToSurfaceImage(displayVk, preservePixels, destLevelGL, 1, 0, destArea);
+    if (result == angle::Result::Stop)
+    {
+        return angle::ToEGL(result, displayVk, EGL_BAD_ACCESS);
+    }
+    // does something bad    image->releaseStagingBuffer(displayVk->getRenderer());
+
+    return egl::NoError();
+}
+
+EGLint OffscreenSurfaceVk::origin()
+{
+    return EGL_UPPER_LEFT_KHR;
+}
+
 namespace impl
 {
 SwapchainCleanupData::SwapchainCleanupData() = default;
@@ -1996,6 +2047,66 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
         }
     }
     return egl::NoError();
+}
+
+egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
+                                        EGLint usageHint,
+                                        bool preservePixels,
+                                        uint8_t **bufferPtrOut,
+                                        EGLint *bufferPitchOut)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::lockSurface");
+
+    DisplayVk *displayVk = vk::GetImpl(display);
+
+    vk::ImageHelper *image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
+    if (!image->valid())
+    {
+        VkResult vResult = acquireNextSwapchainImage(displayVk);
+        if (vResult != VK_SUCCESS)
+        {
+            return egl::EglBadAccess();
+        }
+    }
+    image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
+    ASSERT(image->valid());
+
+    gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
+    gl::LevelIndex sourceLevelGL(0);
+
+    angle::Result result = image->copySurfaceImageToBuffer(
+        displayVk, preservePixels, sourceLevelGL, 1, 0, sourceArea, bufferPtrOut, bufferPitchOut);
+    if (result == angle::Result::Stop)
+    {
+        return angle::ToEGL(result, displayVk, EGL_BAD_ACCESS);
+    }
+    return egl::NoError();
+}
+
+egl::Error WindowSurfaceVk::unlockSurface(const egl::Display *display, bool preservePixels)
+{
+    DisplayVk *displayVk = vk::GetImpl(display);
+
+    vk::ImageHelper *image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
+    ASSERT(image->valid());
+
+    gl::Box destArea(0, 0, 0, getWidth(), getHeight(), 1);
+    gl::LevelIndex destLevelGL(0);
+
+    angle::Result result =
+        image->copyBufferToSurfaceImage(displayVk, preservePixels, destLevelGL, 1, 0, destArea);
+    if (result == angle::Result::Stop)
+    {
+        return angle::ToEGL(result, displayVk, EGL_BAD_ACCESS);
+    }
+    image->releaseStagingBuffer(displayVk->getRenderer());
+
+    return egl::NoError();
+}
+
+EGLint WindowSurfaceVk::origin()
+{
+    return EGL_UPPER_LEFT_KHR;
 }
 
 }  // namespace rx

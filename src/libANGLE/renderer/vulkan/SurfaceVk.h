@@ -77,6 +77,14 @@ class OffscreenSurfaceVk : public SurfaceVk
 
     vk::ImageHelper *getColorAttachmentImage();
 
+    egl::Error lockSurface(const egl::Display *display,
+                           EGLint usageHint,
+                           bool preservePixels,
+                           uint8_t **bufferPtrOut,
+                           EGLint *bufferPitchOut) override;
+    egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
+    EGLint origin() override;
+
   protected:
     struct AttachmentImage final : angle::NonCopyable
     {
@@ -247,6 +255,14 @@ class WindowSurfaceVk : public SurfaceVk
     }
 
     egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
+
+    egl::Error lockSurface(const egl::Display *display,
+                           EGLint usageHint,
+                           bool preservePixels,
+                           uint8_t **bufferPtrOut,
+                           EGLint *bufferPitchOut) override;
+    egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
+    EGLint origin() override;
 
   protected:
     angle::Result swapImpl(const gl::Context *context,
