@@ -1092,6 +1092,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // command buffer to call endDebugUtilsLabelEXT() for.
     GraphicsEventCmdBuf mQueryEventType;
 
+    // For debugging AGI hierarchy issues:
+    int mEventCounter;
+
     // Transform feedback buffers.
     angle::FastUnorderedSet<const vk::BufferHelper *,
                             gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>
