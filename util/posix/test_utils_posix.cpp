@@ -106,16 +106,21 @@ class PosixProcess : public Process
 {
   public:
     PosixProcess(const std::vector<const char *> &commandLineArgs,
-                 bool captureStdOut,
-                 bool captureStdErr)
+                 ProcessOutputCapture captureOutput)
     {
         if (commandLineArgs.empty())
         {
             return;
         }
 
+        const bool captureStdout = captureOutput != ProcessOutputCapture::Nothing;
+        const bool captureStderr = captureOutput == ProcessOutputCapture::StdoutIncludingStderr ||
+                                   captureOutput == ProcessOutputCapture::StdoutAndStderrSeparately;
+        const bool includeStderrInStdout =
+            captureOutput == ProcessOutputCapture::StdoutIncludingStderr;
+
         // Create pipes for stdout and stderr.
-        if (captureStdOut)
+        if (captureStdout)
         {
             if (pipe(mStdoutPipe.fds) != 0)
             {
@@ -128,7 +133,7 @@ class PosixProcess : public Process
                 return;
             }
         }
-        if (captureStdErr)
+        if (captureStderr && !includeStderrInStdout)
         {
             if (pipe(mStderrPipe.fds) != 0)
             {
@@ -156,7 +161,7 @@ class PosixProcess : public Process
             // Child.  Execute the application.
 
             // Redirect stdout and stderr to the pipe fds.
-            if (captureStdOut)
+            if (captureStdout)
             {
                 if (dup2(mStdoutPipe.fds[1], STDOUT_FILENO) < 0)
                 {
@@ -164,7 +169,14 @@ class PosixProcess : public Process
                 }
                 mStdoutPipe.closeEndPoint(1);
             }
-            if (captureStdErr)
+            if (includeStderrInStdout)
+            {
+                if (dup2(STDOUT_FILENO, STDERR_FILENO) < 0)
+                {
+                    _exit(errno);
+                }
+            }
+            else if (captureStderr)
             {
                 if (dup2(mStderrPipe.fds[1], STDERR_FILENO) < 0)
                 {
@@ -418,11 +430,9 @@ bool DeleteFile(const char *path)
     return unlink(path) == 0;
 }
 
-Process *LaunchProcess(const std::vector<const char *> &args,
-                       bool captureStdout,
-                       bool captureStderr)
+Process *LaunchProcess(const std::vector<const char *> &args, ProcessOutputCapture captureOutput)
 {
-    return new PosixProcess(args, captureStdout, captureStderr);
+    return new PosixProcess(args, captureOutput);
 }
 
 int NumberOfProcessors()
