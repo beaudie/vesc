@@ -50,6 +50,7 @@ class DriverUniform
     virtual TIntermSwizzle *getNegFlipYRef() const { return nullptr; }
     virtual TIntermBinary *getEmulatedInstanceId() const { return nullptr; }
     virtual TIntermBinary *getCoverageMask() const { return nullptr; }
+    virtual TIntermBinary *getBlendEquationRef() const { return nullptr; }
 
     const TVariable *getDriverUniformsVariable() const { return mDriverUniforms; }
 
@@ -76,6 +77,7 @@ class DriverUniformExtended : public DriverUniform
     TIntermSwizzle *getNegFlipYRef() const override;
     TIntermBinary *getEmulatedInstanceId() const override;
     TIntermBinary *getCoverageMask() const override;
+    TIntermBinary *getBlendEquationRef() const override;
 
   protected:
     virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) override;

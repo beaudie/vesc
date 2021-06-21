@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 260
+#define ANGLE_SH_VERSION 261
 
 enum ShShaderSpec
 {
@@ -406,6 +406,7 @@ struct ShBuiltInResources
     int EXT_texture_buffer;
     int OES_sample_variables;
     int EXT_clip_cull_distance;
+    int KHR_blend_equation_advanced;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate
@@ -797,6 +798,9 @@ GLenum GetTessGenSpacing(const ShHandle handle);
 GLenum GetTessGenVertexOrder(const ShHandle handle);
 GLenum GetTessGenPointMode(const ShHandle handle);
 
+// Returns the blend equation list supported in the fragment shader.
+AdvancedBlendEquation GetBlendEquation(const ShHandle handle);
+
 //
 // Helper function to identify specs that are based on the WebGL spec.
 //
@@ -828,8 +832,9 @@ enum class SpecializationConstantId : uint32_t
     SurfaceRotation     = 1,
     DrawableWidth       = 2,
     DrawableHeight      = 3,
+    BlendEquation       = 4,
 
-    InvalidEnum = 4,
+    InvalidEnum = 5,
     EnumCount   = InvalidEnum,
 };
 
@@ -854,8 +859,9 @@ enum class SpecConstUsage : uint32_t
     YFlip               = 1,
     Rotation            = 2,
     DrawableSize        = 3,
+    BlendEquation       = 4,
 
-    InvalidEnum = 4,
+    InvalidEnum = 5,
     EnumCount   = InvalidEnum,
 };
 

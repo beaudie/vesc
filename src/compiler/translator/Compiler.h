@@ -174,6 +174,8 @@ class TCompiler : public TShHandleBase
         return mTessEvaluationShaderInputPointType;
     }
 
+    AdvancedBlendEquation getBlendEquation() const { return mBlendEquation; }
+
     unsigned int getSharedMemorySize() const;
 
     sh::GLenum getShaderType() const { return mShaderType; }
@@ -329,6 +331,9 @@ class TCompiler : public TShHandleBase
     TLayoutTessEvaluationType mTessEvaluationShaderInputVertexSpacingType;
     TLayoutTessEvaluationType mTessEvaluationShaderInputOrderingType;
     TLayoutTessEvaluationType mTessEvaluationShaderInputPointType;
+
+    // advanced blend equation parameters
+    AdvancedBlendEquation mBlendEquation;
 
     // name hashing.
     NameMap mNameMap;

@@ -729,6 +729,7 @@ struct SpecializationConstants final
     uint32_t surfaceRotation;
     float drawableWidth;
     float drawableHeight;
+    uint32_t blendEquation;
 };
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 

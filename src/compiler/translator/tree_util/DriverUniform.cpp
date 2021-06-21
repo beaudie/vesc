@@ -40,6 +40,7 @@ constexpr const char kPreRotation[]        = "preRotation";
 constexpr const char kFragRotation[]       = "fragRotation";
 constexpr const char kEmulatedInstanceId[] = "emulatedInstanceID";
 constexpr const char kCoverageMask[]       = "coverageMask";
+constexpr const char kBlendEquation[]      = "blendEquation";
 }  // anonymous namespace
 
 // Class DriverUniform
@@ -237,15 +238,17 @@ TFieldList *DriverUniformExtended::createUniformFields(TSymbolTable *symbolTable
 {
     TFieldList *driverFieldList = DriverUniform::createUniformFields(symbolTable);
 
-    constexpr size_t kNumGraphicsDriverUniformsExt = 4;
+    constexpr size_t kNumGraphicsDriverUniformsExt = 5;
     constexpr std::array<const char *, kNumGraphicsDriverUniformsExt>
-        kGraphicsDriverUniformNamesExt = {{kHalfRenderArea, kFlipXY, kNegFlipXY, kFragRotation}};
+        kGraphicsDriverUniformNamesExt = {
+            {kHalfRenderArea, kFlipXY, kNegFlipXY, kBlendEquation, kFragRotation}};
 
     const std::array<TType *, kNumGraphicsDriverUniformsExt> kDriverUniformTypesExt = {{
         new TType(EbtFloat, 2),
         new TType(EbtFloat, 2),
         new TType(EbtFloat, 2),
-        // NOTE: There's a vec2 gap here that can be used in the future
+        new TType(EbtUInt),
+        // NOTE: There's a 4 byte gap here that can be used in the future
         new TType(EbtFloat, 2, 2),
     }};
 
@@ -303,6 +306,11 @@ TIntermBinary *DriverUniformExtended::getEmulatedInstanceId() const
 TIntermBinary *DriverUniformExtended::getCoverageMask() const
 {
     return createDriverUniformRef(kCoverageMask);
+}
+
+TIntermBinary *DriverUniformExtended::getBlendEquationRef() const
+{
+    return createDriverUniformRef(kBlendEquation);
 }
 
 }  // namespace sh

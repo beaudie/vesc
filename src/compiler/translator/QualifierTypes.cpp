@@ -850,6 +850,12 @@ TLayoutQualifier JoinLayoutQualifiers(TLayoutQualifier leftQualifier,
         joinedQualifier.index = rightQualifier.index;
     }
 
+    if (rightQualifier.blendEquation.isAnyBlendEquation())
+    {
+        joinedQualifier.blendEquation.enabledBlendEquation |=
+            rightQualifier.blendEquation.enabledBlendEquation;
+    }
+
     return joinedQualifier;
 }
 
