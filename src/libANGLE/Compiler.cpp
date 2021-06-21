@@ -176,6 +176,9 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     mResources.OES_sample_variables = extensions.sampleVariablesOES;
     mResources.MaxSamples           = caps.maxSamples;
 
+    // KHR_blend_equation_advanced
+    mResources.KHR_blend_equation_advanced = extensions.blendEquationAdvancedKHR;
+
     // GLSL ES 3.1 constants
     mResources.MaxProgramTextureGatherOffset    = caps.maxProgramTextureGatherOffset;
     mResources.MinProgramTextureGatherOffset    = caps.minProgramTextureGatherOffset;

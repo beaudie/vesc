@@ -184,6 +184,9 @@
 // Geometry shader support:
 5430 VULKAN : dEQP-GLES31.functional.geometry_shading.query.primitives_generated_* = FAIL
 
+// Blend equations:
+3586 VULKAN : dEQP-GLES31.functional.blend_equation_advanced.msaa.* = SKIP
+
 ////
 //// AMD Vulkan expectations
 ////

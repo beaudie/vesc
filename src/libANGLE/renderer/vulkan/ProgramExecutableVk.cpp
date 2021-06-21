@@ -819,6 +819,12 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     shaderProgram->setSpecializationConstant(sh::vk::SpecializationConstantId::DrawableHeight,
                                              dimensions.height);
 
+    const uint32_t &blendEquationIndex =
+        static_cast<uint32_t>(gl::FromGLenum<gl::BlendEquationType>(
+            glState.getBlendStateExt().getEquationColorIndexed(0)));
+    shaderProgram->setSpecializationConstant(sh::vk::SpecializationConstantId::BlendEquation,
+                                             blendEquationIndex);
+
     ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
     return shaderProgram->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), *pipelineCache, getPipelineLayout(), desc,
