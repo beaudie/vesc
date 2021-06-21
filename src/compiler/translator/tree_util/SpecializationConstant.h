@@ -45,6 +45,9 @@ class SpecConst
     // Half render area
     TIntermBinary *getHalfRenderArea();
 
+    // Advanced blend equation
+    TIntermSymbol *getBlendEquation();
+
     void declareSpecConsts(TIntermBlock *root);
     SpecConstUsageBits getSpecConstUsageBits() const { return mUsageBits; }
 
@@ -63,6 +66,7 @@ class SpecConst
     TVariable *mSurfaceRotationVar;
     TVariable *mDrawableWidthVar;
     TVariable *mDrawableHeightVar;
+    TVariable *mBlendEquationVar;
 
     // Bit is set if YFlip or Rotation has been used
     SpecConstUsageBits mUsageBits;
