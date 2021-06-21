@@ -85,12 +85,20 @@ class Process : angle::NonCopyable
     std::string mStderr;
 };
 
+enum class ProcessOutputCapture
+{
+    Nothing,
+    StdoutOnly,
+    StdoutIncludingStderr,
+    StdoutAndStderrSeparately,
+};
+
 class ProcessHandle final : angle::NonCopyable
 {
   public:
     ProcessHandle();
     ProcessHandle(Process *process);
-    ProcessHandle(const std::vector<const char *> &args, bool captureStdout, bool captureStderr);
+    ProcessHandle(const std::vector<const char *> &args, ProcessOutputCapture captureOutput);
     ~ProcessHandle();
     ProcessHandle(ProcessHandle &&other);
     ProcessHandle &operator=(ProcessHandle &&rhs);
@@ -114,9 +122,7 @@ class ProcessHandle final : angle::NonCopyable
 //
 // On success, returns a Process pointer with started() == true.
 // On failure, returns a Process pointer with started() == false.
-Process *LaunchProcess(const std::vector<const char *> &args,
-                       bool captureStdout,
-                       bool captureStderr);
+Process *LaunchProcess(const std::vector<const char *> &args, ProcessOutputCapture captureOutput);
 
 int NumberOfProcessors();
 
