@@ -202,7 +202,7 @@ TEST_P(OcclusionQueriesTest, MaskedClearNotCounted)
                        !IsGLExtensionEnabled("GL_EXT_occlusion_query_boolean"));
 
     // http://anglebug.com/4925
-    ANGLE_SKIP_TEST_IF(IsD3D());
+    ANGLE_SKIP_TEST_IF(IsD3D() || IsMetal());
 
     GLQueryEXT query;
 
