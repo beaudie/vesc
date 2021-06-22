@@ -12,6 +12,7 @@
 #include "util/EGLPlatformParameters.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
+#include "util/test_utils.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -51,10 +52,12 @@ class CaptureReplayTests
         OSWindow::Delete(&mOSWindow);
     }
 
-    bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
+    bool setupGL(const TestTraceInfo &testTraceInfo)
     {
-        if (!mOSWindow->initialize(testTraceInfo.testName, testTraceInfo.replayDrawSurfaceWidth,
-                                   testTraceInfo.replayDrawSurfaceHeight))
+        int captureWidth  = testTraceInfo.replayDrawSurfaceWidth;
+        int captureHeight = testTraceInfo.replayDrawSurfaceHeight;
+
+        if (!mOSWindow->initialize(testTraceInfo.testName, captureWidth, captureHeight))
         {
             return false;
         }
@@ -103,6 +106,45 @@ class CaptureReplayTests
         {
             cleanupTest();
             return false;
+        }
+
+        return true;
+    }
+
+    void teardownGL()
+    {
+        EGLWindow::Delete(&mEGLWindow);
+        OSWindow::Delete(&mOSWindow);
+    }
+
+    bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
+    {
+        int captureWidth  = testTraceInfo.replayDrawSurfaceWidth;
+        int captureHeight = testTraceInfo.replayDrawSurfaceHeight;
+
+        printf("Initializing OS Window: (%d, %d)\n", captureWidth, captureHeight);
+
+        for (int attempt = 0; attempt < 3; ++attempt)
+        {
+            if (!setupGL(testTraceInfo))
+            {
+                return false;
+            }
+
+            // Ensure we have the right width/height.
+            EGLint width;
+            EGLint height;
+            eglQuerySurface(mEGLWindow->getDisplay(), mEGLWindow->getSurface(), EGL_WIDTH, &width);
+            eglQuerySurface(mEGLWindow->getDisplay(), mEGLWindow->getSurface(), EGL_HEIGHT,
+                            &height);
+
+            if (width == captureWidth && height == captureHeight)
+                break;
+
+            printf("Window size mismatch! Requested (%d, %d), got (%d, %d). Recreating GL.\n",
+                   captureWidth, captureHeight, width, height);
+            teardownGL();
+            angle::Sleep(1000);
         }
 
         mStartingDirectory = angle::GetCWD().value();
