@@ -12,6 +12,7 @@
 #include "util/EGLPlatformParameters.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
+#include "util/test_utils.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -45,22 +46,33 @@ class CaptureReplayTests
         mOSWindow->disableErrorMessageDialog();
     }
 
-    ~CaptureReplayTests()
-    {
-        EGLWindow::Delete(&mEGLWindow);
-        OSWindow::Delete(&mOSWindow);
-    }
+    ~CaptureReplayTests() { teardownGL(); }
 
-    bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
+    bool setupGL(const TestTraceInfo &testTraceInfo)
     {
-        if (!mOSWindow->initialize(testTraceInfo.testName, testTraceInfo.replayDrawSurfaceWidth,
-                                   testTraceInfo.replayDrawSurfaceHeight))
+        int captureWidth  = testTraceInfo.replayDrawSurfaceWidth;
+        int captureHeight = testTraceInfo.replayDrawSurfaceHeight;
+
+        printf("Initializing OS Window: (%d, %d)\n", captureWidth, captureHeight);
+
+        if (!mOSWindow->initialize(testTraceInfo.testName, captureWidth, captureHeight))
         {
             return false;
         }
 
         mOSWindow->disableErrorMessageDialog();
         mOSWindow->setVisible(true);
+
+        for (int attempt = 0; attempt < 3; ++attempt)
+        {
+            printf("Got window size: (%d, %d)\n", mOSWindow->getWidth(), mOSWindow->getHeight());
+
+            if (mOSWindow->getWidth() == captureWidth && mOSWindow->getHeight() == captureHeight)
+                break;
+
+            mOSWindow->resize(captureWidth, captureHeight);
+            angle::Sleep(300);
+        }
 
         if (mEGLWindow && !mEGLWindow->isContextVersion(testTraceInfo.replayContextMajorVersion,
                                                         testTraceInfo.replayContextMinorVersion))
@@ -102,6 +114,22 @@ class CaptureReplayTests
         if (!mEGLWindow->setSwapInterval(0))
         {
             cleanupTest();
+            return false;
+        }
+
+        return true;
+    }
+
+    void teardownGL()
+    {
+        EGLWindow::Delete(&mEGLWindow);
+        OSWindow::Delete(&mOSWindow);
+    }
+
+    bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
+    {
+        if (!setupGL(testTraceInfo))
+        {
             return false;
         }
 
