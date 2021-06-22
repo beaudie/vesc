@@ -387,6 +387,11 @@ Result SerializeFramebufferAttachment(const gl::Context *context,
     json->addScalar("ViewIndex", framebufferAttachment.getBaseViewIndex());
     json->addScalar("Samples", framebufferAttachment.getRenderToTextureSamples());
 
+    {
+        GroupScope extentsGroup(json, "Extents");
+        SerializeExtents(json, framebufferAttachment.getSize());
+    }
+
     if (framebufferAttachment.type() != GL_TEXTURE &&
         framebufferAttachment.type() != GL_RENDERBUFFER)
     {
