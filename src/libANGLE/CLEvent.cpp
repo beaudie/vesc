@@ -91,15 +91,18 @@ cl_int Event::getInfo(EventInfo name, size_t valueSize, void *value, size_t *val
 
 cl_int Event::setCallback(cl_int commandExecCallbackType, EventCB pfnNotify, void *userData)
 {
-    auto callbacks = mCallbacks.synchronize();
     // Only when required register a single callback with the back end for each callback type.
-    if ((*callbacks)[commandExecCallbackType].empty())
+    if (mCallbacks[commandExecCallbackType].empty())
     {
-        ANGLE_CL_TRY(mImpl->setCallback(*this, commandExecCallbackType));
+        const cl_int errorCode = mImpl->setCallback(*this, commandExecCallbackType);
+        if (errorCode != CL_SUCCESS)
+        {
+            return errorCode;
+        }
         // This event has to be retained until the callback is called.
         retain();
     }
-    (*callbacks)[commandExecCallbackType].emplace_back(pfnNotify, userData);
+    mCallbacks[commandExecCallbackType].emplace_back(pfnNotify, userData);
     return CL_SUCCESS;
 }
 
@@ -116,8 +119,7 @@ Event::~Event() = default;
 void Event::callback(cl_int commandStatus)
 {
     ASSERT(commandStatus >= 0 && commandStatus < 3);
-    const Callbacks callbacks = std::move(mCallbacks->at(commandStatus));
-    for (const CallbackData &data : callbacks)
+    for (const CallbackData &data : mCallbacks[commandStatus])
     {
         data.first(this, commandStatus, data.second);
     }

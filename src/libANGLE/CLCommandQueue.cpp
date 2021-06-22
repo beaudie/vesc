@@ -43,11 +43,10 @@ cl_int CommandQueue::getInfo(CommandQueueInfo name,
                              void *value,
                              size_t *valueSizeRet) const
 {
-    cl_command_queue_properties properties = 0u;
-    cl_uint valUInt                        = 0u;
-    void *valPointer                       = nullptr;
-    const void *copyValue                  = nullptr;
-    size_t copySize                        = 0u;
+    cl_uint valUInt       = 0u;
+    void *valPointer      = nullptr;
+    const void *copyValue = nullptr;
+    size_t copySize       = 0u;
 
     switch (name)
     {
@@ -67,9 +66,8 @@ cl_int CommandQueue::getInfo(CommandQueueInfo name,
             copySize  = sizeof(valUInt);
             break;
         case CommandQueueInfo::Properties:
-            properties = mProperties->get();
-            copyValue  = &properties;
-            copySize   = sizeof(properties);
+            copyValue = &mProperties;
+            copySize  = sizeof(mProperties);
             break;
         case CommandQueueInfo::PropertiesArray:
             copyValue = mPropArray.data();
@@ -80,7 +78,7 @@ cl_int CommandQueue::getInfo(CommandQueueInfo name,
             copySize  = sizeof(mSize);
             break;
         case CommandQueueInfo::DeviceDefault:
-            valPointer = CommandQueue::CastNative(*mDevice->mDefaultCommandQueue);
+            valPointer = CommandQueue::CastNative(mDevice->mDefaultCommandQueue);
             copyValue  = &valPointer;
             copySize   = sizeof(valPointer);
             break;
@@ -112,23 +110,23 @@ cl_int CommandQueue::setProperty(CommandQueueProperties properties,
                                  cl_bool enable,
                                  cl_command_queue_properties *oldProperties)
 {
-    auto props = mProperties.synchronize();
     if (oldProperties != nullptr)
     {
-        *oldProperties = props->get();
+        *oldProperties = mProperties.get();
     }
-
-    ANGLE_CL_TRY(mImpl->setProperty(properties, enable));
-
-    if (enable == CL_FALSE)
+    const cl_int result = mImpl->setProperty(properties, enable);
+    if (result == CL_SUCCESS)
     {
-        props->clear(properties);
+        if (enable == CL_FALSE)
+        {
+            mProperties.clear(properties);
+        }
+        else
+        {
+            mProperties.set(properties);
+        }
     }
-    else
-    {
-        props->set(properties);
-    }
-    return CL_SUCCESS;
+    return result;
 }
 
 cl_int CommandQueue::enqueueReadBuffer(cl_mem buffer,
@@ -697,10 +695,9 @@ cl_int CommandQueue::finish()
 
 CommandQueue::~CommandQueue()
 {
-    auto queue = mDevice->mDefaultCommandQueue.synchronize();
-    if (*queue == this)
+    if (mDevice->mDefaultCommandQueue == this)
     {
-        *queue = nullptr;
+        mDevice->mDefaultCommandQueue = nullptr;
     }
 }
 
@@ -723,9 +720,9 @@ CommandQueue::CommandQueue(Context &context,
       mSize(size),
       mImpl(context.getImpl().createCommandQueue(*this, errorCode))
 {
-    if (mProperties->isSet(CL_QUEUE_ON_DEVICE_DEFAULT))
+    if (mProperties.isSet(CL_QUEUE_ON_DEVICE_DEFAULT))
     {
-        *mDevice->mDefaultCommandQueue = this;
+        mDevice->mDefaultCommandQueue = this;
     }
 }
 

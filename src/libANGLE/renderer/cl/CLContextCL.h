@@ -12,9 +12,6 @@
 
 #include "libANGLE/renderer/CLContextImpl.h"
 
-#include "common/Spinlock.h"
-#include "common/SynchronizedValue.h"
-
 #include <unordered_set>
 
 namespace rx
@@ -86,16 +83,11 @@ class CLContextCL : public CLContextImpl
     cl_int waitForEvents(const cl::EventPtrs &events) override;
 
   private:
-    struct Mutable
-    {
-        std::unordered_set<const _cl_mem *> mMemories;
-        std::unordered_set<const _cl_sampler *> mSamplers;
-        std::unordered_set<const _cl_command_queue *> mDeviceQueues;
-    };
-    using MutableData = angle::SynchronizedValue<Mutable, angle::Spinlock>;
-
     const cl_context mNative;
-    MutableData mData;
+
+    std::unordered_set<const _cl_mem *> mMemories;
+    std::unordered_set<const _cl_sampler *> mSamplers;
+    std::unordered_set<const _cl_command_queue *> mDeviceQueues;
 
     friend class CLCommandQueueCL;
     friend class CLMemoryCL;
@@ -104,20 +96,17 @@ class CLContextCL : public CLContextImpl
 
 inline bool CLContextCL::hasMemory(cl_mem memory) const
 {
-    const auto data = mData.synchronize();
-    return data->mMemories.find(memory) != data->mMemories.cend();
+    return mMemories.find(memory) != mMemories.cend();
 }
 
 inline bool CLContextCL::hasSampler(cl_sampler sampler) const
 {
-    const auto data = mData.synchronize();
-    return data->mSamplers.find(sampler) != data->mSamplers.cend();
+    return mSamplers.find(sampler) != mSamplers.cend();
 }
 
 inline bool CLContextCL::hasDeviceQueue(cl_command_queue queue) const
 {
-    const auto data = mData.synchronize();
-    return data->mDeviceQueues.find(queue) != data->mDeviceQueues.cend();
+    return mDeviceQueues.find(queue) != mDeviceQueues.cend();
 }
 
 }  // namespace rx

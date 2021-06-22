@@ -39,13 +39,8 @@ class Object
     template <typename T, typename... Args>
     static T *Create(cl_int &errorCode, Args &&... args)
     {
-        T *object = new T(std::forward<Args>(args)..., errorCode);
-        if (errorCode != CL_SUCCESS)
-        {
-            delete object;
-            object = nullptr;
-        }
-        return object;
+        RefPointer<T> object(new T(std::forward<Args>(args)..., errorCode));
+        return errorCode == CL_SUCCESS ? object.release() : nullptr;
     }
 
   private:

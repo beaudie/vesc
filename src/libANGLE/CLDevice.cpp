@@ -347,8 +347,6 @@ cl_int Device::createSubDevices(const cl_device_partition_property *properties,
         while (!subDeviceCreateFuncs.empty())
         {
             devices.emplace_back(new Device(mPlatform, this, type, subDeviceCreateFuncs.front()));
-            // Release initialization reference, lifetime controlled by RefPointer.
-            devices.back()->release();
             if (!devices.back()->mInfo.isValid())
             {
                 return CL_INVALID_VALUE;

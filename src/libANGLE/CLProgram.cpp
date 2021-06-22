@@ -32,8 +32,9 @@ cl_int Program::build(cl_uint numDevices,
     {
         // This program has to be retained until the notify callback is called.
         retain();
-        *mCallback = CallbackData(pfnNotify, userData);
-        notify     = this;
+        mCallback = pfnNotify;
+        mUserData = userData;
+        notify    = this;
     }
     return mImpl->build(devices, options, notify);
 }
@@ -64,8 +65,9 @@ cl_int Program::compile(cl_uint numDevices,
     {
         // This program has to be retained until the notify callback is called.
         retain();
-        *mCallback = CallbackData(pfnNotify, userData);
-        notify     = this;
+        mCallback = pfnNotify;
+        mUserData = userData;
+        notify    = this;
     }
     return mImpl->compile(devices, options, programs, headerIncludeNames, notify);
 }
@@ -190,11 +192,11 @@ Program::~Program() = default;
 
 void Program::callback()
 {
-    CallbackData callbackData;
-    mCallback->swap(callbackData);
-    const ProgramCB callback = callbackData.first;
-    void *const userData     = callbackData.second;
-    ASSERT(callback != nullptr);
+    ASSERT(mCallback != nullptr);
+    const ProgramCB callback = mCallback;
+    void *const userData     = mUserData;
+    mCallback                = nullptr;
+    mUserData                = nullptr;
     callback(this, userData);
     // This program can be released after the callback was called.
     if (release())
@@ -206,18 +208,18 @@ void Program::callback()
 Program::Program(Context &context, std::string &&source, cl_int &errorCode)
     : mContext(&context),
       mDevices(context.getDevices()),
-      mNumAttachedKernels(0u),
       mImpl(context.getImpl().createProgramWithSource(*this, source, errorCode)),
-      mSource(std::move(source))
+      mSource(std::move(source)),
+      mNumAttachedKernels(0u)
 {}
 
 Program::Program(Context &context, const void *il, size_t length, cl_int &errorCode)
     : mContext(&context),
       mDevices(context.getDevices()),
       mIL(static_cast<const char *>(il), length),
-      mNumAttachedKernels(0u),
       mImpl(context.getImpl().createProgramWithIL(*this, il, length, errorCode)),
-      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{})
+      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{}),
+      mNumAttachedKernels(0u)
 {}
 
 Program::Program(Context &context,
@@ -228,18 +230,18 @@ Program::Program(Context &context,
                  cl_int &errorCode)
     : mContext(&context),
       mDevices(std::move(devices)),
-      mNumAttachedKernels(0u),
       mImpl(context.getImpl()
                 .createProgramWithBinary(*this, lengths, binaries, binaryStatus, errorCode)),
-      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{})
+      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{}),
+      mNumAttachedKernels(0u)
 {}
 
 Program::Program(Context &context, DevicePtrs &&devices, const char *kernelNames, cl_int &errorCode)
     : mContext(&context),
       mDevices(std::move(devices)),
-      mNumAttachedKernels(0u),
       mImpl(context.getImpl().createProgramWithBuiltInKernels(*this, kernelNames, errorCode)),
-      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{})
+      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{}),
+      mNumAttachedKernels(0u)
 {}
 
 Program::Program(Context &context,
@@ -251,17 +253,22 @@ Program::Program(Context &context,
                  cl_int &errorCode)
     : mContext(&context),
       mDevices(!devices.empty() ? devices : context.getDevices()),
-      // This program has to be retained until the notify callback is called.
-      mCallback(pfnNotify != nullptr ? (retain(), CallbackData(pfnNotify, userData))
-                                     : CallbackData()),
-      mNumAttachedKernels(0u),
       mImpl(context.getImpl().linkProgram(*this,
                                           devices,
                                           options,
                                           inputPrograms,
                                           pfnNotify != nullptr ? this : nullptr,
                                           errorCode)),
-      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{})
-{}
+      mSource(mImpl ? mImpl->getSource(errorCode) : std::string{}),
+      mCallback(pfnNotify),
+      mUserData(userData),
+      mNumAttachedKernels(0u)
+{
+    if (mCallback != nullptr)
+    {
+        // This program has to be retained until the notify callback is called.
+        retain();
+    }
+}
 
 }  // namespace cl
