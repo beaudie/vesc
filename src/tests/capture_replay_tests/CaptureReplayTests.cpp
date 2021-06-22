@@ -53,6 +53,8 @@ class CaptureReplayTests
 
     bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
     {
+        printf("Initializing OS Window: (%d, %d)\n", testTraceInfo.replayDrawSurfaceWidth,
+               testTraceInfo.replayDrawSurfaceHeight);
         if (!mOSWindow->initialize(testTraceInfo.testName, testTraceInfo.replayDrawSurfaceWidth,
                                    testTraceInfo.replayDrawSurfaceHeight))
         {
