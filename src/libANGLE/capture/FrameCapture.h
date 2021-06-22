@@ -390,6 +390,7 @@ class FrameCapture final : angle::NonCopyable
     void maybeCaptureDrawElementsClientData(const gl::Context *context,
                                             CallCapture &call,
                                             size_t instanceCount);
+    void updateCopyImageSubData(CallCapture &call);
 
     static void ReplayCall(gl::Context *context,
                            ReplayContext *replayContext,
