@@ -690,6 +690,7 @@ void ANGLETestBase::ANGLETestSetUp()
     // taking OpenGL traces can guess the size of the default framebuffer and show it
     // in their UIs
     glViewport(0, 0, mWidth, mHeight);
+    glScissor(0, 0, mWidth, mHeight);
 
     mIsSetUp = true;
 
