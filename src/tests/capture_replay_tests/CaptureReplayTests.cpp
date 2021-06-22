@@ -12,6 +12,7 @@
 #include "util/EGLPlatformParameters.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
+#include "util/test_utils.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -45,18 +46,29 @@ class CaptureReplayTests
         mOSWindow->disableErrorMessageDialog();
     }
 
-    ~CaptureReplayTests()
-    {
-        EGLWindow::Delete(&mEGLWindow);
-        OSWindow::Delete(&mOSWindow);
-    }
+    ~CaptureReplayTests() { teardownGL(); }
 
-    bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
+    bool setupGL(const TestTraceInfo &testTraceInfo)
     {
-        if (!mOSWindow->initialize(testTraceInfo.testName, testTraceInfo.replayDrawSurfaceWidth,
-                                   testTraceInfo.replayDrawSurfaceHeight))
+        int captureWidth  = testTraceInfo.replayDrawSurfaceWidth;
+        int captureHeight = testTraceInfo.replayDrawSurfaceHeight;
+
+        printf("Initializing OS Window: (%d, %d)\n", captureWidth, captureHeight);
+
+        if (!mOSWindow->initialize(testTraceInfo.testName, captureWidth, captureHeight))
         {
             return false;
+        }
+
+        for (int attempt = 0; attempt < 3; ++attempt)
+        {
+            printf("Got window size: (%d, %d)\n", mOSWindow->getWidth(), mOSWindow->getHeight());
+
+            if (mOSWindow->getWidth() == captureWidth && mOSWindow->getHeight() == captureHeight)
+                break;
+
+            mOSWindow->resize(captureWidth, captureHeight);
+            angle::Sleep(300);
         }
 
         mOSWindow->disableErrorMessageDialog();
@@ -105,6 +117,22 @@ class CaptureReplayTests
             return false;
         }
 
+        return true;
+    }
+
+    void teardownGL()
+    {
+        EGLWindow::Delete(&mEGLWindow);
+        OSWindow::Delete(&mOSWindow);
+    }
+
+    bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
+    {
+        if (!setupGL(testTraceInfo))
+        {
+            return false;
+        }
+
         mStartingDirectory = angle::GetCWD().value();
 
         // Load trace
@@ -131,8 +159,7 @@ class CaptureReplayTests
     {
         angle::SetCWD(mStartingDirectory.c_str());
         mTraceLibrary.reset(nullptr);
-        mEGLWindow->destroyGL();
-        mOSWindow->destroy();
+        OSWindow::Delete(&mOSWindow);
     }
 
     void swap() { mEGLWindow->swap(); }
