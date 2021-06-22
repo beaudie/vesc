@@ -53,8 +53,11 @@ class CaptureReplayTests
 
     bool initializeTest(uint32_t testIndex, const TestTraceInfo &testTraceInfo)
     {
-        if (!mOSWindow->initialize(testTraceInfo.testName, testTraceInfo.replayDrawSurfaceWidth,
-                                   testTraceInfo.replayDrawSurfaceHeight))
+        int captureWidth  = testTraceInfo.replayDrawSurfaceWidth;
+        int captureHeight = testTraceInfo.replayDrawSurfaceHeight;
+
+        printf("Initializing OS Window: (%d, %d)\n", captureWidth, captureHeight);
+        if (!mOSWindow->initialize(testTraceInfo.testName, captureWidth, captureHeight))
         {
             return false;
         }
@@ -103,6 +106,24 @@ class CaptureReplayTests
         {
             cleanupTest();
             return false;
+        }
+
+        // Ensure we have the right width/height.
+        EGLint width;
+        EGLint height;
+        eglQuerySurface(mEGLWindow->getDisplay(), mEGLWindow->getSurface(), EGL_WIDTH, &width);
+        eglQuerySurface(mEGLWindow->getDisplay(), mEGLWindow->getSurface(), EGL_HEIGHT, &height);
+        for (int retries = 0; (width != captureWidth || height != captureHeight) && retries < 3;
+             ++retries)
+        {
+            printf(
+                "Window size mismatch! Requested (%d, %d), got (%d, %d). Trying to resize the "
+                "window.\n",
+                captureWidth, captureHeight, width, height);
+            mOSWindow->resize(captureWidth, captureHeight);
+            eglQuerySurface(mEGLWindow->getDisplay(), mEGLWindow->getSurface(), EGL_WIDTH, &width);
+            eglQuerySurface(mEGLWindow->getDisplay(), mEGLWindow->getSurface(), EGL_HEIGHT,
+                            &height);
         }
 
         mStartingDirectory = angle::GetCWD().value();
