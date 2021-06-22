@@ -302,8 +302,8 @@ class ChildProcessesManager():
         return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
 
-def GetTestsListForFilter(test_path, filter):
-    cmd = [test_path, "--list-tests", "--gtest_filter=%s" % filter]
+def GetTestsListForFilter(args, test_path, filter):
+    cmd = GetRunCommand(args, test_path) + ["--list-tests", "--gtest_filter=%s" % filter]
     info('Getting test list from "%s"' % " ".join(cmd))
     return subprocess.check_output(cmd, text=True)
 
@@ -321,7 +321,6 @@ def GetSkippedTestPatterns():
 
 
 def ParseTestNamesFromTestList(output):
-
     def SkipTest(skipped_test_patterns, test):
         for skipped_test_pattern in skipped_test_patterns:
             if fnmatch.fnmatch(test, skipped_test_pattern):
@@ -346,6 +345,13 @@ def ParseTestNamesFromTestList(output):
 
     info('Found %s tests and %d skipped tests.' % (len(tests), skips))
     return tests
+
+
+def GetRunCommand(args, command):
+    if args.xvfb:
+        return ['vpython', 'testing/xvfb.py', command]
+    else:
+        return [command]
 
 
 class GroupedResult():
@@ -518,10 +524,7 @@ class TestBatch():
             ClearFolderContent(self.trace_folder_path)
         filt = ':'.join([test.full_test_name for test in self.tests])
 
-        if args.xvfb:
-            cmd = ['vpython', 'testing/xvfb.py', test_exe_path]
-        else:
-            cmd = [test_exe_path]
+        cmd = GetRunCommand(args, test_exe_path)
         filter_string = '--gtest_filter=%s' % filt
         cmd += [filter_string, '--angle-per-test-capture-label']
 
@@ -581,7 +584,7 @@ class TestBatch():
             return False
         return True
 
-    def RunReplay(self, replay_build_dir, replay_exe_path, child_processes_manager, tests):
+    def RunReplay(self, args, replay_build_dir, replay_exe_path, child_processes_manager, tests):
         env = os.environ.copy()
         env['ANGLE_CAPTURE_ENABLED'] = '0'
         env['ANGLE_FEATURE_OVERRIDES_ENABLED'] = 'enable_capture_limits'
@@ -589,9 +592,8 @@ class TestBatch():
         if self.verbose:
             info("Run Replay: {}".format(replay_exe_path))
 
-        returncode, output = child_processes_manager.RunSubprocess([replay_exe_path],
-                                                                   env,
-                                                                   timeout=SUBPROCESS_TIMEOUT)
+        returncode, output = child_processes_manager.RunSubprocess(
+            GetRunCommand(args, replay_exe_path), env, timeout=SUBPROCESS_TIMEOUT)
         if returncode == -1:
             cmd = replay_exe_path
             self.results.append(
@@ -763,7 +765,7 @@ def RunTests(args, worker_id, job_queue, result_list, message_queue):
                 result_list.append(test_batch.GetResults())
                 message_queue.put(str(test_batch.GetResults()))
                 continue
-            test_batch.RunReplay(replay_build_dir, replay_exec_path, child_processes_manager,
+            test_batch.RunReplay(args, replay_build_dir, replay_exec_path, child_processes_manager,
                                  continued_tests)
             result_list.append(test_batch.GetResults())
             message_queue.put(str(test_batch.GetResults()))
@@ -840,7 +842,7 @@ def main(args):
             return EXIT_FAILURE
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
-        test_list = GetTestsListForFilter(test_path, args.gtest_filter)
+        test_list = GetTestsListForFilter(args, test_path, args.gtest_filter)
         test_names = ParseTestNamesFromTestList(test_list)
         # objects created by manager can be shared by multiple processes. We use it to create
         # collections that are shared by multiple processes such as job queue or result list.
