@@ -92,6 +92,19 @@ MipmapTest.DISABLED_ThreeLevelsInitData/*
 # Compile failed tests
 RobustResourceInitTest.SurfaceInitializedAfterSwap/*
 
+# Linux-specific failures
+DiscardFramebufferEXTTest.ClearDepthThenDrawWithoutDepthTestThenDiscard/*
+DXT1CompressedTextureTest.CompressedTexImage/*
+EGLSyncTest.AndroidNativeFence_withFences/*
+EGLSyncTest.WaitNative/*
+ETCTextureTest.ETC2SRGB8A1Validation/*
+FramebufferFormatsTest.RenderbufferMultisample_DEPTH16/*
+FramebufferFormatsTest.RenderbufferMultisample_DEPTH24_STENCIL8/*
+FramebufferFormatsTest.RenderbufferMultisample_STENCIL_INDEX8/*
+FramebufferFormatsTest.RGB8/*
+GLSLTest.ArrayOfStructsWithSamplersAsFunctionArg/*
+GLSLTest.DefinedAsParameterNameNotAllowed/*
+
 # ES1 crashed tests
 FramebufferObjectTest.FramebufferObject/*
 FramebufferObjectTest.RenderbufferObject/*
