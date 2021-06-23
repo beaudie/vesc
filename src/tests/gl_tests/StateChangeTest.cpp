@@ -1693,6 +1693,11 @@ TEST_P(SimpleStateChangeTest, DrawArraysThenDrawElements)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux() && IsOpenGLES());
     // http://anglebug.com/4177
     ANGLE_SKIP_TEST_IF(IsOSX() && IsMetal());
+
+    EGLint swapBehaviour = 0;
+    ASSERT_TRUE(eglQuerySurface(getEGLWindow()->getDisplay(), getEGLWindow()->getSurface(),
+                                EGL_SWAP_BEHAVIOR, &swapBehaviour));
+
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
     glUseProgram(program);
 
@@ -1728,8 +1733,9 @@ TEST_P(SimpleStateChangeTest, DrawArraysThenDrawElements)
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 3);                             // triangle to the left
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);  // triangle to the right
-        swapBuffers();
+        glFinish();
     }
+
     glDisableVertexAttribArray(positionLocation);
 
     ASSERT_GL_NO_ERROR();
