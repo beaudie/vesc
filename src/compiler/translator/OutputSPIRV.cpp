@@ -3141,6 +3141,12 @@ void OutputSPIRVTraverser::visitFunctionPrototype(TIntermFunctionPrototype *node
 
 bool OutputSPIRVTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
+    if (node->hasConstantValue())
+    {
+        fprintf(stderr, "Going to crash on ASSERT. Op: %u (flags: 0x%lx)\n", node->getOp(),
+                mCompileOptions);
+    }
+
     // Constants are expected to be folded.
     ASSERT(!node->hasConstantValue());
 
