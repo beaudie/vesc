@@ -17,12 +17,36 @@ config("angle_libvulkan_config") {
   }
 }
 
+if (angle_use_custom_libvulkan) {
+  if (is_linux) {
+    _libvulkan_name = "libvulkan.so.1"
+    _libvulkan_ext = "so"
+  } else if (is_win) {
+    _libvulkan_name = "vulkan-1.dll"
+    _libvulkan_ext = "dll"
+  } else if (is_mac) {
+    _libvulkan_name = "libvulkan.dylib"
+    _libvulkan_ext = "dylib"
+  } else {
+    _libvulkan_name = "error"
+    _libvulkan_ext = "error"
+  }
+  copy("angle_vkloader") {
+    deps = [ "$angle_vulkan_loader_dir:libvulkan" ]
+    sources = [ "$root_out_dir/$_libvulkan_name" ]
+    outputs = [ "$root_out_dir/vkloader.$_libvulkan_ext" ]
+  }
+}
+
 group("angle_libvulkan") {
   public_configs = [ ":angle_libvulkan_config" ]
   data_deps = []
   if (angle_use_custom_libvulkan) {
     if (angle_shared_libvulkan) {
-      data_deps += [ "$angle_vulkan_loader_dir:libvulkan" ]
+      data_deps += [
+        ":angle_vkloader",
+        "$angle_vulkan_loader_dir:libvulkan",
+      ]
     } else {
       public_deps = [ "$angle_vulkan_loader_dir:libvulkan" ]
     }
@@ -59,7 +83,8 @@ group("angle_vulkan_entry_points") {
     ]
   } else if (!is_android && !is_ggp) {
     if (angle_shared_libvulkan) {
-      data_deps = [ "$angle_vulkan_loader_dir:libvulkan" ]
+      # TODO(jmadill): Transition to custom name. http://crbug.com/1219969
+      data_deps = [ ":angle_libvulkan" ]
     } else {
       deps = [ "$angle_vulkan_loader_dir:libvulkan" ]
     }
