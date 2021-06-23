@@ -1728,8 +1728,9 @@ TEST_P(SimpleStateChangeTest, DrawArraysThenDrawElements)
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 3);                             // triangle to the left
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);  // triangle to the right
-        swapBuffers();
+        glFinish();
     }
+
     glDisableVertexAttribArray(positionLocation);
 
     ASSERT_GL_NO_ERROR();
