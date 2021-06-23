@@ -17,19 +17,23 @@
 #include "common/debug.h"
 #include "common/system_utils.h"
 
-#if defined(ANGLE_PLATFORM_WINDOWS)
-const char *kLibVulkanNames[] = {"vulkan-1.dll"};
-#else
-const char *kLibVulkanNames[]             = {"libvulkan.so", "libvulkan.so.1"};
-#endif
-
 namespace angle
 {
 // On Android, Fuchsia and GGP we use the system libvulkan.
 #if defined(ANGLE_USE_CUSTOM_LIBVULKAN)
 constexpr SearchType kLibVulkanSearchType = SearchType::ApplicationDir;
+#    if defined(ANGLE_PLATFORM_WINDOWS)
+const char *kLibVulkanNames[] = {"vkloader.dll"};
+#    else
+const char *kLibVulkanNames[] = {"vkloader.so"};
+#    endif
 #else
 constexpr SearchType kLibVulkanSearchType = SearchType::SystemDir;
+#    if defined(ANGLE_PLATFORM_WINDOWS)
+const char *kLibVulkanNames[]             = {"vulkan-1.dll"};
+#    else
+const char *kLibVulkanNames[] = {"libvulkan.so", "libvulkan.so.1"};
+#    endif
 #endif  // defined(ANGLE_USE_CUSTOM_LIBVULKAN)
 
 class VulkanLibrary final : NonCopyable
