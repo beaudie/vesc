@@ -350,8 +350,8 @@ def json_to_table_data(format_id, json, angle_to_gl):
     return format_entry_template.format(**parsed)
 
 
-# For convenience of the Vulkan backend, place depth/stencil formats first.  This allows
-# depth/stencil format IDs to be placed in only a few bits.
+# Place depth/stencil formats first.  This allows depth/stencil format IDs to be placed in only a
+# few bits.
 def sorted_ds_first(all_angle):
     ds_sorted = []
     color_sorted = []
