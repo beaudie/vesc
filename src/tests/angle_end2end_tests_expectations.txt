@@ -28,9 +28,11 @@
 // Nvidia
 6115 NVIDIA OPENGL : GLSLTestLoops.DoWhileContinue/* = SKIP
 6115 NVIDIA OPENGL : GLSLTestLoops.DoWhileUnconditionalContinue/* = SKIP
+6115 NVIDIA OPENGL : GLSLTestLoops.DoWhileContinueInSwitch/* = SKIP
 6115 NVIDIA OPENGL : GLSLTestLoops.WhileBreak/* = SKIP
 6115 NVIDIA GLES : GLSLTestLoops.DoWhileContinue/* = SKIP
 6115 NVIDIA GLES : GLSLTestLoops.DoWhileUnconditionalContinue/* = SKIP
+6115 NVIDIA GLES : GLSLTestLoops.DoWhileContinueInSwitch/* = SKIP
 6115 NVIDIA GLES : GLSLTestLoops.WhileBreak/* = SKIP
 
 // Intel Vulkan
