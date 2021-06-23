@@ -2902,10 +2902,11 @@ TextureStorage *Renderer9::createTextureStorageCube(GLenum internalformat,
                                                     bool renderTarget,
                                                     int size,
                                                     int levels,
-                                                    bool hintLevelZeroOnly)
+                                                    bool hintLevelZeroOnly,
+                                                    const std::string &label)
 {
     return new TextureStorage9_Cube(this, internalformat, renderTarget, size, levels,
-                                    hintLevelZeroOnly);
+                                    hintLevelZeroOnly, label);
 }
 
 TextureStorage *Renderer9::createTextureStorage3D(GLenum internalformat,
