@@ -133,7 +133,7 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
     return new PosixLibrary(fullPath, extraFlags);
 }
 
-Library *OpenSharedLibraryWithExtension(const char *libraryName)
+Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
 {
     return new PosixLibrary(libraryName, 0);
 }
