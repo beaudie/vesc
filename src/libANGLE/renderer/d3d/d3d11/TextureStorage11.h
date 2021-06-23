@@ -535,7 +535,8 @@ class TextureStorage11_Cube : public TextureStorage11
                           bool renderTarget,
                           int size,
                           int levels,
-                          bool hintLevelZeroOnly);
+                          bool hintLevelZeroOnly,
+                          const std::string &label);
     ~TextureStorage11_Cube() override;
 
     angle::Result onDestroy(const gl::Context *context) override;

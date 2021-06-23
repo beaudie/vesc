@@ -397,7 +397,8 @@ TextureStorage9_Cube::TextureStorage9_Cube(Renderer9 *renderer,
                                            bool renderTarget,
                                            int size,
                                            int levels,
-                                           bool hintLevelZeroOnly)
+                                           bool hintLevelZeroOnly,
+                                           const std::string &label)
     : TextureStorage9(renderer, GetTextureUsage(internalformat, renderTarget))
 {
     mTexture = nullptr;
@@ -416,6 +417,7 @@ TextureStorage9_Cube::TextureStorage9_Cube(Renderer9 *renderer,
     mTextureWidth  = size;
     mTextureHeight = size;
     mMipLevels     = mTopLevel + levels;
+    *mTextureLabel = label;
 }
 
 TextureStorage9_Cube::~TextureStorage9_Cube()
