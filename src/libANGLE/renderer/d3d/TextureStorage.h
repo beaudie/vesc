@@ -85,8 +85,11 @@ class TextureStorage : public angle::Subject
     virtual angle::Result resolveTexture(const gl::Context *context);
     virtual GLsizei getRenderToTextureSamples() const;
 
+    virtual void onLabelUpdate() {}
+
   protected:
     const angle::Subject *mSubject;
+    std::string *mTextureLabel = nullptr;
 };
 
 inline angle::Result TextureStorage::onDestroy(const gl::Context *context)

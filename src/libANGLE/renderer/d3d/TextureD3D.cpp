@@ -699,6 +699,10 @@ angle::Result TextureD3D::syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits,
                                     gl::Command source)
 {
+    if (dirtyBits.test(gl::Texture::DirtyBitType::DIRTY_BIT_LABEL))
+    {
+        mTexStorage->onLabelUpdate();
+    }
     // This could be improved using dirty bits.
     return angle::Result::Continue;
 }
@@ -2046,7 +2050,8 @@ angle::Result TextureD3D_Cube::setStorage(const gl::Context *context,
 
     TexStoragePointer storage(context);
     storage.reset(mRenderer->createTextureStorageCube(internalFormat, renderTarget, size.width,
-                                                      static_cast<int>(levels), false));
+                                                      static_cast<int>(levels), false,
+                                                      mState.getLabel()));
 
     ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
     storage.release();
@@ -2188,8 +2193,9 @@ angle::Result TextureD3D_Cube::createCompleteStorage(bool renderTarget,
     }
 
     // TODO (geofflang): detect if storage creation succeeded
-    outStorage->reset(mRenderer->createTextureStorageCube(
-        getBaseLevelInternalFormat(), renderTarget, size, levels, hintLevelZeroOnly));
+    outStorage->reset(mRenderer->createTextureStorageCube(getBaseLevelInternalFormat(),
+                                                          renderTarget, size, levels,
+                                                          hintLevelZeroOnly, mState.getLabel()));
 
     return angle::Result::Continue;
 }

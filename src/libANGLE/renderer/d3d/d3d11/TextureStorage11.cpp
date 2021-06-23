@@ -2061,7 +2061,8 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer,
                                              bool renderTarget,
                                              int size,
                                              int levels,
-                                             bool hintLevelZeroOnly)
+                                             bool hintLevelZeroOnly,
+                                             const std::string &label)
     : TextureStorage11(
           renderer,
           GetTextureBindFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget),
@@ -2097,6 +2098,7 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer,
     mTextureWidth  = size;
     mTextureHeight = size;
     mTextureDepth  = 1;
+    *mTextureLabel = label;
 
     // The LevelZeroOnly hint should only be true if the zero max LOD workaround is active.
     ASSERT(!mUseLevelZeroTexture || mRenderer->getFeatures().zeroMaxLodWorkaround.enabled);
