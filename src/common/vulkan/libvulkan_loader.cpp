@@ -18,16 +18,26 @@ namespace vk
 std::unique_ptr<Library> OpenLibVulkan()
 {
     constexpr const char *kLibVulkanNames[] = {
-#if defined(ANGLE_PLATFORM_WINDOWS)
+#if defined(ANGLE_USE_CUSTOM_LIBVULKAN)
+#    if defined(ANGLE_PLATFORM_WINDOWS)
+        "vkloader.dll",
+#    elif defined(ANGLE_PLATFORM_APPLE)
+        "vkloader.dylib",
+#    else
+        "vkloader.so",
+#    endif  // defined(ANGLE_PLATFORM_WINDOWS)
+#else
+#    if defined(ANGLE_PLATFORM_WINDOWS)
         "vulkan-1.dll",
-#elif defined(ANGLE_PLATFORM_APPLE)
+#    elif defined(ANGLE_PLATFORM_APPLE)
         "libvulkan.dylib",
         "libvulkan.1.dylib",
-        "libMoltenVK.dylib"
-#else
+        "libMoltenVK.dylib",
+#    else
         "libvulkan.so",
         "libvulkan.so.1",
-#endif
+#    endif  // defined(ANGLE_PLATFORM_WINDOWS)
+#endif      // defined(ANGLE_USE_CUSTOM_LIBVULKAN)
     };
 
     constexpr SearchType kSearchTypes[] = {
