@@ -817,17 +817,20 @@ void MaybeResetResources(std::stringstream &out,
     {
         case ResourceIDType::Buffer:
         {
-            BufferSet &newBuffers           = resourceTracker->getNewBuffers();
-            BufferCalls &bufferRegenCalls   = resourceTracker->getBufferRegenCalls();
-            BufferCalls &bufferRestoreCalls = resourceTracker->getBufferRestoreCalls();
-            BufferCalls &bufferMapCalls     = resourceTracker->getBufferMapCalls();
-            BufferCalls &bufferUnmapCalls   = resourceTracker->getBufferUnmapCalls();
+            TrackedResource &trackedResource =
+                resourceTracker->getTrackedResource(ResourceIDType::Buffer);
+            ResourceSet &newBuffers           = trackedResource.getNewResources();
+            ResourceCalls &bufferRegenCalls   = trackedResource.getResourceRegenCalls();
+            ResourceCalls &bufferRestoreCalls = trackedResource.getResourceRestoreCalls();
+
+            BufferCalls &bufferMapCalls   = resourceTracker->getBufferMapCalls();
+            BufferCalls &bufferUnmapCalls = resourceTracker->getBufferUnmapCalls();
 
             // If we have any new buffers generated and not deleted during the run, delete them now
             if (!newBuffers.empty())
             {
                 out << "    const GLuint deleteBuffers[] = {";
-                BufferSet::iterator bufferIter = newBuffers.begin();
+                ResourceSet::iterator bufferIter = newBuffers.begin();
                 for (size_t i = 0; bufferIter != newBuffers.end(); ++i, ++bufferIter)
                 {
                     if (i > 0)
@@ -838,15 +841,15 @@ void MaybeResetResources(std::stringstream &out,
                     {
                         out << "\n        ";
                     }
-                    out << "gBufferMap[" << (*bufferIter).value << "]";
+                    out << "gBufferMap[" << *bufferIter << "]";
                 }
                 out << "};\n";
                 out << "    glDeleteBuffers(" << newBuffers.size() << ", deleteBuffers);\n";
             }
 
             // If any of our starting buffers were deleted during the run, recreate them
-            BufferSet &buffersToRegen = resourceTracker->getBuffersToRegen();
-            for (const gl::BufferID id : buffersToRegen)
+            ResourceSet &buffersToRegen = trackedResource.getResourcesToRegen();
+            for (GLuint id : buffersToRegen)
             {
                 // Emit their regen calls
                 for (CallCapture &call : bufferRegenCalls[id])
@@ -858,14 +861,14 @@ void MaybeResetResources(std::stringstream &out,
             }
 
             // If any of our starting buffers were modified during the run, restore their contents
-            BufferSet &buffersToRestore = resourceTracker->getBuffersToRestore();
-            for (const gl::BufferID id : buffersToRestore)
+            ResourceSet &buffersToRestore = trackedResource.getResourcesToRestore();
+            for (GLuint id : buffersToRestore)
             {
-                if (resourceTracker->getStartingBuffersMappedCurrent(id))
+                if (resourceTracker->getStartingBuffersMappedCurrent({id}))
                 {
                     // Some drivers require the buffer to be unmapped before you can update data,
                     // which violates the spec. See gl::Buffer::bufferDataImpl().
-                    for (CallCapture &call : bufferUnmapCalls[id])
+                    for (CallCapture &call : bufferUnmapCalls[{id}])
                     {
                         out << "    ";
                         WriteCppReplayForCall(call, dataTracker, out, header, binaryData);
@@ -881,20 +884,20 @@ void MaybeResetResources(std::stringstream &out,
                     out << ";\n";
 
                     // Also note that this buffer has been implicitly unmapped by this call
-                    resourceTracker->setBufferUnmapped(id);
+                    resourceTracker->setBufferUnmapped({id});
                 }
             }
 
             // Update the map/unmap of buffers to match the starting state
-            BufferSet startingBuffers = resourceTracker->getStartingBuffers();
-            for (const gl::BufferID id : startingBuffers)
+            ResourceSet startingBuffers = trackedResource.getStartingResources();
+            for (GLuint id : startingBuffers)
             {
                 // If the buffer was mapped at the start, but is not mapped now, we need to map
-                if (resourceTracker->getStartingBuffersMappedInitial(id) &&
-                    !resourceTracker->getStartingBuffersMappedCurrent(id))
+                if (resourceTracker->getStartingBuffersMappedInitial({id}) &&
+                    !resourceTracker->getStartingBuffersMappedCurrent({id}))
                 {
                     // Emit their map calls
-                    for (CallCapture &call : bufferMapCalls[id])
+                    for (CallCapture &call : bufferMapCalls[{id}])
                     {
                         out << "    ";
                         WriteCppReplayForCall(call, dataTracker, out, header, binaryData);
@@ -902,11 +905,11 @@ void MaybeResetResources(std::stringstream &out,
                     }
                 }
                 // If the buffer was unmapped at the start, but is mapped now, we need to unmap
-                if (!resourceTracker->getStartingBuffersMappedInitial(id) &&
-                    resourceTracker->getStartingBuffersMappedCurrent(id))
+                if (!resourceTracker->getStartingBuffersMappedInitial({id}) &&
+                    resourceTracker->getStartingBuffersMappedCurrent({id}))
                 {
                     // Emit their unmap calls
-                    for (CallCapture &call : bufferUnmapCalls[id])
+                    for (CallCapture &call : bufferUnmapCalls[{id}])
                     {
                         out << "    ";
                         WriteCppReplayForCall(call, dataTracker, out, header, binaryData);
@@ -939,6 +942,62 @@ void MaybeResetResources(std::stringstream &out,
             // TODO (http://anglebug.com/5968): Handle programs that need regen
             // This would only happen if a starting program was deleted during the run
             ASSERT(resourceTracker->getProgramsToRegen().empty());
+            break;
+        }
+        case ResourceIDType::Texture:
+        {
+            TrackedResource &trackedResource =
+                resourceTracker->getTrackedResource(ResourceIDType::Texture);
+            ResourceSet &newTextures           = trackedResource.getNewResources();
+            ResourceCalls &textureRegenCalls   = trackedResource.getResourceRegenCalls();
+            ResourceCalls &textureRestoreCalls = trackedResource.getResourceRestoreCalls();
+
+            // If we have any new textures generated and not deleted during the run, delete them now
+            if (!newTextures.empty())
+            {
+                out << "    const GLuint deleteTextures[] = {";
+                ResourceSet::iterator textureIter = newTextures.begin();
+                for (size_t i = 0; textureIter != newTextures.end(); ++i, ++textureIter)
+                {
+                    if (i > 0)
+                    {
+                        out << ", ";
+                    }
+                    if ((i % 4) == 0)
+                    {
+                        out << "\n        ";
+                    }
+                    out << "gTextureMap[" << *textureIter << "]";
+                }
+                out << "};\n";
+                out << "    glDeleteTextures(" << newTextures.size() << ", deleteTextures);\n";
+            }
+
+            // If any of our starting textures were deleted during the run, regen them
+            ResourceSet &texturesToRegen = trackedResource.getResourcesToRegen();
+            for (GLuint id : texturesToRegen)
+            {
+                // Emit their regen calls
+                for (CallCapture &call : textureRegenCalls[id])
+                {
+                    out << "    ";
+                    WriteCppReplayForCall(call, dataTracker, out, header, binaryData);
+                    out << ";\n";
+                }
+            }
+
+            // If any of our starting textures were modified during the run, restore their contents
+            ResourceSet &texturesToRestore = trackedResource.getResourcesToRestore();
+            for (GLuint id : texturesToRestore)
+            {
+                // Emit their restore calls
+                for (CallCapture &call : textureRestoreCalls[id])
+                {
+                    out << "    ";
+                    WriteCppReplayForCall(call, dataTracker, out, header, binaryData);
+                    out << ";\n";
+                }
+            }
             break;
         }
         default:
@@ -1442,6 +1501,68 @@ bool IsQueryActive(const gl::State &glState, gl::QueryID &queryID)
     }
 
     return false;
+}
+
+bool IsTextureUpdate(CallCapture &call)
+{
+    switch (call.entryPoint)
+    {
+        case EntryPoint::GLCompressedCopyTextureCHROMIUM:
+        case EntryPoint::GLCompressedTexImage1D:
+        case EntryPoint::GLCompressedTexImage2D:
+        case EntryPoint::GLCompressedTexImage2DRobustANGLE:
+        case EntryPoint::GLCompressedTexImage3D:
+        case EntryPoint::GLCompressedTexImage3DOES:
+        case EntryPoint::GLCompressedTexImage3DRobustANGLE:
+        case EntryPoint::GLCompressedTexSubImage1D:
+        case EntryPoint::GLCompressedTexSubImage2D:
+        case EntryPoint::GLCompressedTexSubImage2DRobustANGLE:
+        case EntryPoint::GLCompressedTexSubImage3D:
+        case EntryPoint::GLCompressedTexSubImage3DOES:
+        case EntryPoint::GLCompressedTexSubImage3DRobustANGLE:
+        case EntryPoint::GLCompressedTextureSubImage1D:
+        case EntryPoint::GLCompressedTextureSubImage2D:
+        case EntryPoint::GLCompressedTextureSubImage3D:
+        case EntryPoint::GLCopyTexImage1D:
+        case EntryPoint::GLCopyTexImage2D:
+        case EntryPoint::GLCopyTexSubImage1D:
+        case EntryPoint::GLCopyTexSubImage2D:
+        case EntryPoint::GLCopyTexSubImage3D:
+        case EntryPoint::GLCopyTexSubImage3DOES:
+        case EntryPoint::GLCopyTexture3DANGLE:
+        case EntryPoint::GLCopyTextureCHROMIUM:
+        case EntryPoint::GLCopyTextureSubImage1D:
+        case EntryPoint::GLCopyTextureSubImage2D:
+        case EntryPoint::GLCopyTextureSubImage3D:
+        case EntryPoint::GLTexImage1D:
+        case EntryPoint::GLTexImage2D:
+        case EntryPoint::GLTexImage2DExternalANGLE:
+        case EntryPoint::GLTexImage2DMultisample:
+        case EntryPoint::GLTexImage2DRobustANGLE:
+        case EntryPoint::GLTexImage3D:
+        case EntryPoint::GLTexImage3DMultisample:
+        case EntryPoint::GLTexImage3DOES:
+        case EntryPoint::GLTexImage3DRobustANGLE:
+        case EntryPoint::GLTexSubImage1D:
+        case EntryPoint::GLTexSubImage2D:
+        case EntryPoint::GLTexSubImage2DRobustANGLE:
+        case EntryPoint::GLTexSubImage3D:
+        case EntryPoint::GLTexSubImage3DOES:
+        case EntryPoint::GLTexSubImage3DRobustANGLE:
+        case EntryPoint::GLTextureSubImage1D:
+        case EntryPoint::GLTextureSubImage2D:
+        case EntryPoint::GLTextureSubImage3D:
+            return true;
+
+        // Note: CopyImageSubData is handled specially in copyCompressedTextureData
+        case EntryPoint::GLCopyImageSubData:
+        case EntryPoint::GLCopyImageSubDataEXT:
+        case EntryPoint::GLCopyImageSubDataOES:
+            return false;
+
+        default:
+            return false;
+    }
 }
 
 void Capture(std::vector<CallCapture> *setupCalls, CallCapture &&call)
@@ -1979,20 +2100,21 @@ void CaptureBufferResetCalls(const gl::State &replayState,
                              const gl::Buffer *buffer)
 {
     // Track this as a starting resource that may need to be restored.
-    BufferSet &startingBuffers = resourceTracker->getStartingBuffers();
-    startingBuffers.insert(*id);
+    TrackedResource &trackedBuffers = resourceTracker->getTrackedResource(ResourceIDType::Buffer);
+    ResourceSet &startingBuffers    = trackedBuffers.getStartingResources();
+    startingBuffers.insert((*id).value);
 
     // Track calls to regenerate a given buffer
-    BufferCalls &bufferRegenCalls = resourceTracker->getBufferRegenCalls();
-    Capture(&bufferRegenCalls[*id], CaptureDeleteBuffers(replayState, true, 1, id));
-    Capture(&bufferRegenCalls[*id], CaptureGenBuffers(replayState, true, 1, id));
-    MaybeCaptureUpdateResourceIDs(&bufferRegenCalls[*id]);
+    ResourceCalls &bufferRegenCalls = trackedBuffers.getResourceRegenCalls();
+    Capture(&bufferRegenCalls[(*id).value], CaptureDeleteBuffers(replayState, true, 1, id));
+    Capture(&bufferRegenCalls[(*id).value], CaptureGenBuffers(replayState, true, 1, id));
+    MaybeCaptureUpdateResourceIDs(&bufferRegenCalls[(*id).value]);
 
     // Track calls to restore a given buffer's contents
-    BufferCalls &bufferRestoreCalls = resourceTracker->getBufferRestoreCalls();
-    Capture(&bufferRestoreCalls[*id],
+    ResourceCalls &bufferRestoreCalls = trackedBuffers.getResourceRestoreCalls();
+    Capture(&bufferRestoreCalls[(*id).value],
             CaptureBindBuffer(replayState, true, gl::BufferBinding::Array, *id));
-    Capture(&bufferRestoreCalls[*id],
+    Capture(&bufferRestoreCalls[(*id).value],
             CaptureBufferData(replayState, true, gl::BufferBinding::Array,
                               static_cast<GLsizeiptr>(buffer->getSize()), buffer->getMapPointer(),
                               buffer->getUsage()));
@@ -2301,10 +2423,31 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             continue;
         }
 
+        // Track this as a starting resource that may need to be restored.
+        TrackedResource &trackedTextures =
+            resourceTracker->getTrackedResource(ResourceIDType::Texture);
+        ResourceSet &startingTextures = trackedTextures.getStartingResources();
+        startingTextures.insert(id.value);
+
+        // For the initial texture creation calls, track in the generate list
+        ResourceCalls &textureRegenCalls = trackedTextures.getResourceRegenCalls();
+        CallVector texGenCalls({setupCalls, &textureRegenCalls[id.value]});
+
         // Gen the Texture.
-        cap(CaptureGenTextures(replayState, true, 1, &id));
-        MaybeCaptureUpdateResourceIDs(setupCalls);
-        cap(CaptureBindTexture(replayState, true, texture->getType(), id));
+        for (std::vector<CallCapture> *calls : texGenCalls)
+        {
+            Capture(calls, CaptureGenTextures(replayState, true, 1, &id));
+            MaybeCaptureUpdateResourceIDs(calls);
+        }
+
+        // For the remaining texture setup calls, track in the restore list
+        ResourceCalls &textureRestoreCalls = trackedTextures.getResourceRestoreCalls();
+        CallVector texCalls({setupCalls, &textureRestoreCalls[id.value]});
+
+        for (std::vector<CallCapture> *calls : texCalls)
+        {
+            Capture(calls, CaptureBindTexture(replayState, true, texture->getType(), id));
+        }
 
         currentTextureBindings[texture->getType()] = id;
 
@@ -2314,12 +2457,20 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             gl::SamplerState::CreateDefaultForTarget(texture->getType());
         const gl::SamplerState &textureSamplerState = texture->getSamplerState();
 
-        auto capTexParam = [cap, &replayState, texture](GLenum pname, GLint param) {
-            cap(CaptureTexParameteri(replayState, true, texture->getType(), pname, param));
+        auto capTexParam = [&replayState, texture, &texCalls](GLenum pname, GLint param) {
+            for (std::vector<CallCapture> *calls : texCalls)
+            {
+                Capture(calls,
+                        CaptureTexParameteri(replayState, true, texture->getType(), pname, param));
+            }
         };
 
-        auto capTexParamf = [cap, &replayState, texture](GLenum pname, GLfloat param) {
-            cap(CaptureTexParameterf(replayState, true, texture->getType(), pname, param));
+        auto capTexParamf = [&replayState, texture, &texCalls](GLenum pname, GLfloat param) {
+            for (std::vector<CallCapture> *calls : texCalls)
+            {
+                Capture(calls,
+                        CaptureTexParameterf(replayState, true, texture->getType(), pname, param));
+            }
         };
 
         if (textureSamplerState.getMinFilter() != defaultSamplerState.getMinFilter())
@@ -2401,7 +2552,10 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         // If the texture is immutable, initialize it with TexStorage
         if (texture->getImmutableFormat())
         {
-            CaptureTextureStorage(setupCalls, &replayState, texture);
+            for (std::vector<CallCapture> *calls : texCalls)
+            {
+                CaptureTextureStorage(calls, &replayState, texture);
+            }
         }
 
         // Iterate texture levels and layers.
@@ -2433,8 +2587,10 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             {
                 // The buffer contents are already backed up, but we need to emit the TexBuffer
                 // binding calls
-                CaptureTextureContents(setupCalls, &replayState, texture, index, desc, 0, 0);
-
+                for (std::vector<CallCapture> *calls : texCalls)
+                {
+                    CaptureTextureContents(calls, &replayState, texture, index, desc, 0, 0);
+                }
                 continue;
             }
 
@@ -2446,10 +2602,13 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                     context->getShareGroup()->getFrameCaptureShared()->retrieveCachedTextureLevel(
                         texture->id(), index.getTarget(), index.getLevelIndex());
 
-                // Use the shadow copy of the data to populate the call
-                CaptureTextureContents(setupCalls, &replayState, texture, index, desc,
-                                       static_cast<GLuint>(capturedTextureLevel.size()),
-                                       capturedTextureLevel.data());
+                for (std::vector<CallCapture> *calls : texCalls)
+                {
+                    // Use the shadow copy of the data to populate the call
+                    CaptureTextureContents(calls, &replayState, texture, index, desc,
+                                           static_cast<GLuint>(capturedTextureLevel.size()),
+                                           capturedTextureLevel.data());
+                }
             }
             else
             {
@@ -2479,13 +2638,19 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                                                index.getLevelIndex(), getFormat, getType,
                                                data.data());
 
-                    CaptureTextureContents(setupCalls, &replayState, texture, index, desc,
-                                           static_cast<GLuint>(data.size()), data.data());
+                    for (std::vector<CallCapture> *calls : texCalls)
+                    {
+                        CaptureTextureContents(calls, &replayState, texture, index, desc,
+                                               static_cast<GLuint>(data.size()), data.data());
+                    }
                 }
                 else
                 {
-                    CaptureTextureContents(setupCalls, &replayState, texture, index, desc, 0,
-                                           nullptr);
+                    for (std::vector<CallCapture> *calls : texCalls)
+                    {
+                        CaptureTextureContents(calls, &replayState, texture, index, desc, 0,
+                                               nullptr);
+                    }
                 }
             }
         }
@@ -3741,6 +3906,9 @@ void FrameCapture::copyCompressedTextureData(const gl::Context *context, const C
         context->getShareGroup()->getFrameCaptureShared()->copyCachedTextureLevel(
             context, srcName, srcLevel, dstName, dstLevel, call);
     }
+
+    // Also track that the destination texture has been updated
+    mResourceTracker.getTrackedResource(ResourceIDType::Texture).setModifiedResource(dstName.value);
 }
 
 void FrameCapture::captureCompressedTextureData(const gl::Context *context, const CallCapture &call)
@@ -3951,7 +4119,7 @@ void FrameCapture::trackBufferMapping(CallCapture *call,
         mBufferDataMap[id] = std::make_pair(offset, length);
 
         // Track that this buffer was potentially modified
-        mResourceTracker.setBufferModified(id);
+        mResourceTracker.getTrackedResource(ResourceIDType::Buffer).setModifiedResource(id.value);
 
         // Track the bufferID that was just mapped for use when writing return value
         call->params.setMappedBufferID(id);
@@ -4167,6 +4335,24 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
             break;
         }
 
+        case EntryPoint::GLGenTextures:
+        {
+            GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
+            const gl::TextureID *textureIDs =
+                call.params.getParam("texturesPacked", ParamType::TTextureIDPointer, 1)
+                    .value.TextureIDPointerVal;
+            for (GLsizei i = 0; i < count; i++)
+            {
+                // If we're capturing, track what new textures have been genned
+                if (isCaptureActive())
+                {
+                    mResourceTracker.getTrackedResource(ResourceIDType::Texture)
+                        .setGennedResource(textureIDs[i].value);
+                }
+            }
+            break;
+        }
+
         case EntryPoint::GLDeleteBuffers:
         {
             GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
@@ -4184,7 +4370,8 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
                 // If we're capturing, track what buffers have been deleted
                 if (isCaptureActive())
                 {
-                    mResourceTracker.setDeletedBuffer(bufferIDs[i]);
+                    mResourceTracker.getTrackedResource(ResourceIDType::Buffer)
+                        .setDeletedResource(bufferIDs[i].value);
                 }
             }
             break;
@@ -4201,7 +4388,8 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
                 // If we're capturing, track what new buffers have been genned
                 if (isCaptureActive())
                 {
-                    mResourceTracker.setGennedBuffer(bufferIDs[i]);
+                    mResourceTracker.getTrackedResource(ResourceIDType::Buffer)
+                        .setGennedResource(bufferIDs[i].value);
                 }
             }
             break;
@@ -4371,6 +4559,13 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
                 // Look it up in the cache, and delete it if found
                 context->getShareGroup()->getFrameCaptureShared()->deleteCachedTextureLevelData(
                     textureIDs[i]);
+
+                // If we're capturing, track what textures have been deleted
+                if (isCaptureActive())
+                {
+                    mResourceTracker.getTrackedResource(ResourceIDType::Texture)
+                        .setDeletedResource(textureIDs[i].value);
+                }
             }
             break;
         }
@@ -4447,7 +4642,8 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
             gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             // Track that this buffer's contents have been modified
-            mResourceTracker.setBufferModified(buffer->id());
+            mResourceTracker.getTrackedResource(ResourceIDType::Buffer)
+                .setModifiedResource(buffer->id().value);
 
             // BufferData is equivalent to UnmapBuffer, for what we're tracking.
             // From the ES 3.1 spec in BufferData section:
@@ -4462,6 +4658,12 @@ void FrameCapture::maybeCapturePreCallUpdates(const gl::Context *context, CallCa
         }
         default:
             break;
+    }
+
+    if (IsTextureUpdate(call))
+    {
+        // If this call modified texture contents, track it for possible reset
+        trackTextureUpdate(context, call);
     }
 
     mReadBufferSize = std::max(mReadBufferSize, call.params.getReadBufferSize());
@@ -4820,37 +5022,13 @@ void StringCounters::setStringCounter(std::vector<std::string> &strings, int &co
     mStringCounterMap[strings] = counter;
 }
 
+TrackedResource::TrackedResource() = default;
+
+TrackedResource::~TrackedResource() = default;
+
 ResourceTracker::ResourceTracker() = default;
 
 ResourceTracker::~ResourceTracker() = default;
-
-void ResourceTracker::setDeletedBuffer(gl::BufferID id)
-{
-    if (id.value == 0)
-    {
-        // Ignore buffer ID 0
-        return;
-    }
-
-    if (mNewBuffers.find(id) != mNewBuffers.end())
-    {
-        // This is a buffer genned after MEC was initialized, just clear it, since there will be no
-        // actions required for it to return to starting state.
-        mNewBuffers.erase(id);
-        return;
-    }
-
-    if (mStartingBuffers.find(id) != mStartingBuffers.end())
-    {
-        // The app is deleting a buffer we started with, we need to regen on loop
-        mBuffersToRegen.insert(id);
-        mBuffersToRestore.insert(id);
-    }
-
-    // If none of the above is true, the app is deleting a buffer that was never genned.
-    // This is allowed by the spec for DeleteBuffers:
-    //    Unused names in buffers are silently ignored, as is the value zero.
-}
 
 void ResourceTracker::setDeletedFenceSync(GLsync sync)
 {
@@ -4899,29 +5077,50 @@ void ResourceTracker::setDeletedProgram(gl::ShaderProgramID id)
     mProgramsToRegen.insert(id);
 }
 
-void ResourceTracker::setGennedBuffer(gl::BufferID id)
+void TrackedResource::setGennedResource(GLuint id)
 {
-    if (mStartingBuffers.find(id) == mStartingBuffers.end())
+    if (mStartingResources.find(id) == mStartingResources.end())
     {
-        // This is a buffer genned after MEC was initialized, track it
-        mNewBuffers.insert(id);
+        // This is a resource created after MEC was initialized, track it
+        mNewResources.insert(id);
         return;
     }
 }
 
-void ResourceTracker::setBufferModified(gl::BufferID id)
+void TrackedResource::setDeletedResource(GLuint id)
 {
-    // If this was a starting buffer, we need to track it for restore
-    if (mStartingBuffers.find(id) != mStartingBuffers.end())
+    if (id == 0)
     {
-        mBuffersToRestore.insert(id);
+        // Ignore ID 0
+        return;
     }
+
+    if (mNewResources.find(id) != mNewResources.end())
+    {
+        // This is a resource created after MEC was initialized, just clear it, since there will be
+        // no actions required for it to return to starting state.
+        mNewResources.erase(id);
+        return;
+    }
+
+    if (mStartingResources.find(id) != mStartingResources.end())
+    {
+        // In this case, the app is deleting a resource we started with, we need to regen on loop
+        mResourcesToRegen.insert(id);
+
+        // Also restore its contents
+        mResourcesToRestore.insert(id);
+    }
+
+    // If none of the above is true, the app is deleting a resource that was never genned.
 }
 
 void ResourceTracker::setBufferMapped(gl::BufferID id)
 {
     // If this was a starting buffer, we may need to restore it to original state during Reset
-    if (mStartingBuffers.find(id) != mStartingBuffers.end())
+    TrackedResource &trackedBuffers = getTrackedResource(ResourceIDType::Buffer);
+    if (trackedBuffers.getStartingResources().find(id.value) !=
+        trackedBuffers.getStartingResources().end())
     {
         // Track that its current state is mapped (true)
         mStartingBuffersMappedCurrent[id] = true;
@@ -4931,16 +5130,71 @@ void ResourceTracker::setBufferMapped(gl::BufferID id)
 void ResourceTracker::setBufferUnmapped(gl::BufferID id)
 {
     // If this was a starting buffer, we may need to restore it to original state during Reset
-    if (mStartingBuffers.find(id) != mStartingBuffers.end())
+    TrackedResource &trackedBuffers = getTrackedResource(ResourceIDType::Buffer);
+    if (trackedBuffers.getStartingResources().find(id.value) !=
+        trackedBuffers.getStartingResources().end())
     {
         // Track that its current state is unmapped (false)
         mStartingBuffersMappedCurrent[id] = false;
     }
 }
 
+void TrackedResource::setModifiedResource(GLuint id)
+{
+    // If this was a starting resource, we need to track it for restore
+    if (mStartingResources.find(id) != mStartingResources.end())
+    {
+        mResourcesToRestore.insert(id);
+    }
+}
+
 void ResourceTracker::onShaderProgramAccess(gl::ShaderProgramID shaderProgramID)
 {
     mMaxShaderPrograms = std::max(mMaxShaderPrograms, shaderProgramID.value + 1);
+}
+
+void FrameCapture::trackTextureUpdate(const gl::Context *context, const CallCapture &call)
+{
+    GLuint id             = 0;
+    int index             = 0;
+    std::string paramName = "targetPacked";
+
+    // Some calls provide the textureID directly
+    switch (call.entryPoint)
+    {
+        case EntryPoint::GLCompressedCopyTextureCHROMIUM:
+            index     = 1;
+            paramName = "destIdPacked";
+            break;
+        case EntryPoint::GLCopyTextureCHROMIUM:
+        case EntryPoint::GLCopySubTextureCHROMIUM:
+            index     = 3;
+            paramName = "destIdPacked";
+            break;
+        default:
+            break;
+    }
+
+    // For the rest, look it up based on the currently bound texture's id
+    if (index == 0)
+    {
+        gl::TextureTarget targetPacked =
+            call.params.getParam(paramName.c_str(), ParamType::TTextureTarget, index)
+                .value.TextureTargetVal;
+        gl::TextureType textureType = gl::TextureTargetToType(targetPacked);
+        gl::Texture *texture        = context->getState().getTargetTexture(textureType);
+        id                          = texture->id().value;
+    }
+    else
+    {
+        gl::TextureID destIDPacked =
+            call.params.getParam(paramName.c_str(), ParamType::TTextureTarget, index)
+                .value.TextureIDVal;
+        id = destIDPacked.value;
+    }
+
+    // Mark it as modified
+    mResourceTracker.getTrackedResource(ResourceIDType::Texture).setModifiedResource(id);
 }
 
 bool FrameCapture::isCapturing() const
