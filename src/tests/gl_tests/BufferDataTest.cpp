@@ -108,6 +108,14 @@ TEST_P(BufferDataTest, MAYBE_NULLData)
     }
 }
 
+TEST_P(BufferDataTest, Uninitialized)
+{
+    // Trigger frame capture to try capturing the
+    // generated but uninitialized buffer
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    swapBuffers();
+}
+
 TEST_P(BufferDataTest, ZeroNonNULLData)
 {
     glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
