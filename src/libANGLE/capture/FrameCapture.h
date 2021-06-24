@@ -220,6 +220,11 @@ using FenceSyncCalls = std::map<GLsync, std::vector<CallCapture>>;
 
 using ProgramSet = std::set<gl::ShaderProgramID>;
 
+using ResourceSet     = std::set<GLuint>;
+using ResourceSetMap  = std::map<ResourceIDType, ResourceSet>;
+using ResourceCalls   = std::map<GLuint, std::vector<CallCapture>>;
+using ResourceCallMap = std::map<ResourceIDType, ResourceCalls>;
+
 // Helper to track resource changes during the capture
 class ResourceTracker final : angle::NonCopyable
 {
@@ -227,21 +232,11 @@ class ResourceTracker final : angle::NonCopyable
     ResourceTracker();
     ~ResourceTracker();
 
-    BufferCalls &getBufferRegenCalls() { return mBufferRegenCalls; }
-    BufferCalls &getBufferRestoreCalls() { return mBufferRestoreCalls; }
     BufferCalls &getBufferMapCalls() { return mBufferMapCalls; }
     BufferCalls &getBufferUnmapCalls() { return mBufferUnmapCalls; }
 
     std::vector<CallCapture> &getBufferBindingCalls() { return mBufferBindingCalls; }
 
-    BufferSet &getStartingBuffers() { return mStartingBuffers; }
-    BufferSet &getNewBuffers() { return mNewBuffers; }
-    BufferSet &getBuffersToRegen() { return mBuffersToRegen; }
-    BufferSet &getBuffersToRestore() { return mBuffersToRestore; }
-
-    void setGennedBuffer(gl::BufferID id);
-    void setDeletedBuffer(gl::BufferID id);
-    void setBufferModified(gl::BufferID id);
     void setBufferMapped(gl::BufferID id);
     void setBufferUnmapped(gl::BufferID id);
 
@@ -276,6 +271,21 @@ class ResourceTracker final : angle::NonCopyable
 
     void setCreatedProgram(gl::ShaderProgramID id);
     void setDeletedProgram(gl::ShaderProgramID id);
+
+    ResourceSet &getStartingResources(ResourceIDType type) { return mStartingResources[type]; }
+    ResourceSet &getNewResources(ResourceIDType type) { return mNewResources[type]; }
+    ResourceSet &getResourcesToRegen(ResourceIDType type) { return mResourcesToRegen[type]; }
+    ResourceSet &getResourcesToRestore(ResourceIDType type) { return mResourcesToRestore[type]; }
+
+    void setGennedResource(ResourceIDType type, GLuint id);
+    void setDeletedResource(ResourceIDType type, GLuint id);
+    void setModifiedResource(ResourceIDType type, GLuint id);
+
+    ResourceCalls &getResourceRegenCalls(ResourceIDType type) { return mResourceRegenCalls[type]; }
+    ResourceCalls &getResourceRestoreCalls(ResourceIDType type)
+    {
+        return mResourceRestoreCalls[type];
+    }
 
   private:
     // Buffer regen calls will delete and gen a buffer
@@ -321,6 +331,20 @@ class ResourceTracker final : angle::NonCopyable
     // Fence syncs to regen are a list of starting fence sync objects that were deleted and need to
     // be regen'ed.
     FenceSyncSet mFenceSyncsToRegen;
+
+    // Resource regen calls will delete and gen a resource
+    ResourceCallMap mResourceRegenCalls;
+    // Resource restore calls will restore the contents of a resource
+    ResourceCallMap mResourceRestoreCalls;
+
+    // Resources created during startup
+    ResourceSetMap mStartingResources;
+    // Resources created during the run that need to be deleted
+    ResourceSetMap mNewResources;
+    // Resources deleted during the run that need to be recreated
+    ResourceSetMap mResourcesToRegen;
+    // Resources modified during the run that need to be restored
+    ResourceSetMap mResourcesToRestore;
 };
 
 // Used by the CPP replay to filter out unnecessary code.
@@ -342,6 +366,8 @@ using TextureLevelDataMap = std::map<gl::TextureID, TextureLevels>;
 
 // Map from ContextID to surface dimensions
 using SurfaceDimensions = std::map<gl::ContextID, gl::Extents>;
+
+using CallVector = std::vector<std::vector<CallCapture> *>;
 
 class FrameCapture final : angle::NonCopyable
 {
@@ -370,6 +396,8 @@ class FrameCapture final : angle::NonCopyable
                             bool writable);
 
     ResourceTracker &getResouceTracker() { return mResourceTracker; }
+
+    void trackTextureUpdate(const gl::Context *context, const CallCapture &call);
 
   private:
     void writeCppReplayIndexFiles(const gl::Context *, bool writeResetContextCall);
