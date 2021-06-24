@@ -220,6 +220,9 @@ using FenceSyncCalls = std::map<GLsync, std::vector<CallCapture>>;
 
 using ProgramSet = std::set<gl::ShaderProgramID>;
 
+using TextureSet   = std::set<gl::TextureID>;
+using TextureCalls = std::map<gl::TextureID, std::vector<CallCapture>>;
+
 // Helper to track resource changes during the capture
 class ResourceTracker final : angle::NonCopyable
 {
@@ -277,6 +280,18 @@ class ResourceTracker final : angle::NonCopyable
     void setCreatedProgram(gl::ShaderProgramID id);
     void setDeletedProgram(gl::ShaderProgramID id);
 
+    TextureSet &getStartingTextures() { return mStartingTextures; }
+    TextureSet &getNewTextures() { return mNewTextures; }
+    TextureSet &getTexturesToRegen() { return mTexturesToRegen; }
+    TextureSet &getTexturesToRestore() { return mTexturesToRestore; }
+
+    void setGennedTexture(gl::TextureID id);
+    void setDeletedTexture(gl::TextureID id);
+    void setModifiedTexture(gl::TextureID id);
+
+    TextureCalls &getTextureRegenCalls() { return mTextureRegenCalls; }
+    TextureCalls &getTextureRestoreCalls() { return mTextureRestoreCalls; }
+
   private:
     // Buffer regen calls will delete and gen a buffer
     BufferCalls mBufferRegenCalls;
@@ -321,6 +336,20 @@ class ResourceTracker final : angle::NonCopyable
     // Fence syncs to regen are a list of starting fence sync objects that were deleted and need to
     // be regen'ed.
     FenceSyncSet mFenceSyncsToRegen;
+
+    // Texture regen calls will delete and gen a texture
+    TextureCalls mTextureRegenCalls;
+    // Texture restore calls will restore the contents of a texture
+    TextureCalls mTextureRestoreCalls;
+
+    // Textures created during startup
+    TextureSet mStartingTextures;
+    // Textures created during the run that need to be deleted
+    TextureSet mNewTextures;
+    // Textures deleted during the run that need to be recreated
+    TextureSet mTexturesToRegen;
+    // Textures modified during the run that need to be restored
+    TextureSet mTexturesToRestore;
 };
 
 // Used by the CPP replay to filter out unnecessary code.
@@ -342,6 +371,8 @@ using TextureLevelDataMap = std::map<gl::TextureID, TextureLevels>;
 
 // Map from ContextID to surface dimensions
 using SurfaceDimensions = std::map<gl::ContextID, gl::Extents>;
+
+using CallVector = std::vector<std::vector<CallCapture> *>;
 
 class FrameCapture final : angle::NonCopyable
 {
@@ -370,6 +401,8 @@ class FrameCapture final : angle::NonCopyable
                             bool writable);
 
     ResourceTracker &getResouceTracker() { return mResourceTracker; }
+
+    void trackTextureUpdate(const gl::Context *context, const CallCapture &call);
 
   private:
     void writeCppReplayIndexFiles(const gl::Context *, bool writeResetContextCall);
