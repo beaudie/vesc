@@ -579,6 +579,7 @@ class BlendStateExt final
 
     BlendStateExt(const size_t drawBuffers = 1);
 
+    BlendStateExt(const BlendStateExt &other);
     BlendStateExt &operator=(const BlendStateExt &other);
 
     ///////// Blending Toggle /////////
