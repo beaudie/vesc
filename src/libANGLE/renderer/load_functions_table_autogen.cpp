@@ -1608,7 +1608,7 @@ LoadImageFunctionInfo ETC1_RGB8_OES_to_R8G8B8A8_UNORM(GLenum type)
     }
 }
 
-LoadImageFunctionInfo G8_B8R8_2PLANE_420_UNORM_ANGLEX_to_default(GLenum type)
+LoadImageFunctionInfo G8_B8R8_2PLANE_420_UNORM_ANGLE_to_default(GLenum type)
 {
     switch (type)
     {
@@ -1620,7 +1620,7 @@ LoadImageFunctionInfo G8_B8R8_2PLANE_420_UNORM_ANGLEX_to_default(GLenum type)
     }
 }
 
-LoadImageFunctionInfo G8_B8_R8_3PLANE_420_UNORM_ANGLEX_to_default(GLenum type)
+LoadImageFunctionInfo G8_B8_R8_3PLANE_420_UNORM_ANGLE_to_default(GLenum type)
 {
     switch (type)
     {
@@ -3726,10 +3726,10 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             }
             break;
         }
-        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLEX:
-            return G8_B8R8_2PLANE_420_UNORM_ANGLEX_to_default;
-        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLEX:
-            return G8_B8_R8_3PLANE_420_UNORM_ANGLEX_to_default;
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+            return G8_B8R8_2PLANE_420_UNORM_ANGLE_to_default;
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+            return G8_B8_R8_3PLANE_420_UNORM_ANGLE_to_default;
         case GL_LUMINANCE:
         {
             switch (angleFormat)
