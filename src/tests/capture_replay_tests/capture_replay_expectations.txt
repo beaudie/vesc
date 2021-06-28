@@ -54,7 +54,6 @@ GLSLTest.MixedShaderLengths/*
 GLSLTest.ZeroShaderLength/*
 GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
 ImageTest.SourceCubeTargetExternal/*
-OcclusionQueriesTest.*
 PBOExtensionTest.*
 PixmapTest.Clearing/*
 RobustClientMemoryTest.*
