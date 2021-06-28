@@ -134,11 +134,13 @@ bool IsAccessChainRValue(const AccessChain &accessChain)
     return accessChain.storageClass == spv::StorageClassMax;
 }
 
+#if 0
 bool IsAccessChainUnindexedLValue(const NodeData &data)
 {
     return !IsAccessChainRValue(data.accessChain) && data.idList.empty() &&
            data.accessChain.swizzles.empty() && !data.accessChain.dynamicComponent.valid();
 }
+#endif
 
 // A traverser that generates SPIR-V as it walks the AST.
 class OutputSPIRVTraverser : public TIntermTraverser
@@ -1556,6 +1558,7 @@ spirv::IdRef OutputSPIRVTraverser::createFunctionCall(TIntermAggregate *node,
             // - const parameters,
             paramValue = accessChainLoad(&param, decorations);
         }
+#if 0
         else if (IsAccessChainUnindexedLValue(param))
         {
             // The following parameters are passed directly:
@@ -1563,6 +1566,7 @@ spirv::IdRef OutputSPIRVTraverser::createFunctionCall(TIntermAggregate *node,
             // - unindexed lvalues.
             paramValue = param.baseId;
         }
+#endif
         else
         {
             ASSERT(paramQualifier == EvqIn || paramQualifier == EvqOut ||
