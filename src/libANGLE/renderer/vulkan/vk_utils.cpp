@@ -316,6 +316,52 @@ const char *gLoaderLayersPathEnv   = "VK_LAYER_PATH";
 const char *gLoaderICDFilenamesEnv = "VK_ICD_FILENAMES";
 const char *gANGLEPreferredDevice  = "ANGLE_PREFERRED_DEVICE";
 
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+ANGLE_NO_DISCARD VkResult SecondaryCommandPoolInitialize(CommandPool *pool,
+                                                         VkDevice device,
+                                                         uint32_t queueFamilyIndex,
+                                                         bool hasProtectedContent)
+{
+    VkCommandPoolCreateInfo poolInfo = {};
+    poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    poolInfo.queueFamilyIndex        = queueFamilyIndex;
+    if (hasProtectedContent)
+    {
+        poolInfo.flags |= VK_COMMAND_POOL_CREATE_PROTECTED_BIT;
+    }
+    return pool->init(device, poolInfo);
+}
+ANGLE_NO_DISCARD VkResult SecondaryCommandBufferInitialize(CommandBuffer *secondary,
+                                                           VkDevice device,
+                                                           vk::CommandPool *pool,
+                                                           angle::PoolAllocator *allocator)
+{
+    VkCommandBufferAllocateInfo allocInfo = {};
+    allocInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+    allocInfo.commandBufferCount          = 1;
+    allocInfo.commandPool                 = pool->getHandle();
+
+    return secondary->init(device, allocInfo);
+}
+
+ANGLE_NO_DISCARD VkResult
+SecondaryCommandBufferBegin(CommandBuffer *secondary,
+                            const VkCommandBufferInheritanceInfo &inheritanceInfo)
+{
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    beginInfo.pInheritanceInfo         = &inheritanceInfo;
+    if (inheritanceInfo.renderPass != VK_NULL_HANDLE)
+    {
+        beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
+    }
+    return secondary->begin(beginInfo);
+}
+#endif
+
 VkImageAspectFlags GetDepthStencilAspectFlags(const angle::Format &format)
 {
     return (format.depthBits > 0 ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
