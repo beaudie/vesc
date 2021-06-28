@@ -4097,9 +4097,13 @@ void FrameCapture::maybeCaptureDrawElementsClientData(const gl::Context *context
         (void)elementArrayBuffer->getIndexRange(context, drawElementsType, offset, count, restart,
                                                 &indexRange);
     }
-    else
+    else if (indices)
     {
         indexRange = gl::ComputeIndexRange(drawElementsType, indices, count, restart);
+    }
+    else
+    {
+        return;
     }
 
     // index starts from 0
