@@ -67,7 +67,9 @@ VertexAttributeTest.*
 ViewportTest.*
 VulkanExternalImageTest.*
 
-WebGLCompatibilityTest.*
+WebGLCompatibilityTest.NullIndexBuffer/*
+WebGLCompatibilityTest.EnableProgramBinaryExtension/*
+WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/*
 WebGLFramebufferTest.*
 
 # Skipped tests
