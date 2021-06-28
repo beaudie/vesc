@@ -3996,7 +3996,13 @@ void FrameCapture::maybeCaptureDrawElementsClientData(const gl::Context *context
         return;
     }
 
+    // if the count is zero there is nothing to draw, so skip capturing the call
     GLsizei count = call.params.getParam("count", ParamType::TGLsizei, 1).value.GLsizeiVal;
+    if (!count)
+    {
+        return;
+    }
+
     gl::DrawElementsType drawElementsType =
         call.params.getParam("typePacked", ParamType::TDrawElementsType, 2)
             .value.DrawElementsTypeVal;
