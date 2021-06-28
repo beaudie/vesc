@@ -992,7 +992,11 @@ void ANGLETestBase::drawIndexedQuad(GLuint program,
                                     GLfloat positionAttribZ,
                                     GLfloat positionAttribXYScale)
 {
-    drawIndexedQuad(program, positionAttribName, positionAttribZ, positionAttribXYScale, false);
+    bool useIndexBuffer = useIndexBuffer;
+    if (mFixture->configParams.webGLCompatibility.valid())
+        useIndexBuffer = mFixture->configParams.webGLCompatibility.value();
+    drawIndexedQuad(program, positionAttribName, positionAttribZ, positionAttribXYScale,
+                    useIndexBuffer);
 }
 
 void ANGLETestBase::drawIndexedQuad(GLuint program,
