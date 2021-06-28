@@ -55,7 +55,6 @@ ImageTest.SourceCubeTargetExternal/*
 PBOExtensionTest.*
 PixmapTest.Clearing/*
 RobustClientMemoryTest.*
-SRGBFramebufferTest.Validation/*
 StateChangeRenderTest.GenerateMipmap/*
 SyncQueriesTest.*
 TextureLimitsTest.MaxCombinedTextures/*
