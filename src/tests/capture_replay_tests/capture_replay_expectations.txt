@@ -53,12 +53,8 @@ GLSLTest.ZeroShaderLength/*
 GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
 ImageTest.SourceCubeTargetExternal/*
 PBOExtensionTest.*
-UnpackAlignmentTest.*
-UnpackRowLengthTest.*
-VertexAttributeCachingTest.*
 VertexAttributeOORTest.*
 VertexAttributeTest.*
-ViewportTest.*
 VulkanExternalImageTest.*
 
 WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/*
