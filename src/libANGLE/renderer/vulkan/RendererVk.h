@@ -222,13 +222,38 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
-        return mCommandQueue.getDriverPriority(priority);
+        if (mFeatures.asyncCommandQueue.enabled)
+        {
+            return mCommandProcessor.getDriverPriority(priority);
+        }
+        else
+        {
+            return mCommandQueue.getDriverPriority(priority);
+        }
+    }
+    ANGLE_INLINE uint32_t getDeviceQueueIndex()
+    {
+        if (mFeatures.asyncCommandQueue.enabled)
+        {
+            return mCommandProcessor.getDeviceQueueIndex();
+        }
+        else
+        {
+            return mCommandQueue.getDeviceQueueIndex();
+        }
     }
 
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
                                          bool hasProtectedContent,
                                          vk::PrimaryCommandBuffer *commandBufferOut);
+
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    void resetSecondaryCommandBufferOnSubmit(vk::CommandBuffer &&commandBuffer)
+    {
+        mSecondaryCommandBuffersToReset.push_back(std::move(commandBuffer));
+    }
+#endif
 
     // Fire off a single command buffer immediately with default priority.
     // Command buffer must be allocated with getCommandBufferOneOff and is reclaimed.
@@ -367,17 +392,24 @@ class RendererVk : angle::NonCopyable
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           bool hasProtectedContent,
                                           const vk::RenderPass &renderPass,
+                                          vk::CommandPool *commandPool,
                                           vk::CommandBufferHelper **renderPassCommands);
     angle::Result flushOutsideRPCommands(vk::Context *context,
                                          bool hasProtectedContent,
+                                         vk::CommandPool *commandPool,
                                          vk::CommandBufferHelper **outsideRPCommands);
 
     VkResult queuePresent(vk::Context *context,
                           egl::ContextPriority priority,
                           const VkPresentInfoKHR &presentInfo);
 
-    vk::CommandBufferHelper *getCommandBufferHelper(bool hasRenderPass);
-    void recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer);
+    angle::Result getCommandBufferHelper(vk::Context *context,
+                                         bool hasRenderPass,
+                                         vk::CommandPool *commandPool,
+                                         vk::CommandBufferHelper **commandBufferHelperOut);
+    void recycleCommandBufferHelper(VkDevice device,
+                                    vk::CommandBufferHelper *commandBuffer,
+                                    vk::CommandPool *commandPool);
 
     // Process GPU memory reports
     void processMemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT &callbackData)
@@ -530,6 +562,7 @@ class RendererVk : angle::NonCopyable
     // Command buffer pool management.
     std::mutex mCommandBufferHelperFreeListMutex;
     std::vector<vk::CommandBufferHelper *> mCommandBufferHelperFreeList;
+    std::vector<vk::CommandBuffer> mSecondaryCommandBuffersToReset;
 
     // Async Command Queue
     vk::CommandProcessor mCommandProcessor;
