@@ -1556,7 +1556,7 @@ spirv::IdRef OutputSPIRVTraverser::createFunctionCall(TIntermAggregate *node,
             // - const parameters,
             paramValue = accessChainLoad(&param, decorations);
         }
-        else if (IsAccessChainUnindexedLValue(param))
+        else if (IsAccessChainUnindexedLValue(param) || false)
         {
             // The following parameters are passed directly:
             //
