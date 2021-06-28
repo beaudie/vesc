@@ -30,8 +30,6 @@ gl::IndexRange ComputeTypedIndexRange(const IndexType *indices,
                                       bool primitiveRestartEnabled,
                                       GLuint primitiveRestartIndex)
 {
-    ASSERT(count > 0);
-
     IndexType minIndex                = 0;
     IndexType maxIndex                = 0;
     size_t nonPrimitiveRestartIndices = 0;
