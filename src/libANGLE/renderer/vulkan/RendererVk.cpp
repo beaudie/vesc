@@ -780,11 +780,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mYuvConversionCache.destroy(this);
     mVkFormatDescriptorCountMap.clear();
 
-    for (vk::CommandBufferHelper *commandBufferHelper : mCommandBufferHelperFreeList)
-    {
-        SafeDelete(commandBufferHelper);
-    }
-    mCommandBufferHelperFreeList.clear();
+    mCommandBufferRecycler.onDestroy();
 
     mAllocator.destroy();
 
@@ -3052,7 +3048,9 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
         ANGLE_TRY(mCommandProcessor.submitFrame(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
-            signalSemaphore, std::move(currentGarbage), commandPool, submitQueueSerial));
+            signalSemaphore, std::move(currentGarbage),
+            std::move(mCommandBufferRecycler.getCommandBuffersToReset()), commandPool,
+            submitQueueSerial));
     }
     else
     {
@@ -3060,7 +3058,9 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
         ANGLE_TRY(mCommandQueue.submitFrame(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
-            signalSemaphore, std::move(currentGarbage), commandPool, submitQueueSerial));
+            signalSemaphore, std::move(currentGarbage),
+            std::move(mCommandBufferRecycler.getCommandBuffersToReset()), commandPool,
+            submitQueueSerial));
     }
 
     waitSemaphores.clear();
@@ -3150,6 +3150,7 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 angle::Result RendererVk::flushRenderPassCommands(vk::Context *context,
                                                   bool hasProtectedContent,
                                                   const vk::RenderPass &renderPass,
+                                                  vk::CommandPool *commandPool,
                                                   vk::CommandBufferHelper **renderPassCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushRenderPassCommands");
@@ -3157,13 +3158,13 @@ angle::Result RendererVk::flushRenderPassCommands(vk::Context *context,
     std::lock_guard<std::mutex> lock(mCommandQueueMutex);
     if (mFeatures.asyncCommandQueue.enabled)
     {
-        ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(context, hasProtectedContent,
-                                                            renderPass, renderPassCommands));
+        ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(
+            context, hasProtectedContent, renderPass, commandPool, renderPassCommands));
     }
     else
     {
         ANGLE_TRY(mCommandQueue.flushRenderPassCommands(context, hasProtectedContent, renderPass,
-                                                        renderPassCommands));
+                                                        commandPool, renderPassCommands));
     }
 
     return angle::Result::Continue;
@@ -3171,6 +3172,7 @@ angle::Result RendererVk::flushRenderPassCommands(vk::Context *context,
 
 angle::Result RendererVk::flushOutsideRPCommands(vk::Context *context,
                                                  bool hasProtectedContent,
+                                                 vk::CommandPool *commandPool,
                                                  vk::CommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
@@ -3179,12 +3181,12 @@ angle::Result RendererVk::flushOutsideRPCommands(vk::Context *context,
     if (mFeatures.asyncCommandQueue.enabled)
     {
         ANGLE_TRY(mCommandProcessor.flushOutsideRPCommands(context, hasProtectedContent,
-                                                           outsideRPCommands));
+                                                           commandPool, outsideRPCommands));
     }
     else
     {
-        ANGLE_TRY(
-            mCommandQueue.flushOutsideRPCommands(context, hasProtectedContent, outsideRPCommands));
+        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(context, hasProtectedContent, commandPool,
+                                                       outsideRPCommands));
     }
 
     return angle::Result::Continue;
@@ -3214,34 +3216,24 @@ VkResult RendererVk::queuePresent(vk::Context *context,
     return result;
 }
 
-vk::CommandBufferHelper *RendererVk::getCommandBufferHelper(bool hasRenderPass)
+angle::Result RendererVk::getCommandBufferHelper(vk::Context *context,
+                                                 bool hasRenderPass,
+                                                 vk::CommandPool *commandPool,
+                                                 vk::CommandBufferHelper **commandBufferHelperOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferHelperFreeListMutex);
-
-    if (mCommandBufferHelperFreeList.empty())
-    {
-        vk::CommandBufferHelper *commandBuffer = new vk::CommandBufferHelper();
-        commandBuffer->initialize(hasRenderPass);
-        return commandBuffer;
-    }
-    else
-    {
-        vk::CommandBufferHelper *commandBuffer = mCommandBufferHelperFreeList.back();
-        mCommandBufferHelperFreeList.pop_back();
-        commandBuffer->setHasRenderPass(hasRenderPass);
-        return commandBuffer;
-    }
+    return mCommandBufferRecycler.getCommandBufferHelper(context, hasRenderPass, commandPool,
+                                                         commandBufferHelperOut);
 }
 
-void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer)
+void RendererVk::recycleCommandBufferHelper(VkDevice device,
+                                            vk::CommandBufferHelper *commandBuffer,
+                                            vk::CommandPool *commandPool)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleCommandBufferHelper");
     std::lock_guard<std::mutex> lock(mCommandBufferHelperFreeListMutex);
-
-    ASSERT(commandBuffer->empty());
-    commandBuffer->markOpen();
-    mCommandBufferHelperFreeList.push_back(commandBuffer);
+    mCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer, commandPool);
 }
 
 void RendererVk::logCacheStats() const

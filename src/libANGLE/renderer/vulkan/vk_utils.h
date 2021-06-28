@@ -185,13 +185,65 @@ class Context : angle::NonCopyable
     RendererVk *const mRenderer;
 };
 
+using PrimaryCommandBuffer = priv::CommandBuffer<false>;
+
 #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
 using CommandBuffer = priv::SecondaryCommandBuffer;
+ANGLE_NO_DISCARD inline VkResult SecondaryCommandPoolInitialize(CommandPool *pool,
+                                                                VkDevice device,
+                                                                uint32_t queueFamilyIndex,
+                                                                bool hasProtectedContent)
+{
+    return VK_SUCCESS;
+}
+ANGLE_NO_DISCARD inline VkResult SecondaryCommandBufferInitialize(CommandBuffer *secondary,
+                                                                  VkDevice device,
+                                                                  vk::CommandPool *pool,
+                                                                  angle::PoolAllocator *allocator)
+{
+    secondary->initialize(allocator);
+    return VK_SUCCESS;
+}
+ANGLE_NO_DISCARD inline VkResult SecondaryCommandBufferBegin(
+    CommandBuffer *secondary,
+    const VkCommandBufferInheritanceInfo &inheritanceInfo)
+{
+    return VK_SUCCESS;
+}
+ANGLE_NO_DISCARD inline VkResult SecondaryCommandBufferEnd(CommandBuffer *secondary)
+{
+    return VK_SUCCESS;
+}
+inline void CommandBufferExecuteSecondary(PrimaryCommandBuffer *primary, CommandBuffer *secondary)
+{
+    secondary->executeCommands(primary->getHandle());
+}
+constexpr VkSubpassContents kSubpassContents = VK_SUBPASS_CONTENTS_INLINE;
 #else
-using CommandBuffer                          = priv::CommandBuffer;
+using CommandBuffer = priv::CommandBuffer<true>;
+ANGLE_NO_DISCARD VkResult SecondaryCommandPoolInitialize(CommandPool *pool,
+                                                         VkDevice device,
+                                                         uint32_t queueFamilyIndex,
+                                                         bool hasProtectedContent);
+ANGLE_NO_DISCARD VkResult SecondaryCommandBufferInitialize(CommandBuffer *secondary,
+                                                           VkDevice device,
+                                                           vk::CommandPool *pool,
+                                                           angle::PoolAllocator *allocator);
+ANGLE_NO_DISCARD VkResult
+SecondaryCommandBufferBegin(CommandBuffer *secondary,
+                            const VkCommandBufferInheritanceInfo &inheritanceInfo);
+ANGLE_NO_DISCARD inline VkResult SecondaryCommandBufferEnd(CommandBuffer *secondary)
+{
+    return secondary->end();
+}
+inline void CommandBufferExecuteSecondary(PrimaryCommandBuffer *primary, CommandBuffer *secondary)
+{
+    primary->executeCommands(1, secondary);
+}
+constexpr VkSubpassContents kSubpassContents = VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS;
 #endif
 
-using PrimaryCommandBuffer = priv::CommandBuffer;
+using SecondaryCommandBufferList = std::vector<CommandBuffer>;
 
 VkImageAspectFlags GetDepthStencilAspectFlags(const angle::Format &format);
 VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format);
