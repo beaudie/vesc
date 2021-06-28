@@ -908,7 +908,9 @@ CommandBufferHelper::~CommandBufferHelper()
     mFramebuffer.setHandle(VK_NULL_HANDLE);
 }
 
-void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
+angle::Result CommandBufferHelper::initialize(Context *context,
+                                              bool isRenderPassCommandBuffer,
+                                              CommandPool *commandPool)
 {
     ASSERT(mUsedBuffers.empty());
     constexpr size_t kInitialBufferCount = 128;
@@ -917,15 +919,39 @@ void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
     mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
     // Push a scope into the pool allocator so we can easily free and re-init on reset()
     mAllocator.push();
-    mCommandBuffer.initialize(&mAllocator);
+
     mIsRenderPassCommandBuffer = isRenderPassCommandBuffer;
+
+    return initializeCommandBuffer(context, commandPool);
 }
 
-void CommandBufferHelper::reset()
+angle::Result CommandBufferHelper::initializeCommandBuffer(Context *context,
+                                                           CommandPool *commandPool)
+{
+    ANGLE_VK_TRY(context, vk::SecondaryCommandBufferInitialize(&mCommandBuffer,
+                                                               context->getRenderer()->getDevice(),
+                                                               commandPool, &mAllocator));
+
+    if (!mIsRenderPassCommandBuffer)
+    {
+        VkCommandBufferInheritanceInfo inheritanceInfo = {};
+        inheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
+        ANGLE_VK_TRY(context, vk::SecondaryCommandBufferBegin(&mCommandBuffer, inheritanceInfo));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result CommandBufferHelper::reset(Context *context, CommandPool *commandPool)
 {
     mAllocator.pop();
     mAllocator.push();
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
     mCommandBuffer.reset();
+#else
+    context->getRenderer()->resetSecondaryCommandBufferOnSubmit(std::move(mCommandBuffer));
+    ANGLE_TRY(initializeCommandBuffer(context, commandPool));
+#endif
     mUsedBuffers.clear();
 
     if (mIsRenderPassCommandBuffer)
@@ -958,6 +984,8 @@ void CommandBufferHelper::reset()
     ASSERT(!mRebindTransformFeedbackBuffers);
     ASSERT(!mIsTransformFeedbackActiveUnpaused);
     ASSERT(mRenderPassUsedImages.empty());
+
+    return angle::Result::Continue;
 }
 
 bool CommandBufferHelper::usesBuffer(const BufferHelper &buffer) const
@@ -1578,17 +1606,29 @@ void CommandBufferHelper::finalizeDepthStencilImageLayoutAndLoadStore(Context *c
     mDepthStencilImage->resetRenderPassUsageFlags();
 }
 
-void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
-                                          const gl::Rectangle &renderArea,
-                                          const RenderPassDesc &renderPassDesc,
-                                          const AttachmentOpsArray &renderPassAttachmentOps,
-                                          const vk::PackedAttachmentCount colorAttachmentCount,
-                                          const PackedAttachmentIndex depthStencilAttachmentIndex,
-                                          const PackedClearValuesArray &clearValues,
-                                          CommandBuffer **commandBufferOut)
+angle::Result CommandBufferHelper::beginRenderPass(
+    ContextVk *contextVk,
+    const Framebuffer &framebuffer,
+    const gl::Rectangle &renderArea,
+    const RenderPassDesc &renderPassDesc,
+    const AttachmentOpsArray &renderPassAttachmentOps,
+    const vk::PackedAttachmentCount colorAttachmentCount,
+    const PackedAttachmentIndex depthStencilAttachmentIndex,
+    const PackedClearValuesArray &clearValues,
+    CommandBuffer **commandBufferOut)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());
+
+    vk::RenderPass *compatibleRenderPass = nullptr;
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
+
+    VkCommandBufferInheritanceInfo inheritanceInfo = {};
+    inheritanceInfo.sType       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
+    inheritanceInfo.renderPass  = compatibleRenderPass->getHandle();
+    inheritanceInfo.subpass     = 0;
+    inheritanceInfo.framebuffer = framebuffer.getHandle();
+    ANGLE_VK_TRY(contextVk, vk::SecondaryCommandBufferBegin(&mCommandBuffer, inheritanceInfo));
 
     mRenderPassDesc              = renderPassDesc;
     mAttachmentOps               = renderPassAttachmentOps;
@@ -1601,10 +1641,14 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
 
     mRenderPassStarted = true;
     mCounter++;
+
+    return angle::Result::Continue;
 }
 
-void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
+angle::Result CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
+    ANGLE_VK_TRY(contextVk, vk::SecondaryCommandBufferEnd(&mCommandBuffer));
+
     for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
     {
         if (mColorImages[index])
@@ -1619,7 +1663,7 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
     {
-        return;
+        return angle::Result::Continue;
     }
 
     // Do depth stencil layout change and load store optimization.
@@ -1631,6 +1675,8 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     {
         finalizeDepthStencilResolveImageLayout(contextVk);
     }
+
+    return angle::Result::Continue;
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
@@ -1695,15 +1741,16 @@ void CommandBufferHelper::invalidateRenderPassStencilAttachment(
     ExtendRenderPassInvalidateArea(invalidateArea, &mStencilInvalidateArea);
 }
 
-angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &features,
+angle::Result CommandBufferHelper::flushToPrimary(Context *context,
                                                   PrimaryCommandBuffer *primary,
+                                                  CommandPool *secondaryCommandPool,
                                                   const RenderPass *renderPass)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(features, primary);
+    executeBarriers(context->getRenderer()->getFeatures(), primary);
 
     if (mIsRenderPassCommandBuffer)
     {
@@ -1721,19 +1768,18 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
         beginInfo.pClearValues    = mClearValues.data();
 
         // Run commands inside the RenderPass.
-        primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
-        mCommandBuffer.executeCommands(primary->getHandle());
+        primary->beginRenderPass(beginInfo, vk::kSubpassContents);
+        vk::CommandBufferExecuteSecondary(primary, &mCommandBuffer);
         primary->endRenderPass();
     }
     else
     {
-        mCommandBuffer.executeCommands(primary->getHandle());
+        ANGLE_VK_TRY(context, vk::SecondaryCommandBufferEnd(&mCommandBuffer));
+        vk::CommandBufferExecuteSecondary(primary, &mCommandBuffer);
     }
 
     // Restart the command buffer.
-    reset();
-
-    return angle::Result::Continue;
+    return reset(context, secondaryCommandPool);
 }
 
 void CommandBufferHelper::updateRenderPassForResolve(ContextVk *contextVk,
