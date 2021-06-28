@@ -44,7 +44,6 @@ GLSLTest.ZeroShaderLength/*
 GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
 ImageTest.SourceCubeTargetExternal/*
 PBOExtensionTest.*
-SRGBFramebufferTest.Validation/*
 VertexAttributeTest.*
 VulkanExternalImageTest.*
 
