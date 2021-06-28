@@ -148,6 +148,11 @@ find third_party/ -maxdepth 2 -type d ! -path third_party/ \
     ! -path 'third_party/vulkan_memory_allocator*' \
     ! -path 'third_party/zlib*' \
     -print0 | xargs --null rm -rf
+# Special handling for zlib's contrib/ (third_party) folder, since there are some
+# missing license files.
+find third_party/zlib/contrib/ -maxdepth 1 -type d ! -path third_party/zlib/contrib/ \
+    ! -path 'third_party/zlib/contrib/optimizations*' \
+    -print0 | xargs --null rm -rf
 
 git add Android.bp
 
