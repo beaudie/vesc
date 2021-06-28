@@ -54,12 +54,8 @@ GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
 ImageTest.SourceCubeTargetExternal/*
 PBOExtensionTest.*
 SRGBFramebufferTest.Validation/*
-UnpackAlignmentTest.*
-UnpackRowLengthTest.*
-VertexAttributeCachingTest.*
 VertexAttributeOORTest.*
 VertexAttributeTest.*
-ViewportTest.*
 VulkanExternalImageTest.*
 
 WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/*
