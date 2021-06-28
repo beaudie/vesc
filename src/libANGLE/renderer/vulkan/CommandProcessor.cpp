@@ -704,9 +704,7 @@ angle::Result CommandProcessor::flushOutsideRPCommands(Context *context,
     CommandProcessorTask task;
     task.initProcessCommands(*outsideRPCommands, nullptr);
     queueCommand(std::move(task));
-    *outsideRPCommands = mRenderer->getCommandBufferHelper(false);
-
-    return angle::Result::Continue;
+    return mRenderer->getCommandBufferHelper(context, false, outsideRPCommands);
 }
 
 angle::Result CommandProcessor::flushRenderPassCommands(Context *context,
@@ -719,9 +717,7 @@ angle::Result CommandProcessor::flushRenderPassCommands(Context *context,
     CommandProcessorTask task;
     task.initProcessCommands(*renderPassCommands, &renderPass);
     queueCommand(std::move(task));
-    *renderPassCommands = mRenderer->getCommandBufferHelper(true);
-
-    return angle::Result::Continue;
+    return mRenderer->getCommandBufferHelper(context, true, renderPassCommands);
 }
 
 // CommandQueue implementation.
@@ -1134,6 +1130,13 @@ angle::Result CommandQueue::queueSubmit(Context *context,
 
     // Now that we've submitted work, clean up RendererVk garbage
     return renderer->cleanupGarbage(mLastCompletedQueueSerial);
+}
+
+angle::Result CommandQueue::getPrimaryCommands(Context *context, PrimaryCommandBuffer **commandsOut)
+{
+    ANGLE_TRY(ensurePrimaryCommandBufferValid(context));
+    *commandsOut = &mPrimaryCommands;
+    return angle::Result::Continue;
 }
 
 VkResult CommandQueue::queuePresent(egl::ContextPriority contextPriority,

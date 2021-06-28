@@ -224,6 +224,8 @@ class RendererVk : angle::NonCopyable
     angle::Result getCommandBufferOneOff(vk::Context *context,
                                          vk::PrimaryCommandBuffer *commandBufferOut);
 
+    angle::Result getVulkanSecondaryCommandPool(vk::Context *context, vk::CommandPool **poolOut);
+
     // Fire off a single command buffer immediately with default priority.
     // Command buffer must be allocated with getCommandBufferOneOff and is reclaimed.
     angle::Result queueSubmitOneOff(vk::Context *context,
@@ -366,7 +368,9 @@ class RendererVk : angle::NonCopyable
                           egl::ContextPriority priority,
                           const VkPresentInfoKHR &presentInfo);
 
-    vk::CommandBufferHelper *getCommandBufferHelper(bool hasRenderPass);
+    angle::Result getCommandBufferHelper(vk::Context *context,
+                                         bool hasRenderPass,
+                                         vk::CommandBufferHelper **commandBufferHelperOut);
     void recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuffer);
 
     // Process GPU memory reports
@@ -502,6 +506,9 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
+
+    // Only used for Vulkan secondary command buffers.
+    vk::CommandPool mVulkanSecondaryCommandPool;
 
     std::mutex mCommandQueueMutex;
     vk::CommandQueue mCommandQueue;

@@ -291,6 +291,8 @@ class CommandQueue final : public CommandQueueInterface
                               const Fence *fence,
                               Serial submitQueueSerial);
 
+    angle::Result getPrimaryCommands(Context *context, PrimaryCommandBuffer **commandsOut);
+
   private:
     angle::Result releaseToCommandBatch(Context *context,
                                         PrimaryCommandBuffer &&commandBuffer,

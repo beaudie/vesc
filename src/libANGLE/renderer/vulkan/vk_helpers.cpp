@@ -928,7 +928,9 @@ CommandBufferHelper::~CommandBufferHelper()
     mFramebuffer.setHandle(VK_NULL_HANDLE);
 }
 
-void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
+angle::Result CommandBufferHelper::initialize(vk::Context *context,
+                                              const VkCommandBufferInheritanceInfo &inheritanceInfo,
+                                              bool isRenderPassCommandBuffer)
 {
     ASSERT(mUsedBuffers.empty());
     constexpr size_t kInitialBufferCount = 128;
@@ -937,8 +939,15 @@ void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
     mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
     // Push a scope into the pool allocator so we can easily free and re-init on reset()
     mAllocator.push();
-    mCommandBuffer.initialize(&mAllocator);
+
+    RendererVk *renderer           = context->getRenderer();
+    vk::CommandPool *secondaryPool = nullptr;
+    ANGLE_TRY(renderer->getVulkanSecondaryCommandPool(context, &secondaryPool));
+
+    ANGLE_VK_TRY(context, vk::CommandBufferInitialize(&mCommandBuffer, renderer->getDevice(),
+                                                      secondaryPool, inheritanceInfo, &mAllocator));
     mIsRenderPassCommandBuffer = isRenderPassCommandBuffer;
+    return angle::Result::Continue;
 }
 
 void CommandBufferHelper::reset()
@@ -1742,12 +1751,12 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
 
         // Run commands inside the RenderPass.
         primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
-        mCommandBuffer.executeCommands(primary->getHandle());
+        vk::CommandBufferExecuteSecondary(primary, &mCommandBuffer);
         primary->endRenderPass();
     }
     else
     {
-        mCommandBuffer.executeCommands(primary->getHandle());
+        vk::CommandBufferExecuteSecondary(primary, &mCommandBuffer);
     }
 
     // Restart the command buffer.

@@ -769,6 +769,7 @@ void RendererVk::onDestroy(vk::Context *context)
     }
 
     mOneOffCommandPool.destroy(mDevice);
+    mVulkanSecondaryCommandPool.destroy(mDevice);
 
     mPipelineCache.destroy(mDevice);
     mSamplerCache.destroy(this);
@@ -2995,6 +2996,23 @@ angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result RendererVk::getVulkanSecondaryCommandPool(vk::Context *context,
+                                                        vk::CommandPool **poolOut)
+{
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    if (!mVulkanSecondaryCommandPool.valid())
+    {
+        VkCommandPoolCreateInfo createInfo = {};
+        createInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        createInfo.flags =
+            VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;  // VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        ANGLE_VK_TRY(context, mVulkanSecondaryCommandPool.init(mDevice, createInfo));
+    }
+#endif
+    *poolOut = &mVulkanSecondaryCommandPool;
+    return angle::Result::Continue;
+}
+
 angle::Result RendererVk::submitFrame(vk::Context *context,
                                       egl::ContextPriority contextPriority,
                                       std::vector<VkSemaphore> &&waitSemaphores,
@@ -3171,7 +3189,9 @@ VkResult RendererVk::queuePresent(vk::Context *context,
     return result;
 }
 
-vk::CommandBufferHelper *RendererVk::getCommandBufferHelper(bool hasRenderPass)
+angle::Result RendererVk::getCommandBufferHelper(vk::Context *context,
+                                                 bool hasRenderPass,
+                                                 vk::CommandBufferHelper **commandBufferHelperOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferHelperFreeListMutex);
@@ -3179,15 +3199,25 @@ vk::CommandBufferHelper *RendererVk::getCommandBufferHelper(bool hasRenderPass)
     if (mCommandBufferHelperFreeList.empty())
     {
         vk::CommandBufferHelper *commandBuffer = new vk::CommandBufferHelper();
-        commandBuffer->initialize(hasRenderPass);
-        return commandBuffer;
+        *commandBufferHelperOut                = commandBuffer;
+
+        VkCommandBufferInheritanceInfo inheritanceInfo = {};
+        inheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
+        if (hasRenderPass)
+        {
+            inheritanceInfo.renderPass = TODO;
+            inheritanceInfo.subpass    = 0;
+        }
+
+        return commandBuffer->initialize(context, inheritanceInfo, hasRenderPass);
     }
     else
     {
         vk::CommandBufferHelper *commandBuffer = mCommandBufferHelperFreeList.back();
         mCommandBufferHelperFreeList.pop_back();
         commandBuffer->setHasRenderPass(hasRenderPass);
-        return commandBuffer;
+        *commandBufferHelperOut = commandBuffer;
+        return angle::Result::Continue;
     }
 }
 
@@ -3198,7 +3228,10 @@ void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuff
 
     ASSERT(commandBuffer->empty());
     commandBuffer->markOpen();
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    // TODO: recycle secondary command buffers.  Currently they are leaked.
     mCommandBufferHelperFreeList.push_back(commandBuffer);
+#endif
 }
 
 void RendererVk::logCacheStats() const

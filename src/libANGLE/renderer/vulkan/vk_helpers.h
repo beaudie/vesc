@@ -1023,7 +1023,9 @@ class CommandBufferHelper : angle::NonCopyable
     ~CommandBufferHelper();
 
     // General Functions (non-renderPass specific)
-    void initialize(bool isRenderPassCommandBuffer);
+    angle::Result initialize(vk::Context *context,
+                             const VkCommandBufferInheritanceInfo &inheritanceInfo,
+                             bool isRenderPassCommandBuffer);
 
     void bufferRead(ContextVk *contextVk,
                     VkAccessFlags readAccessType,

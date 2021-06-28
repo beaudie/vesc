@@ -752,8 +752,8 @@ angle::Result ContextVk::initialize()
     mEmulateSeamfulCubeMapSampling = shouldEmulateSeamfulCubeMapSampling();
 
     // Assign initial command buffers from queue
-    mOutsideRenderPassCommands = mRenderer->getCommandBufferHelper(false);
-    mRenderPassCommands        = mRenderer->getCommandBufferHelper(true);
+    ANGLE_TRY(mRenderer->getCommandBufferHelper(this, false, &mOutsideRenderPassCommands));
+    ANGLE_TRY(mRenderer->getCommandBufferHelper(this, true, &mRenderPassCommands));
 
     if (mGpuEventsEnabled)
     {

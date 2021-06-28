@@ -185,13 +185,54 @@ class Context : angle::NonCopyable
     RendererVk *const mRenderer;
 };
 
+using PrimaryCommandBuffer = priv::CommandBuffer<false>;
+
 #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
 using CommandBuffer = priv::SecondaryCommandBuffer;
+inline VkResult CommandBufferInitialize(CommandBuffer *secondary,
+                                        VkDevice device,
+                                        vk::CommandPool *pool,
+                                        const VkCommandBufferInheritanceInfo &inheritanceInfo,
+                                        angle::PoolAllocator *allocator)
+{
+    secondary->initialize(allocator);
+    return VK_SUCCESS;
+}
+inline void CommandBufferExecuteSecondary(PrimaryCommandBuffer *primary, CommandBuffer *secondary)
+{
+    secondary->executeCommands(primary->getHandle());
+}
 #else
-using CommandBuffer                          = priv::CommandBuffer;
-#endif
+using CommandBuffer = priv::CommandBuffer<true>;
+inline VkResult CommandBufferInitialize(CommandBuffer *secondary,
+                                        VkDevice device,
+                                        vk::CommandPool *pool,
+                                        const VkCommandBufferInheritanceInfo &inheritanceInfo,
+                                        angle::PoolAllocator *allocator)
+{
+    VkCommandBufferAllocateInfo allocInfo = {};
+    allocInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+    allocInfo.commandBufferCount          = 1;
+    allocInfo.commandPool                 = pool->getHandle();
 
-using PrimaryCommandBuffer = priv::CommandBuffer;
+    VkResult result = secondary->init(device, allocInfo);
+    if (result != VK_SUCCESS)
+    {
+        return result;
+    }
+
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    beginInfo.pInheritanceInfo         = &inheritanceInfo;
+    return secondary->begin(beginInfo);
+}
+inline void CommandBufferExecuteSecondary(PrimaryCommandBuffer *primary, CommandBuffer *secondary)
+{
+    primary->executeCommands(1, secondary);
+}
+#endif
 
 VkImageAspectFlags GetDepthStencilAspectFlags(const angle::Format &format);
 VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format);
