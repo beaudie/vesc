@@ -27,7 +27,8 @@ ColorMaskTest.AMDZeroColorMaskBug/ES3_OpenGL
 WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInVertexBuffer/ES2_Vulkan_SwiftShader
 
 # Crashed tests
-BlitFramebufferANGLETest.*
+BlitFramebufferANGLETest.Reverse*/*
+BlitFramebufferANGLETest.Scissored*/*
 ClipDistanceTest.*
 CopyCompressedTextureTest.InternalFormat/*
 DebugMarkerTest.*
