@@ -26,7 +26,8 @@ GLSLTest.InactiveVaryingInVertexActiveInFragment/*
 ColorMaskTest.AMDZeroColorMaskBug/ES3_OpenGL
 
 # Crashed tests
-BlitFramebufferANGLETest.*
+BlitFramebufferANGLETest.Reverse*/*
+BlitFramebufferANGLETest.Scissored*/*
 ClipDistanceTest.*
 CopyCompressedTextureTest.InternalFormat/*
 DebugMarkerTest.*
