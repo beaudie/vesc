@@ -337,6 +337,11 @@ bool IsPixel4()
     return IsAndroidDevice("Pixel 4");
 }
 
+bool IsPixel4XL()
+{
+    return IsAndroidDevice("Pixel 4 XL");
+}
+
 bool IsNVIDIAShield()
 {
     return IsAndroidDevice("SHIELD Android TV");
@@ -381,7 +386,8 @@ bool IsNVIDIA()
 
 bool IsQualcomm()
 {
-    return IsNexus5X() || IsNexus9() || IsPixelXL() || IsPixel2() || IsPixel2XL();
+    return IsNexus5X() || IsNexus9() || IsPixelXL() || IsPixel2() || IsPixel2XL() || IsPixel4() ||
+           IsPixel4XL();
 }
 
 bool IsConfigAllowlisted(const SystemInfo &systemInfo, const PlatformParameters &param)
