@@ -61,3 +61,6 @@ TYPED_TEST(BitSetIteratorPerfTest, Run)
 }
 
 }  // anonymous namespace
+
+// This is defined here to satisfy the requirements of a shared main file.
+void RegisterTraceTests() {}
