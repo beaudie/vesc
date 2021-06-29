@@ -28,7 +28,7 @@ ANGLE_DISABLE_SUGGEST_OVERRIDE_WARNINGS
 
 // Enable this for debug logging of pre-transform SPIR-V:
 #if !defined(ANGLE_DEBUG_SPIRV_GENERATION)
-#    define ANGLE_DEBUG_SPIRV_GENERATION 0
+#    define ANGLE_DEBUG_SPIRV_GENERATION 1
 #endif  // !defined(ANGLE_DEBUG_SPIRV_GENERATION)
 
 ANGLE_REENABLE_SUGGEST_OVERRIDE_WARNINGS
@@ -178,6 +178,6 @@ ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
     fprintf(stderr, "%s\n%s\n", shaderString, readableSpirv.c_str());
 #endif  // ANGLE_DEBUG_SPIRV_GENERATION
 
-    return true;
+    return false;
 }
 }  // namespace sh
