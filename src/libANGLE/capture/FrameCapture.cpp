@@ -1122,6 +1122,7 @@ void WriteCppReplay(bool compression,
         out << "{\n";
     }
 
+    if (!frameCalls.empty())
     {
         std::stringstream callStream;
 
@@ -3699,7 +3700,10 @@ FrameCapture::FrameCapture()
     }
 }
 
-FrameCapture::~FrameCapture() = default;
+FrameCapture::~FrameCapture()
+{
+    mActiveFrameIndices.clear();
+}
 
 void FrameCapture::copyCompressedTextureData(const gl::Context *context, const CallCapture &call)
 {
@@ -4696,13 +4700,16 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     }
 
     // Note that we currently capture before the start frame to collect shader and program sources.
-    if (!mFrameCalls.empty() && isCaptureActive())
+    if (isCaptureActive())
     {
         if (mIsFirstFrame)
         {
             mCaptureStartFrame = mFrameIndex;
             mIsFirstFrame      = false;
         }
+
+        if (!mFrameCalls.empty())
+            mActiveFrameIndices.insert(getReplayFrameIndex());
         WriteCppReplay(mCompression, mOutDirectory, context, mCaptureLabel, getReplayFrameIndex(),
                        getFrameCount(), mFrameCalls, mSetupCalls, &mResourceTracker, &mBinaryData,
                        mClientArraySizes, mReadBufferSize, mSerializeStateEnabled);
@@ -5098,7 +5105,7 @@ void FrameCapture::writeCppReplayIndexFiles(const gl::Context *context, bool wri
     source << "{\n";
     source << "    switch (frameIndex)\n";
     source << "    {\n";
-    for (uint32_t frameIndex = 1; frameIndex <= frameCount; ++frameIndex)
+    for (uint32_t frameIndex : mActiveFrameIndices)
     {
         source << "        case " << frameIndex << ":\n";
         source << "            " << FmtReplayFunction(contextId, frameIndex) << ";\n";
