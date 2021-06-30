@@ -29,6 +29,9 @@ declare_args() {
   # Fence Waiting
   svdt_enable_vulkan_command_queue_concurrent_wait = true
 
+  # Buffer Suballocations
+  svdt_enable_vulkan_buffer_suballocator = true
+
   # Other Optimizations
   svdt_enable_vulkan_query_get_result_optimization = true
 
@@ -265,6 +268,10 @@ config("angle_vulkan_backend_config") {
   assert(svdt_enable_vulkan_command_queue_2 || !svdt_enable_vulkan_command_queue_concurrent_wait)
   defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT=" +
              "${svdt_enable_vulkan_command_queue_concurrent_wait}" ]
+
+  # Buffer Suballocations
+  defines += [ "SVDT_ENABLE_VULKAN_BUFFER_SUBALLOCATOR=" +
+             "${svdt_enable_vulkan_buffer_suballocator}" ]
 
   # Other Optimizations
   defines += [ "SVDT_ENABLE_VULKAN_QUERY_GET_RESULT_OPTIMIZATION=" +

@@ -845,6 +845,80 @@ class BufferMemory : angle::NonCopyable
     uint8_t *mMappedMemory;
 };
 
+#if SVDT_ENABLE_VULKAN_BUFFER_SUBALLOCATOR
+class BufferSuballocation
+{
+public:
+    ~BufferSuballocation() { ASSERT(!mAllocationIndex); }
+    void release(Serial lastUseSerial = Serial());
+    size_t getOffset() const { return mOffset; }
+    size_t getSize() const { return mSize; }
+    const Buffer &getBuffer() const;
+    uint8_t *getMappedMemory() const { ASSERT(mMappedMemory); return mMappedMemory; }
+    bool isHostVisible() const;
+    bool isHostCoherent() const;
+    angle::Result flush(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
+    angle::Result invalidate(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
+    BufferSerial getOwnerSerial() const;
+private:
+    BufferHelper *mBuffer;
+    class BufferSuballocatorVk *mBufferSuballocator;
+    uintptr_t mAllocationIndex;
+    size_t mOffset;
+    size_t mSize;
+    uint8_t *mMappedMemory;
+    friend class BufferSuballocatorVk;
+};
+
+using BufferSuballocationPtr = std::unique_ptr<BufferSuballocation>;
+
+class BufferSuballocatorVk final
+{
+public:
+    void init(ContextVk *contextVk, size_t initialSize, size_t maxSize, size_t alignment, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryProperty);
+    angle::Result allocate(size_t size, BufferSuballocationPtr *outSuballocation);
+    void release(BufferSuballocation *bufferSuballocation, Serial lastUseSerial);
+    void release();
+private:
+    void free(uintptr_t allocationIndex, size_t offset, size_t size);
+    void releaseFreeSuballocations();
+    class BufferAllocation final
+    {
+    public:
+        ~BufferAllocation() { ASSERT(!mBuffer); }
+        angle::Result init(ContextVk *contextVk, VkBufferUsageFlags usage, size_t size, VkMemoryPropertyFlags memoryProperty);
+        BufferSuballocationPtr allocate(BufferSuballocatorVk *bufferSuballocator, size_t size);
+        void free(size_t offset, size_t size);
+        const BufferHelper *getBufferHelper() const { return mBuffer.get(); }
+        bool CanBeFreed() const { return mFreeRanges.size() == 1 && mFreeRanges.begin()->first == 0 && mFreeRanges.begin()->second == mSize; }
+        void release(ContextVk *contextVk);
+    private:
+        std::map<size_t/*offset*/, size_t/*size*/> mFreeRanges;
+        std::unique_ptr<BufferHelper> mBuffer;
+        uint8_t *mMappedMemory = nullptr;
+        size_t mSize = 0;
+        friend class BufferSuballocatorVk;
+    };
+private:
+    size_t mCurrentSize = 0;
+    size_t mMaxSize = 0;
+    size_t mAlignment = 0;
+    VkBufferUsageFlags mUsage = 0;
+    VkMemoryPropertyFlags mMemoryProperty = 0;
+    ContextVk *mContextVk = nullptr;
+    std::vector<std::unique_ptr<BufferAllocation>> mBufferAllocations;
+    struct PendingFreeSuballocationInfo
+    {
+        Serial mLastUseSerial;
+        uintptr_t mAllocationIndex = 0;
+        size_t mOffset = 0;
+        size_t mSize = 0;
+    };
+    std::vector<PendingFreeSuballocationInfo> mPendingFreeSuballocations;
+    Serial mLastReleaseFreeSuballocationsSerial;
+};
+#endif
+
 class BufferHelper final : public Resource
 {
   public:

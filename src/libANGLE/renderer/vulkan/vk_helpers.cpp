@@ -8311,5 +8311,265 @@ void CommandBufferAccess::onImageWrite(gl::LevelIndex levelStart,
                               levelCount, layerStart, layerCount);
 }
 
+#if SVDT_ENABLE_VULKAN_BUFFER_SUBALLOCATOR
+void BufferSuballocation::release(Serial lastUseSerial)
+{
+    mBufferSuballocator->release(this, lastUseSerial);
+}
+
+const Buffer &BufferSuballocation::getBuffer() const
+{
+    return mBuffer->getBuffer();
+}
+
+bool BufferSuballocation::isHostVisible() const
+{
+    return mBuffer->isHostVisible();
+}
+
+bool BufferSuballocation::isHostCoherent() const
+{
+    return mBuffer->isCoherent();
+}
+
+angle::Result BufferSuballocation::flush(RendererVk *renderer,
+                                                      VkDeviceSize offset,
+                                                      VkDeviceSize size)
+{
+    return mBuffer->flush(renderer, offset, size);
+}
+
+angle::Result BufferSuballocation::invalidate(RendererVk *renderer,
+                                                           VkDeviceSize offset,
+                                                           VkDeviceSize size)
+{
+    return mBuffer->invalidate(renderer, offset, size);
+}
+
+BufferSerial BufferSuballocation::getOwnerSerial() const
+{
+    return mBuffer->getBufferSerial();
+}
+
+void BufferSuballocatorVk::init(ContextVk *contextVk,
+                                size_t initialSize,
+                                size_t maxSize,
+                                size_t alignment,
+                                VkBufferUsageFlags usage,
+                                VkMemoryPropertyFlags memoryProperty)
+{
+    mContextVk = contextVk;
+    mCurrentSize = initialSize;
+    mMaxSize = maxSize;
+    mAlignment = alignment;
+    mUsage = usage;
+    mMemoryProperty = memoryProperty;
+}
+
+angle::Result BufferSuballocatorVk::allocate(size_t size,
+                                             BufferSuballocationPtr *outSuballocation)
+{
+    releaseFreeSuballocations();
+
+    ASSERT(outSuballocation);
+    size = roundUp(size, mAlignment);
+
+    for (auto & bufferAllocation : mBufferAllocations)
+    {
+        *outSuballocation = bufferAllocation->allocate(this, size);
+        if (*outSuballocation)
+        {
+            return angle::Result::Continue;
+        }
+    }
+
+    // use initial size for first allocation
+    if (mBufferAllocations.size())
+    {
+        mCurrentSize = std::min(mCurrentSize * 2, mMaxSize);
+    }
+    std::unique_ptr<BufferAllocation> bufferAllocation = std::make_unique<BufferAllocation>();
+    ANGLE_TRY(bufferAllocation->init(mContextVk, mUsage, std::max(mCurrentSize, size), mMemoryProperty));
+    *outSuballocation = bufferAllocation->allocate(this, size);
+    ASSERT(*outSuballocation);
+    if (!(*outSuballocation))
+    {
+        return angle::Result::Stop;
+    }
+
+    mBufferAllocations.insert(mBufferAllocations.begin(), std::move(bufferAllocation));
+
+    return angle::Result::Continue;
+}
+
+void BufferSuballocatorVk::release(BufferSuballocation *bufferSuballocation, Serial lastUseSerial)
+{
+    releaseFreeSuballocations();
+
+    RendererVk *renderer = mContextVk->getRenderer();
+    if (!lastUseSerial.valid())
+    {
+        lastUseSerial = renderer->getCurrentQueueSerial();
+    }
+    if (lastUseSerial <= renderer->getLastCompletedQueueSerial())
+    {
+        free(bufferSuballocation->mAllocationIndex, bufferSuballocation->mOffset, bufferSuballocation->mSize);
+    }
+    else
+    {
+        mPendingFreeSuballocations.push_back({lastUseSerial, bufferSuballocation->mAllocationIndex, bufferSuballocation->mOffset, bufferSuballocation->mSize});
+    }
+
+    bufferSuballocation->mAllocationIndex = 0;
+}
+
+void BufferSuballocatorVk::releaseFreeSuballocations()
+{
+    RendererVk *renderer = mContextVk->getRenderer();
+    Serial lastCompletedQueueSerial = renderer->getLastCompletedQueueSerial();
+
+    if (lastCompletedQueueSerial == mLastReleaseFreeSuballocationsSerial)
+    {
+        return;
+    }
+    for (auto it = mPendingFreeSuballocations.begin(); it != mPendingFreeSuballocations.end();)
+    {
+        if (it->mLastUseSerial <= lastCompletedQueueSerial)
+        {
+            free(it->mAllocationIndex, it->mOffset, it->mSize);
+            it = mPendingFreeSuballocations.erase(it);
+        }
+        else
+        {
+            break;
+        }
+    }
+    mLastReleaseFreeSuballocationsSerial = lastCompletedQueueSerial;
+}
+
+void BufferSuballocatorVk::free(uintptr_t allocationIndex, size_t offset, size_t size)
+{
+    ASSERT(allocationIndex);
+    ASSERT(mBufferAllocations.size());
+
+    BufferAllocation *allocation = reinterpret_cast<BufferAllocation *>(allocationIndex);
+    allocation->free(offset, size);
+    if (allocation->CanBeFreed() && mBufferAllocations.begin()->get() != allocation)
+    {
+        auto it = std::next(mBufferAllocations.begin(), 1);
+        while (it != mBufferAllocations.end())
+        {
+            if (it->get() == allocation)
+            {
+                allocation->release(mContextVk);
+                it = mBufferAllocations.erase(it);
+                break;
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+}
+
+void BufferSuballocatorVk::release()
+{
+    for (auto &bufferAllocation : mBufferAllocations)
+    {
+        bufferAllocation->release(mContextVk);
+    }
+    mBufferAllocations.clear();
+}
+
+angle::Result BufferSuballocatorVk::BufferAllocation::init(ContextVk *contextVk,
+                                                           VkBufferUsageFlags usage,
+                                                           size_t size,
+                                                           VkMemoryPropertyFlags memoryProperty)
+{
+    // Allocate the buffer
+    ASSERT(!mBuffer);
+    mBuffer = std::make_unique<BufferHelper>();
+
+    VkBufferCreateInfo createInfo    = {};
+    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.flags                 = 0;
+    createInfo.size                  = size;
+    createInfo.usage                 = usage;
+    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+
+    ANGLE_TRY(mBuffer->init(contextVk, createInfo, memoryProperty));
+    ANGLE_TRY(mBuffer->map(contextVk, &mMappedMemory));
+
+    mFreeRanges[0] = size;
+    mSize = size;
+
+    return angle::Result::Continue;
+}
+
+BufferSuballocationPtr BufferSuballocatorVk::BufferAllocation::allocate(BufferSuballocatorVk *bufferSuballocator,
+                                                                        size_t size)
+{
+    BufferSuballocationPtr ret = nullptr;
+
+    for (auto it = mFreeRanges.begin(); it != mFreeRanges.end(); ++it)
+    {
+        if (size <= it->second)
+        {
+            ret = std::make_unique<BufferSuballocation>();
+            ret->mBufferSuballocator = bufferSuballocator;
+            ret->mAllocationIndex = reinterpret_cast<uintptr_t>(this);
+            ret->mBuffer = mBuffer.get();
+            ret->mOffset = it->first;
+            ret->mSize = size;
+            ret->mMappedMemory = mMappedMemory;
+            if (size < it->second)
+            {
+                mFreeRanges[it->first + size] = (it->second - size);
+            }
+            mFreeRanges.erase(it);
+            break;
+        }
+    }
+    return ret;
+}
+
+void BufferSuballocatorVk::BufferAllocation::free(size_t offset, size_t size)
+{
+    auto ret = mFreeRanges.insert({offset, size});
+    auto it = ret.first;
+    // try to merget with previous free range
+    if (it != mFreeRanges.begin())
+    {
+        auto prevIt = std::prev(it, 1);
+        if (prevIt->first + prevIt->second == it->first)
+        {
+            prevIt->second += it->second;
+            mFreeRanges.erase(it);
+            it = prevIt;
+        }
+    }
+    // try to merget with next free range
+    auto nextIt = std::next(it, 1);
+    if (nextIt != mFreeRanges.end())
+    {
+        if (it->first + it->second == nextIt->first)
+        {
+            it->second += nextIt->second;
+            mFreeRanges.erase(nextIt);
+        }
+    }
+}
+
+void BufferSuballocatorVk::BufferAllocation::release(ContextVk *contextVk)
+{
+    mFreeRanges.clear();
+    mMappedMemory = nullptr;
+    mBuffer->release(contextVk->getRenderer());
+    mBuffer = nullptr;
+}
+#endif
 }  // namespace vk
 }  // namespace rx
