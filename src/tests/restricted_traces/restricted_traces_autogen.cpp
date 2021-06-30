@@ -99,6 +99,7 @@
 #include "talking_tom_hero_dash/talking_tom_hero_dash_capture_context1.h"
 #include "temple_run_2/temple_run_2_capture_context1.h"
 #include "temple_run_300/temple_run_300_capture_context1.h"
+#include "toon_blast/toon_blast_capture_context2.h"
 #include "trex_200/trex_200_capture_context1.h"
 #include "whatsapp/whatsapp_capture_context1.h"
 #include "world_of_tanks_blitz/world_of_tanks_blitz_capture_context1.h"
@@ -539,6 +540,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
       temple_run_300::kReplayContextClientMinorVersion, temple_run_300::kReplayFrameStart,
       temple_run_300::kReplayFrameEnd, temple_run_300::kReplayDrawSurfaceWidth,
       temple_run_300::kReplayDrawSurfaceHeight, "temple_run_300"}},
+    {RestrictedTraceID::toon_blast,
+     {toon_blast::kReplayContextClientMajorVersion, toon_blast::kReplayContextClientMinorVersion,
+      toon_blast::kReplayFrameStart, toon_blast::kReplayFrameEnd,
+      toon_blast::kReplayDrawSurfaceWidth, toon_blast::kReplayDrawSurfaceHeight, "toon_blast"}},
     {RestrictedTraceID::trex_200,
      {trex_200::kReplayContextClientMajorVersion, trex_200::kReplayContextClientMinorVersion,
       trex_200::kReplayFrameStart, trex_200::kReplayFrameEnd, trex_200::kReplayDrawSurfaceWidth,
