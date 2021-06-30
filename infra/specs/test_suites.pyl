@@ -667,7 +667,7 @@
           '--print-test-stdout',
         ],
         'merge': {
-          'script': '//tools/perf/process_perf_results.py',
+          'script': '//scripts/process_perf_results.py',
         },
         'android_swarming': {
           'shards': 12,
