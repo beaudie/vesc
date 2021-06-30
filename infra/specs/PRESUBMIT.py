@@ -35,6 +35,7 @@ def _CommonChecks(input_api, output_api):
                 'validate',
                 '-f',
                 config_path,
+                '--skip-dcheck-check',
             ],
             kwargs={'cwd': input_api.PresubmitLocalPath()},
             message=output_api.PresubmitError),
