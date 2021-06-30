@@ -143,7 +143,6 @@
           'win10_nvidia_quadro_p400_stable',
         ],
         'test_suites': {
-          'isolated_scripts': 'angle_perf_isolated_scripts',
         },
       },
       'win7-x64-nvidia': {

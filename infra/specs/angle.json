@@ -470,7 +470,7 @@
         ],
         "isolate_name": "angle_perftests",
         "merge": {
-          "script": "//tools/perf/process_perf_results.py"
+          "script": "//scripts/process_angle_perf_results.py"
         },
         "name": "angle_perftests",
         "swarming": {
@@ -695,7 +695,7 @@
         ],
         "isolate_name": "angle_perftests",
         "merge": {
-          "script": "//tools/perf/process_perf_results.py"
+          "script": "//scripts/process_angle_perf_results.py"
         },
         "name": "angle_perftests",
         "swarming": {
@@ -1359,7 +1359,7 @@
         ],
         "isolate_name": "angle_perftests",
         "merge": {
-          "script": "//tools/perf/process_perf_results.py"
+          "script": "//scripts/process_angle_perf_results.py"
         },
         "name": "angle_perftests",
         "swarming": {
@@ -2123,7 +2123,7 @@
         ],
         "isolate_name": "angle_perftests",
         "merge": {
-          "script": "//tools/perf/process_perf_results.py"
+          "script": "//scripts/process_angle_perf_results.py"
         },
         "name": "angle_perftests",
         "swarming": {
@@ -2902,42 +2902,7 @@
       }
     ]
   },
-  "win10-x64-nvidia-perf": {
-    "isolated_scripts": [
-      {
-        "args": [
-          "angle_perftests",
-          "--non-telemetry=true",
-          "--gtest-benchmark-name=angle_perftests",
-          "-v",
-          "--test-timeout=100",
-          "--batch-size=1",
-          "--bot-mode",
-          "--max-processes=1",
-          "--print-test-stdout"
-        ],
-        "isolate_name": "angle_perftests",
-        "merge": {
-          "script": "//tools/perf/process_perf_results.py"
-        },
-        "name": "angle_perftests",
-        "swarming": {
-          "can_use_on_swarming_builders": true,
-          "containment_type": "AUTO",
-          "dimension_sets": [
-            {
-              "gpu": "10de:1cb3-27.21.14.5148",
-              "os": "Windows-10-18363",
-              "pool": "chromium.tests.gpu"
-            }
-          ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 10
-        },
-        "test_id_prefix": "ninja://src/tests:angle_perftests/"
-      }
-    ]
-  },
+  "win10-x64-nvidia-perf": {},
   "win7-x64-nvidia": {
     "gtest_tests": [
       {
