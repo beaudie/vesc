@@ -2434,11 +2434,23 @@ angle::Result DescriptorPoolHelper::allocateSets(ContextVk *contextVk,
     ASSERT(mFreeDescriptorSets >= descriptorSetCount);
     mFreeDescriptorSets -= descriptorSetCount;
 
-    ANGLE_VK_TRY(contextVk, mDescriptorPool.allocateDescriptorSets(contextVk->getDevice(),
-                                                                   allocInfo, descriptorSetsOut));
+    VkResult result = mDescriptorPool.allocateDescriptorSets(contextVk->getDevice(), allocInfo,
+                                                             descriptorSetsOut);
+    if (result == VK_ERROR_OUT_OF_POOL_MEMORY)
+    {
+        // The Vulkan spec says the following -
+        //    If the allocation fails due to no more space in the descriptor pool, and not because
+        //    of system or device memory exhaustion, then VK_ERROR_OUT_OF_POOL_MEMORY must be
+        //    returned.
+        return angle::Result::Incomplete;
+    }
+    else
+    {
+        ANGLE_VK_TRY(contextVk, result);
 
-    // The pool is still in use every time a new descriptor set is allocated from it.
-    retain(&contextVk->getResourceUseList());
+        // The pool is still in use every time a new descriptor set is allocated from it.
+        retain(&contextVk->getResourceUseList());
+    }
 
     return angle::Result::Continue;
 }
@@ -2510,21 +2522,38 @@ angle::Result DynamicDescriptorPool::allocateSetsAndGetInfo(
     ASSERT(!mDescriptorPools.empty());
     ASSERT(*descriptorSetLayout == mCachedDescriptorSetLayout);
 
-    *newPoolAllocatedOut = false;
+    angle::Result result = angle::Result::Stop;
+    bool needNewPool     = false;
 
     if (!bindingOut->valid() || !bindingOut->get().hasCapacity(descriptorSetCount))
     {
         if (!mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(descriptorSetCount))
         {
-            ANGLE_TRY(allocateNewPool(contextVk));
-            *newPoolAllocatedOut = true;
+            needNewPool = true;
         }
-
-        bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
     }
 
-    return bindingOut->get().allocateSets(contextVk, descriptorSetLayout, descriptorSetCount,
-                                          descriptorSetsOut);
+    if (!needNewPool)
+    {
+        result = mDescriptorPools[mCurrentPoolIndex]->get().allocateSets(
+            contextVk, descriptorSetLayout, descriptorSetCount, descriptorSetsOut);
+        if (result == angle::Result::Incomplete)
+        {
+            // The pool ran out of memory, not a fatal error. Allocate a new pool and try again.
+            needNewPool = true;
+        }
+    }
+
+    if (needNewPool)
+    {
+        ANGLE_TRY(allocateNewPool(contextVk));
+        result = mDescriptorPools[mCurrentPoolIndex]->get().allocateSets(
+            contextVk, descriptorSetLayout, descriptorSetCount, descriptorSetsOut);
+    }
+
+    *newPoolAllocatedOut = needNewPool;
+    bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
+    return result;
 }
 
 angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
