@@ -688,11 +688,18 @@ class PipelineBarrier : angle::NonCopyable
           mDstStageMask(0),
           mMemoryBarrierSrcAccess(0),
           mMemoryBarrierDstAccess(0),
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+          mBufferMemoryBarriers(),
+#endif
           mImageMemoryBarriers()
     {}
     ~PipelineBarrier() = default;
 
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+    bool isEmpty() const { return mBufferMemoryBarriers.empty() && mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0; }
+#else
     bool isEmpty() const { return mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0; }
+#endif
 
     void execute(PrimaryCommandBuffer *primary)
     {
@@ -712,7 +719,12 @@ class PipelineBarrier : angle::NonCopyable
             memoryBarrierCount++;
         }
         primary->pipelineBarrier(
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier,
+            static_cast<uint32_t>(mBufferMemoryBarriers.size()), mBufferMemoryBarriers.data(),
+#else
             mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
+#endif
             static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
 
         reset();
@@ -742,6 +754,13 @@ class PipelineBarrier : angle::NonCopyable
                                      &memoryBarrier, 0, nullptr, 1, &imageBarrier);
         }
 
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+        for (const VkBufferMemoryBarrier &bufferBarrier : mBufferMemoryBarriers)
+        {
+            primary->pipelineBarrier(mSrcStageMask, mDstStageMask, 0, memoryBarrierCount,
+                                     &memoryBarrier, 1, &bufferBarrier, 0, nullptr);
+        }
+#endif
         reset();
     }
 
@@ -754,6 +773,10 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierDstAccess |= other->mMemoryBarrierDstAccess;
         mImageMemoryBarriers.insert(mImageMemoryBarriers.end(), other->mImageMemoryBarriers.begin(),
                                     other->mImageMemoryBarriers.end());
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+        mBufferMemoryBarriers.insert(mBufferMemoryBarriers.end(), other->mBufferMemoryBarriers.begin(),
+                                    other->mBufferMemoryBarriers.end());
+#endif
         other->reset();
     }
 
@@ -778,6 +801,17 @@ class PipelineBarrier : angle::NonCopyable
         mImageMemoryBarriers.push_back(imageMemoryBarrier);
     }
 
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+    void mergeBufferBarrier(VkPipelineStageFlags srcStageMask,
+                           VkPipelineStageFlags dstStageMask,
+                           const VkBufferMemoryBarrier &bufferMemoryBarrier)
+    {
+        ASSERT(bufferMemoryBarrier.pNext == nullptr);
+        mSrcStageMask |= srcStageMask;
+        mDstStageMask |= dstStageMask;
+        mBufferMemoryBarriers.push_back(bufferMemoryBarrier);
+    }
+#endif
     void reset()
     {
         mSrcStageMask           = 0;
@@ -785,6 +819,9 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierSrcAccess = 0;
         mMemoryBarrierDstAccess = 0;
         mImageMemoryBarriers.clear();
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+        mBufferMemoryBarriers.clear();
+#endif
     }
 
     void addDiagnosticsString(std::ostringstream &out) const;
@@ -794,6 +831,9 @@ class PipelineBarrier : angle::NonCopyable
     VkPipelineStageFlags mDstStageMask;
     VkFlags mMemoryBarrierSrcAccess;
     VkFlags mMemoryBarrierDstAccess;
+#if SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
+    std::vector<VkBufferMemoryBarrier> mBufferMemoryBarriers;
+#endif
     std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
 };
 using PipelineBarrierArray = angle::PackedEnumMap<PipelineStage, PipelineBarrier>;

@@ -31,6 +31,7 @@ declare_args() {
 
   # Buffer Suballocations
   svdt_enable_vulkan_buffer_suballocator = true
+  svdt_enable_vulkan_buffer_barrier_support = true
 
   # Other Optimizations
   svdt_enable_vulkan_query_get_result_optimization = true
@@ -272,6 +273,8 @@ config("angle_vulkan_backend_config") {
   # Buffer Suballocations
   defines += [ "SVDT_ENABLE_VULKAN_BUFFER_SUBALLOCATOR=" +
              "${svdt_enable_vulkan_buffer_suballocator}" ]
+  defines += [ "SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT=" +
+             "${svdt_enable_vulkan_buffer_barrier_support}" ]
 
   # Other Optimizations
   defines += [ "SVDT_ENABLE_VULKAN_QUERY_GET_RESULT_OPTIMIZATION=" +
