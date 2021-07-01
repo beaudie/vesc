@@ -773,6 +773,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mPipelineCache.destroy(mDevice);
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
+    mFormatDescriptorCountMap.clear();
 
     for (vk::CommandBufferHelper *commandBufferHelper : mCommandBufferHelperFreeList)
     {
@@ -2511,6 +2512,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // improves 7%.
     ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary, isARM);
 
+    // In order to support immutable samplers tied to external formats, we need to overallocate
+    // descriptor counts for such immutable samplers
+    ANGLE_FEATURE_CONDITION(&mFeatures, externalFormatDefaultDescriptorCount, true);
+
     // When generating SPIR-V, the following workarounds are applied on buggy drivers:
     //
     // - AMD/Windows: Function parameters are passed in temporary variables even if they are already
@@ -3222,6 +3227,50 @@ void RendererVk::logCacheStats() const
     {
         INFO() << "    CacheType " << cacheType++ << ": " << stats.getHitRatio();
     }
+}
+
+uint32_t RendererVk::getFormatDescriptorCount(uint64_t format, bool isExternalFormat)
+{
+    if (isExternalFormat && getFeatures().externalFormatDefaultDescriptorCount.enabled)
+    {
+        // Vulkan spec has a gap in that there is no mechanism available to query the immutable
+        // sampler descriptor count of an external format. For now, return a default value.
+        constexpr uint32_t kExternalFormatDefaultDescriptorCount = 4;
+        return kExternalFormatDefaultDescriptorCount;
+    }
+
+    if (mFormatDescriptorCountMap.count(format) == 0)
+    {
+        // Query device for descriptor count with basic values for most of
+        // VkPhysicalDeviceImageFormatInfo2 members.
+        VkPhysicalDeviceImageFormatInfo2 imageFormatInfo = {};
+        imageFormatInfo.sType  = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
+        imageFormatInfo.format = static_cast<VkFormat>(format);
+        imageFormatInfo.type   = VK_IMAGE_TYPE_2D;
+        imageFormatInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+        imageFormatInfo.usage  = VK_IMAGE_USAGE_SAMPLED_BIT;
+        imageFormatInfo.flags  = 0;
+
+        VkImageFormatProperties imageFormatProperties                            = {};
+        VkSamplerYcbcrConversionImageFormatProperties ycbcrImageFormatProperties = {};
+        ycbcrImageFormatProperties.sType =
+            VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES;
+
+        VkImageFormatProperties2 imageFormatProperties2 = {};
+        imageFormatProperties2.sType                 = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2;
+        imageFormatProperties2.pNext                 = &ycbcrImageFormatProperties;
+        imageFormatProperties2.imageFormatProperties = imageFormatProperties;
+
+        VkResult result = vkGetPhysicalDeviceImageFormatProperties2(
+            mPhysicalDevice, &imageFormatInfo, &imageFormatProperties2);
+
+        ASSERT(result == VK_SUCCESS);
+
+        mFormatDescriptorCountMap[format] =
+            ycbcrImageFormatProperties.combinedImageSamplerDescriptorCount;
+    }
+
+    return mFormatDescriptorCountMap[format];
 }
 
 vk::MemoryReport::MemoryReport()
