@@ -968,6 +968,9 @@ class BufferHelper final : public Resource
     angle::Result init(ContextVk *contextVk,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    void init(ContextVk *contextVk, BufferSuballocationPtr buferSuballocation);
+#endif
     angle::Result initExternal(ContextVk *contextVk,
                                VkMemoryPropertyFlags memoryProperties,
                                const VkBufferCreateInfo &requestedCreateInfo,
@@ -977,11 +980,28 @@ class BufferHelper final : public Resource
     void release(RendererVk *renderer);
 
     BufferSerial getBufferSerial() const { return mSerial; }
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    BufferSerial getOwnerSerial() const
+    {
+        if (mBufferSuballocation)
+        {
+            return mBufferSuballocation->getOwnerSerial();
+        }
+
+        return mSerial;
+    }
+#endif
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
     VkDeviceSize getSize() const { return mSize; }
     uint8_t *getMappedMemory() const
     {
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            return mBufferSuballocation->getMappedMemory();
+        }
+#endif
         ASSERT(isMapped());
         return mMemory.getMappedMemory();
     }
@@ -994,7 +1014,16 @@ class BufferHelper final : public Resource
         return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0;
     }
 
-    bool isMapped() const { return mMemory.getMappedMemory() != nullptr; }
+    bool isMapped() const
+    {
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            return mBufferSuballocation->getMappedMemory() != nullptr;
+        }
+#endif
+        return mMemory.getMappedMemory() != nullptr;
+    }
     bool isExternalBuffer() const { return mMemory.isExternalBuffer(); }
 
     // Also implicitly sets up the correct barriers.
@@ -1005,13 +1034,29 @@ class BufferHelper final : public Resource
 
     angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
     {
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            *ptrOut = mBufferSuballocation->getMappedMemory();
+            return angle::Result::Continue;
+        }
+#endif
         return mMemory.map(contextVk, mSize, ptrOut);
     }
 
     angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
     {
         uint8_t *mapBufPointer;
-        ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            mapBufPointer = mBufferSuballocation->getMappedMemory();
+        }
+        else
+#endif
+        {
+            ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
+        }
         *ptrOut = mapBufPointer + offset;
         return angle::Result::Continue;
     }
@@ -1041,6 +1086,12 @@ class BufferHelper final : public Resource
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    void initBufferMemoryBarrierStruct(VkAccessFlags dstAccessMask,
+                                       VkDeviceSize offset,
+                                       VkDeviceSize size,
+                                       VkBufferMemoryBarrier *bufferMemoryBarrier) const;
+#endif
     bool recordReadBarrier(VkAccessFlags readAccessType,
                            VkPipelineStageFlags readStage,
                            PipelineBarrier *barrier);
@@ -1055,6 +1106,11 @@ class BufferHelper final : public Resource
     // Vulkan objects.
     Buffer mBuffer;
     BufferMemory mMemory;
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    // WA: more easier way to integrate buffer suballocation logic to existing code is
+    // to put bufferSuballocation inside BufferHelper as many of existing logic related to it
+    BufferSuballocationPtr mBufferSuballocation;
+#endif
 
     // Cached properties.
     VkMemoryPropertyFlags mMemoryPropertyFlags;

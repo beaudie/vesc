@@ -623,6 +623,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     VkWriteDescriptorSet &allocWriteDescriptorSet() { return *allocWriteDescriptorSets(1); }
 
     vk::DynamicBuffer *getDefaultUniformStorage() { return &mDefaultUniformStorage; }
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    vk::BufferSuballocatorVk *getDynamicBufferStorage() { return &mDynamicBufferStorage; }
+#endif
     // For testing only.
     void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
 
@@ -1180,6 +1183,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // All staging buffer support is provided by a DynamicBuffer.
     vk::DynamicBuffer mStagingBuffer;
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    vk::BufferSuballocatorVk mDynamicBufferStorage;
+#endif
 
     std::vector<std::string> mCommandBufferDiagnostics;
 

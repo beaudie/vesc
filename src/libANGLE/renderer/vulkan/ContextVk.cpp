@@ -320,7 +320,11 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
 
             VkDeviceSize bufferOffset = 0;
             vk::BufferSerial bufferSerial =
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+                bufferVk->getBufferAndOffset(&bufferOffset).getOwnerSerial();
+#else
                 bufferVk->getBufferAndOffset(&bufferOffset).getBufferSerial();
+#endif
 
             desc->appendBufferSerial(bufferSerial);
             ASSERT(static_cast<uint64_t>(binding.getSize()) <=
@@ -615,6 +619,9 @@ void ContextVk::onDestroy(const gl::Context *context)
     mDefaultUniformStorage.release(mRenderer);
     mEmptyBuffer.release(mRenderer);
     mStagingBuffer.release(mRenderer);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    mDynamicBufferStorage.release();
+#endif
 
     for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
     {
@@ -780,6 +787,18 @@ angle::Result ContextVk::initialize()
                                 mRenderer->getDefaultUniformBufferSize(), true,
                                 vk::DynamicBufferPolicy::FrequentSmallAllocations);
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    constexpr size_t kDynamicBufferStorageInitialSize = 1024u * 1024u;  //  1M
+    constexpr size_t kDynamicBufferStorageMaxSize = 64u * 1024u * 1024u; // 64M
+    mDynamicBufferStorage.init(this, kDynamicBufferStorageInitialSize, kDynamicBufferStorageMaxSize,
+                                    minAlignment,
+                                    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                                    VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+                                    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+                                    VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+                                    VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
+                                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT/* & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT*/);
+#endif
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
     constexpr VkBufferUsageFlags kEmptyBufferUsage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |

@@ -220,6 +220,9 @@ class BufferVk : public BufferImpl
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    bool mUseDynamicBufferStorage = false;
+#endif
 };
 
 }  // namespace rx

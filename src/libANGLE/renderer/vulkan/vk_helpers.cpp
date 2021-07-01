@@ -3646,6 +3646,20 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+void BufferHelper::init(ContextVk *contextVk, BufferSuballocationPtr buferSuballocation)
+{
+    mBufferSuballocation = std::move(buferSuballocation);
+
+    RendererVk *renderer = contextVk->getRenderer();
+
+    mSerial = renderer->getResourceSerialFactory().generateBufferSerial();
+    mSize   = mBufferSuballocation->getSize();
+    mBuffer.setHandle(mBufferSuballocation->getBuffer().getHandle());
+    mMemoryPropertyFlags |= mBufferSuballocation->isHostVisible() ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : 0;
+    mMemoryPropertyFlags |= mBufferSuballocation->isHostCoherent() ? VK_MEMORY_PROPERTY_HOST_COHERENT_BIT : 0;
+}
+#endif
 
 angle::Result BufferHelper::initExternal(ContextVk *contextVk,
                                          VkMemoryPropertyFlags memoryProperties,
@@ -3681,6 +3695,10 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
 
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSize size)
 {
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    ASSERT(!mBufferSuballocation);
+    if (mBufferSuballocation) return angle::Result::Continue;
+#endif
     // Staging buffer memory is non-zero-initialized in 'init'.
     StagingBuffer stagingBuffer;
     ANGLE_TRY(stagingBuffer.init(context, size, StagingUsage::Both));
@@ -3717,6 +3735,15 @@ void BufferHelper::destroy(RendererVk *renderer)
     unmap(renderer);
     mSize = 0;
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    if (mBufferSuballocation)
+    {
+        mBufferSuballocation->release(mUse.usedInRecordedCommands() ? renderer->getCurrentQueueSerial() : mUse.getSerial());
+        mBufferSuballocation = nullptr;
+        mBuffer.setHandle(VK_NULL_HANDLE);
+        return;
+    }
+#endif
     mBuffer.destroy(device);
     mMemory.destroy(renderer);
 }
@@ -3726,6 +3753,15 @@ void BufferHelper::release(RendererVk *renderer)
     unmap(renderer);
     mSize = 0;
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    if (mBufferSuballocation)
+    {
+        mBufferSuballocation->release(mUse.usedInRecordedCommands() ? renderer->getCurrentQueueSerial() : mUse.getSerial());
+        mBufferSuballocation = nullptr;
+        mBuffer.setHandle(VK_NULL_HANDLE);
+        return;
+    }
+#endif
     renderer->collectGarbageAndReinit(&mUse, &mBuffer, mMemory.getExternalMemoryObject(),
                                       mMemory.getMemoryObject());
 }
@@ -3766,7 +3802,16 @@ angle::Result BufferHelper::flush(RendererVk *renderer, VkDeviceSize offset, VkD
     bool hostCoherent = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     if (hostVisible && !hostCoherent)
     {
-        mMemory.flush(renderer, mMemoryPropertyFlags, offset, size);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            ANGLE_TRY(mBufferSuballocation->flush(renderer, offset, size));
+        }
+        else
+#endif
+        {
+            mMemory.flush(renderer, mMemoryPropertyFlags, offset, size);
+        }
     }
     return angle::Result::Continue;
 }
@@ -3777,13 +3822,26 @@ angle::Result BufferHelper::invalidate(RendererVk *renderer, VkDeviceSize offset
     bool hostCoherent = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     if (hostVisible && !hostCoherent)
     {
-        mMemory.invalidate(renderer, mMemoryPropertyFlags, offset, size);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            ANGLE_TRY(mBufferSuballocation->invalidate(renderer, offset, size));
+        }
+        else
+#endif
+        {
+            mMemory.invalidate(renderer, mMemoryPropertyFlags, offset, size);
+        }
     }
     return angle::Result::Continue;
 }
 
 void BufferHelper::changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *commandBuffer)
 {
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    ASSERT(!mBufferSuballocation);
+#endif
+
     VkBufferMemoryBarrier bufferMemoryBarrier = {};
     bufferMemoryBarrier.sType                 = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
     bufferMemoryBarrier.srcAccessMask         = 0;
@@ -3830,6 +3888,25 @@ bool BufferHelper::isReleasedToExternal() const
 #endif
 }
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+ANGLE_INLINE void BufferHelper::initBufferMemoryBarrierStruct(
+    VkAccessFlags dstAccessMask,
+    VkDeviceSize offset,
+    VkDeviceSize size,
+    VkBufferMemoryBarrier *bufferMemoryBarrier) const
+{
+    bufferMemoryBarrier->sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+    bufferMemoryBarrier->pNext               = nullptr;
+    bufferMemoryBarrier->srcAccessMask       = mCurrentWriteAccess;
+    bufferMemoryBarrier->dstAccessMask       = dstAccessMask;
+    bufferMemoryBarrier->srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    bufferMemoryBarrier->dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    bufferMemoryBarrier->buffer              = mBuffer.getHandle();
+    bufferMemoryBarrier->offset              = offset;
+    bufferMemoryBarrier->size                = size;
+}
+#endif
+
 bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
                                      VkPipelineStageFlags readStage,
                                      PipelineBarrier *barrier)
@@ -3840,8 +3917,19 @@ bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
     if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
-                                    readAccessType);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            VkBufferMemoryBarrier bufferMemoryBarrier = {};
+            initBufferMemoryBarrierStruct(readAccessType, mBufferSuballocation->getOffset(), mBufferSuballocation->getSize(), &bufferMemoryBarrier);
+            barrier->mergeBufferBarrier(mCurrentWriteStages, readStage, bufferMemoryBarrier);
+        }
+        else
+#endif
+        {
+            barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
+                                        readAccessType);
+        }
         barrierModified = true;
     }
 
@@ -3862,8 +3950,19 @@ bool BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
            (mCurrentReadStages && mCurrentReadAccess));
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages | mCurrentReadStages, writeStage,
-                                    mCurrentWriteAccess, writeAccessType);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        if (mBufferSuballocation)
+        {
+            VkBufferMemoryBarrier bufferMemoryBarrier = {};
+            initBufferMemoryBarrierStruct(writeAccessType, mBufferSuballocation->getOffset(), mBufferSuballocation->getSize(), &bufferMemoryBarrier);
+            barrier->mergeBufferBarrier(mCurrentWriteStages | mCurrentReadStages, writeStage, bufferMemoryBarrier);
+        }
+        else
+#endif
+        {
+            barrier->mergeMemoryBarrier(mCurrentWriteStages | mCurrentReadStages, writeStage,
+                                        mCurrentWriteAccess, writeAccessType);
+        }
         barrierModified = true;
     }
 

@@ -216,6 +216,13 @@ void BufferVk::release(ContextVk *contextVk)
     {
         mBuffer->release(renderer);
     }
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    else if(mUseDynamicBufferStorage)
+    {
+        mBuffer->release(renderer);
+        delete mBuffer;
+    }
+#endif
     mShadowBuffer.release();
     mBufferPool.release(renderer);
     mHostVisibleBufferPool.release(renderer);
@@ -401,34 +408,51 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    const bool isDynamic = usage == gl::BufferUsage::DynamicDraw ||
+                usage == gl::BufferUsage::DynamicCopy ||
+                usage == gl::BufferUsage::DynamicRead;
+    const bool newUseDynamicBufferStorage = isDynamic && (target == gl::BufferBinding::CopyWrite || target == gl::BufferBinding::Uniform);
+#endif
     // BufferData call is re-specifying the entire buffer
     // Release and init a new mBuffer with this new size
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    if (size != static_cast<size_t>(mState.getSize()) || newUseDynamicBufferStorage != mUseDynamicBufferStorage)
+#else
     if (size != static_cast<size_t>(mState.getSize()))
+#endif
     {
         // Release and re-create the memory and buffer.
         release(contextVk);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+        // change only after release
+        mUseDynamicBufferStorage = newUseDynamicBufferStorage;
 
-        // We could potentially use multiple backing buffers for different usages.
-        // For now keep a single buffer with all relevant usage flags.
-        VkImageUsageFlags usageFlags =
-            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-            VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
-            VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-            VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
-            VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
-
-        if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
+        if (!mUseDynamicBufferStorage)
+#endif
         {
-            usageFlags |= VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT;
+            // We could potentially use multiple backing buffers for different usages.
+            // For now keep a single buffer with all relevant usage flags.
+            VkImageUsageFlags usageFlags =
+                VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+                VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+                VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+
+            if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
+            {
+                usageFlags |= VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT;
+            }
+
+            size_t bufferHelperAlignment = 0;
+            const size_t bufferHelperPoolInitialSize =
+                GetPreferredDynamicBufferInitialSize(renderer, size, usage, &bufferHelperAlignment);
+
+            mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
+                                    bufferHelperPoolInitialSize, memoryPropertyFlags,
+                                    vk::DynamicBufferPolicy::FrequentSmallAllocations);
         }
-
-        size_t bufferHelperAlignment = 0;
-        const size_t bufferHelperPoolInitialSize =
-            GetPreferredDynamicBufferInitialSize(renderer, size, usage, &bufferHelperAlignment);
-
-        mBufferPool.initWithFlags(renderer, usageFlags, bufferHelperAlignment,
-                                  bufferHelperPoolInitialSize, memoryPropertyFlags,
-                                  vk::DynamicBufferPolicy::FrequentSmallAllocations);
 
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
 
@@ -926,16 +950,37 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
     bool needToReleasePreviousBuffers = false;
     size_t size                       = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
 
-    ANGLE_TRY(mBufferPool.allocate(contextVk, size, nullptr, nullptr, &mBufferOffset,
-                                   &needToReleasePreviousBuffers));
-
-    if (needToReleasePreviousBuffers)
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+    if (mUseDynamicBufferStorage)
     {
-        // Release previous buffers
-        mBufferPool.releaseInFlightBuffers(contextVk);
-    }
+        if(mBuffer)
+        {
+            mBuffer->release(contextVk->getRenderer());
+            delete mBuffer;
+            mBuffer = nullptr;
+        }
+        vk::BufferSuballocationPtr suballocation;
+        vk::BufferSuballocatorVk *DynamicBufferStorage = contextVk->getDynamicBufferStorage();
+        ANGLE_TRY(DynamicBufferStorage->allocate(size, &suballocation));
 
-    mBuffer = mBufferPool.getCurrentBuffer();
+        mBufferOffset = suballocation->getOffset();
+        mBuffer = new vk::BufferHelper;
+        mBuffer->init(contextVk, std::move(suballocation));
+    }
+    else
+#endif
+    {
+        ANGLE_TRY(mBufferPool.allocate(contextVk, size, nullptr, nullptr, &mBufferOffset,
+                                    &needToReleasePreviousBuffers));
+
+        if (needToReleasePreviousBuffers)
+        {
+            // Release previous buffers
+            mBufferPool.releaseInFlightBuffers(contextVk);
+        }
+
+        mBuffer = mBufferPool.getCurrentBuffer();
+    }
     ASSERT(mBuffer);
 
     return angle::Result::Continue;
