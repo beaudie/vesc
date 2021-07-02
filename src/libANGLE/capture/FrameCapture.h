@@ -489,6 +489,7 @@ class FrameCaptureShared final : angle::NonCopyable
                                             CallCapture &call,
                                             size_t instanceCount);
     void updateCopyImageSubData(CallCapture &call);
+    void updatePreCallResourceCounts(const CallCapture &call);
 
     static void ReplayCall(gl::Context *context,
                            ReplayContext *replayContext,
@@ -521,6 +522,7 @@ class FrameCaptureShared final : angle::NonCopyable
     HasResourceTypeMap mHasResourceType;
     BufferDataMap mBufferDataMap;
     bool mValidateSerializedState = false;
+    PackedEnumMap<ResourceIDType, uint32_t> mMaxAccessedResourceIDs;
 
     ResourceTracker mResourceTracker;
 
