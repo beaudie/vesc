@@ -41,7 +41,6 @@ def context_header(trace, trace_path):
 
 
 def get_num_frames(trace):
-
     trace_path = src_trace_path(trace)
 
     lo = 99999999
@@ -158,7 +157,8 @@ def main():
         header_file = context_header(trace, trace_path)
 
         if not os.path.exists(header_file):
-            logging.warning('There was a problem tracing %s, could not find header file' % trace)
+            logging.error('There was a problem tracing %s, could not find header file: %s' % trace,
+                          header_file)
             failures += [trace]
         else:
             replace_metadata(header_file, metadata)
@@ -166,6 +166,7 @@ def main():
     if failures:
         print('The following traces failed to re-trace:\n')
         print('\n'.join(['  ' + trace for trace in failures]))
+        return 1
 
     return 0
 
