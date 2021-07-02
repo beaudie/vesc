@@ -12,6 +12,8 @@ import os
 
 usage = """\
 Usage: commit_id.py check                - check if git is present
+       commit_id.py exists <ref_file>    - check if <ref_file> exists, or if git
+                                           is using .git/packed-refs for heads
        commit_id.py position             - print commit position
        commit_id.py gen <file_to_write>  - generate commit.h"""
 
@@ -40,6 +42,17 @@ git_dir_exists = os.path.exists(os.path.join(cwd, '.git', 'HEAD'))
 
 if operation == 'check':
     if git_dir_exists:
+        print("1")
+    else:
+        print("0")
+    sys.exit(0)
+elif operation == 'exists':
+    if len(sys.argv) < 3:
+        sys.exit(usage)
+
+    ref_file_exists = os.path.exists(os.path.join(cwd, sys.argv[2]))
+
+    if ref_file_exists:
         print("1")
     else:
         print("0")

@@ -649,7 +649,18 @@ action("angle_commit_id") {
     branch = read_file(".git/HEAD", "string")
     result = string_split(branch)
     if (result[0] == "ref:") {
-      inputs += [ ".git/" + result[1] ]
+      _ref_file = ".git/" + result[1]
+      if (exec_script("src/commit_id.py",
+                      [
+                        "exists",
+                        _ref_file,
+                      ],
+                      "value") == 1) {
+        inputs += [ _ref_file ]
+      } else {
+        # .git/refs/heads/ is empty and git is instead using .git/packed-refs.  Depend on that file instead.
+        inputs += [ ".git/packed-refs" ]
+      }
     }
   }
 
