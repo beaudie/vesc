@@ -384,7 +384,9 @@ class FrameCapture final : angle::NonCopyable
 
     void reset();
     void maybeOverrideEntryPoint(const gl::Context *context, CallCapture &call);
-    void maybeCapturePreCallUpdates(const gl::Context *context, CallCapture &call);
+    void maybeCapturePreCallUpdates(const gl::Context *context,
+                                    CallCapture &call,
+                                    bool isCallValid);
     void maybeCapturePostCallUpdates(const gl::Context *context);
     void maybeCaptureDrawArraysClientData(const gl::Context *context,
                                           CallCapture &call,
@@ -393,6 +395,7 @@ class FrameCapture final : angle::NonCopyable
                                             CallCapture &call,
                                             size_t instanceCount);
     void updateCopyImageSubData(CallCapture &call);
+    void updatePreCallResourceCounts(const CallCapture &call);
 
     static void ReplayCall(gl::Context *context,
                            ReplayContext *replayContext,
@@ -425,6 +428,7 @@ class FrameCapture final : angle::NonCopyable
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
     BufferDataMap mBufferDataMap;
+    PackedEnumMap<ResourceIDType, uint32_t> mMaxAccessedResourceIDs;
 
     ResourceTracker mResourceTracker;
 
