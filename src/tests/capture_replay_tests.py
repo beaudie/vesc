@@ -565,6 +565,7 @@ class TestBatch():
         returncode, output = child_processes_manager.RunNinja(self.args, replay_build_dir,
                                                               REPLAY_BINARY, True)
         if returncode != 0:
+            info('Replay compile failed: %s' % output)
             self.results.append(
                 GroupedResult(GroupedResult.CompileFailed, "Build replay failed at ninja", output,
                               tests))
