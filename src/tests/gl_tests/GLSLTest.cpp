@@ -2662,6 +2662,62 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
 }
 
+// Test that == and != for vector and matrix types work.
+TEST_P(GLSLTest_ES3, NonScalarEqualOperator)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 color;
+
+uniform float f;
+uniform int i;
+uniform uint u;
+
+void main()
+{
+    mat3x2 m32_1 = mat3x2(vec2(f), vec2(i), vec2(u));
+    mat3x2 m32_2 = mat3x2(m32_1);
+    mat3x2 m32_3 = mat3x2(vec2(i), vec2(u), vec2(f));
+    mat2x3 m23_1 = mat2x3(vec3(f), vec3(i));
+    mat2x3 m23_2 = mat2x3(m23_1);
+    mat2x3 m23_3 = mat2x3(vec3(i), vec3(u));
+    vec2 v2_1 = m32_1[0];
+    vec2 v2_2 = m32_2[0];
+    ivec3 v3_1 = ivec3(transpose(m32_1)[0]);
+    ivec3 v3_2 = ivec3(transpose(m32_2)[0]);
+    uvec4 v4_1 = uvec4(m32_1[1], m32_1[2]);
+    uvec4 v4_2 = uvec4(m32_2[1], m32_2[2]);
+
+    color = vec4((m32_1 == m32_2 ? 0.5 : 0.0) + (m23_1 == m23_2 ? 0.5 : 0.0),
+                 v2_1 == v2_2 ? 1 : 0,
+                 (v3_1 == v3_2 ? 0.5 : 0.0) +
+                    (v4_1 == v4_2 ? 0.5 : 0.0),
+                 (m32_1 != m32_3 ? 0.125 : 0.0) +
+                    (m23_1 != m23_3 ? 0.125 : 0.0) +
+                    (v2_1 != vec2(v3_2) ? 0.25 : 0.0) +
+                    (v3_1 != ivec3(v4_2) ? 0.25 : 0.0) +
+                    (v4_1 != uvec4(v2_1, v2_2) ? 0.25 : 0.0));
+})";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint floc = glGetUniformLocation(program, "f");
+    GLint iloc = glGetUniformLocation(program, "i");
+    GLint uloc = glGetUniformLocation(program, "u");
+    ASSERT_NE(floc, -1);
+    ASSERT_NE(iloc, -1);
+    ASSERT_NE(uloc, -1);
+    glUniform1f(floc, 1.5);
+    glUniform1i(iloc, -123);
+    glUniform1ui(uloc, 456);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+}
+
 // Test that an user-defined function with a large number of float4 parameters doesn't fail due to
 // the function name being too long.
 TEST_P(GLSLTest_ES3, LargeNumberOfFloat4Parameters)
