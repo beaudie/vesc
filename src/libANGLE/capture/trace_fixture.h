@@ -51,11 +51,14 @@ ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
 // Maps from <captured Program ID, captured location> to run-time location.
 using LocationsMap = std::unordered_map<GLuint, std::unordered_map<GLint, GLint>>;
 extern LocationsMap gUniformLocations;
+extern GLint **gUniformLocations2;
 using BlockIndexesMap = std::unordered_map<GLuint, std::unordered_map<GLuint, GLuint>>;
 extern BlockIndexesMap gUniformBlockIndexes;
 extern GLuint gCurrentProgram;
 void UpdateUniformLocation(GLuint program, const char *name, GLint location);
+void UpdateUniformLocation2(GLuint program, const char *name, GLint location);
 void DeleteUniformLocations(GLuint program);
+void DeleteUniformLocations2(GLuint program);
 void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index);
 void UpdateCurrentProgram(GLuint program);
 
