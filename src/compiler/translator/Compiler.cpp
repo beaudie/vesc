@@ -16,6 +16,7 @@
 #include "compiler/translator/IsASTDepthBelowLimit.h"
 #include "compiler/translator/OutputTree.h"
 #include "compiler/translator/ParseContext.h"
+#include "compiler/translator/ValidateArraySizeLimitations.h"
 #include "compiler/translator/ValidateBarrierFunctionCall.h"
 #include "compiler/translator/ValidateClipCullDistance.h"
 #include "compiler/translator/ValidateLimitations.h"
@@ -324,6 +325,12 @@ bool TCompiler::shouldRunLoopAndIndexingValidation(ShCompileOptions compileOptio
            (compileOptions & SH_VALIDATE_LOOP_INDEXING) != 0;
 }
 
+bool TCompiler::shouldLimitArraySizes() const
+{
+    // WebGL shaders limit the total size of array variables.
+    return IsWebGLBasedSpec(mShaderSpec);
+}
+
 bool TCompiler::Init(const ShBuiltInResources &resources)
 {
     SetGlobalPoolAllocator(&allocator);
@@ -581,6 +588,12 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
 
     if (shouldRunLoopAndIndexingValidation(compileOptions) &&
         !ValidateLimitations(root, mShaderType, &mSymbolTable, &mDiagnostics))
+    {
+        return false;
+    }
+
+    if (shouldLimitArraySizes() &&
+        !ValidateArraySizeLimitations(root, &mSymbolTable, &mDiagnostics))
     {
         return false;
     }
