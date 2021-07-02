@@ -5008,6 +5008,78 @@ TEST_P(WebGLCompatibilityTest, EnableCompressedTextureExtensionLossyDecode)
                                               "GL_ANGLE_lossy_etc_decode", true);
 }
 
+// Reject attempts to allocate too-large arrays in shaders.
+// This is an implementation-defined limit - crbug.com/1220237 .
+TEST_P(WebGLCompatibilityTest, ValidateArraySizes)
+{
+    // Note: on macOS with ANGLE's OpenGL backend, getting anywhere
+    // close to this limit causes pathologically slow shader
+    // compilation in the driver. For the "ok" case, therefore, use a
+    // fairly small array.
+    constexpr char kVSArrayOK[] =
+        R"(varying vec4 color;
+const int array_size = 1000;
+void main()
+{
+    const mat2 a = mat2(1.0, 2.0, 3.0, 4.0);
+    const mat2 b = mat2(5.0, 6.0, 7.0, 8.0);
+    mat2 array[array_size];
+    float gray;
+    if ((array[0] == a) && (array[1] == b))
+        color = vec4(gray, gray, gray, 1.0);
+    else
+        color = vec4(1.0, 1.0, 1.0, 1.0);
+})";
+
+    constexpr char kVSArrayTooLarge[] =
+        R"(varying vec4 color;
+// 2 GB / 32 aligned bytes per mat2 = 67108864
+const int array_size = 67108865;
+void main()
+{
+    const mat2 a = mat2(1.0, 2.0, 3.0, 4.0);
+    const mat2 b = mat2(5.0, 6.0, 7.0, 8.0);
+    mat2 array[array_size];
+    float gray;
+    if ((array[0] == a) && (array[1] == b))
+        color = vec4(gray, gray, gray, 1.0);
+    else
+        color = vec4(1.0, 1.0, 1.0, 1.0);
+})";
+
+    constexpr char kVSArrayMuchTooLarge[] =
+        R"(varying vec4 color;
+const int array_size = 795418649;
+void main()
+{
+    const mat2 a = mat2(1.0, 2.0, 3.0, 4.0);
+    const mat2 b = mat2(5.0, 6.0, 7.0, 8.0);
+    mat2 array[array_size];
+    float gray;
+    if ((array[0] == a) && (array[1] == b))
+        color = vec4(gray, gray, gray, 1.0);
+    else
+        color = vec4(1.0, 1.0, 1.0, 1.0);
+})";
+
+    constexpr char kFS[] =
+        R"(precision mediump float;
+varying vec4 color;
+void main()
+{
+    gl_FragColor = vec4(color.r - 0.5, 0.0, 0.0, 1.0);
+})";
+
+    GLuint program = CompileProgram(kVSArrayOK, kFS);
+    EXPECT_NE(0u, program);
+
+    program = CompileProgram(kVSArrayTooLarge, kFS);
+    EXPECT_EQ(0u, program);
+
+    program = CompileProgram(kVSArrayMuchTooLarge, kFS);
+    EXPECT_EQ(0u, program);
+}
+
 // Linking should fail when corresponding vertex/fragment uniform blocks have different precision
 // qualifiers.
 TEST_P(WebGL2CompatibilityTest, UniformBlockPrecisionMismatch)
