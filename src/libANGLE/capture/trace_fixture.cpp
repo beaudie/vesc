@@ -71,9 +71,12 @@ void LoadBinaryData(const char *fileName)
     }
     fclose(fp);
 }
+
+std::unordered_map<GLuint, std::vector<GLint>> gInternalUniformLocationsMap;
 }  // namespace
 
 LocationsMap gUniformLocations;
+GLint **gUniformLocations2;
 BlockIndexesMap gUniformBlockIndexes;
 GLuint gCurrentProgram = 0;
 
@@ -81,10 +84,28 @@ void UpdateUniformLocation(GLuint program, const char *name, GLint location)
 {
     gUniformLocations[program][location] = glGetUniformLocation(program, name);
 }
+
+void UpdateUniformLocation2(GLuint program, const char *name, GLint location)
+{
+    std::vector<GLint> &programLocations = gInternalUniformLocationsMap[program];
+    if (static_cast<GLint>(programLocations.size()) <= location)
+    {
+        programLocations.resize(location + 1, 0);
+    }
+    programLocations[location]  = glGetUniformLocation(program, name);
+    gUniformLocations2[program] = programLocations.data();
+}
+
 void DeleteUniformLocations(GLuint program)
 {
     gUniformLocations.erase(program);
 }
+
+void DeleteUniformLocations2(GLuint program)
+{
+    // No-op. We leave uniform locations around so deleted current programs can still use them.
+}
+
 void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index)
 {
     gUniformBlockIndexes[program][index] = glGetUniformBlockIndex(program, name);
@@ -189,6 +210,9 @@ void InitializeReplay2(const char *binaryDataFileName,
     gTextureMap2           = AllocateZeroedUints(maxTexture);
     gTransformFeedbackMap2 = AllocateZeroedUints(maxTransformFeedback);
     gVertexArrayMap2       = AllocateZeroedUints(maxVertexArray);
+
+    gUniformLocations2 = new GLint *[maxShaderProgram + 1];
+    memset(gUniformLocations2, 0, sizeof(GLint *) * (maxShaderProgram + 1));
 }
 
 void FinishReplay()

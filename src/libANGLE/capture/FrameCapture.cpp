@@ -1278,7 +1278,7 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
         params.addParam(std::move(nameParam));
 
         params.addValueParam("location", ParamType::TGLint, location);
-        callsOut->emplace_back("UpdateUniformLocation", std::move(params));
+        callsOut->emplace_back("UpdateUniformLocation2", std::move(params));
     }
 }
 
@@ -1307,7 +1307,7 @@ void CaptureDeleteUniformLocations(gl::ShaderProgramID program, std::vector<Call
 {
     ParamBuffer params;
     params.addValueParam("program", ParamType::TShaderProgramID, program);
-    callsOut->emplace_back("DeleteUniformLocations", std::move(params));
+    callsOut->emplace_back("DeleteUniformLocations2", std::move(params));
 }
 
 void MaybeCaptureUpdateResourceIDs(std::vector<CallCapture> *callsOut)
@@ -5722,7 +5722,7 @@ void WriteParamValueReplay<ParamType::TUniformLocation>(std::ostream &os,
         return;
     }
 
-    os << "gUniformLocations[";
+    os << "gUniformLocations2[";
 
     // Find the program from the call parameters.
     gl::ShaderProgramID programID;
