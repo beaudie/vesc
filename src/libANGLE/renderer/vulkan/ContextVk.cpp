@@ -4997,6 +4997,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 
     bool anyTextureHasImmutableSampler = false;
     bool recreatePipelineLayout        = false;
+    ImmutableSamplerFormatSet formats  = {};
     for (size_t textureUnit : activeTextures)
     {
         gl::Texture *texture        = textures[textureUnit];
@@ -5074,13 +5075,22 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
             textureVk->getImageViewSubresourceSerial(samplerState);
         mActiveTexturesDesc.update(textureUnit, imageViewSerial, samplerHelper.getSamplerSerial());
 
-        anyTextureHasImmutableSampler =
-            textureVk->getImage().hasImmutableSampler() || anyTextureHasImmutableSampler;
+        if (textureVk->getImage().hasImmutableSampler())
+        {
+            anyTextureHasImmutableSampler = true;
+            formats.insert(textureVk->getImage().getExternalFormat());
+        }
         recreatePipelineLayout =
             textureVk->getAndResetImmutableSamplerDirtyState() || recreatePipelineLayout;
     }
 
     if (anyTextureHasImmutableSampler != mExecutable->usesImmutableSamplers())
+    {
+        recreatePipelineLayout = true;
+    }
+
+    if (mExecutable->usesImmutableSamplers() &&
+        !mExecutable->isImmutableSamplerFormatCompatible(formats))
     {
         recreatePipelineLayout = true;
     }
