@@ -250,6 +250,7 @@ ProgramExecutableVk::ProgramExecutableVk()
       mNumDefaultUniformDescriptors(0),
       mUsesImmutableSamplers(false),
       mImmutableSamplersMaxDescriptorCount(1),
+      mSupportedImmutableSamplerFormats{},
       mUniformBufferDescriptorType(VK_DESCRIPTOR_TYPE_MAX_ENUM),
       mProgram(nullptr),
       mProgramPipeline(nullptr),
@@ -270,6 +271,7 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     }
     mUsesImmutableSamplers               = false;
     mImmutableSamplersMaxDescriptorCount = 1;
+    mSupportedImmutableSamplerFormats.clear();
     mPipelineLayout.reset();
 
     mDescriptorSets.fill(VK_NULL_HANDLE);
@@ -717,6 +719,7 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                     std::max(mImmutableSamplersMaxDescriptorCount,
                              contextVk->getRenderer()->getFormatDescriptorCount(
                                  textureVk->getImage().getExternalFormat(), true));
+                mSupportedImmutableSamplerFormats.insert(textureVk->getImage().getExternalFormat());
             }
             else
             {
