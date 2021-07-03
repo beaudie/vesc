@@ -101,7 +101,8 @@ struct DefaultUniformBlock final : private angle::NonCopyable
 };
 
 // Performance and resource counters.
-using DescriptorSetCountList = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
+using DescriptorSetCountList    = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
+using ImmutableSamplerFormatSet = std::set<uint64_t>;
 
 struct ProgramExecutablePerfCounters
 {
@@ -192,7 +193,13 @@ class ProgramExecutableVk
         return mUniformBufferDescriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     }
 
-    bool usesImmutableSamplers() const { return mUsesImmutableSamplers; }
+    bool usesImmutableSamplers() const { return !mSupportedImmutableSamplerFormats.empty(); }
+
+    bool isImmutableSamplerFormatCompatible(const ImmutableSamplerFormatSet &immutableFormats) const
+    {
+        ASSERT(mSupportedImmutableSamplerFormats.size() > 0);
+        return (mSupportedImmutableSamplerFormats == immutableFormats);
+    }
 
     void accumulateCacheStats(VulkanCacheType cacheType, const CacheStats &cacheStats);
     ProgramExecutablePerfCounters getAndResetObjectPerfCounters();
@@ -278,8 +285,8 @@ class ProgramExecutableVk
 
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
-    bool mUsesImmutableSamplers;
     uint32_t mImmutableSamplersMaxDescriptorCount;
+    ImmutableSamplerFormatSet mSupportedImmutableSamplerFormats;
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
 
