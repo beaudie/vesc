@@ -249,6 +249,7 @@ ProgramExecutableVk::ProgramExecutableVk()
     : mEmptyDescriptorSets{},
       mNumDefaultUniformDescriptors(0),
       mUsesImmutableSamplers(false),
+      mSupportedImmutableSamplerFormats{},
       mUniformBufferDescriptorType(VK_DESCRIPTOR_TYPE_MAX_ENUM),
       mProgram(nullptr),
       mProgramPipeline(nullptr),
@@ -268,6 +269,7 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
         descriptorSetLayout.reset();
     }
     mUsesImmutableSamplers = false;
+    mSupportedImmutableSamplerFormats.clear();
     mPipelineLayout.reset();
 
     mDescriptorSets.fill(VK_NULL_HANDLE);
@@ -701,11 +703,12 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 ASSERT(samplerBinding.boundTextureUnits.size() == 1);
                 // Always take the texture's sampler, that's only way to get to yuv conversion for
                 // externalFormat
-                const vk::Sampler &immutableSampler =
-                    (*activeTextures)[textureUnit].texture->getSampler().get();
+                const TextureVk *textureVk          = (*activeTextures)[textureUnit].texture;
+                const vk::Sampler &immutableSampler = textureVk->getSampler().get();
                 descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
                                 activeStages, &immutableSampler);
                 mUsesImmutableSamplers = true;
+                mSupportedImmutableSamplerFormats.insert(textureVk->getImage().getExternalFormat());
             }
             else
             {
