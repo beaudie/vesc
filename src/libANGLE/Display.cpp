@@ -1513,7 +1513,7 @@ Error Display::destroyContextWithSurfaces(const Thread *thread,
     // Set the previous context back to current
     if (changeContextForDeletion)
     {
-        ANGLE_TRY(makeCurrent(context, currentDrawSurface, currentReadSurface, currentContext));
+        ANGLE_TRY(makeCurrent(nullptr, currentDrawSurface, currentReadSurface, currentContext));
     }
 
     return NoError();
