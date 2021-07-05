@@ -1483,7 +1483,15 @@ Error Display::destroyContextWithSurfaces(const Thread *thread,
                                           Surface *currentDrawSurface,
                                           Surface *currentReadSurface)
 {
+    bool contextIsCurrent = context == currentContext;
+
     size_t refCount = context->getRefCount();
+    if (contextIsCurrent)
+    {
+        // If the contexct is current, ANGLE will hold an extra ref of the context.
+        --refCount;
+    }
+
     if (refCount > 1)
     {
         context->release();
@@ -1491,7 +1499,7 @@ Error Display::destroyContextWithSurfaces(const Thread *thread,
     }
 
     // This is the last reference for this context, so we can destroy it now.
-    bool changeContextForDeletion = context != currentContext;
+    bool changeContextForDeletion = !contextIsCurrent;
 
     // For external context, we cannot change the current native context, and the API user should
     // make sure the native context is current.
@@ -1506,6 +1514,10 @@ Error Display::destroyContextWithSurfaces(const Thread *thread,
     if (changeContextForDeletion)
     {
         ANGLE_TRY(makeCurrent(currentContext, nullptr, nullptr, context));
+        ASSERT(context->getRefCount() == 2);
+        // makCurrent() will add one ref to the context, so we have to remove this ref, and then
+        // below releaseContext(context) call will destroy the context.
+        context->release();
     }
 
     ANGLE_TRY(releaseContext(context));
@@ -1513,7 +1525,7 @@ Error Display::destroyContextWithSurfaces(const Thread *thread,
     // Set the previous context back to current
     if (changeContextForDeletion)
     {
-        ANGLE_TRY(makeCurrent(context, currentDrawSurface, currentReadSurface, currentContext));
+        ANGLE_TRY(makeCurrent(nullptr, currentDrawSurface, currentReadSurface, currentContext));
     }
 
     return NoError();
