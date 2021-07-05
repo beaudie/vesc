@@ -564,14 +564,35 @@ GLuint TextureState::getEnabledLevelCount() const
 
     // The mip chain will have either one or more sequential levels, or max levels,
     // but not a sparse one.
+    Optional<Extents> expectedSize;
     for (size_t descIndex = baseLevel; descIndex < mImageDescs.size();)
     {
-        if (!mImageDescs[descIndex].size.empty())
+        if (mImageDescs[descIndex].size.empty())
         {
-            levelCount++;
+            break;
         }
+        if (expectedSize.valid())
+        {
+            Extents newSize = expectedSize.value();
+            newSize.width   = std::max(1, newSize.width >> 1);
+            newSize.height  = std::max(1, newSize.height >> 1);
+            newSize.depth   = std::max(1, newSize.depth >> 1);
+
+            if (newSize != mImageDescs[descIndex].size)
+            {
+                break;
+            }
+
+            expectedSize = newSize;
+        }
+        else
+        {
+            expectedSize = mImageDescs[descIndex].size;
+        }
+        levelCount++;
         descIndex = (mType == TextureType::CubeMap) ? descIndex + 6 : descIndex + 1;
     }
+
     // The original image already takes account into the levelCount.
     levelCount = std::min(maxLevel - baseLevel + 1, levelCount);
 
