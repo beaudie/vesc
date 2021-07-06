@@ -1239,11 +1239,14 @@ IntelDriverVersion GetIntelDriverVersion(const Optional<LARGE_INTEGER> driverVer
     if (!driverVersion.valid())
         return IntelDriverVersion(0);
 
-    // According to http://www.intel.com/content/www/us/en/support/graphics-drivers/000005654.html,
-    // only the fourth part is necessary since it stands for the driver specific unique version
-    // number.
-    WORD part = LOWORD(driverVersion.value().LowPart);
-    return IntelDriverVersion(part);
+    DWORD lowPart     = driverVersion.value().LowPart;
+    DWORD buildNumber = LOWORD(lowPart);
+    WORD thirdField   = HIWORD(lowPart);
+    if (thirdField >= 100)
+    {
+        buildNumber += thirdField * 10000;
+    }
+    return IntelDriverVersion(buildNumber);
 }
 
 }  // anonymous namespace
@@ -2439,22 +2442,22 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
     ANGLE_FEATURE_CONDITION(features, useSystemMemoryForConstantBuffers, isIntel);
 
     ANGLE_FEATURE_CONDITION(features, callClearTwice,
-                            isIntel && isSkylake && capsVersion < IntelDriverVersion(4771));
+                            isIntel && isSkylake && capsVersion < IntelDriverVersion(1004771));
     ANGLE_FEATURE_CONDITION(features, emulateIsnanFloat,
-                            isIntel && isSkylake && capsVersion < IntelDriverVersion(4542));
+                            isIntel && isSkylake && capsVersion < IntelDriverVersion(1004542));
     ANGLE_FEATURE_CONDITION(
         features, rewriteUnaryMinusOperator,
-        isIntel && (isBroadwell || isHaswell) && capsVersion < IntelDriverVersion(4624));
+        isIntel && (isBroadwell || isHaswell) && capsVersion < IntelDriverVersion(1004624));
 
     ANGLE_FEATURE_CONDITION(features, addMockTextureNoRenderTarget,
-                            isIntel && capsVersion < IntelDriverVersion(4815));
+                            isIntel && capsVersion < IntelDriverVersion(1004815));
 
     // Haswell/Ivybridge drivers occasionally corrupt (small?) (vertex?) texture data uploads.
     ANGLE_FEATURE_CONDITION(features, setDataFasterThanImageUpload,
                             !(isIvyBridge || isBroadwell || isHaswell));
 
     ANGLE_FEATURE_CONDITION(features, disableB5G6R5Support,
-                            (isIntel && capsVersion < IntelDriverVersion(4539)) || isAMD);
+                            (isIntel && capsVersion < IntelDriverVersion(1004539)) || isAMD);
 
     // TODO(jmadill): Disable when we have a fixed driver version.
     // The tiny stencil texture workaround involves using CopySubresource or UpdateSubresource on a
