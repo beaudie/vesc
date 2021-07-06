@@ -2357,11 +2357,6 @@ TEST_P(RobustResourceInitTestES3, BlitDepthStencilAfterClearBuffer)
     ASSERT_GL_NO_ERROR();
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, drawFbo);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(kSize - 1, 0, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(0, kSize - 1, GLColor::red);
-    EXPECT_PIXEL_COLOR_EQ(kSize - 1, kSize - 1, GLColor::red);
-
     // Clear to the same value as robust init, and blit again.
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, readFbo);
     glClearBufferfi(GL_DEPTH_STENCIL, 0, 1.0f, 0);
