@@ -571,7 +571,7 @@ CommandBuffer::CommandBuffer(CommandQueue *cmdQueue) : mCmdQueue(*cmdQueue) {}
 
 CommandBuffer::~CommandBuffer()
 {
-    finish();
+    commit(WaitUntilFinished);
     cleanup();
 }
 
@@ -582,16 +582,21 @@ bool CommandBuffer::ready() const
     return readyImpl();
 }
 
-void CommandBuffer::commit()
+void CommandBuffer::commit(CommandBufferFinishOperation operation)
 {
     std::lock_guard<std::mutex> lg(mLock);
     commitImpl();
-}
-
-void CommandBuffer::finish()
-{
-    commit();
-    [get() waitUntilCompleted];
+    if (operation == WaitUntilScheduled)
+    {
+        // TODO(anglebug.com/5505): when running inside angle_end2end_tests, these
+        // waitUntilScheduled calls are hanging. Not clear why - perhaps the EGLWindow isn't
+        // displayed? - but to keep the test suite running, temporarily stop waiting here.
+        // [get() waitUntilScheduled];
+    }
+    else if (operation == WaitUntilFinished)
+    {
+        [get() waitUntilCompleted];
+    }
 }
 
 void CommandBuffer::present(id<CAMetalDrawable> presentationDrawable)
@@ -793,7 +798,6 @@ void CommandBuffer::commitImpl()
 
     // Do the actual commit
     [get() commit];
-
     mCommitted = true;
 }
 
