@@ -3031,6 +3031,10 @@ TEST_P(UniformBlockWithOneLargeArrayMemberTest, MemberTypeIsVec2)
 // Test uniform block whose member is float type.
 TEST_P(UniformBlockWithOneLargeArrayMemberTest, MemberTypeIsFloat)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     std::ostringstream stream;
     generateArraySizeAndDivisorsDeclaration(stream, false, false, false);
     const std::string &kFS =
