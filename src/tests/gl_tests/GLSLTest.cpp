@@ -1760,6 +1760,9 @@ TEST_P(GLSLTest_ES3, MissingReturnStructOfArrays)
 {
     // TODO(crbug.com/998505): Test failing on Android FYI Release (NVIDIA Shield TV)
     ANGLE_SKIP_TEST_IF(IsNVIDIAShield());
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr char kVS[] =
         "#version 300 es\n"
@@ -5636,6 +5639,9 @@ TEST_P(WebGL2GLSLTest, InitUninitializedStructContainingArrays)
     // Test skipped on Android GLES because local variable initialization is disabled.
     // http://anglebug.com/2046
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr char kFS[] =
         "precision mediump float;\n"
@@ -5743,6 +5749,9 @@ TEST_P(WebGLGLSLTest, InitUninitializedGlobals)
 {
     // http://anglebug.com/2862
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr char kFS[] =
         "precision mediump float;\n"

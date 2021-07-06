@@ -518,7 +518,11 @@ AutoObjCPtr<id<MTLCommandBuffer>> CommandQueue::makeMetalCommandBuffer(uint64_t 
           onCommandBufferCompleted(buf, serial);
         }];
 
-        [metalCmdBuffer enqueue];
+        // While a serial queue is useful for enqueueing work,
+        // it causes all sorts of problems with reserving a slot
+        // before the provokingVertexHelper gets a chance to run in the case
+        // that indicies need to be re-written.
+        //[metalCmdBuffer enqueue];
 
         ASSERT(metalCmdBuffer);
 
@@ -571,7 +575,7 @@ CommandBuffer::CommandBuffer(CommandQueue *cmdQueue) : mCmdQueue(*cmdQueue) {}
 
 CommandBuffer::~CommandBuffer()
 {
-    finish();
+    commit(WaitUntilFinished);
     cleanup();
 }
 
@@ -582,16 +586,20 @@ bool CommandBuffer::ready() const
     return readyImpl();
 }
 
-void CommandBuffer::commit()
+void CommandBuffer::commit(CommandBufferFinishOperation operation)
 {
     std::lock_guard<std::mutex> lg(mLock);
-    commitImpl();
-}
-
-void CommandBuffer::finish()
-{
-    commit();
-    [get() waitUntilCompleted];
+    if (commitImpl())
+    {
+        if (operation == WaitUntilScheduled)
+        {
+            [get() waitUntilScheduled];
+        }
+        else if (operation == WaitUntilFinished)
+        {
+            [get() waitUntilCompleted];
+        }
+    }
 }
 
 void CommandBuffer::present(id<CAMetalDrawable> presentationDrawable)
@@ -775,11 +783,11 @@ bool CommandBuffer::readyImpl() const
     return !mCommitted;
 }
 
-void CommandBuffer::commitImpl()
+bool CommandBuffer::commitImpl()
 {
     if (!readyImpl())
     {
-        return;
+        return false;
     }
 
     // End the current encoder
@@ -793,8 +801,8 @@ void CommandBuffer::commitImpl()
 
     // Do the actual commit
     [get() commit];
-
     mCommitted = true;
+    return true;
 }
 
 void CommandBuffer::forceEndingCurrentEncoder()
