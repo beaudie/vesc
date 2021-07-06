@@ -362,12 +362,13 @@ ExternalImageSiblingImpl *DisplayMtl::createExternalImageSibling(const gl::Conte
 
 gl::Version DisplayMtl::getMaxSupportedESVersion() const
 {
-    // NOTE(hqle): Supports GLES 3.0 on iOS GPU Family 4+ for now.
-#if TARGET_OS_SIMULATOR  // Simulator should be able to support ES3, despite not supporting iOS GPU
-                         // Family 4 in its entirety.
+#if TARGET_OS_SIMULATOR
+    // Simulator should be able to support ES3, despite not supporting iOS GPU
+    // Family 3 in its entirety.
+    // FIXME: None of the feature conditions are checked for simulator support.
     return gl::Version(3, 0);
 #else
-    if (supportsEitherGPUFamily(4, 1))
+    if (supportsEitherGPUFamily(3, 1))
     {
         return mtl::kMaxSupportedGLVersion;
     }
@@ -432,6 +433,30 @@ void DisplayMtl::populateFeatureList(angle::FeatureList *features)
     mFeatures.populateFeatureList(features);
 }
 
+#if TARGET_OS_MACCATALYST
+static bool needsEAGLOnMac()
+{
+#    if defined(__arm64__) || defined(__aarch64__)
+    return true;
+#    else
+    return false;
+#    endif
+}
+#endif
+
+EGLenum DisplayMtl::EGLDrawingBufferTextureTarget()
+{
+#if TARGET_OS_MACCATALYST
+    if (needsEAGLOnMac())
+        return EGL_TEXTURE_2D;
+    return EGL_TEXTURE_RECTANGLE_ANGLE;
+#elif TARGET_OS_OSX
+    return EGL_TEXTURE_RECTANGLE_ANGLE;
+#else
+    return EGL_TEXTURE_2D;
+#endif
+}
+
 egl::ConfigSet DisplayMtl::generateConfigs()
 {
     // NOTE(hqle): generate more config permutations
@@ -455,7 +480,7 @@ egl::ConfigSet DisplayMtl::generateConfigs()
     config.transparentType = EGL_NONE;
 
     // Pbuffer
-    config.bindToTextureTarget = EGL_TEXTURE_2D;
+    config.bindToTextureTarget = EGLDrawingBufferTextureTarget();
     config.maxPBufferWidth     = 4096;
     config.maxPBufferHeight    = 4096;
     config.maxPBufferPixels    = 4096 * 4096;
@@ -725,7 +750,17 @@ void DisplayMtl::ensureCapsInitialized() const
     // Fill in additional limits for UBOs and SSBOs.
     mNativeCaps.maxUniformBufferBindings = mNativeCaps.maxCombinedUniformBlocks;
     mNativeCaps.maxUniformBlockSize      = mtl::kMaxUBOSize;  // Default according to GLES 3.0 spec.
-    mNativeCaps.uniformBufferOffsetAlignment = 1;
+    if ([mMetalDevice supportsFamily:MTLGPUFamilyApple1])
+    {
+        mNativeCaps.uniformBufferOffsetAlignment =
+            16;  // on Apple based GPU's We can ignore data types when setting constant buffer
+                 // alignment at 16.
+    }
+    else
+    {
+        mNativeCaps.uniformBufferOffsetAlignment =
+            256;  // constant buffers on all other GPUs must be aligned to 256.
+    }
 
     mNativeCaps.maxShaderStorageBufferBindings     = 0;
     mNativeCaps.maxShaderStorageBlockSize          = 0;
@@ -977,6 +1012,9 @@ void DisplayMtl::initializeFeatures()
                             !isOSX && !isCatalyst && !isSimulator);
     ANGLE_FEATURE_CONDITION((&mFeatures), rewriteRowMajorMatrices, true);
     ANGLE_FEATURE_CONDITION((&mFeatures), emulateTransformFeedback, true);
+
+    ANGLE_FEATURE_CONDITION((&mFeatures), intelExplicitBoolCastWorkaround,
+                            isIntel() && GetMacOSVersion() < OSVersion(11, 0, 0));
 
     ANGLE_FEATURE_CONDITION((&mFeatures), forceNonCSBaseMipmapGeneration, isIntel());
 
@@ -1244,6 +1282,7 @@ mtl::AutoObjCObj<MTLSharedEventListener> DisplayMtl::getOrCreateSharedEventListe
         ANGLE_MTL_OBJC_SCOPE
         {
             mSharedEventListener = [[[MTLSharedEventListener alloc] init] ANGLE_MTL_AUTORELEASE];
+            ASSERT(mSharedEventListener);  // Failure here most probably means a sandbox issue.
         }
     }
     return mSharedEventListener;
