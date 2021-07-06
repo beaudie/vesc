@@ -1339,13 +1339,18 @@ id<MTLRenderPipelineState> ClearUtils::getClearRenderPipelineState(const gl::Con
     return cache.getRenderPipelineState(contextMtl, pipelineDesc);
 }
 
-void ClearUtils::setupClearWithDraw(const gl::Context *context,
-                                    RenderCommandEncoder *cmdEncoder,
-                                    const ClearRectParams &params)
+angle::Result ClearUtils::setupClearWithDraw(const gl::Context *context,
+                                             RenderCommandEncoder *cmdEncoder,
+                                             const ClearRectParams &params)
 {
     // Generate render pipeline state
     id<MTLRenderPipelineState> renderPipelineState =
         getClearRenderPipelineState(context, cmdEncoder, params);
+    if (renderPipelineState == nil)
+    {
+        // Return early
+        return angle::Result::Stop;
+    }
     ASSERT(renderPipelineState);
     // Setup states
     SetupFullscreenQuadDrawCommonStates(cmdEncoder);
@@ -1379,6 +1384,7 @@ void ClearUtils::setupClearWithDraw(const gl::Context *context,
 
     cmdEncoder->setVertexData(uniformParams, 0);
     cmdEncoder->setFragmentData(uniformParams, 0);
+    return angle::Result::Continue;
 }
 
 angle::Result ClearUtils::clearWithDraw(const gl::Context *context,
@@ -1407,7 +1413,7 @@ angle::Result ClearUtils::clearWithDraw(const gl::Context *context,
         return angle::Result::Continue;
     }
     ContextMtl *contextMtl = GetImpl(context);
-    setupClearWithDraw(context, cmdEncoder, overridedParams);
+    ANGLE_TRY(setupClearWithDraw(context, cmdEncoder, overridedParams));
 
     angle::Result result;
     {
@@ -1543,9 +1549,9 @@ id<MTLRenderPipelineState> ColorBlitUtils::getColorBlitRenderPipelineState(
     return pipelineCache->getRenderPipelineState(contextMtl, pipelineDesc);
 }
 
-void ColorBlitUtils::setupColorBlitWithDraw(const gl::Context *context,
-                                            RenderCommandEncoder *cmdEncoder,
-                                            const ColorBlitParams &params)
+angle::Result ColorBlitUtils::setupColorBlitWithDraw(const gl::Context *context,
+                                                     RenderCommandEncoder *cmdEncoder,
+                                                     const ColorBlitParams &params)
 {
     ASSERT(cmdEncoder->renderPassDesc().numColorAttachments >= 1 && params.src);
 
@@ -1555,6 +1561,11 @@ void ColorBlitUtils::setupColorBlitWithDraw(const gl::Context *context,
     id<MTLRenderPipelineState> renderPipelineState =
         getColorBlitRenderPipelineState(context, cmdEncoder, params);
     ASSERT(renderPipelineState);
+    if (!renderPipelineState)
+    {
+        // return early
+        return angle::Result::Stop;
+    }
     // Setup states
     cmdEncoder->setRenderPipelineState(renderPipelineState);
     cmdEncoder->setDepthStencilState(
@@ -1570,6 +1581,7 @@ void ColorBlitUtils::setupColorBlitWithDraw(const gl::Context *context,
     cmdEncoder->setFragmentSamplerState(contextMtl->getDisplay()->getStateCache().getSamplerState(
                                             contextMtl->getMetalDevice(), samplerDesc),
                                         0, FLT_MAX, 0);
+    return angle::Result::Continue;
 }
 
 angle::Result ColorBlitUtils::blitColorWithDraw(const gl::Context *context,
@@ -1581,7 +1593,7 @@ angle::Result ColorBlitUtils::blitColorWithDraw(const gl::Context *context,
         return angle::Result::Continue;
     }
     ContextMtl *contextMtl = GetImpl(context);
-    setupColorBlitWithDraw(context, cmdEncoder, params);
+    ANGLE_TRY(setupColorBlitWithDraw(context, cmdEncoder, params));
 
     angle::Result result;
     {
@@ -1736,9 +1748,10 @@ id<MTLRenderPipelineState> DepthStencilBlitUtils::getDepthStencilBlitRenderPipel
     return pipelineCache->getRenderPipelineState(contextMtl, pipelineDesc);
 }
 
-void DepthStencilBlitUtils::setupDepthStencilBlitWithDraw(const gl::Context *context,
-                                                          RenderCommandEncoder *cmdEncoder,
-                                                          const DepthStencilBlitParams &params)
+angle::Result DepthStencilBlitUtils::setupDepthStencilBlitWithDraw(
+    const gl::Context *context,
+    RenderCommandEncoder *cmdEncoder,
+    const DepthStencilBlitParams &params)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
 
@@ -1749,7 +1762,10 @@ void DepthStencilBlitUtils::setupDepthStencilBlitWithDraw(const gl::Context *con
     // Generate render pipeline state
     id<MTLRenderPipelineState> renderPipelineState =
         getDepthStencilBlitRenderPipelineState(context, cmdEncoder, params);
-    ASSERT(renderPipelineState);
+    if (!renderPipelineState)
+    {
+        return angle::Result::Stop;
+    }
     // Setup states
     cmdEncoder->setRenderPipelineState(renderPipelineState);
 
@@ -1791,6 +1807,7 @@ void DepthStencilBlitUtils::setupDepthStencilBlitWithDraw(const gl::Context *con
 
     cmdEncoder->setDepthStencilState(contextMtl->getDisplay()->getStateCache().getDepthStencilState(
         contextMtl->getMetalDevice(), dsStateDesc));
+    return angle::Result::Continue;
 }
 
 angle::Result DepthStencilBlitUtils::blitDepthStencilWithDraw(const gl::Context *context,
@@ -1803,7 +1820,7 @@ angle::Result DepthStencilBlitUtils::blitDepthStencilWithDraw(const gl::Context 
     }
     ContextMtl *contextMtl = GetImpl(context);
 
-    setupDepthStencilBlitWithDraw(context, cmdEncoder, params);
+    ANGLE_TRY(setupDepthStencilBlitWithDraw(context, cmdEncoder, params));
 
     angle::Result result;
     {
@@ -2895,6 +2912,10 @@ angle::Result VertexFormatConversionUtils::setupCommonConvertVertexFormatToFloat
     const angle::Format &srcAngleFormat,
     const VertexFormatConvertParams &params)
 {
+    if (pipeline == nullptr)
+    {
+        return angle::Result::Stop;
+    }
     SetPipelineState(cmdEncoder, pipeline);
     SetComputeOrVertexBuffer(cmdEncoder, params.srcBuffer, 0, 1);
     SetComputeOrVertexBufferForWrite(cmdEncoder, params.dstBuffer, 0, 2);
@@ -2943,6 +2964,10 @@ angle::Result VertexFormatConversionUtils::expandVertexFormatComponentsVS(
 
     AutoObjCPtr<id<MTLRenderPipelineState>> pipeline =
         getComponentsExpandRenderPipeline(contextMtl, cmdEncoder);
+    if (pipeline == nullptr)
+    {
+        return angle::Result::Stop;
+    }
 
     ANGLE_TRY(setupCommonExpandVertexFormatComponents(contextMtl, cmdEncoder, pipeline,
                                                       srcAngleFormat, params));
@@ -2966,6 +2991,10 @@ angle::Result VertexFormatConversionUtils::setupCommonExpandVertexFormatComponen
     const angle::Format &srcAngleFormat,
     const VertexFormatConvertParams &params)
 {
+    if (pipeline == nullptr)
+    {
+        return angle::Result::Stop;
+    }
     SetPipelineState(cmdEncoder, pipeline);
     SetComputeOrVertexBuffer(cmdEncoder, params.srcBuffer, 0, 1);
     SetComputeOrVertexBufferForWrite(cmdEncoder, params.dstBuffer, 0, 2);
