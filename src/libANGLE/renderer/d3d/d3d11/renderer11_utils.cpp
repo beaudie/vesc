@@ -1239,11 +1239,14 @@ IntelDriverVersion GetIntelDriverVersion(const Optional<LARGE_INTEGER> driverVer
     if (!driverVersion.valid())
         return IntelDriverVersion(0);
 
-    // According to http://www.intel.com/content/www/us/en/support/graphics-drivers/000005654.html,
-    // only the fourth part is necessary since it stands for the driver specific unique version
-    // number.
-    WORD part = LOWORD(driverVersion.value().LowPart);
-    return IntelDriverVersion(part);
+    DWORD lowPart     = driverVersion.value().LowPart;
+    DWORD buildNumber = LOWORD(lowPart);
+    WORD thirdField   = HIWORD(lowPart);
+    if (thirdField >= 100)
+    {
+        buildNumber += thirdField * 10000;
+    }
+    return IntelDriverVersion(buildNumber);
 }
 
 }  // anonymous namespace
