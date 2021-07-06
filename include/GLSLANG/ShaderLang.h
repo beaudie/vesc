@@ -344,6 +344,9 @@ const ShCompileOptions SH_GENERATE_SPIRV_DIRECTLY = UINT64_C(1) << 58;
 // Generate workarounds in SPIR-V for buggy code.
 const ShCompileOptions SH_GENERATE_SPIRV_WORKAROUNDS = UINT64_C(1) << 59;
 
+// Insert explicit casts for float/double/unsigned/signed int on macOS 10.15 with Intel driver
+const ShCompileOptions SH_ADD_EXPLICIT_BOOL_CASTS = UINT64_C(1) << 60;
+
 // The 64 bits hash function. The first parameter is the input string; the
 // second parameter is the string length.
 using ShHashFunction64 = khronos_uint64_t (*)(const char *, size_t);
