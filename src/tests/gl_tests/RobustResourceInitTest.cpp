@@ -2308,7 +2308,7 @@ TEST_P(RobustResourceInitTestES3, BlitDepthStencilAfterClearBuffer)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsMetal());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLsizei kSize = 16;
 

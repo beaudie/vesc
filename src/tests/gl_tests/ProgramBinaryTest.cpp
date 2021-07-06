@@ -523,6 +523,10 @@ TEST_P(ProgramBinaryES3Test, ActiveUniformShader)
     glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &binaryFormatCount);
     ANGLE_SKIP_TEST_IF(binaryFormatCount == 0);
 
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    // ANGLE_SKIP_TEST_IF(IsMetal());
+
     constexpr char kVS[] =
         "#version 300 es\n"
         "in vec4 position;\n"
