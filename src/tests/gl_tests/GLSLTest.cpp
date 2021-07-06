@@ -1201,8 +1201,6 @@ TEST_P(GLSLTest_ES3, GLVertexIDIntegerTextureDrawArrays)
 {
     // http://anglebug.com/4092
     ANGLE_SKIP_TEST_IF(isSwiftshader());
-    // http://anglebug.com/5232
-    ANGLE_SKIP_TEST_IF(IsMetal());
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
     // TODO(anglebug.com/5491): Failing on iOS, probably related to the ARM Mac failure above.
