@@ -133,21 +133,22 @@ inline bool IsSwiftshader(uint32_t vendorId, uint32_t deviceId)
 
 const char *GetVendorString(uint32_t vendorId);
 
-// Intel
+// For linux, Intel graphics driver version is the Mesa version. The version number has three
+// parts: major revision, minor revision and release number.
+// Currently we only need this on Windows. The last two parts are build number in new driver,
+// while only the last part is build number in legacy driver.
+// See http://www.intel.com/content/www/us/en/support/graphics-drivers/000005654.html for details.
 class IntelDriverVersion
 {
   public:
-    // Currently, We only provide the constructor with one parameter. It mainly used in Intel
-    // version number on windows. If you want to use this class on other platforms, it's easy to
-    // be extended.
-    IntelDriverVersion(uint16_t lastPart);
+    IntelDriverVersion(uint32_t buildNumber);
     bool operator==(const IntelDriverVersion &);
     bool operator!=(const IntelDriverVersion &);
     bool operator<(const IntelDriverVersion &);
     bool operator>=(const IntelDriverVersion &);
 
   private:
-    uint16_t mVersionPart;
+    uint32_t mBuildNumber;
 };
 
 bool IsSandyBridge(uint32_t DeviceId);
