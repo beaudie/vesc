@@ -571,7 +571,7 @@ CommandBuffer::CommandBuffer(CommandQueue *cmdQueue) : mCmdQueue(*cmdQueue) {}
 
 CommandBuffer::~CommandBuffer()
 {
-    finish();
+    commit(WaitUntilFinished);
     cleanup();
 }
 
@@ -582,16 +582,18 @@ bool CommandBuffer::ready() const
     return readyImpl();
 }
 
-void CommandBuffer::commit()
+void CommandBuffer::commit(CommandBufferFinishOperation operation)
 {
     std::lock_guard<std::mutex> lg(mLock);
     commitImpl();
-}
-
-void CommandBuffer::finish()
-{
-    commit();
-    [get() waitUntilCompleted];
+    if (operation == WaitUntilScheduled)
+    {
+        [get() waitUntilScheduled];
+    }
+    else if (operation == WaitUntilFinished)
+    {
+        [get() waitUntilCompleted];
+    }
 }
 
 void CommandBuffer::present(id<CAMetalDrawable> presentationDrawable)
@@ -793,7 +795,6 @@ void CommandBuffer::commitImpl()
 
     // Do the actual commit
     [get() commit];
-
     mCommitted = true;
 }
 

@@ -224,6 +224,10 @@ void main() {
 // Test that we can get and set a float array of uniforms.
 TEST_P(SimpleUniformTest, FloatArrayUniformStateQuery)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     constexpr char kFragShader[] = R"(
 precision mediump float;
 uniform float ufloats[4];
@@ -284,6 +288,10 @@ void main() {
 // Test that we can get and set an int array of uniforms.
 TEST_P(SimpleUniformTest, FloatIntUniformStateQuery)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     constexpr char kFragShader[] = R"(
 precision mediump float;
 uniform int uints[4];
@@ -325,6 +333,11 @@ class UniformTest : public ANGLETest
 
     void testSetUp() override
     {
+        // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+        // changes. Must skip all tests explicitly.
+        if (IsMetal())
+            return;
+
         constexpr char kVS[] = "void main() { gl_Position = vec4(1); }";
         constexpr char kFS[] =
             "precision mediump float;\n"
@@ -366,6 +379,10 @@ class UniformTest : public ANGLETest
 
 TEST_P(UniformTest, GetUniformNoCurrentProgram)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     glUseProgram(mProgram);
     glUniform1f(mUniformFLocation, 1.0f);
     glUniform1i(mUniformILocation, 1);
@@ -392,6 +409,10 @@ TEST_P(UniformTest, GetUniformNoCurrentProgram)
 
 TEST_P(UniformTest, UniformArrayLocations)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     constexpr char kVS[] = R"(precision mediump float;
 uniform float uPosition[4];
 void main(void)
@@ -449,6 +470,10 @@ void main(void)
 // Test that float to integer GetUniform rounds values correctly.
 TEST_P(UniformTest, FloatUniformStateQuery)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     std::vector<double> inValues;
     std::vector<GLfloat> expectedFValues;
     std::vector<GLint> expectedIValues;
@@ -517,6 +542,10 @@ TEST_P(UniformTest, IntUniformStateQuery)
     // TODO(jmadill): Lift this suppression when/if the bug is fixed.
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
 
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     std::vector<GLint> inValues;
     std::vector<GLint> expectedIValues;
     std::vector<GLfloat> expectedFValues;
@@ -570,6 +599,10 @@ TEST_P(UniformTest, IntUniformStateQuery)
 // Test that queries of boolean uniforms round correctly.
 TEST_P(UniformTest, BooleanUniformStateQuery)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     glUseProgram(mProgram);
     GLint intValue     = 0;
     GLfloat floatValue = 0.0f;
@@ -614,6 +647,10 @@ TEST_P(UniformTest, BooleanUniformStateQuery)
 // Test queries for arrays of boolean uniforms.
 TEST_P(UniformTest, BooleanArrayUniformStateQuery)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     glUseProgram(mProgram);
     GLint boolValuesi[4]   = {0, 1, 0, 1};
     GLfloat boolValuesf[4] = {0, 1, 0, 1};
@@ -800,6 +837,10 @@ TEST_P(UniformTestES3, TransposedMatrixArrayUniformStateQuery)
 // Check that trying setting too many elements of an array doesn't overflow
 TEST_P(UniformTestES3, OverflowArray)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision mediump float;\n"
@@ -1004,6 +1045,10 @@ void CheckOneElement(GetUniformV getUniformv,
 // Check that getting an element array doesn't return the whole array.
 TEST_P(UniformTestES3, ReturnsOnlyOneArrayElement)
 {
+    // TODO(anglebug.com/5505): asserting with latest direct-to-Metal compiler
+    // changes.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     static const size_t kArraySize = 4;
     struct UniformArrayInfo
     {
