@@ -124,6 +124,70 @@ class ScopedGLState : angle::NonCopyable
     bool mExited = false;
 };
 
+class ScopedBufferReset : angle::NonCopyable
+{
+  public:
+    ScopedBufferReset(StateManagerGL *stateManager, gl::BufferBinding binding)
+        : mStateManager(stateManager), mBinding(binding)
+    {
+        mBuffer = mStateManager->getBufferID(mBinding);
+    }
+
+    ~ScopedBufferReset() { mStateManager->bindBuffer(mBinding, mBuffer); }
+
+  private:
+    StateManagerGL *mStateManager;
+    gl::BufferBinding mBinding;
+    GLuint mBuffer = 0;
+};
+
+class ScopedVertexArrayReset : angle::NonCopyable
+{
+  public:
+    ScopedVertexArrayReset(StateManagerGL *stateManager) : mStateManager(stateManager)
+    {
+        mVAO      = mStateManager->getVertexArrayID();
+        mVAOState = mStateManager->getVertexArrayState();
+    }
+
+    ~ScopedVertexArrayReset() { mStateManager->bindVertexArray(mVAO, mVAOState); }
+
+  private:
+    StateManagerGL *mStateManager;
+    GLuint mVAO                   = 0;
+    VertexArrayStateGL *mVAOState = nullptr;
+};
+
+class ScopedFramebufferReset : angle::NonCopyable
+{
+  public:
+    ScopedFramebufferReset(StateManagerGL *stateManager) : mStateManager(stateManager)
+    {
+        mReadFramebuffer = stateManager->getFramebufferID(angle::FramebufferBindingRead);
+        mReadFramebuffer = stateManager->getFramebufferID(angle::FramebufferBindingDraw);
+    }
+
+    ~ScopedFramebufferReset()
+    {
+        if (mStateManager->getHasSeparateFramebufferBindings() &&
+            mReadFramebuffer != mDrawFramebuffer)
+        {
+            mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, mReadFramebuffer);
+            mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
+        }
+        else
+        {
+            ASSERT(mReadFramebuffer == mDrawFramebuffer);
+            mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mDrawFramebuffer);
+        }
+    }
+
+  private:
+    StateManagerGL *mStateManager;
+    GLuint mReadFramebuffer = 0;
+    GLuint mDrawFramebuffer = 0;
+};
+
 angle::Result SetClearState(StateManagerGL *stateManager,
                             bool colorClear,
                             bool depthClear,
@@ -863,6 +927,8 @@ angle::Result BlitGL::clearRenderableTexture(const gl::Context *context,
 {
     ANGLE_TRY(initializeResources(context));
 
+    ScopedFramebufferReset framebufferReset(mStateManager);
+
     ClearBindTargetVector bindTargets;
     ClearBindTargetVector unbindTargets;
     GLbitfield clearMask = 0;
@@ -1128,6 +1194,7 @@ angle::Result BlitGL::initializeResources(const gl::Context *context)
 
     ANGLE_GL_TRY(context, mFunctions->genFramebuffers(1, &mScratchFBO));
 
+    ScopedBufferReset bufferReset(mStateManager, gl::BufferBinding::Array);
     ANGLE_GL_TRY(context, mFunctions->genBuffers(1, &mVertexBuffer));
     mStateManager->bindBuffer(gl::BufferBinding::Array, mVertexBuffer);
 
@@ -1143,6 +1210,8 @@ angle::Result BlitGL::initializeResources(const gl::Context *context)
     VertexArrayStateGL *defaultVAOState = mStateManager->getDefaultVAOState();
     if (!mFeatures.syncVertexArraysToDefault.enabled)
     {
+        ScopedVertexArrayReset vaoReset(mStateManager);
+
         ANGLE_GL_TRY(context, mFunctions->genVertexArrays(1, &mVAO));
         mVAOState     = new VertexArrayStateGL(defaultVAOState->attributes.size(),
                                            defaultVAOState->bindings.size());
