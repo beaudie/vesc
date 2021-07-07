@@ -94,7 +94,7 @@ class BindingsBenchmark : public ANGLERenderTest,
 BindingsBenchmark::BindingsBenchmark() : ANGLERenderTest("Bindings", GetParam())
 {
     // Flaky on Windows Intel OpenGL. http://crbug.com/974083
-    if (IsIntel() && GetParam().eglParameters.renderer == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    if (GetParam().eglParameters.renderer == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
     {
         mSkipTest = true;
     }
