@@ -217,9 +217,9 @@ bool GetAsDeclaredStructure(SymbolEnv &symbolEnv,
     if (TIntermDeclaration *declNode = node.getAsDeclarationNode())
     {
         ASSERT(declNode->getChildCount() == 1);
-        TIntermNode &node = *declNode->getChildNode(0);
+        TIntermNode &childNode = *declNode->getChildNode(0);
 
-        if (TIntermSymbol *symbolNode = node.getAsSymbolNode())
+        if (TIntermSymbol *symbolNode = childNode.getAsSymbolNode())
         {
             const TVariable &var = symbolNode->variable();
             const TType &type    = var.getType();
