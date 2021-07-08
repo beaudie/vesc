@@ -2362,6 +2362,48 @@ TEST_P(ImageTest, SourceYUVAHBTargetExternalRGBSampleNoData)
     destroyAndroidHardwareBuffer(source);
 }
 
+TEST_P(ImageTestES3, JasonJason) {
+    EGLWindow *window = getEGLWindow();
+
+    GLubyte kRedColor[] = {255, 0, 0, 255};
+
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM,
+                                              kDefaultAttribs, {{kRedColor, 4}}, &ahb, &ahbImage);
+
+    GLuint ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, &ahbTexture);
+
+    glClearColor(0.f, 0.f, 0.f, 0.f);
+    glClearDepthf(1.0f);
+    glClearStencil(0);
+
+    GLuint fbo = 0;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLuint rbo = 0;
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,  GL_RGBA8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glFinish();
+
+    verifyResults2D(ahbTexture, kRedColor);
+
+    verifyResultAHB(ahb, {{kRedColor, 4}});
+
+    // Clean up
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteRenderbuffers(1, &rbo);
+    glDeleteTextures(1, &ahbTexture);
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
 // Test sampling from a YUV AHB using EXT_yuv_target
 TEST_P(ImageTestES3, SourceYUVAHBTargetExternalYUVSample)
 {
