@@ -1538,7 +1538,7 @@ void TracePerfTest::onReplayDiscardFramebufferEXT(GLenum target,
 void TracePerfTest::swap()
 {
     // Capture a screenshot if enabled.
-    if (gScreenShotDir != nullptr && !mScreenshotSaved)
+    if (gScreenShotDir != nullptr && gScreenShotFrame == mCurrentFrame && !mScreenshotSaved)
     {
         std::stringstream screenshotNameStr;
         screenshotNameStr << gScreenShotDir << GetPathSeparator() << "angle" << mBackend << "_"
