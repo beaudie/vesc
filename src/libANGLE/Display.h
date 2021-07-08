@@ -262,9 +262,6 @@ class Display final : public LabeledObject,
 
     const DisplayState &getState() const { return mState; }
 
-    typedef std::set<gl::Context *> ContextSet;
-    const ContextSet &getContextSet() { return mContextSet; }
-
     const angle::FrontendFeatures &getFrontendFeatures() { return mFrontendFeatures; }
     void overrideFrontendFeatures(const std::vector<std::string> &featureNames, bool enabled);
 
@@ -318,6 +315,7 @@ class Display final : public LabeledObject,
 
     ConfigSet mConfigSet;
 
+    typedef std::set<std::shared_ptr<gl::Context>> ContextSet;
     ContextSet mContextSet;
 
     typedef std::set<Image *> ImageSet;

@@ -336,7 +336,10 @@ using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
 using QueryMap             = ResourceMap<Query, QueryID>;
 using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>;
 
-class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
+class Context final : public egl::LabeledObject,
+                      angle::NonCopyable,
+                      public angle::ObserverInterface,
+                      public std::enable_shared_from_this<Context>
 {
   public:
     Context(egl::Display *display,

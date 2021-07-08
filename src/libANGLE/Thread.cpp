@@ -24,12 +24,7 @@ namespace
 Debug *sDebug = nullptr;
 }  // namespace
 
-Thread::Thread()
-    : mLabel(nullptr),
-      mError(EGL_SUCCESS),
-      mAPI(EGL_OPENGL_ES_API),
-      mContext(static_cast<gl::Context *>(EGL_NO_CONTEXT))
-{}
+Thread::Thread() : mLabel(nullptr), mError(EGL_SUCCESS), mAPI(EGL_OPENGL_ES_API) {}
 
 void Thread::setLabel(EGLLabelKHR label)
 {
@@ -89,37 +84,48 @@ EGLenum Thread::getAPI() const
 
 void Thread::setCurrent(gl::Context *context)
 {
-    mContext = context;
+    if (context)
+    {
+        mContext = context->shared_from_this();
+    }
+    else
+    {
+        mContext.reset();
+    }
 }
 
 Surface *Thread::getCurrentDrawSurface() const
 {
-    if (mContext)
+    if (auto context = mContext.lock())
     {
-        return mContext->getCurrentDrawSurface();
+        return context->getCurrentDrawSurface();
     }
     return nullptr;
 }
 
 Surface *Thread::getCurrentReadSurface() const
 {
-    if (mContext)
+    if (auto context = mContext.lock())
     {
-        return mContext->getCurrentReadSurface();
+        return context->getCurrentReadSurface();
     }
     return nullptr;
 }
 
 gl::Context *Thread::getContext() const
 {
-    return mContext;
+    if (auto context = mContext.lock())
+    {
+        return context.get();
+    }
+    return nullptr;
 }
 
 Display *Thread::getDisplay() const
 {
-    if (mContext)
+    if (auto context = mContext.lock())
     {
-        return mContext->getDisplay();
+        return context->getDisplay();
     }
     return nullptr;
 }

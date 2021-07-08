@@ -773,9 +773,9 @@ void Display::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
 {
     ASSERT(index == kGPUSwitchedSubjectIndex);
     ASSERT(message == angle::SubjectMessage::SubjectChanged);
-    for (ContextSet::iterator ctx = mContextSet.begin(); ctx != mContextSet.end(); ctx++)
+    for (auto &ctx : mContextSet)
     {
-        (*ctx)->onGPUSwitch();
+        ctx->onGPUSwitch();
     }
 }
 
@@ -941,7 +941,8 @@ Error Display::terminate(const Thread *thread)
 
     while (!mContextSet.empty())
     {
-        ANGLE_TRY(destroyContext(thread, *mContextSet.begin()));
+        auto &context = *mContextSet.begin();
+        ANGLE_TRY(destroyContext(thread, context.get()));
     }
 
     ANGLE_TRY(makeCurrent(thread->getContext(), nullptr, nullptr, nullptr));
@@ -1266,13 +1267,12 @@ Error Display::createContext(const Config *configuration,
         }
     }
 
-    gl::Context *context = new gl::Context(this, configuration, shareContext, shareTextures,
-                                           shareSemaphores, cachePointer, clientType, attribs,
-                                           mDisplayExtensions, GetClientExtensions());
-    Error error          = context->initialize();
+    auto context = std::make_shared<gl::Context>(this, configuration, shareContext, shareTextures,
+                                                 shareSemaphores, cachePointer, clientType, attribs,
+                                                 mDisplayExtensions, GetClientExtensions());
+    Error error  = context->initialize();
     if (error.isError())
     {
-        delete context;
         return error;
     }
 
@@ -1281,13 +1281,13 @@ Error Display::createContext(const Config *configuration,
         shareContext->setShared();
     }
 
-    ASSERT(context != nullptr);
-    mContextSet.insert(context);
-
-    context->addRef();
-
     ASSERT(outContext != nullptr);
-    *outContext = context;
+    *outContext = context.get();
+
+    ASSERT(context != nullptr);
+    context->addRef();
+    mContextSet.insert(std::move(context));
+
     return NoError();
 }
 
@@ -1368,9 +1368,9 @@ Error Display::makeCurrent(gl::Context *previousContext,
 
 Error Display::restoreLostDevice()
 {
-    for (ContextSet::iterator ctx = mContextSet.begin(); ctx != mContextSet.end(); ctx++)
+    for (auto &ctx : mContextSet)
     {
-        if ((*ctx)->isResetNotificationEnabled())
+        if (ctx->isResetNotificationEnabled())
         {
             // If reset notifications have been requested, application must delete all contexts
             // first
@@ -1464,8 +1464,7 @@ Error Display::releaseContext(gl::Context *context)
     }
 
     ANGLE_TRY(context->onDestroy(this));
-    mContextSet.erase(context);
-    SafeDelete(context);
+    mContextSet.erase(context->shared_from_this());
 
     return NoError();
 }
@@ -1552,10 +1551,9 @@ void Display::notifyDeviceLost()
         return;
     }
 
-    for (ContextSet::iterator context = mContextSet.begin(); context != mContextSet.end();
-         context++)
+    for (auto &context : mContextSet)
     {
-        (*context)->markContextLost(gl::GraphicsResetStatus::UnknownContextReset);
+        context->markContextLost(gl::GraphicsResetStatus::UnknownContextReset);
     }
 
     mDeviceLost = true;
@@ -1622,7 +1620,8 @@ bool Display::isValidConfig(const Config *config) const
 
 bool Display::isValidContext(const gl::Context *context) const
 {
-    return mContextSet.find(const_cast<gl::Context *>(context)) != mContextSet.end();
+    return mContextSet.find(const_cast<gl::Context *>(context)->shared_from_this()) !=
+           mContextSet.end();
 }
 
 bool Display::isValidSurface(const Surface *surface) const

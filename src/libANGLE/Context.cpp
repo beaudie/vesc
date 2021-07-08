@@ -12,6 +12,7 @@
 
 #include <string.h>
 #include <iterator>
+#include <memory>
 #include <sstream>
 #include <vector>
 
