@@ -262,9 +262,6 @@ class Display final : public LabeledObject,
 
     const DisplayState &getState() const { return mState; }
 
-    typedef std::set<gl::Context *> ContextSet;
-    const ContextSet &getContextSet() { return mContextSet; }
-
     const angle::FrontendFeatures &getFrontendFeatures() { return mFrontendFeatures; }
     void overrideFrontendFeatures(const std::vector<std::string> &featureNames, bool enabled);
 
@@ -318,6 +315,24 @@ class Display final : public LabeledObject,
 
     ConfigSet mConfigSet;
 
+    struct context_ptr_less
+    {
+        using is_transparent = void;
+        bool operator()(const std::shared_ptr<gl::Context> &lhs,
+                        const std::shared_ptr<gl::Context> &rhs) const
+        {
+            return lhs < rhs;
+        }
+        bool operator()(const std::shared_ptr<gl::Context> &lhs, gl::Context *const rhs) const
+        {
+            return lhs.get() < rhs;
+        }
+        bool operator()(gl::Context *const lhs, const std::shared_ptr<gl::Context> &rhs) const
+        {
+            return lhs < rhs.get();
+        }
+    };
+    typedef std::set<std::shared_ptr<gl::Context>, context_ptr_less> ContextSet;
     ContextSet mContextSet;
 
     typedef std::set<Image *> ImageSet;

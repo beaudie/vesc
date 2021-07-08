@@ -62,7 +62,7 @@ class Thread : public LabeledObject
     EGLLabelKHR mLabel;
     EGLint mError;
     EGLenum mAPI;
-    gl::Context *mContext;
+    std::weak_ptr<gl::Context> mContext;
 };
 
 void EnsureDebugAllocated();
