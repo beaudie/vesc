@@ -1968,6 +1968,80 @@ TEST_P(TransformFeedbackTestES31, CaptureArray)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test that vertex only xfb with drawing triangle strip adjacency
+// Test based on KHR-GLES32.core.geometry_shader.adjacency.adjacency_non_indiced_triangle_strip
+// to reproduce xfb issue
+TEST_P(TransformFeedbackTestES31, TriangleStripAdjacency)
+{
+    // Geometry Shader support required to use GL_TRIANGLE_STRIP_ADJACENCY_EXT
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_geometry_shader"));
+
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "in vec2 position;\n"
+        "void main() {\n"
+        "  gl_Position = vec4(position, 0, 1);\n"
+        "}";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "out mediump vec4 color;\n"
+        "void main() {\n"
+        "}";
+
+    std::vector<std::string> tfVaryings;
+    tfVaryings.push_back("gl_Position");
+
+    mProgram = CompileProgramWithTransformFeedback(kVS, kFS, tfVaryings, GL_SEPARATE_ATTRIBS);
+    ASSERT_NE(0u, mProgram);
+
+    glUseProgram(mProgram);
+
+    const std::array<GLfloat, 24> vertices = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+                                              0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+                                              1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(positionLocation, -1);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionLocation);
+
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+
+    glEnable(GL_RASTERIZER_DISCARD);
+    glBeginTransformFeedback(GL_TRIANGLES);
+    glDrawArrays(GL_TRIANGLE_STRIP_ADJACENCY_EXT, 0, 12);
+    glDisable(GL_RASTERIZER_DISCARD);
+    glEndTransformFeedback();
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(0);
+
+    const std::array<GLfloat, 48> expected = {
+        0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f};
+
+    void *mappedBuffer = glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0,
+                                          sizeof(float) * expected.size(), GL_MAP_READ_BIT);
+    ASSERT_NE(nullptr, mappedBuffer);
+
+    float *mappedFloats = static_cast<float *>(mappedBuffer);
+    for (unsigned int cnt = 0; cnt < expected.size(); ++cnt)
+    {
+        EXPECT_EQ(expected[cnt], mappedFloats[cnt]);
+    }
+    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that nonexistent transform feedback varyings don't assert when linking.
 TEST_P(TransformFeedbackTest, NonExistentTransformFeedbackVarying)
 {
