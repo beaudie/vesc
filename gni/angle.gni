@@ -130,6 +130,13 @@ declare_args() {
        (is_linux && (angle_use_x11 || angle_use_vulkan_display) &&
         !is_chromeos) || is_android || is_fuchsia || is_ggp || is_mac)
 
+  # When set to true, ANGLE will not use VK_KHR_surface and VK_KHR_swapchain
+  # extensions. Content can be rendered only off-screen. May be overridden in
+  # build_overrides/angle.gni .
+  if (!defined(angle_use_vulkan_null_display)) {
+    angle_use_vulkan_null_display = false
+  }
+
   # Disable null backend to save space for official build.
   angle_enable_null = !is_official_build
   angle_enable_gl_desktop = !is_android && !is_ios
