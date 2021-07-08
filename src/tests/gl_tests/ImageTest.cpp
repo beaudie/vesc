@@ -2362,6 +2362,32 @@ TEST_P(ImageTest, SourceYUVAHBTargetExternalRGBSampleNoData)
     destroyAndroidHardwareBuffer(source);
 }
 
+TEST_P(ImageTestES3, JasonJason) {
+    EGLWindow *window = getEGLWindow();
+
+    GLubyte kRedColor[] = {255, 0, 0, 255};
+
+    // This test passes if you set the format to AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM
+
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM,
+                                              kDefaultAttribs, {{kRedColor, 4}}, &ahb, &ahbImage);
+
+    GLuint ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, &ahbTexture);
+
+    verifyResults2D(ahbTexture, kRedColor);
+
+    verifyResultAHB(ahb, {{kRedColor, 4}});
+
+    // Clean up
+    glDeleteTextures(1, &ahbTexture);
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
 // Test sampling from a YUV AHB using EXT_yuv_target
 TEST_P(ImageTestES3, SourceYUVAHBTargetExternalYUVSample)
 {
