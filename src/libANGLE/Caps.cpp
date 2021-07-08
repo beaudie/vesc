@@ -1055,8 +1055,6 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_texture_rectangle"] = enableableDisablableExtension(&Extensions::textureRectangle);
         map["GL_EXT_geometry_shader"] = enableableExtension(&Extensions::geometryShaderEXT);
         map["GL_OES_geometry_shader"] = enableableExtension(&Extensions::geometryShaderOES);
-        map["GL_ANGLE_explicit_context_gles1"] = enableableExtension(&Extensions::explicitContextGles1);
-        map["GL_ANGLE_explicit_context"] = enableableExtension(&Extensions::explicitContext);
         map["GL_KHR_parallel_shader_compile"] = enableableExtension(&Extensions::parallelShaderCompile);
         map["GL_EXT_separate_shader_objects"] = enableableExtension(&Extensions::separateShaderObjects);
         map["GL_OES_texture_storage_multisample_2d_array"] = enableableExtension(&Extensions::textureStorageMultisample2DArrayOES);
