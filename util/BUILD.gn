@@ -263,7 +263,6 @@ if (is_win && !angle_is_winuwp) {
 
     if (is_clang) {
       cflags_cc = [
-        "-Wno-c++98-compat-extra-semi",
         "-Wno-missing-declarations",
         "-Wno-switch",
       ]
