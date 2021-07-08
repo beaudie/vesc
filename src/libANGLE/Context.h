@@ -740,7 +740,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     GLenum mResetStrategy;
     const bool mRobustAccess;
     const bool mSurfacelessSupported;
-    const bool mExplicitContextAvailable;
     egl::Surface *mCurrentDrawSurface;
     egl::Surface *mCurrentReadSurface;
     egl::Display *mDisplay;
