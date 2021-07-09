@@ -961,6 +961,7 @@ void State::setStencilParams(GLenum stencilFunc, GLint stencilRef, GLuint stenci
         mStencilRef               = stencilRef;
         mDepthStencil.stencilMask = stencilMask;
         mDirtyBits.set(DIRTY_BIT_STENCIL_FUNCS_FRONT);
+        mDirtyBits.set(DIRTY_BIT_STENCIL_WRITEMASK_FRONT);
     }
 }
 
@@ -975,6 +976,7 @@ void State::setStencilBackParams(GLenum stencilBackFunc,
         mStencilBackRef               = stencilBackRef;
         mDepthStencil.stencilBackMask = stencilBackMask;
         mDirtyBits.set(DIRTY_BIT_STENCIL_FUNCS_BACK);
+        mDirtyBits.set(DIRTY_BIT_STENCIL_WRITEMASK_BACK);
     }
 }
 
