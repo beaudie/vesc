@@ -2382,10 +2382,172 @@ TEST_P(ImageTestES3, JasonJason) {
 
     verifyResultAHB(ahb, {{kRedColor, 4}});
 
+
     // Clean up
     glDeleteTextures(1, &ahbTexture);
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
+}
+
+#define EXPECT_STENCIL_EQ(x, y, expected) \
+    do                                                                              \
+    {                                                                               \
+        GLubyte actual;                                                             \
+        glReadPixels((x), (y), 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, &actual);  \
+        EXPECT_GL_NO_ERROR();                                                       \
+        EXPECT_EQ((expected), actual);                                              \
+    } while (0)
+
+TEST_P(ImageTestES3, JasonJasonStencil) {
+    //EGLWindow *window = getEGLWindow();
+
+    int width = 40;
+    int height = 40;
+
+    GLuint fbo = 0;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLuint colorRbo = 0;
+    glGenRenderbuffers(1, &colorRbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, colorRbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,  GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRbo);
+    glClearColor(0.f, 0.f, 0.f, 0.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLuint stencilRbo = 0;
+    glGenRenderbuffers(1, &stencilRbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, stencilRbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,  GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencilRbo);
+    glClearStencil(0);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    glViewport(0, 0, width, height);
+
+    glEnable(GL_SCISSOR_TEST);
+
+    // Set entire framebuffer to color=black and stencil=0.
+    glScissor(0, 0, width, height);
+    glClearColor(0.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
+    glClearStencil(0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    EXPECT_PIXEL_NEAR(10, 10, 0, 0, 0, 0, 1); // Bot left
+    EXPECT_PIXEL_NEAR(30, 10, 0, 0, 0, 0, 1); // Bot right
+    EXPECT_PIXEL_NEAR(10, 30, 0, 0, 0, 0, 1); // Top left
+    EXPECT_PIXEL_NEAR(30, 30, 0, 0, 0, 0, 1); // Top right
+    EXPECT_STENCIL_EQ(10, 10, 0); // Bot left
+    EXPECT_STENCIL_EQ(30, 10, 0); // Bot right
+    EXPECT_STENCIL_EQ(10, 30, 0); // Top left
+    EXPECT_STENCIL_EQ(30, 30, 0); // Top right
+
+    // Set top left of framebuffer to color=red and stencil=1
+    glScissor(0, height / 2, width / 2, height / 2);
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearStencil(1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    EXPECT_PIXEL_NEAR(10, 10,   0,   0,   0,   0, 1); // Bot left
+    EXPECT_PIXEL_NEAR(30, 10,   0,   0,   0,   0, 1); // Bot right
+    EXPECT_PIXEL_NEAR(10, 30, 255,   0,   0, 255, 1); // Top left
+    EXPECT_PIXEL_NEAR(30, 30,   0,   0,   0,   0, 1); // Top right
+    EXPECT_STENCIL_EQ(10, 10, 0); // Bot left
+    EXPECT_STENCIL_EQ(30, 10, 0); // Bot right
+    EXPECT_STENCIL_EQ(10, 30, 1); // Top left
+    EXPECT_STENCIL_EQ(30, 30, 0); // Top right
+
+
+    // Set bot right of framebuffer to color=green and stencil=3
+    glScissor(width / 2, 0, width / 2, height / 2);
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClearStencil(3);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    EXPECT_PIXEL_NEAR(10, 10,   0,   0,   0,   0, 1); // Bot left
+    EXPECT_PIXEL_NEAR(30, 10,   0, 255,   0, 255, 1); // Bot right
+    EXPECT_PIXEL_NEAR(10, 30, 255,   0,   0, 255, 1); // Top left
+    EXPECT_PIXEL_NEAR(30, 30,   0,   0,   0,   0, 1); // Top right
+    EXPECT_STENCIL_EQ(10, 10, 0); // Bot left
+    EXPECT_STENCIL_EQ(30, 10, 3); // Bot right
+    EXPECT_STENCIL_EQ(10, 30, 1); // Top left
+    EXPECT_STENCIL_EQ(30, 30, 0); // Top right
+
+    // Set top right of framebuffer to color=blue and stencil=2
+    glScissor(width / 2, height / 2, width / 2, height / 2);
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClearStencil(2);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    EXPECT_PIXEL_NEAR(10, 10,   0,   0,   0,   0, 1); // Bot left
+    EXPECT_PIXEL_NEAR(30, 10,   0, 255,   0, 255, 1); // Bot right
+    EXPECT_PIXEL_NEAR(10, 30, 255,   0,   0, 255, 1); // Top left
+    EXPECT_PIXEL_NEAR(30, 30,   0,   0, 255, 255, 1); // Top right
+    EXPECT_STENCIL_EQ(10, 10, 0); // Bot left
+    EXPECT_STENCIL_EQ(30, 10, 3); // Bot right
+    EXPECT_STENCIL_EQ(10, 30, 1); // Top left
+    EXPECT_STENCIL_EQ(30, 30, 2); // Top right
+
+    glDisable(GL_SCISSOR_TEST);
+
+    glClearColor(0.f, 0.f, 0.f, 0.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_PIXEL_NEAR(10, 10, 0, 0, 0, 0, 1); // Bot left
+    EXPECT_PIXEL_NEAR(30, 10, 0, 0, 0, 0, 1); // Bot right
+    EXPECT_PIXEL_NEAR(10, 30, 0, 0, 0, 0, 1); // Top left
+    EXPECT_PIXEL_NEAR(30, 30, 0, 0, 0, 0, 1); // Top right
+    EXPECT_STENCIL_EQ(10, 10, 0); // Bot left
+    EXPECT_STENCIL_EQ(30, 10, 3); // Bot right
+    EXPECT_STENCIL_EQ(10, 30, 1); // Top left
+    EXPECT_STENCIL_EQ(30, 30, 2); // Top right
+
+    constexpr char kVS[] =
+            "precision highp float;\n"
+            "attribute vec4 position;\n"
+            "\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = position;\n"
+            "}\n";
+    constexpr char kColorFS[] =
+            "precision highp float;\n"
+            "uniform vec4 u_color;\n"
+            "\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = u_color;\n"
+            "}\n";
+
+
+    GLuint program = CompileProgram(kVS, kColorFS);
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+
+    GLuint programColorLocation = glGetUniformLocation(program, "u_color");
+
+    glUseProgram(program);
+    glUniform4f(programColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+
+
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 0, 0xFF);        // Always passes stencil test
+    glStencilOp(GL_KEEP, GL_INCR, GL_INCR);   // Increment stencil buffer
+    drawQuad(program, "position", 0.5f);
+
+    EXPECT_PIXEL_NEAR(10, 10, 255, 0, 0, 255, 1); // Bot left
+    EXPECT_PIXEL_NEAR(30, 10, 255, 0, 0, 255, 1); // Bot right
+    EXPECT_PIXEL_NEAR(10, 30, 255, 0, 0, 255, 1); // Top left
+    EXPECT_PIXEL_NEAR(30, 30, 255, 0, 0, 255, 1); // Top right
+    EXPECT_STENCIL_EQ(10, 10, 1); // Bot left
+    EXPECT_STENCIL_EQ(30, 10, 4); // Bot right
+    EXPECT_STENCIL_EQ(10, 30, 2); // Top left
+    EXPECT_STENCIL_EQ(30, 30, 3); // Top right
 }
 
 // Test sampling from a YUV AHB using EXT_yuv_target
