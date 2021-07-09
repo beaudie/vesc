@@ -580,7 +580,7 @@ void WriteResourceIDPointerParamReplay(DataTracker *dataTracker,
         {
             header << ", ";
         }
-        header << "g" << name << "Map2[" << id.value << "]";
+        header << "g" << name << "Map[" << id.value << "]";
     }
 
     header << " };\n    ";
@@ -654,7 +654,7 @@ void WriteCppReplayForCall(const CallCapture &call,
         call.entryPoint == EntryPoint::GLCreateShaderProgramv)
     {
         GLuint id = call.params.getReturnValue().value.GLuintVal;
-        callOut << "gShaderProgramMap2[" << id << "] = ";
+        callOut << "gShaderProgramMap[" << id << "] = ";
     }
 
     if (call.entryPoint == EntryPoint::GLFenceSync)
@@ -907,7 +907,7 @@ void WriteInitReplayCall(bool compression,
     }
 
     std::string binaryDataFileName = GetBinaryDataFilePath(compression, captureLabel);
-    out << "    InitializeReplay2(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
+    out << "    InitializeReplay(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
         << readBufferSize;
 
     for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
@@ -1049,9 +1049,9 @@ void MaybeResetResources(std::stringstream &out,
                     .getNewResources();
 
             // If we have any new programs created and not deleted during the run, delete them now
-            for (const auto &newProgram : newPrograms)
+            for (const GLuint &newProgram : newPrograms)
             {
-                out << "    glDeleteProgram(gShaderProgramMap2[" << newProgram << "]);\n";
+                out << "    glDeleteProgram(gShaderProgramMap[" << newProgram << "]);\n";
             }
 
             // TODO (http://anglebug.com/5968): Handle programs that need regen
@@ -1426,7 +1426,7 @@ void CaptureUpdateResourceIDs(const CallCapture &call,
     const char *resourceName = GetResourceIDTypeName(resourceIDType);
 
     std::stringstream updateFuncNameStr;
-    updateFuncNameStr << "Update" << resourceName << "ID2";
+    updateFuncNameStr << "Update" << resourceName << "ID";
     std::string updateFuncName = updateFuncNameStr.str();
 
     const IDType *returnedIDs = reinterpret_cast<const IDType *>(param.data[0].data());
@@ -1496,7 +1496,7 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
         params.addParam(std::move(nameParam));
         params.addValueParam("location", ParamType::TGLint, location);
         params.addValueParam("count", ParamType::TGLint, static_cast<GLint>(count));
-        callsOut->emplace_back("UpdateUniformLocation2", std::move(params));
+        callsOut->emplace_back("UpdateUniformLocation", std::move(params));
     }
 }
 
@@ -1547,7 +1547,7 @@ void CaptureDeleteUniformLocations(gl::ShaderProgramID program, std::vector<Call
 {
     ParamBuffer params;
     params.addValueParam("program", ParamType::TShaderProgramID, program);
-    callsOut->emplace_back("DeleteUniformLocations2", std::move(params));
+    callsOut->emplace_back("DeleteUniformLocations", std::move(params));
 }
 
 void MaybeCaptureUpdateResourceIDs(std::vector<CallCapture> *callsOut)
@@ -5582,7 +5582,7 @@ void FrameCaptureShared::captureMappedBufferSnapshot(const gl::Context *context,
     dataParamBuffer.addValueParam<GLsizeiptr>("size", ParamType::TGLsizeiptr, length);
 
     // Call the helper that populates the buffer with captured data
-    mFrameCalls.emplace_back("UpdateClientBufferData2", std::move(dataParamBuffer));
+    mFrameCalls.emplace_back("UpdateClientBufferData", std::move(dataParamBuffer));
 
     // Unmap the buffer and move on
     GLboolean dontCare;
@@ -6846,7 +6846,7 @@ void WriteParamValueReplay<ParamType::TBufferID>(std::ostream &os,
                                                  const CallCapture &call,
                                                  gl::BufferID value)
 {
-    os << "gBufferMap2[" << value.value << "]";
+    os << "gBufferMap[" << value.value << "]";
 }
 
 template <>
@@ -6854,7 +6854,7 @@ void WriteParamValueReplay<ParamType::TFenceNVID>(std::ostream &os,
                                                   const CallCapture &call,
                                                   gl::FenceNVID value)
 {
-    os << "gFenceNVMap2[" << value.value << "]";
+    os << "gFenceNVMap[" << value.value << "]";
 }
 
 template <>
@@ -6862,7 +6862,7 @@ void WriteParamValueReplay<ParamType::TFramebufferID>(std::ostream &os,
                                                       const CallCapture &call,
                                                       gl::FramebufferID value)
 {
-    os << "gFramebufferMap2[" << value.value << "]";
+    os << "gFramebufferMap[" << value.value << "]";
 }
 
 template <>
@@ -6870,7 +6870,7 @@ void WriteParamValueReplay<ParamType::TMemoryObjectID>(std::ostream &os,
                                                        const CallCapture &call,
                                                        gl::MemoryObjectID value)
 {
-    os << "gMemoryObjectMap2[" << value.value << "]";
+    os << "gMemoryObjectMap[" << value.value << "]";
 }
 
 template <>
@@ -6878,7 +6878,7 @@ void WriteParamValueReplay<ParamType::TProgramPipelineID>(std::ostream &os,
                                                           const CallCapture &call,
                                                           gl::ProgramPipelineID value)
 {
-    os << "gProgramPipelineMap2[" << value.value << "]";
+    os << "gProgramPipelineMap[" << value.value << "]";
 }
 
 template <>
@@ -6886,7 +6886,7 @@ void WriteParamValueReplay<ParamType::TQueryID>(std::ostream &os,
                                                 const CallCapture &call,
                                                 gl::QueryID value)
 {
-    os << "gQueryMap2[" << value.value << "]";
+    os << "gQueryMap[" << value.value << "]";
 }
 
 template <>
@@ -6894,7 +6894,7 @@ void WriteParamValueReplay<ParamType::TRenderbufferID>(std::ostream &os,
                                                        const CallCapture &call,
                                                        gl::RenderbufferID value)
 {
-    os << "gRenderbufferMap2[" << value.value << "]";
+    os << "gRenderbufferMap[" << value.value << "]";
 }
 
 template <>
@@ -6902,7 +6902,7 @@ void WriteParamValueReplay<ParamType::TSamplerID>(std::ostream &os,
                                                   const CallCapture &call,
                                                   gl::SamplerID value)
 {
-    os << "gSamplerMap2[" << value.value << "]";
+    os << "gSamplerMap[" << value.value << "]";
 }
 
 template <>
@@ -6910,7 +6910,7 @@ void WriteParamValueReplay<ParamType::TSemaphoreID>(std::ostream &os,
                                                     const CallCapture &call,
                                                     gl::SemaphoreID value)
 {
-    os << "gSemaphoreMap2[" << value.value << "]";
+    os << "gSemaphoreMap[" << value.value << "]";
 }
 
 template <>
@@ -6918,7 +6918,7 @@ void WriteParamValueReplay<ParamType::TShaderProgramID>(std::ostream &os,
                                                         const CallCapture &call,
                                                         gl::ShaderProgramID value)
 {
-    os << "gShaderProgramMap2[" << value.value << "]";
+    os << "gShaderProgramMap[" << value.value << "]";
 }
 
 template <>
@@ -6934,7 +6934,7 @@ void WriteParamValueReplay<ParamType::TTextureID>(std::ostream &os,
                                                   const CallCapture &call,
                                                   gl::TextureID value)
 {
-    os << "gTextureMap2[" << value.value << "]";
+    os << "gTextureMap[" << value.value << "]";
 }
 
 template <>
@@ -6942,7 +6942,7 @@ void WriteParamValueReplay<ParamType::TTransformFeedbackID>(std::ostream &os,
                                                             const CallCapture &call,
                                                             gl::TransformFeedbackID value)
 {
-    os << "gTransformFeedbackMap2[" << value.value << "]";
+    os << "gTransformFeedbackMap[" << value.value << "]";
 }
 
 template <>
@@ -6950,7 +6950,7 @@ void WriteParamValueReplay<ParamType::TVertexArrayID>(std::ostream &os,
                                                       const CallCapture &call,
                                                       gl::VertexArrayID value)
 {
-    os << "gVertexArrayMap2[" << value.value << "]";
+    os << "gVertexArrayMap[" << value.value << "]";
 }
 
 template <>
@@ -6964,13 +6964,13 @@ void WriteParamValueReplay<ParamType::TUniformLocation>(std::ostream &os,
         return;
     }
 
-    os << "gUniformLocations2[";
+    os << "gUniformLocations[";
 
     // Find the program from the call parameters.
     gl::ShaderProgramID programID;
     if (FindShaderProgramIDInCall(call, &programID))
     {
-        os << "gShaderProgramMap2[" << programID.value << "]";
+        os << "gShaderProgramMap[" << programID.value << "]";
     }
     else
     {
@@ -6990,7 +6990,7 @@ void WriteParamValueReplay<ParamType::TUniformBlockIndex>(std::ostream &os,
     bool foundProgram = FindShaderProgramIDInCall(call, &programID);
     ASSERT(foundProgram);
 
-    os << "gUniformBlockIndexes[gShaderProgramMap2[" << programID.value << "]][" << value.value
+    os << "gUniformBlockIndexes[gShaderProgramMap[" << programID.value << "]][" << value.value
        << "]";
 }
 
