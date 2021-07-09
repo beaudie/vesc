@@ -4,11 +4,11 @@
   "src/tests/restricted_traces/gen_restricted_traces.py":
     "f700505c2ba8299a6ce68962763d7f2d",
   "src/tests/restricted_traces/restricted_traces.json":
-    "0609bc8adca1e55fa78b71a1d07d44f9",
+    "9af6080313100ce520476b22ae9dd195",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
-    "bdf25c3975dddd48624b258ae2894917",
+    "9dd2850d5d9989be8f3cb9552b56dcb3",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
-    "2860b4658e3f2fe7930db2a50bb6607d",
+    "800e8aaef1e414730ded15450e0615d9",
   "src/tests/restricted_traces/restricted_traces_autogen.h":
     "4b5b94d3dd946c72db59e2717ded7a41"
 }
