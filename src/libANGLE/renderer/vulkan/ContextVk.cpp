@@ -5685,6 +5685,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass()
 {
+    ASSERT(mRenderPassCommands);
     bool isRenderPassStarted = mRenderPassCommands->started();
 
     ANGLE_TRY(flushCommandsAndEndRenderPassImpl());
