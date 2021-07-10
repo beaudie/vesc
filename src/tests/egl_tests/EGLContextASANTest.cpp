@@ -171,7 +171,6 @@ TEST_P(EGLContextASANTest, DestroyContextInUse)
         // Wait for the other thread to delete the context.
         nextStep(Step::Thread1Draw);
         ASSERT_TRUE(waitForStep(Step::Thread0Delete));
-
         EXPECT_EGL_TRUE(eglMakeCurrent(display, surface, surface, localContext));
         EXPECT_EGL_SUCCESS();
 
