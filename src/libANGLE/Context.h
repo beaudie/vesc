@@ -614,10 +614,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const;
     bool noopClearBuffer(GLenum buffer, GLint drawbuffer) const;
 
-    void addRef() const { mRefCount++; }
-    void release() const { mRefCount--; }
-    size_t getRefCount() const { return mRefCount; }
-
+    void markDestroyed() const
+    {
+        ASSERT(!mIsDestroyed);
+        mIsDestroyed = true;
+    }
+    bool isDestroyed() const { return mIsDestroyed; }
     egl::ShareGroup *getShareGroup() const { return mState.getShareGroup(); }
 
     bool supportsGeometryOrTesselation() const;
@@ -787,14 +789,15 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // Cache representation of the serialized context string.
     mutable std::string mCachedSerializedStateString;
 
-    mutable size_t mRefCount;
-
     OverlayType mOverlay;
 
     const bool mIsExternal;
     const bool mSaveAndRestoreState;
 
     bool mIsCurrent;
+
+    // Mark the context is being destroyed.
+    mutable bool mIsDestroyed;
 };
 
 // Thread-local current valid context bound to the thread.
