@@ -759,6 +759,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
 egl::Error Context::unMakeCurrent(const egl::Display *display)
 {
     ASSERT(mIsCurrent);
+    mIsCurrent = false;
 
     ANGLE_TRY(angle::ResultToEGL(mImplementation->onUnMakeCurrent(this)));
 
@@ -774,8 +775,6 @@ egl::Error Context::unMakeCurrent(const egl::Display *display)
     {
         mDisplay->returnZeroFilledBuffer(mZeroFilledBuffer.release());
     }
-
-    mIsCurrent = false;
 
     return egl::NoError();
 }

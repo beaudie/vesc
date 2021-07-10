@@ -268,7 +268,7 @@ BOOL GL_APIENTRY wglMakeCurrent(HDC hDc, HGLRC newContext)
     if (previousDraw != surface || previousRead != surface || previousContext != context)
     {
         ANGLE_EGL_TRY_RETURN(thread,
-                             display->makeCurrent(previousContext, surface, surface,
+                             display->makeCurrent(thread, previousContext, surface, surface,
                                                   const_cast<gl::Context *>(context)),
                              "wglMakeCurrent", GetContextIfValid(display, context), EGL_FALSE);
 
