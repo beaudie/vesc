@@ -43,6 +43,7 @@
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/ImageImpl.h"
 #include "libANGLE/trace.h"
+#include "libGLESv2/global_state.h"
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #    include <versionhelpers.h>
@@ -929,7 +930,7 @@ Error Display::initialize()
     return NoError();
 }
 
-Error Display::terminate(const Thread *thread)
+Error Display::terminate(Thread *thread)
 {
     if (!mInitialized)
     {
@@ -944,7 +945,7 @@ Error Display::terminate(const Thread *thread)
         ANGLE_TRY(destroyContext(thread, *mContextSet.begin()));
     }
 
-    ANGLE_TRY(makeCurrent(thread->getContext(), nullptr, nullptr, nullptr));
+    ANGLE_TRY(makeCurrent(thread, thread->getContext(), nullptr, nullptr, nullptr));
 
     // The global texture and semaphore managers should be deleted with the last context that uses
     // it.
@@ -1284,8 +1285,6 @@ Error Display::createContext(const Config *configuration,
     ASSERT(context != nullptr);
     mContextSet.insert(context);
 
-    context->addRef();
-
     ASSERT(outContext != nullptr);
     *outContext = context;
     return NoError();
@@ -1317,7 +1316,8 @@ Error Display::createSync(const gl::Context *currentContext,
     return NoError();
 }
 
-Error Display::makeCurrent(gl::Context *previousContext,
+Error Display::makeCurrent(Thread *thread,
+                           gl::Context *previousContext,
                            egl::Surface *drawSurface,
                            egl::Surface *readSurface,
                            gl::Context *context)
@@ -1333,8 +1333,13 @@ Error Display::makeCurrent(gl::Context *previousContext,
     bool contextChanged = context != previousContext;
     if (previousContext != nullptr && contextChanged)
     {
-        ANGLE_TRY(previousContext->unMakeCurrent(this));
-        ANGLE_TRY(releaseContext(previousContext));
+        thread->setCurrent(nullptr);
+        auto error = previousContext->unMakeCurrent(this);
+        if (previousContext->isDestroyed())
+        {
+            ANGLE_TRY(releaseContext(previousContext));
+        }
+        ANGLE_TRY(error);
     }
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
@@ -1342,10 +1347,7 @@ Error Display::makeCurrent(gl::Context *previousContext,
     if (context != nullptr)
     {
         ANGLE_TRY(context->makeCurrent(this, drawSurface, readSurface));
-        if (contextChanged)
-        {
-            context->addRef();
-        }
+        thread->setCurrent(context);
     }
 
     // Tick all the scratch buffers to make sure they get cleaned up eventually if they stop being
@@ -1428,12 +1430,12 @@ void Display::destroyStream(egl::Stream *stream)
 // as part of destruction.
 Error Display::releaseContext(gl::Context *context)
 {
-    context->release();
-    size_t refCount = context->getRefCount();
-    if (refCount > 0)
-    {
-        return NoError();
-    }
+    ASSERT(context->isDestroyed());
+
+    // Use scoped_ptr to make sure the context is always freed.
+    std::unique_ptr<gl::Context> unique_context(context);
+
+    mContextSet.erase(context);
 
     if (context->usingDisplayTextureShareGroup())
     {
@@ -1464,58 +1466,41 @@ Error Display::releaseContext(gl::Context *context)
     }
 
     ANGLE_TRY(context->onDestroy(this));
-    mContextSet.erase(context);
-    SafeDelete(context);
 
     return NoError();
 }
 
-Error Display::destroyContext(const Thread *thread, gl::Context *context)
+Error Display::destroyContext(Thread *thread, gl::Context *context)
 {
-    return destroyContextWithSurfaces(thread, context, thread->getContext(),
-                                      thread->getCurrentDrawSurface(),
-                                      thread->getCurrentReadSurface());
-}
+    ASSERT(!context->isDestroyed());
+    context->markDestroyed();
 
-Error Display::destroyContextWithSurfaces(const Thread *thread,
-                                          gl::Context *context,
-                                          gl::Context *currentContext,
-                                          Surface *currentDrawSurface,
-                                          Surface *currentReadSurface)
-{
-    size_t refCount = context->getRefCount();
-    if (refCount > 1)
+    auto *currentContext     = thread->getContext();
+    auto *currentDrawSurface = thread->getCurrentDrawSurface();
+    auto *currentReadSurface = thread->getCurrentReadSurface();
+
+    bool contextIsCurrent = context == currentContext;
+    if (contextIsCurrent)
     {
-        context->release();
+        // If the context is current, we just return, since the context has been marked destroyed,
+        // so the context will be destroyed when the context is released from the current.
         return NoError();
     }
 
-    // This is the last reference for this context, so we can destroy it now.
-    bool changeContextForDeletion = context != currentContext;
-
     // For external context, we cannot change the current native context, and the API user should
     // make sure the native context is current.
-    if (changeContextForDeletion && context->isExternal())
+    if (context->isExternal())
     {
-        ASSERT(!currentContext);
-        changeContextForDeletion = false;
+        ANGLE_TRY(releaseContext(context));
     }
-
-    // Make the context being deleted current during its deletion.  This allows it to delete
-    // any resources it's holding.
-    if (changeContextForDeletion)
+    else
     {
-        ANGLE_TRY(makeCurrent(currentContext, nullptr, nullptr, context));
+        // Make the context current, so we can release resources belong to the context, and then
+        // when context is released from the current, it will be destroyed.
+        ANGLE_TRY(makeCurrent(thread, currentContext, nullptr, nullptr, context));
+        ANGLE_TRY(
+            makeCurrent(thread, context, currentDrawSurface, currentReadSurface, currentContext));
     }
-
-    ANGLE_TRY(releaseContext(context));
-
-    // Set the previous context back to current
-    if (changeContextForDeletion)
-    {
-        ANGLE_TRY(makeCurrent(context, currentDrawSurface, currentReadSurface, currentContext));
-    }
-
     return NoError();
 }
 
@@ -1622,7 +1607,8 @@ bool Display::isValidConfig(const Config *config) const
 
 bool Display::isValidContext(const gl::Context *context) const
 {
-    return mContextSet.find(const_cast<gl::Context *>(context)) != mContextSet.end();
+    return mContextSet.find(const_cast<gl::Context *>(context)) != mContextSet.end() &&
+           !context->isDestroyed();
 }
 
 bool Display::isValidSurface(const Surface *surface) const

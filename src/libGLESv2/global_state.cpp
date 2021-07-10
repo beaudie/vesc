@@ -97,8 +97,7 @@ ANGLE_NO_SANITIZE_MEMORY ANGLE_NO_SANITIZE_THREAD Thread *GetCurrentThread()
 
 void SetContextCurrent(Thread *thread, gl::Context *context)
 {
-    ASSERT(gCurrentThread);
-    gCurrentThread->setCurrent(context);
+    ASSERT(gCurrentThread == thread);
     SetContextToAndroidOpenGLTLSSlot(context);
     gl::gCurrentValidContext = context;
 #if defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)
