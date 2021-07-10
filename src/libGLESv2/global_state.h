@@ -97,6 +97,18 @@ void SetGlobalLastContext(gl::Context *context);
 Thread *GetCurrentThread();
 Debug *GetDebug();
 void SetContextCurrent(Thread *thread, gl::Context *context);
+
+// Sync the current context from Thread to global state.
+class ScopedSyncCurrentContextFromThread
+{
+  public:
+    ScopedSyncCurrentContextFromThread(egl::Thread *thread);
+    ~ScopedSyncCurrentContextFromThread();
+
+  private:
+    egl::Thread *const mThread;
+};
+
 }  // namespace egl
 
 #define ANGLE_SCOPED_GLOBAL_LOCK() \
