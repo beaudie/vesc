@@ -3,84 +3,89 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 #
-# capture_replay_expectations:
-#   Skip these tests because they are expected to fail
+# Test are entered like
+# BUG PLATFORMS : test-name = handling/result
+#
+#  PLATFORMSis optional and lists the platforms the expectation / run disabling happens
+#
+# Valid values for "handling/result" are
+#
+#   EXCLUDE_FROM_RUN : capture_replay_tests.py drops this test from the
+#                      list of tests that will be passed to end2end_tests,
+#                      i.e. we will not try to run the test
+#
+#   SKIPPED : the is expceted to be skipped by the end2end_tests program
+#
+#   FAIL : the test is expected to fail
+#
+#   TIMEOUT : the test is ecpected to time out
+#
+#   COMPILE_FAILED : the compilation of the capture_replay exec is ecpected to fail
+#
+#   CRASHED : the test is expected to crash
+#
+# For test batches that run more than one test TIMEOUT, COMPILE_FAILED, and CRASHED
+# will have to be set for all tests that run a batch, because one test that fails
+# with one of these outcomes will bring down the whole batch.
 #
 
-# Failed tests
-D3DImageFormatConversionTest.*
-DrawBuffersTest.UnwrittenOutputVariablesShouldNotCrash/*
-FramebufferTest.MultiContextNoRenderingFeedbackLoops/*
-ImageTest.Deletion/*
-ImageTest.MipLevels/*
-ImageTest.Source2DTarget2D/*
-ImageTest.Source2DTargetExternal/*
-ImageTest.SourceCubeTarget2D/*
-ImageTest.SourceRenderbufferTargetTexture/*
-ImageTest.SourceRenderbufferTargetTextureExternal/*
-ImageTest.UpdatedData/*
-PbufferTest.BindTexImage/*
-PbufferTest.Clearing/*
-PbufferTest.TextureSizeReset/*
-SimpleStateChangeTest.DrawAndClearTextureRepeatedly/*
-SimpleStateChangeTest.RebindTranslatedAttribute/*
-WebGL2ReadOutsideFramebufferTest.CopyTexSubImage3D/*
-WebGLDrawElementsTest.DrawElementsTypeAlignment/*
-WebGLGLSLTest.*
-WebGLReadOutsideFramebufferTest.*
+6180 : ClipDistanceTest.ThreeClipDistances/* = FAIL
+6180 : ClipDistanceTest.ThreeClipDistancesRedeclared/* = FAIL
+
+6180 : ContextLostSkipValidationTest.LostNoErrorGetProgram/ES2_Vulkan = EXCLUDE_FROM_RUN
+6180 : ContextLostTest.ParallelCompileReadyQuery/ES2_Vulkan = EXCLUDE_FROM_RUN
+
+6180 : EGLContextASANTest.DestroyContextInUse/ES2_Vulkan = FAIL
+6180 : EGLContextSharingTest.TextureLifetime/ES2_Vulkan = EXCLUDE_FROM_RUN
+6180 : EGLContextSharingTest.BindTextureAfterShareContextFree/ES2_Vulkan = SKIPPED
+6180 : EGLContextSharingTest.DisplayShareGroupObjectSharing/ES2_Vulkan = SKIPPED
+6180 : EGLContextSharingTest.DisplayShareGroupReleasedWithLastContext/ES2_Vulkan = SKIPPED
+
+6180 : ExternalWrapTest.ClampToEdge/* = EXCLUDE_FROM_RUN
+6180 : ExternalWrapTest.MirroredRepeat/* = EXCLUDE_FROM_RUN
+6180 : ExternalWrapTest.NoWrap/* = EXCLUDE_FROM_RUN
+6180 : ExternalWrapTest.Repeat/* = EXCLUDE_FROM_RUN
+
+6180 : FramebufferTest.MultiContextNoRenderingFeedbackLoops/* = EXCLUDE_FROM_RUN
+
+6180 : GLSLTest.ArrayOfStructContainingArrayOfSamplers/* = FAIL
+6180 : GLSLTest.ZeroShaderLength/* = EXCLUDE_FROM_RUN
+
+6180 : ImageTest.Deletion/* = FAIL
+6180 : ImageTest.MipLevels/* = FAIL
+
+6180 : ImageTest.Source2DTarget2D/* = FAIL
+6180 : ImageTest.Source2DTargetExternal/* = FAIL
+6180 : ImageTest.SourceCubeTarget2D/* = FAIL
+6180 : ImageTest.SourceCubeTargetExternal/* = EXCLUDE_FROM_RUN
+6180 : ImageTest.SourceRenderbufferTargetTexture/* = FAIL
+6180 : ImageTest.SourceRenderbufferTargetTextureExternal/* = FAIL
+6180 : ImageTest.UpdatedData/* = FAIL
 
 
-# Comparison of captured contexts fail
-ContextLostSkipValidationTest.LostNoErrorGetProgram/ES2_Vulkan
-ContextLostTest.ParallelCompileReadyQuery/ES2_Vulkan
-EGLContextASANTest.DestroyContextInUse/ES2_Vulkan
-EGLContextSharingTest.TextureLifetime/ES2_Vulkan
+6180 : MipmapTest.DefineValidExtraLevelAndUseItLater/ES2_Vulkan = FAIL
+6180 : MipmapTest.GenerateMipmapAfterModifyingBaseLevel/ES2_Vulkan = FAIL
+6180 : MipmapTest.GenerateMipmapAfterSingleLevelDraw/ES2_Vulkan = FAIL
+6180 : MipmapTest.GenerateMipmapFromInitDataThenRender/ES2_Vulkan = FAIL
+6180 : MipmapTest.GenerateMipmapFromRenderedImage/ES2_Vulkan = FAIL
+6180 : MipmapTest.MipMapGenerationD3D9Bug/ES2_Vulkan = FAIL
+6180 : MipmapTest.MipmapsForTexture3DOES/ES2_Vulkan = FAIL
+6180 : MipmapTest.RenderOntoLevelZeroAfterGenerateMipmap/ES2_Vulkan = FAIL
 
-# http://anglebug.com/6006 Failing on bots
-GLSLTest.InactiveVaryingInVertexActiveInFragment/*
-# Flanky tests, pass standalone, but fail in a group
-ColorMaskTest.AMDZeroColorMaskBug/ES3_OpenGL
-WebGLCompatibilityTest.DrawArraysBufferOutOfBoundsNonInstanced/ES2_Vulkan_SwiftShader
-WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInIndexBuffer/ES2_Vulkan_SwiftShader
-WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInVertexBuffer/ES2_Vulkan_SwiftShader
+6180 : PbufferTest.BindTexImage/* = FAIL
+6180 : PbufferTest.Clearing/* = FAIL
+6180 : PbufferTest.TextureSizeReset/* = FAIL
 
-# Crashed tests
-BlitFramebufferANGLETest.Reverse*/*
-BlitFramebufferANGLETest.Scissored*/*
-ClipDistanceTest.*
-DebugMarkerTest.*
-DebugTest.*
-EGLStreamTest.*
-ExternalWrapTest.*
-GetImageTestNoExtensions.EntryPointsInactive/*
-GLSLTest.ArrayOfStructContainingArrayOfSamplers/*
-GLSLTest.InactiveSamplersInStruct/*
-GLSLTest.MixedShaderLengths/*
-GLSLTest.ZeroShaderLength/*
-GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
-ImageTest.SourceCubeTargetExternal/*
-PBOExtensionTest.*
-Texture2DTest.DefineMultipleLevelsWithoutMipmapping/*
-VertexAttributeTest.*
+6180 : Texture2DTest.DefineMultipleLevelsWithoutMipmapping/* = EXCLUDE_FROM_RUN
 
-# Crashes because closing the FD fails and this raises an assertion
-VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/ES2_Vulkan_SwiftShader
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphores/ES2_Vulkan* = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresMutableNoStorage/ES2_Vulkan* = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresNoStorage/ES2_Vulkan* = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresWithFlags/ES2_Vulkan* = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES2_Vulkan* = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/ES2_Vulkan* = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES2_Vulkan* = EXCLUDE_FROM_RUN
 
-# Replay times out
-VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES2_Vulkan_SwiftShader
-VulkanExternalImageTest.ShouldClearOpaqueFdWithSema*/ES2_Vulkan_SwiftShader
-VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES2_Vulkan_SwiftShader
-
-WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/*
-WebGLFramebufferTest.*
-
-# Skipped tests
-EGLProgramCacheControlTest.NegativeAPI/*
-EGLProgramCacheControlTest.SaveAndReload/*
-LineLoopTest.DISABLED_DrawArraysWithLargeCount/*
-MipmapTest.DISABLED_ThreeLevelsInitData/*
-
-# Compile failed tests
-
-# ES1 comparison failed tests
-BootAnimationTest.DefaultBootAnimation/*
+6180 : WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/* = EXCLUDE_FROM_RUN
+6180 win32 :  WebGLCompatibilityTest.DrawArraysBufferOutOfBoundsNonInstanced/ES2_Vulkan_SwiftShader = FAIL
+6180 win32 : WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInVertexBuffer/ES2_Vulkan_SwiftShader = FAIL
