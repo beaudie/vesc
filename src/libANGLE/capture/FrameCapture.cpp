@@ -1298,6 +1298,7 @@ void CaptureDeleteUniformLocations(gl::ShaderProgramID program, std::vector<Call
 
 void MaybeCaptureUpdateResourceIDs(std::vector<CallCapture> *callsOut)
 {
+    ASSERT(callsOut);
     const CallCapture &call = callsOut->back();
 
     switch (call.entryPoint)
@@ -4499,6 +4500,7 @@ void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call, b
 
 void FrameCapture::maybeCapturePostCallUpdates(const gl::Context *context)
 {
+    ASSERT(context);
     // Process resource ID updates.
     MaybeCaptureUpdateResourceIDs(&mFrameCalls);
 
@@ -5570,7 +5572,7 @@ void WriteParamValueReplay<ParamType::TFenceNVID>(std::ostream &os,
                                                   const CallCapture &call,
                                                   gl::FenceNVID value)
 {
-    os << "gFenceMap[" << value.value << "]";
+    os << "gFenceNVMap[" << value.value << "]";
 }
 
 template <>
