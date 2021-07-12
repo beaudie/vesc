@@ -305,14 +305,33 @@ def GetTestsListForFilter(args, test_path, filter):
 
 def GetSkippedTestPatterns():
     skipped_test_patterns = []
-    test_expectations_filename = "capture_replay_expectations.txt"
-    test_expectations_path = os.path.join(REPLAY_SAMPLE_FOLDER, test_expectations_filename)
-    with open(test_expectations_path, "rt") as f:
+    test_skip_filename = "capture_replay_skip.txt"
+    test_skip_path = os.path.join(REPLAY_SAMPLE_FOLDER, test_skip_filename)
+    with open(test_skip_path, "rt") as f:
         for line in f:
             l = line.strip()
             if l != "" and not l.startswith("#"):
                 skipped_test_patterns.append(l)
     return skipped_test_patterns
+
+
+def GetExpectedResults():
+    expected_results = {}
+    # yapf: disable
+    # we want each backend on one line
+    backends = ['ES1_Vulkan',
+                'ES2_Vulkan_SwiftShader']
+    # yapf: enable
+    for backend in backends:
+        expected_results_filename = "capture_replay_expectation_{}.txt".format(backend)
+        expected_results_path = os.path.join(REPLAY_SAMPLE_FOLDER, expected_results_filename)
+        with open(expected_results_path, "rt") as f:
+            for line in f:
+                l = line.strip()
+                if l != "" and not l.startswith("#"):
+                    tokes = l.split()
+                    expected_results[tokes[0]] = tokes[1]
+    return expected_results
 
 
 def ParseTestNamesFromTestList(output):
@@ -906,6 +925,9 @@ def main(args):
         # print out results
         logging.info("\n\n\n")
         logging.info("Results:")
+
+        test_results = {}
+
         for test_batch_result in result_list:
             debug(str(test_batch_result))
             passed_count += len(test_batch_result.passes)
@@ -917,14 +939,36 @@ def main(args):
 
             for failed_test in test_batch_result.fails:
                 failed_tests.append(failed_test)
+                test_results[failed_test] = "Fail"
+
             for timeout_test in test_batch_result.timeouts:
                 timed_out_tests.append(timeout_test)
+                test_results[timeout_test] = "Timeout"
+
             for crashed_test in test_batch_result.crashes:
                 crashed_tests.append(crashed_test)
+                test_results[crashed_test] = "Crashed"
+
             for compile_failed_test in test_batch_result.compile_fails:
                 compile_failed_tests.append(compile_failed_test)
+                test_results[compile_failed_test] = "CompileFailed"
+
             for skipped_test in test_batch_result.skips:
                 skipped_tests.append(skipped_test)
+                test_results[skipped_test] = "Skipped"
+
+            for passed_test in test_batch_result.passes:
+                test_results[passed_test] = "Pass"
+
+        test_result = []
+        for test, result in sorted(test_results.items()):
+            test_result.append("{} {}\n".format(test, result))
+
+        expected_result = []
+        expected_result_map = sorted(GetExpectedResults().items())
+        for test, result in expected_result_map:
+            if test in test_names:
+                expected_result.append("{} {}\n".format(test, result))
 
         logging.info("\n\n")
         logging.info("Elapsed time: %.2lf seconds" % (end_time - start_time))
@@ -933,31 +977,18 @@ def main(args):
             % (passed_count, failed_count, crashed_count, compile_failed_count, skipped_count,
                timedout_count))
 
-        retval = EXIT_SUCCESS
+        result_diff = difflib.unified_diff(
+            expected_result, test_result, fromfile="expected result", tofile="obtained result")
 
-        if len(failed_tests):
-            logging.info("Comparison Failed tests:")
-            for failed_test in sorted(failed_tests):
-                logging.info("  " + failed_test)
-            retval = EXIT_FAILURE
-        if len(crashed_tests):
-            logging.info("Crashed tests:")
-            for crashed_test in sorted(crashed_tests):
-                logging.info("  " + crashed_test)
-            retval = EXIT_FAILURE
-        if len(compile_failed_tests):
-            logging.info("Compile failed tests:")
-            for compile_failed_test in sorted(compile_failed_tests):
-                logging.info("  " + compile_failed_test)
-            retval = EXIT_FAILURE
-        if len(skipped_tests):
-            logging.info("Skipped tests:")
-            for skipped_test in sorted(skipped_tests):
-                logging.info("  " + skipped_test)
-        if len(timed_out_tests):
-            logging.info("Timeout tests:")
-            for timeout_test in sorted(timed_out_tests):
-                logging.info("  " + timeout_test)
+        diff_lines = 0
+        for line in result_diff:
+            if line is not None:
+                print(line, end="")
+                diff_lines = diff_lines + 1
+
+        if diff_lines == 0:
+            retval = EXIT_SUCCESS
+        else:
             retval = EXIT_FAILURE
 
         # delete generated folders if --keep_temp_files flag is set to false
@@ -1031,6 +1062,7 @@ if __name__ == "__main__":
         default=DEFAULT_MAX_JOBS,
         type=int,
         help='Maximum number of test processes. Default is %d.' % DEFAULT_MAX_JOBS)
+
     # TODO(jmadill): Remove this argument. http://anglebug.com/6102
     parser.add_argument('--depot-tools-path', default=None, help='Path to depot tools')
     parser.add_argument('--xvfb', action='store_true', help='Run with xvfb.')

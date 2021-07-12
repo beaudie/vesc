@@ -1,0 +1,13 @@
+# Crashing tests 
+GLSLTest.ZeroShaderLength/*
+
+## Crashes because capturing external images are not supported 
+ImageTest.SourceCubeTargetExternal/* 
+
+## Chrashes because closing the FD fails and this raises an assertion
+VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/ES2_Vulkan_SwiftShader
+
+# Replay times out
+VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES2_Vulkan_SwiftShader
+VulkanExternalImageTest.ShouldClearOpaqueFdWithSema*/ES2_Vulkan_SwiftShader
+VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES2_Vulkan_SwiftShader
