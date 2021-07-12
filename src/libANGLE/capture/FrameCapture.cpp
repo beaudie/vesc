@@ -5139,7 +5139,7 @@ void FrameCapture::writeCppReplayIndexFiles(const gl::Context *context, bool wri
                    << FmtGetSerializedContextStateFunction(contextId, frameIndex) << ";\n";
         }
         source << "        default:\n";
-        source << "            return \"\";\n";
+        source << "            return nullptr;\n";
         source << "    }\n";
         source << "}\n";
         source << "\n";
