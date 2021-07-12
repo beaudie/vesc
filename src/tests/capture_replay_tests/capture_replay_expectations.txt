@@ -3,78 +3,61 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 #
-# capture_replay_expectations:
-#   Skip these tests because they are expected to fail
+# Test are entered like
+# BUG : test-name = handling/result
+#
+# valid values for "handling/result" are
+#
+#   EXCLUDE_FROM_RUN : capture_replay_tests.py drops this test from the
+#                      list of tests that will be passed to end2end_tests,
+#                      i.e. we will not try to run the test
+#
+#   SKIPPED : the is expceted to be skipped by the end2end_tests program
+#
+#   FAIL : the test is expected to fail
+#
+#   TIMEOUT : the test is ecpected to time out
+#
+#   COMPILE_FAILED : the compilation of the capture_replay exec is ecpected to fail
+#
+#   CRASHED : the test is expected to crash
+#
+# For test batches that run more than one test TIMEOUT, COMPILE_FAILED, and CRASHED
+# will have to be set for all tests that run a batch, because one test that fails
+# with one of these outcomes will bring down the whole batch.
 #
 
-# Failed tests
-D3DImageFormatConversionTest.*
-DrawBuffersTest.UnwrittenOutputVariablesShouldNotCrash/*
-FramebufferTest.MultiContextNoRenderingFeedbackLoops/*
-ImageTest.Deletion/*
-ImageTest.MipLevels/*
-ImageTest.Source2DTarget2D/*
-ImageTest.Source2DTargetExternal/*
-ImageTest.SourceCubeTarget2D/*
-ImageTest.SourceRenderbufferTargetTexture/*
-ImageTest.SourceRenderbufferTargetTextureExternal/*
-ImageTest.UpdatedData/*
-PbufferTest.BindTexImage/*
-PbufferTest.Clearing/*
-PbufferTest.TextureSizeReset/*
-SimpleStateChangeTest.DrawAndClearTextureRepeatedly/*
-SimpleStateChangeTest.RebindTranslatedAttribute/*
-WebGL2ReadOutsideFramebufferTest.CopyTexSubImage3D/*
-WebGLDrawElementsTest.DrawElementsTypeAlignment/*
-WebGLGLSLTest.*
-WebGLReadOutsideFramebufferTest.*
+6180 : ClipDistanceTest.ThreeClipDistances/ES2_Vulkan_SwiftShader = FAIL
+6180 : ClipDistanceTest.ThreeClipDistancesRedeclared/ES2_Vulkan_SwiftShader = FAIL
+6180 : ExternalWrapTest.ClampToEdge/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : ExternalWrapTest.MirroredRepeat/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : ExternalWrapTest.NoWrap/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : ExternalWrapTest.Repeat/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : FramebufferTest.MultiContextNoRenderingFeedbackLoops/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : GLSLTest.ArrayOfStructContainingArrayOfSamplers/ES2_Vulkan_SwiftShader = FAIL
+6180 : GLSLTest.ZeroShaderLength/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
 
-# http://anglebug.com/6006 Failing on bots
-GLSLTest.InactiveVaryingInVertexActiveInFragment/*
-# Flanky tests, pass standalone, but fail in a group
-ColorMaskTest.AMDZeroColorMaskBug/ES3_OpenGL
-WebGLCompatibilityTest.DrawArraysBufferOutOfBoundsNonInstanced/ES2_Vulkan_SwiftShader
-WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInIndexBuffer/ES2_Vulkan_SwiftShader
-WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInVertexBuffer/ES2_Vulkan_SwiftShader
+6180 : ImageTest.Deletion/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.MipLevels/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.Source2DTarget2D/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.Source2DTargetExternal/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.SourceCubeTarget2D/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.SourceRenderbufferTargetTexture/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.SourceRenderbufferTargetTextureExternal/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.UpdatedData/ES2_Vulkan_SwiftShader = FAIL
+6180 : ImageTest.SourceCubeTargetExternal/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
 
-# Crashed tests
-BlitFramebufferANGLETest.Reverse*/*
-BlitFramebufferANGLETest.Scissored*/*
-ClipDistanceTest.*
-DebugMarkerTest.*
-DebugTest.*
-EGLStreamTest.*
-ExternalWrapTest.*
-GetImageTestNoExtensions.EntryPointsInactive/*
-GLSLTest.ArrayOfStructContainingArrayOfSamplers/*
-GLSLTest.InactiveSamplersInStruct/*
-GLSLTest.MixedShaderLengths/*
-GLSLTest.ZeroShaderLength/*
-GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
-ImageTest.SourceCubeTargetExternal/*
-PBOExtensionTest.*
-RobustBufferAccessBehaviorTest.*
-Texture2DTest.DefineMultipleLevelsWithoutMipmapping/*
-VertexAttributeTest.*
+6180 : PbufferTest.BindTexImage/ES2_Vulkan_SwiftShader = FAIL
+6180 : PbufferTest.Clearing/ES2_Vulkan_SwiftShader = FAIL
+6180 : PbufferTest.TextureSizeReset/ES2_Vulkan_SwiftShader = FAIL
 
-# Crashes because closing the FD fails and this raises an assertion
-VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/ES2_Vulkan_SwiftShader
+6180 : Texture2DTest.DefineMultipleLevelsWithoutMipmapping/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
 
-# Replay times out
-VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES2_Vulkan_SwiftShader
-VulkanExternalImageTest.ShouldClearOpaqueFdWithSema*/ES2_Vulkan_SwiftShader
-VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES2_Vulkan_SwiftShader
-
-WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/*
-WebGLFramebufferTest.*
-
-# Skipped tests
-EGLProgramCacheControlTest.NegativeAPI/*
-EGLProgramCacheControlTest.SaveAndReload/*
-LineLoopTest.DISABLED_DrawArraysWithLargeCount/*
-MipmapTest.DISABLED_ThreeLevelsInitData/*
-
-# Compile failed tests
-
-# ES1 comparison failed tests
-BootAnimationTest.DefaultBootAnimation/*
+6180 : VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresWithFlags/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresNoStorage/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphores/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresMutableNoStorage/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
+6180 : WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
