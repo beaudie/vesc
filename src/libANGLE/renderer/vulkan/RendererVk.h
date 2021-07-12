@@ -389,6 +389,9 @@ class RendererVk : angle::NonCopyable
         return mSupportedVulkanPipelineStageMask;
     }
 
+    angle::Result getFormatDescriptorCountForExternalFormats(uint64_t format,
+                                                             uint32_t *descriptorCountOut);
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
