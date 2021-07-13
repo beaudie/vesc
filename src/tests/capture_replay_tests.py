@@ -991,6 +991,12 @@ def main(args):
         else:
             retval = EXIT_FAILURE
 
+        if args.write_expectation is not None:
+            with open(args.write_expectation, "w") as expectation_file:
+                for line in test_result:
+                    expectation_file.write(line)
+                expectation_file.close()
+
         # delete generated folders if --keep_temp_files flag is set to false
         if args.purge:
             DeleteTraceFolders(worker_count)
@@ -1062,6 +1068,8 @@ if __name__ == "__main__":
         default=DEFAULT_MAX_JOBS,
         type=int,
         help='Maximum number of test processes. Default is %d.' % DEFAULT_MAX_JOBS)
+    parser.add_argument(
+        '--write-expectation', help='Write the results as expectation to the given file')
 
     # TODO(jmadill): Remove this argument. http://anglebug.com/6102
     parser.add_argument('--depot-tools-path', default=None, help='Path to depot tools')
