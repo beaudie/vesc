@@ -79,6 +79,9 @@ class BlockLayoutEncoder
     BlockMemberInfo encodeType(GLenum type,
                                const std::vector<unsigned int> &arraySizes,
                                bool isRowMajorMatrix);
+    // Advance the offset based on struct size and array dimensions.  Size can be calculated with
+    // getShaderVariableSize() or equivalent.
+    BlockMemberInfo encodeStruct(size_t size, const std::vector<unsigned int> &arraySizes);
 
     size_t getCurrentOffset() const { return mCurrentOffset * kBytesPerComponent; }
     size_t getShaderVariableSize(const ShaderVariable &structVar, bool isRowMajor);

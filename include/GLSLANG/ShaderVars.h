@@ -80,7 +80,7 @@ struct ShaderVariable
 
     // Array size 0 means not an array when passed to or returned from these functions.
     // Note that setArraySize() is deprecated and should not be used inside ANGLE.
-    unsigned int getOutermostArraySize() const { return isArray() ? arraySizes.back() : 0; }
+    unsigned int getOutermostArraySize() const;
     void setArraySize(unsigned int size);
 
     // Turn this ShaderVariable from an array into a specific element in that array. Will update
