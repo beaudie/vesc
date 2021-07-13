@@ -94,9 +94,10 @@ struct AccessChain
     // The number of components in the vector, if vector and swizzle is used.  This is cached to
     // avoid a type look up when handling swizzles.
     uint8_t swizzledVectorComponentCount = 0;
-    // The block storage of the base id.  Used to correctly select the SPIR-V type id when visiting
-    // EOpIndex* binary nodes.
-    TLayoutBlockStorage baseBlockStorage;
+
+    // SPIR-V type differentiations due to the base type.  Used to correctly select the SPIR-V type
+    // id when visiting EOpIndex* binary nodes (i.e. reading from or writing to an access chain).
+    SpirvTypeDifferentiation baseTypeDiff;
 };
 
 // As each node is traversed, it produces data.  When visiting back the parent, this data is used to
@@ -199,7 +200,7 @@ class OutputSPIRVTraverser : public TIntermTraverser
                             spirv::IdRef baseId,
                             spirv::IdRef typeId,
                             spv::StorageClass storageClass,
-                            TLayoutBlockStorage blockStorage) const;
+                            const SpirvTypeDifferentiation &typeDiff) const;
     void nodeDataInitRValue(NodeData *data, spirv::IdRef baseId, spirv::IdRef typeId) const;
 
     void declareSpecConst(TIntermDeclaration *decl);
@@ -471,7 +472,7 @@ spirv::IdRef OutputSPIRVTraverser::getSymbolIdAndStorageClass(const TSymbol *sym
             UNIMPLEMENTED();
     }
 
-    const spirv::IdRef typeId = mBuilder.getTypeData(type, EbsUnspecified).id;
+    const spirv::IdRef typeId = mBuilder.getTypeData(type, {}).id;
     const spirv::IdRef varId  = mBuilder.declareVariable(
         typeId, *storageClass, mBuilder.getDecorations(type), nullptr, name);
 
@@ -487,7 +488,7 @@ void OutputSPIRVTraverser::nodeDataInitLValue(NodeData *data,
                                               spirv::IdRef baseId,
                                               spirv::IdRef typeId,
                                               spv::StorageClass storageClass,
-                                              TLayoutBlockStorage blockStorage) const
+                                              const SpirvTypeDifferentiation &typeDiff) const
 {
     *data = {};
 
@@ -497,7 +498,7 @@ void OutputSPIRVTraverser::nodeDataInitLValue(NodeData *data,
     data->accessChain.baseTypeId       = typeId;
     data->accessChain.preSwizzleTypeId = typeId;
     data->accessChain.storageClass     = storageClass;
-    data->accessChain.baseBlockStorage = blockStorage;
+    data->accessChain.baseTypeDiff     = typeDiff;
 }
 
 void OutputSPIRVTraverser::nodeDataInitRValue(NodeData *data,
@@ -899,7 +900,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstant(const TType &type,
                                                   const TConstantUnion *constUnion,
                                                   bool isConstantNullValue)
 {
-    const spirv::IdRef typeId = mBuilder.getTypeData(type, EbsUnspecified).id;
+    const spirv::IdRef typeId = mBuilder.getTypeData(type, {}).id;
     spirv::IdRefList componentIds;
 
     // If the object is all zeros, use OpConstantNull to avoid creating a bunch of constants.  This
@@ -980,7 +981,7 @@ spirv::IdRef OutputSPIRVTraverser::createComplexConstant(const TType &type,
 {
     if (type.isMatrix() && !type.isArray())
     {
-        // Matrices are constructed from its columns.
+        // Matrices are constructed from their columns.
         spirv::IdRefList columnIds;
 
         const spirv::IdRef columnTypeId =
@@ -1153,7 +1154,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorVectorFromMatrix(
 
     if (arg0Type.getBasicType() != expectedBasicType)
     {
-        argumentTypeId = mBuilder.getTypeData(arg0TypeAsVector, EbsUnspecified).id;
+        argumentTypeId = mBuilder.getTypeData(arg0TypeAsVector, {}).id;
     }
 
     spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
@@ -1331,7 +1332,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromMatrix(
     {
         // If the parameter is a larger matrix than the constructor type, extract the columns
         // directly and potentially swizzle them.
-        SpirvType paramColumnType     = mBuilder.getSpirvType(parameterType, EbsUnspecified);
+        SpirvType paramColumnType     = mBuilder.getSpirvType(parameterType, {});
         paramColumnType.secondarySize = 1;
         const spirv::IdRef paramColumnTypeId =
             mBuilder.getSpirvTypeData(paramColumnType, nullptr).id;
@@ -1366,7 +1367,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromMatrix(
     {
         // Otherwise create an identity matrix and fill in the components that can be taken from the
         // given parameter.
-        SpirvType paramComponentType     = mBuilder.getSpirvType(parameterType, EbsUnspecified);
+        SpirvType paramComponentType     = mBuilder.getSpirvType(parameterType, {});
         paramComponentType.primarySize   = 1;
         paramComponentType.secondarySize = 1;
         const spirv::IdRef paramComponentTypeId =
@@ -1482,7 +1483,7 @@ void OutputSPIRVTraverser::extractComponents(TIntermAggregate *node,
         }
         if (argumentType.isVector())
         {
-            SpirvType componentType   = mBuilder.getSpirvType(argumentType, EbsUnspecified);
+            SpirvType componentType   = mBuilder.getSpirvType(argumentType, {});
             componentType.type        = expectedBasicType;
             componentType.primarySize = 1;
             const spirv::IdRef componentTypeId =
@@ -1511,7 +1512,7 @@ void OutputSPIRVTraverser::extractComponents(TIntermAggregate *node,
 
         ASSERT(argumentType.isMatrix());
 
-        SpirvType componentType            = mBuilder.getSpirvType(argumentType, EbsUnspecified);
+        SpirvType componentType            = mBuilder.getSpirvType(argumentType, {});
         componentType.primarySize          = 1;
         componentType.secondarySize        = 1;
         const spirv::IdRef componentTypeId = mBuilder.getSpirvTypeData(componentType, nullptr).id;
@@ -1680,7 +1681,7 @@ spirv::IdRef OutputSPIRVTraverser::createFunctionCall(TIntermAggregate *node,
                    paramQualifier == EvqInOut);
 
             // Need to create a temp variable and pass that.
-            tempVarTypeIds[paramIndex] = mBuilder.getTypeData(paramType, EbsUnspecified).id;
+            tempVarTypeIds[paramIndex] = mBuilder.getTypeData(paramType, {}).id;
             tempVarIds[paramIndex] =
                 mBuilder.declareVariable(tempVarTypeIds[paramIndex], spv::StorageClassFunction,
                                          decorations, nullptr, "param");
@@ -1729,7 +1730,7 @@ spirv::IdRef OutputSPIRVTraverser::createFunctionCall(TIntermAggregate *node,
         // TODO: handle mismatching types.  http://anglebug.com/6000
         NodeData tempVarData;
         nodeDataInitLValue(&tempVarData, tempVarIds[paramIndex], tempVarTypeIds[paramIndex],
-                           spv::StorageClassFunction, EbsUnspecified);
+                           spv::StorageClassFunction, {});
         const spirv::IdRef tempVarValue =
             accessChainLoad(&tempVarData, mBuilder.getDecorations(paramType));
         accessChainStore(&param, tempVarValue);
@@ -3233,7 +3234,7 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
     if (extractImageFromSampledImage && IsSampler(samplerBasicType))
     {
         // Get the (non-sampled) image type.
-        SpirvType imageType = mBuilder.getSpirvType(samplerType, EbsUnspecified);
+        SpirvType imageType = mBuilder.getSpirvType(samplerType, {});
         ASSERT(!imageType.isSamplerBaseImage);
         imageType.isSamplerBaseImage            = true;
         const spirv::IdRef extractedImageTypeId = mBuilder.getSpirvTypeData(imageType, nullptr).id;
@@ -3273,7 +3274,7 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
         int drefComponent = isProj ? 2 : coordinatesChannelCount - 1;
 
         // Get the component type
-        SpirvType drefSpirvType       = mBuilder.getSpirvType(*coordinatesType, EbsUnspecified);
+        SpirvType drefSpirvType       = mBuilder.getSpirvType(*coordinatesType, {});
         drefSpirvType.primarySize     = 1;
         const spirv::IdRef drefTypeId = mBuilder.getSpirvTypeData(drefSpirvType, nullptr).id;
 
@@ -3410,7 +3411,7 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
             ASSERT(coordinatesChannelCount == 4);
 
             // Get the component type
-            SpirvType spirvType = mBuilder.getSpirvType(*coordinatesType, EbsUnspecified);
+            SpirvType spirvType                  = mBuilder.getSpirvType(*coordinatesType, {});
             const spirv::IdRef coordinatesTypeId = mBuilder.getSpirvTypeData(spirvType, nullptr).id;
             spirvType.primarySize                = 1;
             const spirv::IdRef channelTypeId     = mBuilder.getSpirvTypeData(spirvType, nullptr).id;
@@ -3587,7 +3588,7 @@ spirv::IdRef OutputSPIRVTraverser::castBasicType(spirv::IdRef value,
         return value;
     }
 
-    SpirvType valueSpirvType      = mBuilder.getSpirvType(valueType, EbsUnspecified);
+    SpirvType valueSpirvType      = mBuilder.getSpirvType(valueType, {});
     valueSpirvType.type           = expectedBasicType;
     const spirv::IdRef castTypeId = mBuilder.getSpirvTypeData(valueSpirvType, nullptr).id;
 
@@ -3902,15 +3903,13 @@ void OutputSPIRVTraverser::visitSymbol(TIntermSymbol *node)
         symbol = &node->variable();
     }
 
-    // Track the block storage; it's needed to determine the derived type in an access chain, but is
-    // not promoted in intermediate nodes' TType.
-    TLayoutBlockStorage blockStorage = EbsUnspecified;
-    if (interfaceBlock)
-    {
-        blockStorage = mBuilder.getBlockStorage(type);
-    }
+    // Track the properties that lead to the symbol's specific SPIR-V type based on the GLSL type.
+    // They are needed to determine the derived type in an access chain, but are not promoted in
+    // intermediate nodes' TTypes.
+    SpirvTypeDifferentiation typeDiff;
+    typeDiff.inferDefaults(type, mCompiler);
 
-    const spirv::IdRef typeId = mBuilder.getTypeData(type, blockStorage).id;
+    const spirv::IdRef typeId = mBuilder.getTypeData(type, typeDiff).id;
 
     // If the symbol is a const variable, such as a const function parameter or specialization
     // constant, create an rvalue.
@@ -3925,10 +3924,10 @@ void OutputSPIRVTraverser::visitSymbol(TIntermSymbol *node)
     spv::StorageClass storageClass;
     const spirv::IdRef symbolId = getSymbolIdAndStorageClass(symbol, type, &storageClass);
 
-    nodeDataInitLValue(&mNodeData.back(), symbolId, typeId, storageClass, blockStorage);
+    nodeDataInitLValue(&mNodeData.back(), symbolId, typeId, storageClass, typeDiff);
 
     // If a field of a nameless interface block, create an access chain.
-    if (interfaceBlock && !type.isInterfaceBlock())
+    if (type.getInterfaceBlock() && !type.isInterfaceBlock())
     {
         uint32_t fieldIndex = static_cast<uint32_t>(type.getInterfaceBlockFieldIndex());
         accessChainPushLiteral(&mNodeData.back(), spirv::LiteralInteger(fieldIndex), typeId);
@@ -3978,7 +3977,7 @@ void OutputSPIRVTraverser::visitConstantUnion(TIntermConstantUnion *node)
     }
     // TODO: other node types such as binary, ternary etc.  http://anglebug.com/4889
 
-    const spirv::IdRef typeId  = mBuilder.getTypeData(type, EbsUnspecified).id;
+    const spirv::IdRef typeId  = mBuilder.getTypeData(type, {}).id;
     const spirv::IdRef constId = createConstant(type, expectedBasicType, node->getConstantValue(),
                                                 node->isConstantNullValue());
 
@@ -4017,7 +4016,7 @@ bool OutputSPIRVTraverser::visitSwizzle(Visit visit, TIntermSwizzle *node)
     }
 
     const spirv::IdRef typeId =
-        mBuilder.getTypeData(node->getType(), mNodeData.back().accessChain.baseBlockStorage).id;
+        mBuilder.getTypeData(node->getType(), mNodeData.back().accessChain.baseTypeDiff).id;
 
     accessChainPushSwizzle(&mNodeData.back(), swizzle, typeId, vectorComponentCount);
 
@@ -4078,8 +4077,7 @@ bool OutputSPIRVTraverser::visitBinary(Visit visit, TIntermBinary *node)
                 accessChainPushLiteral(
                     &mNodeData.back(),
                     spirv::LiteralInteger(node->getRight()->getAsConstantUnion()->getIConst(0)),
-                    mBuilder
-                        .getTypeData(node->getType(), mNodeData.back().accessChain.baseBlockStorage)
+                    mBuilder.getTypeData(node->getType(), mNodeData.back().accessChain.baseTypeDiff)
                         .id);
                 // Don't visit the right child, it's already processed.
                 return false;
@@ -4093,12 +4091,12 @@ bool OutputSPIRVTraverser::visitBinary(Visit visit, TIntermBinary *node)
     // There are at least two entries, one for the left node and one for the right one.
     ASSERT(mNodeData.size() >= 2);
 
-    TLayoutBlockStorage blockStorage = EbsUnspecified;
+    SpirvTypeDifferentiation resultTypeDiff;
     if (node->getOp() == EOpIndexIndirect || node->getOp() == EOpAssign)
     {
-        blockStorage = mNodeData[mNodeData.size() - 2].accessChain.baseBlockStorage;
+        resultTypeDiff = mNodeData[mNodeData.size() - 2].accessChain.baseTypeDiff;
     }
-    const spirv::IdRef resultTypeId = mBuilder.getTypeData(node->getType(), blockStorage).id;
+    const spirv::IdRef resultTypeId = mBuilder.getTypeData(node->getType(), resultTypeDiff).id;
 
     // For EOpIndex* operations, push the right value as an index to the left value's access chain.
     // For the other operations, evaluate the expression.
@@ -4209,7 +4207,7 @@ bool OutputSPIRVTraverser::visitUnary(Visit visit, TIntermUnary *node)
         return true;
     }
 
-    const spirv::IdRef resultTypeId = mBuilder.getTypeData(node->getType(), EbsUnspecified).id;
+    const spirv::IdRef resultTypeId = mBuilder.getTypeData(node->getType(), {}).id;
     const spirv::IdRef result       = visitOperator(node, resultTypeId);
 
     // Keep the result as rvalue.
@@ -4746,14 +4744,14 @@ void OutputSPIRVTraverser::visitFunctionPrototype(TIntermFunctionPrototype *node
     FunctionIds ids;
 
     // Declare the function type
-    ids.returnTypeId = mBuilder.getTypeData(function->getReturnType(), EbsUnspecified).id;
+    ids.returnTypeId = mBuilder.getTypeData(function->getReturnType(), {}).id;
 
     spirv::IdRefList paramTypeIds;
     for (size_t paramIndex = 0; paramIndex < function->getParamCount(); ++paramIndex)
     {
         const TType &paramType = function->getParam(paramIndex)->getType();
 
-        spirv::IdRef paramId = mBuilder.getTypeData(paramType, EbsUnspecified).id;
+        spirv::IdRef paramId = mBuilder.getTypeData(paramType, {}).id;
 
         // const function parameters are intermediate values, while the rest are "variables"
         // with the Function storage class.
@@ -4808,7 +4806,7 @@ bool OutputSPIRVTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
     // Expect to have accumulated as many parameters as the node requires.
     ASSERT(mNodeData.size() > node->getChildCount());
 
-    const spirv::IdRef resultTypeId = mBuilder.getTypeData(node->getType(), EbsUnspecified).id;
+    const spirv::IdRef resultTypeId = mBuilder.getTypeData(node->getType(), {}).id;
     spirv::IdRef result;
 
     switch (node->getOp())
@@ -4997,7 +4995,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         return false;
     }
 
-    const spirv::IdRef typeId = mBuilder.getTypeData(type, EbsUnspecified).id;
+    const spirv::IdRef typeId = mBuilder.getTypeData(type, {}).id;
 
     spv::StorageClass storageClass = GetStorageClass(type);
 
@@ -5026,7 +5024,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     spirv::IdRef nonArrayTypeId = typeId;
     if (type.isArray() && (isShaderInOut || isInterfaceBlock))
     {
-        SpirvType elementType  = mBuilder.getSpirvType(type, EbsUnspecified);
+        SpirvType elementType  = mBuilder.getSpirvType(type, {});
         elementType.arraySizes = {};
         nonArrayTypeId         = mBuilder.getSpirvTypeData(elementType, nullptr).id;
     }

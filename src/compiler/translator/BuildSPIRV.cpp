@@ -32,7 +32,9 @@ bool operator==(const SpirvType &a, const SpirvType &b)
     // ValidateASTOptions::validateVariableReferences.
     if (a.block != nullptr)
     {
-        return a.blockStorage == b.blockStorage && a.isInvariant == b.isInvariant;
+        return a.typeDiff.blockStorage == b.typeDiff.blockStorage &&
+               a.typeDiff.isInvariantBlock == b.typeDiff.isInvariantBlock &&
+               a.typeDiff.isRowMajorQualifiedBlock == b.typeDiff.isRowMajorQualifiedBlock;
     }
 
     // Otherwise, match by the type contents.  The AST transformations sometimes recreate types that
@@ -40,7 +42,7 @@ bool operator==(const SpirvType &a, const SpirvType &b)
     return a.type == b.type && a.primarySize == b.primarySize &&
            a.secondarySize == b.secondarySize && a.imageInternalFormat == b.imageInternalFormat &&
            a.isSamplerBaseImage == b.isSamplerBaseImage &&
-           (a.arraySizes.empty() || a.blockStorage == b.blockStorage);
+           (a.arraySizes.empty() || a.typeDiff.blockStorage == b.typeDiff.blockStorage);
 }
 
 uint32_t GetTotalArrayElements(const SpirvType &type)
@@ -61,20 +63,25 @@ uint32_t GetOutermostArraySize(const SpirvType &type)
     return size ? size : 1;
 }
 
-spirv::IdRef SPIRVBuilder::getNewId(const SpirvDecorations &decorations)
+bool IsBlockFieldRowMajorQualified(const TType &fieldType, bool isParentBlockRowMajorQualified)
 {
-    spirv::IdRef newId = mNextAvailableId;
-    mNextAvailableId   = spirv::IdRef(mNextAvailableId + 1);
-
-    for (const spv::Decoration decoration : decorations)
-    {
-        spirv::WriteDecorate(&mSpirvDecorations, newId, decoration, {});
-    }
-
-    return newId;
+    // If the field is specifically qualified as row-major, it will be row-major.  Otherwise unless
+    // specifically qualified as column-major, its matrix packing is inherited from the parent
+    // block.
+    const TLayoutMatrixPacking fieldMatrixPacking = fieldType.getLayoutQualifier().matrixPacking;
+    return fieldMatrixPacking == EmpRowMajor ||
+           (fieldMatrixPacking == EmpUnspecified && isParentBlockRowMajorQualified);
 }
 
-TLayoutBlockStorage SPIRVBuilder::getBlockStorage(const TType &type) const
+bool IsInvariant(const TType &type, TCompiler *compiler)
+{
+    const bool invariantAll = compiler->getPragma().stdgl.invariantAll;
+
+    // The Invariant decoration is applied to output variables if specified or if globally enabled.
+    return type.isInvariant() || (IsShaderOut(type.getQualifier()) && invariantAll);
+}
+
+TLayoutBlockStorage GetBlockStorage(const TType &type)
 {
     // If the type specifies the layout, take it from that.
     TLayoutBlockStorage blockStorage = type.getLayoutQualifier().blockStorage;
@@ -96,7 +103,109 @@ TLayoutBlockStorage SPIRVBuilder::getBlockStorage(const TType &type) const
     return type.getQualifier() == EvqBuffer ? EbsStd430 : EbsStd140;
 }
 
-SpirvType SPIRVBuilder::getSpirvType(const TType &type, TLayoutBlockStorage blockStorage) const
+void SpirvTypeDifferentiation::inferDefaults(const TType &type, TCompiler *compiler)
+{
+    // Infer some defaults based on type.  If necessary, this overrides some fields (if not already
+    // specified).  Otherwise, it leaves the pre-initialized values as-is.
+    if (type.getStruct() != nullptr)
+    {
+        // |invariant| is significant for structs as the fields of the type are decorated with
+        // Invariant in SPIR-V.
+        isInvariantBlock = isInvariantBlock || IsInvariant(type, compiler);
+    }
+    else if (type.isInterfaceBlock())
+    {
+        // Calculate the block storage from the interface block automatically.  The fields inherit
+        // from this.
+        if (blockStorage == EbsUnspecified)
+        {
+            blockStorage = GetBlockStorage(type);
+        }
+
+        // row_major can only be specified on an interface block or one of its fields.  The fields
+        // will inherit this from the interface block itself.
+        if (!isRowMajorQualifiedBlock)
+        {
+            isRowMajorQualifiedBlock = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+        }
+    }
+    else
+    {
+        // No difference w.r.t to invariant and row-major for non-block types.
+        isInvariantBlock         = false;
+        isRowMajorQualifiedBlock = false;
+
+        if (!type.isArray())
+        {
+            // No difference in type for non-block non-array types in std140 and std430 block
+            // storage.
+            blockStorage = EbsUnspecified;
+        }
+    }
+}
+
+void SpirvTypeDifferentiation::onArrayElementSelection(const SpirvType &elementType)
+{
+    // No difference in type for non-block non-array types in std140 and std430 block storage.
+    if (elementType.arraySizes.empty() && elementType.block == nullptr)
+    {
+        blockStorage = EbsUnspecified;
+    }
+}
+
+void SpirvTypeDifferentiation::onBlockFieldSelection(const TType &fieldType)
+{
+    if (fieldType.getStruct() == nullptr)
+    {
+        // If the field is not a block, no difference if the parent block was invariant or
+        // row-major.
+        isInvariantBlock         = false;
+        isRowMajorQualifiedBlock = false;
+
+        // If the field is not an array, no difference in storage block.
+        if (!fieldType.isArray())
+        {
+            blockStorage = EbsUnspecified;
+        }
+    }
+    else
+    {
+        // Apply row-major only to structs that contain matrices.
+        isRowMajorQualifiedBlock =
+            IsBlockFieldRowMajorQualified(fieldType, isRowMajorQualifiedBlock) &&
+            fieldType.isStructureContainingMatrices();
+    }
+}
+
+void SpirvTypeDifferentiation::onMatrixColumnSelection()
+{
+    // The matrix types are never differentiated, so neither would be their columns.
+    ASSERT(!isInvariantBlock && !isRowMajorQualifiedBlock && blockStorage == EbsUnspecified);
+}
+
+void SpirvTypeDifferentiation::onVectorComponentSelection()
+{
+    // The vector types are never differentiated, so neither would be their components.
+    // TODO: Update comment regarding bool in an interface block, in which case it is
+    // differentiated, but the function implementation does not change.  http://anglebug.com/4889.
+    ASSERT(!isInvariantBlock && !isRowMajorQualifiedBlock && blockStorage == EbsUnspecified);
+}
+
+spirv::IdRef SPIRVBuilder::getNewId(const SpirvDecorations &decorations)
+{
+    spirv::IdRef newId = mNextAvailableId;
+    mNextAvailableId   = spirv::IdRef(mNextAvailableId + 1);
+
+    for (const spv::Decoration decoration : decorations)
+    {
+        spirv::WriteDecorate(&mSpirvDecorations, newId, decoration, {});
+    }
+
+    return newId;
+}
+
+SpirvType SPIRVBuilder::getSpirvType(const TType &type,
+                                     const SpirvTypeDifferentiation &typeDiff) const
 {
     SpirvType spirvType;
     spirvType.type                = type.getBasicType();
@@ -104,7 +213,6 @@ SpirvType SPIRVBuilder::getSpirvType(const TType &type, TLayoutBlockStorage bloc
     spirvType.secondarySize       = static_cast<uint8_t>(type.getSecondarySize());
     spirvType.arraySizes          = type.getArraySizes();
     spirvType.imageInternalFormat = type.getLayoutQualifier().imageInternalFormat;
-    spirvType.blockStorage        = blockStorage;
 
     switch (spirvType.type)
     {
@@ -121,32 +229,24 @@ SpirvType SPIRVBuilder::getSpirvType(const TType &type, TLayoutBlockStorage bloc
 
     if (type.getStruct() != nullptr)
     {
-        spirvType.block       = type.getStruct();
-        spirvType.isInvariant = isInvariantOutput(type);
+        spirvType.block = type.getStruct();
     }
     else if (type.isInterfaceBlock())
     {
         spirvType.block = type.getInterfaceBlock();
+    }
 
-        // Calculate the block storage from the interface block automatically.  The fields inherit
-        // from this.
-        if (spirvType.blockStorage == EbsUnspecified)
-        {
-            spirvType.blockStorage = getBlockStorage(type);
-        }
-    }
-    else if (spirvType.arraySizes.empty())
-    {
-        // No difference in type for non-block non-array types in std140 and std430 block storage.
-        spirvType.blockStorage = EbsUnspecified;
-    }
+    // Automatically inherit or infer the type-differentiating properties.
+    spirvType.typeDiff = typeDiff;
+    spirvType.typeDiff.inferDefaults(type, mCompiler);
 
     return spirvType;
 }
 
-const SpirvTypeData &SPIRVBuilder::getTypeData(const TType &type, TLayoutBlockStorage blockStorage)
+const SpirvTypeData &SPIRVBuilder::getTypeData(const TType &type,
+                                               const SpirvTypeDifferentiation &typeDiff)
 {
-    SpirvType spirvType = getSpirvType(type, blockStorage);
+    SpirvType spirvType = getSpirvType(type, typeDiff);
 
     const TSymbol *block = nullptr;
     if (type.getStruct() != nullptr)
@@ -259,10 +359,7 @@ SpirvTypeData SPIRVBuilder::declareType(const SpirvType &type, const TSymbol *bl
 
         SpirvType subType  = type;
         subType.arraySizes = type.arraySizes.first(type.arraySizes.size() - 1);
-        if (subType.arraySizes.empty() && subType.block == nullptr)
-        {
-            subType.blockStorage = EbsUnspecified;
-        }
+        subType.typeDiff.onArrayElementSelection(subType);
 
         const spirv::IdRef subTypeId = getSpirvTypeData(subType, block).id;
 
@@ -289,16 +386,14 @@ SpirvTypeData SPIRVBuilder::declareType(const SpirvType &type, const TSymbol *bl
         spirv::IdRefList fieldTypeIds;
         for (const TField *field : type.block->fields())
         {
-            const TType &fieldType   = *field->type();
-            SpirvType fieldSpirvType = getSpirvType(fieldType, type.blockStorage);
-            const TSymbol *structure = fieldType.getStruct();
-            // Propagate invariant to struct members.
-            if (structure != nullptr)
-            {
-                fieldSpirvType.isInvariant = type.isInvariant || fieldType.isInvariant();
-            }
+            const TType &fieldType = *field->type();
 
-            spirv::IdRef fieldTypeId = getSpirvTypeData(fieldSpirvType, structure).id;
+            SpirvTypeDifferentiation fieldTypeDiff = type.typeDiff;
+            fieldTypeDiff.onBlockFieldSelection(fieldType);
+
+            const SpirvType fieldSpirvType = getSpirvType(fieldType, fieldTypeDiff);
+            const spirv::IdRef fieldTypeId =
+                getSpirvTypeData(fieldSpirvType, fieldType.getStruct()).id;
             fieldTypeIds.push_back(fieldTypeId);
         }
 
@@ -312,7 +407,6 @@ SpirvTypeData SPIRVBuilder::declareType(const SpirvType &type, const TSymbol *bl
 
         SpirvType imageType          = type;
         imageType.isSamplerBaseImage = true;
-        imageType.blockStorage       = EbsUnspecified;
 
         const spirv::IdRef nonSampledId = getSpirvTypeData(imageType, nullptr).id;
 
@@ -332,7 +426,7 @@ SpirvTypeData SPIRVBuilder::declareType(const SpirvType &type, const TSymbol *bl
 
         getImageTypeParameters(type.type, &sampledType, &dim, &depth, &arrayed, &multisampled,
                                &sampled);
-        spv::ImageFormat imageFormat = getImageFormat(type.imageInternalFormat);
+        const spv::ImageFormat imageFormat = getImageFormat(type.imageInternalFormat);
 
         typeId = getNewId({});
         spirv::WriteTypeImage(&mSpirvTypeAndConstantDecls, typeId, sampledType, dim, depth, arrayed,
@@ -350,7 +444,7 @@ SpirvTypeData SPIRVBuilder::declareType(const SpirvType &type, const TSymbol *bl
         SpirvType columnType     = type;
         columnType.primarySize   = columnType.secondarySize;
         columnType.secondarySize = 1;
-        columnType.blockStorage  = EbsUnspecified;
+        columnType.typeDiff.onMatrixColumnSelection();
 
         const spirv::IdRef columnTypeId = getSpirvTypeData(columnType, nullptr).id;
 
@@ -362,9 +456,9 @@ SpirvTypeData SPIRVBuilder::declareType(const SpirvType &type, const TSymbol *bl
     {
         // Declaring a vector.  Declare the component type first, then create a vector out of it.
 
-        SpirvType componentType    = type;
-        componentType.primarySize  = 1;
-        componentType.blockStorage = EbsUnspecified;
+        SpirvType componentType   = type;
+        componentType.primarySize = 1;
+        componentType.typeDiff.onVectorComponentSelection();
 
         const spirv::IdRef componentTypeId = getSpirvTypeData(componentType, nullptr).id;
 
@@ -453,7 +547,7 @@ SpirvTypeData SPIRVBuilder::declareType(const SpirvType &type, const TSymbol *bl
     }
 
     // Write decorations for interface block fields.
-    if (type.blockStorage != EbsUnspecified)
+    if (type.typeDiff.blockStorage != EbsUnspecified)
     {
         // Cannot have opaque uniforms inside interface blocks.
         ASSERT(!isOpaqueType);
@@ -1208,9 +1302,7 @@ uint32_t SPIRVBuilder::nextUnusedOutputLocation(uint32_t consumedCount)
 
 bool SPIRVBuilder::isInvariantOutput(const TType &type) const
 {
-    // The Invariant decoration is applied to output variables if specified or if globally enabled.
-    return type.isInvariant() ||
-           (IsShaderOut(type.getQualifier()) && mCompiler->getPragma().stdgl.invariantAll);
+    return IsInvariant(type, mCompiler);
 }
 
 void SPIRVBuilder::addCapability(spv::Capability capability)
@@ -1483,13 +1575,16 @@ void SPIRVBuilder::writeSwitchCaseBlockEnd()
 // interface block fields, so this function is only called on those.
 const SpirvTypeData &SPIRVBuilder::getFieldTypeDataForAlignmentAndSize(
     const TType &type,
-    TLayoutBlockStorage blockStorage)
+    const SpirvTypeDifferentiation &typeDiff)
 {
-    SpirvType fieldSpirvType = getSpirvType(type, blockStorage);
+    SpirvTypeDifferentiation fieldTypeDiff = typeDiff;
+    fieldTypeDiff.onBlockFieldSelection(type);
+
+    SpirvType fieldSpirvType = getSpirvType(type, fieldTypeDiff);
 
     // If the field is row-major, swap the rows and columns for the purposes of base alignment
     // calculation.
-    const bool isRowMajor = type.getLayoutQualifier().matrixPacking == EmpRowMajor;
+    const bool isRowMajor = IsBlockFieldRowMajorQualified(type, typeDiff.isRowMajorQualifiedBlock);
     if (isRowMajor)
     {
         std::swap(fieldSpirvType.primarySize, fieldSpirvType.secondarySize);
@@ -1515,10 +1610,7 @@ uint32_t SPIRVBuilder::calculateBaseAlignmentAndSize(const SpirvType &type,
         // > laid out in order, according to rule (9).
         SpirvType baseType  = type;
         baseType.arraySizes = {};
-        if (baseType.arraySizes.empty() && baseType.block == nullptr)
-        {
-            baseType.blockStorage = EbsUnspecified;
-        }
+        baseType.typeDiff.onArrayElementSelection(baseType);
 
         const SpirvTypeData &baseTypeData = getSpirvTypeData(baseType, nullptr);
         uint32_t baseAlignment            = baseTypeData.baseAlignment;
@@ -1528,7 +1620,7 @@ uint32_t SPIRVBuilder::calculateBaseAlignmentAndSize(const SpirvType &type,
         // > Rule 4. ... and rounded up to the base alignment of a vec4.
         // > Rule 9. ... If none of the structure members are larger than a vec4, the base alignment
         // of the structure is vec4.
-        if (type.blockStorage != EbsStd430)
+        if (type.typeDiff.blockStorage != EbsStd430)
         {
             baseAlignment          = std::max(baseAlignment, 16u);
             baseSizeInStorageBlock = std::max(baseSizeInStorageBlock, 16u);
@@ -1554,14 +1646,14 @@ uint32_t SPIRVBuilder::calculateBaseAlignmentAndSize(const SpirvType &type,
         for (const TField *field : type.block->fields())
         {
             const SpirvTypeData &fieldTypeData =
-                getFieldTypeDataForAlignmentAndSize(*field->type(), type.blockStorage);
+                getFieldTypeDataForAlignmentAndSize(*field->type(), type.typeDiff);
             baseAlignment = std::max(baseAlignment, fieldTypeData.baseAlignment);
         }
 
         // For std140 only:
         // > If none of the structure members are larger than a vec4, the base alignment of the
         // structure is vec4.
-        if (type.blockStorage != EbsStd430)
+        if (type.typeDiff.blockStorage != EbsStd430)
         {
             baseAlignment = std::max(baseAlignment, 16u);
         }
@@ -1595,6 +1687,7 @@ uint32_t SPIRVBuilder::calculateBaseAlignmentAndSize(const SpirvType &type,
 
         vectorType.primarySize   = vectorType.secondarySize;
         vectorType.secondarySize = 1;
+        vectorType.typeDiff.onMatrixColumnSelection();
 
         const SpirvTypeData &vectorTypeData = getSpirvTypeData(vectorType, nullptr);
         uint32_t baseAlignment              = vectorTypeData.baseAlignment;
@@ -1602,7 +1695,7 @@ uint32_t SPIRVBuilder::calculateBaseAlignmentAndSize(const SpirvType &type,
 
         // For std140 only:
         // > Rule 4. ... and rounded up to the base alignment of a vec4.
-        if (type.blockStorage != EbsStd430)
+        if (type.typeDiff.blockStorage != EbsStd430)
         {
             baseAlignment          = std::max(baseAlignment, 16u);
             baseSizeInStorageBlock = std::max(baseSizeInStorageBlock, 16u);
@@ -1625,6 +1718,7 @@ uint32_t SPIRVBuilder::calculateBaseAlignmentAndSize(const SpirvType &type,
 
         SpirvType baseType   = type;
         baseType.primarySize = 1;
+        baseType.typeDiff.onVectorComponentSelection();
 
         const SpirvTypeData &baseTypeData = getSpirvTypeData(baseType, nullptr);
         uint32_t baseAlignment            = baseTypeData.baseAlignment;
@@ -1669,7 +1763,7 @@ uint32_t SPIRVBuilder::calculateSizeAndWriteOffsetDecorations(const SpirvType &t
         // > which an aligned offset is computed by rounding the base offset up to a multiple of the
         // > base alignment.
         const SpirvTypeData &fieldTypeData =
-            getFieldTypeDataForAlignmentAndSize(fieldType, type.blockStorage);
+            getFieldTypeDataForAlignmentAndSize(fieldType, type.typeDiff);
         nextOffset = rx::roundUp(nextOffset, fieldTypeData.baseAlignment);
 
         // Write the Offset decoration.
@@ -1695,7 +1789,7 @@ uint32_t SPIRVBuilder::calculateSizeAndWriteOffsetDecorations(const SpirvType &t
     // Round up the size to the base alignment of the block.  Additionally, for std140 round it up
     // to the size of vec4.  This is so that arrays of the block have the right stride.
     blockSize = rx::roundUp(blockSize, blockBaseAlignment);
-    if (type.blockStorage != EbsStd430)
+    if (type.typeDiff.blockStorage != EbsStd430)
     {
         blockSize = std::max(blockSize, 16u);
     }
@@ -1712,11 +1806,15 @@ void SPIRVBuilder::writeMemberDecorations(const SpirvType &type, spirv::IdRef ty
     for (const TField *field : type.block->fields())
     {
         const TType &fieldType = *field->type();
-        const SpirvTypeData &fieldTypeData =
-            getFieldTypeDataForAlignmentAndSize(fieldType, type.blockStorage);
+
+        SpirvTypeDifferentiation fieldTypeDiff = type.typeDiff;
+        fieldTypeDiff.onBlockFieldSelection(fieldType);
+
+        const SpirvType fieldSpirvType     = getSpirvType(fieldType, fieldTypeDiff);
+        const SpirvTypeData &fieldTypeData = getSpirvTypeData(fieldSpirvType, nullptr);
 
         // Add invariant decoration if any.
-        if (type.isInvariant || fieldType.isInvariant())
+        if (type.typeDiff.isInvariantBlock || fieldType.isInvariant())
         {
             spirv::WriteMemberDecorate(&mSpirvDecorations, typeId,
                                        spirv::LiteralInteger(fieldIndex), spv::DecorationInvariant,
@@ -1735,7 +1833,8 @@ void SPIRVBuilder::writeMemberDecorations(const SpirvType &type, spirv::IdRef ty
                 spv::DecorationMatrixStride, {spirv::LiteralInteger(matrixStride)});
 
             // ColMajor or RowMajor
-            const bool isRowMajor = fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor;
+            const bool isRowMajor =
+                IsBlockFieldRowMajorQualified(fieldType, type.typeDiff.isRowMajorQualifiedBlock);
             spirv::WriteMemberDecorate(
                 &mSpirvDecorations, typeId, spirv::LiteralInteger(fieldIndex),
                 isRowMajor ? spv::DecorationRowMajor : spv::DecorationColMajor, {});
