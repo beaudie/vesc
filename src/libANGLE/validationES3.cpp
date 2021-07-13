@@ -2301,7 +2301,7 @@ bool ValidateClearBufferfi(const Context *context,
 
 bool ValidateDrawBuffers(const Context *context, GLsizei n, const GLenum *bufs)
 {
-    if (context->getClientMajorVersion() < 3)
+    if ((context->getClientMajorVersion() < 3) && !context->getExtensions().drawBuffers)
     {
         context->validationError(GL_INVALID_OPERATION, kES3Required);
         return false;
