@@ -19,12 +19,24 @@ namespace spirv = angle::spirv;
 namespace sh
 {
 // Helper classes to map types to ids
-struct SpirvType
+
+// The same GLSL type may map to multiple SPIR-V types when said GLSL type is used differently in
+// the shader source, for example used with |invariant| and without, used in an interface block etc.
+// This type contains the pieces of information that differentiate SPIR-V types derived from the
+// same GLSL type.
+struct SpirvType;
+class SpirvTypeDifferentiation
 {
-    // If struct or interface block, the type is identified by the pointer.  Note that both
-    // TStructure and TInterfaceBlock inherit from TFieldListCollection, and their difference is
-    // irrelevant as far as SPIR-V type is concerned.
-    const TFieldListCollection *block = nullptr;
+  public:
+    // Some of the properties that differentiate SPIR-V types apply to structs or arrays, but not to
+    // their fields or basic types.  When extracting fields, array elements, columns or basic types
+    // from a type, the following helpers are used to remove any ineffective (and thus incorrect)
+    // differentiation.
+    void inferDefaults(const TType &type, TCompiler *compiler);
+    void onArrayElementSelection(const SpirvType &elementType);
+    void onBlockFieldSelection(const TType &fieldType);
+    void onMatrixColumnSelection();
+    void onVectorComponentSelection();
 
     // If a structure is used in two interface blocks with different layouts, it would have
     // to generate two SPIR-V types, as its fields' Offset decorations could be different.
@@ -36,7 +48,20 @@ struct SpirvType
     // If a structure is used in two I/O blocks or output varyings with and without the invariant
     // qualifier, it would also have to generate two SPIR-V types, as its fields' Invariant
     // decorations would be different.
-    bool isInvariant = false;
+    bool isInvariantBlock = false;
+
+    // Similarly, a structure containing matrices may be used both with the column_major and
+    // row_major layout qualifier, generating two SPIR-V types with different decorations on its
+    // fields.
+    bool isRowMajorQualifiedBlock = false;
+};
+
+struct SpirvType
+{
+    // If struct or interface block, the type is identified by the pointer.  Note that both
+    // TStructure and TInterfaceBlock inherit from TFieldListCollection, and their difference is
+    // irrelevant as far as SPIR-V type is concerned.
+    const TFieldListCollection *block = nullptr;
 
     // Otherwise, it's a basic type + column, row and array dimensions, or it's an image
     // declaration.
@@ -64,6 +89,9 @@ struct SpirvType
     // between these two types.  Note that for the former, the basic type is still Ebt*Sampler* to
     // distinguish it from storage images (which have a basic type of Ebt*Image*).
     bool isSamplerBaseImage = false;
+
+    // Anything that can cause the same GLSL type to produce different SPIR-V types.
+    SpirvTypeDifferentiation typeDiff;
 };
 
 struct SpirvIdAndIdList
@@ -93,11 +121,14 @@ struct SpirvTypeHash
     size_t operator()(const sh::SpirvType &type) const
     {
         // Block storage must only affect the type if it's a block type or array type (in a block).
-        ASSERT(type.blockStorage == sh::EbsUnspecified || type.block != nullptr ||
+        ASSERT(type.typeDiff.blockStorage == sh::EbsUnspecified || type.block != nullptr ||
                !type.arraySizes.empty());
 
         // Invariant must only affect the type if it's a block type.
-        ASSERT(!type.isInvariant || type.block != nullptr);
+        ASSERT(!type.typeDiff.isInvariantBlock || type.block != nullptr);
+
+        // Row-major must only affect the type if it's a block type.
+        ASSERT(!type.typeDiff.isRowMajorQualifiedBlock || type.block != nullptr);
 
         size_t result = 0;
 
@@ -110,7 +141,9 @@ struct SpirvTypeHash
         if (type.block != nullptr)
         {
             return result ^ angle::ComputeGenericHash(&type.block, sizeof(type.block)) ^
-                   static_cast<size_t>(type.isInvariant) ^ (type.blockStorage << 1);
+                   static_cast<size_t>(type.typeDiff.isInvariantBlock) ^
+                   (static_cast<size_t>(type.typeDiff.isRowMajorQualifiedBlock) << 1) ^
+                   (type.typeDiff.blockStorage << 2);
         }
 
         static_assert(sh::EbtLast < 256, "Basic type doesn't fit in uint8_t");
@@ -123,7 +156,7 @@ struct SpirvTypeHash
             static_cast<uint8_t>(type.type),
             static_cast<uint8_t>((type.primarySize - 1) | (type.secondarySize - 1) << 2 |
                                  type.isSamplerBaseImage << 4),
-            static_cast<uint8_t>(type.blockStorage | type.imageInternalFormat << 3),
+            static_cast<uint8_t>(type.typeDiff.blockStorage | type.imageInternalFormat << 3),
             // Padding because ComputeGenericHash expects a key size divisible by 4
         };
 
@@ -249,9 +282,8 @@ class SPIRVBuilder : angle::NonCopyable
     {}
 
     spirv::IdRef getNewId(const SpirvDecorations &decorations);
-    TLayoutBlockStorage getBlockStorage(const TType &type) const;
-    SpirvType getSpirvType(const TType &type, TLayoutBlockStorage blockStorage) const;
-    const SpirvTypeData &getTypeData(const TType &type, TLayoutBlockStorage blockStorage);
+    SpirvType getSpirvType(const TType &type, const SpirvTypeDifferentiation &typeDiff) const;
+    const SpirvTypeData &getTypeData(const TType &type, const SpirvTypeDifferentiation &typeDiff);
     const SpirvTypeData &getSpirvTypeData(const SpirvType &type, const TSymbol *block);
     spirv::IdRef getBasicTypeId(TBasicType basicType, size_t size);
     spirv::IdRef getTypePointerId(spirv::IdRef typeId, spv::StorageClass storageClass);
@@ -367,8 +399,9 @@ class SPIRVBuilder : angle::NonCopyable
   private:
     SpirvTypeData declareType(const SpirvType &type, const TSymbol *block);
 
-    const SpirvTypeData &getFieldTypeDataForAlignmentAndSize(const TType &type,
-                                                             TLayoutBlockStorage blockStorage);
+    const SpirvTypeData &getFieldTypeDataForAlignmentAndSize(
+        const TType &type,
+        const SpirvTypeDifferentiation &typeDiff);
     uint32_t calculateBaseAlignmentAndSize(const SpirvType &type, uint32_t *sizeInStorageBlockOut);
     uint32_t calculateSizeAndWriteOffsetDecorations(const SpirvType &type,
                                                     spirv::IdRef typeId,
