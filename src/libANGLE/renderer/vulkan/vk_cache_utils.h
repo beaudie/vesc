@@ -1105,9 +1105,20 @@ class UniformsAndXfbDescriptorDesc
         mBufferSerials[kDefaultUniformBufferIndex] = bufferSerial;
         mBufferCount = std::max(mBufferCount, static_cast<uint32_t>(1));
     }
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    void updateDefaultUniformBufferSize(gl::ShaderType shaderType, size_t size)
+    {
+        mBufferSizes[static_cast<uint32_t>(shaderType)] = static_cast<uint32_t>(size);
+    }
+#endif
     void updateTransformFeedbackBuffer(size_t xfbIndex,
                                        BufferSerial bufferSerial,
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+                                       VkDeviceSize bufferOffset,
+                                       VkDeviceSize size)
+#else
                                        VkDeviceSize bufferOffset)
+#endif
     {
         uint32_t bufferIndex        = static_cast<uint32_t>(xfbIndex) + 1;
         mBufferSerials[bufferIndex] = bufferSerial;
@@ -1117,6 +1128,9 @@ class UniformsAndXfbDescriptorDesc
         mXfbBufferOffsets[xfbIndex] = static_cast<uint32_t>(bufferOffset);
 
         mBufferCount = std::max(mBufferCount, (bufferIndex + 1));
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+        mBufferSizes[static_cast<size_t>(gl::ShaderType::EnumCount) + xfbIndex] = static_cast<uint32_t>(size);
+#endif
     }
     size_t hash() const;
     void reset();
@@ -1131,6 +1145,9 @@ class UniformsAndXfbDescriptorDesc
     static constexpr size_t kMaxBufferCount =
         kDefaultUniformBufferCount + gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS;
     std::array<BufferSerial, kMaxBufferCount> mBufferSerials;
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    std::array<uint32_t, static_cast<size_t>(gl::ShaderType::EnumCount) + gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> mBufferSizes;
+#endif
     std::array<uint32_t, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> mXfbBufferOffsets;
 };
 
@@ -1766,6 +1783,90 @@ constexpr uint32_t kReservedDriverUniformBindingCount = 1;
 // supported.
 constexpr uint32_t kReservedPerStageDefaultUniformBindingCount = 1;
 constexpr uint32_t kReservedDefaultUniformBindingCount         = 3;
+
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+class GenericDescriptorPool final : angle::NonCopyable
+{
+public:
+	~GenericDescriptorPool();
+    angle::Result init(ContextVk *contextVk, const std::vector<VkDescriptorPoolSize> &poolSizesIn, uint32_t maxSets);
+    bool allocateDescriptorSet(VkDescriptorSetLayout descriptorSetLayout, VkDescriptorSet *descriptorSetsOut);
+    angle::Result reset();
+private:
+    ContextVk *mContextVk;
+    vk::DescriptorPool mDescriptorPool;
+};
+
+template <typename Key>
+class GlobalDescriptorSetCache final : angle::NonCopyable
+{
+public:
+    angle::Result init(ContextVk *contextVk,
+                       uint32_t initialMaxNumSets,
+                       const char *debugName,
+                       std::initializer_list<VkDescriptorType> potentiallyUsedDescriptors = {});
+    void increaseTotalDescriptorPoolSizes(std::vector<VkDescriptorPoolSize> &descriptorPoolSizes);
+    void decreaseTotalDescriptorPoolSizes(std::vector<VkDescriptorPoolSize> &descriptorPoolSizes);
+    void destroy() { mCachedPools.clear(); }
+	bool findDescriptorSet(const Key& descriptorSetKey,
+                           const vk::DescriptorSetLayout &descriptorSetLayout,
+                           VkDescriptorSet* descriptorSetOut);
+    angle::Result createDescriptorSet(const Key *descriptorSetKey,
+                                      const vk::DescriptorSetLayout &descriptorSetLayout,
+                                      std::vector<VkDescriptorPoolSize> &descriptorSizes,
+                                      VkDescriptorSet *descriptorSetsOut);
+	void gc();
+    uint32_t getId() const { return mId; }
+private:
+	angle::Result addCachedPool();
+    bool freePoolCanBeReused(const std::vector<VkDescriptorPoolSize> &requiredPoolSizes) const;
+    void calcDescriptorPoolSizes(uint32_t maxNumSets, std::vector<VkDescriptorPoolSize> &poolSizesOut) const;
+
+    constexpr static uint32_t kMaxDescriptorType = VkDescriptorType::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+	class CachedPool final : angle::NonCopyable
+	{
+	public:
+		angle::Result init(ContextVk *contextVk, const std::vector<VkDescriptorPoolSize> &poolSizes, uint32_t maxSets);
+        const std::vector<VkDescriptorPoolSize> &getPoolSizes() const { return mPoolSizes; }
+		angle::Result reset(ContextVk *contextVk);
+		bool canGC(ContextVk *contextVk) const;
+		bool findDescriptorSet(const Key& descriptorSetKey,
+                               const vk::DescriptorSetLayout &descriptorSetLayout,
+                               ContextVk *contextVk,
+                               VkDescriptorSet* descriptorSetsOut);
+        bool createDescriptorSet(const Key *descriptorSetKey,
+                                 ContextVk *contextVk,
+                                 const vk::DescriptorSetLayout &descriptorSetLayout,
+                                 std::vector<VkDescriptorPoolSize> &descriptorSizes,
+                                 VkDescriptorSet *descriptorSetsOut);
+        uint32_t getMaxNumSets() const { return mMaxNumSets; }
+        uint32_t getAllocatedDescriptorSize(VkDescriptorType type) const;
+        uint32_t getAllocatedDescriptorSetNum() const { return mAllocatedDescriptorSetNum; }
+	private:
+        std::vector<VkDescriptorPoolSize> mPoolSizes;
+		GenericDescriptorPool mPool;
+        angle::HashMap<uint32_t/*DSLayoutId*/, angle::HashMap<Key, VkDescriptorSet>> mDescriptorSetCaches;
+        uint32_t mMaxNumSets = 0;
+        Serial mLastUseQueueSerial;
+        std::array<uint32_t, kMaxDescriptorType> mAllocatedDescriptorSizes;
+        uint32_t mAllocatedDescriptorSetNum = 0;
+	};
+
+    constexpr static uint32_t kDSSetCacheMaxPoolLookups = 2;
+    ContextVk *mContextVk = nullptr;
+    std::vector<std::unique_ptr<CachedPool>> mCachedPools;
+	std::unique_ptr<CachedPool> mFreePool;
+    uint32_t mCurrentMaxNumSets = 0;
+    uint32_t mMaxMaxNumSets = 4096;
+    std::array<uint32_t, kMaxDescriptorType> mTotalProgramDescriptorPoolSizes;
+    uint32_t mTotalProgramNum = 0;
+    std::array<bool, kMaxDescriptorType> mPotentiallyUsedDescriptors;
+    const char *mDebugName = "";
+    bool mTestPoolIsUsed = false;
+    // if mId changes it means old descriptor sets are freed
+    uint32_t mId = 0;
+};
+#endif
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_

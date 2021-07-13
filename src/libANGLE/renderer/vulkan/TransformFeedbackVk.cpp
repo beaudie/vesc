@@ -79,9 +79,20 @@ void TransformFeedbackVk::initializeXFBBuffersDesc(ContextVk *contextVk, size_t 
             mBufferSizes[bufferIndex]    = nullBuffer.getSize();
         }
 
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+        VkDeviceSize size  = mBufferSizes[bufferIndex] + (mBufferOffsets[bufferIndex] - mAlignedBufferOffsets[bufferIndex]);
+#endif
         mXFBBuffersDesc.updateTransformFeedbackBuffer(
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+            bufferIndex, mBufferHelpers[bufferIndex]->getOwnerSerial(),
+#else
             bufferIndex, mBufferHelpers[bufferIndex]->getBufferSerial(),
+#endif
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+            mBufferOffsets[bufferIndex], size);
+#else
             mBufferOffsets[bufferIndex]);
+#endif
     }
 }
 
@@ -180,7 +191,11 @@ angle::Result TransformFeedbackVk::pause(const gl::Context *context)
         for (size_t xfbIndex = 0; xfbIndex < xfbBufferCount; ++xfbIndex)
         {
             mXFBBuffersDesc.updateTransformFeedbackBuffer(xfbIndex, emptyBuffer.getBufferSerial(),
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+                                                          0, 0);
+#else
                                                           0);
+#endif
         }
     }
 

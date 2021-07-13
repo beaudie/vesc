@@ -143,6 +143,12 @@ class ProgramExecutableVk
         return mCurrentDefaultUniformBufferSerial;
     }
 
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    uint32_t getUniformsAndXfbDescriptorsCacheId() const
+    {
+        return mUniformsAndXfbDescriptorsCacheId;
+    }
+#endif
     angle::Result getGraphicsPipeline(ContextVk *contextVk,
                                       gl::PrimitiveMode mode,
                                       const vk::GraphicsPipelineDesc &desc,
@@ -203,6 +209,9 @@ class ProgramExecutableVk
 
     void accumulateCacheStats(VulkanCacheType cacheType, const CacheStats &cacheStats);
     ProgramExecutablePerfCounters getAndResetObjectPerfCounters();
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    VkDeviceSize getDefaultUniformsBufferSize(const gl::ShaderType shaderType, const DefaultUniformBlock &defaultUniformBlock, ContextVk *contextVk);
+#endif
 
   private:
     friend class ProgramVk;
@@ -213,11 +222,13 @@ class ProgramExecutableVk
         const vk::UniformsAndXfbDescriptorDesc &xfbBufferDesc,
         bool *newDescriptorSetAllocated);
 
+#if !SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
     angle::Result allocateDescriptorSet(ContextVk *contextVk,
                                         DescriptorSetIndex descriptorSetIndex);
     angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
                                                   DescriptorSetIndex descriptorSetIndex,
                                                   bool *newPoolAllocatedOut);
+#endif
     void addInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
                                             const gl::ShaderType shaderType,
                                             VkDescriptorType descType,
@@ -267,6 +278,11 @@ class ProgramExecutableVk
                                              vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
                                              DescriptorSetIndex descriptorSetIndex,
                                              VkDescriptorSetLayout descriptorSetLayout);
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    void getDescriptorPoolSizes(ContextVk *contextVk,
+                                vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+                                std::vector<VkDescriptorPoolSize> &descriptorPoolSizes);
+#endif
 
     void outputCumulativePerfCounters();
 
@@ -275,13 +291,18 @@ class ProgramExecutableVk
     vk::DescriptorSetArray<VkDescriptorSet> mEmptyDescriptorSets;
     uint32_t mNumDefaultUniformDescriptors;
     vk::BufferSerial mCurrentDefaultUniformBufferSerial;
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    uint32_t mUniformsAndXfbDescriptorsCacheId = 0;
+#endif
 
+#if !SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
     DescriptorSetCache<vk::UniformsAndXfbDescriptorDesc, VulkanCacheType::UniformsAndXfbDescriptors>
         mUniformsAndXfbDescriptorsCache;
     DescriptorSetCache<vk::TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>
         mTextureDescriptorsCache;
     DescriptorSetCache<vk::ShaderBuffersDescriptorDesc, VulkanCacheType::ShaderBuffersDescriptors>
         mShaderBufferDescriptorsCache;
+#endif
 
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
@@ -290,6 +311,10 @@ class ProgramExecutableVk
     FormatIndexMap<VkFormat> mVkFormatIndexMap;
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    vk::DescriptorSetArray<std::vector<VkDescriptorPoolSize>> mDescriptorSizes;
+    bool mValidDescriptorSizes = false;
+#endif
 
     // Keep bindings to the descriptor pools. This ensures the pools stay valid while the Program
     // is in use.
@@ -298,7 +323,9 @@ class ProgramExecutableVk
     // Store descriptor pools here. We store the descriptors in the Program to facilitate descriptor
     // cache management. It can also allow fewer descriptors for shaders which use fewer
     // textures/buffers.
+#if !SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
     vk::DescriptorSetArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
+#endif
 
     // A set of dynamic offsets used with vkCmdBindDescriptorSets for the default uniform buffers.
     VkDescriptorType mUniformBufferDescriptorType;

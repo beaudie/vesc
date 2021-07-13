@@ -626,6 +626,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 #if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
     vk::BufferSuballocatorVk *getDynamicBufferStorage() { return &mDynamicBufferStorage; }
 #endif
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    GlobalDescriptorSetCache<vk::ShaderBuffersDescriptorDesc> *getGlobalShaderBufferDescriptorsCache() { return &mGlobalShaderBufferDescriptorsCache; }
+    GlobalDescriptorSetCache<vk::TextureDescriptorDesc> *getGlobalTextureDescriptorsCache() { return &mGlobalTextureDescriptorsCache; }
+    GlobalDescriptorSetCache<vk::UniformsAndXfbDescriptorDesc> *getGlobalUniformsAndXfbDescriptorsCache() { return &mGlobalUniformsAndXfbDescriptorsCache; }
+#endif
     // For testing only.
     void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
 
@@ -1187,6 +1192,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::BufferSuballocatorVk mDynamicBufferStorage;
 #endif
 
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    GlobalDescriptorSetCache<vk::ShaderBuffersDescriptorDesc> mGlobalShaderBufferDescriptorsCache;
+    GlobalDescriptorSetCache<vk::TextureDescriptorDesc> mGlobalTextureDescriptorsCache;
+    GlobalDescriptorSetCache<vk::UniformsAndXfbDescriptorDesc> mGlobalUniformsAndXfbDescriptorsCache;
+#endif
     std::vector<std::string> mCommandBufferDiagnostics;
 
     // Record GL API calls for debuggers

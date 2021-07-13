@@ -158,7 +158,14 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
     // we then must update uniform data for all shader stages to keep all shader stages' unform data
     // in the same buffer.
     requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, glState, &offsets);
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    if (!requiredSpace)
+    {
+        return angle::Result::Continue;
+    }
+#else
     ASSERT(requiredSpace > 0);
+#endif
 
     // Allocate space from dynamicBuffer. Always try to allocate from the current buffer first.
     // If that failed, we deal with fall out and try again.
@@ -198,7 +205,11 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
     // allocate a new descriptor set whenever there is uniform buffer switch.
     vk::BufferHelper *defaultUniformBuffer = defaultUniformStorage->getCurrentBuffer();
     if (mExecutable.getCurrentDefaultUniformBufferSerial() !=
-        defaultUniformBuffer->getBufferSerial())
+        defaultUniformBuffer->getBufferSerial()
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+        || mExecutable.getUniformsAndXfbDescriptorsCacheId() != contextVk->getGlobalUniformsAndXfbDescriptorsCache()->getId()
+#endif
+    )
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
@@ -219,6 +230,15 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
             uniformsAndXfbBufferDesc = &defaultUniformsDesc;
         }
 
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+        for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+        {
+            uniformsAndXfbBufferDesc->updateDefaultUniformBufferSize(shaderType,
+                                                                     mExecutable.getDefaultUniformsBufferSize(shaderType,
+                                                                                                              getShaderProgram(glState, shaderType)->getDefaultUniformBlocks()[shaderType],
+                                                                                                              contextVk));
+        }
+#endif
         bool newDescriptorSetAllocated;
         ANGLE_TRY(mExecutable.allocUniformAndXfbDescriptorSet(contextVk, *uniformsAndXfbBufferDesc,
                                                               &newDescriptorSetAllocated));

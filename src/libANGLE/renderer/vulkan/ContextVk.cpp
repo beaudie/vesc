@@ -329,7 +329,11 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
             desc->appendBufferSerial(bufferSerial);
             ASSERT(static_cast<uint64_t>(binding.getSize()) <=
                    static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+            desc->append32BitValue(static_cast<uint32_t>(gl::GetBoundBufferAvailableSize(binding)));
+#else
             desc->append32BitValue(static_cast<uint32_t>(binding.getSize()));
+#endif
             if (appendOffset)
             {
                 ASSERT(static_cast<uint64_t>(binding.getOffset()) <
@@ -622,6 +626,11 @@ void ContextVk::onDestroy(const gl::Context *context)
 #if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
     mDynamicBufferStorage.release();
 #endif
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    mGlobalShaderBufferDescriptorsCache.destroy();
+    mGlobalTextureDescriptorsCache.destroy();
+    mGlobalUniformsAndXfbDescriptorsCache.destroy();
+#endif
 
     for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
     {
@@ -799,6 +808,11 @@ angle::Result ContextVk::initialize()
                                     VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
                                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT/* & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT*/);
 #endif
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    ANGLE_TRY(mGlobalShaderBufferDescriptorsCache.init(this, 512, "ShaderResourceDescriptorsCache", { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER }));
+    ANGLE_TRY(mGlobalTextureDescriptorsCache.init(this, 512, "TextureDescriptorsCache", { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER }));
+    ANGLE_TRY(mGlobalUniformsAndXfbDescriptorsCache.init(this, 512, "UniformsAndXfbDescriptorsCache", { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER }));
+#endif
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
     constexpr VkBufferUsageFlags kEmptyBufferUsage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
@@ -898,12 +912,20 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // function
     ScopedDescriptorSetUpdates descriptorSetUpdates(this);
 
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    if (mProgram && (mProgram->dirtyUniforms() || mProgram->getExecutable().getUniformsAndXfbDescriptorsCacheId() != mGlobalUniformsAndXfbDescriptorsCache.getId()))
+#else
     if (mProgram && mProgram->dirtyUniforms())
+#endif
     {
         ANGLE_TRY(mProgram->updateUniforms(this));
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    else if (mProgramPipeline && (mProgramPipeline->dirtyUniforms(getState()) || mProgram->getExecutable().getUniformsAndXfbDescriptorsCacheId() != mGlobalUniformsAndXfbDescriptorsCache.getId()))
+#else
     else if (mProgramPipeline && mProgramPipeline->dirtyUniforms(getState()))
+#endif
     {
         ANGLE_TRY(mProgramPipeline->updateUniforms(this));
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -1143,12 +1165,20 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     // function
     ScopedDescriptorSetUpdates descriptorSetUpdates(this);
 
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    if (mProgram && (mProgram->dirtyUniforms() || mProgram->getExecutable().getUniformsAndXfbDescriptorsCacheId() != mGlobalUniformsAndXfbDescriptorsCache.getId()))
+#else
     if (mProgram && mProgram->dirtyUniforms())
+#endif
     {
         ANGLE_TRY(mProgram->updateUniforms(this));
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    else if (mProgramPipeline && (mProgramPipeline->dirtyUniforms(getState()) || mProgram->getExecutable().getUniformsAndXfbDescriptorsCacheId() != mGlobalUniformsAndXfbDescriptorsCache.getId()))
+#else
     else if (mProgramPipeline && mProgramPipeline->dirtyUniforms(getState()))
+#endif
     {
         ANGLE_TRY(mProgramPipeline->updateUniforms(this));
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -1932,6 +1962,15 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
                                                            : vk::kInvalidBufferSerial);
 
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    for (const gl::ShaderType shaderType : mProgram->getState().getExecutable().getLinkedShaderStages())
+    {
+        xfbBufferDesc.updateDefaultUniformBufferSize(shaderType,
+                                                     mProgram->getExecutable().getDefaultUniformsBufferSize(shaderType,
+                                                                                                            mProgram->getDefaultUniformBlocks()[shaderType],
+                                                                                                            this));
+    }
+#endif
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(), uniformBuffer, this,
         xfbBufferDesc);
@@ -5333,6 +5372,11 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     }
     mDefaultUniformStorage.releaseInFlightBuffersToResourceUseList(this);
     mStagingBuffer.releaseInFlightBuffersToResourceUseList(this);
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    mGlobalShaderBufferDescriptorsCache.gc();
+    mGlobalTextureDescriptorsCache.gc();
+    mGlobalUniformsAndXfbDescriptorsCache.gc();
+#endif
 
     ANGLE_TRY(submitFrame(signalSemaphore));
 

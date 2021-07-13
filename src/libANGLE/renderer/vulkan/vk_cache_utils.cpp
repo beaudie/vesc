@@ -2936,7 +2936,12 @@ size_t UniformsAndXfbDescriptorDesc::hash() const
     return angle::ComputeGenericHash(&mBufferSerials, sizeof(mBufferSerials[0]) * mBufferCount) ^
            angle::ComputeGenericHash(
                &mXfbBufferOffsets,
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+               sizeof(mXfbBufferOffsets[0]) * (mBufferCount - kDefaultUniformBufferCount)) ^
+               angle::ComputeGenericHash(&mBufferSizes, sizeof(mBufferSizes));
+#else
                sizeof(mXfbBufferOffsets[0]) * (mBufferCount - kDefaultUniformBufferCount));
+#endif
 }
 
 void UniformsAndXfbDescriptorDesc::reset()
@@ -2944,6 +2949,9 @@ void UniformsAndXfbDescriptorDesc::reset()
     mBufferCount = 0;
     memset(&mBufferSerials, 0, sizeof(mBufferSerials));
     memset(&mXfbBufferOffsets, 0, sizeof(mXfbBufferOffsets));
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    memset(&mBufferSizes, 0, sizeof(mBufferSizes));
+#endif
 }
 
 bool UniformsAndXfbDescriptorDesc::operator==(const UniformsAndXfbDescriptorDesc &other) const
@@ -2958,7 +2966,13 @@ bool UniformsAndXfbDescriptorDesc::operator==(const UniformsAndXfbDescriptorDesc
     return memcmp(&mBufferSerials, &other.mBufferSerials,
                   sizeof(mBufferSerials[0]) * mBufferCount) == 0 &&
            memcmp(&mXfbBufferOffsets, &other.mXfbBufferOffsets,
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+                  sizeof(mXfbBufferOffsets[0]) * (mBufferCount - kDefaultUniformBufferCount)) == 0 &&
+           memcmp(&mBufferSizes, &other.mBufferSizes,
+                  sizeof(mBufferSizes)) == 0;
+#else
                   sizeof(mXfbBufferOffsets[0]) * (mBufferCount - kDefaultUniformBufferCount)) == 0;
+#endif
 }
 
 // ShaderBuffersDescriptorDesc implementation.
@@ -3972,4 +3986,402 @@ template class DescriptorSetCache<vk::UniformsAndXfbDescriptorDesc,
 template class DescriptorSetCache<vk::ShaderBuffersDescriptorDesc,
                                   VulkanCacheType::ShaderBuffersDescriptors>;
 ANGLE_REENABLE_WEAK_TEMPLATE_VTABLES_WARNING
+
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+GenericDescriptorPool::~GenericDescriptorPool()
+{
+    ASSERT(mDescriptorPool.valid());
+
+    if (mDescriptorPool.valid())
+    {
+        mDescriptorPool.destroy(mContextVk->getDevice());
+    }
+}
+
+angle::Result GenericDescriptorPool::init(ContextVk *contextVk,
+                                          const std::vector<VkDescriptorPoolSize> &poolSizesIn,
+                                          uint32_t maxSets)
+{
+    ASSERT(!mDescriptorPool.valid());
+
+    mContextVk = contextVk;
+
+    VkDescriptorPoolCreateInfo descriptorPoolInfo = {};
+    descriptorPoolInfo.sType                      = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    descriptorPoolInfo.flags                      = 0;
+    descriptorPoolInfo.maxSets                    = maxSets;
+    descriptorPoolInfo.poolSizeCount              = static_cast<uint32_t>(poolSizesIn.size());
+    descriptorPoolInfo.pPoolSizes                 = poolSizesIn.data();
+
+    ANGLE_VK_TRY(mContextVk, mDescriptorPool.init(mContextVk->getDevice(), descriptorPoolInfo));
+
+    return angle::Result::Continue;
+}
+
+bool GenericDescriptorPool::allocateDescriptorSet(VkDescriptorSetLayout descriptorSetLayout,
+                                                  VkDescriptorSet *descriptorSetsOut)
+{
+    ASSERT(mDescriptorPool.valid());
+
+    VkDescriptorSetAllocateInfo allocInfo = {};
+    allocInfo.sType                       = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool              = mDescriptorPool.getHandle();
+    allocInfo.descriptorSetCount          = 1;
+    allocInfo.pSetLayouts                 = &descriptorSetLayout;
+
+    if (mDescriptorPool.allocateDescriptorSets(mContextVk->getDevice(), allocInfo, descriptorSetsOut) != VK_SUCCESS)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+angle::Result GenericDescriptorPool::reset()
+{
+    ASSERT(mDescriptorPool.valid());
+
+    ANGLE_VK_TRY(mContextVk, mDescriptorPool.reset(mContextVk->getDevice()));
+
+    return angle::Result::Continue;
+}
+
+
+template <typename Key>
+angle::Result GlobalDescriptorSetCache<Key>::init(ContextVk *contextVk,
+                                                  uint32_t initialMaxNumSets,
+                                                  const char *debugName,
+                                                  std::initializer_list<VkDescriptorType> potentiallyUsedDescriptors)
+{
+    ASSERT(!mCachedPools.size());
+
+    mContextVk = contextVk;
+    mCurrentMaxNumSets = initialMaxNumSets;
+    mTotalProgramDescriptorPoolSizes.fill(0);
+    mDebugName = debugName;
+    if (potentiallyUsedDescriptors.size())
+    {
+        for (auto &potentiallyUsedDescriptor : potentiallyUsedDescriptors)
+        {
+            ASSERT(static_cast<uint32_t>(potentiallyUsedDescriptor) < mPotentiallyUsedDescriptors.size());
+            if (static_cast<uint32_t>(potentiallyUsedDescriptor) >= mPotentiallyUsedDescriptors.size()) continue;
+
+            mPotentiallyUsedDescriptors[static_cast<uint32_t>(potentiallyUsedDescriptor)] = true;
+        }
+    }
+    else
+    {
+        mPotentiallyUsedDescriptors.fill(true);
+    }
+
+    std::vector<VkDescriptorPoolSize> poolSizes;
+    constexpr size_t testPoolMaxNumSets = 128; // Used for initial estimation of the Allocation Ratio
+    calcDescriptorPoolSizes(testPoolMaxNumSets, poolSizes);
+
+    mCachedPools.push_back(std::make_unique<CachedPool>());
+    ANGLE_TRY(mCachedPools[0]->init(mContextVk, poolSizes, testPoolMaxNumSets));
+    mTestPoolIsUsed = true;
+
+    return angle::Result::Continue;
+}
+
+template <typename Key>
+void GlobalDescriptorSetCache<Key>::increaseTotalDescriptorPoolSizes(std::vector<VkDescriptorPoolSize> &descriptorPoolSizes)
+{
+    for (auto &descriptorPoolSize : descriptorPoolSizes)
+    {
+        ASSERT(static_cast<uint32_t>(descriptorPoolSize.type) < mTotalProgramDescriptorPoolSizes.size());
+        if (static_cast<uint32_t>(descriptorPoolSize.type) >= mTotalProgramDescriptorPoolSizes.size()) continue;
+
+        mTotalProgramDescriptorPoolSizes[static_cast<uint32_t>(descriptorPoolSize.type)] += descriptorPoolSize.descriptorCount;
+    }
+
+    mTotalProgramNum++;
+}
+
+template <typename Key>
+void GlobalDescriptorSetCache<Key>::decreaseTotalDescriptorPoolSizes(std::vector<VkDescriptorPoolSize> &descriptorPoolSizes)
+{
+    for (auto &descriptorPoolSize : descriptorPoolSizes)
+    {
+        ASSERT(static_cast<uint32_t>(descriptorPoolSize.type) < mTotalProgramDescriptorPoolSizes.size());
+        if (static_cast<uint32_t>(descriptorPoolSize.type) >= mTotalProgramDescriptorPoolSizes.size()) continue;
+
+        mTotalProgramDescriptorPoolSizes[static_cast<uint32_t>(descriptorPoolSize.type)] -= descriptorPoolSize.descriptorCount;
+    }
+
+    mTotalProgramNum--;
+}
+
+template <typename Key>
+bool GlobalDescriptorSetCache<Key>::findDescriptorSet(const Key &descriptorSetKey,
+                                                      const vk::DescriptorSetLayout &descriptorSetLayout,
+                                                      VkDescriptorSet* descriptorSetOut)
+{
+    for (uint32_t index = 0; (index < kDSSetCacheMaxPoolLookups) && (index < mCachedPools.size()); ++index)
+    {
+        if (mCachedPools[index]->findDescriptorSet(descriptorSetKey, descriptorSetLayout, mContextVk, descriptorSetOut))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template <typename Key>
+angle::Result GlobalDescriptorSetCache<Key>::createDescriptorSet(const Key *descriptorSetKey,
+                                                                 const vk::DescriptorSetLayout &descriptorSetLayout,
+                                                                 std::vector<VkDescriptorPoolSize> &descriptorSizes,
+                                                                 VkDescriptorSet *descriptorSetsOut)
+{
+    for (auto & descriptorSize : descriptorSizes)
+    {
+        if (descriptorSize.descriptorCount && static_cast<uint32_t>(descriptorSize.type) < descriptorSizes.size())
+        {
+            mPotentiallyUsedDescriptors[static_cast<uint32_t>(descriptorSize.type)] = true;
+        }
+    }
+
+    bool bFirstTime = true;
+    while (!mCachedPools.size() ||!mCachedPools[0]->createDescriptorSet(descriptorSetKey, mContextVk, descriptorSetLayout, descriptorSizes, descriptorSetsOut))
+    {
+        if (!bFirstTime)
+        {
+            ERR() << mDebugName << ": FATAL! Failed to create descriptor sets from new pool!";
+            ASSERT(bFirstTime);
+
+            return angle::Result::Stop;
+        }
+        bFirstTime = false;
+        ANGLE_TRY(addCachedPool());
+    }
+
+    return angle::Result::Continue;
+}
+
+template <typename Key>
+void GlobalDescriptorSetCache<Key>::gc()
+{
+    // Loop is for OOM safety. Normally there would be at most 1 loop.
+    while ((mCachedPools.size() > kDSSetCacheMaxPoolLookups) && mCachedPools.back()->canGC(mContextVk))
+    {
+        const size_t removeIndex = (mCachedPools.size() - 1);
+        if (mFreePool)
+        {
+            WARN() << mDebugName << ": GlobalDescriptorSetCache::gc() Free Pool is not empty! Too small mCurrentMaxNumSets?";
+        }
+        if (mCachedPools[removeIndex]->getMaxNumSets() == mMaxMaxNumSets)
+        {
+            mFreePool = std::move(mCachedPools[removeIndex]);
+        }
+        mCachedPools.erase(mCachedPools.begin() + removeIndex);
+    }
+}
+
+template <typename Key>
+angle::Result GlobalDescriptorSetCache<Key>::addCachedPool()
+{
+    if (mTestPoolIsUsed)
+    {
+        mTestPoolIsUsed = false;
+    }
+    else
+    {
+        mCurrentMaxNumSets = std::min(mCurrentMaxNumSets * 2, mMaxMaxNumSets);
+    }
+
+    mId++;
+
+    std::vector<VkDescriptorPoolSize> poolSizes;
+    calcDescriptorPoolSizes(mCurrentMaxNumSets, poolSizes);
+
+    if (freePoolCanBeReused(poolSizes))
+    {
+        ANGLE_TRY(mFreePool->reset(mContextVk));
+        mCachedPools.insert(mCachedPools.begin(), std::move(mFreePool));
+        INFO() << mDebugName << ": GlobalDescriptorSetCache::addCachedPool(): Reuse free pool with size " << mCurrentMaxNumSets;
+    }
+    else
+    {
+        mCachedPools.insert(mCachedPools.begin(), std::make_unique<CachedPool>());
+        ANGLE_TRY(mCachedPools[0]->init(mContextVk, poolSizes, mCurrentMaxNumSets));
+        INFO() << mDebugName << ": GlobalDescriptorSetCache::addCachedPool(): Create new pool with size " << mCurrentMaxNumSets;
+    }
+
+    mFreePool.reset();
+
+    return angle::Result::Continue;
+}
+
+template <typename Key>
+bool GlobalDescriptorSetCache<Key>::freePoolCanBeReused(const std::vector<VkDescriptorPoolSize> &requiredPoolSizes) const
+{
+    if (!mFreePool || mFreePool->getMaxNumSets() != mCurrentMaxNumSets)
+    {
+        return false;
+    }
+
+    const std::vector<VkDescriptorPoolSize> &freePoolSizes = mFreePool->getPoolSizes();
+    auto requiredPoolSizesIt = requiredPoolSizes.cbegin();
+    auto freePoolSizesIt = freePoolSizes.cbegin();
+    // arrays are sorted by type
+    while(requiredPoolSizesIt != requiredPoolSizes.cend() && freePoolSizesIt != freePoolSizes.cend())
+    {
+        if (requiredPoolSizesIt->type == freePoolSizesIt->type)
+        {
+            if (std::abs(static_cast<int>(requiredPoolSizesIt->descriptorCount) -
+                            static_cast<int>(freePoolSizesIt->descriptorCount)) > static_cast<int>(requiredPoolSizesIt->descriptorCount * 0.3))
+            {
+                return false;
+            }
+            ++requiredPoolSizesIt;
+        }
+        else if (requiredPoolSizesIt->type < freePoolSizesIt->type)
+        {
+            return false;
+        }
+        ++freePoolSizesIt;
+    }
+    if(requiredPoolSizesIt != requiredPoolSizes.cend())
+    {
+        return false;
+    }
+
+    return true;
+}
+
+template <typename Key>
+void GlobalDescriptorSetCache<Key>::calcDescriptorPoolSizes(uint32_t maxNumSets, std::vector<VkDescriptorPoolSize> &poolSizesOut) const
+{
+    poolSizesOut.reserve(kMaxDescriptorType);
+    for (uint32_t i = 0; i < kMaxDescriptorType; ++i)
+    {
+        double descriptorPoolSizeRatio = static_cast<float>(mTotalProgramDescriptorPoolSizes[i]) / std::max(mTotalProgramNum, 1u);
+        if (mCachedPools.size())
+        {
+            double allocatedDescriptorSizeRatio = static_cast<float>(mCachedPools[0]->getAllocatedDescriptorSize(static_cast<VkDescriptorType>(i))) / std::max(mCachedPools[0]->getAllocatedDescriptorSetNum(), 1u);
+            descriptorPoolSizeRatio = 0.35 * descriptorPoolSizeRatio + 0.65 * allocatedDescriptorSizeRatio;
+        }
+
+        if (mPotentiallyUsedDescriptors[i])
+        {
+            descriptorPoolSizeRatio = std::max(mTestPoolIsUsed ? 1.0 : 0.25, descriptorPoolSizeRatio);
+        }
+
+        uint32_t descriptorCount = static_cast<uint32_t>(descriptorPoolSizeRatio * maxNumSets);
+        if (descriptorCount)
+        {
+            poolSizesOut.push_back({ static_cast<VkDescriptorType>(i), descriptorCount });
+        }
+    }
+}
+
+template <typename Key>
+angle::Result GlobalDescriptorSetCache<Key>::CachedPool::init(ContextVk *contextVk,
+                                                              const std::vector<VkDescriptorPoolSize> &poolSizes,
+                                                              uint32_t maxSets)
+{
+    ASSERT(!mMaxNumSets);
+
+    mMaxNumSets = maxSets;
+    ANGLE_TRY(mPool.init(contextVk, poolSizes, maxSets));
+    mAllocatedDescriptorSizes.fill(0);
+
+    mPoolSizes = poolSizes;
+
+    return angle::Result::Continue;
+}
+
+template <typename Key>
+angle::Result GlobalDescriptorSetCache<Key>::CachedPool::reset(ContextVk *contextVk)
+{
+    ANGLE_TRY(mPool.reset());
+    mDescriptorSetCaches.clear();
+    mAllocatedDescriptorSizes.fill(0);
+    mAllocatedDescriptorSetNum = 0;
+
+    return angle::Result::Continue;
+}
+
+template <typename Key>
+bool GlobalDescriptorSetCache<Key>::CachedPool::canGC(ContextVk *contextVk) const
+{
+    return mLastUseQueueSerial < contextVk->getRenderer()->getLastCompletedQueueSerial();
+}
+
+template <typename Key>
+bool GlobalDescriptorSetCache<Key>::CachedPool::findDescriptorSet(const Key& descriptorSetKey,
+                                                                  const vk::DescriptorSetLayout &descriptorSetLayout,
+                                                                  ContextVk *contextVk,
+                                                                  VkDescriptorSet* descriptorSetsOut)
+{
+    auto descriptorSetCacheIter = mDescriptorSetCaches.find(descriptorSetLayout.getId());
+    if (descriptorSetCacheIter == mDescriptorSetCaches.end())
+    {
+        return false;
+    }
+
+    angle::HashMap<Key, VkDescriptorSet> &descriptorSetCache = descriptorSetCacheIter->second;
+    auto iter = descriptorSetCache.find(descriptorSetKey);
+    if (iter != descriptorSetCache.end())
+    {
+        *descriptorSetsOut = iter->second;
+        mLastUseQueueSerial = contextVk->getRenderer()->getCurrentQueueSerial();
+        return true;
+    }
+
+    return false;
+}
+
+template <typename Key>
+bool GlobalDescriptorSetCache<Key>::CachedPool::createDescriptorSet(const Key *descriptorSetKey,
+                                                                    ContextVk *contextVk,
+                                                                    const vk::DescriptorSetLayout &descriptorSetLayout,
+                                                                    std::vector<VkDescriptorPoolSize> &descriptorSizes,
+                                                                    VkDescriptorSet *descriptorSetsOut)
+{
+    if (!mPool.allocateDescriptorSet(descriptorSetLayout.getHandle(), descriptorSetsOut))
+    {
+        return false;
+    }
+
+    if (descriptorSetKey)
+    {
+        angle::HashMap<Key, VkDescriptorSet> &descriptorSetCache = mDescriptorSetCaches[descriptorSetLayout.getId()];
+        descriptorSetCache.emplace(*descriptorSetKey, *descriptorSetsOut);
+    }
+    mLastUseQueueSerial = contextVk->getRenderer()->getCurrentQueueSerial();
+
+    for (auto &descriptorSize : descriptorSizes)
+    {
+        ASSERT(static_cast<uint32_t>(descriptorSize.type) < mAllocatedDescriptorSizes.size());
+        if (static_cast<uint32_t>(descriptorSize.type) >= mAllocatedDescriptorSizes.size()) continue;
+
+        mAllocatedDescriptorSizes[static_cast<uint32_t>(descriptorSize.type)] += descriptorSize.descriptorCount;
+    }
+
+    mAllocatedDescriptorSetNum++;
+
+    return true;
+}
+
+template <typename Key>
+uint32_t GlobalDescriptorSetCache<Key>::CachedPool::getAllocatedDescriptorSize(VkDescriptorType type) const
+{
+    ASSERT(static_cast<uint32_t>(type) < mAllocatedDescriptorSizes.size());
+    if (static_cast<uint32_t>(type) >= mAllocatedDescriptorSizes.size())
+    {
+        return 0;
+    }
+
+    return mAllocatedDescriptorSizes[static_cast<uint32_t>(type)];
+}
+
+ANGLE_DISABLE_WEAK_TEMPLATE_VTABLES_WARNING
+template class GlobalDescriptorSetCache<vk::TextureDescriptorDesc>;
+template class GlobalDescriptorSetCache<vk::UniformsAndXfbDescriptorDesc>;
+template class GlobalDescriptorSetCache<vk::ShaderBuffersDescriptorDesc>;
+ANGLE_REENABLE_WEAK_TEMPLATE_VTABLES_WARNING
+#endif
 }  // namespace rx

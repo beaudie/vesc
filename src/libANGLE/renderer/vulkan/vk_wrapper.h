@@ -594,6 +594,11 @@ class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDe
     void destroy(VkDevice device);
 
     VkResult init(VkDevice device, const VkDescriptorSetLayoutCreateInfo &createInfo);
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    uint32_t getId() const { return id; }
+private:
+    uint32_t id = 0;
+#endif
 };
 
 class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPool>
@@ -607,6 +612,9 @@ class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPo
     VkResult allocateDescriptorSets(VkDevice device,
                                     const VkDescriptorSetAllocateInfo &allocInfo,
                                     VkDescriptorSet *descriptorSetsOut);
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    VkResult reset(VkDevice device);
+#endif
     VkResult freeDescriptorSets(VkDevice device,
                                 uint32_t descriptorSetCount,
                                 const VkDescriptorSet *descriptorSets);
@@ -1730,6 +1738,11 @@ ANGLE_INLINE VkResult DescriptorSetLayout::init(VkDevice device,
                                                 const VkDescriptorSetLayoutCreateInfo &createInfo)
 {
     ASSERT(!valid());
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+    static uint32_t idCounter = 0;
+    id = ++idCounter;
+#endif
+
     return vkCreateDescriptorSetLayout(device, &createInfo, nullptr, &mHandle);
 }
 
@@ -1758,6 +1771,15 @@ DescriptorPool::allocateDescriptorSets(VkDevice device,
     ASSERT(valid());
     return vkAllocateDescriptorSets(device, &allocInfo, descriptorSetsOut);
 }
+
+#if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
+ANGLE_INLINE VkResult
+DescriptorPool::reset(VkDevice device)
+{
+    ASSERT(valid());
+    return vkResetDescriptorPool(device, mHandle, 0);
+}
+#endif
 
 ANGLE_INLINE VkResult DescriptorPool::freeDescriptorSets(VkDevice device,
                                                          uint32_t descriptorSetCount,
