@@ -2610,7 +2610,8 @@ void CaptureSignalSemaphoreEXT_buffersPacked(const State &glState,
                                              const GLenum *dstLayouts,
                                              ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(buffers, numBufferBarriers * sizeof(BufferID), paramCapture);
+    paramCapture->countIndices.push_back(std::make_pair("numBufferBarriers", 1));
 }
 
 void CaptureSignalSemaphoreEXT_texturesPacked(const State &glState,
@@ -2623,7 +2624,8 @@ void CaptureSignalSemaphoreEXT_texturesPacked(const State &glState,
                                               const GLenum *dstLayouts,
                                               ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(textures, numTextureBarriers * sizeof(TextureID), paramCapture);
+    paramCapture->countIndices.push_back(std::make_pair("numTextureBarriers", 3));
 }
 
 void CaptureSignalSemaphoreEXT_dstLayouts(const State &glState,
@@ -2636,7 +2638,10 @@ void CaptureSignalSemaphoreEXT_dstLayouts(const State &glState,
                                           const GLenum *dstLayouts,
                                           ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(dstLayouts, (numBufferBarriers + numTextureBarriers) * sizeof(GLenum),
+                  paramCapture);
+    paramCapture->countIndices.push_back(std::make_pair("numBufferBarriers", 1));
+    paramCapture->countIndices.push_back(std::make_pair("numTextureBarriers", 3));
 }
 
 void CaptureWaitSemaphoreEXT_buffersPacked(const State &glState,
@@ -2649,7 +2654,8 @@ void CaptureWaitSemaphoreEXT_buffersPacked(const State &glState,
                                            const GLenum *srcLayouts,
                                            ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(buffers, numBufferBarriers * sizeof(BufferID), paramCapture);
+    paramCapture->countIndices.push_back(std::make_pair("numBufferBarriers", 1));
 }
 
 void CaptureWaitSemaphoreEXT_texturesPacked(const State &glState,
@@ -2662,7 +2668,8 @@ void CaptureWaitSemaphoreEXT_texturesPacked(const State &glState,
                                             const GLenum *srcLayouts,
                                             ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(textures, numTextureBarriers * sizeof(TextureID), paramCapture);
+    paramCapture->countIndices.push_back(std::make_pair("numTextureBarriers", 3));
 }
 
 void CaptureWaitSemaphoreEXT_srcLayouts(const State &glState,
@@ -2675,7 +2682,10 @@ void CaptureWaitSemaphoreEXT_srcLayouts(const State &glState,
                                         const GLenum *srcLayouts,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(srcLayouts, (numBufferBarriers + numTextureBarriers) * sizeof(GLenum),
+                  paramCapture);
+    paramCapture->countIndices.push_back(std::make_pair("numBufferBarriers", 1));
+    paramCapture->countIndices.push_back(std::make_pair("numTextureBarriers", 3));
 }
 
 void CaptureGetSamplerParameterIivEXT_params(const State &glState,

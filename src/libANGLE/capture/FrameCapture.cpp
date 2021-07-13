@@ -448,8 +448,23 @@ void WriteResourceIDPointerParamReplay(DataTracker *dataTracker,
     ASSERT(resourceIDType != ResourceIDType::InvalidEnum);
     const char *name = GetResourceIDTypeName(resourceIDType);
 
-    GLsizei n = call.params.getParamFlexName("n", "count", ParamType::TGLsizei, 0).value.GLsizeiVal;
     ASSERT(param.data.size() == 1);
+
+    GLsizei n = 0;
+    if (param.countIndices.empty())
+    {
+        n = call.params.getParamFlexName("n", "count", ParamType::TGLsizei, 0).value.GLsizeiVal;
+    }
+    else
+    {
+        for (auto &index : param.countIndices)
+        {
+            n += call.params
+                     .getParamFlexName(index.first.c_str(), nullptr, ParamType::TGLuint,
+                                       index.second)
+                     .value.GLsizeiVal;
+        }
+    }
     const ParamT *returnedIDs = reinterpret_cast<const ParamT *>(param.data[0].data());
     for (GLsizei resIndex = 0; resIndex < n; ++resIndex)
     {
@@ -3485,6 +3500,7 @@ ParamCapture &ParamCapture::operator=(ParamCapture &&other)
     std::swap(data, other.data);
     std::swap(arrayClientPointerIndex, other.arrayClientPointerIndex);
     std::swap(readBufferSizeBytes, other.readBufferSizeBytes);
+    std::swap(countIndices, other.countIndices);
     return *this;
 }
 
