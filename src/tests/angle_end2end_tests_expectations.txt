@@ -22,10 +22,6 @@
 4889 VULKAN : GLSLTest.MoreNestedCompoundStructsWithSamplersAsFunctionArg/ES2_Vulkan_DirectSPIRVGen = SKIP
 4889 VULKAN : GLSLTest.NestedCompoundStructsWithSamplersAsFunctionArg/ES2_Vulkan_DirectSPIRVGen = SKIP
 4889 VULKAN : GLSLTest.SamplerInStructMemberIndexing/ES2_Vulkan_DirectSPIRVGen = SKIP
-// SPIR-V generation doesn't yet handle copy between different SPIR-V types generated from the same GLSL type
-4889 VULKAN : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/ES3_1_Vulkan_DirectSPIRVGen = SKIP
-4889 VULKAN : GLSLTest_ES31.BasicTypeArrayAndArrayOfSampler/ES3_1_Vulkan_DirectSPIRVGen = SKIP
-4889 VULKAN : GLSLTest_ES31.StructBothInvariantAndNot/ES3_1_Vulkan_DirectSPIRVGen = SKIP
 
 // Windows
 3786 WIN NVIDIA D3D11 : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
@@ -50,6 +46,9 @@
 6115 NVIDIA GLES : GLSLTestLoops.DoWhileUnconditionalContinue/* = SKIP
 6115 NVIDIA GLES : GLSLTestLoops.DoWhileContinueInSwitch/* = SKIP
 6115 NVIDIA GLES : GLSLTestLoops.WhileBreak/* = SKIP
+// Generates invalid errors when compiling the shader in the GL backend
+6172 NVIDIA OpenGL : GLSLTest_ES31.TypesUsedInDifferentBlockStorages/* = SKIP
+6172 NVIDIA GLES : GLSLTest_ES31.TypesUsedInDifferentBlockStorages/* = SKIP
 
 // Intel Vulkan
 
