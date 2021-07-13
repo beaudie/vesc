@@ -4967,6 +4967,12 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
             !mBuilder.isInLoop() &&
             (initializer->getAsConstantUnion() != nullptr || initializer->hasConstantValue());
 
+        // Use an OpStore for local variables unconditionally on buggy drivers.
+        if (!mInGlobalScope && (mCompileOptions & SH_GENERATE_SPIRV_WORKAROUNDS) != 0)
+        {
+            initializeWithDeclaration = false;
+        }
+
         if (initializeWithDeclaration)
         {
             // If a constant, take the Id directly.
