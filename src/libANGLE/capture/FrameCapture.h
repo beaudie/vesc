@@ -24,7 +24,9 @@ enum class GLenumGroup;
 namespace angle
 {
 
-using ParamData = std::vector<std::vector<uint8_t>>;
+using ParamData         = std::vector<std::vector<uint8_t>>;
+using ParamCountIndices = std::vector<std::pair<std::string, int>>;
+
 struct ParamCapture : angle::NonCopyable
 {
     ParamCapture();
@@ -39,6 +41,7 @@ struct ParamCapture : angle::NonCopyable
     ParamValue value;
     gl::GLenumGroup enumGroup;  // only used for param type GLenum, GLboolean and GLbitfield
     ParamData data;
+    ParamCountIndices countIndices;
     int arrayClientPointerIndex = -1;
     size_t readBufferSizeBytes  = 0;
 };
