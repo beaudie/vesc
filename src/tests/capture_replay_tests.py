@@ -319,7 +319,8 @@ def GetExpectedResults():
     expected_results = {}
     # yapf: disable
     # we want each backend on one line
-    backends = ['ES1_Vulkan_AsyncQueue',
+    backends = ['ES1_Vulkan',
+                'ES1_Vulkan_AsyncQueue',
                 'ES1_Vulkan_SwiftShader',
                 'ES2_Vulkan',
                 'ES2_Vulkan_AsyncQueue',
