@@ -1919,6 +1919,9 @@ void Display::initializeFrontendFeatures()
     // No longer enable this on any Impl - crbug.com/1165751
     ANGLE_FEATURE_CONDITION((&mFrontendFeatures), scalarizeVecAndMatConstructorArgs, false);
 
+    // Enable early return
+    ANGLE_FEATURE_CONDITION(&mFrontendFeatures, enableEarlyReturn, true);
+
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
 
     rx::ApplyFeatureOverrides(&mFrontendFeatures, mState);

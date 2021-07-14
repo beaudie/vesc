@@ -856,8 +856,26 @@ void State::setBlendIndexed(bool enabled, GLuint index)
     mDirtyBits.set(DIRTY_BIT_BLEND_ENABLED);
 }
 
-void State::setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha, GLenum destAlpha)
+void State::setBlendFactors(GLenum sourceRGB,
+                            GLenum destRGB,
+                            GLenum sourceAlpha,
+                            GLenum destAlpha,
+                            bool enableEarlyReturn)
 {
+    if (enableEarlyReturn)
+    {
+        bool sourceBlendRGBUnchanged   = mBlendState.sourceBlendRGB == sourceRGB;
+        bool destBlendRGBUnchanged     = mBlendState.destBlendRGB == destRGB;
+        bool sourceBlendAlphaUnchanged = mBlendState.sourceBlendAlpha == sourceAlpha;
+        bool destBlendAlphaUnchanged   = mBlendState.destBlendAlpha == destAlpha;
+
+        // An early return is possible if the blend factor is not set via indexing.
+        if (sourceBlendRGBUnchanged && destBlendRGBUnchanged && sourceBlendAlphaUnchanged &&
+            destBlendAlphaUnchanged && !mBlendStateExt.mIsBlendFactorsIndexed)
+        {
+            return;
+        }
+    }
 
     mBlendState.sourceBlendRGB   = sourceRGB;
     mBlendState.destBlendRGB     = destRGB;
@@ -885,6 +903,7 @@ void State::setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha
         }
     }
 
+    mBlendStateExt.mIsBlendFactorsIndexed = false;
     mBlendStateExt.setFactors(sourceRGB, destRGB, sourceAlpha, destAlpha);
     mDirtyBits.set(DIRTY_BIT_BLEND_FUNCS);
 }
@@ -901,6 +920,7 @@ void State::setBlendFactorsIndexed(GLenum sourceRGB,
         mBlendFuncConstantAlphaDrawBuffers.set(index, hasConstantAlpha(sourceRGB, destRGB));
     }
 
+    mBlendStateExt.mIsBlendFactorsIndexed = true;
     mBlendStateExt.setFactorsIndexed(index, sourceRGB, destRGB, sourceAlpha, destAlpha);
     mDirtyBits.set(DIRTY_BIT_BLEND_FUNCS);
 }
