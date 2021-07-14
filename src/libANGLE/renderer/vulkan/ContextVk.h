@@ -638,6 +638,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result handleGraphicsEventLog(GraphicsEventCmdBuf queryEventType);
 
+    void flushDescriptorSetUpdates();
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -914,7 +916,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result flushCommandsAndEndRenderPassImpl();
     angle::Result flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                DirtyBits dirtyBitMask);
-    void flushDescriptorSetUpdates();
 
     void onRenderPassFinished();
 
