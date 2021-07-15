@@ -626,6 +626,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool supportsGeometryOrTesselation() const;
     void dirtyAllState();
 
+    void flushWithOrphanedImageRelease() const;
+    egl::OrphanedImageHelper *getOrphanedImageHelper() const { return mOrphanedImages; }
+
   private:
     void initializeDefaultResources();
 
@@ -777,6 +780,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     std::vector<angle::ObserverBinding> mUniformBufferObserverBindings;
     std::vector<angle::ObserverBinding> mSamplerObserverBindings;
     std::vector<angle::ObserverBinding> mImageObserverBindings;
+
+    egl::OrphanedImageHelper *mOrphanedImages;
 
     // Not really a property of context state. The size and contexts change per-api-call.
     mutable Optional<angle::ScratchBuffer> mScratchBuffer;

@@ -358,6 +358,7 @@ Context::Context(egl::Display *display,
       mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
       mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
+      mOrphanedImages(new egl::OrphanedImageHelper),
       mThreadPool(nullptr),
       mFrameCapture(new angle::FrameCapture),
       mRefCount(0),
@@ -9025,6 +9026,14 @@ bool Context::supportsGeometryOrTesselation() const
 {
     return mState.getClientVersion() == ES_3_2 || mState.getExtensions().geometryShaderAny() ||
            mState.getExtensions().tessellationShaderEXT;
+}
+
+void Context::flushWithOrphanedImageRelease() const
+{
+    // Actually flush would be deferred in the implementation.
+    // Do not release orphaned images here, instead of it, release them in the flush of the
+    // impelmentation.
+    ANGLE_CONTEXT_TRY(mImplementation->flush(this));
 }
 
 void Context::dirtyAllState()

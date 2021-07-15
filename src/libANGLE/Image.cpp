@@ -53,6 +53,26 @@ const Display *DisplayFromContext(const gl::Context *context)
 angle::SubjectIndex kExternalImageImplSubjectIndex = 0;
 }  // anonymous namespace
 
+void OrphanedImageHelper::retain(const gl::Context *context, BindingPointer<Image> *bindPtr)
+{
+    bindPtr->get()->addRef();
+    mBindings.push_back(bindPtr->get());
+}
+
+void OrphanedImageHelper::releaseAll(const gl::Context *context)
+{
+    if (!mBindings.size())
+    {
+        return;
+    }
+
+    for (egl::Image *bindPtr : mBindings)
+    {
+        bindPtr->release(DisplayFromContext(context));
+    }
+    mBindings.clear();
+}
+
 ImageSibling::ImageSibling() : FramebufferAttachmentObject(), mSourcesOf(), mTargetOf() {}
 
 ImageSibling::~ImageSibling()
@@ -71,7 +91,7 @@ void ImageSibling::setTargetImage(const gl::Context *context, egl::Image *imageT
     imageTarget->addTargetSibling(this);
 }
 
-angle::Result ImageSibling::orphanImages(const gl::Context *context)
+angle::Result ImageSibling::orphanImages(const gl::Context *context, bool needFlush)
 {
     if (mTargetOf.get() != nullptr)
     {
@@ -79,6 +99,19 @@ angle::Result ImageSibling::orphanImages(const gl::Context *context)
         ASSERT(mSourcesOf.empty());
 
         ANGLE_TRY(mTargetOf->orphanSibling(context, this));
+        if (context != nullptr)
+        {
+            egl::OrphanedImageHelper *orphanedImageHelper = context->getOrphanedImageHelper();
+            if (needFlush)
+            {
+                // flush before releaseing all orphaned siblings.
+                context->flushWithOrphanedImageRelease();
+            }
+            else
+            {
+                orphanedImageHelper->retain(context, &mTargetOf);
+            }
+        }
         mTargetOf.set(DisplayFromContext(context), nullptr);
     }
     else
