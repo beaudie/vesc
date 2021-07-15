@@ -9116,6 +9116,11 @@ void Context::dirtyAllState()
     mState.gles1().setAllDirty();
 }
 
+void Context::finishImmutable() const
+{
+    ANGLE_CONTEXT_TRY(mImplementation->finish(this));
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 
