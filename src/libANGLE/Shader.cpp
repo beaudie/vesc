@@ -372,6 +372,7 @@ void Shader::compile(const Context *context)
     if (context->getFrontendFeatures().forceInitShaderOutputVariables.enabled)
     {
         options |= SH_INIT_OUTPUT_VARIABLES;
+        options |= SH_INITIALIZE_UNINITIALIZED_LOCALS;
     }
 
     mCurrentMaxComputeWorkGroupInvocations =
