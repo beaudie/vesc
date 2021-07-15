@@ -181,7 +181,7 @@ def get_angledata_filename(trace):
     angledata_files = glob.glob('%s/%s*angledata.gz' % (trace, trace))
     assert len(angledata_files) == 1, "Trace '%s' has %d angledata.gz files" % (
         trace, len(angledata_files))
-    return angledata_files[0]
+    return angledata_files[0].replace('\\', '/')
 
 
 def gen_gni(traces, gni_file, format_args):
