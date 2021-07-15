@@ -31,7 +31,8 @@ namespace sh
 namespace
 {
 
-const int kWebGLMaxStructNesting = 4;
+const int kWebGLMaxStructNesting                        = 4;
+const unsigned int kInputArraySizeForTrianglesAdjacency = 6u;
 
 bool ContainsSampler(const TStructure *structType);
 
@@ -94,27 +95,6 @@ bool CanSetDefaultPrecisionOnType(const TPublicType &type)
         return false;
     }
     return true;
-}
-
-// Map input primitive types to input array sizes in a geometry shader.
-GLuint GetGeometryShaderInputArraySize(TLayoutPrimitiveType primitiveType)
-{
-    switch (primitiveType)
-    {
-        case EptPoints:
-            return 1u;
-        case EptLines:
-            return 2u;
-        case EptTriangles:
-            return 3u;
-        case EptLinesAdjacency:
-            return 4u;
-        case EptTrianglesAdjacency:
-            return 6u;
-        default:
-            UNREACHABLE();
-            return 0u;
-    }
 }
 
 bool IsBufferOrSharedVariable(TIntermTyped *var)
@@ -240,6 +220,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxGeometryShaderInvocations(resources.MaxGeometryShaderInvocations),
       mMaxGeometryShaderMaxVertices(resources.MaxGeometryOutputVertices),
       mGeometryInputArraySize(0),
+      mGeometryShaderDeferredSetOfArraySize(false),
       mMaxPatchVertices(resources.MaxPatchVertices),
       mTessControlShaderOutputVertices(0),
       mTessEvaluationShaderInputPrimitiveType(EtetUndefined),
@@ -2747,10 +2728,13 @@ void TParseContext::checkGeometryShaderInputAndSetArraySize(const TSourceLoc &lo
                 // [GLSL ES 3.2 SPEC Chapter 4.4.1.2]
                 // An input can be declared without an array size if there is a previous layout
                 // which specifies the size.
-                error(location,
-                      "Missing a valid input primitive declaration before declaring an unsized "
-                      "array input",
-                      token);
+                warning(location,
+                        "Missing a valid input primitive declaration before declaring an unsized ",
+                        "Defered");
+                // TrianglesAdjacency is the largest value (6) among the Primitive types
+                // that can be entered as an input value.
+                type->sizeOutermostUnsizedArray(kInputArraySizeForTrianglesAdjacency);
+                mGeometryShaderDeferredSetOfArraySize = true;
             }
         }
         else if (type->isArray())
@@ -7046,6 +7030,27 @@ int PaParseStrings(size_t count,
     glslang_finalize(context);
 
     return (error == 0) && (context->numErrors() == 0) ? 0 : 1;
+}
+
+// Map input primitive types to input array sizes in a geometry shader.
+GLuint GetGeometryShaderInputArraySize(TLayoutPrimitiveType primitiveType)
+{
+    switch (primitiveType)
+    {
+        case EptPoints:
+            return 1u;
+        case EptLines:
+            return 2u;
+        case EptTriangles:
+            return 3u;
+        case EptLinesAdjacency:
+            return 4u;
+        case EptTrianglesAdjacency:
+            return 6u;
+        default:
+            UNREACHABLE();
+            return 0u;
+    }
 }
 
 }  // namespace sh

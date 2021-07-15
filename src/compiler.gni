@@ -37,6 +37,8 @@ angle_translator_sources = [
   "src/compiler/translator/ConstantUnion.h",
   "src/compiler/translator/Declarator.cpp",
   "src/compiler/translator/Declarator.h",
+  "src/compiler/translator/DeferredSetGeometryShader.cpp",
+  "src/compiler/translator/DeferredSetGeometryShader.h",
   "src/compiler/translator/Diagnostics.cpp",
   "src/compiler/translator/Diagnostics.h",
   "src/compiler/translator/DirectiveHandler.cpp",

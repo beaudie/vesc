@@ -12,6 +12,7 @@
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
+#include "compiler/translator/ParseContext.h"
 #include "compiler/translator/SymbolTable.h"
 
 #include <algorithm>
@@ -614,7 +615,13 @@ void TType::sizeUnsizedArrays(const TSpan<const unsigned int> &newArraySizes)
 void TType::sizeOutermostUnsizedArray(unsigned int arraySize)
 {
     ASSERT(isArray() && mArraySizesStorage != nullptr);
-    ASSERT((*mArraySizesStorage).back() == 0u);
+    // It is valid to set the size of an array after input variables have been declared. In such
+    // cases we set the size of the array to the default max size allowed -
+    // kInputArraySizeForTrianglesAdjacency
+
+    ASSERT(((*mArraySizesStorage).back() == 0u) ||
+           ((*mArraySizesStorage).back() ==
+            static_cast<unsigned int>(GetGeometryShaderInputArraySize(EptTrianglesAdjacency))));
     (*mArraySizesStorage).back() = arraySize;
 }
 
