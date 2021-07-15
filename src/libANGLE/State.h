@@ -192,7 +192,11 @@ class State : angle::NonCopyable
     DrawBufferMask getBlendEnabledDrawBufferMask() const { return mBlendStateExt.mEnabledMask; }
     void setBlend(bool enabled);
     void setBlendIndexed(bool enabled, GLuint index);
-    void setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha, GLenum destAlpha);
+    void setBlendFactors(GLenum sourceRGB,
+                         GLenum destRGB,
+                         GLenum sourceAlpha,
+                         GLenum destAlpha,
+                         bool enableEarlyReturn);
     void setBlendFactorsIndexed(GLenum sourceRGB,
                                 GLenum destRGB,
                                 GLenum sourceAlpha,

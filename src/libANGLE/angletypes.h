@@ -689,6 +689,7 @@ class BlendStateExt final
     DrawBufferMask mEnabledMask;
 
     size_t mMaxDrawBuffers;
+    GLboolean mIsBlendFactorsIndexed;
 };
 
 // Used in StateCache

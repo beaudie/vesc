@@ -352,7 +352,8 @@ BlendStateExt::BlendStateExt(const size_t drawBuffers)
                                                       mMaxColorMask)),
       mMaxEnabledMask(0xFF >> (8 - drawBuffers)),
       mEnabledMask(),
-      mMaxDrawBuffers(drawBuffers)
+      mMaxDrawBuffers(drawBuffers),
+      mIsBlendFactorsIndexed(false)
 {}
 
 BlendStateExt::BlendStateExt(const BlendStateExt &other) = default;

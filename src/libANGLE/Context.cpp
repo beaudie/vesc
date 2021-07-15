@@ -1174,6 +1174,17 @@ void Context::bindTexture(TextureType target, TextureID handle)
             mState.mTextureManager->checkTextureAllocation(mImplementation.get(), handle, target);
     }
 
+    if (getFrontendFeatures().enableEarlyReturn.enabled)
+    {
+        const gl::ActiveTexturesCache &textures = mState.getActiveTexturesCache();
+
+        if (texture == textures[mState.getActiveSampler()] &&
+            texture == mState.getSamplerTexture(mState.getActiveSampler(), target))
+        {
+            return;
+        }
+    }
+
     ASSERT(texture);
     mState.setSamplerTexture(this, target, texture);
     mStateCache.onActiveTextureChange(this);
@@ -1220,6 +1231,13 @@ void Context::bindSampler(GLuint textureUnit, SamplerID samplerHandle)
     ASSERT(textureUnit < static_cast<GLuint>(mState.mCaps.maxCombinedTextureImageUnits));
     Sampler *sampler =
         mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), samplerHandle);
+
+    if (getFrontendFeatures().enableEarlyReturn.enabled &&
+        sampler == mState.getSampler(textureUnit))
+    {
+        return;
+    }
+
     mState.setSamplerBinding(this, textureUnit, sampler);
     mSamplerObserverBindings[textureUnit].bind(sampler);
     mStateCache.onActiveTextureChange(this);
@@ -5326,7 +5344,8 @@ void Context::blendEquationSeparatei(GLuint buf, GLenum modeRGB, GLenum modeAlph
 
 void Context::blendFunc(GLenum sfactor, GLenum dfactor)
 {
-    mState.setBlendFactors(sfactor, dfactor, sfactor, dfactor);
+    mState.setBlendFactors(sfactor, dfactor, sfactor, dfactor,
+                           getFrontendFeatures().enableEarlyReturn.enabled);
 }
 
 void Context::blendFunci(GLuint buf, GLenum src, GLenum dst)
@@ -5341,7 +5360,8 @@ void Context::blendFunci(GLuint buf, GLenum src, GLenum dst)
 
 void Context::blendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha)
 {
-    mState.setBlendFactors(srcRGB, dstRGB, srcAlpha, dstAlpha);
+    mState.setBlendFactors(srcRGB, dstRGB, srcAlpha, dstAlpha,
+                           getFrontendFeatures().enableEarlyReturn.enabled);
 }
 
 void Context::blendFuncSeparatei(GLuint buf,

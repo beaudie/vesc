@@ -80,6 +80,13 @@ struct FrontendFeatures : angle::FeatureSetBase
     angle::Feature forceRobustResourceInit = {
         "forceRobustResourceInit", angle::FeatureCategory::FrontendWorkarounds,
         "Force-enable robust resource init", &members, "http://anglebug.com/6041"};
+
+    // Check state cache to determine if we are rebinding the same buffer, sampler or texture
+    // objects and setting blendFunc. If so, early return without marking the state as dirty.
+    angle::Feature enableEarlyReturn = {
+        "enableEarlyReturn", angle::FeatureCategory::FrontendFeatures,
+        "Enable early retrun on the same buffer, sampler or texture objects", &members,
+        "https://jira.sarc.samsung.com/browse/GFXSW-6710"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

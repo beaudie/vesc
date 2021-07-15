@@ -13,6 +13,7 @@
 
 #include "libANGLE/GLES1Renderer.h"
 #include "libANGLE/renderer/ContextImpl.h"
+#include "platform/FrontendFeatures.h"
 
 #define ANGLE_HANDLE_ERR(X) \
     (void)(X);              \
@@ -159,6 +160,12 @@ ANGLE_INLINE void Context::bindBuffer(BufferBinding target, BufferID buffer)
 {
     Buffer *bufferObject =
         mState.mBufferManager->checkBufferAllocation(mImplementation.get(), buffer);
+    if (getFrontendFeatures().enableEarlyReturn.enabled &&
+        bufferObject == mState.getTargetBuffer(target))
+    {
+        return;
+    }
+
     mState.setBufferBinding(this, target, bufferObject);
     mStateCache.onBufferBindingChange(this);
 }
