@@ -115,6 +115,13 @@ def main():
         '--no-overwrite',
         help='Skip traces which already exist in the out directory.',
         action='store_true')
+    parser.add_argument(
+        '--validation', help='Enable state serialization validation calls.', action='store_true')
+    parser.add_argument(
+        '--limit',
+        '--frame-limit',
+        type=int,
+        help='Limits the number of captured frames to produce a shorter trace than the original.')
     args, extra_flags = parser.parse_known_args()
 
     logging.basicConfig(level=args.log.upper())
@@ -148,10 +155,16 @@ def main():
 
         logging.debug('Read metadata: %s' % str(metadata))
 
+        max_steps = (min(args.limit, num_frames) if args.limit else num_frames) + 1
+
         env = os.environ.copy()
         env['ANGLE_CAPTURE_OUT_DIR'] = trace_path
         env['ANGLE_CAPTURE_LABEL'] = trace
-        env['ANGLE_CAPTURE_TRIGGER'] = str(num_frames)
+        env['ANGLE_CAPTURE_FRAME_START'] = '2'
+        env['ANGLE_CAPTURE_FRAME_END'] = str(max_steps)
+
+        if args.validation:
+            env['ANGLE_CAPTURE_VALIDATION'] = "1"
 
         renderer = 'vulkan' if args.no_swiftshader else 'vulkan_swiftshader'
 
@@ -161,7 +174,7 @@ def main():
             trace_filter,
             '--retrace-mode',
             '--max-steps-performed',
-            str(num_frames),
+            str(max_steps),
             '--enable-all-trace-tests',
         ]
 
