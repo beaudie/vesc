@@ -648,7 +648,7 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
     {RestrictedTraceID::trex_200,
      {trex_200::kReplayContextClientMajorVersion, trex_200::kReplayContextClientMinorVersion,
       trex_200::kReplayFrameStart, trex_200::kReplayFrameEnd, trex_200::kReplayDrawSurfaceWidth,
-      trex_200::kReplayDrawSurfaceHeight, kDefaultReplayDrawSurfaceColorSpace, "trex_200"}},
+      trex_200::kReplayDrawSurfaceHeight, trex_200::kReplayDrawSurfaceColorSpace, "trex_200"}},
     {RestrictedTraceID::whatsapp,
      {whatsapp::kReplayContextClientMajorVersion, whatsapp::kReplayContextClientMinorVersion,
       whatsapp::kReplayFrameStart, whatsapp::kReplayFrameEnd, whatsapp::kReplayDrawSurfaceWidth,

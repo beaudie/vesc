@@ -1558,7 +1558,7 @@ deps = {
       'packages': [
         {
             'package': 'angle/traces/trex_200',
-            'version': 'version:1',
+            'version': 'version:99',
         },
       ],
       'dep_type': 'cipd',
