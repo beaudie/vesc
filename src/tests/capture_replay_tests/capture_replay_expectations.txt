@@ -32,11 +32,12 @@ WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInVertexBuffer/ES2_Vulkan_Sw
 BlitFramebufferANGLETest.Reverse*/*
 BlitFramebufferANGLETest.Scissored*/*
 ClipDistanceTest.*
-CopyCompressedTextureTest.InternalFormat/*
+CopyCompressedTextureTest.*
 DebugMarkerTest.*
 DebugTest.*
 EGLPrintEGLinfoTest.PrintGLESCapabilities/*
 EGLStreamTest.*
+ETC1CompressedTextureTest.ETC1CompressedSubImage/*
 ExternalWrapTest.*
 FenceNVTest.*
 GetImageTestNoExtensions.EntryPointsInactive/*
