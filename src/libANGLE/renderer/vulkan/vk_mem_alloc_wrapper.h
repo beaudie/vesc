@@ -14,6 +14,8 @@
 
 VK_DEFINE_HANDLE(VmaAllocator)
 VK_DEFINE_HANDLE(VmaAllocation)
+VK_DEFINE_HANDLE(VmaPool)
+struct VmaPoolCreateInfo;
 
 namespace vma
 {
@@ -25,6 +27,9 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VmaAllocator *pAllocator);
 
 void DestroyAllocator(VmaAllocator allocator);
+
+VkResult CreatePool(VmaAllocator allocator, const VmaPoolCreateInfo *pCreateInfo, VmaPool *pPool);
+void DestroyPool(VmaAllocator allocator, VmaPool pool);
 
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation);
 
