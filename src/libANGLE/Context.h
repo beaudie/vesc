@@ -626,6 +626,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool supportsGeometryOrTesselation() const;
     void dirtyAllState();
 
+    // Needed by capture serialization logic that works with a "const" Context pointer.
+    void finishImmutable() const;
+
   private:
     void initializeDefaultResources();
 
