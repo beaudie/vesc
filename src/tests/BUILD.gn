@@ -417,10 +417,14 @@ if (build_angle_perftests) {
         # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
         check_includes = false
       }
-      sources = [ "perf_tests/TracePerfTest.cpp" ]
+      sources = [
+        "../libANGLE/capture/FrameCapture_mock.cpp",
+        "perf_tests/TracePerfTest.cpp",
+      ]
       deps = [
         ":angle_perftests_shared",
         "$angle_root:angle_compression",
+        "$angle_root:angle_frame_capture_utils",
         "$angle_root/util:angle_png_utils",
         "restricted_traces:angle_restricted_traces",
       ]

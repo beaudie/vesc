@@ -115,6 +115,8 @@ def main():
         '--no-overwrite',
         help='Skip traces which already exist in the out directory.',
         action='store_true')
+    parser.add_argument(
+        '--validation', help='Enable state serialization validation calls.', action='store_true')
     args, extra_flags = parser.parse_known_args()
 
     logging.basicConfig(level=args.log.upper())
@@ -152,6 +154,9 @@ def main():
         env['ANGLE_CAPTURE_OUT_DIR'] = trace_path
         env['ANGLE_CAPTURE_LABEL'] = trace
         env['ANGLE_CAPTURE_TRIGGER'] = str(num_frames)
+
+        if args.validation:
+            env['ANGLE_CAPTURE_VALIDATION'] = "1"
 
         renderer = 'vulkan' if args.no_swiftshader else 'vulkan_swiftshader'
 

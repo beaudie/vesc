@@ -24,6 +24,10 @@
 #include <functional>
 #include <sstream>
 
+#if defined(ANGLE_HAS_RAPIDJSON)
+#    include "libANGLE/capture/frame_capture_utils.h"
+#endif  // defined(ANGLE_HAS_RAPIDJSON)
+
 // When --minimize-gpu-work is specified, we want to reduce GPU work to minimum and lift up the CPU
 // overhead to surface so that we can see how much CPU overhead each driver has for each app trace.
 // On some driver(s) the bufferSubData/texSubImage calls end up dominating the frame time when the
@@ -92,6 +96,8 @@ class TracePerfTest : public ANGLERenderTest
     void onReplayDiscardFramebufferEXT(GLenum target,
                                        GLsizei numAttachments,
                                        const GLenum *attachments);
+
+    void validateSerializedState(const char *serializedState);
 
     bool isDefaultFramebuffer(GLenum target) const;
 
@@ -579,6 +585,11 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
     return gCurrentTracePerfTest->getGLWindow()->getProcAddress(procName);
 }
 
+void ValidateSerializedState(const char *serializedState)
+{
+    gCurrentTracePerfTest->validateSerializedState(serializedState);
+}
+
 TracePerfTest::TracePerfTest(const TracePerfParams &params)
     : ANGLERenderTest("TracePerf", params, "ms"), mParams(params), mStartFrame(0), mEndFrame(0)
 {
@@ -1024,6 +1035,8 @@ void TracePerfTest::initializeBenchmark()
     mEndFrame   = traceInfo.endFrame;
     mTraceLibrary->setBinaryDataDecompressCallback(DecompressBinaryData);
 
+    mTraceLibrary->setValidateSerializedStateCallback(ValidateSerializedState);
+
     std::string relativeTestDataDir = std::string("src/tests/restricted_traces/") + traceInfo.name;
 
     constexpr size_t kMaxDataDirLen = 1000;
@@ -1403,6 +1416,18 @@ void TracePerfTest::onReplayFramebufferChange(GLenum target, GLuint framebuffer)
     glGenQueriesEXT(1, &mCurrentQuery.beginTimestampQuery);
     glQueryCounterEXT(mCurrentQuery.beginTimestampQuery, GL_TIMESTAMP_EXT);
     mCurrentQuery.framebuffer = framebuffer;
+}
+
+void TracePerfTest::validateSerializedState(const char *serializedState)
+{
+#if defined(ANGLE_HAS_RAPIDJSON)
+    const GLubyte *bytes = glGetString(GL_SERIALIZED_CONTEXT_STRING_ANGLE);
+    const char *chars    = reinterpret_cast<const char *>(bytes);
+    if (strcmp(chars, serializedState) != 0)
+    {
+        printf("Serialization mismatch.\n");
+    }
+#endif  // defined(ANGLE_HAS_RAPIDJSON)
 }
 
 bool TracePerfTest::isDefaultFramebuffer(GLenum target) const

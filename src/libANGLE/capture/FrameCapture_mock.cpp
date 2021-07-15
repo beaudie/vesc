@@ -9,10 +9,6 @@
 
 #include "libANGLE/capture/FrameCapture.h"
 
-#if ANGLE_CAPTURE_ENABLED
-#    error Frame capture must be disabled to include this file.
-#endif  // ANGLE_CAPTURE_ENABLED
-
 namespace angle
 {
 CallCapture::~CallCapture() {}
