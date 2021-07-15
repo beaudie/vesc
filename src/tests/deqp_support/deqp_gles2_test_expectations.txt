@@ -215,6 +215,8 @@
 5172 MAC OPENGL AMD : dEQP-GLES2.functional.shaders.fragdata.* = FAIL
 5172 MAC OPENGL AMD : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.* = FAIL
 
+6196 MAC OPENGL AMD : dEQP-GLES2.functional.color_clear.complex_rgb = FAIL
+
 // Android GLES backend only failures
 1488 GLES ANDROID : dEQP-GLES2.functional.shaders.return.conditional_return_always_vertex = FAIL
 1488 GLES ANDROID : dEQP-GLES2.functional.shaders.return.conditional_return_always_fragment = FAIL
