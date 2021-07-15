@@ -93,6 +93,8 @@ class TracePerfTest : public ANGLERenderTest
                                        GLsizei numAttachments,
                                        const GLenum *attachments);
 
+    void validateSerializedState(const char *serializedState);
+
     bool isDefaultFramebuffer(GLenum target) const;
 
     double getHostTimeFromGLTime(GLint64 glTime);
@@ -579,6 +581,11 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
     return gCurrentTracePerfTest->getGLWindow()->getProcAddress(procName);
 }
 
+void ValidateSerializedState(const char *serializedState)
+{
+    gCurrentTracePerfTest->validateSerializedState(serializedState);
+}
+
 TracePerfTest::TracePerfTest(const TracePerfParams &params)
     : ANGLERenderTest("TracePerf", params, "ms"), mParams(params), mStartFrame(0), mEndFrame(0)
 {
@@ -1012,6 +1019,12 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     disableTestHarnessSwap();
 
     gCurrentTracePerfTest = this;
+
+    if (gTraceTestValidation)
+    {
+        const TraceInfo &traceInfo = GetTraceInfo(mParams.testID);
+        mStepsToRun                = (traceInfo.endFrame - traceInfo.startFrame + 1);
+    }
 }
 
 void TracePerfTest::initializeBenchmark()
@@ -1044,6 +1057,8 @@ void TracePerfTest::initializeBenchmark()
     mStartFrame = traceInfo.startFrame;
     mEndFrame   = traceInfo.endFrame;
     mTraceLibrary->setBinaryDataDecompressCallback(DecompressBinaryData);
+
+    mTraceLibrary->setValidateSerializedStateCallback(ValidateSerializedState);
 
     std::string relativeTestDataDir = std::string("src/tests/restricted_traces/") + traceInfo.name;
 
@@ -1117,17 +1132,18 @@ void TracePerfTest::initializeBenchmark()
 
     glFinish();
 
-    ASSERT_TRUE(mEndFrame > mStartFrame);
+    ASSERT_GE(mEndFrame, mStartFrame);
 
     getWindow()->ignoreSizeEvents();
     getWindow()->setVisible(true);
 
     // If we're re-tracing, trigger capture start after setup. This ensures the Setup function gets
     // recaptured into another Setup function and not merged with the first frame.
-    if (angle::gRetraceMode)
+    if (gRetraceMode)
     {
-        angle::SetEnvironmentVar("ANGLE_CAPTURE_TRIGGER", "0");
         getGLWindow()->swap();
+        mTrialNumStepsPerformed++;
+        mTotalNumStepsPerformed++;
     }
 }
 
@@ -1426,6 +1442,70 @@ void TracePerfTest::onReplayFramebufferChange(GLenum target, GLuint framebuffer)
     mCurrentQuery.framebuffer = framebuffer;
 }
 
+void TracePerfTest::validateSerializedState(const char *serializedState)
+{
+    if (!gTraceTestValidation)
+    {
+        return;
+    }
+
+    const GLubyte *bytes = glGetString(GL_SERIALIZED_CONTEXT_STRING_ANGLE);
+    const char *chars    = reinterpret_cast<const char *>(bytes);
+    if (strcmp(chars, serializedState) == 0)
+    {
+        printf("Serialization matched for frame %d.\n", mCurrentFrame);
+        return;
+    }
+
+    printf("Serialization mismatch for frame %d.\n", mCurrentFrame);
+
+    if (IsWindows())
+    {
+        printf("Serialization diff not yet implemented on Windows.\n");
+        return;
+    }
+
+    constexpr size_t kMaxPath = 1024;
+    char aFilePath[kMaxPath]  = {};
+    if (CreateTemporaryFile(aFilePath, kMaxPath))
+    {
+        printf("Saving \"actual\" replay serialization to \"%s\".\n", aFilePath);
+        FILE *fpA = fopen(aFilePath, "w");
+        ASSERT(fpA);
+        fprintf(fpA, "%s", chars);
+        fclose(fpA);
+    }
+
+    char bFilePath[kMaxPath] = {};
+    if (CreateTemporaryFile(bFilePath, kMaxPath))
+    {
+        printf("Saving \"expected\" capture serialization to \"%s\".\n", bFilePath);
+        FILE *fpB = fopen(bFilePath, "w");
+        ASSERT(fpB);
+        fprintf(fpB, "%s", serializedState);
+        fclose(fpB);
+    }
+
+    std::vector<const char *> args;
+    args.push_back("/usr/bin/diff");
+    args.push_back(aFilePath);
+    args.push_back(bFilePath);
+    args.push_back("-u3");
+
+    printf("Running diff: ");
+    for (const char *arg : args)
+    {
+        printf(" %s", arg);
+    }
+    printf("\n");
+
+    ProcessHandle proc(LaunchProcess(args, ProcessOutputCapture::StdoutOnly));
+    if (proc && proc->finish())
+    {
+        printf("\n%s\n", proc->getStdout().c_str());
+    }
+}
+
 bool TracePerfTest::isDefaultFramebuffer(GLenum target) const
 {
     switch (target)
@@ -1686,7 +1766,14 @@ void RegisterTraceTests()
 
     for (const TracePerfParams &params : filteredTests)
     {
-        auto factory          = [params]() { return new TracePerfTest(params); };
+        // Force on features if we're validating serialization.
+        TracePerfParams overrideParams = params;
+        if (gTraceTestValidation)
+        {
+            overrideParams.eglParameters.captureLimits = EGL_TRUE;
+        }
+
+        auto factory          = [overrideParams]() { return new TracePerfTest(overrideParams); };
         std::string paramName = testing::PrintToString(params);
         std::stringstream testNameStr;
         testNameStr << "Run/" << paramName;
