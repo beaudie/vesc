@@ -25,6 +25,7 @@ namespace angle
 {
 
 using ParamData = std::vector<std::vector<uint8_t>>;
+
 struct ParamCapture : angle::NonCopyable
 {
     ParamCapture();
