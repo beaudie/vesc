@@ -72,6 +72,16 @@ void DestroyAllocator(VmaAllocator allocator)
     vmaDestroyAllocator(allocator);
 }
 
+VkResult CreatePool(VmaAllocator allocator, const VmaPoolCreateInfo *pCreateInfo, VmaPool *pPool)
+{
+    return vmaCreatePool(allocator, pCreateInfo, pPool);
+}
+
+void DestroyPool(VmaAllocator allocator, VmaPool pool)
+{
+    vmaDestroyPool(allocator, pool);
+}
+
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation)
 {
     vmaFreeMemory(allocator, allocation);
