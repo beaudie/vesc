@@ -340,28 +340,33 @@ void ANGLEPerfTest::doRunLoop(double maxRunTime, int maxStepsToRun, RunLoopPolic
 
     while (mRunning)
     {
-        step();
-
-        if (runPolicy == RunLoopPolicy::FinishEveryStep)
+        if (gMaxStepsPerformed > 0 && mTotalNumStepsPerformed >= gMaxStepsPerformed)
         {
-            glFinish();
+            printf("Stopping because we have %d/%d steps \n", mTotalNumStepsPerformed,
+                   gMaxStepsPerformed);
+            mRunning = false;
         }
-
-        if (mRunning)
+        else if (mTimer.getElapsedTime() > maxRunTime)
         {
-            mTrialNumStepsPerformed++;
-            mTotalNumStepsPerformed++;
-            if (gMaxStepsPerformed > 0 && mTotalNumStepsPerformed >= gMaxStepsPerformed)
+            mRunning = false;
+        }
+        else if (mTrialNumStepsPerformed >= maxStepsToRun)
+        {
+            mRunning = false;
+        }
+        else
+        {
+            step();
+
+            if (runPolicy == RunLoopPolicy::FinishEveryStep)
             {
-                mRunning = false;
+                glFinish();
             }
-            else if (mTimer.getElapsedTime() > maxRunTime)
+
+            if (mRunning)
             {
-                mRunning = false;
-            }
-            else if (mTrialNumStepsPerformed >= maxStepsToRun)
-            {
-                mRunning = false;
+                mTrialNumStepsPerformed++;
+                mTotalNumStepsPerformed++;
             }
         }
     }
