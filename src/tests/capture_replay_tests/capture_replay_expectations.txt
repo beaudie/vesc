@@ -32,12 +32,10 @@ WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInVertexBuffer/ES2_Vulkan_Sw
 BlitFramebufferANGLETest.Reverse*/*
 BlitFramebufferANGLETest.Scissored*/*
 ClipDistanceTest.*
-CopyCompressedTextureTest.*
 DebugMarkerTest.*
 DebugTest.*
 EGLPrintEGLinfoTest.PrintGLESCapabilities/*
 EGLStreamTest.*
-ETC1CompressedTextureTest.ETC1CompressedSubImage/*
 ExternalWrapTest.*
 FenceNVTest.*
 GetImageTestNoExtensions.EntryPointsInactive/*
@@ -47,7 +45,6 @@ GLSLTest.MixedShaderLengths/*
 GLSLTest.ZeroShaderLength/*
 GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
 ImageTest.SourceCubeTargetExternal/*
-PBOCompressedTextureTest.PBOCompressedSubImage/*
 PBOExtensionTest.*
 VertexAttributeTest.*
 VulkanExternalImageTest.*
