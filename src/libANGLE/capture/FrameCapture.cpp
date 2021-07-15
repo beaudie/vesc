@@ -62,6 +62,7 @@ constexpr char kCaptureTriggerVarName[] = "ANGLE_CAPTURE_TRIGGER";
 constexpr char kCaptureLabelVarName[]   = "ANGLE_CAPTURE_LABEL";
 constexpr char kCompressionVarName[]    = "ANGLE_CAPTURE_COMPRESSION";
 constexpr char kSerializeStateVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
+constexpr char kValidationVarName[]     = "ANGLE_CAPTURE_VALIDATION";
 
 constexpr size_t kBinaryAlignment   = 16;
 constexpr size_t kFunctionSizeLimit = 5000;
@@ -77,6 +78,7 @@ constexpr char kAndroidFrameEnd[]       = "debug.angle.capture.frame_end";
 constexpr char kAndroidCaptureTrigger[] = "debug.angle.capture.trigger";
 constexpr char kAndroidCaptureLabel[]   = "debug.angle.capture.label";
 constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
+constexpr char kAndroidValidation[]     = "debug.angle.capture.validation";
 
 std::string GetDefaultOutDirectory()
 {
@@ -1541,6 +1543,24 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
         params.addValueParam("location", ParamType::TGLint, location);
         callsOut->emplace_back("UpdateUniformLocation", std::move(params));
     }
+}
+
+void CaptureValidateSerializedState(const gl::Context *context, std::vector<CallCapture> *callsOut)
+{
+    std::string serializedState;
+    angle::Result result = angle::SerializeContextToString(context, &serializedState);
+    if (result != angle::Result::Continue)
+    {
+        ERR() << "Internal error serializing context state.";
+        return;
+    }
+    ParamCapture serializedStateParam("serializedState", ParamType::TGLcharConstPointer);
+    CaptureString(serializedState.c_str(), &serializedStateParam);
+
+    ParamBuffer params;
+    params.addParam(std::move(serializedStateParam));
+
+    callsOut->emplace_back("ValidateSerializedState", std::move(params));
 }
 
 void CaptureUpdateUniformBlockIndexes(const gl::Program *program,
@@ -3072,7 +3092,8 @@ void CaptureSharedContextMidExecutionSetup(const gl::Context *context,
 
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
-                              ResourceTracker *resourceTracker)
+                              ResourceTracker *resourceTracker,
+                              bool validateSerializedState)
 {
     const gl::State &apiState = context->getState();
     gl::State replayState(nullptr, nullptr, nullptr, nullptr, nullptr, EGL_OPENGL_ES_API,
@@ -3477,7 +3498,6 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     }
 
     // Capture GL Context states.
-    // TODO(http://anglebug.com/3662): Complete state capture.
     auto capCap = [cap, &replayState](GLenum capEnum, bool capValue) {
         if (capValue)
         {
@@ -3846,6 +3866,11 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
     // Allow the replayState object to be destroyed conveniently.
     replayState.setBufferBinding(context, gl::BufferBinding::Array, nullptr);
+
+    if (validateSerializedState)
+    {
+        CaptureValidateSerializedState(context, setupCalls);
+    }
 }
 
 bool SkipCall(EntryPoint entryPoint)
@@ -4167,6 +4192,13 @@ FrameCaptureShared::FrameCaptureShared()
     if (serializeStateFromEnv == "1")
     {
         mSerializeStateEnabled = true;
+    }
+
+    std::string validateSerialiedStateFromEnv =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kValidationVarName, kAndroidValidation);
+    if (validateSerialiedStateFromEnv == "1")
+    {
+        mValidateSerializedState = true;
     }
 }
 
@@ -5293,7 +5325,7 @@ void FrameCaptureShared::setupSharedAndAuxReplay(const gl::Context *context,
         if (isMidExecutionCapture)
         {
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
-                                     &mResourceTracker);
+                                     &mResourceTracker, mValidateSerializedState);
         }
 
         if (!frameCapture->getSetupCalls().empty() && shareContext->id() != context->id())

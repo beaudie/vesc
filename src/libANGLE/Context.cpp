@@ -6540,6 +6540,8 @@ void Context::deleteRenderbuffers(GLsizei n, const RenderbufferID *renderbuffers
 
 void Context::deleteTextures(GLsizei n, const TextureID *textures)
 {
+    printf("DeleteTextures\n");
+
     for (int i = 0; i < n; i++)
     {
         if (textures[i].value != 0)
@@ -6586,6 +6588,8 @@ void Context::genRenderbuffers(GLsizei n, RenderbufferID *renderbuffers)
 
 void Context::genTextures(GLsizei n, TextureID *textures)
 {
+    printf("GenTextures\n");
+
     for (int i = 0; i < n; i++)
     {
         textures[i] = createTexture();

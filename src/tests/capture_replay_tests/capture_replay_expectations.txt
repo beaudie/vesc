@@ -48,6 +48,7 @@ WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInVertexBuffer/ES2_Vulkan_Sw
 BlitFramebufferANGLETest.Reverse*/*
 BlitFramebufferANGLETest.Scissored*/*
 ClipDistanceTest.*
+# CopyCompressedTextureTest.InternalFormat/*
 DebugMarkerTest.*
 DebugTest.*
 EGLStreamTest.*

@@ -186,6 +186,7 @@ TEST_P(CopyCompressedTextureTest, InternalFormat)
     }
     if (IsGLExtensionEnabled("GL_OES_compressed_ETC1_RGB8_texture"))
     {
+        printf("ETC1 supported\n");
         supportedFormats.push_back(
             Data(GL_ETC1_RGB8_OES, CompressedImageETC1, sizeof(CompressedImageETC1)));
     }

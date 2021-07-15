@@ -1332,6 +1332,8 @@ void SerializeVertexArray(JsonSerializer *json, gl::VertexArray *vertexArray)
 
 Result SerializeContextToString(const gl::Context *context, std::string *stringOut)
 {
+    printf("SerializeContextToString\n");
+
     JsonSerializer json;
     json.startDocument("Context");
 

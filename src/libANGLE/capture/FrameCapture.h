@@ -520,6 +520,7 @@ class FrameCaptureShared final : angle::NonCopyable
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
     BufferDataMap mBufferDataMap;
+    bool mValidateSerializedState = false;
 
     ResourceTracker mResourceTracker;
 
