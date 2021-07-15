@@ -3744,7 +3744,8 @@ spirv::IdRef OutputSPIRVTraverser::cast(spirv::IdRef value,
     if (valueTypeSpec.blockStorage == expectedTypeSpec.blockStorage &&
         valueTypeSpec.isInvariantBlock == expectedTypeSpec.isInvariantBlock &&
         valueTypeSpec.isRowMajorQualifiedBlock == expectedTypeSpec.isRowMajorQualifiedBlock &&
-        valueTypeSpec.isRowMajorQualifiedArray == expectedTypeSpec.isRowMajorQualifiedArray)
+        valueTypeSpec.isRowMajorQualifiedArray == expectedTypeSpec.isRowMajorQualifiedArray &&
+        valueTypeSpec.isOrHasBoolInInterfaceBlock == expectedTypeSpec.isOrHasBoolInInterfaceBlock)
     {
         return value;
     }
@@ -3826,8 +3827,23 @@ spirv::IdRef OutputSPIRVTraverser::cast(spirv::IdRef value,
     }
     else
     {
-        // TODO: support bool in interface blocks.  http://anglebug.com/4889.
-        UNREACHABLE();
+        // Bool types in interface blocks are emulated with uint.  bool<->uint cast is done here.
+        ASSERT(valueType.getBasicType() == EbtBool);
+        ASSERT(valueTypeSpec.isOrHasBoolInInterfaceBlock ||
+               expectedTypeSpec.isOrHasBoolInInterfaceBlock);
+
+        // If value is loaded as uint, it needs to change to bool.  If it's bool, it needs to change
+        // to uint before storage.
+        if (valueTypeSpec.isOrHasBoolInInterfaceBlock)
+        {
+            TType emulatedValueType(valueType);
+            emulatedValueType.setBasicType(EbtUInt);
+            return castBasicType(value, emulatedValueType, EbtBool);
+        }
+        else
+        {
+            return castBasicType(value, valueType, EbtUInt);
+        }
     }
 
     // Construct the value with the expected type from its cast constituents.
