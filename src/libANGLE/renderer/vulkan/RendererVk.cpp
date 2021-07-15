@@ -782,6 +782,7 @@ void RendererVk::onDestroy(vk::Context *context)
     }
     mCommandBufferHelperFreeList.clear();
 
+    mBufferMemoryAllocator.destroy(this);
     mAllocator.destroy();
 
     sh::FinalizeGlslang();
@@ -1177,13 +1178,16 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         preferredLargeHeapBlockSize = 4 * 1024 * 1024;
     }
 
+    // Store the physical device memory properties so we can find the right memory pools.
+    mMemoryProperties.init(mPhysicalDevice);
+
     // Create VMA allocator
     ANGLE_VK_TRY(displayVk,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, applicationInfo.apiVersion,
                                  preferredLargeHeapBlockSize));
 
-    // Store the physical device memory properties so we can find the right memory pools.
-    mMemoryProperties.init(mPhysicalDevice);
+    // Create buffer memory allocator
+    ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.initialize(this, preferredLargeHeapBlockSize));
 
     {
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
@@ -3317,15 +3321,17 @@ angle::Result RendererVk::getFormatDescriptorCountForExternalFormat(ContextVk *c
     return angle::Result::Stop;
 }
 
-vk::MemoryReport::MemoryReport()
+namespace vk
+{
+MemoryReport::MemoryReport()
     : mCurrentTotalAllocatedMemory(0),
       mMaxTotalAllocatedMemory(0),
       mCurrentTotalImportedMemory(0),
       mMaxTotalImportedMemory(0)
 {}
 
-void vk::MemoryReport::processCallback(const VkDeviceMemoryReportCallbackDataEXT &callbackData,
-                                       bool logCallback)
+void MemoryReport::processCallback(const VkDeviceMemoryReportCallbackDataEXT &callbackData,
+                                   bool logCallback)
 {
     std::lock_guard<std::mutex> lock(mMemoryReportMutex);
     VkDeviceSize size = 0;
@@ -3403,7 +3409,7 @@ void vk::MemoryReport::processCallback(const VkDeviceMemoryReportCallbackDataEXT
     }
 }
 
-void vk::MemoryReport::logMemoryReportStats() const
+void MemoryReport::logMemoryReportStats() const
 {
     std::lock_guard<std::mutex> lock(mMemoryReportMutex);
 
@@ -3426,4 +3432,72 @@ void vk::MemoryReport::logMemoryReportStats() const
                << " (max=" << std::setw(10) << importedMemoryMax << ")";
     }
 }
+
+// BufferMemoryAllocator implementation.
+BufferMemoryAllocator::BufferMemoryAllocator() : mVMAPools{} {}
+
+BufferMemoryAllocator::~BufferMemoryAllocator()
+{
+    for (VmaPool &pool : mVMAPools)
+    {
+        ASSERT(pool == nullptr);
+    }
+}
+
+VkResult BufferMemoryAllocator::initialize(RendererVk *renderer,
+                                           VkDeviceSize preferredLargeHeapBlockSize)
+{
+    ASSERT(renderer->getAllocator().valid());
+    return VK_SUCCESS;
+}
+
+void BufferMemoryAllocator::destroy(RendererVk *renderer)
+{
+    const Allocator &allocator = renderer->getAllocator();
+    for (VmaPool &pool : mVMAPools)
+    {
+        vma::DestroyPool(allocator.getHandle(), pool);
+        pool = nullptr;
+    }
+}
+
+VkResult BufferMemoryAllocator::createBuffer(RendererVk *renderer,
+                                             const VkBufferCreateInfo &bufferCreateInfo,
+                                             VkMemoryPropertyFlags requiredFlags,
+                                             VkMemoryPropertyFlags preferredFlags,
+                                             bool persistentlyMappedBuffers,
+                                             uint32_t *memoryTypeIndexOut,
+                                             Buffer *bufferOut,
+                                             Allocation *allocationOut)
+{
+    ASSERT(bufferOut && !bufferOut->valid());
+    ASSERT(allocationOut && !allocationOut->valid());
+    const Allocator &allocator = renderer->getAllocator();
+    return vma::CreateBuffer(allocator.getHandle(), &bufferCreateInfo, requiredFlags,
+                             preferredFlags, persistentlyMappedBuffers, memoryTypeIndexOut,
+                             &bufferOut->mHandle, &allocationOut->mHandle);
+}
+
+void BufferMemoryAllocator::getMemoryTypeProperties(RendererVk *renderer,
+                                                    uint32_t memoryTypeIndex,
+                                                    VkMemoryPropertyFlags *flagsOut) const
+{
+    const Allocator &allocator = renderer->getAllocator();
+    vma::GetMemoryTypeProperties(allocator.getHandle(), memoryTypeIndex, flagsOut);
+}
+
+VkResult BufferMemoryAllocator::findMemoryTypeIndexForBufferInfo(
+    RendererVk *renderer,
+    const VkBufferCreateInfo &bufferCreateInfo,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    bool persistentlyMappedBuffers,
+    uint32_t *memoryTypeIndexOut) const
+{
+    const Allocator &allocator = renderer->getAllocator();
+    return vma::FindMemoryTypeIndexForBufferInfo(allocator.getHandle(), &bufferCreateInfo,
+                                                 requiredFlags, preferredFlags,
+                                                 persistentlyMappedBuffers, memoryTypeIndexOut);
+}
+}  // namespace vk
 }  // namespace rx
