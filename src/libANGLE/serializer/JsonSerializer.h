@@ -59,7 +59,10 @@ class JsonSerializer : public angle::NonCopyable
 
     void addString(const std::string &name, const std::string &value);
 
-    void addBlob(const std::string &name, const uint8_t *value, size_t length);
+    void addBlob(const std::string &name,
+                 const uint8_t *value,
+                 size_t length,
+                 bool wholeThing = false);
 
     void startGroup(const std::string &name);
 
