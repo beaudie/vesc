@@ -53,14 +53,16 @@ void JsonSerializer::endGroup()
     mGroupValueStack.top().insert(std::move(new_entry));
 }
 
-void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_t length)
+void JsonSerializer::addBlob(const std::string &name,
+                             const uint8_t *blob,
+                             size_t length,
+                             bool wholeThing)
 {
     unsigned char hash[angle::base::kSHA1Length];
     angle::base::SHA1HashBytes(blob, length, hash);
     std::ostringstream os;
 
-    // Since we don't want to de-serialize the data we just store a checksume
-    // of the blob
+    // Since we don't want to de-serialize the data we just store a checksum of the blob
     os << "SHA1:";
     static constexpr char kASCII[] = "0123456789ABCDEF";
     for (size_t i = 0; i < angle::base::kSHA1Length; ++i)
@@ -72,7 +74,7 @@ void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_
     hash_name << name << "-hash";
     addString(hash_name.str(), os.str());
 
-    std::vector<uint8_t> data(length < 16 ? length : (size_t)16);
+    std::vector<uint8_t> data((length < 16 || wholeThing) ? length : (size_t)16);
     std::copy(blob, blob + data.size(), data.begin());
 
     std::ostringstream raw_name;
