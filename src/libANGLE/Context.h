@@ -626,6 +626,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool supportsGeometryOrTesselation() const;
     void dirtyAllState();
 
+    void finishImmutable() const;
+
   private:
     void initializeDefaultResources();
 
