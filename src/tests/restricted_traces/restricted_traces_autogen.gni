@@ -5079,8 +5079,9 @@ angle_restricted_traces = [
       "trex_200/trex_200_capture_context1_frame009.cpp",
       "trex_200/trex_200_capture_context1_frame010.cpp",
       "trex_200/trex_200_capture_context1_frame011.cpp",
+      "trex_200/trex_200_frame001.cpp",
     ],
-    "trex_200/trex_200_capture_context1.angledata.gz",
+    "trex_200/trex_200.angledata.gz",
   ],
   [
     "whatsapp",
