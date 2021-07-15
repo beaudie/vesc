@@ -1210,7 +1210,9 @@ Result SerializeTextureData(JsonSerializer *json,
 
         label << "Texels-Level" << index.getLevelIndex();
         if (imageIter.current().hasLayer())
+        {
             label << "-Layer" << imageIter.current().getLayerIndex();
+        }
 
         if (texture->getState().getInitState() == gl::InitState::Initialized)
         {
