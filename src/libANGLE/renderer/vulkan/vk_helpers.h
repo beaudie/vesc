@@ -934,6 +934,13 @@ class BufferHelper final : public Resource
                             VkPipelineStageFlags writeStage,
                             PipelineBarrier *barrier);
 
+    ANGLE_INLINE void retainWriteUse(ResourceUseList *resourceUseList) const
+    {
+        resourceUseList->add(mWriteUse);
+    }
+
+    angle::Result waitForGpuWrite(ContextVk *contextVk, const char *debugMessage);
+
   private:
     angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
 
@@ -953,6 +960,7 @@ class BufferHelper final : public Resource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+    SharedResourceUse mWriteUse;
 };
 
 enum class BufferAccess

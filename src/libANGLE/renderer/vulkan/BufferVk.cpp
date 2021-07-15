@@ -606,8 +606,30 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         }
         else if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
         {
-            ANGLE_TRY(mBuffer->waitForIdle(contextVk,
-                                           "GPU stall due to mapping buffer in use by the GPU"));
+            if (mBuffer->isExternalBuffer() || !mBuffer->isHostVisible() || mShadowBuffer.valid())
+            {
+                ANGLE_TRY(mBuffer->waitForIdle(
+                    contextVk, "CPU stall due to mapping buffer in use by the GPU"));
+            }
+            else
+            {
+                ANGLE_TRY(mBuffer->waitForGpuWrite(
+                    contextVk, "CPU stall due to mapping buffer in writing by the GPU"));
+
+                // If this is still used by GPU read, allocate new buffer and copy the contents to
+                // write data
+                if (mBuffer->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+                {
+                    uint8_t *previousPtr;
+                    ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &previousPtr,
+                                                     static_cast<size_t>(mBufferOffset)));
+
+                    ANGLE_TRY(acquireAndUpdate(contextVk, previousPtr,
+                                               static_cast<size_t>(mState.getSize()), 0));
+
+                    onStateChange(angle::SubjectMessage::SubjectChanged);
+                }
+            }
         }
 
         if (mBuffer->isHostVisible())
