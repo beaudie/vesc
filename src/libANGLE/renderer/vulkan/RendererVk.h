@@ -84,7 +84,7 @@ class BufferMemorySubAllocator : angle::NonCopyable
     BufferMemorySubAllocator();
     ~BufferMemorySubAllocator() = default;
 
-    VkResult initialize(Allocator &allocator);
+    VkResult initialize(Allocator &allocator, uint32_t memoryTypeCount);
     void destroy();
 
     // Initializes the buffer handle and memory allocation.
@@ -94,7 +94,7 @@ class BufferMemorySubAllocator : angle::NonCopyable
                           bool persistentlyMappedBuffers,
                           uint32_t *memoryTypeIndexOut,
                           Buffer *bufferOut,
-                          Allocation *allocationOut) const;
+                          Allocation *allocationOut);
 
     void getMemoryTypeProperties(uint32_t memoryTypeIndex, VkMemoryPropertyFlags *flagsOut) const;
     VkResult findMemoryTypeIndexForBufferInfo(const VkBufferCreateInfo &bufferCreateInfo,
@@ -105,8 +105,15 @@ class BufferMemorySubAllocator : angle::NonCopyable
 
   private:
     bool valid() const { return mAllocator != nullptr; }
+
     Allocator *mAllocator;
 
+    // The max size to use mDeviceMemorySmallPools.
+    static constexpr size_t kMaxSizeToUseSmallPool = 1ull << 12;
+    static constexpr size_t kSmallPoolBlockSize    = 128ull * 1024;       // 128K
+    static constexpr size_t kLargePoolBlockSize    = 4ull * 1024 * 1024;  // 4M
+
+    // The small pool uses buddy algorithm to favor allocation speed over memory waste.
     VmaPool mDeviceMemorySmallPools[VK_MAX_MEMORY_TYPES];
     VmaPool mDeviceMemoryLargePools[VK_MAX_MEMORY_TYPES];
 };
