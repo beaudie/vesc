@@ -746,6 +746,135 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(3, 3, GLColor::green);
 }
 
+void drawAndVerifyOutOfBoundsIndex(int startIndex)
+{
+    glClearColor(0.0, 0.0, 1.0, 1.0);  // Start with blue to indicate no pixels touched.
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Create an element array buffer with a tri-strip that starts at startIndex and make
+    // it the active element array buffer.
+    // prepareElementArrayBuffer(/*StartIndex*/startIndex);
+    GLBuffer glElementArrayBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glElementArrayBuffer);
+    uint16_t quadIndices[4];
+    for (uint32_t i = 0; i < sizeof(quadIndices) / sizeof(uint16_t); i++)
+    {
+        quadIndices[i] = startIndex + i;
+    }
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadIndices), quadIndices, GL_STATIC_DRAW);
+
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, /*offset*/ 0);
+    GLenum error = glGetError();
+    // Invalid error flagged by drawElements. Should be INVALID_OPERATION or NO_ERROR;
+    ASSERT_TRUE(error == GL_INVALID_OPERATION || error == GL_NO_ERROR);
+
+    if (error == GL_INVALID_OPERATION)
+    {
+        // testPassed("drawElements flagged INVALID_OPERATION, which is valid so long as all canvas
+        // pixels were not touched."); wtu.checkCanvas(gl, [0, 0, 255, 255]);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(0, 0, 255, 255));
+    }
+    else if (error == GL_NO_ERROR)
+    {
+        // testPassed("drawElements flagged NO_ERROR, which is valid so long as all canvas pixels
+        // are green."); wtu.checkCanvas(gl, [0, 255, 0, 255]);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(0, 255, 0, 255));
+    }
+}
+
+TEST_P(BufferDataTest, OutOfBoundsIndexBuffer)
+{
+    // var wtu = WebGLTestUtils;
+    // var canvas = document.getElementById("canvas");
+    // var gl = wtu.create3DContext(canvas, {antialias: false});
+
+    static constexpr int numberOfQuads = 200;
+
+    // Create a vertex buffer with 200 properly formed tri-strip quads. These quads will cover the
+    // canvas texture such that every single pixel is touched by the fragment shader.
+    GLBuffer glQuadBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, glQuadBuffer);
+    GLfloat quadPositions[numberOfQuads * /*ComponentsPerQuad*/ 2 * /*VerticesPerQuad*/ 4];
+    for (uint32_t i = 0; i < sizeof(quadPositions) / sizeof(GLfloat);
+         i += /*ComponentsPerQuad*/ 2 * /*VerticesPerQuad*/ 4)
+    {
+        quadPositions[i + 0] = -1.0;  // upper left
+        quadPositions[i + 1] = 1.0;
+        quadPositions[i + 2] = 1.0;  // upper right
+        quadPositions[i + 3] = 1.0;
+        quadPositions[i + 4] = -1.0;  // lower left
+        quadPositions[i + 5] = -1.0;
+        quadPositions[i + 6] = 1.0;  // lower right
+        quadPositions[i + 7] = -1.0;
+    }
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadPositions), quadPositions, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+
+    // Create a small vertex buffer with determined-ahead-of-time "random" values (0.2). This buffer
+    // will be the one indexed off the end.
+    GLBuffer glVertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, glVertexBuffer);
+    GLfloat data[] = {0.2, 0.2, 0.2, 0.2};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
+
+    // Setup the verification program.
+    //["vsCheckOutOfBounds", wtu.simpleVertexColorFragmentShader], ["position", "vecRandom"]);
+    const char vsCheckOutOfBounds[]              = R"(
+                precision mediump float;
+                attribute vec2 position;
+                attribute vec4 vecRandom;
+                varying vec4 v_color;
+
+                // Per the spec, each component can either contain existing contents
+                // of the buffer or 0.
+                bool testFloatComponent(float component) {
+                    return (component == 0.2 || component == 0.0);
+                }
+                // The last component is additionally allowed to be 1.0.
+                bool testLastFloatComponent(float component) {
+                    return testFloatComponent(component) || component == 1.0;
+                }
+
+                void main() {
+                    if (testFloatComponent(vecRandom.x) &&
+                        testFloatComponent(vecRandom.y) &&
+                        testFloatComponent(vecRandom.z) &&
+                        testLastFloatComponent(vecRandom.w)) {
+                        v_color = vec4(0.0, 1.0, 0.0, 1.0); // green -- We're good
+                    } else {
+                        v_color = vec4(1.0, 0.0, 0.0, 1.0); // red -- Unexpected value
+                    }
+                    gl_Position = vec4(position, 0.0, 1.0);
+                }
+            )";
+    const char simpleVertexColorFragmentShader[] = R"(precision mediump float;
+                                                      varying vec4 v_color;
+                                                      void main() {
+                                                          gl_FragData[0] = v_color;
+                                                      }
+                                                    )";
+    ANGLE_GL_PROGRAM(glProgram, vsCheckOutOfBounds, simpleVertexColorFragmentShader);
+    glUseProgram(glProgram);
+    GLint positionLoc = glGetAttribLocation(glProgram, "position");
+    ASSERT_NE(-1, positionLoc);
+    GLint vecRandomLoc = glGetAttribLocation(glProgram, "vecRandom");
+    ASSERT_NE(-1, vecRandomLoc);
+
+    ASSERT_GL_NO_ERROR();
+
+    // debug("Test -- Index off the end of the vertex buffer near the beginning of the out of bounds
+    // area.");
+    drawAndVerifyOutOfBoundsIndex(/*StartIndex*/ 4);
+
+    // debug("");
+    // debug("Test -- Index off the end of the vertex buffer near the end of the out of bounds
+    // area.")
+    drawAndVerifyOutOfBoundsIndex(/*StartIndex*/ numberOfQuads - 4);
+}
+
 // Tests a bug where copying buffer data immediately after creation hit a nullptr in D3D11.
 TEST_P(BufferDataTestES3, NoBufferInitDataCopyBug)
 {

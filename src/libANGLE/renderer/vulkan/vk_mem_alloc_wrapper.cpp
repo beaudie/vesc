@@ -72,19 +72,27 @@ void DestroyAllocator(VmaAllocator allocator)
     vmaDestroyAllocator(allocator);
 }
 
-VkResult CreatePool(VmaAllocator allocator, const VmaPoolCreateInfo *pCreateInfo, VmaPool *pPool)
+VkResult CreatePool(VmaAllocator allocator,
+                    uint32_t memoryTypeIndex,
+                    bool buddyAlgorithm,
+                    VkDeviceSize blockSize,
+                    VmaPool *pPool)
 {
-    return vmaCreatePool(allocator, pCreateInfo, pPool);
+    VmaPoolCreateInfo poolCreateInfo = {};
+    poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
+    poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT;
+    if (buddyAlgorithm)
+    {
+        poolCreateInfo.flags |= VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT;
+    }
+    poolCreateInfo.blockSize     = blockSize;
+    poolCreateInfo.maxBlockCount = -1;
+    return vmaCreatePool(allocator, &poolCreateInfo, pPool);
 }
 
 void DestroyPool(VmaAllocator allocator, VmaPool pool)
 {
     vmaDestroyPool(allocator, pool);
-}
-
-void FreeMemory(VmaAllocator allocator, VmaAllocation allocation)
-{
-    vmaFreeMemory(allocator, allocation);
 }
 
 VkResult CreateBuffer(VmaAllocator allocator,
@@ -100,30 +108,48 @@ VkResult CreateBuffer(VmaAllocator allocator,
     VmaAllocationCreateInfo allocationCreateInfo = {};
     allocationCreateInfo.requiredFlags           = requiredFlags;
     allocationCreateInfo.preferredFlags          = preferredFlags;
-    allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+    allocationCreateInfo.flags = persistentlyMappedBuffers ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
     VmaAllocationInfo allocationInfo = {};
 
     result = vmaCreateBuffer(allocator, pBufferCreateInfo, &allocationCreateInfo, pBuffer,
                              pAllocation, &allocationInfo);
     *pMemoryTypeIndexOut = allocationInfo.memoryType;
-
     return result;
 }
 
-VkResult FindMemoryTypeIndexForBufferInfo(VmaAllocator allocator,
-                                          const VkBufferCreateInfo *pBufferCreateInfo,
-                                          VkMemoryPropertyFlags requiredFlags,
-                                          VkMemoryPropertyFlags preferredFlags,
-                                          bool persistentlyMappedBuffers,
-                                          uint32_t *pMemoryTypeIndexOut)
+VkResult AllocateMemory(VmaAllocator allocator,
+                        const VkMemoryRequirements *pVkMemoryRequirements,
+                        VkMemoryPropertyFlags requiredFlags,
+                        VkMemoryPropertyFlags preferredFlags,
+                        bool persistentlyMappedBuffers,
+                        VmaPool customPool,
+                        uint32_t *pMemoryTypeIndexOut,
+                        VmaAllocation *pAllocation,
+                        VkDeviceSize *sizeOut)
 {
+    VkResult result;
     VmaAllocationCreateInfo allocationCreateInfo = {};
     allocationCreateInfo.requiredFlags           = requiredFlags;
     allocationCreateInfo.preferredFlags          = preferredFlags;
     allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+    allocationCreateInfo.pool  = customPool;
+    VmaAllocationInfo allocationInfo = {};
 
-    return vmaFindMemoryTypeIndexForBufferInfo(allocator, pBufferCreateInfo, &allocationCreateInfo,
-                                               pMemoryTypeIndexOut);
+    result = vmaAllocateMemory(allocator, pVkMemoryRequirements, &allocationCreateInfo, pAllocation,
+                               &allocationInfo);
+    *pMemoryTypeIndexOut = allocationInfo.memoryType;
+    *sizeOut             = allocationInfo.size;
+    return result;
+}
+
+void FreeMemory(VmaAllocator allocator, VmaAllocation allocation)
+{
+    vmaFreeMemory(allocator, allocation);
+}
+
+VkResult BindBufferMemory(VmaAllocator allocator, VmaAllocation allocation, VkBuffer buffer)
+{
+    return vmaBindBufferMemory(allocator, allocation, buffer);
 }
 
 void GetMemoryTypeProperties(VmaAllocator allocator,
@@ -131,6 +157,22 @@ void GetMemoryTypeProperties(VmaAllocator allocator,
                              VkMemoryPropertyFlags *pFlags)
 {
     vmaGetMemoryTypeProperties(allocator, memoryTypeIndex, pFlags);
+}
+
+VkResult FindMemoryTypeIndex(VmaAllocator allocator,
+                             uint32_t memoryTypeBits,
+                             VkMemoryPropertyFlags requiredFlags,
+                             VkMemoryPropertyFlags preferredFlags,
+                             bool persistentlyMappedBuffers,
+                             uint32_t *pMemoryTypeIndexOut)
+{
+    VmaAllocationCreateInfo allocationCreateInfo = {};
+    allocationCreateInfo.requiredFlags           = requiredFlags;
+    allocationCreateInfo.preferredFlags          = preferredFlags;
+    allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+
+    return vmaFindMemoryTypeIndex(allocator, memoryTypeBits, &allocationCreateInfo,
+                                  pMemoryTypeIndexOut);
 }
 
 VkResult MapMemory(VmaAllocator allocator, VmaAllocation allocation, void **ppData)
