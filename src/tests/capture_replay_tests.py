@@ -259,8 +259,8 @@ class ChildProcessesManager():
 
     def RunGNGen(self, args, build_dir, pipe_stdout, extra_gn_args=[]):
         gn_args = [('use_goma', str(args.use_goma).lower()),
-                   ('angle_with_capture_by_default', 'true'),
-                   ('is_debug', 'false')] + extra_gn_args
+                   ('angle_with_capture_by_default', 'true'), ('is_debug', 'false'),
+                   ('dcheck_always_on', 'true')] + extra_gn_args
         if args.goma_dir:
             gn_args.append(('goma_dir', '"%s"' % args.goma_dir))
         if args.asan:
