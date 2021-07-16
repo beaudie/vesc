@@ -101,7 +101,8 @@ class BufferMemorySubAllocator : angle::NonCopyable
                           bool persistentlyMappedBuffers,
                           uint32_t *memoryTypeIndexOut,
                           Buffer *bufferOut,
-                          Allocation *allocationOut);
+                          Allocation *allocationOut,
+                          VkDeviceSize *sizeOut);
 
     void getMemoryTypeProperties(uint32_t memoryTypeIndex, VkMemoryPropertyFlags *flagsOut) const;
     VkResult findMemoryTypeIndexForBufferInfo(const VkBufferCreateInfo &bufferCreateInfo,
@@ -110,8 +111,12 @@ class BufferMemorySubAllocator : angle::NonCopyable
                                               bool persistentlyMappedBuffers,
                                               uint32_t *memoryTypeIndexOut) const;
 
+    // The max buffer size to use the suballocator.
+    static constexpr size_t kMaxSizeToUseBufferMemorySubAllocator = (0x1ull << 20) - 1;
+
   private:
     bool valid() const { return mAllocator != nullptr; }
+
     Allocator *mAllocator;
 
     enum VMAPoolType
@@ -121,6 +126,10 @@ class BufferMemorySubAllocator : angle::NonCopyable
         kPoolCount = 2,
     };
     VmaPool mVMAPools[kPoolCount][VK_MAX_MEMORY_TYPES];
+
+    // The max size to use mDeviceMemorySmallPools.
+    static constexpr VkDeviceSize kMaxSizeToUseSmallPool = 1ull << 12;     // 4k
+    static constexpr VkDeviceSize kSmallPoolBlockSize    = 128ull * 1024;  // 128K
 };
 }  // namespace vk
 
