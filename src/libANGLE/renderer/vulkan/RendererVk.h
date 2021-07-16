@@ -102,6 +102,16 @@ class BufferMemoryAllocator : angle::NonCopyable
                           Buffer *bufferOut,
                           Allocation *allocationOut);
 
+    VkResult AllocateMemoryForBuffer(Context *context,
+                                     Buffer &buffer,
+                                     VkMemoryPropertyFlags requiredFlags,
+                                     VkMemoryPropertyFlags preferredFlags,
+                                     bool persistentlyMapped,
+                                     bool robustResourceInitEnabled,
+                                     uint32_t *memoryTypeIndexOut,
+                                     BufferMemory &memory,
+                                     VkDeviceSize *sizeOut);
+
     void getMemoryTypeProperties(RendererVk *renderer,
                                  uint32_t memoryTypeIndex,
                                  VkMemoryPropertyFlags *flagsOut) const;
@@ -113,6 +123,10 @@ class BufferMemoryAllocator : angle::NonCopyable
                                               uint32_t *memoryTypeIndexOut) const;
 
   private:
+    VmaPool &getVMAPool(uint32_t memoryTypeIndex, int poolType)
+    {
+        return mVMAPools[memoryTypeIndex * kPoolCount + poolType];
+    }
     enum VMAPoolType
     {
         kSmallPool = 0,
@@ -120,6 +134,22 @@ class BufferMemoryAllocator : angle::NonCopyable
         kPoolCount = 2,
     };
     std::array<VmaPool, kPoolCount * VK_MAX_MEMORY_TYPES> mVMAPools;
+
+    // There are three code paths for buffer memory allocation: 1) If memory is bigger than
+    // kMaxSizeToUseSubAllocator, we will just call into vulkan driver to allocate memory to
+    // avoid memory waste associated with the sub-allocator. Since the memory size is big, we
+    // think the overhead of calling into vulkan driver for allocation is small compared to the
+    // memory access itself. Otherwise we will use VMA sub-allocator. We always use customized pool
+    // to avoid bufferImageGranularity alignment that are enforced in the default pool. We
+    // maintain two categories of customized pools: one with smaller block size and another with
+    // large block size. If size is bigger than kMaxSizeToUseSmallPool, we use the large pool,
+    // otherwise use the small pool. The large pool uses default allocation algorithm that favors
+    // memory saving and small pool uses buddy algorithm that favors allocation speed. These numbers
+    // are experimental and may subject to future tuning based on the platform configuration (like
+    // the amount of physical memory and GPU family etc).
+    static constexpr VkDeviceSize kMaxSizeToUseSubAllocator = 0x1ull << 20;   // 1M
+    static constexpr VkDeviceSize kMaxSizeToUseSmallPool    = 1ull << 12;     // 4k
+    static constexpr VkDeviceSize kSmallPoolBlockSize       = 128ull * 1024;  // 128K
 };
 }  // namespace vk
 
