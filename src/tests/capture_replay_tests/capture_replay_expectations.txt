@@ -1,3 +1,22 @@
+6180 ES2_Vulkan : ClipDistanceTest.ThreeClipDistances = FAIL
+6180 ES2_Vulkan : ClipDistanceTest.ThreeClipDistancesRedeclared = FAIL
+6180 ES2_Vulkan : ContextLostSkipValidationTest.LostNoErrorGetProgram = DISABLED
+6180 ES2_Vulkan : ContextLostTest.ParallelCompileReadyQuery = DISABLED
+6180 ES2_Vulkan : EGLContextASANTest.DestroyContextInUse = FAIL
+6180 ES2_Vulkan : EGLContextSharingTest.TextureLifetime = DISABLED
+6180 ES2_Vulkan : ExternalWrapTest.ClampToEdge = FAIL
+6180 ES2_Vulkan : ExternalWrapTest.MirroredRepeat = FAIL
+6180 ES2_Vulkan : ExternalWrapTest.NoWrap = FAIL
+6180 ES2_Vulkan : ExternalWrapTest.Repeat = FAIL
+6180 ES2_Vulkan : FramebufferTest.MultiContextNoRenderingFeedbackLoops = DISABLED
+6180 ES2_Vulkan : GLSLTest.ArrayOfStructContainingArrayOfSamplers = FAIL
+6180 ES2_Vulkan : GLSLTest.ZeroShaderLength = DISABLED
+6180 ES2_Vulkan : ImageTest.SourceCubeTargetExternal = DISABLED
+6180 ES2_Vulkan : PbufferTest.BindTexImage = FAIL
+6180 ES2_Vulkan : PbufferTest.Clearing = FAIL
+6180 ES2_Vulkan : PbufferTest.TextureSizeReset = FAIL
+6180 ES2_Vulkan : WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops = DISABLED
+
 6180 ES2_Vulkan_SwiftShader : ClipDistanceTest.ThreeClipDistances = FAIL
 6180 ES2_Vulkan_SwiftShader : ClipDistanceTest.ThreeClipDistancesRedeclared = FAIL
 6180 ES2_Vulkan_SwiftShader : ExternalWrapTest.ClampToEdge = FAIL
@@ -19,4 +38,3 @@
 6180 ES2_Vulkan_SwiftShader : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresMutableNoStorage = DISABLED
 6180 ES2_Vulkan_SwiftShader : VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores = DISABLED
 6180 ES2_Vulkan_SwiftShader : WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops = DISABLED
-
