@@ -27,6 +27,35 @@
 # with one of these outcomes will bring down the whole batch.
 #
 
+6180 : ClipDistanceTest.ThreeClipDistances/ES2_Vulkan = FAIL
+6180 : ClipDistanceTest.ThreeClipDistancesRedeclared/ES2_Vulkan = FAIL
+6180 : ContextLostSkipValidationTest.LostNoErrorGetProgram/ES2_Vulkan = EXCLUDE_FROM_RUN
+6180 : ContextLostTest.ParallelCompileReadyQuery/ES2_Vulkan = EXCLUDE_FROM_RUN
+6180 : EGLContextASANTest.DestroyContextInUse/ES2_Vulkan = FAIL
+6180 : EGLContextSharingTest.TextureLifetime/ES2_Vulkan = EXCLUDE_FROM_RUN
+6180 : ExternalWrapTest.ClampToEdge/ES2_Vulkan = FAIL
+6180 : ExternalWrapTest.MirroredRepeat/ES2_Vulkan = FAIL
+6180 : ExternalWrapTest.NoWrap/ES2_Vulkan = FAIL
+6180 : ExternalWrapTest.Repeat/ES2_Vulkan = FAIL
+6180 : FramebufferTest.MultiContextNoRenderingFeedbackLoops/ES2_Vulkan = EXCLUDE_FROM_RUN
+6180 : GLSLTest.ArrayOfStructContainingArrayOfSamplers/ES2_Vulkan = FAIL
+6180 : GLSLTest.ZeroShaderLength/ES2_Vulkan = EXCLUDE_FROM_RUN
+
+6180 : ImageTest.Deletion/ES2_Vulkan = FAIL
+6180 : ImageTest.MipLevels/ES2_Vulkan = FAIL
+6180 : ImageTest.Source2DTarget2D/ES2_Vulkan = FAIL
+6180 : ImageTest.Source2DTargetExternal/ES2_Vulkan = FAIL
+6180 : ImageTest.SourceCubeTarget2D/ES2_Vulkan = FAIL
+6180 : ImageTest.SourceRenderbufferTargetTexture/ES2_Vulkan = FAIL
+6180 : ImageTest.SourceRenderbufferTargetTextureExternal/ES2_Vulkan = FAIL
+6180 : ImageTest.UpdatedData/ES2_Vulkan = FAIL
+6180 : ImageTest.SourceCubeTargetExternal/ES2_Vulkan = EXCLUDE_FROM_RUN
+
+6180 : PbufferTest.BindTexImage/ES2_Vulkan = FAIL
+6180 : PbufferTest.Clearing/ES2_Vulkan = FAIL
+6180 : PbufferTest.TextureSizeReset/ES2_Vulkan = FAIL
+6180 : WebGLCompatibilityTest.MultiContextNoRenderingFeedbackLoops/ES2_Vulkan = EXCLUDE_FROM_RUN
+
 6180 : ClipDistanceTest.ThreeClipDistances/ES2_Vulkan_SwiftShader = FAIL
 6180 : ClipDistanceTest.ThreeClipDistancesRedeclared/ES2_Vulkan_SwiftShader = FAIL
 6180 : ExternalWrapTest.ClampToEdge/ES2_Vulkan_SwiftShader = EXCLUDE_FROM_RUN
