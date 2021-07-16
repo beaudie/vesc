@@ -11,6 +11,8 @@
 #include "common/vulkan/vk_headers.h"
 #include "vulkan/vulkan_fuchsia_ext.h"
 
+#include "libANGLE/renderer/vulkan/ContextVk.h"
+
 namespace angle
 {
 
@@ -20,7 +22,7 @@ class VulkanExternalHelper
     VulkanExternalHelper();
     ~VulkanExternalHelper();
 
-    void initialize(bool useSwiftshader, bool enableValidationLayers);
+    void initialize(rx::RendererVk *renderer, bool useSwiftshader, bool enableValidationLayers);
 
     VkInstance getInstance() const { return mInstance; }
     VkPhysicalDevice getPhysicalDevice() const { return mPhysicalDevice; }
@@ -133,6 +135,8 @@ class VulkanExternalHelper
         vkGetPhysicalDeviceExternalSemaphorePropertiesKHR                   = nullptr;
     PFN_vkGetMemoryZirconHandleFUCHSIA vkGetMemoryZirconHandleFUCHSIA       = nullptr;
     PFN_vkGetSemaphoreZirconHandleFUCHSIA vkGetSemaphoreZirconHandleFUCHSIA = nullptr;
+
+    rx::RendererVk *mRenderer;
 };
 
 }  // namespace angle

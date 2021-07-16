@@ -179,8 +179,11 @@ VulkanExternalHelper::~VulkanExternalHelper()
     }
 }
 
-void VulkanExternalHelper::initialize(bool useSwiftshader, bool enableValidationLayers)
+void VulkanExternalHelper::initialize(rx::RendererVk *renderer,
+                                      bool useSwiftshader,
+                                      bool enableValidationLayers)
 {
+    mRenderer                           = renderer;
     bool enableValidationLayersOverride = enableValidationLayers;
 #if !defined(ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS)
     enableValidationLayersOverride = false;

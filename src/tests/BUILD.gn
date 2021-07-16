@@ -250,6 +250,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
         "test_utils/VulkanExternalHelper.h",
       ]
       deps += [ "$angle_root/src/common/vulkan" ]
+      deps += [ "$angle_root:libANGLE" ]
     }
 
     if (is_fuchsia) {
