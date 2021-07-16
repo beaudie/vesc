@@ -3383,24 +3383,42 @@ VkResult BufferMemorySubAllocator::initialize(Allocator &allocator)
     ASSERT(!mAllocator);
     ASSERT(allocator.valid());
     mAllocator = &allocator;
-    return VK_SUCCESS;
+
+    VkResult result = VK_SUCCESS;
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < VK_MAX_MEMORY_TYPES; memoryTypeIndex++)
+    {
+        for (int i = 0; i <= 1; i++)
+        {
+            VmaPool *pCustomPool = i == 0 ? &mDeviceMemorySmallPools[memoryTypeIndex]
+                                          : &mDeviceMemoryLargePools[memoryTypeIndex];
+            size_t blockSize = i == 0 ? kSmallPoolBlockSize : kLargePoolBlockSize;
+            // use buddy algorithm for small pool to favor speed
+            bool useBuddyAlgorithm = i == 0 ? true : false;
+            // Create a custom pool.
+            result = vma::CreatePool(mAllocator->getHandle(), memoryTypeIndex, useBuddyAlgorithm,
+                                     blockSize, pCustomPool);
+            if (VK_SUCCESS != result)
+            {
+                return result;
+            }
+        }
+    }
+
+    return result;
 }
 
 void BufferMemorySubAllocator::destroy()
 {
-    for (VmaPool &pool : mDeviceMemorySmallPools)
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < VK_MAX_MEMORY_TYPES; memoryTypeIndex++)
     {
-        if (pool)
+        for (int i = 0; i <= 1; i++)
         {
-            vma::DestroyPool(mAllocator->getHandle(), pool);
-        }
-    }
-
-    for (VmaPool &pool : mDeviceMemoryLargePools)
-    {
-        if (pool)
-        {
-            vma::DestroyPool(mAllocator->getHandle(), pool);
+            VmaPool customPool = i == 0 ? mDeviceMemorySmallPools[memoryTypeIndex]
+                                        : mDeviceMemoryLargePools[memoryTypeIndex];
+            if (customPool)
+            {
+                vma::DestroyPool(mAllocator->getHandle(), customPool);
+            }
         }
     }
 }
@@ -3411,14 +3429,20 @@ VkResult BufferMemorySubAllocator::createBuffer(const VkBufferCreateInfo &buffer
                                                 bool persistentlyMappedBuffers,
                                                 uint32_t *memoryTypeIndexOut,
                                                 Buffer *bufferOut,
-                                                Allocation *allocationOut) const
+                                                Allocation *allocationOut)
 {
     ASSERT(valid());
     ASSERT(bufferOut && !bufferOut->valid());
     ASSERT(allocationOut && !allocationOut->valid());
+
+    uint32_t memoryTypeIndex = *memoryTypeIndexOut;
+    VmaPool customPool = bufferCreateInfo.size <= 4096 ? mDeviceMemorySmallPools[memoryTypeIndex]
+                                                       : mDeviceMemoryLargePools[memoryTypeIndex];
+    ASSERT(customPool);
+
     return vma::CreateBuffer(mAllocator->getHandle(), &bufferCreateInfo, requiredFlags,
-                             preferredFlags, persistentlyMappedBuffers, memoryTypeIndexOut,
-                             &bufferOut->mHandle, &allocationOut->mHandle);
+                             preferredFlags, persistentlyMappedBuffers, customPool,
+                             memoryTypeIndexOut, &bufferOut->mHandle, &allocationOut->mHandle);
 }
 
 void BufferMemorySubAllocator::getMemoryTypeProperties(uint32_t memoryTypeIndex,
