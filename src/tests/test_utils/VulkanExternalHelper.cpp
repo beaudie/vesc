@@ -442,9 +442,43 @@ VkResult VulkanExternalHelper::createImage2DExternal(VkFormat format,
         /* .handleTypes = */ handleTypes,
     };
 
+    /* Use VK_KHR_image_format_list.extension if enabled, as done in vk_helpers */
+    angle::FormatID angle_format_id       = rx::vk::GetFormatIDFromVkFormat(format);
+    const rx::vk::Format &angle_vk_format = mRenderer->getFormat(angle_format_id);
+    angle::FormatID imageFormat           = angle_vk_format.actualImageFormatID;
+    angle::FormatID additionalFormat      = angle_vk_format.actualImageFormat().isSRGB
+                                           ? rx::ConvertToLinear(imageFormat)
+                                           : rx::ConvertToSRGB(imageFormat);
+
+    constexpr uint32_t kImageListFormatCount = 2;
+    VkFormat imageListFormats[kImageListFormatCount];
+    imageListFormats[0] = rx::vk::GetVkFormatFromFormatID(imageFormat);
+    imageListFormats[1] = rx::vk::GetVkFormatFromFormatID(additionalFormat);
+
+    bool imageFormatListEnabled                        = false;
+    VkImageFormatListCreateInfoKHR imageFormatListInfo = {};
+
+    if (mRenderer->getFeatures().supportsImageFormatList.enabled &&
+        mRenderer->haveSameFormatFeatureBits(imageFormat, additionalFormat))
+    {
+        imageFormatListEnabled = true;
+
+        // Add VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT to VkImage create flag
+        createFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+
+        // There is just 1 additional format we might use to create a VkImageView for this
+        // VkImage
+        imageFormatListInfo.sType           = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR;
+        imageFormatListInfo.pNext           = &externalMemoryImageCreateInfo;
+        imageFormatListInfo.viewFormatCount = kImageListFormatCount;
+        imageFormatListInfo.pViewFormats    = imageListFormats;
+    }
+
     VkImageCreateInfo imageCreateInfo = {
         /* .sType = */ VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-        /* .pNext = */ &externalMemoryImageCreateInfo,
+        /* .pNext = */
+        (imageFormatListEnabled) ? (const void *)&imageFormatListInfo
+                                 : (const void *)&externalMemoryImageCreateInfo,
         /* .flags = */ createFlags,
         /* .imageType = */ VK_IMAGE_TYPE_2D,
         /* .format = */ format,
