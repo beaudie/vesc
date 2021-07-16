@@ -18,6 +18,19 @@ VK_DEFINE_HANDLE(VmaPool)
 
 namespace vma
 {
+enum class VmaPoolCreateFlagBits : uint32_t
+{
+    VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT = 2,
+    VMA_POOL_CREATE_LINEAR_ALGORITHM_BIT                = 4,
+    VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT                 = 8,
+};
+
+enum class VmaAllocationCreateFlagBits : uint32_t
+{
+    VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT = 1,
+    VMA_ALLOCATION_CREATE_MAPPED_BIT           = 4,
+};
+
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
                        VkInstance instance,
@@ -29,12 +42,23 @@ void DestroyAllocator(VmaAllocator allocator);
 
 VkResult CreatePool(VmaAllocator allocator,
                     uint32_t memoryTypeIndex,
-                    bool buddyAlgorithm,
+                    VmaPoolCreateFlagBits flags,
                     VkDeviceSize blockSize,
                     VmaPool *pPool);
 void DestroyPool(VmaAllocator allocator, VmaPool pool);
 
+VkResult AllocateMemory(VmaAllocator allocator,
+                        const VkMemoryRequirements *pVkMemoryRequirements,
+                        VkMemoryPropertyFlags requiredFlags,
+                        VkMemoryPropertyFlags preferredFlags,
+                        VmaAllocationCreateFlagBits flags,
+                        VmaPool customPool,
+                        uint32_t *pMemoryTypeIndexOut,
+                        VmaAllocation *pAllocation,
+                        VkDeviceSize *sizeOut);
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation);
+
+VkResult BindBufferMemory(VmaAllocator allocator, VmaAllocation allocation, VkBuffer buffer);
 
 VkResult CreateBuffer(VmaAllocator allocator,
                       const VkBufferCreateInfo *pBufferCreateInfo,
@@ -51,6 +75,13 @@ VkResult FindMemoryTypeIndexForBufferInfo(VmaAllocator allocator,
                                           VkMemoryPropertyFlags preferredFlags,
                                           bool persistentlyMappedBuffers,
                                           uint32_t *pMemoryTypeIndexOut);
+
+VkResult FindMemoryTypeIndex(VmaAllocator allocator,
+                             uint32_t memoryTypeBits,
+                             VkMemoryPropertyFlags requiredFlags,
+                             VkMemoryPropertyFlags preferredFlags,
+                             bool persistentlyMappedBuffers,
+                             uint32_t *pMemoryTypeIndexOut);
 
 void GetMemoryTypeProperties(VmaAllocator allocator,
                              uint32_t memoryTypeIndex,
