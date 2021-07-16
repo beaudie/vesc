@@ -13,6 +13,20 @@
 
 namespace vma
 {
+#define validateVmaPoolCreateFlagBits(x)                                                       \
+    static_assert(static_cast<uint32_t>(VmaPoolCreateFlagBits::x) == static_cast<uint32_t>(x), \
+                  "VMA enum mismatch")
+validateVmaPoolCreateFlagBits(VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT);
+validateVmaPoolCreateFlagBits(VMA_POOL_CREATE_LINEAR_ALGORITHM_BIT);
+validateVmaPoolCreateFlagBits(VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT);
+
+#define validateVmaAllocationCreateFlagBits(x)                                             \
+    static_assert(                                                                         \
+        static_cast<uint32_t>(VmaAllocationCreateFlagBits::x) == static_cast<uint32_t>(x), \
+        "VMA enum mismatch")
+validateVmaAllocationCreateFlagBits(VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT);
+validateVmaAllocationCreateFlagBits(VMA_ALLOCATION_CREATE_MAPPED_BIT);
+
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
                        VkInstance instance,
@@ -74,19 +88,15 @@ void DestroyAllocator(VmaAllocator allocator)
 
 VkResult CreatePool(VmaAllocator allocator,
                     uint32_t memoryTypeIndex,
-                    bool buddyAlgorithm,
+                    VmaPoolCreateFlagBits flags,
                     VkDeviceSize blockSize,
                     VmaPool *pPool)
 {
     VmaPoolCreateInfo poolCreateInfo = {};
     poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
-    poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT;
-    if (buddyAlgorithm)
-    {
-        poolCreateInfo.flags |= VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT;
-    }
-    poolCreateInfo.blockSize     = blockSize;
-    poolCreateInfo.maxBlockCount = -1;  // unlimited
+    poolCreateInfo.flags             = static_cast<uint32_t>(flags);
+    poolCreateInfo.blockSize         = blockSize;
+    poolCreateInfo.maxBlockCount     = -1;  // unlimited
     return vmaCreatePool(allocator, &poolCreateInfo, pPool);
 }
 
@@ -95,9 +105,39 @@ void DestroyPool(VmaAllocator allocator, VmaPool pool)
     vmaDestroyPool(allocator, pool);
 }
 
+VkResult AllocateMemory(VmaAllocator allocator,
+                        const VkMemoryRequirements *pVkMemoryRequirements,
+                        VkMemoryPropertyFlags requiredFlags,
+                        VkMemoryPropertyFlags preferredFlags,
+                        VmaAllocationCreateFlagBits flags,
+                        VmaPool customPool,
+                        uint32_t *pMemoryTypeIndexOut,
+                        VmaAllocation *pAllocation,
+                        VkDeviceSize *sizeOut)
+{
+    VkResult result;
+    VmaAllocationCreateInfo allocationCreateInfo = {};
+    allocationCreateInfo.requiredFlags           = requiredFlags;
+    allocationCreateInfo.preferredFlags          = preferredFlags;
+    allocationCreateInfo.flags                   = static_cast<uint32_t>(flags);
+    allocationCreateInfo.pool                    = customPool;
+    VmaAllocationInfo allocationInfo             = {};
+
+    result = vmaAllocateMemory(allocator, pVkMemoryRequirements, &allocationCreateInfo, pAllocation,
+                               &allocationInfo);
+    *pMemoryTypeIndexOut = allocationInfo.memoryType;
+    *sizeOut             = allocationInfo.size;
+    return result;
+}
+
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation)
 {
     vmaFreeMemory(allocator, allocation);
+}
+
+VkResult BindBufferMemory(VmaAllocator allocator, VmaAllocation allocation, VkBuffer buffer)
+{
+    return vmaBindBufferMemory(allocator, allocation, buffer);
 }
 
 VkResult CreateBuffer(VmaAllocator allocator,
@@ -119,7 +159,6 @@ VkResult CreateBuffer(VmaAllocator allocator,
     result = vmaCreateBuffer(allocator, pBufferCreateInfo, &allocationCreateInfo, pBuffer,
                              pAllocation, &allocationInfo);
     *pMemoryTypeIndexOut = allocationInfo.memoryType;
-
     return result;
 }
 
@@ -137,6 +176,22 @@ VkResult FindMemoryTypeIndexForBufferInfo(VmaAllocator allocator,
 
     return vmaFindMemoryTypeIndexForBufferInfo(allocator, pBufferCreateInfo, &allocationCreateInfo,
                                                pMemoryTypeIndexOut);
+}
+
+VkResult FindMemoryTypeIndex(VmaAllocator allocator,
+                             uint32_t memoryTypeBits,
+                             VkMemoryPropertyFlags requiredFlags,
+                             VkMemoryPropertyFlags preferredFlags,
+                             bool persistentlyMappedBuffers,
+                             uint32_t *pMemoryTypeIndexOut)
+{
+    VmaAllocationCreateInfo allocationCreateInfo = {};
+    allocationCreateInfo.requiredFlags           = requiredFlags;
+    allocationCreateInfo.preferredFlags          = preferredFlags;
+    allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+
+    return vmaFindMemoryTypeIndex(allocator, memoryTypeBits, &allocationCreateInfo,
+                                  pMemoryTypeIndexOut);
 }
 
 void GetMemoryTypeProperties(VmaAllocator allocator,
