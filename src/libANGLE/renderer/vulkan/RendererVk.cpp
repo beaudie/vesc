@@ -3386,7 +3386,27 @@ VkResult BufferMemorySubAllocator::initialize(Allocator &allocator,
     ASSERT(!mAllocator);
     ASSERT(allocator.valid());
     mAllocator = &allocator;
-    return VK_SUCCESS;
+
+    VkResult result = VK_SUCCESS;
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < memoryTypeCount; memoryTypeIndex++)
+    {
+        for (int poolType = kSmallPool; poolType <= kLargePool; poolType++)
+        {
+            size_t blockSize =
+                poolType == kSmallPool ? kSmallPoolBlockSize : preferredLargeHeapBlockSize;
+            // use buddy algorithm for small pool to favor speed
+            bool useBuddyAlgorithm = poolType == kSmallPool ? true : false;
+            // Create a custom pool.
+            result = vma::CreatePool(mAllocator->getHandle(), memoryTypeIndex, useBuddyAlgorithm,
+                                     blockSize, &mVMAPools[poolType][memoryTypeIndex]);
+            if (VK_SUCCESS != result)
+            {
+                return result;
+            }
+        }
+    }
+
+    return result;
 }
 
 void BufferMemorySubAllocator::destroy()
@@ -3409,14 +3429,21 @@ VkResult BufferMemorySubAllocator::createBuffer(const VkBufferCreateInfo &buffer
                                                 bool persistentlyMappedBuffers,
                                                 uint32_t *memoryTypeIndexOut,
                                                 Buffer *bufferOut,
-                                                Allocation *allocationOut)
+                                                Allocation *allocationOut,
+                                                VkDeviceSize *sizeOut)
 {
     ASSERT(valid());
     ASSERT(bufferOut && !bufferOut->valid());
     ASSERT(allocationOut && !allocationOut->valid());
+
+    uint32_t memoryTypeIndex = *memoryTypeIndexOut;
+    int poolType = bufferCreateInfo.size <= kMaxSizeToUseSmallPool ? kSmallPool : kLargePool;
+    ASSERT(mVMAPools[poolType][memoryTypeIndex]);
+
     return vma::CreateBuffer(mAllocator->getHandle(), &bufferCreateInfo, requiredFlags,
-                             preferredFlags, persistentlyMappedBuffers, memoryTypeIndexOut,
-                             &bufferOut->mHandle, &allocationOut->mHandle);
+                             preferredFlags, persistentlyMappedBuffers,
+                             mVMAPools[poolType][memoryTypeIndex], memoryTypeIndexOut,
+                             &bufferOut->mHandle, &allocationOut->mHandle, sizeOut);
 }
 
 void BufferMemorySubAllocator::getMemoryTypeProperties(uint32_t memoryTypeIndex,
