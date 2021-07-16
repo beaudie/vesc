@@ -56,6 +56,7 @@ GPUTestConfigTest.GPUTestConfigConditions_D3D11/*
 ImageTest.SourceCubeTargetExternal/*
 PBOCompressedTextureTest.PBOCompressedSubImage/*
 PBOExtensionTest.*
+RobustBufferAccessBehaviorTest.*
 Texture2DTest.DefineMultipleLevelsWithoutMipmapping/*
 VertexAttributeTest.*
 
