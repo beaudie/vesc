@@ -34,7 +34,19 @@ VkResult CreatePool(VmaAllocator allocator,
                     VmaPool *pPool);
 void DestroyPool(VmaAllocator allocator, VmaPool pool);
 
+VkResult AllocateMemory(VmaAllocator allocator,
+                        const VkMemoryRequirements *pVkMemoryRequirements,
+                        VkMemoryPropertyFlags requiredFlags,
+                        VkMemoryPropertyFlags preferredFlags,
+                        bool persistentlyMappedBuffers,
+                        bool dedicatedMemory,
+                        VmaPool customPool,
+                        uint32_t *pMemoryTypeIndexOut,
+                        VmaAllocation *pAllocation,
+                        VkDeviceSize *sizeOut);
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation);
+
+VkResult BindBufferMemory(VmaAllocator allocator, VmaAllocation allocation, VkBuffer buffer);
 
 VkResult CreateBuffer(VmaAllocator allocator,
                       const VkBufferCreateInfo *pBufferCreateInfo,
@@ -51,6 +63,13 @@ VkResult FindMemoryTypeIndexForBufferInfo(VmaAllocator allocator,
                                           VkMemoryPropertyFlags preferredFlags,
                                           bool persistentlyMappedBuffers,
                                           uint32_t *pMemoryTypeIndexOut);
+
+VkResult FindMemoryTypeIndex(VmaAllocator allocator,
+                             uint32_t memoryTypeBits,
+                             VkMemoryPropertyFlags requiredFlags,
+                             VkMemoryPropertyFlags preferredFlags,
+                             bool persistentlyMappedBuffers,
+                             uint32_t *pMemoryTypeIndexOut);
 
 void GetMemoryTypeProperties(VmaAllocator allocator,
                              uint32_t memoryTypeIndex,
