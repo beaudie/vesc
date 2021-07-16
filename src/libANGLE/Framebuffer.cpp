@@ -1795,6 +1795,16 @@ void Framebuffer::setAttachment(const Context *context,
                                 bool isMultiview,
                                 GLsizei samples)
 {
+    // Match the sample count to the attachment's sample count.
+    if (resource)
+    {
+        const InternalFormat *info = resource->getAttachmentFormat(binding, textureIndex).info;
+        ASSERT(info);
+        GLenum internalformat         = info->internalFormat;
+        const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+        samples                       = formatCaps.getNearestSamples(samples);
+    }
+
     // Context may be null in unit tests.
     if (!context || !context->isWebGL1())
     {
