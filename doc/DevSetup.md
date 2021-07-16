@@ -24,10 +24,6 @@ On Windows:
    * Required for GN-generated Visual Studio projects, the Debug runtime for D3D11, and the D3D Compiler DLL.
  * (optional) See the [Chromium Windows build instructions](https://chromium.googlesource.com/chromium/src/+/master/docs/windows_build_instructions.md) for more info.
 
-On Linux:
-
- * Install package dependencies by running `install-build-deps.sh` later on.
-
 On MacOS:
 
  * [XCode](https://developer.apple.com/xcode/) for Clang and development files.
@@ -39,7 +35,7 @@ git clone https://chromium.googlesource.com/angle/angle
 cd angle
 python scripts/bootstrap.py
 gclient sync
-git checkout master
+git checkout main
 ```
 
 On Linux only, you need to install all the necessary dependencies before going further by running this command:
