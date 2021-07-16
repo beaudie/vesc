@@ -1402,7 +1402,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                  preferredLargeHeapBlockSize));
 
     // Create buffer memory allocator
-    ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.initialize(this, preferredLargeHeapBlockSize));
+    ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.initialize(this));
 
     {
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
@@ -3674,18 +3674,52 @@ void MemoryReport::logMemoryReportStats() const
 }
 
 // BufferMemoryAllocator implementation.
-BufferMemoryAllocator::BufferMemoryAllocator() {}
+BufferMemoryAllocator::BufferMemoryAllocator() : mVMAPools({}) {}
 
-BufferMemoryAllocator::~BufferMemoryAllocator() {}
-
-VkResult BufferMemoryAllocator::initialize(RendererVk *renderer,
-                                           VkDeviceSize preferredLargeHeapBlockSize)
+BufferMemoryAllocator::~BufferMemoryAllocator()
 {
-    ASSERT(renderer->getAllocator().valid());
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < VK_MAX_MEMORY_TYPES; memoryTypeIndex++)
+    {
+        for (VMAPoolType poolType : angle::AllEnums<VMAPoolType>())
+        {
+            ASSERT(mVMAPools[poolType][memoryTypeIndex] == VK_NULL_HANDLE);
+        }
+    }
+}
+
+VkResult BufferMemoryAllocator::initialize(RendererVk *renderer)
+{
+    const Allocator &allocator = renderer->getAllocator();
+    uint32_t memoryTypeCount   = renderer->getMemoryProperties().getMemoryTypeCount();
+
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < memoryTypeCount; memoryTypeIndex++)
+    {
+        for (VMAPoolType poolType : angle::AllEnums<VMAPoolType>())
+        {
+            // Create a custom pool. Actual GPU memory will not gets allocated until AllocateMemory
+            // is called.
+            mVMAPools[poolType][memoryTypeIndex] =
+                createVMAPool(allocator, memoryTypeIndex, poolType);
+        }
+    }
+
     return VK_SUCCESS;
 }
 
-void BufferMemoryAllocator::destroy(RendererVk *renderer) {}
+void BufferMemoryAllocator::destroy(RendererVk *renderer)
+{
+    const Allocator &allocator = renderer->getAllocator();
+    uint32_t memoryTypeCount   = renderer->getMemoryProperties().getMemoryTypeCount();
+
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < memoryTypeCount; memoryTypeIndex++)
+    {
+        for (VMAPoolType poolType : angle::AllEnums<VMAPoolType>())
+        {
+            vma::DestroyPool(allocator.getHandle(), mVMAPools[poolType][memoryTypeIndex]);
+            mVMAPools[poolType][memoryTypeIndex] = VK_NULL_HANDLE;
+        }
+    }
+}
 
 VkResult BufferMemoryAllocator::createBuffer(RendererVk *renderer,
                                              const VkBufferCreateInfo &bufferCreateInfo,
@@ -3702,6 +3736,118 @@ VkResult BufferMemoryAllocator::createBuffer(RendererVk *renderer,
     return vma::CreateBuffer(allocator.getHandle(), &bufferCreateInfo, requiredFlags,
                              preferredFlags, persistentlyMappedBuffers, memoryTypeIndexOut,
                              &bufferOut->mHandle, &allocationOut->mHandle);
+}
+
+VmaPool BufferMemoryAllocator::createVMAPool(const Allocator &allocator,
+                                             uint32_t memoryTypeIndex,
+                                             VMAPoolType poolType)
+{
+    VmaPool vmaPool        = VK_NULL_HANDLE;
+    VkDeviceSize blockSize = poolType == VMAPoolType::kSmallPool ? kSmallPoolBlockSize : 0;
+    vma::PoolCreateFlags poolCreateFlags = vma::POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT;
+    // use buddy algorithm for small pool to favor speed
+    if (poolType == VMAPoolType::kSmallPool)
+    {
+        poolCreateFlags |= vma::POOL_CREATE_BUDDY_ALGORITHM_BIT;
+    }
+    // Create a custom pool.
+    vma::CreatePool(allocator.getHandle(), memoryTypeIndex, poolCreateFlags, blockSize, &vmaPool);
+    return vmaPool;
+}
+
+VmaPool BufferMemoryAllocator::getVMAPool(uint32_t memoryTypeIndex, VMAPoolType poolType)
+{
+    VmaPool vmaPool = mVMAPools[poolType][memoryTypeIndex];
+    ASSERT(vmaPool != VK_NULL_HANDLE);
+    return vmaPool;
+}
+
+VmaPool BufferMemoryAllocator::getVMAPool(uint32_t memoryTypeIndex,
+                                          VkDeviceSize requestedSize,
+                                          bool robustResourceInitEnabled,
+                                          vma::AllocationCreateFlags &flags)
+{
+    VmaPool vmaPool = VK_NULL_HANDLE;
+
+    if (requestedSize > BufferMemoryAllocator::kMaxSizeToUseSubAllocator)
+    {
+        // Use VK_NULL_HANDLE VMAPool since VMA requires it been NULL for dedicated memory.
+        flags |= vma::ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
+    }
+    else
+    {
+        // If robust resource init is enabled, we always use the large pool which uses
+        // default allocation algorithm to ensure no padding added at allocator.
+        VMAPoolType poolType =
+            (!robustResourceInitEnabled && requestedSize <= kMaxSizeToUseSmallPool)
+                ? VMAPoolType::kSmallPool
+                : VMAPoolType::kLargePool;
+        vmaPool = getVMAPool(memoryTypeIndex, poolType);
+    }
+
+    return vmaPool;
+}
+
+VkResult BufferMemoryAllocator::AllocateMemoryForBuffer(Context *context,
+                                                        Buffer &buffer,
+                                                        VkMemoryPropertyFlags requiredFlags,
+                                                        VkMemoryPropertyFlags preferredFlags,
+                                                        bool persistentlyMapped,
+                                                        bool robustResourceInitEnabled,
+                                                        uint32_t *memoryTypeIndexOut,
+                                                        Allocation *allocationOut,
+                                                        VkDeviceSize *sizeOut)
+{
+    RendererVk *renderer                     = context->getRenderer();
+    const Allocator &allocator               = renderer->getAllocator();
+    const MemoryProperties &memoryProperties = renderer->getMemoryProperties();
+    vma::AllocationCreateFlags flags = persistentlyMapped ? vma::ALLOCATION_CREATE_MAPPED_BIT : 0;
+
+    // Call driver to determine memory requirements.
+    VkMemoryRequirements vkMemReq;
+    buffer.getMemoryRequirements(context->getDevice(), &vkMemReq);
+
+    uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
+    VkResult result;
+    // We loop through each memory type bit in case of failure.
+    while (vkMemReq.memoryTypeBits)
+    {
+        // This will immediate return if FindMemoryTypeIndex fail, in the case that we have tried
+        // all memory types that are compatible and and still fail to allocate.
+        VK_RESULT_TRY(vma::FindMemoryTypeIndex(allocator.getHandle(), vkMemReq.memoryTypeBits,
+                                               requiredFlags, preferredFlags, persistentlyMapped,
+                                               &memoryTypeIndex));
+
+        if (vkMemReq.size <= memoryProperties.getHeapSizeForMemoryType(memoryTypeIndex))
+        {
+            // Allocate memory using sub-allocator
+            VmaPool pool =
+                getVMAPool(memoryTypeIndex, vkMemReq.size, robustResourceInitEnabled, flags);
+
+            result = vma::AllocateMemory(allocator.getHandle(), &vkMemReq, requiredFlags,
+                                         preferredFlags, flags, pool, memoryTypeIndexOut,
+                                         &allocationOut->mHandle, sizeOut);
+            if (result == VK_SUCCESS)
+            {
+                ASSERT(*memoryTypeIndexOut == memoryTypeIndex);
+                result = vma::BindBufferMemory(allocator.getHandle(), allocationOut->mHandle,
+                                               buffer.mHandle);
+                if (result != VK_SUCCESS)
+                {
+                    // Roll back memory allocation and fail
+                    vma::FreeMemory(allocator.getHandle(), allocationOut->mHandle);
+                }
+                return result;
+            }
+        }
+
+        // Allocation failed. Remove old memTypeIndex from list of possibilities and loop again
+        // try to find alternative memTypeIndex. If no compatible memory type bit left, we will
+        // break the loop and fail allocation.
+        vkMemReq.memoryTypeBits &= ~(1u << memoryTypeIndex);
+    }
+    // We reach here when we loop through all of memoryTypeBits and still can't allocate
+    return VK_ERROR_OUT_OF_DEVICE_MEMORY;
 }
 
 void BufferMemoryAllocator::getMemoryTypeProperties(RendererVk *renderer,
