@@ -72,9 +72,22 @@ void DestroyAllocator(VmaAllocator allocator)
     vmaDestroyAllocator(allocator);
 }
 
-VkResult CreatePool(VmaAllocator allocator, const VmaPoolCreateInfo *pCreateInfo, VmaPool *pPool)
+VkResult CreatePool(VmaAllocator allocator,
+                    uint32_t memoryTypeIndex,
+                    bool buddyAlgorithm,
+                    VkDeviceSize blockSize,
+                    VmaPool *pPool)
 {
-    return vmaCreatePool(allocator, pCreateInfo, pPool);
+    VmaPoolCreateInfo poolCreateInfo = {};
+    poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
+    poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT;
+    if (buddyAlgorithm)
+    {
+        poolCreateInfo.flags |= VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT;
+    }
+    poolCreateInfo.blockSize     = blockSize;
+    poolCreateInfo.maxBlockCount = -1;
+    return vmaCreatePool(allocator, &poolCreateInfo, pPool);
 }
 
 void DestroyPool(VmaAllocator allocator, VmaPool pool)
@@ -92,6 +105,7 @@ VkResult CreateBuffer(VmaAllocator allocator,
                       VkMemoryPropertyFlags requiredFlags,
                       VkMemoryPropertyFlags preferredFlags,
                       bool persistentlyMappedBuffers,
+                      VmaPool customPool,
                       uint32_t *pMemoryTypeIndexOut,
                       VkBuffer *pBuffer,
                       VmaAllocation *pAllocation)
@@ -101,6 +115,7 @@ VkResult CreateBuffer(VmaAllocator allocator,
     allocationCreateInfo.requiredFlags           = requiredFlags;
     allocationCreateInfo.preferredFlags          = preferredFlags;
     allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+    allocationCreateInfo.pool  = customPool;
     VmaAllocationInfo allocationInfo = {};
 
     result = vmaCreateBuffer(allocator, pBufferCreateInfo, &allocationCreateInfo, pBuffer,
