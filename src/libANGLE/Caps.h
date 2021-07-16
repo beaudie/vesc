@@ -740,7 +740,7 @@ struct Extensions
     bool getSerializedContextStringANGLE = false;
 
     // GL_EXT_primitive_bounding_box
-    bool primitiveBoundingBoxEXT = false;
+    bool primitiveBoundingBoxEXT = true;
 
     // GL_ANGLE_relaxed_vertex_attribute_type
     bool relaxedVertexAttributeTypeANGLE = false;
@@ -998,6 +998,16 @@ struct Caps
     GLuint maxClipDistances                = 0;
     GLuint maxCullDistances                = 0;
     GLuint maxCombinedClipAndCullDistances = 0;
+
+    // GL_EXT_primitive_bounding box
+    GLfloat minX = -1.0f;
+    GLfloat minY = -1.0f;
+    GLfloat minZ = -1.0f;
+    GLfloat minW = 1.0f;
+    GLfloat maxX = 1.0f;
+    GLfloat maxY = 1.0f;
+    GLfloat maxZ = 1.0f;
+    GLfloat maxW = 1.0f;
 
     // GLES1 emulation: Caps for ES 1.1. Taken from Table 6.20 / 6.22 in the OpenGL ES 1.1 spec.
     GLuint maxMultitextureUnits                 = 0;
