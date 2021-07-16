@@ -90,7 +90,7 @@ class BufferMemoryAllocator : angle::NonCopyable
     ~BufferMemoryAllocator() = default;
 
     VkResult initialize(Allocator &allocator,
-                        uint32_t memoryTypeCount,
+                        RendererVk *rendererVk,
                         VkDeviceSize preferredLargeHeapBlockSize);
     void destroy();
 
@@ -98,20 +98,25 @@ class BufferMemoryAllocator : angle::NonCopyable
     VkResult createBuffer(const VkBufferCreateInfo &bufferCreateInfo,
                           VkMemoryPropertyFlags requiredFlags,
                           VkMemoryPropertyFlags preferredFlags,
-                          bool persistentlyMappedBuffers,
+                          bool persistentlyMapped,
                           uint32_t *memoryTypeIndexOut,
                           Buffer *bufferOut,
                           Allocation *allocationOut);
 
+    VkResult AllocateMemoryForBuffer(Context *context,
+                                     Buffer &buffer,
+                                     VkMemoryPropertyFlags requiredFlags,
+                                     VkMemoryPropertyFlags preferredFlags,
+                                     bool persistentlyMapped,
+                                     uint32_t *memoryTypeIndexOut,
+                                     BufferMemory &memory,
+                                     VkDeviceSize *sizeOut);
+
     void getMemoryTypeProperties(uint32_t memoryTypeIndex, VkMemoryPropertyFlags *flagsOut) const;
-    VkResult findMemoryTypeIndexForBufferInfo(const VkBufferCreateInfo &bufferCreateInfo,
-                                              VkMemoryPropertyFlags requiredFlags,
-                                              VkMemoryPropertyFlags preferredFlags,
-                                              bool persistentlyMappedBuffers,
-                                              uint32_t *memoryTypeIndexOut) const;
 
   private:
     bool valid() const { return mAllocator != nullptr; }
+
     Allocator *mAllocator;
 
     enum VMAPoolType
@@ -121,6 +126,22 @@ class BufferMemoryAllocator : angle::NonCopyable
         kPoolCount = 2,
     };
     VmaPool mVMAPools[kPoolCount][VK_MAX_MEMORY_TYPES];
+
+    // There are three code path for buffer memory allocation: 1) If memory is bigger than
+    // kMaxSizeToUseSubAllocator, we will just call into vulkan driver to allocate memorys o that to
+    // avoid memory waste associated with sub-allocator. Since the memory size is big enough we
+    // think the overhead of calling into vulkan driver for allocation is small compared to the
+    // memory access itself. Otherwise we will use VMA suballocator. We always use customized pool
+    // to avoid bufferImageGranularity alignment that are always enforced in the default pool. We
+    // maintain two categories of customer pools, one is smaller block size and another large block
+    // size. If size is bigger than kMaxSizeToUseSmallPool, we use large pool, otherwise use the
+    // small pool. The large pool uses default allocation algorithm that favors memory saving and
+    // small pool uses buddy algorithm that favors allocation speed. These numbers are experimental
+    // and may need to change based on platform configuration (like amount of memory avaiable and
+    // GPU family etc).
+    static constexpr size_t kMaxSizeToUseSubAllocator    = 0x1ull << 20;   // 1M
+    static constexpr VkDeviceSize kMaxSizeToUseSmallPool = 1ull << 12;     // 4k
+    static constexpr VkDeviceSize kSmallPoolBlockSize    = 128ull * 1024;  // 128K
 };
 }  // namespace vk
 
