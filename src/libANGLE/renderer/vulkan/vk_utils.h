@@ -113,6 +113,7 @@ constexpr uint32_t kAttributeOffsetMaxBits = 15;
 namespace vk
 {
 struct Format;
+class BufferMemory;
 
 // A packed attachment index interface with vulkan API
 class PackedAttachmentIndex final
@@ -351,6 +352,7 @@ class MemoryProperties final : angle::NonCopyable
         uint32_t heapIndex = mMemoryProperties.memoryTypes[memoryType].heapIndex;
         return mMemoryProperties.memoryHeaps[heapIndex].size;
     }
+    uint32_t getMemoryTypeCount() const { return mMemoryProperties.memoryTypeCount; }
 
   private:
     VkPhysicalDeviceMemoryProperties mMemoryProperties;
@@ -373,7 +375,7 @@ class StagingBuffer final : angle::NonCopyable
 
   private:
     Buffer mBuffer;
-    Allocation mAllocation;
+    std::unique_ptr<BufferMemory> mMemory;
     size_t mSize;
 };
 

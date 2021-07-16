@@ -3416,9 +3416,9 @@ void BufferMemory::unmap(RendererVk *renderer)
 {
     if (mMappedMemory != nullptr)
     {
-        if (isExternalBuffer())
+        if (mDeviceMemory.valid())
         {
-            mExternalMemory.unmap(renderer->getDevice());
+            mDeviceMemory.unmap(renderer->getDevice());
         }
         else
         {
@@ -3431,10 +3431,13 @@ void BufferMemory::unmap(RendererVk *renderer)
 
 void BufferMemory::destroy(RendererVk *renderer)
 {
-    if (isExternalBuffer())
+    if (mDeviceMemory.valid())
     {
-        mExternalMemory.destroy(renderer->getDevice());
-        ReleaseAndroidExternalMemory(renderer, mClientBuffer);
+        mDeviceMemory.destroy(renderer->getDevice());
+        if (mClientBuffer)
+        {
+            ReleaseAndroidExternalMemory(renderer, mClientBuffer);
+        }
     }
     else
     {
@@ -3447,17 +3450,17 @@ void BufferMemory::flush(RendererVk *renderer,
                          VkDeviceSize offset,
                          VkDeviceSize size)
 {
-    if (isExternalBuffer())
+    if (mDeviceMemory.valid())
     {
         // if the memory type is not host coherent, we perform an explicit flush
         if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
         {
             VkMappedMemoryRange mappedRange = {};
             mappedRange.sType               = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-            mappedRange.memory              = mExternalMemory.getHandle();
+            mappedRange.memory              = mDeviceMemory.getHandle();
             mappedRange.offset              = offset;
             mappedRange.size                = size;
-            mExternalMemory.flush(renderer->getDevice(), mappedRange);
+            mDeviceMemory.flush(renderer->getDevice(), mappedRange);
         }
     }
     else
@@ -3471,17 +3474,17 @@ void BufferMemory::invalidate(RendererVk *renderer,
                               VkDeviceSize offset,
                               VkDeviceSize size)
 {
-    if (isExternalBuffer())
+    if (mDeviceMemory.valid())
     {
         // if the memory type is not device coherent, we perform an explicit invalidate
         if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD) == 0)
         {
             VkMappedMemoryRange memoryRanges = {};
             memoryRanges.sType               = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-            memoryRanges.memory              = mExternalMemory.getHandle();
+            memoryRanges.memory              = mDeviceMemory.getHandle();
             memoryRanges.offset              = offset;
             memoryRanges.size                = size;
-            mExternalMemory.invalidate(renderer->getDevice(), memoryRanges);
+            mDeviceMemory.invalidate(renderer->getDevice(), memoryRanges);
         }
     }
     else
@@ -3492,10 +3495,10 @@ void BufferMemory::invalidate(RendererVk *renderer,
 
 angle::Result BufferMemory::mapImpl(ContextVk *contextVk, VkDeviceSize size)
 {
-    if (isExternalBuffer())
+    if (mDeviceMemory.valid())
     {
-        ANGLE_VK_TRY(contextVk, mExternalMemory.map(contextVk->getRenderer()->getDevice(), 0, size,
-                                                    0, &mMappedMemory));
+        ANGLE_VK_TRY(contextVk, mDeviceMemory.map(contextVk->getRenderer()->getDevice(), 0, size, 0,
+                                                  &mMappedMemory));
     }
     else
     {
@@ -3549,10 +3552,25 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 
     ANGLE_VK_CHECK(contextVk, createInfo->size <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
-    ANGLE_VK_TRY(contextVk, bufferMemorySubAllocator.createBuffer(
-                                *createInfo, requiredFlags, preferredFlags, persistentlyMapped,
-                                &memoryTypeIndex, &mBuffer, mMemory.getMemoryObject()));
-    bufferMemorySubAllocator.getMemoryTypeProperties(memoryTypeIndex, &mMemoryPropertyFlags);
+    if (mSize > BufferMemorySubAllocator::kMaxSizeToUseBufferMemorySubAllocator)
+    {
+        // for large allocation, don't use sub-allocator
+        ANGLE_VK_TRY(contextVk, mBuffer.init(contextVk->getDevice(), *createInfo));
+        VkDeviceSize sizeOut = 0;
+        ASSERT(!mMemory.getAllocationObject()->valid());
+        ANGLE_TRY(AllocateBufferMemory(contextVk, memoryPropertyFlags, &mMemoryPropertyFlags,
+                                       nullptr, &mBuffer, mMemory.getDeviceMemoryObject(),
+                                       &sizeOut));
+    }
+    else
+    {
+        ASSERT(!mMemory.getDeviceMemoryObject()->valid());
+        ANGLE_VK_TRY(contextVk, bufferMemorySubAllocator.createBuffer(
+                                    *createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                                    &memoryTypeIndex, &mBuffer, mMemory.getAllocationObject()));
+        bufferMemorySubAllocator.getMemoryTypeProperties(memoryTypeIndex, &mMemoryPropertyFlags);
+    }
+
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -3570,8 +3588,17 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
             // Can map the memory.
             // Pick an arbitrary value to initialize non-zero memory for sanitization.
             constexpr int kNonZeroInitValue = 55;
-            ANGLE_TRY(InitMappableAllocation(contextVk, allocator, mMemory.getMemoryObject(), mSize,
-                                             kNonZeroInitValue, mMemoryPropertyFlags));
+            if (mMemory.getDeviceMemoryObject()->valid())
+            {
+                ANGLE_TRY(InitMappableDeviceMemory(contextVk, mMemory.getDeviceMemoryObject(),
+                                                   mSize, kNonZeroInitValue, mMemoryPropertyFlags));
+            }
+            else
+            {
+                ANGLE_TRY(InitMappableAllocation(contextVk, allocator,
+                                                 mMemory.getAllocationObject(), mSize,
+                                                 kNonZeroInitValue, mMemoryPropertyFlags));
+            }
         }
     }
 
@@ -3602,8 +3629,9 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
 
     ANGLE_VK_TRY(contextVk, mBuffer.init(renderer->getDevice(), modifiedCreateInfo));
 
+    ASSERT(!mMemory.getAllocationObject()->valid());
     ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &mBuffer,
-                                        &mMemoryPropertyFlags, mMemory.getExternalMemoryObject()));
+                                        &mMemoryPropertyFlags, mMemory.getDeviceMemoryObject()));
 
     ANGLE_TRY(mMemory.initExternal(clientBuffer));
 
@@ -3659,8 +3687,8 @@ void BufferHelper::release(RendererVk *renderer)
     unmap(renderer);
     mSize = 0;
 
-    renderer->collectGarbageAndReinit(&mUse, &mBuffer, mMemory.getExternalMemoryObject(),
-                                      mMemory.getMemoryObject());
+    renderer->collectGarbageAndReinit(&mUse, &mBuffer, mMemory.getDeviceMemoryObject(),
+                                      mMemory.getAllocationObject());
 }
 
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,

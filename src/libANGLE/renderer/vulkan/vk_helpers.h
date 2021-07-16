@@ -831,14 +831,18 @@ class BufferMemory : angle::NonCopyable
     bool isExternalBuffer() const { return mClientBuffer != nullptr; }
 
     uint8_t *getMappedMemory() const { return mMappedMemory; }
-    DeviceMemory *getExternalMemoryObject() { return &mExternalMemory; }
-    Allocation *getMemoryObject() { return &mAllocation; }
+    DeviceMemory *getDeviceMemoryObject() { return &mDeviceMemory; }
+    Allocation *getAllocationObject() { return &mAllocation; }
 
   private:
     angle::Result mapImpl(ContextVk *contextVk, VkDeviceSize size);
 
-    Allocation mAllocation;        // use mAllocation if isExternalBuffer() is false
-    DeviceMemory mExternalMemory;  // use mExternalMemory if isExternalBuffer() is true
+    // mAllocation and mDeviceMemory are mutally exclusive. Only one should be used at any time.
+    // mAllocation mAllocation is used when it is allocated by BufferMemorySubAllocator.
+    // mDeviceMemory is used when it is allocated by calling directly into Vulkan driver. External
+    // allocations is always allocated with vulkan call directly.
+    Allocation mAllocation;
+    DeviceMemory mDeviceMemory;
 
     GLeglClientBufferEXT mClientBuffer;
     uint8_t *mMappedMemory;

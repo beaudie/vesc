@@ -428,14 +428,18 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
 }
 
 // StagingBuffer implementation.
-StagingBuffer::StagingBuffer() : mSize(0) {}
+StagingBuffer::StagingBuffer() : mSize(0)
+{
+    mMemory = std::make_unique<BufferMemory>();
+}
 
 void StagingBuffer::destroy(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
     mBuffer.destroy(device);
-    mAllocation.destroy(renderer->getAllocator());
-    mSize = 0;
+    mMemory->destroy(renderer);
+    mMemory = nullptr;
+    mSize   = 0;
 }
 
 angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUsage usage)
@@ -449,27 +453,49 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    VkMemoryPropertyFlags preferredFlags = 0;
-    VkMemoryPropertyFlags requiredFlags =
+    VkMemoryPropertyFlags requiredFlags = 0;
+    VkMemoryPropertyFlags preferredFlags =
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
     RendererVk *renderer = context->getRenderer();
 
-    uint32_t memoryTypeIndex                           = 0;
-    BufferMemorySubAllocator &bufferMemorySubAllocator = renderer->getBufferMemorySubAllocator();
-    ANGLE_VK_TRY(context, bufferMemorySubAllocator.createBuffer(
-                              createInfo, requiredFlags, preferredFlags,
-                              renderer->getFeatures().persistentlyMappedBuffers.enabled,
-                              &memoryTypeIndex, &mBuffer, &mAllocation));
+    if (size > BufferMemorySubAllocator::kMaxSizeToUseBufferMemorySubAllocator)
+    {
+        // for large allocation, don't use sub-allocator
+        ANGLE_VK_TRY(context, mBuffer.init(context->getDevice(), createInfo));
+        VkDeviceSize sizeOut                            = 0;
+        VkMemoryPropertyFlags actualMemoryPropertyFlags = 0;
+        ASSERT(!mMemory->getAllocationObject()->valid());
+        ANGLE_TRY(AllocateBufferMemory(context, preferredFlags, &actualMemoryPropertyFlags, nullptr,
+                                       &mBuffer, mMemory->getDeviceMemoryObject(), &sizeOut));
+    }
+    else
+    {
+        uint32_t memoryTypeIndex = 0;
+        BufferMemorySubAllocator &bufferMemorySubAllocator =
+            renderer->getBufferMemorySubAllocator();
+        ANGLE_VK_TRY(context, bufferMemorySubAllocator.createBuffer(
+                                  createInfo, requiredFlags, preferredFlags,
+                                  renderer->getFeatures().persistentlyMappedBuffers.enabled,
+                                  &memoryTypeIndex, &mBuffer, mMemory->getAllocationObject()));
+    }
     mSize = static_cast<size_t>(size);
 
     // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
     // invalid values ensures our testing doesn't assume zero-initialized memory.
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
-        const Allocator &allocator = renderer->getAllocator();
-        ANGLE_TRY(InitMappableAllocation(context, allocator, &mAllocation, size, kNonZeroInitValue,
-                                         requiredFlags));
+        if (mMemory->getDeviceMemoryObject()->valid())
+        {
+            ANGLE_TRY(InitMappableDeviceMemory(context, mMemory->getDeviceMemoryObject(), mSize,
+                                               kNonZeroInitValue, preferredFlags));
+        }
+        else
+        {
+            const Allocator &allocator = renderer->getAllocator();
+            ANGLE_TRY(InitMappableAllocation(context, allocator, mMemory->getAllocationObject(),
+                                             size, kNonZeroInitValue, requiredFlags));
+        }
     }
 
     return angle::Result::Continue;
@@ -478,14 +504,28 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
 void StagingBuffer::release(ContextVk *contextVk)
 {
     contextVk->addGarbage(&mBuffer);
-    contextVk->addGarbage(&mAllocation);
+    if (mMemory->getDeviceMemoryObject()->valid())
+    {
+        contextVk->addGarbage(mMemory->getDeviceMemoryObject());
+    }
+    else
+    {
+        contextVk->addGarbage(mMemory->getAllocationObject());
+    }
 }
 
 void StagingBuffer::collectGarbage(RendererVk *renderer, Serial serial)
 {
     GarbageList garbageList;
     garbageList.emplace_back(GetGarbage(&mBuffer));
-    garbageList.emplace_back(GetGarbage(&mAllocation));
+    if (mMemory->getDeviceMemoryObject()->valid())
+    {
+        garbageList.emplace_back(GetGarbage(mMemory->getDeviceMemoryObject()));
+    }
+    else
+    {
+        garbageList.emplace_back(GetGarbage(mMemory->getAllocationObject()));
+    }
 
     SharedResourceUse sharedUse;
     sharedUse.init();
