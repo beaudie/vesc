@@ -470,7 +470,7 @@ struct GetBitSet
 };
 
 // Prefer 64-bit bitsets on 64-bit CPUs. They seem faster than 32-bit.
-#if defined(ANGLE_IS_64_BIT_CPU)
+#if INTPTR_MAX == INT64_MAX
 template <size_t N>
 struct GetBitSet<N, EnableIfBitsFit<N, uint64_t>>
 {
@@ -486,7 +486,7 @@ struct GetBitSet<N, EnableIfBitsFit<N, uint32_t>>
 };
 constexpr std::size_t kDefaultBitSetSize = 32;
 using BaseBitSetType                     = BitSet32<kDefaultBitSetSize>;
-#endif  // defined(ANGLE_IS_64_BIT_CPU)
+#endif  // INTPTR_MAX == INT64_MAX
 
 }  // namespace priv
 

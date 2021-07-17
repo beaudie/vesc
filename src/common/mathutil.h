@@ -1111,7 +1111,7 @@ inline unsigned long ScanForward(uint64_t bits)
 {
     ASSERT(bits != 0u);
     unsigned long firstBitIndex = 0ul;
-#    if defined(ANGLE_IS_64_BIT_CPU)
+#    if INTPTR_MAX == INT64_MAX
     unsigned char ret = _BitScanForward64(&firstBitIndex, bits);
 #    else
     unsigned char ret;
@@ -1124,7 +1124,7 @@ inline unsigned long ScanForward(uint64_t bits)
     {
         ret = _BitScanForward(&firstBitIndex, static_cast<uint32_t>(bits));
     }
-#    endif  // defined(ANGLE_IS_64_BIT_CPU)
+#    endif  // INTPTR_MAX == INT64_MAX
     ASSERT(ret != 0u);
     return firstBitIndex;
 }
@@ -1144,7 +1144,7 @@ inline unsigned long ScanReverse(uint64_t bits)
 {
     ASSERT(bits != 0u);
     unsigned long lastBitIndex = 0ul;
-#    if defined(ANGLE_IS_64_BIT_CPU)
+#    if INTPTR_MAX == INT64_MAX
     unsigned char ret = _BitScanReverse64(&lastBitIndex, bits);
 #    else
     unsigned char ret;
@@ -1157,7 +1157,7 @@ inline unsigned long ScanReverse(uint64_t bits)
         ret = _BitScanReverse(&lastBitIndex, static_cast<uint32_t>(bits >> 32));
         lastBitIndex += 32ul;
     }
-#    endif  // defined(ANGLE_IS_64_BIT_CPU)
+#    endif  // INTPTR_MAX == INT64_MAX
     ASSERT(ret != 0u);
     return lastBitIndex;
 }
@@ -1173,13 +1173,13 @@ inline unsigned long ScanForward(uint32_t bits)
 inline unsigned long ScanForward(uint64_t bits)
 {
     ASSERT(bits != 0u);
-#    if defined(ANGLE_IS_64_BIT_CPU)
+#    if INTPTR_MAX == INT64_MAX
     return static_cast<unsigned long>(__builtin_ctzll(bits));
 #    else
     return static_cast<unsigned long>(static_cast<uint32_t>(bits) == 0
                                           ? __builtin_ctz(static_cast<uint32_t>(bits >> 32)) + 32
                                           : __builtin_ctz(static_cast<uint32_t>(bits)));
-#    endif  // defined(ANGLE_IS_64_BIT_CPU)
+#    endif  // INTPTR_MAX == INT64_MAX
 }
 
 inline unsigned long ScanReverse(uint32_t bits)
@@ -1191,7 +1191,7 @@ inline unsigned long ScanReverse(uint32_t bits)
 inline unsigned long ScanReverse(uint64_t bits)
 {
     ASSERT(bits != 0u);
-#    if defined(ANGLE_IS_64_BIT_CPU)
+#    if INTPTR_MAX == INT64_MAX
     return static_cast<unsigned long>(sizeof(uint64_t) * CHAR_BIT - 1 - __builtin_clzll(bits));
 #    else
     if (static_cast<uint32_t>(bits >> 32) == 0)
@@ -1203,7 +1203,7 @@ inline unsigned long ScanReverse(uint64_t bits)
         return sizeof(uint32_t) * CHAR_BIT - 1 - __builtin_clz(static_cast<uint32_t>(bits >> 32)) +
                32;
     }
-#    endif  // defined(ANGLE_IS_64_BIT_CPU)
+#    endif  // INTPTR_MAX == INT64_MAX
 }
 #endif  // defined(ANGLE_PLATFORM_POSIX)
 

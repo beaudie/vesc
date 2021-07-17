@@ -455,7 +455,7 @@ class BlendStateExt final
     {
         static_assert(ElementCount <= 256, "ElementCount cannot exceed 256.");
 
-#if defined(ANGLE_IS_64_BIT_CPU)
+#if INTPTR_MAX == INT64_MAX
         // Always use uint64_t on 64-bit systems
         static constexpr size_t kBits = 8;
 #else

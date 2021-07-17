@@ -13,7 +13,7 @@
 namespace angle
 {
 
-#if defined(ANGLE_IS_64_BIT_CPU)
+#if INTPTR_MAX == INT64_MAX
 constexpr bool is64Bit = true;
 #else
 constexpr bool is64Bit = false;
