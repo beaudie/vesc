@@ -289,6 +289,7 @@ class OutputSPIRVTraverser : public TIntermTraverser
     spirv::IdRef createCompare(TIntermOperator *node, spirv::IdRef resultTypeId);
     spirv::IdRef createAtomicBuiltIn(TIntermOperator *node, spirv::IdRef resultTypeId);
     spirv::IdRef createImageTextureBuiltIn(TIntermOperator *node, spirv::IdRef resultTypeId);
+    spirv::IdRef createInterpolate(TIntermOperator *node, spirv::IdRef resultTypeId);
 
     spirv::IdRef createFunctionCall(TIntermAggregate *node, spirv::IdRef resultTypeId);
 
@@ -1918,6 +1919,10 @@ spirv::IdRef OutputSPIRVTraverser::visitOperator(TIntermOperator *node, spirv::I
     {
         return createImageTextureBuiltIn(node, resultTypeId);
     }
+    if (BuiltInGroup::IsInterpolationFS(op))
+    {
+        return createInterpolate(node, resultTypeId);
+    }
 
     const size_t childCount  = node->getChildCount();
     TIntermTyped *firstChild = node->getChildNode(0)->getAsTyped();
@@ -2475,20 +2480,6 @@ spirv::IdRef OutputSPIRVTraverser::visitOperator(TIntermOperator *node, spirv::I
             break;
         case EOpFwidthCoarse:
             writeUnaryOp = spirv::WriteFwidthCoarse;
-            break;
-
-            // TODO: for the EOpInterpolate* built-ins, must convert interpolateX(vec.yz) to
-            // interpolate(vec).yz.  This can either be done apriori by an AST transformation, or
-            // simply by taking the base id only when generating the instruction and keeping the
-            // indices/swizzle intact.  http://anglebug.com/4889.
-        case EOpInterpolateAtCentroid:
-            extendedInst = spv::GLSLstd450InterpolateAtCentroid;
-            break;
-        case EOpInterpolateAtSample:
-            extendedInst = spv::GLSLstd450InterpolateAtSample;
-            break;
-        case EOpInterpolateAtOffset:
-            extendedInst = spv::GLSLstd450InterpolateAtOffset;
             break;
 
         case EOpNoise1:
@@ -3711,6 +3702,50 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
     // similar functions but which return a scalar.
     //
     // TODO: For desktop GLSL, the result must be turned into a vec4.  http://anglebug.com/4889.
+
+    return result;
+}
+
+spirv::IdRef OutputSPIRVTraverser::createInterpolate(TIntermOperator *node,
+                                                     spirv::IdRef resultTypeId)
+{
+    spv::GLSLstd450 extendedInst = spv::GLSLstd450Bad;
+
+    mBuilder.addCapability(spv::CapabilityInterpolationFunction);
+
+    switch (node->getOp())
+    {
+        case EOpInterpolateAtCentroid:
+            extendedInst = spv::GLSLstd450InterpolateAtCentroid;
+            break;
+        case EOpInterpolateAtSample:
+            extendedInst = spv::GLSLstd450InterpolateAtSample;
+            break;
+        case EOpInterpolateAtOffset:
+            extendedInst = spv::GLSLstd450InterpolateAtOffset;
+            break;
+        default:
+            UNREACHABLE();
+    }
+
+    size_t childCount = node->getChildCount();
+
+    spirv::IdRefList parameters;
+
+    // interpolateAt* takes the interpolant as the first argument, *pointer* to which needs to be
+    // passed to the instruction.  Except interpolateAtCentroid, another parameter follows.
+    parameters.push_back(accessChainCollapse(&mNodeData[mNodeData.size() - childCount]));
+    if (childCount > 1)
+    {
+        parameters.push_back(accessChainLoad(
+            &mNodeData.back(), node->getChildNode(1)->getAsTyped()->getType(), nullptr));
+    }
+
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+
+    spirv::WriteExtInst(mBuilder.getSpirvCurrentFunctionBlock(), resultTypeId, result,
+                        mBuilder.getExtInstImportIdStd(),
+                        spirv::LiteralExtInstInteger(extendedInst), parameters);
 
     return result;
 }
