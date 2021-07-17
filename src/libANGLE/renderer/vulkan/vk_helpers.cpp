@@ -1037,6 +1037,9 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
         mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
     }
 
+    // Retain the write use to use in the wait for write use only.
+    buffer->retainWriteUse(&contextVk->getResourceUseList());
+
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
     // make the results visible to the host.  The buffer may be mapped by the application in the
     // future.
@@ -3393,7 +3396,9 @@ BufferHelper::BufferHelper()
       mCurrentWriteStages(0),
       mCurrentReadStages(0),
       mSerial()
-{}
+{
+    mWriteUse.init();
+}
 
 BufferMemory::BufferMemory() : mClientBuffer(nullptr), mMappedMemory(nullptr) {}
 
@@ -3506,7 +3511,10 @@ angle::Result BufferMemory::mapImpl(ContextVk *contextVk, VkDeviceSize size)
     return angle::Result::Continue;
 }
 
-BufferHelper::~BufferHelper() = default;
+BufferHelper::~BufferHelper()
+{
+    mWriteUse.release();
+}
 
 angle::Result BufferHelper::init(ContextVk *contextVk,
                                  const VkBufferCreateInfo &requestedCreateInfo,
@@ -3805,6 +3813,28 @@ bool BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
     mCurrentWriteStages = writeStage;
     mCurrentReadStages  = 0;
     return barrierModified;
+}
+
+angle::Result BufferHelper::waitForGpuWrite(ContextVk *contextVk, const char *debugMessage)
+{
+    // If there are pending commands for the resource, flush them.
+    if (mWriteUse.usedInRecordedCommands())
+    {
+        ANGLE_TRY(contextVk->flushImpl(nullptr));
+    }
+
+    // Make sure the driver is done with the resource write.
+    Serial lastCompletedSerial = contextVk->getLastCompletedQueueSerial();
+    if (mWriteUse.usedInRunningCommands(lastCompletedSerial))
+    {
+        if (debugMessage)
+        {
+            ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_HIGH, debugMessage);
+        }
+        ANGLE_TRY(contextVk->finishToSerial(mWriteUse.getSerial()));
+    }
+
+    return angle::Result::Continue;
 }
 
 // ImageHelper implementation.
