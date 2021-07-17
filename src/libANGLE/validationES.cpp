@@ -2728,6 +2728,9 @@ bool ValidateStateQuery(const Context *context,
         }
         break;
 
+        case GL_PRIMITIVE_BOUNDING_BOX:
+            break;
+
         default:
             break;
     }

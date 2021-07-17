@@ -1523,6 +1523,16 @@ void Context::getFloatvImpl(GLenum pname, GLfloat *params) const
         case GL_MAX_FRAGMENT_INTERPOLATION_OFFSET:
             *params = mState.mCaps.maxInterpolationOffset;
             break;
+        case GL_PRIMITIVE_BOUNDING_BOX:
+            params[0] = mState.mCaps.minX;
+            params[1] = mState.mCaps.minY;
+            params[2] = mState.mCaps.minZ;
+            params[3] = mState.mCaps.minW;
+            params[4] = mState.mCaps.maxX;
+            params[5] = mState.mCaps.maxY;
+            params[6] = mState.mCaps.maxZ;
+            params[7] = mState.mCaps.maxW;
+            break;
         default:
             mState.getFloatv(pname, params);
             break;
@@ -5912,7 +5922,14 @@ void Context::primitiveBoundingBox(GLfloat minX,
                                    GLfloat maxZ,
                                    GLfloat maxW)
 {
-    UNIMPLEMENTED();
+    mState.mCaps.minX = minX;
+    mState.mCaps.minY = minY;
+    mState.mCaps.minZ = minZ;
+    mState.mCaps.minW = minW;
+    mState.mCaps.maxX = maxX;
+    mState.mCaps.maxY = maxY;
+    mState.mCaps.maxZ = maxZ;
+    mState.mCaps.maxW = maxW;
 }
 
 void Context::bufferStorage(BufferBinding target,
