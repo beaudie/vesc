@@ -348,6 +348,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "53628595_fa03d882",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-18T13:35:01Z",
+      "side": 1,
+      "message": "TBH I think that SKIPPED_BY_SCRIPT doesn\u0027t express what is happening, because it makes it seem that the script somehow decides that the test is not run, where it is actually the tag itself that makes the script skip the test, i.e. it is us who disable these tests and hat\u0027s why I thought that DISABLED would be easy to understand. Maybe EXCLUDE_FROM_RUN is more expressive?",
+      "parentUuid": "980f3e0a_4d549298",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1

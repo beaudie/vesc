@@ -22,6 +22,30 @@
       },
       "revId": "044856565e688373cacc8cc988c87a6f6c9d625b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deed5ea7_49bf3fd9",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-18T13:35:01Z",
+      "side": 0,
+      "message": "The format should already skip over lines starting with #, I\u0027ll add the license header back.",
+      "parentUuid": "720519e5_1a100d76",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "044856565e688373cacc8cc988c87a6f6c9d625b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

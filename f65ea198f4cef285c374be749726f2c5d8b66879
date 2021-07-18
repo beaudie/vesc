@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b407d8c_15a13dd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-18T13:35:01Z",
+      "side": 1,
+      "message": "Please not that I\u0027ll be away next week, so the update will take some time. ",
+      "revId": "f65ea198f4cef285c374be749726f2c5d8b66879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88f4f23d_23ceedc2",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "Ah, I see you\u0027re interested in defining expectations for your platform. Can you explain why you\u0027re interested in making an expectation list for your GPU vendor / OS?",
       "parentUuid": "88f4f23d_23ceedc2",
+      "range": {
+        "startLine": 1,
+        "startChar": 5,
+        "endLine": 1,
+        "endChar": 27
+      },
+      "revId": "f65ea198f4cef285c374be749726f2c5d8b66879",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4907f44_8d18d8f1",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-18T13:35:01Z",
+      "side": 1,
+      "message": "Okay, I can make the changes to drop the first tag. I didn\u0027t want to make a vendor specific expectation list.",
+      "parentUuid": "79fa59ca_04a863a8",
       "range": {
         "startLine": 1,
         "startChar": 5,
