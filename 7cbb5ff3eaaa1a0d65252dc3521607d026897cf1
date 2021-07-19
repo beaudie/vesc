@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b4252e8_3ef40650",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T18:03:08Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "b098e3c1_bf84afb1",
+      "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c5b2550_c02145e9",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76e73684_452ad49b",
+        "filename": "src/common/spirv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T18:03:08Z",
+      "side": 1,
+      "message": "Ack..\n\nfirst point -\u003e \"base\" target is consumed in BUILD.gn / exposed from this file, thus needs the config to be public in case someone uses it solely\n\nsecond point -\u003e public_configs inherits to the translator. verified manually that we\u0027re still building TranslatorVulkan with direct spv and we\u0027re still running Direct tests. You can also look in the bot logs.\n\nI did have a bug in the angle.gni syntax which was screwing up the layers \u0026 asserts, so fixed that.",
+      "parentUuid": "4c5b2550_c02145e9",
+      "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f46f3951_4b51f72d",
@@ -65,6 +101,24 @@
       "writtenOn": "2021-07-19T15:02:35Z",
       "side": 1,
       "message": "This is used by the backend to validate the transformed SPIR-V, and is independent from how the SPIR-V is generated in the translator.",
+      "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f4812e3_75a15645",
+        "filename": "src/common/spirv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T18:03:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f46f3951_4b51f72d",
       "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
