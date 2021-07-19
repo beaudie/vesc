@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce6ba2a_a44a1146",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1178490
+      },
+      "writtenOn": "2021-07-19T18:12:27Z",
+      "side": 1,
+      "message": "Nit: should this be similar to Chromium\u0027s one? e.g. angle_dcheck_always_on?",
+      "range": {
+        "startLine": 73,
+        "startChar": 2,
+        "endLine": 73,
+        "endChar": 24
+      },
+      "revId": "ca1712a6be7b43ec27b8c1eebdaa5118e03452ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
