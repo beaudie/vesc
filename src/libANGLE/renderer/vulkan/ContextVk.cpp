@@ -836,12 +836,23 @@ angle::Result ContextVk::flush(const gl::Context *context)
         return angle::Result::Continue;
     }
 
-    return flushImpl(nullptr);
+    if (context->getOrphanedImageHelper()->getForceFlush())
+    {
+        mHasDeferredFlush = true;
+    }
+    ANGLE_TRY(flushImpl(nullptr));
+    // For android performance with Vulkan beckend, defer to release orphaned image until the next
+    // flush by application to remove flush in orphaning image functions. orphaned images also be
+    // released with flush when a texture is destroyed.
+    context->getOrphanedImageHelper()->release(context);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
 {
-    return finishImpl();
+    ANGLE_TRY(finishImpl());
+    context->getOrphanedImageHelper()->release(context);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::setupDraw(const gl::Context *context,
@@ -3916,6 +3927,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
+    mHasDeferredFlush = true;
     ANGLE_TRY(flushImpl(nullptr));
     mCurrentWindowSurface = nullptr;
     return angle::Result::Continue;
@@ -5313,6 +5325,9 @@ angle::Result ContextVk::finishImpl()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::finishImpl");
 
+    // Flush should not be deferred for finish.
+    // it forces that flushImpl not skip flush internally.
+    mHasDeferredFlush = true;
     ANGLE_TRY(flushImpl(nullptr));
     ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
 

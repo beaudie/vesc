@@ -362,6 +362,7 @@ Context::Context(egl::Display *display,
       mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
       mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
+      mOrphanedImages(new egl::OrphanedImageHelper),
       mThreadPool(nullptr),
       mFrameCapture(new angle::FrameCapture),
       mRefCount(0),
@@ -689,6 +690,9 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mSemaphoreManager->release(this);
 
     mThreadPool.reset();
+
+    mOrphanedImages->release(this);
+    delete mOrphanedImages;
 
     mImplementation->onDestroy(this);
 
@@ -2597,6 +2601,13 @@ void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, co
 void Context::flush()
 {
     ANGLE_CONTEXT_TRY(mImplementation->flush(this));
+}
+
+void Context::flushForOrphanedImage() const
+{
+    mOrphanedImages->setForceFlush(true);
+    ANGLE_CONTEXT_TRY(mImplementation->flush(this));
+    mOrphanedImages->setForceFlush(false);
 }
 
 void Context::finish()
