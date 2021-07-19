@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9735d4e7_3438261c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-07-19T00:45:14Z",
+      "side": 1,
+      "message": "rename this to \"getFormatDescriptorCountForVkFormats\" for clarity",
+      "range": {
+        "startLine": 392,
+        "startChar": 18,
+        "endLine": 392,
+        "endChar": 42
+      },
+      "revId": "f33fce90c7ce936a766a6a427c8ec9a2d4855347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
