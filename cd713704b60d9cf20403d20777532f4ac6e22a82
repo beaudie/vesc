@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecc41b0f_b0ad9d4a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1171626
+      },
+      "writtenOn": "2021-07-19T07:58:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06cbac4b_0b015938",
+      "revId": "cd713704b60d9cf20403d20777532f4ac6e22a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76a85299_6cdb6a7c",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-07-16T15:22:04Z",
       "side": 1,
       "message": "Range was added. For detailed driver versions, please check https://docs.google.com/spreadsheets/d/10c4HOjcCQ8o9VumpDI16VdfvNPGQ8RG8cD1D-8JzYI0/edit#gid\u003d0",
+      "revId": "cd713704b60d9cf20403d20777532f4ac6e22a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a56735c_0aeddd4b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2440,
+      "author": {
+        "id": 1171626
+      },
+      "writtenOn": "2021-07-19T07:58:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76a85299_6cdb6a7c",
       "revId": "cd713704b60d9cf20403d20777532f4ac6e22a82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
