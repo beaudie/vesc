@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59a5d9bb_1c3104bc",
+        "filename": "src/common/spirv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-19T18:16:07Z",
+      "side": 1,
+      "message": "Ack, verified locally as well.",
+      "parentUuid": "76e73684_452ad49b",
+      "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f46f3951_4b51f72d",
