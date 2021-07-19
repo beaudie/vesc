@@ -294,6 +294,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e095764_5c3d9975",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T17:29:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6223275b_4246d4d4",
+      "range": {
+        "startLine": 918,
+        "startChar": 24,
+        "endLine": 918,
+        "endChar": 43
+      },
+      "revId": "7bcbcbed2cd87b8bfe843b478d6a5341b637e85c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9e8fdef_cc43a9e6",
