@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "989462eb_93b0c4b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T12:09:24Z",
+      "side": 1,
+      "message": "Nice work Brandon. LGTM with two last nits.",
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e34b34b_40b74da4",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T12:09:24Z",
+      "side": 1,
+      "message": "I don\u0027t see any code which uses this variable - can you remove it?",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 338,
+        "endChar": 77
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de33b5d8_2965885e",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T12:09:24Z",
+      "side": 1,
+      "message": "nit: GetMergedVaryingsFromExecutable\n\nActually maybe make this a member of ProgramExecutable now?",
+      "range": {
+        "startLine": 1082,
+        "startChar": 22,
+        "endLine": 1082,
+        "endChar": 50
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
