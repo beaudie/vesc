@@ -104,7 +104,7 @@ Renderbuffer::Renderbuffer(rx::GLImplFactory *implFactory, RenderbufferID id)
 
 void Renderbuffer::onDestroy(const Context *context)
 {
-    (void)(orphanImages(context));
+    (void)(orphanImages(context, true));
 
     if (mImplementation)
     {
@@ -129,7 +129,7 @@ angle::Result Renderbuffer::setStorage(const Context *context,
                                        GLsizei width,
                                        GLsizei height)
 {
-    ANGLE_TRY(orphanImages(context));
+    ANGLE_TRY(orphanImages(context, true));
     ANGLE_TRY(mImplementation->setStorage(context, internalformat, width, height));
 
     mState.update(width, height, Format(internalformat), 0, MultisamplingMode::Regular,
@@ -146,7 +146,7 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
                                                   GLsizei height,
                                                   MultisamplingMode mode)
 {
-    ANGLE_TRY(orphanImages(context));
+    ANGLE_TRY(orphanImages(context, true));
 
     // Potentially adjust "samplesIn" to a supported value
     const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
@@ -163,7 +163,7 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
 
 angle::Result Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image *image)
 {
-    ANGLE_TRY(orphanImages(context));
+    ANGLE_TRY(orphanImages(context, true));
     ANGLE_TRY(mImplementation->setStorageEGLImageTarget(context, image));
 
     setTargetImage(context, image);
