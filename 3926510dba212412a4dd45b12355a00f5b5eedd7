@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aa4355f_d3ee321c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T17:31:40Z",
+      "side": 1,
+      "message": "Ack, this CL moves the tests from unsupported-\u003epassing. We don\u0027t currently have an unsupported expectation.",
+      "parentUuid": "9bfe1bac_beda50fb",
+      "revId": "3926510dba212412a4dd45b12355a00f5b5eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddeb57aa_9056e6ad",
@@ -66,6 +84,30 @@
       "writtenOn": "2021-07-19T15:39:21Z",
       "side": 1,
       "message": "Are we planning on fully implementing the extension?",
+      "range": {
+        "startLine": 1825,
+        "startChar": 45,
+        "endLine": 1825,
+        "endChar": 99
+      },
+      "revId": "3926510dba212412a4dd45b12355a00f5b5eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "832af0ff_8460ce65",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T17:31:40Z",
+      "side": 1,
+      "message": "Ack, not as of this CL. We may in the future depending on requirements from Mohan\u0027s team.",
+      "parentUuid": "ddeb57aa_9056e6ad",
       "range": {
         "startLine": 1825,
         "startChar": 45,
