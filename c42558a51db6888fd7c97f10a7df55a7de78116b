@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef92c513_036f56a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-19T15:04:30Z",
+      "side": 1,
+      "message": "Replay\nWill do",
+      "revId": "c42558a51db6888fd7c97f10a7df55a7de78116b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "053ead26_b809d506",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-07-19T14:56:05Z",
       "side": 1,
       "message": "nit: What is removed exactly? The tests seem enabled! Are the scenarios in the comment \"removed\"?\n\nThere are multiple of these comments. I suggest coalescing them all in the end (no need to say removed, because it doesn\u0027t matter if they previously existed):\n\n    // Following have undefined behavior - may crash with memory violation\n    //\n    // Unprotected context with Protected WindowSurface\n    // Protected context with Unprotected WindowSurface\n    //\n    // Unprotected context with protected texture\n    // Protected context with unprotected texture\n    //\n    // Unprotected context with protected texture from BindTex of PBufferSurface\n    // Protected context with unprotected texture from BindTex of PBufferSurface\n    //\n    // Unprotected context with protected texture from EGL image from Android native buffer\n    // Protected context with unprotected texture from EGL image from Android native buffer",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 483,
+        "endChar": 51
+      },
+      "revId": "c42558a51db6888fd7c97f10a7df55a7de78116b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bbbdf32_bdce6015",
+        "filename": "src/tests/egl_tests/EGLProtectedContentTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-19T15:04:30Z",
+      "side": 1,
+      "message": "Yes, I had several test scenarios that were the fail cases. But we can\u0027t have that in CI tests because we don\u0027t know if we\u0027ll get a fail or crash - depends on platform.\n\nI can remove these comments.",
+      "parentUuid": "053ead26_b809d506",
       "range": {
         "startLine": 481,
         "startChar": 0,
