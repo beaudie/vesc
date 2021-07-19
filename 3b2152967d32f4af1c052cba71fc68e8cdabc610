@@ -20,6 +20,86 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ddf58b02_72e1d1b2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T16:54:15Z",
+      "side": 1,
+      "message": "1.) These are too early, since we can fail to link after these calls and updateLinkedShaderStages() isn\u0027t correctly updated if it does.   They should be moved back to the end of the function when we know everything has linked successfully.\n\n2.) saveLinkedStateInfo() was inside the check \u0027if(mState.mSeparable)\u0027 to prevent unnecessary overhead for the (vast) majority of apps that don\u0027t use program pipelines.   Is it necessary to do that for every program now?   If not, it should remain inside that check.",
+      "range": {
+        "startLine": 1560,
+        "startChar": 0,
+        "endLine": 1562,
+        "endChar": 52
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a01ebc4_b6931da6",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T16:54:15Z",
+      "side": 1,
+      "message": "This is missing loading the mLinkedUniforms list first, so it\u0027s actually reading that data instead of mLinkedUniformBlocks (which was written second by ProgramExecutable::save()).\n\nPlease write a test to load/save uniforms and uniform blocks for a compute shader to catch this bug.",
+      "range": {
+        "startLine": 461,
+        "startChar": 0,
+        "endLine": 465,
+        "endChar": 13
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "886f7a84_4083f468",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T16:54:15Z",
+      "side": 1,
+      "message": "Where is this called?   Program::linkImpl() will only call the version above with a ProgramState.",
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a43fb776_7e5312a5",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T16:54:15Z",
+      "side": 1,
+      "message": "This only works because you\u0027ve marked the shaders as linked before they actually are (this function is called as part of linking and can fail).\n\nSince the link can fail (and updateLinkedShaderStages() isn\u0027t called when it does to mark them all as not linked), these changes should be reverted.",
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e34b34b_40b74da4",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 4
@@ -36,6 +116,29 @@
         "startChar": 0,
         "endLine": 338,
         "endChar": 77
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68d47d02_b14f7f0b",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T16:54:15Z",
+      "side": 1,
+      "message": "Same as above for this function.   The shaders aren\u0027t actually linked yet.",
+      "range": {
+        "startLine": 1510,
+        "startChar": 33,
+        "endLine": 1510,
+        "endChar": 65
       },
       "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
