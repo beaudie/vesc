@@ -33,6 +33,47 @@
       "message": "LGTM. Any tests you can bring online as well?",
       "revId": "3926510dba212412a4dd45b12355a00f5b5eedd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bfe1bac_beda50fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T15:39:21Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "7c6c3941_7237c98d",
+      "revId": "3926510dba212412a4dd45b12355a00f5b5eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddeb57aa_9056e6ad",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T15:39:21Z",
+      "side": 1,
+      "message": "Are we planning on fully implementing the extension?",
+      "range": {
+        "startLine": 1825,
+        "startChar": 45,
+        "endLine": 1825,
+        "endChar": 99
+      },
+      "revId": "3926510dba212412a4dd45b12355a00f5b5eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
