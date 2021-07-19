@@ -50,6 +50,23 @@
       "message": "Oh, sorry Ken - I think I got some of my pending CLs mixed up and was looking at the wrong OWNERS file.",
       "revId": "22a0c02c68a1641c4ce349373a1735ea45d9e081",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a98750c8_f16a8f54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-07-19T15:33:59Z",
+      "side": 1,
+      "message": "LGTM based on Ken\u0027s non-owner review.",
+      "revId": "22a0c02c68a1641c4ce349373a1735ea45d9e081",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
