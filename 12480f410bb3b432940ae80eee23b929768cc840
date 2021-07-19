@@ -16,6 +16,46 @@
       "message": "PTAL. Ready for land?",
       "revId": "12480f410bb3b432940ae80eee23b929768cc840",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa2d7793_422366b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-19T18:37:16Z",
+      "side": 1,
+      "message": "LGTM, thanks for your patience and working through the issues!",
+      "revId": "12480f410bb3b432940ae80eee23b929768cc840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb93085_0f54546b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-19T18:37:16Z",
+      "side": 1,
+      "message": "nit: comment style",
+      "range": {
+        "startLine": 2244,
+        "startChar": 4,
+        "endLine": 2244,
+        "endChar": 7
+      },
+      "revId": "12480f410bb3b432940ae80eee23b929768cc840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
