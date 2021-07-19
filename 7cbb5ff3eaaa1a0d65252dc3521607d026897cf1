@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b098e3c1_bf84afb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-19T15:02:35Z",
+      "side": 1,
+      "message": "I see a more references to dcheck in:\n\n    src/tests/capture_replay_tests.py\n    src/tests/perf_tests/README.md",
+      "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c5b2550_c02145e9",
+        "filename": "src/common/spirv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-19T15:02:35Z",
+      "side": 1,
+      "message": "Don\u0027t need the config here. But you do need it to apply to compiler/translator/TranslatorVulkan.cpp (which is the user of this #define)\n\nI believe right now you are disabling direct-to-SPIR-V effectively.",
+      "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46f3951_4b51f72d",
+        "filename": "src/common/spirv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-19T15:02:35Z",
+      "side": 1,
+      "message": "This is used by the backend to validate the transformed SPIR-V, and is independent from how the SPIR-V is generated in the translator.",
+      "revId": "7cbb5ff3eaaa1a0d65252dc3521607d026897cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
