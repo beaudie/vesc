@@ -801,6 +801,7 @@ if (angle_enable_vulkan || angle_enable_metal) {
       "$angle_root/src/common/spirv:angle_spirv_headers",
       "$angle_root/src/common/spirv:angle_spirv_parser",
       "${angle_spirv_headers_dir}:spv_headers",
+      "${angle_spirv_tools_dir}:spvtools_opt",
     ]
   }
 }
