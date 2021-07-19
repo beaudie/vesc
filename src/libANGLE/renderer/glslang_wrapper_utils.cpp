@@ -20,6 +20,9 @@
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/trace.h"
 
+// SPIR-V tools include for SPIR-V optimization
+#include <spirv-tools/optimizer.hpp>
+
 namespace spirv = angle::spirv;
 
 namespace rx
@@ -4927,6 +4930,18 @@ angle::Result GlslangTransformSpirvCode(const GlslangSpirvOptions &options,
     }
 
     spirvBlobOut->shrink_to_fit();
+
+    // Optimize the SPIR-V for testing purposes.
+    {
+        spvtools::OptimizerOptions opts = {};
+        opts.set_run_validator(false);
+
+        spvtools::Optimizer opt(SPV_ENV_VULKAN_1_0);
+        opt.RegisterPerformancePasses();
+
+        bool success = opt.Run(spirvBlobOut->data(), spirvBlobOut->size(), spirvBlobOut, opts);
+        ASSERT(success);
+    }
 
     ASSERT(spirv::Validate(*spirvBlobOut));
 
