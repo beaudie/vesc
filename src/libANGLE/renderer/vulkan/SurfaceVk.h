@@ -248,6 +248,11 @@ class WindowSurfaceVk : public SurfaceVk
 
     egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
 
+    // ***DEBUG PURPOSE ONLY***
+    // This is used at the "angle_white_box_tests", to check whether acquiring swapchain image is
+    // deferred or not.
+    bool getDeferredStatusForSwapchainImage() const { return mNeedToAcquireNextSwapchainImage; }
+
   protected:
     angle::Result swapImpl(const gl::Context *context,
                            const EGLint *rects,
@@ -292,6 +297,8 @@ class WindowSurfaceVk : public SurfaceVk
                           EGLint n_rects,
                           const void *pNextChain,
                           bool *presentOutOfDate);
+
+    angle::Result setDummyRenderTarget();
 
     void updateOverlay(ContextVk *contextVk) const;
     bool overlayHasEnabledWidget(ContextVk *contextVk) const;
@@ -349,6 +356,13 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
+
+    // Dummy image for GL_RASTERIZER_DISCARD case
+    bool mEnableDummyImageDefaultFramebuffer;
+    bool mNeedToUseDummyImageFramebuffer;
+    vk::ImageHelper mDummyImage;
+    vk::ImageViewHelper mDummyImageViews;
+    vk::Framebuffer mDummyImageFramebuffer;
 };
 
 }  // namespace rx

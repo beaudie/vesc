@@ -2544,6 +2544,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // descriptor counts for such immutable samplers
     ANGLE_FEATURE_CONDITION(&mFeatures, useMultipleDescriptorsForExternalFormats, true);
 
+    // Use a dummy image for the default framebuffer
+    ANGLE_FEATURE_CONDITION(&mFeatures, useDummyImageForDefaultFramebuffer, true);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
