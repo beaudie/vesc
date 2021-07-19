@@ -453,7 +453,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                      const char *message,
                      const char *file,
                      const char *function,
-                     unsigned int line);
+                     unsigned int line) const;
 
     void validationError(GLenum errorCode, const char *message) const;
 
