@@ -836,7 +836,18 @@ angle::Result ContextVk::flush(const gl::Context *context)
         return angle::Result::Continue;
     }
 
-    return flushImpl(nullptr);
+    if (!hasRecordedCommands() && !mHasDeferredFlush && !mIsAnyHostVisibleBufferWritten)
+    {
+        mHasDeferredFlush = true;
+        return angle::Result::Continue;
+    }
+
+    ANGLE_TRY(flushImpl(nullptr));
+    // For android performance with Vulkan beckend, defer to release orphaned image until the next
+    // flush by application to remove flush in orphaning image functions. orphaned images also be
+    // released with flush when a texture is destroyed.
+    context->getOrphanedImageHelper()->release(context);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
