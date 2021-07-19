@@ -573,6 +573,11 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsSurfaceProtectedSwapchains = {
         "supportsSurfaceProtectedSwapchains", FeatureCategory::VulkanFeatures,
         "VkSurface supportsProtected for protected swapchains", &members};
+
+    Feature useDummyImageForDefaultFramebuffer = {
+        "useDummyImageForDefaultFramebuffer", FeatureCategory::VulkanWorkarounds,
+        "Use a dummy image for the default framebuffer if GL_RASTERIZER_DISCARD is enabled",
+        &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
