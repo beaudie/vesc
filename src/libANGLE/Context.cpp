@@ -2740,9 +2740,9 @@ void Context::handleError(GLenum errorCode,
                           const char *message,
                           const char *file,
                           const char *function,
-                          unsigned int line)
+                          unsigned int line) const
 {
-    mErrors.handleError(errorCode, message, file, function, line);
+    const_cast<Context *>(this)->mErrors.handleError(errorCode, message, file, function, line);
 }
 
 void Context::validationError(GLenum errorCode, const char *message) const
