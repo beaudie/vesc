@@ -16,6 +16,29 @@
       "message": "✔",
       "revId": "db4ce4f90fb76ed9daae4524c83a5cf7a59c9c67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7ed7848_ca2b8a59",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-19T18:43:59Z",
+      "side": 1,
+      "message": "These may want some asserts to verify no data is lost when casting them to uint8 so we don\u0027t get collisions.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 53
+      },
+      "revId": "db4ce4f90fb76ed9daae4524c83a5cf7a59c9c67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
