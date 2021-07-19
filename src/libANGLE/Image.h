@@ -35,6 +35,24 @@ namespace egl
 class Image;
 class Display;
 
+using OrphanedImagePtrs = std::vector<egl::Image *>;
+
+class OrphanedImageHelper final
+{
+  public:
+    OrphanedImageHelper();
+    ~OrphanedImageHelper();
+
+    void retain(const gl::Context *context, BindingPointer<Image> *bindPtr);
+    void release(const gl::Context *context);
+
+  private:
+    OrphanedImagePtrs mBindings;
+};
+
+inline OrphanedImageHelper::OrphanedImageHelper()  = default;
+inline OrphanedImageHelper::~OrphanedImageHelper() = default;
+
 // Only currently Renderbuffers and Textures can be bound with images. This makes the relationship
 // explicit, and also ensures that an image sibling can determine if it's been initialized or not,
 // which is important for the robust resource init extension with Textures and EGLImages.
@@ -58,7 +76,7 @@ class ImageSibling : public gl::FramebufferAttachmentObject
     void setTargetImage(const gl::Context *context, egl::Image *imageTarget);
 
     // Orphan all EGL image sources and targets
-    angle::Result orphanImages(const gl::Context *context);
+    angle::Result orphanImages(const gl::Context *context, bool retainOrphaned);
 
     void notifySiblings(angle::SubjectMessage message);
 
