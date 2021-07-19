@@ -372,6 +372,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6b241a8a_c15b5bd5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T12:13:03Z",
+      "side": 1,
+      "message": "The problem is that SKIPPED, DISABLED, and NOT_RUN don\u0027t really make the distinction between who is deciding to skip, disable, or not run the tests. They all effectively mean the same thing. Maybe we can think of a name that clearly indicates the test is skipped because of this expectations file, or if it\u0027s skipped because of a decision in the end2end_tests (or other suite) expectations file?",
+      "parentUuid": "53628595_fa03d882",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
