@@ -52,6 +52,24 @@
       "parentUuid": "07aa08f1_735382d9",
       "revId": "95fd3590edbd0e440f9f0c522cef0a1da74d979f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f477f5a_24e225d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T12:44:45Z",
+      "side": 1,
+      "message": "Ack, might be some specific caps your driver has.",
+      "parentUuid": "785cdee9_98a59f42",
+      "revId": "95fd3590edbd0e440f9f0c522cef0a1da74d979f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
