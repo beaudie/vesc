@@ -53,6 +53,26 @@ const Display *DisplayFromContext(const gl::Context *context)
 angle::SubjectIndex kExternalImageImplSubjectIndex = 0;
 }  // anonymous namespace
 
+void OrphanedImageHelper::retain(const gl::Context *context, BindingPointer<Image> *bindPtr)
+{
+    bindPtr->get()->addRef();
+    mBindings.push_back(bindPtr->get());
+}
+
+void OrphanedImageHelper::release(const gl::Context *context)
+{
+    if (!mBindings.size())
+    {
+        return;
+    }
+
+    for (egl::Image *bindPtr : mBindings)
+    {
+        bindPtr->release(DisplayFromContext(context));
+    }
+    mBindings.clear();
+}
+
 ImageSibling::ImageSibling() : FramebufferAttachmentObject(), mSourcesOf(), mTargetOf() {}
 
 ImageSibling::~ImageSibling()
@@ -79,6 +99,10 @@ angle::Result ImageSibling::orphanImages(const gl::Context *context)
         ASSERT(mSourcesOf.empty());
 
         ANGLE_TRY(mTargetOf->orphanSibling(context, this));
+        if (context != nullptr)
+        {
+            context->getOrphanedImageHelper()->retain(context, &mTargetOf);
+        }
         mTargetOf.set(DisplayFromContext(context), nullptr);
     }
     else
