@@ -257,6 +257,17 @@ angle::Result BufferMtl::getIndexRange(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result BufferMtl::initializeContents(const gl::Context *context,
+                                            gl::BufferBinding target,
+                                            GLintptr offset,
+                                            GLsizeiptr length)
+{
+    angle::MemoryBuffer *scratchBuffer = nullptr;
+    ANGLE_CHECK_GL_ALLOC(context, context->getZeroFilledBuffer(length, &scratchBuffer));
+
+    return setSubData(context, scratchBuffer->data(), length, offset);
+}
+
 angle::Result BufferMtl::getFirstLastIndices(ContextMtl *contextMtl,
                                              gl::DrawElementsType type,
                                              size_t offset,
