@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "916638ce_0ec0784d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 5010,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-07-19T16:01:04Z",
+      "side": 1,
+      "message": "Ack, need to gather some perf data related to using maps instead of array-of-struct as well. Will combine the 2 into a follow up.",
+      "parentUuid": "6fdac95b_7795a591",
+      "range": {
+        "startLine": 5009,
+        "startChar": 0,
+        "endLine": 5010,
+        "endChar": 57
+      },
+      "revId": "9b5d06a776e85cf1e908eb23dd8125325cd76e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cda2797_3ae40121",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-07-19T12:31:05Z",
       "side": 1,
       "message": "very minor nit: I\u0027d make these singular (ForVkFormat, ForExternalFormat) since you\u0027re passing in a single format.",
+      "range": {
+        "startLine": 397,
+        "startChar": 18,
+        "endLine": 397,
+        "endChar": 54
+      },
+      "revId": "9b5d06a776e85cf1e908eb23dd8125325cd76e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cf7c583_207c9531",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-07-19T16:01:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cda2797_3ae40121",
       "range": {
         "startLine": 397,
         "startChar": 18,
