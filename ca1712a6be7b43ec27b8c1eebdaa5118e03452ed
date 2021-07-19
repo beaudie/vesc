@@ -46,6 +46,30 @@
       },
       "revId": "ca1712a6be7b43ec27b8c1eebdaa5118e03452ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf827f8e_55f3d4e7",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-19T18:18:15Z",
+      "side": 1,
+      "message": "Ack, the literal function ASSERT not DCHECK as Shabi said.",
+      "parentUuid": "fdf6d3b8_d4861564",
+      "range": {
+        "startLine": 73,
+        "startChar": 2,
+        "endLine": 73,
+        "endChar": 24
+      },
+      "revId": "ca1712a6be7b43ec27b8c1eebdaa5118e03452ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
