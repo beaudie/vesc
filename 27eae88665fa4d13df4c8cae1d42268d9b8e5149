@@ -153,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6393aafe_e5687621",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-19T18:25:19Z",
+      "side": 1,
+      "message": "I was able to add check to ValidateHardwarewBuffer after passing the attribs.\nThis matches the spec text - that if attribute is true, then need to guarantee that the ANB is protected.",
+      "parentUuid": "6d6f71e9_4ee6414f",
+      "range": {
+        "startLine": 450,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 5
+      },
+      "revId": "27eae88665fa4d13df4c8cae1d42268d9b8e5149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afbefa74_5c547e5c",
