@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1d7e2e0_14380a7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-07-20T20:06:43Z",
+      "side": 1,
+      "message": "I like what you\u0027re changing here since it reduces the amount of memory we use for labels. \n\nBut I wouldn\u0027t say this change is strictly necessary for the followon change, unless I am missing something.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 64
+      },
+      "revId": "4b32d12a09294c021d2e3402f555a7e968bdcc83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
