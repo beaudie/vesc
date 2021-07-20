@@ -26,12 +26,12 @@ ProgramPipelineVk::~ProgramPipelineVk() {}
 void ProgramPipelineVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    reset(contextVk);
+    reset(contextVk, true, true);
 }
 
-void ProgramPipelineVk::reset(ContextVk *contextVk)
+void ProgramPipelineVk::reset(ContextVk *contextVk, bool clearPipelineCache, bool clearShaderCache)
 {
-    mExecutable.reset(contextVk);
+    mExecutable.reset(contextVk, clearPipelineCache, clearShaderCache);
 }
 
 // TODO: http://anglebug.com/3570: Move/Copy all of the necessary information into
@@ -116,7 +116,7 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
         mExecutable.resolvePrecisionMismatch(mergedVaryings);
     }
 
-    return mExecutable.createPipelineLayout(glContext, nullptr);
+    return mExecutable.createPipelineLayout(glContext, nullptr, false);
 }
 
 size_t ProgramPipelineVk::calcUniformUpdateRequiredSpace(

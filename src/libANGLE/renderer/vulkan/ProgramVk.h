@@ -174,7 +174,7 @@ class ProgramVk : public ProgramImpl
                             GLboolean transpose,
                             const GLfloat *value);
 
-    void reset(ContextVk *contextVk);
+    void reset(ContextVk *contextVk, bool clearPipelineCache, bool clearShaderCache);
     angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
     void generateUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap> &layoutMap,
                                       gl::ShaderMap<size_t> &requiredBufferSize);

@@ -2476,7 +2476,7 @@ class ShaderProgramHelper : angle::NonCopyable
 
     bool valid(const gl::ShaderType shaderType) const;
     void destroy(RendererVk *rendererVk);
-    void release(ContextVk *contextVk);
+    void release(ContextVk *contextVk, bool clearPipelineCache);
 
     ShaderAndSerial &getShader(gl::ShaderType shaderType) { return mShaders[shaderType].get(); }
 
@@ -2515,7 +2515,21 @@ class ShaderProgramHelper : angle::NonCopyable
                 ? &mShaders[gl::ShaderType::TessEvaluation].get().get()
                 : nullptr;
 
-        return mGraphicsPipelines.getPipeline(
+        ShaderProgramDesc shaderProgramDesc = ShaderProgramDesc(mShaders);
+
+        auto itor = mGraphicsPipelineCaches.find(shaderProgramDesc);
+        std::shared_ptr<GraphicsPipelineCache> graphicsPipelineCache;
+        if (itor == mGraphicsPipelineCaches.end())
+        {
+            graphicsPipelineCache                      = std::make_shared<GraphicsPipelineCache>();
+            mGraphicsPipelineCaches[shaderProgramDesc] = graphicsPipelineCache;
+        }
+        else
+        {
+            graphicsPipelineCache = itor->second;
+        }
+
+        return graphicsPipelineCache->getPipeline(
             contextVk, pipelineCache, *compatibleRenderPass, pipelineLayout,
             activeAttribLocationsMask, programAttribsTypeMask, vertexShader, fragmentShader,
             geometryShader, tessControlShader, tessEvaluationShader, mSpecializationConstants,
@@ -2527,8 +2541,12 @@ class ShaderProgramHelper : angle::NonCopyable
                                      PipelineAndSerial **pipelineOut);
 
   private:
+    // Maintain pipeline cache per set of shaders. Because descriptors for GraphicsPipelineCache
+    // do not have shader information. This caching mechanithm increase cache hit ratio especially
+    // in case of program pipeline case.
+    std::unordered_map<ShaderProgramDesc, std::shared_ptr<GraphicsPipelineCache>>
+        mGraphicsPipelineCaches;
     gl::ShaderMap<BindingPointer<ShaderAndSerial>> mShaders;
-    GraphicsPipelineCache mGraphicsPipelines;
 
     // We should probably use PipelineHelper here so we can remove PipelineAndSerial.
     PipelineAndSerial mComputePipeline;
