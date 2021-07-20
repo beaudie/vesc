@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a8c8964_f6fd38c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-20T04:08:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f41a2262_d9c89a90",
+      "range": {
+        "startLine": 512,
+        "startChar": 36,
+        "endLine": 512,
+        "endChar": 41
+      },
+      "revId": "acf0f97861d171dbb9b9eebd40f753b847f4f774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54f08aa5_2ca73a77",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-07-19T17:50:30Z",
       "side": 1,
       "message": "nit: please use the expectations file instead of DISABLED_",
+      "range": {
+        "startLine": 11997,
+        "startChar": 22,
+        "endLine": 11997,
+        "endChar": 55
+      },
+      "revId": "acf0f97861d171dbb9b9eebd40f753b847f4f774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d470fd6_dd5786d2",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 11997,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-20T04:08:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54f08aa5_2ca73a77",
       "range": {
         "startLine": 11997,
         "startChar": 22,
