@@ -854,6 +854,8 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
     vk::ImageHelper *srcImage = &readRenderTarget->getImageForCopy();
     vk::ImageHelper *dstImage = &drawRenderTarget->getImageForWrite();
 
+    ANGLE_TRY(srcImage->flushAllStagedUpdates(contextVk));
+
     VkImageAspectFlags imageAspectMask = srcImage->getAspectFlags();
     VkImageAspectFlags blitAspectMask  = imageAspectMask;
 
