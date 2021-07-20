@@ -22,6 +22,30 @@
       },
       "revId": "ed7433ce590164513c32ea793d1138a0c5e87d53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65dd15b6_90550577",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-20T19:17:23Z",
+      "side": 1,
+      "message": "There is one about the max size (which is how I came up with this), but done for minimum.",
+      "parentUuid": "c67ea19f_cf2f4fc3",
+      "range": {
+        "startLine": 81,
+        "startChar": 19,
+        "endLine": 81,
+        "endChar": 34
+      },
+      "revId": "ed7433ce590164513c32ea793d1138a0c5e87d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
