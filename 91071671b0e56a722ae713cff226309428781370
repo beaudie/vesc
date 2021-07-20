@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "467c309d_a512ae97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-20T20:36:13Z",
+      "side": 1,
+      "message": "LGTM. Feel free to also use \".\" where appropriate to make the names more readable. This is fine as-is.",
+      "revId": "91071671b0e56a722ae713cff226309428781370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
