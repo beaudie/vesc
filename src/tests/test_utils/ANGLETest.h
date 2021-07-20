@@ -509,6 +509,11 @@ class ANGLETestBase
         return mCurrentParams->getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE;
     }
 
+    bool isD3D9Renderer() const
+    {
+        return mCurrentParams->getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE;
+    }
+
     bool isD3D11Renderer() const
     {
         return mCurrentParams->getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE;
