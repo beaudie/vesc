@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf0239b_66e46b82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-20T23:53:33Z",
+      "side": 1,
+      "message": "Looks good to me but I defer review to Shabi and Jamie. One small follow-on question.\n",
+      "revId": "d14ce4c32c323044d4aa5723a8ef97fe92e6b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9875e60_aa690be8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-20T23:53:33Z",
+      "side": 1,
+      "message": "From my reading of the OES_texture_buffer extension:\nhttps://www.khronos.org/registry/OpenGL/extensions/OES/OES_texture_buffer.txt\n\nit doesn\u0027t introduce this validation error. Should the error be raised only for clients\u0027 ES 3.2 contexts?",
+      "revId": "d14ce4c32c323044d4aa5723a8ef97fe92e6b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
