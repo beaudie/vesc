@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "918b64ac_6a55e3cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-20T14:41:26Z",
+      "side": 1,
+      "message": "This patch enabled the VK_KHR_image_format_list in the VulkanExternalImageTest by adding the extension struct to VkImageCreateInfo in VulkanExternalHelper. Doing this the sizes from the memory requirements match on all platforms.\nBefore this patch, RendererVk was having the extension enabled and the test did not, which lead to the size mismatch on Pixel 4 / QC.",
+      "revId": "c7fd8f1c6f814d3e3ac245c48c3b77748d7e0c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
