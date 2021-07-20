@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae2f46fe_dadaac62",
+        "filename": "src/tests/test_utils/VulkanExternalHelper.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-20T17:19:57Z",
+      "side": 1,
+      "message": "I asked him to duplicate because we don\u0027t have access to libANGLE, and this operates on VkFormat, not angle::Format. Maybe leave a comment pointer.",
+      "parentUuid": "e5931ff5_98905dc9",
+      "range": {
+        "startLine": 427,
+        "startChar": 9,
+        "endLine": 427,
+        "endChar": 22
+      },
+      "revId": "0a3efcdd9e6ba09f2cd7e7955d73dbdb9fc630ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63f84db2_518e79f7",
         "filename": "src/tests/test_utils/VulkanExternalHelper.cpp",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-20T17:15:05Z",
       "side": 1,
       "message": "It looks like this might already be covered by  RendererVk::haveSameFormatFeatureBits()?",
+      "range": {
+        "startLine": 498,
+        "startChar": 8,
+        "endLine": 498,
+        "endChar": 33
+      },
+      "revId": "0a3efcdd9e6ba09f2cd7e7955d73dbdb9fc630ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64199b5f_9512d02a",
+        "filename": "src/tests/test_utils/VulkanExternalHelper.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-20T17:19:57Z",
+      "side": 1,
+      "message": "Same thing I think. We don\u0027t currently have a place to share common vk utils, unless we put them in common/vulkan or something.",
+      "parentUuid": "63f84db2_518e79f7",
       "range": {
         "startLine": 498,
         "startChar": 8,
