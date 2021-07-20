@@ -39,6 +39,30 @@
       },
       "revId": "c7fd8f1c6f814d3e3ac245c48c3b77748d7e0c37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3044b432_9c51b988",
+        "filename": "src/tests/test_utils/VulkanExternalHelper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-20T16:28:19Z",
+      "side": 1,
+      "message": "Resolved.",
+      "parentUuid": "e48dfd31_f3b4eb95",
+      "range": {
+        "startLine": 516,
+        "startChar": 36,
+        "endLine": 516,
+        "endChar": 41
+      },
+      "revId": "c7fd8f1c6f814d3e3ac245c48c3b77748d7e0c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
