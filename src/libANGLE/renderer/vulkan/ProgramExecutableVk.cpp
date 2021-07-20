@@ -221,11 +221,14 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
 
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(options, variableInfoMap, originalSpirvBlob,
                                                &transformedSpirvBlob));
-    ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                      transformedSpirvBlob.data(),
-                                      transformedSpirvBlob.size() * sizeof(uint32_t)));
 
-    mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
+    std::string spirvKey(reinterpret_cast<char *>(transformedSpirvBlob.data()),
+                         transformedSpirvBlob.size() * sizeof(uint32_t));
+
+    vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
+    ANGLE_TRY(mShaderCache.getShader(contextVk, spirvKey, transformedSpirvBlob, &shader));
+
+    mProgramHelper.setShader(shaderType, shader);
 
     mProgramHelper.setSpecializationConstant(sh::vk::SpecializationConstantId::LineRasterEmulation,
                                              optionBits.enableLineRasterEmulation);
@@ -235,13 +238,13 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void ProgramInfo::release(ContextVk *contextVk)
+void ProgramInfo::release(ContextVk *contextVk, bool clearPipelineCache, bool clearShaderCache)
 {
-    mProgramHelper.release(contextVk);
+    mProgramHelper.release(contextVk, clearPipelineCache);
 
-    for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
+    if (clearShaderCache)
     {
-        shader.get().destroy(contextVk->getDevice());
+        mShaderCache.destroy(contextVk->getRenderer());
     }
 }
 
@@ -261,7 +264,9 @@ ProgramExecutableVk::~ProgramExecutableVk()
     outputCumulativePerfCounters();
 }
 
-void ProgramExecutableVk::reset(ContextVk *contextVk)
+void ProgramExecutableVk::reset(ContextVk *contextVk,
+                                bool clearPipelineCache,
+                                bool clearShaderCache)
 {
     for (auto &descriptorSetLayout : mDescriptorSetLayouts)
     {
@@ -298,9 +303,9 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
     for (ProgramInfo &programInfo : mGraphicsProgramInfos)
     {
-        programInfo.release(contextVk);
+        programInfo.release(contextVk, clearPipelineCache, clearShaderCache);
     }
-    mComputeProgramInfo.release(contextVk);
+    mComputeProgramInfo.release(contextVk, clearPipelineCache, clearShaderCache);
 
     contextVk->onProgramExecutableReset(this);
 }
@@ -930,7 +935,8 @@ angle::Result ProgramExecutableVk::initDynamicDescriptorPools(
 
 angle::Result ProgramExecutableVk::createPipelineLayout(
     const gl::Context *glContext,
-    gl::ActiveTextureArray<vk::TextureUnit> *activeTextures)
+    gl::ActiveTextureArray<vk::TextureUnit> *activeTextures,
+    bool clearPipelineCache)
 {
     const gl::State &glState                   = glContext->getState();
     ContextVk *contextVk                       = vk::GetImpl(glContext);
@@ -940,7 +946,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     gl::ShaderMap<const gl::ProgramState *> programStates;
     fillProgramStateMap(contextVk, &programStates);
 
-    reset(contextVk);
+    reset(contextVk, clearPipelineCache, false);
 
     // Store a reference to the pipeline and descriptor set layouts. This will create them if they
     // don't already exist in the cache.

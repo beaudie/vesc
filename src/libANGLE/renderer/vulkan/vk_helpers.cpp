@@ -7946,7 +7946,13 @@ bool ShaderProgramHelper::valid(const gl::ShaderType shaderType) const
 
 void ShaderProgramHelper::destroy(RendererVk *rendererVk)
 {
-    mGraphicsPipelines.destroy(rendererVk);
+    for (std::pair<const ShaderProgramDesc, std::shared_ptr<GraphicsPipelineCache>>
+             &graphicsPipelineCache : mGraphicsPipelineCaches)
+    {
+        graphicsPipelineCache.second->destroy(rendererVk);
+    }
+    mGraphicsPipelineCaches.clear();
+
     mComputePipeline.destroy(rendererVk->getDevice());
     for (BindingPointer<ShaderAndSerial> &shader : mShaders)
     {
@@ -7954,10 +7960,20 @@ void ShaderProgramHelper::destroy(RendererVk *rendererVk)
     }
 }
 
-void ShaderProgramHelper::release(ContextVk *contextVk)
+void ShaderProgramHelper::release(ContextVk *contextVk, bool clearPipelineCache)
 {
-    mGraphicsPipelines.release(contextVk);
-    contextVk->addGarbage(&mComputePipeline.get());
+    if (clearPipelineCache)
+    {
+        for (std::pair<const ShaderProgramDesc, std::shared_ptr<GraphicsPipelineCache>>
+                 &graphicsPipelineCache : mGraphicsPipelineCaches)
+        {
+            graphicsPipelineCache.second->release(contextVk);
+        }
+        mGraphicsPipelineCaches.clear();
+
+        contextVk->addGarbage(&mComputePipeline.get());
+    }
+
     for (BindingPointer<ShaderAndSerial> &shader : mShaders)
     {
         shader.reset();

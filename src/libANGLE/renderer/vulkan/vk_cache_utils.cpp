@@ -3327,6 +3327,28 @@ bool SamplerDesc::operator==(const SamplerDesc &other) const
     return (memcmp(this, &other, sizeof(SamplerDesc)) == 0);
 }
 
+// ShaderProgramDesc implementation
+ShaderProgramDesc::ShaderProgramDesc(const gl::ShaderMap<BindingPointer<ShaderAndSerial>> &shaders)
+{
+    for (uint32_t shaderType = 0; shaderType < static_cast<uint32_t>(gl::ShaderType::EnumCount);
+         shaderType++)
+    {
+        const BindingPointer<ShaderAndSerial> &shader =
+            shaders[static_cast<gl::ShaderType>(shaderType)];
+        mShaderSerial[shaderType] = shader.valid() ? shader.get().getSerial().getValue() : 0;
+    }
+}
+
+bool ShaderProgramDesc::operator==(const ShaderProgramDesc &other) const
+{
+    return (memcmp(&mShaderSerial, &other.mShaderSerial, sizeof(ShaderProgramDesc)) == 0);
+}
+
+size_t ShaderProgramDesc::hash() const
+{
+    return angle::ComputeGenericHash(*this);
+}
+
 // SamplerHelper implementation.
 SamplerHelper::SamplerHelper(ContextVk *contextVk)
     : mSamplerSerial(contextVk->getRenderer()->getResourceSerialFactory().generateSamplerSerial())
@@ -3905,6 +3927,48 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     samplerOut->set(&insertedSampler);
 
     contextVk->getRenderer()->getActiveHandleCounts().onAllocate(vk::HandleType::Sampler);
+
+    return angle::Result::Continue;
+}
+
+// ShaderCache implementation.
+ShaderCache::ShaderCache() = default;
+
+ShaderCache::~ShaderCache()
+{
+    ASSERT(mPayload.empty());
+}
+
+void ShaderCache::destroy(RendererVk *rendererVk)
+{
+    for (auto &iter : mPayload)
+    {
+        iter.second.get().destroy(rendererVk->getDevice());
+        iter.second.releaseRef();
+    }
+    mPayload.clear();
+}
+
+angle::Result ShaderCache::getShader(ContextVk *contextVk,
+                                     const std::string &spirvKey,
+                                     const angle::spirv::Blob &transformedSpirvBlob,
+                                     vk::RefCounted<vk::ShaderAndSerial> **shaderOut)
+{
+    auto iter = mPayload.find(spirvKey);
+    if (iter != mPayload.end())
+    {
+        *shaderOut = &iter->second;
+        mCacheStats.hit();
+        return angle::Result::Continue;
+    }
+
+    mCacheStats.miss();
+
+    mPayload[spirvKey] = {};
+    *shaderOut         = &mPayload[spirvKey];
+    (*shaderOut)->addRef();
+    ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &(*shaderOut)->get(), transformedSpirvBlob.data(),
+                                      transformedSpirvBlob.size() * sizeof(uint32_t)));
 
     return angle::Result::Continue;
 }

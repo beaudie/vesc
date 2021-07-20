@@ -149,16 +149,16 @@ ProgramVk::~ProgramVk() = default;
 void ProgramVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    reset(contextVk);
+    reset(contextVk, true, true);
 }
 
-void ProgramVk::reset(ContextVk *contextVk)
+void ProgramVk::reset(ContextVk *contextVk, bool clearPipelineCache, bool clearShaderCache)
 {
     mOriginalShaderInfo.release(contextVk);
 
     GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(&mGlslangProgramInterfaceInfo);
 
-    mExecutable.reset(contextVk);
+    mExecutable.reset(contextVk, clearPipelineCache, clearShaderCache);
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
@@ -169,7 +169,7 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
     gl::ShaderMap<size_t> requiredBufferSize;
     requiredBufferSize.fill(0);
 
-    reset(contextVk);
+    reset(contextVk, false, false);
 
     mOriginalShaderInfo.load(stream);
     mExecutable.load(stream);
@@ -199,7 +199,7 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
         return std::make_unique<LinkEventDone>(status);
     }
 
-    status = mExecutable.createPipelineLayout(context, nullptr);
+    status = mExecutable.createPipelineLayout(context, nullptr, false);
     return std::make_unique<LinkEventDone>(status);
 }
 
@@ -264,7 +264,7 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     // assignment done in that function.
     linkResources(resources);
 
-    reset(contextVk);
+    reset(contextVk, false, false);
     mExecutable.clearVariableInfoMap();
 
     // Gather variable info and compiled SPIR-V binaries.
@@ -294,7 +294,7 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
 
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
-    status = mExecutable.createPipelineLayout(context, nullptr);
+    status = mExecutable.createPipelineLayout(context, nullptr, false);
     return std::make_unique<LinkEventDone>(status);
 }
 
