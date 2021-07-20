@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5c75ccd_59f4b077",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-20T18:38:59Z",
+      "side": 1,
+      "message": "Note: uncommenting this line makes the test pass.",
+      "revId": "462bf0d39802d104251f76b181c6e1542765a909",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
