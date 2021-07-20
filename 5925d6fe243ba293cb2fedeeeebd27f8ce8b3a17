@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a2a8cf9_1a1a4776",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-20T14:43:08Z",
+      "side": 1,
+      "message": "The VK_KHR_image_format_list extensions should now pass tests on all platforms as the VulkanExternalImageTest was fixed in the previous patch.",
+      "revId": "5925d6fe243ba293cb2fedeeeebd27f8ce8b3a17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
