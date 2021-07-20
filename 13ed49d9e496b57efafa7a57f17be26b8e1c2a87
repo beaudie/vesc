@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4442fc9b_d0a62117",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 38
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2ee052a_72653907",
+      "range": {
+        "startLine": 746,
+        "startChar": 9,
+        "endLine": 746,
+        "endChar": 29
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cd5ab28_02eb8b6c",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-19T18:56:05Z",
       "side": 1,
       "message": "nit: include order, see google style guide",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39d6790_f99e5c61",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cd5ab28_02eb8b6c",
       "range": {
         "startLine": 10,
         "startChar": 0,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69d8b0dd_e2170703",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Changed logic per Geoff.\nso if Protected Memory is supported by Vulkan driver, then protected content and protected texture are enabled, If for some reason protected_content is not enabled, the protected_textures is disabled.\n\nPreviously ProtectedTextures enabled if protectedContent supported. Suggestions?",
+      "parentUuid": "e02aba62_47f9a1b7",
+      "range": {
+        "startLine": 3562,
+        "startChar": 0,
+        "endLine": 3566,
+        "endChar": 5
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cea607a5_5f0445c3",
         "filename": "src/libANGLE/Image.cpp",
         "patchSetId": 38
@@ -100,6 +172,30 @@
       "writtenOn": "2021-07-19T18:56:05Z",
       "side": 1,
       "message": "usually we like to catch this in the validation layers. looks like a validation issue. I forget the call chain to Image::initialize.",
+      "range": {
+        "startLine": 450,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 5
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82edde8e_d1b017e0",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cea607a5_5f0445c3",
       "range": {
         "startLine": 450,
         "startChar": 0,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c779555_bc57801c",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Only used once, so changed to a separate function.",
+      "parentUuid": "246efb1e_24056b81",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 86,
+        "endChar": 24
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "837e1e74_0fb347af",
@@ -146,6 +266,30 @@
       "writtenOn": "2021-07-19T18:56:05Z",
       "side": 1,
       "message": "e.g. hard to know from reading what false means here, whereas InitState::MayNeedInit is simpler to parse.",
+      "range": {
+        "startLine": 131,
+        "startChar": 88,
+        "endLine": 131,
+        "endChar": 93
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08c8aefd_a7824ebd",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "837e1e74_0fb347af",
       "range": {
         "startLine": 131,
         "startChar": 88,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6693b9ce_1e75a365",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be3a6d3b_38f13378",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 85,
+        "endChar": 25
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18b3b16d_6464d238",
@@ -202,6 +370,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fcf0c08_12a2cb06",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 2802,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18b3b16d_6464d238",
+      "range": {
+        "startLine": 2802,
+        "startChar": 8,
+        "endLine": 2802,
+        "endChar": 25
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1fe3145_3d1d135d",
@@ -215,6 +407,30 @@
       "writtenOn": "2021-07-19T18:56:05Z",
       "side": 1,
       "message": "nit: ? true : false is redundant. just compare with zero.",
+      "range": {
+        "startLine": 371,
+        "startChar": 61,
+        "endLine": 371,
+        "endChar": 78
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd07391d_aae30c91",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-07-20T02:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1fe3145_3d1d135d",
       "range": {
         "startLine": 371,
         "startChar": 61,
