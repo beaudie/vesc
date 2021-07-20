@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "6da6fcd6e602c1d50886b0fb7d6e98133c11687e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2344aa_b464d680",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-07-20T18:07:38Z",
+      "side": 1,
+      "message": "looks like all nits were addressed and bots are happy. Thanks guys, landing this",
+      "revId": "6da6fcd6e602c1d50886b0fb7d6e98133c11687e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
