@@ -1735,12 +1735,17 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
                                                          bool deferClears,
                                                          uint32_t colorIndexGL)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk              = vk::GetImpl(context);
+    const gl::FramebufferState &state = getState();
 
-    RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-    if (renderTarget == nullptr)
+    RenderTargetVk *renderTarget = nullptr;
+    if (state.getReadBufferState() != GL_NONE && state.getReadIndex() == colorIndexGL)
     {
-        return angle::Result::Continue;
+        renderTarget = getColorReadRenderTarget();
+    }
+    else
+    {
+        renderTarget = getColorDrawRenderTarget(colorIndexGL);
     }
 
     if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
