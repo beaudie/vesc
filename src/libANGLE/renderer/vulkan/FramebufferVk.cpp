@@ -1737,11 +1737,23 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+    RenderTargetVk *renderTarget = nullptr;
+    // Check the read render target first.
+    if (mState.getReadBufferState() != GL_NONE && mState.getReadIndex() == colorIndexGL)
+    {
+        renderTarget = mRenderTargetCache.getColorRead(mState);
+    }
+    // If that's not valid, then default to the draw render target.
+    if (renderTarget == nullptr)
+    {
+        renderTarget = mRenderTargetCache.getColorDraw(mState, colorIndexGL);
+    }
+    // No attachments bound, so nothing to do.
     if (renderTarget == nullptr)
     {
         return angle::Result::Continue;
     }
+    ASSERT(renderTarget->getImageForRenderPass().valid());
 
     if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
     {
