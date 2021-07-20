@@ -1202,6 +1202,51 @@ TEST_P(EGLSurfaceTestD3D11, CreateSurfaceWithMSAA)
 
 #endif  // ANGLE_ENABLE_D3D11
 
+// Verify bliting between two surfaces works correctly.
+TEST_P(EGLSurfaceTest, BlitBetweenSurfaces)
+{
+    initializeDisplay();
+    ASSERT_NE(mDisplay, EGL_NO_DISPLAY);
+
+    initializeSurfaceWithDefaultConfig(true);
+    ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
+    ASSERT_NE(mContext, EGL_NO_CONTEXT);
+
+    EGLSurface surface1;
+    EGLSurface surface2;
+
+    const EGLint surfaceAttributes[] = {
+        EGL_WIDTH, 64, EGL_HEIGHT, 64, EGL_NONE,
+    };
+
+    surface1 = eglCreatePbufferSurface(mDisplay, mConfig, surfaceAttributes);
+    ASSERT_EGL_SUCCESS();
+    surface2 = eglCreatePbufferSurface(mDisplay, mConfig, surfaceAttributes);
+    ASSERT_EGL_SUCCESS();
+
+    // Draw to and read from surface1.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface1, surface1, mContext));
+    glClearColor(GLColor::red.R, GLColor::red.G, GLColor::red.B, GLColor::red.A);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw to surface2 and read from surface1.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface2, surface1, mContext));
+    glBlitFramebuffer(0, 0, 64, 64, 0, 0, 64, 64, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // Confirm surface1 has the clear color.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface1, surface1, mContext));
+    EXPECT_PIXEL_COLOR_EQ(32, 32, GLColor::red);
+
+    // Confirm surface2 has the blited clear color.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface2, surface2, mContext));
+    EXPECT_PIXEL_COLOR_EQ(32, 32, GLColor::red);
+
+    eglDestroySurface(mDisplay, surface1);
+    eglDestroySurface(mDisplay, surface2);
+}
+
 // Verify switching between a surface with robust resource init and one without still clears alpha.
 TEST_P(EGLSurfaceTest, RobustResourceInitAndEmulatedAlpha)
 {
