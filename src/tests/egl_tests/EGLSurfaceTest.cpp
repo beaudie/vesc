@@ -862,6 +862,9 @@ TEST_P(EGLSurfaceTest, FixedSizeWindow)
 
 TEST_P(EGLSurfaceTest3, MakeCurrentDifferentSurfaces)
 {
+    // TODO(http://www.anglebug.com/6284): Failing with OpenGL ES backend on Android.
+    ANGLE_SKIP_TEST_IF(IsOpenGLES() && IsAndroid());
+
     const EGLint configAttributes[] = {
         EGL_RED_SIZE,   8, EGL_GREEN_SIZE,   8, EGL_BLUE_SIZE,      8, EGL_ALPHA_SIZE, 8,
         EGL_DEPTH_SIZE, 0, EGL_STENCIL_SIZE, 0, EGL_SAMPLE_BUFFERS, 0, EGL_NONE};
@@ -1202,6 +1205,54 @@ TEST_P(EGLSurfaceTestD3D11, CreateSurfaceWithMSAA)
 
 #endif  // ANGLE_ENABLE_D3D11
 
+// Verify bliting between two surfaces works correctly.
+TEST_P(EGLSurfaceTest3, BlitBetweenSurfaces)
+{
+    // TODO(http://www.anglebug.com/6284): Failing with OpenGL ES backend on Android and Windows.
+    ANGLE_SKIP_TEST_IF(IsOpenGLES() && (IsAndroid() || IsWindows()));
+
+    initializeDisplay();
+    ASSERT_NE(mDisplay, EGL_NO_DISPLAY);
+
+    initializeSurfaceWithDefaultConfig(true);
+    ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
+    ASSERT_NE(mContext, EGL_NO_CONTEXT);
+
+    EGLSurface surface1;
+    EGLSurface surface2;
+
+    const EGLint surfaceAttributes[] = {
+        EGL_WIDTH, 64, EGL_HEIGHT, 64, EGL_NONE,
+    };
+
+    surface1 = eglCreatePbufferSurface(mDisplay, mConfig, surfaceAttributes);
+    ASSERT_EGL_SUCCESS();
+    surface2 = eglCreatePbufferSurface(mDisplay, mConfig, surfaceAttributes);
+    ASSERT_EGL_SUCCESS();
+
+    // Clear surface1.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface1, surface1, mContext));
+    glClearColor(GLColor::red.R, GLColor::red.G, GLColor::red.B, GLColor::red.A);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Blit from surface1 to surface2.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface2, surface1, mContext));
+    glBlitFramebuffer(0, 0, 64, 64, 0, 0, 64, 64, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // Confirm surface1 has the clear color.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface1, surface1, mContext));
+    EXPECT_PIXEL_COLOR_EQ(32, 32, GLColor::red);
+
+    // Confirm surface2 has the blited clear color.
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface2, surface2, mContext));
+    EXPECT_PIXEL_COLOR_EQ(32, 32, GLColor::red);
+
+    eglDestroySurface(mDisplay, surface1);
+    eglDestroySurface(mDisplay, surface2);
+}
+
 // Verify switching between a surface with robust resource init and one without still clears alpha.
 TEST_P(EGLSurfaceTest, RobustResourceInitAndEmulatedAlpha)
 {
@@ -1321,7 +1372,11 @@ ANGLE_INSTANTIATE_TEST(EGLFloatSurfaceTest,
                        WithNoFixture(ES3_VULKAN()));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLSurfaceTest3);
-ANGLE_INSTANTIATE_TEST(EGLSurfaceTest3, WithNoFixture(ES3_VULKAN()));
+ANGLE_INSTANTIATE_TEST(EGLSurfaceTest3,
+                       WithNoFixture(ES3_D3D11()),
+                       WithNoFixture(ES3_OPENGLES()),
+                       WithNoFixture(ES3_VULKAN()),
+                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()));
 
 #if defined(ANGLE_ENABLE_D3D11)
 ANGLE_INSTANTIATE_TEST(EGLSurfaceTestD3D11, WithNoFixture(ES2_D3D11()), WithNoFixture(ES3_D3D11()));
