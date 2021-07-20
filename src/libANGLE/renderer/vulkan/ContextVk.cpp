@@ -5112,7 +5112,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
     // Recreate the pipeline layout, if necessary.
     if (recreatePipelineLayout)
     {
-        ANGLE_TRY(mExecutable->createPipelineLayout(context, &mActiveTextures));
+        ANGLE_TRY(mExecutable->createPipelineLayout(context, &mActiveTextures, true));
 
         // The default uniforms descriptor set was reset during createPipelineLayout(), so mark them
         // dirty to get everything reallocated/rebound before the next draw.

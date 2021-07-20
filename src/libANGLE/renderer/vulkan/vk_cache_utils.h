@@ -13,6 +13,7 @@
 
 #include "common/Color.h"
 #include "common/FixedVector.h"
+#include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -907,6 +908,21 @@ class SamplerDesc final
 
 static_assert(sizeof(SamplerDesc) == 48, "Unexpected SamplerDesc size");
 
+// ShaderProgramDesc is used for key of per shaderMap pipeline cache
+class ShaderProgramDesc final
+{
+  public:
+    ShaderProgramDesc(const gl::ShaderMap<BindingPointer<ShaderAndSerial>> &shaders);
+
+    size_t hash() const;
+    bool operator==(const ShaderProgramDesc &other) const;
+
+  private:
+    uint64_t mShaderSerial[static_cast<uint32_t>(gl::ShaderType::EnumCount)];
+};
+
+static_assert(sizeof(ShaderProgramDesc) == 48, "Unexpected ShaderProgramDesc size");
+
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
@@ -1379,6 +1395,12 @@ struct hash<rx::vk::SamplerDesc>
     size_t operator()(const rx::vk::SamplerDesc &key) const { return key.hash(); }
 };
 
+template <>
+struct hash<rx::vk::ShaderProgramDesc>
+{
+    size_t operator()(const rx::vk::ShaderProgramDesc &key) const { return key.hash(); }
+};
+
 // See Resource Serial types defined in vk_utils.h.
 #define ANGLE_HASH_VK_SERIAL(Type)                                                          \
     template <>                                                                             \
@@ -1402,6 +1424,7 @@ enum class VulkanCacheType
     PipelineLayout,
     Sampler,
     SamplerYcbcrConversion,
+    Shader,
     DescriptorSetLayout,
     DriverUniformsDescriptors,
     TextureDescriptors,
@@ -1678,6 +1701,24 @@ class SamplerYcbcrConversionCache final
 
     SamplerYcbcrConversionMap<uint64_t> mExternalFormatPayload;
     SamplerYcbcrConversionMap<VkFormat> mVkFormatPayload;
+};
+
+// Shader Cache
+class ShaderCache final : public HasCacheStats<VulkanCacheType::Shader>
+{
+  public:
+    ShaderCache();
+    ~ShaderCache() override;
+
+    void destroy(RendererVk *rendererVk);
+
+    angle::Result getShader(ContextVk *contextVk,
+                            const std::string &spirvKey,
+                            const angle::spirv::Blob &transformedSpirvBlob,
+                            vk::RefCounted<vk::ShaderAndSerial> **shaderOut);
+
+  private:
+    std::unordered_map<std::string, vk::RefCounted<vk::ShaderAndSerial>> mPayload;
 };
 
 // DescriptorSet Cache

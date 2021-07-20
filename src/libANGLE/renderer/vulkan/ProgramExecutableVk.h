@@ -72,7 +72,7 @@ class ProgramInfo final : angle::NonCopyable
                               const ShaderInfo &shaderInfo,
                               ProgramTransformOptions optionBits,
                               const ShaderInterfaceVariableInfoMap &variableInfoMap);
-    void release(ContextVk *contextVk);
+    void release(ContextVk *contextVk, bool clearPipelineCache, bool clearShaderCache);
 
     ANGLE_INLINE bool valid(const gl::ShaderType shaderType) const
     {
@@ -83,7 +83,7 @@ class ProgramInfo final : angle::NonCopyable
 
   private:
     vk::ShaderProgramHelper mProgramHelper;
-    gl::ShaderMap<vk::RefCounted<vk::ShaderAndSerial>> mShaders;
+    ShaderCache mShaderCache;
 };
 
 // State for the default uniform blocks.
@@ -118,7 +118,7 @@ class ProgramExecutableVk
     ProgramExecutableVk();
     virtual ~ProgramExecutableVk();
 
-    void reset(ContextVk *contextVk);
+    void reset(ContextVk *contextVk, bool clearPipelineCache, bool clearShaderCache);
 
     void save(gl::BinaryOutputStream *stream);
     std::unique_ptr<rx::LinkEvent> load(gl::BinaryInputStream *stream);
@@ -154,7 +154,8 @@ class ProgramExecutableVk
 
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
     angle::Result createPipelineLayout(const gl::Context *glContext,
-                                       gl::ActiveTextureArray<vk::TextureUnit> *activeTextures);
+                                       gl::ActiveTextureArray<vk::TextureUnit> *activeTextures,
+                                       bool clearPipelineCache);
 
     angle::Result updateTexturesDescriptorSet(ContextVk *contextVk,
                                               const vk::TextureDescriptorDesc &texturesDesc);

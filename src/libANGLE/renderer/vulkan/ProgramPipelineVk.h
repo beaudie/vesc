@@ -26,7 +26,7 @@ class ProgramPipelineVk : public ProgramPipelineImpl
     ~ProgramPipelineVk() override;
 
     void destroy(const gl::Context *context) override;
-    void reset(ContextVk *contextVk);
+    void reset(ContextVk *contextVk, bool clearPipelineCache, bool clearShaderCache);
 
     const ProgramExecutableVk &getExecutable() const { return mExecutable; }
     ProgramExecutableVk &getExecutable() { return mExecutable; }
