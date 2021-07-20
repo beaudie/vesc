@@ -33,6 +33,24 @@
       "message": "Ivan can you please add your information to AUTHORS and/or CONTRIBUTORS where appropriate?",
       "revId": "d701117b6830efa2cd2a0bcc993d67783f93e64f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0b6c37d_f204263e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1461587
+      },
+      "writtenOn": "2021-07-20T12:52:43Z",
+      "side": 1,
+      "message": "Jamie,\nRegarding the AUTHORS.\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/main/AUTHORS\nI guess it is already covered by the \"LG Electronics, Inc.\".\nPlease fix me if I\u0027m wrong.\n\nThe CONTRIBUTORS is updated.",
+      "parentUuid": "37fbbbd0_34381f6b",
+      "revId": "d701117b6830efa2cd2a0bcc993d67783f93e64f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
