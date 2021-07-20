@@ -767,6 +767,7 @@ void Texture::onDestroy(const Context *context)
     }
 
     (void)(orphanImages(context));
+    context->getOrphanedImageHelper()->release(context);
 
     mState.mBuffer.set(context, nullptr, 0, 0);
 
