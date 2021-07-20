@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "dd4fda1b_e21e3e49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 41
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-20T16:00:32Z",
+      "side": 1,
+      "message": "LGTM if the bots can pass without any more major revisions.",
+      "revId": "606da79c208a23f97aee07193163e9028e0e989b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3001f906_b44b981b",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 41

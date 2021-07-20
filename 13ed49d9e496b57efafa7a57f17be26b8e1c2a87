@@ -231,6 +231,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b3a627a_f44e958f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-20T16:00:32Z",
+      "side": 1,
+      "message": "Don\u0027t see a comment in this section yet, but LGTM when you add one.",
+      "parentUuid": "be14a6c0_e13f1a1a",
+      "range": {
+        "startLine": 3562,
+        "startChar": 0,
+        "endLine": 3566,
+        "endChar": 5
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cea607a5_5f0445c3",
