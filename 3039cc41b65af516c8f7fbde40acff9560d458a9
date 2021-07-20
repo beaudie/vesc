@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd7d0b13_8799201e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-20T03:40:48Z",
+      "side": 1,
+      "message": "+Mohan FYI, since you have a change that\u0027s touching the same area.",
+      "revId": "3039cc41b65af516c8f7fbde40acff9560d458a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
