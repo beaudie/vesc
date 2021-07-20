@@ -185,6 +185,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ee91d03_a2d742fc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-07-20T15:54:26Z",
+      "side": 1,
+      "message": "This extension requires EGL_EXT_protected_content so if EGL_EXT_protected_content is not supported then we need to make sure that this one isn\u0027t as well.",
+      "parentUuid": "e6d690b6_b3e5ae74",
+      "range": {
+        "startLine": 3562,
+        "startChar": 0,
+        "endLine": 3566,
+        "endChar": 5
+      },
+      "revId": "13ed49d9e496b57efafa7a57f17be26b8e1c2a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cea607a5_5f0445c3",
         "filename": "src/libANGLE/Image.cpp",
         "patchSetId": 38
