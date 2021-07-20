@@ -16,6 +16,23 @@
       "message": "Please take a look and commit for the Dry Run because I have no permissions for it on Angle project.",
       "revId": "d701117b6830efa2cd2a0bcc993d67783f93e64f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37fbbbd0_34381f6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-20T12:22:47Z",
+      "side": 1,
+      "message": "Ivan can you please add your information to AUTHORS and/or CONTRIBUTORS where appropriate?",
+      "revId": "d701117b6830efa2cd2a0bcc993d67783f93e64f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
