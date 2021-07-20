@@ -1735,14 +1735,26 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
                                                          bool deferClears,
                                                          uint32_t colorIndexGL)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk         = vk::GetImpl(context);
+    RenderTargetVk *renderTarget = nullptr;
 
-    RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-    if (renderTarget == nullptr)
+    // It's possible for the read and draw color attachments to be different if different surfaces
+    // are bound, so we need to flush any staged updates to both.
+
+    // Read
+    if (mState.getReadBufferState() != GL_NONE && mState.getReadIndex() == colorIndexGL)
     {
-        return angle::Result::Continue;
+        renderTarget = mRenderTargetCache.getColorRead(mState);
+        if (renderTarget)
+        {
+            ANGLE_TRY(renderTarget->flushStagedUpdates(contextVk, nullptr, 0,
+                                                       mCurrentFramebufferDesc.getLayerCount()));
+        }
     }
 
+    // Draw
+    renderTarget = mRenderTargetCache.getColorDraw(mState, colorIndexGL);
+    ASSERT(renderTarget);
     if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
     {
         return renderTarget->flushStagedUpdates(contextVk, &mDeferredClears, colorIndexGL,
