@@ -125,6 +125,10 @@ TEST_P(GetImageTest, NegativeAPI)
     glGetTexImageANGLE(GL_TEXTURE_2D, 0, GL_RGBA, GL_NONE, buffer.data());
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
+    // Tests GetCompressed on a normal texture.
+    glGetCompressedTexImageANGLE(GL_TEXTURE_2D, 0, buffer.data());
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
     // Create a simple renderbuffer.
     GLRenderbuffer renderbuf = InitSimpleRenderbuffer();
     ASSERT_GL_NO_ERROR();
@@ -594,6 +598,31 @@ TEST_P(GetImageTest, EmptyTexture)
     glGetTexImageANGLE(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, actualData.data());
     EXPECT_GL_NO_ERROR();
     EXPECT_EQ(expectedData, actualData);
+}
+
+// Basic GetCompressedTexImage.
+TEST_P(GetImageTest, CompressedTexImage)
+{
+    // Verify the extension is enabled.
+    ASSERT_TRUE(IsGLExtensionEnabled(kExtensionName));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_compressed_ETC1_RGB8_texture"));
+
+    constexpr GLsizei kSize      = 4;
+    constexpr GLsizei kImageSize = 8;
+
+    // This arbitrary 'compressed' data just has to be read back exactly as specified below.
+    constexpr std::array<uint8_t, kImageSize> kExpectedData = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, kSize, kSize, 0, kImageSize,
+                           kExpectedData.data());
+
+    std::array<uint8_t, kImageSize> actualData = {};
+    glGetCompressedTexImageANGLE(GL_TEXTURE_2D, 0, actualData.data());
+
+    ASSERT_GL_NO_ERROR();
+    EXPECT_EQ(kExpectedData, actualData);
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(GetImageTest);
