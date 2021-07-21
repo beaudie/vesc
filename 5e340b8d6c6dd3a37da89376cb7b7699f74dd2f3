@@ -16,6 +16,92 @@
       "message": "I haven\u0027t been able to repro the bot failure.  Let\u0027s start the review while I work through that.  I think this is ready to land.",
       "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeba6caa_0da3a964",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-21T12:48:04Z",
+      "side": 1,
+      "message": "LGTM. Next time can you split the refactor from the functionality change?",
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad80c2a5_99ed84eb",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-21T12:48:04Z",
+      "side": 1,
+      "message": "nit: you should be able to remove this.",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 37
+      },
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a02ed2b5_cf7c2e3f",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-21T12:48:04Z",
+      "side": 1,
+      "message": "nit: can you make these const functions by using find instead of operator[]?",
+      "range": {
+        "startLine": 278,
+        "startChar": 16,
+        "endLine": 278,
+        "endChar": 47
+      },
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b2aedfb_7cc650d5",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-21T12:48:04Z",
+      "side": 1,
+      "message": "nit: just return bool instead of a const \u0026 to a simple type, same for above.",
+      "range": {
+        "startLine": 282,
+        "startChar": 4,
+        "endLine": 282,
+        "endChar": 16
+      },
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
