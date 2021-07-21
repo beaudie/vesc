@@ -1161,6 +1161,16 @@ class State : angle::NonCopyable
     DrawBufferMask mBlendFuncConstantAlphaDrawBuffers;
     DrawBufferMask mBlendFuncConstantColorDrawBuffers;
     bool mNoSimultaneousConstantColorAndAlphaBlendFunc;
+
+    // GL_EXT_primitive_bounding_box
+    GLfloat mBoundingBoxMinX = -1.0f;
+    GLfloat mBoundingBoxMinY = -1.0f;
+    GLfloat mBoundingBoxMinZ = -1.0f;
+    GLfloat mBoundingBoxMinW = 1.0f;
+    GLfloat mBoundingBoxMaxX = 1.0f;
+    GLfloat mBoundingBoxMaxY = 1.0f;
+    GLfloat mBoundingBoxMaxZ = 1.0f;
+    GLfloat mBoundingBoxMaxW = 1.0f;
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
