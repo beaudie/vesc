@@ -264,6 +264,22 @@ bool ValidateGetTexImageANGLE(const Context *context,
     return true;
 }
 
+bool ValidateGetCompressedTexImageANGLE(const Context *context,
+                                        TextureTarget target,
+                                        GLint level,
+                                        const void *pixels)
+{
+    if (!context->getExtensions().getImageANGLE)
+    {
+        context->validationError(GL_INVALID_OPERATION, kGetImageExtensionNotEnabled);
+        return false;
+    }
+
+    // TODO: Validate all the things
+
+    return true;
+}
+
 bool ValidateGetRenderbufferImageANGLE(const Context *context,
                                        GLenum target,
                                        GLenum format,

@@ -3033,6 +3033,17 @@ angle::Result TextureVk::getTexImage(const gl::Context *context,
                                          static_cast<uint32_t>(layer), format, type, pixels);
 }
 
+angle::Result TextureVk::getCompressedTexImage(const gl::Context *context,
+                                               const gl::PixelPackState &packState,
+                                               gl::Buffer *packBuffer,
+                                               gl::TextureTarget target,
+                                               GLint level,
+                                               void *pixels)
+{
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
+}
+
 const vk::Format &TextureVk::getBaseLevelFormat(RendererVk *renderer) const
 {
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();

@@ -477,6 +477,7 @@ EXPORTS
     glRenderbufferStorageMultisampleANGLE
 
     ; GL_ANGLE_get_image
+    glGetCompressedTexImageANGLE
     glGetRenderbufferImageANGLE
     glGetTexImageANGLE
 

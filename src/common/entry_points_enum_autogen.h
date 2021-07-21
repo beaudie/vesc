@@ -640,6 +640,7 @@ enum class EntryPoint
     GLGetClipPlanef,
     GLGetClipPlanex,
     GLGetCompressedTexImage,
+    GLGetCompressedTexImageANGLE,
     GLGetCompressedTextureImage,
     GLGetCompressedTextureSubImage,
     GLGetDebugMessageLog,

@@ -49,6 +49,8 @@ New Procedures and Functions
     void GetTexImageANGLE(GLenum target, GLint level, GLenum format, GLenum type,
                           void *pixels);
 
+    void GetCompressedTexImageANGLE(enum target, int level, void *pixels);
+
     void GetRenderbufferImageANGLE(GLenum target, GLint level, GLenum format,
                                    GLenum type, void *pixels);
 
