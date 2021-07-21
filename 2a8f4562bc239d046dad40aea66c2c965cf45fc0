@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "389f2c54_a4bdd1ff",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-21T22:58:33Z",
+      "side": 1,
+      "message": "Ah, thanks Tim for figuring that out. Yes we should have similar code to flush the read attachment for read FBOs. That would be the most precise fix. Can handle specific design qs tomorrow.",
+      "parentUuid": "16d06069_0345a8af",
+      "range": {
+        "startLine": 857,
+        "startChar": 24,
+        "endLine": 857,
+        "endChar": 45
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d3062c_d06e6924",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
