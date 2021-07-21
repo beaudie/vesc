@@ -2418,6 +2418,14 @@ void CaptureSharedContextMidExecutionSetup(const gl::Context *context,
         }
     }
 
+    // Set a unpack alignment of 1.
+    gl::PixelUnpackState &currentUnpackState = replayState.getUnpackState();
+    if (currentUnpackState.alignment != 1)
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, 1));
+        currentUnpackState.alignment = 1;
+    }
+
     // Capture Texture setup and data.
     const gl::TextureManager &textures = apiState.getTextureManagerForCapture();
 
