@@ -33,6 +33,24 @@
       "message": "Do we need to glPopMatrix after we capture each one?",
       "revId": "4eefe0d0cb5c208c6cda62e7991534d46b08b57d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23958db4_1ab87884",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3322,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-21T09:48:11Z",
+      "side": 1,
+      "message": "By capturing a push for each matrix on the stack we are replicating the stack state at time of capture.\nPopping the matrices would negate the push operations and result in a default state.\nTested this with Sonic, where popping the matrices resulted in the incorrect default matrix stack and black rendering.",
+      "parentUuid": "7fb225d5_9c21c9f9",
+      "revId": "4eefe0d0cb5c208c6cda62e7991534d46b08b57d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
