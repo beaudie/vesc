@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82381edd_e06ec696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-21T14:59:43Z",
+      "side": 1,
+      "message": "Yeah, was going to, but chatted with Tim about it, he thought it was okay as is, so I held off.",
+      "parentUuid": "eeba6caa_0da3a964",
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad80c2a5_99ed84eb",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-07-21T12:48:04Z",
       "side": 1,
       "message": "nit: you should be able to remove this.",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 37
+      },
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c53406e_f20f08f3",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-21T14:59:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad80c2a5_99ed84eb",
       "range": {
         "startLine": 213,
         "startChar": 0,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df8210f3_b4f398e5",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-21T14:59:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a02ed2b5_cf7c2e3f",
+      "range": {
+        "startLine": 278,
+        "startChar": 16,
+        "endLine": 278,
+        "endChar": 47
+      },
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b2aedfb_7cc650d5",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-07-21T12:48:04Z",
       "side": 1,
       "message": "nit: just return bool instead of a const \u0026 to a simple type, same for above.",
+      "range": {
+        "startLine": 282,
+        "startChar": 4,
+        "endLine": 282,
+        "endChar": 16
+      },
+      "revId": "5e340b8d6c6dd3a37da89376cb7b7699f74dd2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f8927f_4f37a97b",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-21T14:59:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b2aedfb_7cc650d5",
       "range": {
         "startLine": 282,
         "startChar": 4,
