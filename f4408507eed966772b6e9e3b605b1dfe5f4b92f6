@@ -16,6 +16,29 @@
       "message": "Sorry for the noise, noticed some problems with the logic. Ready now, PTAL",
       "revId": "f4408507eed966772b6e9e3b605b1dfe5f4b92f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be40816_b7a52dc6",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-07-21T19:47:06Z",
+      "side": 1,
+      "message": "Since we\u0027re going to work on Wayland very soon, and since Wayland isn\u0027t trying to use ANGLE at the moment, I suggest only keeping the \"is_chromecast\" from this line and not adding line 58 at all, effectively allowing all ozone platforms to use ANGLE\u0027s Vulkan backend.",
+      "range": {
+        "startLine": 45,
+        "startChar": 29,
+        "endLine": 45,
+        "endChar": 71
+      },
+      "revId": "f4408507eed966772b6e9e3b605b1dfe5f4b92f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
