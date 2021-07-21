@@ -1110,6 +1110,9 @@ enum TQualifier
     EvqTessLevelOuter,
     EvqTessLevelInner,
 
+    // GLES ES 3.1 extension EXT_primitive_bounding_box
+    EvqBoundingBoxEXT,
+
     EvqTessEvaluationIn,
     EvqTessEvaluationOut,
     EvqTessCoord,
@@ -1535,6 +1538,7 @@ inline const char *getQualifierString(TQualifier q)
     case EvqPatchVerticesIn:        return "PatchVerticesIn";
     case EvqTessLevelOuter:         return "TessLevelOuter";
     case EvqTessLevelInner:         return "TessLevelInner";
+    case EvqBoundingBoxEXT:         return "BoundingBoxEXT";
     case EvqTessEvaluationIn:       return "in";
     case EvqTessEvaluationOut:      return "out";
     case EvqTessCoord:              return "TessCoord";
