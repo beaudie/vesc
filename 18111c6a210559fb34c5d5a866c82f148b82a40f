@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4568bbd3_f7e88b89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2021-07-21T15:56:00Z",
+      "side": 1,
+      "message": "This seems like the wrong course of action to me. ANGLE\u0027s implementation of GL_EXT_texture_border_clamp on top of Vulkan is known to be broken for cases that can affect any conformant VK_EXT_custom_border_color implementations, not just SwiftShader\u0027s.\n\nI suggest disabling GL_EXT_texture_border_clamp altogether, letting the SwiftShader implementation land, and then re-enable the extension when the ANGLE issue is fixed.",
+      "revId": "18111c6a210559fb34c5d5a866c82f148b82a40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
