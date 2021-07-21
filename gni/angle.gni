@@ -41,9 +41,8 @@ if (angle_has_build) {
   }
 
   angle_use_x11 = use_x11 && !is_ggp
-  angle_use_vulkan_display =
-      is_linux && !use_x11 && !is_ggp &&
-      (!use_ozone || is_chromecast || ozone_platform_headless)
+  angle_use_vulkan_display = is_linux && !use_x11 && !is_ggp &&
+                             (!ozone_platform_wayland || is_chromecast)
 } else {
   declare_args() {
     is_ubsan = false
@@ -56,6 +55,7 @@ if (angle_has_build) {
     use_ozone = false
     ozone_platform_gbm = false
     ozone_platform_headless = false
+    ozone_platform_wayland = false
     use_fuzzing_engine = false
     use_xcode_clang = false
     is_apple = is_mac || is_ios
