@@ -94,18 +94,18 @@ bool IsInvariant(const TType &type, TCompiler *compiler)
 
 TLayoutBlockStorage GetBlockStorage(const TType &type)
 {
-    // If the type specifies the layout, take it from that.
-    TLayoutBlockStorage blockStorage = type.getLayoutQualifier().blockStorage;
-
-    // For user-defined interface blocks, the block storage is specified on the symbol itself and
-    // not the type.
-    if (blockStorage == EbsUnspecified && type.getInterfaceBlock() != nullptr)
+    // For interface blocks, the block storage is specified on the symbol itself.
+    if (type.getInterfaceBlock() != nullptr)
     {
-        blockStorage = type.getInterfaceBlock()->blockStorage();
+        return type.getInterfaceBlock()->blockStorage();
     }
 
-    if (IsShaderIoBlock(type.getQualifier()) || blockStorage == EbsStd140 ||
-        blockStorage == EbsStd430)
+    // I/O blocks must have been handled above.
+    ASSERT(!IsShaderIoBlock(type.getQualifier()));
+
+    // If the type specifies the layout, take it from that.
+    TLayoutBlockStorage blockStorage = type.getLayoutQualifier().blockStorage;
+    if (blockStorage == EbsStd140 || blockStorage == EbsStd430)
     {
         return blockStorage;
     }
