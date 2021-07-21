@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "638d4028_8a580162",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-07-21T14:56:34Z",
+      "side": 1,
+      "message": "looks like all comments are resolved and bots are happy. thanks guys, landing this",
+      "revId": "d14ce4c32c323044d4aa5723a8ef97fe92e6b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9875e60_aa690be8",
@@ -49,6 +66,24 @@
       "side": 1,
       "message": "We won\u0027t be able to support texture buffer framebuffer attachments on ES3.1 contexts, so not generating a validation error will not make the program any more useful.\n\nPretty certain the error missing from the extension text is an oversight.",
       "parentUuid": "b9875e60_aa690be8",
+      "revId": "d14ce4c32c323044d4aa5723a8ef97fe92e6b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c255131d_a7e041e9",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-07-21T14:56:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c6793a84_ac9e078d",
       "revId": "d14ce4c32c323044d4aa5723a8ef97fe92e6b548",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
