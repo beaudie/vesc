@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "edc62cebef2784050a421b53e85fde58233e0e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efea830f_a2d9d245",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1170324
+      },
+      "writtenOn": "2021-07-21T22:15:36Z",
+      "side": 1,
+      "message": "It seems like I don\u0027t have any priviliges to un-WIP this nor submit it.",
+      "revId": "edc62cebef2784050a421b53e85fde58233e0e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
