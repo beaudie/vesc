@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c04608de_6491a80c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-21T21:03:29Z",
+      "side": 1,
+      "message": "\u003e can you test if FramebufferVk::syncState for the **source** FBO happens before we call into the back-end here on the blit call?\n\nThe read FBO does appear to have its FramebufferVk::syncState() called with dirty bits 0000001000000000010000000001 during Context::syncStateForBlit().",
+      "parentUuid": "e3620427_f00c384b",
+      "range": {
+        "startLine": 857,
+        "startChar": 24,
+        "endLine": 857,
+        "endChar": 45
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d3062c_d06e6924",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
