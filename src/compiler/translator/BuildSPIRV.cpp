@@ -2124,8 +2124,8 @@ void SPIRVBuilder::generateExecutionModes(spirv::Blob *blob)
                  spirv::LiteralInteger(localSize[2])});
             break;
         }
+
         default:
-            // TODO: other shader types.  http://anglebug.com/4889
             break;
     }
 }
