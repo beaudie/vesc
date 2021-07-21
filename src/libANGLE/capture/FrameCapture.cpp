@@ -2065,7 +2065,7 @@ void CaptureTextureStorage(std::vector<CallCapture> *setupCalls,
 }
 
 void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
-                            gl::State *replayState,
+                            const gl::State &apiState,
                             const gl::Texture *texture,
                             const gl::ImageIndex &index,
                             const gl::ImageDesc &desc,
@@ -2080,16 +2080,16 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
         if (texture->getBuffer().getSize() == 0)
         {
             Capture(setupCalls,
-                    CaptureTexBufferEXT(*replayState, true, index.getType(), format.internalFormat,
+                    CaptureTexBufferEXT(apiState, true, index.getType(), format.internalFormat,
                                         texture->getBuffer().get()->id()));
         }
         else
         {
-            Capture(setupCalls, CaptureTexBufferRangeEXT(*replayState, true, index.getType(),
-                                                         format.internalFormat,
-                                                         texture->getBuffer().get()->id(),
-                                                         texture->getBuffer().getOffset(),
-                                                         texture->getBuffer().getSize()));
+            Capture(setupCalls,
+                    CaptureTexBufferRangeEXT(apiState, true, index.getType(), format.internalFormat,
+                                             texture->getBuffer().get()->id(),
+                                             texture->getBuffer().getOffset(),
+                                             texture->getBuffer().getSize()));
         }
 
         // For buffers, we're done
@@ -2106,19 +2106,17 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
         {
             if (texture->getImmutableFormat())
             {
-                Capture(setupCalls,
-                        CaptureCompressedTexSubImage3D(
-                            *replayState, true, index.getTarget(), index.getLevelIndex(), 0, 0, 0,
-                            desc.size.width, desc.size.height, desc.size.depth,
-                            format.internalFormat, size, data));
+                Capture(setupCalls, CaptureCompressedTexSubImage3D(
+                                        apiState, true, index.getTarget(), index.getLevelIndex(), 0,
+                                        0, 0, desc.size.width, desc.size.height, desc.size.depth,
+                                        format.internalFormat, size, data));
             }
             else
             {
-                Capture(setupCalls,
-                        CaptureCompressedTexImage3D(*replayState, true, index.getTarget(),
-                                                    index.getLevelIndex(), format.internalFormat,
-                                                    desc.size.width, desc.size.height,
-                                                    desc.size.depth, 0, size, data));
+                Capture(setupCalls, CaptureCompressedTexImage3D(
+                                        apiState, true, index.getTarget(), index.getLevelIndex(),
+                                        format.internalFormat, desc.size.width, desc.size.height,
+                                        desc.size.depth, 0, size, data));
             }
         }
         else
@@ -2127,15 +2125,15 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
             {
                 Capture(setupCalls,
                         CaptureCompressedTexSubImage2D(
-                            *replayState, true, index.getTarget(), index.getLevelIndex(), 0, 0,
+                            apiState, true, index.getTarget(), index.getLevelIndex(), 0, 0,
                             desc.size.width, desc.size.height, format.internalFormat, size, data));
             }
             else
             {
                 Capture(setupCalls, CaptureCompressedTexImage2D(
-                                        *replayState, true, index.getTarget(),
-                                        index.getLevelIndex(), format.internalFormat,
-                                        desc.size.width, desc.size.height, 0, size, data));
+                                        apiState, true, index.getTarget(), index.getLevelIndex(),
+                                        format.internalFormat, desc.size.width, desc.size.height, 0,
+                                        size, data));
             }
         }
     }
@@ -2145,19 +2143,17 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
         {
             if (texture->getImmutableFormat())
             {
-                Capture(setupCalls,
-                        CaptureTexSubImage3D(*replayState, true, index.getTarget(),
-                                             index.getLevelIndex(), 0, 0, 0, desc.size.width,
-                                             desc.size.height, desc.size.depth, format.format,
-                                             format.type, data));
+                Capture(setupCalls, CaptureTexSubImage3D(
+                                        apiState, true, index.getTarget(), index.getLevelIndex(), 0,
+                                        0, 0, desc.size.width, desc.size.height, desc.size.depth,
+                                        format.format, format.type, data));
             }
             else
             {
-                Capture(
-                    setupCalls,
-                    CaptureTexImage3D(*replayState, true, index.getTarget(), index.getLevelIndex(),
-                                      format.internalFormat, desc.size.width, desc.size.height,
-                                      desc.size.depth, 0, format.format, format.type, data));
+                Capture(setupCalls,
+                        CaptureTexImage3D(apiState, true, index.getTarget(), index.getLevelIndex(),
+                                          format.internalFormat, desc.size.width, desc.size.height,
+                                          desc.size.depth, 0, format.format, format.type, data));
             }
         }
         else
@@ -2165,16 +2161,16 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
             if (texture->getImmutableFormat())
             {
                 Capture(setupCalls,
-                        CaptureTexSubImage2D(*replayState, true, index.getTarget(),
+                        CaptureTexSubImage2D(apiState, true, index.getTarget(),
                                              index.getLevelIndex(), 0, 0, desc.size.width,
                                              desc.size.height, format.format, format.type, data));
             }
             else
             {
-                Capture(setupCalls, CaptureTexImage2D(*replayState, true, index.getTarget(),
-                                                      index.getLevelIndex(), format.internalFormat,
-                                                      desc.size.width, desc.size.height, 0,
-                                                      format.format, format.type, data));
+                Capture(setupCalls,
+                        CaptureTexImage2D(apiState, true, index.getTarget(), index.getLevelIndex(),
+                                          format.internalFormat, desc.size.width, desc.size.height,
+                                          0, format.format, format.type, data));
             }
         }
     }
@@ -2562,7 +2558,7 @@ void CaptureSharedContextMidExecutionSetup(const gl::Context *context,
             {
                 // The buffer contents are already backed up, but we need to emit the TexBuffer
                 // binding calls
-                CaptureTextureContents(setupCalls, &replayState, texture, index, desc, 0, 0);
+                CaptureTextureContents(setupCalls, apiState, texture, index, desc, 0, 0);
 
                 continue;
             }
@@ -2576,7 +2572,7 @@ void CaptureSharedContextMidExecutionSetup(const gl::Context *context,
                         texture->id(), index.getTarget(), index.getLevelIndex());
 
                 // Use the shadow copy of the data to populate the call
-                CaptureTextureContents(setupCalls, &replayState, texture, index, desc,
+                CaptureTextureContents(setupCalls, apiState, texture, index, desc,
                                        static_cast<GLuint>(capturedTextureLevel.size()),
                                        capturedTextureLevel.data());
             }
@@ -2608,13 +2604,12 @@ void CaptureSharedContextMidExecutionSetup(const gl::Context *context,
                                                index.getLevelIndex(), getFormat, getType,
                                                data.data());
 
-                    CaptureTextureContents(setupCalls, &replayState, texture, index, desc,
+                    CaptureTextureContents(setupCalls, apiState, texture, index, desc,
                                            static_cast<GLuint>(data.size()), data.data());
                 }
                 else
                 {
-                    CaptureTextureContents(setupCalls, &replayState, texture, index, desc, 0,
-                                           nullptr);
+                    CaptureTextureContents(setupCalls, apiState, texture, index, desc, 0, nullptr);
                 }
             }
         }
