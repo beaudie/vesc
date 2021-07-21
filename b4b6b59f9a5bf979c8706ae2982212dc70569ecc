@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a91ab151_ffb28d0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-21T23:17:53Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "b4b6b59f9a5bf979c8706ae2982212dc70569ecc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0089b6a0_4f1ef6ff",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-21T23:17:53Z",
+      "side": 1,
+      "message": "nit: Can you make this a local variable?",
+      "range": {
+        "startLine": 2321,
+        "startChar": 27,
+        "endLine": 2321,
+        "endChar": 38
+      },
+      "revId": "b4b6b59f9a5bf979c8706ae2982212dc70569ecc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bea727c_d1f8f783",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-21T23:17:53Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like the resource is deleted by these calls, since the app did that during the run (which is why they need to be regen\u0027ed).",
+      "range": {
+        "startLine": 243,
+        "startChar": 33,
+        "endLine": 243,
+        "endChar": 43
+      },
+      "revId": "b4b6b59f9a5bf979c8706ae2982212dc70569ecc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
