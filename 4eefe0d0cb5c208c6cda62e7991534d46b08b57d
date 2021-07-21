@@ -51,6 +51,24 @@
       "parentUuid": "7fb225d5_9c21c9f9",
       "revId": "4eefe0d0cb5c208c6cda62e7991534d46b08b57d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c81b90d_f0fc648c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3322,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-21T13:40:31Z",
+      "side": 1,
+      "message": "Makes sense, I was thinking about this wrong.  Thought this was just for grabbing the data, not setting it up for replay.",
+      "parentUuid": "23958db4_1ab87884",
+      "revId": "4eefe0d0cb5c208c6cda62e7991534d46b08b57d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
