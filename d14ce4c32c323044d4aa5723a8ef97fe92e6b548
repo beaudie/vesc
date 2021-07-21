@@ -33,6 +33,24 @@
       "message": "From my reading of the OES_texture_buffer extension:\nhttps://www.khronos.org/registry/OpenGL/extensions/OES/OES_texture_buffer.txt\n\nit doesn\u0027t introduce this validation error. Should the error be raised only for clients\u0027 ES 3.2 contexts?",
       "revId": "d14ce4c32c323044d4aa5723a8ef97fe92e6b548",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6793a84_ac9e078d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-21T01:34:40Z",
+      "side": 1,
+      "message": "We won\u0027t be able to support texture buffer framebuffer attachments on ES3.1 contexts, so not generating a validation error will not make the program any more useful.\n\nPretty certain the error missing from the extension text is an oversight.",
+      "parentUuid": "b9875e60_aa690be8",
+      "revId": "d14ce4c32c323044d4aa5723a8ef97fe92e6b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
