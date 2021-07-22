@@ -1203,13 +1203,12 @@ angle::Result Texture::setImage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
-    ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
+    ImageIndex index    = ImageIndex::MakeFromTarget(target, level, size.depth);
+    InitState initState = DetermineInitState(context, unpackBuffer, pixels);
+    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
 
     ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size, format, type, unpackState,
                                  unpackBuffer, pixels));
-
-    InitState initState = DetermineInitState(context, unpackBuffer, pixels);
-    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 

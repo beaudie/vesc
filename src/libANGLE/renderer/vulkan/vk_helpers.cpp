@@ -1944,7 +1944,8 @@ DynamicBuffer::DynamicBuffer()
       mLastFlushOrInvalidateOffset(0),
       mSize(0),
       mAlignment(0),
-      mMemoryPropertyFlags(0)
+      mMemoryPropertyFlags(0),
+      mInFlightBuffersSize(0)
 {}
 
 DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
@@ -1958,6 +1959,7 @@ DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
       mSize(other.mSize),
       mAlignment(other.mAlignment),
       mMemoryPropertyFlags(other.mMemoryPropertyFlags),
+      mInFlightBuffersSize(other.mInFlightBuffersSize),
       mInFlightBuffers(std::move(other.mInFlightBuffers)),
       mBufferFreeList(std::move(other.mBufferFreeList))
 {}
@@ -2088,6 +2090,7 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
 
             ANGLE_TRY(flush(contextVk));
 
+            mInFlightBuffersSize += mBuffer->getSize();
             mInFlightBuffers.push_back(std::move(mBuffer));
             ASSERT(!mBuffer);
         }
@@ -2185,6 +2188,8 @@ void DynamicBuffer::release(RendererVk *renderer)
     ReleaseBufferListToRenderer(renderer, &mInFlightBuffers);
     ReleaseBufferListToRenderer(renderer, &mBufferFreeList);
 
+    mInFlightBuffersSize = 0;
+
     if (mBuffer)
     {
         mBuffer->release(renderer);
@@ -2210,6 +2215,7 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
         }
     }
     mInFlightBuffers.clear();
+    mInFlightBuffersSize = 0;
 }
 
 void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
@@ -2228,6 +2234,7 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
     }
 
     mInFlightBuffers.clear();
+    mInFlightBuffersSize = 0;
 }
 
 void DynamicBuffer::destroy(RendererVk *renderer)
@@ -2236,6 +2243,7 @@ void DynamicBuffer::destroy(RendererVk *renderer)
 
     DestroyBufferList(renderer, &mInFlightBuffers);
     DestroyBufferList(renderer, &mBufferFreeList);
+    mInFlightBuffersSize = 0;
 
     if (mBuffer)
     {

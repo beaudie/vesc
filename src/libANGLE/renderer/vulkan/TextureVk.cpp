@@ -528,8 +528,10 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                                  unpack, stagingBuffer, type, pixels, vkFormat));
     }
 
-    // If we used context's staging buffer, flush out the updates
-    if (stagingBuffer)
+    // If we used context's staging buffer, or if updates to be flushed are piled up,
+    // flush out the updates
+    if (stagingBuffer || (contextVk->getFeatures().forceFlushTextureSubresourceUpdates.enabled &&
+                          mImage->needToFlushStagedSubresourceUpdates()))
     {
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
     }

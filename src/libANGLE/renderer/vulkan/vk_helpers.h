@@ -162,6 +162,8 @@ class DynamicBuffer : angle::NonCopyable
     }
 
     bool valid() const { return mSize != 0; }
+    size_t getInFlightBuffersCount() const { return mInFlightBuffers.size(); }
+    size_t getInFlightBuffersSize() const { return mInFlightBuffersSize; }
 
   private:
     void reset();
@@ -177,6 +179,7 @@ class DynamicBuffer : angle::NonCopyable
     size_t mSize;
     size_t mAlignment;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
+    size_t mInFlightBuffersSize;
 
     BufferHelperPointerVector mInFlightBuffers;
     BufferHelperPointerVector mBufferFreeList;
@@ -1909,6 +1912,11 @@ class ImageHelper final : public Resource, public angle::Subject
     void restoreSubresourceStencilContent(gl::LevelIndex level,
                                           uint32_t layerIndex,
                                           uint32_t layerCount);
+    bool needToFlushStagedSubresourceUpdates() const
+    {
+        return mStagingBuffer.getInFlightBuffersCount() > kStagedSubresourceUpdateCountThreshold ||
+               mStagingBuffer.getInFlightBuffersSize() > kStagedSubresourceUpdateSizeThreshold;
+    }
 
   private:
     enum class UpdateSource
@@ -2053,6 +2061,9 @@ class ImageHelper final : public Resource, public angle::Subject
     LevelContentDefinedMask &getLevelStencilContentDefined(LevelIndex level);
     const LevelContentDefinedMask &getLevelContentDefined(LevelIndex level) const;
     const LevelContentDefinedMask &getLevelStencilContentDefined(LevelIndex level) const;
+
+    static constexpr size_t kStagedSubresourceUpdateCountThreshold = 32;
+    static constexpr size_t kStagedSubresourceUpdateSizeThreshold  = 300 * (1 << 20);
 
     angle::Result initLayerImageViewImpl(
         Context *context,

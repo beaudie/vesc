@@ -2552,6 +2552,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // http://anglebug.com/6110
     ANGLE_FEATURE_CONDITION(&mFeatures, directSPIRVGenerationWorkarounds, IsWindows() && isAMD);
 
+    // forceFlushTextureSubresourceUpdates {
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceFlushTextureSubresourceUpdates, true);
+    // } forceFlushTextureSubresourceUpdates
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 

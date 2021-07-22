@@ -21,6 +21,15 @@ struct FeaturesVk : FeatureSetBase
     FeaturesVk();
     ~FeaturesVk();
 
+    // forceFlushTextureSubresourceUpdates {
+    // This feature prevents out-of-memory situations by forcibly flushing the texture's
+    // subresource updates every specific threshold so that they do not accumulate infinitely.
+    Feature forceFlushTextureSubresourceUpdates = {
+        "forceFlushTextureSubresourceUpdates", FeatureCategory::VulkanWorkarounds,
+        "Force flush subresource updates of texture whenever a threshold is reached.", &members,
+        "8391"};
+    // } forceFlushTextureSubresourceUpdates
+
     // Line segment rasterization must follow OpenGL rules. This means using an algorithm similar
     // to Bresenham's. Vulkan uses a different algorithm. This feature enables the use of pixel
     // shader patching to implement OpenGL basic line rasterization rules. This feature will
