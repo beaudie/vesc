@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "44c8e59e3c475436846c3172c25d31a779897d01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3f398d5_b5f87935",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T01:45:53Z",
+      "side": 1,
+      "message": "Not usually how we do it. Please keep it false here, and enable it in the backends that actually implement it (even if the implementation is noop, although I suggest a dirty bit and actual handling for example in the GL backend (which is what pass through really means in ANGLE)).",
+      "range": {
+        "startLine": 737,
+        "startChar": 35,
+        "endLine": 737,
+        "endChar": 39
+      },
+      "revId": "44c8e59e3c475436846c3172c25d31a779897d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126ead1f_a14b00d4",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T01:45:53Z",
+      "side": 1,
+      "message": "Underscore missing.\n\nAlso the names here are too generic, could we call them like `boundingBoxMinX` etc?\n\nAlso2, they don\u0027t belong to Caps, but State.",
+      "range": {
+        "startLine": 999,
+        "startChar": 32,
+        "endLine": 999,
+        "endChar": 33
+      },
+      "revId": "44c8e59e3c475436846c3172c25d31a779897d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
