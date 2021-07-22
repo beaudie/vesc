@@ -187,6 +187,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b8342a7_d7d99e91",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-22T22:47:13Z",
+      "side": 1,
+      "message": "Jason,\n\nThe issue with your fix is that FramebufferVk::flushColorAttachmentUpdates() is still indexing into the draw color attachments with `mRenderTargetCache.getColors()[colorIndexGL]`.\n\n    const gl::AttachmentArray\u003cRenderTargetT *\u003e \u0026RenderTargetCache\u003cRenderTargetT\u003e::getColors() const\n    {\n        return mColorRenderTargets;\n    }\n    \nInstead, we need to get to the mReadRenderTarget:\n\n    RenderTargetT *RenderTargetCache\u003cRenderTargetT\u003e::getColorRead(\n    const gl::FramebufferState \u0026state) const\n    {\n        return mReadRenderTarget;\n    }\n    \nLooking around, there is RenderTargetCache\u003cRenderTargetT\u003e::updateColorRenderTarget() which we can steal from and come up with:\n\n  angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *context,\n                                                           bool deferClears,\n                                                           uint32_t colorIndexGL)\n  {\n      ContextVk *contextVk \u003d vk::GetImpl(context);\n      const gl::FramebufferState \u0026state \u003d getState();\n      RenderTargetVk *renderTarget \u003d nullptr;\n\n      if (state.getReadBufferState() !\u003d GL_NONE \u0026\u0026 state.getReadIndex() \u003d\u003d colorIndexGL)\n      {\n          renderTarget \u003d getColorReadRenderTarget();\n      }\n      else\n      {\n          renderTarget \u003d getColorDrawRenderTarget(colorIndexGL);\n      }\n      \nThis version passes the test with the flushAllStagedUpdates() call here removed.\n\nJamie - Is this closer to what you\u0027re describing?",
+      "parentUuid": "2e969818_3b36eb1b",
+      "range": {
+        "startLine": 857,
+        "startChar": 24,
+        "endLine": 857,
+        "endChar": 45
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d3062c_d06e6924",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
