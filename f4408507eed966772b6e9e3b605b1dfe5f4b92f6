@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5db05c7d_392438a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T01:58:08Z",
+      "side": 1,
+      "message": "Seems like Alexis understands what this change is doing, so deferring review to him.",
+      "revId": "f4408507eed966772b6e9e3b605b1dfe5f4b92f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6be40816_b7a52dc6",
