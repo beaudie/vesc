@@ -41,6 +41,53 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3695a8a_12875418",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-22T05:08:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0089b6a0_4f1ef6ff",
+      "range": {
+        "startLine": 2321,
+        "startChar": 27,
+        "endLine": 2321,
+        "endChar": 38
+      },
+      "revId": "b4b6b59f9a5bf979c8706ae2982212dc70569ecc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "843ab572_03a0a94f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2325,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-22T05:08:48Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 2325,
+        "startChar": 44,
+        "endLine": 2325,
+        "endChar": 64
+      },
+      "revId": "b4b6b59f9a5bf979c8706ae2982212dc70569ecc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bea727c_d1f8f783",
@@ -54,6 +101,30 @@
       "writtenOn": "2021-07-21T23:17:53Z",
       "side": 1,
       "message": "It doesn\u0027t look like the resource is deleted by these calls, since the app did that during the run (which is why they need to be regen\u0027ed).",
+      "range": {
+        "startLine": 243,
+        "startChar": 33,
+        "endLine": 243,
+        "endChar": 43
+      },
+      "revId": "b4b6b59f9a5bf979c8706ae2982212dc70569ecc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ded584_9aabed84",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-07-22T05:08:48Z",
+      "side": 1,
+      "message": "This is tricky.  If you look below at ref, you can see that we do delete buffers in the regen calls.  That was due to apps that delete and generate so many buffers, the IDs of the original buffers get re-used by the end of the trace.  They no longer reflect the original buffers and have to be deleted again.  I think this is a bug in the initial implementation and I\u0027ve just been lucky with all the apps I\u0027ve tested with.  I\u0027ve added a DeleteTexture call to the beginning of texture regen calls.  It isn\u0027t quite as elegant as mirroring *all* the setup calls, but I think we do need to delete.  It is also safe to delete a texture that was already deleted, in case the app hasn\u0027t re-used the ID.\n\nIn a PUBG test, it changes a sequence like this:\n\n    glGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateTextureID(593, 0);\n    glGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateTextureID(594, 0);\n    glGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateTextureID(627, 0);\n\nto:\n\n    const GLuint glDeleteTextures_texturesPacked_0[] \u003d { gTextureMap[593] };\n    glDeleteTextures(1, glDeleteTextures_texturesPacked_0);\n    glGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateTextureID(593, 0);\n    const GLuint glDeleteTextures_texturesPacked_1[] \u003d { gTextureMap[594] };\n    glDeleteTextures(1, glDeleteTextures_texturesPacked_1);\n    glGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateTextureID(594, 0);\n    const GLuint glDeleteTextures_texturesPacked_2[] \u003d { gTextureMap[627] };\n    glDeleteTextures(1, glDeleteTextures_texturesPacked_2);\n    glGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateTextureID(627, 0);",
+      "parentUuid": "5bea727c_d1f8f783",
       "range": {
         "startLine": 243,
         "startChar": 33,
