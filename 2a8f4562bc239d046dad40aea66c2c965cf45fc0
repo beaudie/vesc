@@ -139,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36f184c1_b35855cf",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-22T14:12:58Z",
+      "side": 1,
+      "message": "Because the read buffer is also something attached as a color attachment, it should be sufficient to mark the color attachment that the read buffer points to as \"needs update\". This is when you\u0027re processing the dirty bits for the read attachment in syncState.",
+      "parentUuid": "389f2c54_a4bdd1ff",
+      "range": {
+        "startLine": 857,
+        "startChar": 24,
+        "endLine": 857,
+        "endChar": 45
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d3062c_d06e6924",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
