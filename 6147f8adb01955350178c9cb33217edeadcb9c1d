@@ -16,6 +16,24 @@
       "message": "Congrats for the milestone!\nhttps://chromium-swarm.appspot.com/task?id\u003d54e51c3b9e524410 was quite slow, hopefully it\u0027s crbug.com/1217662",
       "revId": "6147f8adb01955350178c9cb33217edeadcb9c1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68715250_5b82027b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T19:19:06Z",
+      "side": 1,
+      "message": "Thanks, and here\u0027s the milestone really achieved: https://chromium-review.googlesource.com/c/angle/angle/+/3046103/1/src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+      "parentUuid": "b54f8847_41ece7d8",
+      "revId": "6147f8adb01955350178c9cb33217edeadcb9c1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
