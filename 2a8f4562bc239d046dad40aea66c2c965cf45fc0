@@ -163,6 +163,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e969818_3b36eb1b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-22T20:01:58Z",
+      "side": 1,
+      "message": "\u003e Because the read buffer is also something attached as a color attachment, it should be sufficient to mark the color attachment that the read buffer points to as \"needs update\".\n\nAm I understanding correctly you are suggesting updating\n\n```\ncase gl::Framebuffer::DIRTY_BIT_READ_BUFFER:\n                ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));\n                break;\n```\n\nwith:\n\n```\ncase gl::Framebuffer::DIRTY_BIT_READ_BUFFER:\n                ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));\n\n                ANGLE_TRY(updateColorAttachment(context, mState.getReadIndex()));\n                shouldUpdateColorMask  \u003d true;\n                shouldUpdateLayerCount \u003d true;\n                dirtyColorAttachments.set(mState.getReadIndex());\n                break;\n```\n\nIf so, this does not appear to be sufficient to fix the test.",
+      "parentUuid": "36f184c1_b35855cf",
+      "range": {
+        "startLine": 857,
+        "startChar": 24,
+        "endLine": 857,
+        "endChar": 45
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d3062c_d06e6924",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
