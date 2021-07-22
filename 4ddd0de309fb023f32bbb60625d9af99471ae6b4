@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "173aee31_6e5eb73d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T14:49:44Z",
+      "side": 1,
+      "message": "Follow up changes enables the test suite on the bots",
+      "revId": "4ddd0de309fb023f32bbb60625d9af99471ae6b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bc1dd6e_b4973d67",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2666,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T14:49:44Z",
+      "side": 1,
+      "message": "Note to self: fix comment",
+      "range": {
+        "startLine": 2665,
+        "startChar": 96,
+        "endLine": 2666,
+        "endChar": 23
+      },
+      "revId": "4ddd0de309fb023f32bbb60625d9af99471ae6b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
