@@ -33,6 +33,24 @@
       "message": "reviewers: I don\u0027t recommend looking too closely at the new results script, as it\u0027s mostly already-reviewed code. I chose to clone it because modifying the original to add build info to histograms for ANGLE would have been moderately invasive, and this gives us a route where we can maintain this script going forward. If you feel that we need to review it more carefully, I can commit the original Chromium script then amend this script to just show the diff with my changes.",
       "revId": "f9b6d33b2dd37628022bc4acfb587e722363c3dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c229c9_571efe72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T14:55:24Z",
+      "side": 1,
+      "message": "Drive-by: What would be nice about that is if we ever want to sync with chromium (because maybe they did something cool, and we really didn\u0027t do anything), we have the diff documented somewhere.",
+      "parentUuid": "9f7cafb4_24bd13dc",
+      "revId": "f9b6d33b2dd37628022bc4acfb587e722363c3dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
