@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd1b5af5_22309bfa",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-22T22:07:40Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "aad0011a_c12e37f7",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 49
+      },
+      "revId": "f8cf32a0736e2a1f3174ede35f84b5c9e2f1b74b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdc5bb33_b7df0221",
