@@ -971,6 +971,14 @@ void LogFeatureStatus(const angle::FeatureSetBase &features,
     }
 }
 
+void LogAllFeaturesStatus(const angle::FeatureSetBase &features)
+{
+    for (auto iter : features.getFeatures())
+    {
+        INFO() << "Feature: " << iter.first << (iter.second->enabled ? " enabled" : " disabled");
+    }
+}
+
 void ApplyFeatureOverrides(angle::FeatureSetBase *features, const egl::DisplayState &state)
 {
     features->overrideFeatures(state.featureOverridesEnabled, true);
@@ -994,6 +1002,8 @@ void ApplyFeatureOverrides(angle::FeatureSetBase *features, const egl::DisplaySt
 
     features->overrideFeatures(overridesDisabled, false);
     LogFeatureStatus(*features, overridesDisabled, false);
+
+    LogAllFeaturesStatus(*features);
 }
 
 void GetSamplePosition(GLsizei sampleCount, size_t index, GLfloat *xy)
