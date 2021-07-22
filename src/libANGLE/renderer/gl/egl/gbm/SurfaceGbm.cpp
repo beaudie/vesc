@@ -41,6 +41,7 @@ egl::Error SurfaceGbm::makeCurrent(const gl::Context *context)
 
 egl::Error SurfaceGbm::swap(const gl::Context *context)
 {
+    fprintf(stdout, "swap\n");
     mBuffer->present(context);
     return egl::NoError();
 }

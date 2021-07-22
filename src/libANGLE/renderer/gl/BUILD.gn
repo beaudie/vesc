@@ -6,7 +6,7 @@
 
 import("../../../../gni/angle.gni")
 
-if (angle_has_build && ozone_platform_gbm) {
+if (angle_has_build && (ozone_platform_wayland || ozone_platform_gbm)) {
   import("//build/config/linux/pkg_config.gni")
 }
 
@@ -156,7 +156,7 @@ if (is_android || is_linux || is_chromeos) {
   ]
 }
 
-if (ozone_platform_gbm) {
+if (ozone_platform_gbm || ozone_platform_wayland) {
   _gl_backend_sources += [
     "egl/gbm/DisplayGbm.cpp",
     "egl/gbm/DisplayGbm.h",
@@ -233,7 +233,7 @@ config("angle_gl_backend_config") {
   if (angle_enable_gl_null) {
     defines += [ "ANGLE_ENABLE_OPENGL_NULL" ]
   }
-  if (ozone_platform_gbm) {
+  if (ozone_platform_wayland || ozone_platform_gbm) {
     defines += [ "ANGLE_USE_GBM" ]
   }
   if (is_apple) {
@@ -278,7 +278,7 @@ angle_source_set("angle_gl_backend") {
       frameworks += [ "Cocoa.framework" ]
     }
   }
-  if (ozone_platform_gbm) {
+  if (ozone_platform_wayland || ozone_platform_gbm) {
     public_configs += [ ":libdrm" ]
     deps += [ "//third_party/minigbm" ]
   }

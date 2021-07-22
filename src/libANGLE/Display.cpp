@@ -299,19 +299,35 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                 impl = new rx::DisplayGbm(state);
                 break;
             }
+            if (platformType == EGL_PLATFORM_SURFACELESS_MESA)
+            {
+                fprintf(stdout, "create rx::DisplayGBM\n");
+                impl = new rx::DisplayGbm(state);
+                break;
+            }
 #        endif
+            fprintf(stdout, "EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE\n");
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
+                fprintf(stdout, "create rx::DisplayEGL\n");
+                impl = new rx::DisplayEGL(state);
+                break;
+            }
+            if (platformType == EGL_PLATFORM_WAYLAND_EXT)
+            {
+                fprintf(stdout, "create DisplayEGL\n");
                 impl = new rx::DisplayEGL(state);
                 break;
             }
 #        if defined(ANGLE_USE_X11)
             if (platformType == EGL_PLATFORM_X11_EXT)
             {
+                fprintf(stdout, "create DisplayGLX\n");
                 impl = new rx::DisplayGLX(state);
                 break;
             }
 #        endif
+            fprintf(stdout, "No display available\n");
             break;
 
 #    elif defined(ANGLE_PLATFORM_ANDROID)
@@ -344,9 +360,16 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                 impl = new rx::DisplayGbm(state);
                 break;
             }
+            if (platformType == EGL_PLATFORM_SURFACELESS_MESA)
+            {
+                fprintf(stdout, "create rx::DisplayGBM\n");
+                impl = new rx::DisplayGbm(state);
+                break;
+            }
 #        endif
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
+                fprintf(stdout, "create DisplayGbm for OPENGLES\n");
                 impl = new rx::DisplayEGL(state);
                 break;
             }
@@ -569,13 +592,14 @@ DisplayState::~DisplayState() {}
 // | ANGLE type | DEVICE type |  PLATFORM type   | Display  |
 // |--------------------------------------------------------|
 // |   OPENGL   |     EGL     |       ANY        |   EGL    |
-// |   OPENGL   |   HARDWARE  |     X11_EXT      |   GLX    |
-// |  OPENGLES  |   HARDWARE  |     X11_EXT      |   GLX    |
-// |  OPENGLES  |     EGL     |       ANY        |   EGL    |
-// |   VULKAN   |   HARDWARE  |     X11_EXT      |  VkXcb   |
-// |   VULKAN   | SWIFTSHADER |     X11_EXT      |  VkXcb   |
-// |  OPENGLES  |   HARDWARE  | SURFACELESS_MESA |   EGL*   |
-// |  OPENGLES  |   HARDWARE  |    DEVICE_EXT    |   EGL    |
+// |   OPENGL   |     EGL     | SURFACELESS_MESA |  ?GBM?   | <--- When dmabuf is available (has
+// libgbm, dmabuf ext). |   OPENGL   |   HARDWARE  |   WAYLAND_EXT    | ?WL_EGL? | <--- When dmabuf
+// is not available and WL_EGL is used |   OPENGL   |   HARDWARE  |     X11_EXT      |   GLX    | |
+// OPENGLES  |   HARDWARE  |     X11_EXT      |   GLX    | |  OPENGLES  |   HARDWARE  | WAYLAND_EXT
+// | ?WL_EGL? | |  OPENGLES  |     EGL     |       ANY        |   EGL    | |   VULKAN   |   HARDWARE
+// |     X11_EXT      |  VkXcb   | |   VULKAN   | SWIFTSHADER |     X11_EXT      |  VkXcb   | |
+// OPENGLES  |   HARDWARE  | SURFACELESS_MESA |   EGL*   | <--- Probably, GBM as well? At least,
+// works with Surfacless impl in Wayland. |  OPENGLES  |   HARDWARE  |    DEVICE_EXT    |   EGL    |
 // |   VULKAN   |   HARDWARE  | SURFACELESS_MESA | VkBase** |
 // |   VULKAN   | SWIFTSHADER | SURFACELESS_MESA | VkBase** |
 // |--------------------------------------------------------|

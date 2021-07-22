@@ -253,10 +253,21 @@ egl::Error DisplayEGL::initialize(egl::Display *display)
         return egl::EglNotInitialized() << "No matching ES Bit";
     }
 
-    std::vector<EGLint> configAttribListBase = {
-        EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER, EGL_SURFACE_TYPE, EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
-        EGL_CONFIG_CAVEAT,     EGL_NONE,       EGL_CONFORMANT,   esBit,
-        EGL_RENDERABLE_TYPE,   esBit,          EGL_NONE};
+    std::vector<EGLint> configAttribListBase = {EGL_BUFFER_SIZE,
+                                                32,
+                                                EGL_ALPHA_SIZE,
+                                                8,
+                                                EGL_BLUE_SIZE,
+                                                8,
+                                                EGL_GREEN_SIZE,
+                                                8,
+                                                EGL_RED_SIZE,
+                                                8,
+                                                EGL_RENDERABLE_TYPE,
+                                                EGL_OPENGL_ES2_BIT,
+                                                EGL_SURFACE_TYPE,
+                                                EGL_WINDOW_BIT,
+                                                EGL_NONE};
 
     mConfigAttribList = configAttribListBase;
 
