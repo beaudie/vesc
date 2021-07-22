@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad0011a_c12e37f7",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T21:10:52Z",
+      "side": 1,
+      "message": "That also weirds me out, since it\u0027s after the UNREACHABLEs (and moves the EptPoints away from its natural position. I reworked this to hopefully satisfy both of us.",
+      "parentUuid": "4cd1dd13_0968b249",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 49
+      },
+      "revId": "f8cf32a0736e2a1f3174ede35f84b5c9e2f1b74b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdc5bb33_b7df0221",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe21622c_27bdb076",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T21:10:52Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "bdc5bb33_b7df0221",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 50
+      },
+      "revId": "f8cf32a0736e2a1f3174ede35f84b5c9e2f1b74b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73a183dd_10f58d6e",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-07-22T21:04:29Z",
       "side": 1,
       "message": "nit: ancestor",
+      "range": {
+        "startLine": 311,
+        "startChar": 19,
+        "endLine": 311,
+        "endChar": 49
+      },
+      "revId": "f8cf32a0736e2a1f3174ede35f84b5c9e2f1b74b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d2802c_3691209a",
+        "filename": "src/compiler/translator/tree_ops/vulkan/DeclarePerVertexBlocks.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-22T21:10:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73a183dd_10f58d6e",
       "range": {
         "startLine": 311,
         "startChar": 19,
