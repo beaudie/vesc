@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "270f5dd9_18e34f46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-22T21:41:46Z",
+      "side": 1,
+      "message": "Should there be a bug tracking disabling this extra config so we don\u0027t use CQ resources on it forever?",
+      "revId": "4abb59678d5f1b8b29dd8cb35b8e36b7f815694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cea22bd0_916a2db8",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-22T21:41:46Z",
+      "side": 1,
+      "message": "nit: Please add comments indicating which field is being assigned.\n\n    dEQPOptions gOptions    \u003d {\n        kDefaultPreRotation,    // preRotation\n        false,                  // enableDirectSPIRVGen\n        false                   // enableRenderDocCapture\n    };",
+      "revId": "4abb59678d5f1b8b29dd8cb35b8e36b7f815694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36b2d5c6_7b89cc57",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-22T21:41:46Z",
+      "side": 1,
+      "message": "Why is DirectSPIRVGen enabled with 270 rotation?   Just to get a bit more coverage with pre-rotation?",
+      "revId": "4abb59678d5f1b8b29dd8cb35b8e36b7f815694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
