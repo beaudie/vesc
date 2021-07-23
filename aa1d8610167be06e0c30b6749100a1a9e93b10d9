@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53d7cf3d_6663a1a2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-23T18:06:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7de2750_bf6596cb",
+      "range": {
+        "startLine": 1742,
+        "startChar": 8,
+        "endLine": 1742,
+        "endChar": 13
+      },
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb5313b7_e88cddbb",
@@ -90,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bec95b3a_39e6a163",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-23T18:06:31Z",
+      "side": 1,
+      "message": "Getting the draw RT first makes the new test fail. Both \n\n```\nmRenderTargetCache.getColorRead(mState);\n```\n\n```\nmRenderTargetCache.getColorDraw(mState, colorIndexGL);\n```\n\nappear to be non-nullptr pointers.",
+      "parentUuid": "61ce5e22_d30a0122",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1754,
+        "endChar": 5
+      },
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cef175b4_d763ecbf",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 12
@@ -101,6 +149,24 @@
       "writtenOn": "2021-07-23T17:47:00Z",
       "side": 1,
       "message": "Comment should say \"clear surface1\"",
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6171a454_8f1e7898",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-23T18:06:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cef175b4_d763ecbf",
       "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -118,6 +184,24 @@
       "writtenOn": "2021-07-23T17:47:00Z",
       "side": 1,
       "message": "This comment also needs updating",
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "794d7726_b867696c",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-23T18:06:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af0ef89d_d30e83d9",
       "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
