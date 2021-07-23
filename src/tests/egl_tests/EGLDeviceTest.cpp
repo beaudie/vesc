@@ -83,6 +83,8 @@ class EGLDeviceCreationTest : public ANGLETest
 
         if (mContext != EGL_NO_CONTEXT)
         {
+            ASSERT_EGL_TRUE(
+                eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
             eglDestroyContext(mDisplay, mContext);
             mContext = EGL_NO_CONTEXT;
         }
