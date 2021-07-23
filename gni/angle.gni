@@ -173,6 +173,10 @@ declare_args() {
   angle_enable_hlsl = angle_enable_d3d9 || angle_enable_d3d11
   angle_enable_essl = angle_enable_gl || use_ozone
   angle_enable_glsl = angle_enable_gl || use_ozone
+  angle_enable_apple_translator_workarounds =
+      is_apple &&
+      (angle_enable_glsl || angle_enable_metal || use_fuzzing_engine)
+
   angle_enable_trace = false
   angle_enable_trace_android_logcat = false
 
