@@ -16,6 +16,23 @@
       "message": "PTAL\n\nNot many other people around unfortunately, but it\u0027s pretty straightforward.",
       "revId": "a6204d881eb8af7a5127c9ce2991de40fa171a82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b6266b_5d043f80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-23T17:57:53Z",
+      "side": 1,
+      "message": "Thanks Shabi. I\u0027m going to land this, since I don\u0027t think we need 2 reviewers here.",
+      "revId": "a6204d881eb8af7a5127c9ce2991de40fa171a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
