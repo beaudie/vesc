@@ -62,6 +62,64 @@
       },
       "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61ce5e22_d30a0122",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-23T17:47:00Z",
+      "side": 1,
+      "message": "+1. Except I would get the draw RT first (as I presume the FBO is more often synced for draw than read), and do the more complicated readRT check if drawRT is nullptr.",
+      "parentUuid": "bb5313b7_e88cddbb",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1754,
+        "endChar": 5
+      },
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cef175b4_d763ecbf",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-23T17:47:00Z",
+      "side": 1,
+      "message": "Comment should say \"clear surface1\"",
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af0ef89d_d30e83d9",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-23T17:47:00Z",
+      "side": 1,
+      "message": "This comment also needs updating",
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
