@@ -1815,18 +1815,11 @@ bool GetSystemInfoVendorIDAndDeviceID(const FunctionsGL *functions,
                                       angle::VendorID *outVendor,
                                       angle::DeviceID *outDevice)
 {
-    bool isGetSystemInfoSuccess = angle::GetSystemInfo(outSystemInfo);
-    if (isGetSystemInfoSuccess && !outSystemInfo->gpus.empty())
-    {
-        *outVendor = outSystemInfo->gpus[outSystemInfo->activeGPUIndex].vendorId;
-        *outDevice = outSystemInfo->gpus[outSystemInfo->activeGPUIndex].deviceId;
-    }
-    else
-    {
-        *outVendor = GetVendorID(functions);
-        *outDevice = GetDeviceID(functions);
-    }
-    return isGetSystemInfoSuccess;
+    // Get vendor and device from GL itself, so on multi-GPU systems the correct GPU is selected.
+    *outVendor = GetVendorID(functions);
+    *outDevice = GetDeviceID(functions);
+    // Gather additional information from the system to detect multi-GPU scenarios.
+    return angle::GetSystemInfo(outSystemInfo);
 }
 
 bool Has9thGenIntelGPU(const angle::SystemInfo &systemInfo)
