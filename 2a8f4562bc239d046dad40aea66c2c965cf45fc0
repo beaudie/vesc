@@ -233,6 +233,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "379bd9ae_99ded2fe",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-23T13:53:32Z",
+      "side": 1,
+      "message": "Thanks Tim! Done.",
+      "parentUuid": "ebb43f4e_6f82b3ee",
+      "range": {
+        "startLine": 857,
+        "startChar": 24,
+        "endLine": 857,
+        "endChar": 45
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82d3062c_d06e6924",
@@ -256,6 +280,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "993105c6_e859c55e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-23T13:53:32Z",
+      "side": 1,
+      "message": "Ack, ran presubmit. Was there something specific about this line that you expected presubmit to catch?",
+      "parentUuid": "82d3062c_d06e6924",
+      "range": {
+        "startLine": 1207,
+        "startChar": 0,
+        "endLine": 1207,
+        "endChar": 24
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "344faefa_534f15e2",
@@ -269,6 +317,30 @@
       "writtenOn": "2021-07-21T20:26:54Z",
       "side": 1,
       "message": "nit: you can omit this. if you want to verify the color, you can use a PBO or another blit call.",
+      "range": {
+        "startLine": 1233,
+        "startChar": 0,
+        "endLine": 1235,
+        "endChar": 51
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "957eab4b_5ca6c675",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-07-23T13:53:32Z",
+      "side": 1,
+      "message": "Removed. This was just a note to see if it helped give any insight as to what was happening.",
+      "parentUuid": "344faefa_534f15e2",
       "range": {
         "startLine": 1233,
         "startChar": 0,
