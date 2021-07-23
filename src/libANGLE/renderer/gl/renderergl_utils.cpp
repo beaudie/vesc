@@ -202,6 +202,7 @@ SwapControlData::SwapControlData()
 VendorID GetVendorID(const FunctionsGL *functions)
 {
     std::string nativeVendorString(GetString(functions, GL_VENDOR));
+    fprintf(stderr, "Native vendor string: '%s'\n", nativeVendorString.c_str());
     // Concatenate GL_RENDERER to the string being checked because some vendors put their names in
     // GL_RENDERER
     nativeVendorString += " ";
@@ -209,32 +210,39 @@ VendorID GetVendorID(const FunctionsGL *functions)
 
     if (nativeVendorString.find("NVIDIA") != std::string::npos)
     {
+        fprintf(stderr, " - NVIDIA\n");
         return VENDOR_ID_NVIDIA;
     }
     else if (nativeVendorString.find("ATI") != std::string::npos ||
              nativeVendorString.find("AMD") != std::string::npos ||
              nativeVendorString.find("Radeon") != std::string::npos)
     {
+        fprintf(stderr, " - AMD\n");
         return VENDOR_ID_AMD;
     }
     else if (nativeVendorString.find("Qualcomm") != std::string::npos)
     {
+        fprintf(stderr, " - Qualcomm\n");
         return VENDOR_ID_QUALCOMM;
     }
     else if (nativeVendorString.find("Intel") != std::string::npos)
     {
+        fprintf(stderr, " - Intel\n");
         return VENDOR_ID_INTEL;
     }
     else if (nativeVendorString.find("Imagination") != std::string::npos)
     {
+        fprintf(stderr, " - Immagination\n");
         return VENDOR_ID_POWERVR;
     }
     else if (nativeVendorString.find("Vivante") != std::string::npos)
     {
+        fprintf(stderr, " - Vivante\n");
         return VENDOR_ID_VIVANTE;
     }
     else
     {
+        fprintf(stderr, " - Unknown\n");
         return VENDOR_ID_UNKNOWN;
     }
 }
@@ -242,6 +250,7 @@ VendorID GetVendorID(const FunctionsGL *functions)
 uint32_t GetDeviceID(const FunctionsGL *functions)
 {
     std::string nativeRendererString(GetString(functions, GL_RENDERER));
+    fprintf(stderr, "Native renderer string: '%s'\n", nativeRendererString.c_str());
     constexpr std::pair<const char *, uint32_t> kKnownDeviceIDs[] = {
         {"Adreno (TM) 418", ANDROID_DEVICE_ID_NEXUS5X},
         {"Adreno (TM) 530", ANDROID_DEVICE_ID_PIXEL1XL},
@@ -252,10 +261,12 @@ uint32_t GetDeviceID(const FunctionsGL *functions)
     {
         if (nativeRendererString.find(knownDeviceID.first) != std::string::npos)
         {
+            fprintf(stderr, " - found it as '%s'\n", knownDeviceID.first);
             return knownDeviceID.second;
         }
     }
 
+    fprintf(stderr, " - unknown\n");
     return 0;
 }
 
@@ -1815,18 +1826,11 @@ bool GetSystemInfoVendorIDAndDeviceID(const FunctionsGL *functions,
                                       angle::VendorID *outVendor,
                                       angle::DeviceID *outDevice)
 {
-    bool isGetSystemInfoSuccess = angle::GetSystemInfo(outSystemInfo);
-    if (isGetSystemInfoSuccess && !outSystemInfo->gpus.empty())
-    {
-        *outVendor = outSystemInfo->gpus[outSystemInfo->activeGPUIndex].vendorId;
-        *outDevice = outSystemInfo->gpus[outSystemInfo->activeGPUIndex].deviceId;
-    }
-    else
-    {
-        *outVendor = GetVendorID(functions);
-        *outDevice = GetDeviceID(functions);
-    }
-    return isGetSystemInfoSuccess;
+    // Get vendor and device from GL itself, so on multi-GPU systems the correct GPU is selected.
+    *outVendor = GetVendorID(functions);
+    *outDevice = GetDeviceID(functions);
+    // Gather additional information from the system to detect multi-GPU scenarios.
+    return angle::GetSystemInfo(outSystemInfo);
 }
 
 bool Has9thGenIntelGPU(const angle::SystemInfo &systemInfo)
