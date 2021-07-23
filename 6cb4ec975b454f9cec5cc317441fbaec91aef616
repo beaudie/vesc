@@ -22,6 +22,30 @@
       },
       "revId": "6cb4ec975b454f9cec5cc317441fbaec91aef616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58127b1e_f7b31f6c",
+        "filename": "infra/specs/PRESUBMIT.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-23T12:47:03Z",
+      "side": 1,
+      "message": "Removed in favor of https://chromium-review.googlesource.com/c/angle/angle/+/3048850/1",
+      "parentUuid": "77d1278a_89eb173a",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 38
+      },
+      "revId": "6cb4ec975b454f9cec5cc317441fbaec91aef616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
