@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5313b7_e88cddbb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-23T16:37:29Z",
+      "side": 1,
+      "message": "Looks like these function calls are too conservative.   We\u0027ll need to get the values directly, since it\u0027s possible for to not have any attachments (so renderTarget remains null).   We should at least be able to add the valid() check once we know the pointer is good.\n\n    RenderTargetVk *renderTarget \u003d nullptr;\n    // Check the read render target first.\n    if (state.getReadBufferState() !\u003d GL_NONE \u0026\u0026 state.getReadIndex() \u003d\u003d colorIndexGL)\n    {\n        renderTarget \u003d mRenderTargetCache.getColorRead(mState);\n    }\n    // If that\u0027s not valid, then default to the draw render target.\n    if (renderTarget \u003d\u003d nullptr)\n    {\n        renderTarget \u003d mRenderTargetCache.getColorDraw(mState, colorIndexGL);\n    }\n\n    // No attachments bound, so nothing to do.\n    if (renderTarget \u003d\u003d nullptr)\n    {\n        return angle::Result::Continue;\n    }\n    ASSERT(renderTarget-\u003egetImageForRenderPass().valid());",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1754,
+        "endChar": 5
+      },
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
