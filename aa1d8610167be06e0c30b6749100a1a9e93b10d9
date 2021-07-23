@@ -138,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "589df280_c7350a47",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-23T18:08:51Z",
+      "side": 1,
+      "message": "Hm, maybe we need to do both when both attachments exist?   I\u0027m not familiar enough with how things work in this area.",
+      "parentUuid": "bec95b3a_39e6a163",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1754,
+        "endChar": 5
+      },
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cef175b4_d763ecbf",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 12
