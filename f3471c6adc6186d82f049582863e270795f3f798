@@ -22,6 +22,30 @@
       },
       "revId": "f3471c6adc6186d82f049582863e270795f3f798",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a8fc256_7b07a38f",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-23T17:54:36Z",
+      "side": 1,
+      "message": "\u003e This gets called by every OpenGLES entry point, right?\n\nNo.   Here is the list of functions that call it, which the majority being EGL:\n\n\u003e    Display::destroyContext\n\u003e    Display::terminate(3 usages)\n\u003e    egl::BindTexImage\n\u003e    egl::ClientWaitSync\n\u003e    egl::ClientWaitSyncKHR\n\u003e    egl::CreateSync\n\u003e    egl::CreateSyncKHR\n\u003e    egl::GetCurrentContext\n\u003e    egl::GetCurrentDisplay(2 usages)\n\u003e    egl::MakeCurrent\n\u003e    egl::PostSubBufferNV\n\u003e    egl::QuerySurface\n\u003e    egl::ReleaseTexImage\n\u003e    egl::ReleaseThread\n\u003e    egl::SignalSyncKHR\n\u003e    egl::StreamConsumerAcquireKHR\n\u003e    egl::StreamConsumerGLTextureExternalKHR\n\u003e    egl::SwapBuffers\n\u003e    egl::SwapBuffersWithDamageKHR\n\u003e    egl::SwapBuffersWithFrameTokenANGLE\n\u003e    egl::Terminate\n\u003e    egl::ValidateBindTexImage\n\u003e    egl::ValidateCreateSyncBase\n\u003e    egl::ValidateQuerySurface\n\u003e    egl::ValidateStreamConsumerAcquireKHR\n\u003e    egl::ValidateStreamConsumerGLTextureExternalAttribsNV\n\u003e    egl::ValidateStreamConsumerGLTextureExternalKHR\n\u003e    egl::ValidateStreamConsumerReleaseKHR\n\u003e    egl::ValidateSwapBuffers\n\u003e    egl::ValidateSwapInterval\n\u003e    egl::ValidateWaitSync\n\u003e    egl::WaitClient\n\u003e    egl::WaitGL\n\u003e    egl::WaitNative\n\u003e    egl::WaitSync\n\u003e    egl::WaitSyncKHR\n\u003e    gl::GetGlobalContext\n\u003e        gl::GenerateContextLostErrorOnCurrentGlobalContext\n\u003e        GL_GetError\n\u003e        GL_GetGraphicsResetStatus\n\u003e        GL_GetGraphicsResetStatusEXT\n\u003e        GL_GetProgramiv\n\u003e        GL_GetProgramivRobustANGLE\n\u003e        GL_GetQueryObjecti64vEXT\n\u003e        GL_GetQueryObjecti64vRobustANGLE\n\u003e        GL_GetQueryObjectivEXT\n\u003e        GL_GetQueryObjectivRobustANGLE\n\u003e        GL_GetShaderiv\n\u003e        GL_GetShaderivRobustANGLE\n\u003e        GL_GetSynciv\n\u003e    ScopedSyncCurrentContextFromThread::~ScopedSyncCurrentContextFromThread\n\nIt\u0027s a decent amount, but few (if any) are performance sensitive, with most of them requiring a CPU stall anyway (wait, swap, etc.).\n\nWe can make this change specific to eglTerminate(), but the overall bug of attempting to use a Context that\u0027s been destroyed would still exist for all of the other commands.\n\nI\u0027m open to suggestions on how to clean up the other Threads if you have any.   Presumably we\u0027d need to a global list of all Threads we\u0027ve seen issue EGL commands so we can iterate through them and update their pointers when a Context is destroyed.   We may be able to restrict this tracking to just eglMakeCurrent() and iterate in eglTerminate().\n\nWhat I don\u0027t know about this approach is how safe it is in terms of multithreading.   How parallel can the execution of these calls be?\n\n\u003e Is the assertion actual harmful or just warning that we may safely ignore? \nIt\u0027s helpful and can\u0027t be ignored since we\u0027d attempt to free resources that don\u0027t exist otherwise.\n\n\u003e Also from the description this sounds like app bug?\n\nThis is not an app bug.   Threads can eglDestroyContext() a context that\u0027s current on another thread and eglTerminate() and display used by multiple threads.\n\nFrom the EGL 1.5 spec describing eglTerminate():\n\n\u003e If contexts or surfaces, created with respect to dpy are current (see section 3.7.3) to any thread, then they are not actually destroyed while they remain\ncurrent.",
+      "parentUuid": "0801d5fd_373b3176",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 0
+      },
+      "revId": "f3471c6adc6186d82f049582863e270795f3f798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
