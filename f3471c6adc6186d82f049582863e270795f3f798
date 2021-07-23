@@ -70,6 +70,30 @@
       },
       "revId": "f3471c6adc6186d82f049582863e270795f3f798",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d4d46e6_d9bfcdaf",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-23T19:15:44Z",
+      "side": 1,
+      "message": "\u003e I am seeing Display::terminate() is calling context-\u003erelease() in a loop and destroying every context in that call, that seems the root cause to me.\n\nCorrect, it is the root cause of the bug (and why I updated the comment to indicate it\u0027s a source for subtle bugs like this).\n\nWhile I agree with you that it seems like the ref counting and releasing isn\u0027t quite implemented correctly here, I\u0027ll need someone with more knowledge of ANGLE\u0027s EGL implementation to chime in on how large of a change that is.\n\nMy concern with trying to make a change like that is presumably it\u0027s currently implemented this way for a reason and \"fixing\" it may significantly increase the scope of the fix.   I\u0027ll try and poke at a fix while we wait for input from Geoff/Jamie (since they are on vacation).\n\nGeoff/Jamie - Thoughts?",
+      "parentUuid": "075afec3_f450b652",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 0
+      },
+      "revId": "f3471c6adc6186d82f049582863e270795f3f798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
