@@ -33,6 +33,24 @@
       "message": "not really clear on the logic of the change but lgtm as most people are out.",
       "revId": "d46446b088038294a5f55588181c443e86e4dfde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c31015c_041d0ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-23T15:06:41Z",
+      "side": 1,
+      "message": "GetSystemInfo uses libpci and sees 2 GPUs. It looks at the vendors, sees Intel and Nvidia, and takes a chance by assuming the Nvidia one is the active one. When it\u0027s wrong, the GL backend applies Nvidia workarounds even if the active GPU is really the Intel one.\n\nThis change makes the vendor detection use the context\u0027s pointers, so the active GPU is always correctly detected.",
+      "parentUuid": "c5f811e1_4f7a270b",
+      "revId": "d46446b088038294a5f55588181c443e86e4dfde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
