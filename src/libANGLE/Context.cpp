@@ -368,7 +368,8 @@ Context::Context(egl::Display *display,
       mOverlay(mImplementation.get()),
       mIsExternal(GetIsExternal(attribs)),
       mSaveAndRestoreState(GetSaveAndRestoreState(attribs)),
-      mIsCurrent(false)
+      mIsCurrent(false),
+      mIsDestroyed(false)
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
@@ -606,6 +607,8 @@ void Context::initializeDefaultResources()
 
 egl::Error Context::onDestroy(const egl::Display *display)
 {
+    mIsDestroyed = true;
+
     if (!mHasBeenCurrent)
     {
         // The context is never current, so default resources are not allocated.

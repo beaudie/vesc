@@ -112,6 +112,11 @@ Surface *Thread::getCurrentReadSurface() const
 
 gl::Context *Thread::getContext() const
 {
+    if (mContext && mContext->isDestroyed())
+    {
+        return nullptr;
+    }
+
     return mContext;
 }
 

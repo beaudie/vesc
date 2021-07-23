@@ -626,6 +626,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool supportsGeometryOrTesselation() const;
     void dirtyAllState();
 
+    bool isDestroyed() const { return mIsDestroyed; }
+
   private:
     void initializeDefaultResources();
 
@@ -797,6 +799,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const bool mSaveAndRestoreState;
 
     bool mIsCurrent;
+    bool mIsDestroyed;
 };
 
 class ScopedContextRef
