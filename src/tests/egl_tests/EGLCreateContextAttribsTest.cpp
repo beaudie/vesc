@@ -210,6 +210,7 @@ TEST_P(EGLCreateContextAttribsTest, IMGContextPriorityExtension)
     }
 
     // Cleanup contexts
+    eglDestroyContext(mDisplay, context);
     eglTerminate(mDisplay);
 }
 
