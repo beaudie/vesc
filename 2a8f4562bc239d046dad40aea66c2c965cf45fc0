@@ -304,6 +304,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f9b7a10_40b4ca55",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-23T17:29:50Z",
+      "side": 1,
+      "message": "Yeah, the formatting was off above.",
+      "parentUuid": "993105c6_e859c55e",
+      "range": {
+        "startLine": 1207,
+        "startChar": 0,
+        "endLine": 1207,
+        "endChar": 24
+      },
+      "revId": "2a8f4562bc239d046dad40aea66c2c965cf45fc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "344faefa_534f15e2",

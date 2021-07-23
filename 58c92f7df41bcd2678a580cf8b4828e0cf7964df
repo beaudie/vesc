@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a84f964_5ceb9079",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-23T17:29:50Z",
+      "side": 1,
+      "message": "Maybe leave a comment indicating why we specifically check the read index/state here.",
+      "range": {
+        "startLine": 1742,
+        "startChar": 0,
+        "endLine": 1746,
+        "endChar": 8
+      },
+      "revId": "58c92f7df41bcd2678a580cf8b4828e0cf7964df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
