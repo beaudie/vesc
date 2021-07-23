@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da95a396_2d30e157",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-07-23T13:21:41Z",
+      "side": 0,
+      "message": "Hmm, don\u0027t you now loose what you added here? https://chromium-review.googlesource.com/c/angle/angle/+/3035447\n\nNow angle_assert_always_on is not explicitly set any more. so e.g. \nangle_debug_layers_enabled \u003d is_debug || angle_assert_always_on\nwill be false.",
+      "range": {
+        "startLine": 98,
+        "startChar": 33,
+        "endLine": 98,
+        "endChar": 60
+      },
+      "revId": "9f7a86a80874b202fbd5338d79fd4f6eca5d9485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
