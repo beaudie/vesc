@@ -121,6 +121,8 @@ class Display final : public LabeledObject,
   public:
     ~Display() override;
 
+    void removeFromPlatformDisplayMap();
+
     void setLabel(EGLLabelKHR label) override;
     EGLLabelKHR getLabel() const override;
 
@@ -272,8 +274,6 @@ class Display final : public LabeledObject,
 
     const DisplayState &getState() const { return mState; }
 
-    const ContextSet &getContextSet() { return mContextSet; }
-
     const angle::FrontendFeatures &getFrontendFeatures() { return mFrontendFeatures; }
     void overrideFrontendFeatures(const std::vector<std::string> &featureNames, bool enabled);
 
@@ -308,7 +308,7 @@ class Display final : public LabeledObject,
     void updateAttribsFromEnvironment(const AttributeMap &attribMap);
 
     Error restoreLostDevice();
-    Error releaseContext(gl::Context *context);
+    Error releaseContext(gl::Context *context, Thread *thread);
 
     void initDisplayExtensions();
     void initVendorString();
@@ -371,6 +371,8 @@ class Display final : public LabeledObject,
 
     std::mutex mDisplayGlobalMutex;
     std::mutex mProgramCacheMutex;
+
+    bool mIsTerminated;
 };
 
 }  // namespace egl
