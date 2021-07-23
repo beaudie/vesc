@@ -51,6 +51,23 @@
       "parentUuid": "c5f811e1_4f7a270b",
       "revId": "d46446b088038294a5f55588181c443e86e4dfde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe99c93b_a8d60690",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-23T15:38:16Z",
+      "side": 1,
+      "message": "@Ken, looks like some dual-GPU bots were passing tests because non-Intel workarounds were being applied to Intel tests. If you have any information on what the other GPU is on the failing bots, I could try and apply the workarounds appropriately.\n\nIf you have resources to actually look into what workarounds are necessary on Intel, that would be even better.",
+      "revId": "d46446b088038294a5f55588181c443e86e4dfde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
