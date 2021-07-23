@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e85c02d_d84491d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-23T14:59:07Z",
+      "side": 1,
+      "message": "I can confirm that locally, chrome unstable has disable_sync_control_support disabled due to this bug, and with this change it becomes enabled (so it\u0027s working)",
+      "revId": "d46446b088038294a5f55588181c443e86e4dfde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
