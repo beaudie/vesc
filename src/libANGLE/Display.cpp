@@ -976,6 +976,9 @@ Error Display::terminate(Thread *thread)
         }
 
         // Force to release all refs, since the context could be current on other threads.
+        // Note: This can introduce subtle bugs where other threads currently have Thread::mContext
+        // pointing to this context, leading to crashes when they try to use this context after it
+        // has been released (and destroyed).
         while (context->getRefCount())
         {
             context->release();
