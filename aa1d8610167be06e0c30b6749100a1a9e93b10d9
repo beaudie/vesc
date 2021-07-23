@@ -162,6 +162,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cca56f42_cd84b34a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-23T18:11:55Z",
+      "side": 1,
+      "message": "But shouldn\u0027t they point to the same image? If they don\u0027t, then getting either first is wrong as Tim pointed out.\n\nCan you investigate a bit please and figure out how exactly the two RTs are different?",
+      "parentUuid": "589df280_c7350a47",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1754,
+        "endChar": 5
+      },
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cef175b4_d763ecbf",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 12
