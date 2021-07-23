@@ -51,7 +51,9 @@ EGLNativePixmapType X11Pixmap::getNativePixmap() const
     return mPixmap;
 }
 
+#if !defined(ANGLE_USE_VULKAN_DISPLAY)
 OSPixmap *CreateOSPixmap()
 {
     return new X11Pixmap();
 }
+#endif
