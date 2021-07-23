@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0801d5fd_373b3176",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-07-23T17:07:14Z",
+      "side": 1,
+      "message": "This gets called by every OpenGLES entry point, right? If yes, we should explore different fix that does not involve adding any extra instructions here.\n\nIs the assertion actual harmful or just warning that we may safely ignore? \nAlso from the description this sounds like app bug?",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 0
+      },
+      "revId": "f3471c6adc6186d82f049582863e270795f3f798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
