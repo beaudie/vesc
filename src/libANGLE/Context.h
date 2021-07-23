@@ -419,7 +419,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool isExternal() const { return mIsExternal; }
     bool saveAndRestoreState() const { return mSaveAndRestoreState; }
-    bool isCurrent() const { return mIsCurrent; }
 
     void getBooleanvImpl(GLenum pname, GLboolean *params) const;
     void getFloatvImpl(GLenum pname, GLfloat *params) const;
@@ -799,8 +798,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     const bool mIsExternal;
     const bool mSaveAndRestoreState;
-
-    bool mIsCurrent;
 };
 
 class ScopedContextRef

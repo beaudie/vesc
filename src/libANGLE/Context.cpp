@@ -374,8 +374,7 @@ Context::Context(egl::Display *display,
       mRefCount(0),
       mOverlay(mImplementation.get()),
       mIsExternal(GetIsExternal(attribs)),
-      mSaveAndRestoreState(GetSaveAndRestoreState(attribs)),
-      mIsCurrent(false)
+      mSaveAndRestoreState(GetSaveAndRestoreState(attribs))
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
@@ -639,10 +638,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
         mGLES1Renderer->onDestroy(this, &mState);
     }
 
-    if (mIsCurrent)
-    {
-        ANGLE_TRY(unMakeCurrent(display));
-    }
+    ANGLE_TRY(unMakeCurrent(display));
 
     for (auto fence : mFenceNVMap)
     {
@@ -739,8 +735,6 @@ egl::Error Context::makeCurrent(egl::Display *display,
 
     if (!mHasBeenCurrent)
     {
-        ASSERT(!mIsCurrent);
-
         initializeDefaultResources();
         initRendererString();
         initVersionStrings();
@@ -760,10 +754,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
         mHasBeenCurrent = true;
     }
 
-    if (mIsCurrent)
-    {
-        ANGLE_TRY(unsetDefaultFramebuffer());
-    }
+    ANGLE_TRY(unsetDefaultFramebuffer());
 
     getShareGroup()->getFrameCaptureShared()->onMakeCurrent(this, drawSurface);
 
@@ -783,16 +774,11 @@ egl::Error Context::makeCurrent(egl::Display *display,
         return angle::ResultToEGL(implResult);
     }
 
-    mIsCurrent = true;
-
     return egl::NoError();
 }
 
 egl::Error Context::unMakeCurrent(const egl::Display *display)
 {
-    ASSERT(mIsCurrent);
-    mIsCurrent = false;
-
     ANGLE_TRY(angle::ResultToEGL(mImplementation->onUnMakeCurrent(this)));
 
     ANGLE_TRY(unsetDefaultFramebuffer());
