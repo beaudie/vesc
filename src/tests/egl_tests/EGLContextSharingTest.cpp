@@ -35,6 +35,8 @@ class EGLContextSharingTest : public ANGLETest
   public:
     EGLContextSharingTest() : mContexts{EGL_NO_CONTEXT, EGL_NO_CONTEXT}, mTexture(0) {}
 
+    void testSetUp() override { mMajorVersion = GetParam().majorVersion; }
+
     void testTearDown() override
     {
         glDeleteTextures(1, &mTexture);
@@ -43,6 +45,9 @@ class EGLContextSharingTest : public ANGLETest
 
         if (display != EGL_NO_DISPLAY)
         {
+            EXPECT_EGL_TRUE(
+                eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
             for (auto &context : mContexts)
             {
                 SafeDestroyContext(display, context);
@@ -53,8 +58,32 @@ class EGLContextSharingTest : public ANGLETest
         getEGLWindow()->makeCurrent();
     }
 
+    bool chooseConfig(EGLDisplay display, EGLConfig *config) const
+    {
+        EGLint count         = 0;
+        EGLint clientVersion = mMajorVersion == 3 ? EGL_OPENGL_ES3_BIT : EGL_OPENGL_ES2_BIT;
+        EGLint attribs[]     = {EGL_RED_SIZE,
+                            8,
+                            EGL_GREEN_SIZE,
+                            8,
+                            EGL_BLUE_SIZE,
+                            8,
+                            EGL_ALPHA_SIZE,
+                            0,
+                            EGL_RENDERABLE_TYPE,
+                            clientVersion,
+                            EGL_SURFACE_TYPE,
+                            EGL_WINDOW_BIT,
+                            EGL_NONE};
+
+        bool result = eglChooseConfig(display, attribs, config, 1, &count);
+        EXPECT_EGL_TRUE(result && (count > 0));
+        return result;
+    }
+
     EGLContext mContexts[2];
     GLuint mTexture;
+    EGLint mMajorVersion = 0;
 };
 
 // Tests that creating resources works after freeing the share context.
@@ -109,14 +138,15 @@ TEST_P(EGLContextSharingTest, DisplayShareGroupContextCreation)
     ASSERT_NE(EGL_NO_CONTEXT, mContexts[0]);
     ASSERT_NE(EGL_NO_CONTEXT, mContexts[1]);
     eglDestroyContext(display, mContexts[0]);
+    mContexts[0] = EGL_NO_CONTEXT;
 
     // Try creating a context that is not in the global share group but tries to share with a
     // context that is
     const EGLint notInShareGroupContextAttribs[] = {
         EGL_CONTEXT_CLIENT_VERSION, 2, EGL_DISPLAY_TEXTURE_SHARE_GROUP_ANGLE, EGL_FALSE, EGL_NONE};
-    mContexts[1] = eglCreateContext(display, config, mContexts[1], notInShareGroupContextAttribs);
+    mContexts[0] = eglCreateContext(display, config, mContexts[1], notInShareGroupContextAttribs);
     ASSERT_EGL_ERROR(EGL_BAD_ATTRIBUTE);
-    ASSERT_TRUE(mContexts[1] == EGL_NO_CONTEXT);
+    ASSERT_TRUE(mContexts[0] == EGL_NO_CONTEXT);
 }
 
 // Tests the sharing of textures using EGL_ANGLE_display_texture_share_group
@@ -539,6 +569,139 @@ TEST_P(EGLContextSharingTest, DeleteReaderOfSharedTexture)
         eglDestroySurface(dpy, surface[t]);
         eglDestroyContext(dpy, ctx[t]);
     }
+}
+
+// Test that eglTerminate() with a thread doesn't cause other threads to crash.
+TEST_P(EGLContextSharingTest, EglTerminateMultiThreaded)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    // TIMTIM
+    ANGLE_SKIP_TEST_IF(true);
+
+    // http://anglebug.com/6208
+    // The following EGL calls led to a crash in eglMakeCurrent():
+    //
+    // Thread A: eglMakeCurrent(context A)
+    // Thread B: eglDestroyContext(context A)
+    //        B: eglTerminate() <<--- this release context A
+    // Thread A: eglMakeCurrent(context B)
+
+    constexpr size_t kThreadCount    = 2;
+    EGLSurface surface[kThreadCount] = {EGL_NO_SURFACE, EGL_NO_SURFACE};
+    EGLContext ctx[kThreadCount]     = {EGL_NO_CONTEXT, EGL_NO_CONTEXT};
+
+    EGLint pbufferAttributes[] = {EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE, EGL_NONE};
+
+    EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
+    EGLDisplay dpy     = eglGetPlatformDisplayEXT(
+        EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+    EXPECT_TRUE(dpy != EGL_NO_DISPLAY);
+    EXPECT_EGL_TRUE(eglInitialize(dpy, nullptr, nullptr));
+
+    EGLConfig config = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(chooseConfig(dpy, &config));
+    surface[0] = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
+    EXPECT_EGL_SUCCESS();
+    const EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, GetParam().majorVersion, EGL_NONE};
+    ctx[0]                        = eglCreateContext(dpy, config, nullptr, contextAttribs);
+    EXPECT_NE(EGL_NO_CONTEXT, ctx[0]);
+
+    // Synchronization tools to ensure the two threads are interleaved as designed by this test.
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        Thread0Clear,
+        Thread1Terminate,
+        Thread0MakeCurrentContext1,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    std::thread thread0 = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface[0], surface[0], ctx[0]));
+        EXPECT_EGL_SUCCESS();
+
+        // Clear and read back to make sure thread 0 uses context 0.
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
+
+        // Wait for thread 1 to clear.
+        threadSynchronization.nextStep(Step::Thread0Clear);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread1Terminate));
+
+        // Locally created display was terminated. Go back to the getEGLWindow()'s.
+        dpy = getEGLWindow()->getDisplay();
+        EXPECT_EGL_TRUE(eglInitialize(dpy, nullptr, nullptr));
+        EXPECT_TRUE(chooseConfig(dpy, &config));
+        surface[1] = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
+        EXPECT_EGL_SUCCESS();
+        ctx[1] = eglCreateContext(dpy, config, nullptr, contextAttribs);
+        EXPECT_NE(EGL_NO_CONTEXT, ctx[1]);
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface[1], surface[1], ctx[1]));
+
+        // Clear and read back to make sure thread 0 uses context 1.
+        glClearColor(1.0, 1.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        EXPECT_PIXEL_EQ(0, 0, 255, 255, 0, 255);
+
+        eglDestroySurface(dpy, surface[1]);
+        eglDestroyContext(dpy, ctx[1]);
+
+        threadSynchronization.nextStep(Step::Thread0MakeCurrentContext1);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+
+        EXPECT_EGL_SUCCESS();
+    });
+
+    std::thread thread1 = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        // Wait for thread 0 to clear.
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0Clear));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface[0], surface[0], ctx[0]));
+        EXPECT_EGL_SUCCESS();
+
+        // Clear and read back to make sure thread 1 uses context 0.
+        glClearColor(0.0, 1.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+        // Destroy context 0 while both threads have it current.
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+        eglDestroyContext(dpy, ctx[0]);
+        EXPECT_EGL_SUCCESS();
+        eglTerminate(dpy);
+        EXPECT_EGL_SUCCESS();
+
+        // Wait for the thread 0 to make a new context and glClear().
+        threadSynchronization.nextStep(Step::Thread1Terminate);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0MakeCurrentContext1));
+
+        threadSynchronization.nextStep(Step::Finish);
+
+        EXPECT_EGL_SUCCESS();
+    });
+
+    thread0.join();
+    thread1.join();
+
+    ASSERT_NE(currentStep, Step::Abort);
+
+    // Cleanup
+    dpy = getEGLWindow()->getDisplay();
+    EXPECT_EGL_TRUE(eglInitialize(dpy, nullptr, nullptr));
+    EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    eglDestroyContext(dpy, ctx[1]);
 }
 }  // anonymous namespace
 
