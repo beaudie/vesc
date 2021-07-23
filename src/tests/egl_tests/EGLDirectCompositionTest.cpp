@@ -291,6 +291,8 @@ TEST_P(EGLDirectCompositionTest, RenderSolidColor)
     ASSERT_EGL_TRUE(pixelBuffer[(50 * 50 * 4) + 2] == 0);
     ASSERT_EGL_TRUE(pixelBuffer[(50 * 50 * 4) + 3] == 255);
 
+    ASSERT_TRUE(eglMakeCurrent(mEglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) !=
+                EGL_FALSE);
     ASSERT_EGL_TRUE(eglDestroySurface(mEglDisplay, s));
     ASSERT_EGL_TRUE(eglDestroyContext(mEglDisplay, mEglContext));
 }
