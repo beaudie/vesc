@@ -68,6 +68,24 @@
       "message": "@Ken, looks like some dual-GPU bots were passing tests because non-Intel workarounds were being applied to Intel tests. If you have any information on what the other GPU is on the failing bots, I could try and apply the workarounds appropriately.\n\nIf you have resources to actually look into what workarounds are necessary on Intel, that would be even better.",
       "revId": "d46446b088038294a5f55588181c443e86e4dfde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ea28185_97eff340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-23T19:41:45Z",
+      "side": 1,
+      "message": "I think something\u0027s going more deeply wrong in this CL. For example the webgl-multi-draw and instanced-arrays failures here:\nhttps://ci.chromium.org/ui/p/chromium/builders/try/mac-angle-chromium-try/3445/overview\n\nare on single-GPU, Intel Macs. Shrek worked around macOS OpenGL driver bugs on Intel GPUs to make these tests pass, and I think those workarounds aren\u0027t being applied correctly any more.\n\nIt would be helpful if you could add logging to your CL to see what the behavioral differences are on the bots.",
+      "parentUuid": "fe99c93b_a8d60690",
+      "revId": "d46446b088038294a5f55588181c443e86e4dfde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
