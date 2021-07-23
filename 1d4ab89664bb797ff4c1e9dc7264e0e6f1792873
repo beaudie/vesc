@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce01298e_69a55bef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-23T23:04:24Z",
+      "side": 1,
+      "message": "This version of the CL results in:\n\n    void SetupReplay()\n    {\n        EGLContext context \u003d eglGetCurrentContext();\n        gContextMap[3] \u003d context;\n\n        asphalt_9::InitReplay();\n        asphalt_9::SetupReplayContextShared();\n        SetupReplayContext3();\n\n        EGLContext context4 \u003d eglCreateContext(nullptr, nullptr, context, nullptr);\n        eglMakeCurrent(nullptr, nullptr, nullptr, context4);\n        gContextMap[4] \u003d context4;\n        asphalt_9::SetupReplayContext4();\n        EGLContext context5 \u003d eglCreateContext(nullptr, nullptr, context, nullptr);\n        eglMakeCurrent(nullptr, nullptr, nullptr, context5);\n        gContextMap[5] \u003d context5;\n        asphalt_9::SetupReplayContext5();\n        EGLContext context6 \u003d eglCreateContext(nullptr, nullptr, context, nullptr);\n        eglMakeCurrent(nullptr, nullptr, nullptr, context6);\n        gContextMap[6] \u003d context6;\n        asphalt_9::SetupReplayContext6();\n        EGLContext context7 \u003d eglCreateContext(nullptr, nullptr, context, nullptr);\n        eglMakeCurrent(nullptr, nullptr, nullptr, context7);\n        gContextMap[7] \u003d context7;\n        asphalt_9::SetupReplayContext7();\n\n        eglMakeCurrent(nullptr, nullptr, nullptr, context);\n    }\n    \nIt no longer passes in EGLWindow, and instead the EGL calls are routed into TracePerfTest where the GLWindow stuff is handled.\n\nWith this cleanup, I think all that\u0027s left is the refactor to handle rerouting the EGL calls to WGL, which I\u0027ll need Jamie\u0027s help doing once he gets back.",
+      "revId": "1d4ab89664bb797ff4c1e9dc7264e0e6f1792873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
