@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77d1278a_89eb173a",
+        "filename": "infra/specs/PRESUBMIT.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-07-23T01:11:11Z",
+      "side": 1,
+      "message": "nit: unrelated",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 38
+      },
+      "revId": "6cb4ec975b454f9cec5cc317441fbaec91aef616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
