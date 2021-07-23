@@ -46,6 +46,30 @@
       },
       "revId": "f3471c6adc6186d82f049582863e270795f3f798",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "075afec3_f450b652",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-07-23T18:22:57Z",
+      "side": 1,
+      "message": "I think the correct fix is to refcount the context properly. It appears that the threadA is not really holding onto the context even though it has a pointer to the contextA. I am seeing Display::terminate() is calling context-\u003erelease() in a loop and destroying every context in that call, that seems the root cause to me. The context (or part of it) should be kept alive until `Thread A: eglMakeCurrent(context B)` which unbinds contextA, at that time it should decrement A\u0027s refcount and destroy contextA.",
+      "parentUuid": "0a8fc256_7b07a38f",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 0
+      },
+      "revId": "f3471c6adc6186d82f049582863e270795f3f798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
