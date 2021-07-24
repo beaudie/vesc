@@ -16,6 +16,24 @@
       "message": "This looks good from Firefox\u0027s standpoint, thanks!",
       "revId": "ae6819169a0f74040960080ca0faee4ef8ffc539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed05ef8d_0bdde720",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-24T03:43:15Z",
+      "side": 1,
+      "message": "Perfect, thanks for confirming.",
+      "parentUuid": "b37a9eed_09a7d230",
+      "revId": "ae6819169a0f74040960080ca0faee4ef8ffc539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
