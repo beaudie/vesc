@@ -133,6 +133,30 @@
       },
       "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da69ac31_cd2502c7",
+        "filename": "src/tests/deqp_support/deqp_gles31_rotate_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-26T16:54:56Z",
+      "side": 1,
+      "message": "These tests passed for us on Windows. Let me update it to be 3576 VULKAN LINUX",
+      "parentUuid": "d8d0281e_69163f23",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 4
+      },
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
