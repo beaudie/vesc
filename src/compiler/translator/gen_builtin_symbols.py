@@ -1779,13 +1779,11 @@ def process_single_function_group(shader_type, group_name, group, symbols, varia
 
             core_props = copy.deepcopy(function_props)
 
-            # Adjust the props by updating the level, removing extension and adding suffix
+            # Adjust the props by updating the level and removing extension.  The suffix is
+            # untouched; the extension and promotoed functions are identical.
             core_level = function_props['essl_extension_becomes_core_in']
             core_props['essl_level'] = core_level
             del core_props['essl_extension']
-            suffix = core_props['suffix'] if 'suffix' in core_props else ''
-            suffix += generate_suffix_from_level(core_level)
-            core_props['suffix'] = suffix
 
             process_single_function(shader_type, group_name, core_props, symbols, variables,
                                     functions, group_op_suffix, unmangled_function_if_statements,
