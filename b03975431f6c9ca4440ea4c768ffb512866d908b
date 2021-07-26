@@ -396,6 +396,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e8ad25cf_20607729",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-26T10:14:44Z",
+      "side": 1,
+      "message": "Well, that was essentially the reason why I wanted to put the list of tests that we don\u0027t want to run (because of some bug) into ta different file, because it is not an expectation that these tests are not run, it is a precondition, and the file name would express this. \n\nAnyway, with the approach we\u0027re taking now my argument is that \"EXCLUDE_FROM_RUN\" is an imperative, indicating, that this is an up-front decision not to run the test.\n\n\"SKIPPED\" is past tense, so it expresses a result, which could indeed be the result of the test not being considered up-front, or not being run for other reasons by end2end_tests. \n\nOne could also just add a comment to the expectations files to give a clear indication how these values are to be interpreted, and I think this is what I\u0027ll do.",
+      "parentUuid": "6b241a8a_c15b5bd5",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
