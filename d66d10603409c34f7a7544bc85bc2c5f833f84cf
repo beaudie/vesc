@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72a07708_9b6e36ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-26T13:46:03Z",
+      "side": 1,
+      "message": "Failure is a flake, next one is patch failure (needs rebase because of infra change prior to this change)",
+      "revId": "d66d10603409c34f7a7544bc85bc2c5f833f84cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
