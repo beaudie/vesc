@@ -296,6 +296,13 @@ spv::ExecutionMode GetGeometryOutputExecutionMode(TLayoutPrimitiveType primitive
 
 spv::ExecutionMode GetTessEvalInputExecutionMode(TLayoutTessEvaluationType inputType)
 {
+    // It's invalid for input type to not be specified, but that's a link-time error.  Default to
+    // anything.
+    if (inputType == EtetUndefined)
+    {
+        inputType = EtetTriangles;
+    }
+
     switch (inputType)
     {
         case EtetTriangles:
@@ -1447,8 +1454,8 @@ spirv::IdRef SPIRVBuilder::declareVariable(spirv::IdRef typeId,
                                     ? &mSpirvCurrentFunctionBlocks.front().localVariables
                                     : &mSpirvVariableDecls;
 
-    const spirv::IdRef variableId    = getNewId(decorations);
     const spirv::IdRef typePointerId = getTypePointerId(typeId, storageClass);
+    const spirv::IdRef variableId    = getNewId(decorations);
 
     spirv::WriteVariable(spirvSection, typePointerId, variableId, storageClass, initializerId);
 

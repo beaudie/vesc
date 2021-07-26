@@ -5831,8 +5831,8 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         // Tessellation shaders can have their input or output qualified with |patch|.
         if (type.getQualifier() == EvqPatchIn || type.getQualifier() == EvqPatchOut)
         {
-            spirv::WriteDecorate(mBuilder.getSpirvDecorations(), nonArrayTypeId,
-                                 spv::DecorationPatch, {});
+            spirv::WriteDecorate(mBuilder.getSpirvDecorations(), variableId, spv::DecorationPatch,
+                                 {});
         }
     }
     else if (isInterfaceBlock)
