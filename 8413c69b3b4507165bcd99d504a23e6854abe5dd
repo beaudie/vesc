@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6022a640_eec42684",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-26T16:48:25Z",
+      "side": 1,
+      "message": "Originally defined here: https://chromium-review.googlesource.com/c/angle/angle/+/2849615\n\nAnd the min/max bounding box values were moved to State.h",
+      "parentUuid": "7c877c38_7c37ec67",
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d08d1918_e0df9009",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c21fe905_d433e44b",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-26T16:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d08d1918_e0df9009",
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e995210_0a8a2431",
@@ -65,6 +101,30 @@
       "writtenOn": "2021-07-26T16:04:40Z",
       "side": 1,
       "message": "nit 5896 is marked as duplicate, please use 3576 (also in the commit message). Any initial triage to understand why these fail?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 4
+      },
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8d0281e_69163f23",
+        "filename": "src/tests/deqp_support/deqp_gles31_rotate_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-26T16:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e995210_0a8a2431",
       "range": {
         "startLine": 15,
         "startChar": 0,
