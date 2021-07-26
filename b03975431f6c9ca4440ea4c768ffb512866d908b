@@ -420,6 +420,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1a04dec0_2d2f17e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-26T16:06:02Z",
+      "side": 1,
+      "message": "what is the difference right now between EXCLUDE_FROM_RUN and SKIPPED? They are synonyms from my reading.\n\nCan we determine a name that makes it clear what the difference is?",
+      "parentUuid": "e8ad25cf_20607729",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
