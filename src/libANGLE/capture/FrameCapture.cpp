@@ -5047,14 +5047,13 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
     if (isCallValid)
     {
         mFrameCalls.emplace_back(std::move(call));
+        maybeCapturePostCallUpdates(context);
     }
     else
     {
         INFO() << "FrameCapture: Not capturing invalid call to "
                << GetEntryPointName(call.entryPoint);
     }
-
-    maybeCapturePostCallUpdates(context);
 }
 
 void FrameCaptureShared::maybeCapturePostCallUpdates(const gl::Context *context)
