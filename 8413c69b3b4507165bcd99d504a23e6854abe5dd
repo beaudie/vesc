@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "989bbaf1_94f91afc",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-26T17:56:05Z",
+      "side": 1,
+      "message": "Thanks. Please add a quick negative end2end test for it (try to use the function, but not have the extension enabled, something like that and expect failure).",
+      "parentUuid": "c21fe905_d433e44b",
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e995210_0a8a2431",
