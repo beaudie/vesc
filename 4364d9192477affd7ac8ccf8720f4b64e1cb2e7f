@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90a236e2_3272d35f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-07-26T20:46:06Z",
+      "side": 1,
+      "message": "I can only rubber stamp, since I don\u0027t understand how the changes in those autogen files affect binary size.\n\nAlso, it\u0027s weird that many bots failed on PS1 but then passed in PS2.\nIs this because of the relation chain?\nThis change is not really related to the other changes in the chain, right?",
+      "revId": "4364d9192477affd7ac8ccf8720f4b64e1cb2e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43ad3802_debdf779",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5809,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-07-26T20:46:06Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with this code, could you explain what the change in this number means?",
+      "range": {
+        "startLine": 5809,
+        "startChar": 57,
+        "endLine": 5809,
+        "endChar": 67
+      },
+      "revId": "4364d9192477affd7ac8ccf8720f4b64e1cb2e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
