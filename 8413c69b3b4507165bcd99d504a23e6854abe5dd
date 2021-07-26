@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8e3293e_85a30d0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-26T15:59:23Z",
+      "side": 1,
+      "message": "PTAL. This change is an updated patchset from: https://chromium-review.googlesource.com/c/angle/angle/+/3036582/4",
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
