@@ -33,6 +33,46 @@
       "message": "Missing Caps.h from the other change?",
       "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d08d1918_e0df9009",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-26T16:04:40Z",
+      "side": 1,
+      "message": "Should there be an extension check?",
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e995210_0a8a2431",
+        "filename": "src/tests/deqp_support/deqp_gles31_rotate_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-26T16:04:40Z",
+      "side": 1,
+      "message": "nit 5896 is marked as duplicate, please use 3576 (also in the commit message). Any initial triage to understand why these fail?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 4
+      },
+      "revId": "8413c69b3b4507165bcd99d504a23e6854abe5dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
