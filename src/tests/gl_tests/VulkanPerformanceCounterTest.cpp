@@ -3002,8 +3002,6 @@ void main()
 
     GLsizei offset = 0;
 
-    uint32_t descriptorSetAllocationsBefore = 0;
-
     for (int iteration = 0; iteration < kIterations; ++iteration)
     {
         glUniform1i(uniLoc, 1);
@@ -3016,12 +3014,6 @@ void main()
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid *>(offset));
         offset += sizeof(GLColor);
-
-        // Capture the allocations counter after the first run.
-        if (iteration == 0)
-        {
-            descriptorSetAllocationsBefore = hackANGLE().descriptorSetAllocations;
-        }
     }
 
     ASSERT_GL_NO_ERROR();
