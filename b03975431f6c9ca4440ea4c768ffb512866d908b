@@ -444,6 +444,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0ca1d70b_7e5af5f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-26T16:59:55Z",
+      "side": 1,
+      "message": "I\u0027m not a native English speaker, but to me EXCLUDE_FROM_RUN sounds like a request to not run the test, which also implies that there will be no result.  \n\nSKIPPED on the other hand is a result, so I don\u0027t see how these two can be synonyms. AFAICS EXCLUDED_FROM_RUN would be a synonym for SKIPPED, so yes SKIPPED is a possible interpretation of the (non-existing) result of the tests that were requested to be excluded, but EXCLUDE_FROM_RUN is not a result, so it can\u0027t be taken for one emitted by end2end_tests, which by exclusion makes it clear what SKIPPED stands for. \n\nI\u0027ve added a section to the comment to describe what tags are supported, and what they stand for. I think that this is better to use likely overly long words that make it completely explicit what each entry means. Such a comment makes sense anyway, to make it clear why we exclude tests from running up front, instead of just making them CRASH, TIMEOUT, or COMPILE_FAILED. \n\nNow if this is not to your liking, then please propose some names.",
+      "parentUuid": "1a04dec0_2d2f17e9",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
