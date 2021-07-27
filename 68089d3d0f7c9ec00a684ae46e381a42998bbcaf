@@ -70,6 +70,24 @@
       "parentUuid": "157f7cd0_a10d7afb",
       "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae27cbe3_492aeba3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-07-27T18:13:59Z",
+      "side": 1,
+      "message": "Would it be possible to change glslang to post-submit once direct is the default?",
+      "parentUuid": "11899ae1_7f2c6bbc",
+      "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
