@@ -243,7 +243,6 @@ id<MTLDevice> DisplayMtl::getMetalDeviceMatchingAttribute(const egl::AttributeMa
             {
                 NSLog(@"Using Metal Device: %@", [device name]);
                 return device;
-                break;
             }
         }
     }
@@ -299,7 +298,6 @@ SurfaceImpl *DisplayMtl::createPbufferFromClientBuffer(const egl::SurfaceState &
     {
         case EGL_IOSURFACE_ANGLE:
             return new IOSurfaceSurfaceMtl(this, state, clientBuffer, attribs);
-            break;
         default:
             UNREACHABLE();
     }
@@ -1149,8 +1147,10 @@ bool DisplayMtl::supportsAppleGPUFamily(uint8_t iOSFamily) const
             return false;
     }
 
+#    if TARGET_OS_IOS || TARGET_OS_TV
     return [getMetalDevice() supportsFeatureSet:featureSet];
-#endif      // TARGET_OS_IOS || TARGET_OS_TV
+#    endif
+#endif  // TARGET_OS_MACCATALYST
 }
 
 bool DisplayMtl::supportsMacGPUFamily(uint8_t macFamily) const
