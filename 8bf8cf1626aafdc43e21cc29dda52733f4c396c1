@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbd971f_d8941016",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-07-27T23:30:52Z",
+      "side": 1,
+      "message": "Thanks for suppressing, a couple nits:",
+      "revId": "8bf8cf1626aafdc43e21cc29dda52733f4c396c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e824de_3a12f0c8",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-07-27T23:30:52Z",
+      "side": 1,
+      "message": "This is too broad, please reduce this a bit to:\ndEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.*",
+      "range": {
+        "startLine": 368,
+        "startChar": 22,
+        "endLine": 368,
+        "endChar": 78
+      },
+      "revId": "8bf8cf1626aafdc43e21cc29dda52733f4c396c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae6ec93e_38e676d2",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-07-27T23:30:52Z",
+      "side": 1,
+      "message": "This is too broad, looks like only these tests fail:\ndEQP-GLES3.functional.texture.specification.teximage3d_pbo.r8*\ndEQP-GLES3.functional.texture.specification.teximage3d_pbo.rg8*\ndEQP-GLES3.functional.texture.specification.teximage3d_pbo.r16*",
+      "range": {
+        "startLine": 369,
+        "startChar": 22,
+        "endLine": 369,
+        "endChar": 75
+      },
+      "revId": "8bf8cf1626aafdc43e21cc29dda52733f4c396c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
