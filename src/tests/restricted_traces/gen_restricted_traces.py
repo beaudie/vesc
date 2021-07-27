@@ -45,6 +45,7 @@ HEADER_TEMPLATE = """\
 #include <cstdint>
 #include <vector>
 #include <KHR/khrplatform.h>
+#include <EGL/egl.h>
 
 // See util/util_export.h for details on import/export labels.
 #if !defined(ANGLE_TRACE_EXPORT)
@@ -93,6 +94,7 @@ static constexpr size_t kTraceInfoMaxNameLen = 32;
 
 static constexpr uint32_t kDefaultReplayContextClientMajorVersion = 3;
 static constexpr uint32_t kDefaultReplayContextClientMinorVersion = 1;
+static constexpr uint32_t kDefaultReplayDrawSurfaceColorSpace = EGL_COLORSPACE_LINEAR;
 
 struct TraceInfo
 {{
@@ -102,6 +104,7 @@ struct TraceInfo
     uint32_t endFrame;
     uint32_t drawSurfaceWidth;
     uint32_t drawSurfaceHeight;
+    uint32_t drawSurfaceColorSpace;
     char name[kTraceInfoMaxNameLen];
 }};
 
@@ -198,32 +201,56 @@ def gen_gni(traces, gni_file, format_args):
     return True
 
 
-def contains_context_version(trace):
-    """Determines if the trace contains the major/minor context version"""
+def contains_string(trace, string):
+    """Determines if the trace contains a string"""
     for file in os.listdir(trace):
         if fnmatch.fnmatch(file, '*.h'):
             with open(os.path.join(trace, file)) as f:
-                if 'kReplayContextClientMajorVersion' in f.read():
+                if string in f.read():
                     return True
     return False
+
+
+def contains_context_version(trace):
+    """Determines if the trace contains the major/minor context version"""
+    return contains_string(trace, 'kReplayContextClientMajorVersion')
+
+
+def contains_colorspace(trace):
+    """Determines if the trace contains an EGL surface color space"""
+    return contains_string(trace, 'kReplayDrawSurfaceColorSpace')
+
+
+def insert_trace_name(string, name):
+    if "%s" in string:
+        return string % name
+    else:
+        return string
 
 
 def get_trace_info(trace):
     # Some traces don't contain major/minor version, so use defaults
     info = []
-    defaults = ''
     if contains_context_version(trace):
         info += ["%s::kReplayContextClientMajorVersion", "%s::kReplayContextClientMinorVersion"]
     else:
-        defaults = "kDefaultReplayContextClientMajorVersion, kDefaultReplayContextClientMinorVersion,"
+        info += [
+            "kDefaultReplayContextClientMajorVersion", "kDefaultReplayContextClientMinorVersion"
+        ]
 
     info += [
         "%s::kReplayFrameStart", "%s::kReplayFrameEnd", "%s::kReplayDrawSurfaceWidth",
-        "%s::kReplayDrawSurfaceHeight", "\"%s\""
+        "%s::kReplayDrawSurfaceHeight"
     ]
 
-    merged_info = defaults + ", ".join([element % trace for element in info])
-    return merged_info
+    if contains_colorspace(trace):
+        info += ["%s::kReplayDrawSurfaceColorSpace"]
+    else:
+        info += ["kDefaultReplayDrawSurfaceColorSpace"]
+
+    info += ["\"%s\""]
+
+    return ", ".join([insert_trace_name(element, trace) for element in info])
 
 
 def get_context(trace):
