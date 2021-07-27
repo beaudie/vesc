@@ -16,6 +16,24 @@
       "message": "For how long do we need to keep running both versions?\nI\u0027m worried that if we also duplicate gles31 tests, we\u0027d run out of capacity.\nWould it be possible to stop running gles2 and gles3 when you add gles31?",
       "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99b25fb7_d5eae0a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-27T01:03:00Z",
+      "side": 1,
+      "message": "Anything is possible, though it would be easy to break tests. I don\u0027t believe we would need to have both versions running for too long, maybe two or three months? Once this path proves capable, we can remove glslang-based testing (and move to post commit?) until it\u0027s entirely removed.\n\nI thought dEQP tests are fast enough? How about something like ES3.1 on windows (because newer driver), ES3 and ES2 on Linux? Android is obviously more critical, can we afford running everything on that? Otherwise ES3.1 on Android is probably more important.",
+      "parentUuid": "e3cbee9a_b0cf0760",
+      "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
