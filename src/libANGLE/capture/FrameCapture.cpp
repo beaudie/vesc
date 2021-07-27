@@ -5433,6 +5433,9 @@ void FrameCaptureShared::onMakeCurrent(const gl::Context *context, const egl::Su
         return;
     }
 
+    mDrawSurfaceColorSpaces[context->id()] =
+        egl::FromEGLenum<egl::ColorSpace>(drawSurface->getGLColorspace());
+
     // Track the width and height of the draw surface as provided to makeCurrent
     mDrawSurfaceDimensions[context->id()] =
         gl::Extents(drawSurface->getWidth(), drawSurface->getHeight(), 1);
@@ -5685,6 +5688,8 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
            << mDrawSurfaceDimensions.at(contextId).width << ";\n";
     header << "constexpr EGLint kReplayDrawSurfaceHeight = "
            << mDrawSurfaceDimensions.at(contextId).height << ";\n";
+    header << "constexpr EGLenum kReplayDrawSurfaceColorSpace = "
+           << mDrawSurfaceColorSpaces.at(contextId) << ";\n";
     header << "constexpr EGLint kDefaultFramebufferRedBits = "
            << (config ? std::to_string(config->redSize) : "EGL_DONT_CARE") << ";\n";
     header << "constexpr EGLint kDefaultFramebufferGreenBits = "

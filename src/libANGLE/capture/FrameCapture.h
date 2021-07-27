@@ -347,6 +347,9 @@ using TextureLevelDataMap = std::map<gl::TextureID, TextureLevels>;
 // Map from ContextID to surface dimensions
 using SurfaceDimensions = std::map<gl::ContextID, gl::Extents>;
 
+// Map from ContextID to surface color space
+using SurfaceColorSpaces = std::map<gl::ContextID, egl::ColorSpace>;
+
 using CallVector = std::vector<std::vector<CallCapture> *>;
 
 class FrameCapture final : angle::NonCopyable
@@ -510,6 +513,7 @@ class FrameCaptureShared final : angle::NonCopyable
     bool mIsFirstFrame   = true;
     bool mWroteIndexFile = false;
     SurfaceDimensions mDrawSurfaceDimensions;
+    SurfaceColorSpaces mDrawSurfaceColorSpaces;
     gl::AttribArray<size_t> mClientArraySizes;
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
