@@ -221,36 +221,32 @@ def contains_colorspace(trace):
     return contains_string(trace, 'kReplayDrawSurfaceColorSpace')
 
 
-def insert_trace_name(string, name):
-    if "%s" in string:
-        return string % name
-    else:
-        return string
-
-
 def get_trace_info(trace):
     # Some traces don't contain major/minor version, so use defaults
     info = []
     if contains_context_version(trace):
-        info += ["%s::kReplayContextClientMajorVersion", "%s::kReplayContextClientMinorVersion"]
+        info += [
+            f"{trace}::kReplayContextClientMajorVersion",
+            f"{trace}::kReplayContextClientMinorVersion"
+        ]
     else:
         info += [
             "kDefaultReplayContextClientMajorVersion", "kDefaultReplayContextClientMinorVersion"
         ]
 
     info += [
-        "%s::kReplayFrameStart", "%s::kReplayFrameEnd", "%s::kReplayDrawSurfaceWidth",
-        "%s::kReplayDrawSurfaceHeight"
+        f"{trace}::kReplayFrameStart", f"{trace}::kReplayFrameEnd",
+        f"{trace}::kReplayDrawSurfaceWidth", f"{trace}::kReplayDrawSurfaceHeight"
     ]
 
     if contains_colorspace(trace):
-        info += ["%s::kReplayDrawSurfaceColorSpace"]
+        info += [f"{trace}::kReplayDrawSurfaceColorSpace"]
     else:
         info += ["kDefaultReplayDrawSurfaceColorSpace"]
 
-    info += ["\"%s\""]
+    info += [f"\"{trace}\""]
 
-    return ", ".join([insert_trace_name(element, trace) for element in info])
+    return ", ".join(info)
 
 
 def get_context(trace):
