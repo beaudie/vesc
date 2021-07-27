@@ -57,6 +57,7 @@ struct ANGLE_UTIL_EXPORT ConfigParameters
     EGLint samples;
     Optional<bool> contextProgramCacheEnabled;
     EGLenum resetStrategy;
+    EGLint colorSpace;
 };
 
 class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
