@@ -16,6 +16,24 @@
       "message": "This shouldn\u0027t be removed. hackANGLE() is doing work!",
       "revId": "2ce8181788dec2d17bd05159824f8d21ee1c8a06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ac08f2d_a8c9479e",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3023,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-07-27T12:41:15Z",
+      "side": 0,
+      "message": "Fixed, maybe?",
+      "parentUuid": "ded9020a_caca8c14",
+      "revId": "2ce8181788dec2d17bd05159824f8d21ee1c8a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
