@@ -34,6 +34,24 @@
       "parentUuid": "ded9020a_caca8c14",
       "revId": "2ce8181788dec2d17bd05159824f8d21ee1c8a06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d36e57_5eb9b442",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3023,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-27T14:51:32Z",
+      "side": 0,
+      "message": "Probably works, but could you instead revert this and add ANGLE_UNUSED_VARIABLE after this line? I\u0027m thinking we should add validation to the value of `descriptorSetAllocationsBefore` down the line (which is beyond the scope of this change)",
+      "parentUuid": "3ac08f2d_a8c9479e",
+      "revId": "2ce8181788dec2d17bd05159824f8d21ee1c8a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
