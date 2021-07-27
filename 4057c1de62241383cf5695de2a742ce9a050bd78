@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceff62ea_f730ce95",
+        "filename": "src/compiler/translator/SymbolTable_ESSL_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 18353,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-27T01:19:54Z",
+      "side": 0,
+      "message": "Ref",
+      "revId": "4057c1de62241383cf5695de2a742ce9a050bd78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
