@@ -32,7 +32,8 @@ ConfigParameters::ConfigParameters()
       clientArraysEnabled(true),
       robustAccess(false),
       samples(-1),
-      resetStrategy(EGL_NO_RESET_NOTIFICATION_EXT)
+      resetStrategy(EGL_NO_RESET_NOTIFICATION_EXT),
+      colorSpace(EGL_DONT_CARE)
 {}
 
 ConfigParameters::~ConfigParameters() = default;
@@ -416,6 +417,12 @@ bool EGLWindow::initializeSurface(OSWindow *osWindow,
         surfaceAttributes.push_back(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE);
         surfaceAttributes.push_back(mConfigParams.robustResourceInit.value() ? EGL_TRUE
                                                                              : EGL_FALSE);
+    }
+
+    if (mConfigParams.colorSpace != EGL_DONT_CARE)
+    {
+        surfaceAttributes.push_back(EGL_GL_COLORSPACE_KHR);
+        surfaceAttributes.push_back(mConfigParams.colorSpace);
     }
 
     surfaceAttributes.push_back(EGL_NONE);
