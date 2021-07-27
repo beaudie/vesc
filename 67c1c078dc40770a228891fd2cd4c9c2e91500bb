@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a6634d_374b52c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-27T12:44:04Z",
+      "side": 1,
+      "message": "This is just to make the python code nicer. Since this requires Python 3.6+ I separated this from the previous commit to see it the CI likes it.",
+      "revId": "67c1c078dc40770a228891fd2cd4c9c2e91500bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
