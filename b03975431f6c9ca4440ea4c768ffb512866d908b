@@ -492,6 +492,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "13cde4f0_a4a207eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-27T16:23:37Z",
+      "side": 1,
+      "message": "I disagree there\u0027s not much point. The comment helps but it\u0027s much better if the expectations are self-documenting. Don\u0027t worry about length - it\u0027s worth the cost if it makes maintenance better. How about GTEST_SKIP(PED) and CAPTURE_SKIP(PED) ? The tense of the verbs is not meaningful as to what the intent of the skip is.\n\nI\u0027m OOO but happy to take this up offline to unblock this review when I get back. I\u0027d love to land this code and think this one last change is important.",
+      "parentUuid": "405f1374_c4b80a2c",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
