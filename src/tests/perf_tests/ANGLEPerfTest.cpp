@@ -688,6 +688,7 @@ void ANGLERenderTest::SetUp()
     mConfigParams.alphaBits   = 8;
     mConfigParams.depthBits   = 24;
     mConfigParams.stencilBits = 8;
+    mConfigParams.colorSpace  = mTestParams.colorSpace;
 
     if (!mGLWindow->initializeGL(mOSWindow, mEntryPointsLib.get(), mTestParams.driver, withMethods,
                                  mConfigParams))

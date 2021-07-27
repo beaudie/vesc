@@ -418,6 +418,9 @@ bool EGLWindow::initializeSurface(OSWindow *osWindow,
                                                                              : EGL_FALSE);
     }
 
+    surfaceAttributes.push_back(EGL_GL_COLORSPACE_KHR);
+    surfaceAttributes.push_back(mConfigParams.colorSpace);
+
     surfaceAttributes.push_back(EGL_NONE);
 
     osWindow->resetNativeWindow();

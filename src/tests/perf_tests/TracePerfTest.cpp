@@ -1612,6 +1612,7 @@ TracePerfParams CombineTestID(const TracePerfParams &in, RestrictedTraceID id)
     out.minorVersion    = traceInfo.contextClientMinorVersion;
     out.windowWidth     = traceInfo.drawSurfaceWidth;
     out.windowHeight    = traceInfo.drawSurfaceHeight;
+    out.colorSpace      = traceInfo.drawSurfaceColorSpace;
     return out;
 }
 

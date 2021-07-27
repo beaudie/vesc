@@ -41,6 +41,7 @@ struct ANGLE_UTIL_EXPORT ConfigParameters
     int alphaBits;
     int depthBits;
     int stencilBits;
+    EGLenum colorSpace = EGL_COLORSPACE_LINEAR;
 
     Optional<bool> webGLCompatibility;
     Optional<bool> robustResourceInit;
