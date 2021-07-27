@@ -584,6 +584,19 @@ void TCompiler::enableValidateFunctionCall(bool enable)
     mValidateASTOptions.validateFunctionCall = enable;
 }
 
+bool TCompiler::disableValidateVariableReferences()
+{
+    bool wasEnabled                                = mValidateASTOptions.validateVariableReferences;
+    mValidateASTOptions.validateVariableReferences = false;
+    return wasEnabled;
+}
+
+void TCompiler::enableValidateVariableReferences(bool enable)
+{
+    ASSERT(!mValidateASTOptions.validateVariableReferences);
+    mValidateASTOptions.validateVariableReferences = enable;
+}
+
 bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
                                     const TParseContext &parseContext,
                                     ShCompileOptions compileOptions)

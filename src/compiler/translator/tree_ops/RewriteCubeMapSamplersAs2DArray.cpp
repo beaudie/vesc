@@ -951,15 +951,11 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
     TIntermFunctionDefinition *mCoordTranslationFunctionImplicitDecl;
 };
 
-}  // anonymous namespace
-
-bool RewriteCubeMapSamplersAs2DArray(TCompiler *compiler,
-                                     TIntermBlock *root,
-                                     TSymbolTable *symbolTable,
-                                     bool isFragmentShader)
+bool RewriteCubeMapSamplersAs2DArrayImpl(TCompiler *compiler,
+                                         TIntermBlock *root,
+                                         TSymbolTable *symbolTable,
+                                         bool isFragmentShader)
 {
-    bool enableValidateFunctionCall = compiler->disableValidateFunctionCall();
-
     RewriteCubeMapSamplersAs2DArrayTraverser traverser(symbolTable, isFragmentShader);
     root->traverse(&traverser);
     if (!traverser.updateTree(compiler, root))
@@ -981,9 +977,22 @@ bool RewriteCubeMapSamplersAs2DArray(TCompiler *compiler,
         root->insertChildNodes(firstFunctionIndex,
                                TIntermSequence({coordTranslationFunctionDeclImplicit}));
     }
+    return true;
+}
+}  // anonymous namespace
+
+bool RewriteCubeMapSamplersAs2DArray(TCompiler *compiler,
+                                     TIntermBlock *root,
+                                     TSymbolTable *symbolTable,
+                                     bool isFragmentShader)
+{
+    bool enableValidateFunctionCall = compiler->disableValidateFunctionCall();
+
+    bool result =
+        RewriteCubeMapSamplersAs2DArrayImpl(compiler, root, symbolTable, isFragmentShader);
 
     compiler->enableValidateFunctionCall(enableValidateFunctionCall);
-    return compiler->validateAST(root);
+    return result && compiler->validateAST(root);
 }
 
 }  // namespace sh
