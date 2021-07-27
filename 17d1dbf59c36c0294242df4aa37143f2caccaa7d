@@ -22,6 +22,30 @@
       },
       "revId": "17d1dbf59c36c0294242df4aa37143f2caccaa7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c74fb5_c688f4b6",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T00:36:28Z",
+      "side": 1,
+      "message": "We now use a ResourceMap for mProgramUsedStagesMap",
+      "parentUuid": "93035f62_d956070d",
+      "range": {
+        "startLine": 33,
+        "startChar": 44,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "17d1dbf59c36c0294242df4aa37143f2caccaa7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a6b0b80_8cba8de3",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T00:36:28Z",
+      "side": 1,
+      "message": "\u003e Also I\u0027m wondering what the value of storing this info continually in memory is - can you compute it inline in validate() and then discard it once the function returns? I didn\u0027t look closely to see how difficult this is.\nYou\u0027re referring to mProgramUsedStagesMap? - if so we have to continually store this as it only updates when glUseProgramStages is called\n\n\u003e Well, you should be able to turn the inner for loop into a bitset check, right?\nDone",
+      "parentUuid": "b945be3a_57fba892",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 9
+      },
+      "revId": "aeae44a83004d20ec83625bf6256fe2aad372e47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "52a8145f_d35695c3",
         "filename": "src/libANGLE/Shader.h",
         "patchSetId": 6
