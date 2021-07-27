@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1fe607c_3d846583",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T23:48:41Z",
+      "side": 1,
+      "message": "These have been removed.",
+      "parentUuid": "ddf58b02_72e1d1b2",
+      "range": {
+        "startLine": 1560,
+        "startChar": 0,
+        "endLine": 1562,
+        "endChar": 52
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a01ebc4_b6931da6",
@@ -88,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5f51d77_39f49e89",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T23:48:41Z",
+      "side": 1,
+      "message": "done in ProgramBinaryTest.cpp",
+      "parentUuid": "7c0777c9_27e2c3bb",
+      "range": {
+        "startLine": 461,
+        "startChar": 0,
+        "endLine": 465,
+        "endChar": 13
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "886f7a84_4083f468",
@@ -101,6 +149,24 @@
       "writtenOn": "2021-07-19T16:54:15Z",
       "side": 1,
       "message": "Where is this called?   Program::linkImpl() will only call the version above with a ProgramState.",
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33b6b9b7_bc66655c",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T23:48:41Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "886f7a84_4083f468",
       "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -122,6 +188,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3d2298c_ca0eaffc",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T23:48:41Z",
+      "side": 1,
+      "message": "I\u0027ve gone back to using a separate struct",
+      "parentUuid": "a43fb776_7e5312a5",
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e34b34b_40b74da4",
@@ -135,6 +219,30 @@
       "writtenOn": "2021-07-19T12:09:24Z",
       "side": 1,
       "message": "I don\u0027t see any code which uses this variable - can you remove it?",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 338,
+        "endChar": 77
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e336d0f8_81cce00a",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T23:48:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e34b34b_40b74da4",
       "range": {
         "startLine": 337,
         "startChar": 0,
@@ -168,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce368dd_7f9d31e0",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T23:48:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68d47d02_b14f7f0b",
+      "range": {
+        "startLine": 1510,
+        "startChar": 33,
+        "endLine": 1510,
+        "endChar": 65
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de33b5d8_2965885e",
@@ -181,6 +313,30 @@
       "writtenOn": "2021-07-19T12:09:24Z",
       "side": 1,
       "message": "nit: GetMergedVaryingsFromExecutable\n\nActually maybe make this a member of ProgramExecutable now?",
+      "range": {
+        "startLine": 1082,
+        "startChar": 22,
+        "endLine": 1082,
+        "endChar": 50
+      },
+      "revId": "3b2152967d32f4af1c052cba71fc68e8cdabc610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad954e8d_3d30a43a",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-07-27T23:48:41Z",
+      "side": 1,
+      "message": "Newest patch doesn\u0027t take in programExecutable now, I left it where it is as it\u0027s not associated with the executable now that we\u0027ve done the separate linking struct\n\nRenamed to GetMergedVaryingsFromLinkingVariables",
+      "parentUuid": "de33b5d8_2965885e",
       "range": {
         "startLine": 1082,
         "startChar": 22,
