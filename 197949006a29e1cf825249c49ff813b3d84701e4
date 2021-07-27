@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eeb5839_cdb061da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-27T12:41:55Z",
+      "side": 1,
+      "message": "To deal with EGL color spaces and generate strings from the enums, I added a new entry in the packed_egl_enums.",
+      "revId": "197949006a29e1cf825249c49ff813b3d84701e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
