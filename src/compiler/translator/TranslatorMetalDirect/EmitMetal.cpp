@@ -2015,14 +2015,10 @@ bool GenMetalTraverser::visitAggregate(Visit, TIntermAggregate *aggregateNode)
                                 groupedTraverse(operandNode);
                                 return false;
                             }
-                            else
-                            {
-                                groupedTraverse(operandNode);
-                                mOut << opName;
-                                return false;
-                            }
+                            groupedTraverse(operandNode);
+                            mOut << opName;
+                            return false;
                         }
-                        break;
 
                         case 2:
                         {
@@ -2033,7 +2029,6 @@ bool GenMetalTraverser::visitAggregate(Visit, TIntermAggregate *aggregateNode)
                             groupedTraverse(rightNode);
                             return false;
                         }
-                        break;
 
                         default:
                             UNREACHABLE();

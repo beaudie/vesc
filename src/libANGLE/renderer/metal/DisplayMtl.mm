@@ -243,7 +243,6 @@ id<MTLDevice> DisplayMtl::getMetalDeviceMatchingAttribute(const egl::AttributeMa
             {
                 NSLog(@"Using Metal Device: %@", [device name]);
                 return device;
-                break;
             }
         }
     }
@@ -299,7 +298,6 @@ SurfaceImpl *DisplayMtl::createPbufferFromClientBuffer(const egl::SurfaceState &
     {
         case EGL_IOSURFACE_ANGLE:
             return new IOSurfaceSurfaceMtl(this, state, clientBuffer, attribs);
-            break;
         default:
             UNREACHABLE();
     }
