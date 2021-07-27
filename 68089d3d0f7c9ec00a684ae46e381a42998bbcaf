@@ -52,6 +52,24 @@
       "parentUuid": "99b25fb7_d5eae0a7",
       "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11899ae1_7f2c6bbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-27T18:12:21Z",
+      "side": 1,
+      "message": "I see. Would Android be able to handle ES3.1 only?\n\n\u003e I was hoping for something like 1 week.\n\nI would love to, but I suspect we would want to keep glslang around for a few months (even if disabled by default) in case a new app starts failing shader compilation and we need to compare the output of ANGLE with glslang\u0027s.\n\nAlso, taking into account vacations, I\u0027d say one month is the minimum!",
+      "parentUuid": "157f7cd0_a10d7afb",
+      "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
