@@ -365,6 +365,11 @@
 5172 MAC OPENGL AMD : dEQP-GLES3.functional.shaders.fragdata.valid_uniform_index = FAIL
 5172 MAC OPENGL AMD : dEQP-GLES3.functional.shaders.fragdata.draw_buffers = FAIL
 
+6222 MAC OPENGL AMD : dEQP-GLES3.functional.texture.specification.texsubimage* = FAIL
+6222 MAC OPENGL AMD : dEQP-GLES3.functional.texture.specification.teximage* = FAIL
+
+6223 MAC METAL AMD : dEQP-GLES3.functional.shaders.discard.basic_always = FAIL
+
 // Mac Intel crashes
 2137 MAC OPENGL INTEL : dEQP-GLES3.functional.shaders.discard.function_static_loop_never = SKIP
 2137 MAC OPENGL INTEL : dEQP-GLES3.functional.shaders.discard.dynamic_loop_never = SKIP
