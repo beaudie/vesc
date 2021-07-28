@@ -106,6 +106,24 @@
       "parentUuid": "ae27cbe3_492aeba3",
       "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22213d78_256e705b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-28T20:10:33Z",
+      "side": 1,
+      "message": "Shabi, I\u0027d suggest you remove glslang as soon as possible. i.e. when you switch, make a CL to make the feature default and remove glslang testing at the same time. Let\u0027s not be overly cautious, we have pretty good testing and we can revert if  anything breaks.",
+      "parentUuid": "2483aafc_d3435f44",
+      "revId": "68089d3d0f7c9ec00a684ae46e381a42998bbcaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
