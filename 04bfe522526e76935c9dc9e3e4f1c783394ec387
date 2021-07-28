@@ -16,6 +16,24 @@
       "message": "Is there a test that can be enabled for this, or is that part of the GLES 3.2 deqp stuff?",
       "revId": "04bfe522526e76935c9dc9e3e4f1c783394ec387",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e4b5388_d6f7c9fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T01:10:08Z",
+      "side": 1,
+      "message": "The latter!",
+      "parentUuid": "e91b65ee_e775fa97",
+      "revId": "04bfe522526e76935c9dc9e3e4f1c783394ec387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
