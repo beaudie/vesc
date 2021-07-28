@@ -122,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d640d1b_f31987bb",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T23:35:52Z",
+      "side": 1,
+      "message": "Thanks for your help on this Shabi - this test\u0027s now passing without turning off validateMultiDeclarations.",
+      "parentUuid": "1d2b64c3_94ea9ad3",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33b508ee_df14d43b",
