@@ -37,7 +37,7 @@ ShShaderOutput CompilerMtl::getTranslatorOutputType() const
 
 bool CompilerMtl::useDirectToMSLCompiler()
 {
-    return false;
+    return true;
 }
 
 }  // namespace rx

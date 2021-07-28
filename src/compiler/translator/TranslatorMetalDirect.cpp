@@ -10,7 +10,8 @@
 #include "common/utilities.h"
 #include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
-#include "compiler/translator/OutputVulkanGLSL.h"
+#include "compiler/translator/OutputGLSLBase.h"
+#include "compiler/translator/OutputTree.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.h"
 #include "compiler/translator/TranslatorMetalDirect/AstHelpers.h"
@@ -26,6 +27,7 @@
 #include "compiler/translator/TranslatorMetalDirect/RewriteKeywords.h"
 #include "compiler/translator/TranslatorMetalDirect/RewriteOutArgs.h"
 #include "compiler/translator/TranslatorMetalDirect/RewritePipelines.h"
+#include "compiler/translator/TranslatorMetalDirect/RewriteStructSamplersMetal.h"
 #include "compiler/translator/TranslatorMetalDirect/RewriteUnaddressableReferences.h"
 #include "compiler/translator/TranslatorMetalDirect/SeparateCompoundExpressions.h"
 #include "compiler/translator/TranslatorMetalDirect/SeparateCompoundStructDeclarations.h"
@@ -42,6 +44,8 @@
 #include "compiler/translator/tree_ops/RewriteDfdy.h"
 #include "compiler/translator/tree_ops/RewriteStructSamplers.h"
 #include "compiler/translator/tree_ops/apple/RewriteRowMajorMatrices.h"
+#include "compiler/translator/tree_ops/vulkan/MonomorphizeUnsupportedFunctionsInVulkanGLSL.h"
+#include "compiler/translator/tree_ops/vulkan/SeparateStructFromUniformDeclarations.h"
 #include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/tree_util/DriverUniform.h"
 #include "compiler/translator/tree_util/FindFunction.h"
@@ -491,6 +495,8 @@ ANGLE_NO_DISCARD bool TranslatorMetalDirect::insertSampleMaskWritingLogic(
     // This transformation leaves the tree in an inconsistent state by using a variable that's
     // defined in text, outside of the knowledge of the AST.
     mValidateASTOptions.validateVariableReferences = false;
+    // It also uses a function call (ANGLE_writeSampleMask) that's unknown to the AST.
+    mValidateASTOptions.validateFunctionCall = false;
 
     TSymbolTable *symbolTable = &getSymbolTable();
 
@@ -756,6 +762,9 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         }
     }
 
+#define USE_OLD_REWRITE_STRUCT_SAMPLERS 0
+
+#if USE_OLD_REWRITE_STRUCT_SAMPLERS
     if (aggregateTypesUsedForUniforms > 0)
     {
         if (!NameEmbeddedStructUniformsMetal(this, root, &symbolTable))
@@ -763,9 +772,16 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             return false;
         }
 
+        // TODO(anglebug.com/5505): the RewriteStructSamplersMetal pass currently fails
+        // several AST validation passes.
+        // mValidateASTOptions.validateQualifiers         = false;
+        // mValidateASTOptions.validateFunctionCall       = false;
+        // mValidateASTOptions.validateVariableReferences = false;
+        // mValidateASTOptions.validateExpressionTypes    = false;
+
         int removedUniformsCount;
         bool rewriteStructSamplersResult =
-            RewriteStructSamplers(this, root, &symbolTable, &removedUniformsCount);
+            RewriteStructSamplersMetal(this, root, &symbolTable, &removedUniformsCount);
 
         if (!rewriteStructSamplersResult)
         {
@@ -773,6 +789,44 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         }
         defaultUniformCount -= removedUniformsCount;
     }
+#else
+    // If there are any function calls that take array-of-array of opaque uniform parameters, or
+    // other opaque uniforms that need special handling in Vulkan, such as atomic counters,
+    // monomorphize the functions by removing said parameters and replacing them in the function
+    // body with the call arguments.
+    //
+    // This has a few benefits:
+    //
+    // - It dramatically simplifies future transformations w.r.t to samplers in structs, array of
+    //   arrays of opaque types, atomic counters etc.
+    // - Avoids the need for shader*ArrayDynamicIndexing Vulkan features.
+    if (!MonomorphizeUnsupportedFunctionsInVulkanGLSL(this, root, &getSymbolTable(),
+                                                      compileOptions))
+    {
+        return false;
+    }
+
+    if (aggregateTypesUsedForUniforms > 0)
+    {
+        if (!NameEmbeddedStructUniformsMetal(this, root, &symbolTable))
+        {
+            return false;
+        }
+
+        if (!SeparateStructFromUniformDeclarations(this, root, &getSymbolTable()))
+        {
+            return false;
+        }
+
+        int removedUniformsCount;
+
+        if (!RewriteStructSamplers(this, root, &getSymbolTable(), &removedUniformsCount))
+        {
+            return false;
+        }
+        defaultUniformCount -= removedUniformsCount;
+    }
+#endif
 
     if (compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING)
     {
@@ -1122,6 +1176,15 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
     // references to structures like "ANGLE_TextureEnv<metal::texture2d<float>>" which are
     // defined in text (in ProgramPrelude), outside of the knowledge of the AST.
     mValidateASTOptions.validateStructUsage = false;
+    // The RewritePipelines phase also generates incoming arguments to synthesized
+    // functions that use are missing qualifiers - for example, angleUniforms isn't marked
+    // as an incoming argument.
+    mValidateASTOptions.validateQualifiers = false;
+
+    {
+        OutputTree(root, getInfoSink().info);
+        fprintf(stderr, "Before RewritePipelines:\n%s\n", getInfoSink().info.c_str());
+    }
 
     PipelineStructs pipelineStructs;
     if (!RewritePipelines(*this, *root, idGen, *driverUniforms, symbolEnv, invariants,
