@@ -104,6 +104,23 @@
       "parentUuid": "037b90c0_f0c24f6d",
       "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36811bfa_0cefcf9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-28T15:28:15Z",
+      "side": 1,
+      "message": "This is unit testing the ANGLE\u0027s test utility functions, which the rest of the test infrastructure relies on to be working correctly.   Is it possible there are other test failures that are being missed because the these functions are not working correctly?\n\nReading through the bug, it seems this may just be an issue with gcov.   Is it possible to disable gcov for these specific tests or skip these only when gcov is enabled, so we can keep them running?",
+      "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
