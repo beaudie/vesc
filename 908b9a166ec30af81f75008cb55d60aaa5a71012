@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e746f86_590bc92c",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T18:07:38Z",
+      "side": 1,
+      "message": "Could you help me look at this offline? I couldn\u0027t figure out where in the Metal backend multiple declarators were being added to a single TIntermDeclaration, though I could somewhat see it in the AST.",
+      "parentUuid": "915685a8_d5dd2504",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "33b508ee_df14d43b",
         "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteStructSamplersMetal.cpp",
         "patchSetId": 1
@@ -99,6 +117,24 @@
       "writtenOn": "2021-07-28T15:17:36Z",
       "side": 1,
       "message": "This is a copy of the old transformation that did this. That transformation was complicated and buggy, and I\u0027d much rather it wasn\u0027t duplicated here.\n\nMy suggestion is to delete this file and use the transformations used in TranslatorVulkan.cpp. Essentially this transformation was split in two:\n\n- MonomorphizeUnsupportedFunctionsInVulkanGLSL (which can be renamed) simplifies cases that are not easy to transform (for example array of array of sampler partially indexed and passed to a function)\n- RewriteStructSamplers makes assumptions about the way samplers are used which makes it dramatically simpler (_and_ correct)\n\nThe exact code in TranslatorVulkan which should be replicated in Metal is:\n\n    if (!MonomorphizeUnsupportedFunctionsInVulkanGLSL(this, root, \u0026getSymbolTable(),\n                                                      compileOptions))\n    {\n        return false;\n    }\n\n    if (aggregateTypesUsedForUniforms \u003e 0)\n    {\n        if (!SeparateStructFromUniformDeclarations(this, root, \u0026getSymbolTable()))\n        {\n            return false;\n        }\n\n        int removedUniformsCount;\n\n        if (!RewriteStructSamplers(this, root, \u0026getSymbolTable(), \u0026removedUniformsCount))\n        {\n            return false;\n        }\n        defaultUniformCount -\u003d removedUniformsCount;\n    }\n\n\nThe Monomorphize... transformation is helpful for many other transformations too, such as reducing array of array of opaque uniforms to 1D arrays, emulating atomic counters etc.",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b68ef2ae_9ad667e1",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteStructSamplersMetal.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T18:07:38Z",
+      "side": 1,
+      "message": "Let\u0027s chat offline and see whether re-merging these is possible. I checked out the old version of this code at the point where Apple branched it and compared WebKit\u0027s to it; WebKit\u0027s was substantially rewritten from what I could tell. Their code has a \"RewriteStructSamplersOld\" and \"RewriteStructSamplers\", and the monomorphization is implemented differently in theirs.\n\nBringing this code in rather than calling the common RewriteStructSamplers code fixed assertion failures in many tests. I\u0027d like to get to the point ASAP of being able to run angle_end2end_tests without assertion failures so that we can continue the upstreaming process and start working on the test failures.",
+      "parentUuid": "33b508ee_df14d43b",
       "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -122,6 +158,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4345dae_d043ee39",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T18:07:38Z",
+      "side": 1,
+      "message": "Thanks, have incorporated this code and verified on GLSLTest.NamelessScopedStructs/ES2_Metal that it\u0027s working.",
+      "parentUuid": "e547d6f7_231e91d4",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f9545a30_38dfe9e5",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 1
@@ -133,6 +187,24 @@
       "writtenOn": "2021-07-28T15:17:36Z",
       "side": 1,
       "message": "nit: tag with http://anglebug.com/6174",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e7a8f6b_59f74f26",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T18:07:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9545a30_38dfe9e5",
       "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +226,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aabe6075_16395722",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3147,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T18:07:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "290923a4_a1660ca5",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfebedbe_41de09e2",
@@ -167,6 +257,24 @@
       "writtenOn": "2021-07-28T15:17:36Z",
       "side": 1,
       "message": "And here\u0027s why I said the old transformation is buggy.",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a66e6fb6_9d310284",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6480,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T18:07:38Z",
+      "side": 1,
+      "message": "Understood. However, incorporating Apple\u0027s version of that code fixed many assertion failures in other tests, while only introducing a fatal error in this one test.",
+      "parentUuid": "bfebedbe_41de09e2",
       "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
