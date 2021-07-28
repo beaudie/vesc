@@ -157,6 +157,24 @@
       "parentUuid": "ccec2794_e552e295",
       "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "656c138d_11253ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-28T16:09:26Z",
+      "side": 1,
+      "message": "\u003e Is it possible to disable gcov for these specific tests or skip these only when gcov is enabled, so we can keep them running?\n\nI think it should be possible, however, not sure if it\u0027s trivial. Maybe simple\n```\nif (use_clang_coverage) {\n  // add tests\n}\n```\nin GN could work though.",
+      "parentUuid": "36811bfa_0cefcf9e",
+      "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
