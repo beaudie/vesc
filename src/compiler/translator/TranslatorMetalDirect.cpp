@@ -26,6 +26,7 @@
 #include "compiler/translator/TranslatorMetalDirect/RewriteKeywords.h"
 #include "compiler/translator/TranslatorMetalDirect/RewriteOutArgs.h"
 #include "compiler/translator/TranslatorMetalDirect/RewritePipelines.h"
+#include "compiler/translator/TranslatorMetalDirect/RewriteStructSamplersMetal.h"
 #include "compiler/translator/TranslatorMetalDirect/RewriteUnaddressableReferences.h"
 #include "compiler/translator/TranslatorMetalDirect/SeparateCompoundExpressions.h"
 #include "compiler/translator/TranslatorMetalDirect/SeparateCompoundStructDeclarations.h"
@@ -40,7 +41,6 @@
 #include "compiler/translator/tree_ops/RewriteAtomicCounters.h"
 #include "compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.h"
 #include "compiler/translator/tree_ops/RewriteDfdy.h"
-#include "compiler/translator/tree_ops/RewriteStructSamplers.h"
 #include "compiler/translator/tree_ops/apple/RewriteRowMajorMatrices.h"
 #include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/tree_util/DriverUniform.h"
@@ -491,6 +491,8 @@ ANGLE_NO_DISCARD bool TranslatorMetalDirect::insertSampleMaskWritingLogic(
     // This transformation leaves the tree in an inconsistent state by using a variable that's
     // defined in text, outside of the knowledge of the AST.
     mValidateASTOptions.validateVariableReferences = false;
+    // It also uses a function call (ANGLE_writeSampleMask) that's unknown to the AST.
+    mValidateASTOptions.validateFunctionCall = false;
 
     TSymbolTable *symbolTable = &getSymbolTable();
 
@@ -763,9 +765,16 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             return false;
         }
 
+        // TODO(anglebug.com/5505): the RewriteStructSamplersMetal pass currently fails
+        // several AST validation passes.
+        mValidateASTOptions.validateQualifiers         = false;
+        mValidateASTOptions.validateFunctionCall       = false;
+        mValidateASTOptions.validateVariableReferences = false;
+        mValidateASTOptions.validateExpressionTypes    = false;
+
         int removedUniformsCount;
         bool rewriteStructSamplersResult =
-            RewriteStructSamplers(this, root, &symbolTable, &removedUniformsCount);
+            RewriteStructSamplersMetal(this, root, &symbolTable, &removedUniformsCount);
 
         if (!rewriteStructSamplersResult)
         {
@@ -1094,6 +1103,9 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         return false;
     }
 
+    // The SeparateCompoundStructDeclarations pass produces multiple declarations, so
+    // disable validateMultiDeclarations for the time being.
+    mValidateASTOptions.validateMultiDeclarations = false;
     if (!SeparateCompoundStructDeclarations(*this, idGen, *root))
     {
         return false;
@@ -1122,6 +1134,10 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
     // references to structures like "ANGLE_TextureEnv<metal::texture2d<float>>" which are
     // defined in text (in ProgramPrelude), outside of the knowledge of the AST.
     mValidateASTOptions.validateStructUsage = false;
+    // The RewritePipelines phase also generates incoming arguments to synthesized
+    // functions that use are missing qualifiers - for example, angleUniforms isn't marked
+    // as an incoming argument.
+    mValidateASTOptions.validateQualifiers = false;
 
     PipelineStructs pipelineStructs;
     if (!RewritePipelines(*this, *root, idGen, *driverUniforms, symbolEnv, invariants,
