@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7206f70a_190bf362",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T20:58:19Z",
+      "side": 1,
+      "message": "It\u0027s sad that all this is basically for a feature with no user. Nevertheless, I ended up finding a number of bugs with `precise` (regardless of SPIR-V gen) which this change fixes.\n\nAlso, while I \"basically\" implemented glslang\u0027s algorithm, it\u0027s working better than glslang itself (see new tests\u0027 suppressions for glslang), so yeay.",
+      "revId": "73f8782f02bc6fcb81dbca4a07e8c2ba66f9ea8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
