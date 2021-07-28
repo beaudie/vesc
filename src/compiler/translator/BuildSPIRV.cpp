@@ -661,7 +661,7 @@ spirv::IdRef SPIRVBuilder::getFunctionTypeId(spirv::IdRef returnTypeId,
     return iter->second;
 }
 
-SpirvDecorations SPIRVBuilder::getDecorations(const TType &type)
+SpirvDecorations SPIRVBuilder::getDecorations(const TType &type, bool isPrecise)
 {
     const bool enablePrecision = (mCompileOptions & SH_IGNORE_PRECISION_QUALIFIERS) == 0;
     const TPrecision precision = type.getPrecision();
@@ -675,7 +675,11 @@ SpirvDecorations SPIRVBuilder::getDecorations(const TType &type)
         decorations.push_back(spv::DecorationRelaxedPrecision);
     }
 
-    // TODO: Handle |precise|.  http://anglebug.com/4889.
+    // Handle |precise|.
+    if (isPrecise)
+    {
+        decorations.push_back(spv::DecorationNoContraction);
+    }
 
     return decorations;
 }
@@ -1941,7 +1945,7 @@ void SPIRVBuilder::writeMemberDecorations(const SpirvType &type, spirv::IdRef ty
         }
 
         // Add other decorations.
-        SpirvDecorations decorations = getDecorations(fieldType);
+        SpirvDecorations decorations = getDecorations(fieldType, false);
         for (const spv::Decoration decoration : decorations)
         {
             spirv::WriteMemberDecorate(&mSpirvDecorations, typeId,
