@@ -159,6 +159,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fedb5f8b_68729aa2",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteStructSamplersMetal.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T18:15:40Z",
+      "side": 1,
+      "message": "OK, thanks for this information - it was difficult to figure this out looking through file histories in git. Hoping we can sync up in real time and I could ask for your help unforking this code.",
+      "parentUuid": "18e6f05b_0a6c5ebe",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e547d6f7_231e91d4",
         "filename": "src/compiler/translator/ValidateAST.cpp",
         "patchSetId": 1
