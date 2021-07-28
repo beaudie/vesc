@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed40b75a_3e1651f6",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:47:39Z",
+      "side": 1,
+      "message": "Renamed to `restore*` to make the intent even clearer.",
+      "parentUuid": "bf257b60_8ab4ae0a",
+      "range": {
+        "startLine": 594,
+        "startChar": 16,
+        "endLine": 594,
+        "endChar": 48
+      },
+      "revId": "566d55a0cf19bd7557edabebc36ec3d1bff4b848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26a7d051_29531b6b",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-07-27T21:25:19Z",
       "side": 1,
       "message": "nit: Please add this comment to the other places where validation is temporarily disabled also.",
+      "range": {
+        "startLine": 553,
+        "startChar": 0,
+        "endLine": 554,
+        "endChar": 87
+      },
+      "revId": "566d55a0cf19bd7557edabebc36ec3d1bff4b848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a91745b_8b60065b",
+        "filename": "src/compiler/translator/tree_ops/vulkan/MonomorphizeUnsupportedFunctionsInVulkanGLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26a7d051_29531b6b",
       "range": {
         "startLine": 553,
         "startChar": 0,
