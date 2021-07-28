@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43011a8d_e0a7da31",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-28T20:16:31Z",
+      "side": 1,
+      "message": "nit: please copy the existing style and init this in the cpp for consistency\n\nI suggest you start this as DONT_CARE and only set it in the attributes if it\u0027s not DONT_CARE.\n\nAlso please place this below under EGLWindow-specific for now.",
+      "range": {
+        "startLine": 44,
+        "startChar": 25,
+        "endLine": 44,
+        "endChar": 46
+      },
+      "revId": "c36f58960d4c281597a0d9b8647a60fccad292bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
