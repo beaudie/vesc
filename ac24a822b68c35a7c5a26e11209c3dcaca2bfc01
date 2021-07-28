@@ -16,6 +16,23 @@
       "message": "Not sure if this is the correct way of fixing it, but it resolves the issue for me.\nTo resolve the sync issue, setCaptureActive can also be executed right before the `Capture Sync Objects` block in `CaptureSharedContextMidExecutionSetup`, if this turns out to be too early.",
       "revId": "ac24a822b68c35a7c5a26e11209c3dcaca2bfc01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec033874_6620507b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-28T20:39:21Z",
+      "side": 1,
+      "message": "This doesn\u0027t look like the right fix to me.   This fix appears to be based on this statement in the bug:\n\n\u003e This is due to `mCaptureActive` being set to false in `FrameCaptureShared` during `CaptureSharedContextMidExecutionSetup`\n\nHowever, this is incorrect.   The only place setCaptureInactive() is called is during onEndFrame():\n\n    void FrameCaptureShared::onEndFrame(const gl::Context *context)\n    {\n        if (!enabled() || mFrameIndex \u003e mCaptureEndFrame)\n        {\n            setCaptureInactive();\n            return;\n        }\n        \nRegardless, we shouldn\u0027t be indicating that the trace is active when it isn\u0027t anymore.   I\u0027m going to take a look at this also to try and track down the issue and see if we can find a better fix.",
+      "revId": "ac24a822b68c35a7c5a26e11209c3dcaca2bfc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
