@@ -46,6 +46,30 @@
       },
       "revId": "17d1dbf59c36c0294242df4aa37143f2caccaa7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "710400d4_aa5c9814",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-28T20:27:22Z",
+      "side": 1,
+      "message": "Ah... ResourceMap isn\u0027t the perfect tool in the toolbox because it stores pointers. So your code is now using heap allocation. To fulfill what I\u0027m asking you\u0027d need to either define a hash member in PackedEnums.h for ResourceIDs or change ResourceMap to work with value types. Both might be pretty easy, but you\u0027d have to untangle the enable_if magic to get the hash function to work. For the other one, it\u0027s easy but you\u0027d ideally make generalizing ResourceMap a split change.\n\nGiven you guys are pretty busy I\u0027m fine if you want to go back to GLuint and we don\u0027t have to worry about making it perfect.",
+      "parentUuid": "b6c74fb5_c688f4b6",
+      "range": {
+        "startLine": 33,
+        "startChar": 44,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "17d1dbf59c36c0294242df4aa37143f2caccaa7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
