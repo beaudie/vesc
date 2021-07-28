@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb4fe565_5dd06329",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-28T20:12:30Z",
+      "side": 1,
+      "message": "nit: suggest you have a single map, and use a map-of-structs instead of a collection of maps (struct-of-maps).",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 0
+      },
+      "revId": "ee40285ae4db84ee171f28ce2acd402a3ec1bf1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
