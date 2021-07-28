@@ -141,6 +141,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18e6f05b_0a6c5ebe",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteStructSamplersMetal.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T18:13:38Z",
+      "side": 1,
+      "message": "That\u0027s not Apple\u0027s version. Indeed there was a time where ANGLE had both RewriteStructSamplersOld and RewriteStructSamplers (the \"Old\" one was for Android and swiftshader which didn\u0027t support sampler array dynamic indexing; yet another unnecessary hardware requirement added with this transformation).",
+      "parentUuid": "b68ef2ae_9ad667e1",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e547d6f7_231e91d4",
         "filename": "src/compiler/translator/ValidateAST.cpp",
         "patchSetId": 1
