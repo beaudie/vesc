@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3489d3af_a189777a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-28T11:04:10Z",
+      "side": 1,
+      "message": "Not sure if this is the correct way of fixing it, but it resolves the issue for me.\nTo resolve the sync issue, setCaptureActive can also be executed right before the `Capture Sync Objects` block in `CaptureSharedContextMidExecutionSetup`, if this turns out to be too early.",
+      "revId": "ac24a822b68c35a7c5a26e11209c3dcaca2bfc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
