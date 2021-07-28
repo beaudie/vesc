@@ -328,7 +328,7 @@ class TestExpectation():
                    "TIMEOUT" : "Timeout",
                    "CRASHED" : "Crashed",
                    "COMPILE_FAILED" : "CompileFailed",
-                   "SKIPPED" : "Skipped",
+                   "SKIPPED_BY_GTEST" : "Skipped",
                    "PASS" : "Pass" }
     # yapf: enable
 
@@ -353,7 +353,7 @@ class TestExpectation():
             platforms = test_info[1:]
 
         if platform in platforms:
-            if result_stripped == 'EXCLUDE_FROM_RUN':
+            if result_stripped == 'DISABLED_FOR_CAPTURE':
                 test_name = test_name.replace('*', '.*')
                 self.disabled_tests.append(re.compile('^' + test_name + '$'))
             else:
