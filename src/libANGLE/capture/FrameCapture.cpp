@@ -2449,7 +2449,10 @@ void CaptureSharedContextMidExecutionSetup(const gl::Context *context,
 {
 
     FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
-    const gl::State &apiState              = context->getState();
+    frameCaptureShared->setCaptureActive();
+
+    const gl::State &apiState = context->getState();
+
     gl::State replayState(nullptr, nullptr, nullptr, nullptr, nullptr, EGL_OPENGL_ES_API,
                           apiState.getClientVersion(), false, true, true, true, false,
                           EGL_CONTEXT_PRIORITY_MEDIUM_IMG, apiState.hasProtectedContent());
