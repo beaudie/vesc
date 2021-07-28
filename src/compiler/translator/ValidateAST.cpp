@@ -776,6 +776,10 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
 
     if (mOptions.validateMultiDeclarations && sequence.size() > 1)
     {
+        mDiagnostics->error(node->getLine(),
+                            "Found multiple declarations where SeparateDeclarations should have "
+                            "separated them",
+                            "<validateMultiDeclarations>");
         mMultiDeclarationsFailed = true;
     }
 
