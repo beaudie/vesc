@@ -16,6 +16,23 @@
       "message": "Ptal",
       "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43eb7134_6f4e386f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T13:08:55Z",
+      "side": 1,
+      "message": "Isn\u0027t it possible to fix whatever is causing the LLVM issue? I\u0027m worried if we disable the tests we would never get back to fixing the original issue. At least now whatever change broke this is recent and there\u0027s a higher chance the original author is around / able to fix it.",
+      "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
