@@ -14,6 +14,7 @@
 #include "common/spirv/spirv_instruction_builder_autogen.h"
 #include "compiler/translator/BuildSPIRV.h"
 #include "compiler/translator/Compiler.h"
+#include "compiler/translator/tree_util/FindPreciseNodes.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
 #include <cfloat>
@@ -183,7 +184,10 @@ bool IsAccessChainUnindexedLValue(const NodeData &data)
 class OutputSPIRVTraverser : public TIntermTraverser
 {
   public:
-    OutputSPIRVTraverser(TCompiler *compiler, ShCompileOptions compileOptions, bool forceHighp);
+    OutputSPIRVTraverser(TCompiler *compiler,
+                         ShCompileOptions compileOptions,
+                         bool forceHighp,
+                         const PreciseNodeSet &preciseNodes);
     ~OutputSPIRVTraverser() override;
 
     spirv::Blob getSpirv();
@@ -365,8 +369,12 @@ class OutputSPIRVTraverser : public TIntermTraverser
                                                spirv::IdRef structValue,
                                                uint32_t fieldIndex);
 
+    bool isPrecise(TIntermTyped *node) { return mPreciseNodes.count(node) > 0; }
+
     TCompiler *mCompiler;
     ANGLE_MAYBE_UNUSED ShCompileOptions mCompileOptions;
+
+    PreciseNodeSet mPreciseNodes;
 
     SPIRVBuilder mBuilder;
 
@@ -489,10 +497,12 @@ spv::StorageClass GetStorageClass(const TType &type, GLenum shaderType)
 
 OutputSPIRVTraverser::OutputSPIRVTraverser(TCompiler *compiler,
                                            ShCompileOptions compileOptions,
-                                           bool forceHighp)
+                                           bool forceHighp,
+                                           const PreciseNodeSet &preciseNodes)
     : TIntermTraverser(true, true, true, &compiler->getSymbolTable()),
       mCompiler(compiler),
       mCompileOptions(compileOptions),
+      mPreciseNodes(preciseNodes),
       mBuilder(compiler,
                compileOptions,
                forceHighp,
@@ -658,7 +668,7 @@ spirv::IdRef OutputSPIRVTraverser::getSymbolIdAndStorageClass(const TSymbol *sym
 
     const spirv::IdRef typeId = mBuilder.getTypeData(type, {}).id;
     const spirv::IdRef varId  = mBuilder.declareVariable(
-        typeId, *storageClass, mBuilder.getDecorations(type), nullptr, name);
+        typeId, *storageClass, mBuilder.getDecorations(type, false), nullptr, name);
 
     mBuilder.addEntryPointInterfaceVariableId(varId);
     spirv::WriteDecorate(mBuilder.getSpirvDecorations(), varId, spv::DecorationBuiltIn,
@@ -873,7 +883,7 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
                                                    const TType &valueType,
                                                    spirv::IdRef *resultTypeIdOut)
 {
-    const SpirvDecorations &decorations = mBuilder.getDecorations(valueType);
+    const SpirvDecorations &decorations = mBuilder.getDecorations(valueType, false);
 
     // Loading through the access chain can generate different instructions based on whether it's an
     // rvalue, the indices are literal, there's a swizzle etc.
@@ -1363,7 +1373,7 @@ spirv::IdRef OutputSPIRVTraverser::createArrayOrStructConstructor(
     spirv::IdRef typeId,
     const spirv::IdRefList &parameters)
 {
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
     spirv::WriteCompositeConstruct(mBuilder.getSpirvCurrentFunctionBlock(), typeId, result,
                                    parameters);
     return result;
@@ -1378,7 +1388,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorScalarFromNonScalar(
     const TType &type     = node->getType();
     const TType &arg0Type = node->getChildNode(0)->getAsTyped()->getType();
 
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(type));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(type, false));
 
     spirv::LiteralIntegerList indices = {spirv::LiteralInteger(0)};
     if (arg0Type.isMatrix())
@@ -1412,7 +1422,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorVectorFromScalar(
 
     spirv::IdRefList replicatedParameter(vectorSize, castParameter);
 
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(parameterType));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(parameterType, false));
     spirv::WriteCompositeConstruct(mBuilder.getSpirvCurrentFunctionBlock(), typeId, result,
                                    replicatedParameter);
     return result;
@@ -1442,7 +1452,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorVectorFromMatrix(
         argumentTypeId = mBuilder.getTypeData(arg0TypeAsVector, {}).id;
     }
 
-    spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
     spirv::WriteCompositeConstruct(mBuilder.getSpirvCurrentFunctionBlock(), argumentTypeId, result,
                                    extractedComponents);
 
@@ -1463,7 +1473,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorVectorFromScalarsAndVectors(
     spirv::IdRefList extractedComponents;
     extractComponents(node, node->getType().getNominalSize(), parameters, &extractedComponents);
 
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
     spirv::WriteCompositeConstruct(mBuilder.getSpirvCurrentFunctionBlock(), typeId, result,
                                    extractedComponents);
     return result;
@@ -1486,7 +1496,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromScalar(
     const spirv::IdRef scalarId = parameters[0];
     spirv::IdRef zeroId;
 
-    SpirvDecorations decorations = mBuilder.getDecorations(type);
+    SpirvDecorations decorations = mBuilder.getDecorations(type, false);
 
     switch (type.getBasicType())
     {
@@ -1550,7 +1560,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromVectors(
 
     const TType &type = node->getType();
 
-    SpirvDecorations decorations = mBuilder.getDecorations(type);
+    SpirvDecorations decorations = mBuilder.getDecorations(type, false);
 
     spirv::IdRefList extractedComponents;
     extractComponents(node, type.getCols() * type.getRows(), parameters, &extractedComponents);
@@ -1605,7 +1615,7 @@ spirv::IdRef OutputSPIRVTraverser::createConstructorMatrixFromMatrix(
     const TType &type          = node->getType();
     const TType &parameterType = (*node->getSequence())[0]->getAsTyped()->getType();
 
-    SpirvDecorations decorations = mBuilder.getDecorations(type);
+    SpirvDecorations decorations = mBuilder.getDecorations(type, false);
 
     ASSERT(parameters.size() == 1);
 
@@ -1749,7 +1759,7 @@ void OutputSPIRVTraverser::extractComponents(TIntermAggregate *node,
     // more components than necessary) and extracts the first componentCount components.
     const TIntermSequence &arguments = *node->getSequence();
 
-    const SpirvDecorations decorations = mBuilder.getDecorations(node->getType());
+    const SpirvDecorations decorations = mBuilder.getDecorations(node->getType(), false);
     const TBasicType expectedBasicType = node->getType().getBasicType();
 
     ASSERT(arguments.size() == parameters.size());
@@ -1893,7 +1903,7 @@ spirv::IdRef OutputSPIRVTraverser::endShortCircuit(TIntermBinary *node, spirv::I
 
     // Create an OpPhi instruction that selects either the |left| or |right| based on which block
     // was traversed.
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
 
     spirv::WritePhi(
         mBuilder.getSpirvCurrentFunctionBlock(), *typeId, result,
@@ -1978,7 +1988,7 @@ spirv::IdRef OutputSPIRVTraverser::createFunctionCall(TIntermAggregate *node,
             tempVarTypeIds[paramIndex] = mBuilder.getTypeData(paramType, {}).id;
             tempVarIds[paramIndex] =
                 mBuilder.declareVariable(tempVarTypeIds[paramIndex], spv::StorageClassFunction,
-                                         mBuilder.getDecorations(argType), nullptr, "param");
+                                         mBuilder.getDecorations(argType, false), nullptr, "param");
 
             // If it's an in or inout parameter, the temp variable needs to be initialized with the
             // value of the parameter first.
@@ -1996,7 +2006,7 @@ spirv::IdRef OutputSPIRVTraverser::createFunctionCall(TIntermAggregate *node,
     }
 
     // Make the actual function call.
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
     spirv::WriteFunctionCall(mBuilder.getSpirvCurrentFunctionBlock(), resultTypeId, result,
                              functionId, parameters);
 
@@ -2810,7 +2820,7 @@ spirv::IdRef OutputSPIRVTraverser::visitOperator(TIntermOperator *node, spirv::I
         parameters.push_back(one);
     }
 
-    const SpirvDecorations decorations = mBuilder.getDecorations(node->getType());
+    const SpirvDecorations decorations = mBuilder.getDecorations(node->getType(), isPrecise(node));
     spirv::IdRef result;
     if (node->getType().getBasicType() != EbtVoid)
     {
@@ -2838,7 +2848,8 @@ spirv::IdRef OutputSPIRVTraverser::visitOperator(TIntermOperator *node, spirv::I
         // operating on the column.
         spirv::IdRefList columnIds;
 
-        const SpirvDecorations operandDecorations = mBuilder.getDecorations(firstOperandType);
+        const SpirvDecorations operandDecorations =
+            mBuilder.getDecorations(firstOperandType, false);
 
         const spirv::IdRef columnTypeId =
             mBuilder.getBasicTypeId(firstOperandType.getBasicType(), firstOperandType.getRows());
@@ -2918,7 +2929,7 @@ spirv::IdRef OutputSPIRVTraverser::visitOperator(TIntermOperator *node, spirv::I
         {
             const spirv::IdRef one = mBuilder.getFloatConstant(1);
             const spirv::IdRef invertedParam =
-                mBuilder.getNewId(mBuilder.getDecorations(secondChild->getType()));
+                mBuilder.getNewId(mBuilder.getDecorations(secondChild->getType(), isPrecise(node)));
             spirv::WriteFDiv(mBuilder.getSpirvCurrentFunctionBlock(), parameterTypeIds.back(),
                              invertedParam, one, parameters[1]);
             parameters[1] = invertedParam;
@@ -2994,8 +3005,8 @@ spirv::IdRef OutputSPIRVTraverser::createCompare(TIntermOperator *node, spirv::I
     TIntermTyped *operand    = node->getChildNode(0)->getAsTyped();
     const TType &operandType = operand->getType();
 
-    const SpirvDecorations resultDecorations  = mBuilder.getDecorations(node->getType());
-    const SpirvDecorations operandDecorations = mBuilder.getDecorations(operandType);
+    const SpirvDecorations resultDecorations  = mBuilder.getDecorations(node->getType(), false);
+    const SpirvDecorations operandDecorations = mBuilder.getDecorations(operandType, false);
 
     // Load the left and right values.
     spirv::IdRefList parameters = loadAllParams(node, 0, nullptr);
@@ -3130,7 +3141,7 @@ spirv::IdRef OutputSPIRVTraverser::createAtomicBuiltIn(TIntermOperator *node,
 
     WriteAtomicOp writeAtomicOp = nullptr;
 
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
 
     // Determine whether the operation is on ints or uints.
     const bool isUnsigned = isImage ? IsUIntImage(operandBasicType) : operandBasicType == EbtUInt;
@@ -3685,7 +3696,7 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
         const spirv::IdRef drefTypeId = mBuilder.getSpirvTypeData(drefSpirvType, nullptr).id;
 
         // Extract the dref component out of coordinates.
-        drefId = mBuilder.getNewId(mBuilder.getDecorations(*coordinatesType));
+        drefId = mBuilder.getNewId(mBuilder.getDecorations(*coordinatesType, false));
         spirv::WriteCompositeExtract(mBuilder.getSpirvCurrentFunctionBlock(), drefTypeId, drefId,
                                      coordinatesId, {spirv::LiteralInteger(drefComponent)});
     }
@@ -3824,7 +3835,7 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
 
             // Extract the last component out of coordinates.
             const spirv::IdRef projChannelId =
-                mBuilder.getNewId(mBuilder.getDecorations(*coordinatesType));
+                mBuilder.getNewId(mBuilder.getDecorations(*coordinatesType, false));
             spirv::WriteCompositeExtract(mBuilder.getSpirvCurrentFunctionBlock(), channelTypeId,
                                          projChannelId, coordinatesId,
                                          {spirv::LiteralInteger(coordinatesChannelCount - 1)});
@@ -3832,7 +3843,7 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
             // Insert it after the channels that are consumed.  The extra channels are ignored per
             // the SPIR-V spec.
             const spirv::IdRef newCoordinatesId =
-                mBuilder.getNewId(mBuilder.getDecorations(*coordinatesType));
+                mBuilder.getNewId(mBuilder.getDecorations(*coordinatesType, false));
             spirv::WriteCompositeInsert(mBuilder.getSpirvCurrentFunctionBlock(), coordinatesTypeId,
                                         newCoordinatesId, projChannelId, coordinatesId,
                                         {spirv::LiteralInteger(requiredChannelCount - 1)});
@@ -3880,7 +3891,7 @@ spirv::IdRef OutputSPIRVTraverser::createImageTextureBuiltIn(TIntermOperator *no
     spirv::IdRef result;
     if (spirvOp != spv::OpImageWrite)
     {
-        result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+        result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
     }
 
     switch (spirvOp)
@@ -4008,7 +4019,7 @@ spirv::IdRef OutputSPIRVTraverser::createSubpassLoadBuiltIn(TIntermOperator *nod
     // and is set to (0, 0) here.
     const spirv::IdRef coordId = mBuilder.getNullConstant(mBuilder.getBasicTypeId(EbtUInt, 2));
 
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
     spirv::WriteImageRead(mBuilder.getSpirvCurrentFunctionBlock(), resultTypeId, result, image,
                           coordId, hasSampleParam ? &operandsMask : nullptr, imageOperandsList);
 
@@ -4050,7 +4061,7 @@ spirv::IdRef OutputSPIRVTraverser::createInterpolate(TIntermOperator *node,
             &mNodeData.back(), node->getChildNode(1)->getAsTyped()->getType(), nullptr));
     }
 
-    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+    const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
 
     spirv::WriteExtInst(mBuilder.getSpirvCurrentFunctionBlock(), resultTypeId, result,
                         mBuilder.getExtInstImportIdStd(),
@@ -4077,7 +4088,7 @@ spirv::IdRef OutputSPIRVTraverser::castBasicType(spirv::IdRef value,
     valueSpirvType.typeSpec.isOrHasBoolInInterfaceBlock = false;
     const spirv::IdRef castTypeId = mBuilder.getSpirvTypeData(valueSpirvType, nullptr).id;
 
-    const spirv::IdRef castValue = mBuilder.getNewId(mBuilder.getDecorations(valueType));
+    const spirv::IdRef castValue = mBuilder.getNewId(mBuilder.getDecorations(valueType, false));
 
     // Write the instruction that casts between types.  Different instructions are used based on the
     // types being converted.
@@ -4235,7 +4246,7 @@ spirv::IdRef OutputSPIRVTraverser::cast(spirv::IdRef value,
         const spirv::IdRef elementTypeId =
             mBuilder.getTypeDataOverrideTypeSpec(elementType, valueElementTypeSpec).id;
 
-        const SpirvDecorations elementDecorations = mBuilder.getDecorations(elementType);
+        const SpirvDecorations elementDecorations = mBuilder.getDecorations(elementType, false);
 
         // Extract each element of the array and cast it to the expected type.
         for (unsigned int elementIndex = 0; elementIndex < valueType.getOutermostArraySize();
@@ -4270,7 +4281,8 @@ spirv::IdRef OutputSPIRVTraverser::cast(spirv::IdRef value,
                 mBuilder.getTypeDataOverrideTypeSpec(fieldType, valueFieldTypeSpec).id;
 
             // Extract the field.
-            const spirv::IdRef fieldId = mBuilder.getNewId(mBuilder.getDecorations(fieldType));
+            const spirv::IdRef fieldId =
+                mBuilder.getNewId(mBuilder.getDecorations(fieldType, false));
             spirv::WriteCompositeExtract(mBuilder.getSpirvCurrentFunctionBlock(), fieldTypeId,
                                          fieldId, value, {spirv::LiteralInteger(fieldIndex++)});
 
@@ -4302,7 +4314,7 @@ spirv::IdRef OutputSPIRVTraverser::cast(spirv::IdRef value,
     // Construct the value with the expected type from its cast constituents.
     const spirv::IdRef expectedTypeId =
         mBuilder.getTypeDataOverrideTypeSpec(valueType, expectedTypeSpec).id;
-    const spirv::IdRef expectedId = mBuilder.getNewId(mBuilder.getDecorations(valueType));
+    const spirv::IdRef expectedId = mBuilder.getNewId(mBuilder.getDecorations(valueType, false));
 
     spirv::WriteCompositeConstruct(mBuilder.getSpirvCurrentFunctionBlock(), expectedTypeId,
                                    expectedId, constituents);
@@ -4628,7 +4640,7 @@ void OutputSPIRVTraverser::storeBuiltInStructOutputInParamHelper(NodeData *data,
                                                                  uint32_t fieldIndex)
 {
     spirv::IdRef fieldTypeId  = mBuilder.getTypeData(param->getType(), {}).id;
-    spirv::IdRef fieldValueId = mBuilder.getNewId(mBuilder.getDecorations(param->getType()));
+    spirv::IdRef fieldValueId = mBuilder.getNewId(mBuilder.getDecorations(param->getType(), false));
 
     spirv::WriteCompositeExtract(mBuilder.getSpirvCurrentFunctionBlock(), fieldTypeId, fieldValueId,
                                  structValue, {spirv::LiteralInteger(fieldIndex)});
@@ -5039,7 +5051,8 @@ bool OutputSPIRVTraverser::visitTernary(Visit visit, TIntermTernary *node)
     // When done, generate either OpSelect or OpPhi.
     if (visit == PostVisit)
     {
-        const spirv::IdRef result = mBuilder.getNewId(mBuilder.getDecorations(node->getType()));
+        const spirv::IdRef result =
+            mBuilder.getNewId(mBuilder.getDecorations(node->getType(), false));
 
         ASSERT(mNodeData.back().idList.size() == 2);
         const spirv::IdRef trueValue  = mNodeData.back().idList[0].id;
@@ -5420,7 +5433,7 @@ bool OutputSPIRVTraverser::visitFunctionDefinition(Visit visit, TIntermFunctionD
             const TVariable *paramVariable = function->getParam(paramIndex);
 
             const spirv::IdRef paramId =
-                mBuilder.getNewId(mBuilder.getDecorations(paramVariable->getType()));
+                mBuilder.getNewId(mBuilder.getDecorations(paramVariable->getType(), false));
             spirv::WriteFunctionParameter(mBuilder.getSpirvFunctions(),
                                           ids.parameterTypeIds[paramIndex], paramId);
 
@@ -5490,8 +5503,7 @@ bool OutputSPIRVTraverser::visitGlobalQualifierDeclaration(Visit visit,
 {
     if (node->isPrecise())
     {
-        // TODO: handle precise.  http://anglebug.com/4889.
-        UNIMPLEMENTED();
+        // Nothing to do for |precise|.
         return false;
     }
 
@@ -5552,7 +5564,7 @@ void OutputSPIRVTraverser::visitFunctionPrototype(TIntermFunctionPrototype *node
     //
     // Apply decorations to the return value of the function by applying them to the OpFunction
     // instruction.
-    ids.functionId = mBuilder.getNewId(mBuilder.getDecorations(function->getReturnType()));
+    ids.functionId = mBuilder.getNewId(mBuilder.getDecorations(function->getReturnType(), false));
 
     // Remember the ID of main() for the sake of OpEntryPoint.
     if (function->isMain())
@@ -5781,7 +5793,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
 
     spv::StorageClass storageClass = GetStorageClass(type, mCompiler->getShaderType());
 
-    SpirvDecorations decorations = mBuilder.getDecorations(type);
+    SpirvDecorations decorations = mBuilder.getDecorations(type, false);
     if (mBuilder.isInvariantOutput(type))
     {
         // Apply the Invariant decoration to output variables if specified or if globally enabled.
@@ -6176,8 +6188,15 @@ bool OutputSPIRV(TCompiler *compiler,
                  ShCompileOptions compileOptions,
                  bool forceHighp)
 {
+    // Find the list of nodes that require NoContraction (as a result of |precise|).
+    PreciseNodeSet preciseNodes;
+    if (compiler->hasAnyPreciseType())
+    {
+        FindPreciseNodes(compiler, root, &preciseNodes);
+    }
+
     // Traverse the tree and generate SPIR-V instructions
-    OutputSPIRVTraverser traverser(compiler, compileOptions, forceHighp);
+    OutputSPIRVTraverser traverser(compiler, compileOptions, forceHighp, preciseNodes);
     root->traverse(&traverser);
 
     // Generate the final SPIR-V and store in the sink
