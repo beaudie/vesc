@@ -16,6 +16,159 @@
       "message": "Shabi: would you feel comfortable reviewing this yourself? It should have essentially no effect for any of the other backends, but finally gets the direct-to-Metal backend to complete an angle_end2end_tests run without crashing. Would like to land this so we can begin merging later changes which may have fixed test failures.\n\nOthers: any comments welcome. CC\u0027ing Jonah as FYI though he\u0027s OOO.\n",
       "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aed51f25_e8a47513",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "Good one! Unfortunately OutputTree is not quite complete :(",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20744a18_b23f3e06",
+        "filename": "src/compiler/translator/Symbol.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "Please remove (see other comments).",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49550b08_ca689b06",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "Should be able to remove these once the good transformation is used.",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "915685a8_d5dd2504",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "Many transformations rely on this so this may be asking for trouble later; it should be easy to fix, no?",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b508ee_df14d43b",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteStructSamplersMetal.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "This is a copy of the old transformation that did this. That transformation was complicated and buggy, and I\u0027d much rather it wasn\u0027t duplicated here.\n\nMy suggestion is to delete this file and use the transformations used in TranslatorVulkan.cpp. Essentially this transformation was split in two:\n\n- MonomorphizeUnsupportedFunctionsInVulkanGLSL (which can be renamed) simplifies cases that are not easy to transform (for example array of array of sampler partially indexed and passed to a function)\n- RewriteStructSamplers makes assumptions about the way samplers are used which makes it dramatically simpler (_and_ correct)\n\nThe exact code in TranslatorVulkan which should be replicated in Metal is:\n\n    if (!MonomorphizeUnsupportedFunctionsInVulkanGLSL(this, root, \u0026getSymbolTable(),\n                                                      compileOptions))\n    {\n        return false;\n    }\n\n    if (aggregateTypesUsedForUniforms \u003e 0)\n    {\n        if (!SeparateStructFromUniformDeclarations(this, root, \u0026getSymbolTable()))\n        {\n            return false;\n        }\n\n        int removedUniformsCount;\n\n        if (!RewriteStructSamplers(this, root, \u0026getSymbolTable(), \u0026removedUniformsCount))\n        {\n            return false;\n        }\n        defaultUniformCount -\u003d removedUniformsCount;\n    }\n\n\nThe Monomorphize... transformation is helpful for many other transformations too, such as reducing array of array of opaque uniforms to 1D arrays, emulating atomic counters etc.",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e547d6f7_231e91d4",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "Thanks for adding this!\n\nnit: I\u0027d also output the name of the second symbol (untested code):\n\n    TIntermSymbol *symbol \u003d sequence[1]-\u003egetAsSymbolNode();\n    if (symbol \u003d\u003d nullptr)\n    {\n        TIntermBinary *init \u003d sequence[1]-\u003egetAsBinaryNode();\n        ASSERT(init \u0026\u0026 init-\u003egetOp() \u003d\u003d EOpInitialize);\n        symbol \u003d init-\u003egetLeft()-\u003egetAsSymbolNode();\n    }\n    ASSERT(symbol);\n    \n    mDiagnostics-\u003eerror(node-\u003egetLine(),\n                    \"Found multiple declarations where SeparateDeclarations should have \"\n                    \"separated them\",\n                    \"\u003cvalidateMultiDeclarations\u003e\",\n                    symbol-\u003evariable().name().data());",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9545a30_38dfe9e5",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "nit: tag with http://anglebug.com/6174",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "290923a4_a1660ca5",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfebedbe_41de09e2",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-28T15:17:36Z",
+      "side": 1,
+      "message": "And here\u0027s why I said the old transformation is buggy.",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
