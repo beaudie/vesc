@@ -516,6 +516,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "29a215c2_30d2cf95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-28T14:07:08Z",
+      "side": 1,
+      "message": "I\u0027d rather go with SKIPPED_BY_GTEST and DISABLED_FOR_CAPTURE, with that the \"what\" comes first, and using the DISABLED prefix aligns with what Shahbaz wrote about the gtest semantics. (I still added a comment for the possible values. because to me it is surprising that the  *expectation* file contains tags that lead to not running tests).",
+      "parentUuid": "13cde4f0_a4a207eb",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
