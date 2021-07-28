@@ -69,6 +69,23 @@
       "parentUuid": "9023e2ef_62814959",
       "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e123e612_a6ded99f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-28T13:34:22Z",
+      "side": 1,
+      "message": "Shahbaz, as another possible idea for the future, to make the tests more resilient to this problem, you can consider piping stderr to a buffer/file.",
+      "revId": "ec5ba5416942a80104248c324d3f6ad3dd3cbb19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
