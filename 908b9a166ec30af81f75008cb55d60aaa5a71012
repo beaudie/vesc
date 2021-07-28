@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0010351_a9278ca0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-28T07:56:44Z",
+      "side": 1,
+      "message": "Shabi: would you feel comfortable reviewing this yourself? It should have essentially no effect for any of the other backends, but finally gets the direct-to-Metal backend to complete an angle_end2end_tests run without crashing. Would like to land this so we can begin merging later changes which may have fixed test failures.\n\nOthers: any comments welcome. CC\u0027ing Jonah as FYI though he\u0027s OOO.\n",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
