@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d2b81bb_59e34759",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T16:12:01Z",
+      "side": 1,
+      "message": "Can this option apply to SKIP also, or is that a bigger change?",
+      "range": {
+        "startLine": 10,
+        "startChar": 26,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "945c2375_32eee099",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T16:12:01Z",
+      "side": 1,
+      "message": "Please add the option in the commit message.",
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fa2ab60_ed3bee23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T16:12:01Z",
+      "side": 1,
+      "message": "This is a good idea.\n\nCan it be done at the test harness level also (or instead) so we can do the same with SKIP (like I ask about below)?",
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e6a4f9_bb07b9c9",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T16:12:01Z",
+      "side": 1,
+      "message": "nit: I\u0027d call this something like \u0027force\u0027 or \u0027force-run\u0027, since \"overriding the expectation file\" can also imply overriding the pass/fail status which doesn\u0027t really make much sense.",
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
