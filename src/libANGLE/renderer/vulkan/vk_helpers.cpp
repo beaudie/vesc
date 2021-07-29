@@ -3457,7 +3457,7 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
         if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0 &&
             (requestedCreateInfo.usage & VK_BUFFER_USAGE_TRANSFER_DST_BIT) != 0)
         {
-            ANGLE_TRY(initializeNonZeroMemory(contextVk, createInfo->size));
+            ANGLE_TRY(initializeNonZeroMemory(contextVk, sizeOut));
         }
         else if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
         {
