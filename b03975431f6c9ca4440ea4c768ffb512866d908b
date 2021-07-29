@@ -612,6 +612,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c74d53b0_1131f8ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-29T13:34:58Z",
+      "side": 1,
+      "message": "It meas exactly this: the tests have no consistent result, If the expectation is FLAKY the test will be run, the result will be reported, but it doesn\u0027t make the CI fail. I added the value so that we don\u0027t have to disable these tests up-front like we did until now.",
+      "parentUuid": "59fc9984_dd37aad8",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "b03975431f6c9ca4440ea4c768ffb512866d908b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e455e50_5dc9b21d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
