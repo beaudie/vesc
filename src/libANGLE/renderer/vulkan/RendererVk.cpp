@@ -3572,7 +3572,17 @@ VkResult BufferMemoryAllocator::AllocateMemoryForBuffer(Context *context,
             // allocate memory using sub-allocator
             Allocation *allocation = memory.getAllocationObject();
 
-            int poolType = vkMemReq.size <= kMaxSizeToUseSmallPool ? kSmallPool : kLargePool;
+            int poolType;
+            if (rendererVk->getFeatures().allocateNonZeroMemory.enabled)
+            {
+                // If allocateNonZeroMemory is enabled, we always use the large pool which uses
+                // default allocation algorithm to ensure no padding added at allocator.
+                poolType = kLargePool;
+            }
+            else
+            {
+                poolType = vkMemReq.size <= kMaxSizeToUseSmallPool ? kSmallPool : kLargePool;
+            }
             ASSERT(mVMAPools[poolType][memoryTypeIndex]);
 
             result = vma::AllocateMemory(mAllocator->getHandle(), &vkMemReq, requiredFlags,
