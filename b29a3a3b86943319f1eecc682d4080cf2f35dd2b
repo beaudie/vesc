@@ -20,6 +20,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3639938_884b26f1",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T13:49:44Z",
+      "side": 1,
+      "message": "Is it possible to store these only in the separable case? IIUC, these are needed only for separable programs, so would be nice if the cache entries aren\u0027t increased in size for all programs.",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 13
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d13d763_3d81fdce",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T13:49:44Z",
+      "side": 1,
+      "message": "There\u0027s a helper already for this (see the above function). Can pass linkingVariables.mIsShaderStageUsedBitset to GetLastPreFragmentStage.",
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "395f5fad_84f388a8",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 5
