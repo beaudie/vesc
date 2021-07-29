@@ -1686,9 +1686,11 @@ void SPIRVBuilder::writePerVertexBuiltIns(const TType &type, spirv::IdRef typeId
                 break;
             case EvqClipDistance:
                 decorationValue = spv::BuiltInClipDistance;
+                addCapability(spv::CapabilityClipDistance);
                 break;
             case EvqCullDistance:
                 decorationValue = spv::BuiltInCullDistance;
+                addCapability(spv::CapabilityCullDistance);
                 break;
             default:
                 UNREACHABLE();

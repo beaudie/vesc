@@ -1031,6 +1031,11 @@ class SpirvIDDiscoverer final : angle::NonCopyable
         return typeId == mOutputPerVertex.typeId ? mOutputPerVertex.maxActiveMember
                                                  : mInputPerVertex.maxActiveMember;
     }
+    uint32_t isPerVertexMemberActive(uint32_t memberIndex) const
+    {
+        return (mInputPerVertex.typeId.valid() && mInputPerVertex.maxActiveMember >= memberIndex) ||
+               (mOutputPerVertex.typeId.valid() && mOutputPerVertex.maxActiveMember >= memberIndex);
+    }
 
     spirv::IdRef floatId() const { return mFloatId; }
     spirv::IdRef vec4Id() const { return mVec4Id; }
@@ -1372,6 +1377,9 @@ class SpirvPerVertexTrimmer final : angle::NonCopyable
   public:
     SpirvPerVertexTrimmer() {}
 
+    TransformationState transformCapability(const SpirvIDDiscoverer &ids,
+                                            gl::ShaderType shaderType,
+                                            spv::Capability capability);
     TransformationState transformMemberDecorate(const SpirvIDDiscoverer &ids,
                                                 spirv::IdRef typeId,
                                                 spirv::LiteralInteger member,
@@ -1385,6 +1393,39 @@ class SpirvPerVertexTrimmer final : angle::NonCopyable
                                             spirv::IdRefList *memberList,
                                             spirv::Blob *blobOut);
 };
+
+TransformationState SpirvPerVertexTrimmer::transformCapability(const SpirvIDDiscoverer &ids,
+                                                               gl::ShaderType shaderType,
+                                                               spv::Capability capability)
+{
+    // gl_PerVertex is always defined as:
+    //
+    //    Field 0: gl_Position
+    //    Field 1: gl_PointSize
+    //    Field 2: gl_ClipDistance
+    //    Field 3: gl_CullDistance
+    //
+    constexpr uint32_t kClipDistanceMemberIndex = 2;
+    constexpr uint32_t kCullDistanceMemberIndex = 3;
+
+    // Drop the ClipDistance or CullDistance capabilities if not actually used in the shader.  In
+    // fragment shaders, the capabilities are only added when necessary.
+    if (shaderType != gl::ShaderType::Fragment)
+    {
+        if (capability == spv::CapabilityClipDistance &&
+            !ids.isPerVertexMemberActive(kClipDistanceMemberIndex))
+        {
+            return TransformationState::Transformed;
+        }
+        if (capability == spv::CapabilityCullDistance &&
+            !ids.isPerVertexMemberActive(kCullDistanceMemberIndex))
+        {
+            return TransformationState::Transformed;
+        }
+    }
+
+    return TransformationState::Unchanged;
+}
 
 TransformationState SpirvPerVertexTrimmer::transformMemberDecorate(const SpirvIDDiscoverer &ids,
                                                                    spirv::IdRef typeId,
@@ -3415,6 +3456,12 @@ TransformationState SpirvTransformer::transformCapability(const uint32_t *instru
 {
     spv::Capability capability;
     spirv::ParseCapability(instruction, &capability);
+
+    if (mPerVertexTrimmer.transformCapability(mIds, mOptions.shaderType, capability) ==
+        TransformationState::Transformed)
+    {
+        return TransformationState::Transformed;
+    }
 
     return mXfbCodeGenerator.transformCapability(capability, mSpirvBlobOut);
 }
