@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3b0791f_05563d2f",
+        "filename": "src/tests/angle_unittests.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-29T12:53:30Z",
+      "side": 1,
+      "message": "I\u0027d suggest just putting this in the BUILD.gn. These gni files are not really relevant any more.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 35
+      },
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
