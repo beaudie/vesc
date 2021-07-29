@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6285468a_fed805ac",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T20:08:23Z",
+      "side": 0,
+      "message": "Why is this removed?   Aren\u0027t we still assuming that a vertex shader needs to be present to draw (otherwise we no-op\u0027ed way before getting here), unless it\u0027s a separable program?\n\n\u003e We only no-op the draw if there\u0027s no vs.",
+      "revId": "b8e8c8229ca6e19a2e44c2b4ff646ac16a11bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
