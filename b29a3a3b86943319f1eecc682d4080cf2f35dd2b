@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4337ab4a_ec2c25e7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-29T16:41:39Z",
+      "side": 1,
+      "message": "Looks to me like you can nest this in the inner scope, and use the constructor instead of the \"savePending\" method.",
+      "range": {
+        "startLine": 1558,
+        "startChar": 4,
+        "endLine": 1558,
+        "endChar": 38
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3639938_884b26f1",
         "filename": "src/libANGLE/ProgramExecutable.cpp",
         "patchSetId": 5
@@ -99,6 +122,52 @@
         "startChar": 43,
         "endLine": 1429,
         "endChar": 85
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d264f580_ba8606bc",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-29T16:41:39Z",
+      "side": 1,
+      "message": "style nits:\n\ndon\u0027t use \"m\" prefix for public data.\nput data after members.\nI believe the methods can be constructors.\nUse final/NonCopyable as appropriate.\n\nalso I\u0027d prefer if we don\u0027t use the \"pending\" term as it doesn\u0027t really have context.",
+      "range": {
+        "startLine": 244,
+        "startChar": 47,
+        "endLine": 244,
+        "endChar": 73
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfeee72c_4929ad13",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-29T16:41:39Z",
+      "side": 1,
+      "message": "same comment as above about scope.",
+      "range": {
+        "startLine": 525,
+        "startChar": 21,
+        "endLine": 525,
+        "endChar": 37
       },
       "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
