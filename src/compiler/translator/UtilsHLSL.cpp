@@ -839,7 +839,7 @@ TString DecoratePrivate(const ImmutableString &privateText)
 
 TString Decorate(const ImmutableString &string)
 {
-    if (!string.beginsWith("gl_"))
+    if (!gl::IsBuiltInName(string.data()))
     {
         return "_" + TString(string.data());
     }
@@ -881,7 +881,7 @@ TString DecorateFunctionIfNeeded(const TFunction *func)
         ASSERT(!func->name().beginsWith("_"));
         return TString(func->name().data());
     }
-    ASSERT(!func->name().beginsWith("gl_"));
+    ASSERT(!gl::IsBuiltInName(func->name().data()));
     // Add an additional f prefix to functions so that they're always disambiguated from variables.
     // This is necessary in the corner case where a variable declaration hides a function that it
     // uses in its initializer.
