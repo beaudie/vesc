@@ -3431,10 +3431,11 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 
     ANGLE_VK_TRY(contextVk, mBuffer.init(contextVk->getDevice(), *createInfo));
 
-    uint32_t memoryTypeIndex = UINT32_MAX;
-    VkResult result          = bufferMemoryAllocator.AllocateMemoryForBuffer(
-        contextVk, mBuffer, requiredFlags, preferredFlags, persistentlyMapped, &memoryTypeIndex,
-        mMemory, &sizeOut);
+    bool robustResourceInitEnabled = contextVk->isRobustResourceInitEnabled();
+    uint32_t memoryTypeIndex       = UINT32_MAX;
+    VkResult result                = bufferMemoryAllocator.AllocateMemoryForBuffer(
+        contextVk, mBuffer, requiredFlags, preferredFlags, persistentlyMapped,
+        robustResourceInitEnabled, &memoryTypeIndex, mMemory, &sizeOut);
     if (result != VK_SUCCESS)
     {
         // Caller may have called init and we destroy mBuffer to properly clean up in case o
@@ -3457,7 +3458,7 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
         if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0 &&
             (requestedCreateInfo.usage & VK_BUFFER_USAGE_TRANSFER_DST_BIT) != 0)
         {
-            ANGLE_TRY(initializeNonZeroMemory(contextVk, createInfo->size));
+            ANGLE_TRY(initializeNonZeroMemory(contextVk, sizeOut));
         }
         else if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
         {

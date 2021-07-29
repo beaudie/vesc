@@ -108,6 +108,7 @@ class BufferMemoryAllocator : angle::NonCopyable
                                      VkMemoryPropertyFlags requiredFlags,
                                      VkMemoryPropertyFlags preferredFlags,
                                      bool persistentlyMapped,
+                                     bool robustResourceInitEnabled,
                                      uint32_t *memoryTypeIndexOut,
                                      BufferMemory &memory,
                                      VkDeviceSize *sizeOut);

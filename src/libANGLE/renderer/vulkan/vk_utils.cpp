@@ -582,7 +582,7 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
 
     ANGLE_VK_TRY(context, bufferMemoryAllocator.AllocateMemoryForBuffer(
                               context, mBuffer, requiredFlags, preferredFlags,
-                              renderer->getFeatures().persistentlyMappedBuffers.enabled,
+                              renderer->getFeatures().persistentlyMappedBuffers.enabled, false,
                               &memoryTypeIndex, mMemory, &sizeOut));
     mSize = static_cast<size_t>(sizeOut);
 

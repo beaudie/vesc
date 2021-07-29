@@ -3515,6 +3515,7 @@ VkResult BufferMemoryAllocator::AllocateMemoryForBuffer(Context *context,
                                                         VkMemoryPropertyFlags requiredFlags,
                                                         VkMemoryPropertyFlags preferredFlags,
                                                         bool persistentlyMapped,
+                                                        bool robustResourceInitEnabled,
                                                         uint32_t *memoryTypeIndexOut,
                                                         BufferMemory &memory,
                                                         VkDeviceSize *sizeOut)
@@ -3572,7 +3573,12 @@ VkResult BufferMemoryAllocator::AllocateMemoryForBuffer(Context *context,
             // allocate memory using sub-allocator
             Allocation *allocation = memory.getAllocationObject();
 
-            int poolType = vkMemReq.size <= kMaxSizeToUseSmallPool ? kSmallPool : kLargePool;
+            int poolType;
+            // If robust resource init is enabled, we always use the large pool which uses
+            // default allocation algorithm to ensure no padding added at allocator.
+            poolType = (!robustResourceInitEnabled && vkMemReq.size <= kMaxSizeToUseSmallPool)
+                           ? kSmallPool
+                           : kLargePool;
             ASSERT(mVMAPools[poolType][memoryTypeIndex]);
 
             result = vma::AllocateMemory(mAllocator->getHandle(), &vkMemReq, requiredFlags,
