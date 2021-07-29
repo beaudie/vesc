@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5b310a_c2d2f9f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-29T01:56:42Z",
+      "side": 1,
+      "message": "Patch set 4 introduces a USE_OLD_REWRITE_STRUCT_SAMPLERS #define in TranslatorMetalDirect.cpp to switch between the old and new RewriteStructSamplers, and introduces a significant amount of debugging code. To replicate my debugging setup, build angle_end2end_tests in Debug mode and run:\n\nlldb -- out/Debug/angle_end2end_tests --gtest_filter\u003dGLSLTest.ArrayOfStructContainingArrayOfSamplers/ES2_Metal\n\nThe new RewriteStructSamplers doesn\u0027t work yet. MonomorphizeUnsupportedFunctionsInVulkanGLSL becomes a no-op because the fragment shader\u0027s main function _main_0 doesn\u0027t actually take any of these constructs as an argument. All that happens in this test is the struct is flattened, so it comes out as an array[2][2] of sampler2D, rather than as an array[4] with the old RewriteStructSamplers code.\n\nThe direct-to-Metal backend\u0027s pipeline rewriting is dependent on this array flattening occurring.\n\nGreatly appreciate any help understanding what would need to be done to either MonomorphizeUnsupportedFunctionsInVulkanGLSL or RewriteStructSamplers to get the needed behavior for the rest of the direct-to-Metal backend. If this would take a while, I\u0027d appreciate being able to temporarily land the old copy of the RewriteStructSamplers code (as RewriteStructSamplersMetal) so this can be debugged in parallel to other work.\n",
+      "revId": "b5a0fa383a5b4e438fc72a7693400f7a293838f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
