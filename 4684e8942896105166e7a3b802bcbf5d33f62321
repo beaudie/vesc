@@ -16,6 +16,23 @@
       "message": "LGTM. Looping in Tim who should know this code better than me.",
       "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0691e170_85d39655",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-29T16:36:45Z",
+      "side": 1,
+      "message": "LGTM, thanks Brandon.",
+      "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
