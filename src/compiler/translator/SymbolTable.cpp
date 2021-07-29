@@ -316,7 +316,12 @@ const TSymbol *TSymbolTable::findBuiltInWithConversion(const std::vector<Immutab
 bool TSymbolTable::declare(TSymbol *symbol)
 {
     ASSERT(!mTable.empty());
-    ASSERT(symbol->symbolType() == SymbolType::UserDefined);
+    // The following built-ins may be redeclared by the shader: gl_ClipDistance, gl_CullDistance and
+    // gl_LastFragData.
+    ASSERT(symbol->symbolType() == SymbolType::UserDefined ||
+           (symbol->symbolType() == SymbolType::BuiltIn &&
+            (symbol->name() == "gl_ClipDistance" || symbol->name() == "gl_CullDistance" ||
+             symbol->name() == "gl_LastFragData")));
     ASSERT(!symbol->isFunction());
     return mTable.back()->insert(symbol);
 }

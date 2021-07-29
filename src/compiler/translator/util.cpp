@@ -715,6 +715,7 @@ bool IsBuiltinOutputVariable(TQualifier qualifier)
         case EvqFragData:
         case EvqSecondaryFragDataEXT:
         case EvqClipDistance:
+        case EvqCullDistance:
         case EvqLastFragData:
         case EvqSampleMask:
             return true;
