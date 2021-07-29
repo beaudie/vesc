@@ -16,6 +16,41 @@
       "message": "Patch set 4 introduces a USE_OLD_REWRITE_STRUCT_SAMPLERS #define in TranslatorMetalDirect.cpp to switch between the old and new RewriteStructSamplers, and introduces a significant amount of debugging code. To replicate my debugging setup, build angle_end2end_tests in Debug mode and run:\n\nlldb -- out/Debug/angle_end2end_tests --gtest_filter\u003dGLSLTest.ArrayOfStructContainingArrayOfSamplers/ES2_Metal\n\nThe new RewriteStructSamplers doesn\u0027t work yet. MonomorphizeUnsupportedFunctionsInVulkanGLSL becomes a no-op because the fragment shader\u0027s main function _main_0 doesn\u0027t actually take any of these constructs as an argument. All that happens in this test is the struct is flattened, so it comes out as an array[2][2] of sampler2D, rather than as an array[4] with the old RewriteStructSamplers code.\n\nThe direct-to-Metal backend\u0027s pipeline rewriting is dependent on this array flattening occurring.\n\nGreatly appreciate any help understanding what would need to be done to either MonomorphizeUnsupportedFunctionsInVulkanGLSL or RewriteStructSamplers to get the needed behavior for the rest of the direct-to-Metal backend. If this would take a while, I\u0027d appreciate being able to temporarily land the old copy of the RewriteStructSamplers code (as RewriteStructSamplersMetal) so this can be debugged in parallel to other work.\n",
       "revId": "b5a0fa383a5b4e438fc72a7693400f7a293838f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3587fe89_0990e76e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T14:04:02Z",
+      "side": 1,
+      "message": "General advice is to follow TranslatorVulkan :)\n\nSee comment on the code.",
+      "parentUuid": "9b5b310a_c2d2f9f2",
+      "revId": "b5a0fa383a5b4e438fc72a7693400f7a293838f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08dcae12_837cde6c",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T14:04:02Z",
+      "side": 1,
+      "message": "You can stick this here to flatten array of arrays (exactly as is done in TranslatorVulkan.cpp):\n\n    // Replace array of array of opaque uniforms with a flattened array.  This is run after\n    // MonomorphizeUnsupportedFunctionsInVulkanGLSL and RewriteStructSamplers so that it\u0027s not\n    // possible for an array of array of opaque type to be partially subscripted and passed to a\n    // function.\n    if (!RewriteArrayOfArrayOfOpaqueUniforms(this, root, \u0026getSymbolTable()))\n    {\n        return false;\n    }",
+      "revId": "b5a0fa383a5b4e438fc72a7693400f7a293838f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
