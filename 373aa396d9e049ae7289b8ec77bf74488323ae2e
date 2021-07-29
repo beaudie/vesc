@@ -3,6 +3,80 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "190380a2_bbd467ef",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T19:00:07Z",
+      "side": 1,
+      "message": "Can you pull the Abseil stuff out into a separate CL?\n\nAbseil has been a notorious pain in the (my) ass to keep working everywhere, so I\u0027d like to make it easier for us to pinpoint the CL where more of it is enabled in case there are build issues.",
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9639868c_57175071",
+        "filename": "src/compiler/translator/BuildSPIRV.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T19:00:07Z",
+      "side": 1,
+      "message": "Can there be a getArithmeticDecorations() instead, which takes the isPrecise parameter?   That should down on all the calls where \u0027false\u0027 is passed in and make it clearer which nodes it\u0027s for.",
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd559331_78424aee",
+        "filename": "src/compiler/translator/tree_util/FindPreciseNodes.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T19:00:07Z",
+      "side": 1,
+      "message": "remove?",
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e61020fd_588e44e5",
+        "filename": "src/compiler/translator/tree_util/FindPreciseNodes.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T19:00:07Z",
+      "side": 1,
+      "message": "which?",
+      "range": {
+        "startLine": 603,
+        "startChar": 35,
+        "endLine": 603,
+        "endChar": 48
+      },
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c3b0791f_05563d2f",
         "filename": "src/tests/angle_unittests.gni",
         "patchSetId": 5
