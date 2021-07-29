@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0707093e_4004a3d3",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-29T20:44:56Z",
+      "side": 1,
+      "message": "Thanks.\n\n\u003e but it has no user\n\nThat\u0027s fine.   I\u0027m just worried about build quirks, like bringing in the new file and making sure things are accessible.",
+      "parentUuid": "120b38bc_90b99d7e",
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9639868c_57175071",
