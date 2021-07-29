@@ -43,6 +43,22 @@ int GetPerVertexFieldIndex(const TQualifier qualifier, const ImmutableString &na
     }
 }
 
+bool IsBuiltInVariable(const TVariable *variable)
+{
+    if (variable->symbolType() == SymbolType::BuiltIn)
+    {
+        return true;
+    }
+
+    // Redeclared gl_ClipDistance && gl_CullDistance are considered UserDefined symbols.
+    if (variable->symbolType() == SymbolType::UserDefined)
+    {
+        return variable->name() == "gl_ClipDistance" || variable->name() == "gl_CullDistance";
+    }
+
+    return false;
+}
+
 // Traverser that:
 //
 // 1. Declares the input and output gl_PerVertex types and variables if not already (based on shader
@@ -146,7 +162,7 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
         //     };
         //
 
-        if (variable->symbolType() != SymbolType::BuiltIn)
+        if (!IsBuiltInVariable(variable))
         {
             ASSERT(variable->name() != "gl_Position" && variable->name() != "gl_PointSize" &&
                    variable->name() != "gl_ClipDistance" && variable->name() != "gl_CullDistance" &&

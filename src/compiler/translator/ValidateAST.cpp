@@ -54,7 +54,7 @@ class ValidateAST : public TIntermTraverser
     void visitStructOrInterfaceBlockDeclaration(const TType &type, const TSourceLoc &location);
     void visitStructInDeclarationUsage(const TType &type, const TSourceLoc &location);
     // Visit a unary or aggregate node and validate its built-in op against its built-in function.
-    void visitBuiltIn(TIntermOperator *op, const TFunction *function);
+    void visitBuiltInFunction(TIntermOperator *op, const TFunction *function);
     // Visit an aggregate node and validate its function call is to one that's already defined.
     void visitFunctionCall(TIntermAggregate *node);
     // Visit a binary node and validate its type against its operands.
@@ -280,7 +280,7 @@ void ValidateAST::visitStructInDeclarationUsage(const TType &type, const TSource
     }
 }
 
-void ValidateAST::visitBuiltIn(TIntermOperator *node, const TFunction *function)
+void ValidateAST::visitBuiltInFunction(TIntermOperator *node, const TFunction *function)
 {
     const TOperator op = node->getOp();
     if (!BuiltInGroup::IsBuiltIn(op))
@@ -445,20 +445,39 @@ void ValidateAST::visitBuiltInVariable(TIntermSymbol *node)
     const TVariable *variable = &node->variable();
     ImmutableString name      = variable->name();
 
-    auto iter = mReferencedBuiltIns.find(name);
-    if (iter == mReferencedBuiltIns.end())
+    if (mOptions.validateVariableReferences)
     {
-        mReferencedBuiltIns[name] = variable;
-        return;
+        auto iter = mReferencedBuiltIns.find(name);
+        if (iter == mReferencedBuiltIns.end())
+        {
+            mReferencedBuiltIns[name] = variable;
+            return;
+        }
+
+        if (variable != iter->second)
+        {
+            mDiagnostics->error(
+                node->getLine(),
+                "Found inconsistent references to built-in variable <validateVariableReferences>",
+                name.data());
+            mVariableReferencesFailed = true;
+        }
     }
 
-    if (variable != iter->second)
+    if (mOptions.validateQualifiers)
     {
-        mDiagnostics->error(
-            node->getLine(),
-            "Found inconsistent references to built-in variable <validateVariableReferences>",
-            name.data());
-        mVariableReferencesFailed = true;
+        TQualifier qualifier = variable->getType().getQualifier();
+
+        if ((name == "gl_ClipDistance" && qualifier != EvqClipDistance) ||
+            (name == "gl_CullDistance" && qualifier != EvqCullDistance) ||
+            (name == "gl_LastFragData" && qualifier != EvqLastFragData))
+        {
+            mDiagnostics->error(
+                node->getLine(),
+                "Incorrect qualifier applied to redeclared built-in <validateQualifiers>",
+                name.data());
+            mQualifiersFailed = true;
+        }
     }
 }
 
@@ -580,10 +599,11 @@ void ValidateAST::visitSymbol(TIntermSymbol *node)
         {
             visitVariableNeedingDeclaration(node);
         }
-        else if (variable->name().beginsWith("gl_"))
-        {
-            visitBuiltInVariable(node);
-        }
+    }
+
+    if (variable->name().beginsWith("gl_"))
+    {
+        visitBuiltInVariable(node);
     }
 }
 
@@ -616,7 +636,7 @@ bool ValidateAST::visitUnary(Visit visit, TIntermUnary *node)
 
     if (visit == PreVisit && mOptions.validateBuiltInOps)
     {
-        visitBuiltIn(node, node->getFunction());
+        visitBuiltInFunction(node, node->getFunction());
     }
 
     return true;
@@ -715,7 +735,7 @@ bool ValidateAST::visitAggregate(Visit visit, TIntermAggregate *node)
 
     if (visit == PreVisit && mOptions.validateBuiltInOps)
     {
-        visitBuiltIn(node, node->getFunction());
+        visitBuiltInFunction(node, node->getFunction());
     }
 
     if (visit == PreVisit && mOptions.validateFunctionCall)

@@ -55,13 +55,13 @@ class GLClipCullDistanceReferenceTraverser : public TIntermTraverser
                                          bool *nonConstIdxUsedOut,
                                          unsigned int *maxConstIdxOut,
                                          ClipCullDistanceIdxSet *constIndicesOut,
-                                         const ImmutableString &targetStr)
+                                         TQualifier targetQualifier)
         : TIntermTraverser(true, false, false),
           mRedeclaredSym(redeclaredSymOut),
           mUseNonConstClipCullDistanceIndex(nonConstIdxUsedOut),
           mMaxConstClipCullDistanceIndex(maxConstIdxOut),
           mConstClipCullDistanceIndices(constIndicesOut),
-          mTargetStr(targetStr)
+          mTargetQualifier(targetQualifier)
     {
         *mRedeclaredSym                    = nullptr;
         *mUseNonConstClipCullDistanceIndex = false;
@@ -79,8 +79,8 @@ class GLClipCullDistanceReferenceTraverser : public TIntermTraverser
             return true;
         }
 
-        TIntermTyped *variable = sequence.front()->getAsTyped();
-        if (!variable->getAsSymbolNode() || variable->getAsSymbolNode()->getName() != mTargetStr)
+        TIntermSymbol *variable = sequence.front()->getAsSymbolNode();
+        if (variable == nullptr || variable->getType().getQualifier() != mTargetQualifier)
         {
             return true;
         }
@@ -112,7 +112,7 @@ class GLClipCullDistanceReferenceTraverser : public TIntermTraverser
         {
             return true;
         }
-        if (clipCullDistance->getName() != mTargetStr)
+        if (clipCullDistance->getType().getQualifier() != mTargetQualifier)
         {
             return true;
         }
@@ -161,8 +161,8 @@ class GLClipCullDistanceReferenceTraverser : public TIntermTraverser
     unsigned int *mMaxConstClipCullDistanceIndex;
     // List of constant index reference of gl_ClipDistance
     ClipCullDistanceIdxSet *mConstClipCullDistanceIndices;
-    // String for gl_ClipDistance/gl_CullDistance
-    const ImmutableString mTargetStr;
+    // Qualifier for gl_ClipDistance/gl_CullDistance
+    const TQualifier mTargetQualifier;
 };
 
 // Replace all symbolic occurrences of given variables except one symbol.
@@ -207,7 +207,7 @@ TIntermNode *simpleAssignFunc(const unsigned int index,
     return new TIntermBinary(EOpAssign, left, right);
 }
 
-// This is only used for gl_Clipdistance
+// This is only used for gl_ClipDistance
 TIntermNode *assignFuncWithEnableFlags(const unsigned int index,
                                        TIntermSymbol *leftSymbol,
                                        TIntermSymbol *rightSymbol,
@@ -337,7 +337,7 @@ bool ReplaceClipCullDistanceAssignments::assignOriginalValueToANGLEVariableImpl(
     for (unsigned int i = 0; i < mEnabledDistances; i++)
     {
         readBlock->appendStatement(
-            simpleAssignFunc(i, glClipCullDistanceSymbol, clipCullDistanceSymbol, nullptr));
+            simpleAssignFunc(i, clipCullDistanceSymbol, glClipCullDistanceSymbol, nullptr));
     }
 
     return RunAtTheBeginningOfShader(mCompiler, mRoot, readBlock);
@@ -477,7 +477,7 @@ ANGLE_NO_DISCARD bool ReplaceClipDistanceAssignments(TCompiler *compiler,
     unsigned int maxConstIndex                    = 0;
     GLClipCullDistanceReferenceTraverser indexTraverser(&redeclaredGlClipDistance,
                                                         &useNonConstIndex, &maxConstIndex,
-                                                        &constIndices, glClipDistanceName);
+                                                        &constIndices, EvqClipDistance);
     root->traverse(&indexTraverser);
     if (!useNonConstIndex && constIndices.none())
     {
@@ -562,7 +562,7 @@ ANGLE_NO_DISCARD bool ReplaceCullDistanceAssignments(TCompiler *compiler,
     unsigned int maxConstIndex                    = 0;
     GLClipCullDistanceReferenceTraverser indexTraverser(&redeclaredGLCullDistance,
                                                         &useNonConstIndex, &maxConstIndex,
-                                                        &constIndices, glCullDistanceName);
+                                                        &constIndices, EvqCullDistance);
     root->traverse(&indexTraverser);
     if (!useNonConstIndex)
     {
