@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "120b38bc_90b99d7e",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T20:05:57Z",
+      "side": 1,
+      "message": "Done, but it has no user?",
+      "parentUuid": "190380a2_bbd467ef",
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9639868c_57175071",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2679a063_37ab0c10",
+        "filename": "src/compiler/translator/BuildSPIRV.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T20:05:57Z",
+      "side": 1,
+      "message": "Good idea, done.",
+      "parentUuid": "9639868c_57175071",
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd559331_78424aee",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-07-29T19:00:07Z",
       "side": 1,
       "message": "remove?",
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "019e90dc_add3caeb",
+        "filename": "src/compiler/translator/tree_util/FindPreciseNodes.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T20:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd559331_78424aee",
       "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36b19f9b_295b9d61",
+        "filename": "src/compiler/translator/tree_util/FindPreciseNodes.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T20:05:57Z",
+      "side": 1,
+      "message": "Done (originally meant to say \"should not\", then changed to \"cannot\")",
+      "parentUuid": "e61020fd_588e44e5",
+      "range": {
+        "startLine": 603,
+        "startChar": 35,
+        "endLine": 603,
+        "endChar": 48
+      },
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3b0791f_05563d2f",
@@ -88,6 +166,30 @@
       "writtenOn": "2021-07-29T12:53:30Z",
       "side": 1,
       "message": "I\u0027d suggest just putting this in the BUILD.gn. These gni files are not really relevant any more.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 35
+      },
+      "revId": "373aa396d9e049ae7289b8ec77bf74488323ae2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8a18aa3_ee000f23",
+        "filename": "src/tests/angle_unittests.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-29T20:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3b0791f_05563d2f",
       "range": {
         "startLine": 152,
         "startChar": 0,
