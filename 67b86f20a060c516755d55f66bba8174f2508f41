@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52e78f81_405d95b0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T11:58:08Z",
+      "side": 1,
+      "message": "nit: I\u0027d suggest you keep a reference to the iterator returned by [] and modify that reference instead of calling operator[] three times.",
+      "range": {
+        "startLine": 5437,
+        "startChar": 4,
+        "endLine": 5437,
+        "endChar": 38
+      },
+      "revId": "67b86f20a060c516755d55f66bba8174f2508f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
