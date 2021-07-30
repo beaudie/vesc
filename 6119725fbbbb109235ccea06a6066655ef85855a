@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ba74c9_caf80ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T17:54:28Z",
+      "side": 1,
+      "message": "Also could you please ensure you update AUTHORS and/or CONTRIBUTORS as necessary?",
+      "revId": "6119725fbbbb109235ccea06a6066655ef85855a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd9a10db_78eb6abe",
