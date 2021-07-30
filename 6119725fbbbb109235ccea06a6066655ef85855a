@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb25e2d1_951734a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T17:52:17Z",
+      "side": 1,
+      "message": "LGTM.. presumably the test triggers an ASAN issue without the fix?",
+      "revId": "6119725fbbbb109235ccea06a6066655ef85855a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd9a10db_78eb6abe",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9002,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T17:52:17Z",
+      "side": 1,
+      "message": "nit: can you also add validation for the red color after the draw?",
+      "range": {
+        "startLine": 9002,
+        "startChar": 4,
+        "endLine": 9002,
+        "endChar": 22
+      },
+      "revId": "6119725fbbbb109235ccea06a6066655ef85855a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
