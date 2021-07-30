@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c3c787d_7ead4c78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T22:22:16Z",
+      "side": 1,
+      "message": "LGTM\n\nSimilar to one of the previous CLs.   Do you have any trace of gfxbench performance data with this change?",
+      "revId": "4cda3af8c83ae01baf222961a78bb4da8ce97b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01b4f4c0_34c10285",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T22:22:16Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 757,
+        "startChar": 42,
+        "endLine": 757,
+        "endChar": 49
+      },
+      "revId": "4cda3af8c83ae01baf222961a78bb4da8ce97b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae9d79d4_2d774098",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T22:22:16Z",
+      "side": 1,
+      "message": "It looks like the \u0027offsetOut\u0027 parameter should just be removed from these functions.",
+      "revId": "4cda3af8c83ae01baf222961a78bb4da8ce97b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
