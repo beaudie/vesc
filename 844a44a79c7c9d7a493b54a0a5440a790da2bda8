@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c73f6452_5bec58ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-30T14:53:46Z",
+      "side": 1,
+      "message": "Test failure is off-by-one precision error which I\u0027ll fix.\n\nThe change does have an impact on the trace images, though I don\u0027t see anything visually degrading. Unless I\u0027m wrong and somehow gl_FragColor should be highp, this change should show a little boost in the failing traces",
+      "revId": "844a44a79c7c9d7a493b54a0a5440a790da2bda8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
