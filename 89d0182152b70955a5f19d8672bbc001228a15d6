@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20fa8120_24903581",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-30T06:45:03Z",
+      "side": 1,
+      "message": "I\u0027ve updated the commit message to write SKIP_FOR_CAPTURE here (as I should have done before, when I change the code). This change only refers to skips that are done because above tag is given in the expectation file (I\u0027m really not happy about putting these tags into that file, because it is not an expectation if I say up-front \"don\u0027t run this test\", but yeah). \n\nThe SKIP_BY_GTEST is another beast, it means that end2end_tests starts to run this tests and then decides not to go through with it. So other than the above it is truly an expected output from \nend2end_tests and to override this it would require the option to be passed on to end2end_tests and one would have to ignore the platform specific skips that are given in the code. So yes, it would be a lot more involved. I could make a CL if there is interest, but it would be a new one.",
+      "parentUuid": "1d2b81bb_59e34759",
+      "range": {
+        "startLine": 10,
+        "startChar": 26,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "945c2375_32eee099",
         "filename": "/COMMIT_MSG",
         "patchSetId": 10
@@ -37,6 +61,24 @@
       "writtenOn": "2021-07-29T16:12:01Z",
       "side": 1,
       "message": "Please add the option in the commit message.",
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e113b8ef_fe724519",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-30T06:45:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "945c2375_32eee099",
       "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +113,24 @@
       "writtenOn": "2021-07-29T16:12:01Z",
       "side": 1,
       "message": "nit: I\u0027d call this something like \u0027force\u0027 or \u0027force-run\u0027, since \"overriding the expectation file\" can also imply overriding the pass/fail status which doesn\u0027t really make much sense.",
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d25cc79_b4c32181",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-07-30T06:45:03Z",
+      "side": 1,
+      "message": "I called it --force-run-capture",
+      "parentUuid": "40e6a4f9_bb07b9c9",
       "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
