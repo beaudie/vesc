@@ -1311,10 +1311,6 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
 {
     TInfoSinkBase sink;
 
-    bool precisionEmulation = false;
-    if (!emulatePrecisionIfNeeded(root, sink, &precisionEmulation, SH_SPIRV_VULKAN_OUTPUT))
-        return false;
-
     bool enablePrecision = (compileOptions & SH_IGNORE_PRECISION_QUALIFIERS) == 0;
 
     SpecConst specConst(&getSymbolTable(), compileOptions, getShaderType());
@@ -1348,14 +1344,14 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
             return false;
         }
 
-        return OutputSPIRV(this, root, compileOptions, precisionEmulation);
+        return OutputSPIRV(this, root, compileOptions);
     }
 #endif
 
     // Write translated shader.
     TOutputVulkanGLSL outputGLSL(sink, getHashFunction(), getNameMap(), &getSymbolTable(),
                                  getShaderType(), getShaderVersion(), getOutputType(),
-                                 precisionEmulation, enablePrecision, compileOptions);
+                                 enablePrecision, compileOptions);
     root->traverse(&outputGLSL);
 
     return compileToSpirv(sink);
