@@ -90,6 +90,63 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86a70348_9331c643",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T17:40:01Z",
+      "side": 1,
+      "message": "I\u0027m still going through the relation chain so I\u0027m not entirely sure how this class is being used yet.   As Jamie noted, a high level design doc explaining the goal and changes would probably be helpful to give a little more context for these changes.",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b1e6f29_21265109",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3453,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T17:40:01Z",
+      "side": 1,
+      "message": "Why are these passed in?",
+      "range": {
+        "startLine": 3452,
+        "startChar": 0,
+        "endLine": 3453,
+        "endChar": 84
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71e1c05b_e6894e23",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T17:40:01Z",
+      "side": 1,
+      "message": "Referencing kSmallPool and kLargePool directly takes out some of the benefit of using an enum, since this won\u0027t automatically free any pools if new values are added after kLargePool.   Instead, this should be (similar to the memory type loop):\n\n        for (int poolType \u003d 0; poolType \u003c kPoolCount; poolType++)",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8931c17_d96fb040",
@@ -155,6 +212,23 @@
         "endLine": 123,
         "endChar": 11
       },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f671241e_709503bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3537,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T17:40:01Z",
+      "side": 1,
+      "message": "This can be moved below to just before the InitMappableAllocation() call.",
       "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
