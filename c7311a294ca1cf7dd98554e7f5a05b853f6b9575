@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57ac5e7c_6fd564da",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-30T19:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cd40f54_2be7d8ee",
+      "range": {
+        "startLine": 323,
+        "startChar": 12,
+        "endLine": 324,
+        "endChar": 50
+      },
+      "revId": "c7311a294ca1cf7dd98554e7f5a05b853f6b9575",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a15572a2_27d054e3",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-07-30T11:56:10Z",
       "side": 1,
       "message": "nit: we should have helpers for this somewhere.",
+      "range": {
+        "startLine": 857,
+        "startChar": 13,
+        "endLine": 858,
+        "endChar": 13
+      },
+      "revId": "c7311a294ca1cf7dd98554e7f5a05b853f6b9575",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81ff7f11_71ec9672",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-30T19:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a15572a2_27d054e3",
       "range": {
         "startLine": 857,
         "startChar": 13,
