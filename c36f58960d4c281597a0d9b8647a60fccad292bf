@@ -46,6 +46,30 @@
       },
       "revId": "c36f58960d4c281597a0d9b8647a60fccad292bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "614b9dbc_40f9d5a2",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T12:01:29Z",
+      "side": 1,
+      "message": "OK sounds good.",
+      "parentUuid": "81781a0a_796b0ee3",
+      "range": {
+        "startLine": 44,
+        "startChar": 25,
+        "endLine": 44,
+        "endChar": 46
+      },
+      "revId": "c36f58960d4c281597a0d9b8647a60fccad292bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
