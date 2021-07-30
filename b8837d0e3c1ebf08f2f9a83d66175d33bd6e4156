@@ -16,6 +16,24 @@
       "message": "PS4..6 line diff: +63 -1425\n\nNow doesn\u0027t that feel good? :)",
       "revId": "b8837d0e3c1ebf08f2f9a83d66175d33bd6e4156",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1053059d_d008cbf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-30T07:11:34Z",
+      "side": 1,
+      "message": "Yes it does! Thank you again for your advice and help!",
+      "parentUuid": "2ad7a215_39da58fa",
+      "revId": "b8837d0e3c1ebf08f2f9a83d66175d33bd6e4156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
