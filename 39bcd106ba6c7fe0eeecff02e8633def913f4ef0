@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84f17ebd_12a286e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T16:51:25Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "39bcd106ba6c7fe0eeecff02e8633def913f4ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62667ec1_47d40e7d",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T16:51:25Z",
+      "side": 1,
+      "message": "nit: \u0027-f\u0027 (for force)",
+      "range": {
+        "startLine": 1145,
+        "startChar": 9,
+        "endLine": 1145,
+        "endChar": 11
+      },
+      "revId": "39bcd106ba6c7fe0eeecff02e8633def913f4ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
