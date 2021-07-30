@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55363a89_c09aad7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T17:04:26Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t quite follow. Did you change the way UBO / SSBO buffers are allocated to no longer use the linear allocator? It\u0027s important that those stay linear so they can change descriptors less frequently.",
+      "parentUuid": "d9c9c183_c6737c04",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8931c17_d96fb040",

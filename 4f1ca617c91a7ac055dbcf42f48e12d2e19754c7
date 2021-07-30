@@ -70,6 +70,30 @@
       },
       "revId": "4f1ca617c91a7ac055dbcf42f48e12d2e19754c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad46b1ce_6f05b924",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T17:04:26Z",
+      "side": 1,
+      "message": "Despite its size helpers is the intended place for classes like this. I\u0027m fine if you put it in helpers then do a follow-up change to split that file up to be more manageable.",
+      "parentUuid": "981b34a8_c3af8f98",
+      "range": {
+        "startLine": 86,
+        "startChar": 6,
+        "endLine": 86,
+        "endChar": 27
+      },
+      "revId": "4f1ca617c91a7ac055dbcf42f48e12d2e19754c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
