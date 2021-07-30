@@ -756,6 +756,7 @@ angle::Result CreateRenderPass2(Context *context,
         ASSERT(isRenderToTexture);
         ASSERT(renderer->getFeatures().supportsMultisampledRenderToSingleSampled.enabled);
         ASSERT(subpassDescriptions.size() == 1);
+        ASSERT(renderToTextureInfo.rasterizationSamples != VK_SAMPLE_COUNT_1_BIT);
 
         subpassDescriptions.back().pNext = &renderToTextureInfo;
     }
@@ -938,6 +939,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     const uint8_t descSamples            = desc.samples();
     const uint8_t attachmentSamples      = isRenderToTexture ? 1 : descSamples;
     const uint8_t renderToTextureSamples = isRenderToTexture ? descSamples : 1;
+    fprintf(stderr, "InitRPFromDesc: isMSRTT? %d, desc samples: %d\n", isRenderToTexture,
+            descSamples);
 
     // Unpack the packed and split representation into the format required by Vulkan.
     gl::DrawBuffersVector<VkAttachmentReference> colorAttachmentRefs;
@@ -1226,8 +1229,12 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     // If depth/stencil resolve is used, we need to create the render pass with
     // vkCreateRenderPass2KHR.  Same when using the VK_EXT_multisampled_render_to_single_sampled
     // extension.
+    ASSERT(isRenderToTexture == desc.isRenderToTexture());
     if (depthStencilResolve.pDepthStencilResolveAttachment != nullptr || desc.isRenderToTexture())
     {
+        fprintf(stderr, " CreateRP2 because %d || %d (MSRTT samples: %d)\n",
+                depthStencilResolve.pDepthStencilResolveAttachment != nullptr,
+                desc.isRenderToTexture(), renderToTextureSamples);
         ANGLE_TRY(CreateRenderPass2(contextVk, createInfo, depthStencilResolve, multiviewInfo,
                                     desc.hasDepthUnresolveAttachment(),
                                     desc.hasStencilUnresolveAttachment(), desc.isRenderToTexture(),
