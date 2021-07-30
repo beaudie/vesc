@@ -34,6 +34,24 @@
       "parentUuid": "c73f6452_5bec58ba",
       "revId": "844a44a79c7c9d7a493b54a0a5440a790da2bda8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f72b548_6b6e5be0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-30T15:08:48Z",
+      "side": 1,
+      "message": "Well it may turn highp to mediump, so pretty sure it can\u0027t _regress_ perf.\n\nAlso, the GLSL ES 100 spec says the built-in is declared as:\n\n    mediump vec4 gl_FragColor;\n\nWhich is consistent with builtin_variables.json. So yeah, pretty sure the change is correct.",
+      "parentUuid": "4a8bce73_12374846",
+      "revId": "844a44a79c7c9d7a493b54a0a5440a790da2bda8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
