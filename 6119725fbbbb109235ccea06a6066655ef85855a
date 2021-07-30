@@ -35,6 +35,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa29ab5_13da81de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-07-30T18:09:26Z",
+      "side": 1,
+      "message": "I already added it to AUTHORS in a previous commit.",
+      "parentUuid": "26ba74c9_caf80ff1",
+      "revId": "6119725fbbbb109235ccea06a6066655ef85855a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd68a5a1_c519975b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-07-30T18:09:26Z",
+      "side": 1,
+      "message": "Yes, perhaps. I tested it on my local machine.",
+      "parentUuid": "fb25e2d1_951734a8",
+      "revId": "6119725fbbbb109235ccea06a6066655ef85855a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd9a10db_78eb6abe",
@@ -48,6 +84,30 @@
       "writtenOn": "2021-07-30T17:52:17Z",
       "side": 1,
       "message": "nit: can you also add validation for the red color after the draw?",
+      "range": {
+        "startLine": 9002,
+        "startChar": 4,
+        "endLine": 9002,
+        "endChar": 22
+      },
+      "revId": "6119725fbbbb109235ccea06a6066655ef85855a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0928f8e9_ccc18f56",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9002,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-07-30T18:09:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd9a10db_78eb6abe",
       "range": {
         "startLine": 9002,
         "startChar": 4,
