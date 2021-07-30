@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b505da2_7aa8cabc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-07-30T15:02:23Z",
+      "side": 1,
+      "message": "According to https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1233361#c45,\nthis revert is reliably ready to land.",
+      "revId": "7bd23a01408fad8936db4e4a239c822d66b37d96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
