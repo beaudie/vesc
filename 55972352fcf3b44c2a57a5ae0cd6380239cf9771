@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a03e7c_f0208b92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "Seems reasonable to me.\n\nDo you have any numbers to show that this is working as intended (less VMA memory fragmentation and/or lower memory usage overall) and not introducing any performance regressions?",
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb3dd9f_836f59aa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3468,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "nit: Redundant. Remove.",
+      "range": {
+        "startLine": 3468,
+        "startChar": 59,
+        "endLine": 3468,
+        "endChar": 74
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a62186f_8ca01cd5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3479,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "This can just be:\n\n            // Create a custom pool.\n            ANGLE_VK_TRY(vma::CreatePool(mAllocator-\u003egetHandle(), memoryTypeIndex, useBuddyAlgorithm,\n                                     blockSize, \u0026mVMAPools[poolType][memoryTypeIndex]));\n    }\n\n    return VK_SUCCESS;",
+      "range": {
+        "startLine": 3469,
+        "startChar": 0,
+        "endLine": 3479,
+        "endChar": 18
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "121ca622_0e732199",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3536,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY()",
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b43dd57_07bec70a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3548,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like vkMemReq.size can change inside the loop.   Assuming it\u0027s always the same value, is there a way to refactor this to pull these checks out of the loop?",
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcbb8bb6_bf7087b8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "nit: There is no \"2)\".",
+      "range": {
+        "startLine": 135,
+        "startChar": 64,
+        "endLine": 135,
+        "endChar": 66
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d87ca2a_65879d7b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "nit: I would prefer avoiding the shifts to make them more human readable:\n\n    1024 * 1024; // 1MB\n    4 * 1024;    // 4KB\n    128 * 1024;  // 128KB\n    \nAdmittedly, I don\u0027t know for sure where the \u0027ull\u0027 needs to be, or if it\u0027s required at all since none of these are particularly large values.",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 85
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2d90267_3390959a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3441,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "This seems a little clunky.\n\nWhy is destorying the mBuffer only required if BufferHelper::init() fails here, but not any of the later ANGLE_TRY() calls?   It seems like we\u0027re losing VK objects/memory if later ANGLE_TRY() calls fail also, and I\u0027m not sure if we attempt any sort of cleanup like there for other objects.",
+      "range": {
+        "startLine": 3440,
+        "startChar": 0,
+        "endLine": 3441,
+        "endChar": 48
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99134015_d8fb8ef0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-07-30T18:51:44Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY(result)",
+      "range": {
+        "startLine": 3442,
+        "startChar": 0,
+        "endLine": 3443,
+        "endChar": 35
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
