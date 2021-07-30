@@ -51,6 +51,24 @@
       "message": "You can stick this here to flatten array of arrays (exactly as is done in TranslatorVulkan.cpp):\n\n    // Replace array of array of opaque uniforms with a flattened array.  This is run after\n    // MonomorphizeUnsupportedFunctionsInVulkanGLSL and RewriteStructSamplers so that it\u0027s not\n    // possible for an array of array of opaque type to be partially subscripted and passed to a\n    // function.\n    if (!RewriteArrayOfArrayOfOpaqueUniforms(this, root, \u0026getSymbolTable()))\n    {\n        return false;\n    }",
       "revId": "b5a0fa383a5b4e438fc72a7693400f7a293838f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8d202fe_2ced5b8f",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-30T02:03:14Z",
+      "side": 1,
+      "message": "Thank you Shabi! This worked perfectly!",
+      "parentUuid": "08dcae12_837cde6c",
+      "revId": "b5a0fa383a5b4e438fc72a7693400f7a293838f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

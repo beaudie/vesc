@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd63a3f4_21310766",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-30T02:03:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49550b08_ca689b06",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "915685a8_d5dd2504",
@@ -246,6 +264,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "044d9d8a_6e6bd300",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-30T02:03:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4345dae_d043ee39",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9545a30_38dfe9e5",
@@ -347,6 +383,24 @@
       "side": 1,
       "message": "Understood. However, incorporating Apple\u0027s version of that code fixed many assertion failures in other tests, while only introducing a fatal error in this one test.",
       "parentUuid": "bfebedbe_41de09e2",
+      "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3e03f6_bb35fbc8",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6480,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-07-30T02:03:14Z",
+      "side": 1,
+      "message": "Thank you! This is fixed by incorporating the additional passes from TranslatorVulkan!",
+      "parentUuid": "a66e6fb6_9d310284",
       "revId": "908b9a166ec30af81f75008cb55d60aaa5a71012",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
