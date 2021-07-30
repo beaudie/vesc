@@ -36,6 +36,9 @@ std::string GetModulePath(void *moduleOrSymbol)
 
 Optional<std::string> GetCWD()
 {
+#if ANGLE_PLATFORM_MACOS
+    return angle::GetModuleDirectory();
+#else
     std::array<char, 4096> pathBuf;
     char *result = getcwd(pathBuf.data(), pathBuf.size());
     if (result == nullptr)
@@ -43,11 +46,18 @@ Optional<std::string> GetCWD()
         return Optional<std::string>::Invalid();
     }
     return std::string(pathBuf.data());
+#endif
 }
 
 bool SetCWD(const char *dirName)
 {
+#if ANGLE_PLATFORM_MACOS
+    // Can't change module directory on MacOS, return true only if
+    // the requested directory is already set to module directory
+    return (angle::GetModuleDirectory() == dirName);
+#else
     return (chdir(dirName) == 0);
+#endif
 }
 
 bool UnsetEnvironmentVar(const char *variableName)
@@ -81,12 +91,14 @@ std::string GetModuleDirectory()
         directory = moduleName.substr(0, moduleName.find_last_of('/') + 1);
     }
 
+#if !ANGLE_PLATFORM_MACOS
     // Ensure we return the full path to the module, not the relative path
     Optional<std::string> cwd = GetCWD();
     if (cwd.valid() && !IsFullPath(directory))
     {
         directory = ConcatenatePath(cwd.value(), directory);
     }
+#endif
     return directory;
 }
 
