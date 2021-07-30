@@ -46,6 +46,30 @@
       },
       "revId": "4f1ca617c91a7ac055dbcf42f48e12d2e19754c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "981b34a8_c3af8f98",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-07-30T16:54:50Z",
+      "side": 1,
+      "message": "vk_helpers.cpp file already too big to navigate. Will you okay for me to leave it here for now and split it into a separate file in future CL?",
+      "parentUuid": "7ecdc347_00cf2ce1",
+      "range": {
+        "startLine": 86,
+        "startChar": 6,
+        "endLine": 86,
+        "endChar": 27
+      },
+      "revId": "4f1ca617c91a7ac055dbcf42f48e12d2e19754c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c9c183_c6737c04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-07-30T16:54:50Z",
+      "side": 1,
+      "message": "I did not change linear allocator in this serial of CLs. For ContextVk::mStagingBuffer, linear allocator is the right choice and I think our DynamicBuffer implementation works well for that kind of usage. I do not have a plan to change that.",
+      "parentUuid": "3c59c30c_5e85b4f3",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8931c17_d96fb040",
@@ -100,6 +118,30 @@
       "writtenOn": "2021-07-30T12:32:43Z",
       "side": 1,
       "message": "can you see if you can encapsulate this into a single API instead of several APIs? I haven\u0027t looked closely at the code to see if it\u0027s possible.",
+      "range": {
+        "startLine": 3537,
+        "startChar": 0,
+        "endLine": 3557,
+        "endChar": 0
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b945625d_4b7a789b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3557,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-07-30T16:54:50Z",
+      "side": 1,
+      "message": "Yes, this section of code will be end up just making one allocateMemoryForBuffer call in crrev.com/c/2939490.",
+      "parentUuid": "3728d73b_09744535",
       "range": {
         "startLine": 3537,
         "startChar": 0,
