@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62856f77_4d442023",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-07-30T01:19:23Z",
+      "side": 1,
+      "message": "Tried my best to clean this mess. There\u0027s definitely more work needed for anglebug.com/5466 as currently the translator doesn\u0027t support user-defined gl_PerVertex declarations.",
+      "revId": "e781a7af34c95f713db180221b16f2428086290d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
