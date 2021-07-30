@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91b93051_740e7724",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-07-30T17:27:19Z",
+      "side": 1,
+      "message": "Right. Maybe we should discuss it in crrev.com/c/2901241 that actually change this. This CL does not change UBO/SSBO behavior.\n\nOne solution for UBO/SSBO is to still keep the per object DynamicBuffer pool so we do not change behavior of that. It will be unfortunate that BufferVk.cpp wont be simplified because of that, but we can leave it as future optimization for now.",
+      "parentUuid": "55363a89_c09aad7b",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8931c17_d96fb040",
