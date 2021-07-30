@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c59c30c_5e85b4f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T12:32:43Z",
+      "side": 1,
+      "message": "Looks good. Just to confirm the direction for the patch series: we\u0027ll end up in a state that still uses a linear allocator, but instead we\u0027ll be using tools in Vma to do the linear allocation? And we\u0027ll still have an offset into a buffer for many/most allocations?",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8931c17_d96fb040",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T12:32:43Z",
+      "side": 1,
+      "message": "can you ASSERT that the pools are dellocated/nulled out in the destructor to ensure we call destroy() before we destruct this object?",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f77e1c2_aa61a782",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T12:32:43Z",
+      "side": 1,
+      "message": "minor request - but instead of owning a weak pointer, you can pass in the RendererVk as the first argument and pull the Allocator from RendererVk? Will help follow the single-ownership model we use most of the time.",
+      "range": {
+        "startLine": 115,
+        "startChar": 15,
+        "endLine": 115,
+        "endChar": 25
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf49cf39_82740a50",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T12:32:43Z",
+      "side": 1,
+      "message": "nit: you can use std::array",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 11
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3728d73b_09744535",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3557,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-07-30T12:32:43Z",
+      "side": 1,
+      "message": "can you see if you can encapsulate this into a single API instead of several APIs? I haven\u0027t looked closely at the code to see if it\u0027s possible.",
+      "range": {
+        "startLine": 3537,
+        "startChar": 0,
+        "endLine": 3557,
+        "endChar": 0
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
