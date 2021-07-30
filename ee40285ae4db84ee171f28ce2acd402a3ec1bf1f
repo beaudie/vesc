@@ -22,6 +22,30 @@
       },
       "revId": "ee40285ae4db84ee171f28ce2acd402a3ec1bf1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19a6af86_a69fc38b",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-07-30T11:12:16Z",
+      "side": 1,
+      "message": "Added a SurfaceParams struct containing extents and color space, which is now the value of the map.",
+      "parentUuid": "eb4fe565_5dd06329",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 0
+      },
+      "revId": "ee40285ae4db84ee171f28ce2acd402a3ec1bf1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
