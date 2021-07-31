@@ -4873,9 +4873,8 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             {
                 TConstantUnion *safeConstantUnion = new TConstantUnion();
                 safeConstantUnion->setIConst(safeIndex);
-                indexExpression = new TIntermConstantUnion(
-                    safeConstantUnion, TType(EbtInt, indexExpression->getPrecision(),
-                                             indexExpression->getQualifier()));
+                indexExpression =
+                    new TIntermConstantUnion(safeConstantUnion, TType(indexExpression->getType()));
             }
 
             TIntermBinary *node =
