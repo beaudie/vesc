@@ -3477,6 +3477,58 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initWithDeviceMemory(ContextVk *contextVk,
+                                                 const VkBufferCreateInfo &createInfo,
+                                                 VkMemoryPropertyFlags memoryPropertyFlags,
+                                                 VkDeviceMemory vkDeviceMemory)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    mSerial = renderer->getResourceSerialFactory().generateBufferSerial();
+    mSize   = createInfo.size;
+
+    ANGLE_VK_TRY(contextVk, mBuffer.init(contextVk->getDevice(), createInfo));
+
+    ANGLE_TRY(mMemory.initDeviceMemoryReference(vkDeviceMemory));
+
+    ANGLE_VK_TRY(contextVk,
+                 mBuffer.bindMemory(contextVk->getDevice(), *mMemory.getDeviceMemoryObject()));
+
+    mMemoryPropertyFlags     = memoryPropertyFlags;
+    mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
+
+    if (renderer->getFeatures().allocateNonZeroMemory.enabled)
+    {
+        // This memory can't be mapped, so the buffer must be marked as a transfer destination so we
+        // can use a staging resource to initialize it to a non-zero value. If the memory is
+        // mappable we do the initialization in AllocateBufferMemory.
+        if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0 &&
+            (createInfo.usage & VK_BUFFER_USAGE_TRANSFER_DST_BIT) != 0)
+        {
+            ANGLE_TRY(initializeNonZeroMemory(contextVk, mSize));
+        }
+        else if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
+        {
+            // Can map the memory.
+            // Pick an arbitrary value to initialize non-zero memory for sanitization.
+            constexpr int kNonZeroInitValue = 55;
+            if (mMemory.getDeviceMemoryObject()->valid())
+            {
+                ANGLE_TRY(InitMappableDeviceMemory(contextVk, mMemory.getDeviceMemoryObject(),
+                                                   mSize, kNonZeroInitValue, mMemoryPropertyFlags));
+            }
+            else
+            {
+                ANGLE_TRY(InitMappableAllocation(contextVk, renderer->getAllocator(),
+                                                 mMemory.getAllocationObject(), mSize,
+                                                 kNonZeroInitValue, mMemoryPropertyFlags));
+            }
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result BufferHelper::initExternal(ContextVk *contextVk,
                                          VkMemoryPropertyFlags memoryProperties,
                                          const VkBufferCreateInfo &requestedCreateInfo,

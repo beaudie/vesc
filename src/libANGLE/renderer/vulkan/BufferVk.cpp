@@ -157,7 +157,11 @@ BufferVk::VertexConversionBuffer::~VertexConversionBuffer() = default;
 
 // BufferVk implementation.
 BufferVk::BufferVk(const gl::BufferState &state)
-    : BufferImpl(state), mBuffer(nullptr), mBufferOffset(0), mMemoryPropertyFlags(0)
+    : BufferImpl(state),
+      mBuffer(nullptr),
+      mBufferOffset(0),
+      mMemoryPropertyFlags(0),
+      mMemoryTypeIndex(0)
 {}
 
 BufferVk::~BufferVk() {}
@@ -172,16 +176,20 @@ void BufferVk::destroy(const gl::Context *context)
 void BufferVk::release(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
-    // For external buffers, mBuffer is not a reference to a pre-created buffer in the
-    // sub-allocator. It was allocated explicitly and needs to be deallocated during release(...)
-    if (mBuffer && mBuffer->isExternalBuffer())
+    if (mAllocation.valid())
+    {
+        mAllocation.destroy(renderer->getAllocator());
+        // If mAllocation is valid, this means it is sub-allocated. The allocator owns BufferHelper
+        // object and is responsible to release it.
+        mBuffer = nullptr;
+    }
+    if (mBuffer)
     {
         mBuffer->release(renderer);
         mBuffer = nullptr;
     }
     mShadowBuffer.release();
     mHostVisibleBufferPool.release(renderer);
-    mBuffer       = nullptr;
     mBufferOffset = 0;
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
@@ -877,21 +885,12 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
     }
 
     // Allocate the buffer
-    std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
-
-    VkBufferCreateInfo createInfo    = {};
-    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    createInfo.flags                 = 0;
-    createInfo.size                  = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
-    createInfo.usage                 = usageFlags;
-    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-    createInfo.queueFamilyIndexCount = 0;
-    createInfo.pQueueFamilyIndices   = nullptr;
-
-    ANGLE_TRY(buffer->init(contextVk, createInfo, mMemoryPropertyFlags));
-    ASSERT(buffer->valid());
-
-    mBuffer = buffer.release();
+    RendererVk *rendererVk                           = contextVk->getRenderer();
+    vk::BufferMemoryAllocator &bufferMemoryAllocator = rendererVk->getBufferMemoryAllocator();
+    VkDeviceSize requestedSize = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
+    ANGLE_TRY(bufferMemoryAllocator.createBuffer(contextVk, requestedSize, mMemoryPropertyFlags,
+                                                 mAllocation, &mMemoryTypeIndex, &mBuffer,
+                                                 &mBufferOffset));
     ASSERT(mBuffer);
 
     return angle::Result::Continue;
