@@ -1877,8 +1877,8 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     {
         ASSERT((mImageUsageFlags & VK_IMAGE_USAGE_STORAGE_BIT) != 0);
 
-        mImage->retain(&contextVk->getResourceUseList());
-        getImageViews().retain(&contextVk->getResourceUseList());
+        mImage->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
+        getImageViews().retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
 
         return generateMipmapsWithCompute(contextVk);
     }
@@ -2112,7 +2112,7 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
         }
     }
 
-    mImage->retain(&contextVk->getResourceUseList());
+    mImage->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 
     return angle::Result::Continue;
 }
@@ -2648,7 +2648,7 @@ const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextV
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
+    imageViews.retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 
     if (mState.isStencilMode() && imageViews.hasStencilReadImageView())
     {
@@ -2672,7 +2672,7 @@ const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *context
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
+    imageViews.retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!imageViews.hasStencilReadImageView() || !imageViews.hasFetchImageView());
@@ -2692,7 +2692,7 @@ const vk::ImageView &TextureVk::getCopyImageViewAndRecordUse(ContextVk *contextV
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
+    imageViews.retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 
     ASSERT(mImage->getFormat().actualImageFormat().isSRGB ==
            (ConvertToLinear(mImage->getFormat().actualImageFormatID) != angle::FormatID::NONE));
@@ -2775,7 +2775,7 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
     const vk::BufferHelper &buffer =
         vk::GetImpl(mState.getBuffer().get())->getBufferAndOffset(&bufferOffset);
 
-    retainBufferViews(&contextVk->getResourceUseList());
+    retainBufferViews(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
     return mBufferViews.getView(contextVk, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }
 

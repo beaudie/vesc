@@ -12,23 +12,38 @@
 
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <stack>
+
 namespace rx
 {
 namespace vk
 {
+enum class ResourceUseType
+{
+    Read,       // Resource is being used/read by the GPU
+    ReadWrite,  // Resource is being read and/or written by the GPU
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
 // Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
-// of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
-// in the VkQueue. The reference count and serial together can determine if a resource is currently
-// in use.
+// of times a resource is retained by ANGLE. The accessSerial indicates the most recent use of a
+// resource in the VkQueue. The reference count and accessSerial together can determine if a
+// resource is currently in use.
 struct ResourceUse
 {
     ResourceUse() = default;
 
     // The number of times a resource is retained by ANGLE.
-    uint32_t counter = 0;
+    uint32_t accessCounter = 0;
+    std::stack<uint32_t> readAccessCounts;
+    std::stack<uint32_t> writeAccessCounts;
 
     // The most recent time of use in a VkQueue.
-    Serial serial;
+    Serial accessSerial;
+    Serial readSerial;
+    Serial readWriteSerial;
 };
 
 class SharedResourceUse final : angle::NonCopyable
@@ -49,18 +64,43 @@ class SharedResourceUse final : angle::NonCopyable
     {
         ASSERT(!mUse);
         mUse = new ResourceUse;
-        mUse->counter++;
+        mUse->accessCounter++;
     }
 
     // Specifically for use with command buffers that are used as one-offs.
-    void updateSerialOneOff(Serial serial) { mUse->serial = serial; }
+    void updateSerialOneOff(Serial serial)
+    {
+        ASSERT(valid());
+        ASSERT(mUse->readSerial <= serial && mUse->readWriteSerial <= serial);
+        mUse->readSerial = serial;
+
+        // Only update the Serial for the matching command.
+        if (!mUse->writeAccessCounts.empty() &&
+            mUse->writeAccessCounts.top() == mUse->accessCounter)
+        {
+            mUse->readWriteSerial = serial;
+            mUse->writeAccessCounts.pop();
+        }
+    }
 
     ANGLE_INLINE void release()
     {
         ASSERT(valid());
-        ASSERT(mUse->counter > 0);
-        if (--mUse->counter == 0)
+        // The accessCounter acts as the "lifetime" counter.
+        ASSERT(mUse->accessCounter > 0);
+
+        // Pop the access if the resource is released before the command using it is submitted.
+        if (!mUse->writeAccessCounts.empty() &&
+            mUse->writeAccessCounts.top() == mUse->accessCounter)
         {
+            mUse->writeAccessCounts.pop();
+        }
+
+        --mUse->accessCounter;
+
+        if (mUse->accessCounter == 0)
+        {
+            ASSERT(mUse->writeAccessCounts.empty());
             delete mUse;
         }
         mUse = nullptr;
@@ -68,45 +108,76 @@ class SharedResourceUse final : angle::NonCopyable
 
     ANGLE_INLINE void releaseAndUpdateSerial(Serial serial)
     {
-        ASSERT(valid());
-        ASSERT(mUse->counter > 0);
-        ASSERT(mUse->serial <= serial);
-        mUse->serial = serial;
+        updateSerialOneOff(serial);
         release();
     }
 
-    ANGLE_INLINE void set(const SharedResourceUse &rhs)
+    ANGLE_INLINE void set(const SharedResourceUse &rhs, ResourceUseType resourceUseType)
     {
         ASSERT(rhs.valid());
         ASSERT(!valid());
-        ASSERT(rhs.mUse->counter < std::numeric_limits<uint32_t>::max());
+        ASSERT(rhs.mUse->accessCounter < std::numeric_limits<uint32_t>::max());
         mUse = rhs.mUse;
-        mUse->counter++;
+
+        // Always increment the accessCounter, since that also behaves as the "lifetime" counter.
+        mUse->accessCounter++;
+        ASSERT(mUse->accessCounter < std::numeric_limits<uint32_t>::max());
+
+        switch (resourceUseType)
+        {
+            case ResourceUseType::Read:
+                // Counter already incremented.
+                break;
+            case ResourceUseType::ReadWrite:
+                mUse->writeAccessCounts.push(mUse->accessCounter);
+                break;
+            default:
+                UNREACHABLE();
+        }
     }
 
-    // The base counter value for a live resource is "1". Any value greater than one indicates
+    // The base accessCounter value for a live resource is "1". Any value greater than one indicates
     // the resource is in use by a command buffer.
     ANGLE_INLINE bool usedInRecordedCommands() const
     {
         ASSERT(valid());
-        return mUse->counter > 1;
+        return mUse->accessCounter > 1;
+    }
+    ANGLE_INLINE bool usedInRecordedCommandsForWrite() const
+    {
+        ASSERT(valid());
+        return mUse->writeAccessCounts.size() > 0;
     }
 
     ANGLE_INLINE bool usedInRunningCommands(Serial lastCompletedSerial) const
     {
         ASSERT(valid());
-        return mUse->serial > lastCompletedSerial;
+        return mUse->accessSerial > lastCompletedSerial || mUse->readSerial > lastCompletedSerial ||
+               mUse->readWriteSerial > lastCompletedSerial;
+    }
+    ANGLE_INLINE bool usedInRunningCommandsForWrite(Serial lastCompletedSerial) const
+    {
+        ASSERT(valid());
+        return mUse->readWriteSerial > lastCompletedSerial;
     }
 
     ANGLE_INLINE bool isCurrentlyInUse(Serial lastCompletedSerial) const
     {
         return usedInRecordedCommands() || usedInRunningCommands(lastCompletedSerial);
     }
+    ANGLE_INLINE bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return usedInRecordedCommandsForWrite() ||
+               usedInRunningCommandsForWrite(lastCompletedSerial);
+    }
 
-    ANGLE_INLINE Serial getSerial() const
+    ANGLE_INLINE Serial getLatestSerial() const
     {
         ASSERT(valid());
-        return mUse->serial;
+        Serial serial =
+            mUse->accessSerial >= mUse->readSerial ? mUse->accessSerial : mUse->readSerial;
+        serial = serial >= mUse->readWriteSerial ? serial : mUse->readWriteSerial;
+        return serial;
     }
 
   private:
@@ -140,10 +211,10 @@ class ResourceUseList final : angle::NonCopyable
     virtual ~ResourceUseList();
     ResourceUseList &operator=(ResourceUseList &&rhs);
 
-    void add(const SharedResourceUse &resourceUse);
+    void add(const SharedResourceUse &resourceUse, ResourceUseType resourceUseType);
 
     void releaseResourceUses();
-    void releaseResourceUsesAndUpdateSerials(Serial serial);
+    void releaseResourceUsesAndUpdateSerials(Serial accessSerial);
 
     bool empty() { return mResourceUses.empty(); }
 
@@ -151,10 +222,11 @@ class ResourceUseList final : angle::NonCopyable
     std::vector<SharedResourceUse> mResourceUses;
 };
 
-ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse &resourceUse)
+ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse &resourceUse,
+                                       ResourceUseType resourceUseType)
 {
     SharedResourceUse newUse;
-    newUse.set(resourceUse);
+    newUse.set(resourceUse, resourceUseType);
     mResourceUses.emplace_back(std::move(newUse));
 }
 
@@ -179,6 +251,10 @@ class Resource : angle::NonCopyable
     {
         return mUse.isCurrentlyInUse(lastCompletedSerial);
     }
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mUse.isCurrentlyInUseForWrite(lastCompletedSerial);
+    }
 
     // Ensures the driver is caught up to this resource and it is only in use by ANGLE.
     angle::Result finishRunningCommands(ContextVk *contextVk);
@@ -187,7 +263,7 @@ class Resource : angle::NonCopyable
     angle::Result waitForIdle(ContextVk *contextVk, const char *debugMessage);
 
     // Adds the resource to a resource use list.
-    void retain(ResourceUseList *resourceUseList) const;
+    void retain(ResourceUseList *resourceUseList, ResourceUseType resourceUseType) const;
 
   protected:
     Resource();
@@ -197,10 +273,11 @@ class Resource : angle::NonCopyable
     SharedResourceUse mUse;
 };
 
-ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const
+ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList,
+                                   ResourceUseType resourceUseType) const
 {
     // Store reference in resource list.
-    resourceUseList->add(mUse);
+    resourceUseList->add(mUse, resourceUseType);
 }
 
 }  // namespace vk

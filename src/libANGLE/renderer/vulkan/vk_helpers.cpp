@@ -841,6 +841,31 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
     return kImageMemoryBarrierData[imageLayout].layout;
 }
 
+bool IsImageLayoutReadOnly(ImageLayout imageLayout)
+{
+    switch (imageLayout)
+    {
+        case ImageLayout::ColorAttachment:
+        case ImageLayout::ColorAttachmentAndFragmentShaderRead:
+        case ImageLayout::ColorAttachmentAndAllShadersRead:
+        case ImageLayout::DSAttachmentWriteAndFragmentShaderRead:
+        case ImageLayout::DSAttachmentWriteAndAllShadersRead:
+        case ImageLayout::DepthStencilAttachment:
+        case ImageLayout::DepthStencilResolveAttachment:
+        case ImageLayout::ExternalShadersWrite:
+        case ImageLayout::TransferDst:
+        case ImageLayout::VertexShaderWrite:
+        case ImageLayout::PreFragmentShadersWrite:
+        case ImageLayout::FragmentShaderWrite:
+        case ImageLayout::ComputeShaderWrite:
+        case ImageLayout::AllGraphicsShadersWrite:
+            return false;
+
+        default:
+            return true;
+    }
+}
+
 bool FormatHasNecessaryFeature(RendererVk *renderer,
                                angle::FormatID formatID,
                                VkImageTiling tilingMode,
@@ -1000,7 +1025,7 @@ void CommandBufferHelper::bufferRead(ContextVk *contextVk,
                                      PipelineStage readStage,
                                      BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
     if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
     {
@@ -1020,7 +1045,7 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
                                       AliasingMode aliasingMode,
                                       BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
     if (buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
@@ -1033,8 +1058,12 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
     // Compute / XFB emulation buffers are not allowed to alias.
     if (aliasingMode == AliasingMode::Disallowed)
     {
-        ASSERT(!usesBuffer(*buffer));
-        mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
+        // It's possible for a buffer to be bound as a vertex array and texture, and be modified by
+        // both stages. It's only necessary to include the buffer here once though.
+        if (!usesBuffer(*buffer))
+        {
+            mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
+        }
     }
 
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
@@ -1051,7 +1080,7 @@ void CommandBufferHelper::imageRead(ContextVk *contextVk,
                                     ImageLayout imageLayout,
                                     ImageHelper *image)
 {
-    image->retain(&contextVk->getResourceUseList());
+    image->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 
     if (image->isReadBarrierNecessary(imageLayout))
     {
@@ -1078,7 +1107,7 @@ void CommandBufferHelper::imageWrite(ContextVk *contextVk,
                                      AliasingMode aliasingMode,
                                      ImageHelper *image)
 {
-    image->retain(&contextVk->getResourceUseList());
+    image->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
     image->onWrite(level, 1, layerStart, layerCount, aspectFlags);
     // Write always requires a barrier
     updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
@@ -1105,7 +1134,7 @@ void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(packedAttachmentIndex < mColorImagesCount);
 
-    image->retain(resourceUseList);
+    image->retain(resourceUseList, vk::ResourceUseType::ReadWrite);
     if (!usesImageInRenderPass(*image))
     {
         // This is possible due to different layers of the same texture being attached to different
@@ -1118,7 +1147,7 @@ void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
 
     if (resolveImage)
     {
-        resolveImage->retain(resourceUseList);
+        resolveImage->retain(resourceUseList, vk::ResourceUseType::ReadWrite);
         if (!usesImageInRenderPass(*resolveImage))
         {
             mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
@@ -1143,7 +1172,7 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
     // Because depthStencil buffer's read/write property can change while we build renderpass, we
     // defer the image layout changes until endRenderPass time or when images going away so that we
     // only insert layout change barrier once.
-    image->retain(resourceUseList);
+    image->retain(resourceUseList, vk::ResourceUseType::ReadWrite);
     mRenderPassUsedImages.insert(image->getImageSerial().getValue());
     mDepthStencilImage      = image;
     mDepthStencilLevelIndex = level;
@@ -1156,7 +1185,7 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
         // Note that the resolve depth/stencil image has the same level/layer index as the
         // depth/stencil image as currently it can only ever come from
         // multisampled-render-to-texture renderbuffers.
-        resolveImage->retain(resourceUseList);
+        resolveImage->retain(resourceUseList, vk::ResourceUseType::ReadWrite);
         mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
         mDepthStencilResolveImage = resolveImage;
         resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
@@ -2197,7 +2226,8 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
     ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
     for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
     {
-        bufferHelper->retain(resourceUseList);
+        // Default to read/write without knowing the specific usage.
+        bufferHelper->retain(resourceUseList, vk::ResourceUseType::ReadWrite);
 
         if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
         {
@@ -2438,7 +2468,7 @@ angle::Result DescriptorPoolHelper::allocateSets(ContextVk *contextVk,
                                                                    allocInfo, descriptorSetsOut));
 
     // The pool is still in use every time a new descriptor set is allocated from it.
-    retain(&contextVk->getResourceUseList());
+    retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 
     return angle::Result::Continue;
 }
@@ -2824,7 +2854,7 @@ void QueryHelper::endQueryImpl(ContextVk *contextVk, CommandBuffer *commandBuffe
 
     // Query results are available after endQuery, retain this query so that we get its serial
     // updated which is used to indicate that query results are (or will be) available.
-    retain(&contextVk->getResourceUseList());
+    retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 }
 
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
@@ -2908,12 +2938,12 @@ void QueryHelper::writeTimestamp(ContextVk *contextVk, CommandBuffer *commandBuf
     commandBuffer->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
     // timestamp results are available immediately, retain this query so that we get its serial
     // updated which is used to indicate that query results are (or will be) available.
-    retain(&contextVk->getResourceUseList());
+    retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
 }
 
 bool QueryHelper::hasSubmittedCommands() const
 {
-    return mUse.getSerial().valid();
+    return mUse.getLatestSerial().valid();
 }
 
 angle::Result QueryHelper::getUint64ResultNonBlocking(ContextVk *contextVk,
@@ -3665,18 +3695,21 @@ void BufferHelper::release(RendererVk *renderer)
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            BufferHelper *srcBuffer,
                                            uint32_t regionCount,
-                                           const VkBufferCopy *copyRegions)
+                                           const VkBufferCopy *copyRegions,
+                                           ResourceUseType *resourceUseTypeOut)
 {
     // Check for self-dependency.
     vk::CommandBufferAccess access;
     if (srcBuffer->getBufferSerial() == getBufferSerial())
     {
         access.onBufferSelfCopy(this);
+        *resourceUseTypeOut = ResourceUseType::ReadWrite;
     }
     else
     {
         access.onBufferTransferRead(srcBuffer);
         access.onBufferTransferWrite(this);
+        *resourceUseTypeOut = ResourceUseType::ReadWrite;
     }
 
     CommandBuffer *commandBuffer;
@@ -5153,8 +5186,8 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         bool isSrc3D = srcImage->getType() == VK_IMAGE_TYPE_3D;
         bool isDst3D = dstImage->getType() == VK_IMAGE_TYPE_3D;
 
-        srcImage->retain(&contextVk->getResourceUseList());
-        dstImage->retain(&contextVk->getResourceUseList());
+        srcImage->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
+        dstImage->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
 
         VkImageCopy region = {};
 
@@ -6922,7 +6955,8 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
             contextVk, contextVk->hasProtectedContent(), renderer->getMemoryProperties(),
             gl::Extents(area.width, area.height, 1), *mFormat,
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
-        resolvedImage.get().retain(&contextVk->getResourceUseList());
+        resolvedImage.get().retain(&contextVk->getResourceUseList(),
+                                   vk::ResourceUseType::ReadWrite);
     }
 
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
@@ -7667,7 +7701,7 @@ angle::Result ImageViewHelper::getLevelStorageImageView(ContextVk *contextVk,
 {
     ASSERT(mImageViewSerial.valid());
 
-    retain(&contextVk->getResourceUseList());
+    retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
 
     ImageView *imageView =
         GetLevelImageView(&mLevelStorageImageViews, levelVk, image.getLevelCount());
@@ -7696,7 +7730,7 @@ angle::Result ImageViewHelper::getLevelLayerStorageImageView(ContextVk *contextV
     ASSERT(mImageViewSerial.valid());
     ASSERT(!image.getFormat().actualImageFormat().isBlock);
 
-    retain(&contextVk->getResourceUseList());
+    retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
 
     ImageView *imageView =
         GetLevelLayerImageView(&mLayerLevelStorageImageViews, levelVk, layer, image.getLevelCount(),
@@ -7727,7 +7761,7 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
     ASSERT(mImageViewSerial.valid());
     ASSERT(!image.getFormat().actualImageFormat().isBlock);
 
-    retain(&contextVk->getResourceUseList());
+    retain(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
 
     ImageSubresourceRange range = MakeImageSubresourceDrawRange(
         image.toGLLevel(levelVk), layer, GetLayerMode(image, layerCount), mode);
@@ -7761,7 +7795,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     ASSERT(mImageViewSerial.valid());
     ASSERT(!image.getFormat().actualImageFormat().isBlock);
 
-    retain(&contextVk->getResourceUseList());
+    retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
 
     LayerLevelImageViewVector &imageViews = (mode == gl::SrgbWriteControlMode::Linear)
                                                 ? mLayerLevelDrawImageViewsLinear

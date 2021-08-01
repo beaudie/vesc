@@ -197,14 +197,15 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return *mImage;
     }
 
-    void retainImageViews(vk::ResourceUseList *resourceUseList)
+    void retainImageViews(vk::ResourceUseList *resourceUseList, vk::ResourceUseType resourceUseType)
     {
-        getImageViews().retain(resourceUseList);
+        getImageViews().retain(resourceUseList, resourceUseType);
     }
 
-    void retainBufferViews(vk::ResourceUseList *resourceUseList)
+    void retainBufferViews(vk::ResourceUseList *resourceUseList,
+                           vk::ResourceUseType resourceUseType)
     {
-        mBufferViews.retain(resourceUseList);
+        mBufferViews.retain(resourceUseList, resourceUseType);
     }
 
     void releaseOwnershipOfImage(const gl::Context *context);
