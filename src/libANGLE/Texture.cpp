@@ -2294,6 +2294,10 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             }
             break;
         case angle::SubjectMessage::SubjectMapped:
+            // TODO(timvp): Only do this when the buffer is ghosted.
+            mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
+            break;
+
         case angle::SubjectMessage::SubjectUnmapped:
         case angle::SubjectMessage::BindingChanged:
             ASSERT(index == kBufferSubjectIndex);
