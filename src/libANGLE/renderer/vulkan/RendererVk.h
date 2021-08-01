@@ -258,6 +258,20 @@ class RendererVk : angle::NonCopyable
         use->init();
     }
 
+    void collectSharedResourceUseAndReinit(vk::SharedResourceUse *use)
+    {
+        if (!use->usedInRecordedCommands())
+        {
+            return;
+        }
+
+        // Intentionally empty garbage so the SharedResourceUse is cleaned up correctly.
+        std::vector<vk::GarbageObject> sharedGarbage;
+
+        std::lock_guard<std::mutex> lock(mGarbageMutex);
+        mSharedGarbage.emplace_back(std::move(*use), std::move(sharedGarbage));
+    }
+
     void collectGarbage(vk::SharedResourceUse &&use, std::vector<vk::GarbageObject> &&sharedGarbage)
     {
         if (!sharedGarbage.empty())

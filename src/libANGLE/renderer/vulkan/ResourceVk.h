@@ -16,10 +16,19 @@ namespace rx
 {
 namespace vk
 {
+enum class ResourceUseType
+{
+    Read,       // Resource is being used/read by the GPU
+    ReadWrite,  // Resource is being read and/or written by the GPU
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
 // Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
-// of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
-// in the VkQueue. The reference count and serial together can determine if a resource is currently
-// in use.
+// of times a resource is retained by ANGLE. The accessSerial indicates the most recent use of a
+// resource in the VkQueue. The reference count and accessSerial together can determine if a
+// resource is currently in use.
 struct ResourceUse
 {
     ResourceUse() = default;
