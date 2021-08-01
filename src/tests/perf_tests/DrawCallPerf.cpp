@@ -276,7 +276,7 @@ void main()
 
     if (params.stateChange == StateChange::ManyTextureDraw)
     {
-        GLint program3TexLocs[mTextures.size()];
+        GLint program3TexLocs[kManyTexturesCount];
 
         for (size_t i = 0; i < mTextures.size(); ++i)
         {
