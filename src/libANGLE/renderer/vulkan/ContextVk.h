@@ -966,6 +966,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     ContextVkPerfCounters getAndResetObjectPerfCounters();
 
+    bool isTextureBuffer(vk::BufferSerial bufferSerial);
+
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
