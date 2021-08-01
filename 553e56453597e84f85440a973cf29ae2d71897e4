@@ -16,6 +16,75 @@
       "message": "PTAL",
       "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24047933_92859dc2",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-01T01:25:09Z",
+      "side": 1,
+      "message": "Instead of this, use the following to automatically inherit the properties correctly (including precision):\n\nnew TType();\n\n    TType *emulatedBoundingBoxDeclType \u003d new TType(builtinBoundingBoxVar-\u003egetType());\n    emulatedBoundingBoxDeclType-\u003esetQualifier(EvqGlobal);",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 290,
+        "endChar": 51
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a26de49_f22547cd",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-01T01:25:09Z",
+      "side": 1,
+      "message": "nit: Can move this down to `case gl::ShaderType::TessControl` below.",
+      "range": {
+        "startLine": 964,
+        "startChar": 0,
+        "endLine": 967,
+        "endChar": 9
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "490ef514_9a5e138b",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-01T01:25:09Z",
+      "side": 1,
+      "message": "This is not correct. `primarySize` should be 4 because it\u0027s a vec4, but this file has no way to specify the array size. You can follow other array built-ins like `gl_TessLevelOuter` below to see how the type is declared.",
+      "range": {
+        "startLine": 1401,
+        "startChar": 0,
+        "endLine": 1402,
+        "endChar": 45
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
