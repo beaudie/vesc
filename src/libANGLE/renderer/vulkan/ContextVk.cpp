@@ -1540,14 +1540,17 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
             ASSERT(stages.any());
 
-            // TODO: accept multiple stages in bufferRead.  http://anglebug.com/3573
+            // TODO: accept multiple stages in bufferWrite.  http://anglebug.com/3573
             for (gl::ShaderType stage : stages)
             {
+                // Assume Write access to texture buffers, since they can be rendered to or sampled
+                // from, and we can't know which the shader(s) will do.
                 // Note: if another range of the same buffer is simultaneously used for storage,
                 // such as for transform feedback output, or SSBO, unnecessary barriers can be
                 // generated.
-                commandBufferHelper->bufferRead(this, VK_ACCESS_SHADER_READ_BIT,
-                                                vk::GetPipelineStage(stage), &buffer);
+                commandBufferHelper->bufferWrite(
+                    this, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+                    vk::GetPipelineStage(stage), vk::AliasingMode::Disallowed, &buffer);
             }
 
             textureVk->retainBufferViews(&mResourceUseList);
@@ -1705,8 +1708,12 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-                                            vk::PipelineStage::VertexInput, arrayBuffer);
+            // Texture buffers will be retained as Write accesses.
+            if (!isTextureBuffer(arrayBuffer->getBufferSerial()))
+            {
+                mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+                                                vk::PipelineStage::VertexInput, arrayBuffer);
+            }
         }
     }
 
@@ -1725,8 +1732,12 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dir
     mRenderPassCommandBuffer->bindIndexBuffer(elementArrayBuffer->getBuffer(), offset,
                                               getVkIndexType(mCurrentDrawElementsType));
 
-    mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
-                                    elementArrayBuffer);
+    // Texture buffers will be retained as Write accesses.
+    if (!isTextureBuffer(elementArrayBuffer->getBufferSerial()))
+    {
+        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT,
+                                        vk::PipelineStage::VertexInput, elementArrayBuffer);
+    }
 
     return angle::Result::Continue;
 }
@@ -2309,7 +2320,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
                                  VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, nullptr, 0, nullptr, 0,
                                  nullptr);
         timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
-        timestampQuery.retain(&scratchResourceUseList);
+        timestampQuery.retain(&scratchResourceUseList, vk::ResourceUseType::Access);
 
         commandBuffer.setEvent(gpuDone.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
 
@@ -4862,7 +4873,8 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(vk::CommandBuffer *commandB
     // updated correctly.
     if (!driverUniforms->descriptorPoolBinding.get().usedInRecordedCommands())
     {
-        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList);
+        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList,
+                                                           vk::ResourceUseType::Access);
     }
 
     commandBuffer->bindDescriptorSets(
@@ -4927,7 +4939,8 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     {
         // The descriptor pool that this descriptor set was allocated from needs to be retained each
         // time the descriptor set is used in a new command.
-        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList);
+        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList,
+                                                           vk::ResourceUseType::Access);
         return angle::Result::Continue;
     }
 
@@ -5417,7 +5430,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, hasProtectedContent(), &commandBuffer));
 
     timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
-    timestampQuery.retain(&scratchResourceUseList);
+    timestampQuery.retain(&scratchResourceUseList, vk::ResourceUseType::Access);
     ANGLE_VK_TRY(this, commandBuffer.end());
 
     // Create fence for the submission
@@ -6127,7 +6140,7 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
 
         imageAccess.image->recordReadBarrier(this, imageAccess.aspectFlags, imageAccess.imageLayout,
                                              &mOutsideRenderPassCommands->getCommandBuffer());
-        imageAccess.image->retain(&mResourceUseList);
+        imageAccess.image->retain(&mResourceUseList, vk::ResourceUseType::Read);
     }
 
     for (const vk::CommandBufferImageWrite &imageWrite : access.getWriteImages())
@@ -6137,7 +6150,7 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
         imageWrite.access.image->recordWriteBarrier(
             this, imageWrite.access.aspectFlags, imageWrite.access.imageLayout,
             &mOutsideRenderPassCommands->getCommandBuffer());
-        imageWrite.access.image->retain(&mResourceUseList);
+        imageWrite.access.image->retain(&mResourceUseList, vk::ResourceUseType::Write);
         imageWrite.access.image->onWrite(imageWrite.levelStart, imageWrite.levelCount,
                                          imageWrite.layerStart, imageWrite.layerCount,
                                          imageWrite.access.aspectFlags);
@@ -6341,5 +6354,32 @@ ContextVkPerfCounters ContextVk::getAndResetObjectPerfCounters()
     ContextVkPerfCounters counters               = mContextPerfCounters;
     mContextPerfCounters.descriptorSetsAllocated = {};
     return counters;
+}
+
+bool ContextVk::isTextureBuffer(vk::BufferSerial bufferSerial)
+{
+    const gl::ProgramExecutable *executable     = mState.getProgramExecutable();
+    const gl::ActiveTextureMask &activeTextures = executable->getActiveSamplersMask();
+
+    for (size_t textureUnit : activeTextures)
+    {
+        const vk::TextureUnit &unit = mActiveTextures[textureUnit];
+        TextureVk *textureVk        = unit.texture;
+
+        // If it's a texture buffer, get the attached buffer.
+        if (textureVk->getBuffer().get() != nullptr)
+        {
+            BufferVk *bufferVk        = vk::GetImpl(textureVk->getBuffer().get());
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferHelper &buffer  = bufferVk->getBufferAndOffset(&bufferOffset);
+
+            if (buffer.getBufferSerial() == bufferSerial)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 }  // namespace rx
