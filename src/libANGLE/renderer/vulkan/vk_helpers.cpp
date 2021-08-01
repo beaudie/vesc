@@ -33,8 +33,7 @@ namespace
 constexpr VkClearColorValue kRobustInitColorValue = {{0, 0, 0, 0}};
 // When emulating a texture, we want the emulated channels to be 0, with alpha 1.
 constexpr VkClearColorValue kEmulatedInitColorValue = {{0, 0, 0, 1.0f}};
-// ANGLE_robust_resource_initialization requires
-// depth to be initialized to 1 and stencil to 0.
+// ANGLE_robust_resource_initialization requires depth to be initialized to 1 and stencil to 0.
 // We are fine with these values for emulated depth/stencil textures too.
 constexpr VkClearDepthStencilValue kRobustInitDepthStencilValue = {1.0f, 0};
 
