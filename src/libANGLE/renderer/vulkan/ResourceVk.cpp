@@ -33,8 +33,6 @@ Resource::~Resource()
 
 angle::Result Resource::finishRunningCommands(ContextVk *contextVk)
 {
-    // mUse is always updated for both ReadOnly and ReadWrite, so we only need to check its
-    // Serial.
     return contextVk->finishToSerial(mUse.getSerial());
 }
 

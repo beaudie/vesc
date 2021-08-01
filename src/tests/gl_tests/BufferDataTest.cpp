@@ -746,6 +746,37 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(3, 3, GLColor::green);
 }
 
+// Verify that we can map and write the buffer between draws and the second draw sees the new buffer
+// data.
+TEST_P(BufferDataTest, MapWriteArrayBufferData)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_map_buffer_range"));
+
+    std::vector<GLfloat> data(6, 0.0f);
+
+    glUseProgram(mProgram);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data.size(), nullptr, GL_STATIC_DRAW);
+    glVertexAttribPointer(mAttribLocation, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(mAttribLocation);
+
+    // Don't read back to verify black, so we don't break the render pass.
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    // Map and write.
+    std::vector<GLfloat> data2(6, 1.0f);
+    void *mapPtr = glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);
+    ASSERT_NE(nullptr, mapPtr);
+    ASSERT_GL_NO_ERROR();
+    memcpy(mapPtr, data2.data(), sizeof(GLfloat) * data2.size());
+    glUnmapBufferOES(GL_ARRAY_BUFFER);
+
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(8, 8, GLColor::red);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Tests a null crash bug caused by copying from null back-end buffer pointer
 // when calling bufferData again after drawing without calling bufferData in D3D11.
 TEST_P(BufferDataTestES3, DrawWithNotCallingBufferData)

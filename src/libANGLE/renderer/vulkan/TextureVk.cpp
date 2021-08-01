@@ -2919,17 +2919,14 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
     }
 
     // Create a view for the required format.
-    BufferVk *bufferVk             = vk::GetImpl(mState.getBuffer().get());
-    VkDeviceSize bufferOffset      = 0;
-    const vk::BufferHelper &buffer = bufferVk->getBufferAndOffset(&bufferOffset);
-
+    BufferVk *bufferVk                   = vk::GetImpl(mState.getBuffer().get());
+    VkDeviceSize bufferOffset            = 0;
+    const vk::BufferHelper &buffer       = bufferVk->getBufferAndOffset(&bufferOffset);
     vk::ResourceUseList &resourceUseList = contextVk->getResourceUseList();
     buffer.retainReadOnly(&resourceUseList);
-    ANGLE_TRY(mBufferViews.getView(contextVk, buffer, bufferOffset, *imageUniformFormat, viewOut));
-    // Retain after getting the view, since it may be a different view if a new one was created due
-    // to (for example) the underlying buffer being ghosted.
+
     retainBufferViews(&contextVk->getResourceUseList());
-    return angle::Result::Continue;
+    return mBufferViews.getView(contextVk, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
