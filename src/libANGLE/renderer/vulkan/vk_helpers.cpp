@@ -841,6 +841,31 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
     return kImageMemoryBarrierData[imageLayout].layout;
 }
 
+bool IsImageLayoutReadOnly(ImageLayout imageLayout)
+{
+    switch (imageLayout)
+    {
+        case ImageLayout::ColorAttachment:
+        case ImageLayout::ColorAttachmentAndFragmentShaderRead:
+        case ImageLayout::ColorAttachmentAndAllShadersRead:
+        case ImageLayout::DSAttachmentWriteAndFragmentShaderRead:
+        case ImageLayout::DSAttachmentWriteAndAllShadersRead:
+        case ImageLayout::DepthStencilAttachment:
+        case ImageLayout::DepthStencilResolveAttachment:
+        case ImageLayout::ExternalShadersWrite:
+        case ImageLayout::TransferDst:
+        case ImageLayout::VertexShaderWrite:
+        case ImageLayout::PreFragmentShadersWrite:
+        case ImageLayout::FragmentShaderWrite:
+        case ImageLayout::ComputeShaderWrite:
+        case ImageLayout::AllGraphicsShadersWrite:
+            return false;
+
+        default:
+            return true;
+    }
+}
+
 bool FormatHasNecessaryFeature(RendererVk *renderer,
                                angle::FormatID formatID,
                                VkImageTiling tilingMode,
@@ -1000,7 +1025,7 @@ void CommandBufferHelper::bufferRead(ContextVk *contextVk,
                                      PipelineStage readStage,
                                      BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retainBuffer(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
     if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
     {
@@ -1020,7 +1045,7 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
                                       AliasingMode aliasingMode,
                                       BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retainBuffer(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
     if (buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
@@ -1033,8 +1058,12 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
     // Compute / XFB emulation buffers are not allowed to alias.
     if (aliasingMode == AliasingMode::Disallowed)
     {
-        ASSERT(!usesBuffer(*buffer));
-        mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
+        // It's possible for a buffer to be bound as a vertex array and texture, and be modified by
+        // both stages. It's only necessary to include the buffer here once though.
+        if (!usesBuffer(*buffer))
+        {
+            mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
+        }
     }
 
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
@@ -2197,7 +2226,8 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
     ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
     for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
     {
-        bufferHelper->retain(resourceUseList);
+        // Default to read/write without knowing the specific usage.
+        bufferHelper->retainBuffer(resourceUseList, vk::ResourceUseType::ReadWrite);
 
         if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
         {
@@ -2913,7 +2943,7 @@ void QueryHelper::writeTimestamp(ContextVk *contextVk, CommandBuffer *commandBuf
 
 bool QueryHelper::hasSubmittedCommands() const
 {
-    return mUse.getSerial().valid();
+    return mUse.getLatestSerial().valid();
 }
 
 angle::Result QueryHelper::getUint64ResultNonBlocking(ContextVk *contextVk,
@@ -3665,18 +3695,21 @@ void BufferHelper::release(RendererVk *renderer)
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            BufferHelper *srcBuffer,
                                            uint32_t regionCount,
-                                           const VkBufferCopy *copyRegions)
+                                           const VkBufferCopy *copyRegions,
+                                           ResourceUseType *resourceUseTypeOut)
 {
     // Check for self-dependency.
     vk::CommandBufferAccess access;
     if (srcBuffer->getBufferSerial() == getBufferSerial())
     {
         access.onBufferSelfCopy(this);
+        *resourceUseTypeOut = ResourceUseType::ReadWrite;
     }
     else
     {
         access.onBufferTransferRead(srcBuffer);
         access.onBufferTransferWrite(this);
+        *resourceUseTypeOut = ResourceUseType::ReadWrite;
     }
 
     CommandBuffer *commandBuffer;
