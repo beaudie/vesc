@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39fe0fbe_dc707f9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-01T04:57:37Z",
+      "side": 1,
+      "message": "PTAL again. I confirm that on my laptop it correctly detects Intel to be the one running the tests.",
+      "revId": "474f0e82a23265eddb2f6b3a66f47b0137f472ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
