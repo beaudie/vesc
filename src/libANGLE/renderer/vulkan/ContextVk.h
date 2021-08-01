@@ -515,6 +515,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         }
     }
 
+    bool hasOutsideRenderPass() const
+    {
+        // Checking mRenderPassCommandBuffer ensures we've called setupDraw.
+        return mOutsideRenderPassCommands;
+    }
+
+    vk::CommandBufferHelper &getStartedOutsideRenderPassCommands()
+    {
+        return *mOutsideRenderPassCommands;
+    }
+
     angle::Result getOutsideRenderPassCommandBuffer(const vk::CommandBufferAccess &access,
                                                     vk::CommandBuffer **commandBufferOut)
     {
