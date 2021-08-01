@@ -474,7 +474,7 @@ angle::Result ProgramExecutableVk::allocUniformAndXfbDescriptorSet(
         // The descriptor pool that this descriptor set was allocated from needs to be retained each
         // time the descriptor set is used in a new command.
         mDescriptorPoolBindings[DescriptorSetIndex::UniformsAndXfb].get().retain(
-            &contextVk->getResourceUseList());
+            &contextVk->getResourceUseList(), vk::ResourceUseType::Read);
         return angle::Result::Continue;
     }
 
@@ -1161,7 +1161,7 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
     if (defaultUniformBlock.uniformData.empty())
     {
         bufferHelper = &contextVk->getEmptyBuffer();
-        bufferHelper->retain(&contextVk->getResourceUseList());
+        bufferHelper->retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
         size = bufferHelper->getSize();
     }
 
@@ -1353,7 +1353,7 @@ angle::Result ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
 
     // Bind the empty buffer to every array slot that's unused.
     vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
-    emptyBuffer.retain(&contextVk->getResourceUseList());
+    emptyBuffer.retain(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
     size_t count                        = (~writtenBindings).count();
     VkDescriptorBufferInfo *bufferInfos = contextVk->allocDescriptorBufferInfos(count);
     VkWriteDescriptorSet *writeInfos    = contextVk->allocWriteDescriptorSets(count);
@@ -1514,7 +1514,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
             // The descriptor pool that this descriptor set was allocated from needs to be retained
             // each time the descriptor set is used in a new command.
             mDescriptorPoolBindings[DescriptorSetIndex::ShaderResource].get().retain(
-                &contextVk->getResourceUseList());
+                &contextVk->getResourceUseList(), vk::ResourceUseType::Read);
         }
     }
 
@@ -1678,7 +1678,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         // The descriptor pool that this descriptor set was allocated from needs to be retained each
         // time the descriptor set is used in a new command.
         mDescriptorPoolBindings[DescriptorSetIndex::Texture].get().retain(
-            &contextVk->getResourceUseList());
+            &contextVk->getResourceUseList(), vk::ResourceUseType::Read);
         return angle::Result::Continue;
     }
 

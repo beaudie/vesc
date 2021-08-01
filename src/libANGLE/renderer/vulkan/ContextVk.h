@@ -515,6 +515,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         }
     }
 
+    bool hasOutsideRenderPass() const
+    {
+        // Checking mRenderPassCommandBuffer ensures we've called setupDraw.
+        return mOutsideRenderPassCommands;
+    }
+
+    vk::CommandBufferHelper &getStartedOutsideRenderPassCommands()
+    {
+        return *mOutsideRenderPassCommands;
+    }
+
     angle::Result getOutsideRenderPassCommandBuffer(const vk::CommandBufferAccess &access,
                                                     vk::CommandBuffer **commandBufferOut)
     {
@@ -965,6 +976,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageBits usageBits);
 
     ContextVkPerfCounters getAndResetObjectPerfCounters();
+
+    bool isTextureBuffer(vk::BufferSerial bufferSerial);
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
