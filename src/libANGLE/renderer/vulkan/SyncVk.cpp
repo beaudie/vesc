@@ -148,7 +148,7 @@ angle::Result SyncHelper::clientWait(Context *context,
     }
     else
     {
-        if (!mUse.getSerial().valid())
+        if (!mUse.getLatestSerial().valid())
         {
             // The sync object wasn't flushed before waiting, so the wait will always necessarily
             // time out.
@@ -167,10 +167,11 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    ASSERT(mUse.getSerial().valid());
+    ASSERT(mUse.getLatestSerial().valid());
 
     VkResult status = VK_SUCCESS;
-    ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+    ANGLE_TRY(
+        renderer->waitForSerialWithUserTimeout(context, mUse.getLatestSerial(), timeout, &status));
 
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
@@ -325,8 +326,8 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     if (mUse.valid())
     {
         // We have a valid serial to wait on
-        ANGLE_TRY(
-            renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+        ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mUse.getLatestSerial(), timeout,
+                                                         &status));
     }
     else
     {
