@@ -1000,7 +1000,7 @@ void CommandBufferHelper::bufferRead(ContextVk *contextVk,
                                      PipelineStage readStage,
                                      BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retainBuffer(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
     if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
     {
@@ -1008,7 +1008,7 @@ void CommandBufferHelper::bufferRead(ContextVk *contextVk,
     }
 
     ASSERT(!usesBufferForWrite(*buffer));
-    if (!mUsedBuffers.contains(buffer->getBufferSerial().getValue()))
+    if (!mUsedBuffers.contains(buffer->getBufferSerial().getValue()) && !usesBuffer(*buffer))
     {
         mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Read);
     }
@@ -1020,7 +1020,7 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
                                       AliasingMode aliasingMode,
                                       BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retainBuffer(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
     if (buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
@@ -2197,7 +2197,10 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
     ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
     for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
     {
-        bufferHelper->retain(resourceUseList);
+        // This function is used only for internal buffers, and they are all read-only.
+        // It's possible this may change in the future, but there isn't a good way to detect that,
+        // unfortunately.
+        bufferHelper->retainBuffer(resourceUseList, vk::ResourceUseType::Read);
 
         if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
         {
@@ -3393,7 +3396,9 @@ BufferHelper::BufferHelper()
       mCurrentWriteStages(0),
       mCurrentReadStages(0),
       mSerial()
-{}
+{
+    mWriteUse.init();
+}
 
 BufferMemory::BufferMemory() : mClientBuffer(nullptr), mMappedMemory(nullptr) {}
 
@@ -3506,7 +3511,11 @@ angle::Result BufferMemory::mapImpl(ContextVk *contextVk, VkDeviceSize size)
     return angle::Result::Continue;
 }
 
-BufferHelper::~BufferHelper() = default;
+BufferHelper::~BufferHelper()
+{
+    ASSERT(mWriteUse.valid() && !mWriteUse.usedInRecordedCommands());
+    mWriteUse.release();
+}
 
 angle::Result BufferHelper::init(ContextVk *contextVk,
                                  const VkBufferCreateInfo &requestedCreateInfo,
@@ -3660,6 +3669,13 @@ void BufferHelper::release(RendererVk *renderer)
 
     renderer->collectGarbageAndReinit(&mUse, &mBuffer, mMemory.getExternalMemoryObject(),
                                       mMemory.getMemoryObject());
+
+    // Assume this release() applies to the retainBuffer(ReadWrite), but we can't actually know for
+    // sure. This may lead to issues if a BufferHelper is retainBuffer(ReadWrite)'ed and then
+    // release()'ed before submitted in a command buffer. No scenario has hit this case yet though.
+    mWriteUse.release();
+    // Keep "mWriteUse" valid.
+    mWriteUse.init();
 }
 
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,

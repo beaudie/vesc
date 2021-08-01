@@ -935,8 +935,29 @@ class BufferHelper final : public Resource
                             VkPipelineStageFlags writeStage,
                             PipelineBarrier *barrier);
 
+    ANGLE_INLINE void retainBuffer(ResourceUseList *resourceUseList,
+                                   ResourceUseType resourceUseType) const
+    {
+        retain(resourceUseList);
+
+        // Store reference in resource list.
+        if (resourceUseType == ResourceUseType::ReadWrite)
+        {
+            resourceUseList->add(mWriteUse);
+        }
+    }
+
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
+
   private:
     angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
+
+    // Make retain() private, so users are forced to call retainBuffer() and explicitly decide
+    // whether the access is a Read or ReadWrite.
+    using Resource::retain;
 
     // Vulkan objects.
     Buffer mBuffer;
@@ -954,6 +975,9 @@ class BufferHelper final : public Resource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+
+    // Current resource Write access lifetime.
+    SharedResourceUse mWriteUse;
 };
 
 enum class BufferAccess
