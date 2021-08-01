@@ -1000,7 +1000,7 @@ void CommandBufferHelper::bufferRead(ContextVk *contextVk,
                                      PipelineStage readStage,
                                      BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retainBuffer(&contextVk->getResourceUseList(), vk::ResourceUseType::Read);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
     if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
     {
@@ -1020,7 +1020,7 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
                                       AliasingMode aliasingMode,
                                       BufferHelper *buffer)
 {
-    buffer->retain(&contextVk->getResourceUseList());
+    buffer->retainBuffer(&contextVk->getResourceUseList(), vk::ResourceUseType::ReadWrite);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
     if (buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
@@ -1033,8 +1033,12 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
     // Compute / XFB emulation buffers are not allowed to alias.
     if (aliasingMode == AliasingMode::Disallowed)
     {
-        ASSERT(!usesBuffer(*buffer));
-        mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
+        // It's possible for a buffer to be bound as a vertex array and texture, and be modified by
+        // both stages. It's only necessary to include the buffer here once though.
+        if (!usesBuffer(*buffer))
+        {
+            mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
+        }
     }
 
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
@@ -2197,7 +2201,8 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
     ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
     for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
     {
-        bufferHelper->retain(resourceUseList);
+        // Default to read/write without knowing the specific usage.
+        bufferHelper->retainBuffer(resourceUseList, vk::ResourceUseType::ReadWrite);
 
         if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
         {
@@ -3658,6 +3663,20 @@ void BufferHelper::release(RendererVk *renderer)
     unmap(renderer);
     mSize = 0;
 
+    if (mWriteUse.valid())
+    {
+        // Assume this release() applies to the retainBuffer(ReadWrite), but we can't actually know
+        // for sure. This may lead to issues if a BufferHelper is retainBuffer(ReadWrite)'ed and
+        // then releas()'ed before submitted in a command buffer. No scenario has hit this case yet
+        // though.
+        mWriteUse.release();
+    }
+    // Always keep mWriteUse valid.
+    if (!mWriteUse.valid())
+    {
+        mWriteUse.init();
+    }
+
     renderer->collectGarbageAndReinit(&mUse, &mBuffer, mMemory.getExternalMemoryObject(),
                                       mMemory.getMemoryObject());
 }
@@ -3665,18 +3684,21 @@ void BufferHelper::release(RendererVk *renderer)
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            BufferHelper *srcBuffer,
                                            uint32_t regionCount,
-                                           const VkBufferCopy *copyRegions)
+                                           const VkBufferCopy *copyRegions,
+                                           ResourceUseType *resourceUseTypeOut)
 {
     // Check for self-dependency.
     vk::CommandBufferAccess access;
     if (srcBuffer->getBufferSerial() == getBufferSerial())
     {
         access.onBufferSelfCopy(this);
+        *resourceUseTypeOut = ResourceUseType::ReadWrite;
     }
     else
     {
         access.onBufferTransferRead(srcBuffer);
         access.onBufferTransferWrite(this);
+        *resourceUseTypeOut = ResourceUseType::ReadWrite;
     }
 
     CommandBuffer *commandBuffer;
