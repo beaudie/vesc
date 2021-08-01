@@ -886,7 +886,8 @@ class BufferHelper final : public Resource
     angle::Result copyFromBuffer(ContextVk *contextVk,
                                  BufferHelper *srcBuffer,
                                  uint32_t regionCount,
-                                 const VkBufferCopy *copyRegions);
+                                 const VkBufferCopy *copyRegions,
+                                 ResourceUseType *resourceUseTypeOut);
 
     angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
     {
