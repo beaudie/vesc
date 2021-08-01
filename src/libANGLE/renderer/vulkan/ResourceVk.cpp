@@ -19,16 +19,19 @@ namespace vk
 Resource::Resource()
 {
     mUse.init();
+    mWriteUse.init();
 }
 
 Resource::Resource(Resource &&other) : Resource()
 {
-    mUse = std::move(other.mUse);
+    mUse      = std::move(other.mUse);
+    mWriteUse = std::move(other.mWriteUse);
 }
 
 Resource::~Resource()
 {
     mUse.release();
+    mWriteUse.release();
 }
 
 angle::Result Resource::finishRunningCommands(ContextVk *contextVk)
