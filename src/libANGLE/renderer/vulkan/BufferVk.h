@@ -212,6 +212,7 @@ class BufferVk : public BufferImpl
 
     // Pool of BufferHelpers for mBuffer to acquire from
     vk::DynamicBuffer mBufferPool;
+    uint32_t mMemoryTypeIndex;
 
     // DynamicBuffer to aid map operations of buffers when they are not host visible.
     vk::DynamicBuffer mHostVisibleBufferPool;

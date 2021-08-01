@@ -429,7 +429,9 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
 }
 
 // BufferMemory implementation.
-BufferMemory::BufferMemory() : mClientBuffer(nullptr), mMappedMemory(nullptr) {}
+BufferMemory::BufferMemory()
+    : mIsReferenceDeviceMemory(false), mClientBuffer(nullptr), mMappedMemory(nullptr)
+{}
 
 BufferMemory::~BufferMemory() = default;
 
@@ -437,6 +439,15 @@ angle::Result BufferMemory::initExternal(void *clientBuffer)
 {
     ASSERT(clientBuffer != nullptr);
     mClientBuffer = clientBuffer;
+    return angle::Result::Continue;
+}
+
+angle::Result BufferMemory::initDeviceMemoryReference(VkDeviceMemory vkDeviceMemory)
+{
+    ASSERT(mClientBuffer == nullptr);
+    ASSERT(!mAllocation.valid());
+    mDeviceMemory.setHandle(vkDeviceMemory);
+    mIsReferenceDeviceMemory = true;
     return angle::Result::Continue;
 }
 
@@ -465,7 +476,13 @@ void BufferMemory::unmap(RendererVk *renderer)
 
 void BufferMemory::destroy(RendererVk *renderer)
 {
-    if (mDeviceMemory.valid())
+    if (mIsReferenceDeviceMemory)
+    {
+        ASSERT(!mAllocation.valid());
+        // We do not own it, thus do not destroy.
+        mDeviceMemory.release();
+    }
+    else if (mDeviceMemory.valid())
     {
         mDeviceMemory.destroy(renderer->getDevice());
         if (mClientBuffer)

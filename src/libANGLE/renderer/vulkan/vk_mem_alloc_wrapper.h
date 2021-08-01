@@ -43,6 +43,8 @@ VkResult AllocateMemory(VmaAllocator allocator,
                         VmaPool customPool,
                         uint32_t *pMemoryTypeIndexOut,
                         VmaAllocation *pAllocation,
+                        VkDeviceMemory *deviceMemoryOut,
+                        VkDeviceSize *offsetOut,
                         VkDeviceSize *sizeOut);
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation);
 

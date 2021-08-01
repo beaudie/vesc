@@ -93,14 +93,13 @@ class BufferMemoryAllocator : angle::NonCopyable
     void destroy(RendererVk *renderer);
 
     // Initializes the buffer handle and memory allocation.
-    VkResult createBuffer(RendererVk *renderer,
-                          const VkBufferCreateInfo &bufferCreateInfo,
-                          VkMemoryPropertyFlags requiredFlags,
-                          VkMemoryPropertyFlags preferredFlags,
-                          bool persistentlyMapped,
-                          uint32_t *memoryTypeIndexOut,
-                          Buffer *bufferOut,
-                          Allocation *allocationOut);
+    angle::Result createBuffer(ContextVk *contextVk,
+                               VkDeviceSize requestedSize,
+                               VkMemoryPropertyFlags memoryPropertyFlags,
+                               Allocation &allocationOut,
+                               uint32_t *memoryTypeIndexOut,
+                               BufferHelper **bufferHelperOut,
+                               VkDeviceSize *offsetOut);
 
     VkResult AllocateMemoryForBuffer(Context *context,
                                      Buffer &buffer,
@@ -157,6 +156,8 @@ class BufferMemoryAllocator : angle::NonCopyable
         return (*dedicatedMemory) ? nullptr : getVMAPool(memoryTypeIndex, poolType);
     }
 
+    VkDeviceSize getBlockSize(int poolType) const;
+
     enum VMAPoolType
     {
         kSmallPool = 0,
@@ -164,6 +165,12 @@ class BufferMemoryAllocator : angle::NonCopyable
         kPoolCount = 2,
     };
     std::array<VmaPool, kPoolCount * VK_MAX_MEMORY_TYPES> mVMAPools;
+    VkDeviceSize mPreferredLargeHeapBlockSize;
+
+    // For commonly used buffers, we create the buffers for the whole block to improve cache hit
+    // rate that uses buffer object as part of the key.
+    angle::FastIntegerMap<BufferHelper *> mCachedBuffers;
+    VkBufferCreateInfo mCachedBufferCreateInfo;
 
     // There are three code paths for buffer memory allocation: If memory is bigger than
     // kMaxSizeToUseSubAllocator, we will just call into vulkan driver to allocate memory to

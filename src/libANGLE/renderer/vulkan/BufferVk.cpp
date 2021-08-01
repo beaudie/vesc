@@ -200,7 +200,7 @@ BufferVk::BufferVk(const gl::BufferState &state)
       mBufferOffset(0),
       mUseDynamicBufferPool(false),
       mMemoryPropertyFlags(0),
-      mBufferUsage(gl::BufferUsage::InvalidEnum)
+      mBufferUsage(gl::BufferUsage::InvalidEnum) mMemoryTypeIndex(0)
 {}
 
 BufferVk::~BufferVk() {}
@@ -225,7 +225,6 @@ void BufferVk::release(ContextVk *contextVk)
     mShadowBuffer.release();
     mBufferPool.release(renderer);
     mHostVisibleBufferPool.release(renderer);
-    mBuffer       = nullptr;
     mBufferOffset = 0;
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
