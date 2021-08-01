@@ -80,7 +80,7 @@ SyncHelper::~SyncHelper() {}
 
 void SyncHelper::releaseToRenderer(RendererVk *renderer)
 {
-    renderer->collectGarbageAndReinit(&mUse, &mEvent);
+    renderer->collectGarbageAndReinit(&mReadUse, &mEvent);
 }
 
 angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEglSyncObject)
@@ -106,7 +106,7 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEglSyncObject)
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
     commandBuffer->setEvent(mEvent.getHandle(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
-    retain(&contextVk->getResourceUseList());
+    retainReadOnly(&contextVk->getResourceUseList());
 
     if (isEglSyncObject)
     {
@@ -148,7 +148,7 @@ angle::Result SyncHelper::clientWait(Context *context,
     }
     else
     {
-        if (!mUse.getSerial().valid())
+        if (!mReadUse.getSerial().valid())
         {
             // The sync object wasn't flushed before waiting, so the wait will always necessarily
             // time out.
@@ -167,10 +167,11 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    ASSERT(mUse.getSerial().valid());
+    ASSERT(mReadUse.getSerial().valid());
 
     VkResult status = VK_SUCCESS;
-    ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+    ANGLE_TRY(
+        renderer->waitForSerialWithUserTimeout(context, mReadUse.getSerial(), timeout, &status));
 
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
@@ -189,7 +190,7 @@ angle::Result SyncHelper::serverWait(ContextVk *contextVk)
     commandBuffer->waitEvents(1, mEvent.ptr(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
                               VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, nullptr, 0, nullptr, 0,
                               nullptr);
-    retain(&contextVk->getResourceUseList());
+    retainReadOnly(&contextVk->getResourceUseList());
     return angle::Result::Continue;
 }
 
@@ -216,7 +217,7 @@ SyncHelperNativeFence::~SyncHelperNativeFence()
 
 void SyncHelperNativeFence::releaseToRenderer(RendererVk *renderer)
 {
-    renderer->collectGarbageAndReinit(&mUse, &mFenceWithFd);
+    renderer->collectGarbageAndReinit(&mReadUse, &mFenceWithFd);
 }
 
 // Note: We have mFenceWithFd hold the FD, so that ownership is with ICD. Meanwhile we store a dup
@@ -270,7 +271,7 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // Flush first because the fence comes after current pending set of commands.
     ANGLE_TRY(contextVk->flushImpl(nullptr));
 
-    retain(&contextVk->getResourceUseList());
+    retainReadOnly(&contextVk->getResourceUseList());
 
     Serial serialOut;
     // exportFd is exporting VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR type handle which
@@ -322,11 +323,11 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     }
 
     VkResult status = VK_SUCCESS;
-    if (mUse.valid())
+    if (mReadUse.valid())
     {
         // We have a valid serial to wait on
-        ANGLE_TRY(
-            renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+        ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mReadUse.getSerial(), timeout,
+                                                         &status));
     }
     else
     {
@@ -374,7 +375,7 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
 angle::Result SyncHelperNativeFence::getStatus(Context *context, bool *signaled) const
 {
     // We've got a serial, check if the serial is still in use
-    if (mUse.valid())
+    if (mReadUse.valid())
     {
         *signaled = !isCurrentlyInUse(context->getRenderer()->getLastCompletedQueueSerial());
         return angle::Result::Continue;
