@@ -291,6 +291,10 @@ angle::Result Buffer::mapRange(const Context *context,
 
     // Notify when state changes.
     onStateChange(angle::SubjectMessage::SubjectMapped);
+    if (bufferGhosted)
+    {
+        onStateChange(angle::SubjectMessage::SubjectGhosted);
+    }
 
     return angle::Result::Continue;
 }
