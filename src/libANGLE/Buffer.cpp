@@ -36,7 +36,8 @@ BufferState::BufferState()
       mTransformFeedbackGenericBindingCount(0),
       mImmutable(GL_FALSE),
       mStorageExtUsageFlags(0),
-      mExternal(GL_FALSE)
+      mExternal(GL_FALSE),
+      mGhosted(false)
 {}
 
 BufferState::~BufferState() {}
@@ -289,6 +290,11 @@ angle::Result Buffer::mapRange(const Context *context,
 
     // Notify when state changes.
     onStateChange(angle::SubjectMessage::SubjectMapped);
+    if (mState.ghosted())
+    {
+        onStateChange(angle::SubjectMessage::SubjectGhosted);
+        mState.resetGhosted();
+    }
 
     return angle::Result::Continue;
 }
