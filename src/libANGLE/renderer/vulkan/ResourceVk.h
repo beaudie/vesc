@@ -12,14 +12,25 @@
 
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <stack>
+
 namespace rx
 {
 namespace vk
 {
+enum class ResourceUseType
+{
+    Read,       // Resource is being used/read by the GPU
+    ReadWrite,  // Resource is being read and/or written by the GPU
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
 // Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
-// of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
-// in the VkQueue. The reference count and serial together can determine if a resource is currently
-// in use.
+// of times a resource is retained by ANGLE. The accessSerial indicates the most recent use of a
+// resource in the VkQueue. The reference count and accessSerial together can determine if a
+// resource is currently in use.
 struct ResourceUse
 {
     ResourceUse() = default;
@@ -179,6 +190,10 @@ class Resource : angle::NonCopyable
     {
         return mUse.isCurrentlyInUse(lastCompletedSerial);
     }
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
 
     // Ensures the driver is caught up to this resource and it is only in use by ANGLE.
     angle::Result finishRunningCommands(ContextVk *contextVk);
@@ -188,6 +203,7 @@ class Resource : angle::NonCopyable
 
     // Adds the resource to a resource use list.
     void retain(ResourceUseList *resourceUseList) const;
+    void retainBuffer(ResourceUseList *resourceUseList, ResourceUseType resourceUseType) const;
 
   protected:
     Resource();
@@ -195,12 +211,27 @@ class Resource : angle::NonCopyable
 
     // Current resource lifetime.
     SharedResourceUse mUse;
+    // Current resource Write access lifetime.
+    SharedResourceUse mWriteUse;
 };
 
 ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const
 {
     // Store reference in resource list.
+    // Default to Read access.
     resourceUseList->add(mUse);
+}
+
+ANGLE_INLINE void Resource::retainBuffer(ResourceUseList *resourceUseList,
+                                         ResourceUseType resourceUseType) const
+{
+    retain(resourceUseList);
+
+    // Store reference in resource list.
+    if (resourceUseType == ResourceUseType::ReadWrite)
+    {
+        resourceUseList->add(mWriteUse);
+    }
 }
 
 }  // namespace vk
