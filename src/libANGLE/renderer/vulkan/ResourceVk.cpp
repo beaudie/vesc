@@ -33,7 +33,7 @@ Resource::~Resource()
 
 angle::Result Resource::finishRunningCommands(ContextVk *contextVk)
 {
-    return contextVk->finishToSerial(mUse.getSerial());
+    return contextVk->finishToSerial(mUse.getLatestSerial());
 }
 
 angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessage)
