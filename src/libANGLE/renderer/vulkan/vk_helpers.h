@@ -2442,6 +2442,7 @@ class BufferViewHelper final : public Resource
                           const BufferHelper &buffer,
                           VkDeviceSize bufferOffset,
                           const Format &format,
+                          BufferVk *bufferVk,
                           const BufferView **viewOut);
 
     // Return unique Serial for a bufferView.

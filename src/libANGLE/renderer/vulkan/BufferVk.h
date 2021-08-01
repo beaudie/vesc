@@ -128,6 +128,9 @@ class BufferVk : public BufferImpl
                                                 size_t offset,
                                                 bool hostVisible);
 
+    bool wasBufferGhosted() { return mBufferWasGhosted; }
+    void resetBufferGhosted() { mBufferWasGhosted = false; }
+
   private:
     angle::Result initializeShadowBuffer(ContextVk *contextVk,
                                          gl::BufferBinding target,
@@ -203,6 +206,7 @@ class BufferVk : public BufferImpl
 
     vk::BufferHelper *mBuffer;
     VkDeviceSize mBufferOffset;
+    bool mBufferWasGhosted;
 
     // Pool of BufferHelpers for mBuffer to acquire from
     vk::DynamicBuffer mBufferPool;
