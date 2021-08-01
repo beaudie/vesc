@@ -1540,16 +1540,20 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
             ASSERT(stages.any());
 
-            // TODO: accept multiple stages in bufferRead.  http://anglebug.com/3573
+            // TODO: accept multiple stages in bufferWrite.  http://anglebug.com/3573
             for (gl::ShaderType stage : stages)
             {
+                // Assume Write access to texture buffers, since they can be rendered to or sampled
+                // from, and we can't know which the shader(s) will do.
                 // Note: if another range of the same buffer is simultaneously used for storage,
                 // such as for transform feedback output, or SSBO, unnecessary barriers can be
                 // generated.
-                commandBufferHelper->bufferRead(this, VK_ACCESS_SHADER_READ_BIT,
-                                                vk::GetPipelineStage(stage), &buffer);
+                commandBufferHelper->bufferWrite(
+                    this, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+                    vk::GetPipelineStage(stage), vk::AliasingMode::Disallowed, &buffer);
             }
 
+            buffer.retainBuffer(&mResourceUseList, vk::ResourceUseType::ReadWrite);
             textureVk->retainBufferViews(&mResourceUseList);
 
             continue;
@@ -5190,6 +5194,7 @@ angle::Result ContextVk::updateActiveImages(vk::CommandBufferHelper *commandBuff
                     vk::GetPipelineStage(stage), vk::AliasingMode::Disallowed, &buffer);
             }
 
+            buffer.retainBuffer(&mResourceUseList, vk::ResourceUseType::ReadWrite);
             textureVk->retainBufferViews(&mResourceUseList);
 
             continue;

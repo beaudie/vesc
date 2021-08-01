@@ -886,7 +886,8 @@ class BufferHelper final : public Resource
     angle::Result copyFromBuffer(ContextVk *contextVk,
                                  BufferHelper *srcBuffer,
                                  uint32_t regionCount,
-                                 const VkBufferCopy *copyRegions);
+                                 const VkBufferCopy *copyRegions,
+                                 ResourceUseType *resourceUseTypeOut);
 
     angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
     {
@@ -934,6 +935,23 @@ class BufferHelper final : public Resource
                             VkPipelineStageFlags writeStage,
                             PipelineBarrier *barrier);
 
+    ANGLE_INLINE void retainBuffer(ResourceUseList *resourceUseList,
+                                   ResourceUseType resourceUseType) const
+    {
+        retain(resourceUseList);
+
+        // Store reference in resource list.
+        if (resourceUseType == ResourceUseType::ReadWrite)
+        {
+            resourceUseList->add(mWriteUse);
+        }
+    }
+
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
+
   private:
     angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
 
@@ -953,6 +971,9 @@ class BufferHelper final : public Resource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+
+    // Current resource Write access lifetime.
+    SharedResourceUse mWriteUse;
 };
 
 enum class BufferAccess
