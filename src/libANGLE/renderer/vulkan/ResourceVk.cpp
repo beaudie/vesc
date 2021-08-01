@@ -59,6 +59,22 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessa
     return angle::Result::Continue;
 }
 
+// ReadWriteResource implementation.
+ReadWriteResource::ReadWriteResource() : Resource()
+{
+    mWriteUse.init();
+}
+
+ReadWriteResource::ReadWriteResource(ReadWriteResource &&other) : ReadWriteResource()
+{
+    mWriteUse = std::move(other.mWriteUse);
+}
+
+ReadWriteResource::~ReadWriteResource()
+{
+    mWriteUse.release();
+}
+
 // SharedGarbage implementation.
 SharedGarbage::SharedGarbage() = default;
 

@@ -2790,6 +2790,8 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
     const vk::BufferHelper &buffer =
         vk::GetImpl(mState.getBuffer().get())->getBufferAndOffset(&bufferOffset);
 
+    vk::ResourceUseList &resourceUseList = contextVk->getResourceUseList();
+    buffer.retain(&resourceUseList, vk::ResourceUseType::ReadWrite);
     retainBufferViews(&contextVk->getResourceUseList());
     return mBufferViews.getView(contextVk, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }

@@ -16,6 +16,15 @@ namespace rx
 {
 namespace vk
 {
+enum class ResourceUseType
+{
+    Read,       // Resource is being used/read by the GPU
+    ReadWrite,  // Resource is being read and/or written by the GPU
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
 // Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
 // of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
 // in the VkQueue. The reference count and serial together can determine if a resource is currently
@@ -195,6 +204,41 @@ class Resource : angle::NonCopyable
 
     // Current resource lifetime.
     SharedResourceUse mUse;
+};
+
+class ReadWriteResource : public Resource
+{
+  public:
+    virtual ~ReadWriteResource() override;
+
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
+
+    ANGLE_INLINE void retain(ResourceUseList *resourceUseList,
+                             ResourceUseType resourceUseType) const
+    {
+        retain(resourceUseList);
+
+        // Store reference in resource list.
+        if (resourceUseType == ResourceUseType::ReadWrite)
+        {
+            resourceUseList->add(mWriteUse);
+        }
+    }
+
+  protected:
+    ReadWriteResource();
+    ReadWriteResource(ReadWriteResource &&other);
+
+    // Current resource lifetime.
+    SharedResourceUse mWriteUse;
+
+  private:
+    // Make retain(ResourceUseList) private, so users are forced to call retain(ResourceUseList,
+    // ResourceUseType) and explicitly decide whether the access is a Read or ReadWrite.
+    using Resource::retain;
 };
 
 ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const
