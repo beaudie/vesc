@@ -365,6 +365,7 @@ class BufferMemory : angle::NonCopyable
     BufferMemory();
     ~BufferMemory();
     angle::Result initExternal(void *clientBuffer);
+    angle::Result initDeviceMemoryReference(VkDeviceMemory vkDeviceMemory);
     angle::Result init();
 
     void destroy(RendererVk *renderer);
@@ -403,6 +404,9 @@ class BufferMemory : angle::NonCopyable
     // allocated with vulkan call directly.
     Allocation mAllocation;
     DeviceMemory mDeviceMemory;
+    // True means the mDeviceMemory object is a reference. We do not own it and should not detroy
+    // it.
+    bool mIsReferenceDeviceMemory;
 
     void *mClientBuffer;
     uint8_t *mMappedMemory;

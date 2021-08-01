@@ -103,6 +103,8 @@ VkResult AllocateMemory(VmaAllocator allocator,
                         VmaPool customPool,
                         uint32_t *pMemoryTypeIndexOut,
                         VmaAllocation *pAllocation,
+                        VkDeviceMemory *deviceMemoryOut,
+                        VkDeviceSize *offsetOut,
                         VkDeviceSize *sizeOut)
 {
     VkResult result;
@@ -116,6 +118,8 @@ VkResult AllocateMemory(VmaAllocator allocator,
     result = vmaAllocateMemory(allocator, pVkMemoryRequirements, &allocationCreateInfo, pAllocation,
                                &allocationInfo);
     *pMemoryTypeIndexOut = allocationInfo.memoryType;
+    *deviceMemoryOut     = allocationInfo.deviceMemory;
+    *offsetOut           = allocationInfo.offset;
     *sizeOut             = allocationInfo.size;
     return result;
 }
