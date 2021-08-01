@@ -180,6 +180,7 @@ angle::Result BufferGL::mapRange(const gl::Context *context,
                                  size_t offset,
                                  size_t length,
                                  GLbitfield access,
+                                 bool *bufferGhosted,
                                  void **mapPtr)
 {
     ContextGL *contextGL              = GetImplAs<ContextGL>(context);

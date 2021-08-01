@@ -267,8 +267,10 @@ angle::Result Buffer::mapRange(const Context *context,
     ASSERT(!mState.mMapped);
     ASSERT(offset + length <= mState.mSize);
 
+    bool bufferGhosted = false;
     mState.mMapPointer = nullptr;
-    ANGLE_TRY(mImpl->mapRange(context, offset, length, access, &mState.mMapPointer));
+    ANGLE_TRY(
+        mImpl->mapRange(context, offset, length, access, &bufferGhosted, &mState.mMapPointer));
 
     mState.mMapped      = GL_TRUE;
     mState.mMapOffset   = static_cast<GLint64>(offset);
@@ -289,6 +291,10 @@ angle::Result Buffer::mapRange(const Context *context,
 
     // Notify when state changes.
     onStateChange(angle::SubjectMessage::SubjectMapped);
+    if (bufferGhosted)
+    {
+        onStateChange(angle::SubjectMessage::SubjectGhosted);
+    }
 
     return angle::Result::Continue;
 }
