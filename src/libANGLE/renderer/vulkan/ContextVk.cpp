@@ -1540,16 +1540,20 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
             ASSERT(stages.any());
 
-            // TODO: accept multiple stages in bufferRead.  http://anglebug.com/3573
+            // TODO: accept multiple stages in bufferWrite.  http://anglebug.com/3573
             for (gl::ShaderType stage : stages)
             {
+                // Assume Write access to texture buffers, since they can be rendered to or sampled
+                // from, and we can't know which the shader(s) will do.
                 // Note: if another range of the same buffer is simultaneously used for storage,
                 // such as for transform feedback output, or SSBO, unnecessary barriers can be
                 // generated.
-                commandBufferHelper->bufferRead(this, VK_ACCESS_SHADER_READ_BIT,
-                                                vk::GetPipelineStage(stage), &buffer);
+                commandBufferHelper->bufferWrite(
+                    this, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+                    vk::GetPipelineStage(stage), vk::AliasingMode::Disallowed, &buffer);
             }
 
+            buffer.retainBuffer(&mResourceUseList, vk::ResourceUseType::ReadWrite);
             textureVk->retainBufferViews(&mResourceUseList);
 
             continue;
@@ -1698,15 +1702,20 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
         mVertexArray->getCurrentArrayBuffers();
 
     // Mark all active vertex buffers as accessed.
-    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
-    gl::AttributesMask attribsMask          = executable->getActiveAttribLocationsMask();
+    vk::CommandBufferHelper &commandBufferHelper = getStartedRenderPassCommands();
+    const gl::ProgramExecutable *executable      = mState.getProgramExecutable();
+    gl::AttributesMask attribsMask               = executable->getActiveAttribLocationsMask();
     for (size_t attribIndex : attribsMask)
     {
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-                                            vk::PipelineStage::VertexInput, arrayBuffer);
+            // Texture buffers will be retained as Write accesses.
+            if (!commandBufferHelper.usesBufferForWrite(*arrayBuffer))
+            {
+                mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+                                                vk::PipelineStage::VertexInput, arrayBuffer);
+            }
         }
     }
 
@@ -1725,8 +1734,13 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dir
     mRenderPassCommandBuffer->bindIndexBuffer(elementArrayBuffer->getBuffer(), offset,
                                               getVkIndexType(mCurrentDrawElementsType));
 
-    mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
-                                    elementArrayBuffer);
+    // Texture buffers will be retained as Write accesses.
+    vk::CommandBufferHelper &commandBufferHelper = getStartedRenderPassCommands();
+    if (!commandBufferHelper.usesBufferForWrite(*elementArrayBuffer))
+    {
+        mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT,
+                                        vk::PipelineStage::VertexInput, elementArrayBuffer);
+    }
 
     return angle::Result::Continue;
 }
@@ -5190,6 +5204,7 @@ angle::Result ContextVk::updateActiveImages(vk::CommandBufferHelper *commandBuff
                     vk::GetPipelineStage(stage), vk::AliasingMode::Disallowed, &buffer);
             }
 
+            buffer.retainBuffer(&mResourceUseList, vk::ResourceUseType::ReadWrite);
             textureVk->retainBufferViews(&mResourceUseList);
 
             continue;
