@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3319fde9_16b05e4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-02T14:55:03Z",
+      "side": 1,
+      "message": "LGTM, although it probably would have been worth squashing this into previous commit to avoid having to review code that was immediately removed.",
+      "revId": "f771fe77f2e3e43ade97b2a94de09bd5e4802302",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
