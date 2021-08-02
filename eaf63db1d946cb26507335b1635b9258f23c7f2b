@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc61a97_2bd2560f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T17:20:00Z",
+      "side": 1,
+      "message": "PTAL... you can see in the bot run that the new script is running on the bots.",
+      "revId": "eaf63db1d946cb26507335b1635b9258f23c7f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -125,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ed439db_f720e753",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T17:20:00Z",
+      "side": 1,
+      "message": "Latest patch set should fix it on Android. As well as enable it on the bots.",
+      "parentUuid": "7b0007c2_63316709",
+      "range": {
+        "startLine": 172,
+        "startChar": 11,
+        "endLine": 172,
+        "endChar": 26
+      },
+      "revId": "4082695c4f6d0234dd3b7349c68844122c11053b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3a024529_814e474b",
         "filename": "src/tests/run_perf_tests.py",
         "patchSetId": 1
@@ -160,6 +184,30 @@
       "side": 1,
       "message": "Below 7 values it doesn\u0027t make sense to do truncation, because you don\u0027t have enough samples. I\u0027ll make it a constant so it\u0027s more readable.",
       "parentUuid": "3a024529_814e474b",
+      "range": {
+        "startLine": 205,
+        "startChar": 29,
+        "endLine": 205,
+        "endChar": 30
+      },
+      "revId": "4082695c4f6d0234dd3b7349c68844122c11053b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b88d6114_0e6ee09a",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T17:20:00Z",
+      "side": 1,
+      "message": "Done, LMK if that seems better.",
+      "parentUuid": "5220c790_8b081eea",
       "range": {
         "startLine": 205,
         "startChar": 29,
