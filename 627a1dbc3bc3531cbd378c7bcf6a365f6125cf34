@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d691059_ec2b8839",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T22:08:57Z",
+      "side": 1,
+      "message": "PTAL. Got a green run on each config. Android is super-slow because of the script doing a bunch of redundant communication. One idea on how to speed it up partially. It would be annoying to have to rewrite the whole script. Maybe you guys have ideas?",
+      "revId": "627a1dbc3bc3531cbd378c7bcf6a365f6125cf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
