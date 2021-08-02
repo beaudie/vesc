@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "370415a6_932416c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T20:44:31Z",
+      "side": 1,
+      "message": "can you @ me in the sections of your ddoc where you discuss this? This is new info to me. I was under the impression that VMA sub-allocation is always a good thing.",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 12,
+        "endChar": 30
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99820570_6ead883c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T20:44:31Z",
+      "side": 1,
+      "message": "Again can you @ me to the ddoc where you mention the problems with bufferImageGranularity? I\u0027m curious to know more about the issue.",
+      "range": {
+        "startLine": 13,
+        "startChar": 32,
+        "endLine": 13,
+        "endChar": 54
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
