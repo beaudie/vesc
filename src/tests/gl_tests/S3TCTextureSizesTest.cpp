@@ -135,8 +135,12 @@ TEST_P(S3TCTextureSizesTest, NPOTTexStorage)
     }
     else
     {
+        glTexStorage2D(GL_TEXTURE_2D, 4, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, 11, 11);
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
         glTexStorage2D(GL_TEXTURE_2D, 4, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, 12, 12);
     }
+    EXPECT_GL_NO_ERROR();
 
     struct levelInfo
     {
