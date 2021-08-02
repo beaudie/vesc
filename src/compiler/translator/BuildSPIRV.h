@@ -313,10 +313,11 @@ class SPIRVBuilder : angle::NonCopyable
     spirv::IdRef getTypePointerId(spirv::IdRef typeId, spv::StorageClass storageClass);
     spirv::IdRef getFunctionTypeId(spirv::IdRef returnTypeId, const spirv::IdRefList &paramTypeIds);
 
-    // Decorations that may apply to intermediate instructions (in addition to variables).
-    // |precise| is only applicable to arithmetic nodes.
-    SpirvDecorations getDecorations(const TType &type);
-    SpirvDecorations getArithmeticDecorations(const TType &type, bool isPrecise);
+    // Decorations that apply to declaration instructions (|OpVariable| etc).
+    SpirvDecorations getDeclarationDecorations(const TType &type);
+    // Decorations that may apply to intermediate instructions, i.e. RelaxedPrecision and
+    // NoDecoration.
+    SpirvDecorations getDecorations(const TIntermTyped *node);
 
     // Extended instructions
     spirv::IdRef getExtInstImportIdStd();
@@ -426,6 +427,7 @@ class SPIRVBuilder : angle::NonCopyable
 
   private:
     SpirvTypeData declareType(const SpirvType &type, const TSymbol *block);
+    void addPrecisionDecoration(TPrecision precision, SpirvDecorations *decorationsOut);
 
     uint32_t calculateBaseAlignmentAndSize(const SpirvType &type, uint32_t *sizeInStorageBlockOut);
     uint32_t calculateSizeAndWriteOffsetDecorations(const SpirvType &type,
