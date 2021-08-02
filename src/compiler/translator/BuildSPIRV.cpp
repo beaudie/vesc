@@ -659,28 +659,35 @@ spirv::IdRef SPIRVBuilder::getFunctionTypeId(spirv::IdRef returnTypeId,
     return iter->second;
 }
 
-SpirvDecorations SPIRVBuilder::getDecorations(const TType &type)
+void SPIRVBuilder::addPrecisionDecoration(TPrecision precision, SpirvDecorations *decorationsOut)
 {
     const bool enablePrecision = (mCompileOptions & SH_IGNORE_PRECISION_QUALIFIERS) == 0;
-    const TPrecision precision = type.getPrecision();
 
+    if (enablePrecision && (precision == EbpMedium || precision == EbpLow))
+    {
+        decorationsOut->push_back(spv::DecorationRelaxedPrecision);
+    }
+}
+
+SpirvDecorations SPIRVBuilder::getDeclarationDecorations(const TType &type)
+{
     SpirvDecorations decorations;
 
     // Handle precision.
-    if (enablePrecision && (precision == EbpMedium || precision == EbpLow))
-    {
-        decorations.push_back(spv::DecorationRelaxedPrecision);
-    }
+    addPrecisionDecoration(type.getDeclaredPrecision(), &decorations);
 
     return decorations;
 }
 
-SpirvDecorations SPIRVBuilder::getArithmeticDecorations(const TType &type, bool isPrecise)
+SpirvDecorations SPIRVBuilder::getDecorations(const TIntermTyped *node)
 {
-    SpirvDecorations decorations = getDecorations(type);
+    SpirvDecorations decorations;
+
+    // Handle precision.
+    addPrecisionDecoration(node->getDerivedPrecision(), &decorations);
 
     // Handle |precise|.
-    if (isPrecise)
+    if (node->isPrecise())
     {
         decorations.push_back(spv::DecorationNoContraction);
     }
@@ -1949,7 +1956,7 @@ void SPIRVBuilder::writeMemberDecorations(const SpirvType &type, spirv::IdRef ty
         }
 
         // Add other decorations.
-        SpirvDecorations decorations = getDecorations(fieldType);
+        SpirvDecorations decorations = getDeclarationDecorations(fieldType);
         for (const spv::Decoration decoration : decorations)
         {
             spirv::WriteMemberDecorate(&mSpirvDecorations, typeId,

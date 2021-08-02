@@ -24,6 +24,7 @@
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/FindSymbolNode.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
+#include "compiler/translator/tree_util/PropagatePrecision.h"
 #include "compiler/translator/tree_util/ReplaceArrayOfMatrixVarying.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 #include "compiler/translator/tree_util/RunAtTheEndOfShader.h"
@@ -238,6 +239,8 @@ bool TranslatorMetal::translate(TIntermBlock *root,
             return false;
         }
     }
+
+    PropagatePrecision(this, root);
 
     // Write translated shader.
     TOutputVulkanGLSL outputGLSL(sink, getHashFunction(), getNameMap(), &getSymbolTable(),
