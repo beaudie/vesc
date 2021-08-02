@@ -16,6 +16,40 @@
       "message": "PTAL again. I confirm that on my laptop it correctly detects Intel to be the one running the tests.",
       "revId": "474f0e82a23265eddb2f6b3a66f47b0137f472ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df2f929f_75958a95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-02T20:54:47Z",
+      "side": 1,
+      "message": "lgtm, nice work.\n",
+      "revId": "474f0e82a23265eddb2f6b3a66f47b0137f472ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a249bd_057dd116",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-02T20:54:47Z",
+      "side": 1,
+      "message": "Please add TODO(author) or TOOD(bug ID)",
+      "revId": "474f0e82a23265eddb2f6b3a66f47b0137f472ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
