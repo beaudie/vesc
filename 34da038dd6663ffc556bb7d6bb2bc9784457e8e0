@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84ffe878_be15bd5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-02T14:09:05Z",
+      "side": 1,
+      "message": "Change LGTM. Could have been also good if this function was not called in the first place when dealing with PBOs.",
+      "revId": "34da038dd6663ffc556bb7d6bb2bc9784457e8e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
