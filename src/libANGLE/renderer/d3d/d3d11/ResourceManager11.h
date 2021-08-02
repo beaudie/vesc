@@ -191,7 +191,17 @@ class Resource11Base : angle::NonCopyable
     T *get() const { return mData->object; }
     T *const *getPointer() const { return &mData->object; }
 
-    void setDebugName(const char *name) { d3d11::SetDebugName(mData->object, name); }
+    void setInternalName(const char *name)
+    {
+        internalDebugName = name;
+        UpdateDebugNameWithD3D();
+    }
+
+    void setKHRDebugLabel(const std::string *label)
+    {
+        khrDebugName = label;
+        UpdateDebugNameWithD3D();
+    }
 
     void set(T *object)
     {
@@ -231,6 +241,20 @@ class Resource11Base : angle::NonCopyable
     }
 
     Pointer<DataT> mData;
+
+  private:
+    void UpdateDebugNameWithD3D()
+    {
+        std::string debugName;
+        if (internalDebugName)
+            debugName += std::string("_") + internalDebugName;
+        if (khrDebugName)
+            debugName += std::string("_") + *khrDebugName;
+        d3d11::SetDebugName(mData->object, debugName.c_str());
+    }
+
+    const std::string *khrDebugName = nullptr;
+    const char *internalDebugName   = nullptr;
 };
 
 template <typename T>

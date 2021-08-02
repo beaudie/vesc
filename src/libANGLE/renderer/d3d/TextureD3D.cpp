@@ -699,7 +699,7 @@ angle::Result TextureD3D::syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits,
                                     gl::Command source)
 {
-    if (dirtyBits.test(gl::Texture::DirtyBitType::DIRTY_BIT_LABEL))
+    if (mTexStorage && dirtyBits.test(gl::Texture::DirtyBitType::DIRTY_BIT_LABEL))
     {
         mTexStorage->onLabelUpdate();
     }
