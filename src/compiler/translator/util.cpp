@@ -391,7 +391,7 @@ GLenum GLVariablePrecision(const TType &type)
 {
     if (type.getBasicType() == EbtFloat)
     {
-        switch (type.getPrecision())
+        switch (type.getDeclaredPrecision())
         {
             case EbpHigh:
                 return GL_HIGH_FLOAT;
@@ -408,7 +408,7 @@ GLenum GLVariablePrecision(const TType &type)
     }
     else if (type.getBasicType() == EbtInt || type.getBasicType() == EbtUInt)
     {
-        switch (type.getPrecision())
+        switch (type.getDeclaredPrecision())
         {
             case EbpHigh:
                 return GL_HIGH_INT;

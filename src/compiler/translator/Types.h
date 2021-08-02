@@ -115,7 +115,7 @@ class TType
                     const TSpan<const unsigned int> arraySizes,
                     const char *mangledName)
         : type(t),
-          precision(p),
+          declaredPrecision(p),
           qualifier(q),
           invariant(false),
           precise(false),
@@ -134,7 +134,7 @@ class TType
 
     constexpr TType(TType &&t)
         : type(t.type),
-          precision(t.precision),
+          declaredPrecision(t.declaredPrecision),
           qualifier(t.qualifier),
           invariant(t.invariant),
           precise(t.precise),
@@ -156,8 +156,8 @@ class TType
     constexpr TBasicType getBasicType() const { return type; }
     void setBasicType(TBasicType t);
 
-    TPrecision getPrecision() const { return precision; }
-    void setPrecision(TPrecision p) { precision = p; }
+    TPrecision getDeclaredPrecision() const { return declaredPrecision; }
+    void setDeclaredPrecision(TPrecision p) { declaredPrecision = p; }
 
     constexpr TQualifier getQualifier() const { return qualifier; }
     void setQualifier(TQualifier q) { qualifier = q; }
@@ -309,7 +309,10 @@ class TType
 
     const char *getBasicString() const { return sh::getBasicString(type); }
 
-    const char *getPrecisionString() const { return sh::getPrecisionString(precision); }
+    const char *getDeclaredPrecisionString() const
+    {
+        return sh::getPrecisionString(declaredPrecision);
+    }
     const char *getQualifierString() const { return sh::getQualifierString(qualifier); }
 
     const char *getBuiltInTypeNameString() const;
@@ -370,7 +373,7 @@ class TType
     }
 
     TBasicType type;
-    TPrecision precision;
+    TPrecision declaredPrecision;
     TQualifier qualifier;
     bool invariant;
     bool precise;

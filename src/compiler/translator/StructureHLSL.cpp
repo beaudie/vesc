@@ -438,7 +438,7 @@ TString StructureHLSL::addBuiltInConstructor(const TType &type, const TIntermSeq
     ASSERT(parameters);
 
     TType ctorType = type;
-    ctorType.setPrecision(EbpHigh);
+    ctorType.setDeclaredPrecision(EbpHigh);
     ctorType.setQualifier(EvqTemporary);
 
     const TString constructorFunctionName =

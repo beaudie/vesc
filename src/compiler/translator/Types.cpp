@@ -173,7 +173,7 @@ TType::TType(TBasicType t, TPrecision p, TQualifier q, unsigned char ps, unsigne
 
 TType::TType(const TPublicType &p)
     : type(p.getBasicType()),
-      precision(p.precision),
+      declaredPrecision(p.precision),
       qualifier(p.qualifier),
       invariant(p.invariant),
       precise(p.precise),
@@ -225,7 +225,7 @@ TType::TType(const TType &t)
 TType &TType::operator=(const TType &t)
 {
     type                      = t.type;
-    precision                 = t.precision;
+    declaredPrecision         = t.declaredPrecision;
     qualifier                 = t.qualifier;
     invariant                 = t.invariant;
     precise                   = t.precise;

@@ -91,7 +91,7 @@ void RecordConstantPrecisionTraverser::visitConstantUnion(TIntermConstantUnion *
 {
     // If the constant has lowp or undefined precision, it can't increase the precision of consuming
     // operations.
-    if (node->getPrecision() < EbpMedium)
+    if (node->getType().getDeclaredPrecision() < EbpMedium)
         return;
 
     // It's possible the node has no effect on the precision of the consuming expression, depending

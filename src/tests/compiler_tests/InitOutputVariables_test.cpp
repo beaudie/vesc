@@ -33,9 +33,10 @@ bool AreSymbolsTheSame(const TIntermSymbol *expected, const TIntermSymbol *candi
     }
     const TType &expectedType  = expected->getType();
     const TType &candidateType = candidate->getType();
-    const bool sameTypes       = expectedType == candidateType &&
-                           expectedType.getPrecision() == candidateType.getPrecision() &&
-                           expectedType.getQualifier() == candidateType.getQualifier();
+    const bool sameTypes =
+        expectedType == candidateType &&
+        expectedType.getDeclaredPrecision() == candidateType.getDeclaredPrecision() &&
+        expectedType.getQualifier() == candidateType.getQualifier();
     const bool sameSymbols = (expected->variable().symbolType() == SymbolType::Empty &&
                               candidate->variable().symbolType() == SymbolType::Empty) ||
                              expected->getName() == candidate->getName();
