@@ -412,7 +412,7 @@ void TOutputGLSLBase::writeVariableType(const TType &type,
     }
     else
     {
-        if (writeVariablePrecision(type.getPrecision()))
+        if (writeVariablePrecision(type.getDeclaredPrecision()))
             out << " ";
         out << getTypeName(type);
     }
@@ -1143,7 +1143,7 @@ void TOutputGLSLBase::declareStruct(const TStructure *structure)
     {
         const TField *field    = fields[i];
         const TType &fieldType = *field->type();
-        if (writeVariablePrecision(fieldType.getPrecision()))
+        if (writeVariablePrecision(fieldType.getDeclaredPrecision()))
         {
             out << " ";
         }
@@ -1254,7 +1254,7 @@ void TOutputGLSLBase::declareInterfaceBlock(const TType &type)
         const TType &fieldType = *field->type();
 
         out << getMemoryQualifiers(fieldType);
-        if (writeVariablePrecision(fieldType.getPrecision()))
+        if (writeVariablePrecision(fieldType.getDeclaredPrecision()))
             out << " ";
         if (fieldType.isInvariant())
         {

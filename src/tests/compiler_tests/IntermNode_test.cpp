@@ -79,7 +79,7 @@ class IntermNodeTest : public testing::Test
     void checkTypeEqualWithQualifiers(const TType &original, const TType &copy)
     {
         ASSERT_EQ(original, copy);
-        ASSERT_EQ(original.getPrecision(), copy.getPrecision());
+        ASSERT_EQ(original.getDeclaredPrecision(), copy.getDeclaredPrecision());
         ASSERT_EQ(original.getQualifier(), copy.getQualifier());
     }
 

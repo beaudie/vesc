@@ -33,11 +33,6 @@ const float kPi                         = 3.14159265358979323846f;
 const float kDegreesToRadiansMultiplier = kPi / 180.0f;
 const float kRadiansToDegreesMultiplier = 180.0f / kPi;
 
-TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
-{
-    return left > right ? left : right;
-}
-
 TConstantUnion *Vectorize(const TConstantUnion &constant, size_t size)
 {
     TConstantUnion *constUnion = new TConstantUnion[size];
@@ -611,31 +606,14 @@ TIntermAggregate::TIntermAggregate(const TFunction *func,
         mArguments.swap(*arguments);
     }
     ASSERT(mFunction == nullptr || mFunction->symbolType() != SymbolType::Empty);
-    setPrecisionAndQualifier();
+    setQualifier();
 }
 
-void TIntermAggregate::setPrecisionAndQualifier()
+void TIntermAggregate::setQualifier()
 {
     mType.setQualifier(EvqTemporary);
-    if (BuiltInGroup::IsBuiltIn(mOp) && !BuiltInGroup::IsMath(mOp))
+    if ((!BuiltInGroup::IsBuiltIn(mOp) && !isFunctionCall()) || BuiltInGroup::IsMath(mOp))
     {
-        setBuiltInFunctionPrecision();
-    }
-    else if (!isFunctionCall())
-    {
-        if (isConstructor())
-        {
-            // Structs should not be precision qualified, the individual members may be.
-            // Built-in types on the other hand should be precision qualified.
-            if (getBasicType() != EbtStruct)
-            {
-                setPrecisionFromChildren();
-            }
-        }
-        else
-        {
-            setPrecisionForMathBuiltInOp();
-        }
         if (areChildrenConstQualified())
         {
             mType.setQualifier(EvqConst);
@@ -645,7 +623,7 @@ void TIntermAggregate::setPrecisionAndQualifier()
 
 bool TIntermAggregate::areChildrenConstQualified()
 {
-    for (TIntermNode *&arg : mArguments)
+    for (TIntermNode *arg : mArguments)
     {
         TIntermTyped *typedArg = arg->getAsTyped();
         if (typedArg && typedArg->getQualifier() != EvqConst)
@@ -654,80 +632,6 @@ bool TIntermAggregate::areChildrenConstQualified()
         }
     }
     return true;
-}
-
-void TIntermAggregate::setPrecisionFromChildren()
-{
-    if (getBasicType() == EbtBool)
-    {
-        mType.setPrecision(EbpUndefined);
-        return;
-    }
-
-    TPrecision precision                = EbpUndefined;
-    TIntermSequence::iterator childIter = mArguments.begin();
-    while (childIter != mArguments.end())
-    {
-        TIntermTyped *typed = (*childIter)->getAsTyped();
-        if (typed)
-            precision = GetHigherPrecision(typed->getPrecision(), precision);
-        ++childIter;
-    }
-    mType.setPrecision(precision);
-}
-
-void TIntermAggregate::setPrecisionForMathBuiltInOp()
-{
-    ASSERT(BuiltInGroup::IsMath(mOp));
-    if (!setPrecisionForSpecialBuiltInOp())
-    {
-        setPrecisionFromChildren();
-    }
-}
-
-bool TIntermAggregate::setPrecisionForSpecialBuiltInOp()
-{
-    switch (mOp)
-    {
-        case EOpBitfieldExtract:
-            mType.setPrecision(mArguments[0]->getAsTyped()->getPrecision());
-            return true;
-        case EOpBitfieldInsert:
-            mType.setPrecision(GetHigherPrecision(mArguments[0]->getAsTyped()->getPrecision(),
-                                                  mArguments[1]->getAsTyped()->getPrecision()));
-            return true;
-        case EOpUaddCarry:
-        case EOpUsubBorrow:
-            mType.setPrecision(EbpHigh);
-            return true;
-        default:
-            return false;
-    }
-}
-
-void TIntermAggregate::setBuiltInFunctionPrecision()
-{
-    // All built-ins returning bool are math operations.
-    ASSERT(getBasicType() != EbtBool);
-    ASSERT(!isFunctionCall() && !isConstructor() && !BuiltInGroup::IsMath(mOp));
-
-    TPrecision precision = EbpUndefined;
-    for (TIntermNode *arg : mArguments)
-    {
-        TIntermTyped *typed = arg->getAsTyped();
-        // ESSL spec section 8: texture functions get their precision from the sampler.
-        if (typed && IsSampler(typed->getBasicType()))
-        {
-            precision = typed->getPrecision();
-            break;
-        }
-    }
-    // ESSL 3.0 spec section 8: textureSize always gets highp precision.
-    // All other functions that take a sampler are assumed to be texture functions.
-    if (mOp == EOpTextureSize)
-        mType.setPrecision(EbpHigh);
-    else
-        mType.setPrecision(precision);
 }
 
 const char *TIntermAggregate::functionName() const
@@ -1055,7 +959,7 @@ bool TIntermCase::replaceChildNode(TIntermNode *original, TIntermNode *replaceme
     return false;
 }
 
-TIntermTyped::TIntermTyped() : mPrecision(EbpUndefined), mIsPrecise(false) {}
+TIntermTyped::TIntermTyped() : mDerivedPrecision(EbpUndefined), mIsPrecise(false) {}
 TIntermTyped::TIntermTyped(const TIntermTyped &node) : TIntermTyped()
 {
     // Copy constructor is disallowed for TIntermNode in order to disallow it for subclasses that
@@ -1064,7 +968,7 @@ TIntermTyped::TIntermTyped(const TIntermTyped &node) : TIntermTyped()
     mLine = node.mLine;
 
     // Once deteremined, the tree is not expected to transform.
-    ASSERT(mPrecision == EbpUndefined && !mIsPrecise);
+    ASSERT(mDerivedPrecision == EbpUndefined && !mIsPrecise);
 }
 
 bool TIntermTyped::hasConstantValue() const
@@ -1304,74 +1208,74 @@ void TIntermUnary::promote()
     if (mOperand->getQualifier() == EvqConst)
         resultQualifier = EvqConst;
 
-    unsigned char operandPrimarySize =
-        static_cast<unsigned char>(mOperand->getType().getNominalSize());
+    TType resultType = mOperand->getType();
+    resultType.setQualifier(resultQualifier);
+
+    // Result is an intermediate value, so make sure it's identified as such.
+    resultType.setInterfaceBlock(nullptr);
+
+    // Override type properties for special built-ins.  Precision is promoted later in
+    // |PropagatePrecision|.
     switch (mOp)
     {
         case EOpFloatBitsToInt:
-            setType(TType(EbtInt, EbpHigh, resultQualifier, operandPrimarySize));
+            resultType.setBasicType(EbtInt);
             break;
         case EOpFloatBitsToUint:
-            setType(TType(EbtUInt, EbpHigh, resultQualifier, operandPrimarySize));
+            resultType.setBasicType(EbtUInt);
             break;
         case EOpIntBitsToFloat:
         case EOpUintBitsToFloat:
-            setType(TType(EbtFloat, EbpHigh, resultQualifier, operandPrimarySize));
+            resultType.setBasicType(EbtFloat);
             break;
         case EOpPackSnorm2x16:
         case EOpPackUnorm2x16:
         case EOpPackHalf2x16:
         case EOpPackUnorm4x8:
         case EOpPackSnorm4x8:
-            setType(TType(EbtUInt, EbpHigh, resultQualifier));
+            resultType.setBasicType(EbtUInt);
+            resultType.setPrimarySize(1);
             break;
         case EOpUnpackSnorm2x16:
         case EOpUnpackUnorm2x16:
-            setType(TType(EbtFloat, EbpHigh, resultQualifier, 2));
-            break;
         case EOpUnpackHalf2x16:
-            setType(TType(EbtFloat, EbpMedium, resultQualifier, 2));
+            resultType.setBasicType(EbtFloat);
+            resultType.setPrimarySize(2);
             break;
         case EOpUnpackUnorm4x8:
         case EOpUnpackSnorm4x8:
-            setType(TType(EbtFloat, EbpMedium, resultQualifier, 4));
+            resultType.setBasicType(EbtFloat);
+            resultType.setPrimarySize(4);
             break;
         case EOpAny:
         case EOpAll:
-            setType(TType(EbtBool, EbpUndefined, resultQualifier));
+            resultType.setBasicType(EbtBool);
+            resultType.setPrimarySize(1);
             break;
         case EOpLength:
         case EOpDeterminant:
-            setType(TType(EbtFloat, mOperand->getType().getPrecision(), resultQualifier));
+            resultType.setBasicType(EbtFloat);
+            resultType.setPrimarySize(1);
             break;
         case EOpTranspose:
-            setType(TType(EbtFloat, mOperand->getType().getPrecision(), resultQualifier,
-                          static_cast<unsigned char>(mOperand->getType().getRows()),
-                          static_cast<unsigned char>(mOperand->getType().getCols())));
+            ASSERT(resultType.getBasicType() == EbtFloat);
+            resultType.setPrimarySize(static_cast<unsigned char>(mOperand->getType().getRows()));
+            resultType.setSecondarySize(static_cast<unsigned char>(mOperand->getType().getCols()));
             break;
         case EOpIsinf:
         case EOpIsnan:
-            setType(TType(EbtBool, EbpUndefined, resultQualifier, operandPrimarySize));
-            break;
-        case EOpBitfieldReverse:
-            setType(TType(mOperand->getBasicType(), EbpHigh, resultQualifier, operandPrimarySize));
+            resultType.setBasicType(EbtBool);
             break;
         case EOpBitCount:
-            setType(TType(EbtInt, EbpLow, resultQualifier, operandPrimarySize));
-            break;
         case EOpFindLSB:
-            setType(TType(EbtInt, EbpLow, resultQualifier, operandPrimarySize));
-            break;
         case EOpFindMSB:
-            setType(TType(EbtInt, EbpLow, resultQualifier, operandPrimarySize));
+            resultType.setBasicType(EbtInt);
             break;
         default:
-            setType(mOperand->getType());
-            mType.setQualifier(resultQualifier);
-            // Result is an intermediate value, so make sure it's identified as such.
-            mType.setInterfaceBlock(nullptr);
             break;
     }
+
+    setType(resultType);
 }
 
 TIntermSwizzle::TIntermSwizzle(TIntermTyped *operand, const TVector<int> &swizzleOffsets)
@@ -1534,9 +1438,13 @@ void TIntermSwizzle::promote()
     if (mOperand->getQualifier() == EvqConst)
         resultQualifier = EvqConst;
 
-    auto numFields = mSwizzleOffsets.size();
-    setType(TType(mOperand->getBasicType(), mOperand->getPrecision(), resultQualifier,
-                  static_cast<unsigned char>(numFields)));
+    size_t numFields = mSwizzleOffsets.size();
+
+    TType resultType = mOperand->getType();
+    resultType.setPrimarySize(static_cast<unsigned char>(numFields));
+    resultType.setQualifier(resultQualifier);
+
+    setType(resultType);
 }
 
 bool TIntermSwizzle::hasDuplicateOffsets() const
@@ -1635,6 +1543,13 @@ void TIntermBinary::promote()
         getTypePointer()->setQualifier(EvqTemporary);
     }
 
+    // Result is an intermediate value, so make sure it's identified as such.  That's not true for
+    // interface block arrays being indexed.
+    if (mOp != EOpIndexDirect && mOp != EOpIndexIndirect)
+    {
+        getTypePointer()->setInterfaceBlock(nullptr);
+    }
+
     // Handle indexing ops.
     switch (mOp)
     {
@@ -1646,12 +1561,11 @@ void TIntermBinary::promote()
             }
             else if (mLeft->isMatrix())
             {
-                setType(TType(mLeft->getBasicType(), mLeft->getPrecision(), resultQualifier,
-                              static_cast<unsigned char>(mLeft->getRows())));
+                mType.toMatrixColumnType();
             }
             else if (mLeft->isVector())
             {
-                setType(TType(mLeft->getBasicType(), mLeft->getPrecision(), resultQualifier));
+                mType.toComponentType();
             }
             else
             {
@@ -1661,16 +1575,16 @@ void TIntermBinary::promote()
         case EOpIndexDirectStruct:
         {
             const TFieldList &fields = mLeft->getType().getStruct()->fields();
-            const int i              = mRight->getAsConstantUnion()->getIConst(0);
-            setType(*fields[i]->type());
+            const int fieldIndex     = mRight->getAsConstantUnion()->getIConst(0);
+            setType(*fields[fieldIndex]->type());
             getTypePointer()->setQualifier(resultQualifier);
             return;
         }
         case EOpIndexDirectInterfaceBlock:
         {
             const TFieldList &fields = mLeft->getType().getInterfaceBlock()->fields();
-            const int i              = mRight->getAsConstantUnion()->getIConst(0);
-            setType(*fields[i]->type());
+            const int fieldIndex     = mRight->getAsConstantUnion()->getIConst(0);
+            setType(*fields[fieldIndex]->type());
             getTypePointer()->setQualifier(resultQualifier);
             return;
         }
@@ -1680,50 +1594,7 @@ void TIntermBinary::promote()
 
     ASSERT(mLeft->isArray() == mRight->isArray());
 
-    // The result gets promoted to the highest precision.
-    TPrecision higherPrecision = GetHigherPrecision(mLeft->getPrecision(), mRight->getPrecision());
-    getTypePointer()->setPrecision(higherPrecision);
-
     const int nominalSize = std::max(mLeft->getNominalSize(), mRight->getNominalSize());
-
-    //
-    // All scalars or structs. Code after this test assumes this case is removed!
-    //
-    if (nominalSize == 1)
-    {
-        switch (mOp)
-        {
-            //
-            // Promote to conditional
-            //
-            case EOpEqual:
-            case EOpNotEqual:
-            case EOpLessThan:
-            case EOpGreaterThan:
-            case EOpLessThanEqual:
-            case EOpGreaterThanEqual:
-                setType(TType(EbtBool, EbpUndefined, resultQualifier));
-                break;
-
-            //
-            // And and Or operate on conditionals
-            //
-            case EOpLogicalAnd:
-            case EOpLogicalXor:
-            case EOpLogicalOr:
-                ASSERT(mLeft->getBasicType() == EbtBool && mRight->getBasicType() == EbtBool);
-                setType(TType(EbtBool, EbpUndefined, resultQualifier));
-                break;
-
-            default:
-                break;
-        }
-        return;
-    }
-
-    // If we reach here, at least one of the operands is vector or matrix.
-    // The other operand could be a scalar, vector, or matrix.
-    TBasicType basicType = mLeft->getBasicType();
 
     switch (mOp)
     {
@@ -1732,27 +1603,24 @@ void TIntermBinary::promote()
         case EOpMatrixTimesScalar:
             if (mRight->isMatrix())
             {
-                setType(TType(basicType, higherPrecision, resultQualifier,
-                              static_cast<unsigned char>(mRight->getCols()),
-                              static_cast<unsigned char>(mRight->getRows())));
+                getTypePointer()->setPrimarySize(static_cast<unsigned char>(mRight->getCols()));
+                getTypePointer()->setSecondarySize(static_cast<unsigned char>(mRight->getRows()));
             }
             break;
         case EOpMatrixTimesVector:
-            setType(TType(basicType, higherPrecision, resultQualifier,
-                          static_cast<unsigned char>(mLeft->getRows()), 1));
+            getTypePointer()->setPrimarySize(static_cast<unsigned char>(mLeft->getRows()));
+            getTypePointer()->setSecondarySize(1);
             break;
         case EOpMatrixTimesMatrix:
-            setType(TType(basicType, higherPrecision, resultQualifier,
-                          static_cast<unsigned char>(mRight->getCols()),
-                          static_cast<unsigned char>(mLeft->getRows())));
+            getTypePointer()->setPrimarySize(static_cast<unsigned char>(mRight->getCols()));
+            getTypePointer()->setSecondarySize(static_cast<unsigned char>(mLeft->getRows()));
             break;
         case EOpVectorTimesScalar:
-            setType(TType(basicType, higherPrecision, resultQualifier,
-                          static_cast<unsigned char>(nominalSize), 1));
+            getTypePointer()->setPrimarySize(static_cast<unsigned char>(nominalSize));
             break;
         case EOpVectorTimesMatrix:
-            setType(TType(basicType, higherPrecision, resultQualifier,
-                          static_cast<unsigned char>(mRight->getCols()), 1));
+            getTypePointer()->setPrimarySize(static_cast<unsigned char>(mRight->getCols()));
+            ASSERT(getType().getSecondarySize() == 1);
             break;
         case EOpMulAssign:
         case EOpVectorTimesScalarAssign:
@@ -1785,12 +1653,11 @@ void TIntermBinary::promote()
         case EOpBitwiseXorAssign:
         case EOpBitwiseOrAssign:
         {
+            ASSERT(!mLeft->isArray() && !mRight->isArray());
             const int secondarySize =
                 std::max(mLeft->getSecondarySize(), mRight->getSecondarySize());
-            setType(TType(basicType, higherPrecision, resultQualifier,
-                          static_cast<unsigned char>(nominalSize),
-                          static_cast<unsigned char>(secondarySize)));
-            ASSERT(!mLeft->isArray() && !mRight->isArray());
+            getTypePointer()->setPrimarySize(static_cast<unsigned char>(nominalSize));
+            getTypePointer()->setSecondarySize(static_cast<unsigned char>(secondarySize));
             break;
         }
         case EOpEqual:
@@ -1801,7 +1668,18 @@ void TIntermBinary::promote()
         case EOpGreaterThanEqual:
             ASSERT((mLeft->getNominalSize() == mRight->getNominalSize()) &&
                    (mLeft->getSecondarySize() == mRight->getSecondarySize()));
-            setType(TType(EbtBool, EbpUndefined, resultQualifier));
+            getTypePointer()->setBasicType(EbtBool);
+            getTypePointer()->setPrimarySize(1);
+            getTypePointer()->setSecondarySize(1);
+            break;
+
+        //
+        // And and Or operate on conditionals
+        //
+        case EOpLogicalAnd:
+        case EOpLogicalXor:
+        case EOpLogicalOr:
+            ASSERT(mLeft->getBasicType() == EbtBool && mRight->getBasicType() == EbtBool);
             break;
 
         case EOpIndexDirect:
