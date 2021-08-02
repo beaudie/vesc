@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae766b7e_ae0887ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-02T15:06:29Z",
+      "side": 1,
+      "message": "Can you add this descriptive text to the code instead of just the CL message?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "cf9818ec227d026d7bb42eb00edee46e0865da63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d9e664_83545d9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-02T15:06:29Z",
+      "side": 1,
+      "message": "LGTM with one request.",
+      "revId": "cf9818ec227d026d7bb42eb00edee46e0865da63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
