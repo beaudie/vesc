@@ -104,6 +104,24 @@
       "parentUuid": "9ea28185_97eff340",
       "revId": "d46446b088038294a5f55588181c443e86e4dfde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13414e77_9b90eb05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-02T14:52:25Z",
+      "side": 1,
+      "message": "The issue was that GetDeviceId really only handled a handful of QC devices. I changed this such that system info is still used, but the active index is no longer used (instead, the vendor id from GL is matched with the listed GPUs)",
+      "parentUuid": "04faef14_d59c2dc1",
+      "revId": "d46446b088038294a5f55588181c443e86e4dfde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
