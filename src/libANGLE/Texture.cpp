@@ -2232,7 +2232,7 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
                 // which resolves the underlying multisampled texture if it exists and so
                 // Texture will signal dirty storage to invalidate its own cache and the
                 // attached framebuffer's cache.
-                signalDirtyStorage(InitState::Initialized);
+                signalDirtyStorage(InitState::MayNeedInit);
             }
             break;
         case angle::SubjectMessage::DirtyBitsFlagged:
