@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4580249f_a784fa65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T11:53:58Z",
+      "side": 1,
+      "message": "Can  you please also update registry_xml.py?",
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24047933_92859dc2",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 6
@@ -82,6 +99,29 @@
         "startChar": 0,
         "endLine": 1402,
         "endChar": 45
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a6e527e_d3bad878",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-02T11:53:58Z",
+      "side": 1,
+      "message": "nit: please use the cpp to init like with the other states.",
+      "range": {
+        "startLine": 1166,
+        "startChar": 0,
+        "endLine": 1173,
+        "endChar": 36
       },
       "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
