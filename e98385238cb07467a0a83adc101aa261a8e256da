@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b0b332_fae517dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-08-02T22:15:52Z",
+      "side": 1,
+      "message": "I thought the releaseTexStorage function should send a SubjectChanged message to the Framebuffer::onSubjectStateChange function to fix the bug.\n\nBut calling the ContentsChanged message handler of the Texture::onSubjectStateChange function in the releaseTexStorage function seems to cause a bug as a side effect.\n\nSo I fixed it and tested it locally, but I\u0027m not sure that this is the correct.\n\nCould you review this code?",
+      "revId": "e98385238cb07467a0a83adc101aa261a8e256da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
