@@ -43,9 +43,9 @@ TInfoSinkBase &TInfoSinkBase::operator<<(const TType &type)
         sink.append(type.getQualifierString());
         sink.append(" ");
     }
-    if (type.getPrecision() != EbpUndefined)
+    if (type.getDeclaredPrecision() != EbpUndefined)
     {
-        sink.append(type.getPrecisionString());
+        sink.append(type.getDeclaredPrecisionString());
         sink.append(" ");
     }
 
