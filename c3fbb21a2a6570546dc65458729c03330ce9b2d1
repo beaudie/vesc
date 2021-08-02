@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a97376a_d2f4dbca",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-02T14:49:16Z",
+      "side": 0,
+      "message": "Nice cleanup!",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 17
+      },
+      "revId": "c3fbb21a2a6570546dc65458729c03330ce9b2d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

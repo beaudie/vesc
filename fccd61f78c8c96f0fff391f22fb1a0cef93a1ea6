@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e55d61d_391bc6c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-02T14:49:16Z",
+      "side": 1,
+      "message": "LGTM with one request.",
+      "revId": "fccd61f78c8c96f0fff391f22fb1a0cef93a1ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "477155f4_9f6141c7",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-02T14:49:16Z",
+      "side": 1,
+      "message": "This looks like it is scanning for the string format identifier to detect whether defaults are in use.  Can you add a comment explaining this helper for future readers?",
+      "range": {
+        "startLine": 224,
+        "startChar": 4,
+        "endLine": 224,
+        "endChar": 21
+      },
+      "revId": "fccd61f78c8c96f0fff391f22fb1a0cef93a1ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
