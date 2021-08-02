@@ -10,6 +10,7 @@
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/OutputESSL.h"
 #include "compiler/translator/tree_ops/gl/RecordConstantPrecision.h"
+#include "compiler/translator/tree_util/PropagatePrecision.h"
 
 namespace sh
 {
@@ -88,6 +89,8 @@ bool TranslatorESSL::translate(TIntermBlock *root,
             sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
             getGeometryShaderOutputPrimitiveType(), getGeometryShaderMaxVertices());
     }
+
+    PropagatePrecision(this, root);
 
     // Write translated shader.
     TOutputESSL outputESSL(sink, getHashFunction(), getNameMap(), &getSymbolTable(),

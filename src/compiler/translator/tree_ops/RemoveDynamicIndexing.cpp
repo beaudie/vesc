@@ -109,7 +109,7 @@ const TType *GetBaseType(const TType &type, bool write)
     // end up using mediump version of an indexing function for a highp value, if both mediump and
     // highp values are being indexed in the shader. For HLSL precision doesn't matter, but in
     // principle this code could be used with multiple backends.
-    baseType->setPrecision(EbpHigh);
+    baseType->setDeclaredPrecision(EbpHigh);
     baseType->setQualifier(EvqParamInOut);
     if (!write)
         baseType->setQualifier(EvqParamIn);

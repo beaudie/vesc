@@ -158,7 +158,6 @@ class TIntermTyped : public TIntermNode
 
     TBasicType getBasicType() const { return getType().getBasicType(); }
     TQualifier getQualifier() const { return getType().getQualifier(); }
-    TPrecision getPrecision() const { return getType().getPrecision(); }
     TMemoryQualifier getMemoryQualifier() const { return getType().getMemoryQualifier(); }
     int getCols() const { return getType().getCols(); }
     int getRows() const { return getType().getRows(); }
@@ -180,20 +179,20 @@ class TIntermTyped : public TIntermNode
     // stored in the intermediate nodes:
     //
     // - Precision, which for intermediate nodes is derived from the precision of the declared
-    //   variables.  This is not currently implemented.  TODO: http://anglebug.com/4889
+    //   variables.
     // - Precise-ness, which is set for arithmetic nodes that are involved in the calculation of a
     //   value assigned to a |precise| variable.
+
+    void setDerivedPrecision(TPrecision p) { mDerivedPrecision = p; }
+    TPrecision getDerivedPrecision() const { return mDerivedPrecision; }
+
     void setIsPrecise() { mIsPrecise = true; }
     bool isPrecise() const { return mIsPrecise; }
 
   protected:
     TIntermTyped(const TIntermTyped &node);
 
-    // TODO: move the precision promotion logic to a final post-processing step that sets this
-    // value.  With the current implementation, it's quite trivial for tree transformations to leave
-    // the tree in an inconsistent state, or for example to ignore globally specified precisions.
-    // http://anglebug.com/4889
-    TPrecision mPrecision;
+    TPrecision mDerivedPrecision;
     bool mIsPrecise;
 };
 
@@ -662,20 +661,9 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
 
     TIntermAggregate(const TIntermAggregate &node);  // note: not deleted, just private!
 
-    void setPrecisionAndQualifier();
+    void setQualifier();
 
     bool areChildrenConstQualified();
-
-    void setPrecisionFromChildren();
-
-    void setPrecisionForMathBuiltInOp();
-
-    // Returns true if precision was set according to special rules for this built-in.
-    bool setPrecisionForSpecialBuiltInOp();
-
-    // Used for non-math built-in functions. The function name in the symbol info needs to be set
-    // before calling this.
-    void setBuiltInFunctionPrecision();
 };
 
 // A list of statements. Either the root node which contains declarations and function definitions,
