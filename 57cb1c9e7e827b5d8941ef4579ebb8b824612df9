@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8a5bb1a_e92e843b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "The first three patches are mainly try to address out current inefficient use of VMA, that we are using default pool which forces bufferImageGranularity and calling findMemoryTypeIndexForBufferInfo which creates/free buffer. So we should be good to move forward with the first three patches. But I will ensure we all agress for the  last patch which essentially changes how BufferVk allocates memory. But lets move that discussion to the design doc",
+      "parentUuid": "eb4622ae_8348f0a6",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b1e6f29_21265109",
@@ -120,6 +138,30 @@
       "writtenOn": "2021-07-30T17:40:01Z",
       "side": 1,
       "message": "Why are these passed in?",
+      "range": {
+        "startLine": 3452,
+        "startChar": 0,
+        "endLine": 3453,
+        "endChar": 84
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08fa1414_002af28a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3453,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "It will be used in the next CL.",
+      "parentUuid": "7b1e6f29_21265109",
       "range": {
         "startLine": 3452,
         "startChar": 0,
@@ -147,6 +189,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b198e30e_49b65902",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71e1c05b_e6894e23",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8931c17_d96fb040",
@@ -160,6 +220,30 @@
       "writtenOn": "2021-07-30T12:32:43Z",
       "side": 1,
       "message": "can you ASSERT that the pools are dellocated/nulled out in the destructor to ensure we call destroy() before we destruct this object?",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4889414_d4698135",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "Good point. Done",
+      "parentUuid": "c8931c17_d96fb040",
       "range": {
         "startLine": 90,
         "startChar": 0,
@@ -193,6 +277,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "308303ec_37995964",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f77e1c2_aa61a782",
+      "range": {
+        "startLine": 115,
+        "startChar": 15,
+        "endLine": 115,
+        "endChar": 25
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf49cf39_82740a50",
@@ -216,6 +324,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f596fb6d_29b2a77b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf49cf39_82740a50",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 11
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f671241e_709503bb",
@@ -229,6 +361,24 @@
       "writtenOn": "2021-07-30T17:40:01Z",
       "side": 1,
       "message": "This can be moved below to just before the InitMappableAllocation() call.",
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd9a00a6_d883eb5a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3537,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f671241e_709503bb",
       "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -270,6 +420,30 @@
       "side": 1,
       "message": "Yes, this section of code will be end up just making one allocateMemoryForBuffer call in crrev.com/c/2939490.",
       "parentUuid": "3728d73b_09744535",
+      "range": {
+        "startLine": 3537,
+        "startChar": 0,
+        "endLine": 3557,
+        "endChar": 0
+      },
+      "revId": "57cb1c9e7e827b5d8941ef4579ebb8b824612df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3684ed05_6faea0d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3557,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-02T16:45:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b945625d_4b7a789b",
       "range": {
         "startLine": 3537,
         "startChar": 0,
