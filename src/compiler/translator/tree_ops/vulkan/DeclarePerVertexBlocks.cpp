@@ -294,7 +294,7 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
         clipDistanceType->setQualifier(EvqClipDistance);
         cullDistanceType->setQualifier(EvqCullDistance);
 
-        pointSizeType->setPrecision(EbpMedium);
+        pointSizeType->setDeclaredPrecision(EbpMedium);
 
         // TODO: handle interaction with GS and T*S where the two can have different sizes.  These
         // values are valid for EvqPerVertexOut only.  For EvqPerVertexIn, the size should come from

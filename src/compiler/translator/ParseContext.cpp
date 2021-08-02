@@ -1420,7 +1420,7 @@ void TParseContext::checkIsParameterQualifierValid(
 
     if (typeQualifier.precision != EbpUndefined)
     {
-        type->setPrecision(typeQualifier.precision);
+        type->setDeclaredPrecision(typeQualifier.precision);
     }
 
     if (typeQualifier.precise)

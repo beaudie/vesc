@@ -76,7 +76,7 @@ TEST_F(QualificationVertexShaderTestESSL31, AllQualifiersMixed)
         const TType &type = node->getType();
         EXPECT_TRUE(type.isInvariant());
         EXPECT_EQ(EvqFlatOut, type.getQualifier());
-        EXPECT_EQ(EbpHigh, type.getPrecision());
+        EXPECT_EQ(EbpHigh, type.getDeclaredPrecision());
     }
 }
 

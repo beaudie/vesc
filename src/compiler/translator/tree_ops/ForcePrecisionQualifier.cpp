@@ -33,9 +33,9 @@ TPrecisionTraverser::TPrecisionTraverser(TSymbolTable *symbolTable)
 
 void TPrecisionTraverser::overwriteVariablePrecision(TType *type) const
 {
-    if (type->getPrecision() == EbpHigh)
+    if (type->getDeclaredPrecision() == EbpHigh)
     {
-        type->setPrecision(EbpMedium);
+        type->setDeclaredPrecision(EbpMedium);
     }
 }
 

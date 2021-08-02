@@ -620,7 +620,7 @@ void ValidateAST::visitSymbol(TIntermSymbol *node)
     if (mOptions.validatePrecision)
     {
         if (!isBuiltIn && IsPrecisionApplicable(node->getType()) &&
-            node->getType().getPrecision() == EbpUndefined)
+            node->getType().getDeclaredPrecision() == EbpUndefined)
         {
             // Note that some built-ins don't have a precision.
             mDiagnostics->error(node->getLine(),
@@ -720,7 +720,7 @@ void ValidateAST::visitFunctionPrototype(TIntermFunctionPrototype *node)
             }
         }
 
-        if (IsPrecisionApplicable(paramType) && paramType.getPrecision() == EbpUndefined)
+        if (IsPrecisionApplicable(paramType) && paramType.getDeclaredPrecision() == EbpUndefined)
         {
             mDiagnostics->error(
                 node->getLine(),
@@ -731,7 +731,7 @@ void ValidateAST::visitFunctionPrototype(TIntermFunctionPrototype *node)
     }
 
     const TType &returnType = function->getReturnType();
-    if (IsPrecisionApplicable(returnType) && returnType.getPrecision() == EbpUndefined)
+    if (IsPrecisionApplicable(returnType) && returnType.getDeclaredPrecision() == EbpUndefined)
     {
         mDiagnostics->error(
             node->getLine(),
@@ -928,7 +928,7 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 {
                     const TType *fieldType = field->type();
                     if (IsPrecisionApplicable(*fieldType) &&
-                        fieldType->getPrecision() == EbpUndefined)
+                        fieldType->getDeclaredPrecision() == EbpUndefined)
                     {
                         mDiagnostics->error(
                             node->getLine(),
