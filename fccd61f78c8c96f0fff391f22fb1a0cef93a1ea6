@@ -39,6 +39,30 @@
       },
       "revId": "fccd61f78c8c96f0fff391f22fb1a0cef93a1ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "436570ff_7269aa63",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-03T08:52:27Z",
+      "side": 1,
+      "message": "Squashed with the next commit.",
+      "parentUuid": "477155f4_9f6141c7",
+      "range": {
+        "startLine": 224,
+        "startChar": 4,
+        "endLine": 224,
+        "endChar": 21
+      },
+      "revId": "fccd61f78c8c96f0fff391f22fb1a0cef93a1ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
