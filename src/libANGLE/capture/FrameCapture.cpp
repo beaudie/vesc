@@ -54,14 +54,14 @@ namespace angle
 namespace
 {
 
-constexpr char kEnabledVarName[]               = "ANGLE_CAPTURE_ENABLED";
-constexpr char kOutDirectoryVarName[]          = "ANGLE_CAPTURE_OUT_DIR";
-constexpr char kFrameStartVarName[]            = "ANGLE_CAPTURE_FRAME_START";
-constexpr char kFrameEndVarName[]              = "ANGLE_CAPTURE_FRAME_END";
-constexpr char kCaptureTriggerVarName[]        = "ANGLE_CAPTURE_TRIGGER";
-constexpr char kCaptureLabel[]                 = "ANGLE_CAPTURE_LABEL";
-constexpr char kCompression[]                  = "ANGLE_CAPTURE_COMPRESSION";
-constexpr char kSerializeStateEnabledVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
+constexpr char kEnabledVarName[]        = "ANGLE_CAPTURE_ENABLED";
+constexpr char kOutDirectoryVarName[]   = "ANGLE_CAPTURE_OUT_DIR";
+constexpr char kFrameStartVarName[]     = "ANGLE_CAPTURE_FRAME_START";
+constexpr char kFrameEndVarName[]       = "ANGLE_CAPTURE_FRAME_END";
+constexpr char kCaptureTriggerVarName[] = "ANGLE_CAPTURE_TRIGGER";
+constexpr char kCaptureLabelVarName[]   = "ANGLE_CAPTURE_LABEL";
+constexpr char kCompressionVarName[]    = "ANGLE_CAPTURE_COMPRESSION";
+constexpr char kSerializeStateVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
 
 constexpr size_t kBinaryAlignment   = 16;
 constexpr size_t kFunctionSizeLimit = 5000;
@@ -4150,7 +4150,7 @@ FrameCaptureShared::FrameCaptureShared()
     }
 
     std::string labelFromEnv =
-        GetEnvironmentVarOrUnCachedAndroidProperty(kCaptureLabel, kAndroidCaptureLabel);
+        GetEnvironmentVarOrUnCachedAndroidProperty(kCaptureLabelVarName, kAndroidCaptureLabel);
     if (!labelFromEnv.empty())
     {
         // Optional label to provide unique file names and namespaces
@@ -4158,13 +4158,12 @@ FrameCaptureShared::FrameCaptureShared()
     }
 
     std::string compressionFromEnv =
-        GetEnvironmentVarOrUnCachedAndroidProperty(kCompression, kAndroidCompression);
+        GetEnvironmentVarOrUnCachedAndroidProperty(kCompressionVarName, kAndroidCompression);
     if (compressionFromEnv == "0")
     {
         mCompression = false;
     }
-    std::string serializeStateEnabledFromEnv =
-        angle::GetEnvironmentVar(kSerializeStateEnabledVarName);
+    std::string serializeStateEnabledFromEnv = angle::GetEnvironmentVar(kSerializeStateVarName);
     if (serializeStateEnabledFromEnv == "1")
     {
         mSerializeStateEnabled = true;
