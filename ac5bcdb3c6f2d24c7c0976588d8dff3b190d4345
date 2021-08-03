@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eccaf54_1980c77b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4087,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-03T15:23:05Z",
+      "side": 0,
+      "message": "From a style perspective, I like having the default value in the initializer list.  You could just change this to false and remove the assignment from the header.",
+      "range": {
+        "startLine": 4087,
+        "startChar": 0,
+        "endLine": 4087,
+        "endChar": 21
+      },
+      "revId": "ac5bcdb3c6f2d24c7c0976588d8dff3b190d4345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
