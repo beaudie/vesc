@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc0d242a_999dbd25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T19:33:29Z",
+      "side": 1,
+      "message": "Will mac/nvidia support metal? My impression was that it\u0027s a deprecated platform?",
+      "parentUuid": "905ff198_273ac996",
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f1ac546_403739a8",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-08-03T19:20:47Z",
       "side": 1,
       "message": "The previous version seems to be 263, why is this not 264?",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a394c0_39bb6897",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T19:33:29Z",
+      "side": 1,
+      "message": "Another change is incrementing to 264 at the same time :)",
+      "parentUuid": "8f1ac546_403739a8",
       "range": {
         "startLine": 29,
         "startChar": 25,
