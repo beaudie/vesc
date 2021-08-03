@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68bd32ac_e148a622",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T13:48:38Z",
+      "side": 1,
+      "message": "Ken, what do you think of this change? It seems like Mac/Nvidia is still affected by this bug. Is it ok to suppress the test there? The workaround being removed is buggy in non-trivial situations, so this is really trading one bug for another. The original Nvidia bug that prompted the workaround is fixed in surviving drivers on Linux and windows.",
+      "revId": "9b79db2d3a5236bc27071095f01ae1315e964bbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
