@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa89507f_0d98409e",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1828,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T16:21:30Z",
+      "side": 1,
+      "message": "The issue was that the mac-rel bot was running on this GPU that GetVendorID didn\u0027t know about:\n\n    Native vendor string: \u0027Apple Inc. Apple Software Renderer\u0027\n     - Unknown\n    Has system info? 1, gpu count? 1\n     - 0x15AD 0x0405\n\nThe vendor ID of the device detected by system info is VmWare. I made the change more robust by handling unknown vendor IDs here.",
+      "revId": "8b386e804c0ec3fe268277abe90efefa66a75826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
