@@ -3334,9 +3334,18 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             CaptureFramebufferAttachment(context, setupCalls, replayState, *stencilAttachment);
         }
 
+        gl::FramebufferState defaultFrameBufferState(
+            context->getCaps(), framebuffer->getState().id(),
+            framebuffer->getState().getFramebufferSerial());
+        const std::vector<GLenum> &defaultDrawBufferStates =
+            defaultFrameBufferState.getDrawBufferStates();
         const std::vector<GLenum> &drawBufferStates = framebuffer->getDrawBufferStates();
-        cap(CaptureDrawBuffers(replayState, true, static_cast<GLsizei>(drawBufferStates.size()),
-                               drawBufferStates.data()));
+
+        if (drawBufferStates != defaultDrawBufferStates)
+        {
+            cap(CaptureDrawBuffers(replayState, true, static_cast<GLsizei>(drawBufferStates.size()),
+                                   drawBufferStates.data()));
+        }
     }
 
     // Capture framebuffer bindings.
