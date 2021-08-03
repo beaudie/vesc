@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f815090_c7030303",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-03T14:51:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20fa8120_24903581",
+      "range": {
+        "startLine": 10,
+        "startChar": 26,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "945c2375_32eee099",
@@ -131,6 +155,24 @@
       "side": 1,
       "message": "I called it --force-run-capture",
       "parentUuid": "40e6a4f9_bb07b9c9",
+      "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7ceba2e_cdc2ab8e",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-03T14:51:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d25cc79_b4c32181",
       "revId": "89d0182152b70955a5f19d8672bbc001228a15d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
