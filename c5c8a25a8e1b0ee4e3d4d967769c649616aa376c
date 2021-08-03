@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04af6b03_49a14173",
+        "filename": "src/compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T15:01:35Z",
+      "side": 0,
+      "message": "Failure on the old Android bot was probably due to this change. Going to try relanding with this bit reverted.",
+      "revId": "c5c8a25a8e1b0ee4e3d4d967769c649616aa376c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
