@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60dce1ea_ad49c507",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T13:34:27Z",
+      "side": 1,
+      "message": "LGTM, maybe also add a comment in the code somewhere adding some info that you currently have in the CL description.",
+      "revId": "4e0f79ed2fbbd6c12b15a86a11093dd8852e7a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6685cccd_5c40766a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1796,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T13:34:27Z",
+      "side": 1,
+      "message": "nit: there\u0027s a PFN type you can use instead of auto, e.g. PFNGLFRAMEBUFFERTEXTURE2DPROC",
+      "range": {
+        "startLine": 1796,
+        "startChar": 4,
+        "endLine": 1796,
+        "endChar": 8
+      },
+      "revId": "4e0f79ed2fbbd6c12b15a86a11093dd8852e7a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "553af73f_122a58c6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T13:34:27Z",
+      "side": 1,
+      "message": "nit: same for this guy",
+      "range": {
+        "startLine": 1798,
+        "startChar": 4,
+        "endLine": 1798,
+        "endChar": 8
+      },
+      "revId": "4e0f79ed2fbbd6c12b15a86a11093dd8852e7a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0fbd9ed_3b24aacb",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2815,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T13:34:27Z",
+      "side": 1,
+      "message": "and for all these",
+      "range": {
+        "startLine": 2815,
+        "startChar": 4,
+        "endLine": 2815,
+        "endChar": 8
+      },
+      "revId": "4e0f79ed2fbbd6c12b15a86a11093dd8852e7a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "944e7224_b7e91f2a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T13:34:27Z",
+      "side": 1,
+      "message": "it might be helpful to put these in a helper or something, not sure the ideal way, but you use it in a few places. maybe a struct with all the framebuffer functions filled in?",
+      "range": {
+        "startLine": 3250,
+        "startChar": 0,
+        "endLine": 3254,
+        "endChar": 31
+      },
+      "revId": "4e0f79ed2fbbd6c12b15a86a11093dd8852e7a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
