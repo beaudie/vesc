@@ -23,7 +23,7 @@ ResourceTracker::~ResourceTracker() {}
 TrackedResource::TrackedResource() {}
 TrackedResource::~TrackedResource() {}
 
-FrameCapture::FrameCapture() {}
+FrameCapture::FrameCapture() : mEnabled(false) {}
 FrameCapture::~FrameCapture() {}
 
 FrameCaptureShared::FrameCaptureShared() {}
