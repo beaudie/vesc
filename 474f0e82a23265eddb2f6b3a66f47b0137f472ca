@@ -50,6 +50,24 @@
       "message": "Please add TODO(author) or TOOD(bug ID)",
       "revId": "474f0e82a23265eddb2f6b3a66f47b0137f472ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "093b3de0_b7cb0653",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T01:51:01Z",
+      "side": 1,
+      "message": "Ack. The bug tag is at the end of the comment (not sure when, but we\u0027ve stopped doing TODO(...), it\u0027s been some time).",
+      "parentUuid": "98a249bd_057dd116",
+      "revId": "474f0e82a23265eddb2f6b3a66f47b0137f472ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
