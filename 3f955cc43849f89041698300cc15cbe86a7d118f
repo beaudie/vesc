@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cab59a8d_964254e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T11:13:24Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "3f955cc43849f89041698300cc15cbe86a7d118f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c7267e1_ac97993c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T11:13:24Z",
+      "side": 1,
+      "message": "aside: can uniforms be multi-dimensional? I forget.",
+      "range": {
+        "startLine": 1535,
+        "startChar": 32,
+        "endLine": 1535,
+        "endChar": 42
+      },
+      "revId": "3f955cc43849f89041698300cc15cbe86a7d118f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
