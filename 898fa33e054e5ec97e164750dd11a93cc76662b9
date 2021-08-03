@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22916a3a_2d6350b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-03T22:48:16Z",
+      "side": 1,
+      "message": "re-LGTM",
+      "revId": "898fa33e054e5ec97e164750dd11a93cc76662b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "764a9e74_e34102bd",
+        "filename": "src/tests/perf_tests/BindingPerf.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-03T22:48:16Z",
+      "side": 1,
+      "message": "http://crbug.com/974083 is marked fixed.\n\nThis is also skipping OpenGL on everything now.",
+      "revId": "898fa33e054e5ec97e164750dd11a93cc76662b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
