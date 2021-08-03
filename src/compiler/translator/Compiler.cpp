@@ -609,7 +609,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
                                     const TParseContext &parseContext,
                                     ShCompileOptions compileOptions)
 {
-    mValidateASTOptions = {};
+    mValidateASTOptions                   = {};
+    mValidateASTOptions.validatePrecision = !IsDesktopGLSpec(mShaderSpec);
     if (!validateAST(root))
     {
         return false;
