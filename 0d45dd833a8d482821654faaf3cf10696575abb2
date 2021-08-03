@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1af7e19_ae0aed0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-03T20:37:46Z",
+      "side": 1,
+      "message": "It seems like Mac NVIDIA does support Metal.\nAt least, I see some end2end tests do run with Metal backend in\nhttps://chromium-swarm.appspot.com/task?id\u003d552366fd933dcb10\nE.g.\n[3520/4155] RendererTest.SimpleOperation/ES3_Metal (104.1 ms)\n\nOtherwise, I\u0027m not sure how our plans for Metal backend are aligned with supporting Mac NVIDIA. Ken?",
+      "parentUuid": "fc0d242a_999dbd25",
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f1ac546_403739a8",
