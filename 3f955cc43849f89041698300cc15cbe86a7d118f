@@ -20,6 +20,29 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ce0a2505_64c4d0a3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-03T15:10:34Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 1531,
+        "startChar": 20,
+        "endLine": 1531,
+        "endChar": 36
+      },
+      "revId": "3f955cc43849f89041698300cc15cbe86a7d118f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8c7267e1_ac97993c",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -31,6 +54,30 @@
       "writtenOn": "2021-08-03T11:13:24Z",
       "side": 1,
       "message": "aside: can uniforms be multi-dimensional? I forget.",
+      "range": {
+        "startLine": 1535,
+        "startChar": 32,
+        "endLine": 1535,
+        "endChar": 42
+      },
+      "revId": "3f955cc43849f89041698300cc15cbe86a7d118f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "413773a3_ce726a96",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-03T15:10:34Z",
+      "side": 1,
+      "message": "Yes, but we assert single dimension right before this code, see ref.",
+      "parentUuid": "8c7267e1_ac97993c",
       "range": {
         "startLine": 1535,
         "startChar": 32,
