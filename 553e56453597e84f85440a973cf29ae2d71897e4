@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f76f6c6_c55f9683",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-03T01:15:31Z",
+      "side": 1,
+      "message": "Was added here: https://chromium-review.googlesource.com/c/angle/angle/+/2849615/2/scripts/registry_xml.py",
+      "parentUuid": "4580249f_a784fa65",
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24047933_92859dc2",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-08-01T01:25:09Z",
       "side": 1,
       "message": "Instead of this, use the following to automatically inherit the properties correctly (including precision):\n\nnew TType();\n\n    TType *emulatedBoundingBoxDeclType \u003d new TType(builtinBoundingBoxVar-\u003egetType());\n    emulatedBoundingBoxDeclType-\u003esetQualifier(EvqGlobal);",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 290,
+        "endChar": 51
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87734324_90b0b1a5",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-03T01:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24047933_92859dc2",
       "range": {
         "startLine": 289,
         "startChar": 0,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9970c68_0bb88ac6",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-03T01:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a26de49_f22547cd",
+      "range": {
+        "startLine": 964,
+        "startChar": 0,
+        "endLine": 967,
+        "endChar": 9
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "490ef514_9a5e138b",
@@ -104,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d9f071f_30b43f09",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-03T01:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "490ef514_9a5e138b",
+      "range": {
+        "startLine": 1401,
+        "startChar": 0,
+        "endLine": 1402,
+        "endChar": 45
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a6e527e_d3bad878",
@@ -117,6 +207,30 @@
       "writtenOn": "2021-08-02T11:53:58Z",
       "side": 1,
       "message": "nit: please use the cpp to init like with the other states.",
+      "range": {
+        "startLine": 1166,
+        "startChar": 0,
+        "endLine": 1173,
+        "endChar": 36
+      },
+      "revId": "553e56453597e84f85440a973cf29ae2d71897e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4acccba4_866e64b7",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-03T01:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a6e527e_d3bad878",
       "range": {
         "startLine": 1166,
         "startChar": 0,
