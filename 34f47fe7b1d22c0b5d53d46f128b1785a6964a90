@@ -64,6 +64,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6983497a_2be70a67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-03T22:50:42Z",
+      "side": 1,
+      "message": "Updates to this change is moved to here: https://chromium-review.googlesource.com/c/angle/angle/+/3068381",
+      "revId": "34f47fe7b1d22c0b5d53d46f128b1785a6964a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdb905d5_3400f928",
