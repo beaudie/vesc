@@ -16,6 +16,52 @@
       "message": "PTAL. This is the updated change from https://chromium-review.googlesource.com/c/angle/angle/+/2954900",
       "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22be5ff3_ba061384",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T19:18:38Z",
+      "side": 1,
+      "message": "suggestion: for the std::get stuff here. maybe use a custom struct with named fields? std::tuple saves a few lines on declaration but it harder to read for the rest of the code.",
+      "range": {
+        "startLine": 831,
+        "startChar": 12,
+        "endLine": 831,
+        "endChar": 23
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "557490da_61f18ecb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T19:18:38Z",
+      "side": 1,
+      "message": "nit: looks like you can remove this.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
