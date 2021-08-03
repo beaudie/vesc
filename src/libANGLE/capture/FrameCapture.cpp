@@ -3296,9 +3296,13 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             CaptureFramebufferAttachment(context, setupCalls, replayState, *stencilAttachment);
         }
 
-        const std::vector<GLenum> &drawBufferStates = framebuffer->getDrawBufferStates();
-        cap(CaptureDrawBuffers(replayState, true, static_cast<GLsizei>(drawBufferStates.size()),
-                               drawBufferStates.data()));
+        // Not supported in GL_OES_framebuffer_object / GLES 1.1
+        if (!context->isGLES1())
+        {
+            const std::vector<GLenum> &drawBufferStates = framebuffer->getDrawBufferStates();
+            cap(CaptureDrawBuffers(replayState, true, static_cast<GLsizei>(drawBufferStates.size()),
+                                   drawBufferStates.data()));
+        }
     }
 
     // Capture framebuffer bindings.
