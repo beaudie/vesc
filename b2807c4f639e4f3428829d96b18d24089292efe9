@@ -22,6 +22,30 @@
       },
       "revId": "b2807c4f639e4f3428829d96b18d24089292efe9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed16558a_0d747ec4",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-03T10:16:11Z",
+      "side": 1,
+      "message": "Done. Unfortunately on Mesa the VK_EXT_swapchain_colorspace extension is not available and EGL_KHR_gl_colorspace does not get exposed. So with this check the feature is now not available on Mesa for Vulkan. Surprisingly the color space was rendered correctly before.",
+      "parentUuid": "93847397_1e2590fa",
+      "range": {
+        "startLine": 422,
+        "startChar": 8,
+        "endLine": 422,
+        "endChar": 21
+      },
+      "revId": "b2807c4f639e4f3428829d96b18d24089292efe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
