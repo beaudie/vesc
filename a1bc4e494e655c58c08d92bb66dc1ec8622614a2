@@ -16,6 +16,23 @@
       "message": "The WebGL CTS failures are caused by a bug there. We need to merge https://github.com/KhronosGroup/WebGL/pull/3306 before landing this CL.",
       "revId": "a1bc4e494e655c58c08d92bb66dc1ec8622614a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "beac6417_dad0d998",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T11:11:50Z",
+      "side": 1,
+      "message": "LGTM when WebGL upstream pull is merged.",
+      "revId": "a1bc4e494e655c58c08d92bb66dc1ec8622614a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
