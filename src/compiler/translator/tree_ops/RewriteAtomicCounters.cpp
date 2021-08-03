@@ -10,7 +10,6 @@
 
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
-#include "compiler/translator/StaticType.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -28,7 +27,7 @@ const TVariable *DeclareAtomicCountersBuffers(TIntermBlock *root, TSymbolTable *
 {
     // Define `uint counters[];` as the only field in the interface block.
     TFieldList *fieldList = new TFieldList;
-    TType *counterType    = new TType(EbtUInt);
+    TType *counterType    = new TType(EbtUInt, EbpHigh, EvqGlobal);
     counterType->makeArray(0);
 
     TField *countersField =
