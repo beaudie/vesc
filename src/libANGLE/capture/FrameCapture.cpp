@@ -4084,8 +4084,7 @@ void FrameCapture::reset()
 }
 
 FrameCaptureShared::FrameCaptureShared()
-    : mEnabled(true),
-      mSerializeStateEnabled(false),
+    : mSerializeStateEnabled(false),
       mCompression(true),
       mClientVertexArrayMap{},
       mFrameIndex(1),
