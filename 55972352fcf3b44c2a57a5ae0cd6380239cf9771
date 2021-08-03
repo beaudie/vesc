@@ -169,6 +169,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "762466f2_e92177b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T15:22:54Z",
+      "side": 1,
+      "message": "We have a wrapper for this: vk::DeviceScoped.",
+      "parentUuid": "a2d90267_3390959a",
+      "range": {
+        "startLine": 3440,
+        "startChar": 0,
+        "endLine": 3441,
+        "endChar": 48
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "99134015_d8fb8ef0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 20

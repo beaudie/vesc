@@ -93,6 +93,75 @@
       },
       "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "babae7af_50281dff",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3546,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T15:22:54Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 3546,
+        "startChar": 15,
+        "endLine": 3546,
+        "endChar": 19
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52357172_0cbd5c4f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3564,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T15:22:54Z",
+      "side": 1,
+      "message": "Use vk::DeviceScoped",
+      "range": {
+        "startLine": 3564,
+        "startChar": 20,
+        "endLine": 3564,
+        "endChar": 41
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03b7e23a_212b5696",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3577,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T15:22:54Z",
+      "side": 1,
+      "message": "Could you please refactor all these policy decisions to one place? Like the decision to use the buddy algorithm, the decision to use a different pool for robust init etc",
+      "range": {
+        "startLine": 3576,
+        "startChar": 12,
+        "endLine": 3577,
+        "endChar": 84
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
