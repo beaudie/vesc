@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6b7e3f1_a7bf6d53",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-03T13:35:35Z",
+      "side": 1,
+      "message": "rather than doing this, I suggest you check if the draw buffers states are non-default. note that glDrawBuffers also doesn\u0027t exist in GLES 2.0 so the current check is technically imprecise.",
+      "range": {
+        "startLine": 3298,
+        "startChar": 0,
+        "endLine": 3306,
+        "endChar": 5
+      },
+      "revId": "68efa806f373a0cf430f99d34016711536fbb6b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
