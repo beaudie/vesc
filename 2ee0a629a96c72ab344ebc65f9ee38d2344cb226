@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4c4d317_ade92e5c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-03T14:38:17Z",
+      "side": 1,
+      "message": "I\u0027m confused, there\u0027s no reference to mVMAPools?",
+      "revId": "2ee0a629a96c72ab344ebc65f9ee38d2344cb226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
