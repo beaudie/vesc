@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "905ff198_273ac996",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-03T19:20:47Z",
+      "side": 1,
+      "message": "I think we\u0027ll need to keep the workaround on Mac until we switch to Metal there.",
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f1ac546_403739a8",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-03T19:20:47Z",
+      "side": 1,
+      "message": "The previous version seems to be 263, why is this not 264?",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
