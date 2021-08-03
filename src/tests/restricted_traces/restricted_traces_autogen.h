@@ -120,6 +120,7 @@ enum class RestrictedTraceID
     plants_vs_zombies_2,
     pokemon_go,
     professional_baseball_spirits,
+    pubg_mobile,
     pubg_mobile_lite,
     ragnarok_m_eternal_love,
     raid_shadow_legends,
