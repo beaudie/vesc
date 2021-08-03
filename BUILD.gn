@@ -620,7 +620,8 @@ translator_lib("translator") {
   gl_d3d_only = false
 }
 
-if (angle_enable_essl || angle_enable_glsl || angle_enable_hlsl) {
+if (build_with_chromium &&
+    (angle_enable_essl || angle_enable_glsl || angle_enable_hlsl)) {
   translator_lib("translator_gl_d3d_only") {
     gl_d3d_only = true
   }
