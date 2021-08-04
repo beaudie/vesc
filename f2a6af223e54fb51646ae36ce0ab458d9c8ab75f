@@ -16,6 +16,23 @@
       "message": "Third time\u0027s the charm! PTAL.",
       "revId": "f2a6af223e54fb51646ae36ce0ab458d9c8ab75f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98063a3a_461c5686",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-04T17:12:42Z",
+      "side": 1,
+      "message": "lgtm, good luck!\n",
+      "revId": "f2a6af223e54fb51646ae36ce0ab458d9c8ab75f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
