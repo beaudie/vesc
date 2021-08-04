@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19fb90a7_a96f3598",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3468,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bb3dd9f_836f59aa",
+      "range": {
+        "startLine": 3468,
+        "startChar": 59,
+        "endLine": 3468,
+        "endChar": 74
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a62186f_8ca01cd5",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-30T18:51:44Z",
       "side": 1,
       "message": "This can just be:\n\n            // Create a custom pool.\n            ANGLE_VK_TRY(vma::CreatePool(mAllocator-\u003egetHandle(), memoryTypeIndex, useBuddyAlgorithm,\n                                     blockSize, \u0026mVMAPools[poolType][memoryTypeIndex]));\n    }\n\n    return VK_SUCCESS;",
+      "range": {
+        "startLine": 3469,
+        "startChar": 0,
+        "endLine": 3479,
+        "endChar": 18
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90423351_5f36a4ce",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3479,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "The problem is that we do not have context here.",
+      "parentUuid": "9a62186f_8ca01cd5",
       "range": {
         "startLine": 3469,
         "startChar": 0,
@@ -100,6 +148,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d72b505_3d9f3aee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3548,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Then I will have to duplicate while() loop in each block, so not sure it will be better though. Most of time you only loop while() once, so there isn\u0027t any perf concern here. This will even more true once we cache memoryTypeIndex in BufferVk (in that case, most time we never come to this whole loop).",
+      "parentUuid": "5b43dd57_07bec70a",
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbb8bb6_bf7087b8",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 20
@@ -111,6 +177,30 @@
       "writtenOn": "2021-07-30T18:51:44Z",
       "side": 1,
       "message": "nit: There is no \"2)\".",
+      "range": {
+        "startLine": 135,
+        "startChar": 64,
+        "endLine": 135,
+        "endChar": 66
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52e74562_64ed2780",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcbb8bb6_bf7087b8",
       "range": {
         "startLine": 135,
         "startChar": 64,
@@ -134,6 +224,30 @@
       "writtenOn": "2021-07-30T18:51:44Z",
       "side": 1,
       "message": "nit: I would prefer avoiding the shifts to make them more human readable:\n\n    1024 * 1024; // 1MB\n    4 * 1024;    // 4KB\n    128 * 1024;  // 128KB\n    \nAdmittedly, I don\u0027t know for sure where the \u0027ull\u0027 needs to be, or if it\u0027s required at all since none of these are particularly large values.",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 85
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba03a6eb_8681985c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d87ca2a_65879d7b",
       "range": {
         "startLine": 147,
         "startChar": 0,
@@ -191,6 +305,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7daffa42_b7fac211",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3441,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "762466f2_e92177b6",
+      "range": {
+        "startLine": 3440,
+        "startChar": 0,
+        "endLine": 3441,
+        "endChar": 48
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99134015_d8fb8ef0",
@@ -204,6 +342,30 @@
       "writtenOn": "2021-07-30T18:51:44Z",
       "side": 1,
       "message": "ANGLE_VK_TRY(result)",
+      "range": {
+        "startLine": 3442,
+        "startChar": 0,
+        "endLine": 3443,
+        "endChar": 35
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaef00a0_5e162de3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99134015_d8fb8ef0",
       "range": {
         "startLine": 3442,
         "startChar": 0,

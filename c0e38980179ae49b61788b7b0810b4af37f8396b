@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b66719b4_6dedab14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "155f5709_9c2470ee",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 12,
+        "endChar": 30
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99820570_6ead883c",
@@ -95,6 +119,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd5af548_3afdf8f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Thanks for double checking. This mentioning has been removed now.",
+      "parentUuid": "34396aa7_473a2bd8",
+      "range": {
+        "startLine": 13,
+        "startChar": 32,
+        "endLine": 13,
+        "endChar": 54
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "babae7af_50281dff",
@@ -108,6 +156,30 @@
       "writtenOn": "2021-08-03T15:22:54Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 3546,
+        "startChar": 15,
+        "endLine": 3546,
+        "endChar": 19
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "618f3e29_f2b8070f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3546,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "babae7af_50281dff",
       "range": {
         "startLine": 3546,
         "startChar": 15,
@@ -141,6 +213,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8720a5c_5f78dfb5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3564,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "This is now remov3ed with dedicated memory flag.",
+      "parentUuid": "52357172_0cbd5c4f",
+      "range": {
+        "startLine": 3564,
+        "startChar": 20,
+        "endLine": 3564,
+        "endChar": 41
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03b7e23a_212b5696",
@@ -154,6 +250,30 @@
       "writtenOn": "2021-08-03T15:22:54Z",
       "side": 1,
       "message": "Could you please refactor all these policy decisions to one place? Like the decision to use the buddy algorithm, the decision to use a different pool for robust init etc",
+      "range": {
+        "startLine": 3576,
+        "startChar": 12,
+        "endLine": 3577,
+        "endChar": 84
+      },
+      "revId": "c0e38980179ae49b61788b7b0810b4af37f8396b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9878054f_2e790dcb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3577,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-04T18:05:09Z",
+      "side": 1,
+      "message": "buddy algorith or default algorithm are decided at pool creation time, so you really can\u0027t put it in same place as the rest of logic. But I have merged which pool to pick into one function getVMAPool().",
+      "parentUuid": "03b7e23a_212b5696",
       "range": {
         "startLine": 3576,
         "startChar": 12,
