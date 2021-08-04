@@ -12,6 +12,7 @@
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 #include "compiler/translator/tree_util/SpecializationConstant.h"
+#include "compiler/translator/util.h"
 
 namespace sh
 {
@@ -70,6 +71,7 @@ class ValidateAST : public TIntermTraverser
     bool variableNeedsDeclaration(const TVariable *variable);
     const TFieldListCollection *getStructOrInterfaceBlock(const TType &type,
                                                           ImmutableString *typeNameOut);
+    bool doesDerivedPrecisionMatchNode(TIntermTyped *node, TPrecision derivedPrecision);
 
     void expectNonNullChildren(Visit visit, TIntermNode *node, size_t least_count);
 
@@ -103,6 +105,9 @@ class ValidateAST : public TIntermTraverser
 
     // For validateQualifiers:
     bool mQualifiersFailed = false;
+
+    // For validatePrecision:
+    bool mPrecisionFailed = false;
 
     // For validateStructUsage:
     std::vector<std::map<ImmutableString, const TFieldListCollection *>> mStructsAndBlocksByName;
@@ -566,6 +571,15 @@ const TFieldListCollection *ValidateAST::getStructOrInterfaceBlock(const TType &
     return structOrBlock;
 }
 
+bool ValidateAST::doesDerivedPrecisionMatchNode(TIntermTyped *node, TPrecision derivedPrecision)
+{
+    // In some cases, the node may not be able to derive a precision from its childern, but may have
+    // inherited one from its parent.  Allow such cases.  For example, vec4(bool) or
+    // gl_GlobalInvocationID.x.
+
+    return derivedPrecision == EbpUndefined || derivedPrecision == node->getPrecision();
+}
+
 void ValidateAST::expectNonNullChildren(Visit visit, TIntermNode *node, size_t least_count)
 {
     if (visit == PreVisit && mOptions.validateNullNodes)
@@ -602,9 +616,23 @@ void ValidateAST::visitSymbol(TIntermSymbol *node)
         }
     }
 
-    if (gl::IsBuiltInName(variable->name().data()))
+    const bool isBuiltIn = gl::IsBuiltInName(variable->name().data());
+    if (isBuiltIn)
     {
         visitBuiltInVariable(node);
+    }
+
+    if (mOptions.validatePrecision)
+    {
+        if (!isBuiltIn && IsPrecisionApplicableToType(node->getBasicType()) &&
+            node->getType().getPrecision() == EbpUndefined)
+        {
+            // Note that some built-ins don't have a precision.
+            mDiagnostics->error(node->getLine(),
+                                "Found symbol with undefined precision <validatePrecision>",
+                                variable->name().data());
+            mPrecisionFailed = true;
+        }
     }
 }
 
@@ -616,6 +644,18 @@ void ValidateAST::visitConstantUnion(TIntermConstantUnion *node)
 bool ValidateAST::visitSwizzle(Visit visit, TIntermSwizzle *node)
 {
     visitNode(visit, node);
+
+    if (mOptions.validatePrecision)
+    {
+        if (!doesDerivedPrecisionMatchNode(node, node->derivePrecision()))
+        {
+            mDiagnostics->error(node->getLine(),
+                                "Found swizzle node with inconsistent precision with its operand",
+                                "<validatePrecision>");
+            mPrecisionFailed = true;
+        }
+    }
+
     return true;
 }
 
@@ -626,6 +666,17 @@ bool ValidateAST::visitBinary(Visit visit, TIntermBinary *node)
     if (mOptions.validateExpressionTypes && visit == PreVisit)
     {
         validateExpressionTypeBinary(node);
+    }
+
+    if (mOptions.validatePrecision)
+    {
+        if (!doesDerivedPrecisionMatchNode(node, node->derivePrecision()))
+        {
+            mDiagnostics->error(node->getLine(),
+                                "Found binary node with inconsistent precision with its operands",
+                                "<validatePrecision>");
+            mPrecisionFailed = true;
+        }
     }
 
     return true;
@@ -640,12 +691,35 @@ bool ValidateAST::visitUnary(Visit visit, TIntermUnary *node)
         visitBuiltInFunction(node, node->getFunction());
     }
 
+    if (mOptions.validatePrecision)
+    {
+        if (!doesDerivedPrecisionMatchNode(node, node->derivePrecision()))
+        {
+            mDiagnostics->error(node->getLine(),
+                                "Found unary node with inconsistent precision with its operand",
+                                "<validatePrecision>");
+            mPrecisionFailed = true;
+        }
+    }
+
     return true;
 }
 
 bool ValidateAST::visitTernary(Visit visit, TIntermTernary *node)
 {
     visitNode(visit, node);
+
+    if (mOptions.validatePrecision)
+    {
+        if (!doesDerivedPrecisionMatchNode(node, node->derivePrecision()))
+        {
+            mDiagnostics->error(node->getLine(),
+                                "Found ternary node with inconsistent precision with its operands",
+                                "<validatePrecision>");
+            mPrecisionFailed = true;
+        }
+    }
+
     return true;
 }
 
@@ -677,14 +751,15 @@ void ValidateAST::visitFunctionPrototype(TIntermFunctionPrototype *node)
         mDeclaredFunctions.insert(function);
     }
 
-    if (mOptions.validateQualifiers)
+    const TFunction *function = node->getFunction();
+    for (size_t paramIndex = 0; paramIndex < function->getParamCount(); ++paramIndex)
     {
-        const TFunction *function = node->getFunction();
-        for (size_t paramIndex = 0; paramIndex < function->getParamCount(); ++paramIndex)
-        {
-            const TVariable *param = function->getParam(paramIndex);
-            TQualifier qualifier   = param->getType().getQualifier();
+        const TVariable *param = function->getParam(paramIndex);
+        const TType &paramType = param->getType();
 
+        if (mOptions.validateQualifiers)
+        {
+            TQualifier qualifier = paramType.getQualifier();
             if (qualifier != EvqParamIn && qualifier != EvqParamOut && qualifier != EvqParamInOut &&
                 qualifier != EvqParamConst)
             {
@@ -695,6 +770,27 @@ void ValidateAST::visitFunctionPrototype(TIntermFunctionPrototype *node)
                 mQualifiersFailed = true;
             }
         }
+
+        if (IsPrecisionApplicableToType(paramType.getBasicType()) &&
+            paramType.getPrecision() == EbpUndefined)
+        {
+            mDiagnostics->error(
+                node->getLine(),
+                "Found function parameter with undefined precision <validatePrecision>",
+                param->name().data());
+            mPrecisionFailed = true;
+        }
+    }
+
+    const TType &returnType = function->getReturnType();
+    if (IsPrecisionApplicableToType(returnType.getBasicType()) &&
+        returnType.getPrecision() == EbpUndefined)
+    {
+        mDiagnostics->error(
+            node->getLine(),
+            "Found function with undefined precision on return value <validatePrecision>",
+            function->name().data());
+        mPrecisionFailed = true;
     }
 }
 
@@ -753,6 +849,18 @@ bool ValidateAST::visitAggregate(Visit visit, TIntermAggregate *node)
                                 "<validateNoRawFunctionCalls>",
                                 node->getFunction()->name().data());
             mNoRawFunctionCallsFailed = true;
+        }
+    }
+
+    if (mOptions.validatePrecision)
+    {
+        if (!doesDerivedPrecisionMatchNode(node, node->derivePrecision()))
+        {
+            mDiagnostics->error(
+                node->getLine(),
+                "Found aggregate node with inconsistent precision with its arguments",
+                "<validatePrecision>");
+            mPrecisionFailed = true;
         }
     }
 
@@ -829,6 +937,7 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
             ASSERT(symbol);
 
             const TVariable *variable = &symbol->variable();
+            const TType &type         = variable->getType();
 
             if (mOptions.validateVariableReferences)
             {
@@ -863,7 +972,6 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
                 // Only declare the struct once.
                 validateStructUsage = false;
 
-                const TType &type = variable->getType();
                 if (type.isStructSpecifier() || type.isInterfaceBlock())
                     visitStructOrInterfaceBlockDeclaration(type, node->getLine());
             }
@@ -871,6 +979,29 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
             if (gl::IsBuiltInName(variable->name().data()))
             {
                 visitBuiltInVariable(symbol);
+            }
+
+            if (mOptions.validatePrecision && (type.isStructSpecifier() || type.isInterfaceBlock()))
+            {
+                const TFieldListCollection *structOrBlock = type.getStruct();
+                if (structOrBlock == nullptr)
+                {
+                    structOrBlock = type.getInterfaceBlock();
+                }
+
+                for (const TField *field : structOrBlock->fields())
+                {
+                    const TType *fieldType = field->type();
+                    if (IsPrecisionApplicableToType(fieldType->getBasicType()) &&
+                        fieldType->getPrecision() == EbpUndefined)
+                    {
+                        mDiagnostics->error(
+                            node->getLine(),
+                            "Found block field with undefined precision <validatePrecision>",
+                            field->name().data());
+                        mPrecisionFailed = true;
+                    }
+                }
             }
         }
     }
@@ -899,8 +1030,8 @@ bool ValidateAST::validateInternal()
 {
     return !mSingleParentFailed && !mVariableReferencesFailed && !mBuiltInOpsFailed &&
            !mFunctionCallFailed && !mNoRawFunctionCallsFailed && !mNullNodesFailed &&
-           !mQualifiersFailed && !mStructUsageFailed && !mExpressionTypesFailed &&
-           !mMultiDeclarationsFailed;
+           !mQualifiersFailed && !mPrecisionFailed && !mStructUsageFailed &&
+           !mExpressionTypesFailed && !mMultiDeclarationsFailed;
 }
 
 }  // anonymous namespace
