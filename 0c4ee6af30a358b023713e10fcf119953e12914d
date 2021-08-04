@@ -16,6 +16,24 @@
       "message": "Apparently I can\u0027t self approve these anymore.",
       "revId": "0c4ee6af30a358b023713e10fcf119953e12914d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a0e801a_31edd7cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-04T19:15:06Z",
+      "side": 1,
+      "message": "There\u0027s an annoying pop up, but you actually can. The submission will go through anyway.",
+      "parentUuid": "42bfcf56_e59f31c7",
+      "revId": "0c4ee6af30a358b023713e10fcf119953e12914d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
