@@ -18,6 +18,143 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c7d7ccc_1bba6ac3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "It looks like there are quite a few test failures and some incorrect rendering with the trace.",
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "732c52d1_f75b796d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure how this is used yet, but should it be \u0027gl::ShaderBitSet(shaderType)\u0027?\n\nAh, I see, it\u0027s not necessary since it\u0027s done in AddResourceInfo().",
+      "range": {
+        "startLine": 694,
+        "startChar": 26,
+        "endLine": 694,
+        "endChar": 44
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbab7cba_7fb432a5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "These don\u0027t need to be references, since they are just ints.\n\nGoing further, you don\u0027t want them to be references, since you don\u0027t want to modify the shaderType value in the tuple with the \u0027previousShaderType \u003d shaderType\u0027 line below (which can actually be removed, since it\u0027s unused).",
+      "range": {
+        "startLine": 731,
+        "startChar": 16,
+        "endLine": 731,
+        "endChar": 51
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f8f2482_7e4035df",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "Unused.   Remove.",
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ee3236d_d3e6f320",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "Doesn\u0027t need to be a reference.\n\nSame for the rest of thees.",
+      "range": {
+        "startLine": 782,
+        "startChar": 35,
+        "endLine": 782,
+        "endChar": 36
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c23fa7fd_7b74ccf6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "Unused.   Remove.\n\nSame for the rest of these.",
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bf70223_6c046682",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "Redundant, since it\u0027s done in AddResourceInfo().\n\nSame for the rest of these.",
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22be5ff3_ba061384",
@@ -36,6 +173,76 @@
         "startChar": 12,
         "endLine": 831,
         "endChar": 23
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b898537_72f7766d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "+1 to a struct with named fields.\n\nThat would also allow for updating the interface for InsertIfAbsent() to return a populated struct so the uniformBindingIndexMapOut doesn\u0027t need to be queried both there and in each of these functions.   Instead, you can do something like look at the .shaderType field to see if it\u0027s ShaderType::InvalidEnum if it\u0027s a new variable or not, and act accordingly on it.",
+      "parentUuid": "22be5ff3_ba061384",
+      "range": {
+        "startLine": 831,
+        "startChar": 12,
+        "endLine": 831,
+        "endChar": 23
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f70fd3_a509fc6f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "These blocks don\u0027t seem correct to me, since the input/output state is specific to a particular shader and will affect SpirvIDDiscoverer::visitMemberName().\n\nWhy is this (and the one below in the \u0027else\u0027 block) necessary?",
+      "range": {
+        "startLine": 1155,
+        "startChar": 0,
+        "endLine": 1158,
+        "endChar": 13
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97b7965e_44e7c655",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T00:07:32Z",
+      "side": 1,
+      "message": "Can this be moved up to after the samplerUniform.isActive() check?",
+      "range": {
+        "startLine": 1805,
+        "startChar": 0,
+        "endLine": 1811,
+        "endChar": 13
       },
       "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
