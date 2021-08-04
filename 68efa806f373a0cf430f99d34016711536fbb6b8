@@ -22,6 +22,30 @@
       },
       "revId": "68efa806f373a0cf430f99d34016711536fbb6b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150eeb4d_8332add2",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3306,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-04T17:45:48Z",
+      "side": 1,
+      "message": "Good solution. To achieve this I am constructing an empty FramebufferState object and comparing the mDrawBufferStates vectors. This was not retrievable from the replay state, as done usually when comparing default states.\n\nThis patch is also the proper solution for the now abandoned for validationES3, as it does not produce a trace calling glDrawBuffers on a GLES1 context.",
+      "parentUuid": "c6b7e3f1_a7bf6d53",
+      "range": {
+        "startLine": 3298,
+        "startChar": 0,
+        "endLine": 3306,
+        "endChar": 5
+      },
+      "revId": "68efa806f373a0cf430f99d34016711536fbb6b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
