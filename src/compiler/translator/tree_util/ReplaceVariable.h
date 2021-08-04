@@ -31,7 +31,11 @@ ANGLE_NO_DISCARD bool ReplaceVariableWithTyped(TCompiler *compiler,
 
 using VariableReplacementMap = angle::HashMap<const TVariable *, const TIntermTyped *>;
 
-// Replace a set of variables with their corresponding expression.
+// Replace a set of variables with their corresponding expression.  This is used in situations where
+// a function parameter of opaque type is replaced with the uniform that's passed in as that
+// parameter.  In such a case, the uniform would have its precision specified while the argument may
+// not have.  To support such replacements, when replacing a symbol of opaque type, the precision of
+// the parent nodes are adjusted accordingly.
 ANGLE_NO_DISCARD bool ReplaceVariables(TCompiler *compiler,
                                        TIntermBlock *root,
                                        const VariableReplacementMap &variableMap);
