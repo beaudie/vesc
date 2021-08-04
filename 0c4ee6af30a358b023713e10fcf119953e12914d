@@ -34,6 +34,24 @@
       "parentUuid": "42bfcf56_e59f31c7",
       "revId": "0c4ee6af30a358b023713e10fcf119953e12914d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7e68a1_c9ebffc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-04T19:17:38Z",
+      "side": 1,
+      "message": "My CQ+2 was reset above by LUCI due to:\n\n CL chromium-review.googlesource.com/3071661 must be approved before triggering CQ Code Owners",
+      "parentUuid": "7a0e801a_31edd7cb",
+      "revId": "0c4ee6af30a358b023713e10fcf119953e12914d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
