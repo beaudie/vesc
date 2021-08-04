@@ -56,6 +56,30 @@
       },
       "revId": "25ec2663aa229f8b599604538bd50b6d97c5b07d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d784b32_5a1d9ca2",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5347,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T21:34:52Z",
+      "side": 1,
+      "message": "Ah, yeah, good catch.   A call to setCaptureActive() has been added to the FrameCaptureShared() ctor if we are starting the capture with frame 1, so all GLES calls are captured correctly.",
+      "parentUuid": "e185fa59_3447117d",
+      "range": {
+        "startLine": 5347,
+        "startChar": 12,
+        "endLine": 5347,
+        "endChar": 28
+      },
+      "revId": "25ec2663aa229f8b599604538bd50b6d97c5b07d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
