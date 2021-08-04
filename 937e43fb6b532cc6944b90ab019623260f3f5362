@@ -177,6 +177,52 @@
       },
       "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77beebbf_e2050b7b",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T21:45:44Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 25,
+        "startChar": 67,
+        "endLine": 25,
+        "endChar": 75
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfd29427_0dae0a71",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-04T21:45:44Z",
+      "side": 1,
+      "message": "This sounds a little concerning.   What does this actually mean in practice?   We can\u0027t know what tests are in a batch, since that\u0027s determined a run-time and will change as tests are added/removed/enabled/disabled.\n\nTaking a step back, I don\u0027t understand why TIMEOUT, COMPILE_FAILED, and CRASHED exist in the first place since any tests that fail in one of those ways should be marked with one of the SKIPs.   There also aren\u0027t any tests with any of those, so we can\u0027t see how they actually behave.   Can they be removed?",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
