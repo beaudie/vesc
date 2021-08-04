@@ -16,6 +16,23 @@
       "message": "Added skip tests.",
       "revId": "83c74f0218dfa896b0101ee3009ac4d31c0d1f93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbb87bf6_2131ab03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-08-04T12:57:52Z",
+      "side": 1,
+      "message": "That test failure appears to be a temporary error.\nCould you retry the test?\n\nAnd if you don’t mind, could you try the test in https://crrev.com/c/3063858 too?\n\nThanks.",
+      "revId": "83c74f0218dfa896b0101ee3009ac4d31c0d1f93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
