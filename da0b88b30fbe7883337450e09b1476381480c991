@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97fcc9df_8c916067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-04T18:16:00Z",
+      "side": 1,
+      "message": "Mostly a clean up in preparation for more changes in this area. Includes some minor fixes in the way precision is derived for some of the ES3.1 and ES3.2 built-ins that were not previously handled.",
+      "revId": "da0b88b30fbe7883337450e09b1476381480c991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
