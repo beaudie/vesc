@@ -240,9 +240,7 @@ bool TranslatorMetal::translate(TIntermBlock *root,
     }
 
     // Write translated shader.
-    TOutputVulkanGLSL outputGLSL(sink, getHashFunction(), getNameMap(), &getSymbolTable(),
-                                 getShaderType(), getShaderVersion(), getOutputType(), true,
-                                 compileOptions);
+    TOutputVulkanGLSL outputGLSL(this, sink, true, compileOptions);
     root->traverse(&outputGLSL);
 
     return compileToSpirv(sink);
