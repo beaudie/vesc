@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e44965fc_edcecbf7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-08-04T22:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56a519b1_c2fb8b89",
+      "range": {
+        "startLine": 248,
+        "startChar": 1,
+        "endLine": 252,
+        "endChar": 58
+      },
+      "revId": "4f4949ff88d1fc853b4918884b8269162a3a38a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dad2ca27_de611310",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-03T20:51:48Z",
       "side": 1,
       "message": "Unless I am missing something, we shouldn\u0027t need to call GetPrivateData anymore now that you\u0027ve deleted the \"MultipleNamesSetByANGLE\" code.",
+      "range": {
+        "startLine": 2281,
+        "startChar": 0,
+        "endLine": 2282,
+        "endChar": 84
+      },
+      "revId": "4f4949ff88d1fc853b4918884b8269162a3a38a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4254ff_dfdc4714",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2282,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-08-04T22:29:46Z",
+      "side": 1,
+      "message": "Ah, missed removing it. Thanks.",
+      "parentUuid": "dad2ca27_de611310",
       "range": {
         "startLine": 2281,
         "startChar": 0,
