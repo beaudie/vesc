@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab177557_fbdae612",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1796,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-04T17:55:34Z",
+      "side": 1,
+      "message": "Unfortunately this is not possible since I need the capture function signature here, returning angle::CallCapture and taking gl::State and isCallValid and not the GL prototype.\n\nIn the new version of the patch I am also not able to use auto in the struct and need to specify the full function signatures.",
+      "parentUuid": "6685cccd_5c40766a",
+      "range": {
+        "startLine": 1796,
+        "startChar": 4,
+        "endLine": 1796,
+        "endChar": 8
+      },
+      "revId": "4e0f79ed2fbbd6c12b15a86a11093dd8852e7a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "553af73f_122a58c6",
@@ -100,6 +124,30 @@
       "writtenOn": "2021-08-03T13:34:27Z",
       "side": 1,
       "message": "it might be helpful to put these in a helper or something, not sure the ideal way, but you use it in a few places. maybe a struct with all the framebuffer functions filled in?",
+      "range": {
+        "startLine": 3250,
+        "startChar": 0,
+        "endLine": 3254,
+        "endChar": 31
+      },
+      "revId": "4e0f79ed2fbbd6c12b15a86a11093dd8852e7a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbaf8cc0_97edfbf4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-04T17:55:34Z",
+      "side": 1,
+      "message": "I refactored the patch and made a struct containing the capture functions. This makes it a bit longer though, but it keeps the functions in one place. Due to the inability to use auto in the struct declaration, the patch also is on the verbose side. Tell me if you have any ideas for a better refactor or prefer the old version.",
+      "parentUuid": "944e7224_b7e91f2a",
       "range": {
         "startLine": 3250,
         "startChar": 0,
