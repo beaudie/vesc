@@ -54,6 +54,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abfe6b8e_0057956f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-04T02:01:12Z",
+      "side": 1,
+      "message": "lgtm\n",
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db878e12_e2220958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-04T02:01:12Z",
+      "side": 1,
+      "message": "We anticipate that ANGLE\u0027s Metal backend will work better on Mac NVIDIA hardware than ANGLE\u0027s OpenGL backend, since the OpenGL driver on this hardware is definitely not receiving any attention.\n\nSeeing the new bug associated with this workaround, I think it\u0027s OK to accept a regression on an unknown (but likely small) quantity of WebGL content on these machines in the interim until the Metal backend\u0027s deployed.",
+      "parentUuid": "b1af7e19_ae0aed0b",
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f1ac546_403739a8",
