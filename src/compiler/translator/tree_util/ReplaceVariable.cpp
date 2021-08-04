@@ -52,11 +52,43 @@ class ReplaceVariablesTraverser : public TIntermTraverser
         auto iter = mVariableMap.find(&node->variable());
         if (iter != mVariableMap.end())
         {
-            queueReplacement(iter->second->deepCopy(), OriginalNode::IS_DROPPED);
+            getParentNode()->replaceChildNode(node, iter->second->deepCopy());
+
+            // When an opaque type is replaced, adjust the precision of parent nodes if necessary.
+            if (IsOpaqueType(node->variable().getType().getBasicType()))
+            {
+                for (int ancestorIndex = 0; ancestorIndex < getCurrentTraversalDepth();
+                     ++ancestorIndex)
+                {
+                    TIntermNode *ancestor = getAncestorNode(ancestorIndex);
+                    if (!adjustPrecision(ancestor))
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
 
   private:
+    bool adjustPrecision(TIntermNode *ancestor)
+    {
+        TIntermTyped *asTyped = ancestor->getAsTyped();
+        if (asTyped == nullptr)
+        {
+            return false;
+        }
+
+        const TPrecision derivedPrecision = asTyped->derivePrecision();
+        if (derivedPrecision == asTyped->getPrecision())
+        {
+            return false;
+        }
+
+        asTyped->propagatePrecision(derivedPrecision);
+        return true;
+    }
+
     const VariableReplacementMap &mVariableMap;
 };
 
