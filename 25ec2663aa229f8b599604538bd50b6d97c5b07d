@@ -16,6 +16,46 @@
       "message": "I\u0027ve verified this works with DOTA and Idle Heroes MEC.",
       "revId": "25ec2663aa229f8b599604538bd50b6d97c5b07d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "567e9b38_b3c63646",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-04T20:46:13Z",
+      "side": 1,
+      "message": "I believe this would fix the broken case, but might have broken capture from the beginning.",
+      "revId": "25ec2663aa229f8b599604538bd50b6d97c5b07d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e185fa59_3447117d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5347,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-04T20:46:13Z",
+      "side": 1,
+      "message": "Where does setCaptureActive() get called when capturing from the beginning?  I believe in that case mFrameIndex \u003d\u003d mCaptureStartFrame \u003d\u003d 1, but we won\u0027t get here.  \n\nMaybe the equality check needs to be hoisted out of here so it can be hit for mIsFirstFrame too?",
+      "range": {
+        "startLine": 5347,
+        "startChar": 12,
+        "endLine": 5347,
+        "endChar": 28
+      },
+      "revId": "25ec2663aa229f8b599604538bd50b6d97c5b07d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
