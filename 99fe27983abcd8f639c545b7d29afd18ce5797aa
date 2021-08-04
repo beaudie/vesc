@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9af1a380_e4784fa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-04T22:33:42Z",
+      "side": 1,
+      "message": "I\u0027ll land TBR to unblock the Chromium roll.\nSince bots are happy, this shouldn\u0027t be an issue.",
+      "revId": "99fe27983abcd8f639c545b7d29afd18ce5797aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
