@@ -33,6 +33,24 @@
       "message": "Only used in the Metal backend then?",
       "revId": "d9d26105208d1a4173016de0d7ede3a424985d07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f3cca85_1e3aeedc",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-04T19:40:35Z",
+      "side": 1,
+      "message": "Yeap.",
+      "parentUuid": "3fde7445_4b5698c4",
+      "revId": "d9d26105208d1a4173016de0d7ede3a424985d07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
