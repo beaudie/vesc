@@ -89,6 +89,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b622b0c7_fed5e5cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-04T02:02:11Z",
+      "side": 1,
+      "message": "Note: I suspect you\u0027ll have to first change Chromium to stop referencing this workaround before this can be landed - or at least, until ANGLE can roll this into Chromium.\n",
+      "revId": "0d45dd833a8d482821654faaf3cf10696575abb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f1ac546_403739a8",
