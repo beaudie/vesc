@@ -41,6 +41,7 @@
 #include "compiler/translator/tree_util/FindFunction.h"
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
+#include "compiler/translator/tree_util/PropagatePrecision.h"
 #include "compiler/translator/tree_util/ReplaceClipCullDistanceVariable.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 #include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
@@ -1377,9 +1378,13 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
             return false;
         }
 
+        PropagatePrecision(root);
+
         return OutputSPIRV(this, root, compileOptions);
     }
 #endif
+
+    PropagatePrecision(root);
 
     // Write translated shader.
     TOutputVulkanGLSL outputGLSL(this, sink, enablePrecision, compileOptions);

@@ -10,6 +10,8 @@
 
 #include "compiler/translator/FunctionLookup.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/tree_util/PropagatePrecision.h"
+#include "compiler/translator/util.h"
 
 namespace sh
 {
@@ -160,6 +162,8 @@ TVariable *CreateTempVariable(TSymbolTable *symbolTable, const TType *type)
 TVariable *CreateTempVariable(TSymbolTable *symbolTable, const TType *type, TQualifier qualifier)
 {
     ASSERT(symbolTable != nullptr);
+    ASSERT(!IsPrecisionApplicableToType(type->getBasicType()) ||
+           type->getPrecision() != EbpUndefined);
     if (type->getQualifier() == qualifier)
     {
         return CreateTempVariable(symbolTable, type);
@@ -218,6 +222,7 @@ TVariable *DeclareTempVariable(TSymbolTable *symbolTable,
                                TQualifier qualifier,
                                TIntermDeclaration **declarationOut)
 {
+    PropagatePrecision(initializer);
     TVariable *variable =
         CreateTempVariable(symbolTable, new TType(initializer->getType()), qualifier);
     *declarationOut = CreateTempInitDeclarationNode(variable, initializer);

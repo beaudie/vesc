@@ -6,6 +6,7 @@
 
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
+#include "compiler/translator/tree_util/PropagatePrecision.h"
 
 namespace sh
 {
@@ -715,6 +716,9 @@ bool TOutputTraverser::visitBranch(Visit visit, TIntermBranch *node)
 
 void OutputTree(TIntermNode *root, TInfoSinkBase &out)
 {
+    // Before outputting the tree, make sure the intermediate node precisions are correct.
+    PropagatePrecision(root);
+
     TOutputTraverser it(out);
     ASSERT(root);
     root->traverse(&it);
