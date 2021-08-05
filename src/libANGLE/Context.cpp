@@ -268,7 +268,10 @@ enum SubjectIndexes : angle::SubjectIndex
     kUniformBuffer0SubjectIndex = kImageMaxSubjectIndex,
     kUniformBufferMaxSubjectIndex =
         kUniformBuffer0SubjectIndex + IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS,
-    kSampler0SubjectIndex    = kUniformBufferMaxSubjectIndex,
+    kShaderStorageBuffer0SubjectIndex = kUniformBufferMaxSubjectIndex,
+    kShaderStorageBufferMaxSubjectIndex =
+        kShaderStorageBuffer0SubjectIndex + IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS,
+    kSampler0SubjectIndex    = kShaderStorageBufferMaxSubjectIndex,
     kSamplerMaxSubjectIndex  = kSampler0SubjectIndex + IMPLEMENTATION_MAX_ACTIVE_TEXTURES,
     kVertexArraySubjectIndex = kSamplerMaxSubjectIndex,
     kReadFramebufferSubjectIndex,
@@ -375,6 +378,12 @@ Context::Context(egl::Display *display,
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
     {
         mUniformBufferObserverBindings.emplace_back(this, uboIndex);
+    }
+
+    for (angle::SubjectIndex ssboIndex = kShaderStorageBuffer0SubjectIndex;
+         ssboIndex < kShaderStorageBufferMaxSubjectIndex; ++ssboIndex)
+    {
+        mShaderStorageBufferObserverBindings.emplace_back(this, ssboIndex);
     }
 
     for (angle::SubjectIndex samplerIndex = kSampler0SubjectIndex;
@@ -6025,6 +6034,11 @@ void Context::bindBufferRange(BufferBinding target,
         mUniformBufferObserverBindings[index].bind(object);
         mStateCache.onUniformBufferStateChange(this);
     }
+    else if (target == BufferBinding::ShaderStorage)
+    {
+        mShaderStorageBufferObserverBindings[index].bind(object);
+        mStateCache.onShaderStorageBufferStateChange(this);
+    }
     else
     {
         mStateCache.onBufferBindingChange(this);
@@ -8859,6 +8873,11 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
                 mState.onUniformBufferStateChange(index - kUniformBuffer0SubjectIndex);
                 mStateCache.onUniformBufferStateChange(this);
             }
+            else if (index < kShaderStorageBufferMaxSubjectIndex)
+            {
+                mState.onShaderStorageBufferStateChange(index - kShaderStorageBuffer0SubjectIndex);
+                mStateCache.onShaderStorageBufferStateChange(this);
+            }
             else
             {
                 ASSERT(index < kSamplerMaxSubjectIndex);
@@ -9310,6 +9329,11 @@ void StateCache::onActiveTransformFeedbackChange(Context *context)
 }
 
 void StateCache::onUniformBufferStateChange(Context *context)
+{
+    updateBasicDrawStatesError();
+}
+
+void StateCache::onShaderStorageBufferStateChange(Context *context)
 {
     updateBasicDrawStatesError();
 }
