@@ -16,6 +16,24 @@
       "message": "It seems difficult to solve the problem by using the existing observer message as it is.\nSo I implemented to set only DirtyBit using message that are not used in Texture and Framebuffer.\nI don\u0027t know if it\u0027s okay with observer message design, but now I think the bug won\u0027t happen.\n\nCould you retry the test?",
       "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1286c789_5a417071",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T12:26:00Z",
+      "side": 1,
+      "message": "New dirty bit is okay - I suggest we add a different dirty bit rather than overloading binding changed.",
+      "parentUuid": "a9c6c413_283d1b2c",
+      "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
