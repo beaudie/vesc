@@ -111,6 +111,30 @@
       },
       "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf9d245_896c5d72",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-08-05T14:08:40Z",
+      "side": 1,
+      "message": "Sorry. I misunderstood what you said.\n\nAdded a new SubjectMessage to patchset 5.",
+      "parentUuid": "244665bf_aaa3d5bb",
+      "range": {
+        "startLine": 717,
+        "startChar": 41,
+        "endLine": 717,
+        "endChar": 55
+      },
+      "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
