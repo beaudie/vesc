@@ -22,6 +22,30 @@
       },
       "revId": "1b8027b198b4a4832e327787c8669d3a8a188fa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c2fa637_4939a9f1",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-05T13:48:03Z",
+      "side": 1,
+      "message": "I added `translator_gl_d3d_only` specifically for the validating command decoder to have something to link to (which doesn\u0027t include vulkan and all its dependencies).\n\nIn an ANGLE checkout, the double-build of the translator is annoying.",
+      "parentUuid": "02a38cb2_1112ae5f",
+      "range": {
+        "startLine": 623,
+        "startChar": 4,
+        "endLine": 623,
+        "endChar": 23
+      },
+      "revId": "1b8027b198b4a4832e327787c8669d3a8a188fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
