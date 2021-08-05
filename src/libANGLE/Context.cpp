@@ -271,7 +271,10 @@ enum SubjectIndexes : angle::SubjectIndex
     kAtomicCounterBuffer0SubjectIndex = kUniformBufferMaxSubjectIndex,
     kAtomicCounterBufferMaxSubjectIndex =
         kAtomicCounterBuffer0SubjectIndex + IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS,
-    kSampler0SubjectIndex    = kAtomicCounterBufferMaxSubjectIndex,
+    kShaderStorageBuffer0SubjectIndex = kAtomicCounterBufferMaxSubjectIndex,
+    kShaderStorageBufferMaxSubjectIndex =
+        kShaderStorageBuffer0SubjectIndex + IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS,
+    kSampler0SubjectIndex    = kShaderStorageBufferMaxSubjectIndex,
     kSamplerMaxSubjectIndex  = kSampler0SubjectIndex + IMPLEMENTATION_MAX_ACTIVE_TEXTURES,
     kVertexArraySubjectIndex = kSamplerMaxSubjectIndex,
     kReadFramebufferSubjectIndex,
@@ -384,6 +387,12 @@ Context::Context(egl::Display *display,
          acbIndex < kAtomicCounterBufferMaxSubjectIndex; ++acbIndex)
     {
         mAtomicCounterBufferObserverBindings.emplace_back(this, acbIndex);
+    }
+
+    for (angle::SubjectIndex ssboIndex = kShaderStorageBuffer0SubjectIndex;
+         ssboIndex < kShaderStorageBufferMaxSubjectIndex; ++ssboIndex)
+    {
+        mShaderStorageBufferObserverBindings.emplace_back(this, ssboIndex);
     }
 
     for (angle::SubjectIndex samplerIndex = kSampler0SubjectIndex;
@@ -6056,6 +6065,11 @@ void Context::bindBufferRange(BufferBinding target,
         mAtomicCounterBufferObserverBindings[index].bind(object);
         mStateCache.onAtomicCounterBufferStateChange(this);
     }
+    else if (target == BufferBinding::ShaderStorage)
+    {
+        mShaderStorageBufferObserverBindings[index].bind(object);
+        mStateCache.onShaderStorageBufferStateChange(this);
+    }
     else
     {
         mStateCache.onBufferBindingChange(this);
@@ -6307,19 +6321,19 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
     angle::Result result =
         mImplementation->dispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ);
 
-    // This must be called before convertPpoToComputeOrDraw() so it uses the PPO's compute values
-    // before convertPpoToComputeOrDraw() reverts the PPO back to graphics.
+    // This must be called before convertPpoToComputeOrDraw() so it uses the PPO's compute
+    // values before convertPpoToComputeOrDraw() reverts the PPO back to graphics.
     MarkShaderStorageUsage(this);
 
-    // We always assume PPOs are used for draws, until they aren't. If we just executed a dispatch
-    // with a PPO, we need to convert it back to a "draw"-type.
-    // We don't re-link the PPO again, since it's possible for that link to generate validation
-    // errors due to bad VS/FS, and we want to catch those errors during validation of the draw
-    // command: 11.1.3.11 Validation It is not always possible to determine at link time if a
-    // program object can execute successfully, given that LinkProgram can not know the state of the
-    // remainder of the pipeline. Therefore validation is done when the first rendering command
-    // which triggers shader invocations is issued, to determine if the set of active program
-    // objects can be executed.
+    // We always assume PPOs are used for draws, until they aren't. If we just executed a
+    // dispatch with a PPO, we need to convert it back to a "draw"-type. We don't re-link the
+    // PPO again, since it's possible for that link to generate validation errors due to bad
+    // VS/FS, and we want to catch those errors during validation of the draw command: 11.1.3.11
+    // Validation It is not always possible to determine at link time if a program object can
+    // execute successfully, given that LinkProgram can not know the state of the remainder of
+    // the pipeline. Therefore validation is done when the first rendering command which
+    // triggers shader invocations is issued, to determine if the set of active program objects
+    // can be executed.
     convertPpoToComputeOrDraw(false);
 
     if (ANGLE_UNLIKELY(IsError(result)))
@@ -7684,7 +7698,8 @@ void Context::uniformBlockBinding(ShaderProgramID program,
     Program *programObject = getProgramResolveLink(program);
     programObject->bindUniformBlock(uniformBlockIndex, uniformBlockBinding);
 
-    // Note: If the Program is shared between Contexts we would be better using Observer/Subject.
+    // Note: If the Program is shared between Contexts we would be better using
+    // Observer/Subject.
     if (programObject->isInUse())
     {
         mState.setObjectDirty(GL_PROGRAM);
@@ -8895,6 +8910,11 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
                 mState.onAtomicCounterBufferStateChange(index - kAtomicCounterBuffer0SubjectIndex);
                 mStateCache.onAtomicCounterBufferStateChange(this);
             }
+            else if (index < kShaderStorageBufferMaxSubjectIndex)
+            {
+                mState.onShaderStorageBufferStateChange(index - kShaderStorageBuffer0SubjectIndex);
+                mStateCache.onShaderStorageBufferStateChange(this);
+            }
             else
             {
                 ASSERT(index < kSamplerMaxSubjectIndex);
@@ -8907,9 +8927,10 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
 
 angle::Result Context::onProgramLink(Program *programObject)
 {
-    // Don't parallel link a program which is active in any GL contexts. With this assumption, we
-    // don't need to worry that:
-    //   1. Draw calls after link use the new executable code or the old one depending on the link
+    // Don't parallel link a program which is active in any GL contexts. With this assumption,
+    // we don't need to worry that:
+    //   1. Draw calls after link use the new executable code or the old one depending on the
+    //   link
     //      result.
     //   2. When a backend program, e.g., ProgramD3D is linking, other backend classes like
     //      StateManager11, Renderer11, etc., may have a chance to make unexpected calls to
@@ -9355,6 +9376,11 @@ void StateCache::onAtomicCounterBufferStateChange(Context *context)
     updateBasicDrawStatesError();
 }
 
+void StateCache::onShaderStorageBufferStateChange(Context *context)
+{
+    updateBasicDrawStatesError();
+}
+
 void StateCache::onColorMaskChange(Context *context)
 {
     updateBasicDrawStatesError();
@@ -9404,13 +9430,13 @@ void StateCache::updateValidDrawModes(Context *context)
         TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
 
         // ES Spec 3.0 validation text:
-        // When transform feedback is active and not paused, all geometric primitives generated must
-        // match the value of primitiveMode passed to BeginTransformFeedback. The error
+        // When transform feedback is active and not paused, all geometric primitives generated
+        // must match the value of primitiveMode passed to BeginTransformFeedback. The error
         // INVALID_OPERATION is generated by DrawArrays and DrawArraysInstanced if mode is not
         // identical to primitiveMode. The error INVALID_OPERATION is also generated by
-        // DrawElements, DrawElementsInstanced, and DrawRangeElements while transform feedback is
-        // active and not paused, regardless of mode. Any primitive type may be used while transform
-        // feedback is paused.
+        // DrawElements, DrawElementsInstanced, and DrawRangeElements while transform feedback
+        // is active and not paused, regardless of mode. Any primitive type may be used while
+        // transform feedback is paused.
         if (!context->getExtensions().geometryShaderAny() &&
             !context->getExtensions().tessellationShaderEXT && context->getClientVersion() < ES_3_2)
         {
@@ -9422,9 +9448,9 @@ void StateCache::updateValidDrawModes(Context *context)
 
     if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
     {
-        // All draw modes are valid, since drawing without a program does not generate an error and
-        // and operations requiring a GS will trigger other validation errors.
-        // `patchOK = false` due to checking above already enabling it if a TS is present.
+        // All draw modes are valid, since drawing without a program does not generate an error
+        // and and operations requiring a GS will trigger other validation errors. `patchOK =
+        // false` due to checking above already enabling it if a TS is present.
         setValidDrawModes(true, true, true, true, true, false);
         return;
     }
