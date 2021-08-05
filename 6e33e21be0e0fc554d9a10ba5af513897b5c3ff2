@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "6e33e21be0e0fc554d9a10ba5af513897b5c3ff2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126c5dee_bc2fdc39",
+        "filename": "src/compiler/translator/ParseContext.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-05T02:35:01Z",
+      "side": 1,
+      "message": "Here I was trusting the code that this was not an issue for GS! I recently made a very similar fix for tessellation shaders, I suggest handling GS the same way. You should be able to just adjust the TType as soon the layout is declared, same way mTessControlDeferredArrayTypesToSize is handled.\n\nSee this change: https://chromium-review.googlesource.com/c/angle/angle/+/3054614",
+      "revId": "6e33e21be0e0fc554d9a10ba5af513897b5c3ff2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
