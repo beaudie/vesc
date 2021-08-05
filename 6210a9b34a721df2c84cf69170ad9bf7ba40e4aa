@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80321c94_627178d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-05T23:19:59Z",
+      "side": 1,
+      "message": "Jeff and Brandon,\n\nThe reverted CL was briefly discussed in today\u0027s Google-Samsung meeting today.  I took a quick look at this CL.  If I\u0027m understanding the code correctly (again, a quick look), this CL will cause the GL back-end to behave differently instead of just stubbing the new interfaces (needed for the Vulkan back-end).  Can this CL be modified and re-landed?",
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b13aa0d8_d9806dce",
+        "filename": "src/libANGLE/renderer/gl/MemoryObjectGL.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-05T23:19:59Z",
+      "side": 1,
+      "message": "Why not make this a no-op?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 0
+      },
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac20d94b_06d302bc",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-05T23:19:59Z",
+      "side": 1,
+      "message": "Why not just set this to false?",
+      "range": {
+        "startLine": 84,
+        "startChar": 27,
+        "endLine": 84,
+        "endChar": 87
+      },
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d3895b8_d8fe96ef",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-05T23:19:59Z",
+      "side": 1,
+      "message": "Seems like this could cause the GL back-end to behave differently with an AHB that has the protected bit set.  Why not just set:\n\nmHasProtectedContent \u003d false;",
+      "range": {
+        "startLine": 27,
+        "startChar": 36,
+        "endLine": 30,
+        "endChar": 88
+      },
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
