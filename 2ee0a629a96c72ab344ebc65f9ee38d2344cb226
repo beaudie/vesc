@@ -16,6 +16,24 @@
       "message": "I\u0027m confused, there\u0027s no reference to mVMAPools?",
       "revId": "2ee0a629a96c72ab344ebc65f9ee38d2344cb226",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2db1e572_b5995820",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T13:20:51Z",
+      "side": 1,
+      "message": "+1, see other comment.\n\nProbably we should remove it from this CL and put it back when we use it.",
+      "parentUuid": "b4c4d317_ade92e5c",
+      "revId": "2ee0a629a96c72ab344ebc65f9ee38d2344cb226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
