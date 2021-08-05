@@ -52,6 +52,24 @@
       "parentUuid": "1286c789_5a417071",
       "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa35a84_3f735efc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T13:11:40Z",
+      "side": 1,
+      "message": "Dirty bits are the intended solution, so I think your code is doing the right thing. There may be alternate solutions but I haven\u0027t thought of one at this time.",
+      "parentUuid": "637b1702_9192b6b5",
+      "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
