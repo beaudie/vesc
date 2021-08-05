@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "206854e6_5208f5e5",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3635,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-05T21:37:40Z",
+      "side": 1,
+      "message": "Remove",
+      "range": {
+        "startLine": 3635,
+        "startChar": 0,
+        "endLine": 3635,
+        "endChar": 94
+      },
+      "revId": "a68cea9bb593ba4a534e92b0796dd4a6ce401018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
