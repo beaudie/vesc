@@ -1026,6 +1026,10 @@ angle::Result Renderer9::setSamplerState(const gl::Context *context,
             mDevice->SetSamplerState(d3dSampler, D3DSAMP_MAXANISOTROPY, maxAnisotropy);
         }
 
+        const bool isSrgb = gl::GetSizedInternalFormatInfo(textureD3D->getBaseLevelInternalFormat())
+                                .colorEncoding == GL_SRGB;
+        mDevice->SetSamplerState(d3dSampler, D3DSAMP_SRGBTEXTURE, isSrgb);
+
         ASSERT(texture->getBorderColor().type == angle::ColorGeneric::Type::Float);
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_BORDERCOLOR,
                                  gl_d3d9::ConvertColor(texture->getBorderColor().colorF));
