@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c6c413_283d1b2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-08-05T12:20:59Z",
+      "side": 1,
+      "message": "It seems difficult to solve the problem by using the existing observer message as it is.\nSo I implemented to set only DirtyBit using message that are not used in Texture and Framebuffer.\nI don\u0027t know if it\u0027s okay with observer message design, but now I think the bug won\u0027t happen.\n\nCould you retry the test?",
+      "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
