@@ -39,6 +39,30 @@
       },
       "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f61c520_6e3a9453",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-05T02:37:39Z",
+      "side": 1,
+      "message": "Tests already exist for level\u003d\u003d0. Understanding that Size\u003c\u003clevel doesn\u0027t necessarily equal Size0, there are still some obviously invalid situations. For example, if width or height\u003d\u003d1 at level 1, that implies level 0 has a width or height of 2 (or 3), which is invalid.\n\nThe new tests that were added in https://github.com/KhronosGroup/WebGL/pull/3304 and that I\u0027m following up on in https://github.com/KhronosGroup/WebGL/pull/3307 verify these constraints. They seem reasonable to me to enforce. What do you think?\n\n(The new angle_end2end_tests in this CL are ports of portions of those WebGL conformance tests, and fail pretty badly without these changes.)",
+      "parentUuid": "7b3b8803_ad81ba28",
+      "range": {
+        "startLine": 1063,
+        "startChar": 62,
+        "endLine": 1064,
+        "endChar": 48
+      },
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
