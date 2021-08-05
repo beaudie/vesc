@@ -1008,6 +1008,14 @@ bool ValidCompressedDimension(GLsizei size, GLuint blockSize, GLint level)
     return (level > 0) || (size % blockSize == 0);
 }
 
+bool ValidCompressedBaseLevelForWebGL(GLsizei size, GLuint blockSize, GLint level)
+{
+    // Avoid undefined behavior
+    if (level > 31)
+        return false;
+    return ((size << level) % blockSize) == 0;
+}
+
 bool ValidCompressedImageSize(const Context *context,
                               GLenum internalFormat,
                               GLint level,
@@ -1050,6 +1058,20 @@ bool ValidCompressedImageSize(const Context *context,
             !ValidCompressedDimension(depth, formatInfo.compressedBlockDepth, level))
         {
             return false;
+        }
+
+        // In WebGL compatibility mode, also enforce that the base level implied
+        // by the compressed texture's mip level would conform to the block
+        // size.
+        if (context->getExtensions().webglCompatibility)
+        {
+            if (!ValidCompressedBaseLevelForWebGL(width, formatInfo.compressedBlockWidth, level) ||
+                !ValidCompressedBaseLevelForWebGL(height, formatInfo.compressedBlockHeight,
+                                                  level) ||
+                !ValidCompressedBaseLevelForWebGL(depth, formatInfo.compressedBlockDepth, level))
+            {
+                return false;
+            }
         }
     }
 
