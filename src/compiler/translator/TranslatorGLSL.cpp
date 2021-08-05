@@ -14,6 +14,7 @@
 #include "compiler/translator/tree_ops/RewriteTexelFetchOffset.h"
 #include "compiler/translator/tree_ops/apple/RewriteRowMajorMatrices.h"
 #include "compiler/translator/tree_ops/apple/RewriteUnaryMinusOperatorFloat.h"
+#include "compiler/translator/tree_util/PropagatePrecision.h"
 
 namespace sh
 {
@@ -207,6 +208,8 @@ bool TranslatorGLSL::translate(TIntermBlock *root,
             sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
             getGeometryShaderOutputPrimitiveType(), getGeometryShaderMaxVertices());
     }
+
+    PropagatePrecision(root);
 
     // Write translated shader.
     TOutputGLSL outputGLSL(this, sink, compileOptions);

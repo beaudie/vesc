@@ -635,10 +635,10 @@ TIntermAggregate::TIntermAggregate(const TFunction *func,
         mArguments.swap(*arguments);
     }
     ASSERT(mFunction == nullptr || mFunction->symbolType() != SymbolType::Empty);
-    setPrecisionAndQualifier();
+    setQualifier();
 }
 
-void TIntermAggregate::setPrecisionAndQualifier()
+void TIntermAggregate::setQualifier()
 {
     mType.setQualifier(EvqTemporary);
     if ((!BuiltInGroup::IsBuiltIn(mOp) && !isFunctionCall()) || BuiltInGroup::IsMath(mOp))
@@ -648,8 +648,6 @@ void TIntermAggregate::setPrecisionAndQualifier()
             mType.setQualifier(EvqConst);
         }
     }
-
-    propagatePrecision(derivePrecision());
 }
 
 bool TIntermAggregate::areChildrenConstQualified()
@@ -1403,7 +1401,6 @@ void TIntermUnary::promote()
     }
 
     setType(resultType);
-    propagatePrecision(derivePrecision());
 }
 
 // Derive precision from children nodes
@@ -1520,8 +1517,6 @@ TIntermTernary::TIntermTernary(TIntermTyped *cond,
     ASSERT(mFalseExpression);
     getTypePointer()->setQualifier(
         TIntermTernary::DetermineQualifier(cond, trueExpression, falseExpression));
-
-    propagatePrecision(derivePrecision());
 }
 
 TIntermLoop::TIntermLoop(TLoopType type,
@@ -1634,7 +1629,6 @@ void TIntermSwizzle::promote()
     auto numFields = mSwizzleOffsets.size();
     setType(TType(mOperand->getBasicType(), EbpUndefined, resultQualifier,
                   static_cast<unsigned char>(numFields)));
-    propagatePrecision(derivePrecision());
 }
 
 // Derive precision from children nodes
@@ -1894,8 +1888,6 @@ void TIntermBinary::promote()
             UNREACHABLE();
             break;
     }
-
-    propagatePrecision(derivePrecision());
 }
 
 // Derive precision from children nodes
@@ -1954,10 +1946,18 @@ void TIntermBinary::propagatePrecision(TPrecision precision)
         PropagatePrecisionIfApplicable(mLeft, precision);
     }
 
-    if (mOp != EOpIndexDirect && mOp != EOpIndexIndirect && mOp != EOpIndexDirectStruct &&
+    if (mOp != EOpIndexIndirect && mOp != EOpIndexDirectStruct &&
         mOp != EOpIndexDirectInterfaceBlock)
     {
         PropagatePrecisionIfApplicable(mRight, precision);
+    }
+
+    // For literal indices, always apply highp.  This is purely for the purpose of making sure
+    // constant nodes are also given a precision, so if they are hoisted to a temp variable, there
+    // would be a precision to apply to that variable.
+    if (mOp == EOpIndexDirect)
+    {
+        PropagatePrecisionIfApplicable(mRight, EbpHigh);
     }
 }
 

@@ -216,6 +216,8 @@ angle_translator_sources = [
   "src/compiler/translator/tree_util/IntermTraverse.cpp",
   "src/compiler/translator/tree_util/IntermTraverse.h",
   "src/compiler/translator/tree_util/NodeSearch.h",
+  "src/compiler/translator/tree_util/PropagatePrecision.cpp",
+  "src/compiler/translator/tree_util/PropagatePrecision.h",
   "src/compiler/translator/tree_util/ReplaceArrayOfMatrixVarying.cpp",
   "src/compiler/translator/tree_util/ReplaceArrayOfMatrixVarying.h",
   "src/compiler/translator/tree_util/ReplaceClipCullDistanceVariable.cpp",

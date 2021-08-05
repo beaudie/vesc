@@ -42,6 +42,7 @@
 #include "compiler/translator/tree_util/FindFunction.h"
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
+#include "compiler/translator/tree_util/PropagatePrecision.h"
 #include "compiler/translator/tree_util/ReplaceClipCullDistanceVariable.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 #include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
@@ -1378,9 +1379,13 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
             return false;
         }
 
+        PropagatePrecision(root);
+
         return OutputSPIRV(this, root, compileOptions);
     }
 #endif
+
+    PropagatePrecision(root);
 
     // When generating text, glslang cannot know the precision of folded constants so it may infer
     // the wrong precisions.  The following transformation gives constants names with precision to
