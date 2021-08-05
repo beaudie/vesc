@@ -3630,6 +3630,12 @@ void State::onUniformBufferStateChange(size_t uniformBufferIndex)
     mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
 }
 
+void State::onAtomicCounterBufferStateChange(size_t atomicCounterBufferIndex)
+{
+    // This could be represented by a different dirty bit. Using the same one keeps it simple.
+    mDirtyBits.set(DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+}
+
 AttributesMask State::getAndResetDirtyCurrentValues() const
 {
     AttributesMask retVal = mDirtyCurrentValues;
