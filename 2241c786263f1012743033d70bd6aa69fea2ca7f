@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcddb3f3_fd28fd71",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "Why do we use the same block size for both small and large pools?\n\nTaking a step back, this value is currently 4MB (for everything except QC), which is larger than kMaxSizeToUseSubAllocator which is our limit for using the suballocator in the first place.\n\nhttps://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/struct_vma_pool_create_info.html#aa4265160536cdb9be821b7686c16c676\n\u003e VkDeviceSize VmaPoolCreateInfo::blockSize\n\u003e Size of a single VkDeviceMemory block to be allocated as part of this pool, in bytes. Optional.\n\u003e \n\u003e Specify nonzero to set explicit, constant size of memory blocks used by this pool.\n\u003e \n\u003e Leave 0 to use default and let the library manage block sizes automatically. Sizes of particular blocks may vary.\n\nBased on the description, I think this should be set to \u00270\u0027 for every pool, since we are only suballocated for small buffers (well, smaller than 4MB anyway).",
+      "range": {
+        "startLine": 3461,
+        "startChar": 68,
+        "endLine": 3461,
+        "endChar": 95
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "271be366_2a8c4390",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3531,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY()",
+      "range": {
+        "startLine": 3524,
+        "startChar": 0,
+        "endLine": 3531,
+        "endChar": 0
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62f2482b_7b2f6f26",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3554,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "This can just be the following (you don\u0027t need 2 return statements):\n\n                if (result !\u003d VK_SUCCESS)\n                {\n                    // Roll back memory allocation and fail\n                    vma::FreeMemory(allocator.getHandle(), allocation-\u003emHandle);\n                }\n                return result;",
+      "range": {
+        "startLine": 3548,
+        "startChar": 0,
+        "endLine": 3554,
+        "endChar": 34
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5bb209f_57f6bd0f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "nit: I think this and getVMAPool() are large enough to be moved into the .cpp file.",
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ee78004_198c7d5b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "Doesn\u0027t need to be a reference, since it\u0027s just a handle.",
+      "range": {
+        "startLine": 131,
+        "startChar": 16,
+        "endLine": 131,
+        "endChar": 17
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa1105e2_2822f8af",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "Same.   Doesn\u0027t need to be a reference, since it\u0027s just a handle.",
+      "range": {
+        "startLine": 141,
+        "startChar": 12,
+        "endLine": 141,
+        "endChar": 13
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67602612_f0cc5090",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "To help with correctness, I\u0027d prefer something like:\n\n    {\n        VmaPool vmaPool \u003d mVMAPools[memoryTypeIndex * kPoolCount + poolType];\n        ASSERT(vmaPool !\u003d VK_NULL_HANDLE);\n        return vmaPool;\n    }",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 5
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb07135a_ff389e18",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "If we are relying on the linear allocator, we should specify that\u0027s what we want with VMA_POOL_CREATE_LINEAR_ALGORITHM_BIT in the VmaPoolCreateInfo.flags, rather than assuming that\u0027s what VMA will use by default.   Based on that, we should pass in which algorithm we want to use to vma::CreatePool(), rather than the \u0027useBuddyAlgorithm\u0027 boolean.",
+      "range": {
+        "startLine": 152,
+        "startChar": 11,
+        "endLine": 152,
+        "endChar": 39
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd00054f_7ba2fdf5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "This should be VK_NULL_HANDLE, to better match the VMA spec.\n\nAlso, please add a comment indicating what VK_NULL_HANDLE means here.\n\nhttps://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/struct_vma_allocation_create_info.html#a6272c0555cfd1fe28bff1afeb6190150\n\u003e Leave VK_NULL_HANDLE to allocate from default pool.",
+      "range": {
+        "startLine": 157,
+        "startChar": 36,
+        "endLine": 157,
+        "endChar": 43
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3967b29f_56595a18",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "This needs to be updated to indicate that we are using VMA for everything, and requesting dedicated allocations with a flag.",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 87
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "007ed5d1_a8e396ff",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "linear",
+      "range": {
+        "startLine": 176,
+        "startChar": 57,
+        "endLine": 176,
+        "endChar": 64
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

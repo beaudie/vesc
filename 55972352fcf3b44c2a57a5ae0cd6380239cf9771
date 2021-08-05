@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4efabbc0_a28078b8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3479,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "90423351_5f36a4ce",
+      "range": {
+        "startLine": 3469,
+        "startChar": 0,
+        "endLine": 3479,
+        "endChar": 18
+      },
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "121ca622_0e732199",
@@ -160,6 +184,24 @@
       "side": 1,
       "message": "Then I will have to duplicate while() loop in each block, so not sure it will be better though. Most of time you only loop while() once, so there isn\u0027t any perf concern here. This will even more true once we cache memoryTypeIndex in BufferVk (in that case, most time we never come to this whole loop).",
       "parentUuid": "5b43dd57_07bec70a",
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47931fe0_502bf630",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3548,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T02:11:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0d72b505_3d9f3aee",
       "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
