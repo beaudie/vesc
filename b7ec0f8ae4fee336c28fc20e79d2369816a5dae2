@@ -173,6 +173,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9910b53_6eb54549",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-05T13:46:53Z",
+      "side": 1,
+      "message": "I think it\u0027s best to rely on the blockSize (i.e. what the code already does). All BC formats are 4x4, but that doesn\u0027t mean every compressed format would be 4x4.",
+      "parentUuid": "ee8e83c6_efb7588a",
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c54669c_01cc1d95",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 1
