@@ -209,6 +209,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6fb5b246_0e0bb45b",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-05T14:33:00Z",
+      "side": 1,
+      "message": "Looking at this section again, I think the old check may be removed altogether from this block:\n- WebGL requirements are fully covered by the new one.\n- D3D renderer workarounds nonconforming sizes in d3d11::MakeValidSize; that path would be relevant only for non-WebGL users.",
+      "parentUuid": "53dc2023_5734cacf",
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c54669c_01cc1d95",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 1
