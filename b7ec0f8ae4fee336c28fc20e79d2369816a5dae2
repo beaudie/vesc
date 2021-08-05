@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c42290b0_f93b6823",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T12:29:11Z",
+      "side": 1,
+      "message": "nit: is there some kind of symbolic constant you can use here? feel free to use constexpr or anything, just to make this more readable.",
+      "range": {
+        "startLine": 1014,
+        "startChar": 16,
+        "endLine": 1014,
+        "endChar": 18
+      },
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b3b8803_ad81ba28",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -85,6 +108,23 @@
         "endLine": 1064,
         "endChar": 48
       },
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c54669c_01cc1d95",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3057,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T12:29:11Z",
+      "side": 1,
+      "message": "nit: please comment before each new test.",
       "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
