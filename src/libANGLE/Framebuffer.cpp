@@ -2067,7 +2067,12 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
             return;
         }
 
-        ASSERT(message != angle::SubjectMessage::BindingChanged);
+        // This can be triggered by freeing TextureStorage in D3D back-end.
+        if (message == angle::SubjectMessage::BindingChanged)
+        {
+            mDirtyBits.set(index);
+            return;
+        }
 
         // This can be triggered by external changes to the default framebuffer.
         if (message == angle::SubjectMessage::SurfaceChanged)
