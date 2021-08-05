@@ -46,6 +46,30 @@
       },
       "revId": "b2807c4f639e4f3428829d96b18d24089292efe9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48a562f4_02001bd6",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-05T09:40:08Z",
+      "side": 1,
+      "message": "To fix the numerous Vulkan platforms where VK_EXT_swapchain_colorspace is not available, I am checking for EGL_COLORSPACE_LINEAR as default value, since EGL_DONT_CARE won\u0027t actually occur.\nWhen the extension is not available EGL_GL_COLORSPACE_KHR won\u0027t be added to the surface attributes. If it\u0027s not the EGL_COLORSPACE_LINEAR default value the extension will be required.\n\nAll currently available traces will use EGL_COLORSPACE_LINEAR. Dota Underlords will use EGL_COLORSPACE_sRGB.",
+      "parentUuid": "ed16558a_0d747ec4",
+      "range": {
+        "startLine": 422,
+        "startChar": 8,
+        "endLine": 422,
+        "endChar": 21
+      },
+      "revId": "b2807c4f639e4f3428829d96b18d24089292efe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
