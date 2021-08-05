@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21425ab6_5ffe5cab",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-05T22:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01b4f4c0_34c10285",
+      "range": {
+        "startLine": 757,
+        "startChar": 42,
+        "endLine": 757,
+        "endChar": 49
+      },
+      "revId": "4cda3af8c83ae01baf222961a78bb4da8ce97b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae9d79d4_2d774098",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-07-30T22:22:16Z",
       "side": 1,
       "message": "It looks like the \u0027offsetOut\u0027 parameter should just be removed from these functions.",
+      "revId": "4cda3af8c83ae01baf222961a78bb4da8ce97b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d51b387_935de231",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-05T22:10:50Z",
+      "side": 1,
+      "message": "This CL has been reworked per previous discussion. This comment is no longer relevant.",
+      "parentUuid": "ae9d79d4_2d774098",
       "revId": "4cda3af8c83ae01baf222961a78bb4da8ce97b7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

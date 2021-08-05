@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e12bbb1_8ba60ba9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-05T22:10:50Z",
+      "side": 1,
+      "message": "This CL has been reworked per previous discussion. This comment is no longer relevant.",
+      "parentUuid": "ce6adae5_94b00d59",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "0a4f6224a119488f316dbb398c989c7072908f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4661e789_90576308",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-03T15:25:04Z",
       "side": 1,
       "message": "Probably should let acquireBufferHelper automatically do the clean up.\n\nAlso some ASSERTs would be nice to catch leaks.",
+      "range": {
+        "startLine": 541,
+        "startChar": 0,
+        "endLine": 542,
+        "endChar": 26
+      },
+      "revId": "0a4f6224a119488f316dbb398c989c7072908f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75aee5ab_605d011c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-05T22:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4661e789_90576308",
       "range": {
         "startLine": 541,
         "startChar": 0,
