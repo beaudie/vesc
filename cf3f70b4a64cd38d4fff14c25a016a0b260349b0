@@ -88,6 +88,29 @@
       "parentUuid": "3fa35a84_3f735efc",
       "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "244665bf_aaa3d5bb",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T13:23:06Z",
+      "side": 1,
+      "message": "I\u0027d suggest adding a new message for this case, e.g. StorageReleased or something like that. BindingChanged doesn\u0027t communicate the right intent.",
+      "range": {
+        "startLine": 717,
+        "startChar": 41,
+        "endLine": 717,
+        "endChar": 55
+      },
+      "revId": "cf3f70b4a64cd38d4fff14c25a016a0b260349b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
