@@ -34,6 +34,24 @@
       "parentUuid": "b4c4d317_ade92e5c",
       "revId": "2ee0a629a96c72ab344ebc65f9ee38d2344cb226",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c4c155a_c64b8391",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-05T20:32:42Z",
+      "side": 1,
+      "message": "Moved mVMAPools to crrev.com/c/2939490",
+      "parentUuid": "2db1e572_b5995820",
+      "revId": "2ee0a629a96c72ab344ebc65f9ee38d2344cb226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
