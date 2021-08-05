@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fce5d65d_46b737f4",
+        "filename": "src/compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-05T21:00:36Z",
+      "side": 1,
+      "message": "The Nvidia Shield bot is having infra issues, so I did a local hack and verified that the webgl test that was failing on this bot in my previous attempt to remove this hack is not hitting this assertion (and the output looks fine in terms of precision applied).",
+      "revId": "6dc9475ca8ba7449f61279e32074d48f0a70f7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
