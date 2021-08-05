@@ -16,6 +16,24 @@
       "message": "Hopefully I found the right reviewers...",
       "revId": "7daaf0a913571f79ecb8d0d17218d7a5d2194a36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c20ad331_aa677990",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-05T20:41:19Z",
+      "side": 1,
+      "message": "You did, but last time this happened there were a few other tests that flakily failed too because of this clang issue. You could suppress this, but the other ones will probably be flagged as flaky soon. Ideally you would get the offending clang change reverted.",
+      "parentUuid": "d96be9cc_5a8066b2",
+      "revId": "7daaf0a913571f79ecb8d0d17218d7a5d2194a36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
