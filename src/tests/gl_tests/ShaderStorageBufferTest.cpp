@@ -2121,9 +2121,6 @@ void main()
 // Test that BufferData change propagate to context state.
 TEST_P(ShaderStorageBufferTest31, DependentBufferChange)
 {
-    // http://issuetracker.google.com/195678877
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr char kComputeShaderSource[] =
         R"(#version 310 es
 layout (local_size_x=1) in;
