@@ -155,6 +155,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee8e83c6_efb7588a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-05T12:50:14Z",
+      "side": 1,
+      "message": "Oops, missed the negation; the correct expression is\n  return !((level \u003d\u003d 1) \u0026\u0026 (size \u0026 1));",
+      "parentUuid": "31652b8d_37e296b0",
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c54669c_01cc1d95",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 1
