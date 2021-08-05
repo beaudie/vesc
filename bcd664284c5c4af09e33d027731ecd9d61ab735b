@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3f9325_920a30c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-08-05T22:01:58Z",
+      "side": 1,
+      "message": "I tested the proposed change using the app from which the test case was derived, and this does resolve the problem. Thanks again for the quick attention to this issue.",
+      "revId": "bcd664284c5c4af09e33d027731ecd9d61ab735b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
