@@ -317,6 +317,30 @@
       },
       "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1584b12_943e837f",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T19:20:15Z",
+      "side": 1,
+      "message": "OK I see your point. I\u0027m fine if we condense them, I just don\u0027t want to slow down the review too much if people have different opinions.",
+      "parentUuid": "62abdcce_e939fb03",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
