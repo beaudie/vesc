@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82f6c134_acb8b8d9",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1868,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-05T01:00:51Z",
+      "side": 1,
+      "message": "Reverted.",
+      "parentUuid": "e5f30c4c_957e0811",
+      "range": {
+        "startLine": 1866,
+        "startChar": 0,
+        "endLine": 1868,
+        "endChar": 54
+      },
+      "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d33a028b_5e001a53",
@@ -71,6 +95,24 @@
       "writtenOn": "2021-07-29T20:08:23Z",
       "side": 1,
       "message": "This function should be unnecessary and can be removed.   This is already handled by ValidateProgramPipelineAttachedPrograms(), which returns the INVALID_OPERATION as part of ValidateDrawStates() and should prevent making it so far into handling the draw call in the first place.\n\nIf that\u0027s not working, we need to clean that path up instead of duplicating the checking here.",
+      "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35a3bdb7_80ef2ac5",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-05T01:00:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d33a028b_5e001a53",
       "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +134,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aced8b56_773b6716",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-05T01:00:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d536bb02_7dcf1e2c",
+      "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f6317f9_aab3d000",
@@ -105,6 +165,24 @@
       "writtenOn": "2021-07-29T20:08:23Z",
       "side": 1,
       "message": "Another reason to remove verifyProgramStagesUsage() and fix ValidateProgramPipelineAttachedPrograms() is that this verifyProgramStagesUsage() doesn\u0027t update the info log string, so there\u0027s no error message that is returned to the user why the operation failed.",
+      "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b493ae66_96669001",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-05T01:00:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f6317f9_aab3d000",
       "revId": "4684e8942896105166e7a3b802bcbf5d33f62321",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
