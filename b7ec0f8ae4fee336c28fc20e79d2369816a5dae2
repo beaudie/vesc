@@ -16,6 +16,29 @@
       "message": "Shabi, Jamie: please review.\n\nThis will fail the s3tc and s3tc-srgb conformance tests on all the trybots; still running a dry run to see what other failures there might be.\n",
       "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b3b8803_ad81ba28",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-05T02:26:11Z",
+      "side": 1,
+      "message": "Is the check here really helpful for non-zero levels? If Size0 is mip0\u0027s size and Size0\u003e\u003elevel \u003d\u003d Size, that doesn\u0027t mean that Size\u003c\u003clevel \u003d\u003d Size0. ValidCompressedBaseLevelForWebGL is testing Size\u003c\u003clevel, but that\u0027s not necessarily the actual mip0 size. Given that it\u0027s a shift left (and block size is probably like 4 or 8), that would pass for any level \u003e\u003d 2 or 3.\n\nThe bug says:\n\n\u003e an implicit requirement was added that the 0th level of mipmapped compressed textures must be block-sized\n\nIsn\u0027t it sufficient to only perform this test for level\u003d\u003d0?",
+      "range": {
+        "startLine": 1063,
+        "startChar": 62,
+        "endLine": 1064,
+        "endChar": 48
+      },
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
