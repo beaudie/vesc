@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2591c98c_94957d5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T16:59:26Z",
+      "side": 1,
+      "message": "LGTM once the CQ errors are cleaned up.",
+      "revId": "96a0b625f814a0c73b40e8538acda2b505d938d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a50f1bd_a3777900",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T16:59:26Z",
+      "side": 1,
+      "message": "While this return good status to the caller that the link succeeded, the PPO isn\u0027t marked \"linked\" until the \u0027mState.mIsLinked \u003d true\u0027 below, which isn\u0027t being executed due to the return.\n\nSince the PPO isn\u0027t actually doing all of the link work and validation and isn\u0027t \"linked\" in traditional sense, it\u0027s probably better to just update/remove this part of the comment.",
+      "range": {
+        "startLine": 550,
+        "startChar": 38,
+        "endLine": 550,
+        "endChar": 67
+      },
+      "revId": "96a0b625f814a0c73b40e8538acda2b505d938d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af671089_fc58665c",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T16:59:26Z",
+      "side": 1,
+      "message": "Can this be removed, or is it necessary?   I\u0027d expect the error message to have been updated in ValidateProgramPipelineAttachedPrograms().",
+      "range": {
+        "startLine": 657,
+        "startChar": 0,
+        "endLine": 663,
+        "endChar": 5
+      },
+      "revId": "96a0b625f814a0c73b40e8538acda2b505d938d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

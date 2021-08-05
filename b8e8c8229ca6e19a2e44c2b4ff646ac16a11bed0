@@ -34,6 +34,24 @@
       "parentUuid": "6285468a_fed805ac",
       "revId": "b8e8c8229ca6e19a2e44c2b4ff646ac16a11bed0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "839464e8_55da7037",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-05T16:59:26Z",
+      "side": 0,
+      "message": "Ah, right, the PPO link occurs in ValidateDrawStates(), which occurs before we make it to noopDraw() in (for example) drawArrays().",
+      "parentUuid": "7805293b_528f9d33",
+      "revId": "b8e8c8229ca6e19a2e44c2b4ff646ac16a11bed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
