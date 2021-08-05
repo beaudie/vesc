@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5105a560_bdd6115f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-05T12:30:35Z",
+      "side": 1,
+      "message": "I think the early exit in the first scenario prevents potential unwanted allocation attempt. Still, the only difference between these validation functions is that the new one disallows odd sizes for mip level 1.",
+      "parentUuid": "48ab7911_8a94187b",
+      "range": {
+        "startLine": 1063,
+        "startChar": 62,
+        "endLine": 1064,
+        "endChar": 48
+      },
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c54669c_01cc1d95",
