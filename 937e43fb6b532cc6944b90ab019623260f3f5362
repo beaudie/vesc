@@ -204,6 +204,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a49666ee_c12e3cff",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T12:20:46Z",
+      "side": 1,
+      "message": "nit: can we use inifinite tense everywhere and call this COMPILE_FAIL?",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 18
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7996c04_7ad8628d",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T12:20:46Z",
+      "side": 1,
+      "message": "nit: can we use inifinite tense everywhere and call this CRASH?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 11
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dfd29427_0dae0a71",
         "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
         "patchSetId": 17
@@ -215,6 +261,30 @@
       "writtenOn": "2021-08-04T21:45:44Z",
       "side": 1,
       "message": "This sounds a little concerning.   What does this actually mean in practice?   We can\u0027t know what tests are in a batch, since that\u0027s determined a run-time and will change as tests are added/removed/enabled/disabled.\n\nTaking a step back, I don\u0027t understand why TIMEOUT, COMPILE_FAILED, and CRASHED exist in the first place since any tests that fail in one of those ways should be marked with one of the SKIPs.   There also aren\u0027t any tests with any of those, so we can\u0027t see how they actually behave.   Can they be removed?",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff3af75_f57b5828",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-05T12:20:46Z",
+      "side": 1,
+      "message": "re groups: This is intentional, and it\u0027s just the way the script is designed. We don\u0027t run any bisection to try and find any individual crashes, and even if you wanted to ask Gert to fix that, we shouldn\u0027t complicate this change with that fix.\n\nI\u0027m fine with leaving CRASH/etc since they could pop up if we add new test suites. The script detects these different cases.",
+      "parentUuid": "dfd29427_0dae0a71",
       "range": {
         "startLine": 29,
         "startChar": 0,
