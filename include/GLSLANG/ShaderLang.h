@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 266
+#define ANGLE_SH_VERSION 268
 
 enum ShShaderSpec
 {
@@ -72,11 +72,9 @@ enum ShShaderOutput
     // Output SPIR-V for the Vulkan backend.
     SH_SPIRV_VULKAN_OUTPUT = 0x8B4B,
 
-    // Output SPIR-V to be cross compiled to Metal.
-    SH_SPIRV_METAL_OUTPUT = 0x8B4C,
-
-    // Output for MSL
-    SH_MSL_METAL_OUTPUT = 0x8B4D,
+    // Output SPIR-V to be cross compiled to Metal or MSL directly, based on
+    // the SH_GENERATE_METAL_DIRECTLY flag.
+    SH_METAL_OUTPUT = 0x8B4C,
 };
 
 // Compile options.
@@ -334,6 +332,9 @@ const ShCompileOptions SH_INIT_FRAGMENT_OUTPUT_VARIABLES = UINT64_C(1) << 57;
 // Transitory flag to select between producing SPIR-V directly vs using glslang.  Ignored in
 // non-assert-enabled builds to avoid increasing ANGLE's binary size while both generators coexist.
 const ShCompileOptions SH_GENERATE_SPIRV_DIRECTLY = UINT64_C(1) << 58;
+
+// Transitory flag to select between producing SPIR-V or MSL.
+const ShCompileOptions SH_GENERATE_METAL_DIRECTLY = UINT64_C(1) << 59;
 
 // The 64 bits hash function. The first parameter is the input string; the
 // second parameter is the string length.

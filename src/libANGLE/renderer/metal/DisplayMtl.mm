@@ -978,6 +978,12 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), forceNonCSBaseMipmapGeneration, isIntel());
 
+    const bool directToMetal = angle::GetBoolEnvironmentVar("ANGLE_USE_MSL_COMPILER");
+#ifdef ANGLE_ENABLE_ASSERTS
+    fprintf(stderr, "Shader compiler output: %s\n", directToMetal ? "Metal" : "SPIR-V");
+#endif
+    ANGLE_FEATURE_CONDITION((&mFeatures), directMetalGeneration, directToMetal);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesMtl(platform, &mFeatures);
 

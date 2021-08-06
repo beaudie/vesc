@@ -118,7 +118,7 @@ TEST_P(APPLEClipDistanceTest, CompileSucceedsMetal)
     mResources.APPLE_clip_distance = 1;
     mResources.MaxClipDistances    = 8;
 
-    InitializeCompiler(SH_SPIRV_METAL_OUTPUT);
+    InitializeCompiler(SH_METAL_OUTPUT);
     EXPECT_TRUE(TestShaderCompile(EXTPragma));
 }
 #endif

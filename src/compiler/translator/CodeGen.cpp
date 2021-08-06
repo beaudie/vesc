@@ -21,11 +21,8 @@
 #endif  // ANGLE_ENABLE_VULKAN
 
 #ifdef ANGLE_ENABLE_METAL
-#    include "compiler/translator/TranslatorMetalDirect.h"
-#endif  // ANGLE_ENABLE_METAL
-
-#ifdef ANGLE_ENABLE_METAL_SPIRV
 #    include "compiler/translator/TranslatorMetal.h"
+#    include "compiler/translator/TranslatorMetalDirect.h"
 #endif  // ANGLE_ENABLE_METAL_SPIRV
 
 #include "compiler/translator/util.h"
@@ -71,13 +68,12 @@ TCompiler *ConstructCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput 
 #ifdef ANGLE_ENABLE_METAL_SPIRV
     if (IsOutputMetal(output))
     {
+        // TODO: there's no access to flags here.  To make this work, need to create a single
+        // Translator class for both metal-through-SPIR-V and direct-metal generators.  Inside the
+        // class, the SH_GENERATE_METAL_DIRECTLY flag should be used to choose the right generator
+        // at run time.
         return new TranslatorMetal(type, spec);
-    }
-#endif
-#ifdef ANGLE_ENABLE_METAL
-    if (IsOutputMetalDirect(output))
-    {
-        return new TranslatorMetalDirect(type, spec, output);
+        // return new TranslatorMetalDirect(type, spec, output);
     }
 #endif  // ANGLE_ENABLE_METAL
 

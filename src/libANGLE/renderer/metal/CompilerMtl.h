@@ -22,8 +22,6 @@ class CompilerMtl : public CompilerImpl
     ~CompilerMtl() override;
 
     ShShaderOutput getTranslatorOutputType() const override;
-
-    static bool useDirectToMSLCompiler();
 };
 
 }  // namespace rx

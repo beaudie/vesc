@@ -415,8 +415,10 @@ void Shader::resolveCompile()
     }
 
     const ShShaderOutput outputType = mCompilingState->shCompilerInstance.getShaderOutputType();
+    // TODO: should be able to tell if direct to metal is used, because with direct to metal the
+    // output is not actually binary.
     const bool isBinaryOutput =
-        outputType == SH_SPIRV_VULKAN_OUTPUT || outputType == SH_SPIRV_METAL_OUTPUT;
+        outputType == SH_SPIRV_VULKAN_OUTPUT || outputType == SH_METAL_OUTPUT;
 
     if (isBinaryOutput)
     {

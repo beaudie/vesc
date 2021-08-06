@@ -140,6 +140,11 @@ std::shared_ptr<WaitableCompileEvent> ShaderMtl::compile(const gl::Context *cont
     // IF SPIRV
     compileOptions |= SH_ADD_VULKAN_XFB_EMULATION_SUPPORT_CODE;
 
+    if (contextMtl->getDisplay()->getFeatures().directMetalGeneration.enabled)
+    {
+        compileOptions |= SH_GENERATE_METAL_DIRECTLY;
+    }
+
     return compileImplMtl(context, compilerInstance, getState().getSource(),
                           compileOptions | options);
 }

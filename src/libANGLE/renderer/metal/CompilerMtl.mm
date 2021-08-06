@@ -21,23 +21,7 @@ CompilerMtl::~CompilerMtl() {}
 
 ShShaderOutput CompilerMtl::getTranslatorOutputType() const
 {
-#if ANGLE_ENABLE_METAL_SPIRV
-    if (useDirectToMSLCompiler())
-    {
-        return SH_MSL_METAL_OUTPUT;
-    }
-    else
-    {
-        return SH_SPIRV_METAL_OUTPUT;
-    }
-#else
     return SH_MSL_METAL_OUTPUT;
-#endif
-}
-
-bool CompilerMtl::useDirectToMSLCompiler()
-{
-    return false;
 }
 
 }  // namespace rx
