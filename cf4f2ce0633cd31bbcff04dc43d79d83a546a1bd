@@ -16,6 +16,23 @@
       "message": "Shabi: please review. Hoping this is small enough that you can +2 it yourself. Please CQ for me if so. Thanks.\n\nThis will make it easier to diagnose regressions as we continue upstreaming the direct-to-Metal compiler.\n",
       "revId": "cf4f2ce0633cd31bbcff04dc43d79d83a546a1bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b12de1a4_6e6db88b",
+        "filename": "src/libANGLE/renderer/metal/CompilerMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-06T14:06:39Z",
+      "side": 1,
+      "message": "Just one suggestion. Please add a bool like `mUseDirectToMSLCompiler` to ContextMtl and initialize it in the constructor. You can do logging at the same time. No need for `static` and the tracking of whether the log was output or not.\n\nYou can remove this function instead and in `ProgramMtl::linkImpl` just do:\n\n    ContextMtl *contextMtl \u003d mtl::GetImpl(glContext);\n    if (CompilerMtl::useDirectToMSLCompiler()) ...",
+      "revId": "cf4f2ce0633cd31bbcff04dc43d79d83a546a1bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
