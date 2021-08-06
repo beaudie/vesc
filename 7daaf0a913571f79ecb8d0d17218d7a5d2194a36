@@ -34,6 +34,23 @@
       "parentUuid": "d96be9cc_5a8066b2",
       "revId": "7daaf0a913571f79ecb8d0d17218d7a5d2194a36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e971a856_3f97c4d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T12:34:19Z",
+      "side": 1,
+      "message": "Shabi should we revert this while we wait for the Clang fix to unblock the roll?",
+      "revId": "7daaf0a913571f79ecb8d0d17218d7a5d2194a36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
