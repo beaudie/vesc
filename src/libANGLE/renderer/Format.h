@@ -54,6 +54,9 @@ struct Format final : private angle::NonCopyable
     constexpr bool hasDepthOrStencilBits() const;
     constexpr bool isLUMA() const;
     constexpr bool isBGRA() const;
+    constexpr bool isD24ToD32(const angle::Format &angleFormat) const;
+    constexpr bool isAlpha8toR8(const angle::Format &angleFormat) const;
+    constexpr bool isAlpha8toR8G8(const angle::Format &angleFormat) const;
 
     constexpr bool isSint() const;
     constexpr bool isUint() const;
@@ -198,6 +201,22 @@ constexpr bool Format::isBGRA() const
 {
     return id == FormatID::B8G8R8A8_UNORM || id == FormatID::B8G8R8A8_UNORM_SRGB ||
            id == FormatID::B8G8R8A8_TYPELESS || id == FormatID::B8G8R8A8_TYPELESS_SRGB;
+}
+
+constexpr bool Format::isD24ToD32(const angle::Format &angleFormat) const
+{
+    return (id == FormatID::D32_FLOAT_S8X24_UINT || id == FormatID::D32_FLOAT) &&
+           angleFormat.depthBits == 24;
+}
+
+constexpr bool Format::isAlpha8toR8(const angle::Format &angleFormat) const
+{
+    return id == FormatID::R8_UNORM && (angleFormat.redBits == 0 && angleFormat.alphaBits > 0);
+}
+
+constexpr bool Format::isAlpha8toR8G8(const angle::Format &angleFormat) const
+{
+    return id == FormatID::R8G8_UNORM && (angleFormat.redBits == 0 && angleFormat.alphaBits > 0);
 }
 
 constexpr bool Format::isSint() const

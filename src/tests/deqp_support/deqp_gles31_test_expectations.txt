@@ -174,6 +174,30 @@
 // Flaky timeouts on SwANGLE
 1173237 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.precision.refract.lowp_compute.vec4 = SKIP
 
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.formats.compressed_r11_eac.gather* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.formats.compressed_rg11_eac.gather* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_unorm_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.linear_unorm_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_snorm_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.linear_snorm_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_int_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_uint_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_srgb_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.linear_srgb_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_uint_stencil = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_float_depth_uint_stencil_sample_stencil = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_unorm_depth_uint_stencil_sample_stencil = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.nearest_compressed_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.range_clamp.linear_compressed_color = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.per_axis_wrap_mode.texture_2d.unorm_depth.gather.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth_component16.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth_component24.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth24_stencil8.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth32f_stencil8.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.formats.rgb565.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.formats.rgb5_a1.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.formats.depth_component16.gather_size* = SKIP
+
 ////
 //// General Vulkan expectations
 ////
