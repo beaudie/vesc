@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f47fdd7_cc5f590b",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T01:15:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a50f1bd_a3777900",
+      "range": {
+        "startLine": 550,
+        "startChar": 38,
+        "endLine": 550,
+        "endChar": 67
+      },
+      "revId": "96a0b625f814a0c73b40e8538acda2b505d938d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af671089_fc58665c",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-05T16:59:26Z",
       "side": 1,
       "message": "Can this be removed, or is it necessary?   I\u0027d expect the error message to have been updated in ValidateProgramPipelineAttachedPrograms().",
+      "range": {
+        "startLine": 657,
+        "startChar": 0,
+        "endLine": 663,
+        "endChar": 5
+      },
+      "revId": "96a0b625f814a0c73b40e8538acda2b505d938d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0986a98f_0574681a",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T01:15:07Z",
+      "side": 1,
+      "message": "This is necessary as the validation info log is reset at the start of the ProgramPipeline::validate function and ValidateProgramPipelineAttachedPrograms doesn\u0027t write into it",
+      "parentUuid": "af671089_fc58665c",
       "range": {
         "startLine": 657,
         "startChar": 0,
