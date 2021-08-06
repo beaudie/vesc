@@ -488,6 +488,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f48434f2_15883883",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T12:26:05Z",
+      "side": 1,
+      "message": "I\u0027m fine with it as-is. LGTM.",
+      "parentUuid": "38246fe8_a46d08f1",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 11
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfd29427_0dae0a71",
@@ -597,6 +621,30 @@
       "side": 1,
       "message": "My suggestion would be: Keep as proposed here for now. The next CL introduces an additional command line parameter to actually run these tests, so on top of that I\u0027d add another CL that makes it possible to add the expectation to the test when it is not skipped like \n\nnnnn : test-name \u003d SKIP_FOR_CAPTURE CRASHED\n\nWith that we would have an annotation why the SKIP_FOR_CAPTURE was added. We might consider to also force a batch size of one if the script is run with this additional flag to avoid that these failures carry over to other tests when more than one test is run with the flag.",
       "parentUuid": "d1584b12_943e837f",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc102e3d_4afddd2a",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T12:26:05Z",
+      "side": 1,
+      "message": "We want zero or one expectations per test only. Not sure if you were proposing using two expectations? Anyway it would be nice if we could land this CL.",
+      "parentUuid": "984030ec_30524ec4",
       "range": {
         "startLine": 29,
         "startChar": 0,
