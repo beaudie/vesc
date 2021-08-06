@@ -86,6 +86,24 @@
       "parentUuid": "1781e821_f3d0f2c7",
       "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e5a36a5_ec647f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-06T21:55:36Z",
+      "side": 1,
+      "message": "From what I read in the bug, and in the code, the extension was enabled and affecting the tests with the GL back-end.  I think that the changes that Jeff did with this re-land CL should fix that.  It would be nice to have/run some tests to be sure though.\n\nJeff, can you create a simple end2end test that ensures the extension is only there for the Vulkan back-end?",
+      "parentUuid": "7a77b2e0_23a58a31",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
