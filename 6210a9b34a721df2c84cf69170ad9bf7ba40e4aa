@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ea8decd_025eb85e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-06T18:00:36Z",
+      "side": 1,
+      "message": "Moved to: https://chromium-review.googlesource.com/c/angle/angle/+/3076825",
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b13aa0d8_d9806dce",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-08-05T23:19:59Z",
       "side": 1,
       "message": "Why not make this a no-op?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 0
+      },
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9078f756_1013db1f",
+        "filename": "src/libANGLE/renderer/gl/MemoryObjectGL.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-06T18:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b13aa0d8_d9806dce",
       "range": {
         "startLine": 45,
         "startChar": 0,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c9a9d9_6a2792cb",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-06T18:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac20d94b_06d302bc",
+      "range": {
+        "startLine": 84,
+        "startChar": 27,
+        "endLine": 84,
+        "endChar": 87
+      },
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d3895b8_d8fe96ef",
@@ -77,6 +142,30 @@
       "writtenOn": "2021-08-05T23:19:59Z",
       "side": 1,
       "message": "Seems like this could cause the GL back-end to behave differently with an AHB that has the protected bit set.  Why not just set:\n\nmHasProtectedContent \u003d false;",
+      "range": {
+        "startLine": 27,
+        "startChar": 36,
+        "endLine": 30,
+        "endChar": 88
+      },
+      "revId": "6210a9b34a721df2c84cf69170ad9bf7ba40e4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c31e461c_f100b131",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-06T18:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d3895b8_d8fe96ef",
       "range": {
         "startLine": 27,
         "startChar": 36,
