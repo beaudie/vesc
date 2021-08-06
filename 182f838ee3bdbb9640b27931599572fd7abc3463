@@ -33,6 +33,24 @@
       "message": "Ken: a pre-commit test in angle_end2end_tests would be appreciated.",
       "revId": "182f838ee3bdbb9640b27931599572fd7abc3463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57fe5a23_8ee9046c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-06T20:43:36Z",
+      "side": 1,
+      "message": "Working on this with Shabi in a follow-up CL. He\u0027s advised me how to turn on the direct-to-Metal translator as a feature rather than as a different code gen target in CompilerMtl.",
+      "parentUuid": "fbf06965_f0313176",
+      "revId": "182f838ee3bdbb9640b27931599572fd7abc3463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
