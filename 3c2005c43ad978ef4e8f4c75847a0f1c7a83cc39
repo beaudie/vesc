@@ -70,6 +70,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba2dc009_e47980a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:57:21Z",
+      "side": 1,
+      "message": "I think all complexity comes from tracking writeSerial, which I think can be simplified greatly what I just commented. The other option is to utilize mHostVisibleBufferPool mechanism. Basically you detect this case (that mapBuffer is called and GPU access is pending and wait is longer than 5ms (you pick)), then you just decided to switch to mHostVisibleBufferPool mode, just treat it exactly like the mBuffer is device local memory and CPU is inaccessiable. The mHostVisibleBufferPool code path always map mHostVisibleBufferPool to user and issue a DMA copy to mBuffer. I think doing this way the fix is going to be very local to BufferVk.cpp, might be a cleaner fix. The downside is first mapBuffer call is more expensive.\n\nyea, ddoc might be worthwhile so that we can avoid poluting CL for long discussion.",
+      "parentUuid": "a2828fb0_87654d3b",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 14
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "411c92a7_9432d15c",
