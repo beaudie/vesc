@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7111254f_1aa0d248",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2163,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T17:19:25Z",
+      "side": 1,
+      "message": "Thanks for pointing out. I think you are right. This also needs GL_BUFFER_UPDATE_BARRIER_BIT bit as well, since the BufferData call also occurs on the same OpenGL buffer (driver may doing a DMA instead of reallocate storage).",
+      "parentUuid": "31803aff_f001aaf7",
+      "revId": "61287f8590205f27d16828299a83d81ce795497b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd4a6730_ff2aed6b",
@@ -66,6 +84,24 @@
       "writtenOn": "2021-08-06T14:11:45Z",
       "side": 1,
       "message": "Missing barrier before the map:\n\n    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT)",
+      "revId": "61287f8590205f27d16828299a83d81ce795497b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a86d4a54_3079bb0b",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2167,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T17:19:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd4a6730_ff2aed6b",
       "revId": "61287f8590205f27d16828299a83d81ce795497b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
