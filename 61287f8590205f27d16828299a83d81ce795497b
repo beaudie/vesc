@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e84fda2b_ab3676f4",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2163,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T17:53:26Z",
+      "side": 1,
+      "message": "This still fail on Nexus OpenGLES driver after memory barrier, sounds like real driver bug.",
+      "parentUuid": "7111254f_1aa0d248",
+      "revId": "61287f8590205f27d16828299a83d81ce795497b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd4a6730_ff2aed6b",
