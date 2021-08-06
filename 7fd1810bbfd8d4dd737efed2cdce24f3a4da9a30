@@ -16,6 +16,24 @@
       "message": "Doesn\u0027t this break the optimization to resolve with a subpass?",
       "revId": "7fd1810bbfd8d4dd737efed2cdce24f3a4da9a30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75b2a2e6_7f36c805",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4267,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-06T17:56:42Z",
+      "side": 1,
+      "message": "Don\u0027t we have a counter test for that? It shouldn\u0027t nevertheless because `onRenderPassFinished` only sets `mRenderPassCommandBuffer \u003d nullptr`, but doesn\u0027t actually close the render pass. And `restoreFinishedRenderPass` basically recovers this variable:\n\n    void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)\n    {\n        if (mRenderPassCommandBuffer !\u003d nullptr)\n        {\n            // The render pass isn\u0027t finished yet, so nothing to restore.\n            return;\n        }\n    \n        if (mRenderPassCommands-\u003estarted() \u0026\u0026\n            mRenderPassCommands-\u003egetFramebufferHandle() \u003d\u003d framebuffer-\u003egetHandle())\n        {\n            // There is already a render pass open for this framebuffer, so just restore the\n            // pointer rather than starting a whole new render pass. One possible path here\n            // is if the draw framebuffer binding has changed from FBO A -\u003e B -\u003e A, without\n            // any commands that started a new render pass for FBO B (such as a clear being\n            // issued that was deferred).\n            mRenderPassCommandBuffer \u003d \u0026mRenderPassCommands-\u003egetCommandBuffer();\n            ASSERT(hasStartedRenderPass());\n        }\n    }",
+      "parentUuid": "c14dd5b0_0c688d8d",
+      "revId": "7fd1810bbfd8d4dd737efed2cdce24f3a4da9a30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
