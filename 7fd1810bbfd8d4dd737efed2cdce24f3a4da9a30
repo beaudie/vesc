@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c14dd5b0_0c688d8d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4267,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T16:58:54Z",
+      "side": 1,
+      "message": "Doesn\u0027t this break the optimization to resolve with a subpass?",
+      "revId": "7fd1810bbfd8d4dd737efed2cdce24f3a4da9a30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
