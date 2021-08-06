@@ -11,6 +11,7 @@
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 #include "common/aligned_memory.h"
+#include "common/mathutil.h"
 #include "common/vulkan/vk_google_filtering_precision.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
@@ -3211,10 +3212,40 @@ void SamplerDesc::update(ContextVk *contextVk,
         (samplerState.getBorderColor().type == angle::ColorGeneric::Type::Float) ? 0 : 1;
 
     mBorderColor = samplerState.getBorderColor().colorF;
-    if (vkFormat.intendedFormatID != angle::FormatID::NONE)
+
+    const Format &format             = contextVk->getRenderer()->getFormat(formatID);
+    const angle::Format &angleFormat = format.intendedFormat();
+
+    // Texture border color adjustment in case of LUMA and depth/stencil formats
+    switch (format.actualImageFormatID)
     {
-        LoadTextureBorderFunctionInfo loadFunction = vkFormat.textureBorderLoadFunctions();
-        loadFunction.loadFunction(mBorderColor);
+        case angle::FormatID::R8_UNORM:
+            if (angleFormat.redBits == 0 && angleFormat.alphaBits > 0)
+            {
+                mBorderColor.red   = mBorderColor.alpha;
+                mBorderColor.alpha = 0;
+            }
+            break;
+        case angle::FormatID::R8G8_UNORM:
+            if (angleFormat.redBits == 0 && angleFormat.alphaBits > 0)
+            {
+                mBorderColor.green = mBorderColor.alpha;
+                mBorderColor.alpha = 0;
+            }
+            break;
+        case angle::FormatID::D32_FLOAT_S8X24_UINT:
+        case angle::FormatID::D32_FLOAT:
+
+            if (angleFormat.depthBits == 24)
+            {
+                mBorderColor.red   = gl::clamp01(mBorderColor.red);
+                mBorderColor.green = gl::clamp01(mBorderColor.green);
+                mBorderColor.blue  = gl::clamp01(mBorderColor.blue);
+                mBorderColor.alpha = gl::clamp01(mBorderColor.alpha);
+            }
+            break;
+        default:
+            break;
     }
 
     mReserved = 0;
