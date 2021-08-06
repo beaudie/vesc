@@ -745,7 +745,8 @@ Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
       mImplObserver(this, rx::kTextureImageImplObserverMessageIndex),
       mBufferObserver(this, kBufferSubjectIndex),
       mBoundSurface(nullptr),
-      mBoundStream(nullptr)
+      mBoundStream(nullptr),
+      mInSyncState(false)
 {
     mImplObserver.bind(mTexture);
 
@@ -2046,7 +2047,9 @@ GLuint Texture::getNativeID() const
 angle::Result Texture::syncState(const Context *context, Command source)
 {
     ASSERT(hasAnyDirtyBit() || source == Command::GenerateMipmap);
+    mInSyncState = true;
     ANGLE_TRY(mTexture->syncState(context, mDirtyBits, source));
+    mInSyncState = false;
     mDirtyBits.reset();
     return angle::Result::Continue;
 }
@@ -2245,9 +2248,12 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             }
             break;
         case angle::SubjectMessage::SubjectChanged:
-            mState.mInitState = InitState::MayNeedInit;
-            signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
-            onStateChange(angle::SubjectMessage::ContentsChanged);
+            if (!mInSyncState)
+            {
+                mState.mInitState = InitState::MayNeedInit;
+                signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
+                onStateChange(angle::SubjectMessage::ContentsChanged);
+            }
 
             // Notify siblings that we are dirty.
             if (index == rx::kTextureImageImplObserverMessageIndex)
