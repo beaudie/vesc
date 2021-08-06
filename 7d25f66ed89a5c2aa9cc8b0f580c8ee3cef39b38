@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b08a0176_f7cbc3c5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T16:34:10Z",
+      "side": 1,
+      "message": "suggestions:\n\n1. use decltype to define the types\n2. don\u0027t use inline definition+declaration - define a type here and make the constructor take the boolean and the constructor init the members\n3. declare the struct in the scope that uses it then let it get cleaned up",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "revId": "7d25f66ed89a5c2aa9cc8b0f580c8ee3cef39b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
