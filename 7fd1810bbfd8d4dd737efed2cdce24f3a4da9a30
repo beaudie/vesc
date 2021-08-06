@@ -34,6 +34,24 @@
       "parentUuid": "c14dd5b0_0c688d8d",
       "revId": "7fd1810bbfd8d4dd737efed2cdce24f3a4da9a30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50a3ce17_e9a0352d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4267,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T19:25:25Z",
+      "side": 1,
+      "message": "\u003e Don\u0027t we have a counter test for that?\n\nYup: VulkanPerformanceCounterTest_ES31::MultisampleResolveWithBlit()\n\n\u003e And `restoreFinishedRenderPass` basically recovers this variable:\n\nAh, yeah, I missed the call to restoreFinishedRenderPass() just before the hasStartedRenderPassWithFramebuffer() check in FramebufferVk::blit().",
+      "parentUuid": "75b2a2e6_7f36c805",
+      "revId": "7fd1810bbfd8d4dd737efed2cdce24f3a4da9a30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
