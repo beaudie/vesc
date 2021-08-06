@@ -2448,9 +2448,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // http://issuetracker.google.com/173636783 Qualcomm driver appears having issues with
     // specialization constant
-    ANGLE_FEATURE_CONDITION(&mFeatures, forceDriverUniformOverSpecConst,
-                            isQualcomm && mPhysicalDeviceProperties.driverVersion <
-                                              kPixel4DriverWithWorkingSpecConstSupport);
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceDriverUniformOverSpecConst, true);
 
     // The compute shader used to generate mipmaps uses a 256-wide workgroup.  This path is only
     // enabled on devices that meet this minimum requirement.  Furthermore,
