@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b5053d9e_7d933e91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0263eb80_74a4e0d4",
+      "range": {
+        "startLine": 19,
+        "startChar": 46,
+        "endLine": 19,
+        "endChar": 53
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a548a61c_6b384daa",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 17
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64cfcff6_37e9fe21",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "I\u0027d rather keep it as is, because initializing (an otherwise) constant dictionary with the curly brace syntax is kind of the standard way for doing it in Python.",
+      "parentUuid": "d1d32b23_4189bf9b",
+      "range": {
+        "startLine": 882,
+        "startChar": 0,
+        "endLine": 882,
+        "endChar": 19
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "86a75c4a_caad2755",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 17
@@ -77,6 +125,30 @@
       "writtenOn": "2021-08-03T21:06:08Z",
       "side": 1,
       "message": "nit: platform_map",
+      "range": {
+        "startLine": 884,
+        "startChar": 4,
+        "endLine": 884,
+        "endChar": 15
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c70b2354_d57969b4",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86a75c4a_caad2755",
       "range": {
         "startLine": 884,
         "startChar": 4,
@@ -100,6 +172,30 @@
       "writtenOn": "2021-08-03T21:06:08Z",
       "side": 1,
       "message": "nit: needs a space",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85a4bf12_0dd47af6",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d058e93f_ef4b7e3d",
       "range": {
         "startLine": 9,
         "startChar": 3,
@@ -156,6 +252,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db28c99_04474776",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "872a3a8a_82eaa8a6",
+      "range": {
+        "startLine": 17,
+        "startChar": 20,
+        "endLine": 17,
+        "endChar": 35
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd69aabc_0bf083c8",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "I agree that SKIPPED is better, because it was *skipped by gtest* ..., and  \"GroupedResult\" also defines \"Skipped\". Changed accordingly.",
+      "parentUuid": "58ff7224_4cfb0a2b",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 17
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "898ba21b_728727ae",
@@ -169,6 +313,30 @@
       "writtenOn": "2021-08-03T21:06:08Z",
       "side": 1,
       "message": "nit: expected",
+      "range": {
+        "startLine": 23,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 34
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "956019e9_36645561",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "898ba21b_728727ae",
       "range": {
         "startLine": 23,
         "startChar": 26,
@@ -225,6 +393,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42f749ea_dd8ed292",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77beebbf_e2050b7b",
+      "range": {
+        "startLine": 25,
+        "startChar": 67,
+        "endLine": 25,
+        "endChar": 75
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa4a5c2_376d3df4",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a49666ee_c12e3cff",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 18
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7996c04_7ad8628d",
@@ -238,6 +454,30 @@
       "writtenOn": "2021-08-05T12:20:46Z",
       "side": 1,
       "message": "nit: can we use inifinite tense everywhere and call this CRASH?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 11
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38246fe8_a46d08f1",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "I wanted to keep it in line with the lowercase values provided in \"GroupedResult\", which make more sense to me, because this would be an actual results, i.e. something that has happened.\n\nThat said, can we shift this discussion about the finer details of the English language to a later point in time and land this? \n\nI\u0027d really like to merge this sooner rather than later, because it feels like every time I rebase I have to update the expectations list because something was fixed or a test was added.",
+      "parentUuid": "b7996c04_7ad8628d",
       "range": {
         "startLine": 27,
         "startChar": 4,
@@ -333,6 +573,30 @@
       "side": 1,
       "message": "OK I see your point. I\u0027m fine if we condense them, I just don\u0027t want to slow down the review too much if people have different opinions.",
       "parentUuid": "62abdcce_e939fb03",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "984030ec_30524ec4",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-06T09:14:26Z",
+      "side": 1,
+      "message": "My suggestion would be: Keep as proposed here for now. The next CL introduces an additional command line parameter to actually run these tests, so on top of that I\u0027d add another CL that makes it possible to add the expectation to the test when it is not skipped like \n\nnnnn : test-name \u003d SKIP_FOR_CAPTURE CRASHED\n\nWith that we would have an annotation why the SKIP_FOR_CAPTURE was added. We might consider to also force a batch size of one if the script is run with this additional flag to avoid that these failures carry over to other tests when more than one test is run with the flag.",
+      "parentUuid": "d1584b12_943e837f",
       "range": {
         "startLine": 29,
         "startChar": 0,
