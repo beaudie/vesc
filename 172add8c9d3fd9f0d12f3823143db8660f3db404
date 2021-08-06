@@ -68,6 +68,24 @@
       "message": "comment. Land, if gap is covered.",
       "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e037dcf7_3c1a31bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T19:31:45Z",
+      "side": 1,
+      "message": "It\u0027s not. Normally it would be up to the CL author (you) to ensure when you re-land that the coverage hold is filled with a new test.",
+      "parentUuid": "1781e821_f3d0f2c7",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
