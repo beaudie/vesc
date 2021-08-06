@@ -89,6 +89,121 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12db113e_b961669b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "I think you can also add `\u0026\u0026 mBuffer-\u003eisHostVisible()` here as well. If mBuffer is not host visible, we can\u0027t use CPU to do copy, there is no need for us to go through these. We should instead go into handleDeviceLocalBufferMap().",
+      "range": {
+        "startLine": 606,
+        "startChar": 8,
+        "endLine": 607,
+        "endChar": 41
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7555b271_42606dd6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "These logic can be skipped if (access \u0026 GL_MAP_INVALIDATE_BUFFER_BIT) !\u003d 0",
+      "range": {
+        "startLine": 609,
+        "startChar": 13,
+        "endLine": 629,
+        "endChar": 13
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee90ba74_b0e1e0e1",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "Would\u0027t it hit assertion in acquireBufferHelper because mBuffer is not null?\nYou may want to look into acquireAndUpdate to see if you can use that instead.",
+      "range": {
+        "startLine": 633,
+        "startChar": 26,
+        "endLine": 633,
+        "endChar": 45
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d1772d_06e6d821",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "Is it legal to use it in textureBuffer as write and mean time also use the buffer as vertex buffer? Would this be undefined behavior? I am wondering if this if check is needed or not. This check is not cheap.",
+      "range": {
+        "startLine": 1712,
+        "startChar": 17,
+        "endLine": 1712,
+        "endChar": 32
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fd20a8d_04cce0fe",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "If not been used as R and W, what it is used for? Sounds like can be treated just like read or ReadAndWrite?",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec065274_916d6532",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 7
@@ -105,6 +220,75 @@
         "startChar": 0,
         "endLine": 44,
         "endChar": 0
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4680db39_382721ff",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "The easiest way I think to do this is keep serial as is, you just add a new serial called bufferWriteSerial that specically used to track buffer writes. That way most of the diffs relatyed to retain() call is not needed. See my other comment in retain as well.",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 23
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae7a0d30_9677feee",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "I would suggest keep retain as is, which means retain as readAndWrite. Then most of the diff related to retain is not needed.",
+      "range": {
+        "startLine": 303,
+        "startChar": 9,
+        "endLine": 303,
+        "endChar": 15
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d8b7136_c076666e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T21:47:14Z",
+      "side": 1,
+      "message": "You keep a new list in contextVk, lets call mBufferResourceWriteList. Here you add it  to mBufferResourceWriteList. And then you pass this to submitFrame() call and there https://chromium.googlesource.com/angle/angle/+/bc913c7040e97028316591ae7d2c02519161b4cf/src/libANGLE/renderer/vulkan/RendererVk.cpp#2996, you also walk bufferResourceWriteList and update writeSerial for buffers.\n\nI think if you do that (i.e, only add extra tracking for bufferWrites), diff will be much smaller. (And sorry if I gave you wrong hint previously to lead you here).",
+      "range": {
+        "startLine": 1023,
+        "startChar": 19,
+        "endLine": 1023,
+        "endChar": 51
       },
       "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
