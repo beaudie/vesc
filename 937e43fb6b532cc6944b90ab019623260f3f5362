@@ -653,6 +653,30 @@
       },
       "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5da12ce4_bede317d",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T16:44:49Z",
+      "side": 1,
+      "message": "Ack\n\nSounds good.",
+      "parentUuid": "bc102e3d_4afddd2a",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "937e43fb6b532cc6944b90ab019623260f3f5362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
