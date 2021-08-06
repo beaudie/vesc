@@ -16,6 +16,23 @@
       "message": "Shabi: thanks for your advice on this. PTAL.\n\nJamie: FYI.\n",
       "revId": "182f838ee3bdbb9640b27931599572fd7abc3463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbf06965_f0313176",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T20:10:41Z",
+      "side": 1,
+      "message": "Ken: a pre-commit test in angle_end2end_tests would be appreciated.",
+      "revId": "182f838ee3bdbb9640b27931599572fd7abc3463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
