@@ -16,6 +16,23 @@
       "message": "Single-line fix that resolves four WebGL CTS failures:\n\n  conformance/textures/image_bitmap_from_canvas/tex-2d-luminance-luminance-unsigned_byte.html\n  conformance/textures/image_bitmap_from_canvas/tex-2d-luminance_alpha-luminance_alpha-unsigned_byte.html\n  conformance/textures/webgl_canvas/tex-2d-luminance-luminance-unsigned_byte.html\n  conformance/textures/webgl_canvas/tex-2d-luminance_alpha-luminance_alpha-unsigned_byte.html\n",
       "revId": "3c5548d7eae6785f12ac0cf9dca7f91fd9731692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73493315_fa0d2467",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T18:56:22Z",
+      "side": 1,
+      "message": "Nice fix!",
+      "revId": "3c5548d7eae6785f12ac0cf9dca7f91fd9731692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
