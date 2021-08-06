@@ -102,15 +102,25 @@ class BufferMemoryAllocator : angle::NonCopyable
                           Buffer *bufferOut,
                           Allocation *allocationOut);
 
-    VkResult AllocateMemoryForBuffer(Context *context,
-                                     Buffer &buffer,
-                                     VkMemoryPropertyFlags requiredFlags,
-                                     VkMemoryPropertyFlags preferredFlags,
-                                     bool persistentlyMapped,
-                                     bool robustResourceInitEnabled,
-                                     uint32_t *memoryTypeIndexOut,
-                                     BufferMemory &memory,
-                                     VkDeviceSize *sizeOut);
+    VkResult AllocateMemoryWithTypeIndex(Context *context,
+                                         const VkMemoryRequirements &memoryRequirements,
+                                         VkMemoryPropertyFlags requiredFlags,
+                                         VkMemoryPropertyFlags preferredFlags,
+                                         bool persistentlyMapped,
+                                         bool robustResourceInitEnabled,
+                                         uint32_t memoryTypeIndex,
+                                         Allocation &allocation,
+                                         VkDeviceSize *sizeOut);
+
+    VkResult AllocateMemory(Context *context,
+                            const VkMemoryRequirements &memoryRequirements,
+                            VkMemoryPropertyFlags requiredFlags,
+                            VkMemoryPropertyFlags preferredFlags,
+                            bool persistentlyMapped,
+                            bool robustResourceInitEnabled,
+                            uint32_t *memoryTypeIndexOut,
+                            Allocation &allocation,
+                            VkDeviceSize *sizeOut);
 
     void getMemoryTypeProperties(RendererVk *renderer,
                                  uint32_t memoryTypeIndex,

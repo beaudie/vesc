@@ -200,7 +200,8 @@ BufferVk::BufferVk(const gl::BufferState &state)
       mBufferOffset(0),
       mUseDynamicBufferPool(false),
       mMemoryPropertyFlags(0),
-      mBufferUsage(gl::BufferUsage::InvalidEnum)
+      mBufferUsage(gl::BufferUsage::InvalidEnum),
+      mMemoryRequirements{}
 {}
 
 BufferVk::~BufferVk() {}
@@ -229,8 +230,9 @@ void BufferVk::release(ContextVk *contextVk)
     }
     mShadowBuffer.release();
     mHostVisibleBufferPool.release(renderer);
-    mBuffer       = nullptr;
-    mBufferOffset = 0;
+    mBuffer          = nullptr;
+    mBufferOffset    = 0;
+    mMemoryTypeIndex = kInvalidMemoryTypeIndex;
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
@@ -410,6 +412,12 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+    if (usage != mBufferUsage || size != static_cast<size_t>(mState.getSize()))
+    {
+        mMemoryTypeIndex = kInvalidMemoryTypeIndex;
+        mBufferUsage     = usage;
+    }
+
     // BufferData call is re-specifying the entire buffer
     // Release and init a new mBuffer with this new size
     if (size != static_cast<size_t>(mState.getSize()))
@@ -418,7 +426,6 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         release(contextVk);
 
         mMemoryPropertyFlags = memoryPropertyFlags;
-        mBufferUsage         = usage;
 
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
 
@@ -978,8 +985,16 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
     {
         if (mBuffer)
         {
+            // First try to reinit with new memory
+            if (mMemoryTypeIndex != kInvalidMemoryTypeIndex &&
+                angle::Result::Continue ==
+                    mBuffer->reinit(contextVk, mMemoryRequirements, mMemoryTypeIndex))
+            {
+                return angle::Result::Continue;
+            }
             mBuffer->release(renderer);
-            mBuffer = nullptr;
+            mBuffer          = nullptr;
+            mMemoryTypeIndex = kInvalidMemoryTypeIndex;
         }
         // Allocate the buffer directly
         std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
@@ -993,8 +1008,10 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
         createInfo.queueFamilyIndexCount = 0;
         createInfo.pQueueFamilyIndices   = nullptr;
 
-        ANGLE_TRY(buffer->init(contextVk, createInfo, mMemoryPropertyFlags));
+        ANGLE_TRY(buffer->init(contextVk, createInfo, mMemoryPropertyFlags, &mMemoryRequirements,
+                               &mMemoryTypeIndex));
         ASSERT(buffer->valid());
+        ASSERT(mMemoryTypeIndex != kInvalidMemoryTypeIndex);
 
         mBuffer = buffer.release();
     }
