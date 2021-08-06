@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89205ba0_3c25784b",
+        "filename": "src/compiler/translator/util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T18:48:48Z",
+      "side": 1,
+      "message": "Can a version of this be implemented by the various TIntermOperator types, so something like TIntermUnary::propagatePrecision() can call it instead of looking for specific ops like EOpArrayLength?",
+      "revId": "6073a4953d6f0221cc9b4d0d828fcf7e02530865",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
