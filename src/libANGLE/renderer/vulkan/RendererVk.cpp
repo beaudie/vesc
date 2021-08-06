@@ -2200,7 +2200,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     }
 
     constexpr uint32_t kPixel2DriverWithRelaxedPrecision        = 0x801EA000;
-    constexpr uint32_t kPixel4DriverWithWorkingSpecConstSupport = 0x80201000;
 
     bool isAMD      = IsAMD(mPhysicalDeviceProperties.vendorID);
     bool isIntel    = IsIntel(mPhysicalDeviceProperties.vendorID);
@@ -2448,9 +2447,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // http://issuetracker.google.com/173636783 Qualcomm driver appears having issues with
     // specialization constant
-    ANGLE_FEATURE_CONDITION(&mFeatures, forceDriverUniformOverSpecConst,
-                            isQualcomm && mPhysicalDeviceProperties.driverVersion <
-                                              kPixel4DriverWithWorkingSpecConstSupport);
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceDriverUniformOverSpecConst, true);
 
     // The compute shader used to generate mipmaps uses a 256-wide workgroup.  This path is only
     // enabled on devices that meet this minimum requirement.  Furthermore,
