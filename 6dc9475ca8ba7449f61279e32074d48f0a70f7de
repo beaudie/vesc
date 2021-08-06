@@ -16,6 +16,24 @@
       "message": "The Nvidia Shield bot is having infra issues, so I did a local hack and verified that the webgl test that was failing on this bot in my previous attempt to remove this hack is not hitting this assertion (and the output looks fine in terms of precision applied).",
       "revId": "6dc9475ca8ba7449f61279e32074d48f0a70f7de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b1452d_e2345937",
+        "filename": "src/compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-06T00:21:54Z",
+      "side": 1,
+      "message": "Filed https://crbug.com/1237272 . Please feel free to file similar bugs yourself via http://go/chrome-labs-fixit-bug .",
+      "parentUuid": "fce5d65d_46b737f4",
+      "revId": "6dc9475ca8ba7449f61279e32074d48f0a70f7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
