@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9baf99d_9c9a2c79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T22:34:56Z",
+      "side": 1,
+      "message": "\u003e This is a good case for a ring buffer/DynamicBuffer/other linear allocator.\n\nI\u0027m assuming Charlie\u0027s buffer changes will handle this automatically, depending on the situation.\n\n\u003e Presumably this is vertex or index data?\n\nYeah, Idle Heroes updates verex data before every draw by mapping the buffer.   Without this fix, we break the renderpass as part of the map, since the draw hasn\u0027t used the data yet.   \"Ghosting\" the data allows us keep all of the draws in the same renderpass which significantly improves performance.",
+      "parentUuid": "ef4f2cdf_66b77ed0",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2828fb0_87654d3b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 7
@@ -83,6 +107,30 @@
       "writtenOn": "2021-08-06T21:57:21Z",
       "side": 1,
       "message": "I think all complexity comes from tracking writeSerial, which I think can be simplified greatly what I just commented. The other option is to utilize mHostVisibleBufferPool mechanism. Basically you detect this case (that mapBuffer is called and GPU access is pending and wait is longer than 5ms (you pick)), then you just decided to switch to mHostVisibleBufferPool mode, just treat it exactly like the mBuffer is device local memory and CPU is inaccessiable. The mHostVisibleBufferPool code path always map mHostVisibleBufferPool to user and issue a DMA copy to mBuffer. I think doing this way the fix is going to be very local to BufferVk.cpp, might be a cleaner fix. The downside is first mapBuffer call is more expensive.\n\nyea, ddoc might be worthwhile so that we can avoid poluting CL for long discussion.",
+      "parentUuid": "a2828fb0_87654d3b",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 14
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8930e9ee_c9e01156",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T22:34:56Z",
+      "side": 1,
+      "message": "I finished writing up: go/angle-idle-heroes-gl-ext-map-buffer-range\n\nDo we want this to be specific to BufferVk?   One of the comments when discussing this before was that we\u0027d want to do this for textures also (does mHostVisibleBufferPool affect that at all)?",
       "parentUuid": "a2828fb0_87654d3b",
       "range": {
         "startLine": 20,
@@ -182,6 +230,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69ef2ab3_feccafd1",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T22:34:56Z",
+      "side": 1,
+      "message": "I haven\u0027t hit any assertions yet, but maybe I need to rebase to pick up your changes?   I\u0027ll give that a shot and see if CQ uncovers anything.",
+      "parentUuid": "ee90ba74_b0e1e0e1",
+      "range": {
+        "startLine": 633,
+        "startChar": 26,
+        "endLine": 633,
+        "endChar": 45
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d1772d_06e6d821",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -193,6 +265,30 @@
       "writtenOn": "2021-08-06T21:47:14Z",
       "side": 1,
       "message": "Is it legal to use it in textureBuffer as write and mean time also use the buffer as vertex buffer? Would this be undefined behavior? I am wondering if this if check is needed or not. This check is not cheap.",
+      "range": {
+        "startLine": 1712,
+        "startChar": 17,
+        "endLine": 1712,
+        "endChar": 32
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79ae4c48_26c20771",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T22:34:56Z",
+      "side": 1,
+      "message": "\u003e Is it legal to use it in textureBuffer as write and mean time also use the buffer as vertex buffer? \n\nIt seems to be, since there are many dEQP tests that do exactly this.   See the dEQP-GLES31.functional.texture.texture_buffer tests in third_party/VK-GL-CTS/src/android/cts/master/gles31-master.txt.",
+      "parentUuid": "82d1772d_06e6d821",
       "range": {
         "startLine": 1712,
         "startChar": 17,
@@ -228,6 +324,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "45b9e258_fd524139",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T22:34:56Z",
+      "side": 1,
+      "message": "This is used for things like:\n- Descriptor Pools (technically can be Read)\n- Sync objects\n- Query objects\n\nI\u0027m not super confident I got all of the read/write classifications correct in the first place, and especially not sure about what to do with those types of objects that aren\u0027t necessarily in either bucket of read or write.",
+      "parentUuid": "6fd20a8d_04cce0fe",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec065274_916d6532",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 7
@@ -239,6 +359,30 @@
       "writtenOn": "2021-08-06T20:18:58Z",
       "side": 1,
       "message": "eek.. this is pretty heavy. wonder if we can adopt a different design here.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 0
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05964347_0bc75173",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T22:34:56Z",
+      "side": 1,
+      "message": "This is required to make sure we associate the read/write access with the corresponding retain() call.   Later, when the command is submitted and the Resource is releas()\u0027ed, this allows the read/write Serial to be updated correctly and accurately determine when the access has completed.\n\nThe accessCounter (oops, forgot to revert the rename), increments/decrements with the retain()/release() calls, which lends itself nicely to using std::stack to track the read/write accesses for each accessCounter value.   I\u0027m open to suggestions if you have anything in mind.",
+      "parentUuid": "ec065274_916d6532",
       "range": {
         "startLine": 42,
         "startChar": 0,
