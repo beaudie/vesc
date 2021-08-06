@@ -146,7 +146,6 @@ bool DeclareDefaultUniforms(TCompiler *compiler,
         if (IsDefaultUniform(type))
         {
             TType *fieldType = new TType(type);
-            fieldType->setPrecision(EbpUndefined);
 
             uniformList->push_back(new TField(fieldType, symbol->getName(), symbol->getLine(),
                                               symbol->variable().symbolType()));
@@ -168,7 +167,6 @@ bool DeclareDefaultUniforms(TCompiler *compiler,
         const TVariable *variable = uniformVars[fieldIndex];
 
         TType *replacementType = new TType(variable->getType());
-        replacementType->setPrecision(EbpUndefined);
         replacementType->setInterfaceBlockField(uniformBlock->getType().getInterfaceBlock(),
                                                 fieldIndex);
 
