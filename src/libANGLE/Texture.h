@@ -650,6 +650,8 @@ class Texture final : public RefCountObject<TextureID>,
     egl::Surface *mBoundSurface;
     egl::Stream *mBoundStream;
 
+    bool mInSyncState;
+
     // We track all the serials of the Framebuffers this texture is attached to. Note that this
     // allows duplicates because different ranges of a Texture can be bound to the same Framebuffer.
     // For the purposes of depth-stencil loops, a simple "isBound" check works fine. For color
