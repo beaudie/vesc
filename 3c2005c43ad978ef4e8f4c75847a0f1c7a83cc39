@@ -73,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e144efe_b01b1a56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T22:53:57Z",
+      "side": 1,
+      "message": "I think this is orthogonal to how we allocate buffer. The problem here is not how we alloc, but we do not know if there is a pending GPU write or not, thus we have to assume the worst case to wait for all access to finish, even though in this case all GPU access is readOnly access.",
+      "parentUuid": "f9baf99d_9c9a2c79",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2828fb0_87654d3b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 7
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "I finished writing up: go/angle-idle-heroes-gl-ext-map-buffer-range\n\nDo we want this to be specific to BufferVk?   One of the comments when discussing this before was that we\u0027d want to do this for textures also (does mHostVisibleBufferPool affect that at all)?",
       "parentUuid": "a2828fb0_87654d3b",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 14
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c782ebe4_962e5136",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T22:53:57Z",
+      "side": 1,
+      "message": "Right. I think doing for buffer only will make it a lot simpler. Probably my fault since I mentioned texture to you but I take back.",
+      "parentUuid": "8930e9ee_c9e01156",
       "range": {
         "startLine": 20,
         "startChar": 0,
@@ -289,6 +337,30 @@
       "side": 1,
       "message": "\u003e Is it legal to use it in textureBuffer as write and mean time also use the buffer as vertex buffer? \n\nIt seems to be, since there are many dEQP tests that do exactly this.   See the dEQP-GLES31.functional.texture.texture_buffer tests in third_party/VK-GL-CTS/src/android/cts/master/gles31-master.txt.",
       "parentUuid": "82d1772d_06e6d821",
+      "range": {
+        "startLine": 1712,
+        "startChar": 17,
+        "endLine": 1712,
+        "endChar": 32
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f42f5d7_0fadfe47",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T22:53:57Z",
+      "side": 1,
+      "message": "Shouldn\u0027t ContextVk::handleDirtyTexturesImpl() code at line 1551 handle this already?",
+      "parentUuid": "79ae4c48_26c20771",
       "range": {
         "startLine": 1712,
         "startChar": 17,
