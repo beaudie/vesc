@@ -133,7 +133,6 @@ struct Format final : private angle::NonCopyable
 
     InitializeTextureDataFunction imageInitializerFunction;
     LoadFunctionMap textureLoadFunctions;
-    LoadTextureBorderFunctionMap textureBorderLoadFunctions;
     VertexCopyFunction vertexLoadFunction;
     VertexCopyFunction compressedVertexLoadFunction;
 
