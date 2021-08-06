@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "127a0c34_d2e0b5eb",
+        "filename": "src/libANGLE/capture/frame_capture_utils_autogen.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T18:45:18Z",
+      "side": 1,
+      "message": "splitting out the autogen stuff sounds like a good way to land this CL.",
+      "revId": "28a18805a8751d6e77b4e354556dc123fa92e331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63e6a418_5e9cea5e",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 15
@@ -26,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c14edda9_a202185e",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T18:45:18Z",
+      "side": 1,
+      "message": "this could also be a split change since it\u0027s pretty unobtrusive.",
+      "range": {
+        "startLine": 51,
+        "startChar": 31,
+        "endLine": 51,
+        "endChar": 38
+      },
+      "revId": "28a18805a8751d6e77b4e354556dc123fa92e331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8965a5e3_ab0c39b6",
         "filename": "util/windows/WGLWindow.h",
         "patchSetId": 15
@@ -37,6 +77,30 @@
       "writtenOn": "2021-08-06T18:06:30Z",
       "side": 1,
       "message": "@Jamie\n\nI\u0027m not sure what you have in mind for this WGL refactor stuff either, so I\u0027ve tossed in just enough to get things working and show where the gaps are.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 37
+      },
+      "revId": "28a18805a8751d6e77b4e354556dc123fa92e331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb9d2071_33ab89a2",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-06T18:45:18Z",
+      "side": 1,
+      "message": "Yeah I should help here to redo the API a bit for this class. I was thinking we split the \"initialize\" function up somehow. Maybe I won\u0027t have time to do this today but can help next week.",
+      "parentUuid": "8965a5e3_ab0c39b6",
       "range": {
         "startLine": 39,
         "startChar": 0,
