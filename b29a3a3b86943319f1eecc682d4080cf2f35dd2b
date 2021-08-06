@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3932f88f_dbfc13a6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "It\u0027s been moved to the constructor. The declaration\u0027s been left where it\u0027s at though as currently if linkingVariables goes out of scope the behavior of mProgram-\u003elink(context, resources, infoLog, mergedVaryings) becomes undefined as ProgramMergedVaryings maintains a pointer to the ShaderVariable that we stored off in linkingVariables",
+      "parentUuid": "4337ab4a_ec2c25e7",
+      "range": {
+        "startLine": 1558,
+        "startChar": 4,
+        "endLine": 1558,
+        "endChar": 38
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3639938_884b26f1",
         "filename": "src/libANGLE/ProgramExecutable.cpp",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2021-07-29T13:49:44Z",
       "side": 1,
       "message": "Is it possible to store these only in the separable case? IIUC, these are needed only for separable programs, so would be nice if the cache entries aren\u0027t increased in size for all programs.",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 13
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7493e0be_17088104",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "It seems to already be in the separable case",
+      "parentUuid": "a3639938_884b26f1",
       "range": {
         "startLine": 659,
         "startChar": 0,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8e1757f_4ba73d8a",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d13d763_3d81fdce",
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "395f5fad_84f388a8",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-07-28T22:43:23Z",
       "side": 1,
       "message": "style: linkingVariables",
+      "range": {
+        "startLine": 388,
+        "startChar": 52,
+        "endLine": 388,
+        "endChar": 68
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "923eab53_bd7546b5",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "395f5fad_84f388a8",
       "range": {
         "startLine": 388,
         "startChar": 52,
@@ -127,6 +217,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "300e6bc1_50c2a3a8",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70d44c3c_cd079320",
+      "range": {
+        "startLine": 1429,
+        "startChar": 43,
+        "endLine": 1429,
+        "endChar": 85
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d264f580_ba8606bc",
@@ -140,6 +254,30 @@
       "writtenOn": "2021-07-29T16:41:39Z",
       "side": 1,
       "message": "style nits:\n\ndon\u0027t use \"m\" prefix for public data.\nput data after members.\nI believe the methods can be constructors.\nUse final/NonCopyable as appropriate.\n\nalso I\u0027d prefer if we don\u0027t use the \"pending\" term as it doesn\u0027t really have context.",
+      "range": {
+        "startLine": 244,
+        "startChar": 47,
+        "endLine": 244,
+        "endChar": 73
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd67323c_01b86cff",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d264f580_ba8606bc",
       "range": {
         "startLine": 244,
         "startChar": 47,
@@ -173,6 +311,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52e0b495_a23f5e8d",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfeee72c_4929ad13",
+      "range": {
+        "startLine": 525,
+        "startChar": 21,
+        "endLine": 525,
+        "endChar": 37
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85fe7caa_258a3dbb",
@@ -196,6 +358,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4a56ce4_0ff8646d",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85fe7caa_258a3dbb",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 9
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "508ecb0a_4cdfaf2c",
@@ -209,6 +395,24 @@
       "writtenOn": "2021-07-28T22:43:23Z",
       "side": 1,
       "message": "Do we need to do a glDispatchCompute() to actually catch the error?   Or does this fail with the previous patchset without that?",
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "659b3ef9_e8dfc9ee",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-06T02:03:06Z",
+      "side": 1,
+      "message": "We don\u0027t, the comment has been removed",
+      "parentUuid": "508ecb0a_4cdfaf2c",
       "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
