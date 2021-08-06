@@ -11,6 +11,7 @@
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 #include "common/aligned_memory.h"
+#include "common/mathutil.h"
 #include "common/vulkan/vk_google_filtering_precision.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
@@ -3211,10 +3212,28 @@ void SamplerDesc::update(ContextVk *contextVk,
         (samplerState.getBorderColor().type == angle::ColorGeneric::Type::Float) ? 0 : 1;
 
     mBorderColor = samplerState.getBorderColor().colorF;
-    if (vkFormat.intendedFormatID != angle::FormatID::NONE)
+
+    const Format &format              = contextVk->getRenderer()->getFormat(formatID);
+    const angle::Format &angleFormat  = format.intendedFormat();
+    const angle::Format &actualFormat = format.actualImageFormat();
+
+    // Texture border color adjustment in case of LUMA and depth/stencil formats
+    if (actualFormat.isAlpha8toR8(angleFormat))
     {
-        LoadTextureBorderFunctionInfo loadFunction = vkFormat.textureBorderLoadFunctions();
-        loadFunction.loadFunction(mBorderColor);
+        mBorderColor.red   = mBorderColor.alpha;
+        mBorderColor.alpha = 0;
+    }
+    else if (actualFormat.isAlpha8toR8G8(angleFormat))
+    {
+        mBorderColor.green = mBorderColor.alpha;
+        mBorderColor.alpha = 0;
+    }
+    else if (actualFormat.isD24ToD32(angleFormat))
+    {
+        mBorderColor.red   = gl::clamp01(mBorderColor.red);
+        mBorderColor.green = gl::clamp01(mBorderColor.green);
+        mBorderColor.blue  = gl::clamp01(mBorderColor.blue);
+        mBorderColor.alpha = gl::clamp01(mBorderColor.alpha);
     }
 
     mReserved = 0;
