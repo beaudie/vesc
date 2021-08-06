@@ -573,14 +573,18 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
 
     RendererVk *renderer                         = context->getRenderer();
     BufferMemoryAllocator &bufferMemoryAllocator = renderer->getBufferMemoryAllocator();
-    uint32_t memoryTypeIndex                     = UINT32_MAX;
+    uint32_t memoryTypeIndexOut                  = kInvalidMemoryTypeIndex;
     VkDeviceSize sizeOut                         = 0;
+    VkMemoryRequirements memoryRequirements      = {};
 
-    ANGLE_VK_TRY(context, bufferMemoryAllocator.AllocateMemoryForBuffer(
-                              context, mBuffer, requiredFlags, preferredFlags,
+    ANGLE_VK_TRY(context, bufferMemoryAllocator.AllocateMemory(
+                              context, memoryRequirements, requiredFlags, preferredFlags,
                               renderer->getFeatures().persistentlyMappedBuffers.enabled, false,
-                              &memoryTypeIndex, mMemory, &sizeOut));
+                              &memoryTypeIndexOut, *mMemory.getAllocationObject(), &sizeOut));
     mSize = static_cast<size_t>(sizeOut);
+
+    ANGLE_VK_TRY(context,
+                 mBuffer.bindMemory(renderer->getAllocator(), *mMemory.getAllocationObject()));
 
     // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
     // invalid values ensures our testing doesn't assume zero-initialized memory.

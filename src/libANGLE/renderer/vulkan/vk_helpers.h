@@ -808,6 +808,14 @@ class BufferHelper final : public Resource
     angle::Result init(ContextVk *contextVk,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
+    angle::Result init(ContextVk *contextVk,
+                       const VkBufferCreateInfo &createInfo,
+                       VkMemoryPropertyFlags memoryPropertyFlags,
+                       VkMemoryRequirements *memoryRequirements,
+                       uint32_t *memoryTypeIndex);
+    angle::Result reinit(ContextVk *contextVk,
+                         const VkMemoryRequirements &memoryRequirements,
+                         uint32_t memoryTypeIndex);
     angle::Result initExternal(ContextVk *contextVk,
                                VkMemoryPropertyFlags memoryProperties,
                                const VkBufferCreateInfo &requestedCreateInfo,

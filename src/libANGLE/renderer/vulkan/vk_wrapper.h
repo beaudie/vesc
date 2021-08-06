@@ -524,6 +524,7 @@ class Buffer final : public WrappedObject<Buffer, VkBuffer>
 
     VkResult init(VkDevice device, const VkBufferCreateInfo &createInfo);
     VkResult bindMemory(VkDevice device, const DeviceMemory &deviceMemory);
+    VkResult bindMemory(const Allocator &allocator, const Allocation &allocation);
     void getMemoryRequirements(VkDevice device, VkMemoryRequirements *memoryRequirementsOut);
 
   private:
@@ -1524,6 +1525,12 @@ ANGLE_INLINE VkResult Buffer::bindMemory(VkDevice device, const DeviceMemory &de
 {
     ASSERT(valid() && deviceMemory.valid());
     return vkBindBufferMemory(device, mHandle, deviceMemory.getHandle(), 0);
+}
+
+ANGLE_INLINE VkResult Buffer::bindMemory(const Allocator &allocator, const Allocation &allocation)
+{
+    ASSERT(valid() && allocation.valid());
+    return vma::BindBufferMemory(allocator.getHandle(), allocation.getHandle(), mHandle);
 }
 
 ANGLE_INLINE void Buffer::getMemoryRequirements(VkDevice device,

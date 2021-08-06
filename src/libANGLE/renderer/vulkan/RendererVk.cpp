@@ -3496,61 +3496,74 @@ VkResult BufferMemoryAllocator::createBuffer(RendererVk *renderer,
                              &bufferOut->mHandle, &allocationOut->mHandle);
 }
 
-VkResult BufferMemoryAllocator::AllocateMemoryForBuffer(Context *context,
-                                                        Buffer &buffer,
-                                                        VkMemoryPropertyFlags requiredFlags,
-                                                        VkMemoryPropertyFlags preferredFlags,
-                                                        bool persistentlyMapped,
-                                                        bool robustResourceInitEnabled,
-                                                        uint32_t *memoryTypeIndexOut,
-                                                        BufferMemory &memory,
-                                                        VkDeviceSize *sizeOut)
+VkResult BufferMemoryAllocator::AllocateMemoryWithTypeIndex(
+    Context *context,
+    const VkMemoryRequirements &memoryRequirements,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    bool persistentlyMapped,
+    bool robustResourceInitEnabled,
+    uint32_t memoryTypeIndex,
+    Allocation &allocation,
+    VkDeviceSize *sizeOut)
+{
+    RendererVk *renderer       = context->getRenderer();
+    const Allocator &allocator = renderer->getAllocator();
+    uint32_t memoryTypeIndexOut;
+
+    // Allocate memory using sub-allocator
+    bool dedicatedMemory;
+    VmaPool pool = getVMAPool(memoryTypeIndex, memoryRequirements.size, robustResourceInitEnabled,
+                              &dedicatedMemory);
+
+    return vma::AllocateMemory(allocator.getHandle(), &memoryRequirements, requiredFlags,
+                               preferredFlags, persistentlyMapped, dedicatedMemory, pool,
+                               &memoryTypeIndexOut, &allocation.mHandle, sizeOut);
+}
+
+VkResult BufferMemoryAllocator::AllocateMemory(Context *context,
+                                               const VkMemoryRequirements &memoryRequirements,
+                                               VkMemoryPropertyFlags requiredFlags,
+                                               VkMemoryPropertyFlags preferredFlags,
+                                               bool persistentlyMapped,
+                                               bool robustResourceInitEnabled,
+                                               uint32_t *memoryTypeIndexOut,
+                                               Allocation &allocation,
+                                               VkDeviceSize *sizeOut)
 {
     RendererVk *renderer                     = context->getRenderer();
     const Allocator &allocator               = renderer->getAllocator();
     const MemoryProperties &memoryProperties = renderer->getMemoryProperties();
 
-    // Call driver to determine memory requirements.
-    VkMemoryRequirements vkMemReq;
-    buffer.getMemoryRequirements(context->getDevice(), &vkMemReq);
-
-    uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
+    VkDeviceSize requestedSize = memoryRequirements.size;
+    uint32_t memoryTypeBits    = memoryRequirements.memoryTypeBits;
+    uint32_t memoryTypeIndex   = kInvalidMemoryTypeIndex;
     VkResult result;
     // We loop through each memory type bit in case of failure.
-    while (vkMemReq.memoryTypeBits)
+    while (memoryTypeBits)
     {
         // This will immediate return if FindMemoryTypeIndex fail, in the case that we have tried
         // all memory types that are compatible and and still fail to allocate.
-        result =
-            vma::FindMemoryTypeIndex(allocator.getHandle(), vkMemReq.memoryTypeBits, requiredFlags,
-                                     preferredFlags, persistentlyMapped, &memoryTypeIndex);
+        result = vma::FindMemoryTypeIndex(allocator.getHandle(), memoryTypeBits, requiredFlags,
+                                          preferredFlags, persistentlyMapped, &memoryTypeIndex);
         if (result != VK_SUCCESS)
         {
             return result;
         }
 
-        if (vkMemReq.size <= memoryProperties.getHeapSizeForMemoryType(memoryTypeIndex))
+        if (requestedSize <= memoryProperties.getHeapSizeForMemoryType(memoryTypeIndex))
         {
             // Allocate memory using sub-allocator
-            Allocation *allocation = memory.getAllocationObject();
             bool dedicatedMemory;
-            VmaPool pool = getVMAPool(memoryTypeIndex, vkMemReq.size, robustResourceInitEnabled,
+            VmaPool pool = getVMAPool(memoryTypeIndex, requestedSize, robustResourceInitEnabled,
                                       &dedicatedMemory);
 
-            result = vma::AllocateMemory(allocator.getHandle(), &vkMemReq, requiredFlags,
+            result = vma::AllocateMemory(allocator.getHandle(), &memoryRequirements, requiredFlags,
                                          preferredFlags, persistentlyMapped, dedicatedMemory, pool,
-                                         memoryTypeIndexOut, &allocation->mHandle, sizeOut);
+                                         memoryTypeIndexOut, &allocation.mHandle, sizeOut);
             if (result == VK_SUCCESS)
             {
                 ASSERT(*memoryTypeIndexOut == memoryTypeIndex);
-                result = vma::BindBufferMemory(allocator.getHandle(), allocation->mHandle,
-                                               buffer.mHandle);
-                if (result != VK_SUCCESS)
-                {
-                    // Roll back memory allocation and fail
-                    vma::FreeMemory(allocator.getHandle(), allocation->mHandle);
-                    return result;
-                }
                 return VK_SUCCESS;
             }
         }
@@ -3558,7 +3571,7 @@ VkResult BufferMemoryAllocator::AllocateMemoryForBuffer(Context *context,
         // Allocation failed. Remove old memTypeIndex from list of possibilities and loop again
         // try to find alternative memTypeIndex. If no compatible memory type bit left, we will
         // break the loop and fail allocation.
-        vkMemReq.memoryTypeBits &= ~(1u << memoryTypeIndex);
+        memoryTypeBits &= ~(1u << memoryTypeIndex);
     }
     // We reach here when we loop through all of memoryTypeBits and still can't allocate
     return VK_ERROR_OUT_OF_DEVICE_MEMORY;

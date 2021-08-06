@@ -3399,7 +3399,9 @@ BufferHelper::~BufferHelper() = default;
 
 angle::Result BufferHelper::init(ContextVk *contextVk,
                                  const VkBufferCreateInfo &requestedCreateInfo,
-                                 VkMemoryPropertyFlags memoryPropertyFlags)
+                                 VkMemoryPropertyFlags memoryPropertyFlags,
+                                 VkMemoryRequirements *memoryRequirements,
+                                 uint32_t *memoryTypeIndexOut)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -3430,17 +3432,26 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
     ANGLE_VK_TRY(contextVk, buffer.get().init(contextVk->getDevice(), *createInfo));
     ANGLE_TRY(mMemory.init());
 
+    // 1. Call driver to determine memory requirements.
+    buffer.get().getMemoryRequirements(contextVk->getDevice(), memoryRequirements);
+
+    // 2. Allocate memory
+    Allocation &allocation         = *mMemory.getAllocationObject();
     bool robustResourceInitEnabled = contextVk->isRobustResourceInitEnabled();
-    uint32_t memoryTypeIndex       = UINT32_MAX;
     VkDeviceSize sizeOut           = 0;
     ANGLE_VK_CHECK(contextVk,
-                   VK_SUCCESS == bufferMemoryAllocator.AllocateMemoryForBuffer(
-                                     contextVk, buffer.get(), requiredFlags, preferredFlags,
+                   VK_SUCCESS == bufferMemoryAllocator.AllocateMemory(
+                                     contextVk, *memoryRequirements, requiredFlags, preferredFlags,
                                      persistentlyMapped, robustResourceInitEnabled,
-                                     &memoryTypeIndex, mMemory, &sizeOut),
+                                     memoryTypeIndexOut, allocation, &sizeOut),
                    VK_ERROR_OUT_OF_DEVICE_MEMORY);
+    ASSERT(*memoryTypeIndexOut != kInvalidMemoryTypeIndex);
 
-    bufferMemoryAllocator.getMemoryTypeProperties(renderer, memoryTypeIndex, &mMemoryPropertyFlags);
+    // 3. Bind memory to buffer
+    ANGLE_VK_TRY(contextVk, buffer.get().bindMemory(renderer->getAllocator(), allocation));
+
+    bufferMemoryAllocator.getMemoryTypeProperties(renderer, *memoryTypeIndexOut,
+                                                  &mMemoryPropertyFlags);
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -3466,14 +3477,86 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
             }
             else
             {
-                ANGLE_TRY(InitMappableAllocation(contextVk, renderer->getAllocator(),
-                                                 mMemory.getAllocationObject(), sizeOut,
-                                                 kNonZeroInitValue, mMemoryPropertyFlags));
+                ANGLE_TRY(InitMappableAllocation(contextVk, renderer->getAllocator(), &allocation,
+                                                 sizeOut, kNonZeroInitValue, mMemoryPropertyFlags));
             }
         }
     }
 
+    // Success.
     mBuffer = buffer.release();
+    return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::init(ContextVk *contextVk,
+                                 const VkBufferCreateInfo &createInfo,
+                                 VkMemoryPropertyFlags memoryPropertyFlags)
+{
+    VkMemoryRequirements memoryRequirements;
+    uint32_t memoryTypeIndex;
+    return init(contextVk, createInfo, memoryPropertyFlags, &memoryRequirements, &memoryTypeIndex);
+}
+
+angle::Result BufferHelper::reinit(ContextVk *contextVk,
+                                   const VkMemoryRequirements &memoryRequirements,
+                                   uint32_t memoryTypeIndex)
+{
+    ASSERT(mBuffer.valid());
+    ASSERT(memoryTypeIndex != kInvalidMemoryTypeIndex);
+    ASSERT(mMemoryPropertyFlags != 0);
+    ASSERT(mSize != 0);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    unmap(renderer);
+    mMemory.destroy(renderer);
+    ANGLE_TRY(mMemory.init());
+
+    mCurrentWriteAccess = 0;
+    mCurrentReadAccess  = 0;
+    mCurrentWriteStages = 0;
+    mCurrentReadStages  = 0;
+    mSerial             = renderer->getResourceSerialFactory().generateBufferSerial();
+
+    bool persistentlyMapped        = renderer->getFeatures().persistentlyMappedBuffers.enabled;
+    bool robustResourceInitEnabled = contextVk->isRobustResourceInitEnabled();
+
+    // Allocate memory
+    BufferMemoryAllocator &bufferMemoryAllocator = renderer->getBufferMemoryAllocator();
+    Allocation &allocation                       = *mMemory.getAllocationObject();
+    VkDeviceSize sizeOut                         = 0;
+    ANGLE_VK_CHECK(
+        contextVk,
+        VK_SUCCESS == bufferMemoryAllocator.AllocateMemoryWithTypeIndex(
+                          contextVk, memoryRequirements, mMemoryPropertyFlags, mMemoryPropertyFlags,
+                          persistentlyMapped, robustResourceInitEnabled, memoryTypeIndex,
+                          allocation, &sizeOut),
+        VK_ERROR_OUT_OF_DEVICE_MEMORY);
+
+    // Bind memory to buffer
+    ANGLE_VK_TRY(contextVk, mBuffer.bindMemory(renderer->getAllocator(), allocation));
+
+    mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
+
+    if (renderer->getFeatures().allocateNonZeroMemory.enabled)
+    {
+        // This memory can't be mapped, so the buffer must be marked as a transfer destination so we
+        // can use a staging resource to initialize it to a non-zero value. If the memory is
+        // mappable we do the initialization in AllocateBufferMemory.
+        if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0)
+        {
+            ANGLE_TRY(initializeNonZeroMemory(contextVk, sizeOut));
+        }
+        else
+        {
+            // Can map the memory.
+            // Pick an arbitrary value to initialize non-zero memory for sanitization.
+            constexpr int kNonZeroInitValue = 55;
+            ANGLE_TRY(InitMappableAllocation(contextVk, renderer->getAllocator(), &allocation,
+                                             sizeOut, kNonZeroInitValue, mMemoryPropertyFlags));
+        }
+    }
+
+    // Success.
     return angle::Result::Continue;
 }
 

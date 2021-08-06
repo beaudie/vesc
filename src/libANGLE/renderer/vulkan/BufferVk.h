@@ -219,6 +219,8 @@ class BufferVk : public BufferImpl
     // Memory/Usage property that will be used for memory allocation.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
     gl::BufferUsage mBufferUsage;
+    VkMemoryRequirements mMemoryRequirements;
+    uint32_t mMemoryTypeIndex;
 
     // Pool of BufferHelpers for mBuffer to acquire from. This is lazy initialized only when we
     // decided to allocate from this pool. If this is null, mBuffer is allocated directly by
