@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fd712a1_be53c85f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-06T01:40:08Z",
+      "side": 1,
+      "message": "Nice. You should be able to make a similar test for SSBOs.\n\nTexture buffers and image buffers might be ok, but would be nice to verify with a test too.",
+      "revId": "2ddf25e32c31cf61df1d8d9949c163200c07b9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b212760c_9a4b7922",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-06T01:40:08Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 180,
+        "startChar": 24,
+        "endLine": 180,
+        "endChar": 29
+      },
+      "revId": "2ddf25e32c31cf61df1d8d9949c163200c07b9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
