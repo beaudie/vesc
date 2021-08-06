@@ -16,6 +16,23 @@
       "message": "Can you also make a similar test for SSBOs?",
       "revId": "db01ef17b8c5ea0293536fe1c79cec6c50490d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5203f531_47ba315a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-06T16:27:00Z",
+      "side": 1,
+      "message": "Thanks all for quick review.",
+      "revId": "db01ef17b8c5ea0293536fe1c79cec6c50490d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
