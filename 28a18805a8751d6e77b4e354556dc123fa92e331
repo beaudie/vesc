@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63e6a418_5e9cea5e",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T18:06:30Z",
+      "side": 1,
+      "message": "@Jamie\n\nThis is the start of where I\u0027ll need some help with the the EGL/WGL remapping.",
+      "range": {
+        "startLine": 1430,
+        "startChar": 0,
+        "endLine": 1432,
+        "endChar": 51
+      },
+      "revId": "28a18805a8751d6e77b4e354556dc123fa92e331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8965a5e3_ab0c39b6",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T18:06:30Z",
+      "side": 1,
+      "message": "@Jamie\n\nI\u0027m not sure what you have in mind for this WGL refactor stuff either, so I\u0027ve tossed in just enough to get things working and show where the gaps are.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 37
+      },
+      "revId": "28a18805a8751d6e77b4e354556dc123fa92e331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
