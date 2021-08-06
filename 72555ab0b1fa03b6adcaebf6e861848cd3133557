@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bae9a49e_bd79a4d1",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T19:12:53Z",
+      "side": 1,
+      "message": "What cases lead to allocating the buffer directly, rather than from VMA or a buffer pool?   I thought all dedicated allocations were meant to go through VMA now.",
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e23b22b_1b9fdbe0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T19:12:53Z",
+      "side": 1,
+      "message": "nit: being",
+      "range": {
+        "startLine": 133,
+        "startChar": 29,
+        "endLine": 133,
+        "endChar": 33
+      },
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd886ada_5c876ced",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T19:12:53Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 316,
+        "startChar": 88,
+        "endLine": 316,
+        "endChar": 95
+      },
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edcf8271_8f9727f0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-06T19:12:53Z",
+      "side": 1,
+      "message": "nit: being",
+      "range": {
+        "startLine": 317,
+        "startChar": 15,
+        "endLine": 317,
+        "endChar": 19
+      },
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
