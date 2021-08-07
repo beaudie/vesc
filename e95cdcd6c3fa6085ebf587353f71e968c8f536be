@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7608b200_2f371fb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-07T04:31:42Z",
+      "side": 1,
+      "message": "Jamie: PTAL.\n\nI verified locally that it\u0027s possible to instantiate a test suite with:\n  WithDirectMetalGeneration(ES2_METAL())\n\nUntil https://chromium-review.googlesource.com/c/angle/angle/+/3078998 lands, though, it\u0027s infeasible to do that because basically all tests that exercise the shader compiler are failing. Will follow up after that lands and enable test suites with the direct-to-Metal compiler.\n",
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
