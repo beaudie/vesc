@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa897ae5_acf46c49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-07T05:00:40Z",
+      "side": 1,
+      "message": "False alarm. I broke the SPIR-V Metal translator\u0027s coverageMask by updating the DriverUniforms struct in ContextMtl.h. Fixed now.\n",
+      "revId": "0eee4ef4a4f715617edfd70b1dcd9c022daf12b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
