@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e40f37c4_0598bcbc",
+        "filename": "src/compiler/translator/CodeGen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-07T04:27:44Z",
+      "side": 1,
+      "message": "It turns out this wasn\u0027t necessary. The EGLDisplay is reinitialized at the time these feature overrides are applied, and given that, it was possible to keep TranslatorMetal and TranslatorMetalDirect separate, under different output types. Combining them would have been tedious and error-prone because TCompiler isn\u0027t a pure interface, so making a small shim to switch between the two was infeasible.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3079083 has the working version of this prototype. Thanks so much for your help!",
+      "range": {
+        "startLine": 74,
+        "startChar": 18,
+        "endLine": 74,
+        "endChar": 22
+      },
+      "revId": "17de20314585f592f03a84634758901144f14d6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
