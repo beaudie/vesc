@@ -978,10 +978,21 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), forceNonCSBaseMipmapGeneration, isIntel());
 
+#if ANGLE_ENABLE_METAL_SPIRV
+    const bool defaultDirectToMetal = angle::GetBoolEnvironmentVar("ANGLE_USE_MSL_COMPILER");
+#else
+    const bool defaultDirectToMetal = true;
+#endif
+    ANGLE_FEATURE_CONDITION((&mFeatures), directMetalGeneration, defaultDirectToMetal);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesMtl(platform, &mFeatures);
 
     ApplyFeatureOverrides(&mFeatures, getState());
+#ifdef ANGLE_ENABLE_ASSERTS
+    fprintf(stderr, "Shader compiler output: %s\n",
+            mFeatures.directMetalGeneration.enabled ? "Metal" : "SPIR-V");
+#endif
 }
 
 angle::Result DisplayMtl::initializeShaderLibrary()
@@ -1251,5 +1262,10 @@ mtl::AutoObjCObj<MTLSharedEventListener> DisplayMtl::getOrCreateSharedEventListe
     return mSharedEventListener;
 }
 #endif
+
+bool DisplayMtl::useDirectToMetalCompiler()
+{
+    return mFeatures.directMetalGeneration.enabled;
+}
 
 }  // namespace rx
