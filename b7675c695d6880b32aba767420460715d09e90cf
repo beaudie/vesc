@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "585e885b_a210a14f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-07T01:03:32Z",
+      "side": 1,
+      "message": "Jamie: would you consider reviewing and +2\u0027ing this? It\u0027s fairly small and fixes nearly 90% of the test failures with the direct-to-Metal backend.\n\nIn a separate patch, will work on turning on tests of the direct-to-Metal backend on the waterfall and CQ.\n",
+      "revId": "b7675c695d6880b32aba767420460715d09e90cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
