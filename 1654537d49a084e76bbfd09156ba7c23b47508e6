@@ -52,6 +52,24 @@
       "parentUuid": "9c143503_3d23fecc",
       "revId": "1654537d49a084e76bbfd09156ba7c23b47508e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebbb1d44_5f1c1a1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-08-08T03:44:45Z",
+      "side": 1,
+      "message": "i think that feature is just about “base vertex/base instance” is supported or not. Instance array and ordinary GLES 3.0 instance draw without base vertex/base instance is well supported on apple gpu family 1. I tested on iPhone 6.",
+      "parentUuid": "2681d4d1_26803c7e",
+      "revId": "1654537d49a084e76bbfd09156ba7c23b47508e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
