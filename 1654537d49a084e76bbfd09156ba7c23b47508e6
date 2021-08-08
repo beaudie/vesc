@@ -34,6 +34,24 @@
       "parentUuid": "a8f5bf2e_41d1cf04",
       "revId": "1654537d49a084e76bbfd09156ba7c23b47508e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2681d4d1_26803c7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-08T03:14:24Z",
+      "side": 1,
+      "message": "(Note: the relevance to WebGL 1.0 is that ANGLE_instanced_arrays is supported on nearly every other WebGL 1.0 implementation and we would want to support it here too. I haven\u0027t checked to see whether the base vertex/instance feature introduced in Apple GPU Family 3 https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf includes all instancing functionality or just this particular portion.)",
+      "parentUuid": "9c143503_3d23fecc",
+      "revId": "1654537d49a084e76bbfd09156ba7c23b47508e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
