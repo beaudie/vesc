@@ -16,6 +16,24 @@
       "message": "Just fyi, \"emulatedInstanceID\" is not really needed. This \"emulation\" was supposed to support instance drawing feature on non-capable hardwares. It originated from my old code. However, it was removed because instance draw is in fact always supported on all Apple\u0027s Metal capable hardwares,\n\nI suggest you take note on this because this emulation code has been removed and re-added back and forth multiple times in the past months since direct-to-metal patch was introduced due to misunderstanding and mis-coordinating between multiple parties.\n\nKeeping this emulation code path would make it easier to be in sync with Webkit. However, it will just be dead code that will be never be used and add unnecessary maintenance\u0027s efforts.",
       "revId": "1654537d49a084e76bbfd09156ba7c23b47508e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c143503_3d23fecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-08T03:10:17Z",
+      "side": 1,
+      "message": "Thanks Quyen for pointing this out. I had a feeling the emulated instance ID code wasn\u0027t needed, but wasn\u0027t sure on what hardware Apple intended to run ANGLE-on-Metal. Certainly they don\u0027t intend to run WebGL 2.0 on hardware earlier than the A9, which has this support, but wasn\u0027t sure about WebGL 1.0. Still need to ask them.\n\nI was considering removing the emulatedInstanceID support completely in this patch, since it\u0027s non-functional in the upstreamed direct-to-Metal code, but that was a larger change than desired in this targeted patch.\n\nRegardless, thanks for continuing to look at and advise on this work. Will appreciate your feedback on future patches as we try to make it pass all tests.",
+      "parentUuid": "a8f5bf2e_41d1cf04",
+      "revId": "1654537d49a084e76bbfd09156ba7c23b47508e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
