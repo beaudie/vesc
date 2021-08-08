@@ -33,6 +33,40 @@
       "message": "Kyle: FYI.\n",
       "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5c4439f_6a185491",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-08T02:12:34Z",
+      "side": 1,
+      "message": "I\u0027m glad this turned out to be much easier to fix!",
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e61482a_27e58069",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-08T02:12:34Z",
+      "side": 1,
+      "message": "Nice fix!",
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
