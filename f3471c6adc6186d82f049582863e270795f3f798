@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "792deb79_9030fa4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-09T21:06:47Z",
+      "side": 1,
+      "message": "Done.\n\nNote that the test only recreates the bug when ASSERTs are disabled, which is how we run for release builds in Android.   Otherwise, we hit ASSERTs in Display::destroyContext() that check getRefCount().",
+      "parentUuid": "ed91f65e_d46c2fa1",
+      "revId": "f3471c6adc6186d82f049582863e270795f3f798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0801d5fd_373b3176",
