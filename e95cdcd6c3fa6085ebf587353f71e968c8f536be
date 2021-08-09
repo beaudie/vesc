@@ -67,6 +67,52 @@
       "message": "Nice fix!",
       "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2609be4_3ecb6d00",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-09T11:20:02Z",
+      "side": 1,
+      "message": "Could you please remove this and use the existing method for environment variable feature selection:\n\nANGLE_FEATURE_OVERRIDES_ENABLED\u003ddirectMetalGeneration ./test",
+      "range": {
+        "startLine": 980,
+        "startChar": 0,
+        "endLine": 985,
+        "endChar": 6
+      },
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "496dc41f_eba2de6d",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-09T11:20:02Z",
+      "side": 1,
+      "message": "is this necessary? If so can you please use INFO()?",
+      "range": {
+        "startLine": 992,
+        "startChar": 0,
+        "endLine": 995,
+        "endChar": 6
+      },
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
