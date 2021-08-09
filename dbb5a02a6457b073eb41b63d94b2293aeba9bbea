@@ -16,6 +16,29 @@
       "message": "Needed this small update to run Fortnite on ANGLE.",
       "revId": "dbb5a02a6457b073eb41b63d94b2293aeba9bbea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63d4e097_2c3d9bb0",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3185,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-09T11:23:40Z",
+      "side": 1,
+      "message": "(2) What commands are affected by the relaxed errors for persistently\n        mapped buffers?\n\n        RESOLVED: In GL 4.5 the following commands have the relaxed\n        language BufferSubData, ClearBufferSubData, CopyBufferSubData,\n        GetBufferSubData and InvalidateBufferSubData. Of these commands\n        the only ones that apply to ES 3.1 are BufferSubData and\n        CopyBufferSubData. However, if additional extensions add any of\n        the other commands and EXT_buffer_storage is supported, they\n        would have the same behavior in ES.\n\nLooks like we might need to update BufferSubData as well, can you check?",
+      "range": {
+        "startLine": 3175,
+        "startChar": 0,
+        "endLine": 3185,
+        "endChar": 0
+      },
+      "revId": "dbb5a02a6457b073eb41b63d94b2293aeba9bbea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
