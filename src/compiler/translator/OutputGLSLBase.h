@@ -84,6 +84,7 @@ class TOutputGLSLBase : public TIntermTraverser
 
     void declareStruct(const TStructure *structure);
     void writeQualifier(TQualifier qualifier, const TType &type, const TSymbol *symbol);
+    bool structDeclared(const TStructure *structure) const;
 
     const char *mapQualifierToString(TQualifier qualifier);
 
@@ -100,6 +101,9 @@ class TOutputGLSLBase : public TIntermTraverser
 
     TInfoSinkBase &mObjSink;
     bool mDeclaringVariable;
+
+    // This set contains all the ids of the structs from every scope.
+    std::set<int> mDeclaredStructs;
 
     // name hashing.
     ShHashFunction64 mHashFunction;

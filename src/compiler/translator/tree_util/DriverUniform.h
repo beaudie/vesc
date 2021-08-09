@@ -37,9 +37,7 @@ enum class DriverUniformMode
 class DriverUniform
 {
   public:
-    DriverUniform(DriverUniformMode mode)
-        : mMode(mode), mDriverUniforms(nullptr), mEmulatedDepthRangeType(nullptr)
-    {}
+    DriverUniform(DriverUniformMode mode) : mMode(mode), mDriverUniforms(nullptr) {}
     virtual ~DriverUniform() = default;
 
     bool addComputeDriverUniformsToShader(TIntermBlock *root, TSymbolTable *symbolTable);
@@ -68,12 +66,11 @@ class DriverUniform
 
   protected:
     TIntermBinary *createDriverUniformRef(const char *fieldName) const;
-    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable);
-    TType *createEmulatedDepthRangeType(TSymbolTable *symbolTable);
+    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) const;
+    TType *createEmulatedDepthRangeType(TSymbolTable *symbolTable) const;
 
     const DriverUniformMode mMode;
     const TVariable *mDriverUniforms;
-    TType *mEmulatedDepthRangeType;
 };
 
 class DriverUniformExtended : public DriverUniform
@@ -92,7 +89,7 @@ class DriverUniformExtended : public DriverUniform
     TIntermBinary *getCoverageMask() const override;
 
   protected:
-    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) override;
+    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) const override;
 };
 
 }  // namespace sh
