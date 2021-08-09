@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f398cc7e_65f76140",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "I need to double check customized pool allows 0 as block size or not. But I like the idea to we control block size instead of trust VMA. I a bit worried that VMA implementers may never tuned this for mobile. But I will follow up to see whats the block size we are getting on my mobile device.",
+      "parentUuid": "dcddb3f3_fd28fd71",
+      "range": {
+        "startLine": 3461,
+        "startChar": 68,
+        "endLine": 3461,
+        "endChar": 95
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271be366_2a8c4390",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 23
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-05T02:11:47Z",
       "side": 1,
       "message": "ANGLE_VK_TRY()",
+      "range": {
+        "startLine": 3524,
+        "startChar": 0,
+        "endLine": 3531,
+        "endChar": 0
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02f396cc_6a5bbe21",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3531,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY will return angle::Result::Stop upon failure, this API returns VkResult, so I can\u0027t use that macro. That been said, we could change all BufferAllocator APIs to return angle::Result instead of VkResult. I just kept it as VkResult since that is what previous Allocator code does. I think we can look into it to change to angle::Result in future follow up CL if needed.",
+      "parentUuid": "271be366_2a8c4390",
       "range": {
         "startLine": 3524,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0bb4b13_f5a51c22",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3554,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62f2482b_7b2f6f26",
+      "range": {
+        "startLine": 3548,
+        "startChar": 0,
+        "endLine": 3554,
+        "endChar": 34
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5bb209f_57f6bd0f",
@@ -87,6 +159,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "404663b3_61e88edc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5bb209f_57f6bd0f",
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ee78004_198c7d5b",
@@ -100,6 +190,30 @@
       "writtenOn": "2021-08-05T02:11:47Z",
       "side": 1,
       "message": "Doesn\u0027t need to be a reference, since it\u0027s just a handle.",
+      "range": {
+        "startLine": 131,
+        "startChar": 16,
+        "endLine": 131,
+        "endChar": 17
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2715a72_024d7c63",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ee78004_198c7d5b",
       "range": {
         "startLine": 131,
         "startChar": 16,
@@ -133,6 +247,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fd0530b_f680a8cb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa1105e2_2822f8af",
+      "range": {
+        "startLine": 141,
+        "startChar": 12,
+        "endLine": 141,
+        "endChar": 13
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67602612_f0cc5090",
@@ -146,6 +284,30 @@
       "writtenOn": "2021-08-05T02:11:47Z",
       "side": 1,
       "message": "To help with correctness, I\u0027d prefer something like:\n\n    {\n        VmaPool vmaPool \u003d mVMAPools[memoryTypeIndex * kPoolCount + poolType];\n        ASSERT(vmaPool !\u003d VK_NULL_HANDLE);\n        return vmaPool;\n    }",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 5
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1e7ee6e_39c8762e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67602612_f0cc5090",
       "range": {
         "startLine": 142,
         "startChar": 0,
@@ -181,6 +343,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9f3dd12_21fb4477",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "There is a bit confusion here, that default allocator is not linear allocator. They don\u0027t have a name for it as I read the doc and code. WHen you do not specify the algorith, (i.e, leave it as 0), it uses default allocator.",
+      "parentUuid": "fb07135a_ff389e18",
+      "range": {
+        "startLine": 152,
+        "startChar": 11,
+        "endLine": 152,
+        "endChar": 39
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd00054f_7ba2fdf5",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 23
@@ -192,6 +378,30 @@
       "writtenOn": "2021-08-05T02:11:47Z",
       "side": 1,
       "message": "This should be VK_NULL_HANDLE, to better match the VMA spec.\n\nAlso, please add a comment indicating what VK_NULL_HANDLE means here.\n\nhttps://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/struct_vma_allocation_create_info.html#a6272c0555cfd1fe28bff1afeb6190150\n\u003e Leave VK_NULL_HANDLE to allocate from default pool.",
+      "range": {
+        "startLine": 157,
+        "startChar": 36,
+        "endLine": 157,
+        "endChar": 43
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1f2e77_8a0f555d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd00054f_7ba2fdf5",
       "range": {
         "startLine": 157,
         "startChar": 36,
@@ -225,6 +435,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bca1f1fb_df1f05f9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3967b29f_56595a18",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 87
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "007ed5d1_a8e396ff",
@@ -238,6 +472,30 @@
       "writtenOn": "2021-08-05T02:11:47Z",
       "side": 1,
       "message": "linear",
+      "range": {
+        "startLine": 176,
+        "startChar": 57,
+        "endLine": 176,
+        "endChar": 64
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "163d7691_29cc28e2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "It is default, as explained in previous comment. linear means different algorithm.",
+      "parentUuid": "007ed5d1_a8e396ff",
       "range": {
         "startLine": 176,
         "startChar": 57,

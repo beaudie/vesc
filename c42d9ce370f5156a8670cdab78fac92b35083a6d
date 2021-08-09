@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f24910ab_9809e1fe",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d09e0476_917efebd",
+      "range": {
+        "startLine": 166,
+        "startChar": 5,
+        "endLine": 166,
+        "endChar": 68
+      },
+      "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5256d89_383d12ac",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-06T16:57:22Z",
       "side": 1,
       "message": "can you check out using the preferred block size to do the dedicated allocations? I\u0027m curious to know what you think. Removing this logic would be preferable to simplify the code.",
+      "range": {
+        "startLine": 180,
+        "startChar": 34,
+        "endLine": 180,
+        "endChar": 59
+      },
+      "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21eb2abd_bd8c7597",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-09T23:59:41Z",
+      "side": 1,
+      "message": "Yes, I did experiment before. If we use preferred block size, most allocation will end up using sub-allocator which defeats the purpose. I think most allocation is less than 4M and preferred block size is around 4M (the actual number needs to double check, but I know for sure most allocation is less than the block size).\n\nOne thing I can simplify is to allocate VMAPool as needed. Right now I allocate all pools at initialization time, which could be wasting a lot of these pool allocations (It did not actually allocate pool memory, just the data structures of the pool). I did this to avoid have to check at memory allocation time, but that is subject to debate. I am okay with either, please let me know what your opinion.",
+      "parentUuid": "d5256d89_383d12ac",
       "range": {
         "startLine": 180,
         "startChar": 34,
