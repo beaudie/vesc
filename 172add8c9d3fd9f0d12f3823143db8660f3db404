@@ -104,6 +104,41 @@
       "parentUuid": "7a77b2e0_23a58a31",
       "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e264b86_48487ea0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-09T14:22:59Z",
+      "side": 1,
+      "message": "I totally misunderstood what you were saying. First it was that chromium had a test that ANGLE did not, and that showed an error. So, I thought when you said gap, that Google was going to add this test to ANGLE to cover the difference. So I was waiting for this test, that maybe I could use to verify. Because the only run/fail was not informative as to what went wrong. My best guess and Ian\u0027s is that I\u0027m picking up a protected bit from ANB or dmabuf on a gles run and glTexImage2D fails from that. Now Mohan had me remove all fail cases from my test set because on some devices this will crash - can\u0027t have this in CI. So you want me to add a test case for a backend we don\u0027t support for a test that would crash? Not to be obtuse here, I have removed the protected bit from gles backend. So what is a good test here that would verify the failing use case? ANB to Image to texture, then call glTexImage2D - but we do not want a crash, or at least verify no crash - I think I cover that. Note that I only select the Vulkan backend in the test set. Maybe all that is needed is to add gles backend to test set and verify no fail?",
+      "parentUuid": "9e5a36a5_ec647f69",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "134926c2_d98edb34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-09T14:22:59Z",
+      "side": 1,
+      "message": "response.",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
