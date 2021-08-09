@@ -26,7 +26,7 @@ class TIntermBinary;
 class DriverUniform
 {
   public:
-    DriverUniform() : mDriverUniforms(nullptr), mEmulatedDepthRangeType(nullptr) {}
+    DriverUniform() : mDriverUniforms(nullptr) {}
     virtual ~DriverUniform() = default;
 
     bool addComputeDriverUniformsToShader(TIntermBlock *root, TSymbolTable *symbolTable);
@@ -50,11 +50,10 @@ class DriverUniform
 
   protected:
     TIntermBinary *createDriverUniformRef(const char *fieldName) const;
-    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable);
-    TType *createEmulatedDepthRangeType(TSymbolTable *symbolTable);
+    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) const;
+    TType *createEmulatedDepthRangeType(TSymbolTable *symbolTable) const;
 
     const TVariable *mDriverUniforms;
-    TType *mEmulatedDepthRangeType;
 };
 
 class DriverUniformExtended : public DriverUniform
@@ -70,7 +69,7 @@ class DriverUniformExtended : public DriverUniform
     TIntermSwizzle *getNegFlipYRef() const override;
 
   protected:
-    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) override;
+    virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) const override;
 };
 
 }  // namespace sh

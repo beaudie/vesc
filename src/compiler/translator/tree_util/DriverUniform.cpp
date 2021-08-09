@@ -71,7 +71,7 @@ bool DriverUniform::addComputeDriverUniformsToShader(TIntermBlock *root, TSymbol
     return mDriverUniforms != nullptr;
 }
 
-TFieldList *DriverUniform::createUniformFields(TSymbolTable *symbolTable)
+TFieldList *DriverUniform::createUniformFields(TSymbolTable *symbolTable) const
 {
     constexpr size_t kNumGraphicsDriverUniforms                                                = 8;
     constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames = {
@@ -104,15 +104,9 @@ TFieldList *DriverUniform::createUniformFields(TSymbolTable *symbolTable)
     return driverFieldList;
 }
 
-TType *DriverUniform::createEmulatedDepthRangeType(TSymbolTable *symbolTable)
+TType *DriverUniform::createEmulatedDepthRangeType(TSymbolTable *symbolTable) const
 {
-    // If already defined, return it immediately.
-    if (mEmulatedDepthRangeType != nullptr)
-    {
-        return mEmulatedDepthRangeType;
-    }
-
-    // Create the depth range type.
+    // Init the depth range type.
     TFieldList *depthRangeParamsFields = new TFieldList();
     depthRangeParamsFields->push_back(new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1, 1),
                                                  ImmutableString("near"), TSourceLoc(),
@@ -131,11 +125,9 @@ TType *DriverUniform::createEmulatedDepthRangeType(TSymbolTable *symbolTable)
     TStructure *emulatedDepthRangeParams = new TStructure(
         symbolTable, kEmulatedDepthRangeParams, depthRangeParamsFields, SymbolType::AngleInternal);
 
-    mEmulatedDepthRangeType = new TType(emulatedDepthRangeParams, false);
+    TType *emulatedDepthRangeType = new TType(emulatedDepthRangeParams, false);
 
-    // Note: this should really return a const TType *, but one of its uses is with TField who takes
-    // a non-const TType.  See comment on that class.
-    return mEmulatedDepthRangeType;
+    return emulatedDepthRangeType;
 }
 
 // The Add*DriverUniformsToShader operation adds an internal uniform block to a shader. The driver
@@ -147,13 +139,11 @@ bool DriverUniform::addGraphicsDriverUniformsToShader(TIntermBlock *root, TSymbo
 {
     ASSERT(!mDriverUniforms);
 
-    // Declare the depth range struct type.
-    TType *emulatedDepthRangeType     = createEmulatedDepthRangeType(symbolTable);
-    TType *emulatedDepthRangeDeclType = new TType(emulatedDepthRangeType->getStruct(), true);
-
+    TType *emulatedDepthRangeType = createEmulatedDepthRangeType(symbolTable);
+    // Declare a global depth range variable.
     TVariable *depthRangeVar =
         new TVariable(symbolTable->nextUniqueId(), kEmptyImmutableString, SymbolType::Empty,
-                      TExtension::UNDEFINED, emulatedDepthRangeDeclType);
+                      TExtension::UNDEFINED, emulatedDepthRangeType);
 
     DeclareGlobalVariable(root, depthRangeVar);
 
@@ -230,7 +220,7 @@ TIntermBinary *DriverUniform::getNumSamplesRef() const
 //
 // Class DriverUniformExtended
 //
-TFieldList *DriverUniformExtended::createUniformFields(TSymbolTable *symbolTable)
+TFieldList *DriverUniformExtended::createUniformFields(TSymbolTable *symbolTable) const
 {
     TFieldList *driverFieldList = DriverUniform::createUniformFields(symbolTable);
 
