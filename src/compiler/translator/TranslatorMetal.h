@@ -48,7 +48,7 @@ class DriverUniformMetal : public DriverUniform
     TIntermBinary *getCoverageMaskFieldRef() const;
 
   protected:
-    TFieldList *createUniformFields(TSymbolTable *symbolTable) override;
+    TFieldList *createUniformFields(TSymbolTable *symbolTable) const override;
 };
 
 class TranslatorMetal : public TranslatorVulkan

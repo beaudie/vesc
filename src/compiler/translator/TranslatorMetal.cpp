@@ -118,7 +118,7 @@ ANGLE_NO_DISCARD bool InitializeUnusedOutputs(TIntermBlock *root,
 
 // class DriverUniformMetal
 // The fields here must match the DriverUniforms structure defined in ContextMtl.h.
-TFieldList *DriverUniformMetal::createUniformFields(TSymbolTable *symbolTable)
+TFieldList *DriverUniformMetal::createUniformFields(TSymbolTable *symbolTable) const
 {
     TFieldList *driverFieldList = DriverUniform::createUniformFields(symbolTable);
 
