@@ -16,6 +16,46 @@
       "message": "Resolved the issues mentioned in the comment.",
       "revId": "4c6109c2e817d9e09dbab89c8473a9caec5f6a3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d58ba0_6b9488a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-09T15:14:33Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4c6109c2e817d9e09dbab89c8473a9caec5f6a3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "658f4539_8c0d3fb0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2283,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-09T15:14:33Z",
+      "side": 1,
+      "message": "To save some allocations, initialize this string with \"ANGLE_\" and remove the \u0027d3dName\u0027 below.",
+      "range": {
+        "startLine": 2283,
+        "startChar": 4,
+        "endLine": 2283,
+        "endChar": 26
+      },
+      "revId": "4c6109c2e817d9e09dbab89c8473a9caec5f6a3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
