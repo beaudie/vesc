@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8466204a_f20efaff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:32:28Z",
+      "side": 1,
+      "message": "LGTM with some questions.",
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2139b9a2_4e615a17",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:32:28Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 1582,
+        "startChar": 39,
+        "endLine": 1582,
+        "endChar": 51
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d104fa3_788b31c8",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:32:28Z",
+      "side": 1,
+      "message": "This sticks out as weird to me.  It is also checked for explicitly above (ref).  Is this something an app would actually use, or is it just an ANGLE internal thing that we don\u0027t need to capture?  We should punt on it for that reason as opposed to its complexity.",
+      "range": {
+        "startLine": 1610,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 77
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d20fda9_8ec1f8a4",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:32:28Z",
+      "side": 1,
+      "message": "This sticks out as weird to me.  It is also checked for above (ref).  Is this something an app would actually use, or is it an internal ANGLE thing?  We should punt on it for that reason as opposed to its complexity.",
+      "range": {
+        "startLine": 1610,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 77
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54070316_d583db34",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 2092,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:32:28Z",
+      "side": 1,
+      "message": "Are you anticipating adding more types here?  If not, maybe just do an equality check as you are with AHardwareBufferConstPointer.  That or move AHardwareBufferConstPointer into this table for consistency.",
+      "range": {
+        "startLine": 2092,
+        "startChar": 9,
+        "endLine": 2092,
+        "endChar": 25
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
