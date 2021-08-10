@@ -92,7 +92,7 @@
 #include "saint_seiya_awakening/saint_seiya_awakening_capture_context1.h"
 #include "sakura_school_simulator/sakura_school_simulator_capture_context2.h"
 #include "shadow_fight_2/shadow_fight_2_capture_context1.h"
-#include "slingshot_test1/slingshot_test1_capture_context2.h"
+#include "slingshot_test1/slingshot_test1_capture_context1.h"
 #include "slingshot_test2/slingshot_test2_capture_context2.h"
 #include "sniper_3d/sniper_3d_capture_context1.h"
 #include "standoff_2/standoff_2_capture_context1.h"
@@ -582,7 +582,7 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {slingshot_test1::kReplayContextClientMajorVersion,
       slingshot_test1::kReplayContextClientMinorVersion, slingshot_test1::kReplayFrameStart,
       slingshot_test1::kReplayFrameEnd, slingshot_test1::kReplayDrawSurfaceWidth,
-      slingshot_test1::kReplayDrawSurfaceHeight, kDefaultReplayDrawSurfaceColorSpace,
+      slingshot_test1::kReplayDrawSurfaceHeight, slingshot_test1::kReplayDrawSurfaceColorSpace,
       "slingshot_test1"}},
     {RestrictedTraceID::slingshot_test2,
      {slingshot_test2::kReplayContextClientMajorVersion,

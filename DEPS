@@ -1437,7 +1437,7 @@ deps = {
   'src/tests/restricted_traces/slingshot_test1': {
       'packages': [
         {
-            'package': 'angle/traces/slingshot_test1',
+            'package': 'experimental/google.com/jmadill/angle/traces/slingshot_test1',
             'version': 'version:1',
         },
       ],
