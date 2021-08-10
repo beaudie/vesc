@@ -237,6 +237,30 @@
       },
       "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c90c582b_f301d52c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-10T18:19:42Z",
+      "side": 1,
+      "message": "The problem is VMA headers are not included here. As the way it is structured, vk_mem_alloc_wrapper is designed to hide VMA from the rest of ANGLE. I can\u0027t use VMA bits unless I define my own bit. I would suggest in future we expose VMA directly to the rest of code (I am not seeing any reason we should not).",
+      "parentUuid": "3340d4c7_47bb34bb",
+      "range": {
+        "startLine": 180,
+        "startChar": 34,
+        "endLine": 180,
+        "endChar": 59
+      },
+      "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
