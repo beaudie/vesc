@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06056e9d_7c1bf431",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T22:45:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2139b9a2_4e615a17",
+      "range": {
+        "startLine": 1582,
+        "startChar": 39,
+        "endLine": 1582,
+        "endChar": 51
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d104fa3_788b31c8",
@@ -89,6 +113,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a26fd019_6f37ee17",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T22:45:11Z",
+      "side": 1,
+      "message": "\u003e Is this something an app would actually use, or is it an internal ANGLE thing?\n\nThis is an ANGLE-specific EGL class that\u0027s created within the EGL entry point (entry_points_egl_autogen.cpp) and passed along to the appropriate function in egl_stubs.cpp.   Apps don\u0027t create them directly, instead they are created from lists of attributes the app passes in.\n\n\u003e We should punt on it for that reason as opposed to its complexity.\n\nI\u0027m not sure what you mean here.   The ParamValue union has a lot of ANGLE-specific classes, since the GL and EGL entry points often repackage the GLES/EGL parameters into ANGLE-specific structs/classes/enums/etc.   ParamValue doesn\u0027t hold strictly GL/EGL API parameter types, but a mix of API types and ANGLE-specific structs that are passed to the stub functions, so excluding it because it\u0027s an ANGLE type doesn\u0027t fit with how ParamValue is defined.\n\negl::AttributeMap is a special case since we can\u0027t copy it into the ParamValue union member due to compilation failures.",
+      "parentUuid": "3d20fda9_8ec1f8a4",
+      "range": {
+        "startLine": 1610,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 77
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17dac22d_93fdde92",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T22:45:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5d104fa3_788b31c8",
+      "range": {
+        "startLine": 1610,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 77
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54070316_d583db34",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 4
@@ -100,6 +172,30 @@
       "writtenOn": "2021-08-10T21:32:28Z",
       "side": 1,
       "message": "Are you anticipating adding more types here?  If not, maybe just do an equality check as you are with AHardwareBufferConstPointer.  That or move AHardwareBufferConstPointer into this table for consistency.",
+      "range": {
+        "startLine": 2092,
+        "startChar": 9,
+        "endLine": 2092,
+        "endChar": 25
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f503bb76_c4c9d12f",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 2092,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T22:45:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54070316_d583db34",
       "range": {
         "startLine": 2092,
         "startChar": 9,
