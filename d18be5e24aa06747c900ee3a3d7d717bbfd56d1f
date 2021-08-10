@@ -50,6 +50,23 @@
       "message": "Reply\nNot ready, do not merge.",
       "revId": "d18be5e24aa06747c900ee3a3d7d717bbfd56d1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10ee4dbc_8e737b85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-10T16:45:03Z",
+      "side": 1,
+      "message": "Replay",
+      "revId": "d18be5e24aa06747c900ee3a3d7d717bbfd56d1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
