@@ -171,6 +171,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "effc86aa_8f6f1ee4",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T04:35:20Z",
+      "side": 1,
+      "message": "Its still not working for me on Android:\n\n out/AndroidPerformance$  ../../src/tests/run_perf_tests.py\n \u003csnip\u003e\n Command [\u0027./angle_perftests\u0027, \u0027--list-tests\u0027] returned exit code 0\nTraceback (most recent call last):\n  File \"../../src/tests/run_perf_tests.py\", line 389, in \u003cmodule\u003e\n    sys.exit(main())\n  File \"../../src/tests/run_perf_tests.py\", line 244, in main\n    tests \u003d _get_tests_from_output(lines)\n  File \"../../src/tests/run_perf_tests.py\", line 120, in _get_tests_from_output\n    raise Exception(\u0027Did not find test list in test output!\u0027)\n Exception: Did not find test list in test output!\n\nBelow what I see when I run \"./angle_perftests --list-tests\" for Android.\n\n out/AndroidPerformance$ ./angle_perftests --list-tests\nAdditional test environment:\n    CHROME_DEVEL_SANDBOX\u003d/opt/chromium/chrome_sandbox\n    CHROME_HEADLESS\u003d1\n    LANG\u003den_US.UTF-8\nCommand: /\u003csnip\u003e/.vpython-root/d759f4/bin/python ../../build/android/test_runner.py gtest --output-directory ./. --runtime-deps-path gen.runtime/src/tests/angle_perftests__test_runner_script.runtime_deps --suite angle_perftests --list-tests\n\n C   34.955s Main  ********************************************************************************\nC   34.955s Main  Summary\nC   34.955s Main  ********************************************************************************\nC   34.955s Main  [\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 1 test ran.\nC   34.955s Main  [  PASSED  ] 1 test.\nC   34.955s Main  ********************************************************************************\nC   34.980s Main  TEST RESULTS: file:///\u003csnip\u003e/code/angle/out/AndroidPerformance/TEST_RESULTS_2021_08_09T22_20_53/test_results_presentation/test_results_presentation.html",
+      "parentUuid": "3b027e7f_755086fa",
+      "range": {
+        "startLine": 172,
+        "startChar": 11,
+        "endLine": 172,
+        "endChar": 26
+      },
+      "revId": "4082695c4f6d0234dd3b7349c68844122c11053b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a024529_814e474b",
