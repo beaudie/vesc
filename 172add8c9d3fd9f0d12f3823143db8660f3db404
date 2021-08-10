@@ -193,6 +193,24 @@
       "parentUuid": "a7059041_e71e4592",
       "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89d67619_217d0b98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-10T16:38:00Z",
+      "side": 1,
+      "message": "No, this was to try and recreate the error, so that we know we have the fix. I did not add a test case. I added gles to test suite to see if the error would present.\n\nI think your code changes to gles backend (MemoryObjectGL, DmabuffImageSiblingEGL, NativeBufferImageSiblingAndroid) seem the most likely, and I have the fix. BUT I don\u0027t know how to generate the original error.",
+      "parentUuid": "bfc189bc_00ffce95",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

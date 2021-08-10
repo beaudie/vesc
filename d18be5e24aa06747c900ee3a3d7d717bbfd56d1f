@@ -33,6 +33,23 @@
       "message": "LGTM ... thanks for the test change!",
       "revId": "d18be5e24aa06747c900ee3a3d7d717bbfd56d1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6631cca9_19f82e92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-10T16:38:00Z",
+      "side": 1,
+      "message": "Reply\nNot ready, do not merge.",
+      "revId": "d18be5e24aa06747c900ee3a3d7d717bbfd56d1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
