@@ -120,6 +120,29 @@
       "message": "Reply",
       "revId": "d18be5e24aa06747c900ee3a3d7d717bbfd56d1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccfb1f00_0375b866",
+        "filename": "src/tests/egl_tests/EGLProtectedContentTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-10T18:30:49Z",
+      "side": 1,
+      "message": "Given that the new tests will skip if the extension is not enabled, is there any reason not to keep these lines?",
+      "range": {
+        "startLine": 832,
+        "startChar": 1,
+        "endLine": 833,
+        "endChar": 53
+      },
+      "revId": "d18be5e24aa06747c900ee3a3d7d717bbfd56d1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
