@@ -195,6 +195,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e86daa8_0fd312fe",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T12:48:46Z",
+      "side": 1,
+      "message": "Seems like the problem was I required the \"verbose\" flag to get test output from the Android runner. So I removed the flag from my arguments and made it default. Should work now.",
+      "parentUuid": "effc86aa_8f6f1ee4",
+      "range": {
+        "startLine": 172,
+        "startChar": 11,
+        "endLine": 172,
+        "endChar": 26
+      },
+      "revId": "4082695c4f6d0234dd3b7349c68844122c11053b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a024529_814e474b",
