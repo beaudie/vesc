@@ -265,6 +265,24 @@
       "parentUuid": "e383791e_cc5307ed",
       "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19c13500_d282683a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-08-10T17:02:17Z",
+      "side": 1,
+      "message": "We started off try to give a local manual reproduce. That ended up as a hassle with limited devices available that were also out of date.\n\nThat\u0027s why I just went with this latest CI run, hoping that enabling gles tests would expose the issue.\n\nAlso I don\u0027t seem to have access to the test results of that failed chromium run. The details were very limited and inconsistent too.\n\nAnyway, let me add back the change Ian and I think are the only possible cause given the limited evidence - gles runs.",
+      "parentUuid": "ad7494ed_7cb459fa",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
