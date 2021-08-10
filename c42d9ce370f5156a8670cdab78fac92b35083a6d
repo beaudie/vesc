@@ -213,6 +213,30 @@
       },
       "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3340d4c7_47bb34bb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T18:05:13Z",
+      "side": 1,
+      "message": "Apologies, I didn\u0027t notice the changes to the VMA interface. bool types can be a bit hard to follow the chain of information. Can you instead pass the flag values (0 or DEDICATED) and pass that to the VMA helper function?",
+      "parentUuid": "eb3b22b5_e6869751",
+      "range": {
+        "startLine": 180,
+        "startChar": 34,
+        "endLine": 180,
+        "endChar": 59
+      },
+      "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3f406be_a3caa0d3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 3437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T18:05:13Z",
+      "side": 1,
+      "message": "Do you need FixedVector? I\u0027d recommend std::array for the integer-typed pools, and PackedEnumMap for the \"enum class\" map/array.",
+      "parentUuid": "1469896e_783343a7",
+      "range": {
+        "startLine": 3437,
+        "startChar": 48,
+        "endLine": 3437,
+        "endChar": 62
+      },
+      "revId": "3e18b21946062e3d02d3cdb8c92fe57959637379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed1358d7_19090f53",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 29
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-10T18:00:00Z",
       "side": 1,
       "message": "@jmadill. This boolean flag pass to vma::AllocateMemory call and will add VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT to the flag bits. The whole VMA is structured in a way that it is hide from the rest of ANGLE code, this CL does not change that, so we basically use the boolean and let vk_memory_alloc_wrapper.cpp translate boolean to the actual VMA flag. (I do think we should someday expose VMA directly to the rest of code though)",
+      "range": {
+        "startLine": 3535,
+        "startChar": 0,
+        "endLine": 3535,
+        "endChar": 88
+      },
+      "revId": "3e18b21946062e3d02d3cdb8c92fe57959637379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6cf2357_23f80218",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 3535,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T18:05:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ed1358d7_19090f53",
       "range": {
         "startLine": 3535,
         "startChar": 0,
