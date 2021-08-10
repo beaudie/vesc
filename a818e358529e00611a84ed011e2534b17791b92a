@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e344040_b781eda1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T15:28:45Z",
+      "side": 1,
+      "message": "Thanks Lubosz. This looks good, just a few nits.",
+      "revId": "a818e358529e00611a84ed011e2534b17791b92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b3adc14_664db5b6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T15:28:45Z",
+      "side": 1,
+      "message": "nit: suggest starting lowercase as we generally use that style.",
+      "range": {
+        "startLine": 83,
+        "startChar": 47,
+        "endLine": 83,
+        "endChar": 67
+      },
+      "revId": "a818e358529e00611a84ed011e2534b17791b92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cae6fb67_67485cd1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T15:28:45Z",
+      "side": 1,
+      "message": "nit: methods before data.",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 27
+      },
+      "revId": "a818e358529e00611a84ed011e2534b17791b92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "845af159_31f9b6d5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2879,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T15:28:45Z",
+      "side": 1,
+      "message": "nit: init like this:\n\n FramebufferCaptureFuncs framebufferFuncs(context-\u003eisGLES1());",
+      "range": {
+        "startLine": 2879,
+        "startChar": 4,
+        "endLine": 2879,
+        "endChar": 95
+      },
+      "revId": "a818e358529e00611a84ed011e2534b17791b92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85675630_de63f4d6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3308,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T15:28:45Z",
+      "side": 1,
+      "message": "nit: init like this:\n\n FramebufferCaptureFuncs framebufferFuncs(context-\u003eisGLES1());",
+      "range": {
+        "startLine": 3306,
+        "startChar": 27,
+        "endLine": 3308,
+        "endChar": 0
+      },
+      "revId": "a818e358529e00611a84ed011e2534b17791b92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
