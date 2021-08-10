@@ -230,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d638922_3cecaca2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12db113e_b961669b",
+      "range": {
+        "startLine": 606,
+        "startChar": 8,
+        "endLine": 607,
+        "endChar": 41
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f105e9e_3b47729f",
@@ -253,6 +277,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db8a2aef_11a4db7e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f105e9e_3b47729f",
+      "range": {
+        "startLine": 625,
+        "startChar": 26,
+        "endLine": 625,
+        "endChar": 50
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7555b271_42606dd6",
@@ -266,6 +314,30 @@
       "writtenOn": "2021-08-06T21:47:14Z",
       "side": 1,
       "message": "These logic can be skipped if (access \u0026 GL_MAP_INVALIDATE_BUFFER_BIT) !\u003d 0",
+      "range": {
+        "startLine": 609,
+        "startChar": 13,
+        "endLine": 629,
+        "endChar": 13
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55f5a638_43d867d6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7555b271_42606dd6",
       "range": {
         "startLine": 609,
         "startChar": 13,
@@ -313,6 +385,30 @@
       "side": 1,
       "message": "I haven\u0027t hit any assertions yet, but maybe I need to rebase to pick up your changes?   I\u0027ll give that a shot and see if CQ uncovers anything.",
       "parentUuid": "ee90ba74_b0e1e0e1",
+      "range": {
+        "startLine": 633,
+        "startChar": 26,
+        "endLine": 633,
+        "endChar": 45
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9c6e20f_d8c07cb9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "Looking closer at acquireAndUpdate(), that\u0027s a bit more than we need to do here, since that handles !isHostVisible() (which the buffer has to be), sub-updates, and retaining the buffer (which we don\u0027t want).\n\nGetting a new buffer via acquireBufferHelper() is all we need, combined with a manual memcpy().",
+      "parentUuid": "69ef2ab3_feccafd1",
       "range": {
         "startLine": 633,
         "startChar": 26,
@@ -467,6 +563,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35119377_8ce7822f",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "\u003e I think only 2 is enough, `Read` and `ReadWrite` (no real difference between `ReadWrite` and `Write`).\n\nSounds good.\n\n\u003e I think we actually have that enum somewhere around.\n\nYeah, I think you made one a while ago, but I can\u0027t find it anywhere.\n\n\u003e I think Access is for resources that are not readable or writable? Then you can just hijack either serial for that and not have yet another serial for them.\n\nUsing Read should work.",
+      "parentUuid": "18cea952_0141dfe7",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec065274_916d6532",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 7
@@ -538,6 +658,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b82aae0_a5c00396",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "This is to correspond which retain(READ/WRITE) call is for which release() call, to handle the case where release() is called before the resource is used in a command.\n\nAdditionally, we need to be able to handle 2 contexts sharing a resource, with one doing a read and another doing a write.   We need to know when the command performing the write is submitted so we can update the correct serial.",
+      "parentUuid": "2301f29c_45bd267d",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 0
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4680db39_382721ff",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 7
@@ -583,6 +727,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ad209b8_6c3dbe0d",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "Done\n\nI went with readSerial and readWriteSerial, rather than specifying either are just for buffers, in case we start tracking write access for other Resources in the future.",
+      "parentUuid": "af7b2a04_109ee72c",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 23
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae7a0d30_9677feee",
@@ -606,6 +774,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79cb12ac_0136c701",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "Done\n\nI kept retain and added a retainBuffer() which takes a ResourceUseType.   We can update this one if it\u0027s used for other Resources in the future.",
+      "parentUuid": "ae7a0d30_9677feee",
+      "range": {
+        "startLine": 303,
+        "startChar": 9,
+        "endLine": 303,
+        "endChar": 15
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dca91978_4b7b0f4c",
@@ -619,6 +811,30 @@
       "writtenOn": "2021-08-08T01:37:08Z",
       "side": 1,
       "message": "You may want to specialize this to `retainReadImage/BufferViews` and `retainReadWriteImage/BufferViews`. Because contrary to what the message commit says, texture buffers *cannot* be written to. *Image buffers* can.\n\nWith this change, the same scenario you are optimizing but involving texture buffers will still suffer even though they shouldn\u0027t.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 5
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e95d8469_664c9a8e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T01:28:56Z",
+      "side": 1,
+      "message": "\u003e Because contrary to what the message commit says, texture buffers *cannot* be written to. *Image buffers* can.\n\nI don\u0027t understand what you mean here.   My understanding is that the texture buffer view still needs to be retained as ReadWrite since the texture buffer is being retained as Write, so we can know that a write is being performed (and when it completes).",
+      "parentUuid": "dca91978_4b7b0f4c",
       "range": {
         "startLine": 199,
         "startChar": 0,
