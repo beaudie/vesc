@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1469896e_783343a7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 3437,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-10T18:02:23Z",
+      "side": 1,
+      "message": "@jmadill This seems does not zero init the whole 2d array. Any idea how do I do it properly?",
+      "range": {
+        "startLine": 3437,
+        "startChar": 48,
+        "endLine": 3437,
+        "endChar": 62
+      },
+      "revId": "3e18b21946062e3d02d3cdb8c92fe57959637379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed1358d7_19090f53",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 29
