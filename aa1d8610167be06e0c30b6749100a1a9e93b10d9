@@ -186,6 +186,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a36b3441_c8a4f53d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T17:24:27Z",
+      "side": 1,
+      "message": "They are separate attachments[1].   I believe this is expected due to the test explicitly binding a different read and draw surface for the blit (to show the bug), but I\u0027m not an expert in how all the surface/attachment/binding stuff works.\n\nI\u0027ve put together a CL that flushes staged updates to both read and draw attachments (PS #2):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3078980/2\n\nNote that it fails several VulkanPerformanceCounterTest tests due to increasing the renderpass count.\n\nIt seems only doing read first (if it exists), otherwise doing write, \"works\", but I\u0027m not sure if that\u0027s actually correct.   Instead, I\u0027m wondering if the VulkanPerformanceCounterTest tests need to be updated with the new values so we can do both read/write if they exist.\n\n\n[1]: Here is the gdb data when breaking in FramebufferVk::flushColorAttachmentUpdates().   Note that getColorRead() and getColorDraw() return different pointers.\n\nStack:\n    rx::FramebufferVk::flushColorAttachmentUpdates FramebufferVk.cpp:1742\n    rx::FramebufferVk::syncState FramebufferVk.cpp:1906\n    gl::Framebuffer::syncState Framebuffer.cpp:2051\n    gl::State::syncReadFramebuffer State.cpp:3305\n    gl::State::syncDirtyObjects State.h:1185\n    gl::Context::syncDirtyObjects Context.inl.h:106\n    gl::Context::syncState Context.cpp:4086\n    gl::Context::syncStateForBlit Context.cpp:5283\n    gl::Context::blitFramebuffer Context.cpp:4146\n    GL_BlitFramebuffer entry_points_gles_3_0_autogen.cpp:227\n    (anonymous namespace)::EGLSurfaceTest_BlitBetweenSurfaces_Test::TestBody EGLSurfaceTest.cpp:1238\n\nLocal variables and parameters:\n    colorIndexGL \u003d {uint32_t} 0\n    context \u003d {const gl::Context * | 0x560b9cc3ca40} 0x560b9cc3ca40\n    contextVk \u003d {rx::ContextVk * | 0x560b9cc429f0} 0x560b9cc429f0\n    deferClears \u003d {bool} false\n    renderTarget \u003d {rx::RenderTargetVk * | 0x0} NULL\n    this \u003d {rx::FramebufferVk * | 0x560b9d9591b0} 0x560b9d9591b0\n\nEvaluate getColorRead():\n    mRenderTargetCache.getColorRead(mState)\n        result \u003d {rx::RenderTargetVk * | 0x560b9d5decb0} 0x560b9d5decb0\n             mImage \u003d {rx::vk::ImageHelper * | 0x560b9d5ded30} 0x560b9d5ded30\n             mImageViews \u003d {rx::vk::ImageViewHelper * | 0x560b9d5deee8} 0x560b9d5deee8\n             mLayerCount \u003d {uint32_t} 1\n             mLayerIndex \u003d {uint32_t} 0\n             mLevelIndexGL \u003d {gl::LevelIndex} \n             mResolveImage \u003d {rx::vk::ImageHelper * | 0x0} NULL\n             mResolveImageViews \u003d {rx::vk::ImageViewHelper * | 0x0} NULL\n             mTransience \u003d {rx::RenderTargetTransience} rx::RenderTargetTransience::Default\n             rx::FramebufferAttachmentRenderTarget \u003d {rx::FramebufferAttachmentRenderTarget} \n\nEvaluate getColorDraw():\n    mRenderTargetCache.getColorDraw(mState, colorIndexGL)\n        result \u003d {rx::RenderTargetVk * | 0x560b9d5e5650} 0x560b9d5e5650\n             mImage \u003d {rx::vk::ImageHelper * | 0x560b9d5e56d0} 0x560b9d5e56d0\n             mImageViews \u003d {rx::vk::ImageViewHelper * | 0x560b9d5e5888} 0x560b9d5e5888\n             mLayerCount \u003d {uint32_t} 1\n             mLayerIndex \u003d {uint32_t} 0\n             mLevelIndexGL \u003d {gl::LevelIndex} \n             mResolveImage \u003d {rx::vk::ImageHelper * | 0x0} NULL\n             mResolveImageViews \u003d {rx::vk::ImageViewHelper * | 0x0} NULL\n             mTransience \u003d {rx::RenderTargetTransience} rx::RenderTargetTransience::Default\n             rx::FramebufferAttachmentRenderTarget \u003d {rx::FramebufferAttachmentRenderTarget}",
+      "parentUuid": "cca56f42_cd84b34a",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1754,
+        "endChar": 5
+      },
+      "revId": "aa1d8610167be06e0c30b6749100a1a9e93b10d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cef175b4_d763ecbf",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 12
