@@ -117,6 +117,30 @@
       },
       "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dd65289_59d4827d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T13:54:28Z",
+      "side": 1,
+      "message": "How about setting the \"big\" (default allocator) pool preferred block size at 2M so we get \u003e1M allocations to allocate with dedicated memory? I\u0027m not sure if the setting for the preferred block size would impact any other behaviour? It would allow us to remove the logic for dedicated allocations and simplify the code. Is there a downside I\u0027m not understanding?",
+      "parentUuid": "0ca92d71_016fc72f",
+      "range": {
+        "startLine": 180,
+        "startChar": 34,
+        "endLine": 180,
+        "endChar": 59
+      },
+      "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
