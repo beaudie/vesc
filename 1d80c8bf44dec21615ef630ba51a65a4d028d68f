@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c4ecee2_0fdd0b8e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T17:41:05Z",
+      "side": 1,
+      "message": "Do we need this to always be human-readable and accessible in every trace file?   I think it would be better to just always compress it and put it into the binary file, since it outputs the diff as human-readable if there\u0027s an error.",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0f5fe50_f4d1b24f",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T17:41:05Z",
+      "side": 1,
+      "message": "This only works on linux.   Are there plans to support Windows?   \n\nRegardless, this should probably bail out early if it\u0027s running on Windows rather than failing.",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae7f152e_f5b567e5",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T17:41:05Z",
+      "side": 1,
+      "message": "Why is this necessary?   Shouldn\u0027t the Context already do this with \u0027angle_with_capture_by_default \u003d true\u0027?   Or is that not part of the GN args for building the binary that\u0027s doing the retracing?",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
