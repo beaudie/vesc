@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6987400b_5f831ddc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-10T01:06:55Z",
+      "side": 1,
+      "message": "If you keep retain as is and just add a retainBufferForReadOnlyAccess, I think the diff will even smaller. These internal buffers is irrelevant to the optimization you try to do.",
+      "range": {
+        "startLine": 2230,
+        "startChar": 22,
+        "endLine": 2230,
+        "endChar": 34
+      },
+      "revId": "5fd18b34437efb657874047dcc08ec73002c7301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

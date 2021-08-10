@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc7e8b3f_a2579974",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-10T01:06:55Z",
+      "side": 1,
+      "message": "If you keep retain as is, I also dont think you need to change any of these calls, since these are internal buffers that will never subject to the optimization you try to do. Same for the diff at line 2445.",
+      "range": {
+        "startLine": 2869,
+        "startChar": 20,
+        "endLine": 2869,
+        "endChar": 32
+      },
+      "revId": "64bac7022ae59d6eccb51d26ebbc361b993a2253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b07ecc61_73782341",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-10T01:06:55Z",
+      "side": 1,
+      "message": "Is it never been used? I did quick search not seeing been used.",
+      "range": {
+        "startLine": 844,
+        "startChar": 5,
+        "endLine": 844,
+        "endChar": 26
+      },
+      "revId": "64bac7022ae59d6eccb51d26ebbc361b993a2253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
