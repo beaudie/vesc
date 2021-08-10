@@ -261,6 +261,30 @@
       },
       "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5bf1c2d_a8d8dba5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T20:34:26Z",
+      "side": 1,
+      "message": "OK, thanks for clarifying. My request then is that you replace the bool with a typed enum defined in the wrapper header. As bools can be opaque. Isolating libs can prevent some kinds of code confusion (warnings, compiler options, etc) so it is helpful to isolate them.",
+      "parentUuid": "c90c582b_f301d52c",
+      "range": {
+        "startLine": 180,
+        "startChar": 34,
+        "endLine": 180,
+        "endChar": 59
+      },
+      "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
