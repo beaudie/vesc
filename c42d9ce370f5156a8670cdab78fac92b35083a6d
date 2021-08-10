@@ -189,6 +189,30 @@
       },
       "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb3b22b5_e6869751",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-10T18:00:00Z",
+      "side": 1,
+      "message": "See RendererVk.cpp line 3535.",
+      "parentUuid": "f1f18d14_58f7c9bb",
+      "range": {
+        "startLine": 180,
+        "startChar": 34,
+        "endLine": 180,
+        "endChar": 59
+      },
+      "revId": "c42d9ce370f5156a8670cdab78fac92b35083a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
