@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8599df4_6cf09158",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T23:07:10Z",
+      "side": 1,
+      "message": "Do you have an example of what the compilation failure looks like?  I\u0027m mostly curious, I don\u0027t think we\u0027ve excluded something like this before. I\u0027m curious how it manifests.  Are just dropping the capture entrypoints that contain AttributeMap?",
+      "parentUuid": "a26fd019_6f37ee17",
+      "range": {
+        "startLine": 1610,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 77
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54070316_d583db34",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 4
