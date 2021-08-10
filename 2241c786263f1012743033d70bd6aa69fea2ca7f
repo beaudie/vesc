@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71f0886a_42fe6c8a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T23:39:30Z",
+      "side": 1,
+      "message": "Reading the VMA docs again, I was misunderstanding what they meant by blocks.   It\u0027s the size of memory allocated from the VK device, not the granularity that\u0027s allocated from a pool for each allocation from VMA.\n\nBased on that, 4MB may be the right choice, though I still think it would be better to see if \u00270\u0027 works and if VMA behaves well enough with that on the various devices.\n\nAs you point out thought, it\u0027s entirely possible that their heuristics are biased towards desktop GPUs.",
+      "parentUuid": "f398cc7e_65f76140",
+      "range": {
+        "startLine": 3461,
+        "startChar": 68,
+        "endLine": 3461,
+        "endChar": 95
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271be366_2a8c4390",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 23
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "ANGLE_VK_TRY will return angle::Result::Stop upon failure, this API returns VkResult, so I can\u0027t use that macro. That been said, we could change all BufferAllocator APIs to return angle::Result instead of VkResult. I just kept it as VkResult since that is what previous Allocator code does. I think we can look into it to change to angle::Result in future follow up CL if needed.",
       "parentUuid": "271be366_2a8c4390",
+      "range": {
+        "startLine": 3524,
+        "startChar": 0,
+        "endLine": 3531,
+        "endChar": 0
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a8ab114_f40f94d1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3531,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T23:39:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "02f396cc_6a5bbe21",
       "range": {
         "startLine": 3524,
         "startChar": 0,
@@ -355,6 +403,30 @@
       "side": 1,
       "message": "There is a bit confusion here, that default allocator is not linear allocator. They don\u0027t have a name for it as I read the doc and code. WHen you do not specify the algorith, (i.e, leave it as 0), it uses default allocator.",
       "parentUuid": "fb07135a_ff389e18",
+      "range": {
+        "startLine": 152,
+        "startChar": 11,
+        "endLine": 152,
+        "endChar": 39
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36307b4a_09161342",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T23:39:30Z",
+      "side": 1,
+      "message": "I can\u0027t find any documentation on how the default allocator works.   Can you link to where the default allocator is described and where the \"no padding added\" behavior is specified?",
+      "parentUuid": "f9f3dd12_21fb4477",
       "range": {
         "startLine": 152,
         "startChar": 11,
