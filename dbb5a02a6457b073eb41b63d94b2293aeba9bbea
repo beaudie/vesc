@@ -39,6 +39,30 @@
       },
       "revId": "dbb5a02a6457b073eb41b63d94b2293aeba9bbea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e655ea07_48994745",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3185,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T03:21:36Z",
+      "side": 1,
+      "message": "Yep, thanks for checking that. I updated the CL to include BufferSubData changes and include another test.",
+      "parentUuid": "63d4e097_2c3d9bb0",
+      "range": {
+        "startLine": 3175,
+        "startChar": 0,
+        "endLine": 3185,
+        "endChar": 0
+      },
+      "revId": "dbb5a02a6457b073eb41b63d94b2293aeba9bbea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
