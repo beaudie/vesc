@@ -247,6 +247,24 @@
       "parentUuid": "bbdfdf38_8aff67e9",
       "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad7494ed_7cb459fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T16:48:53Z",
+      "side": 1,
+      "message": "I wouldn\u0027t require this to block the CL if you\u0027re pretty confident it won\u0027t break again. It\u0027s just a nice-to-have safety check. Another option is to manually reproduce and verify the fix.",
+      "parentUuid": "e383791e_cc5307ed",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
