@@ -20,6 +20,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b6272e0_e55671b6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:09:37Z",
+      "side": 1,
+      "message": "None of this is specific to the overall theme of this CL, it is for all strings.  Definitely want to keep as many strings as we can inline for readability.",
+      "parentUuid": "5c4ecee2_0fdd0b8e",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec6d81d5_ecda8bb7",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:09:37Z",
+      "side": 1,
+      "message": "Why are these needed here?",
+      "range": {
+        "startLine": 1137,
+        "startChar": 0,
+        "endLine": 1138,
+        "endChar": 34
+      },
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0f5fe50_f4d1b24f",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
@@ -31,6 +72,24 @@
       "writtenOn": "2021-08-10T17:41:05Z",
       "side": 1,
       "message": "This only works on linux.   Are there plans to support Windows?   \n\nRegardless, this should probably bail out early if it\u0027s running on Windows rather than failing.",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e11351e4_6275834c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T21:09:37Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "a0f5fe50_f4d1b24f",
       "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
