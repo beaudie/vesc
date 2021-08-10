@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cd902a1_972e10cf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 3437,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-10T20:24:02Z",
+      "side": 1,
+      "message": "Thanks for suggestion. Fixed now.",
+      "parentUuid": "d3f406be_a3caa0d3",
+      "range": {
+        "startLine": 3437,
+        "startChar": 48,
+        "endLine": 3437,
+        "endChar": 62
+      },
+      "revId": "3e18b21946062e3d02d3cdb8c92fe57959637379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed1358d7_19090f53",
