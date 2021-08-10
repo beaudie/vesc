@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf94e9e6_9c11a7f1",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T23:02:52Z",
+      "side": 1,
+      "message": "Thanks, yeah, that\u0027s the spec language.   I\u0027ve added it to the bug too.",
+      "parentUuid": "51c06948_c0e35338",
+      "range": {
+        "startLine": 582,
+        "startChar": 43,
+        "endLine": 582,
+        "endChar": 50
+      },
+      "revId": "5328ae5c9011a306ffd4994a1a56c9db155b382c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53f6d7c5_d5a84e7d",
@@ -43,6 +67,47 @@
         "endLine": 637,
         "endChar": 83
       },
+      "revId": "5328ae5c9011a306ffd4994a1a56c9db155b382c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "459a15f8_945e2262",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T23:02:52Z",
+      "side": 1,
+      "message": "It\u0027s below: ref1",
+      "parentUuid": "53f6d7c5_d5a84e7d",
+      "range": {
+        "startLine": 637,
+        "startChar": 8,
+        "endLine": 637,
+        "endChar": 83
+      },
+      "revId": "5328ae5c9011a306ffd4994a1a56c9db155b382c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42a40022_76b5675c",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-10T23:02:52Z",
+      "side": 1,
+      "message": "ref1",
       "revId": "5328ae5c9011a306ffd4994a1a56c9db155b382c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
