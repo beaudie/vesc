@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0be5fda_e85be65c",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2051,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-10T19:02:56Z",
+      "side": 1,
+      "message": "Should this call setInitState instead?\n\nAlso, should every ::syncState be restoring this, or are Textures special?",
+      "range": {
+        "startLine": 2051,
+        "startChar": 0,
+        "endLine": 2051,
+        "endChar": 47
+      },
+      "revId": "693095df488e0b269be45ede75307e35e22865b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
