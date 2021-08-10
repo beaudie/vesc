@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba892f15_b7f69a6c",
+        "filename": "src/libANGLE/capture/frame_capture_utils_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T11:48:12Z",
+      "side": 1,
+      "message": "looks like it got weirdly cut off here (ANDRO) and for a few others.",
+      "range": {
+        "startLine": 997,
+        "startChar": 29,
+        "endLine": 997,
+        "endChar": 48
+      },
+      "revId": "62c081536723efd97fbf48ef5906619a5890f57e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
