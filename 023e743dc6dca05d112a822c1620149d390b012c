@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3519eccc_fac8e208",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-10T11:30:18Z",
+      "side": 1,
+      "message": "re-lgtm. Shabi\u0027s out so you should shuffle in another reviewer.",
+      "revId": "023e743dc6dca05d112a822c1620149d390b012c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
