@@ -22,6 +22,30 @@
       },
       "revId": "9352d42d0706103c9c821b239b2ea2250da5194e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f69d3822_438e6544",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-10T18:32:16Z",
+      "side": 1,
+      "message": "Fixed. Also added Metal.",
+      "parentUuid": "2c14d55f_83d65e3b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "9352d42d0706103c9c821b239b2ea2250da5194e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
