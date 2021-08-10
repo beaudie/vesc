@@ -211,6 +211,24 @@
       "parentUuid": "bfc189bc_00ffce95",
       "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbdfdf38_8aff67e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-10T16:42:21Z",
+      "side": 1,
+      "message": "Got it, sorry for the confusion.\n\nIf you run the tests with the GL backend with the original CL (without the changes I suggested), was there a failure?",
+      "parentUuid": "89d67619_217d0b98",
+      "revId": "172add8c9d3fd9f0d12f3823143db8660f3db404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
