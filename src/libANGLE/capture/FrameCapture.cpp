@@ -5177,7 +5177,7 @@ void FrameCaptureShared::maybeCapturePostCallUpdates(const gl::Context *context)
     // Process resource ID updates.
     MaybeCaptureUpdateResourceIDs(&mFrameCalls);
 
-    const CallCapture &lastCall = mFrameCalls.back();
+    CallCapture &lastCall = mFrameCalls.back();
     switch (lastCall.entryPoint)
     {
         case EntryPoint::GLCreateShaderProgramv:
@@ -5207,6 +5207,17 @@ void FrameCaptureShared::maybeCapturePostCallUpdates(const gl::Context *context)
             const ParamCapture &param =
                 lastCall.params.getParam("programPacked", ParamType::TShaderProgramID, 0);
             CaptureDeleteUniformLocations(param.value.ShaderProgramIDVal, &mFrameCalls);
+            break;
+        }
+        case EntryPoint::GLShaderSource:
+        {
+            lastCall.params.setValueParamAtIndex("count", ParamType::TGLsizei, 1, 1);
+
+            ParamCapture &paramLength =
+                lastCall.params.getParam("length", ParamType::TGLintConstPointer, 3);
+            paramLength.data.resize(1);
+            // set to -1 to use the actual string length
+            paramLength.data[0] = {0xff, 0xff, 0xff, 0xff};
             break;
         }
         default:
@@ -6214,14 +6225,17 @@ void CaptureShaderStrings(GLsizei count,
                           const GLint *length,
                           ParamCapture *paramCapture)
 {
+    std::vector<uint8_t> data;
+    size_t offset = 0;
     for (GLsizei index = 0; index < count; ++index)
     {
         size_t len = ((length && length[index] >= 0) ? length[index] : strlen(strings[index]));
-        // includes the '\0' suffix
-        std::vector<uint8_t> data(len + 1, 0);
-        memcpy(data.data(), strings[index], len);
-        paramCapture->data.emplace_back(std::move(data));
+        data.resize(offset + len);
+        std::copy(strings[index], strings[index] + len, data.begin() + offset);
+        offset += len;
     }
+    data.push_back(0);
+    paramCapture->data.emplace_back(std::move(data));
 }
 
 template <>
