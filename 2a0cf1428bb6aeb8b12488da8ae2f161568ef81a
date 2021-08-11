@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aa2f363_6b95ccee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1170419
+      },
+      "writtenOn": "2021-08-11T21:09:14Z",
+      "side": 1,
+      "message": "I don\u0027t think you necessarily need a bigquery-export table defined. I think you just need `enable \u003d True` bit in resultdb.settings for the original issue.\n\nBut eventually you\u0027d prob want a bigquery, in which case I\u0027m not sure what the best practice is. +Chan for that.",
+      "parentUuid": "91356558_0f2467d8",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "2a0cf1428bb6aeb8b12488da8ae2f161568ef81a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "72dd78ca_4cb0a443",
