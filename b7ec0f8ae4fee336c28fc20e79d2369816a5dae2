@@ -245,6 +245,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06f27b8a_4b16ffc9",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-11T18:13:24Z",
+      "side": 1,
+      "message": "\u003e as written this code is applying to ETC formats\n\nIt\u0027s complicated. Those are ANGLE-specific enums for emulating ETC on top of BC for non-WebGL users, so the D3D-specific restrictions still apply.\n\nMy suggestion about the old check is to evaluate the webglCompatibility condition earlier and to perform either ValidCompressedBaseLevelForWebGL or ValidCompressedDimension.",
+      "parentUuid": "afb696d7_a9053c02",
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c54669c_01cc1d95",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 1
