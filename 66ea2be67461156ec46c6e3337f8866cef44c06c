@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da31bff3_b5b40584",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-11T22:13:07Z",
+      "side": 1,
+      "message": "Rebased onto CL 3072568, since the latter adds a more appropriate location for a WebGL-specific test.",
+      "revId": "66ea2be67461156ec46c6e3337f8866cef44c06c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
