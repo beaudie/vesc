@@ -203,6 +203,30 @@
       },
       "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4a0b92e_d370a3c6",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T19:20:13Z",
+      "side": 1,
+      "message": "Debug build. Thanks for letting this go in; I\u0027ll clean it up later.",
+      "parentUuid": "cb765e45_7b606f9c",
+      "range": {
+        "startLine": 992,
+        "startChar": 0,
+        "endLine": 995,
+        "endChar": 6
+      },
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
