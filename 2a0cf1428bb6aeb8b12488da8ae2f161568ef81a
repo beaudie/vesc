@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "91356558_0f2467d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-11T20:27:10Z",
+      "side": 1,
+      "message": "Yeah, I was looking at these.\nI wonder if I can reuse \u0027chrome-luci-data.chromium.ci_test_results\u0027, or should I define a new table somehow.",
+      "parentUuid": "1029ab77_4c81acd6",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "2a0cf1428bb6aeb8b12488da8ae2f161568ef81a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "72dd78ca_4cb0a443",
