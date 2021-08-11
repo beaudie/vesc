@@ -236,6 +236,30 @@
       },
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4cf9af4_f8c8c454",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-11T23:10:00Z",
+      "side": 1,
+      "message": "Example results:\nhttps://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket.appspot.com/8839165753722967456/+/steps/angle_end2end_tests_on_Intel_GPU_on_Linux_on_Ubuntu-19.04/0/logs/json.output/0",
+      "parentUuid": "e295c530_40098e65",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
