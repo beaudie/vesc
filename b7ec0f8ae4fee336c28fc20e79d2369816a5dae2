@@ -227,6 +227,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afb696d7_a9053c02",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T17:59:56Z",
+      "side": 1,
+      "message": "Removing the old check may break non-WebGL applications using compressed textures. This new check already is more stringent than it used to be; there is a previously-passing part of WebGL\u0027s S3TC and RGTC tests that now generates INVALID_OPERATION. See https://github.com/KhronosGroup/WebGL/pull/3307 .\n\nIt\u0027s a good point that the spec changes were only made to S3TC, BPTC and RGTC in https://github.com/KhronosGroup/WebGL/pull/3304 , and as written this code is applying to ETC formats per CompressedTextureFormatRequiresExactSize. This new block should really only apply to the S3TC, BPTC and RGTC formats; I\u0027ll update the code.",
+      "parentUuid": "6fb5b246_0e0bb45b",
+      "revId": "b7ec0f8ae4fee336c28fc20e79d2369816a5dae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c54669c_01cc1d95",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 1
