@@ -16,6 +16,24 @@
       "message": "(lgtm fwiw) ",
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81057bee_0a9f4e34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-11T21:58:04Z",
+      "side": 1,
+      "message": "I think something is still missing.\nChromium builders have \"query test results\" step, but ours don\u0027t, e.g.\nhttps://ci.chromium.org/ui/p/angle/builders/try/linux-clang-rel/23681/overview\n\nAlso there is no \"Test Results\" tab in MILO and https://ci.chromium.org/ui/p/angle/builders/try/linux-clang-rel/23681/test-results says:\nNo associated invocation.\nYou need to integrate with ResultDB to see the test results.\nSee go/resultdb or ask luci-eng@ for help.\n\nI wonder if this is because we don\u0027t actually upload yet?",
+      "parentUuid": "392d771c_e7979bc4",
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
