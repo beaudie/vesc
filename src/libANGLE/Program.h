@@ -821,13 +821,14 @@ class Program final : public LabeledObject, public angle::Subject, public HasAtt
     const ProgramExecutable &getExecutable() const { return mState.getExecutable(); }
     ProgramExecutable &getExecutable() { return mState.getExecutable(); }
 
+    angle::Result deserialize(const Context *context, BinaryInputStream &stream, InfoLog &infoLog);
+
   private:
     struct LinkingState;
 
     ~Program() override;
 
     // Loads program state according to the specified binary blob.
-    angle::Result deserialize(const Context *context, BinaryInputStream &stream, InfoLog &infoLog);
 
     void unlink();
     void deleteSelf(const Context *context);

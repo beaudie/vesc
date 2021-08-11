@@ -3807,9 +3807,6 @@ void Context::initCaps()
                        : "FrameCapture limits were forced")
                << std::endl;
 
-        INFO() << "Limiting binary format support count to zero";
-        mDisplay->overrideFrontendFeatures({"disable_program_binary"}, true);
-
         // Set to the most common limit per gpuinfo.org. Required for several platforms we test.
         constexpr GLint maxImageUnits = 8;
         INFO() << "Limiting image unit count to " << maxImageUnits;

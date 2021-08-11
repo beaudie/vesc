@@ -1440,5 +1440,4 @@ Result SerializeContextToString(const gl::Context *context, std::string *stringO
     scratchBuffer.clear();
     return Result::Continue;
 }
-
 }  // namespace angle

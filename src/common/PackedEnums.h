@@ -138,6 +138,12 @@ class PackedEnumMap
 
     constexpr const_reference operator[](E n) const
     {
+        if (static_cast<size_t>(n) >= mPrivateData.size())
+        {
+            // force it to crash
+            int *foo = nullptr;
+            ASSERT(*foo);
+        }
         ASSERT(static_cast<size_t>(n) < mPrivateData.size());
         return mPrivateData[static_cast<UnderlyingType>(n)];
     }

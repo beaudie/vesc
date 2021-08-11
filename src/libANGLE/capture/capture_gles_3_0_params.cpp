@@ -656,7 +656,12 @@ void CaptureProgramBinary_binary(const State &glState,
                                  GLsizei length,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (!binary)
+    {
+        return;
+    }
+
+    CaptureMemory(binary, length, paramCapture);
 }
 
 void CaptureSamplerParameterfv_param(const State &glState,

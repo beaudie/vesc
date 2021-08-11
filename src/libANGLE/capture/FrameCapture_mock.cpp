@@ -33,4 +33,5 @@ void FrameCaptureShared::onMakeCurrent(const gl::Context *context, const egl::Su
 {}
 void FrameCaptureShared::onDestroyContext(const gl::Context *context) {}
 void FrameCaptureShared::replay(gl::Context *context) {}
+void FrameCaptureShared::setProgramSources(gl::ShaderProgramID id, ProgramSources sources) {}
 }  // namespace angle

@@ -1281,6 +1281,14 @@ void QueryProgramiv(Context *context, const Program *program, GLenum pname, GLin
             return;
         case GL_LINK_STATUS:
             *params = program->isLinked();
+            // if (!program->isLinked())
+            {
+                char infoLog[1024];
+                GLint length;
+                context->getProgramInfoLog(program->id(), sizeof(infoLog), &length, infoLog);
+                INFO() << "CLN: Link status checked for program " << program->id().value
+                       << " Info log contains: " << infoLog;
+            }
             return;
         case GL_COMPLETION_STATUS_KHR:
             if (context->isContextLost())

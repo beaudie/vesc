@@ -27,6 +27,7 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/Version.h"
+#include "libANGLE/capture/FrameCapture.h"
 #include "libANGLE/features.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/queryconversions.h"
@@ -1857,7 +1858,6 @@ angle::Result Program::loadBinary(const Context *context,
 
     BinaryInputStream stream(binary, length);
     ANGLE_TRY(deserialize(context, stream, infoLog));
-
     // Currently we require the full shader text to compute the program hash.
     // We could also store the binary in the internal program cache.
 
@@ -4665,6 +4665,28 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     stream.writeInt(mState.getAtomicCounterUniformRange().low());
     stream.writeInt(mState.getAtomicCounterUniformRange().high());
 
+    if (context && context->getShareGroup()->getFrameCaptureShared()->enabled())
+    {
+        // Serialize the source for each stage
+        for (ShaderType shaderType : AllShaderTypes())
+        {
+            gl::Shader *shader = getAttachedShader(shaderType);
+            if (shader)
+            {
+                INFO() << "CLN: Writing string of size " << shader->getSourceString().size()
+                       << " for stage " << shaderType;
+                stream.writeString(shader->getSourceString());
+            }
+            else
+            {
+                // If we don't have a shader for a stage, write an empty string
+                INFO() << "CLN: Writing an empty string for stage " << shaderType;
+                std::string nullString;
+                stream.writeString(nullString.c_str());
+            }
+        }
+    }
+
     mProgram->save(context, &stream);
 
     ASSERT(binaryOut);
@@ -4771,6 +4793,33 @@ angle::Result Program::deserialize(const Context *context,
 
     postResolveLink(context);
     mState.mExecutable->updateCanDrawWith();
+
+    // Read any source
+    if (context && context->getShareGroup()->getFrameCaptureShared()->enabled())
+    {
+        // Build up a map containing source for existing stages
+        angle::ProgramSources sources;
+
+        for (ShaderType shaderType : AllShaderTypes())
+        {
+            std::string shaderSource = stream.readString();
+            if (shaderSource.length() > 0)
+            {
+                INFO() << "CLN: Read string of size " << shaderSource.length() << " for stage "
+                       << shaderType;
+                sources[shaderType] = shaderSource;
+            }
+            else
+            {
+                INFO() << "CLN: Skipped emptry string for stage " << shaderType;
+            }
+        }
+
+        // Store it for use during MEC
+        INFO() << "CLN: Calling in to setProgramSources with id=" << id().value;
+        context->getShareGroup()->getFrameCaptureShared()->setProgramSources(id(), sources);
+        // INFO() << "CLN: Returned from setProgramSources with id=" << id().value;
+    }
 
     return angle::Result::Continue;
 }
