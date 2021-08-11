@@ -185,6 +185,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9926d511_dc4d66c6",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-11T21:19:31Z",
+      "side": 1,
+      "message": "\u003e Do you have an example of what the compilation failure looks like?\n\nHere is the build error (once the necessary support for egl::AttributeMap is added to the script and FrameCapture.h/cpp).\n\n../../third_party/angle/src/libANGLE/capture/FrameCapture.cpp:4014:15: error: call to implicitly-deleted default constructor of \u0027angle::ParamValue\u0027\nParamCapture::ParamCapture() : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::DefaultGroup) {}\n              ^\n../../third_party/angle/src/libANGLE/capture/frame_capture_utils_autogen.h:182:23: note: default constructor of \u0027ParamValue\u0027 is implicitly deleted because variant field \u0027AttributeMapVal\u0027 has a non-trivial default constructor\n    egl::AttributeMap AttributeMapVal;\n                      ^\n../../third_party/angle/src/libANGLE/capture/FrameCapture.cpp:4014:15: error: attempt to use a deleted function\nParamCapture::ParamCapture() : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::DefaultGroup) {}\n              ^\n../../third_party/angle/src/libANGLE/capture/frame_capture_utils_autogen.h:182:23: note: destructor of \u0027ParamValue\u0027 is implicitly deleted because variant field \u0027AttributeMapVal\u0027 has a non-trivial destructor\n    egl::AttributeMap AttributeMapVal;\n    \n\u003e Are just dropping the capture entrypoints that contain AttributeMap?\n\nWe aren\u0027t capturing EGL calls, so there are no entry points to drop.   This is just adding support for EGL parameters/types, since all we care about is generating our own EGL calls and inserting them into the capture (specifically, eglMakeCurrent()).",
+      "parentUuid": "a8599df4_6cf09158",
+      "range": {
+        "startLine": 1610,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 77
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54070316_d583db34",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 4
