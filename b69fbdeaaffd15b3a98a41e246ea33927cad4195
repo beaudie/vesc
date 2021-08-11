@@ -70,6 +70,24 @@
       "parentUuid": "9de9a093_60708c6b",
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3e0c6b_5983c720",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1157909
+      },
+      "writtenOn": "2021-08-11T22:07:34Z",
+      "side": 1,
+      "message": "Both observations are because buildbucket/ResultDB integration has not been enabled.\n\nAfter this CL is submitted, you should be able see the step and \"Test Results\" tab on milo. But it may be empty because you don\u0027t actually upload results yet.",
+      "parentUuid": "81057bee_0a9f4e34",
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
