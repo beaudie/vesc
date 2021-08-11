@@ -77,7 +77,22 @@ void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_
 void JsonSerializer::addCString(const std::string &name, const char *value)
 {
     rapidjson::Value tag(name.c_str(), mAllocator);
-    rapidjson::Value val(value, mAllocator);
+    std::ostringstream sanitized_value;
+    if (value)
+    {
+        while (*value)
+        {
+            if (isascii(*value))
+                sanitized_value << *value;
+            else
+            {
+                sanitized_value << "<" << (int)*value << ">";
+            }
+            ++value;
+        }
+    }
+
+    rapidjson::Value val(sanitized_value.str().c_str(), mAllocator);
     mGroupValueStack.top().insert(std::make_pair(name, std::move(val)));
 }
 
