@@ -212,6 +212,30 @@
       },
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e295c530_40098e65",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-11T23:08:45Z",
+      "side": 1,
+      "message": "All the tests on these standalone bots use GTest.\nHowever, we wrap GTest in custom ANGLE harness, so they report their results in JSON format like isolated tests do.\nWe use \"use_isolated_scripts_api\": true in our build specs to get this scheme to work.",
+      "parentUuid": "b20b2ca0_8aa96975",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
