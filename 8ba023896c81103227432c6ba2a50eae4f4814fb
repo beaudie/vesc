@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0c5b022_c5e69ef9",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5052,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T22:45:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa366c4_aca32b56",
+      "range": {
+        "startLine": 5052,
+        "startChar": 5,
+        "endLine": 5052,
+        "endChar": 18
+      },
+      "revId": "8ba023896c81103227432c6ba2a50eae4f4814fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b42003a5_550e9ce1",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-11T18:44:21Z",
       "side": 1,
       "message": "nit: your code is totally fine but for simplicity we usually just do\n\nstd::vector\u003cuint8_t\u003e tempVector(expectedByteLength, 0);",
+      "range": {
+        "startLine": 5064,
+        "startChar": 4,
+        "endLine": 5065,
+        "endChar": 51
+      },
+      "revId": "8ba023896c81103227432c6ba2a50eae4f4814fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "169829be_803fae15",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5065,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T22:45:14Z",
+      "side": 1,
+      "message": "Thanks, should have thought of that. Done.",
+      "parentUuid": "b42003a5_550e9ce1",
       "range": {
         "startLine": 5064,
         "startChar": 4,
