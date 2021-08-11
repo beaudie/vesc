@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1029ab77_4c81acd6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1170419
+      },
+      "writtenOn": "2021-08-11T20:13:04Z",
+      "side": 1,
+      "message": "That check is about wether or not resultdb is enabled at the build-level. If it\u0027s not enabled in the build, any test-specific resultdb settings in testing specs will be ignored.\n\nSo what you really need is https://chromium.googlesource.com/infra/luci/luci-go/+/refs/heads/main/lucicfg/doc/README.md#resultdb.settings\neg: https://source.chromium.org/chromium/chromium/src/+/main:infra/config/lib/builders.star;drc\u003d189d164cbe3ffdccafbf2bf631b07fe845af51a0;l\u003d746",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "2a0cf1428bb6aeb8b12488da8ae2f161568ef81a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "72dd78ca_4cb0a443",
