@@ -16,6 +16,23 @@
       "message": "Rebased onto CL 3072568, since the latter adds a more appropriate location for a WebGL-specific test.",
       "revId": "66ea2be67461156ec46c6e3337f8866cef44c06c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2533e13_efcc66d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T22:38:08Z",
+      "side": 1,
+      "message": "OK. Please hold off on this until the other CL is landed since a significant number of Chromium-side suppressions need to be added and then removed. Thanks.\n",
+      "revId": "66ea2be67461156ec46c6e3337f8866cef44c06c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
