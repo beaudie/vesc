@@ -2211,7 +2211,7 @@ CallCapture CaptureShaderSource(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("shaderPacked", ParamType::TShaderProgramID, shaderPacked);
-    paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
+    paramBuffer.addValueParam("count", ParamType::TGLsizei, 1);
 
     if (isCallValid)
     {
@@ -2232,9 +2232,8 @@ CallCapture CaptureShaderSource(const State &glState,
     if (isCallValid)
     {
         ParamCapture lengthParam("length", ParamType::TGLintConstPointer);
-        InitParamValue(ParamType::TGLintConstPointer, length, &lengthParam.value);
-        CaptureShaderSource_length(glState, isCallValid, shaderPacked, count, string, length,
-                                   &lengthParam);
+        InitParamValue(ParamType::TGLintConstPointer, static_cast<const GLint *>(nullptr),
+                       &lengthParam.value);
         paramBuffer.addParam(std::move(lengthParam));
     }
     else
