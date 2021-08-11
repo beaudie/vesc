@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efcc968c_a5a6ce4a",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T18:16:18Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "7e61482a_27e58069",
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2609be4_3ecb6d00",
@@ -92,6 +110,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81aaf619_2e9f7f36",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T18:16:18Z",
+      "side": 1,
+      "message": "Yes, thanks for that tip! Removed the environment variable check.",
+      "parentUuid": "d2609be4_3ecb6d00",
+      "range": {
+        "startLine": 980,
+        "startChar": 0,
+        "endLine": 985,
+        "endChar": 6
+      },
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "496dc41f_eba2de6d",
@@ -105,6 +147,30 @@
       "writtenOn": "2021-08-09T11:20:02Z",
       "side": 1,
       "message": "is this necessary? If so can you please use INFO()?",
+      "range": {
+        "startLine": 992,
+        "startChar": 0,
+        "endLine": 995,
+        "endChar": 6
+      },
+      "revId": "e95cdcd6c3fa6085ebf587353f71e968c8f536be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daed6343_98f719e6",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-11T18:16:18Z",
+      "side": 1,
+      "message": "Yes, I really need this output to know what mode things are running in, especially on the bots. I tried changing this to INFO() but the output disappeared in normal runs of angle_end2end_tests. Is there a hidden command line flag that will enable this output?",
+      "parentUuid": "496dc41f_eba2de6d",
       "range": {
         "startLine": 992,
         "startChar": 0,
