@@ -34,6 +34,24 @@
       "parentUuid": "392d771c_e7979bc4",
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9de9a093_60708c6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1170419
+      },
+      "writtenOn": "2021-08-11T22:03:52Z",
+      "side": 1,
+      "message": "That might in part be because infra/config/main.star changes only apply to builders after the change is submitted (and picked up by https://luci-config.appspot.com/). So tryjobs on CLs that make //infra/config changes aren\u0027t much use :/",
+      "parentUuid": "81057bee_0a9f4e34",
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
