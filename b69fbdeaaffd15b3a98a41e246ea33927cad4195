@@ -107,6 +107,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "559dbcae_3dab8037",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-11T22:25:41Z",
+      "side": 1,
+      "message": "The eventual goal is to actually enable resultdb, so might as well do it sooner than later.",
+      "parentUuid": "cb04b9f8_ccc0b478",
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4174ddef_9651103f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-11T22:25:41Z",
+      "side": 1,
+      "message": "I got \"query test results\" step to appear via LED:\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/bbb411b5504571ff7985dd2c12b37c239d3c1defc9b0959edac5e04aa71e4795/+/annotations\n\nAlas, LED uses the old UI and not MILO, so there is no \"Test Results\" tab 😞",
+      "parentUuid": "6f3e0c6b_5983c720",
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e063201b_526a06a9",
@@ -120,6 +156,30 @@
       "writtenOn": "2021-08-11T22:16:51Z",
       "side": 1,
       "message": "Does angle run the same or a subset of test suites as chromium? If yes, does it run them the same way as chromium?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb6216e6_2f2409f4",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-11T22:25:41Z",
+      "side": 1,
+      "message": "There is some overlap, like angle_unittests and angle_end2end_tests.\nI think there is actually no need to run these in Chromium, but it will take some time to get rid of the overlap.",
+      "parentUuid": "e063201b_526a06a9",
       "range": {
         "startLine": 26,
         "startChar": 0,
