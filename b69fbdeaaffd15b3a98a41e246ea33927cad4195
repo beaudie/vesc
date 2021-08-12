@@ -431,6 +431,30 @@
       },
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9ac84e2_5fbbdf4b",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1157909
+      },
+      "writtenOn": "2021-08-12T18:42:19Z",
+      "side": 1,
+      "message": "Since the logic of deciding whether to use result_adapter is in the chromium_tests recipe_module, I think it should just work for ANGLE the same way as chromium. Which means you only need to remove the changes in the pyl files, and the recipe can automatically know that the test suites should run with rdb and json result_adapter (the exact logic is at [1]).\n\n[1]: https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/generators.py;l\u003d537;drc\u003d4f18f03dedbad7aba2e03b8e2e00568fd627f28e",
+      "parentUuid": "2cadc068_57f28bc4",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
