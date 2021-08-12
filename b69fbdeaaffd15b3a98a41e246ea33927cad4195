@@ -383,6 +383,30 @@
       },
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4dc7c86_01ebd932",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1170419
+      },
+      "writtenOn": "2021-08-12T18:17:16Z",
+      "side": 1,
+      "message": "Ah. If these tests aren\u0027t using typ and their test harness doesn\u0027t actually integrate with resultdb itself, then Chan\u0027s right that this has_native_resultdb_integration mixin in these testing specs is not needed (and is in fact preventing the results from being uploaded to rbd)\n\nresult-adapter (which wraps the test when has_native_resultdb_integration is false) reads the json itself and uploads the results. Though I don\u0027t know what format (gtest or json) it will end up using and which format it ends up needing.",
+      "parentUuid": "5d4181b0_b710c92c",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
