@@ -527,6 +527,30 @@
       },
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cc15bc0_070b7d67",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1157909
+      },
+      "writtenOn": "2021-08-12T19:40:25Z",
+      "side": 1,
+      "message": "Yes performance is one of the goal.\n\nThere isn\u0027t a C++ API, but the test harness can make RPCs to the local ResultSink server to upload test results: please see go/result-sink for more details.\n\nAnd [1] is the code in typ to integrate with ResultSink. \n\n[1]: https://source.chromium.org/chromium/chromium/src/+/master:third_party/catapult/third_party/typ/typ/result_sink.py",
+      "parentUuid": "5019735e_0b500062",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
