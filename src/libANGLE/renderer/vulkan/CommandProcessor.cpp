@@ -74,7 +74,7 @@ angle::Result FenceRecycler::newSharedFence(vk::Context *context,
     }
 
     VkDevice device(context->getDevice());
-    if (gotRecycledFence)
+    if (gotRecycledFence && fence.valid())
     {
         ANGLE_VK_TRY(context, fence.reset(device));
     }
