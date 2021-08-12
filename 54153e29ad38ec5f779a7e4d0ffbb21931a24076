@@ -33,6 +33,24 @@
       "message": "Ah... yes we merge the strings when storing the shader source. The most \"behaviour preserving\" fix would be to update our replay writing to write out arrays of strings instead of single strings. A possibly simpler fix would be to use a \"post-call\" update to patch the count member to 1 like you had in your autogen fix. I\u0027d be fine with either.",
       "revId": "54153e29ad38ec5f779a7e4d0ffbb21931a24076",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a58d5a39_04dc30c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1495282
+      },
+      "writtenOn": "2021-08-12T06:30:09Z",
+      "side": 1,
+      "message": "I went with the option to update the required values after the capturing. I\u0027m not really happy to remove the \"const\" from \"lastCall\", maybe this should go into an extra method \"maybeOverrideCapturedValues\"?",
+      "parentUuid": "0e49541b_d5048cf7",
+      "revId": "54153e29ad38ec5f779a7e4d0ffbb21931a24076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
