@@ -39,6 +39,30 @@
       },
       "revId": "3f5ff3b7014f2f12d65e899499edf6ca670cae58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d8f308e_27097f86",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5220,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-12T16:28:33Z",
+      "side": 1,
+      "message": "Either way works for me since it is filling a uint8_t vector.",
+      "parentUuid": "d07be68b_3e1e6b67",
+      "range": {
+        "startLine": 5220,
+        "startChar": 12,
+        "endLine": 5220,
+        "endChar": 59
+      },
+      "revId": "3f5ff3b7014f2f12d65e899499edf6ca670cae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
