@@ -492,6 +492,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f1fadc5d_57bf376b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-12T21:49:42Z",
+      "side": 1,
+      "message": "\u003e Shouldn\u0027t ContextVk::handleDirtyTexturesImpl() code at line 1551 handle this already?\n\nI\u0027m not sure if it\u0027s supposed to, but it doesn\u0027t today.   We only get to handleDirtyTexturesImpl() as part of handing State::DIRTY_BIT_TEXTURE_BINDINGS vs this call which is part of handling DIRTY_BIT_VERTEX_BUFFERS.   A dirty vertex buffer doesn\u0027t imply dirty textures, so I don\u0027t think we should expect to execute both in all cases when the same buffer is bound to both.\n\nAdditionally, CommandBufferHelper::bufferWrite() (which is called by handleDirtyTexturesImpl()) has the following assert today:\n\n    ASSERT(!usesBuffer(*buffer));\n    \nThat means we currently can\u0027t call bufferRead() and then bufferWrite(), otherwise we\u0027ll hit the assert and crash.",
+      "parentUuid": "8f42f5d7_0fadfe47",
+      "range": {
+        "startLine": 1712,
+        "startChar": 17,
+        "endLine": 1712,
+        "endChar": 32
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fd20a8d_04cce0fe",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 7
@@ -858,6 +882,30 @@
       "writtenOn": "2021-08-06T21:47:14Z",
       "side": 1,
       "message": "You keep a new list in contextVk, lets call mBufferResourceWriteList. Here you add it  to mBufferResourceWriteList. And then you pass this to submitFrame() call and there https://chromium.googlesource.com/angle/angle/+/bc913c7040e97028316591ae7d2c02519161b4cf/src/libANGLE/renderer/vulkan/RendererVk.cpp#2996, you also walk bufferResourceWriteList and update writeSerial for buffers.\n\nI think if you do that (i.e, only add extra tracking for bufferWrites), diff will be much smaller. (And sorry if I gave you wrong hint previously to lead you here).",
+      "range": {
+        "startLine": 1023,
+        "startChar": 19,
+        "endLine": 1023,
+        "endChar": 51
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1dd32c3_eb189a08",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-12T21:49:42Z",
+      "side": 1,
+      "message": "This design doesn\u0027t handle the case of a Resource being retained and then released without being submitted.   Additionally, it doesn\u0027t handle a buffer being used by multiple contexts for read and/or write accesses.",
+      "parentUuid": "6d8b7136_c076666e",
       "range": {
         "startLine": 1023,
         "startChar": 19,

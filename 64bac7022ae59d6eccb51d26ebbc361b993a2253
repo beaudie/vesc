@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6239a4af_56a398fa",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-12T21:49:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc7e8b3f_a2579974",
+      "range": {
+        "startLine": 2869,
+        "startChar": 20,
+        "endLine": 2869,
+        "endChar": 32
+      },
+      "revId": "64bac7022ae59d6eccb51d26ebbc361b993a2253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b07ecc61_73782341",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-10T01:06:55Z",
       "side": 1,
       "message": "Is it never been used? I did quick search not seeing been used.",
+      "range": {
+        "startLine": 844,
+        "startChar": 5,
+        "endLine": 844,
+        "endChar": 26
+      },
+      "revId": "64bac7022ae59d6eccb51d26ebbc361b993a2253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c88f8b4_3b022adb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-12T21:49:42Z",
+      "side": 1,
+      "message": "Good catch.   Cleaned up.",
+      "parentUuid": "b07ecc61_73782341",
       "range": {
         "startLine": 844,
         "startChar": 5,
