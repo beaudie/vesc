@@ -209,6 +209,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94f480c0_ab4959e3",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T11:44:19Z",
+      "side": 1,
+      "message": "Seeing as your CL is limited to generating a few specific calls, I\u0027m fine if we defer fixing AttributeMap for later. You could add a TODO here for issue 4035 (EGL capture). It shouldn\u0027t be too hard to fix but could require reworking the union, not sure exactly.",
+      "parentUuid": "9926d511_dc4d66c6",
+      "range": {
+        "startLine": 1610,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 77
+      },
+      "revId": "55dd2c1be7b83fb7e87d46ea0e98110f8fcca23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54070316_d583db34",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 4
