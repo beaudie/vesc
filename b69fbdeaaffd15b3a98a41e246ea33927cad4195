@@ -407,6 +407,30 @@
       },
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cadc068_57f28bc4",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T18:37:48Z",
+      "side": 1,
+      "message": "ANGLE outputs the \"chromium test results json format\". Presumably result-adapter can process this as the above link to angle_end2end_tests in the Chromium CQ will output the same format.\n\nBTW would there be some performance advantages to making the test harness itself communicate to ResultDB? Is there a C++ API for ResultDB or anything like that?",
+      "parentUuid": "a4dc7c86_01ebd932",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
