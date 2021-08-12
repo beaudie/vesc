@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcfbca3e_c3f9d1b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T11:29:05Z",
+      "side": 1,
+      "message": "LGTM, nice targeted fix.",
+      "revId": "3f5ff3b7014f2f12d65e899499edf6ca670cae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d07be68b_3e1e6b67",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5220,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T11:29:05Z",
+      "side": 1,
+      "message": "nit: this is totally correct, but it looks a bit odd because you\u0027re assigning four bytes to make up an integer. How about\n\nstd::fill(data.begin, data.end, 0xFF)",
+      "range": {
+        "startLine": 5220,
+        "startChar": 12,
+        "endLine": 5220,
+        "endChar": 59
+      },
+      "revId": "3f5ff3b7014f2f12d65e899499edf6ca670cae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
