@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eae43d8_b0e138dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-12T19:42:43Z",
+      "side": 1,
+      "message": "LGTM once the test failures are figured out.",
+      "revId": "60dd1d3eb7c3d07fc841f7dfdc34ca61be17de11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e4594e_43471f4e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-12T19:42:43Z",
+      "side": 1,
+      "message": "Why mark it duplicate if it\u0027s not active?",
+      "range": {
+        "startLine": 859,
+        "startChar": 24,
+        "endLine": 859,
+        "endChar": 25
+      },
+      "revId": "60dd1d3eb7c3d07fc841f7dfdc34ca61be17de11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f5ff698_3fa311df",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-12T19:42:43Z",
+      "side": 1,
+      "message": "nit: These can be combined in all of these functions.",
+      "range": {
+        "startLine": 979,
+        "startChar": 0,
+        "endLine": 987,
+        "endChar": 9
+      },
+      "revId": "60dd1d3eb7c3d07fc841f7dfdc34ca61be17de11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
