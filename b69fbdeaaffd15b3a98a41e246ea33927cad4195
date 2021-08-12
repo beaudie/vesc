@@ -162,6 +162,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "82c92adb_26922246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-12T17:24:02Z",
+      "side": 1,
+      "message": "I\u0027m going to land this as is, since now ANGLE CQ is broken because crrev.com/c/3087890 relanded.\nWe can figure the intricacies or result adapter later.",
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ffeeb2c3_4cac6d73",
         "filename": "infra/config/generated/cr-buildbucket.cfg",
         "patchSetId": 2
