@@ -143,6 +143,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b13a0dbf_1641e927",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T11:24:37Z",
+      "side": 1,
+      "message": "LGTM - one question for Chan.",
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffeeb2c3_4cac6d73",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T11:24:37Z",
+      "side": 1,
+      "message": "the formatting seems weird on these, not sure why.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 8
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e063201b_526a06a9",
@@ -276,6 +316,30 @@
       "side": 1,
       "message": "Interestingly, because that swarming task runs on chromium-swarm.appspot.com, ResultDB is already enabled for the swarming task [1]. \n\nBut because the test runner/script doesn\u0027t natively integrate with ResultDB, the test results were not uploaded to ResultDB [2].\n\nI found an angle_end2end_tests in chromium [3], and it\u0027s using a result_adapter to do the actual upload. [4]\n\nI think angle is using the same recipe as chromium? If so you don\u0027t need to make the changes on the pyl files and the recipe would know to use result_adapter automatically. Ben, is that right?\n\n[1]: https://screenshot.googleplex.com/4okcSZCb5AtLQUc\n[2]: https://screenshot.googleplex.com/E2d42YDcmRRozZA\n[3]: https://chromium-swarm.appspot.com/task?d\u003dtrue\u0026id\u003d55501a4b5d7c4010\n[4]: https://screenshot.googleplex.com/5yii7Nstj2Puzpd",
       "parentUuid": "c4cf9af4_f8c8c454",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d4181b0_b710c92c",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T11:24:37Z",
+      "side": 1,
+      "message": "Hey Chan,\n\nWe use a different recipe that calls into the Chromium recipe modules (chromium_tests, test_utils, etc).\n\nSee here:\n\nhttps://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/angle/api.py;l\u003d107?q\u003dangle%2Fapi.py\u0026ss\u003dchromium\n\nDo you know what (if any) changes we need to make the ANGLE tests use the rdb adapter?",
+      "parentUuid": "f3dd1baf_ad005af9",
       "range": {
         "startLine": 26,
         "startChar": 0,
