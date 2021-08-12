@@ -34,6 +34,24 @@
       "parentUuid": "a7f68204_8b6d8dcb",
       "revId": "b4b0ed876d5b5e5dfcd2657a675b7b7bf5ad8265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1aab62_2035900e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1157909
+      },
+      "writtenOn": "2021-08-12T19:57:04Z",
+      "side": 1,
+      "message": "Ah, I know why, resultdb are enabled on ANGLE ci builders, but not on try builders.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3087640/comments/7bef925d_f5fe0c1d",
+      "parentUuid": "c88756dc_3bc13d72",
+      "revId": "b4b0ed876d5b5e5dfcd2657a675b7b7bf5ad8265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
