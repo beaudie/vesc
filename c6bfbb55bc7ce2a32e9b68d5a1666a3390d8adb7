@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfbc58b3_24916673",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Resolved by using Jamie\u0027s suggestion to use named structure",
+      "parentUuid": "732c52d1_f75b796d",
+      "range": {
+        "startLine": 694,
+        "startChar": 26,
+        "endLine": 694,
+        "endChar": 44
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbab7cba_7fb432a5",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-08-04T00:07:32Z",
       "side": 1,
       "message": "These don\u0027t need to be references, since they are just ints.\n\nGoing further, you don\u0027t want them to be references, since you don\u0027t want to modify the shaderType value in the tuple with the \u0027previousShaderType \u003d shaderType\u0027 line below (which can actually be removed, since it\u0027s unused).",
+      "range": {
+        "startLine": 731,
+        "startChar": 16,
+        "endLine": 731,
+        "endChar": 51
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bda7579_3ee03cbc",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Resolved by using Jamie\u0027s suggestion to use named structure",
+      "parentUuid": "dbab7cba_7fb432a5",
       "range": {
         "startLine": 731,
         "startChar": 16,
@@ -98,6 +146,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "944de7f6_7ff3c99c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f8f2482_7e4035df",
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ee3236d_d3e6f320",
@@ -111,6 +177,30 @@
       "writtenOn": "2021-08-04T00:07:32Z",
       "side": 1,
       "message": "Doesn\u0027t need to be a reference.\n\nSame for the rest of thees.",
+      "range": {
+        "startLine": 782,
+        "startChar": 35,
+        "endLine": 782,
+        "endChar": 36
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5df00cd9_9219f5a6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ee3236d_d3e6f320",
       "range": {
         "startLine": 782,
         "startChar": 35,
@@ -138,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a540abeb_f8757567",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c23fa7fd_7b74ccf6",
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bf70223_6c046682",
@@ -151,6 +259,24 @@
       "writtenOn": "2021-08-04T00:07:32Z",
       "side": 1,
       "message": "Redundant, since it\u0027s done in AddResourceInfo().\n\nSame for the rest of these.",
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df28e856_34afa878",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bf70223_6c046682",
       "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -202,6 +328,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb415822_9f4cbc7e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Refactored most of these into AddAndUpdateResourceMaps",
+      "parentUuid": "2b898537_72f7766d",
+      "range": {
+        "startLine": 831,
+        "startChar": 12,
+        "endLine": 831,
+        "endChar": 23
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0f70fd3_a509fc6f",
@@ -215,6 +365,30 @@
       "writtenOn": "2021-08-04T00:07:32Z",
       "side": 1,
       "message": "These blocks don\u0027t seem correct to me, since the input/output state is specific to a particular shader and will affect SpirvIDDiscoverer::visitMemberName().\n\nWhy is this (and the one below in the \u0027else\u0027 block) necessary?",
+      "range": {
+        "startLine": 1155,
+        "startChar": 0,
+        "endLine": 1158,
+        "endChar": 13
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f6239d_20520b14",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "These have been reverted, I think you\u0027re right",
+      "parentUuid": "b0f70fd3_a509fc6f",
       "range": {
         "startLine": 1155,
         "startChar": 0,
@@ -248,6 +422,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90bb88a8_5023bed4",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97b7965e_44e7c655",
+      "range": {
+        "startLine": 1805,
+        "startChar": 0,
+        "endLine": 1811,
+        "endChar": 13
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "557490da_61f18ecb",
@@ -261,6 +459,30 @@
       "writtenOn": "2021-08-03T19:18:38Z",
       "side": 1,
       "message": "nit: looks like you can remove this.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "c6bfbb55bc7ce2a32e9b68d5a1666a3390d8adb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4cd3b2c_bb8357c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "557490da_61f18ecb",
       "range": {
         "startLine": 25,
         "startChar": 0,

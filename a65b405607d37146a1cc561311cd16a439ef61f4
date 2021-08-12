@@ -16,6 +16,24 @@
       "message": "Why was this removed?",
       "revId": "a65b405607d37146a1cc561311cd16a439ef61f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9221ed_c89cc9bb",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-12T17:39:18Z",
+      "side": 0,
+      "message": "This was removed as we are now handling this check in glslang_wrapper_utils.cpp\u0027s AssignImageBindings function. We mark it as a duplicate if it\u0027s not active",
+      "parentUuid": "32935d4a_c7b463c3",
+      "revId": "a65b405607d37146a1cc561311cd16a439ef61f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
