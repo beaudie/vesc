@@ -503,6 +503,30 @@
       },
       "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ce901d3_56217bf6",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-12T19:33:58Z",
+      "side": 1,
+      "message": "Thanks Chan. I was curious if performance was one of the goals of result_db. e.g. skipping the upload step at the end and doing continual streaming might be have higher throughput. Also asking again - is there a c++ API?",
+      "parentUuid": "5019735e_0b500062",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 95
+      },
+      "revId": "b69fbdeaaffd15b3a98a41e246ea33927cad4195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
