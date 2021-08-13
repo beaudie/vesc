@@ -959,6 +959,8 @@ private:
 };
 #endif
 
+#define SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS (SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS || SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER)
+
 class BufferHelper final : public Resource
 {
   public:
@@ -968,7 +970,7 @@ class BufferHelper final : public Resource
     angle::Result init(ContextVk *contextVk,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS
     void init(ContextVk *contextVk, BufferSuballocationPtr buferSuballocation);
 #endif
     angle::Result initExternal(ContextVk *contextVk,
@@ -980,7 +982,7 @@ class BufferHelper final : public Resource
     void release(RendererVk *renderer);
 
     BufferSerial getBufferSerial() const { return mSerial; }
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS
     BufferSerial getOwnerSerial() const
     {
         if (mBufferSuballocation)
@@ -996,7 +998,7 @@ class BufferHelper final : public Resource
     VkDeviceSize getSize() const { return mSize; }
     uint8_t *getMappedMemory() const
     {
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS
         if (mBufferSuballocation)
         {
             return mBufferSuballocation->getMappedMemory();
@@ -1016,7 +1018,7 @@ class BufferHelper final : public Resource
 
     bool isMapped() const
     {
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS
         if (mBufferSuballocation)
         {
             return mBufferSuballocation->getMappedMemory() != nullptr;
@@ -1034,7 +1036,7 @@ class BufferHelper final : public Resource
 
     angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
     {
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS
         if (mBufferSuballocation)
         {
             *ptrOut = mBufferSuballocation->getMappedMemory();
@@ -1047,7 +1049,7 @@ class BufferHelper final : public Resource
     angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
     {
         uint8_t *mapBufPointer;
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS
         if (mBufferSuballocation)
         {
             mapBufPointer = mBufferSuballocation->getMappedMemory();
@@ -1086,7 +1088,7 @@ class BufferHelper final : public Resource
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS && SVDT_ENABLE_VULKAN_BUFFER_BARRIER_SUPPORT
     void initBufferMemoryBarrierStruct(VkAccessFlags dstAccessMask,
                                        VkDeviceSize offset,
                                        VkDeviceSize size,
@@ -1106,7 +1108,7 @@ class BufferHelper final : public Resource
     // Vulkan objects.
     Buffer mBuffer;
     BufferMemory mMemory;
-#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
+#if SVDT_USE_BUFFER_HELPER_FOR_SUBALLOCATIONS
     // WA: more easier way to integrate buffer suballocation logic to existing code is
     // to put bufferSuballocation inside BufferHelper as many of existing logic related to it
     BufferSuballocationPtr mBufferSuballocation;

@@ -626,6 +626,9 @@ void ContextVk::onDestroy(const gl::Context *context)
 #if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
     mDynamicBufferStorage.release();
 #endif
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    mVertexConversionBufferStorage.release();
+#endif
 #if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
     mGlobalShaderBufferDescriptorsCache.destroy();
     mGlobalTextureDescriptorsCache.destroy();
@@ -807,6 +810,14 @@ angle::Result ContextVk::initialize()
                                     VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
                                     VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT,
                                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT/* & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT*/);
+#endif
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    // TODO: adjust it
+    constexpr size_t kConvertedArrayBufferInitialSize = 1u * 1024u * 1024; // 1 M
+    constexpr size_t kConvertedArrayBufferMaxSize = 8u * 1024u * 1024u; // 8 M
+
+    mVertexConversionBufferStorage.init(this, kConvertedArrayBufferInitialSize, kConvertedArrayBufferMaxSize,
+                                        vk::kVertexBufferAlignment, vk::kVertexBufferUsageFlags, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 #endif
 #if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
     ANGLE_TRY(mGlobalShaderBufferDescriptorsCache.init(this, 512, "ShaderResourceDescriptorsCache", { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER }));

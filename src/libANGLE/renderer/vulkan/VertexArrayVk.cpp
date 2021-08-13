@@ -75,6 +75,17 @@ angle::Result WarnOnVertexFormatConversion(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+void StreamVertexData(uint8_t *dst,
+                        const uint8_t *sourceData,
+                        size_t bytesToAllocate,
+                        size_t vertexCount,
+                        size_t sourceStride,
+                        size_t destStride,
+                        VertexCopyFunction vertexLoadFunction,
+                        uint32_t replicateCount)
+{
+#else
 angle::Result StreamVertexData(ContextVk *contextVk,
                                vk::DynamicBuffer *dynamicBuffer,
                                const uint8_t *sourceData,
@@ -93,6 +104,7 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                       nullptr));
     *bufferOut = dynamicBuffer->getCurrentBuffer();
     dst += destOffset;
+#endif
     if (replicateCount == 1)
     {
         vertexLoadFunction(sourceData, sourceStride, vertexCount, dst);
@@ -112,6 +124,29 @@ angle::Result StreamVertexData(ContextVk *contextVk,
             }
         }
     }
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+}
+
+angle::Result StreamVertexData(ContextVk *contextVk,
+                               vk::DynamicBuffer *dynamicBuffer,
+                               const uint8_t *sourceData,
+                               size_t bytesToAllocate,
+                               size_t destOffset,
+                               size_t vertexCount,
+                               size_t sourceStride,
+                               size_t destStride,
+                               VertexCopyFunction vertexLoadFunction,
+                               vk::BufferHelper **bufferOut,
+                               VkDeviceSize *bufferOffsetOut,
+                               uint32_t replicateCount)
+{
+    uint8_t *dst = nullptr;
+    ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, nullptr, bufferOffsetOut,
+                                      nullptr));
+    *bufferOut = dynamicBuffer->getCurrentBuffer();
+    dst += destOffset;
+    StreamVertexData(dst, sourceData, bytesToAllocate, vertexCount, sourceStride, destStride, vertexLoadFunction, replicateCount);
+#endif
 
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
     return angle::Result::Continue;
@@ -400,9 +435,13 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     ASSERT(vertexFormat.getVertexInputAlignment(compressed) <= vk::kVertexBufferAlignment);
 
     // Allocate buffer for results
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    ANGLE_TRY(conversion->reallocate(contextVk, numVertices * destFormatSize));
+#else
     conversion->data.releaseInFlightBuffers(contextVk);
     ANGLE_TRY(conversion->data.allocate(contextVk, numVertices * destFormatSize, nullptr, nullptr,
                                         &conversion->lastAllocationOffset, nullptr));
+#endif
 
     ASSERT(conversion->dirty);
     conversion->dirty = false;
@@ -419,7 +458,11 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     params.destOffset = static_cast<size_t>(conversion->lastAllocationOffset);
 
     ANGLE_TRY(contextVk->getUtils().convertVertexBuffer(
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+        contextVk, conversion->getBuffer(), srcBufferHelper, params));
+#else
         contextVk, conversion->data.getCurrentBuffer(), srcBufferHelper, params));
+#endif
 
     return angle::Result::Continue;
 }
@@ -438,7 +481,9 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     unsigned srcFormatSize = vertexFormat.getIntendedFormat().pixelBytes;
     unsigned dstFormatSize = vertexFormat.getActualBufferFormat(compressed).pixelBytes;
 
+#if !SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
     conversion->data.releaseInFlightBuffers(contextVk);
+#endif
 
     size_t numVertices = GetVertexCount(srcBuffer, binding, srcFormatSize);
     if (numVertices == 0)
@@ -451,10 +496,23 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     const uint8_t *srcBytes = reinterpret_cast<const uint8_t *>(src);
     srcBytes += binding.getOffset() + relativeOffset;
     ASSERT(vertexFormat.getVertexInputAlignment(compressed) <= vk::kVertexBufferAlignment);
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    const size_t bytesToAllocate = numVertices * dstFormatSize;
+    ANGLE_TRY(conversion->reallocate(contextVk, bytesToAllocate));
+    uint8_t *dstBytes;
+    mCurrentArrayBuffers[attribIndex] = conversion->getBuffer();
+    ANGLE_TRY(conversion->getBuffer()->map(contextVk, &dstBytes));
+    dstBytes += conversion->lastAllocationOffset;
+    StreamVertexData(
+        dstBytes, srcBytes, bytesToAllocate, numVertices,
+        binding.getStride(), srcFormatSize, vertexFormat.getVertexLoadFunction(compressed), 1);
+    ANGLE_TRY(conversion->getBuffer()->flush(contextVk->getRenderer(), conversion->lastAllocationOffset, bytesToAllocate));
+#else
     ANGLE_TRY(StreamVertexData(
         contextVk, &conversion->data, srcBytes, numVertices * dstFormatSize, 0, numVertices,
         binding.getStride(), srcFormatSize, vertexFormat.getVertexLoadFunction(compressed),
         &mCurrentArrayBuffers[attribIndex], &conversion->lastAllocationOffset, 1));
+#endif
     ANGLE_TRY(srcBuffer->unmapImpl(contextVk));
 
     ASSERT(conversion->dirty);
@@ -661,7 +719,11 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     bufferOnly = false;
                 }
 
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+                vk::BufferHelper *bufferHelper          = conversion->getBuffer();
+#else
                 vk::BufferHelper *bufferHelper          = conversion->data.getCurrentBuffer();
+#endif
                 mCurrentArrayBuffers[attribIndex]       = bufferHelper;
                 mCurrentArrayBufferHandles[attribIndex] = bufferHelper->getBuffer().getHandle();
                 mCurrentArrayBufferOffsets[attribIndex] = conversion->lastAllocationOffset;

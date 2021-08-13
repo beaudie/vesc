@@ -31,7 +31,9 @@ constexpr size_t kBufferSizeGranularity = 4;
 static_assert(gl::isPow2(kBufferSizeGranularity), "use as alignment, must be power of two");
 
 // Start with a fairly small buffer size. We can increase this dynamically as we convert more data.
+#if !SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
 constexpr size_t kConvertedArrayBufferInitialSize = 1024 * 8;
+#endif
 
 // Buffers that have a static usage pattern will be allocated in
 // device local memory to speed up access to and from the GPU.
@@ -158,6 +160,42 @@ ANGLE_INLINE bool IsUsageDynamic(gl::BufferUsage usage)
 }  // namespace
 
 // ConversionBuffer implementation.
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+ConversionBuffer::ConversionBuffer()
+    : dirty(true), lastAllocationOffset(0), mBuffer(nullptr)
+{
+}
+
+angle::Result ConversionBuffer::reallocate(ContextVk* contextVk, size_t size)
+{
+    if (mBuffer)
+    {
+        mBuffer->release(contextVk->getRenderer());
+        delete mBuffer;
+    }
+
+    mBuffer = new vk::BufferHelper;
+
+    vk::BufferSuballocationPtr suballocation;
+    vk::BufferSuballocatorVk *vertexConversionBufferStorage = contextVk->getVertexConversionBufferStorage();
+    ANGLE_TRY(vertexConversionBufferStorage->allocate(size, &suballocation));
+
+    lastAllocationOffset = suballocation->getOffset();
+    mBuffer->init(contextVk, std::move(suballocation));
+
+    return angle::Result::Continue;
+}
+
+void ConversionBuffer::release(RendererVk *renderer)
+{
+    if (mBuffer)
+    {
+        mBuffer->release(renderer);
+        delete mBuffer;
+        mBuffer = nullptr;
+    }
+}
+#else
 ConversionBuffer::ConversionBuffer(RendererVk *renderer,
                                    VkBufferUsageFlags usageFlags,
                                    size_t initialSize,
@@ -168,10 +206,13 @@ ConversionBuffer::ConversionBuffer(RendererVk *renderer,
     data.init(renderer, usageFlags, alignment, initialSize, hostVisible,
               vk::DynamicBufferPolicy::OneShotUse);
 }
+#endif
 
+#if !SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
 ConversionBuffer::~ConversionBuffer() = default;
 
 ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
+#endif
 
 // BufferVk::VertexConversionBuffer implementation.
 BufferVk::VertexConversionBuffer::VertexConversionBuffer(RendererVk *renderer,
@@ -179,19 +220,25 @@ BufferVk::VertexConversionBuffer::VertexConversionBuffer(RendererVk *renderer,
                                                          GLuint strideIn,
                                                          size_t offsetIn,
                                                          bool hostVisible)
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    : ConversionBuffer(),
+#else
     : ConversionBuffer(renderer,
                        vk::kVertexBufferUsageFlags,
                        kConvertedArrayBufferInitialSize,
                        vk::kVertexBufferAlignment,
                        hostVisible),
+#endif
       formatID(formatIDIn),
       stride(strideIn),
       offset(offsetIn)
 {}
 
+#if !SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
 BufferVk::VertexConversionBuffer::VertexConversionBuffer(VertexConversionBuffer &&other) = default;
 
 BufferVk::VertexConversionBuffer::~VertexConversionBuffer() = default;
+#endif
 
 // BufferVk implementation.
 BufferVk::BufferVk(const gl::BufferState &state)
@@ -231,7 +278,11 @@ void BufferVk::release(ContextVk *contextVk)
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+        buffer.release(renderer);
+#else
         buffer.data.release(renderer);
+#endif
     }
 }
 

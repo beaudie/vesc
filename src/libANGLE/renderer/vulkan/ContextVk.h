@@ -626,6 +626,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 #if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
     vk::BufferSuballocatorVk *getDynamicBufferStorage() { return &mDynamicBufferStorage; }
 #endif
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    vk::BufferSuballocatorVk *getVertexConversionBufferStorage() { return &mVertexConversionBufferStorage; }
+#endif
 #if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE
     GlobalDescriptorSetCache<vk::ShaderBuffersDescriptorDesc> *getGlobalShaderBufferDescriptorsCache() { return &mGlobalShaderBufferDescriptorsCache; }
     GlobalDescriptorSetCache<vk::TextureDescriptorDesc> *getGlobalTextureDescriptorsCache() { return &mGlobalTextureDescriptorsCache; }
@@ -1190,6 +1193,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::DynamicBuffer mStagingBuffer;
 #if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_DYNAMIC_BUFFERS
     vk::BufferSuballocatorVk mDynamicBufferStorage;
+#endif
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    vk::BufferSuballocatorVk mVertexConversionBufferStorage;
 #endif
 
 #if SVDT_ENABLE_VULKAN_GLOBAL_DESCRIPTORSET_CACHE

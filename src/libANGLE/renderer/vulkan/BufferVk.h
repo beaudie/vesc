@@ -22,6 +22,11 @@ class RendererVk;
 // Conversion buffers hold translated index and vertex data.
 struct ConversionBuffer
 {
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    ConversionBuffer();
+    angle::Result reallocate(ContextVk* contextVk, size_t size);
+    void release(RendererVk *renderer);
+#else
     ConversionBuffer(RendererVk *renderer,
                      VkBufferUsageFlags usageFlags,
                      size_t initialSize,
@@ -30,6 +35,7 @@ struct ConversionBuffer
     ~ConversionBuffer();
 
     ConversionBuffer(ConversionBuffer &&other);
+#endif
 
     // One state value determines if we need to re-stream vertex data.
     bool dirty;
@@ -38,7 +44,13 @@ struct ConversionBuffer
     VkDeviceSize lastAllocationOffset;
 
     // The conversion is stored in a dynamic buffer.
+#if SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
+    vk::BufferHelper* getBuffer() { ASSERT(mBuffer); return mBuffer; }
+private:
+    vk::BufferHelper* mBuffer;
+#else
     vk::DynamicBuffer data;
+#endif
 };
 
 class BufferVk : public BufferImpl
@@ -191,9 +203,11 @@ class BufferVk : public BufferImpl
                                GLuint strideIn,
                                size_t offsetIn,
                                bool hostVisible);
+#if !SVDT_USE_VULKAN_BUFFER_SUBALLOCATOR_FOR_CONVERSION_BUFFER
         ~VertexConversionBuffer();
 
         VertexConversionBuffer(VertexConversionBuffer &&other);
+#endif
 
         // The conversion is identified by the triple of {format, stride, offset}.
         angle::FormatID formatID;
