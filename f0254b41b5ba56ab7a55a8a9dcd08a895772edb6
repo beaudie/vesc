@@ -16,6 +16,46 @@
       "message": "This is based off of Jason\u0027s CL here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3042125\n\nThis version passes CQ, though there appear to be bugs in the GL/GLES/D3D9 backends that the new test is exposing.   I\u0027ll open a bug for the skip if you guys think everything else looks good.",
       "revId": "f0254b41b5ba56ab7a55a8a9dcd08a895772edb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "347a6d7b_2eb69f41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-13T11:48:00Z",
+      "side": 1,
+      "message": "flushing changing LGTM, but one comment about the test.",
+      "revId": "f0254b41b5ba56ab7a55a8a9dcd08a895772edb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c8722bf_03a69da6",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-13T11:48:00Z",
+      "side": 1,
+      "message": "if you look in the test log, you\u0027ll see the error is this:\n\n../../src/tests/egl_tests/EGLSurfaceTest.cpp(1239): error: Expected equality of these values:\n\n  static_cast\u003cGLenum\u003e(0)\n\n    Which is: 0\n\n  l_glGetError()\n\n    Which is: 1282\n    \nThis is potentially because glBlitFramebuffer is an extension in ES2. You can make your test EGLSurfaceTest3 or fall back to BlitFramebufferANGLE in ES2. I believe this is not a bug in D3D/GLES, but a bug in the test.",
+      "range": {
+        "startLine": 1208,
+        "startChar": 0,
+        "endLine": 1209,
+        "endChar": 79
+      },
+      "revId": "f0254b41b5ba56ab7a55a8a9dcd08a895772edb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
