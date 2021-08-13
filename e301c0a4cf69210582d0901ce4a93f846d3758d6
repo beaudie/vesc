@@ -33,6 +33,24 @@
       "message": "https://chromium-review.googlesource.com/c/chromium/src/+/3089646 has landed. Need Chromium to roll forward into ANGLE in order for this CL to land.\n",
       "revId": "e301c0a4cf69210582d0901ce4a93f846d3758d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c41dfe48_96e10a65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-13T00:29:56Z",
+      "side": 1,
+      "message": "Rolling in https://chromium-review.googlesource.com/c/angle/angle/+/3092967",
+      "parentUuid": "770a7148_10ce798e",
+      "revId": "e301c0a4cf69210582d0901ce4a93f846d3758d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
