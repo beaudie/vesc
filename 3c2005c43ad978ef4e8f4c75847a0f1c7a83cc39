@@ -516,6 +516,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c031c6a8_2189961b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-13T00:24:04Z",
+      "side": 1,
+      "message": "I think ContextVk::handleDirtyTexturesImplwill be handled before vertex/index buffers, so we should be calling bufferWrite first. I am wondering if you can just do `if(!usesBufferForWrite(*buffer))` here, which should be much cheaper than isTextureBuffer().",
+      "parentUuid": "f1fadc5d_57bf376b",
+      "range": {
+        "startLine": 1712,
+        "startChar": 17,
+        "endLine": 1712,
+        "endChar": 32
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fd20a8d_04cce0fe",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 7
