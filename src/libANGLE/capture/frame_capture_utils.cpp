@@ -1238,6 +1238,8 @@ Result SerializeTextureData(JsonSerializer *json,
         gl::PixelPackState packState;
         packState.alignment = 1;
 
+        GroupScope samplerStateGroup(json, "Layer", imageIter.current().getLayerIndex());
+
         std::string label = "Texels-Level" + std::to_string(index.getLevelIndex());
 
         if (texture->getState().getInitState() == gl::InitState::Initialized)
