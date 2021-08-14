@@ -16,6 +16,7 @@
 #include <rapidjson/filewritestream.h>
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/prettywriter.h>
+#include <iostream>
 
 namespace angle
 {
@@ -39,12 +40,16 @@ void JsonSerializer::startGroup(const std::string &name)
 
 void JsonSerializer::endGroup()
 {
+    ASSERT(!mGroupValueStack.empty());
+    ASSERT(!mGroupNameStack.empty());
+
     SortedValueGroup group = std::move(mGroupValueStack.top());
     std::string name       = std::move(mGroupNameStack.top());
-    mGroupValueStack.pop();
-    mGroupNameStack.pop();
 
     mGroupValueStack.top().insert(std::make_pair(name, makeValueGroup(group)));
+
+    mGroupValueStack.pop();
+    mGroupNameStack.pop();
 }
 
 void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_t length)
