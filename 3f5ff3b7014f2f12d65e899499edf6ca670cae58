@@ -87,6 +87,30 @@
       },
       "revId": "3f5ff3b7014f2f12d65e899499edf6ca670cae58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aefe173_4db27aa7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5220,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-14T13:36:58Z",
+      "side": 1,
+      "message": "It turns out that with GLSLTest.MixedShaderLengths the shader is written as an array, so the best option seems to be consistent, and to combine the strings at capture time to one string, and handle it like this, so I\u0027ve updated the patch accordingly.",
+      "parentUuid": "1bf19a75_8e869a75",
+      "range": {
+        "startLine": 5220,
+        "startChar": 12,
+        "endLine": 5220,
+        "endChar": 59
+      },
+      "revId": "3f5ff3b7014f2f12d65e899499edf6ca670cae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
