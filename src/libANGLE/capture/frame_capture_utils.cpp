@@ -1237,27 +1237,31 @@ Result SerializeTextureData(JsonSerializer *json,
 
         gl::PixelPackState packState;
         packState.alignment = 1;
+        std::stringstream label;
 
-        std::string label = "Texels-Level" + std::to_string(index.getLevelIndex());
+        label << "Texels";
+        if (imageIter.current().getLayerIndex())
+            label << "-Layer" << imageIter.current().getLayerIndex();
+        label << "-Level" << index.getLevelIndex();
 
         if (texture->getState().getInitState() == gl::InitState::Initialized)
         {
             if (format.compressed)
             {
                 // TODO: Read back compressed data. http://anglebug.com/6177
-                json->addCString(label, "compressed texel data");
+                json->addCString(label.str(), "compressed texel data");
             }
             else
             {
                 ANGLE_TRY(texture->getTexImage(context, packState, nullptr, index.getTarget(),
                                                index.getLevelIndex(), getFormat, getType,
                                                texelsPtr->data()));
-                json->addBlob(label, texelsPtr->data(), texelsPtr->size());
+                json->addBlob(label.str(), texelsPtr->data(), texelsPtr->size());
             }
         }
         else
         {
-            json->addCString(label, "not initialized");
+            json->addCString(label.str(), "not initialized");
         }
     }
     return Result::Continue;
