@@ -60,15 +60,6 @@
 6180 : ImageTest.SourceRenderbufferTargetTextureExternal/* = FAIL
 6180 : ImageTest.UpdatedData/* = FAIL
 
-6180 : MipmapTest.DefineValidExtraLevelAndUseItLater/ES2_Vulkan = FAIL
-6180 : MipmapTest.GenerateMipmapAfterModifyingBaseLevel/ES2_Vulkan = FAIL
-6180 : MipmapTest.GenerateMipmapAfterSingleLevelDraw/ES2_Vulkan = FAIL
-6180 : MipmapTest.GenerateMipmapFromInitDataThenRender/ES2_Vulkan = FAIL
-6180 : MipmapTest.GenerateMipmapFromRenderedImage/ES2_Vulkan = FAIL
-6180 : MipmapTest.MipMapGenerationD3D9Bug/ES2_Vulkan = FAIL
-6180 : MipmapTest.MipmapsForTexture3DOES/ES2_Vulkan = FAIL
-6180 : MipmapTest.RenderOntoLevelZeroAfterGenerateMipmap/ES2_Vulkan = FAIL
-
 6108 : PBOCompressedTextureTest.PBOCompressedSubImageWithUnpackRowLength/* = SKIP_FOR_CAPTURE
 
 6180 : PbufferTest.BindTexImage/* = FAIL
@@ -92,3 +83,12 @@
 # flaky test
 6180 : DrawBuffersTest.UnwrittenOutputVariablesShouldNotCrash/ES2_Vulkan_SwiftShader = FLAKY
 6180 : WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInIndexBuffer/ES2_Vulkan_SwiftShader = FLAKY
+
+6180 : MipmapTest.GenerateMipmapFromInitDataThenRender/ES2_Vulkan = FLAKY
+6180 : MipmapTest.GenerateMipmapFromRenderedImage/ES2_Vulkan = FLAKY
+6180 : MipmapTest.GenerateMipmapAfterModifyingBaseLevel/ES2_Vulkan = FLAKY
+6108 : MipmapTest.DefineValidExtraLevelAndUseItLater/ES2_Vulkan = FLAKY
+6108 : MipmapTest.GenerateMipmapAfterSingleLevelDraw/ES2_Vulkan = FLAKY
+6108 : MipmapTest.RenderOntoLevelZeroAfterGenerateMipmap/ES2_Vulkan = FLAKY 
+6108 : MipmapTest.MipmapsForTexture3DOES/ES2_Vulkan = FLAKY
+6108 : MipmapTest.MipMapGenerationD3D9Bug/ES2_Vulkan = FLAKY
