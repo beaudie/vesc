@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079061e4_64673e2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-14T05:18:15Z",
+      "side": 1,
+      "message": "PTAL\n\nThis uses Charlie\u0027s idea to add a second SharedResourceUse (mWriteUse) to Resource, which tracks the counter/serial for all retainBuffer(Write) calls. Both mUse and mWriteUse are added to the resourceUseList, so both Serials are updated during SubmitFrame().",
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
