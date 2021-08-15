@@ -213,6 +213,11 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
     include_dirs = [ "." ]
 
     sources = angle_end2end_tests_sources + [ "angle_end2end_tests_main.cpp" ]
+    sources += [
+      "../libANGLE/capture/gl_enum_utils.cpp",
+      "../libANGLE/capture/gl_enum_utils_autogen.cpp",
+    ]
+
     libs = []
     data = [ "angle_end2end_tests_expectations.txt" ]
 
