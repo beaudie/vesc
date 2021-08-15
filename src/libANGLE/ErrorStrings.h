@@ -209,6 +209,7 @@ MSG kInsufficientBufferSize = "Insufficient buffer size.";
 MSG kInsufficientParams = "More parameters are required than were provided.";
 MSG kInsufficientVertexBufferSize = "Vertex buffer is not big enough for the draw call";
 MSG kIntegerOverflow = "Integer overflow.";
+MSG kInternalFormatRequiresTexture2D = "internalformat is an ETC1 or PVRTC1 format.";
 MSG kInternalFormatRequiresTexture2DArray = "internalformat is an ETC2/EAC format and target is not GL_TEXTURE_2D_ARRAY.";
 MSG kInternalFormatRequiresTexture2DArrayS3TC = "internalformat is an S3TC format and target is not GL_TEXTURE_2D_ARRAY.";
 MSG kInternalFormatRequiresTexture2DArrayRGTC = "internalformat is an RGTC format and target is not GL_TEXTURE_2D_ARRAY.";

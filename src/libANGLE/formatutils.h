@@ -402,6 +402,19 @@ ANGLE_INLINE bool IsASTC2DFormat(const GLenum format)
     return false;
 }
 
+ANGLE_INLINE bool IsETC1Format(const GLenum format)
+{
+    switch (format)
+    {
+        case GL_ETC1_RGB8_OES:
+        case GL_ETC1_SRGB8_NV:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
 ANGLE_INLINE bool IsETC2EACFormat(const GLenum format)
 {
     // ES 3.1, Table 8.19

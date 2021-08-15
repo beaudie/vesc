@@ -373,8 +373,25 @@ static bool ValidateTexImageFormatCombination(const Context *context,
     return true;
 }
 
+static bool ValidateES3CompressedFormatForTexture2DArray(const Context *context, GLenum format)
+{
+    if (IsETC1Format(format) || IsPVRTC1Format(format))
+    {
+        context->validationError(GL_INVALID_OPERATION, kInternalFormatRequiresTexture2D);
+        return false;
+    }
+
+    return true;
+}
+
 static bool ValidateES3CompressedFormatForTexture3D(const Context *context, GLenum format)
 {
+    if (IsETC1Format(format) || IsPVRTC1Format(format))
+    {
+        context->validationError(GL_INVALID_OPERATION, kInternalFormatRequiresTexture2D);
+        return false;
+    }
+
     if (IsETC2EACFormat(format))
     {
         // ES 3.1, Section 8.7, page 169.
@@ -585,16 +602,6 @@ bool ValidateES3TexImageParametersBase(const Context *context,
         return false;
     }
 
-    if (isCompressed && texType == TextureType::_3D)
-    {
-        GLenum compressedDataFormat = isSubImage ? format : internalformat;
-        if (!ValidateES3CompressedFormatForTexture3D(context, compressedDataFormat))
-        {
-            // Error already generated.
-            return false;
-        }
-    }
-
     // Validate texture formats
     GLenum actualInternalFormat =
         isSubImage ? texture->getFormat(target, level).info->internalFormat : internalformat;
@@ -613,6 +620,32 @@ bool ValidateES3TexImageParametersBase(const Context *context,
         {
             context->validationError(GL_INVALID_ENUM, kCompressedMismatch);
             return false;
+        }
+
+        if (!actualFormatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
+        {
+            context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+            return false;
+        }
+
+        if (texType == TextureType::_2DArray)
+        {
+            GLenum compressedDataFormat = isSubImage ? format : internalformat;
+            if (!ValidateES3CompressedFormatForTexture2DArray(context, compressedDataFormat))
+            {
+                // Error already generated.
+                return false;
+            }
+        }
+
+        if (texType == TextureType::_3D)
+        {
+            GLenum compressedDataFormat = isSubImage ? format : internalformat;
+            if (!ValidateES3CompressedFormatForTexture3D(context, compressedDataFormat))
+            {
+                // Error already generated.
+                return false;
+            }
         }
 
         if (isSubImage)
@@ -648,12 +681,6 @@ bool ValidateES3TexImageParametersBase(const Context *context,
                 context->validationError(GL_INVALID_OPERATION, kInvalidCompressedImageSize);
                 return false;
             }
-        }
-
-        if (!actualFormatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
-        {
-            context->validationError(GL_INVALID_ENUM, kInvalidFormat);
-            return false;
         }
 
         // Disallow 3D-only compressed formats from being set on 2D textures
@@ -1415,6 +1442,15 @@ bool ValidateES3TexStorageParametersBase(const Context *context,
         {
             context->validationError(GL_INVALID_ENUM, kRectangleTextureCompressed);
             return false;
+        }
+
+        if (target == TextureType::_2DArray)
+        {
+            if (!ValidateES3CompressedFormatForTexture2DArray(context, formatInfo.internalFormat))
+            {
+                // Error already generated.
+                return false;
+            }
         }
 
         if (target == TextureType::_3D)
