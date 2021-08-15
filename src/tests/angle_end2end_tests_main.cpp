@@ -18,6 +18,7 @@ void ANGLEProcessTestArgs(int *argc, char *argv[]);
 // tests. It's also more similar to how the dEQP Test harness works. In the future we should
 // likely specialize more register functions more like dEQP instead of relying on static init.
 void RegisterContextCompatibilityTests();
+void RegisterCompressedTextureFormatsTests();
 
 namespace
 {
@@ -29,6 +30,7 @@ int main(int argc, char **argv)
     angle::TestSuite testSuite(&argc, argv);
     ANGLEProcessTestArgs(&argc, argv);
     RegisterContextCompatibilityTests();
+    RegisterCompressedTextureFormatsTests();
 
     constexpr size_t kMaxPath = 512;
     std::array<char, kMaxPath> foundDataPath;
