@@ -16,6 +16,75 @@
       "message": "PTAL\n\nThis uses Charlie\u0027s idea to add a second SharedResourceUse (mWriteUse) to Resource, which tracks the counter/serial for all retainBuffer(Write) calls. Both mUse and mWriteUse are added to the resourceUseList, so both Serials are updated during SubmitFrame().",
       "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77afc220_23b424a7",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-16T17:06:50Z",
+      "side": 1,
+      "message": "The default is for Read/Write Access. For example, all texture code is calling retain, and there should be no behavior change. That is why I was thinking add mWriteUse into BufferHelper class instead of Resource class so that it is clear that is BufferHelper specific optimization. i.e, BufferHelper::retain() call will update both mUse and mWriteUse.",
+      "range": {
+        "startLine": 219,
+        "startChar": 18,
+        "endLine": 219,
+        "endChar": 22
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d775e5f6_54315dc5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-16T17:06:50Z",
+      "side": 1,
+      "message": "I thought this change is no longer needed with the new fix you did for textureBuffer?",
+      "range": {
+        "startLine": 1036,
+        "startChar": 8,
+        "endLine": 1040,
+        "endChar": 12
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d6660b_2f063c36",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-16T17:06:50Z",
+      "side": 1,
+      "message": "I thought this needs to go through garbage collector? Otherwise, what if this is still not submitted and still in the mResourceUseList, and submit code will modofy mWriteUses after this has been reinited? My understanding is that you need to add a new API like collectShasredUseAndReinit(mWriteUse) and check if mWriteUse is in recorded commands then do std::move.",
+      "range": {
+        "startLine": 3666,
+        "startChar": 4,
+        "endLine": 3674,
+        "endChar": 15
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
