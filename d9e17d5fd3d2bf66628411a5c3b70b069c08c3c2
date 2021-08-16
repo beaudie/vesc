@@ -33,6 +33,47 @@
       "message": "Sorry Yuly, Adding prior reviewers to this script as I realize you haven\u0027t looked at it before.",
       "revId": "d9e17d5fd3d2bf66628411a5c3b70b069c08c3c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "342951eb_16e047aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-16T21:58:02Z",
+      "side": 1,
+      "message": "No worries, looks trivial enough.",
+      "parentUuid": "bb8329af_96a21662",
+      "revId": "d9e17d5fd3d2bf66628411a5c3b70b069c08c3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2822ef7_9d9086fe",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-16T21:58:02Z",
+      "side": 1,
+      "message": "I wonder if there is a simpler way than writing a temp file for each test and executing external script on it.\nDoes HistogramSet.DeduplicateDiagnostics() do something similar, perhaps?",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 58
+      },
+      "revId": "d9e17d5fd3d2bf66628411a5c3b70b069c08c3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
