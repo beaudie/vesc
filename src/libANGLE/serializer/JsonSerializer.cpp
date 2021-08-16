@@ -39,12 +39,21 @@ void JsonSerializer::startGroup(const std::string &name)
 
 void JsonSerializer::endGroup()
 {
+    ASSERT(!mGroupValueStack.empty());
+    ASSERT(!mGroupNameStack.empty());
+
+    // Copying the group would be expensive, so we use move semantics.
+    // This will leave top() in a valid but un-initialized state, so pop right away.
     SortedValueGroup group = std::move(mGroupValueStack.top());
-    std::string name       = std::move(mGroupNameStack.top());
     mGroupValueStack.pop();
-    mGroupNameStack.pop();
+
+    // There seems to be a bug with std::move and std::string, which results in
+    // valgrind to report access to uninitialized memory in make_pair below
+    // so delay the pop() until after name was used.
+    std::string name = std::move(mGroupNameStack.top());
 
     mGroupValueStack.top().insert(std::make_pair(name, makeValueGroup(group)));
+    mGroupNameStack.pop();
 }
 
 void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_t length)
