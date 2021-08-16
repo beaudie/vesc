@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "928e51e7_6a9f3698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-16T13:00:22Z",
+      "side": 1,
+      "message": "The new test ensures that the validation layer is consistent across various compressed format extensions in the context of enabled/disabled state.\n\nThe new Metal limitation affects only systems older than 10.15. I think it\u0027s a better approach than disallowing 3D uploads of BPTC textures altogether.\n\nThe Qualcomm failure is documented here: https://crbug.com/1060012. I\u0027ll try to add a workaround for that or just skip the failing case on that platform.\n\n ",
+      "revId": "bfdabde1b2efcf789f8f7a6a003e1885dd3f08f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
