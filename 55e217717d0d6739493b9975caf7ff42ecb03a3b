@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c18aa19e_8438fb4c",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-16T21:01:14Z",
+      "side": 0,
+      "message": "Are there any issues with moving this validation farther down? This doesn\u0027t rely on the actualFormatInfo, so should the 2D array case perhaps be validated up here?",
+      "revId": "55e217717d0d6739493b9975caf7ff42ecb03a3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

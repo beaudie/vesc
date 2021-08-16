@@ -16,6 +16,40 @@
       "message": "The new test ensures that the validation layer is consistent across various compressed format extensions in the context of enabled/disabled state.\n\nThe new Metal limitation affects only systems older than 10.15. I think it\u0027s a better approach than disallowing 3D uploads of BPTC textures altogether.\n\nThe Qualcomm failure is documented here: https://crbug.com/1060012. I\u0027ll try to add a workaround for that or just skip the failing case on that platform.\n\n ",
       "revId": "bfdabde1b2efcf789f8f7a6a003e1885dd3f08f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "725550cd_77d5e0ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-16T21:01:14Z",
+      "side": 1,
+      "message": "Looks good to me overall - a couple of questions. I didn\u0027t review the tests in detail.\n",
+      "revId": "bfdabde1b2efcf789f8f7a6a003e1885dd3f08f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d4e26e9_a5d8fb78",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-16T21:01:14Z",
+      "side": 1,
+      "message": "What happens in the compressedTexSubImage case when the format\u0027s unknown or unsupported then? Slight concern about handing off this behavior to the driver when ANGLE\u0027s validation should catch all potential errors.",
+      "revId": "bfdabde1b2efcf789f8f7a6a003e1885dd3f08f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
