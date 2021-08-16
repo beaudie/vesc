@@ -22,6 +22,30 @@
       },
       "revId": "693095df488e0b269be45ede75307e35e22865b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f7e7e0b_069cfb97",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2051,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-16T12:16:20Z",
+      "side": 1,
+      "message": "Renderbuffers/Surfaces don\u0027t have syncState calls because their APIs don\u0027t operate on states like with Textures. So Textures are a bit special. I don\u0027t have a totally consistent answer but we don\u0027t want to finish syncState with dirty states set. It\u0027s probably also OK to call setInitState. The code here is slightly faster because we don\u0027t need to reset the image desc init states.",
+      "parentUuid": "e0be5fda_e85be65c",
+      "range": {
+        "startLine": 2051,
+        "startChar": 0,
+        "endLine": 2051,
+        "endChar": 47
+      },
+      "revId": "693095df488e0b269be45ede75307e35e22865b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
