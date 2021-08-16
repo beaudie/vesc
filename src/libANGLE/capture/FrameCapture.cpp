@@ -5441,9 +5441,11 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
             // handled correctly by maybeCapturePreCallUpdates() and maybeCapturePostCallUpdates().
             setCaptureActive();
         }
-
-        // Not capturing the current frame, so return.
-        return;
+        else
+        {
+            // Not capturing the current frame, so return.
+            return;
+        }
     }
 
     if (mIsFirstFrame)
@@ -5455,6 +5457,8 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
         // When *not* performing a mid-execution capture, setup the replay with the first frame.
         bool isMidExecutionCapture = mCaptureStartFrame != 1;
         setupSharedAndAuxReplay(context, isMidExecutionCapture);
+        mIsFirstFrame = false;
+        return;
     }
 
     if (!mFrameCalls.empty())
