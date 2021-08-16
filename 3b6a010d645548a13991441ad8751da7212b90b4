@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eae64b0_26966505",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-16T11:39:16Z",
+      "side": 1,
+      "message": "can you instead add this to the this label string? potentially only when the layer is non-zero.",
+      "range": {
+        "startLine": 1243,
+        "startChar": 36,
+        "endLine": 1243,
+        "endChar": 41
+      },
+      "revId": "3b6a010d645548a13991441ad8751da7212b90b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
