@@ -63,6 +63,30 @@
       },
       "revId": "dccf1b4c80adbbcb52fb82ac9ea9bb39d5aa5d3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ede19e_bd5b236a",
+        "filename": "src/libANGLE/serializer/JsonSerializer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T17:29:45Z",
+      "side": 1,
+      "message": "Ah, yeah, I skipped over the new mGroupValueStack.top() being modified.   Rather than trying to work around the quirks of move semantics with strings and stacks, I think we should just do a copy and pop() right away, since the std::move() leaves the stack object in a weird state.\n\nIf nothing else, there should probably at least be a comment here indicating that mGroupNameStack.top() is \"valid\" but unspecified and should not be accessed until after the pop(), along with why the pop() is being delayed (since most everything says move() should immediately be followed by pop()).",
+      "parentUuid": "233c8e97_4a37cac5",
+      "range": {
+        "startLine": 50,
+        "startChar": 70,
+        "endLine": 50,
+        "endChar": 75
+      },
+      "revId": "dccf1b4c80adbbcb52fb82ac9ea9bb39d5aa5d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
