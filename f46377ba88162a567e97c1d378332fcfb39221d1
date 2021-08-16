@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39352059_e306eda8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T22:36:35Z",
+      "side": 1,
+      "message": "Getting this logic right has been tricky for me so far.   Hopefully we can get it right this time once and for all.",
+      "revId": "f46377ba88162a567e97c1d378332fcfb39221d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c99b5a66_343292a5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5447,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T22:36:35Z",
+      "side": 1,
+      "message": "Since setCaptureActive() is called in the FrameCaptureShared ctor, you may be able to move this return into the \u0027if (mFrameIndex \u003d\u003d mCaptureStartFrame)\u0027 block and remove the second \u0027return\u0027 that was added below.",
+      "revId": "f46377ba88162a567e97c1d378332fcfb39221d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f22521f_c29af49d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5461,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T22:36:35Z",
+      "side": 1,
+      "message": "I think this is causing the first frame\u0027s commands to be skipped, since WriteWindowSurfaceContextCppReplay() will not be called for getReplayFrameIndex() \u003d\u003d 1.",
+      "revId": "f46377ba88162a567e97c1d378332fcfb39221d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
