@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54cac539_e4381f84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T23:10:48Z",
+      "side": 1,
+      "message": "LGTM assuming win-trace-rel passes once the earlier CLs are fixed up.",
+      "revId": "41e1acc74edc71a944ee02572d720c71cf742c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d7b880_ed0458a0",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3666,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T23:10:48Z",
+      "side": 1,
+      "message": "nit: nothing",
+      "range": {
+        "startLine": 3666,
+        "startChar": 7,
+        "endLine": 3666,
+        "endChar": 14
+      },
+      "revId": "41e1acc74edc71a944ee02572d720c71cf742c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caaf6b2f_3012ef60",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3459,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T23:10:48Z",
+      "side": 1,
+      "message": "Why do we need to check both apiState and replayState for these calls?",
+      "revId": "41e1acc74edc71a944ee02572d720c71cf742c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
