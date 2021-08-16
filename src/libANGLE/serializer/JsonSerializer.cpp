@@ -39,12 +39,16 @@ void JsonSerializer::startGroup(const std::string &name)
 
 void JsonSerializer::endGroup()
 {
+    ASSERT(!mGroupValueStack.empty());
+    ASSERT(!mGroupNameStack.empty());
+
     SortedValueGroup group = std::move(mGroupValueStack.top());
-    std::string name       = std::move(mGroupNameStack.top());
     mGroupValueStack.pop();
-    mGroupNameStack.pop();
+
+    std::string name = std::move(mGroupNameStack.top());
 
     mGroupValueStack.top().insert(std::make_pair(name, makeValueGroup(group)));
+    mGroupNameStack.pop();
 }
 
 void JsonSerializer::addBlob(const std::string &name, const uint8_t *blob, size_t length)
