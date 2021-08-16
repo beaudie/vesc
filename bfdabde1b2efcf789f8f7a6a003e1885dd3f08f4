@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "96b8b0ac_d4462769",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-16T21:02:06Z",
+      "side": 1,
+      "message": "Also: the validation changes are significant; please mention them in the fist sentence. Maybe \"Adjust compressed texture validation; add test.\"",
+      "revId": "bfdabde1b2efcf789f8f7a6a003e1885dd3f08f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "928e51e7_6a9f3698",
