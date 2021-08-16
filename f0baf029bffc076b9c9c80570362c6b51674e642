@@ -16,6 +16,24 @@
       "message": "Looks like one of the unit tests is failing.",
       "revId": "f0baf029bffc076b9c9c80570362c6b51674e642",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df28908e_62ef49c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-16T12:56:11Z",
+      "side": 1,
+      "message": "Yeah, stupid mistake that also explains why all the tests were now passing. I\u0027ll update the patch accordingly.",
+      "parentUuid": "42dd1cd6_61ef1382",
+      "revId": "f0baf029bffc076b9c9c80570362c6b51674e642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
