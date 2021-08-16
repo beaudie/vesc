@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ad032a2_4eb7d78e",
+        "filename": "src/libANGLE/serializer/JsonSerializer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-16T15:21:13Z",
+      "side": 1,
+      "message": "https://www.cplusplus.com/reference/stack/stack/pop/\n\u003e Remove top element\n\u003e \n\u003e This calls the removed element\u0027s destructor.\n\nThis \u0027group\u0027 variable also suffers from the same bug.\n\nThe \u0027move\u0027 isn\u0027t actually transfering the object to the local variable; it\u0027s still on the stack which is why they are being destroyed.   Both of the pop() calls should be moved to the end of the function.",
+      "range": {
+        "startLine": 50,
+        "startChar": 70,
+        "endLine": 50,
+        "endChar": 75
+      },
+      "revId": "dccf1b4c80adbbcb52fb82ac9ea9bb39d5aa5d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
