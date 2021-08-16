@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a651fa54_472c3753",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-16T22:59:14Z",
+      "side": 1,
+      "message": "Note: when moving forward with this we\u0027ll probably want to pull in more changes, especially:\n\n[Metal ANGLE] Fix over-autorelease of rx::DisplayMtl::getMetalDeviceMatchingAttribute() and various Objective-C leaks\nhttps://bugs.webkit.org/show_bug.cgi?id\u003d229128\n",
+      "revId": "22c53dcb40e8ad993859c2eddc1f5e3357f2874e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
