@@ -74,6 +74,30 @@
       },
       "revId": "d9e17d5fd3d2bf66628411a5c3b70b069c08c3c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c70f5933_2dd5f0b6",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T11:22:58Z",
+      "side": 1,
+      "message": "Ack, Diagnostics are not quite the same thing. The measurements are part of the histograms rather than the diagnostics.\n\nIn the future I might investigate skipping saving files altogether and writing new histograms in this script, with trimming the outlier values.",
+      "parentUuid": "b2822ef7_9d9086fe",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 58
+      },
+      "revId": "d9e17d5fd3d2bf66628411a5c3b70b069c08c3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
