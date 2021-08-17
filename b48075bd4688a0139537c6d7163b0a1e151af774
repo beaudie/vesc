@@ -56,6 +56,30 @@
       },
       "revId": "b48075bd4688a0139537c6d7163b0a1e151af774",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c8bd63_adecda56",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-17T17:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbd09a0a_c57de51d",
+      "range": {
+        "startLine": 246,
+        "startChar": 47,
+        "endLine": 246,
+        "endChar": 68
+      },
+      "revId": "b48075bd4688a0139537c6d7163b0a1e151af774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
