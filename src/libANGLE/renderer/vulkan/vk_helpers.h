@@ -12,6 +12,7 @@
 #include "common/MemoryBuffer.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
 namespace gl
 {
@@ -1410,9 +1411,9 @@ bool FormatHasNecessaryFeature(RendererVk *renderer,
                                VkFormatFeatureFlags featureBits);
 
 bool CanCopyWithTransfer(RendererVk *renderer,
-                         const Format &srcFormat,
+                         angle::FormatID srcFormatID,
                          VkImageTiling srcTilingMode,
-                         const Format &destFormat,
+                         angle::FormatID destFormatID,
                          VkImageTiling destTilingMode);
 
 class ImageHelper final : public Resource, public angle::Subject
@@ -1587,6 +1588,12 @@ class ImageHelper final : public Resource, public angle::Subject
     uint32_t getLayerCount() const { return mLayerCount; }
     uint32_t getLevelCount() const { return mLevelCount; }
     const Format &getFormat() const { return *mFormat; }
+    angle::FormatID getActualFormatID() const { return mFormat->actualImageFormatID; }
+    VkFormat getActualVkFormat() const { return mFormat->actualImageVkFormat(); }
+    const angle::Format &getActualAngleFormat() const
+    {
+        return angle::Format::Get(mFormat->actualImageFormatID);
+    }
     GLint getSamples() const { return mSamples; }
 
     ImageSerial getImageSerial() const

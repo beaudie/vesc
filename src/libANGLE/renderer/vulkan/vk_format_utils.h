@@ -196,7 +196,7 @@ size_t GetVertexInputAlignment(const vk::Format &format, bool compressed);
 
 // Get the swizzle state based on format's requirements and emulations.
 gl::SwizzleState GetFormatSwizzle(const ContextVk *contextVk,
-                                  const vk::Format &format,
+                                  const angle::Format &angleFormat,
                                   const bool sized);
 
 // Apply application's swizzle to the swizzle implied by format as received from GetFormatSwizzle.

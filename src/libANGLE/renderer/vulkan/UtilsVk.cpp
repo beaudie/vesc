@@ -274,9 +274,9 @@ uint32_t GetConvertIndexIndirectLineLoopFlag(uint32_t indicesBitsWidth)
     }
 }
 
-uint32_t GetGenerateMipmapFlags(ContextVk *contextVk, const vk::Format &format)
+uint32_t GetGenerateMipmapFlags(ContextVk *contextVk, angle::FormatID formatID)
 {
-    const angle::Format &actualFormat = format.actualImageFormat();
+    const angle::Format &actualFormat = angle::Format::Get(formatID);
 
     uint32_t flags = 0;
 
@@ -2824,15 +2824,17 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     // alpha value is correct, if dest is RGBA.
 
     const vk::Format &srcFormat = src->getFormat();
+    angle::FormatID srcFormatID = src->getActualFormatID();
     const vk::Format &dstFormat = dest->getFormat();
+    angle::FormatID dstFormatID = dest->getActualFormatID();
 
     // This path should only be necessary for when RGBA is used as fallback for RGB.  No other
     // format which can be used with EXT_copy_image has a fallback.
     ASSERT(srcFormat.intendedFormat().blueBits > 0 && srcFormat.intendedFormat().alphaBits == 0);
     ASSERT(dstFormat.intendedFormat().blueBits > 0 && dstFormat.intendedFormat().alphaBits == 0);
 
-    const angle::Format &srcImageFormat = srcFormat.actualImageFormat();
-    const angle::Format &dstImageFormat = dstFormat.actualImageFormat();
+    const angle::Format &srcImageFormat = angle::Format::Get(srcFormatID);
+    const angle::Format &dstImageFormat = angle::Format::Get(dstFormatID);
 
     // Create temporary buffers.
     vk::RendererScoped<vk::BufferHelper> srcBuffer(contextVk->getRenderer());
@@ -3049,7 +3051,7 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     shaderParams.invSrcExtent[1] = 1.0f / srcExtents.height;
     shaderParams.levelCount      = params.destLevelCount;
 
-    uint32_t flags = GetGenerateMipmapFlags(contextVk, src->getFormat());
+    uint32_t flags = GetGenerateMipmapFlags(contextVk, src->getActualFormatID());
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
