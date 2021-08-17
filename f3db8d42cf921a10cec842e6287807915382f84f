@@ -57,6 +57,30 @@
       },
       "revId": "f3db8d42cf921a10cec842e6287807915382f84f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "449f14e8_d9cbb75e",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T20:12:08Z",
+      "side": 1,
+      "message": "Result of a mixed-up merge. Fixed.",
+      "parentUuid": "a24ff1ff_f9a0f876",
+      "range": {
+        "startLine": 513,
+        "startChar": 9,
+        "endLine": 513,
+        "endChar": 31
+      },
+      "revId": "f3db8d42cf921a10cec842e6287807915382f84f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
