@@ -2217,6 +2217,98 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
     }
 }
 
+void GenerateLinkedProgram(const gl::Context *context,
+                           const gl::State &replayState,
+                           ResourceTracker *resourceTracker,
+                           std::vector<CallCapture> *setupCalls,
+                           gl::Program *program,
+                           gl::ShaderProgramID id,
+                           const ProgramSources &linkedSources)
+{
+
+    // Use max ID as a temporary shader ID.
+    gl::ShaderProgramID tempShaderID = {resourceTracker->getMaxShaderPrograms()};
+
+    // Compile with last linked sources.
+    for (gl::ShaderType shaderType : program->getExecutable().getLinkedShaderStages())
+    {
+        const std::string &sourceString = linkedSources[shaderType];
+        const char *sourcePointer       = sourceString.c_str();
+
+        // Compile and attach the temporary shader. Then free it immediately.
+        Capture(setupCalls, CaptureCreateShader(replayState, true, shaderType, tempShaderID.value));
+        Capture(setupCalls,
+                CaptureShaderSource(replayState, true, tempShaderID, 1, &sourcePointer, nullptr));
+        Capture(setupCalls, CaptureCompileShader(replayState, true, tempShaderID));
+        Capture(setupCalls, CaptureAttachShader(replayState, true, id, tempShaderID));
+        Capture(setupCalls, CaptureDeleteShader(replayState, true, tempShaderID));
+    }
+
+    // Gather XFB varyings
+    std::vector<std::string> xfbVaryings;
+    for (const gl::TransformFeedbackVarying &xfbVarying :
+         program->getState().getLinkedTransformFeedbackVaryings())
+    {
+        xfbVaryings.push_back(xfbVarying.nameWithArrayIndex());
+    }
+
+    if (!xfbVaryings.empty())
+    {
+        std::vector<const char *> varyingsStrings;
+        for (const std::string &varyingString : xfbVaryings)
+        {
+            varyingsStrings.push_back(varyingString.data());
+        }
+
+        GLenum xfbMode = program->getState().getTransformFeedbackBufferMode();
+        Capture(setupCalls, CaptureTransformFeedbackVaryings(replayState, true, id,
+                                                             static_cast<GLint>(xfbVaryings.size()),
+                                                             varyingsStrings.data(), xfbMode));
+    }
+
+    // Force the attributes to be bound the same way as in the existing program.
+    // This can affect attributes that are optimized out in some implementations.
+    for (const sh::ShaderVariable &attrib : program->getState().getProgramInputs())
+    {
+        if (gl::IsBuiltInName(attrib.name))
+        {
+            // Don't try to bind built-in attributes
+            continue;
+        }
+
+        // Separable programs may not have a VS, meaning it may not have attributes.
+        if (program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Vertex))
+        {
+            ASSERT(attrib.location != -1);
+            Capture(setupCalls, CaptureBindAttribLocation(replayState, true, id,
+                                                          static_cast<GLuint>(attrib.location),
+                                                          attrib.name.c_str()));
+        }
+    }
+
+    if (program->isSeparable())
+    {
+        // MEC manually recreates separable programs, rather than attempting to recreate a call
+        // to glCreateShaderProgramv(), so insert a call to mark it separable.
+        Capture(setupCalls,
+                CaptureProgramParameteri(replayState, true, id, GL_PROGRAM_SEPARABLE, GL_TRUE));
+    }
+
+    Capture(setupCalls, CaptureLinkProgram(replayState, true, id));
+    CaptureUpdateUniformLocations(program, setupCalls);
+    CaptureUpdateUniformValues(replayState, context, program, setupCalls);
+    CaptureUpdateUniformBlockIndexes(program, setupCalls);
+
+    // Capture uniform block bindings for each program
+    for (unsigned int uniformBlockIndex = 0;
+         uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
+    {
+        GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
+        Capture(setupCalls, CaptureUniformBlockBinding(replayState, true, id, {uniformBlockIndex},
+                                                       blockBinding));
+    }
+}
+
 // TODO(http://anglebug.com/4599): Improve reset/restore call generation
 // There are multiple ways to track reset calls for individual resources. For now, we are tracking
 // separate lists of instructions that mirror the calls created during mid-execution setup. Other
@@ -2776,8 +2868,7 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
     const gl::ResourceMap<gl::Program, gl::ShaderProgramID> &programs =
         shadersAndPrograms.getProgramsForCaptureAndPerf();
 
-    // Capture Program binary state. Use max ID as a temporary shader ID.
-    gl::ShaderProgramID tempShaderID = {resourceTracker->getMaxShaderPrograms()};
+    // Capture Program binary state.
     for (const auto &programIter : programs)
     {
         gl::ShaderProgramID id = {programIter.first};
@@ -2796,82 +2887,8 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
 
         cap(CaptureCreateProgram(replayState, true, id.value));
 
-        // Compile with last linked sources.
-        for (gl::ShaderType shaderType : program->getExecutable().getLinkedShaderStages())
-        {
-            const std::string &sourceString = linkedSources[shaderType];
-            const char *sourcePointer       = sourceString.c_str();
-
-            // Compile and attach the temporary shader. Then free it immediately.
-            cap(CaptureCreateShader(replayState, true, shaderType, tempShaderID.value));
-            cap(CaptureShaderSource(replayState, true, tempShaderID, 1, &sourcePointer, nullptr));
-            cap(CaptureCompileShader(replayState, true, tempShaderID));
-            cap(CaptureAttachShader(replayState, true, id, tempShaderID));
-            cap(CaptureDeleteShader(replayState, true, tempShaderID));
-        }
-
-        // Gather XFB varyings
-        std::vector<std::string> xfbVaryings;
-        for (const gl::TransformFeedbackVarying &xfbVarying :
-             program->getState().getLinkedTransformFeedbackVaryings())
-        {
-            xfbVaryings.push_back(xfbVarying.nameWithArrayIndex());
-        }
-
-        if (!xfbVaryings.empty())
-        {
-            std::vector<const char *> varyingsStrings;
-            for (const std::string &varyingString : xfbVaryings)
-            {
-                varyingsStrings.push_back(varyingString.data());
-            }
-
-            GLenum xfbMode = program->getState().getTransformFeedbackBufferMode();
-            cap(CaptureTransformFeedbackVaryings(replayState, true, id,
-                                                 static_cast<GLint>(xfbVaryings.size()),
-                                                 varyingsStrings.data(), xfbMode));
-        }
-
-        // Force the attributes to be bound the same way as in the existing program.
-        // This can affect attributes that are optimized out in some implementations.
-        for (const sh::ShaderVariable &attrib : program->getState().getProgramInputs())
-        {
-            if (gl::IsBuiltInName(attrib.name))
-            {
-                // Don't try to bind built-in attributes
-                continue;
-            }
-
-            // Separable programs may not have a VS, meaning it may not have attributes.
-            if (program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Vertex))
-            {
-                ASSERT(attrib.location != -1);
-                cap(CaptureBindAttribLocation(replayState, true, id,
-                                              static_cast<GLuint>(attrib.location),
-                                              attrib.name.c_str()));
-            }
-        }
-
-        if (program->isSeparable())
-        {
-            // MEC manually recreates separable programs, rather than attempting to recreate a call
-            // to glCreateShaderProgramv(), so insert a call to mark it separable.
-            cap(CaptureProgramParameteri(replayState, true, id, GL_PROGRAM_SEPARABLE, GL_TRUE));
-        }
-
-        cap(CaptureLinkProgram(replayState, true, id));
-        CaptureUpdateUniformLocations(program, setupCalls);
-        CaptureUpdateUniformValues(replayState, context, program, setupCalls);
-        CaptureUpdateUniformBlockIndexes(program, setupCalls);
-
-        // Capture uniform block bindings for each program
-        for (unsigned int uniformBlockIndex = 0;
-             uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
-        {
-            GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
-            cap(CaptureUniformBlockBinding(replayState, true, id, {uniformBlockIndex},
-                                           blockBinding));
-        }
+        GenerateLinkedProgram(context, replayState, resourceTracker, setupCalls, program, id,
+                              linkedSources);
 
         resourceTracker->onShaderProgramAccess(id);
         resourceTracker->getTrackedResource(ResourceIDType::ShaderProgram)
