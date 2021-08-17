@@ -393,11 +393,9 @@ gl::SwizzleState ApplySwizzle(const gl::SwizzleState &formatSwizzle,
 }
 
 gl::SwizzleState GetFormatSwizzle(const ContextVk *contextVk,
-                                  const vk::Format &format,
+                                  const angle::Format &angleFormat,
                                   const bool sized)
 {
-    const angle::Format &angleFormat = format.intendedFormat();
-
     gl::SwizzleState internalSwizzle;
 
     if (angleFormat.isLUMA())

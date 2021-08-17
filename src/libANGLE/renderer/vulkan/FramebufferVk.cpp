@@ -2200,8 +2200,7 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
         const RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
-        params.colorFormat =
-            &colorRenderTarget->getImageForRenderPass().getFormat().actualImageFormat();
+        params.colorFormat = &colorRenderTarget->getImageForRenderPass().getActualFormat();
         params.colorAttachmentIndexGL = static_cast<uint32_t>(colorIndexGL);
         params.colorMaskFlags =
             gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(colorIndexGL, colorMasks);
