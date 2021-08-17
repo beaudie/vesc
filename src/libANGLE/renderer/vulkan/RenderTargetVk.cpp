@@ -237,10 +237,28 @@ angle::Result RenderTargetVk::getAndRetainCopyImageView(ContextVk *contextVk,
                                        : getImageView(contextVk, imageViewOut);
 }
 
-const vk::Format &RenderTargetVk::getImageFormat() const
+angle::FormatID RenderTargetVk::getImageActualFormatID() const
 {
     ASSERT(mImage && mImage->valid());
-    return mImage->getFormat();
+    return mImage->getActualFormatID();
+}
+
+angle::FormatID RenderTargetVk::getImageIntendedFormatID() const
+{
+    ASSERT(mImage && mImage->valid());
+    return mImage->getIntendedFormatID();
+}
+
+const angle::Format &RenderTargetVk::getImageActualFormat() const
+{
+    ASSERT(mImage && mImage->valid());
+    return mImage->getActualFormat();
+}
+
+const angle::Format &RenderTargetVk::getImageIntendedFormat() const
+{
+    ASSERT(mImage && mImage->valid());
+    return mImage->getIntendedFormat();
 }
 
 gl::Extents RenderTargetVk::getExtents() const
