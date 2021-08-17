@@ -1699,7 +1699,7 @@ void CaptureFramebufferAttachment(std::vector<CallCapture> *setupCalls,
     }
 }
 
-void CaptureUpdateUniformValues(gl::State &replayState,
+void CaptureUpdateUniformValues(const gl::State &replayState,
                                 const gl::Context *context,
                                 gl::Program *program,
                                 std::vector<CallCapture> *callsOut)
@@ -1715,7 +1715,13 @@ void CaptureUpdateUniformValues(gl::State &replayState,
     {
         Capture(callsOut, CaptureUseProgram(replayState, true, program->id()));
         CaptureUpdateCurrentProgram(callsOut->back(), callsOut);
-        (void)replayState.setProgram(context, program);
+
+        // Is the below necessary?  It breaks our ability to run GenerateLinkedProgram in
+        // overrideProgramBinary, which does not have access to replayState, only the current
+        // context state. I don't believe any of the calls below that use replayState need the
+        // current program to be set.
+        //
+        //(void)replayState.setProgram(context, program);
     }
 
     const std::vector<gl::LinkedUniform> &uniforms = program->getState().getUniforms();
@@ -2225,6 +2231,8 @@ void GenerateLinkedProgram(const gl::Context *context,
                            gl::ShaderProgramID id,
                            const ProgramSources &linkedSources)
 {
+    // Bump up our max program ID before creating temp shaders
+    resourceTracker->onShaderProgramAccess(id);
 
     // Use max ID as a temporary shader ID.
     gl::ShaderProgramID tempShaderID = {resourceTracker->getMaxShaderPrograms()};
@@ -2234,6 +2242,21 @@ void GenerateLinkedProgram(const gl::Context *context,
     {
         const std::string &sourceString = linkedSources[shaderType];
         const char *sourcePointer       = sourceString.c_str();
+
+        if (sourceString.empty())
+        {
+            const ProgramSources &cachedLinkedSources =
+                context->getShareGroup()->getFrameCaptureShared()->getProgramSources(id);
+
+            const std::string &cachedSourceString = cachedLinkedSources[shaderType];
+            sourcePointer                         = cachedSourceString.c_str();
+
+            if (cachedSourceString.empty())
+            {
+                ERR() << "Empty source detected for program=" << id.value
+                      << " stage=" << shaderType;
+            }
+        }
 
         // Compile and attach the temporary shader. Then free it immediately.
         Capture(setupCalls, CaptureCreateShader(replayState, true, shaderType, tempShaderID.value));
@@ -2890,7 +2913,6 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
         GenerateLinkedProgram(context, replayState, resourceTracker, setupCalls, program, id,
                               linkedSources);
 
-        resourceTracker->onShaderProgramAccess(id);
         resourceTracker->getTrackedResource(ResourceIDType::ShaderProgram)
             .getStartingResources()
             .insert(id.value);
@@ -4525,17 +4547,34 @@ void FrameCaptureShared::updateCopyImageSubData(CallCapture &call)
     }
 }
 
-void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context, CallCapture &call)
+void FrameCaptureShared::overrideProgramBinary(const gl::Context *context,
+                                               CallCapture &inCall,
+                                               std::vector<CallCapture> &outCalls)
 {
-    switch (call.entryPoint)
+    gl::ShaderProgramID id = inCall.params.getParam("programPacked", ParamType::TShaderProgramID, 0)
+                                 .value.ShaderProgramIDVal;
+
+    gl::Program *program = context->getProgramResolveLink(id);
+    ASSERT(program);
+
+    GenerateLinkedProgram(context, context->getState(), &mResourceTracker, &outCalls, program, id,
+                          getProgramSources(id));
+}
+
+void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
+                                                 CallCapture &inCall,
+                                                 std::vector<CallCapture> &outCalls)
+{
+    switch (inCall.entryPoint)
     {
         case EntryPoint::GLEGLImageTargetTexture2DOES:
         {
             // We don't support reading EGLImages. Instead, just pull from a tiny null texture.
             // TODO (anglebug.com/4964): Read back the image data and populate the texture.
             std::vector<uint8_t> pixelData = {0, 0, 0, 0};
-            call = CaptureTexSubImage2D(context->getState(), true, gl::TextureTarget::_2D, 0, 0, 0,
-                                        1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
+            outCalls.emplace_back(
+                CaptureTexSubImage2D(context->getState(), true, gl::TextureTarget::_2D, 0, 0, 0, 1,
+                                     1, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data()));
             break;
         }
         case EntryPoint::GLEGLImageTargetRenderbufferStorageOES:
@@ -4548,11 +4587,24 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context, Cal
         case EntryPoint::GLCopyImageSubDataOES:
         {
             // We must look at the src and dst target types to determine which remap table to use
-            updateCopyImageSubData(call);
+            updateCopyImageSubData(inCall);
+            outCalls.emplace_back(std::move(inCall));
+            break;
+        }
+        case EntryPoint::GLProgramBinary:
+        case EntryPoint::GLProgramBinaryOES:
+        {
+            // Binary formats are not portable at all, so replace the calls with full linking
+            // sequence
+            overrideProgramBinary(context, inCall, outCalls);
             break;
         }
         default:
+        {
+            // Pass the single call through
+            outCalls.emplace_back(std::move(inCall));
             break;
+        }
     }
 }
 
@@ -4780,7 +4832,11 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
             const gl::Shader *shader = program->getAttachedShader(shaderType);
             ASSERT(shader);
             setShaderSource(shader->getHandle(), shader->getSourceString());
-            setProgramSources(programID, GetAttachedProgramSources(program));
+            // Programs linked in support of ProgramBinary will not have attached shaders
+            if (program->getState().hasAttachedShader())
+            {
+                setProgramSources(programID, GetAttachedProgramSources(program));
+            }
             handleGennedResource(programID);
             break;
         }
@@ -4809,7 +4865,11 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
                 call.params.getParam("shaderPacked", ParamType::TShaderProgramID, 0)
                     .value.ShaderProgramIDVal;
             const gl::Shader *shader = context->getShader(shaderID);
-            setShaderSource(shaderID, shader->getSourceString());
+            // Shaders compiled for ProgramBinary will not have a shader created
+            if (shader)
+            {
+                setShaderSource(shaderID, shader->getSourceString());
+            }
             break;
         }
 
@@ -4820,7 +4880,11 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
                 call.params.getParam("programPacked", ParamType::TShaderProgramID, 0)
                     .value.ShaderProgramIDVal;
             const gl::Program *program = context->getProgramResolveLink(programID);
-            setProgramSources(programID, GetAttachedProgramSources(program));
+            // Programs linked in support of ProgramBinary will not have attached shaders
+            if (program->getState().hasAttachedShader())
+            {
+                setProgramSources(programID, GetAttachedProgramSources(program));
+            }
             break;
         }
 
@@ -4986,25 +5050,31 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
 }
 
 void FrameCaptureShared::captureCall(const gl::Context *context,
-                                     CallCapture &&call,
+                                     CallCapture &&inCall,
                                      bool isCallValid)
 {
-    if (SkipCall(call.entryPoint))
+    if (SkipCall(inCall.entryPoint))
     {
         return;
     }
 
     if (isCallValid)
     {
-        maybeOverrideEntryPoint(context, call);
-        maybeCapturePreCallUpdates(context, call);
-        mFrameCalls.emplace_back(std::move(call));
-        maybeCapturePostCallUpdates(context);
+        std::vector<CallCapture> outCalls;
+        maybeOverrideEntryPoint(context, inCall, outCalls);
+
+        // Need to loop on any new calls we added during override
+        for (CallCapture &call : outCalls)
+        {
+            maybeCapturePreCallUpdates(context, call);
+            mFrameCalls.emplace_back(std::move(call));
+            maybeCapturePostCallUpdates(context);
+        }
     }
     else
     {
         INFO() << "FrameCapture: Not capturing invalid call to "
-               << GetEntryPointName(call.entryPoint);
+               << GetEntryPointName(inCall.entryPoint);
     }
 }
 
