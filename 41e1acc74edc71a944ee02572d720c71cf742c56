@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2beb8340_bea7b1ed",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3666,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T20:11:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5d7b880_ed0458a0",
+      "range": {
+        "startLine": 3666,
+        "startChar": 7,
+        "endLine": 3666,
+        "endChar": 14
+      },
+      "revId": "41e1acc74edc71a944ee02572d720c71cf742c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "caaf6b2f_3012ef60",
@@ -71,6 +95,24 @@
       "writtenOn": "2021-08-16T23:10:48Z",
       "side": 1,
       "message": "Why do we need to check both apiState and replayState for these calls?",
+      "revId": "41e1acc74edc71a944ee02572d720c71cf742c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba9c5455_57fc44f1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T20:11:51Z",
+      "side": 1,
+      "message": "The normal check when writing out a MEC call is:\n\nDoes the \"actual\" state of the GL in the replay (replayState) differ from the \"expected\" state of the GL at time of capture (apiState)? If so, write out a setup call.\n\nHere it\u0027s a bit tweaked - we\u0027re assuming if there\u0027s a program bound to the API that our replay state differs (if (apiState.getProgram()). The full check would be if (apiState.getProgram().id !\u003d replayState.getProgram().id).\n\nI left a bit more comment context here to satisfy both your question and Cody\u0027s concern.",
+      "parentUuid": "caaf6b2f_3012ef60",
       "revId": "41e1acc74edc71a944ee02572d720c71cf742c56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
