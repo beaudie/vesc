@@ -16,6 +16,24 @@
       "message": "Thanks for the fix! Greg, can you please enable some/all of these tests in ANGLE\u0027s end2end_tests?",
       "revId": "cd44a1db35ce37b535ca87391abe06f0eb688760",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1282e1b2_7346f7ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-17T16:41:00Z",
+      "side": 1,
+      "message": "Hi Jamie, we\u0027ll turn these on as soon as we can -- right now the ANGLE feature for enabling the direct-to-Metal translator for individual tests isn\u0027t working (something\u0027s not hermetic about enabling it) and we\u0027re not sure why. Hopefully we can just make the switch wholesale shortly.",
+      "parentUuid": "0a309607_26f57e93",
+      "revId": "cd44a1db35ce37b535ca87391abe06f0eb688760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
