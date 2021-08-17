@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb3b3e20_7fa05d66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-17T19:51:27Z",
+      "side": 1,
+      "message": "This looks like a nice cleanup!  Can you verify you\u0027ve tested the change?  If not, I can try it with an Android app quick.",
+      "revId": "f3db8d42cf921a10cec842e6287807915382f84f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a24ff1ff_f9a0f876",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-17T19:51:27Z",
+      "side": 1,
+      "message": "This doesn\u0027t look related.",
+      "range": {
+        "startLine": 513,
+        "startChar": 9,
+        "endLine": 513,
+        "endChar": 31
+      },
+      "revId": "f3db8d42cf921a10cec842e6287807915382f84f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
