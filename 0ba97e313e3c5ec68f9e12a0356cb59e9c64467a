@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d009f57_67fec62b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-17T00:05:24Z",
+      "side": 1,
+      "message": "Could you mention that this code is being upstreamed from WebKit? It was apparently lost during the initial upstreaming.\n\nCould you also mention what angle_end2end_tests this fixes?",
+      "revId": "0ba97e313e3c5ec68f9e12a0356cb59e9c64467a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b67bc9d9_4417ed39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-17T00:05:24Z",
+      "side": 1,
+      "message": "lgtm from my standpoint. ANGLE requires 2 reviews; Jamie, could you please take a look at this too?",
+      "revId": "0ba97e313e3c5ec68f9e12a0356cb59e9c64467a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2222265f_858cf4c2",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-17T00:05:24Z",
+      "side": 1,
+      "message": "Should we say \"Vulkan (and Metal)\"?",
+      "revId": "0ba97e313e3c5ec68f9e12a0356cb59e9c64467a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a007c18b_f95dbbd7",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-17T00:05:24Z",
+      "side": 1,
+      "message": "I haven\u0027t looked deeply at this code before but just found that both TranslatorMetal and TranslatorMetalDirect were theoretically supposed to handle this in transformDepthBeforeCorrection. It\u0027d be interesting to know why the SPIR-V based TranslatorMetal works and TranslatorMetalDirect doesn\u0027t. Maybe that\u0027s why this particular chunk of code was removed during upstreaming.",
+      "revId": "0ba97e313e3c5ec68f9e12a0356cb59e9c64467a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
