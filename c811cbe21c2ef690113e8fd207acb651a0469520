@@ -46,6 +46,30 @@
       },
       "revId": "c811cbe21c2ef690113e8fd207acb651a0469520",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f51e588f_4cd4c4a0",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-17T17:36:38Z",
+      "side": 1,
+      "message": "So TIMEOUT will skip the test as it is.\nNot sure I understood your reply, is it planned that TIMEOUT will eventually give the test more time to run?\nLike in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/angle_deqp_tests_main.cpp;l\u003d23",
+      "parentUuid": "e2975db0_0a046f05",
+      "range": {
+        "startLine": 102,
+        "startChar": 81,
+        "endLine": 102,
+        "endChar": 88
+      },
+      "revId": "c811cbe21c2ef690113e8fd207acb651a0469520",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
