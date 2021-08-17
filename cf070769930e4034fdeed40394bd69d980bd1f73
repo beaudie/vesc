@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c732685b_5539d4c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-17T17:32:16Z",
+      "side": 1,
+      "message": "I think it\u0027s crazy that angle_perftests take 445m 38s on Android.\nI recall they now run 1 test at a time because bundling tests together was flaky on Windows.\nCan we try increasing the size of test batches on Android?",
+      "revId": "cf070769930e4034fdeed40394bd69d980bd1f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
