@@ -1588,11 +1588,21 @@ class ImageHelper final : public Resource, public angle::Subject
     uint32_t getLayerCount() const { return mLayerCount; }
     uint32_t getLevelCount() const { return mLevelCount; }
     const Format &getFormat() const { return *mFormat; }
+    angle::FormatID getIntendedFormatID() const { return mFormat->intendedFormatID; }
+    const angle::Format &getIntendedFormat() const
+    {
+        return angle::Format::Get(mFormat->intendedFormatID);
+    }
     angle::FormatID getActualFormatID() const { return mFormat->actualImageFormatID; }
     VkFormat getActualVkFormat() const { return mFormat->actualImageVkFormat(); }
     const angle::Format &getActualFormat() const
     {
         return angle::Format::Get(mFormat->actualImageFormatID);
+    }
+    bool hasEmulatedImageChannels() const;
+    bool hasEmulatedImageFormat() const
+    {
+        return mFormat->actualImageFormatID != mFormat->intendedFormatID;
     }
     GLint getSamples() const { return mSamples; }
 

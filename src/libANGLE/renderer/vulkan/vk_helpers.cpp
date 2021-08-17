@@ -755,25 +755,24 @@ void ExtendRenderPassInvalidateArea(const gl::Rectangle &invalidateArea, gl::Rec
 }
 
 bool CanCopyWithTransferForCopyImage(RendererVk *renderer,
-                                     const Format &srcFormat,
-                                     angle::FormatID srcFormatID,
+                                     ImageHelper *srcImage,
                                      VkImageTiling srcTilingMode,
-                                     const Format &destFormat,
-                                     angle::FormatID destFormatID,
+                                     ImageHelper *destImage,
                                      VkImageTiling destTilingMode)
 {
     // Neither source nor destination formats can be emulated for copy image through transfer,
-    // unless they are emualted with the same format!
+    // unless they are emulated with the same format!
     bool isFormatCompatible =
-        (!srcFormat.hasEmulatedImageFormat() && !destFormat.hasEmulatedImageFormat()) ||
-        srcFormatID == destFormatID;
+        (!srcImage->hasEmulatedImageFormat() && !destImage->hasEmulatedImageFormat()) ||
+        srcImage->getActualFormatID() == destImage->getActualFormatID();
 
     // If neither formats are emulated, GL validation ensures that pixelBytes is the same for both.
-    ASSERT(!isFormatCompatible || angle::Format::Get(srcFormatID).pixelBytes ==
-                                      angle::Format::Get(destFormatID).pixelBytes);
+    ASSERT(!isFormatCompatible ||
+           srcImage->getActualFormat().pixelBytes == destImage->getActualFormat().pixelBytes);
 
     return isFormatCompatible &&
-           CanCopyWithTransfer(renderer, srcFormatID, srcTilingMode, destFormatID, destTilingMode);
+           CanCopyWithTransfer(renderer, srcImage->getActualFormatID(), srcTilingMode,
+                               destImage->getActualFormatID(), destTilingMode);
 }
 
 bool CanCopyWithTransformForReadPixels(const PackPixelsParams &packPixelsParams,
@@ -5141,18 +5140,14 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
 {
     ContextVk *contextVk = GetImpl(context);
 
-    const Format &sourceVkFormat = srcImage->getFormat();
-    angle::FormatID srcFormatID  = srcImage->getActualFormatID();
     VkImageTiling srcTilingMode  = srcImage->getTilingMode();
-    const Format &destVkFormat   = dstImage->getFormat();
-    angle::FormatID destFormatID = dstImage->getActualFormatID();
     VkImageTiling destTilingMode = dstImage->getTilingMode();
 
     const gl::LevelIndex srcLevelGL = gl::LevelIndex(srcLevel);
     const gl::LevelIndex dstLevelGL = gl::LevelIndex(dstLevel);
 
-    if (CanCopyWithTransferForCopyImage(contextVk->getRenderer(), sourceVkFormat, srcFormatID,
-                                        srcTilingMode, destVkFormat, destFormatID, destTilingMode))
+    if (CanCopyWithTransferForCopyImage(contextVk->getRenderer(), srcImage, srcTilingMode, dstImage,
+                                        destTilingMode))
     {
         bool isSrc3D = srcImage->getType() == VK_IMAGE_TYPE_3D;
         bool isDst3D = dstImage->getType() == VK_IMAGE_TYPE_3D;
@@ -5198,7 +5193,7 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(),
                                  dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
     }
-    else if (!sourceVkFormat.intendedFormat().isBlock && !destVkFormat.intendedFormat().isBlock)
+    else if (!srcImage->getIntendedFormat().isBlock && !dstImage->getIntendedFormat().isBlock)
     {
         // The source and destination image formats may be using a fallback in the case of RGB
         // images.  A compute shader is used in such a case to perform the copy.
@@ -6094,7 +6089,7 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
 void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled)
 {
     // Skip staging extra clears if robust resource init is enabled.
-    if (!mFormat->hasEmulatedImageChannels() || isRobustResourceInitEnabled)
+    if (!hasEmulatedImageChannels() || isRobustResourceInitEnabled)
     {
         return;
     }
@@ -7273,6 +7268,18 @@ void ImageHelper::prependSubresourceUpdate(gl::LevelIndex level, SubresourceUpda
     mSubresourceUpdates[level.get()].insert(mSubresourceUpdates[level.get()].begin(),
                                             std::move(update));
     onStateChange(angle::SubjectMessage::SubjectChanged);
+}
+
+bool ImageHelper::hasEmulatedImageChannels() const
+{
+    const angle::Format &angleFmt   = getIntendedFormat();
+    const angle::Format &textureFmt = getActualFormat();
+
+    return (angleFmt.alphaBits == 0 && textureFmt.alphaBits > 0) ||
+           (angleFmt.blueBits == 0 && textureFmt.blueBits > 0) ||
+           (angleFmt.greenBits == 0 && textureFmt.greenBits > 0) ||
+           (angleFmt.depthBits == 0 && textureFmt.depthBits > 0) ||
+           (angleFmt.stencilBits == 0 && textureFmt.stencilBits > 0);
 }
 
 // FramebufferHelper implementation.
