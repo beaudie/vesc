@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d83710d4_487f4462",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T11:28:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3932f88f_dbfc13a6",
+      "range": {
+        "startLine": 1558,
+        "startChar": 4,
+        "endLine": 1558,
+        "endChar": 38
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3639938_884b26f1",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "It seems to already be in the separable case",
       "parentUuid": "a3639938_884b26f1",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 13
+      },
+      "revId": "b29a3a3b86943319f1eecc682d4080cf2f35dd2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f17df566_ff55e48a",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T11:28:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7493e0be_17088104",
       "range": {
         "startLine": 659,
         "startChar": 0,

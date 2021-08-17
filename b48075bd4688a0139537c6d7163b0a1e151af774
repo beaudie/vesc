@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "b48075bd4688a0139537c6d7163b0a1e151af774",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d043ea47_5784a6aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T11:28:45Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "b48075bd4688a0139537c6d7163b0a1e151af774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbd09a0a_c57de51d",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T11:28:45Z",
+      "side": 1,
+      "message": "nit: very minor, but even the \u0027linking\u0027 prefix is redundant because of the name of the class.",
+      "range": {
+        "startLine": 246,
+        "startChar": 47,
+        "endLine": 246,
+        "endChar": 68
+      },
+      "revId": "b48075bd4688a0139537c6d7163b0a1e151af774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
