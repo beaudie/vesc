@@ -16,6 +16,24 @@
       "message": "I think it\u0027s crazy that angle_perftests take 445m 38s on Android.\nI recall they now run 1 test at a time because bundling tests together was flaky on Windows.\nCan we try increasing the size of test batches on Android?",
       "revId": "cf070769930e4034fdeed40394bd69d980bd1f73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456800c8_66a188d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T17:40:10Z",
+      "side": 1,
+      "message": "I\u0027d like to try throwing a lot of resources at these tests to see how low I can get the variance, then trimming it back and seeing if we can keep the high quality. I already made some changes to the test running harness to speed these up 4x. Running test in batches introduces potential for a lot of variance.\n\nAnother avenue to pursue is to use a test harness that\u0027s more designed for our use case. We can keep an open socket and communicate with the device as we go instead of continually re-polling with ADB.\n\nAlso keep in mind this is only run in CI, so it\u0027s only a few runs a day, less than 1x per ANGLE commit landed.",
+      "parentUuid": "c732685b_5539d4c1",
+      "revId": "cf070769930e4034fdeed40394bd69d980bd1f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
