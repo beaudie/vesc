@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4660f4f_48c1cbd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T19:55:21Z",
+      "side": 1,
+      "message": "I have not tested on Android as of yet. Feel free to test manually to verify! The intent is the same behaviour as before.",
+      "parentUuid": "bb3b3e20_7fa05d66",
+      "revId": "f3db8d42cf921a10cec842e6287807915382f84f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a24ff1ff_f9a0f876",
