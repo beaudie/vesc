@@ -112,7 +112,7 @@ bool CanCopyWithTransferForCopyTexture(RendererVk *renderer,
     }
 
     // If the formats are identical, we can always transfer between them.
-    if (srcImage.getFormat().intendedFormatID == destFormat.intendedFormatID)
+    if (srcImage.getIntendedFormatID() == destFormat.intendedFormatID)
     {
         return true;
     }
@@ -725,8 +725,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
 
     RenderTargetVk *colorReadRT = framebufferVk->getColorReadRenderTarget();
 
-    const vk::Format &srcFormat          = colorReadRT->getImageFormat();
-    angle::FormatID srcIntendedFormatID  = srcFormat.intendedFormatID;
+    angle::FormatID srcIntendedFormatID  = colorReadRT->getImageIntendedFormatID();
     angle::FormatID srcActualFormatID    = colorReadRT->getImageActualFormatID();
     VkImageTiling srcTilingMode          = colorReadRT->getImageForCopy().getTilingMode();
     const vk::Format &destFormat         = renderer->getFormat(internalFormat.sizedInternalFormat);
@@ -1143,6 +1142,10 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     // Perform self-copies through a staging buffer.
     // TODO: optimize to copy directly if possible.  http://anglebug.com/4719
     bool isSelfCopy = mImage == srcImage;
+    GLenum srcColorEncoding =
+        gl::GetSizedInternalFormatInfo(srcImage->getFormat().intendedGLFormat).colorEncoding;
+    GLenum dstColorEncoding =
+        gl::GetSizedInternalFormatInfo(destFormat.intendedGLFormat).colorEncoding;
 
     // If destination is valid, copy the source directly into it.
     if (mImage->valid() && !shouldUpdateBeStaged(level) && !isSelfCopy)
@@ -1158,7 +1161,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
             const vk::ImageView *destView;
             ANGLE_TRY(getLevelLayerImageView(contextVk, level, baseLayer + layerIndex, &destView));
 
-            ANGLE_TRY(utilsVk.copyImage(contextVk, mImage, destView, srcImage, srcView, params));
+            ANGLE_TRY(utilsVk.copyImage(contextVk, mImage, destView, dstColorEncoding, srcImage,
+                                        srcView, srcColorEncoding, params));
         }
     }
     else
@@ -1190,8 +1194,9 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
                 &stagingView, vk::LevelIndex(0), 1, layerIndex, 1,
                 gl::SrgbWriteControlMode::Default));
 
-            ANGLE_TRY(utilsVk.copyImage(contextVk, &stagingImage->get(), &stagingView, srcImage,
-                                        srcView, params));
+            ANGLE_TRY(utilsVk.copyImage(contextVk, &stagingImage->get(), &stagingView,
+                                        dstColorEncoding, srcImage, srcView, srcColorEncoding,
+                                        params));
 
             // Queue the resource for cleanup as soon as the copy above is finished.  There's no
             // need to keep it around.
@@ -2597,7 +2602,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     vk::SamplerDesc samplerDesc(contextVk, mState.getSamplerState(), mState.isStencilMode(),
-                                mImage->getExternalFormat(), mImage->getFormat().intendedFormatID);
+                                mImage->getExternalFormat(), mImage->getIntendedFormatID());
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &mSampler));
 
     return angle::Result::Continue;
