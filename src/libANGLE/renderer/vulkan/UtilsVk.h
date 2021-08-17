@@ -246,8 +246,10 @@ class UtilsVk : angle::NonCopyable
     angle::Result copyImage(ContextVk *contextVk,
                             vk::ImageHelper *dest,
                             const vk::ImageView *destView,
+                            GLenum destColorEncoding,
                             vk::ImageHelper *src,
                             const vk::ImageView *srcView,
+                            GLenum srcColorEncoding,
                             const CopyImageParameters &params);
 
     angle::Result copyImageBits(ContextVk *contextVk,
