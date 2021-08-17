@@ -392,8 +392,6 @@ class FrameCaptureShared final : angle::NonCopyable
     // Returns a frame index starting from "1" as the first frame.
     uint32_t getReplayFrameIndex() const;
 
-    ResourceTracker &getResourceTracker() { return mResourceTracker; }
-
     void trackBufferMapping(CallCapture *call,
                             gl::BufferID id,
                             GLintptr offset,
@@ -467,6 +465,28 @@ class FrameCaptureShared final : angle::NonCopyable
         mReadBufferSize = std::max(mReadBufferSize, readBufferSize);
     }
 
+    template <typename ResourceType>
+    void handleGennedResource(ResourceType resourceID)
+    {
+        if (isCaptureActive())
+        {
+            ResourceIDType idType    = GetResourceIDTypeFromType<ResourceType>::IDType;
+            TrackedResource &tracker = mResourceTracker.getTrackedResource(idType);
+            tracker.setGennedResource(resourceID.value);
+        }
+    }
+
+    template <typename ResourceType>
+    void handleDeletedResource(ResourceType resourceID)
+    {
+        if (isCaptureActive())
+        {
+            ResourceIDType idType    = GetResourceIDTypeFromType<ResourceType>::IDType;
+            TrackedResource &tracker = mResourceTracker.getTrackedResource(idType);
+            tracker.setDeletedResource(resourceID.value);
+        }
+    }
+
   private:
     void writeCppReplayIndexFiles(const gl::Context *, bool writeResetContextCall);
 
@@ -489,6 +509,8 @@ class FrameCaptureShared final : angle::NonCopyable
                                             CallCapture &call,
                                             size_t instanceCount);
     void updateCopyImageSubData(CallCapture &call);
+
+    void runMidExecutionCapture(const gl::Context *context);
 
     static void ReplayCall(gl::Context *context,
                            ReplayContext *replayContext,
