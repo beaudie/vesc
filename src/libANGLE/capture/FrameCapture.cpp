@@ -4155,8 +4155,12 @@ void FrameCaptureShared::copyCompressedTextureData(const gl::Context *context,
         call.params.getParam("dstName", ParamType::TTextureID, 6).value.TextureIDVal;
     GLint dstLevel = call.params.getParam("dstLevel", ParamType::TGLint, 8).value.GLintVal;
 
+    // Our packedenums don't handle CUBE_MAP, they expect a face index
+    GLenum modifiedDstTarget =
+        (dstTarget == GL_TEXTURE_CUBE_MAP) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X : GL_TEXTURE_CUBE_MAP;
+
     // Look up the texture type
-    gl::TextureTarget dstTargetPacked = gl::PackParam<gl::TextureTarget>(dstTarget);
+    gl::TextureTarget dstTargetPacked = gl::PackParam<gl::TextureTarget>(modifiedDstTarget);
     gl::TextureType dstTextureType    = gl::TextureTargetToType(dstTargetPacked);
 
     // Look up the currently bound texture
