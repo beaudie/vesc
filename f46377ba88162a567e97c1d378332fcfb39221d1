@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d076babd_1385d2d0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5447,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T19:34:18Z",
+      "side": 1,
+      "message": "PTAL, I redid this significantly. The CL also includes a bunch of redesign and refactoring now.",
+      "parentUuid": "c99b5a66_343292a5",
+      "revId": "f46377ba88162a567e97c1d378332fcfb39221d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f22521f_c29af49d",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2021-08-16T22:36:35Z",
       "side": 1,
       "message": "I think this is causing the first frame\u0027s commands to be skipped, since WriteWindowSurfaceContextCppReplay() will not be called for getReplayFrameIndex() \u003d\u003d 1.",
+      "revId": "f46377ba88162a567e97c1d378332fcfb39221d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4403d56f_f2c81752",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5461,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-17T19:34:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3f22521f_c29af49d",
       "revId": "f46377ba88162a567e97c1d378332fcfb39221d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
