@@ -191,7 +191,7 @@ void Format::initBufferFallback(RendererVk *renderer,
     }
 }
 
-size_t Format::getImageCopyBufferAlignment() const
+size_t GetImageCopyBufferAlignment(angle::FormatID formatID)
 {
     // vkCmdCopyBufferToImage must have an offset that is a multiple of 4 as well as a multiple
     // of the texel size (if uncompressed) or pixel block size (if compressed).
@@ -212,7 +212,7 @@ size_t Format::getImageCopyBufferAlignment() const
     // - else texelSize % 4 != 0 gives a 2x multiplier
     // - else there's no multiplier.
     //
-    const angle::Format &format = actualImageFormat();
+    const angle::Format &format = angle::Format::Get(formatID);
 
     ASSERT(format.pixelBytes != 0);
     const size_t texelSize  = format.pixelBytes;
@@ -222,11 +222,13 @@ size_t Format::getImageCopyBufferAlignment() const
     return alignment;
 }
 
-size_t Format::getValidImageCopyBufferAlignment() const
+size_t GetValidImageCopyBufferAlignment(angle::FormatID intendedFormatID,
+                                        angle::FormatID actualFormatID)
 {
     constexpr size_t kMinimumAlignment = 16;
-    return (intendedFormatID == angle::FormatID::NONE) ? kMinimumAlignment
-                                                       : getImageCopyBufferAlignment();
+    return (intendedFormatID == angle::FormatID::NONE)
+               ? kMinimumAlignment
+               : GetImageCopyBufferAlignment(actualFormatID);
 }
 
 bool Format::hasEmulatedImageChannels() const

@@ -1599,6 +1599,11 @@ class ImageHelper final : public Resource, public angle::Subject
     {
         return angle::Format::Get(mFormat->actualImageFormatID);
     }
+    bool hasEmulatedImageChannels() const;
+    bool hasEmulatedImageFormat() const
+    {
+        return mFormat->actualImageFormatID != mFormat->intendedFormatID;
+    }
     GLint getSamples() const { return mSamples; }
 
     ImageSerial getImageSerial() const
