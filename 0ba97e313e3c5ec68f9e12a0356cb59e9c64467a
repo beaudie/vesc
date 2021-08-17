@@ -121,6 +121,24 @@
       "parentUuid": "a007c18b_f95dbbd7",
       "revId": "0ba97e313e3c5ec68f9e12a0356cb59e9c64467a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "153c26a9_ec68bcdb",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-17T00:49:46Z",
+      "side": 1,
+      "message": "transformDepthBeforeCorrection was added only for TranslatorMetal, and was reused in TranslatorMetalDirect.\n\nI\u0027m not sure where the gl_Position conversion\u0027s done in TranslatorVulkan. Let\u0027s move forward with this CL and investigate things further later.",
+      "parentUuid": "22256f94_2d7b2855",
+      "revId": "0ba97e313e3c5ec68f9e12a0356cb59e9c64467a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
