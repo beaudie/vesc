@@ -80,6 +80,10 @@ struct FrontendFeatures : angle::FeatureSetBase
     angle::Feature forceRobustResourceInit = {
         "forceRobustResourceInit", angle::FeatureCategory::FrontendWorkarounds,
         "Force-enable robust resource init", &members, "http://anglebug.com/6041"};
+
+    angle::Feature forceProgramBinaryForCapture = {
+        "forceProgramBinaryForCapture", angle::FeatureCategory::FrontendFeatures,
+        "Even if FrameCapture is enabled, enable GL_OES_get_program_binary", &members, "http://??"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
