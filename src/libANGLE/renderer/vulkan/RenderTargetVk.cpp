@@ -95,7 +95,7 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
                                  uint32_t framebufferLayerCount,
                                  vk::PackedAttachmentIndex packedAttachmentIndex)
 {
-    ASSERT(!mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
+    ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
     contextVk->onColorDraw(mImage, mResolveImage, packedAttachmentIndex);
@@ -113,7 +113,7 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
 
 void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLayerCount)
 {
-    ASSERT(!mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
+    ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
     ASSERT(mResolveImage == nullptr);
 
@@ -125,7 +125,7 @@ void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLa
 
 void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount)
 {
-    const angle::Format &format = mImage->getFormat().actualImageFormat();
+    const angle::Format &format = mImage->getActualFormat();
     ASSERT(format.hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
