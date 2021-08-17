@@ -87,6 +87,30 @@
       },
       "revId": "dccf1b4c80adbbcb52fb82ac9ea9bb39d5aa5d3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6006efa_fb0533cc",
+        "filename": "src/libANGLE/serializer/JsonSerializer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-17T09:45:55Z",
+      "side": 1,
+      "message": "Copying the group would be quite expensive, because it copies the whole (sub-)tree, and given the way rapidjason is implemented (i.e. once attached to the parent one can no longer add nodes), the tree has to be build botton-up, which would result in copying nested groups various times. \n\nI\u0027ve added according comments.",
+      "parentUuid": "c2ede19e_bd5b236a",
+      "range": {
+        "startLine": 50,
+        "startChar": 70,
+        "endLine": 50,
+        "endChar": 75
+      },
+      "revId": "dccf1b4c80adbbcb52fb82ac9ea9bb39d5aa5d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
