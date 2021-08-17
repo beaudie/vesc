@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70e1265f_4ec6e7ff",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5240,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-17T20:36:06Z",
+      "side": 1,
+      "message": "Doing this late, means there will be a missed frame of maybeCapturePreCallUpdates() and maybeCapturePostCallUpdates() work:\n\nend of frame N: runMidExecutionCapture()\nend of frame N+1: setCaptureActive(), writeMainContextCppReplay()\n\nHowever, none of the calls *during* frame N+1 were handled with isCaptureActive() \u003d\u003d true, so none of the maybeCapturePreCallUpdates() and maybeCapturePostCallUpdates() work was performed for each of the GL calls - including the gen/delete ResourceID handling.   For example, glFenceSync() will not have handleGennedResource() called for the new object, so it will not be reset. This is what was broken with DOTA Underlords and fixed by the previous CL.\n\nPlease retest MEC with DOTA Underlords and verify the various objects are all gen/deleted correctly during ResetReplay().",
+      "revId": "5e9562350a47a99fa728b7cbba17e34db69fe8be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
