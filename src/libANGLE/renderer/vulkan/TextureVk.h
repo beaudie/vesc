@@ -288,11 +288,11 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
     void releaseAndDeleteImageAndViews(ContextVk *contextVk);
-    angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
+    angle::Result ensureImageAllocated(ContextVk *contextVk, angle::FormatID formatID);
     void setImageHelper(ContextVk *contextVk,
                         vk::ImageHelper *imageHelper,
                         gl::TextureType imageType,
-                        const vk::Format &format,
+                        angle::FormatID formatID,
                         uint32_t imageLevelOffset,
                         uint32_t imageLayerOffset,
                         gl::LevelIndex imageBaseLevel,
@@ -416,6 +416,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result initImage(ContextVk *contextVk,
                             const vk::Format &format,
+                            angle::FormatID actualImageFormatID,
                             const bool sized,
                             const gl::Extents &firstLevelExtents,
                             const uint32_t firstLevel,
@@ -428,6 +429,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                         gl::LevelIndex previousFirstAllocateLevel,
                                         vk::ImageHelper *srcImage,
                                         vk::ImageHelper *dstImage);
+    angle::Result copyAndStageImageDataWithBuffer(ContextVk *contextVk,
+                                                  gl::TexLevelMask skipLevelsMask);
     angle::Result initImageViews(ContextVk *contextVk,
                                  const angle::Format &format,
                                  const bool sized,
@@ -479,9 +482,19 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result refreshImageViews(ContextVk *contextVk);
     bool shouldDecodeSRGB(ContextVk *contextVk, GLenum srgbDecode, bool texelFetchStaticUse) const;
-    void initImageUsageFlags(ContextVk *contextVk, const vk::Format &format);
+    void initImageUsageFlags(ContextVk *contextVk, angle::FormatID formatID);
     void handleImmutableSamplerTransition(const vk::ImageHelper *previousImage,
                                           const vk::ImageHelper *nextImage);
+
+    bool hasBeenBoundAsAttachment() const { return mState.hasBeenBoundAsAttachment(); }
+    angle::FormatID getActualImageFormatID(const vk::Format &format) const
+    {
+        return format.getActualImageFormatID(hasBeenBoundAsAttachment());
+    }
+    const angle::Format &getActualImageFormat(const vk::Format &format) const
+    {
+        return format.getActualImageFormat(hasBeenBoundAsAttachment());
+    }
 
     bool mOwnsImage;
     bool mRequiresMutableStorage;
