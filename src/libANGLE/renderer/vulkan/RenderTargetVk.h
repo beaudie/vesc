@@ -19,7 +19,7 @@ namespace rx
 {
 namespace vk
 {
-struct Format;
+class Format;
 class FramebufferHelper;
 class ImageHelper;
 class ImageView;
