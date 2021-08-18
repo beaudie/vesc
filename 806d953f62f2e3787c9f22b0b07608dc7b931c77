@@ -16,6 +16,23 @@
       "message": "Awesome work Gregg tracking this down! lgtm\n",
       "revId": "806d953f62f2e3787c9f22b0b07608dc7b931c77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e9a10e_12b30805",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-18T23:19:28Z",
+      "side": 1,
+      "message": "+2\u0027ing because jmadill@ approved an earlier version of this CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3104506\n\nand gman\u0027s verified locally that this fixes these tests on the direct-to-Metal backend without regressing anything else.\n",
+      "revId": "806d953f62f2e3787c9f22b0b07608dc7b931c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
