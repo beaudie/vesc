@@ -135,6 +135,30 @@
       },
       "revId": "dccf1b4c80adbbcb52fb82ac9ea9bb39d5aa5d3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb8b3f40_064b42ff",
+        "filename": "src/libANGLE/serializer/JsonSerializer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-18T15:49:42Z",
+      "side": 1,
+      "message": "The flakyness of the test was unrelated. I\u0027ve also updated the patch to get rid of the std::move that is actually not really helping. Using references to the top() can actually be done, because for the group the values are copied in the MakeSortedGroup call, so that the pop after this call is no problem, and the top() gets never in an uninitialized (although valid) state.",
+      "parentUuid": "231a768e_529f9d54",
+      "range": {
+        "startLine": 50,
+        "startChar": 70,
+        "endLine": 50,
+        "endChar": 75
+      },
+      "revId": "dccf1b4c80adbbcb52fb82ac9ea9bb39d5aa5d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
