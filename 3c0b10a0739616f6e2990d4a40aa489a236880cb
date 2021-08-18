@@ -22,6 +22,30 @@
       },
       "revId": "3c0b10a0739616f6e2990d4a40aa489a236880cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc31e515_3e9a6024",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-18T12:19:39Z",
+      "side": 1,
+      "message": "Yes, hasLayer() looks better, change accordingly.",
+      "parentUuid": "8180dbc3_a7b6116a",
+      "range": {
+        "startLine": 1243,
+        "startChar": 12,
+        "endLine": 1243,
+        "endChar": 47
+      },
+      "revId": "3c0b10a0739616f6e2990d4a40aa489a236880cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
