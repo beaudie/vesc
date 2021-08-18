@@ -234,8 +234,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     const vk::Format &vkFormat = bufferFormatProperties.format == VK_FORMAT_UNDEFINED
                                      ? renderer->getFormat(angle::FormatID::NONE)
                                      : renderer->getFormat(internalFormat);
-    angle::FormatID vkFormatID       = vkFormat.actualImageFormatID;
-    const angle::Format &imageFormat = vkFormat.actualImageFormat();
+    angle::FormatID vkFormatID       = vkFormat.getActualRenderableImageFormatID();
+    const angle::Format &imageFormat = vkFormat.getActualRenderableImageFormat();
     bool isDepthOrStencilFormat      = imageFormat.hasDepthOrStencilBits();
 
     // Query AHB description and do the following -
