@@ -1095,6 +1095,267 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+class FramebufferTestWithFormatFallback : public ANGLETest
+{
+  protected:
+    FramebufferTestWithFormatFallback()
+    {
+        setWindowWidth(16);
+        setWindowHeight(16);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+        setConfigStencilBits(8);
+    }
+
+    void texImageFollowedByFBORead(GLenum internalFormat, GLenum type);
+    void blitCopyFollowedByFBORead(GLenum internalFormat, GLenum type);
+    void copyTexImageFollowedBySampling(GLenum internalFormat, GLenum type);
+    void cubeTexImageFollowedByFBORead(GLenum internalFormat, GLenum type);
+    GLushort convertGLColorToUShort(GLenum internalFormat, const GLColor &color);
+    static constexpr GLsizei kTexWidth  = 2;
+    static constexpr GLsizei kTexHeight = 2;
+};
+
+GLushort FramebufferTestWithFormatFallback::convertGLColorToUShort(GLenum internalFormat,
+                                                                   const GLColor &color)
+{
+    GLushort r, g, b, a;
+    switch (internalFormat)
+    {
+        case GL_RGB5_A1:
+            r = (color.R >> 3) << 11;
+            g = (color.G >> 3) << 6;
+            b = (color.B >> 3) << 1;
+            a = color.A >> 7;
+            break;
+        case GL_RGBA4:
+            r = (color.R >> 4) << 12;
+            g = (color.G >> 4) << 8;
+            b = (color.B >> 4) << 4;
+            a = color.A >> 4;
+            break;
+        default:
+            UNREACHABLE();
+            r = 0;
+            g = 0;
+            b = 0;
+            a = 0;
+            break;
+    }
+    return r | g | b | a;
+}
+
+// Test texture format fallback while it has staged updates.
+void FramebufferTestWithFormatFallback::texImageFollowedByFBORead(GLenum internalFormat,
+                                                                  GLenum type)
+{
+    const GLColor kColor = GLColor::blue;
+    GLTexture blueTex2D;
+    glBindTexture(GL_TEXTURE_2D, blueTex2D);
+    const GLushort u16Color = convertGLColorToUShort(internalFormat, kColor);
+    std::vector<GLushort> bluePixels(kTexWidth * kTexHeight, u16Color);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
+                 bluePixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // attach blue texture to FBO
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blueTex2D, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColor.R, kColor.G, kColor.B, kColor.A);
+    ASSERT_GL_NO_ERROR();
+}
+TEST_P(FramebufferTestWithFormatFallback, TexImageRGBA5551)
+{
+    // http://anglebug.com/6347
+    ANGLE_SKIP_TEST_IF(IsOSX());
+    texImageFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
+}
+TEST_P(FramebufferTestWithFormatFallback, TexImageRGBA4444)
+{
+    texImageFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
+}
+
+// Test texture format fallback while it has staged updates and then do copyTexImage2D and followed
+// by sampling.
+void FramebufferTestWithFormatFallback::copyTexImageFollowedBySampling(GLenum internalFormat,
+                                                                       GLenum type)
+{
+    const GLColor kColor = GLColor::blue;
+    // Create blue texture
+    GLTexture blueTex2D;
+    glBindTexture(GL_TEXTURE_2D, blueTex2D);
+    const GLushort u16Color = convertGLColorToUShort(internalFormat, kColor);
+    std::vector<GLushort> bluePixels(kTexWidth * kTexHeight, u16Color);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
+                 bluePixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // attach blue texture to FBO and read back to verify. This should trigger format conversion
+    GLFramebuffer blueFbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, blueFbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blueTex2D, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, 0, 0, 255, 255);
+    ASSERT_GL_NO_ERROR();
+
+    // Create red texture
+    GLTexture copyTex2D;
+    glBindTexture(GL_TEXTURE_2D, copyTex2D);
+    std::vector<GLushort> redPixels(kTexWidth * kTexHeight, 0xF801);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
+                 redPixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // CopyTexImage from blue to red
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 0, 0, kTexWidth, kTexHeight, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw with copyTex2D
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    glUseProgram(program);
+    GLint textureLocation = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    ASSERT_NE(-1, textureLocation);
+    GLint lodLocation = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, lodLocation);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, copyTex2D);
+    glClearColor(0, 1, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUniform1f(lodLocation, 0);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, kColor.R, kColor.G, kColor.B,
+                    kColor.A);
+    ASSERT_GL_NO_ERROR();
+}
+TEST_P(FramebufferTestWithFormatFallback, CopyTexImageRGBA5551)
+{
+    copyTexImageFollowedBySampling(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
+}
+TEST_P(FramebufferTestWithFormatFallback, CopyTexImageRGBA4444)
+{
+    copyTexImageFollowedBySampling(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
+}
+
+// Test texture format fallback while it has staged updates and then do FBO blit and followed by
+// copyTexImage2D.
+void FramebufferTestWithFormatFallback::blitCopyFollowedByFBORead(GLenum internalFormat,
+                                                                  GLenum type)
+{
+    const GLColor kColor = GLColor::blue;
+    // Create blue texture
+    GLTexture blueTex2D;
+    glBindTexture(GL_TEXTURE_2D, blueTex2D);
+    const GLushort u16Color = convertGLColorToUShort(internalFormat, kColor);
+    std::vector<GLushort> bluePixels(kTexWidth * kTexHeight, u16Color);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
+                 bluePixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // attach blue texture to FBO and read back to verify. This should trigger format conversion
+    GLFramebuffer readFbo;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blueTex2D, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+
+    GLRenderbuffer renderBuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, kTexWidth, kTexHeight);
+    GLFramebuffer drawFbo;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFbo);
+    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                              renderBuffer);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_DRAW_FRAMEBUFFER);
+
+    // Blit
+    glBlitFramebuffer(0, 0, kTexWidth, kTexHeight, 0, 0, kTexWidth, kTexHeight, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // CopyTexImage from renderBuffer to red texture
+    GLFramebuffer readFbo2;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo2);
+    glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                              renderBuffer);
+    GLTexture copyTex2D;
+    glBindTexture(GL_TEXTURE_2D, copyTex2D);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, kTexWidth, kTexHeight, 0);
+    ASSERT_GL_NO_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // Read out red texture
+    GLFramebuffer readFbo3;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo3);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, copyTex2D, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+    EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColor.R, kColor.G, kColor.B, kColor.A);
+    ASSERT_GL_NO_ERROR();
+}
+TEST_P(FramebufferTestWithFormatFallback, BlitCopyTexImageRGBA5551)
+{
+    blitCopyFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
+}
+TEST_P(FramebufferTestWithFormatFallback, BlitCopyTexImageRGBA4444)
+{
+    blitCopyFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
+}
+
+// Test texture format fallback while it has staged updates, specially for cubemap target.
+void FramebufferTestWithFormatFallback::cubeTexImageFollowedByFBORead(GLenum internalFormat,
+                                                                      GLenum type)
+{
+    const GLColor kColors[6] = {GLColor::red,  GLColor::green,  GLColor::blue,
+                                GLColor::cyan, GLColor::yellow, GLColor::magenta};
+    GLTexture cubeTex2D;
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex2D);
+    for (GLenum target = GL_TEXTURE_CUBE_MAP_POSITIVE_X; target <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+         target++)
+    {
+        int j                   = target - GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+        const GLushort u16Color = convertGLColorToUShort(internalFormat, kColors[j]);
+        std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
+        glTexImage2D(target, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
+                     pixels.data());
+    }
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // attach blue texture to FBO
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    for (GLenum target = GL_TEXTURE_CUBE_MAP_POSITIVE_X; target <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+         target++)
+    {
+        GLint j = target - GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, target, cubeTex2D, 0);
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+        EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColors[j].R, kColors[j].G, kColors[j].B,
+                        kColors[j].A);
+    }
+    ASSERT_GL_NO_ERROR();
+}
+TEST_P(FramebufferTestWithFormatFallback, CubeTexImageRGBA5551)
+{
+    cubeTexImageFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
+}
+TEST_P(FramebufferTestWithFormatFallback, CubeTexImageRGBA4444)
+{
+    cubeTexImageFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
+}
+
 class FramebufferTest_ES31 : public ANGLETest
 {
   protected:
@@ -3382,3 +3643,4 @@ ANGLE_INSTANTIATE_TEST_ES3_AND(FramebufferTest_ES3,
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(FramebufferTest_ES31);
 ANGLE_INSTANTIATE_TEST_ES31(FramebufferTest_ES31);
+ANGLE_INSTANTIATE_TEST_ES3(FramebufferTestWithFormatFallback);
