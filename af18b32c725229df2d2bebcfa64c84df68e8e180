@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996285ff_084281d6",
+        "filename": "src/tests/gl_tests/CompressedTextureEntrypointsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T15:57:37Z",
+      "side": 1,
+      "message": "nit: I recommend you call this CompressedTextureTest or CompressedTextureFormatsTest\n\nAlso I recommend you split up the tests so each test runs a single format for better result reporting and small single test run time. We have a way of running parameterized tests - see ANGLE_INSTANTIATE_TEST_COMBINE_1, which you can examine in MultisampleTest.",
+      "range": {
+        "startLine": 175,
+        "startChar": 7,
+        "endLine": 175,
+        "endChar": 39
+      },
+      "revId": "af18b32c725229df2d2bebcfa64c84df68e8e180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
