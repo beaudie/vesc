@@ -158,7 +158,7 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
                           const PackedAttachmentOpsDesc &ops)
 {
     desc->flags   = 0;
-    desc->format  = format.actualImageVkFormat();
+    desc->format  = format.getActualRenderableImageVkFormat();
     desc->samples = gl_vk::GetSamples(samples);
     desc->loadOp  = static_cast<VkAttachmentLoadOp>(ops.loadOp);
     desc->storeOp =
@@ -178,10 +178,10 @@ void UnpackColorResolveAttachmentDesc(VkAttachmentDescription *desc,
                                       bool isInvalidated)
 {
     desc->flags  = 0;
-    desc->format = format.actualImageVkFormat();
+    desc->format = format.getActualRenderableImageVkFormat();
 
     // This function is for color resolve attachments.
-    const angle::Format &angleFormat = format.actualImageFormat();
+    const angle::Format &angleFormat = format.getActualRenderableImageFormat();
     ASSERT(angleFormat.depthBits == 0 && angleFormat.stencilBits == 0);
 
     // Resolve attachments always have a sample count of 1.
@@ -211,7 +211,7 @@ void UnpackDepthStencilResolveAttachmentDesc(VkAttachmentDescription *desc,
     // There cannot be simultaneous usages of the depth/stencil resolve image, as depth/stencil
     // resolve currently only comes from depth/stencil renderbuffers.
     desc->flags  = 0;
-    desc->format = format.actualImageVkFormat();
+    desc->format = format.getActualRenderableImageVkFormat();
 
     // This function is for depth/stencil resolve attachment.
     const angle::Format &angleFormat = format.intendedFormat();
@@ -992,7 +992,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], format, attachmentSamples,
                              ops[attachmentCount]);
 
-        angle::FormatID attachmentFormat = format.actualImageFormatID;
+        angle::FormatID attachmentFormat = format.getActualRenderableImageFormatID();
 
         // If this renderpass uses EXT_srgb_write_control, we need to override the format to its
         // linear counterpart. Formats that cannot be reinterpreted are exempt from this
@@ -1005,8 +1005,9 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                 attachmentFormat = linearFormat;
             }
         }
-        attachmentDescs[attachmentCount.get()].format =
-            contextVk->getRenderer()->getFormat(attachmentFormat).actualImageVkFormat();
+        attachmentDescs[attachmentCount.get()].format = contextVk->getRenderer()
+                                                            ->getFormat(attachmentFormat)
+                                                            .getActualRenderableImageVkFormat();
         ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
 
         isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
@@ -2040,7 +2041,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             {
                 ASSERT(!contextVk->getRenderer()
                             ->getFormat(mRenderPassDesc[colorIndexGL])
-                            .actualImageFormat()
+                            .getActualRenderableImageFormat()
                             .isInt());
                 state.blendEnable = VK_TRUE;
                 UnpackBlendAttachmentState(inputAndBlend.attachments[colorIndexGL], &state);
@@ -3102,9 +3103,10 @@ SamplerDesc::SamplerDesc(ContextVk *contextVk,
                          const gl::SamplerState &samplerState,
                          bool stencilMode,
                          uint64_t externalFormat,
-                         angle::FormatID formatID)
+                         angle::FormatID formatID,
+                         bool renderable)
 {
-    update(contextVk, samplerState, stencilMode, externalFormat, formatID);
+    update(contextVk, samplerState, stencilMode, externalFormat, formatID, renderable);
 }
 
 void SamplerDesc::reset()
@@ -3136,7 +3138,8 @@ void SamplerDesc::update(ContextVk *contextVk,
                          const gl::SamplerState &samplerState,
                          bool stencilMode,
                          uint64_t externalFormat,
-                         angle::FormatID formatID)
+                         angle::FormatID formatID,
+                         bool renderable)
 {
     const angle::FeaturesVk &featuresVk = contextVk->getFeatures();
     mMipLodBias                         = 0.0f;
@@ -3158,11 +3161,12 @@ void SamplerDesc::update(ContextVk *contextVk,
     // GL has no notion of external format, this must be provided from metadata from the image
     const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(formatID);
     mIsExternalFormat          = (externalFormat != 0) ? 1 : 0;
-    mExternalOrVkFormat        = (externalFormat != 0)
-                              ? externalFormat
-                              : (vkFormat.intendedFormat().isYUV)
-                                    ? static_cast<uint64_t>(vkFormat.actualImageVkFormat())
-                                    : 0;
+    mExternalOrVkFormat =
+        (externalFormat != 0)
+            ? externalFormat
+            : (vkFormat.intendedFormat().isYUV)
+                  ? static_cast<uint64_t>(vkFormat.getActualRenderableImageVkFormat())
+                  : 0;
 
     bool compareEnable    = samplerState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
     VkCompareOp compareOp = gl_vk::GetCompareOp(samplerState.getCompareFunc());
@@ -3213,7 +3217,8 @@ void SamplerDesc::update(ContextVk *contextVk,
     mBorderColor = samplerState.getBorderColor().colorF;
     if (vkFormat.intendedFormatID != angle::FormatID::NONE)
     {
-        LoadTextureBorderFunctionInfo loadFunction = vkFormat.textureBorderLoadFunctions();
+        LoadTextureBorderFunctionInfo loadFunction =
+            vkFormat.getTextureBorderLoadFunction(renderable);
         loadFunction.loadFunction(mBorderColor);
     }
 
