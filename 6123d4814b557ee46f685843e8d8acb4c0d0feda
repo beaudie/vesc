@@ -16,6 +16,29 @@
       "message": "PTAL Cody/Tim. Logging now works in the child process more consistently.",
       "revId": "6123d4814b557ee46f685843e8d8acb4c0d0feda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb2c6954_268ad4e3",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-18T21:37:56Z",
+      "side": 1,
+      "message": "There\u0027s a weird mix of \"logging\" and \"logger\" in here, not entirely clear that all the uses are correct.  How did you decide which ones needed to remain \"logging\"?",
+      "range": {
+        "startLine": 984,
+        "startChar": 12,
+        "endLine": 984,
+        "endChar": 19
+      },
+      "revId": "6123d4814b557ee46f685843e8d8acb4c0d0feda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
