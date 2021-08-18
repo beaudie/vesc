@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b372b00_306dff1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T21:20:13Z",
+      "side": 1,
+      "message": "Thanks Yuly. I\u0027m going to take the unusual liberty of landing this without waiting for Charlie\u0027s review to try and unblock some of my CL queue. Charlie feel free to make comments and I\u0027ll follow up as needed.",
+      "revId": "6d233045f85276167fdd2b7238c72644d229f91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
