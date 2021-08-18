@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b32cb0eb_2e635702",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T12:40:51Z",
+      "side": 1,
+      "message": "re-lgtm",
+      "revId": "8655f7a57f6c3ff1a866d04e6c2b653062b1d21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3111ca24_19b92120",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T12:40:51Z",
+      "side": 1,
+      "message": "nit: I believe stringstream.str() may do work - recommend caching the result and using that.",
+      "range": {
+        "startLine": 1251,
+        "startChar": 33,
+        "endLine": 1251,
+        "endChar": 44
+      },
+      "revId": "8655f7a57f6c3ff1a866d04e6c2b653062b1d21d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
