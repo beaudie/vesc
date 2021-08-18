@@ -16,6 +16,24 @@
       "message": "Remove",
       "revId": "052340f497909a0fbfe7a587e9b807a2b5c99c3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a37e3c06_95f8331f",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T11:36:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5d01cab_b0e546bc",
+      "revId": "052340f497909a0fbfe7a587e9b807a2b5c99c3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
