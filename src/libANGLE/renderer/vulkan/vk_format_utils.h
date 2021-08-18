@@ -55,6 +55,8 @@ angle::FormatID GetFormatIDFromVkFormat(VkFormat vkFormat);
 size_t GetImageCopyBufferAlignment(angle::FormatID formatID);
 size_t GetValidImageCopyBufferAlignment(angle::FormatID intendedFormatID,
                                         angle::FormatID actualFormatID);
+bool HasEmulatedImageChannels(const angle::Format &intendedFormat,
+                              const angle::Format &actualFormat);
 
 // Describes a Vulkan format. For more information on formats in the Vulkan back-end please see
 // https://chromium.googlesource.com/angle/angle/+/master/src/libANGLE/renderer/vulkan/doc/FormatTablesAndEmulation.md
