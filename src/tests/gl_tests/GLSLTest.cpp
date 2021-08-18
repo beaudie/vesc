@@ -5739,6 +5739,9 @@ TEST_P(GLSLTest, InactiveVaryingInVertexActiveInFragment)
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     drawQuad(program.get(), "inputAttribute", 0.5f);
     ASSERT_GL_NO_ERROR();
+
+    // Because the draw has undefined results, clear the surface before we exit.
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 // Test that a varying struct that's not statically used in the fragment shader works.
