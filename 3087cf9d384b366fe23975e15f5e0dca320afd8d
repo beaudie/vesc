@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ecf88a_a98853be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-18T19:42:27Z",
+      "side": 1,
+      "message": "PTAL\n\nI removed the previous +1/+2 since this is essentially a rewrite of the previous CL to fix the underlying issue with ANGLE\u0027s EGL Display/Context implementation.   This also uncovered multiple EGL test bugs.",
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
