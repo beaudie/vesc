@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb870bce_c4dd5da7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Just a few comments ",
+      "revId": "34a89892c6210c974beb974b74e18d8ccf3cdf47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12608c42_14f276e8",
@@ -72,6 +89,57 @@
         "endLine": 991,
         "endChar": 66
       },
+      "revId": "34a89892c6210c974beb974b74e18d8ccf3cdf47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cb68178_03676c2d",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Maybe a more descriptive name like \"to_string\" following std::to_string for integer and float types?",
+      "revId": "34a89892c6210c974beb974b74e18d8ccf3cdf47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c34db9_3fdb2140",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Why not copy  bindingPointerVector[i].id().value right away?",
+      "revId": "34a89892c6210c974beb974b74e18d8ccf3cdf47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78223318_3cf8e494",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-18T22:31:54Z",
+      "side": 1,
+      "message": "That\u0027s a lot of vertical space and a lot of repetition, maybe factor this out \nto something like \n\ntemplate \u003ctypename T\u003e \nvoid addID(JsonSerialiter *json, const char *name, const T *object)\n{\n   json-\u003eaddScalar(name, object ? object-\u003eid().value : 0); \n}",
       "revId": "34a89892c6210c974beb974b74e18d8ccf3cdf47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
