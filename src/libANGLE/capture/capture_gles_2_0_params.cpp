@@ -704,7 +704,10 @@ void CaptureTexImage2D_pixels(const State &glState,
     (void)internalFormatInfo.computeSkipBytes(type, srcRowPitch, srcDepthPitch, unpack, false,
                                               &srcSkipBytes);
 
-    size_t captureSize = srcRowPitch * height + srcSkipBytes;
+    // The last row is only captured to the end of "width" groups (pixelBytes), while the other rows
+    // respect the unpack alignment (srcRowPitch).
+    size_t captureSize =
+        width * internalFormatInfo.pixelBytes + (srcRowPitch * (height - 1)) + srcSkipBytes;
     CaptureMemory(pixels, captureSize, paramCapture);
 }
 
