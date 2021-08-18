@@ -131,12 +131,15 @@ struct Format final : private angle::NonCopyable
     angle::FormatID intendedFormatID;
     GLenum intendedGLFormat;
     angle::FormatID actualImageFormatID;
+    angle::FormatID actualRenderableImageFormatID;
     angle::FormatID actualBufferFormatID;
     angle::FormatID actualCompressedBufferFormatID;
 
     InitializeTextureDataFunction imageInitializerFunction;
     LoadFunctionMap textureLoadFunctions;
     LoadTextureBorderFunctionMap textureBorderLoadFunctions;
+    LoadFunctionMap renderableTextureLoadFunctions;
+    LoadTextureBorderFunctionMap renderableTextureBorderLoadFunctions;
     VertexCopyFunction vertexLoadFunction;
     VertexCopyFunction compressedVertexLoadFunction;
 

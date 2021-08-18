@@ -2819,7 +2819,9 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     }
 
     bool imageFormatListEnabled    = false;
-    angle::FormatID actualFormatID = format.actualImageFormatID;
+    angle::FormatID actualFormatID = mState.hasBeenBoundAsAttachment()
+                                         ? format.actualRenderableImageFormatID
+                                         : format.actualImageFormatID;
     ANGLE_TRY(mImage->initExternal(contextVk, mState.getType(), vkExtent, format, actualFormatID,
                                    samples, mImageUsageFlags, mImageCreateFlags,
                                    vk::ImageLayout::Undefined, nullptr, gl::LevelIndex(firstLevel),
