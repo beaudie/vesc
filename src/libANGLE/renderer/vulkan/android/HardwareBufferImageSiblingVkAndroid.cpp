@@ -277,6 +277,10 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     // disable robust init for this external image.
     bool robustInitEnabled = false;
 
+    angle::FormatID actualFormatID = (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+                                         ? externalVkFormat.actualImageFormatID
+                                         : vkFormat.actualImageFormatID;
+
     mImage->setTilingMode(imageTilingMode);
     VkImageCreateFlags imageCreateFlags = vk::kVkImageCreateFlagsNone;
     if (hasProtectedContent())
@@ -285,8 +289,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     }
     ANGLE_TRY(mImage->initExternal(
         displayVk, gl::TextureType::_2D, vkExtents,
-        bufferFormatProperties.format == VK_FORMAT_UNDEFINED ? externalVkFormat : vkFormat, 1,
-        usage, imageCreateFlags, vk::ImageLayout::ExternalPreInitialized,
+        bufferFormatProperties.format == VK_FORMAT_UNDEFINED ? externalVkFormat : vkFormat,
+        actualFormatID, 1, usage, imageCreateFlags, vk::ImageLayout::ExternalPreInitialized,
         &externalMemoryImageCreateInfo, gl::LevelIndex(0), 1, 1, robustInitEnabled, nullptr,
         hasProtectedContent()));
 
