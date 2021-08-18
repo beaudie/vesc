@@ -16,6 +16,23 @@
       "message": "PTAL, should pass on linux-ozone-rel now https://chromium-swarm.appspot.com/task?id\u003d556ef9f32f6bb010",
       "revId": "a84f24c16650f8496312b2776e6f24a19be85c56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16ea1854_54e42cb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-18T18:59:43Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "a84f24c16650f8496312b2776e6f24a19be85c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
