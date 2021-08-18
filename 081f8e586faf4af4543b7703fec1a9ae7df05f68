@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abdf0897_d9f6fcba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-18T13:23:55Z",
+      "side": 1,
+      "message": "With this CL, we should be able to enable ASTC tests on WebGL 2.",
+      "revId": "081f8e586faf4af4543b7703fec1a9ae7df05f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
