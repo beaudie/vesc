@@ -346,8 +346,8 @@ TEST_P(MultithreadingTest, MultiContextDrawWithSwapBuffers)
 
     // http://anglebug.com/5099
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-    // http://anglebug.com/5099
-    ANGLE_SKIP_TEST_IF(IsWindows() && isSwiftshader());
+    // http://anglebug.com/6261
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
 
     EGLWindow *window = getEGLWindow();
     EGLDisplay dpy    = window->getDisplay();
@@ -714,6 +714,8 @@ TEST_P(MultithreadingTestES3, MultithreadFenceDraw)
 {
     // http://anglebug.com/5418
     ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsVulkan());
+    // http://anglebug.com/6261
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
 
     // Have the secondary thread use glDrawArrays()
     mainThreadDraw(true);
