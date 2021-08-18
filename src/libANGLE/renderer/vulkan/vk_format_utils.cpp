@@ -124,10 +124,12 @@ Format::Format()
     : intendedFormatID(angle::FormatID::NONE),
       intendedGLFormat(GL_NONE),
       actualImageFormatID(angle::FormatID::NONE),
+      actualRenderableImageFormatID(angle::FormatID::NONE),
       actualBufferFormatID(angle::FormatID::NONE),
       actualCompressedBufferFormatID(angle::FormatID::NONE),
       imageInitializerFunction(nullptr),
       textureLoadFunctions(),
+      renderableTextureLoadFunctions(),
       vertexLoadFunction(nullptr),
       compressedVertexLoadFunction(nullptr),
       vertexLoadRequiresConversion(false),
@@ -140,7 +142,7 @@ Format::Format()
 void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *info, int numInfo)
 {
     size_t skip                 = renderer->getFeatures().forceFallbackFormat.enabled ? 1 : 0;
-    SupportTest testFunction    = HasFullTextureFormatSupport;
+    SupportTest testFunction    = HasNonRenderableTextureFormatSupport;
     const angle::Format &format = angle::Format::Get(info[0].format);
     if (format.isInt() || (format.isFloat() && format.redBits >= 32))
     {
@@ -150,17 +152,22 @@ void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *
         // enabled automatically by examining format capabilities.
         testFunction = HasNonFilterableTextureFormatSupport;
     }
-    if (format.isSnorm() || format.isBlock)
+
+    int i = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo), testFunction);
+    actualImageFormatID      = info[i].format;
+    imageInitializerFunction = info[i].initializer;
+
+    // Set renderable format.
+    if (testFunction != HasNonFilterableTextureFormatSupport && !format.isSnorm() &&
+        !format.isBlock)
     {
         // Rendering to SNORM textures is not supported on Android, and it's
         // enabled by the extension EXT_render_snorm.
         // Compressed textures also need to perform this check.
-        testFunction = HasNonRenderableTextureFormatSupport;
+        testFunction = HasFullTextureFormatSupport;
+        i = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo), testFunction);
+        actualRenderableImageFormatID = info[i].format;
     }
-    int i = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo), testFunction);
-
-    actualImageFormatID      = info[i].format;
-    imageInitializerFunction = info[i].initializer;
 }
 
 void Format::initBufferFallback(RendererVk *renderer,
@@ -231,6 +238,7 @@ size_t GetValidImageCopyBufferAlignment(angle::FormatID intendedFormatID,
                : GetImageCopyBufferAlignment(actualFormatID);
 }
 
+// Returns true if the image format has more channels than the ANGLE format.
 bool HasEmulatedImageChannels(const angle::Format &angleFmt, const angle::Format &textureFmt)
 {
     return (angleFmt.alphaBits == 0 && textureFmt.alphaBits > 0) ||
@@ -240,11 +248,9 @@ bool HasEmulatedImageChannels(const angle::Format &angleFmt, const angle::Format
            (angleFmt.stencilBits == 0 && textureFmt.stencilBits > 0);
 }
 
-bool Format::hasEmulatedImageChannels() const
+bool HasEmulatedImageFormat(angle::FormatID intendedFormatID, angle::FormatID actualFormatID)
 {
-    const angle::Format &angleFmt   = intendedFormat();
-    const angle::Format &textureFmt = actualImageFormat();
-    return HasEmulatedImageChannels(angleFmt, textureFmt);
+    return actualFormatID != intendedFormatID;
 }
 
 bool operator==(const Format &lhs, const Format &rhs)
@@ -275,6 +281,11 @@ void FormatTable::initialize(RendererVk *renderer,
         format.initialize(renderer, angleFormat);
         format.intendedFormatID = formatID;
 
+        if (angle::FormatID::NONE == format.actualRenderableImageFormatID)
+        {
+            format.actualRenderableImageFormatID = format.actualImageFormatID;
+        }
+
         if (!format.valid())
         {
             continue;
@@ -282,7 +293,6 @@ void FormatTable::initialize(RendererVk *renderer,
 
         gl::TextureCaps textureCaps;
         FillTextureFormatCaps(renderer, format.actualImageFormatID, &textureCaps);
-        outTextureCapsMap->set(formatID, textureCaps);
 
         if (textureCaps.texturable)
         {
@@ -290,6 +300,25 @@ void FormatTable::initialize(RendererVk *renderer,
                 GetLoadFunctionsMap(format.intendedGLFormat, format.actualImageFormatID);
             format.textureBorderLoadFunctions = GetLoadTextureBorderFunctionsMap(
                 format.intendedGLFormat, format.actualImageFormatID);
+        }
+
+        if (format.actualRenderableImageFormatID == format.actualImageFormatID)
+        {
+            outTextureCapsMap->set(formatID, textureCaps);
+            format.renderableTextureLoadFunctions       = format.textureLoadFunctions;
+            format.renderableTextureBorderLoadFunctions = format.textureBorderLoadFunctions;
+        }
+        else
+        {
+            FillTextureFormatCaps(renderer, format.actualRenderableImageFormatID, &textureCaps);
+            outTextureCapsMap->set(formatID, textureCaps);
+            if (textureCaps.texturable)
+            {
+                format.renderableTextureLoadFunctions = GetLoadFunctionsMap(
+                    format.intendedGLFormat, format.actualRenderableImageFormatID);
+                format.renderableTextureBorderLoadFunctions = GetLoadTextureBorderFunctionsMap(
+                    format.intendedGLFormat, format.actualRenderableImageFormatID);
+            }
         }
 
         if (angleFormat.isBlock)
