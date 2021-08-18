@@ -275,7 +275,7 @@ class ChildProcessesManager():
             gn_args.append(('angle_assert_always_on', 'true'))
         if args.asan:
             gn_args.append(('is_asan', 'true'))
-        debug('Calling GN gen with %s' % str(gn_args))
+        info('Calling GN gen with %s' % str(gn_args))
         args_str = ' '.join(['%s=%s' % (k, v) for (k, v) in gn_args])
         cmd = [self._gn_path, 'gen', '--args=%s' % args_str, build_dir]
         return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
@@ -569,31 +569,31 @@ class TestBatch():
     def RunWithCapture(self, args, child_processes_manager):
         test_exe_path = os.path.join(args.out_dir, 'Capture', args.test_suite)
 
-        # set the static environment variables that do not change throughout the script run
-        env = os.environ.copy()
-        env['ANGLE_CAPTURE_FRAME_END'] = '{}'.format(self.CAPTURE_FRAME_END)
-        env['ANGLE_CAPTURE_SERIALIZE_STATE'] = '1'
-        env['ANGLE_FEATURE_OVERRIDES_ENABLED'] = 'forceRobustResourceInit'
-        env['ANGLE_CAPTURE_ENABLED'] = '1'
+        logger = multiprocessing.log_to_stderr()
+        logger.setLevel(level=args.log.upper())
 
-        info('Setting ANGLE_CAPTURE_OUT_DIR to %s' % self.trace_folder_path)
-        env['ANGLE_CAPTURE_OUT_DIR'] = self.trace_folder_path
+        extra_env = {
+            'ANGLE_CAPTURE_FRAME_END': '{}'.format(self.CAPTURE_FRAME_END),
+            'ANGLE_CAPTURE_SERIALIZE_STATE': '1',
+            'ANGLE_FEATURE_OVERRIDES_ENABLED': 'forceRobustResourceInit',
+            'ANGLE_CAPTURE_ENABLED': '1',
+            'ANGLE_CAPTURE_OUT_DIR': self.trace_folder_path,
+        }
+
+        env = {**os.environ.copy(), **extra_env}
 
         if not self.args.keep_temp_files:
             ClearFolderContent(self.trace_folder_path)
         filt = ':'.join([test.full_test_name for test in self.tests])
 
         cmd = GetRunCommand(args, test_exe_path)
-        filter_string = '--gtest_filter=%s' % filt
-        cmd += [filter_string, '--angle-per-test-capture-label']
-
-        if self.args.verbose:
-            info("Run capture: '{} {}'".format(test_exe_path, filter_string))
+        cmd += ['--gtest_filter=%s' % filt, '--angle-per-test-capture-label']
+        logger.info("Run capture: '{}' with env {}".format(' '.join(cmd), str(extra_env)))
 
         returncode, output = child_processes_manager.RunSubprocess(
             cmd, env, timeout=SUBPROCESS_TIMEOUT)
         if args.show_capture_stdout:
-            info("Capture stdout: %s" % output)
+            logger.info("Capture stdout: %s" % output)
         if returncode == -1:
             self.results.append(GroupedResult(GroupedResult.Crashed, "", output, self.tests))
             return False
@@ -645,12 +645,15 @@ class TestBatch():
         return True
 
     def RunReplay(self, replay_build_dir, replay_exe_path, child_processes_manager, tests):
-        env = os.environ.copy()
-        env['ANGLE_CAPTURE_ENABLED'] = '0'
-        env['ANGLE_FEATURE_OVERRIDES_ENABLED'] = 'enable_capture_limits'
+        extra_env = {
+            'ANGLE_CAPTURE_ENABLED': '0',
+            'ANGLE_FEATURE_OVERRIDES_ENABLED': 'enable_capture_limits',
+        }
+        env = {**os.environ.copy(), **extra_env}
 
-        if self.args.verbose:
-            info("Run Replay: {}".format(replay_exe_path))
+        logger = multiprocessing.log_to_stderr()
+        logger.setLevel(level=self.args.log.upper())
+        logger.info("Run Replay: {} with env {}".format(replay_exe_path, str(extra_env)))
 
         returncode, output = child_processes_manager.RunSubprocess(
             GetRunCommand(self.args, replay_exe_path), env, timeout=SUBPROCESS_TIMEOUT)
@@ -913,7 +916,7 @@ def main(args, platform):
             return EXIT_FAILURE
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
-        test_list = GetTestsListForFilter(args, test_path, args.gtest_filter)
+        test_list = GetTestsListForFilter(args, test_path, args.filter)
         test_expectation = TestExpectation(platform)
         test_names = ParseTestNamesFromTestList(test_list, test_expectation,
                                                 args.force_run_capture)
@@ -945,7 +948,6 @@ def main(args, platform):
         crashed_tests = []
         compile_failed_tests = []
         skipped_tests = []
-
 
         # result list is created by manager and can be shared by multiple processes. Each
         # subprocess populates the result list with the results of its test runs. After all
@@ -1088,7 +1090,7 @@ def main(args, platform):
         return EXIT_FAILURE
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--out-dir',
@@ -1101,6 +1103,8 @@ if __name__ == "__main__":
         action='store_true',
         help='Use goma for distributed builds. Requires internal access. Off by default.')
     parser.add_argument(
+        '-f',
+        '--filter',
         '--gtest_filter',
         default=DEFAULT_FILTER,
         help='Same as GoogleTest\'s filter argument. Default is "%s".' % DEFAULT_FILTER)
@@ -1119,22 +1123,22 @@ if __name__ == "__main__":
         help='Whether to keep the temp files and folders. Off by default')
     parser.add_argument('--purge', help='Purge all build directories on exit.')
     parser.add_argument(
-        "--goma-dir",
-        default="",
+        '--goma-dir',
+        default='',
         help='Set custom goma directory. Uses the goma in path by default.')
     parser.add_argument(
-        "--output-to-file",
+        '--output-to-file',
         action='store_true',
         help='Whether to write output to a result file. Off by default')
     parser.add_argument(
-        "--result-file",
+        '--result-file',
         default=DEFAULT_RESULT_FILE,
         help='Name of the result file in the capture_replay_tests folder. Default is "%s".' %
         DEFAULT_RESULT_FILE)
-    parser.add_argument('-v', "--verbose", action='store_true', help='Off by default')
+    parser.add_argument('-v', "--verbose", action='store_true', help='Shows full test output.')
     parser.add_argument(
-        "-l",
-        "--log",
+        '-l',
+        '--log',
         default=DEFAULT_LOG_LEVEL,
         help='Controls the logging level. Default is "%s".' % DEFAULT_LOG_LEVEL)
     parser.add_argument(
@@ -1144,7 +1148,6 @@ if __name__ == "__main__":
         type=int,
         help='Maximum number of test processes. Default is %d.' % DEFAULT_MAX_JOBS)
     parser.add_argument(
-        '-f',
         '--force-run-capture',
         action='store_true',
         help='Also run tests that are disabled in the expectations by SKIP_FOR_CAPTURE')
