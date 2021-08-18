@@ -171,14 +171,16 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    const vk::Format &vkFormat = renderer->getFormat(internalFormat);
+    const vk::Format &vkFormat       = renderer->getFormat(internalFormat);
+    angle::FormatID intendedFormatID = vkFormat.intendedFormatID;
+    angle::FormatID actualFormatID   = vkFormat.actualImageFormatID;
 
     // EXT_external_objects issue 13 says that all supported usage flags must be specified.
     // However, ANGLE_external_objects_flags allows these flags to be masked.  Note that the GL enum
     // values constituting the bits of |usageFlags| are identical to their corresponding Vulkan
     // value.
     const VkImageUsageFlags imageUsageFlags =
-        vk::GetMaximalImageUsageFlags(renderer, vkFormat.actualImageFormatID) & usageFlags;
+        vk::GetMaximalImageUsageFlags(renderer, actualFormatID) & usageFlags;
 
     VkExternalMemoryImageCreateInfo externalMemoryImageCreateInfo = {};
     externalMemoryImageCreateInfo.sType       = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO;
@@ -204,10 +206,10 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
     // ANGLE_external_objects_flags allows create flags to be specified by the application instead
     // of getting defaulted to zero.  Note that the GL enum values constituting the bits of
     // |createFlags| are identical to their corresponding Vulkan value.
-    ANGLE_TRY(image->initExternal(contextVk, type, vkExtents, vkFormat, 1, imageUsageFlags,
-                                  createFlags, vk::ImageLayout::Undefined,
-                                  &externalMemoryImageCreateInfo, gl::LevelIndex(0),
-                                  static_cast<uint32_t>(levels), layerCount,
+    ANGLE_TRY(image->initExternal(contextVk, type, vkExtents, vkFormat, intendedFormatID,
+                                  actualFormatID, 1, imageUsageFlags, createFlags,
+                                  vk::ImageLayout::Undefined, &externalMemoryImageCreateInfo,
+                                  gl::LevelIndex(0), static_cast<uint32_t>(levels), layerCount,
                                   contextVk->isRobustResourceInitEnabled(), nullptr, false));
 
     VkMemoryRequirements externalMemoryRequirements;
