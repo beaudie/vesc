@@ -2034,7 +2034,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             {
                 ASSERT(!contextVk->getRenderer()
                             ->getFormat(mRenderPassDesc[colorIndexGL])
-                            .actualImageFormat()
+                            .getActualRenderableImageFormat()
                             .isInt());
                 state.blendEnable = VK_TRUE;
                 UnpackBlendAttachmentState(inputAndBlend.attachments[colorIndexGL], &state);
@@ -3096,9 +3096,9 @@ SamplerDesc::SamplerDesc(ContextVk *contextVk,
                          const gl::SamplerState &samplerState,
                          bool stencilMode,
                          uint64_t externalFormat,
-                         angle::FormatID formatID)
+                         angle::FormatID intendedFormatID)
 {
-    update(contextVk, samplerState, stencilMode, externalFormat, formatID);
+    update(contextVk, samplerState, stencilMode, externalFormat, intendedFormatID);
 }
 
 void SamplerDesc::reset()
@@ -3130,7 +3130,7 @@ void SamplerDesc::update(ContextVk *contextVk,
                          const gl::SamplerState &samplerState,
                          bool stencilMode,
                          uint64_t externalFormat,
-                         angle::FormatID formatID)
+                         angle::FormatID intendedFormatID)
 {
     const angle::FeaturesVk &featuresVk = contextVk->getFeatures();
     mMipLodBias                         = 0.0f;
@@ -3150,12 +3150,14 @@ void SamplerDesc::update(ContextVk *contextVk,
     mMaxLod        = samplerState.getMaxLod();
 
     // GL has no notion of external format, this must be provided from metadata from the image
-    const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(formatID);
-    mIsExternalFormat          = (externalFormat != 0) ? 1 : 0;
-    mExternalOrVkFormat        = (externalFormat != 0)
+    const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(intendedFormatID);
+    ASSERT(!vkFormat.intendedFormat().isYUV ||
+           vkFormat.getActualImageVkFormat(false) == vkFormat.getActualImageVkFormat(true));
+    mIsExternalFormat   = (externalFormat != 0) ? 1 : 0;
+    mExternalOrVkFormat = (externalFormat != 0)
                               ? externalFormat
                               : (vkFormat.intendedFormat().isYUV)
-                                    ? static_cast<uint64_t>(vkFormat.actualImageVkFormat())
+                                    ? static_cast<uint64_t>(vkFormat.getActualImageVkFormat(false))
                                     : 0;
 
     bool compareEnable    = samplerState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
