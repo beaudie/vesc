@@ -272,6 +272,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     }
 
     angle::Result ensureMutable(ContextVk *contextVk);
+    angle::Result ensureRenderableFormat(ContextVk *contextVk);
 
     bool getAndResetImmutableSamplerDirtyState()
     {
@@ -416,6 +417,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result initImage(ContextVk *contextVk,
                             const vk::Format &format,
+                            angle::FormatID actualImageFormatID,
                             const bool sized,
                             const gl::Extents &firstLevelExtents,
                             const uint32_t firstLevel,
@@ -428,6 +430,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                         gl::LevelIndex previousFirstAllocateLevel,
                                         vk::ImageHelper *srcImage,
                                         vk::ImageHelper *dstImage);
+    angle::Result copyAndStageImageDataWithBuffer(ContextVk *contextVk,
+                                                  const vk::Format &format,
+                                                  gl::TexLevelMask skipLevelsMask);
     angle::Result initImageViews(ContextVk *contextVk,
                                  const angle::Format &format,
                                  const bool sized,
@@ -466,7 +471,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     bool isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) const;
 
-    bool shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL) const;
+    bool shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
+                              angle::FormatID dstFormatID) const;
 
     // We monitor the staging buffer and set dirty bits if the staging buffer changes. Note that we
     // support changes in the staging buffer even outside the TextureVk class.
@@ -479,12 +485,15 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result refreshImageViews(ContextVk *contextVk);
     bool shouldDecodeSRGB(ContextVk *contextVk, GLenum srgbDecode, bool texelFetchStaticUse) const;
-    void initImageUsageFlags(ContextVk *contextVk, const vk::Format &format);
+    void initImageUsageFlags(ContextVk *contextVk, angle::FormatID formatID);
     void handleImmutableSamplerTransition(const vk::ImageHelper *previousImage,
                                           const vk::ImageHelper *nextImage);
 
+    bool isRenderable() const { return mRequiresRenderableFormat; }
+
     bool mOwnsImage;
     bool mRequiresMutableStorage;
+    bool mRequiresRenderableFormat;
     bool mImmutableSamplerDirty;
 
     gl::TextureType mImageNativeType;
