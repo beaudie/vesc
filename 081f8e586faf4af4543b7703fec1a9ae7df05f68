@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e2236a0_de137325",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-18T19:31:56Z",
+      "side": 1,
+      "message": "Suggest adding a brief second paragraph to the commit message describing what this does, to make scanning through the git logs easier.",
+      "revId": "081f8e586faf4af4543b7703fec1a9ae7df05f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "abdf0897_d9f6fcba",
@@ -14,6 +31,23 @@
       "writtenOn": "2021-08-18T13:23:55Z",
       "side": 1,
       "message": "With this CL, we should be able to enable ASTC tests on WebGL 2.",
+      "revId": "081f8e586faf4af4543b7703fec1a9ae7df05f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d16e8af_326fc259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-18T19:31:56Z",
+      "side": 1,
+      "message": "lgtm\n",
       "revId": "081f8e586faf4af4543b7703fec1a9ae7df05f68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
