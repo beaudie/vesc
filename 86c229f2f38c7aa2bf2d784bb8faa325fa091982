@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa18a94_6173c2e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-18T15:07:05Z",
+      "side": 1,
+      "message": "LGTM, but Tim refactored this code most recently.  I\u0027m again hoping these changes are passing your local MEC tests.  Maybe best to run them with a variety of start/end frames.",
+      "revId": "86c229f2f38c7aa2bf2d784bb8faa325fa091982",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
