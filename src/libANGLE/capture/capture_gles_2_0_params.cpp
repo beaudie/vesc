@@ -704,7 +704,11 @@ void CaptureTexImage2D_pixels(const State &glState,
     (void)internalFormatInfo.computeSkipBytes(type, srcRowPitch, srcDepthPitch, unpack, false,
                                               &srcSkipBytes);
 
-    size_t captureSize = srcRowPitch * height + srcSkipBytes;
+    // For the last row of pixels, we don't round up to the unpack alignment. This often affects
+    // 1x1 sized textures because they may be 1 or 2 bytes wide with an alignment is 4 bytes.
+    size_t allRowSizeMinusLastRowSize = srcRowPitch * (height - 1);
+    size_t lastRowSize                = width * internalFormatInfo.pixelBytes;
+    size_t captureSize                = allRowSizeMinusLastRowSize + lastRowSize + srcSkipBytes;
     CaptureMemory(pixels, captureSize, paramCapture);
 }
 
