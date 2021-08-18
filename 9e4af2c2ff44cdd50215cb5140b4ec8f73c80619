@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecfa5fb3_5c14fd33",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3247,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-18T21:12:49Z",
+      "side": 1,
+      "message": "Should we restore the original alignment afterwards to avoid side-effects?",
+      "range": {
+        "startLine": 3247,
+        "startChar": 0,
+        "endLine": 3247,
+        "endChar": 42
+      },
+      "revId": "9e4af2c2ff44cdd50215cb5140b4ec8f73c80619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13c188bf_907ea6a2",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3249,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-18T21:12:49Z",
+      "side": 1,
+      "message": "remove?",
+      "range": {
+        "startLine": 3249,
+        "startChar": 0,
+        "endLine": 3249,
+        "endChar": 37
+      },
+      "revId": "9e4af2c2ff44cdd50215cb5140b4ec8f73c80619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8296295b_19f83dd8",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3329,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-18T21:12:49Z",
+      "side": 1,
+      "message": "nit: enum indexes would be more descriptive than numbers",
+      "range": {
+        "startLine": 3329,
+        "startChar": 0,
+        "endLine": 3329,
+        "endChar": 46
+      },
+      "revId": "9e4af2c2ff44cdd50215cb5140b4ec8f73c80619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "238786ec_0f42fd21",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3360,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-18T21:12:49Z",
+      "side": 1,
+      "message": "Does it make sense to change \"continue\" to \"return\"?",
+      "range": {
+        "startLine": 3351,
+        "startChar": 0,
+        "endLine": 3360,
+        "endChar": 0
+      },
+      "revId": "9e4af2c2ff44cdd50215cb5140b4ec8f73c80619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1a55c10_4037a910",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3368,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-18T21:12:49Z",
+      "side": 1,
+      "message": "Wanted to double-check my understanding of GL here.\nThese parameters would not affect how mipmap levels are populated in FillLevel, right? So the order doesn\u0027t matter here?",
+      "range": {
+        "startLine": 3364,
+        "startChar": 0,
+        "endLine": 3368,
+        "endChar": 72
+      },
+      "revId": "9e4af2c2ff44cdd50215cb5140b4ec8f73c80619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
