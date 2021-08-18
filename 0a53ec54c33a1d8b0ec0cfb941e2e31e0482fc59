@@ -16,6 +16,69 @@
       "message": "@Geoff and @Jamie, Aditya added a test with the change. If it looks good to you, I\u0027ll submit his change to the queue.",
       "revId": "0a53ec54c33a1d8b0ec0cfb941e2e31e0482fc59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "110ea727_ea64f63e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T11:07:55Z",
+      "side": 1,
+      "message": "LGTM with two small nits.",
+      "revId": "0a53ec54c33a1d8b0ec0cfb941e2e31e0482fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d541bd41_4d80be3e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T11:07:55Z",
+      "side": 1,
+      "message": "nit: please comment before each new test.",
+      "range": {
+        "startLine": 2654,
+        "startChar": 0,
+        "endLine": 2654,
+        "endChar": 6
+      },
+      "revId": "0a53ec54c33a1d8b0ec0cfb941e2e31e0482fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "999a908d_3705c509",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2656,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T11:07:55Z",
+      "side": 1,
+      "message": "nit: please use the RAII types (GLTexture). You can use .reset to force a delete.",
+      "range": {
+        "startLine": 2656,
+        "startChar": 4,
+        "endLine": 2656,
+        "endChar": 11
+      },
+      "revId": "0a53ec54c33a1d8b0ec0cfb941e2e31e0482fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
