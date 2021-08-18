@@ -16,6 +16,92 @@
       "message": "PTAL\n\nI removed the previous +1/+2 since this is essentially a rewrite of the previous CL to fix the underlying issue with ANGLE\u0027s EGL Display/Context implementation.   This also uncovered multiple EGL test bugs.",
       "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b2cf997_27eec0d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T19:53:54Z",
+      "side": 1,
+      "message": "LGTM, please clear this with Geoff before landing. I\u0027m not sure what interactions this could mess with if we\u0027re changing how we internally makeCurrent. This stuff sometimes isn\u0027t very easily testable.",
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "135c8d7c_4991b3cf",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T19:53:54Z",
+      "side": 1,
+      "message": "nit: suggest you make this named something like initializeGlslangRefCount or Counter",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 24
+      },
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc0676b_e54533cb",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T19:53:54Z",
+      "side": 1,
+      "message": "nit: suggest we defend against overflow (pedantic)",
+      "range": {
+        "startLine": 933,
+        "startChar": 6,
+        "endLine": 933,
+        "endChar": 26
+      },
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3712f149_e1a826dc",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T19:53:54Z",
+      "side": 1,
+      "message": "nit: suggest we defend against negative numbers.",
+      "range": {
+        "startLine": 938,
+        "startChar": 6,
+        "endLine": 938,
+        "endChar": 26
+      },
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

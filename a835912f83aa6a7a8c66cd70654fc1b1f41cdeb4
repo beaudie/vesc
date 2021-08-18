@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a342d99_d6048439",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-18T19:53:54Z",
+      "side": 0,
+      "message": "nit: just make sure we aren\u0027t doing extra work on redundant makeCurrent calls. We probably aren\u0027t just want to make sure you\u0027re aware.",
+      "range": {
+        "startLine": 641,
+        "startChar": 8,
+        "endLine": 641,
+        "endChar": 18
+      },
+      "revId": "a835912f83aa6a7a8c66cd70654fc1b1f41cdeb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
