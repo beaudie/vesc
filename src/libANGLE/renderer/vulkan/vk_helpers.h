@@ -1527,6 +1527,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                 const MemoryProperties &memoryProperties,
                                 const gl::Extents &glExtents,
                                 const Format &format,
+                                angle::FormatID actualFormatID,
                                 VkImageUsageFlags usage,
                                 uint32_t layerCount);
     // Create an image for staging purposes.  Used by:
@@ -1539,6 +1540,7 @@ class ImageHelper final : public Resource, public angle::Subject
                               VkImageType imageType,
                               const VkExtent3D &extents,
                               const Format &format,
+                              angle::FormatID actualFormatID,
                               GLint samples,
                               VkImageUsageFlags usage,
                               uint32_t mipLevels,
@@ -1682,6 +1684,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                              GLenum type,
                                              const uint8_t *pixels,
                                              const Format &vkFormat,
+                                             bool renderable,
                                              const GLuint inputRowPitch,
                                              const GLuint inputDepthPitch,
                                              const GLuint inputSkipBytes);
@@ -1695,7 +1698,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                          DynamicBuffer *stagingBufferOverride,
                                          GLenum type,
                                          const uint8_t *pixels,
-                                         const Format &vkFormat);
+                                         const Format &vkFormat,
+                                         bool renderable);
 
     angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
                                                    size_t allocationSize,
@@ -1711,6 +1715,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                                         const gl::Offset &dstOffset,
                                                         const gl::Extents &dstExtent,
                                                         const gl::InternalFormat &formatInfo,
+                                                        bool renderable,
                                                         FramebufferVk *framebufferVk,
                                                         DynamicBuffer *stagingBufferOverride);
 
@@ -1920,6 +1925,9 @@ class ImageHelper final : public Resource, public angle::Subject
                                           uint32_t layerIndex,
                                           uint32_t layerCount);
 
+    // Whether there are any updates in [start, end).
+    bool hasStagedUpdatesInLevels(gl::LevelIndex levelStart, gl::LevelIndex levelEnd) const;
+
   private:
     enum class UpdateSource
     {
@@ -2028,8 +2036,6 @@ class ImageHelper final : public Resource, public angle::Subject
 
     void appendSubresourceUpdate(gl::LevelIndex level, SubresourceUpdate &&update);
     void prependSubresourceUpdate(gl::LevelIndex level, SubresourceUpdate &&update);
-    // Whether there are any updates in [start, end).
-    bool hasStagedUpdatesInLevels(gl::LevelIndex levelStart, gl::LevelIndex levelEnd) const;
 
     // Used only for assertions, these functions verify that SubresourceUpdate::image references
     // have the correct ref count.  This is to prevent accidental leaks.

@@ -3980,10 +3980,10 @@ angle::Result ImageHelper::init(Context *context,
                                 bool isRobustResourceInitEnabled,
                                 bool hasProtectedContent)
 {
-    return initExternal(context, textureType, extents, format, format.actualImageFormatID, samples,
-                        usage, kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, firstLevel,
-                        mipLevels, layerCount, isRobustResourceInitEnabled, nullptr,
-                        hasProtectedContent);
+    return initExternal(
+        context, textureType, extents, format, format.getActualRenderableImageFormatID(), samples,
+        usage, kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, firstLevel, mipLevels,
+        layerCount, isRobustResourceInitEnabled, nullptr, hasProtectedContent);
 }
 
 angle::Result ImageHelper::initMSAASwapchain(Context *context,
@@ -3999,10 +3999,10 @@ angle::Result ImageHelper::initMSAASwapchain(Context *context,
                                              bool isRobustResourceInitEnabled,
                                              bool hasProtectedContent)
 {
-    ANGLE_TRY(initExternal(context, textureType, extents, format, format.actualImageFormatID,
-                           samples, usage, kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr,
-                           firstLevel, mipLevels, layerCount, isRobustResourceInitEnabled, nullptr,
-                           hasProtectedContent));
+    ANGLE_TRY(initExternal(
+        context, textureType, extents, format, format.getActualRenderableImageFormatID(), samples,
+        usage, kVkImageCreateFlagsNone, ImageLayout::Undefined, nullptr, firstLevel, mipLevels,
+        layerCount, isRobustResourceInitEnabled, nullptr, hasProtectedContent));
     if (rotatedAspectRatio)
     {
         std::swap(mExtents.width, mExtents.height);
@@ -4059,17 +4059,17 @@ angle::Result ImageHelper::initExternal(Context *context,
     bool imageFormatListEnabled                        = false;
     RendererVk *rendererVk                             = context->getRenderer();
     VkImageFormatListCreateInfoKHR imageFormatListInfo = {};
-    angle::FormatID imageFormat                        = format.actualImageFormatID;
-    angle::FormatID additionalFormat                   = format.actualImageFormat().isSRGB
-                                           ? ConvertToLinear(imageFormat)
-                                           : ConvertToSRGB(imageFormat);
+    const angle::Format &actualFormat                  = angle::Format::Get(mActualFormatID);
+    VkFormat actualVkFormat                            = GetVkFormatFromFormatID(mActualFormatID);
+    angle::FormatID additionalFormat =
+        actualFormat.isSRGB ? ConvertToLinear(mActualFormatID) : ConvertToSRGB(mActualFormatID);
     constexpr uint32_t kImageListFormatCount = 2;
     VkFormat imageListFormats[kImageListFormatCount];
-    imageListFormats[0] = vk::GetVkFormatFromFormatID(imageFormat);
+    imageListFormats[0] = vk::GetVkFormatFromFormatID(mActualFormatID);
     imageListFormats[1] = vk::GetVkFormatFromFormatID(additionalFormat);
 
     if (rendererVk->getFeatures().supportsImageFormatList.enabled &&
-        rendererVk->haveSameFormatFeatureBits(imageFormat, additionalFormat))
+        rendererVk->haveSameFormatFeatureBits(mActualFormatID, additionalFormat))
     {
         imageFormatListEnabled = true;
 
@@ -4091,7 +4091,7 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     mYuvConversionSampler.reset();
     mExternalFormat = 0;
-    if (format.actualImageFormat().isYUV)
+    if (actualFormat.isYUV)
     {
         // The Vulkan spec states: If sampler is used and the VkFormat of the image is a
         // multi-planar format, the image must have been created with
@@ -4106,8 +4106,7 @@ angle::Result ImageHelper::initExternal(Context *context,
             VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT;
 
         VkFormatFeatureFlags supportedChromaSubSampleFeatureBits =
-            rendererVk->getImageFormatFeatureBits(format.actualImageFormatID,
-                                                  kChromaSubSampleFeatureBits);
+            rendererVk->getImageFormatFeatureBits(mActualFormatID, kChromaSubSampleFeatureBits);
 
         VkChromaLocation supportedLocation = ((supportedChromaSubSampleFeatureBits &
                                                VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
@@ -4117,7 +4116,7 @@ angle::Result ImageHelper::initExternal(Context *context,
         // Create the VkSamplerYcbcrConversion to associate with image views and samplers
         VkSamplerYcbcrConversionCreateInfo yuvConversionInfo = {};
         yuvConversionInfo.sType         = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO;
-        yuvConversionInfo.format        = format.actualImageVkFormat();
+        yuvConversionInfo.format        = actualVkFormat;
         yuvConversionInfo.xChromaOffset = supportedLocation;
         yuvConversionInfo.yChromaOffset = supportedLocation;
         yuvConversionInfo.ycbcrModel    = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
@@ -4125,8 +4124,7 @@ angle::Result ImageHelper::initExternal(Context *context,
         yuvConversionInfo.chromaFilter  = VK_FILTER_NEAREST;
 
         ANGLE_TRY(rendererVk->getYuvConversionCache().getYuvConversion(
-            context, format.actualImageVkFormat(), false, yuvConversionInfo,
-            &mYuvConversionSampler));
+            context, actualVkFormat, false, yuvConversionInfo, &mYuvConversionSampler));
     }
 
     if (hasProtectedContent)
@@ -4139,7 +4137,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.pNext     = (imageFormatListEnabled) ? &imageFormatListInfo : externalImageCreateInfo;
     imageInfo.flags     = mCreateFlags;
     imageInfo.imageType = mImageType;
-    imageInfo.format    = format.actualImageVkFormat();
+    imageInfo.format    = actualVkFormat;
     imageInfo.extent    = mExtents;
     imageInfo.mipLevels = mLevelCount;
     imageInfo.arrayLayers           = mLayerCount;
@@ -4560,7 +4558,7 @@ void ImageHelper::init2DWeakReference(Context *context,
     mRotatedAspectRatio = rotatedAspectRatio;
     mFormat             = &format;
     mIntendedFormatID   = format.intendedFormatID;
-    mActualFormatID     = format.actualImageFormatID;
+    mActualFormatID     = format.getActualRenderableImageFormatID();
     mSamples            = std::max(samples, 1);
     mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
     mCurrentLayout      = ImageLayout::Undefined;
@@ -4577,13 +4575,14 @@ angle::Result ImageHelper::init2DStaging(Context *context,
                                          const MemoryProperties &memoryProperties,
                                          const gl::Extents &glExtents,
                                          const Format &format,
+                                         angle::FormatID actualFormatID,
                                          VkImageUsageFlags usage,
                                          uint32_t layerCount)
 {
     gl_vk::GetExtent(glExtents, &mExtents);
 
     return initStaging(context, hasProtectedContent, memoryProperties, VK_IMAGE_TYPE_2D, mExtents,
-                       format, 1, usage, 1, layerCount);
+                       format, actualFormatID, 1, usage, 1, layerCount);
 }
 
 angle::Result ImageHelper::initStaging(Context *context,
@@ -4592,6 +4591,7 @@ angle::Result ImageHelper::initStaging(Context *context,
                                        VkImageType imageType,
                                        const VkExtent3D &extents,
                                        const Format &format,
+                                       angle::FormatID actualFormatID,
                                        GLint samples,
                                        VkImageUsageFlags usage,
                                        uint32_t mipLevels,
@@ -4606,7 +4606,7 @@ angle::Result ImageHelper::initStaging(Context *context,
     mRotatedAspectRatio = false;
     mFormat             = &format;
     mIntendedFormatID   = format.intendedFormatID;
-    mActualFormatID     = format.actualImageFormatID;
+    mActualFormatID     = actualFormatID;
     mSamples            = std::max(samples, 1);
     mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
     mLayerCount         = layerCount;
@@ -4623,7 +4623,7 @@ angle::Result ImageHelper::initStaging(Context *context,
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.flags                 = hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : 0;
     imageInfo.imageType             = mImageType;
-    imageInfo.format                = format.actualImageVkFormat();
+    imageInfo.format                = GetVkFormatFromFormatID(mActualFormatID);
     imageInfo.extent                = mExtents;
     imageInfo.mipLevels             = mLevelCount;
     imageInfo.arrayLayers           = mLayerCount;
@@ -5422,11 +5422,25 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                       GLenum type,
                                                       const uint8_t *pixels,
                                                       const Format &vkFormat,
+                                                      bool renderable,
                                                       const GLuint inputRowPitch,
                                                       const GLuint inputDepthPitch,
                                                       const GLuint inputSkipBytes)
 {
-    const angle::Format &storageFormat = vkFormat.actualImageFormat();
+    const angle::Format &storageFormat = vkFormat.getActualImageFormat(renderable);
+
+    if (!mFormat)
+    {
+        // If we are staging something, we are using mActualFormatID. Thus we must remember what
+        // format the source pixels are in so that we know how to pull out data when needed.
+        mFormat         = &vkFormat;
+        mActualFormatID = vkFormat.getActualImageFormatID(renderable);
+    }
+    else
+    {
+        ASSERT(mFormat == &vkFormat);
+        ASSERT(mActualFormatID == vkFormat.getActualImageFormatID(renderable));
+    }
 
     size_t outputRowPitch;
     size_t outputDepthPitch;
@@ -5435,7 +5449,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     uint32_t bufferImageHeight;
     size_t allocationSize;
 
-    LoadImageFunctionInfo loadFunctionInfo = vkFormat.textureLoadFunctions(type);
+    LoadImageFunctionInfo loadFunctionInfo = vkFormat.getTextureLoadFunction(renderable, type);
     LoadImageFunction stencilLoadFunction  = nullptr;
 
     if (storageFormat.isBlock)
@@ -5539,7 +5553,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                   outputDepthPitch);
 
     // YUV formats need special handling.
-    if (vkFormat.actualImageFormat().isYUV)
+    if (storageFormat.isYUV)
     {
         gl::YuvFormatInfo yuvInfo(formatInfo.internalFormat, glExtents);
 
@@ -5569,7 +5583,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     }
 
     VkBufferImageCopy copy         = {};
-    VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.actualImageFormat());
+    VkImageAspectFlags aspectFlags = GetFormatAspectFlags(storageFormat);
 
     copy.bufferOffset      = stagingOffset;
     copy.bufferRowLength   = bufferRowLength;
@@ -5809,7 +5823,8 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                                   DynamicBuffer *stagingBufferOverride,
                                                   GLenum type,
                                                   const uint8_t *pixels,
-                                                  const Format &vkFormat)
+                                                  const Format &vkFormat,
+                                                  bool renderable)
 {
     GLuint inputRowPitch   = 0;
     GLuint inputDepthPitch = 0;
@@ -5818,7 +5833,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                   &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
 
     ANGLE_TRY(stageSubresourceUpdateImpl(contextVk, index, glExtents, offset, formatInfo, unpack,
-                                         stagingBufferOverride, type, pixels, vkFormat,
+                                         stagingBufferOverride, type, pixels, vkFormat, renderable,
                                          inputRowPitch, inputDepthPitch, inputSkipBytes));
 
     return angle::Result::Continue;
@@ -5871,6 +5886,7 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     const gl::Offset &dstOffset,
     const gl::Extents &dstExtent,
     const gl::InternalFormat &formatInfo,
+    bool renderable,
     FramebufferVk *framebufferVk,
     DynamicBuffer *stagingBufferOverride)
 {
@@ -5896,8 +5912,9 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     RendererVk *renderer = contextVk->getRenderer();
 
     const Format &vkFormat             = renderer->getFormat(formatInfo.sizedInternalFormat);
-    const angle::Format &storageFormat = vkFormat.actualImageFormat();
-    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(formatInfo.type);
+    const angle::Format &storageFormat = vkFormat.getActualImageFormat(renderable);
+    LoadImageFunctionInfo loadFunction =
+        vkFormat.getTextureLoadFunction(renderable, formatInfo.type);
 
     size_t outputRowPitch   = storageFormat.pixelBytes * clippedRectangle.width;
     size_t outputDepthPitch = outputRowPitch * clippedRectangle.height;
@@ -6936,7 +6953,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     {
         ANGLE_TRY(resolvedImage.get().init2DStaging(
             contextVk, contextVk->hasProtectedContent(), renderer->getMemoryProperties(),
-            gl::Extents(area.width, area.height, 1), *mFormat,
+            gl::Extents(area.width, area.height, 1), *mFormat, mActualFormatID,
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
         resolvedImage.get().retain(&contextVk->getResourceUseList());
     }
