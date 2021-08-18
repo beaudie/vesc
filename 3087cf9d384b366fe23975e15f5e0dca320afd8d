@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "323b6d2a_ab35e45b",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-18T21:48:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "135c8d7c_4991b3cf",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 24
+      },
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bc0676b_e54533cb",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9a96a37_315bc708",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-18T21:48:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bc0676b_e54533cb",
+      "range": {
+        "startLine": 933,
+        "startChar": 6,
+        "endLine": 933,
+        "endChar": 26
+      },
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3712f149_e1a826dc",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-08-18T19:53:54Z",
       "side": 1,
       "message": "nit: suggest we defend against negative numbers.",
+      "range": {
+        "startLine": 938,
+        "startChar": 6,
+        "endLine": 938,
+        "endChar": 26
+      },
+      "revId": "3087cf9d384b366fe23975e15f5e0dca320afd8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e978ae56_adb7cde1",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-18T21:48:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3712f149_e1a826dc",
       "range": {
         "startLine": 938,
         "startChar": 6,

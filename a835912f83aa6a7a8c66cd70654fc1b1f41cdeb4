@@ -22,6 +22,30 @@
       },
       "revId": "a835912f83aa6a7a8c66cd70654fc1b1f41cdeb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf212653_6d344acd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-18T21:48:33Z",
+      "side": 0,
+      "message": "Context::onDestroy() is only called when the instance of the Context is about to be freed/deleted by Display::releaseContext(), so there\u0027s no way for this Context to be used in any following eglMakeCurrent() calls, since it doesn\u0027t exist anymore after Display::releaseContext() completes.\n\nTo handle that correctly, we need to release all of the resources it may hold onto before it\u0027s gone forever.   For example, with the Vulkan backend there may still be commands in flight for this context that ContextVk::onUnMakeCurrent() needs to flush before the RendererVk is destroyed by DisplayVk::terminate(), if this is the last Context owned by the Display.",
+      "parentUuid": "0a342d99_d6048439",
+      "range": {
+        "startLine": 641,
+        "startChar": 8,
+        "endLine": 641,
+        "endChar": 18
+      },
+      "revId": "a835912f83aa6a7a8c66cd70654fc1b1f41cdeb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
