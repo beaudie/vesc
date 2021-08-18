@@ -231,16 +231,20 @@ size_t GetValidImageCopyBufferAlignment(angle::FormatID intendedFormatID,
                : GetImageCopyBufferAlignment(actualFormatID);
 }
 
-bool Format::hasEmulatedImageChannels() const
+bool HasEmulatedImageChannels(const angle::Format &angleFmt, const angle::Format &textureFmt)
 {
-    const angle::Format &angleFmt   = intendedFormat();
-    const angle::Format &textureFmt = actualImageFormat();
-
     return (angleFmt.alphaBits == 0 && textureFmt.alphaBits > 0) ||
            (angleFmt.blueBits == 0 && textureFmt.blueBits > 0) ||
            (angleFmt.greenBits == 0 && textureFmt.greenBits > 0) ||
            (angleFmt.depthBits == 0 && textureFmt.depthBits > 0) ||
            (angleFmt.stencilBits == 0 && textureFmt.stencilBits > 0);
+}
+
+bool Format::hasEmulatedImageChannels() const
+{
+    const angle::Format &angleFmt   = intendedFormat();
+    const angle::Format &textureFmt = actualImageFormat();
+    return HasEmulatedImageChannels(angleFmt, textureFmt);
 }
 
 bool operator==(const Format &lhs, const Format &rhs)
