@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd2ff2a5_2339ba28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-08-18T20:14:45Z",
+      "side": 1,
+      "message": "Added the comment to the test and used RAII type instead.",
+      "revId": "4ede012f6bf2e3e9f30e51e72f34d95d6e8e0010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

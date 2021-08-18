@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d488c8_ee639d9d",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2654,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-08-18T20:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d541bd41_4d80be3e",
+      "range": {
+        "startLine": 2654,
+        "startChar": 0,
+        "endLine": 2654,
+        "endChar": 6
+      },
+      "revId": "0a53ec54c33a1d8b0ec0cfb941e2e31e0482fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "999a908d_3705c509",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-08-18T11:07:55Z",
       "side": 1,
       "message": "nit: please use the RAII types (GLTexture). You can use .reset to force a delete.",
+      "range": {
+        "startLine": 2656,
+        "startChar": 4,
+        "endLine": 2656,
+        "endChar": 11
+      },
+      "revId": "0a53ec54c33a1d8b0ec0cfb941e2e31e0482fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe74bcf2_a15db2d1",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2656,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-08-18T20:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "999a908d_3705c509",
       "range": {
         "startLine": 2656,
         "startChar": 4,
