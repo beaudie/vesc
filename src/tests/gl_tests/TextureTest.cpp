@@ -3310,9 +3310,6 @@ void FillLevel(GLint level,
 // conformance/textures/misc/texture-size.html does
 TEST_P(Texture2DTest, TextureSize)
 {
-    // http://anglebug.com/5982
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsTSan() && (IsOpenGL() || IsVulkan()));
-
     const GLColor kNewMipColors[] = {
         GLColor::green,  GLColor::red,     GLColor::blue,
         GLColor::yellow, GLColor::magenta, GLColor::cyan,
@@ -3339,18 +3336,21 @@ void main()
 {
     gl_FragColor = textureCube(tex, texcoord);
 })";
-    GLuint programCubeMap = CompileProgram(kVS, kFS);
-    ASSERT_NE(0u, programCubeMap);
+    ANGLE_GL_PROGRAM(programCubeMap, kVS, kFS);
+    GLint textureCubeUniformLocation = glGetUniformLocation(programCubeMap, "tex");
+    ASSERT_NE(-1, textureCubeUniformLocation);
     ASSERT_GL_NO_ERROR();
 
-    GLint max2DSize, maxCubeMapSize;
-    glGetTexParameteriv(GL_TEXTURE_2D, GL_MAX_TEXTURE_SIZE, &max2DSize);
-    glGetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_MAX_CUBE_MAP_TEXTURE_SIZE, &maxCubeMapSize);
-    // Assuming 2048x2048xRGBA (22meg with mips) will run on all WebGL platforms
+    GLint max2DSize = 0;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max2DSize);
+    GLint maxCubeMapSize = 0;
+    glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &maxCubeMapSize);
+    // Assuming 2048x2048xRGBA (22 mb with mips) will run on all WebGL platforms
     GLint max2DSquareSize = std::min(max2DSize, 2048);
-    // I'd prefer this to be 2048 but that's 16meg x 6 faces or 128meg (with mips)
-    // 1024 is 33.5 meg (with mips)
+    // I'd prefer this to be 2048 but that's 16 mb x 6 faces or 128 mb (with mips)
+    // 1024 is 33.5 mb (with mips)
     maxCubeMapSize = std::min(maxCubeMapSize, 1024);
+    ASSERT_GL_NO_ERROR();
 
     GLint power = 0;
     GLint size  = std::pow(2, power);
@@ -3360,8 +3360,9 @@ void main()
     {
         for (int i = 0; i < 4; i++)
         {
-            bool cubeMap     = i == 3 ? true : false;
+            bool cubeMap     = i == 3;
             GLenum texTarget = cubeMap ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D;
+            GLuint program   = cubeMap ? programCubeMap : mProgram;
 
             switch (i)
             {
@@ -3390,38 +3391,42 @@ void main()
                 continue;
             }
 
-            GLuint texture;
-            glGenTextures(1, &texture);
-
+            GLTexture texture;
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(texTarget, texture);
+            FillLevel(0, texWidth, texHeight, kNewMipColors[colorCount], cubeMap, false);
             glTexParameteri(texTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(texTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(texTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(texTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            FillLevel(0, texWidth, texHeight, kNewMipColors[colorCount], cubeMap, false);
+            ASSERT_GL_NO_ERROR();
 
+            glClear(GL_COLOR_BUFFER_BIT);
+            ASSERT_GL_NO_ERROR();
+
+            glUseProgram(program);
             if (cubeMap)
             {
-                glUseProgram(programCubeMap);
+                glUniform1i(textureCubeUniformLocation, 0);
             }
             else
             {
-                glUseProgram(mProgram);
+                glUniform1i(mTexture2DUniformLocation, 0);
             }
-            glUniform1i(mTexture2DUniformLocation, 0);
 
-            glClear(GL_COLOR_BUFFER_BIT);
-            drawQuad(mProgram, "position", 1.0f);
+            drawQuad(program, "position", 1.0f);
+            ASSERT_GL_NO_ERROR();
             EXPECT_PIXEL_COLOR_EQ(0, 0, kNewMipColors[colorCount]);
 
             colorCount = (colorCount + 1) % sizeof(kNewMipColors);
             FillLevel(0, texWidth, texHeight, kNewMipColors[colorCount], cubeMap, false);
             glGenerateMipmap(texTarget);
-            EXPECT_GL_NO_ERROR();
+            ASSERT_GL_NO_ERROR();
 
             glTexParameteri(texTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
             glClear(GL_COLOR_BUFFER_BIT);
-            drawQuad(mProgram, "position", 1.0f);
+            drawQuad(program, "position", 1.0f);
+            ASSERT_GL_NO_ERROR();
             EXPECT_PIXEL_COLOR_EQ(0, 0, kNewMipColors[colorCount]);
 
             colorCount = (colorCount + 1) % sizeof(kNewMipColors);
@@ -3429,11 +3434,9 @@ void main()
             glGenerateMipmap(texTarget);
 
             glClear(GL_COLOR_BUFFER_BIT);
-            drawQuad(mProgram, "position", 1.0f);
+            drawQuad(program, "position", 1.0f);
+            ASSERT_GL_NO_ERROR();
             EXPECT_PIXEL_COLOR_EQ(0, 0, kNewMipColors[colorCount]);
-            EXPECT_GL_NO_ERROR();
-
-            glDeleteTextures(1, &texture);
         }
 
         ++power;
