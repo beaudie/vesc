@@ -1410,6 +1410,8 @@ bool FormatHasNecessaryFeature(RendererVk *renderer,
                                VkImageTiling tilingMode,
                                VkFormatFeatureFlags featureBits);
 
+bool IsImageFormatCompatible(angle::FormatID srcFormatID, angle::FormatID dstFormatID);
+
 bool CanCopyWithTransfer(RendererVk *renderer,
                          angle::FormatID srcFormatID,
                          VkImageTiling srcTilingMode,
@@ -1684,6 +1686,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                              GLenum type,
                                              const uint8_t *pixels,
                                              const Format &vkFormat,
+                                             bool renderable,
                                              const GLuint inputRowPitch,
                                              const GLuint inputDepthPitch,
                                              const GLuint inputSkipBytes);
@@ -1697,7 +1700,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                          DynamicBuffer *stagingBufferOverride,
                                          GLenum type,
                                          const uint8_t *pixels,
-                                         const Format &vkFormat);
+                                         const Format &vkFormat,
+                                         bool renderable);
 
     angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
                                                    size_t allocationSize,
@@ -1705,7 +1709,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    const gl::Extents &glExtents,
                                                    const gl::Offset &offset,
                                                    uint8_t **destData,
-                                                   DynamicBuffer *stagingBufferOverride);
+                                                   DynamicBuffer *stagingBufferOverride,
+                                                   angle::FormatID formatID);
 
     angle::Result stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
                                                         const gl::ImageIndex &index,
@@ -1713,6 +1718,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                                         const gl::Offset &dstOffset,
                                                         const gl::Extents &dstExtent,
                                                         const gl::InternalFormat &formatInfo,
+                                                        bool renderable,
                                                         FramebufferVk *framebufferVk,
                                                         DynamicBuffer *stagingBufferOverride);
 
@@ -1921,6 +1927,9 @@ class ImageHelper final : public Resource, public angle::Subject
     void restoreSubresourceStencilContent(gl::LevelIndex level,
                                           uint32_t layerIndex,
                                           uint32_t layerCount);
+    bool hasStagedUpdatesInLevelsWithMissMatchedFormat(gl::LevelIndex levelStart,
+                                                       gl::LevelIndex levelEnd,
+                                                       angle::FormatID formatID) const;
 
   private:
     enum class UpdateSource
@@ -1947,6 +1956,7 @@ class ImageHelper final : public Resource, public angle::Subject
     {
         BufferHelper *bufferHelper;
         VkBufferImageCopy copyRegion;
+        angle::FormatID formatID;
     };
     struct ImageUpdate
     {
@@ -1957,7 +1967,9 @@ class ImageHelper final : public Resource, public angle::Subject
     {
         SubresourceUpdate();
         ~SubresourceUpdate();
-        SubresourceUpdate(BufferHelper *bufferHelperIn, const VkBufferImageCopy &copyRegion);
+        SubresourceUpdate(BufferHelper *bufferHelperIn,
+                          const VkBufferImageCopy &copyRegion,
+                          angle::FormatID formatID);
         SubresourceUpdate(RefCounted<ImageHelper> *imageIn, const VkImageCopy &copyRegion);
         SubresourceUpdate(VkImageAspectFlags aspectFlags,
                           const VkClearValue &clearValue,

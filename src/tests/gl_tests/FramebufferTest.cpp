@@ -1095,6 +1095,29 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Test texture format fallback while it has staged updates.
+TEST_P(FramebufferTest_ES3, TexImageRGBA5551)
+{
+    GLuint blueTex2D;
+    glGenTextures(1, &blueTex2D);
+    glBindTexture(GL_TEXTURE_2D, blueTex2D);
+    std::vector<GLushort> bluePixels(16 * 16, 0x003F);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB5_A1, 16, 16, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1,
+                 bluePixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    ASSERT_GL_NO_ERROR();
+
+    // attach blue texture to FBO
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blueTex2D, 0);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    EXPECT_PIXEL_EQ(16 / 4, 16 / 4, 0, 0, 255, 255);
+}
+
 class FramebufferTest_ES31 : public ANGLETest
 {
   protected:
