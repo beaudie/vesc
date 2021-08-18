@@ -34,6 +34,24 @@
       "parentUuid": "70e1265f_4ec6e7ff",
       "revId": "5e9562350a47a99fa728b7cbba17e34db69fe8be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7267f03d_8f745faa",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5240,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-18T16:38:00Z",
+      "side": 1,
+      "message": "\u003e From what you\u0027re saying, the right fix is to ensure capture is active after runMEC.\n\nI think the better way to put it is that capture has to be active for any frame we are recording calls for, which your assert is now checking.\n\n\u003e Can you let me know if you\u0027re OK with proceeding with this CL with that fix in place? Done in latest patch set.\n\nLGTM",
+      "parentUuid": "e7e94383_53ede371",
+      "revId": "5e9562350a47a99fa728b7cbba17e34db69fe8be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
