@@ -1095,8 +1095,6 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
-<<<<<<< HEAD
-=======
 class FramebufferTestWithFormatFallback : public ANGLETest
 {
   protected:
@@ -1587,7 +1585,6 @@ TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_InCompatibleFormat)
     }
 }
 
->>>>>>> be0b24973 (Vulkan: Add tests for 16 bit texture format fallback)
 class FramebufferTest_ES31 : public ANGLETest
 {
   protected:
@@ -3875,3 +3872,4 @@ ANGLE_INSTANTIATE_TEST_ES3_AND(FramebufferTest_ES3,
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(FramebufferTest_ES31);
 ANGLE_INSTANTIATE_TEST_ES31(FramebufferTest_ES31);
+ANGLE_INSTANTIATE_TEST_ES3(FramebufferTestWithFormatFallback);
