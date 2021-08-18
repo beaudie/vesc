@@ -840,7 +840,8 @@ class SamplerDesc final
                 const gl::SamplerState &samplerState,
                 bool stencilMode,
                 uint64_t externalFormat,
-                angle::FormatID formatID);
+                angle::FormatID formatID,
+                bool renderable);
     ~SamplerDesc();
 
     SamplerDesc(const SamplerDesc &other);
@@ -850,7 +851,8 @@ class SamplerDesc final
                 const gl::SamplerState &samplerState,
                 bool stencilMode,
                 uint64_t externalFormat,
-                angle::FormatID formatID);
+                angle::FormatID formatID,
+                bool renderable);
     void reset();
     angle::Result init(ContextVk *contextVk, Sampler *sampler) const;
 
