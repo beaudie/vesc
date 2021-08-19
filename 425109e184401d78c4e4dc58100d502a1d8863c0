@@ -16,6 +16,23 @@
       "message": "There may be other ways to fix this, but seems like a reasonable approach.",
       "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0abae80c_fd7087ef",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T17:23:33Z",
+      "side": 1,
+      "message": "I\u0027m fine with this version, but my preference would be to move this check into Context::finish() and early out in there, so the Display (or previously FrameCapture) doesn\u0027t need to know these types of details.",
+      "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
