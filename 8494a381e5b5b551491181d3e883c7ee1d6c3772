@@ -22,6 +22,30 @@
       },
       "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "354c6444_a1f028dd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4160,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T17:15:36Z",
+      "side": 1,
+      "message": "From the GLES 3.2 spec:\n\n\u003e 16.2.2 Copying Between Images\n\u003e \n\u003e Slices of a two-dimensional array, cube map array, or three dimensional texture,\n\u003e or faces of a cube map texture are all compatible provided they share a compatible\n\u003e internal format, and multiple slices or faces may be copied between these objects\n\u003e with a single call by specifying the starting slice with srcZ and dstZ, and the number\n\u003e of slices to be copied with srcDepth. Cubemap textures always have six faces\n\u003e which are selected by a zero-based face index, according to the order specified in\n\u003e table 8.20.\n\nSo, rather than assuming GL_TEXTURE_CUBE_MAP_POSITIVE_X, we need to instead determine the correct face based on the srcZ, dstZ, and srcDepth.",
+      "parentUuid": "5553fe91_2eef5e80",
+      "range": {
+        "startLine": 4160,
+        "startChar": 78,
+        "endLine": 4160,
+        "endChar": 97
+      },
+      "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
