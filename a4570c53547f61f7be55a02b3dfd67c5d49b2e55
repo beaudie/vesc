@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53131cfc_dabda8d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T18:22:33Z",
+      "side": 1,
+      "message": "It does, see the spec. :/\n\nhttps://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_type_2_10_10_10_REV.txt",
+      "parentUuid": "c0629ab9_410a82cb",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "a4570c53547f61f7be55a02b3dfd67c5d49b2e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d91750dc_32c993e9",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 6

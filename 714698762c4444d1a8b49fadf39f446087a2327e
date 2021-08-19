@@ -22,6 +22,30 @@
       },
       "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31a9d378_e86549f1",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T18:22:33Z",
+      "side": 0,
+      "message": "I don\u0027t think putting in a silent ceil is a good idea, in the interests of not auto-correcting programming errors. I can make a change to trap any non-rounded numbers, but I don\u0027t want to dig into unrelated work too deeply. WDYT of landing this now as-is?",
+      "parentUuid": "e934a4ec_1ba2efbd",
+      "range": {
+        "startLine": 774,
+        "startChar": 28,
+        "endLine": 774,
+        "endChar": 65
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
