@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ac8cabd_416c7570",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-19T00:01:25Z",
+      "side": 1,
+      "message": "Hi Gregg - do you have voting privileges on CLs?\n",
+      "revId": "ebbab47cc987560c90c7d87f4390566401a45907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
