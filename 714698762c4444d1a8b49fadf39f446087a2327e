@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a953f666_6f200653",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:06:42Z",
+      "side": 1,
+      "message": "nit: This is more traditionally referred to as a buffer overflow, while OOM means \"out of memory\", i.e you couldn\u0027t allocate more memory (rather than accessing invalid memory).",
+      "range": {
+        "startLine": 7,
+        "startChar": 29,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19111e46_a527290a",
         "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
         "patchSetId": 6
@@ -14,6 +37,30 @@
       "writtenOn": "2021-08-19T16:13:10Z",
       "side": 1,
       "message": "I don\u0027t normally like extra variables, but can you update the math below to match what you are describing?  One variable for the last row, one for the other rows, then add them together? i.e.\n\n mostRowSize \u003d (srcRowPitch * (height - 1));\n lastRowSize \u003d  width * internalFormatInfo.pixelBytes;\n captureSize \u003d mostRowSize + lastRowSize + srcSkipBytes;",
+      "range": {
+        "startLine": 707,
+        "startChar": 0,
+        "endLine": 708,
+        "endChar": 50
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1463bd35_1ebbc34f",
+        "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:06:42Z",
+      "side": 1,
+      "message": "+1\n\nIf nothing else, some comments explaining what each part of the calculation mean, while it\u0027s all still fresh in your mind.",
+      "parentUuid": "19111e46_a527290a",
       "range": {
         "startLine": 707,
         "startChar": 0,
