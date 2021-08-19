@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ea780a6_cecd3cac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T03:13:37Z",
+      "side": 1,
+      "message": "I\u0027ll update this CL with an example of what the generated sequence looks like vs what the app sent down, but wanted to start the discussion on a couple points.",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98b4560f_622f21fa",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4709,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T03:13:37Z",
+      "side": 1,
+      "message": "Debatable whether this makes sense, to only serialize source when capture is enabled.  Since we can enable capture via GN args, there could be program binaries that would still be submitted given their format is still compatible.  Locally I\u0027ve been changing ANGLE_COMMIT_HASH which changes our binary format, so new binaries are created.\n\nWould there be big push back to enabling this all the time?",
+      "range": {
+        "startLine": 4709,
+        "startChar": 19,
+        "endLine": 4709,
+        "endChar": 79
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dc01820_27425a43",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T03:13:37Z",
+      "side": 1,
+      "message": "Commented this out locally so this will compile.  As the comment says, not clear why we need this.  In the ProgramBinary case (i.e. not the MEC case), we get the state by calling context-\u003egetState() [ref1] which returns a const gl:State\u0026.  We could potentially add a context-\u003egetStateForCapture() which would return a mutable state, but it isn\u0027t clear to me why we need to modify the state passed in.",
+      "range": {
+        "startLine": 1724,
+        "startChar": 0,
+        "endLine": 1724,
+        "endChar": 57
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f29d7959_6dc52426",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4560,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T03:13:37Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 4560,
+        "startChar": 35,
+        "endLine": 4560,
+        "endChar": 54
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
