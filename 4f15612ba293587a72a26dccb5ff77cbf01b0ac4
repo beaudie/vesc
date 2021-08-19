@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9a38d59_07750511",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T01:15:33Z",
+      "side": 1,
+      "message": "Done\n\nI remove this line.",
+      "parentUuid": "77afc220_23b424a7",
+      "range": {
+        "startLine": 219,
+        "startChar": 18,
+        "endLine": 219,
+        "endChar": 22
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d775e5f6_54315dc5",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab74f249_f8fbdbac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T01:15:33Z",
+      "side": 1,
+      "message": "Without this change, the following test fails:\n\n    dEQP.GLES31/functional_texture_texture_buffer_render_modify_as_vertex_texture_as_fragment_texture_bufferdata\n    \nHere is the stack trace:\n\nFATAL: vk_helpers.cpp:1036 (bufferWrite): \t! Assert failed in bufferWrite (../../src/libANGLE/renderer/vulkan/vk_helpers.cpp:1036): !usesBuffer(*buffer)\nNo results file specified.\n\nSignal 4 [Illegal instruction]:\nBacktrace:\nangle::PrintStackBacktrace() at crash_handler_posix.cpp:453\nangle::Handler(int) at crash_handler_posix.cpp:616\n__restore_rt at sigaction.c:?\ngl::LogMessage::~LogMessage() at debug.cpp:202\nrx::vk::CommandBufferHelper::bufferWrite(rx::ContextVk*, unsigned int, rx::vk::PipelineStage, rx::vk::AliasingMode, rx::vk::BufferHelper*) at vk_helpers.cpp:?\nrx::ContextVk::handleDirtyTexturesImpl(rx::vk::CommandBufferHelper*) at ContextVk.cpp:1544\nrx::ContextVk::handleDirtyGraphicsTextures(angle::BitSetT\u003c18ul, unsigned long, unsigned long\u003e::Iterator*, angle::BitSetT\u003c18ul, unsigned long, unsigned long\u003e) at ContextVk.cpp:1682\nrx::ContextVk::setupDraw(gl::Context const*, gl::PrimitiveMode, int, int, int, gl::DrawElementsType, void const*, angle::BitSetT\u003c18ul, unsigned long, unsigned long\u003e) at ContextVk.cpp:915\nrx::ContextVk::drawArrays(gl::Context const*, gl::PrimitiveMode, int, int) at ContextVk.cpp:2562\ngl::Context::drawArrays(gl::PrimitiveMode, int, int) at Context.inl.h:132\nGL_DrawArrays at entry_points_gles_2_0_autogen.cpp:1066\ndeqp::gls::(anonymous namespace)::renderGL(glu::RenderContext\u0026, deqp::gls::TextureBufferCaseUtil::RenderBits, unsigned int, int, glu::ShaderProgram\u0026, glu::TextureBuffer\u0026) at glsTextureBufferCase.cpp:634\n\nWe only want to add the buffer to the list once, and it has been added previously by ContextVk::handleDirtyTexturesImpl().   The loop is iterating through the  textureUnit values, and calling bufferWrite() for each active stage for each active texture.   For this specific test, the same buffer is bound as:\n\nvertex shader: texture unit 0\nfragment shader: texture unit 1\n\nThis means bufferWrite() is called for the same texture, but different shader stages, so we need to make sure the barriers are correct.\n\nWe can remove the check and continue adding the buffer to the list, since the list itself is purely bookkeeping (is the buffer used for read/write and getUsedBuffersCount()).   It\u0027s probably better to keep the check and only add it once though.",
+      "parentUuid": "d775e5f6_54315dc5",
+      "range": {
+        "startLine": 1036,
+        "startChar": 8,
+        "endLine": 1040,
+        "endChar": 12
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d6660b_2f063c36",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
@@ -77,6 +125,30 @@
       "writtenOn": "2021-08-16T17:06:50Z",
       "side": 1,
       "message": "I thought this needs to go through garbage collector? Otherwise, what if this is still not submitted and still in the mResourceUseList, and submit code will modofy mWriteUses after this has been reinited? My understanding is that you need to add a new API like collectShasredUseAndReinit(mWriteUse) and check if mWriteUse is in recorded commands then do std::move.",
+      "range": {
+        "startLine": 3666,
+        "startChar": 4,
+        "endLine": 3674,
+        "endChar": 15
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39d6d5a1_29c2b998",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T01:15:33Z",
+      "side": 1,
+      "message": "\u003e I thought this needs to go through garbage collector?\n\nIt can\u0027t, since that will double-free the Vulkan object when garbage.destroyIfComplete() is called for both mUse and mWriteUse.\n\n\u003e Otherwise, what if this is still not submitted and still in the mResourceUseList, and submit code will modify mWriteUses after this has been reinited?\n\nThis isn\u0027t the case due to the way ResourceUseList::add() is implemented:\n\n    ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse \u0026resourceUse)\n    {\n        SharedResourceUse newUse;\n        newUse.set(resourceUse);\n        mResourceUses.emplace_back(std::move(newUse));\n    }\n    \nThe mResourceUseList has a new copy of the SharedResourceUse, not the actual mWriteUse that\u0027s owned by the BufferHelper.   This means when mWriteUse.release() is called and SharedResourceUse::mUse is deleted() and reallocated with SharedResourceUse::init(), the mResourceUseList is not pointing to the old invalid memory, but the SharedResourceUse created specifically for it by add().\n\nDue to that, the release()+init() calls should be correct and also matches the empty garbage case in collectGarbageAndReinit() (which would otherwise suffer from the same problem).\n\nPlease do double check my understanding is correct here though.",
+      "parentUuid": "82d6660b_2f063c36",
       "range": {
         "startLine": 3666,
         "startChar": 4,

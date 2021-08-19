@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "905a292f_754e05ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T01:15:33Z",
+      "side": 1,
+      "message": "I\u0027ve updated this CL and go/angle-idle-heroes-gl-ext-map-buffer-range with Charlie\u0027s design suggestions.   It does simplify things quite a bit.",
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af9e816a_2b62745e",
