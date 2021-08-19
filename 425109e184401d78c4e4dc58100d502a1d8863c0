@@ -51,6 +51,24 @@
       "parentUuid": "0abae80c_fd7087ef",
       "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c07c2e_ed758466",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T19:11:30Z",
+      "side": 1,
+      "message": "Right, though I was thinking of something more along the lines of:\n\n void Context::finish()\n {\n     if (!hasBeenCurrent())\n     {\n         return;\n     }\n     \n     ANGLE_CONTEXT_TRY(mImplementation-\u003efinish(this));\n }\n \nThat way callers don\u0027t need to care about any implementation details, and any new changes to Context::finish() can make their own determination of whether it needs to have been current beforehand or not (add the change before or after the conditional).\n\nIt\u0027s not too big of a deal either way though, since a real app can\u0027t call glFinish() for a Context that\u0027s not (or has never been) current, so this is only to help with things entirely internal to ANGLE (like frame capture).",
+      "parentUuid": "43fce3d4_990c1cc6",
+      "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
