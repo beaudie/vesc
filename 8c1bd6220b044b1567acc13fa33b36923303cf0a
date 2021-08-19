@@ -33,6 +33,24 @@
       "message": "I suggest a helper function. Might be more robust to implement it just like GetFormatSwizzle:\n\n    if (angleFormat.isLUMA())\n    {\n        ...\n    }\n    else if (angleFormat.hasDepthOrStencilBits())\n    {\n        ...\n    }\n\nThat way we wouldn\u0027t have to enumerate all possible LUMA and D/S formats.",
       "revId": "8c1bd6220b044b1567acc13fa33b36923303cf0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fce140d_ac9fd4dd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3248,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-19T19:22:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8cf7049_9a847043",
+      "revId": "8c1bd6220b044b1567acc13fa33b36923303cf0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
