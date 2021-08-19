@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a08a642b_b7ff3b48",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-19T18:26:02Z",
+      "side": 1,
+      "message": "I don\u0027t see a reason to increase this, since the tests pass with the current timeouts.\nThis will prevent us from detecting that tests become slower in the future.\nI know that we\u0027ll have perf bots to catch regressions, but they might not cover the same problems as all dEQP suite does.\nI think it\u0027s good to have this additional method of catching perf regressions.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 6
+      },
+      "revId": "b96eb69c3931950244eb95a533c3fcf5fb01c1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
