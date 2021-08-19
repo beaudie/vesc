@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0629ab9_410a82cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T16:20:28Z",
+      "side": 1,
+      "message": "Do you mean RGB10X2?  RGB10A2 doesn\u0027t force alpha to 1.0.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "a4570c53547f61f7be55a02b3dfd67c5d49b2e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d91750dc_32c993e9",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T16:20:28Z",
+      "side": 1,
+      "message": "To help future reviewers, this parameter is new compared to AddRGBAFormat.",
+      "range": {
+        "startLine": 753,
+        "startChar": 27,
+        "endLine": 753,
+        "endChar": 37
+      },
+      "revId": "a4570c53547f61f7be55a02b3dfd67c5d49b2e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
