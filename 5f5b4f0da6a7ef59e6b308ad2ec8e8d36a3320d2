@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c2720ef_e31f435b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-19T20:39:16Z",
+      "side": 1,
+      "message": "Darn, BPTC failures on the NVIDIA MacBook Pros. We can try to move these all to macOS 11; not sure if further Metal upgrades will address these failures. Do you have any way of debugging this?",
+      "revId": "5f5b4f0da6a7ef59e6b308ad2ec8e8d36a3320d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
