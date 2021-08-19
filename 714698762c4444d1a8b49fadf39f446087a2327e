@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19111e46_a527290a",
+        "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T16:13:10Z",
+      "side": 1,
+      "message": "I don\u0027t normally like extra variables, but can you update the math below to match what you are describing?  One variable for the last row, one for the other rows, then add them together? i.e.\n\n mostRowSize \u003d (srcRowPitch * (height - 1));\n lastRowSize \u003d  width * internalFormatInfo.pixelBytes;\n captureSize \u003d mostRowSize + lastRowSize + srcSkipBytes;",
+      "range": {
+        "startLine": 707,
+        "startChar": 0,
+        "endLine": 708,
+        "endChar": 50
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
