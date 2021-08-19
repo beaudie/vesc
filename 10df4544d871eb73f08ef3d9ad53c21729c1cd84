@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9721d5a_986b8728",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5743,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T16:23:04Z",
+      "side": 1,
+      "message": "Can you include in the comment why this is being done? i.e. \"in service of capture/replay tests\" or something.",
+      "range": {
+        "startLine": 5743,
+        "startChar": 0,
+        "endLine": 5743,
+        "endChar": 80
+      },
+      "revId": "10df4544d871eb73f08ef3d9ad53c21729c1cd84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e118164_f99a28e7",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5744,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T16:23:04Z",
+      "side": 1,
+      "message": "Alternatively, the test could be updated to just link instead of draw.",
+      "range": {
+        "startLine": 5744,
+        "startChar": 4,
+        "endLine": 5744,
+        "endChar": 33
+      },
+      "revId": "10df4544d871eb73f08ef3d9ad53c21729c1cd84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
