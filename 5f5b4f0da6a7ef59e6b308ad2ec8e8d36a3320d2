@@ -34,6 +34,29 @@
       "parentUuid": "6c2720ef_e31f435b",
       "revId": "5f5b4f0da6a7ef59e6b308ad2ec8e8d36a3320d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7d6fc9a_797a8cce",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T21:24:11Z",
+      "side": 1,
+      "message": "instead of defining your own macros, would it be be possible to use ANGLE_INSTANTIATE_TEST_COMBINE_#? Unfortunately maintaining different macro sets adds to the burden of fixing or extending the tests if they ever need to change. Let me know in the slack if you need any help. (@ me)",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "5f5b4f0da6a7ef59e6b308ad2ec8e8d36a3320d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
