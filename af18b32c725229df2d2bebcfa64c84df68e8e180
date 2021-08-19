@@ -22,6 +22,30 @@
       },
       "revId": "af18b32c725229df2d2bebcfa64c84df68e8e180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d1d42f_abfce1f7",
+        "filename": "src/tests/gl_tests/CompressedTextureEntrypointsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-19T20:08:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "996285ff_084281d6",
+      "range": {
+        "startLine": 175,
+        "startChar": 7,
+        "endLine": 175,
+        "endChar": 39
+      },
+      "revId": "af18b32c725229df2d2bebcfa64c84df68e8e180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
