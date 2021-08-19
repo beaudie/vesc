@@ -378,6 +378,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "143dfdb9_f51a9883",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:40:05Z",
+      "side": 1,
+      "message": "Oh, I know.  We\u0027re using the temp ID as a lookup into the map.  The actual ID used by the app will be incrementing, we just never look at it, keep overwriting the entry in the map.",
+      "parentUuid": "94f388cd_5ec6a0b7",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f29d7959_6dc52426",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
