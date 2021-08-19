@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d6b08df_454cdc37",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5176,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T16:07:51Z",
+      "side": 1,
+      "message": "I noticed this change in your previous CL, but I thought it was offset by the start frame adjustment above.  You really just have to run the games and test out these changes.  Did you test this out Jamie, or do you need Tim to try it?",
+      "range": {
+        "startLine": 5176,
+        "startChar": 0,
+        "endLine": 5176,
+        "endChar": 68
+      },
+      "revId": "2ae7f6b4849e174db0c26f872d3f669a9cc69738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
