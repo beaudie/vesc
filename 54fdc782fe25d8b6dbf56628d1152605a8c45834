@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1015fd97_6ff40a24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-19T00:42:53Z",
+      "side": 1,
+      "message": "Much better now, with a few last comments.",
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af9e816a_2b62745e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-19T00:42:53Z",
+      "side": 1,
+      "message": "Looks like this argument is only been used here and will set to ReadWrite only if src\u003d\u003dmBuffer. I would suggest that remove this argument and do the check here at line 895:\n    vk::ResourceUseType resourceUseType \u003d (src\u003d\u003dmBuffer)? vk::ResourceUseType::Read : vk::ResourceUseType::ReadWrite;",
+      "range": {
+        "startLine": 892,
+        "startChar": 63,
+        "endLine": 892,
+        "endChar": 78
+      },
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f236ae6_39c1d3a3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-19T00:42:53Z",
+      "side": 1,
+      "message": "This is not needed, commandBufferHelper-\u003ebufferWrite() above already retained for RW.",
+      "range": {
+        "startLine": 1556,
+        "startChar": 0,
+        "endLine": 1556,
+        "endChar": 83
+      },
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cf32eea_8142b9ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-19T00:42:53Z",
+      "side": 1,
+      "message": "Is it possible to make it look like this:\n    void retain(ResourceUseList *resourceUseList) const\n    {\n          Resource::retain(resourceUseList);\n          resourceUseList-\u003eadd(mWriteUse);\n    }\n    void readOnlyRetain(ResourceUseList *resourceUseList) const;\n    {\n          Resource::retain(resourceUseList);\n    }\n\nI thought C++ allows this, right? If yes, then the good thing about this is normal place people call retain() it will still just work. Otherwise if someone accidentally called retain, it will go to Resource::retain which will be a bug.",
+      "range": {
+        "startLine": 938,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 0
+      },
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
