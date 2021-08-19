@@ -396,6 +396,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b3b69ee_f8b6fd41",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T20:28:08Z",
+      "side": 1,
+      "message": "Ah, yeah, that makes sense once I saw your sample GL commands in the other comment.   I was misunderstanding how it\u0027s used.\n\nIt\u0027s probably worth a comment on what this \"ID\" actually is (an index into gShaderProgramMap) and not the actual ID returned by glCreateShader(), since it tripped us both up.",
+      "parentUuid": "143dfdb9_f51a9883",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f29d7959_6dc52426",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -513,6 +531,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e413f529_41ee1e1b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4836,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T20:28:08Z",
+      "side": 1,
+      "message": "A few things here:\n\n1.) Thanks for the GL commands, that\u0027s helpful to see what this change is doing with real output.\n\n2.) This case statement is handling glCreateShaderProgramv(), which the trace is not using.   glCreateShaderProgramv() is used for PPOs, since it generates separable programs that only contain a single shader stage.   In this example, the app is uploading a program binary, though that program may have been created with glCreateShaderProgramv() (though that seems unlikely, since I haven\u0027t heard anything about Fortnite using PPOs yet).\n\n3.) \n\u003e We\u0027re generating calls to glAttachShader that will be executed in the future, not executing them during capture.  So they aren\u0027t attached when this code is run.\n\nI don\u0027t understand.   It\u0027s the same \u0027gl::Program *program\u0027 pointer for both calls here, without the Program it\u0027s pointing to having any shaders attached/detached in between.   The \u0027program\u0027 here is an already linked Program in the app\u0027s currently active API State.\n\nI\u0027m still not sure it\u0027s possible for program-\u003egetState().hasAttachedShader() to ever be false here.   Can you try removing this conditional and see if it still works?",
+      "parentUuid": "76e98e38_90b3870a",
+      "range": {
+        "startLine": 4835,
+        "startChar": 0,
+        "endLine": 4836,
+        "endChar": 56
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a103f7d_61a4431f",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -542,6 +584,24 @@
       "side": 1,
       "message": "This is the current context, which just executed glProgramBinary, not the result of the new sequence we generate and write to the trace, for future execution.  I agree this is tricky and took me a while to get this straight on Android.",
       "parentUuid": "9a103f7d_61a4431f",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3a1f08d_d6f1b4f1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4868,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T20:28:08Z",
+      "side": 1,
+      "message": "Ah, right.",
+      "parentUuid": "ee856bcc_7e8e13b6",
       "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
