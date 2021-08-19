@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5553fe91_2eef5e80",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T11:30:45Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be dstTarget? And what about the other five faces?",
+      "range": {
+        "startLine": 4160,
+        "startChar": 78,
+        "endLine": 4160,
+        "endChar": 97
+      },
+      "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
