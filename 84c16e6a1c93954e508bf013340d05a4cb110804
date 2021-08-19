@@ -555,6 +555,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "787fddd8_2facf405",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4836,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T21:41:09Z",
+      "side": 1,
+      "message": "2) re: glCreateShaderProgramv:  I proactively added this check just based on the code pattern.  I can drop that one.\n\n3) re: program pointers:  By both calls, I presume you mean the handling of GLCreateShaderProgramv and GLLinkProgram here.  For the latter, when we are running the real app which just created a program and populated it with ProgramBinary, I don\u0027t think it will have attached shaders.  I\u0027ll do another run to verify once I get some of the other feedback cleared up.",
+      "parentUuid": "e413f529_41ee1e1b",
+      "range": {
+        "startLine": 4835,
+        "startChar": 0,
+        "endLine": 4836,
+        "endChar": 56
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a103f7d_61a4431f",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
