@@ -46,6 +46,30 @@
       },
       "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4c761dd_f44d3701",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T19:05:20Z",
+      "side": 0,
+      "message": "-1 to landing as-is, since it still contains the potential for incorrectly calculating how many bytes are required to hold the specified bits.\n\n\u003e I don\u0027t think putting in a silent ceil is a good idea, in the interests of not auto-correcting programming errors. \n\nThe ceiling isn\u0027t fixing errors from the caller, it\u0027s fixing the bug here.   The caller is correctly indicating how many bits they require, this call is incorrectly calculating how many bytes are required to hold those bits.   Using UnsignedCeilDivide() ensures we get the correct value.",
+      "parentUuid": "31a9d378_e86549f1",
+      "range": {
+        "startLine": 774,
+        "startChar": 28,
+        "endLine": 774,
+        "endChar": 65
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
