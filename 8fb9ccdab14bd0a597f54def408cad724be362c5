@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ed31c4_0bdff74d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3818,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T11:21:28Z",
+      "side": 0,
+      "message": "I actually think we should keep this - maybe we need a separate feature for capturing sources in the program binary?",
+      "range": {
+        "startLine": 3817,
+        "startChar": 0,
+        "endLine": 3818,
+        "endChar": 77
+      },
+      "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
