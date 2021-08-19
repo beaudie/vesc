@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f32c08a_503198c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T02:56:03Z",
+      "side": 1,
+      "message": "The code should be a 1:1 move with the exception of tempShaderID which I pulled into the helper as well.",
+      "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
