@@ -33,6 +33,24 @@
       "message": "I\u0027m fine with this version, but my preference would be to move this check into Context::finish() and early out in there, so the Display (or previously FrameCapture) doesn\u0027t need to know these types of details.",
       "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43fce3d4_990c1cc6",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T18:52:12Z",
+      "side": 1,
+      "message": "I considered that, but went with the solution I had on disk, which used to be isolated to FrameCapture.cpp, and is still an isolated use case.  That approach would turn Context::finish() into this:\n\n void Context::finish()\n {\n     if (hasBeenCurrent())\n     {\n         ANGLE_CONTEXT_TRY(mImplementation-\u003efinish(this));\n     }\n }\n \nOr sprinkle it into 5 different backends.",
+      "parentUuid": "0abae80c_fd7087ef",
+      "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
