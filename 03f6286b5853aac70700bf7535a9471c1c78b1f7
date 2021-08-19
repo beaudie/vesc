@@ -1,6 +1,92 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c0491ae_bfad8246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "Sorry for the slow re-review. I know you\u0027re working on the texture usage flags change simulatenously.",
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bafe16cb_0ba6649b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "same nit here about the flags",
+      "range": {
+        "startLine": 3514,
+        "startChar": 5,
+        "endLine": 3517,
+        "endChar": 100
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c27e83e_7b8dad0b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 3534,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "nit: use VmaAllocationCreateFlags - the \"FlagBits\" is just for a single flag, the \"Flags\" is for a combination of bits and is typedef uint32_t. this will let you clean up the casting below.",
+      "range": {
+        "startLine": 3534,
+        "startChar": 47,
+        "endLine": 3534,
+        "endChar": 75
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afcd11e7_9f50d289",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 3538,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "why does robust resource init play into this? sorry if you already answered this elsewhere, but it would be nice to avoid having to check that if possible. does it produce errors somewhere?",
+      "range": {
+        "startLine": 3538,
+        "startChar": 29,
+        "endLine": 3538,
+        "endChar": 55
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da9a8072_0ef851ae",
@@ -14,6 +100,98 @@
       "writtenOn": "2021-08-10T23:39:30Z",
       "side": 1,
       "message": "This can be moved earlier to avoid the poolType check and getVMAPool() call.",
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb07b765_214f6ec8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 3585,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "nit: can you please make this into a try macro? maybe ANGLE_VMA_TRY or just ANGLE_VK_RESULT_TRY? not sure on the best name.",
+      "range": {
+        "startLine": 3585,
+        "startChar": 7,
+        "endLine": 3585,
+        "endChar": 33
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e01e97d_7074e1a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "nit: use ANGLE_VK_TRY",
+      "range": {
+        "startLine": 3437,
+        "startChar": 33,
+        "endLine": 3440,
+        "endChar": 84
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54bd37df_03e6f3cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "nit: CAPS for macros",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 37
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc916b55_c07f6923",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T15:34:27Z",
+      "side": 1,
+      "message": "ah, I see the issue. just use VkFlags instead for flag combinations, as it\u0027s the base type for all Vulkan bitsets (uint32_t basically).",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 2
+      },
       "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
