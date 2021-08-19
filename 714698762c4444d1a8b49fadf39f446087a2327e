@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e934a4ec_1ba2efbd",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:19:59Z",
+      "side": 0,
+      "message": "The issue is that this value must be divisible by 8, otherwise it\u0027s off by 1 byte.\n\nThis can all be reverted, and instead this line can be updated to the following:\n\n    formatInfo.pixelBytes \u003d UnsignedCeilDivide(red + green + blue + alpha + shared, 8);",
+      "range": {
+        "startLine": 774,
+        "startChar": 28,
+        "endLine": 774,
+        "endChar": 65
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
