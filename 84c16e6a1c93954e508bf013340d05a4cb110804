@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d865c57_5b1b1281",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 18,
+        "startChar": 52,
+        "endLine": 18,
+        "endChar": 59
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d254cc2_8d16e481",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "Can you add the commands for how you\u0027re \"modifying\" the ToT commit?",
+      "range": {
+        "startLine": 17,
+        "startChar": 61,
+        "endLine": 18,
+        "endChar": 59
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2ea780a6_cecd3cac",
@@ -107,6 +153,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71189c00_c3669a5b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "This can be simplified, since we only care about recreating the linked program:\n\n        ProgramExecutable \u0026getExecutable \u003d getExecutable();\n        for (ShaderType shaderType : getExecutable.getLinkedShaderStages())\n        {\n            gl::Shader *shader \u003d getAttachedShader(shaderType);\n            ASSERT(shader);\n            stream.writeString(shader-\u003egetSourceString());\n        }\n        \nA similar update can be made to Program::deserialize(), since the ProgramExecutable knows which shader stages are linked by the end of deserialize().\n\nThere also aren\u0027t any worries about getLinkedShaderStages() returning compute vs draw stages, since Programs can only be one or the other, never both.",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dc01820_27425a43",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -154,6 +223,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd0a180e_2297f45e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "Maybe I\u0027m missing how this \u0027tempShaderID\u0027 is being used, but it looks like this is reusing the same shader ID for every shader stage in the program.\n\n\u003e If a shader object to be deleted is attached to a program object, it will be flagged for deletion, but it will not be deleted until it is no longer attached to any program object, for any rendering context (i.e., it must be detached from wherever it was attached before it will be deleted).\n\nIn this case, the shader is not being detached, since the program has not been linked yet, so the shader ID cannot be recycled yet.",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f29d7959_6dc52426",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -194,6 +280,92 @@
         "startChar": 35,
         "endLine": 4560,
         "endChar": 54
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14bb4c83_61af8a64",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4833,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "ref1",
+      "range": {
+        "startLine": 4832,
+        "startChar": 0,
+        "endLine": 4833,
+        "endChar": 27
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20b13c34_94e351dd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4836,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "We just got back a valid Shader* from getAttachedShader() above [ref1].   How can we not have an attached shader here?\n\nAdditionally, GenerateLinkedProgram() never generates a glDetachShader() call, so it should still be attached.   Where is the shader detached?",
+      "range": {
+        "startLine": 4835,
+        "startChar": 0,
+        "endLine": 4836,
+        "endChar": 56
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a103f7d_61a4431f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4868,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "nit: The Shader is being created, it\u0027s just being immediately deleted.",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4106b5d0_5183ca8d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4884,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 1,
+      "message": "Ditto above.\n\nGenerateLinkedProgram() never generates a glDetachShader() call, so it should still be attached.",
+      "range": {
+        "startLine": 4883,
+        "startChar": 0,
+        "endLine": 4884,
+        "endChar": 56
       },
       "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

@@ -22,6 +22,30 @@
       },
       "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a92a48_814faf36",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3818,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-19T18:00:32Z",
+      "side": 0,
+      "message": "Yeah, it would be nice to at least indicate to the apps that we don\u0027t want them using program binaries if they\u0027re willing to listen, even if we can work around them ignoring it.",
+      "parentUuid": "24ed31c4_0bdff74d",
+      "range": {
+        "startLine": 3817,
+        "startChar": 0,
+        "endLine": 3818,
+        "endChar": 77
+      },
+      "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
