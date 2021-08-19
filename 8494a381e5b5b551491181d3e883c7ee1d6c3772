@@ -118,6 +118,30 @@
       },
       "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e6a8f6_6b10b4dc",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4160,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T18:41:22Z",
+      "side": 1,
+      "message": "We actually do the same thing in gl::ValidateCopyImageSubDataBase.  It calls a helper (gl::GetTargetFormatInfo) which does the following:\n\n Texture *texture          \u003d context-\u003egetTexture(PackParam\u003cTextureID\u003e(name));\n GLenum textureTargetToUse \u003d target;\n\n if (target \u003d\u003d GL_TEXTURE_CUBE_MAP)\n {\n     // Use GL_TEXTURE_CUBE_MAP_POSITIVE_X to properly gather the\n     // textureWidth/textureHeight\n     textureTargetToUse \u003d GL_TEXTURE_CUBE_MAP_POSITIVE_X;\n }\n return *texture-\u003egetFormat(PackParam\u003cTextureTarget\u003e(textureTargetToUse), level).info;\n            \nRef: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationES.cpp;l\u003d3101-3110",
+      "parentUuid": "7bb8ab69_65379f36",
+      "range": {
+        "startLine": 4160,
+        "startChar": 78,
+        "endLine": 4160,
+        "endChar": 97
+      },
+      "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
