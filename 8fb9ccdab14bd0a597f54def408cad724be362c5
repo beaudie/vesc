@@ -46,6 +46,30 @@
       },
       "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba0c3d8f_1f0aa274",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3818,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 0,
+      "message": "Well, we throw GL errors if the app uses an entry point that isn\u0027t available.  So at least for Fortnite, I have to leave it on, else the app quits.  If I return this to what it used to be (zero exposed formats), that might work.  I\u0027m not sure why we moved away from that.  A capture_replay_test perhaps.",
+      "parentUuid": "42a92a48_814faf36",
+      "range": {
+        "startLine": 3817,
+        "startChar": 0,
+        "endLine": 3818,
+        "endChar": 77
+      },
+      "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

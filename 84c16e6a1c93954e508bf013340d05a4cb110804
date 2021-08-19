@@ -47,6 +47,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfaa703c_5e659b69",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "Yeah, I\u0027ve just been doing \"git commit --amend\" and adding some characters to the commit message.  I won\u0027t need to mention this with the approach Jamie suggested of modifying MemoryProgramCache::ComputeHash.",
+      "parentUuid": "5d254cc2_8d16e481",
+      "range": {
+        "startLine": 17,
+        "startChar": 61,
+        "endLine": 18,
+        "endChar": 59
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2ea780a6_cecd3cac",
@@ -151,6 +175,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb56d43c_06db8621",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4709,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "See above:\n\n    // nullptr context is supported when computing binary length.\n    if (context)\n    {\n        stream.writeInt(context-\u003egetClientVersion().major);\n        stream.writeInt(context-\u003egetClientVersion().minor);\n    }\n    else\n    {\n        stream.writeInt(2);\n        stream.writeInt(0);\n    }",
+      "parentUuid": "08dd412c_bbb0d990",
+      "range": {
+        "startLine": 4709,
+        "startChar": 8,
+        "endLine": 4709,
+        "endChar": 16
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c96e052_7113aa95",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4709,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "Good idea, will do.",
+      "parentUuid": "e121c918_ba955f95",
+      "range": {
+        "startLine": 4709,
+        "startChar": 19,
+        "endLine": 4709,
+        "endChar": 79
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71189c00_c3669a5b",
@@ -164,6 +236,30 @@
       "writtenOn": "2021-08-19T18:00:32Z",
       "side": 1,
       "message": "This can be simplified, since we only care about recreating the linked program:\n\n        ProgramExecutable \u0026getExecutable \u003d getExecutable();\n        for (ShaderType shaderType : getExecutable.getLinkedShaderStages())\n        {\n            gl::Shader *shader \u003d getAttachedShader(shaderType);\n            ASSERT(shader);\n            stream.writeString(shader-\u003egetSourceString());\n        }\n        \nA similar update can be made to Program::deserialize(), since the ProgramExecutable knows which shader stages are linked by the end of deserialize().\n\nThere also aren\u0027t any worries about getLinkedShaderStages() returning compute vs draw stages, since Programs can only be one or the other, never both.",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1752e365_a84add46",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "Good idea, will give it a try.  Updating serialized formats is always tricky.",
+      "parentUuid": "71189c00_c3669a5b",
       "range": {
         "startLine": 4712,
         "startChar": 0,
@@ -223,6 +319,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff898a94_86f379c3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "I\u0027m trying an approach that provides a default state inside overrideProgramBinary and sends a non-const reference to that.",
+      "parentUuid": "95131350_0c279254",
+      "range": {
+        "startLine": 1724,
+        "startChar": 0,
+        "endLine": 1724,
+        "endChar": 57
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd0a180e_2297f45e",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -234,6 +354,24 @@
       "writtenOn": "2021-08-19T18:00:32Z",
       "side": 1,
       "message": "Maybe I\u0027m missing how this \u0027tempShaderID\u0027 is being used, but it looks like this is reusing the same shader ID for every shader stage in the program.\n\n\u003e If a shader object to be deleted is attached to a program object, it will be flagged for deletion, but it will not be deleted until it is no longer attached to any program object, for any rendering context (i.e., it must be detached from wherever it was attached before it will be deleted).\n\nIn this case, the shader is not being detached, since the program has not been linked yet, so the shader ID cannot be recycled yet.",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94f388cd_5ec6a0b7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2238,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "Interesting.  This is carry-over from the existing LinkProgram support in MEC.  No driver has ever complained about re-using the same ID.  If we can never detach any of these shaders until the program itself is deleted, we\u0027ll need to increment this value continuously.",
+      "parentUuid": "cd0a180e_2297f45e",
       "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -333,6 +471,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76e98e38_90b3870a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4836,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "We\u0027re generating calls to glAttachShader that will be executed in the future, not executing them during capture.  So they aren\u0027t attached when this code is run.\n\nFor reference (and I\u0027ll add this to the CL as a comment) here\u0027s what the app is submitting, and ANGLE is executing before capturing each call.  This is pulled from a trace before adding the override:\n\n  gShaderProgramMap[5349] \u003d glCreateProgram();\n  glProgramBinary(gShaderProgramMap[5349], GL_PROGRAM_BINARY_ANGLE, gBinaryData[99422352], 82291);\n  glGetProgramiv(gShaderProgramMap[5349], GL_LINK_STATUS, gReadBuffer);\n  glGetProgramiv(gShaderProgramMap[5349], GL_PROGRAM_BINARY_LENGTH, gReadBuffer);\n    \nFrameCaptureShared::overrideProgramBinary will insert the following sequence *instead* of what you see above:\n\n  gShaderProgramMap[5349] \u003d glCreateProgram();\n  // Begin override\n  gShaderProgramMap[5350] \u003d glCreateShader(GL_VERTEX_SHADER);\n  glShaderSource(gShaderProgramMap[5350], 1, string_0, \u0026gBinaryData[76656032]);\n  glCompileShader(gShaderProgramMap[5350]);\n  glAttachShader(gShaderProgramMap[5349], gShaderProgramMap[5350]);\n  glDeleteShader(gShaderProgramMap[5350]);\n  gShaderProgramMap[5350] \u003d glCreateShader(GL_FRAGMENT_SHADER);\n  glShaderSource(gShaderProgramMap[5350], 1, string_1, \u0026gBinaryData[76656048]);\n  glCompileShader(gShaderProgramMap[5350]);\n  glAttachShader(gShaderProgramMap[5349], gShaderProgramMap[5350]);\n  glDeleteShader(gShaderProgramMap[5350]);\n  glBindAttribLocation(gShaderProgramMap[5349], 0, \"in_ATTRIBUTE0\");\n  ...\n  glBindAttribLocation(gShaderProgramMap[5349], 4, \"in_ATTRIBUTE4\");\n  glLinkProgram(gShaderProgramMap[5349]);\n  UpdateUniformLocation(gShaderProgramMap[5349], \"vc0_h\", 0, 20);\n  ...\n  UpdateUniformLocation(gShaderProgramMap[5349], \"ps7\", 72, 1);\n  glUseProgram(gShaderProgramMap[5349]);\n  UpdateCurrentProgram(gShaderProgramMap[5349]);\n  UpdateCurrentProgram(gShaderProgramMap[5349]);\n  glUniform4fv(gUniformLocations[gCurrentProgram][0], 20, \u0026gBinaryData[76656064]);\n  ...\n  glUniform1iv(gUniformLocations[gCurrentProgram][72], 1, \u0026gBinaryData[76657216]);\n  // End override\n  glGetProgramiv(gShaderProgramMap[5349], GL_LINK_STATUS, gReadBuffer);\n  glGetProgramiv(gShaderProgramMap[5349], GL_PROGRAM_BINARY_LENGTH, gReadBuffer);",
+      "parentUuid": "20b13c34_94e351dd",
+      "range": {
+        "startLine": 4835,
+        "startChar": 0,
+        "endLine": 4836,
+        "endChar": 56
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a103f7d_61a4431f",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -344,6 +506,24 @@
       "writtenOn": "2021-08-19T18:00:32Z",
       "side": 1,
       "message": "nit: The Shader is being created, it\u0027s just being immediately deleted.",
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee856bcc_7e8e13b6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4868,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-19T19:30:43Z",
+      "side": 1,
+      "message": "This is the current context, which just executed glProgramBinary, not the result of the new sequence we generate and write to the trace, for future execution.  I agree this is tricky and took me a while to get this straight on Android.",
+      "parentUuid": "9a103f7d_61a4431f",
       "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
