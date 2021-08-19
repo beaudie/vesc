@@ -142,6 +142,30 @@
       },
       "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ab8528d_56f02e2a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T18:46:47Z",
+      "side": 1,
+      "message": "I see.. maybe we should expose that helper function? Anyway seems reasonable. I would probably organize the code so readers aren\u0027t as confused (somehow).",
+      "parentUuid": "e4e6a8f6_6b10b4dc",
+      "range": {
+        "startLine": 4160,
+        "startChar": 78,
+        "endLine": 4160,
+        "endChar": 97
+      },
+      "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
