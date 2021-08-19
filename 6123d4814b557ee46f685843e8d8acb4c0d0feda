@@ -39,6 +39,30 @@
       },
       "revId": "6123d4814b557ee46f685843e8d8acb4c0d0feda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea2e54fd_5e199536",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T12:12:05Z",
+      "side": 1,
+      "message": "No mystery, I just missed .warning() and .error() in my find/replace. Fixed.",
+      "parentUuid": "bb2c6954_268ad4e3",
+      "range": {
+        "startLine": 984,
+        "startChar": 12,
+        "endLine": 984,
+        "endChar": 19
+      },
+      "revId": "6123d4814b557ee46f685843e8d8acb4c0d0feda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
