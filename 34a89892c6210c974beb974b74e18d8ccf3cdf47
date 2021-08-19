@@ -204,6 +204,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a661027_6b35754a",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-19T13:39:41Z",
+      "side": 1,
+      "message": "I have to admit that I don\u0027t really understand your reluctance to use \"auto\" here, since getting around having to deduct types in templatad constructs was one of the reasons it was introduced, and you don\u0027t lose any information by using it. \nHowever, in this case the construct is just accessing a value directly, so there is no real optimization in replacing the construct.",
+      "parentUuid": "c1a114b6_8c2cadc7",
+      "revId": "34a89892c6210c974beb974b74e18d8ccf3cdf47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78223318_3cf8e494",
