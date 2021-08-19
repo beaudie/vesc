@@ -70,6 +70,30 @@
       },
       "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f547776d_779e9f1a",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-19T19:42:41Z",
+      "side": 0,
+      "message": "I\u0027d like to ensure that the caller specifies unused bits as well. I\u0027m against putting in stuff that automatically fixes potential errors. See other instances where we specify the unused bits. Can you think of an alternative? My suggestion is we add an ASSERT to specify the bits are correctly multiples of 8, but I\u0027d like to avoid doing that in this CL to minimize the work I\u0027m taking on.\n\nLMKWYT",
+      "parentUuid": "e4c761dd_f44d3701",
+      "range": {
+        "startLine": 774,
+        "startChar": 28,
+        "endLine": 774,
+        "endChar": 65
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
