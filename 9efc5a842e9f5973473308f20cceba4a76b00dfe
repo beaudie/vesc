@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01ee2c7c_8a115549",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T10:54:21Z",
+      "side": 1,
+      "message": "brandon are you going to have time to fix the out-of-range values handling? I think that\u0027s why these are failing.",
+      "range": {
+        "startLine": 177,
+        "startChar": 5,
+        "endLine": 177,
+        "endChar": 17
+      },
+      "revId": "9efc5a842e9f5973473308f20cceba4a76b00dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
