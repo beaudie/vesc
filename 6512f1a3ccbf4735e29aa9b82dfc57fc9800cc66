@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0487c66_f743d776",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T16:38:46Z",
+      "side": 1,
+      "message": "Ack, yes this is intentional. That\u0027s how duplicated constants work in the GL/EGL headers.",
+      "parentUuid": "8096070e_4818e27f",
+      "range": {
+        "startLine": 360,
+        "startChar": 32,
+        "endLine": 360,
+        "endChar": 38
+      },
+      "revId": "6512f1a3ccbf4735e29aa9b82dfc57fc9800cc66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05c764d9_6444f2fd",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-20T15:24:48Z",
       "side": 1,
       "message": "Where do you check to determine if this was already done?  Curious how this is handled in the native driver where the extension won\u0027t be supported.",
+      "range": {
+        "startLine": 703,
+        "startChar": 21,
+        "endLine": 703,
+        "endChar": 53
+      },
+      "revId": "6512f1a3ccbf4735e29aa9b82dfc57fc9800cc66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa02761f_0c41725f",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T16:38:46Z",
+      "side": 1,
+      "message": "With the extension:\n\ninit the surface, angle sees the property, and sets up the swap interval on create\nwe call setSwapInterval below, nothing happens\n\nWithout the extension:\n\ninit the surface, using the default swap interval (1)\nwe call setSwapInterval below, which may or may not have an impact depending on the driver\u0027s implementation. on VANGLE this would recreate the swap chain.",
+      "parentUuid": "05c764d9_6444f2fd",
       "range": {
         "startLine": 703,
         "startChar": 21,
