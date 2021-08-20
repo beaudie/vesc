@@ -79,9 +79,7 @@ bool IsTextureLevelDefinitionCompatibleWithImage(const vk::ImageHelper &image,
     ASSERT(IsTextureLevelInAllocatedImage(image, textureLevelIndexGL));
 
     vk::LevelIndex imageLevelIndexVk = image.toVkLevel(textureLevelIndexGL);
-    return size == image.getLevelExtents(imageLevelIndexVk) &&
-           format.intendedFormatID == image.getIntendedFormatID() &&
-           format.actualImageFormatID == image.getActualFormatID();
+    return size == image.getLevelExtents(imageLevelIndexVk) && format == image.getFormat();
 }
 
 bool CanCopyWithTransferForTexImage(RendererVk *renderer,
