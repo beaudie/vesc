@@ -39,6 +39,30 @@
       },
       "revId": "d7757908287f4842d0d9cd115d2b14f95e7db063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a3a5f34_9bbabae4",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T21:12:53Z",
+      "side": 1,
+      "message": "Done, thanks for catching.",
+      "parentUuid": "ff257a4d_421bb096",
+      "range": {
+        "startLine": 26,
+        "startChar": 22,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "d7757908287f4842d0d9cd115d2b14f95e7db063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
