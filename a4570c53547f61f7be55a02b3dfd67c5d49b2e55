@@ -86,6 +86,30 @@
       },
       "revId": "a4570c53547f61f7be55a02b3dfd67c5d49b2e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2440f238_142dd3b5",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T13:36:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d91750dc_32c993e9",
+      "range": {
+        "startLine": 753,
+        "startChar": 27,
+        "endLine": 753,
+        "endChar": 37
+      },
+      "revId": "a4570c53547f61f7be55a02b3dfd67c5d49b2e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
