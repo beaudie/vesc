@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8096070e_4818e27f",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-20T15:24:48Z",
+      "side": 1,
+      "message": "This is the same value as EGL_SWAP_INTERVAL_EXT.  Is that intended?",
+      "range": {
+        "startLine": 360,
+        "startChar": 32,
+        "endLine": 360,
+        "endChar": 38
+      },
+      "revId": "6512f1a3ccbf4735e29aa9b82dfc57fc9800cc66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c764d9_6444f2fd",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-20T15:24:48Z",
+      "side": 1,
+      "message": "Where do you check to determine if this was already done?  Curious how this is handled in the native driver where the extension won\u0027t be supported.",
+      "range": {
+        "startLine": 703,
+        "startChar": 21,
+        "endLine": 703,
+        "endChar": 53
+      },
+      "revId": "6512f1a3ccbf4735e29aa9b82dfc57fc9800cc66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
