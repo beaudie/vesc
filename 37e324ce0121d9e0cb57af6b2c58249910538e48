@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cad268a4_93afd419",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-20T17:22:43Z",
+      "side": 1,
+      "message": "Is this an app bug or something wrong with the trace itself?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 46
+      },
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fbcb7fcf_89d3e6bf",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -14,6 +37,30 @@
       "writtenOn": "2021-08-20T16:55:08Z",
       "side": 1,
       "message": "Can this test be enabled then?",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd0d19c7_743528f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-20T17:22:43Z",
+      "side": 1,
+      "message": "The point of the test is that the varying is uninitialized:\n\n  // Test that an inactive varying in vertex shader but used in fragment shader can be linked\n  // successfully.\n  \nSo, the test should be enabled without this feature, which it is.   Also, I\u0027d expect nothing outside of capture/replay to have this feature enabled (which is what this CL is doing), since that could create a large blind spot in our testing.",
+      "parentUuid": "fbcb7fcf_89d3e6bf",
       "range": {
         "startLine": 16,
         "startChar": 10,
@@ -54,6 +101,23 @@
       "writtenOn": "2021-08-20T16:55:08Z",
       "side": 1,
       "message": "LGTM, glad you found this, I know it was a challenge.",
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b38903dc_0de57750",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-20T17:22:43Z",
+      "side": 1,
+      "message": "This looks like a good feature to reduce flakiness with the traces.   Are there any worries about unintended consequences like silently fixing up traces that would otherwise expose regressions in ANGLE?   Presumably we aren\u0027t too worried since we\u0027ve been running with robust resource init also.",
       "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
