@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "842eabe1_3d23c0a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T12:04:42Z",
+      "side": 1,
+      "message": "Done, was a typo, meant OOB",
+      "parentUuid": "a953f666_6f200653",
+      "range": {
+        "startLine": 7,
+        "startChar": 29,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19111e46_a527290a",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "+1\n\nIf nothing else, some comments explaining what each part of the calculation mean, while it\u0027s all still fresh in your mind.",
       "parentUuid": "19111e46_a527290a",
+      "range": {
+        "startLine": 707,
+        "startChar": 0,
+        "endLine": 708,
+        "endChar": 50
+      },
+      "revId": "714698762c4444d1a8b49fadf39f446087a2327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f26be116_ee9c10d1",
+        "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T12:04:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1463bd35_1ebbc34f",
       "range": {
         "startLine": 707,
         "startChar": 0,
