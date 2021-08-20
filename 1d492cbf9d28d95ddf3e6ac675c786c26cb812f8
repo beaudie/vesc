@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c137a4a_f184258e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T21:30:53Z",
+      "side": 1,
+      "message": "Going to short-cut the process and land this manually, it\u0027s pretty clear the mb config is correct.",
+      "revId": "1d492cbf9d28d95ddf3e6ac675c786c26cb812f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
