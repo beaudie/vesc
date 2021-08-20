@@ -16,6 +16,23 @@
       "message": "Another small issue flushed out by validation.",
       "revId": "e718be191b6220d6f651c64cfdd300411b1e8ee8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c99182_def529cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-20T17:12:20Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e718be191b6220d6f651c64cfdd300411b1e8ee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
