@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d283ea8e_f06ceb92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T19:02:41Z",
+      "side": 1,
+      "message": "It\u0027s technically an app bug, but because the undefined pixel values were only the alpha channel of the back buffer window surface, it\u0027s invisible to the user. To the serialization logic which \"sees everything\" we actually were able to pick up the delta.",
+      "parentUuid": "cad268a4_93afd419",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 46
+      },
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbcb7fcf_89d3e6bf",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "The point of the test is that the varying is uninitialized:\n\n  // Test that an inactive varying in vertex shader but used in fragment shader can be linked\n  // successfully.\n  \nSo, the test should be enabled without this feature, which it is.   Also, I\u0027d expect nothing outside of capture/replay to have this feature enabled (which is what this CL is doing), since that could create a large blind spot in our testing.",
       "parentUuid": "fbcb7fcf_89d3e6bf",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b690630c_bb9343c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T19:02:41Z",
+      "side": 1,
+      "message": "WebGL also enables this feature to prevent undefined pixels. As Tim said the test was already enabled. I fixed this by manually running the tests with --asan builds. It\u0027s possible it could be flaky without ASAN but I don\u0027t know how common/possible the flake was with SwiftShader.",
+      "parentUuid": "dd0d19c7_743528f9",
       "range": {
         "startLine": 16,
         "startChar": 10,
@@ -118,6 +166,24 @@
       "writtenOn": "2021-08-20T17:22:43Z",
       "side": 1,
       "message": "This looks like a good feature to reduce flakiness with the traces.   Are there any worries about unintended consequences like silently fixing up traces that would otherwise expose regressions in ANGLE?   Presumably we aren\u0027t too worried since we\u0027ve been running with robust resource init also.",
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11951708_6d55b83b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-20T19:02:41Z",
+      "side": 1,
+      "message": "It does modify the shader logic a bit, so it could theoretically have some side-effects. We\u0027re only running with this flag for trace tool validation, we won\u0027t enable it for the traces we test performance with. Aside from the performance issue I don\u0027t expect any major behaviour changes. It should just default init globals in the shader. And generally we need to eliminate sources of non-determinism or UB in tests before we can rely on them at all. Same as for robust init as you pointed out.",
+      "parentUuid": "b38903dc_0de57750",
       "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
