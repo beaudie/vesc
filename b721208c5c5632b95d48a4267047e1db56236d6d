@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62080b14_626a752f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-20T17:09:08Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "b721208c5c5632b95d48a4267047e1db56236d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "515d1ea5_40754c8e",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-20T17:09:08Z",
+      "side": 1,
+      "message": "Presumably this is because swapInterval is initialized to 1 in the ConfigParameters ctor.  If so, please make this a constant that both places use to keep them in sync.   Otherwise, a comment explaining why \u00271\u0027 is ignored would be helpful.",
+      "range": {
+        "startLine": 458,
+        "startChar": 40,
+        "endLine": 458,
+        "endChar": 71
+      },
+      "revId": "b721208c5c5632b95d48a4267047e1db56236d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
