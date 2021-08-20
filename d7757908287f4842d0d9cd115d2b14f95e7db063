@@ -16,6 +16,29 @@
       "message": "PTAL, was missing from the prior CL.",
       "revId": "d7757908287f4842d0d9cd115d2b14f95e7db063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff257a4d_421bb096",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-20T21:08:46Z",
+      "side": 1,
+      "message": "3",
+      "range": {
+        "startLine": 26,
+        "startChar": 22,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "d7757908287f4842d0d9cd115d2b14f95e7db063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
