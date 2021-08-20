@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbcb7fcf_89d3e6bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-20T16:55:08Z",
+      "side": 1,
+      "message": "Can this test be enabled then?",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1165bc42_6853cb79",
@@ -14,6 +37,23 @@
       "writtenOn": "2021-08-20T16:36:53Z",
       "side": 1,
       "message": "PTAL. Big speedup to test iteration if you change the trace autogen.",
+      "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2d5ee35_4a511597",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-20T16:55:08Z",
+      "side": 1,
+      "message": "LGTM, glad you found this, I know it was a challenge.",
       "revId": "37e324ce0121d9e0cb57af6b2c58249910538e48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
