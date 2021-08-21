@@ -166,6 +166,30 @@
       },
       "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "761d60d5_c58a5f45",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4160,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-21T01:06:44Z",
+      "side": 1,
+      "message": "I updated this implementation to use dstZ and the texture\u0027s name, which seems cleaner than just using a cube face.",
+      "parentUuid": "6ab8528d_56f02e2a",
+      "range": {
+        "startLine": 4160,
+        "startChar": 78,
+        "endLine": 4160,
+        "endChar": 97
+      },
+      "revId": "8494a381e5b5b551491181d3e883c7ee1d6c3772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
