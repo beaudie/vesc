@@ -70,6 +70,30 @@
       },
       "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "161f72ed_40ffccea",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3818,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-21T01:09:51Z",
+      "side": 0,
+      "message": "Unfortunately, leaving the extension on and reducing the formats to zero:\n\n        mState.mCaps.shaderBinaryFormats.clear();\n        mState.mCaps.programBinaryFormats.clear();\n        \nStill causes the app to quit.\n        \nI decided to add a feature to force this on, even when capturing:\n\n getFrontendFeatures().forceProgramBinary\n \nAnd that seems to be working.  You enable it like this:\n\n adb shell setprop debug.angle.feature_overrides_enabled forceProgramBinaryForCapture",
+      "parentUuid": "ba0c3d8f_1f0aa274",
+      "range": {
+        "startLine": 3817,
+        "startChar": 0,
+        "endLine": 3818,
+        "endChar": 77
+      },
+      "revId": "8fb9ccdab14bd0a597f54def408cad724be362c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
