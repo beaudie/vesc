@@ -69,6 +69,24 @@
       "parentUuid": "43fce3d4_990c1cc6",
       "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b6797c1_1898fea1",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-21T01:09:06Z",
+      "side": 1,
+      "message": "I left it as is so as not to perturb any paths outside of FrameCapture.",
+      "parentUuid": "f0c07c2e_ed758466",
+      "revId": "425109e184401d78c4e4dc58100d502a1d8863c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
