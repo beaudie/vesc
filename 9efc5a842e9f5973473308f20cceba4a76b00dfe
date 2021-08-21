@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53336b12_237b7664",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-21T09:30:32Z",
+      "side": 1,
+      "message": "Maybe I\u0027m missing something, is there a reason you can\u0027t use angleFormat.isLUMA() and angleFormat.hasDepthOrStencilBits() instead of enumerating the formats? (Just like in GetFormatSwizzle)\n\nThis is broken for 16-bit LUMA for example (if that exists)",
+      "revId": "9efc5a842e9f5973473308f20cceba4a76b00dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01ee2c7c_8a115549",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
