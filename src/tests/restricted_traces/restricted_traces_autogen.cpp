@@ -17,6 +17,7 @@
 #include "angry_birds_2_1500/angry_birds_2_1500_capture_context1.h"
 #include "arena_of_valor/arena_of_valor_capture_context1.h"
 #include "asphalt_8/asphalt_8_capture_context1.h"
+#include "asphalt_9/asphalt_9_capture_context3.h"
 #include "avakin_life/avakin_life_capture_context1.h"
 #include "aztec_ruins/aztec_ruins_capture_context1.h"
 #include "beach_buggy_racing/beach_buggy_racing_capture_context1.h"
@@ -141,6 +142,10 @@ constexpr angle::PackedEnumMap<RestrictedTraceID, TraceInfo> kTraceInfos = {
      {asphalt_8::kReplayContextClientMajorVersion, asphalt_8::kReplayContextClientMinorVersion,
       asphalt_8::kReplayFrameStart, asphalt_8::kReplayFrameEnd, asphalt_8::kReplayDrawSurfaceWidth,
       asphalt_8::kReplayDrawSurfaceHeight, kDefaultReplayDrawSurfaceColorSpace, "asphalt_8"}},
+    {RestrictedTraceID::asphalt_9,
+     {asphalt_9::kReplayContextClientMajorVersion, asphalt_9::kReplayContextClientMinorVersion,
+      asphalt_9::kReplayFrameStart, asphalt_9::kReplayFrameEnd, asphalt_9::kReplayDrawSurfaceWidth,
+      asphalt_9::kReplayDrawSurfaceHeight, asphalt_9::kReplayDrawSurfaceColorSpace, "asphalt_9"}},
     {RestrictedTraceID::avakin_life,
      {avakin_life::kReplayContextClientMajorVersion, avakin_life::kReplayContextClientMinorVersion,
       avakin_life::kReplayFrameStart, avakin_life::kReplayFrameEnd,
