@@ -16,6 +16,24 @@
       "message": "Hello SeongHwan Park, this is a merge for the current LTS branch, I don\u0027t have permissions for submitting it. Could you please review/submit the change?",
       "revId": "125eeb9dc60aeddec496d2683891cc4765afd4de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e34bd87d_816ccb2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1515738
+      },
+      "writtenOn": "2021-08-23T10:50:37Z",
+      "side": 1,
+      "message": "I am not a committer. Probably I don\u0027t have Code-Review permission, either. How can I help you?",
+      "parentUuid": "08a53f72_e05949d7",
+      "revId": "125eeb9dc60aeddec496d2683891cc4765afd4de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
