@@ -82,8 +82,6 @@ enum Token
     kConfigPreRotation90,
     kConfigPreRotation180,
     kConfigPreRotation270,
-    // SPIR-V generation
-    kConfigSPIRVGen,
     // expectation
     kExpectationPass,
     kExpectationFail,
@@ -181,7 +179,6 @@ constexpr TokenInfo kTokenData[kNumberOfTokens] = {
     {"prerotation90", GPUTestConfig::kConditionPreRotation90},
     {"prerotation180", GPUTestConfig::kConditionPreRotation180},
     {"prerotation270", GPUTestConfig::kConditionPreRotation270},
-    {"spirvgen", GPUTestConfig::kConditionSPIRVGen},
     {"pass", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestPass},
     {"fail", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestFail},
     {"flaky", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestFlaky},
@@ -504,7 +501,6 @@ bool GPUTestExpectationsParser::parseLine(const GPUTestConfig *config,
             case kConfigPreRotation90:
             case kConfigPreRotation180:
             case kConfigPreRotation270:
-            case kConfigSPIRVGen:
                 // MODIFIERS, check each condition and add accordingly.
                 if (stage != kLineParserConfigs && stage != kLineParserBugID)
                 {
