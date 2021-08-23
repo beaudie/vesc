@@ -16,6 +16,23 @@
       "message": "Thanks Gert, LGTM.",
       "revId": "b1f0aef3f8d77ebcfb4a0a436d53687194613741",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3e5901_2e82e460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-23T21:27:26Z",
+      "side": 1,
+      "message": "The code is getting difficult to read, but I like the results in anglebug.com/6282",
+      "revId": "b1f0aef3f8d77ebcfb4a0a436d53687194613741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
