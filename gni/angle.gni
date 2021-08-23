@@ -87,9 +87,9 @@ declare_args() {
   # By default we enable debug layers when asserts are turned on.
   angle_debug_layers_enabled = is_debug || angle_assert_always_on
 
-  # Enable direct SPIR-V generation conditionally to avoid increasing binary size of ANGLE on
-  # official builds until that's the only path.
-  angle_enable_direct_spirv_gen = is_debug || angle_assert_always_on
+  # Support using glslang to generate SPIR-V for the time being for the purpose of debugging
+  # the SPIR-V generation path, but leave it disabled on release.
+  angle_enable_spirv_gen_through_glslang = is_debug || angle_assert_always_on
 
   if (!is_android) {
     ndk_api_level_at_least_26 = false
