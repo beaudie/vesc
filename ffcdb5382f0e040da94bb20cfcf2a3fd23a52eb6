@@ -16,6 +16,115 @@
       "message": "PTAL",
       "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eefc8649_0c1a7dae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-23T15:57:32Z",
+      "side": 1,
+      "message": "Nice to see this coming together!",
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78be10c9_66189be3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 4993,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-23T15:57:32Z",
+      "side": 1,
+      "message": "Can you make this an explicit cast so it accurately reflects your comment above?  Actually, if you convert mLastContextId to a packed value, this code might all get clearer.",
+      "range": {
+        "startLine": 4993,
+        "startChar": 12,
+        "endLine": 4993,
+        "endChar": 52
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b6465b6_ac130dcb",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-23T15:57:32Z",
+      "side": 1,
+      "message": "This would be clearer as gl::ContextID, can avoid some casts below.",
+      "range": {
+        "startLine": 522,
+        "startChar": 4,
+        "endLine": 522,
+        "endChar": 12
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b0e1cd4_93c555b7",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-23T15:57:32Z",
+      "side": 1,
+      "message": "Convert to TODO",
+      "range": {
+        "startLine": 106,
+        "startChar": 35,
+        "endLine": 106,
+        "endChar": 41
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa998307_633b2132",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-23T15:57:32Z",
+      "side": 1,
+      "message": "These function names are a little goofy.  Maybe createContextEGL and makeCurrentEGL.",
+      "range": {
+        "startLine": 163,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 44
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
