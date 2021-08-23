@@ -20,7 +20,7 @@
 
 namespace sh
 {
-#if defined(ANGLE_ENABLE_VULKAN) || defined(ANGLE_ENABLE_METAL)
+#if defined(ANGLE_ENABLE_SPIRV_GENERATION_THROUGH_GLSLANG)
 void GlslangInitialize();
 void GlslangFinalize();
 
@@ -37,6 +37,14 @@ ANGLE_INLINE void GlslangInitialize()
 ANGLE_INLINE void GlslangFinalize()
 {
     UNREACHABLE();
+}
+ANGLE_INLINE bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
+                                        sh::GLenum shaderType,
+                                        const std::string &shaderSource,
+                                        angle::spirv::Blob *spirvBlobOut)
+{
+    UNREACHABLE();
+    return false;
 }
 #endif  // defined(ANGLE_ENABLE_VULKAN) || defined(ANGLE_ENABLE_METAL)
 }  // namespace sh
