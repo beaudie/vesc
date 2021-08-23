@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 266
+#define ANGLE_SH_VERSION 267
 
 enum ShShaderSpec
 {
@@ -332,8 +332,8 @@ const ShCompileOptions SH_ADD_VULKAN_XFB_EXTENSION_SUPPORT_CODE = UINT64_C(1) <<
 const ShCompileOptions SH_INIT_FRAGMENT_OUTPUT_VARIABLES = UINT64_C(1) << 57;
 
 // Transitory flag to select between producing SPIR-V directly vs using glslang.  Ignored in
-// non-assert-enabled builds to avoid increasing ANGLE's binary size while both generators coexist.
-const ShCompileOptions SH_GENERATE_SPIRV_DIRECTLY = UINT64_C(1) << 58;
+// non-assert-enabled builds to avoid increasing ANGLE's binary size.
+const ShCompileOptions SH_GENERATE_SPIRV_THROUGH_GLSLANG = UINT64_C(1) << 58;
 
 // The 64 bits hash function. The first parameter is the input string; the
 // second parameter is the string length.
