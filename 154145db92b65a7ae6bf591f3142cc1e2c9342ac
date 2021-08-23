@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40d6313e_bf0a7c36",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13135,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-23T22:23:02Z",
+      "side": 1,
+      "message": "Nit: effect -\u003e affect, here and in CL description.",
+      "revId": "154145db92b65a7ae6bf591f3142cc1e2c9342ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

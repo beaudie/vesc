@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f59910a_f15def9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-23T22:23:02Z",
+      "side": 1,
+      "message": "Thank you for integrating this test! lgtm. I think it\u0027s fine if I approve this since it\u0027s just adding a test.\n",
+      "revId": "16e5f9690c24176ddec20fae1ca0e3301566cb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
