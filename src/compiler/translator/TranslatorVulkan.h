@@ -17,7 +17,6 @@
 namespace sh
 {
 
-class TOutputVulkanGLSL;
 class SpecConst;
 class DriverUniform;
 
@@ -34,14 +33,11 @@ class TranslatorVulkan : public TCompiler
 
     // Subclass can call this method to transform the AST before writing the final output.
     // See TranslatorMetal.cpp.
-    ANGLE_NO_DISCARD bool translateImpl(TInfoSinkBase &sink,
-                                        TIntermBlock *root,
+    ANGLE_NO_DISCARD bool translateImpl(TIntermBlock *root,
                                         ShCompileOptions compileOptions,
                                         PerformanceDiagnostics *perfDiagnostics,
                                         SpecConst *specConst,
                                         DriverUniform *driverUniforms);
-
-    void writeExtensionBehavior(ShCompileOptions compileOptions, TInfoSinkBase &sink);
 
     // Give subclass such as TranslatorMetal a chance to do depth transform before
     // TranslatorVulkan apply its own transform.
@@ -51,9 +47,6 @@ class TranslatorVulkan : public TCompiler
     {
         return true;
     }
-
-    // Generate SPIR-V out of intermediate GLSL through glslang.
-    ANGLE_NO_DISCARD bool compileToSpirv(const TInfoSinkBase &glsl);
 };
 
 }  // namespace sh

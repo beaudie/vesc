@@ -4,9 +4,7 @@
 // found in the LICENSE file.
 //
 // TranslatorVulkan:
-//   A GLSL-based translator that outputs shaders that fit GL_KHR_vulkan_glsl and feeds them into
-//   glslang to spit out SPIR-V.
-//   See: https://www.khronos.org/registry/vulkan/specs/misc/GL_KHR_vulkan_glsl.txt
+//   A translator that outputs SPIR-V for consumption by Vulkan.
 //
 
 #include "compiler/translator/TranslatorVulkan.h"
@@ -18,9 +16,7 @@
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/OutputSPIRV.h"
-#include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
-#include "compiler/translator/glslang_wrapper.h"
 #include "compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h"
 #include "compiler/translator/tree_ops/RecordConstantPrecision.h"
 #include "compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.h"
@@ -507,14 +503,6 @@ ANGLE_NO_DISCARD bool AddXfbEmulationSupport(TCompiler *compiler,
     TIntermBlock *captureXfbBlock = new TIntermBlock;
     captureXfbBlock->appendStatement(captureXfbCall);
 
-    // Create a call to ANGLEGetXfbOffsets too, for the sole purpose of preventing it from being
-    // culled as unused by glslang.
-    TIntermSequence ivec4Zero;
-    ivec4Zero.push_back(CreateZeroNode(*ivec4Type));
-    TIntermAggregate *getOffsetsCall =
-        TIntermAggregate::CreateFunctionCall(*getOffsetsFunction, &ivec4Zero);
-    captureXfbBlock->appendStatement(getOffsetsCall);
-
     // Create the if
     TIntermIfElse *captureXfb = new TIntermIfElse(isXfbActiveUnpaused, captureXfbBlock, nullptr);
 
@@ -800,8 +788,7 @@ TranslatorVulkan::TranslatorVulkan(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_GLSL_450_CORE_OUTPUT)
 {}
 
-bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
-                                     TIntermBlock *root,
+bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                                      ShCompileOptions compileOptions,
                                      PerformanceDiagnostics * /*perfDiagnostics*/,
                                      SpecConst *specConst,
@@ -814,10 +801,6 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
             return false;
         }
     }
-
-    sink << "#version 450 core\n";
-    writeExtensionBehavior(compileOptions, sink);
-    WritePragma(sink, compileOptions, getPragma());
 
     // Write out default uniforms into a uniform block assigned to a specific set/binding.
     int defaultUniformCount           = 0;
@@ -1205,7 +1188,6 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
                 }
             }
 
-            EmitEarlyFragmentTestsGLSL(*this, sink);
             break;
         }
 
@@ -1241,43 +1223,20 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
         }
 
         case gl::ShaderType::Geometry:
-        {
-            int maxVertices = getGeometryShaderMaxVertices();
-
-            // max_vertices=0 is not valid in Vulkan
-            maxVertices = std::max(1, maxVertices);
-
-            WriteGeometryShaderLayoutQualifiers(
-                sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
-                getGeometryShaderOutputPrimitiveType(), maxVertices);
             break;
-        }
 
         case gl::ShaderType::TessControl:
-        {
             if (!ReplaceGLBoundingBoxWithGlobal(this, root, &getSymbolTable()))
             {
                 return false;
             }
-            WriteTessControlShaderLayoutQualifiers(sink, getTessControlShaderOutputVertices());
             break;
-        }
 
         case gl::ShaderType::TessEvaluation:
-        {
-            WriteTessEvaluationShaderLayoutQualifiers(
-                sink, getTessEvaluationShaderInputPrimitiveType(),
-                getTessEvaluationShaderInputVertexSpacingType(),
-                getTessEvaluationShaderInputOrderingType(),
-                getTessEvaluationShaderInputPointType());
             break;
-        }
 
         case gl::ShaderType::Compute:
-        {
-            EmitWorkGroupSizeGLSL(*this, sink);
             break;
-        }
 
         default:
             UNREACHABLE();
@@ -1302,60 +1261,16 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
     return true;
 }
 
-void TranslatorVulkan::writeExtensionBehavior(ShCompileOptions compileOptions, TInfoSinkBase &sink)
-{
-    const TExtensionBehavior &extBehavior = getExtensionBehavior();
-    TBehavior multiviewBehavior           = EBhUndefined;
-    TBehavior multiview2Behavior          = EBhUndefined;
-    for (const auto &iter : extBehavior)
-    {
-        if (iter.second == EBhUndefined || iter.second == EBhDisable)
-        {
-            continue;
-        }
-
-        switch (iter.first)
-        {
-            case TExtension::OVR_multiview:
-                multiviewBehavior = iter.second;
-                break;
-            case TExtension::OVR_multiview2:
-                multiviewBehavior = iter.second;
-                break;
-            default:
-                break;
-        }
-    }
-
-    if (multiviewBehavior != EBhUndefined || multiview2Behavior != EBhUndefined)
-    {
-        // Only either OVR_multiview or OVR_multiview2 should be emitted.
-        TExtension ext     = TExtension::OVR_multiview;
-        TBehavior behavior = multiviewBehavior;
-        if (multiview2Behavior != EBhUndefined)
-        {
-            ext      = TExtension::OVR_multiview2;
-            behavior = multiview2Behavior;
-        }
-        EmitMultiviewGLSL(*this, compileOptions, ext, behavior, sink);
-    }
-}
-
 bool TranslatorVulkan::translate(TIntermBlock *root,
                                  ShCompileOptions compileOptions,
                                  PerformanceDiagnostics *perfDiagnostics)
 {
-    TInfoSinkBase sink;
-
-    bool enablePrecision = (compileOptions & SH_IGNORE_PRECISION_QUALIFIERS) == 0;
-
     SpecConst specConst(&getSymbolTable(), compileOptions, getShaderType());
 
     if ((compileOptions & SH_USE_SPECIALIZATION_CONSTANT) != 0)
     {
         DriverUniform driverUniforms(DriverUniformMode::InterfaceBlock);
-        if (!translateImpl(sink, root, compileOptions, perfDiagnostics, &specConst,
-                           &driverUniforms))
+        if (!translateImpl(root, compileOptions, perfDiagnostics, &specConst, &driverUniforms))
         {
             return false;
         }
@@ -1363,58 +1278,25 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     else
     {
         DriverUniformExtended driverUniformsExt(DriverUniformMode::InterfaceBlock);
-        if (!translateImpl(sink, root, compileOptions, perfDiagnostics, &specConst,
-                           &driverUniformsExt))
+        if (!translateImpl(root, compileOptions, perfDiagnostics, &specConst, &driverUniformsExt))
         {
             return false;
         }
     }
 
-#if defined(ANGLE_ENABLE_DIRECT_SPIRV_GENERATION)
-    if ((compileOptions & SH_GENERATE_SPIRV_DIRECTLY) != 0)
-    {
-        // Declare the implicitly defined gl_PerVertex I/O blocks if not already.  This will help
-        // SPIR-V generation treat them mostly like usual I/O blocks.
-        if (!DeclarePerVertexBlocks(this, root, &getSymbolTable()))
-        {
-            return false;
-        }
-
-        return OutputSPIRV(this, root, compileOptions);
-    }
-#endif
-
-    // When generating text, glslang cannot know the precision of folded constants so it may infer
-    // the wrong precisions.  The following transformation gives constants names with precision to
-    // guide glslang.  This is not an issue for SPIR-V generation because the precision information
-    // is present in the tree already.
-    if (!RecordConstantPrecision(this, root, &getSymbolTable()))
+    // Declare the implicitly defined gl_PerVertex I/O blocks if not already.  This will help
+    // SPIR-V generation treat them mostly like usual I/O blocks.
+    if (!DeclarePerVertexBlocks(this, root, &getSymbolTable()))
     {
         return false;
     }
 
-    // Write translated shader.
-    TOutputVulkanGLSL outputGLSL(this, sink, enablePrecision, compileOptions);
-    root->traverse(&outputGLSL);
-
-    return compileToSpirv(sink);
+    return OutputSPIRV(this, root, compileOptions);
 }
 
 bool TranslatorVulkan::shouldFlattenPragmaStdglInvariantAll()
 {
     // Not necessary.
     return false;
-}
-
-bool TranslatorVulkan::compileToSpirv(const TInfoSinkBase &glsl)
-{
-    angle::spirv::Blob spirvBlob;
-    if (!GlslangCompileToSpirv(getResources(), getShaderType(), glsl.str(), &spirvBlob))
-    {
-        return false;
-    }
-
-    getInfoSink().obj.setBinary(std::move(spirvBlob));
-    return true;
 }
 }  // namespace sh
