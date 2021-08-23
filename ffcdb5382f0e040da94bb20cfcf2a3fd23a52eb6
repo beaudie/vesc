@@ -60,6 +60,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fe60f2b_0b6c5ed4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 5869,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "are we able to embed these as captured calls? I recall you added some logic for capturing EGL. Maybe these could be the first calls in a Setup function.",
+      "range": {
+        "startLine": 5861,
+        "startChar": 24,
+        "endLine": 5869,
+        "endChar": 46
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "244f0022_6d13ded7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 6529,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "what about if value is not NO_DISPLAY/NO_SURFACE? We write nothing?",
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9c41782_13f3d4b4",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "small nit: uses?",
+      "range": {
+        "startLine": 459,
+        "startChar": 9,
+        "endLine": 459,
+        "endChar": 30
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b6465b6_ac130dcb",
         "filename": "src/libANGLE/capture/FrameCapture.h",
         "patchSetId": 30
@@ -76,6 +139,52 @@
         "startChar": 4,
         "endLine": 522,
         "endChar": 12
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bfb4dd7_c6294e46",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "nit: we call this mWindowSurfaceContextID AFAIK.",
+      "range": {
+        "startLine": 544,
+        "startChar": 18,
+        "endLine": 544,
+        "endChar": 40
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "137e9967_69874238",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "see here.. is this the same as above?",
+      "range": {
+        "startLine": 563,
+        "startChar": 18,
+        "endLine": 563,
+        "endChar": 41
       },
       "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -106,6 +215,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86414ec3_0b57d579",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "nit: can you use the same naming as the other methods?\n\nThese would be onReplayCreateContext, onReplayMakeCurrent\n\nAlso I\u0027m not seeing a createSurface call, yet.\n\nAlso it looks like we\u0027re using attrib lists.. so maybe we do have to update the param classes to handle those.",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 95
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f4dfdf6_bd46da7a",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "nit: we should probably put API prefixes on our callbacks now.",
+      "range": {
+        "startLine": 464,
+        "startChar": 52,
+        "endLine": 464,
+        "endChar": 65
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1550d82c_554ee660",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "nit: make this into a strongly typed wrapper, you could use the Khronos design pattern and define an empty struct and use a pointer to that.",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa998307_633b2132",
         "filename": "util/EGLWindow.h",
         "patchSetId": 30
@@ -122,6 +300,76 @@
         "startChar": 4,
         "endLine": 164,
         "endChar": 44
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bdbe7c0_aeee0f8e",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "createContextImpl/makeCurrentImpl are what we\u0027d use in other parts of ANGLE.",
+      "parentUuid": "aa998307_633b2132",
+      "range": {
+        "startLine": 163,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 44
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9b1d20a_bead2eba",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "I don\u0027t think this will work out of the box with sharing, there are some specific things you need to share on Windows. Did you test it at all?",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 1
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "421b2447_8e2add0d",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-23T16:22:33Z",
+      "side": 1,
+      "message": "nit: can you explicitly distinguish these two methods?",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 39,
+        "endChar": 20
       },
       "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
