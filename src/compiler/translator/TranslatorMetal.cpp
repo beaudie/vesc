@@ -373,10 +373,10 @@ ANGLE_NO_DISCARD bool TranslatorMetal::insertRasterizerDiscardLogic(TInfoSinkBas
     // Create vec4(-3, -3, -3, 1):
     auto vec4Type = new TType(EbtFloat, 4);
     TIntermSequence vec4Args;
-    vec4Args.push_back(CreateFloatNode(-3.0f));
-    vec4Args.push_back(CreateFloatNode(-3.0f));
-    vec4Args.push_back(CreateFloatNode(-3.0f));
-    vec4Args.push_back(CreateFloatNode(1.0f));
+    vec4Args.push_back(CreateFloatNode(-3.0f, EbpMedium));
+    vec4Args.push_back(CreateFloatNode(-3.0f, EbpMedium));
+    vec4Args.push_back(CreateFloatNode(-3.0f, EbpMedium));
+    vec4Args.push_back(CreateFloatNode(1.0f, EbpMedium));
     TIntermAggregate *constVarConstructor =
         TIntermAggregate::CreateConstructor(*vec4Type, &vec4Args);
 

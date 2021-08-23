@@ -561,10 +561,10 @@ ANGLE_NO_DISCARD bool TranslatorMetalDirect::insertRasterizationDiscardLogic(TIn
     // Create vec4(-3, -3, -3, 1):
     auto vec4Type             = new TType(EbtFloat, 4);
     TIntermSequence *vec4Args = new TIntermSequence();
-    vec4Args->push_back(CreateFloatNode(-3.0f));
-    vec4Args->push_back(CreateFloatNode(-3.0f));
-    vec4Args->push_back(CreateFloatNode(-3.0f));
-    vec4Args->push_back(CreateFloatNode(1.0f));
+    vec4Args->push_back(CreateFloatNode(-3.0f, EbpMedium));
+    vec4Args->push_back(CreateFloatNode(-3.0f, EbpMedium));
+    vec4Args->push_back(CreateFloatNode(-3.0f, EbpMedium));
+    vec4Args->push_back(CreateFloatNode(1.0f, EbpMedium));
     TIntermAggregate *constVarConstructor =
         TIntermAggregate::CreateConstructor(*vec4Type, vec4Args);
 
@@ -624,7 +624,7 @@ bool TranslatorMetalDirect::appendVertexShaderDepthCorrectionToMain(TIntermBlock
     TVector<int> swizzleOffsetZ = {2};
     TIntermSwizzle *positionZ   = new TIntermSwizzle(positionRef, swizzleOffsetZ);
 
-    TIntermConstantUnion *oneHalf = CreateFloatNode(0.5f);
+    TIntermConstantUnion *oneHalf = CreateFloatNode(0.5f, EbpMedium);
 
     TVector<int> swizzleOffsetW = {3};
     TIntermSwizzle *positionW   = new TIntermSwizzle(positionRef->deepCopy(), swizzleOffsetW);
@@ -1011,7 +1011,7 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             {
                 flipNegXY = driverUniforms->getNegFlipXYRef();
             }
-            TIntermConstantUnion *pivot = CreateFloatNode(0.5f);
+            TIntermConstantUnion *pivot = CreateFloatNode(0.5f, EbpMedium);
             TIntermTyped *fragRotation  = nullptr;
             if (usePreRotation)
             {

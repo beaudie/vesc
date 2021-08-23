@@ -14,6 +14,7 @@
 
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/util.h"
 
 namespace sh
 {
@@ -201,6 +202,8 @@ TFunction::TFunction(TSymbolTable *symbolTable,
     // Functions with an empty name are not allowed.
     ASSERT(symbolType != SymbolType::Empty);
     ASSERT(name != nullptr || symbolType == SymbolType::AngleInternal);
+    ASSERT(!IsPrecisionApplicableToType(retType->getBasicType()) ||
+           retType->getPrecision() != EbpUndefined);
 }
 
 void TFunction::addParameter(const TVariable *p)
