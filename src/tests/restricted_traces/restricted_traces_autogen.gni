@@ -96,6 +96,28 @@ angle_restricted_traces = [
     "asphalt_8/asphalt_8_capture_context1.angledata.gz",
   ],
   [
+    "asphalt_9",
+    3,
+    [
+      "asphalt_9/asphalt_9_capture_context3_frame001.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame002.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame003.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame004.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame005.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame006.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame007.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame008.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame009.cpp",
+      "asphalt_9/asphalt_9_capture_context3_frame010.cpp",
+      "asphalt_9/asphalt_9_capture_context4_frame001.cpp",
+      "asphalt_9/asphalt_9_capture_context5_frame001.cpp",
+      "asphalt_9/asphalt_9_capture_context6_frame001.cpp",
+      "asphalt_9/asphalt_9_capture_context7_frame001.cpp",
+      "asphalt_9/asphalt_9_capture_shared.cpp",
+    ],
+    "asphalt_9/asphalt_9.angledata.gz",
+  ],
+  [
     "avakin_life",
     1,
     [

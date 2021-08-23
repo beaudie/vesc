@@ -34,6 +34,7 @@ enum class RestrictedTraceID
     angry_birds_2_1500,
     arena_of_valor,
     asphalt_8,
+    asphalt_9,
     avakin_life,
     aztec_ruins,
     beach_buggy_racing,
