@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08a53f72_e05949d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2021-08-23T08:29:18Z",
+      "side": 1,
+      "message": "Hello SeongHwan Park, this is a merge for the current LTS branch, I don\u0027t have permissions for submitting it. Could you please review/submit the change?",
+      "revId": "125eeb9dc60aeddec496d2683891cc4765afd4de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
