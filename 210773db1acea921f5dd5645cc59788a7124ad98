@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd7025dd_4d48e6bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-08-23T18:30:27Z",
+      "side": 1,
+      "message": "Suspecting this CL for this failure\nhttps://luci-milo.appspot.com/ui/p/chromium/builders/ci/Win10%20FYI%20x64%20Release%20(NVIDIA%20GeForce%20GTX%201660)/5154/overview\nShabi, could you confirm?",
+      "revId": "210773db1acea921f5dd5645cc59788a7124ad98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
