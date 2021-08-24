@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d709df0_cfd9fc16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-24T19:07:14Z",
+      "side": 1,
+      "message": "Great find; lgtm\n\nSince this change is small, taking the liberty of approving it fully.\n\nNote there have been a few other fixes in WebKit related to constants and reserved words. Take a look at this upstreaming patch:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3010618\n\nand this recently filed bug:\nhttps://bugs.webkit.org/show_bug.cgi?id\u003d229378\n\nThere are some changes not in the upstreaming patch, too.\n",
+      "revId": "7dc9ae21f54fb6c171ca87bbd6684eadb541c87f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
