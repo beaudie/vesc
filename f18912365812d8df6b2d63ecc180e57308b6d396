@@ -16,6 +16,24 @@
       "message": "Just adding a trace, but I can\u0027t self approve anymore.  This got fixed by Tim back in July with http://anglebug.com/6183",
       "revId": "f18912365812d8df6b2d63ecc180e57308b6d396",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fabff4cc_0be67800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T10:58:01Z",
+      "side": 1,
+      "message": "You can, I think. It just pops up a warning.",
+      "parentUuid": "230f78a6_90d0611f",
+      "revId": "f18912365812d8df6b2d63ecc180e57308b6d396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
