@@ -86,6 +86,24 @@
       "parentUuid": "051b3603_61168d94",
       "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad154520_43a87710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-24T16:25:01Z",
+      "side": 1,
+      "message": "Part reason this is okay for now is because mImageUsesageFlags is not been used much. I guess you may able study the code to write a test and it will fail with current code base. But My change for RGBA4 format will actually use mImageUsageFlags more and the following existing tests fail, due to we incoreectly recognize mImageUsageFlags change:\n\n VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphores/ES2_Vulkan\n* VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphores/ES3_Vulkan\n* VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresMutableNoStorage/ES2_Vulkan\n* VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresMutableNoStorage/ES3_Vulkan\n* VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresNoStorage/ES2_Vulkan\n* VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresNoStorage/ES3_Vulkan\n* VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresWithFlags/ES2_Vulkan\n* VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresWithFlags/ES3_Vulkan\n* VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES2_Vulkan\n* VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES3_Vulkan\n* VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES2_Vulkan\n* VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES3_Vulkan\n\nSo in some way you already have tests covering these.",
+      "parentUuid": "feaa6a79_2f75020f",
+      "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
