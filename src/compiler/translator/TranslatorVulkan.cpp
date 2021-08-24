@@ -639,9 +639,10 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
             fragRotation = driverUniforms->getFragRotationMatrixRef();
         }
     }
+    const TVariable *fragCoord = static_cast<const TVariable *>(
+        symbolTable->findBuiltIn(ImmutableString("gl_FragCoord"), compiler->getShaderVersion()));
     return RotateAndFlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable,
-                                        BuiltInVariable::gl_FragCoord(), kFlippedFragCoordName,
-                                        pivot, fragRotation);
+                                        fragCoord, kFlippedFragCoordName, pivot, fragRotation);
 }
 
 // This block adds OpenGL line segment rasterization emulation behind a specialization constant
@@ -713,7 +714,8 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     TIntermDeclaration *dDecl = CreateTempInitDeclarationNode(d, dfsum);
 
     // vec2 f = gl_FragCoord.xy
-    const TVariable *fragCoord  = BuiltInVariable::gl_FragCoord();
+    const TVariable *fragCoord = static_cast<const TVariable *>(
+        symbolTable->findBuiltIn(ImmutableString("gl_FragCoord"), compiler->getShaderVersion()));
     TIntermSwizzle *fragCoordXY = CreateSwizzle(new TIntermSymbol(fragCoord), 0, 1);
     TVariable *f                = CreateTempVariable(symbolTable, vec2Type);
     TIntermDeclaration *fDecl   = CreateTempInitDeclarationNode(f, fragCoordXY);
