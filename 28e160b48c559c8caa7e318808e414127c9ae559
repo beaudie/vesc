@@ -16,6 +16,29 @@
       "message": "This will allow us to land auto-roll\u0027s into AOSP",
       "revId": "28e160b48c559c8caa7e318808e414127c9ae559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c963363f_63d0d6ed",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T15:28:04Z",
+      "side": 1,
+      "message": "nit: can you sort?\n\nAlso it looks like Charlie is not listed as wrangler right now. Charlie would you be OK with being added to the ANGLE sheriffing rotation?",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "28e160b48c559c8caa7e318808e414127c9ae559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
