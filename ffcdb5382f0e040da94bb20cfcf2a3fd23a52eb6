@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "289b675a_14f9e4b0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 4993,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "\u003e Can you make this an explicit cast so it accurately reflects your comment above\n\nDone.\n\n\u003e Actually, if you convert mLastContextId to a packed value, this code might all get clearer.\n\nI\u0027m not sure what you\u0027re describing here.   Looking at gl::ContextID:\n\n  struct ContextID\n  {\n      uint32_t value;\n  };\n\nAnd then gl::PackParam:\n\n  // Second case: handling non-pointer resource ids.\n  template \u003ctypename EnumT, typename FromT\u003e\n  typename std::enable_if\u003c!std::is_pointer\u003cFromT\u003e::value \u0026\u0026 !std::is_enum\u003cEnumT\u003e::value, EnumT\u003e::type\n  PackParam(FromT from)\n  {\n      return {from};\n  }\n  \nSo I think they would essentially be the same thing.   With the (good) idea to make mLastContextId a gl::ContextId, the final line becomes:\n\n    mLastContextId \u003d context-\u003eid();\n\nCan you give an example of what you\u0027re describing?",
+      "parentUuid": "78be10c9_66189be3",
+      "range": {
+        "startLine": 4993,
+        "startChar": 12,
+        "endLine": 4993,
+        "endChar": 52
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3fe60f2b_0b6c5ed4",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 30
@@ -71,6 +95,30 @@
       "writtenOn": "2021-08-23T16:22:33Z",
       "side": 1,
       "message": "are we able to embed these as captured calls? I recall you added some logic for capturing EGL. Maybe these could be the first calls in a Setup function.",
+      "range": {
+        "startLine": 5861,
+        "startChar": 24,
+        "endLine": 5869,
+        "endChar": 46
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50c495e9_9ec9656b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 5869,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "I\u0027m able to move the eglMakeCurrent() calls over to SetupReplayContextXX().\n\nMoving the eglCreateContext() calls will take some more work:\n\n1.) FmtSetupFunction doesn\u0027t support generating prototypes vs function calls.   We need to pass in the share context to create the new context with, so we need both:\n\n    void SetupReplayContext4(EGLContext context);\nand\n   SetupReplayContext4(context);\n\nIt\u0027ll take refactoring/hacking to support both.\n\n2.) We\u0027ll need to support capturing and replaying eglCreateContext().   This CL already introduces gContextMap:\n\n  using ContextMap \u003d std::unordered_map\u003cuint32_t, EGLContext\u003e;\n  extern ContextMap gContextMap;\n\nNext, we\u0027ll need to do something similar to the current gen calls for buffers/textures/etc. and store the EGLContext returned by eglCreateContext() in gContextMap for the correct context ID.\n\nThe trouble I\u0027m having is corresponding the context ID with the EGL context, since there\u0027s no way to record that in the all itself.   One option is to just add a gl::ContextID member to CallCapture, which is filled in when the eglCreateContext() call is generated.\n\nTogether, these changes feel like enough work for a follow-on CL, so I\u0027m going to mark this with a TODO for now.",
+      "parentUuid": "3fe60f2b_0b6c5ed4",
       "range": {
         "startLine": 5861,
         "startChar": 24,
@@ -98,6 +146,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d219859_92cdfd40",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 6529,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "I\u0027ve added an UNREACHABLE(), since we don\u0027t support any other values.",
+      "parentUuid": "244f0022_6d13ded7",
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9c41782_13f3d4b4",
@@ -111,6 +177,30 @@
       "writtenOn": "2021-08-23T16:22:33Z",
       "side": 1,
       "message": "small nit: uses?",
+      "range": {
+        "startLine": 459,
+        "startChar": 9,
+        "endLine": 459,
+        "endChar": 30
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfd0c824_d0a681da",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "We can only output calls to SetupReplayContextXX() in SetupReplay() when they exist, which is for MEC.",
+      "parentUuid": "a9c41782_13f3d4b4",
       "range": {
         "startLine": 459,
         "startChar": 9,
@@ -144,6 +234,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ef01b80_ef04af96",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b6465b6_ac130dcb",
+      "range": {
+        "startLine": 522,
+        "startChar": 4,
+        "endLine": 522,
+        "endChar": 12
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bfb4dd7_c6294e46",
@@ -157,6 +271,30 @@
       "writtenOn": "2021-08-23T16:22:33Z",
       "side": 1,
       "message": "nit: we call this mWindowSurfaceContextID AFAIK.",
+      "range": {
+        "startLine": 544,
+        "startChar": 18,
+        "endLine": 544,
+        "endChar": 40
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7e6c8a3_787dc2ce",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Removed.  Bad merge.",
+      "parentUuid": "8bfb4dd7_c6294e46",
       "range": {
         "startLine": 544,
         "startChar": 18,
@@ -190,6 +328,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e2a2ab_84863486",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "137e9967_69874238",
+      "range": {
+        "startLine": 563,
+        "startChar": 18,
+        "endLine": 563,
+        "endChar": 41
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b0e1cd4_93c555b7",
@@ -203,6 +365,30 @@
       "writtenOn": "2021-08-23T15:57:32Z",
       "side": 1,
       "message": "Convert to TODO",
+      "range": {
+        "startLine": 106,
+        "startChar": 35,
+        "endLine": 106,
+        "endChar": 41
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d152497_6e721087",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Oops. Done.",
+      "parentUuid": "7b0e1cd4_93c555b7",
       "range": {
         "startLine": 106,
         "startChar": 35,
@@ -238,6 +424,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e739a30_736f2565",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "\u003e nit: can you use the same naming as the other methods?\n\u003e \n\u003e These would be onReplayCreateContext, onReplayMakeCurrent\n\nDone.\n\n\u003e Also I\u0027m not seeing a createSurface call, yet.\n\nAll of the Contexts are currently using the same Surface for this implementation.      Everything seems to be working well enough without that support, but it would at least be more correct and may fix some subtle bug I haven\u0027t dug into yet.\n\nIt looks like FrameCaptureShared::onMakeCurrent() captures the draw surface extents and color space, so we\u0027ll need to do the same for the read surface as well, if they are different surfaces.\n\nThe next step will be determining which surface type was created for each context (window vs pbuffer), and then how to correspond those surfaces to each context.   Since we don\u0027t capture EGL calls yet, we\u0027ll need to serialize the getCurrent[Draw|Read]Surface()-\u003egetType() values and map them to each context ID, so we can recreate the calls later.\n\nI\u0027ve added a TODO to create the corresponding surfaces for each context with a follow-on CL.\n\n\u003e Also it looks like we\u0027re using attrib lists.. so maybe we do have to update the param classes to handle those.\n\nThe only value we actually use is in CreateContext() is share_context and for MakeCurrent() is context.   We ignore the rest of the parameters, since we don\u0027t know what they should be for the perftests anyway and don\u0027t want/need those specifics from the actual app since they aren\u0027t portable.\n\nFor example, here is an example from SetupReplay();\n\n    EGLContext context4 \u003d eglCreateContext(nullptr, nullptr, context, nullptr);\n    gContextMap[4] \u003d context4;\n    eglMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, context4);\n    \nThe eglMakeCurrent() calls in the replay functions look similar:\n\n    eglMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, gContextMap[4]);",
+      "parentUuid": "86414ec3_0b57d579",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 95
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f4dfdf6_bd46da7a",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 30
@@ -249,6 +459,30 @@
       "writtenOn": "2021-08-23T16:22:33Z",
       "side": 1,
       "message": "nit: we should probably put API prefixes on our callbacks now.",
+      "range": {
+        "startLine": 464,
+        "startChar": 52,
+        "endLine": 464,
+        "endChar": 65
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33978273_fe21a539",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "I\u0027ve added EGL prefixes to these and the TracePerfTest functions.   I\u0027ll leave adding GL prefixes to another CL if you\u0027d still like that.",
+      "parentUuid": "3f4dfdf6_bd46da7a",
       "range": {
         "startLine": 464,
         "startChar": 52,
@@ -272,6 +506,30 @@
       "writtenOn": "2021-08-23T16:22:33Z",
       "side": 1,
       "message": "nit: make this into a strongly typed wrapper, you could use the Khronos design pattern and define an empty struct and use a pointer to that.",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc43b8c_1c955f72",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Using a strong type sounds like a good idea, but I\u0027m having trouble finding what you\u0027re describing.   Can you point me to what you\u0027re thinking of?\n\nLooking around online, I came across doing something like:\n\n  struct GLWindowContext;\n  \n  class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable\n  {\n  ...\n      virtual GLWindowContext *getCurrentContext()        \u003d 0;\n  ...\n  };\n    \n  class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase\n  {\n  ...\n      GLWindowContext *getCurrentContext() override;\n  ..\n  };\n  \n  GLWindowContext *EGLWindow::getCurrentContext()\n  {\n      return reinterpret_cast\u003cGLWindowContext *\u003e(mContext);\n  }\n\nThis seems to compile and run fine.   Is this about what you\u0027re thinking of?",
+      "parentUuid": "1550d82c_554ee660",
       "range": {
         "startLine": 133,
         "startChar": 4,
@@ -329,6 +587,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d54aa87_2eec4d66",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bdbe7c0_aeee0f8e",
+      "range": {
+        "startLine": 163,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 44
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9b1d20a_bead2eba",
@@ -352,6 +634,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "318a8ed7_bb7eee9c",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Trying the Asphalt 9 replay on Windows works well once I remove the call to _wglShareLists().   The images rendered match linux, which has 1 bad mesh but otherwise looks good.\n\nNote that I updated _wglCreateContextAttribsARB() to take a share context, which seems to work just fine without any other changes.",
+      "parentUuid": "c9b1d20a_bead2eba",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 1
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "421b2447_8e2add0d",
@@ -365,6 +671,30 @@
       "writtenOn": "2021-08-23T16:22:33Z",
       "side": 1,
       "message": "nit: can you explicitly distinguish these two methods?",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "744e9115_18c95d62",
+        "filename": "util/windows/WGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T01:15:49Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "421b2447_8e2add0d",
       "range": {
         "startLine": 39,
         "startChar": 9,
