@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22b4f252_e3e2bd8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T20:03:06Z",
+      "side": 1,
+      "message": "There are rules. The most relevant part here is this:\n\n\u003e ... The precision used to internally evaluate an operation, and the precision qualification subsequently associated with any resulting intermediate values, must be at least as high as the highest precision qualification of the operands consumed by the operation.\n\n\u003e In cases where operands do not have a precision qualifier, the precision qualification will come from the other operands. ...\n\nBut ANGLE is in a special situation here. The thing is, the author of the shader expected the result of (x + y) to be mediump in the example above, and any other precision derived from that to also be mediump.\n\nNow if ANGLE decides to transform x by some magic, and that magic was done in highp, does that mean the result of (x + y) should now be highp? The spec doesn\u0027t say anything about this of course, so it\u0027s up to us really to decide. I believe (x + y) should remain mediump because that\u0027s what the original shader intended.",
+      "parentUuid": "0ca0e23c_08d32191",
+      "range": {
+        "startLine": 27,
+        "startChar": 45,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93e42d29_ae63aae6",
         "filename": "src/compiler/translator/Compiler.cpp",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-24T10:54:11Z",
       "side": 1,
       "message": "nit: leave a comment?",
+      "range": {
+        "startLine": 618,
+        "startChar": 45,
+        "endLine": 618,
+        "endChar": 60
+      },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3a7bfa2_e8be554a",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T20:03:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93e42d29_ae63aae6",
       "range": {
         "startLine": 618,
         "startChar": 45,
@@ -111,6 +159,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e67fd44_3ec04b17",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T20:03:06Z",
+      "side": 1,
+      "message": "The spec defines the range and precision of lowp/mediump/highp. In most cases, it\u0027s pretty obvious; most of our constants are 0, 0.5, -1 etc which can all be lowp. Vulkan doesn\u0027t distinguish between lowp and mediump, so I went with mediump in all those cases (including for example 3, which cannot fit in lowp).\n\nWhen I had the slightest doubt, I went with highp.",
+      "parentUuid": "4309f3dc_ba29d3c2",
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86813b3d_ec8f8e7a",
@@ -124,6 +190,24 @@
       "writtenOn": "2021-08-24T19:51:17Z",
       "side": 1,
       "message": "Should this be checking mOptions.validatePrecision here and below?",
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "658296f9_2098783d",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T20:03:06Z",
+      "side": 1,
+      "message": "Oh yeah, done.",
+      "parentUuid": "86813b3d_ec8f8e7a",
       "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
