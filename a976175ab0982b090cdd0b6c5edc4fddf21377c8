@@ -22,6 +22,30 @@
       },
       "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7370833b_2cf519fb",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T19:44:07Z",
+      "side": 1,
+      "message": "So this is what we did before:\n\nstep()\nglFinish()\nstep()\nglFinish()\n.. repeat for \"gCalibrationTime\" seconds\nthen take the number of steps, the actual time ran, and compute an estimate of steps \"mStepsToRun\". \n\nwhen we run for real, we go\n\nstep()\nstep()\nstep()\n.. repeat for \"mStepsToRun\" steps.\nglFinish()\n\nthis has an obvious performance difference, because after each step() (one frame in a trace) you had a complete stall.\n\nWhat the new code does, is first it does the above to compute a tentative steps to  run, then does another pass (several times) where it then computes the \"actual\" elapsed time after running mStepsToRun and then re-computes mStepsToRun. This produces a much more accurate approximation of the number of steps to run in the fixed time.\n\nThe goal is as always more consistency and stable measurements using the same number of steps when we take many samples.\n\nI can try to encapsulate this in the comment if it would help.",
+      "parentUuid": "2c903df8_44076312",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 60
+      },
+      "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
