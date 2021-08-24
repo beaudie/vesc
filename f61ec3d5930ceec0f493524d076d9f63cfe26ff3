@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816528bd_48732581",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T16:43:43Z",
+      "side": 1,
+      "message": "Open to suggestions. I have a strong dislike for this function.",
+      "revId": "f61ec3d5930ceec0f493524d076d9f63cfe26ff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
