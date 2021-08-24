@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3589ce_cc5901a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-24T21:19:47Z",
+      "side": 1,
+      "message": "Thanks for the comments!  Leaving some replies while I address them.",
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b856e81_bdd53fab",
@@ -19,6 +36,76 @@
         "startChar": 9,
         "endLine": 85,
         "endChar": 37
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31450489_6b9e21c2",
+        "filename": "include/platform/FrontendFeatures.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-24T21:19:47Z",
+      "side": 1,
+      "message": "Sure, I can rename it.",
+      "parentUuid": "6b856e81_bdd53fab",
+      "range": {
+        "startLine": 85,
+        "startChar": 9,
+        "endLine": 85,
+        "endChar": 37
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8890914_af1775d1",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4653,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-24T21:19:47Z",
+      "side": 1,
+      "message": "ref2",
+      "range": {
+        "startLine": 4643,
+        "startChar": 0,
+        "endLine": 4653,
+        "endChar": 5
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e6cc123_04d8bf79",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4686,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-24T21:19:47Z",
+      "side": 1,
+      "message": "ref3",
+      "range": {
+        "startLine": 4686,
+        "startChar": 8,
+        "endLine": 4686,
+        "endChar": 15
       },
       "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -49,6 +136,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c14f9499_4c4ecbb1",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4709,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-24T21:19:47Z",
+      "side": 1,
+      "message": "Yes, at least according to the code above (see ref2).  Although I\u0027m not finding any code paths that could call this function with a null context.  Also, there are other parts of this function that presume a context is available (ref3), so we can probably drop it here.",
+      "parentUuid": "37f39e49_176cdd5c",
+      "range": {
+        "startLine": 4709,
+        "startChar": 8,
+        "endLine": 4709,
+        "endChar": 15
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ceed5ee_ab028f21",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 2
@@ -65,6 +176,29 @@
         "startChar": 8,
         "endLine": 4834,
         "endChar": 15
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5678d589_ed345619",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-24T21:19:47Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 2228,
+        "startChar": 4,
+        "endLine": 2228,
+        "endChar": 46
       },
       "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

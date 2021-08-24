@@ -344,6 +344,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b0ed673_4f68bb39",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-24T21:19:47Z",
+      "side": 1,
+      "message": "\u003e This is invalid GLSL, so it wouldn\u0027t compile when recreating the programs from the source in the program binaries.\nIt is possible have a program that is VS only.  I\u0027m not sure why the program thought it had a linked fragment stage though.  Trying to keep the investigation germane.  I can debug a bit more, but this is really just an optimization.  I only care about stages that have source we can re-use.",
+      "parentUuid": "3cd845dc_cb174fdd",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dc01820_27425a43",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
