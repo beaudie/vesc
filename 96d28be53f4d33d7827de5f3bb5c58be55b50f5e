@@ -104,6 +104,24 @@
       "parentUuid": "feaa6a79_2f75020f",
       "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d673dfa4_ed1218ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-24T17:12:10Z",
+      "side": 1,
+      "message": "So this is a pre-requisite for your RGBA4 CL, and fixes tests that would be otherwise broken for that CL.  Got it.  I\u0027m happy.  I\u0027ll let Jamie or Shabi have a chance to comment before +2, just in case.",
+      "parentUuid": "ad154520_43a87710",
+      "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
