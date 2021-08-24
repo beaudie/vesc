@@ -17,6 +17,7 @@
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/StaticType.h"
+#include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/util.h"
 
 namespace sh
@@ -556,4 +557,13 @@ bool UnmangledEntry::matches(const ImmutableString &name,
         return anyExtensionEnabled;
     }
 }
+
+namespace BuiltInVariable
+{
+const TVariable *gl_FragCoordByVersion(int version)
+{
+    return version == kESSL1Only ? gl_FragCoord() : gl_FragCoord300();
+}
+}  // namespace BuiltInVariable
+
 }  // namespace sh

@@ -344,9 +344,10 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
             fragRotation = driverUniforms->getFragRotationMatrixRef();
         }
     }
-    return RotateAndFlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable,
-                                        BuiltInVariable::gl_FragCoord(), kFlippedFragCoordName,
-                                        pivot, fragRotation);
+    return RotateAndFlipBuiltinVariable(
+        compiler, root, insertSequence, flipXY, symbolTable,
+        BuiltInVariable::gl_FragCoordByVersion(compiler->getShaderVersion()), kFlippedFragCoordName,
+        pivot, fragRotation);
 }
 
 void DeclareRightBeforeMain(TIntermBlock &root, const TVariable &var)
@@ -1037,7 +1038,8 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             {
                 return false;
             }
-            DeclareRightBeforeMain(*root, *BuiltInVariable::gl_FragCoord());
+            DeclareRightBeforeMain(*root,
+                                   *BuiltInVariable::gl_FragCoordByVersion(getShaderVersion()));
         }
 
         if (!RewriteDfdy(this, compileOptions, root, getSymbolTable(), getShaderVersion(),

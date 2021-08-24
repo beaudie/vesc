@@ -380,6 +380,19 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
     TVariable *mGlInVariableWithArraySize;
 };
 
+// Some built-ins are declared multiple times, for different shader versions.  Often the difference
+// is in the list of required extensions.  When encountered in the shader source, the correct
+// variable is automatically picked up.  If an AST transformation requires to directly retrieve a
+// variable, it must do so based on the shader version.  The following built-ins are accessed as
+// such:
+//
+// - gl_FragCoord: This built-in is mediump in ESSL100 and highp in ESSL300+
+//
+namespace BuiltInVariable
+{
+const TVariable *gl_FragCoordByVersion(int version);
+}  // namespace BuiltInVariable
+
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_SYMBOLTABLE_H_
