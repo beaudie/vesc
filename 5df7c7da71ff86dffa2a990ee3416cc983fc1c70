@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c2078f_8cb2ff51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T19:19:05Z",
+      "side": 1,
+      "message": "nit: Ian, can you update the presubmit to ANGLE that rejects bugs number 0-999?",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 19
+      },
+      "revId": "5df7c7da71ff86dffa2a990ee3416cc983fc1c70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
