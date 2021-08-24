@@ -16,6 +16,23 @@
       "message": "This is also one of the bugs that affecting the dynamic format switch. Because mImageUsageFlags not been set, it will think there is a usage flag change and triggers reallocation when it shouldn\u0027t.",
       "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f6711a3_9b84d79a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T11:08:30Z",
+      "side": 1,
+      "message": "LGTM.. any possible regression test we could add?",
+      "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
