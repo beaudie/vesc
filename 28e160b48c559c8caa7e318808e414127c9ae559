@@ -159,6 +159,30 @@
       },
       "revId": "28e160b48c559c8caa7e318808e414127c9ae559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12e5606f_37153ebe",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-24T16:33:36Z",
+      "side": 1,
+      "message": "We\u0027re theorizing that it\u0027s why I can\u0027t land a CL that auto-rolls from upstream ANGLE to AOSP.",
+      "parentUuid": "84c72506_9e5529f9",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "28e160b48c559c8caa7e318808e414127c9ae559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
