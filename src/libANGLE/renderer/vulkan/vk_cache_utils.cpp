@@ -32,6 +32,23 @@ namespace vk
 namespace
 {
 
+// ConvertRenderPass*OpToVk*Op relies on the fact that only None is different from VK enums.
+static_assert(static_cast<uint32_t>(RenderPassLoadOp::None) == 3,
+              "ConvertRenderPassLoadOpToVkLoadOp must be updated");
+static_assert(static_cast<uint32_t>(RenderPassStoreOp::None) == 2,
+              "ConvertRenderPassStoreOpToVkStoreOp must be updated");
+
+VkAttachmentLoadOp ConvertRenderPassLoadOpToVkLoadOp(RenderPassLoadOp loadOp)
+{
+    return loadOp == RenderPassLoadOp::None ? VK_ATTACHMENT_LOAD_OP_NONE_EXT
+                                            : static_cast<VkAttachmentLoadOp>(loadOp);
+}
+VkAttachmentStoreOp ConvertRenderPassStoreOpToVkStoreOp(RenderPassStoreOp storeOp)
+{
+    return storeOp == RenderPassStoreOp::None ? VK_ATTACHMENT_STORE_OP_NONE_EXT
+                                              : static_cast<VkAttachmentStoreOp>(storeOp);
+}
+
 uint8_t PackGLBlendOp(GLenum blendOp)
 {
     switch (blendOp)
@@ -160,10 +177,11 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
     desc->flags   = 0;
     desc->format  = GetVkFormatFromFormatID(formatID);
     desc->samples = gl_vk::GetSamples(samples);
-    desc->loadOp  = static_cast<VkAttachmentLoadOp>(ops.loadOp);
+    desc->loadOp  = ConvertRenderPassLoadOpToVkLoadOp(static_cast<RenderPassLoadOp>(ops.loadOp));
     desc->storeOp =
         ConvertRenderPassStoreOpToVkStoreOp(static_cast<RenderPassStoreOp>(ops.storeOp));
-    desc->stencilLoadOp = static_cast<VkAttachmentLoadOp>(ops.stencilLoadOp);
+    desc->stencilLoadOp =
+        ConvertRenderPassLoadOpToVkLoadOp(static_cast<RenderPassLoadOp>(ops.stencilLoadOp));
     desc->stencilStoreOp =
         ConvertRenderPassStoreOpToVkStoreOp(static_cast<RenderPassStoreOp>(ops.stencilStoreOp));
     desc->initialLayout =
@@ -2641,8 +2659,8 @@ void AttachmentOpsArray::initWithLoadStore(PackedAttachmentIndex index,
                                            ImageLayout finalLayout)
 {
     setLayouts(index, initialLayout, finalLayout);
-    setOps(index, VK_ATTACHMENT_LOAD_OP_LOAD, RenderPassStoreOp::Store);
-    setStencilOps(index, VK_ATTACHMENT_LOAD_OP_LOAD, RenderPassStoreOp::Store);
+    setOps(index, RenderPassLoadOp::Load, RenderPassStoreOp::Store);
+    setStencilOps(index, RenderPassLoadOp::Load, RenderPassStoreOp::Store);
 }
 
 void AttachmentOpsArray::setLayouts(PackedAttachmentIndex index,
@@ -2655,7 +2673,7 @@ void AttachmentOpsArray::setLayouts(PackedAttachmentIndex index,
 }
 
 void AttachmentOpsArray::setOps(PackedAttachmentIndex index,
-                                VkAttachmentLoadOp loadOp,
+                                RenderPassLoadOp loadOp,
                                 RenderPassStoreOp storeOp)
 {
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
@@ -2665,7 +2683,7 @@ void AttachmentOpsArray::setOps(PackedAttachmentIndex index,
 }
 
 void AttachmentOpsArray::setStencilOps(PackedAttachmentIndex index,
-                                       VkAttachmentLoadOp loadOp,
+                                       RenderPassLoadOp loadOp,
                                        RenderPassStoreOp storeOp)
 {
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
@@ -2677,13 +2695,13 @@ void AttachmentOpsArray::setStencilOps(PackedAttachmentIndex index,
 void AttachmentOpsArray::setClearOp(PackedAttachmentIndex index)
 {
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
-    SetBitField(ops.loadOp, VK_ATTACHMENT_LOAD_OP_CLEAR);
+    SetBitField(ops.loadOp, RenderPassLoadOp::Clear);
 }
 
 void AttachmentOpsArray::setClearStencilOp(PackedAttachmentIndex index)
 {
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
-    SetBitField(ops.stencilLoadOp, VK_ATTACHMENT_LOAD_OP_CLEAR);
+    SetBitField(ops.stencilLoadOp, RenderPassLoadOp::Clear);
 }
 
 size_t AttachmentOpsArray::hash() const
