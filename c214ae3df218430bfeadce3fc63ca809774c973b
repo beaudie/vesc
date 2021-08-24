@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2556ee3_bcfcde23",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T14:19:02Z",
+      "side": 0,
+      "message": "Is this removal intentional? Any side effects?",
+      "range": {
+        "startLine": 2893,
+        "startChar": 7,
+        "endLine": 2893,
+        "endChar": 51
+      },
+      "revId": "c214ae3df218430bfeadce3fc63ca809774c973b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
