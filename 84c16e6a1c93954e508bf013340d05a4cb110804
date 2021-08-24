@@ -368,6 +368,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "45faa5b7_1630176e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T23:54:10Z",
+      "side": 1,
+      "message": "\u003e It is possible have a program that is VS only.  I\u0027m not sure why the program thought it had a linked fragment stage though. \n\nRight, my concern is this may be indicating a bug somewhere since a Program shouldn\u0027t think it has a linked shader stage that it doesn\u0027t actually have.   We\u0027re pretty reliant on getLinkedShaderStages() being accurate, so it would be good to understand what\u0027s going on here.",
+      "parentUuid": "9b0ed673_4f68bb39",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dc01820_27425a43",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
