@@ -16,6 +16,23 @@
       "message": "LGTM\nBut I ain\u0027t have any rights in angle.\n\nWhen the bug is approved, please add the owner to submit.",
       "revId": "89149928180d17005df3d9a12dc43800ff2bd4c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0ecb39_25502cf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T14:48:28Z",
+      "side": 1,
+      "message": "The change LGTM, but I don\u0027t see an approval for merge to M90.",
+      "revId": "89149928180d17005df3d9a12dc43800ff2bd4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
