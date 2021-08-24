@@ -33,6 +33,24 @@
       "message": "The code is getting difficult to read, but I like the results in anglebug.com/6282",
       "revId": "b1f0aef3f8d77ebcfb4a0a436d53687194613741",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db51dfd4_c1d16b4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-24T07:51:30Z",
+      "side": 1,
+      "message": "I think storing the different result types in different lists might no longer be the best option, so I\u0027ll make a follow-up patch to  clean this code a bit.",
+      "parentUuid": "0d3e5901_2e82e460",
+      "revId": "b1f0aef3f8d77ebcfb4a0a436d53687194613741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
