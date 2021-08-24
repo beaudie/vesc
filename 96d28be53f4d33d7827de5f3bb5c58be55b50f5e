@@ -51,6 +51,41 @@
       "parentUuid": "7f6711a3_9b84d79a",
       "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bc555fc_2cdcd989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-24T15:42:59Z",
+      "side": 1,
+      "message": "LGTM, but I\u0027ll wait for the test for +2",
+      "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feaa6a79_2f75020f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-24T15:42:59Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "051b3603_61168d94",
+      "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
