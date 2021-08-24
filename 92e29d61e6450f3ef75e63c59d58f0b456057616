@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ca0e23c_08d32191",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T19:51:17Z",
+      "side": 1,
+      "message": "Is there GLSL spec language that specifies what should happen here?   Presumably not if we keep it mediump and pass all tests?",
+      "range": {
+        "startLine": 27,
+        "startChar": 45,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93e42d29_ae63aae6",
         "filename": "src/compiler/translator/Compiler.cpp",
         "patchSetId": 4
@@ -67,6 +90,40 @@
         "endLine": 55,
         "endChar": 50
       },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4309f3dc_ba29d3c2",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T19:51:17Z",
+      "side": 1,
+      "message": "How are you deciding when to use highp vs mediump in these?",
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86813b3d_ec8f8e7a",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T19:51:17Z",
+      "side": 1,
+      "message": "Should this be checking mOptions.validatePrecision here and below?",
       "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
