@@ -45,6 +45,30 @@
       },
       "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6d73c5d_cfb5011b",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T18:09:14Z",
+      "side": 1,
+      "message": "Nack. That one disables it right at the beginning because desktop GLSL doesn\u0027t have precision (I\u0027ll add a comment)\n\nThis one is done here (after many transformations are done and validated) because it\u0027s the transformations that happen from here on that are problematic (not the earlier ones).\n\nThere are some validations disabled in the metal path too in an analogous location.",
+      "parentUuid": "5831808b_f061117f",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 50
+      },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
