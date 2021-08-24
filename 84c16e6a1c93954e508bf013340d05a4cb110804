@@ -320,6 +320,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3cd845dc_cb174fdd",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T16:52:41Z",
+      "side": 1,
+      "message": "If the assert isn\u0027t being hit when using getLinkedShaderStages(), then the same number of shader stages and strings should be output in both cases.   Additionally, if there isn\u0027t any source to compile, it shouldn\u0027t be possible to recreate the program with all of the necessary shader stages.\n\n\u003e I didn\u0027t debug it all the way, but I did print out the lengths of shaders and saw 0 sized fragment shaders paired with non-zero vertex shaders.\n\nThis is invalid GLSL, so it wouldn\u0027t compile when recreating the programs from the source in the program binaries.   For example:\n\n\u003e The #version directive must be present in the first line of a shader and must be followed by a newline. \n\nSo the version string must at least be present, which makes the source string non-zero.\n\nIt looks like we\u0027re seeing behavior we don\u0027t quite understand.   Can you take a closer look at what may be going on here?",
+      "parentUuid": "e1aad7fb_a9881df7",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dc01820_27425a43",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
@@ -753,6 +777,30 @@
       "side": 1,
       "message": "I tried removing the GLLinkProgram check and we do end up capturing empty strings.  I believe that\u0027s because we populate the correct string during deserialize, but then overwrite it here when processing the LinkProgram we added.  We can\u0027t use the program\u0027s state here because it was populated with ProgramBinary and doesn\u0027t have attached shader source.",
       "parentUuid": "787fddd8_2facf405",
+      "range": {
+        "startLine": 4835,
+        "startChar": 0,
+        "endLine": 4836,
+        "endChar": 56
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "219a0018_74bf6efb",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4836,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T16:52:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "469165c4_9ab5e2c4",
       "range": {
         "startLine": 4835,
         "startChar": 0,
