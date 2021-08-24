@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c903df8_44076312",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T18:00:57Z",
+      "side": 1,
+      "message": "I\u0027m a bit confused by this comment.   Why do we want to know how many can run without glFinish() if we are running with glFinish()?\n\nPresumably the glFinish() will wait for all of the work to complete that might be missed without a glFinish(), so how does running without glFinish() give us a time that\u0027s representative of how long running with glFinish() will take?",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 60
+      },
+      "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
