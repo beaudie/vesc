@@ -2447,24 +2447,24 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
         if (mDeferredClears.test(colorIndexGL))
         {
-            renderPassAttachmentOps.setOps(colorIndexVk, VK_ATTACHMENT_LOAD_OP_CLEAR, storeOp);
+            renderPassAttachmentOps.setOps(colorIndexVk, vk::RenderPassLoadOp::Clear, storeOp);
             packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                     mDeferredClears[colorIndexGL]);
             mDeferredClears.reset(colorIndexGL);
         }
         else
         {
-            const VkAttachmentLoadOp loadOp = colorRenderTarget->hasDefinedContent()
-                                                  ? VK_ATTACHMENT_LOAD_OP_LOAD
-                                                  : VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            const vk::RenderPassLoadOp loadOp = colorRenderTarget->hasDefinedContent()
+                                                    ? vk::RenderPassLoadOp::Load
+                                                    : vk::RenderPassLoadOp::DontCare;
 
-            if (loadOp == VK_ATTACHMENT_LOAD_OP_DONT_CARE &&
+            if (loadOp == vk::RenderPassLoadOp::DontCare &&
                 mEmulatedAlphaAttachmentMask[colorIndexGL])
             {
                 // This color attachment has a format with no alpha channel, but is emulated with a
                 // format that does have an alpha channel, which must be cleared to 1.0 in order to
                 // be visible.
-                renderPassAttachmentOps.setOps(colorIndexVk, VK_ATTACHMENT_LOAD_OP_CLEAR, storeOp);
+                renderPassAttachmentOps.setOps(colorIndexVk, vk::RenderPassLoadOp::Clear, storeOp);
                 VkClearValue emulatedAlphaClearValue =
                     getCorrectedColorClearValue(colorIndexGL, {});
                 packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
@@ -2477,7 +2477,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                         kUninitializedClearValue);
             }
         }
-        renderPassAttachmentOps.setStencilOps(colorIndexVk, VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+        renderPassAttachmentOps.setStencilOps(colorIndexVk, vk::RenderPassLoadOp::DontCare,
                                               vk::RenderPassStoreOp::DontCare);
 
         // If there's a resolve attachment, and loadOp needs to be LOAD, the multisampled attachment
@@ -2520,8 +2520,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // depth stencil attachment always immediately follows color attachment
         depthStencilAttachmentIndex = colorIndexVk;
 
-        VkAttachmentLoadOp depthLoadOp       = VK_ATTACHMENT_LOAD_OP_LOAD;
-        VkAttachmentLoadOp stencilLoadOp     = VK_ATTACHMENT_LOAD_OP_LOAD;
+        vk::RenderPassLoadOp depthLoadOp     = vk::RenderPassLoadOp::Load;
+        vk::RenderPassLoadOp stencilLoadOp   = vk::RenderPassLoadOp::Load;
         vk::RenderPassStoreOp depthStoreOp   = vk::RenderPassStoreOp::Store;
         vk::RenderPassStoreOp stencilStoreOp = vk::RenderPassStoreOp::Store;
 
@@ -2532,12 +2532,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         if (!depthStencilRenderTarget->hasDefinedContent() ||
             depthStencilRenderTarget->isEntirelyTransient())
         {
-            depthLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            depthLoadOp = vk::RenderPassLoadOp::DontCare;
         }
         if (!depthStencilRenderTarget->hasDefinedStencilContent() ||
             depthStencilRenderTarget->isEntirelyTransient())
         {
-            stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            stencilLoadOp = vk::RenderPassLoadOp::DontCare;
         }
 
         // If depth/stencil image is transient, no need to store its data at the end of the render
@@ -2560,14 +2560,14 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
             if (mDeferredClears.testDepth())
             {
-                depthLoadOp                   = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                depthLoadOp                   = vk::RenderPassLoadOp::Clear;
                 clearValue.depthStencil.depth = mDeferredClears.getDepthValue();
                 mDeferredClears.reset(vk::kUnpackedDepthIndex);
             }
 
             if (mDeferredClears.testStencil())
             {
-                stencilLoadOp                   = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                stencilLoadOp                   = vk::RenderPassLoadOp::Clear;
                 clearValue.depthStencil.stencil = mDeferredClears.getStencilValue();
                 mDeferredClears.reset(vk::kUnpackedStencilIndex);
             }
@@ -2588,12 +2588,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // limitations, use DONT_CARE for load/store. The same logic for depth follows.
         if (format.intendedFormat().stencilBits == 0)
         {
-            stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            stencilLoadOp  = vk::RenderPassLoadOp::DontCare;
             stencilStoreOp = vk::RenderPassStoreOp::DontCare;
         }
         if (format.intendedFormat().depthBits == 0)
         {
-            depthLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            depthLoadOp  = vk::RenderPassLoadOp::DontCare;
             depthStoreOp = vk::RenderPassStoreOp::DontCare;
         }
 
@@ -2605,18 +2605,18 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         if (depthStencilRenderTarget->hasResolveAttachment() &&
             depthStencilRenderTarget->isImageTransient())
         {
-            const bool unresolveDepth = depthLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD;
+            const bool unresolveDepth = depthLoadOp == vk::RenderPassLoadOp::Load;
             const bool unresolveStencil =
-                stencilLoadOp == VK_ATTACHMENT_LOAD_OP_LOAD && canExportStencil;
+                stencilLoadOp == vk::RenderPassLoadOp::Load && canExportStencil;
 
             if (unresolveDepth)
             {
-                depthLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                depthLoadOp = vk::RenderPassLoadOp::DontCare;
             }
 
             if (unresolveStencil)
             {
-                stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                stencilLoadOp = vk::RenderPassLoadOp::DontCare;
             }
 
             if (unresolveDepth || unresolveStencil)
