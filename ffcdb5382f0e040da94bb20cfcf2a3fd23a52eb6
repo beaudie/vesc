@@ -129,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac94f103_204a582c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 5869,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T11:07:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "50c495e9_9ec9656b",
+      "range": {
+        "startLine": 5861,
+        "startChar": 24,
+        "endLine": 5869,
+        "endChar": 46
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "244f0022_6d13ded7",
@@ -201,6 +225,30 @@
       "side": 1,
       "message": "We can only output calls to SetupReplayContextXX() in SetupReplay() when they exist, which is for MEC.",
       "parentUuid": "a9c41782_13f3d4b4",
+      "range": {
+        "startLine": 459,
+        "startChar": 9,
+        "endLine": 459,
+        "endChar": 30
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e927bcf_f49c90ce",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T11:07:04Z",
+      "side": 1,
+      "message": "Right, it was a grammatical suggestion. The frame capture \"is\" not mid-execution capture, but rather \"uses\" mid-execution capture.",
+      "parentUuid": "bfd0c824_d0a681da",
       "range": {
         "startLine": 459,
         "startChar": 9,
@@ -448,6 +496,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d72b2e6_6d6c65c4",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T11:07:04Z",
+      "side": 1,
+      "message": "Yeah the attribute values are not directly portable, but for every value in the attribMap we might have to have special handling for it. Stuff like \"no error\", \"WebGL compatibility\" , and other ANGLE stuff are all Context extensions that we\u0027ll eventually want to handle specifically. Anyway SGTM on a TODO if you mention that somewhere.",
+      "parentUuid": "0e739a30_736f2565",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 95
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f4dfdf6_bd46da7a",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 30
@@ -483,6 +555,30 @@
       "side": 1,
       "message": "I\u0027ve added EGL prefixes to these and the TracePerfTest functions.   I\u0027ll leave adding GL prefixes to another CL if you\u0027d still like that.",
       "parentUuid": "3f4dfdf6_bd46da7a",
+      "range": {
+        "startLine": 464,
+        "startChar": 52,
+        "endLine": 464,
+        "endChar": 65
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b5d3fd2_e1ccd09d",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T11:07:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "33978273_fe21a539",
       "range": {
         "startLine": 464,
         "startChar": 52,
@@ -530,6 +626,30 @@
       "side": 1,
       "message": "Using a strong type sounds like a good idea, but I\u0027m having trouble finding what you\u0027re describing.   Can you point me to what you\u0027re thinking of?\n\nLooking around online, I came across doing something like:\n\n  struct GLWindowContext;\n  \n  class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable\n  {\n  ...\n      virtual GLWindowContext *getCurrentContext()        \u003d 0;\n  ...\n  };\n    \n  class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase\n  {\n  ...\n      GLWindowContext *getCurrentContext() override;\n  ..\n  };\n  \n  GLWindowContext *EGLWindow::getCurrentContext()\n  {\n      return reinterpret_cast\u003cGLWindowContext *\u003e(mContext);\n  }\n\nThis seems to compile and run fine.   Is this about what you\u0027re thinking of?",
       "parentUuid": "1550d82c_554ee660",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c44b0fea_bcaa545d",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T11:07:04Z",
+      "side": 1,
+      "message": "Almost.. the pointer can be part of the type as well. See vulkan_core.h:\n\n#define VK_DEFINE_HANDLE(object) typedef struct object##_T* object;\n\nSo you can do \"using GLWindowContext \u003d struct GLWindowHandleContext_T *;\" or something similar.",
+      "parentUuid": "ddc43b8c_1c955f72",
       "range": {
         "startLine": 133,
         "startChar": 4,
@@ -648,6 +768,30 @@
       "side": 1,
       "message": "Trying the Asphalt 9 replay on Windows works well once I remove the call to _wglShareLists().   The images rendered match linux, which has 1 bad mesh but otherwise looks good.\n\nNote that I updated _wglCreateContextAttribsARB() to take a share context, which seems to work just fine without any other changes.",
       "parentUuid": "c9b1d20a_bead2eba",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 1
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b151090_d16da315",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T11:07:04Z",
+      "side": 1,
+      "message": "Ah, I might have missed it in your CL, sorry. Thanks for fixing WGL.",
+      "parentUuid": "318a8ed7_bb7eee9c",
       "range": {
         "startLine": 227,
         "startChar": 0,
