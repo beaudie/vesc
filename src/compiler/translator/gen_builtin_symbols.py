@@ -148,6 +148,7 @@ template_immutablestringtest_cpp = """// GENERATED FILE - DO NOT EDIT.
 namespace sh
 {{
 
+
 TEST(ImmutableStringTest, ScriptGeneratedHashesMatch)
 {{
 {script_generated_hash_tests}
@@ -1839,7 +1840,7 @@ def prune_parameters_arrays(parameter_declarations, function_declarations):
     for param_variable_name, param_declaration in sorted(
             parameter_declarations.items(), key=lambda item: -len(item[0])):
         replaced = False
-        for used in used_param_variable_names:
+        for used in sorted(used_param_variable_names):
             if used.startswith(param_variable_name):
                 parameter_variable_name_replacements[param_variable_name] = used
                 replaced = True
