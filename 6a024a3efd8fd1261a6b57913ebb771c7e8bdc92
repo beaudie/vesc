@@ -16,6 +16,24 @@
       "message": "Oops, will revert before landing.",
       "revId": "6a024a3efd8fd1261a6b57913ebb771c7e8bdc92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2f60e60_456018a2",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T19:26:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa611c81_4f7ad0c8",
+      "revId": "6a024a3efd8fd1261a6b57913ebb771c7e8bdc92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
