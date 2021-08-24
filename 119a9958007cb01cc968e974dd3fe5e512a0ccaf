@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d200569d_9924ef90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T21:31:40Z",
+      "side": 1,
+      "message": "Reading the spec, you\u0027re correct:\n\n\u003e If ctx is current to some other thread, or if either draw or read are bound to contexts in another thread, an EGL_BAD_ACCESS error is generated.\n\nUnfortunately, that\u0027s not how ANGLE was behaving in practice.\n\nInstead, when eglTerminate() was called, Display::terminate() would loop through all of the Contexts owned by the Display, and then call destroyContext() on them.   This would make the Context current on the thread handling eglTerminate() while the Context was current on another thread that had previously called eglMakeCurrent().   This lead to the eglTerminate()\u0027ing-Thread setting Context::mIsCurrent \u003d false during it\u0027s makeCurrent() dance, even though it \"stole\" the Context from another thread that still (correctly) had it current.\n\nI\u0027ve updated the commit message to clarify this.\n\nThat said, now that most of that logic has been cleaned up (eglTerminate() doesn\u0027t destroy Contexts that are still current on a thread), I may be able to reintroduce Context::mIsCurrent if you think it\u0027s worth keeping around.\n\nAlso, based on this, I\u0027m wondering how correct the EGLContextSharingTest.EglTerminateMultiThreaded test I added is.   It has no trouble making the same Context current on multiple threads.",
+      "parentUuid": "f6bfe742_4a93fa99",
+      "range": {
+        "startLine": 24,
+        "startChar": 26,
+        "endLine": 24,
+        "endChar": 67
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05e1c441_f8420c47",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-24T19:56:54Z",
       "side": 1,
       "message": "Same comment, a it should only ever be current on a single thread. If it was possible to be current on multiple threads there would be bugs here that multiple distroyContext calls on the same context would break the refcounting.",
+      "range": {
+        "startLine": 1537,
+        "startChar": 7,
+        "endLine": 1537,
+        "endChar": 59
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aa225c3_c6daf3ae",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T21:31:40Z",
+      "side": 1,
+      "message": "The Context doesn\u0027t have to be current on this thread in order to be destroyed (otherwise we wouldn\u0027t need to pass in the context to destroy).   In this case, imagine:\n\n  Thread 1: eglMakeCurrent(Context A)\n  Thread 2: eglMakeCurrent(Context B)\n  Thread 2: eglDestroyContext(Context A)  \u003c\u003c--- this case\n       \nThread 2 can destroy Context A while Thread 1 still has it current.   As soon as it does though, Thread 1 can no longer render with Context A and then Context A will be destroyed when Thread 1 switches to another context (or NO_CONTEXT).",
+      "parentUuid": "49dee60d_26905e8a",
       "range": {
         "startLine": 1537,
         "startChar": 7,
