@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93e42d29_ae63aae6",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T10:54:11Z",
+      "side": 1,
+      "message": "nit: leave a comment?",
+      "range": {
+        "startLine": 618,
+        "startChar": 45,
+        "endLine": 618,
+        "endChar": 60
+      },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5831808b_f061117f",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T10:54:11Z",
+      "side": 1,
+      "message": "can you put this back in the other file which disables this feature?",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 50
+      },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
