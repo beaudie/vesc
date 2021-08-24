@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07376276_c163f774",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T20:38:27Z",
+      "side": 1,
+      "message": "Ok, that makes sense.   It\u0027s just a matter of understanding that we are the compiler at this point in the chain, so anything we do under the covers just needs to abide by the GLSL rules as far as the app\u0027s shader code is concerned.",
+      "parentUuid": "22b4f252_e3e2bd8a",
+      "range": {
+        "startLine": 27,
+        "startChar": 45,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "92e29d61e6450f3ef75e63c59d58f0b456057616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93e42d29_ae63aae6",
