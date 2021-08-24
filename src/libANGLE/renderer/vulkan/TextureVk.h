@@ -288,7 +288,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
     void releaseAndDeleteImageAndViews(ContextVk *contextVk);
-    angle::Result ensureImageAllocated(ContextVk *contextVk, angle::FormatID formatID);
+    angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format *format = nullptr);
     void setImageHelper(ContextVk *contextVk,
                         vk::ImageHelper *imageHelper,
                         gl::TextureType imageType,
@@ -415,7 +415,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                            SurfaceRotation srcFramebufferRotation);
 
     angle::Result initImage(ContextVk *contextVk,
-                            const vk::Format &format,
+                            angle::FormatID intendedImageFormatID,
                             angle::FormatID actualImageFormatID,
                             const bool sized,
                             const gl::Extents &firstLevelExtents,
@@ -487,13 +487,20 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                           const vk::ImageHelper *nextImage);
 
     bool hasBeenBoundAsAttachment() const { return mState.hasBeenBoundAsAttachment(); }
-    angle::FormatID getActualImageFormatID(const vk::Format &format) const
+    angle::FormatID getIntendedImageFormatID() const
     {
-        return format.getActualImageFormatID(hasBeenBoundAsAttachment());
+        ASSERT(mFormat);
+        return mFormat->intendedFormatID;
     }
-    const angle::Format &getActualImageFormat(const vk::Format &format) const
+    angle::FormatID getActualImageFormatID() const
     {
-        return format.getActualImageFormat(hasBeenBoundAsAttachment());
+        ASSERT(mFormat);
+        return mFormat->getActualImageFormatID(hasBeenBoundAsAttachment());
+    }
+    const angle::Format &getActualImageFormat() const
+    {
+        ASSERT(mFormat);
+        return mFormat->getActualImageFormat(hasBeenBoundAsAttachment());
     }
 
     bool mOwnsImage;
@@ -550,6 +557,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // dynamically allocated as the texture can release ownership for example and it can be
     // transferred to another |TextureVk|.
     vk::ImageHelper *mImage;
+    vk::Format const *mFormat;
 
     // |mSampler| contains the relevant Vulkan sampler states representing the OpenGL Texture
     // sampling states for the Texture.

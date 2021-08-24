@@ -285,7 +285,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         imageCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
     }
     ANGLE_TRY(mImage->initExternal(
-        displayVk, gl::TextureType::_2D, vkExtents, vkFormat, vkFormatID, 1, usage,
+        displayVk, gl::TextureType::_2D, vkExtents, vkFormat.intendedFormatID, vkFormatID, 1, usage,
         imageCreateFlags, vk::ImageLayout::ExternalPreInitialized, &externalMemoryImageCreateInfo,
         gl::LevelIndex(0), 1, 1, robustInitEnabled, nullptr, hasProtectedContent()));
 
