@@ -70,6 +70,24 @@
       "parentUuid": "69922a49_43d1f476",
       "revId": "210773db1acea921f5dd5645cc59788a7124ad98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad33e7b4_d1bc2554",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-24T15:12:17Z",
+      "side": 1,
+      "message": "Looking at the SPIR-V diff of the only non-trivial shader, I suspect the reason for the failures is that gl_FragCoord (and correspondingly flippedFragCoord) was highp before this change and is mediump now.\n\nI see that ANGLE declares this variable as mediump (in builtin_variables.json), and GLSL ES 100 requires it to be mediump.  However, GLSL ES 320 requires it to be highp. That\u0027s most likely the reason for the failure.\n\nI\u0027ll find a way to fix it.",
+      "parentUuid": "a02aafa1_c2e998a5",
+      "revId": "210773db1acea921f5dd5645cc59788a7124ad98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
