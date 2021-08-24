@@ -183,6 +183,30 @@
       },
       "revId": "28e160b48c559c8caa7e318808e414127c9ae559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4fe69d1_a141cf4f",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T19:18:08Z",
+      "side": 1,
+      "message": "We should probably stick to core contributors to ANGLE for now. Feel free to branch the OWNERS file for AOSP, if Trevor and Yuxin need rights in that repo. Also you make it a part of the auto-roller.",
+      "parentUuid": "12e5606f_37153ebe",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "28e160b48c559c8caa7e318808e414127c9ae559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
