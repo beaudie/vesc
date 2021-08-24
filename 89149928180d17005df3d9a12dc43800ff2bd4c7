@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71a4a835_eee53d24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1380654
+      },
+      "writtenOn": "2021-08-24T13:13:01Z",
+      "side": 1,
+      "message": "LGTM\nBut I ain\u0027t have any rights in angle.\n\nWhen the bug is approved, please add the owner to submit.",
+      "revId": "89149928180d17005df3d9a12dc43800ff2bd4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
