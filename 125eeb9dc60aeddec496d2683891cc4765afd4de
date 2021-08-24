@@ -51,6 +51,23 @@
       "message": "Thanks SeongHwan, Geoff Lang (found you using the \"Find Owners\" button), could you please review/submit the change? We are merging this change into the current LTS branch, but I don\u0027t have permissions to submit the change. Please let me know if you\u0027re not the right person for reviewing the change",
       "revId": "125eeb9dc60aeddec496d2683891cc4765afd4de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "282a0c73_40051461",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2021-08-24T07:57:23Z",
+      "side": 1,
+      "message": "Thanks Geoff Lang, could you please also submit the change? I don\u0027t have permissions for submitting it",
+      "revId": "125eeb9dc60aeddec496d2683891cc4765afd4de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
