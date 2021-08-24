@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55cfc401_11a80829",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-24T15:23:09Z",
+      "side": 1,
+      "message": "This will allow us to land auto-roll\u0027s into AOSP",
+      "revId": "28e160b48c559c8caa7e318808e414127c9ae559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
