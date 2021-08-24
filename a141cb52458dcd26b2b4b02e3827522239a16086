@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc9411d8_979e9f6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T10:51:57Z",
+      "side": 1,
+      "message": "Ah, whoops, landed already, but a few comments for the future, not necessary to fix for this CL.",
+      "revId": "a141cb52458dcd26b2b4b02e3827522239a16086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74a0e9d4_4e467358",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 13135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T10:51:57Z",
+      "side": 1,
+      "message": "nit: please comment before the new tests we add.",
+      "range": {
+        "startLine": 13135,
+        "startChar": 0,
+        "endLine": 13135,
+        "endChar": 6
+      },
+      "revId": "a141cb52458dcd26b2b4b02e3827522239a16086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8640fa20_38bbb5eb",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 13137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T10:51:57Z",
+      "side": 1,
+      "message": "nit: can you change this to use angle_end2end_tests_expectations.txt? This is the new way. We haven\u0027t ported all the old expectations yet.",
+      "range": {
+        "startLine": 13137,
+        "startChar": 4,
+        "endLine": 13137,
+        "endChar": 22
+      },
+      "revId": "a141cb52458dcd26b2b4b02e3827522239a16086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
