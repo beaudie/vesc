@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b061bcd_4e5bebdb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T13:32:33Z",
+      "side": 1,
+      "message": "nit: called \u0027dictionaries\u0027 in python",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "d29148c5450a0c00ae56767ffe27bc150219332c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52ff7f47_7dcdb155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-24T13:32:33Z",
+      "side": 1,
+      "message": "LGTM, I like that we\u0027re using more loops now ",
+      "revId": "d29148c5450a0c00ae56767ffe27bc150219332c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
