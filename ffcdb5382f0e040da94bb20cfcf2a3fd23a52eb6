@@ -518,6 +518,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e740d2b6_7bcd7734",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T21:04:35Z",
+      "side": 1,
+      "message": "\u003e Yeah the attribute values are not directly portable, but for every value in the attribMap we might have to have special handling for it. Stuff like \"no error\", \"WebGL compatibility\" , and other ANGLE stuff are all Context extensions that we\u0027ll eventually want to handle specifically.\n\nI\u0027d hope the apps create each context with the same list of attributes, so we wouldn\u0027t need to treat the auxiliary contexts any different than the main one (whic is what this CL does), but we\u0027ve been surprised before so who knows.\n\n\u003e Anyway SGTM on a TODO if you mention that somewhere.\n\nDone",
+      "parentUuid": "4d72b2e6_6d6c65c4",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 95
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f4dfdf6_bd46da7a",
@@ -650,6 +674,30 @@
       "side": 1,
       "message": "Almost.. the pointer can be part of the type as well. See vulkan_core.h:\n\n#define VK_DEFINE_HANDLE(object) typedef struct object##_T* object;\n\nSo you can do \"using GLWindowContext \u003d struct GLWindowHandleContext_T *;\" or something similar.",
       "parentUuid": "ddc43b8c_1c955f72",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6766438_5ac0ce7b",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-24T21:04:35Z",
+      "side": 1,
+      "message": "Cool, thanks.\n\nDone.",
+      "parentUuid": "c44b0fea_bcaa545d",
       "range": {
         "startLine": 133,
         "startChar": 4,
