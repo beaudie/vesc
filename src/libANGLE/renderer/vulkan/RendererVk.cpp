@@ -185,6 +185,8 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdClearAttachments-baseArrayLayer-00018",
     // http://anglebug.com/6293
     "VUID-VkFramebufferCreateInfo-flags-04535",
+    // http://anglebug.com/6317
+    "VUID-vkCmdBindPipeline-None-02323",
 };
 
 // Suppress validation errors that are known
