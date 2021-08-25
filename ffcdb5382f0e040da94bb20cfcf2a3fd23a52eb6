@@ -782,6 +782,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a25d43c_97e91dde",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T00:33:35Z",
+      "side": 1,
+      "message": "It looks like I resolved this too soon.\n\nAnywhere that uses EGL_NO_CONTEXT is failing to compile.\n\n  ../../src/tests/gl_tests/VulkanMultithreadingTest.cpp:91:49: error: cannot initialize a parameter of type \u0027GLWindowContext\u0027 (aka \u0027GLWindowHandleContext_T *\u0027) with an rvalue of type \u0027void *\u0027\n                    ctx \u003d window-\u003ecreateContext(EGL_NO_CONTEXT);\n                    \nEGL_NO_CONTEXT is defined as:\n  #define EGL_NO_CONTEXT                    EGL_CAST(EGLContext,0)\n  #define EGL_CAST(type, value) (static_cast\u003ctype\u003e(value))\n\nSo while capture/replay works fine, end2end tests that use EGL_NO_CONTEXT are failing to build.\n\nLooking at VK_DEFINE_HANDLE(), I\u0027m not understanding how this would allow multiple underlying types to be passed around as another struct pointer type.   Specifically, we need to be able to accept/return either an EGLContext or HGLRC (WGL context), which is why void* is being used.\n\nUnfortunately I\u0027m not familiar with this design pattern, nor am I seeing a good way to work around this.\n\nAny ideas?",
+      "parentUuid": "b6766438_5ac0ce7b",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa998307_633b2132",
         "filename": "util/EGLWindow.h",
         "patchSetId": 30
