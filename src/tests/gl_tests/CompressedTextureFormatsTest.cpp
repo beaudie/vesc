@@ -99,6 +99,38 @@ class CompressedTextureFormatsTest : public ANGLETestWithParam<CompressedTexture
         }
     }
 
+    void check2DExt(const bool extensionEnabled)
+    {
+        if (IsGLExtensionRequestable("GL_EXT_texture_storage"))
+        {
+            glRequestExtensionANGLE("GL_EXT_texture_storage");
+        }
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_storage"));
+
+        const GLenum format = ::testing::get<1>(GetParam()).first;
+        const GLsizei size  = ::testing::get<1>(GetParam()).second;
+
+        GLubyte data[32];
+
+        GLTexture texture;
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, format, 4, 4);
+        if (extensionEnabled)
+        {
+            EXPECT_GL_NO_ERROR();
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 4, 4, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+            glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 4, 4, format, size, data);
+            EXPECT_GL_ERROR(mSupportsUpdates ? GL_NO_ERROR : GL_INVALID_OPERATION);
+        }
+        else
+        {
+            EXPECT_GL_ERROR(GL_INVALID_ENUM);
+        }
+    }
+
     void check3D(GLenum target, const bool extensionEnabled, const bool supportsTarget)
     {
         const GLenum format = ::testing::get<1>(GetParam()).first;
@@ -174,6 +206,7 @@ class CompressedTextureFormatsTest : public ANGLETestWithParam<CompressedTexture
         // It's not possible to disable ETC2/EAC support on ES 3.0.
         const bool extensionEnabled = mAlwaysOnES3 && getClientMajorVersion() >= 3;
         check2D(extensionEnabled);
+        check2DExt(extensionEnabled);
         if (getClientMajorVersion() >= 3)
         {
             check3D(GL_TEXTURE_2D_ARRAY, extensionEnabled, mSupports2DArray);
@@ -194,6 +227,7 @@ class CompressedTextureFormatsTest : public ANGLETestWithParam<CompressedTexture
 
         // Repeat all checks after enabling the extensions.
         check2D(true);
+        check2DExt(true);
         if (getClientMajorVersion() >= 3)
         {
             check3D(GL_TEXTURE_2D_ARRAY, true, mSupports2DArray);
