@@ -1063,7 +1063,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
 
-    // Potentially make adjustments for pre-rotatation.
+    // Potentially make adjustments for pre-rotation.
     gl::Box rotatedSourceBox = sourceBox;
     gl::Extents srcExtents   = srcImage->getLevelExtents2D(vk::LevelIndex(0));
     switch (srcFramebufferRotation)
@@ -3035,14 +3035,25 @@ angle::Result TextureVk::getTexImage(const gl::Context *context,
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
     }
 
-    size_t layer =
-        gl::IsCubeMapFaceTarget(target) ? gl::CubeMapTextureTargetToFaceIndex(target) : 0;
-
     gl::MaybeOverrideLuminance(format, type, getColorReadFormat(context),
                                getColorReadType(context));
 
-    return mImage->readPixelsForGetImage(contextVk, packState, packBuffer, gl::LevelIndex(level),
-                                         static_cast<uint32_t>(layer), format, type, pixels);
+    switch (target)
+    {
+        case gl::TextureTarget::CubeMapArray:
+        case gl::TextureTarget::_2DArray:
+            return mImage->readPixelsForGetImage(contextVk, packState, packBuffer,
+                                                 gl::LevelIndex(level), 0, mImage->getLayerCount(),
+                                                 format, type, pixels);
+        default:
+        {
+            size_t layer =
+                gl::IsCubeMapFaceTarget(target) ? gl::CubeMapTextureTargetToFaceIndex(target) : 0;
+            return mImage->readPixelsForGetImage(
+                contextVk, packState, packBuffer, gl::LevelIndex(level),
+                static_cast<uint32_t>(layer), 1, format, type, pixels);
+        }
+    }
 }
 
 const vk::Format &TextureVk::getBaseLevelFormat(RendererVk *renderer) const
