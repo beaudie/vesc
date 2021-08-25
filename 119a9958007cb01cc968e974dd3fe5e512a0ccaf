@@ -158,6 +158,30 @@
       },
       "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7da2f10e_0ce35ae8",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T18:57:13Z",
+      "side": 1,
+      "message": "\u003e If the user calls eglDestroyContext 5 times the refcount will be incorrect and the context will be deleted before it has been unmade current from all those threads.\n\nGood catch.\n\nThe reference count is incremented in 2 places today:\n1.) createContext()\n2.) makeCurrent()\n\nI think we can fix the \"user calls eglDestroyContext 5 times\" case by removing the addRef() call from createContext() so the reference count only tracks how many threads actually have it current.   Then, the release() call can be removed from destroyContext(), and we will only destroy the context when the count reaches \u00270\u0027 (indicating no threads have it current).\n\nThat should keep the reference count sane regardless of how many times destroyContext() is called for a single context.   I\u0027ll write a test doing what you described and give that change a shot.",
+      "parentUuid": "cc6a7023_0b84ff58",
+      "range": {
+        "startLine": 1537,
+        "startChar": 7,
+        "endLine": 1537,
+        "endChar": 59
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
