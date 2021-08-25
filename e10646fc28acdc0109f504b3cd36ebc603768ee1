@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57c7e01e_a4cdedb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T21:19:52Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "929f442f_0bca1159",
+      "revId": "e10646fc28acdc0109f504b3cd36ebc603768ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df92fdd7_15c1a085",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d282d325_2bad4daa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3052,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T21:19:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df92fdd7_15c1a085",
+      "range": {
+        "startLine": 3052,
+        "startChar": 27,
+        "endLine": 3052,
+        "endChar": 48
+      },
+      "revId": "e10646fc28acdc0109f504b3cd36ebc603768ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3086046_a154e67c",
@@ -71,6 +113,30 @@
       "writtenOn": "2021-08-25T17:44:42Z",
       "side": 1,
       "message": "Comparing anything with what could be black is usually a bad idea.  Mind sticking a non-zero color in each of these?",
+      "range": {
+        "startLine": 480,
+        "startChar": 70,
+        "endLine": 480,
+        "endChar": 75
+      },
+      "revId": "e10646fc28acdc0109f504b3cd36ebc603768ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9dfae94_dcf25701",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T21:19:52Z",
+      "side": 1,
+      "message": "Done - note all expected values are non-black.",
+      "parentUuid": "e3086046_a154e67c",
       "range": {
         "startLine": 480,
         "startChar": 70,
