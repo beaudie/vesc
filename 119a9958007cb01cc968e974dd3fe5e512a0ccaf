@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b375a986_369138f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-25T17:24:43Z",
+      "side": 1,
+      "message": "Right, we make things current internally in order to destroy them. This was needed for our GL backend which wouldn\u0027t be able to delete resources without being current.\n\nA good future improvement would be to move that logic into the backends because only GL needs it.\n\nThere may be a validation bug if the same context can be made current multiple times.",
+      "parentUuid": "d200569d_9924ef90",
+      "range": {
+        "startLine": 24,
+        "startChar": 26,
+        "endLine": 24,
+        "endChar": 67
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05e1c441_f8420c47",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "The Context doesn\u0027t have to be current on this thread in order to be destroyed (otherwise we wouldn\u0027t need to pass in the context to destroy).   In this case, imagine:\n\n  Thread 1: eglMakeCurrent(Context A)\n  Thread 2: eglMakeCurrent(Context B)\n  Thread 2: eglDestroyContext(Context A)  \u003c\u003c--- this case\n       \nThread 2 can destroy Context A while Thread 1 still has it current.   As soon as it does though, Thread 1 can no longer render with Context A and then Context A will be destroyed when Thread 1 switches to another context (or NO_CONTEXT).",
       "parentUuid": "49dee60d_26905e8a",
+      "range": {
+        "startLine": 1537,
+        "startChar": 7,
+        "endLine": 1537,
+        "endChar": 59
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc6a7023_0b84ff58",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-25T17:24:43Z",
+      "side": 1,
+      "message": "Thread 1 could still render to that context but yes, it will be destroyed as soon as Thread 1 changes context.\n\nThis is the flaw with using refcounts on contexts for destruction I think.  If a context is current on 5 of threads (invalid but for the sake of argument) then it will have 6 refcounts (allocation + makeCurrent calls). If the user calls eglDestroyContext 5 times the refcount will be incorrect and the context will be deleted before it has been unmade current from all those threads.\n\nIn reality there should only be 2 states we need to track: is the context current and is the context alive (not deleted). Our makecurrent on destruction logic complicates this and I don\u0027t think it\u0027s worth making that change right now.",
+      "parentUuid": "2aa225c3_c6daf3ae",
       "range": {
         "startLine": 1537,
         "startChar": 7,
