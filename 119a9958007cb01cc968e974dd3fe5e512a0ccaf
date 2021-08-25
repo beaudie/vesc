@@ -182,6 +182,30 @@
       },
       "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f28e73f_8da6e3ae",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-25T19:41:49Z",
+      "side": 1,
+      "message": "If the context is deleted while current, you need to track that and defer the deletion until the next makeCurrent. We need to track the deletion state separately from the ref count I think.",
+      "parentUuid": "7da2f10e_0ce35ae8",
+      "range": {
+        "startLine": 1537,
+        "startChar": 7,
+        "endLine": 1537,
+        "endChar": 59
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
