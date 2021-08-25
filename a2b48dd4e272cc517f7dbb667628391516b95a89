@@ -16,6 +16,29 @@
       "message": "Suppressing another test, for the same bug number Tim suppressed a related test before.",
       "revId": "a2b48dd4e272cc517f7dbb667628391516b95a89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "949d72d1_ae6e102c",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T19:59:01Z",
+      "side": 1,
+      "message": "could you use angle_end2end_tests expectations intead?",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 457,
+        "endChar": 0
+      },
+      "revId": "a2b48dd4e272cc517f7dbb667628391516b95a89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
