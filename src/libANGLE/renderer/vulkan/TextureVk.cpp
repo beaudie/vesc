@@ -1020,7 +1020,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
 
         ANGLE_TRY(stagingImage->get().init2DStaging(
             contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            gl::Extents(sourceBox.width, sourceBox.height, 1), destFormat,
+            gl::Extents(sourceBox.width, sourceBox.height, 1), destFormat.intendedFormatID,
             destFormat.actualImageFormatID, kTransferStagingImageFlags, layerCount));
 
         access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
@@ -1143,7 +1143,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     // TODO: optimize to copy directly if possible.  http://anglebug.com/4719
     bool isSelfCopy = mImage == srcImage;
     GLenum srcColorEncoding =
-        gl::GetSizedInternalFormatInfo(srcImage->getFormat().intendedGLFormat).colorEncoding;
+        gl::GetSizedInternalFormatInfo(srcImage->getIntendedFormat().glInternalFormat)
+            .colorEncoding;
     GLenum dstColorEncoding =
         gl::GetSizedInternalFormatInfo(destFormat.intendedGLFormat).colorEncoding;
 
@@ -1176,7 +1177,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
 
         ANGLE_TRY(stagingImage->get().init2DStaging(
             contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            gl::Extents(sourceBox.width, sourceBox.height, 1), destFormat,
+            gl::Extents(sourceBox.width, sourceBox.height, 1), destFormat.intendedFormatID,
             destFormat.actualImageFormatID, kDrawStagingImageFlags, layerCount));
 
         params.destOffset[0] = 0;
@@ -2006,11 +2007,11 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
     const uint32_t levelCount = srcImage->getLevelCount();
     const uint32_t layerCount = srcImage->getLayerCount();
 
-    ANGLE_TRY(stagingImage->get().initStaging(contextVk, mState.hasProtectedContent(),
-                                              renderer->getMemoryProperties(), srcImage->getType(),
-                                              srcImage->getExtents(), srcImage->getFormat(),
-                                              srcImage->getActualFormatID(), srcImage->getSamples(),
-                                              kTransferStagingImageFlags, levelCount, layerCount));
+    ANGLE_TRY(stagingImage->get().initStaging(
+        contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+        srcImage->getType(), srcImage->getExtents(), srcImage->getIntendedFormatID(),
+        srcImage->getActualFormatID(), srcImage->getSamples(), kTransferStagingImageFlags,
+        levelCount, layerCount));
 
     // Copy the src image wholly into the staging image
     const VkImageAspectFlags aspectFlags = srcImage->getAspectFlags();
@@ -2080,7 +2081,7 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
     {
         // Cache values needed for copy and stage operations
         vk::ImageHelper *srcImage = mImage;
-        const vk::Format &format  = mImage->getFormat();
+        const vk::Format &format  = getBaseLevelFormat(contextVk->getRenderer());
 
         // If any level was redefined but the image was not owned by the Texture, it's already
         // released and deleted by TextureVk::redefineLevel().
@@ -2823,8 +2824,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     bool imageFormatListEnabled    = false;
     angle::FormatID actualFormatID = format.actualImageFormatID;
-    ANGLE_TRY(mImage->initExternal(contextVk, mState.getType(), vkExtent, format, actualFormatID,
-                                   samples, mImageUsageFlags, mImageCreateFlags,
+    ANGLE_TRY(mImage->initExternal(contextVk, mState.getType(), vkExtent, format.intendedFormatID,
+                                   actualFormatID, samples, mImageUsageFlags, mImageCreateFlags,
                                    vk::ImageLayout::Undefined, nullptr, gl::LevelIndex(firstLevel),
                                    levelCount, layerCount, contextVk->isRobustResourceInitEnabled(),
                                    &imageFormatListEnabled, mState.hasProtectedContent()));
