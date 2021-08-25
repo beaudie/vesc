@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc77402f_f7a99f4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-25T20:09:32Z",
+      "side": 1,
+      "message": "Yea it would be nice clean up these last non-result returning impl functions. Updated them to ANGLE_SWALLOW_ERR.",
+      "parentUuid": "4bf44c8b_9143a816",
+      "revId": "0b03f4056bb0455ac3570874c48f990f3fc48501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5e041e1_83002679",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-08-24T20:01:20Z",
       "side": 1,
       "message": "ANGLE_SWALLOW_ERR ?",
+      "range": {
+        "startLine": 295,
+        "startChar": 5,
+        "endLine": 295,
+        "endChar": 9
+      },
+      "revId": "0b03f4056bb0455ac3570874c48f990f3fc48501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94034102_ef3bcb36",
+        "filename": "src/libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-25T20:09:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5e041e1_83002679",
       "range": {
         "startLine": 295,
         "startChar": 5,
