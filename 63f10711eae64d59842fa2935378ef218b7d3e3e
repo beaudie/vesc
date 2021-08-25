@@ -33,6 +33,23 @@
       "message": "What does this fix Brandon? Sorry don\u0027t see any test or any additional info in the bug.",
       "revId": "63f10711eae64d59842fa2935378ef218b7d3e3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08949669_a24c3667",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-25T02:49:31Z",
+      "side": 1,
+      "message": "Obvious fix, so LGTM, but regression test would be nice",
+      "revId": "63f10711eae64d59842fa2935378ef218b7d3e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
