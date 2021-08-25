@@ -33,6 +33,24 @@
       "message": "Nice Shabi, wonder if this will improve GPU time.",
       "revId": "a5ab58f950b0d46a8a77a72c908f5a9575de696c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff111070_1d9668ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-25T16:59:49Z",
+      "side": 1,
+      "message": "Checked with Aztec Ruins based on the GOLD diff from Intel, no discernible perf difference on P4.\n\nDo we do GOLD check on Android? If so, given that the changes didn\u0027t cause GOLD failures on the bots, they are probably not very effective on the Qualcomm drivers. ARM saw failures due to precision changes (while the Android bots didn\u0027t catch them), so they are more likely to notice a difference.\n\nAlso, funny story. See the fix in PackUnpackTest.cpp, P4 failed the tests with the GL backend, but not the Vulkan backend, which makes me wonder if they are not really paying attention to precision in their Vulkan driver? That would also explain why there is no perf difference.",
+      "parentUuid": "d0756366_4c68f7af",
+      "revId": "a5ab58f950b0d46a8a77a72c908f5a9575de696c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
