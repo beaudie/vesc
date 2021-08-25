@@ -806,6 +806,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc639d57_aab14d5a",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T00:42:02Z",
+      "side": 1,
+      "message": "Maybe keep the old APIs (EGLContext createContext, non-virtual), and make a new function createContextGeneric that returns the new GLWindowContext.",
+      "parentUuid": "0a25d43c_97e91dde",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa998307_633b2132",
         "filename": "util/EGLWindow.h",
         "patchSetId": 30
