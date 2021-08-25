@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2a42bc7_e2c3cf83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-25T20:55:43Z",
+      "side": 1,
+      "message": "FYI Jamie ... this CL moves the 2 new end2end suppressions I added to the expectations file, along with the prior suppression that I copied.",
+      "revId": "11a942c896ee6ba1f5c5e5b3fb65d239721dc968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
