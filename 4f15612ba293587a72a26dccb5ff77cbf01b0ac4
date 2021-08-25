@@ -181,6 +181,30 @@
       },
       "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc64b0d5_82cfb4a4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-25T19:18:26Z",
+      "side": 1,
+      "message": "So mResourceUseList gets a new copy of SharedResourceUse, but still pointing to the object\u0027s ResourceUse.",
+      "parentUuid": "39d6d5a1_29c2b998",
+      "range": {
+        "startLine": 3666,
+        "startChar": 4,
+        "endLine": 3674,
+        "endChar": 15
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
