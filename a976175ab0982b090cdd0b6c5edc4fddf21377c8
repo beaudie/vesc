@@ -70,6 +70,30 @@
       },
       "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2406e76_fe5021ec",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-25T05:33:10Z",
+      "side": 1,
+      "message": "I\u0027d prefer it in a comment rather than commit message, with the call sequence reflecting what happens now vs. what used to happen.\n\nDid we add the finish per step for a reason?  Maybe for offscreen?  It has always been obviously slow, but I thought it was necessary.",
+      "parentUuid": "7da68535_b0462864",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 60
+      },
+      "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
