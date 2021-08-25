@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ae299f4_8f203956",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-25T14:56:42Z",
+      "side": 1,
+      "message": "Turned out most of the last remaining GOLD failures with the SPIR-V gen path was due to this difference. This change fixes things for the glslang path first.",
+      "revId": "a5ab58f950b0d46a8a77a72c908f5a9575de696c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
