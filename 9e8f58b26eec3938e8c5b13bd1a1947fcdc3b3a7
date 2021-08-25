@@ -16,6 +16,24 @@
       "message": "I think you can go ahead with this if you are seeing improved results.  I do think we\u0027ll eventually have devices in CI that do not stabilize in this short period of time.  I know I have some locally, haven\u0027t tried them with these changes, but typically have to run 10+ seconds to get consistent results.",
       "revId": "9e8f58b26eec3938e8c5b13bd1a1947fcdc3b3a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a4cb09_5f69e002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T16:52:17Z",
+      "side": 1,
+      "message": "This is an initial check for an estimated number of steps, run during warmup. The sampling for performance is done as a follow-up pass and uses a bigger sample.",
+      "parentUuid": "4910a6b1_f63da7c8",
+      "revId": "9e8f58b26eec3938e8c5b13bd1a1947fcdc3b3a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
