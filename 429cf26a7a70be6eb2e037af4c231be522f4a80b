@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "144e9996_ea517359",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-25T17:51:03Z",
+      "side": 1,
+      "message": "I am sending out all the refactoring CLs for review for now while I am still debugging the bots failure with the functional change CL. These refactoring CL are expecting no functionality change. The purpose of them is to wane off vk::Format usage in many places so that the actual functional CL will not need to worry about it (thus reduce amount of code diff in the functional CL). The end of this series of refactoring CL is ImageHelper class no longer holding on to vk::Format object. It only knows actualFormatID and intendedFormatID.",
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
