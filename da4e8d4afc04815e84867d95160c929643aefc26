@@ -34,6 +34,24 @@
       "parentUuid": "5d1e33ac_b4629b2a",
       "revId": "da4e8d4afc04815e84867d95160c929643aefc26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6824be1f_03e24536",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2021-08-25T06:12:09Z",
+      "side": 1,
+      "message": "I removed dependency to DEPS\u0027d swarming_client from recipe. Could you CQ+2 again?",
+      "parentUuid": "bfd444fd_1e7c5f18",
+      "revId": "da4e8d4afc04815e84867d95160c929643aefc26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
