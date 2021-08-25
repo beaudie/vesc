@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a755aeb_16e27835",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T01:30:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0b7978a9_acf9262f",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef4f2cdf_66b77ed0",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "I think this is orthogonal to how we allocate buffer. The problem here is not how we alloc, but we do not know if there is a pending GPU write or not, thus we have to assume the worst case to wait for all access to finish, even though in this case all GPU access is readOnly access.",
       "parentUuid": "f9baf99d_9c9a2c79",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a14429c2_e0d0588e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T01:30:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e144efe_b01b1a56",
       "range": {
         "startLine": 11,
         "startChar": 0,
@@ -180,6 +228,30 @@
       "side": 1,
       "message": "Right. I think doing for buffer only will make it a lot simpler. Probably my fault since I mentioned texture to you but I take back.",
       "parentUuid": "8930e9ee_c9e01156",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 14
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb353db_d4965e3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T01:30:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c782ebe4_962e5136",
       "range": {
         "startLine": 20,
         "startChar": 0,
@@ -647,6 +719,30 @@
       "side": 1,
       "message": "\u003e I think only 2 is enough, `Read` and `ReadWrite` (no real difference between `ReadWrite` and `Write`).\n\nSounds good.\n\n\u003e I think we actually have that enum somewhere around.\n\nYeah, I think you made one a while ago, but I can\u0027t find it anywhere.\n\n\u003e I think Access is for resources that are not readable or writable? Then you can just hijack either serial for that and not have yet another serial for them.\n\nUsing Read should work.",
       "parentUuid": "18cea952_0141dfe7",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "913d3805_057247e4",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T01:30:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35119377_8ce7822f",
       "range": {
         "startLine": 23,
         "startChar": 4,

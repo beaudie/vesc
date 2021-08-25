@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ce96704_cb05d2c5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T01:30:56Z",
+      "side": 1,
+      "message": "Good catch.   Though, I think your code snippet has the Read and ReadWrite backwards, since on the self-copy case (src \u003d\u003d mBuffer), we want to mark the source as ReadWrite.",
+      "parentUuid": "af9e816a_2b62745e",
+      "range": {
+        "startLine": 892,
+        "startChar": 63,
+        "endLine": 892,
+        "endChar": 78
+      },
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f236ae6_39c1d3a3",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acd06b73_cebba5c6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T01:30:56Z",
+      "side": 1,
+      "message": "Oops. Done.",
+      "parentUuid": "4f236ae6_39c1d3a3",
+      "range": {
+        "startLine": 1556,
+        "startChar": 0,
+        "endLine": 1556,
+        "endChar": 83
+      },
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cf32eea_8142b9ba",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-08-19T00:42:53Z",
       "side": 1,
       "message": "Is it possible to make it look like this:\n    void retain(ResourceUseList *resourceUseList) const\n    {\n          Resource::retain(resourceUseList);\n          resourceUseList-\u003eadd(mWriteUse);\n    }\n    void readOnlyRetain(ResourceUseList *resourceUseList) const;\n    {\n          Resource::retain(resourceUseList);\n    }\n\nI thought C++ allows this, right? If yes, then the good thing about this is normal place people call retain() it will still just work. Otherwise if someone accidentally called retain, it will go to Resource::retain which will be a bug.",
+      "range": {
+        "startLine": 938,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 0
+      },
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a69a818_0fb6e76d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T01:30:56Z",
+      "side": 1,
+      "message": "I like the idea, but not quite this implementation.   My concern is that retain() doesn\u0027t indicate that it\u0027s for Read and Write, nor is there really any indication that there\u0027s a readOnlyRetain() without going to look for it.\n\nInstead, making retain() private pushes callers to retainBuffer() and explicitly making the distinction of Read vs. ReadWrite.\n\nLet me know what you think.",
+      "parentUuid": "1cf32eea_8142b9ba",
       "range": {
         "startLine": 938,
         "startChar": 0,
