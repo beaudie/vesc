@@ -483,6 +483,27 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     void handleImmutableSamplerTransition(const vk::ImageHelper *previousImage,
                                           const vk::ImageHelper *nextImage);
 
+    angle::FormatID getIntendedImageFormatID() const
+    {
+        ASSERT(mFormat);
+        return mFormat->intendedFormatID;
+    }
+    const angle::Format &getIntendedImageFormat() const
+    {
+        ASSERT(mFormat);
+        return angle::Format::Get(mFormat->intendedFormatID);
+    }
+    angle::FormatID getActualImageFormatID() const
+    {
+        ASSERT(mFormat);
+        return mFormat->actualImageFormatID;
+    }
+    const angle::Format &getActualImageFormat() const
+    {
+        ASSERT(mFormat);
+        return angle::Format::Get(mFormat->actualImageFormatID);
+    }
+
     bool mOwnsImage;
     bool mRequiresMutableStorage;
     bool mImmutableSamplerDirty;
@@ -537,6 +558,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // dynamically allocated as the texture can release ownership for example and it can be
     // transferred to another |TextureVk|.
     vk::ImageHelper *mImage;
+    vk::Format const *mFormat;
 
     // |mSampler| contains the relevant Vulkan sampler states representing the OpenGL Texture
     // sampling states for the Texture.
