@@ -38,6 +38,7 @@ void GetDeferredInitializers(TIntermDeclaration *declaration,
                              bool initializeUninitializedGlobals,
                              bool canUseLoopsToInitialize,
                              bool highPrecisionSupported,
+                             bool forceDeferGlobalInitializers,
                              TIntermSequence *deferredInitializersOut,
                              std::vector<const TVariable *> *variablesToReplaceOut,
                              TSymbolTable *symbolTable)
@@ -53,7 +54,8 @@ void GetDeferredInitializers(TIntermDeclaration *declaration,
         ASSERT(symbolNode);
         TIntermTyped *expression = init->getRight();
 
-        if (expression->getQualifier() != EvqConst || !expression->hasConstantValue())
+        if (expression->getQualifier() != EvqConst || !expression->hasConstantValue() ||
+            (forceDeferGlobalInitializers && symbolNode->getQualifier() == EvqGlobal))
         {
             // For variables which are not constant, defer their real initialization until
             // after we initialize uniforms.
@@ -137,6 +139,7 @@ bool DeferGlobalInitializers(TCompiler *compiler,
 {
     TIntermSequence deferredInitializers;
     std::vector<const TVariable *> variablesToReplace;
+    bool forceDeferGlobalInitializers = compiler->getOutputType() == SH_MSL_METAL_OUTPUT;
 
     // Loop over all global statements and process the declarations. This is simpler than using a
     // traverser.
@@ -147,7 +150,8 @@ bool DeferGlobalInitializers(TCompiler *compiler,
         {
             GetDeferredInitializers(declaration, initializeUninitializedGlobals,
                                     canUseLoopsToInitialize, highPrecisionSupported,
-                                    &deferredInitializers, &variablesToReplace, symbolTable);
+                                    forceDeferGlobalInitializers, &deferredInitializers,
+                                    &variablesToReplace, symbolTable);
         }
     }
 
