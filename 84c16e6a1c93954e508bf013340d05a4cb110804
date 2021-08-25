@@ -416,6 +416,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c292083_0cc98e15",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T16:24:15Z",
+      "side": 1,
+      "message": "I\u0027m still not fully understanding this implementation, due to the cachedSourceString.empty() check.\n\n\u003e To support this, we will embed program source into ANGLE\u0027s binary\nformat. This will allow us to parse it out again when the app submits\nthe binary.\n\nThis change requires the source for all shaders stages in a program to be present so we can recreate the program later with them.  If there are any stages missing, then we can\u0027t fully recreate the program, so the trace won\u0027t be correct/complete.\n\nWhile I understand that it\u0027s possible to create and link separable programs with missing shader stages, that\u0027s not what the app is doing here.   It has linked a full program with all of the necessary shader stages, but we can\u0027t embed the source for them since they aren\u0027t present.   Rather than returning an partial program binary, it seems we should instead be ASSERT()\u0027ing that there is missing shader source and the trace will be incomplete.\n\nMaybe there\u0027s something else I\u0027m misunderstanding, but how does the recreated program with missing shader stages link and execute correctly in your trace?",
+      "parentUuid": "b8596fb8_dac83957",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dc01820_27425a43",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
