@@ -392,6 +392,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8596fb8_dac83957",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-25T05:08:02Z",
+      "side": 1,
+      "message": "Spent some time on this again.  Using code similar to what you\u0027ve got above, the assert does fire:\n\n        for (ShaderType shaderType : mState.mExecutable-\u003egetLinkedShaderStages())\n        {\n            gl::Shader *shader \u003d getAttachedShader(shaderType);\n            ASSERT(shader);\n            if (shader)\n            {\n                stream.writeString(shader-\u003egetSourceString());\n            }\n        }\n\nThe calls leading to this are:\n\n glCreateProgram(context\u003d3)\n glProgramBinary(context\u003d3, program\u003d7, binaryFormat \u003d GL_PROGRAM_BINARY_ANGLE,\n                 binary \u003d ..., length \u003d 17790)\n glGetProgramiv(context\u003d3, program\u003d7, pname \u003d GL_LINK_STATUS, params \u003d ...)\n glGetProgramiv(context\u003d3, program\u003d7, pname \u003d GL_PROGRAM_BINARY_LENGTH,\n                params \u003d ...)\n ! Assert failed in serialize (../../src/libANGLE/Program.cpp:4728): shader\n\nThe stack leading up to the assert is:\n\n gl::LogMessage::~LogMessage()+260) \n gl::Program::serialize(gl::Context const*, angle::MemoryBuffer*) +916) \n gl::Program::saveBinary(gl::Context*, unsigned int*, void*, int, int*) +256)\n gl::Program::getBinaryLength(gl::Context*) +240) \n gl::QueryProgramiv(gl::Context*, gl::Program const*, unsigned int, int*)+828) \n gl::Context::getProgramiv(gl::ShaderProgramID, unsigned int, int*)+284) \n GL_GetProgramiv+232) \n\nSo we can see that serialize is called when the app checks the size of the binary.  If I add some logging instead of the assert, I can see that... no programs are attached to the executable in this scenario... ever:\n \n glCreateProgram(context \u003d 3)\n glProgramBinary(context \u003d 3, program \u003d 7, binaryFormat \u003d GL_PROGRAM_BINARY_ANGLE,\n                 binary \u003d ..., length \u003d 17790)\n CLN: deserialize: Shader length of 1678 was read from binary for\n                   stage\u003dGL_VERTEX_SHADER in program\u003d7\n CLN: deserialize: Shader length of 1885 was read from binary for \n                   stage\u003dGL_FRAGMENT_SHADER in program\u003d7\n glGetProgramiv(context \u003d 3, program \u003d 7, pname \u003d GL_LINK_STATUS, params \u003d ...)\n glGetProgramiv(context \u003d 3, program \u003d 7, pname \u003d GL_PROGRAM_BINARY_LENGTH, \n                params \u003d ...)\n CLN: serialize: No shader attached for stage\u003dGL_VERTEX_SHADER in program\u003d7\n CLN: serialize: No shader attached for stage\u003dGL_FRAGMENT_SHADER in program\u003d7\n glGetProgramiv(context \u003d 3, program \u003d 7, pname \u003d GL_LINK_STATUS, params \u003d ...)\n glUseProgram(context \u003d 3, program \u003d 7)\n \nIf I browse through the source a bit, I don\u0027t see where Program::attachShader is ever called when ProgramBinary is used.  So maybe this is WAI?  It does throw off the binary size calculation though, so I also hooked up the ability to load the shader source from cache. \n\nI did go ahead and move to using getLinkedShaderStages instead of looping through all shader types.  LMKWYT.",
+      "parentUuid": "45faa5b7_1630176e",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dc01820_27425a43",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
