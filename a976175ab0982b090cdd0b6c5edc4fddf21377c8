@@ -142,6 +142,30 @@
       },
       "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b759f151_594d2078",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-25T14:34:52Z",
+      "side": 1,
+      "message": "\u003e What the new code does, is first it does the above to compute a tentative steps to  run, then does another pass (several times) where it then computes the \"actual\" elapsed time\n\nDrive by: why not skip the first run (finish after every step) and do the actual one (finish once at the end) right off the bat?",
+      "parentUuid": "9a12d533_a0e0566a",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 60
+      },
+      "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
