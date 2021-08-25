@@ -617,7 +617,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     mValidateASTOptions = {};
 
     // Desktop GLSL shaders don't have precision, so don't expect them to be specified.
-    mValidateASTOptions.validatePrecision = !IsDesktopGLSpec(mShaderSpec);
+    mValidateASTOptions.validatePrecision = false;  //! IsDesktopGLSpec(mShaderSpec);
 
     if (!validateAST(root))
     {

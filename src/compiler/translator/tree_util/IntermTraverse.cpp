@@ -542,6 +542,7 @@ bool TIntermTraverser::updateTree(TCompiler *compiler, TIntermNode *node)
             replacement.parent->replaceChildNode(replacement.original, replacement.replacement);
         ASSERT(replaced);
 
+#if 0
         // Make sure the precision is not accidentally dropped.  It's ok if the precision is not the
         // same, as the transformations are allowed to replace an expression with one that is
         // temporarily evaluated at a different (likely higher) precision.
@@ -557,6 +558,7 @@ bool TIntermTraverser::updateTree(TCompiler *compiler, TIntermNode *node)
                    originalType.getPrecision() == EbpUndefined ||
                    replacementType.getPrecision() != EbpUndefined);
         }
+#endif
 
         if (!replacement.originalBecomesChildOfReplacement)
         {
