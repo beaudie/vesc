@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af327946_a17ae85d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T18:03:24Z",
+      "side": 1,
+      "message": "nit: please call these parameters intendedFormat and actualFormat. Looks like we may have missed renaming them on a prior refactor.",
+      "range": {
+        "startLine": 234,
+        "startChar": 50,
+        "endLine": 234,
+        "endChar": 92
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faad69b3_5669fd15",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T18:03:24Z",
+      "side": 1,
+      "message": "nit: please call these parameters intendedFormat and actualFormat. Looks like we may have missed renaming them on a prior refactor.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 65
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d33b6a94_0c884e4e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T18:03:24Z",
+      "side": 1,
+      "message": "nit: I think you can make this a private member in ImageHelper, then you can make HasEmulatedImageChannels back as a member method that doesn\u0027t need to take two parameters.",
+      "range": {
+        "startLine": 705,
+        "startChar": 13,
+        "endLine": 705,
+        "endChar": 40
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
