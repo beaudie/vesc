@@ -118,6 +118,30 @@
       },
       "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a12d533_a0e0566a",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T12:52:15Z",
+      "side": 1,
+      "message": "Oh, and your questions:\n\nI added finish per step because previously we weren\u0027t calling finish at all so were getting crazy wrong values for mStepsToRun for GPU tests. We want to get a fixed number of steps to run in a specified amount of time, with asynchronous calls, so it takes a bit of estimation. The calibration always produced an under-estimate so it wasn\u0027t a huge problem, but it had a surprisingly large variance between runs so I\u0027m hoping this will fix that.",
+      "parentUuid": "3cf34817_9468836b",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 60
+      },
+      "revId": "a976175ab0982b090cdd0b6c5edc4fddf21377c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
