@@ -51,6 +51,24 @@
       "parentUuid": "d0756366_4c68f7af",
       "revId": "a5ab58f950b0d46a8a77a72c908f5a9575de696c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf9dda7e_41b2d037",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T17:03:27Z",
+      "side": 1,
+      "message": "In RendererVk:\n\n    // http://anglebug.com/3078\n    ANGLE_FEATURE_CONDITION(\n        \u0026mFeatures, enablePrecisionQualifiers,\n        !(IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) \u0026\u0026\n          (mPhysicalDeviceProperties.driverVersion \u003c kPixel2DriverWithRelaxedPrecision)) \u0026\u0026\n            !IsPixel4(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID));\n\nYeah we most definitely run gold tests on P4.",
+      "parentUuid": "ff111070_1d9668ed",
+      "revId": "a5ab58f950b0d46a8a77a72c908f5a9575de696c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
