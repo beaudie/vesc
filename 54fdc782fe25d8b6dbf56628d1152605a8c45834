@@ -174,6 +174,30 @@
       },
       "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f71cc418_9ce620eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-25T19:09:06Z",
+      "side": 1,
+      "message": "I just saw you made retain private (didn\u0027t know you can do that with using). Looks good to me. I weas thinking to leep retain and reduce the code diff as well as not needing ResourceUseType. But I am ok with what you did as well, leaving to you and other folks to decide.",
+      "parentUuid": "9a69a818_0fb6e76d",
+      "range": {
+        "startLine": 938,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 0
+      },
+      "revId": "54fdc782fe25d8b6dbf56628d1152605a8c45834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

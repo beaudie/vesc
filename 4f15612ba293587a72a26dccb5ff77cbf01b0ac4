@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14a7619_58d984bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-25T19:09:06Z",
+      "side": 1,
+      "message": "I see, so this is side effect of change in line ContextVk.cpp:1551.",
+      "parentUuid": "ab74f249_f8fbdbac",
+      "range": {
+        "startLine": 1036,
+        "startChar": 8,
+        "endLine": 1040,
+        "endChar": 12
+      },
+      "revId": "4f15612ba293587a72a26dccb5ff77cbf01b0ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82d6660b_2f063c36",
