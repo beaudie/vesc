@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea561a5a_18ffafe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-25T16:40:22Z",
+      "side": 1,
+      "message": "LGTM.  I thought we were already doing this, but I see there\u0027s a continue in there.",
+      "revId": "a845373001949b1c07d26066a43c1e60d0953333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
