@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "52438777_464cd386",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T23:59:50Z",
+      "side": 1,
+      "message": "typo: alone",
+      "range": {
+        "startLine": 9,
+        "startChar": 17,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d687165_d6047ade",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T23:59:50Z",
+      "side": 1,
+      "message": "Why do we need \u0027format\u0027 and \u0027format.actualImageFormatID\u0027?   Why can\u0027t initExternal() get \u0027format.actualImageFormatID\u0027 from \u0027format\u0027 itself?\n\nMaybe I missed a call where the actualImageFormatID comes from somewhere else, but it looks like they all do some form of this.",
+      "range": {
+        "startLine": 289,
+        "startChar": 52,
+        "endLine": 289,
+        "endChar": 86
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af327946_a17ae85d",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 9
@@ -66,6 +112,40 @@
         "endLine": 705,
         "endChar": 40
       },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1902f410_d313275c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T23:59:50Z",
+      "side": 1,
+      "message": "Similar to Jamie\u0027s comment above, this can be a private function of ImageHelper and then the format IDs don\u0027t need to be passed in and instead this can just call hasEmulatedImageFormat().",
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d76590d_1668381d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6040,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-25T23:59:50Z",
+      "side": 1,
+      "message": "I see that this assert was already here, but I think it would be better to move this assert into getActualFormat() so it\u0027s validated everywhere it\u0027s used.",
       "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
