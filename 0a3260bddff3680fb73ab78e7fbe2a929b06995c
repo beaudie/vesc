@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "72898bdf_cfefc36c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T17:19:40Z",
+      "side": 1,
+      "message": "Yeah we could have up to 8 builds simultaneously using hundreds of processes. I think that was the source of flakiness, but haven\u0027t proven it yet.",
+      "parentUuid": "31e3bab4_e992027b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 10
+      },
+      "revId": "0a3260bddff3680fb73ab78e7fbe2a929b06995c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1a007daa_989b612d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -37,6 +61,23 @@
       "writtenOn": "2021-08-25T14:45:26Z",
       "side": 1,
       "message": "Cody/Tim PTAL. Gert, FYI, this should make it less of a concern to run with the -l flag when running without Goma.",
+      "revId": "0a3260bddff3680fb73ab78e7fbe2a929b06995c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84efb84e_b332a7ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-25T17:19:40Z",
+      "side": 1,
+      "message": "Thanks for approvals.",
       "revId": "0a3260bddff3680fb73ab78e7fbe2a929b06995c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
