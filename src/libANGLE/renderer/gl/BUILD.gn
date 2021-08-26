@@ -131,6 +131,8 @@ if (is_android || is_linux || is_chromeos) {
     "egl/ContextEGL.h",
     "egl/DisplayEGL.cpp",
     "egl/DisplayEGL.h",
+    "egl/DisplayEGLSurfaceless.cpp",
+    "egl/DisplayEGLSurfaceless.h",
     "egl/DmaBufImageSiblingEGL.cpp",
     "egl/DmaBufImageSiblingEGL.h",
     "egl/ExternalImageSiblingEGL.h",
