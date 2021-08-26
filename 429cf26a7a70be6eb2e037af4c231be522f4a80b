@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "542c6cf8_65e552ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-26T20:50:39Z",
+      "side": 1,
+      "message": "LGTM.  Please handle Shabi\u0027s comments.  Sorry to take so long to finish this!",
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6773df8d_d5391531",
@@ -37,6 +54,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "657591b8_18a50196",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-26T20:50:39Z",
+      "side": 1,
+      "message": "nit: Since this is no longer a method of the Format struct, should it move higher in the file?\n\nJust asking.  I\u0027m fine not holding up this CL for this.",
+      "range": {
+        "startLine": 194,
+        "startChar": 7,
+        "endLine": 194,
+        "endChar": 34
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a157e28c_1675d1dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-26T20:50:39Z",
+      "side": 1,
+      "message": "nit: Ditto about moving",
+      "range": {
+        "startLine": 225,
+        "startChar": 7,
+        "endLine": 225,
+        "endChar": 39
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfe7c569_388dc499",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -48,6 +111,30 @@
       "writtenOn": "2021-08-26T19:24:52Z",
       "side": 1,
       "message": "nit: I presume this will have an \"if\" inside later? If so, then cache in a local variable to avoid re-evaluation in the return expression.",
+      "range": {
+        "startLine": 767,
+        "startChar": 18,
+        "endLine": 767,
+        "endChar": 35
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c584eaf_4af7b7bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-26T20:50:39Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "cfe7c569_388dc499",
       "range": {
         "startLine": 767,
         "startChar": 18,
