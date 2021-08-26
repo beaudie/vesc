@@ -46,6 +46,47 @@
       },
       "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d2f52e4_42b64c81",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:29:01Z",
+      "side": 1,
+      "message": "nit: Remember to remove from the class too",
+      "parentUuid": "9296e734_f1e35a48",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 45
+      },
+      "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0878b942_76612901",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:29:01Z",
+      "side": 1,
+      "message": "Could you please move these to CopyImageParameters?",
+      "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
