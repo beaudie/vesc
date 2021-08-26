@@ -4411,6 +4411,7 @@ void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const Ca
             break;
         case EntryPoint::GLCopyTextureCHROMIUM:
         case EntryPoint::GLCopySubTextureCHROMIUM:
+        case EntryPoint::GLCopyTexture3DANGLE:
             index     = 3;
             paramName = "destIdPacked";
             break;
