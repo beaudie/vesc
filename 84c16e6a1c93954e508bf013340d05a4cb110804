@@ -73,6 +73,54 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "970c7e16_4aded4e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T22:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d865c57_5b1b1281",
+      "range": {
+        "startLine": 18,
+        "startChar": 52,
+        "endLine": 18,
+        "endChar": 59
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4c0df25_7f3bfd86",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T22:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfaa703c_5e659b69",
+      "range": {
+        "startLine": 17,
+        "startChar": 61,
+        "endLine": 18,
+        "endChar": 59
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2ea780a6_cecd3cac",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -476,6 +524,30 @@
       "side": 1,
       "message": "Ah, right, there 2 cases where this would be called during MEC:\n\n1.) The first time the app is run with capture enabled, in which case the source is present since the app created the program from scratch and the shaders are still around.\n2.) The next time the app is run with capture enabled and the branch wasn\u0027t \"modified\", so the same binaries (containing the source) can be re-uploaded to ANGLE.   However, the program never had shaders attached, so we can\u0027t get source from them.\n\nThat should explain both paths through here and why we wouldn\u0027t always have shaders attached.\n\nRegardless of which it is though, we always need to be certain there is shader source available for each linked stage in the program so the capture can be replayed correctly.   Whether it\u0027s an ASSERT() or UNREACHABLE() doesn\u0027t really matter, as long as we error out when we don\u0027t have shader source.\n\nThanks for bearing with me on this one.   I think you\u0027ve got something that works here now.",
       "parentUuid": "1dbfc689_f8d5d4e7",
+      "range": {
+        "startLine": 4712,
+        "startChar": 0,
+        "endLine": 4724,
+        "endChar": 9
+      },
+      "revId": "84c16e6a1c93954e508bf013340d05a4cb110804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c46fc638_88bfd6d5",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T22:35:45Z",
+      "side": 1,
+      "message": "No problem, I appreciate your thorough review, its part of what makes this a strong project.\n\nI did some more cleanup and commenting, including the resulting override GL sequence.  Local testing shows this working solidly.",
+      "parentUuid": "2eac000e_92bc5250",
       "range": {
         "startLine": 4712,
         "startChar": 0,

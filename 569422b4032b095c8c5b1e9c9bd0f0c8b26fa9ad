@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "644c60cf_820893cd",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4653,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T22:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8890914_af1775d1",
+      "range": {
+        "startLine": 4643,
+        "startChar": 0,
+        "endLine": 4653,
+        "endChar": 5
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e6cc123_04d8bf79",
@@ -125,6 +149,30 @@
       "writtenOn": "2021-08-24T21:19:47Z",
       "side": 1,
       "message": "ref3",
+      "range": {
+        "startLine": 4686,
+        "startChar": 8,
+        "endLine": 4686,
+        "endChar": 15
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3babf67e_42c43394",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4686,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T22:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e6cc123_04d8bf79",
       "range": {
         "startLine": 4686,
         "startChar": 8,
@@ -229,6 +277,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e43923a1_6584e54f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4834,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T22:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ceed5ee_ab028f21",
+      "range": {
+        "startLine": 4834,
+        "startChar": 8,
+        "endLine": 4834,
+        "endChar": 15
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5678d589_ed345619",
@@ -242,6 +314,30 @@
       "writtenOn": "2021-08-24T21:19:47Z",
       "side": 1,
       "message": "ref",
+      "range": {
+        "startLine": 2228,
+        "startChar": 4,
+        "endLine": 2228,
+        "endChar": 46
+      },
+      "revId": "569422b4032b095c8c5b1e9c9bd0f0c8b26fa9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70a23659_d2aa7782",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T22:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5678d589_ed345619",
       "range": {
         "startLine": 2228,
         "startChar": 4,
