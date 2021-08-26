@@ -224,6 +224,30 @@
       },
       "revId": "b450ac3ff8d3825880ad3f7616b6603c90fcc8d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a21da34_c847d20c",
+        "filename": "util/shader_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T13:53:31Z",
+      "side": 1,
+      "message": "Basic shaders like this are most definitely tested by deqp.",
+      "parentUuid": "7ac978f9_fa700503",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 49
+      },
+      "revId": "b450ac3ff8d3825880ad3f7616b6603c90fcc8d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
