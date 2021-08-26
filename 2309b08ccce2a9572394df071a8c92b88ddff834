@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e67f46a3_31e73f7f",
+        "filename": "src/compiler/translator/tree_ops/InitializeVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:47:41Z",
+      "side": 1,
+      "message": "You should recursively call AddZeroInitSequence here. This is broken if the I/O block has structs or arrays. Please add a struct and array to your test.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 51
+      },
+      "revId": "2309b08ccce2a9572394df071a8c92b88ddff834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
