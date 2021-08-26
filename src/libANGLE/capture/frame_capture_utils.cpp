@@ -1175,21 +1175,18 @@ Result SerializeTexture(const gl::Context *context,
                         ScratchBuffer *scratchBuffer,
                         gl::Texture *texture)
 {
-    // Force texture init to ensure pixels are flushed.
-    if (texture->hasAnyDirtyBit() && texture->isSamplerComplete(context, nullptr))
-    {
-        ANGLE_TRY(texture->syncState(context, gl::Command::Other));
-    }
-
     GroupScope group(json, "Texture", texture->getId());
-    SerializeTextureState(json, texture->getState());
-    json->addString("Label", texture->getLabel());
-    // FrameCapture can not serialize mBoundSurface and mBoundStream
-    // because they are likely to change with each run
+
+    // We sync texture data first, because this can force the texture state to initialized.
     if (texture->getType() != gl::TextureType::Buffer)
     {
         ANGLE_TRY(SerializeTextureData(json, context, texture, scratchBuffer));
     }
+
+    SerializeTextureState(json, texture->getState());
+    json->addString("Label", texture->getLabel());
+    // FrameCapture can not serialize mBoundSurface and mBoundStream
+    // because they are likely to change with each run
     return Result::Continue;
 }
 

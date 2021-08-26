@@ -2176,7 +2176,7 @@ void Texture::setInitState(InitState initState)
 {
     for (ImageDesc &imageDesc : mState.mImageDescs)
     {
-        // Only modifiy defined images, undefined images will remain in the initialized state
+        // Only modify defined images, undefined images will remain in the initialized state
         if (!imageDesc.size.empty())
         {
             imageDesc.initState = initState;
@@ -2298,6 +2298,12 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
         case angle::SubjectMessage::BindingChanged:
             ASSERT(index == kBufferSubjectIndex);
             break;
+
+        case angle::SubjectMessage::InitializationComplete:
+            ASSERT(index == rx::kTextureImageImplObserverMessageIndex);
+            setInitState(InitState::Initialized);
+            break;
+
         default:
             UNREACHABLE();
             break;
@@ -2323,9 +2329,10 @@ angle::Result Texture::getTexImage(const Context *context,
                                    GLenum type,
                                    void *pixels)
 {
-    if (hasAnyDirtyBit())
+    // No-op if the image level is empty.
+    if (getExtents(target, level).empty())
     {
-        ANGLE_TRY(syncState(context, Command::Other));
+        return angle::Result::Continue;
     }
 
     return mTexture->getTexImage(context, packState, packBuffer, target, level, format, type,
