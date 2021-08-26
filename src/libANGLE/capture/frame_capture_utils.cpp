@@ -1176,7 +1176,8 @@ Result SerializeTexture(const gl::Context *context,
                         gl::Texture *texture)
 {
     // Force texture init to ensure pixels are flushed.
-    if (texture->hasAnyDirtyBit() && texture->isSamplerComplete(context, nullptr))
+    if (texture->hasAnyDirtyBit() && texture->isSamplerComplete(context, nullptr) &&
+        texture->getState().getEnabledLevelCount() > 0)
     {
         ANGLE_TRY(texture->syncState(context, gl::Command::Other));
     }

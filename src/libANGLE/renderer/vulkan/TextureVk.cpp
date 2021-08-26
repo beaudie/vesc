@@ -2476,7 +2476,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
 
     // Before redefining the image for any reason, check to see if it's about to go through mipmap
     // generation.  In that case, drop every staged change for the subsequent mips after base, and
-    // make sure the image is created with the complete mipchain.
+    // make sure the image is created with the complete mip chain.
     bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
     if (isGenerateMipmap)
     {
@@ -2543,7 +2543,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // Respecify the image if it's changed in usage, or if any of its levels are redefined and no
     // update to base/max levels were done (otherwise the above call would have already taken care
     // of this).  Note that if both base/max and image usage are changed, the image is recreated
-    // twice, which incurs unncessary copies.  This is not expected to be happening in real
+    // twice, which incurs unnecessary copies.  This is not expected to be happening in real
     // applications.
     if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
         mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
