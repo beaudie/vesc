@@ -22,6 +22,30 @@
       },
       "revId": "2309b08ccce2a9572394df071a8c92b88ddff834",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e4266a6_f19976e6",
+        "filename": "src/compiler/translator/tree_ops/InitializeVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-26T22:18:32Z",
+      "side": 1,
+      "message": "Added tests for all of the above. Code did not require any changes to pass.",
+      "parentUuid": "e67f46a3_31e73f7f",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 51
+      },
+      "revId": "2309b08ccce2a9572394df071a8c92b88ddff834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
