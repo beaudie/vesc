@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fedef5dc_45bc208d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T02:27:58Z",
+      "side": 1,
+      "message": "Thanks for adding tests. Could you please add a few more tests that make sure this is correct for UBOs and SSBOs as well?",
+      "revId": "b450ac3ff8d3825880ad3f7616b6603c90fcc8d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57603219_e4b43051",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T02:27:58Z",
+      "side": 1,
+      "message": "AFAICT This is only different from AddAndUpdateResourceMaps by this:\n\n    else\n    {\n        uniformBindingInfo.frontShaderType \u003d shaderType;\n    }\n\nCan you please deduplicate? You could add a parameter or something to conditionally do this if necessary.",
+      "range": {
+        "startLine": 834,
+        "startChar": 0,
+        "endLine": 859,
+        "endChar": 68
+      },
+      "revId": "b450ac3ff8d3825880ad3f7616b6603c90fcc8d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d251b4f7_4eceeae9",
+        "filename": "util/shader_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T02:27:58Z",
+      "side": 1,
+      "message": "There\u0027s no point in adding these. It\u0027s perfectly fine to use the essl31_shaders ones in ES3.2 tests.",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 49
+      },
+      "revId": "b450ac3ff8d3825880ad3f7616b6603c90fcc8d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
