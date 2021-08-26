@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b461b80_488d7445",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T01:02:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5cc48434_ed3341b6",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff544b21_ebc65f43",
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "\"Invalid Format\" is more precise here and better aligned with other texture-related entry points.",
       "parentUuid": "ff544b21_ebc65f43",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0b7e4a7_418b2e25",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T01:02:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc3e6f3b_7f2fcf10",
       "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -153,6 +189,24 @@
       "side": 1,
       "message": "ANGLE_SKIP_TEST_IF checks the condition and simply returns from the current function.",
       "parentUuid": "43bc7e18_d1dbaad9",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6afe0f6_7b680c03",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T01:02:36Z",
+      "side": 1,
+      "message": "OK, I didn\u0027t know that. I think this would be more readable if you just said \"if (!IsGLExtEnabled(...)) return\".",
+      "parentUuid": "defcd7e9_811874ac",
       "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

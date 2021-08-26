@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9953178_1b02a09d",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T01:02:36Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "a77074f0_b35e0c79",
+      "revId": "c61fd91904a5438270607157ac502ec4175534e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "826e32d0_17c6ba01",
@@ -73,6 +91,30 @@
       "side": 0,
       "message": "The textureStorage check is redundant here, others are subsumed.",
       "parentUuid": "826e32d0_17c6ba01",
+      "range": {
+        "startLine": 1930,
+        "startChar": 27,
+        "endLine": 1930,
+        "endChar": 40
+      },
+      "revId": "c61fd91904a5438270607157ac502ec4175534e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b03f51b7_b9caf6b9",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1930,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T01:02:36Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "90028df3_c8524536",
       "range": {
         "startLine": 1930,
         "startChar": 27,
