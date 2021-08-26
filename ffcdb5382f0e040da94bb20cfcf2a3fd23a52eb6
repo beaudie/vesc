@@ -830,6 +830,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a880f692_9cc4927c",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-26T01:11:40Z",
+      "side": 1,
+      "message": "I think that\u0027s what I have here already.   It currently looks like this:\n\n    class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable\n    {\n    ...\n        // EGLContext and HGLRC (WGL) are both \"handles\", which are implemented as pointers.\n        // Use void* here and let the underlying implementation handle interpreting the type correctly.\n        virtual GLWindowContext getCurrentContext()                  \u003d 0;\n        virtual GLWindowContext createContext(GLWindowContext share) \u003d 0;\n        virtual bool makeCurrent(GLWindowContext context)            \u003d 0;\n\n\n    class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase\n    {\n    ...\n      public:\n        // Initializes EGL resources.\n        GLWindowContext getCurrentContext() override;\n        GLWindowContext createContext(GLWindowContext share) override;\n        bool makeCurrent(GLWindowContext context) override;\n    ...\n      private:\n        EGLContext createContextImpl(EGLContext share);\n        bool makeCurrentImpl(EGLContext context);\n\nWith the implementation of EGLWindow::createContext() acting as the translator from EGLWindow to GLWindowContext:\n    GLWindowContext EGLWindow::createContext(GLWindowContext share)\n    {\n        EGLContext shareContext \u003d reinterpret_cast\u003cEGLContext\u003e(share);\n        return reinterpret_cast\u003cGLWindowContext\u003e(createContextImpl(shareContext));\n    }\n\nThe problem is that we need either:\n1.) Non-generic GLWindowBase::makeCurrent(EGLContext) and GLWindowBase::makeCurrent(HGLRC).\n- This won\u0027t build on Linux, due to HGLRC not being defined.\n2.) Generic GLWindowBase::makeCurrent(void*) which can be translated by EGLWindow to EGLContext or WGLWindow to HGLRC, depending on the implementation.\n\nThe translation from GLWindowContext to EGLContext/HGLRC can\u0027t happen in GLWindowBase, since GLWindowBase can\u0027t know about both EGLContext and HGLRC at the same time.\n\nLet\u0027s chat tomorrow and try to work through what you\u0027ve got in mind.",
+      "parentUuid": "fc639d57_aab14d5a",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa998307_633b2132",
         "filename": "util/EGLWindow.h",
         "patchSetId": 30
