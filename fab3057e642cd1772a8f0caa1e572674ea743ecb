@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e8cdc2e_377ec46f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-26T00:16:50Z",
+      "side": 1,
+      "message": "LGTM, but it looks like there are still some bot failures.",
+      "revId": "fab3057e642cd1772a8f0caa1e572674ea743ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
