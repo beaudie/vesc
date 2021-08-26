@@ -16,6 +16,24 @@
       "message": "I wonder if we should make wrappings for intended and actual image formats as returned by ImageHelper, to avoid accidentally passing one for the other, and also to make sure vk::Format::getActualImageFormat is not accidentally used instead of vk::ImageHelper::getActualImageFormat.",
       "revId": "0a3ffdccecc3bdc19afae9ad6f8e3af775f8fd95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd52fdae_821a65ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T20:26:24Z",
+      "side": 1,
+      "message": "Also, just FYI the way I had thought this would be done was to leave ImageHelper having a vk::Format as it did before, but have a flag that chooses between the two actual image formats in that (inside ImageHelper::getActualImageFormat)",
+      "parentUuid": "bd50cb9f_94822a27",
+      "revId": "0a3ffdccecc3bdc19afae9ad6f8e3af775f8fd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
