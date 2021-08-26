@@ -854,6 +854,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab48c8e6_84b9e165",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-26T11:46:26Z",
+      "side": 1,
+      "message": "Sure. My suggestion is to keep the old APIs unchanged, then add new APIs that you use in the new code, that don\u0027t overlap.",
+      "parentUuid": "a880f692_9cc4927c",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa998307_633b2132",
         "filename": "util/EGLWindow.h",
         "patchSetId": 30
