@@ -46,6 +46,30 @@
       },
       "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "144477cd_5b269e3b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T21:23:33Z",
+      "side": 0,
+      "message": "Params are fine then.",
+      "parentUuid": "3be3f680_d384e4cf",
+      "range": {
+        "startLine": 2643,
+        "startChar": 12,
+        "endLine": 2643,
+        "endChar": 38
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
