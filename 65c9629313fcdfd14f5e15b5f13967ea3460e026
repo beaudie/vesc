@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5cc48434_ed3341b6",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T00:27:44Z",
+      "side": 1,
+      "message": "I went through every switch-case statement and compared the conditions there with the per-format textureSupport functions. Those that are the same were removed.",
+      "parentUuid": "89ed9bed_578e6680",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff544b21_ebc65f43",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 1
@@ -65,6 +83,24 @@
       "writtenOn": "2021-08-26T00:00:31Z",
       "side": 1,
       "message": "This used to use \"kEnumNotSupported\" rather than \"kInvalidFormat\". Is this an intentional change?",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc3e6f3b_7f2fcf10",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T00:27:44Z",
+      "side": 1,
+      "message": "\"Invalid Format\" is more precise here and better aligned with other texture-related entry points.",
+      "parentUuid": "ff544b21_ebc65f43",
       "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -99,6 +135,24 @@
       "writtenOn": "2021-08-26T00:00:31Z",
       "side": 1,
       "message": "Is this going to skip the entire surrounding test if EXT_texture_storage isn\u0027t available? That seems wrong.",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "defcd7e9_811874ac",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T00:27:44Z",
+      "side": 1,
+      "message": "ANGLE_SKIP_TEST_IF checks the condition and simply returns from the current function.",
+      "parentUuid": "43bc7e18_d1dbaad9",
       "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
