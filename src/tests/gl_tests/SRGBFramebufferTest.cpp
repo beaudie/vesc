@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/OSWindow.h"
 
 namespace
 {
@@ -299,6 +300,88 @@ TEST_P(SRGBFramebufferTestES3, BlitFramebuffer)
 
     glBindFramebuffer(GL_FRAMEBUFFER, dstFramebuffer);
     EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+}
+
+// This test reproduces an issue in the Vulkan backend found in the Chromium CI that
+// was caused by enabling the VK_KHR_image_format_list extension on SwiftShader
+// which exposed GL_EXT_sRGB_write_control.
+TEST_P(SRGBFramebufferTest, DrawToSmallFBOClearLargeFBO)
+{
+    if (!IsGLExtensionEnabled("GL_EXT_sRGB_write_control") ||
+        (!IsGLExtensionEnabled("GL_EXT_sRGB") && getClientMajorVersion() < 3))
+    {
+        std::cout
+            << "Test skipped because GL_EXT_sRGB_write_control and GL_EXT_sRGB are not available."
+            << std::endl;
+        return;
+    }
+
+    // Disabling GL_FRAMEBUFFER_SRGB_EXT caused the issue
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+
+    constexpr GLsizei kDimensionsSmall[] = {1, 1};
+    constexpr GLsizei kDimensionsLarge[] = {2, 2};
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kDimensionsSmall[0], kDimensionsSmall[1]);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        GLuint framebuffer;
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        unsigned char vertexData[] = {0};
+        GLuint vertexBuffer;
+        glGenBuffers(1, &vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(char), vertexData, GL_STATIC_DRAW);
+
+        unsigned int indexData[] = {0};
+        GLuint indexBuffer;
+        glGenBuffers(1, &indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int), indexData, GL_STATIC_DRAW);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+        glUseProgram(mProgram);
+
+        glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, nullptr);
+
+        const GLuint buffers[] = {vertexBuffer, indexBuffer};
+        glDeleteBuffers(2, buffers);
+
+        glDeleteFramebuffers(1, &framebuffer);
+        glDeleteTextures(1, &texture);
+
+        EXPECT_GL_NO_ERROR();
+    }
+
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kDimensionsLarge[0], kDimensionsLarge[1]);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        GLuint framebuffer;
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+        // Vulkan validation happened to fail here with:
+        // "Cannot execute a render pass with renderArea not within the bound of the framebuffer"
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glDeleteFramebuffers(1, &framebuffer);
+        glDeleteTextures(1, &texture);
+        EXPECT_GL_NO_ERROR();
+    }
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
