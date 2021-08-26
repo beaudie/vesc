@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f728b489_9e199668",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-26T15:28:18Z",
+      "side": 1,
+      "message": "This test is very similar to the one from Shahbaz, which came with the fix for angleproject:6244.\nI extracted this from the Chromium CI.\nIn contrast to `BlitFramebufferTestES31/DrawToSmallFBOThenResolveLargeFBO`, this test was only reproducible if `GL_EXT_sRGB_write_control` was available and `GL_FRAMEBUFFER_SRGB_EXT` was disabled.",
+      "revId": "54ff8796e35781f3362e362b56ea21e0b40ce8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
