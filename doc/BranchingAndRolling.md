@@ -6,7 +6,29 @@ its dependency on a specific version of ANGLE in the repository; this document
 describes how to update that dependency, and, if necessary, create an ANGLE
 branch to correspond to a branched release of Chrome.
 
-## Rolling DEPS
+ANGLE's commit queue also runs browser-level tests which are hosted in
+the Chromium repository. To reduce the chance of a Chromium-side
+change breaking ANGLE's CQ, the version of Chromium against which
+ANGLE changes is also snapshotted, and rolled forward into ANGLE with
+appropriate testing.
+
+## Autorollers
+
+At present, autorollers manage both the ANGLE roll into Chromium, and
+the Chromium roll into ANGLE.
+
+The top-level page for the ANGLE autoroller into Chromium is:
+[https://autoroll.skia.org/r/angle-chromium-autoroll](https://autoroll.skia.org/r/angle-chromium-autoroll)
+
+The top-level page for the Chromium autoroller into ANGLE is:
+[https://autoroll.skia.org/r/chromium-angle-autoroll](https://autoroll.skia.org/r/chromium-angle-autoroll)
+
+Each of these can be triggered manually if necessary by logging in
+with appropriate credentials. The Chromium-into-ANGLE autoroller in
+particular usually only runs daily, and sometimes when adding or
+removing test suppressions it's advantageous to run it more often.
+
+## Manually rolling DEPS
 
 Chromium's dependency on third-party projects is tracked in [the Chromium
 repository's src/DEPS file]
