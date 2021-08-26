@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e65a8822_c20c629f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2779,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:15:35Z",
+      "side": 1,
+      "message": "Not sure what you changed based on my comment on the doc, but this needs changing at least too:\n\n    isImage ? vk::ResourceUseType::ReadWrite : vk::ResourceUseType::Read",
+      "range": {
+        "startLine": 2779,
+        "startChar": 42,
+        "endLine": 2779,
+        "endChar": 72
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d58d9457_c5d1dd0a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:15:35Z",
+      "side": 1,
+      "message": "ReadWrite for future-proofing",
+      "range": {
+        "startLine": 2445,
+        "startChar": 89,
+        "endLine": 2445,
+        "endChar": 93
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2213b5ec_4aa133ed",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:15:35Z",
+      "side": 1,
+      "message": "ReadWrite for future-proofing",
+      "range": {
+        "startLine": 2870,
+        "startChar": 88,
+        "endLine": 2870,
+        "endChar": 92
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "590fe51a_397d9097",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:15:35Z",
+      "side": 1,
+      "message": "Neither of the mentioned cases can modify the buffer. You could change the comment to something like \"SSBO and ACB\" (or \"SSBO and XFB\"). If you meant that bound to one that reads and one that writes, you could say like \"VBO and SSBO\".",
+      "range": {
+        "startLine": 1035,
+        "startChar": 81,
+        "endLine": 1035,
+        "endChar": 96
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df95f68a_2ffdddd1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:15:35Z",
+      "side": 1,
+      "message": "This function is used only for internal buffers, and they are all read-only. I don\u0027t know how to enforce it wouldn\u0027t break in the future, but this can safely use Read right now.",
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "501698fe_2748a448",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:15:35Z",
+      "side": 1,
+      "message": "This should be pretty easy to write a regression test for, no?\n\n    glGenBuffers(\u0026buf, 1);\n    // Use as SSBO\n    // Dispatch\n    glDeleteBuffer(buf);\n    glFinish();\n\nWhat issues can arise from this code? Also, the comment says assume it\u0027s for ReadWrite, while simultaneously says ReadWrite can have issues. Could you describe the issue in more details?\n\nAlso, a question is, why is it necessary to release the write use, but not the read use here?",
+      "range": {
+        "startLine": 3673,
+        "startChar": 58,
+        "endLine": 3673,
+        "endChar": 99
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
