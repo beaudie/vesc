@@ -673,8 +673,13 @@ TPrecision TIntermAggregate::derivePrecision() const
         return EbpUndefined;
     }
 
-    // For AST function calls, take the qualifier from the declared one.
-    if (isFunctionCall())
+    // For AST function calls, take the qualifier from the declared one.  For constructors, take it
+    // from what may be decided by AST transformations (constructors don't have a precision when
+    // parsing the tree):
+    //
+    // > Literal constants do not have precision qualifiers. Neither do Boolean variables. Neither
+    // > do constructors.
+    if (isFunctionCall() || mOp == EOpConstruct)
     {
         return mType.getPrecision();
     }
@@ -700,9 +705,8 @@ TPrecision TIntermAggregate::derivePrecision() const
             break;
     }
 
-    // The rest of the math operations and constructors get their precision from their
-    // arguments.
-    if (BuiltInGroup::IsMath(mOp) || mOp == EOpConstruct)
+    // The rest of the math operations get their precision from their arguments.
+    if (BuiltInGroup::IsMath(mOp))
     {
         TPrecision precision = EbpUndefined;
         for (TIntermNode *argument : mArguments)
@@ -1964,6 +1968,15 @@ void TIntermBinary::propagatePrecision(TPrecision precision)
     // constant nodes are also given a precision, so if they are hoisted to a temp variable, there
     // would be a precision to apply to that variable.
     if (mOp == EOpIndexDirect)
+    {
+        PropagatePrecisionIfApplicable(mRight, EbpHigh);
+    }
+
+    // Do the same for indirect indices when the index is a constructor.  Constructors don't have
+    // precision per spec.
+    TIntermAggregate *rightAsAggregate = mRight->getAsAggregate();
+    if (mOp == EOpIndexIndirect && rightAsAggregate != nullptr &&
+        rightAsAggregate->getOp() == EOpConstruct)
     {
         PropagatePrecisionIfApplicable(mRight, EbpHigh);
     }
