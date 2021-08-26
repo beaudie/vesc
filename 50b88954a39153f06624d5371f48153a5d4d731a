@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb312778_117ec986",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T17:38:48Z",
+      "side": 1,
+      "message": "This is a replacement for I7809140af84f2c565008e211adf0f998a0e57e91 (reverted a few months ago).",
+      "revId": "50b88954a39153f06624d5371f48153a5d4d731a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
