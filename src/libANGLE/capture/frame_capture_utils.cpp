@@ -1187,7 +1187,10 @@ Result SerializeTexture(const gl::Context *context,
     json->addString("Label", texture->getLabel());
     // FrameCapture can not serialize mBoundSurface and mBoundStream
     // because they are likely to change with each run
-    ANGLE_TRY(SerializeTextureData(json, context, texture, scratchBuffer));
+    if (texture->getType() != gl::TextureType::Buffer)
+    {
+        ANGLE_TRY(SerializeTextureData(json, context, texture, scratchBuffer));
+    }
     return Result::Continue;
 }
 
