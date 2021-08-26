@@ -140,6 +140,24 @@
       "parentUuid": "d673dfa4_ed1218ea",
       "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba8dee4_b8023f49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-26T15:50:35Z",
+      "side": 1,
+      "message": "The validation error is here today and this CL does fix it. \n\nThe mImageUsageFlag initialization diff, the above listed test will fail once I land my R4G4B4A4 fix. This means once R4G4B4A4 CLs have landed, the above listed tests will catch mImageUsageFlag regressions. I created anglebugs.com/6327 to track more tests on external backed textures.",
+      "parentUuid": "3bc32e77_7bc8d431",
+      "revId": "96d28be53f4d33d7827de5f3bb5c58be55b50f5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
