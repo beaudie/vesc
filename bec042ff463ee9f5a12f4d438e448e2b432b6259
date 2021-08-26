@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb688695_fe03bead",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-26T23:59:07Z",
+      "side": 1,
+      "message": "It is already removed from the class. All gone.",
+      "parentUuid": "9d2f52e4_42b64c81",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 45
+      },
+      "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0878b942_76612901",
@@ -120,6 +144,24 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "0878b942_76612901",
+      "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58bf5570_8c2f6d7f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-26T23:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ad69b4a_8b807f7d",
       "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
