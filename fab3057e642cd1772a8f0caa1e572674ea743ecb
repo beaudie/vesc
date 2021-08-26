@@ -33,6 +33,24 @@
       "message": "It looks like Gert\u0027s change makes an unexpected passing test into a failure. I think we should probably make unexpected passes a pass as well.",
       "revId": "fab3057e642cd1772a8f0caa1e572674ea743ecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a9500a_39923924",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T15:21:42Z",
+      "side": 1,
+      "message": "Making it a failure is a nice way of forcing folks to keep the list updated.  But I would worry about positive flakes costing time.",
+      "parentUuid": "307936b8_55cf39c1",
+      "revId": "fab3057e642cd1772a8f0caa1e572674ea743ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
