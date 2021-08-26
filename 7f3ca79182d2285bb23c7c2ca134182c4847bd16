@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85914d51_4aa90b76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T16:11:13Z",
+      "side": 1,
+      "message": "I debugged the regression in Slingshot when using glslang (but not SPIR-V gen) to this glslang bug: https://github.com/KhronosGroup/glslang/pull/2741",
+      "revId": "7f3ca79182d2285bb23c7c2ca134182c4847bd16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
