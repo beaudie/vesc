@@ -46,6 +46,30 @@
       },
       "revId": "d2ba012473e7b3e03417950c61fd25b3184dc117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd1b175e_a2355d3e",
+        "filename": "src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-26T16:52:24Z",
+      "side": 1,
+      "message": "OK, I read the thread and see the context now.\n\nI\u0027m tempted to just enable it always. If you do need to avoid changes in the other back-ends, I suggest you make this decision in checkAndSimplifyAST where we do other similar checks, and pass in the value for \"force\". I\u0027d also suggest we document it a bit with a code comment.",
+      "parentUuid": "f2b13c0a_faa6ec8b",
+      "range": {
+        "startLine": 142,
+        "startChar": 3,
+        "endLine": 142,
+        "endChar": 89
+      },
+      "revId": "d2ba012473e7b3e03417950c61fd25b3184dc117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
