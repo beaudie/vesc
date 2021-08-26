@@ -57,6 +57,7 @@
 #        include "libANGLE/renderer/gl/apple/DisplayApple_api.h"
 #    elif defined(ANGLE_PLATFORM_LINUX)
 #        include "libANGLE/renderer/gl/egl/DisplayEGL.h"
+#        include "libANGLE/renderer/gl/egl/DisplayEGLSurfaceless.h"
 #        if defined(ANGLE_USE_GBM)
 #            include "libANGLE/renderer/gl/egl/gbm/DisplayGbm.h"
 #        endif
@@ -302,7 +303,10 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
 #        endif
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
-                impl = new rx::DisplayEGL(state);
+                if (platformType == EGL_PLATFORM_SURFACELESS_MESA)
+                    impl = new rx::DisplayEGLSurfaceless(state);
+                else
+                    impl = new rx::DisplayEGL(state);
                 break;
             }
 #        if defined(ANGLE_USE_X11)
@@ -347,7 +351,10 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
 #        endif
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
-                impl = new rx::DisplayEGL(state);
+                if (platformType == EGL_PLATFORM_SURFACELESS_MESA)
+                    impl = new rx::DisplayEGLSurfaceless(state);
+                else
+                    impl = new rx::DisplayEGL(state);
                 break;
             }
             else
