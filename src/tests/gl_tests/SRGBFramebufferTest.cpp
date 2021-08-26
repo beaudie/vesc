@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/OSWindow.h"
 
 namespace
 {
@@ -299,6 +300,171 @@ TEST_P(SRGBFramebufferTestES3, BlitFramebuffer)
 
     glBindFramebuffer(GL_FRAMEBUFFER, dstFramebuffer);
     EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+}
+
+TEST_P(SRGBFramebufferTest, BlitterAssert)
+{
+    // For the sws blitter assertion to occur I need to initialize a EGLDIsplay with
+    // EGL_PLATFORM_ANGLE_TYPE_ANGLE and EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE set here,
+    // otherwise the test stops after the first Vulkan validation error.
+    {
+        OSWindow *osWindow = OSWindow::New();
+        osWindow->initialize("SRGBFramebufferTest", 128, 128);
+
+        EGLAttrib displayAttributes[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(),
+                                         EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,
+                                         GetParam().getDeviceType(), EGL_NONE};
+        EGLDisplay display            = eglGetPlatformDisplay(
+            EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(osWindow->getNativeDisplay()),
+            displayAttributes);
+        ASSERT_TRUE(display != EGL_NO_DISPLAY);
+        osWindow->destroy();
+        OSWindow::Delete(&osWindow);
+    }
+
+    // To hit the sws blitter assertion the dimensions need to differ here,
+    // where this is the configuration with the smallest values to reproduce the issue.
+    unsigned int dimensionsSmall[] = {1, 1};
+    unsigned int dimensionsLarge[] = {6, 6};
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, dimensionsSmall[0], dimensionsSmall[1]);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        GLuint framebuffer;
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        unsigned char vertexData[] = {0};
+        GLuint vertexBuffer;
+        glGenBuffers(1, &vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(char), vertexData, GL_STATIC_DRAW);
+
+        unsigned int indexData[] = {0};
+        GLuint indexBuffer;
+        glGenBuffers(1, &indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int), indexData, GL_STATIC_DRAW);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glViewport(0, 0, dimensionsSmall[0], dimensionsSmall[1]);
+
+        // Disabling GL_FRAMEBUFFER_SRGB_EXT here causes the issue
+        glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+
+        // We must clear here to hit the blitter assertion.
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(mProgram);
+
+        glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, nullptr);
+
+        glDeleteFramebuffers(1, &framebuffer);
+        glDeleteTextures(1, &texture);
+
+        const GLuint buffers[] = {vertexBuffer, indexBuffer};
+        glDeleteBuffers(2, buffers);
+    }
+
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, dimensionsLarge[0], dimensionsLarge[1]);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        GLuint framebuffer;
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glViewport(0, 0, dimensionsLarge[0], dimensionsLarge[1]);
+
+        // Vulkan Validation will fail here with:
+        // "Cannot execute a render pass with renderArea not within the bound of the framebuffer"
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // This causes SwiftShader to throw an assertion in Blitter.cpp
+        glReadPixels(0, 0, dimensionsSmall[0], dimensionsSmall[1], GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
+
+        glDeleteFramebuffers(1, &framebuffer);
+        glDeleteTextures(1, &texture);
+    }
+}
+
+TEST_P(SRGBFramebufferTest, FailValidation)
+{
+    // To hit the validation issue the dimensions need to differ here,
+    // where this is the configuration with the smallest values to reproduce the issue.
+    unsigned int dimensionsSmall[] = {1, 1};
+    unsigned int dimensionsLarge[] = {2, 2};
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, dimensionsSmall[0], dimensionsSmall[1]);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        GLuint framebuffer;
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        unsigned char vertexData[] = {0};
+        GLuint vertexBuffer;
+        glGenBuffers(1, &vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(char), vertexData, GL_STATIC_DRAW);
+
+        unsigned int indexData[] = {0};
+        GLuint indexBuffer;
+        glGenBuffers(1, &indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int), indexData, GL_STATIC_DRAW);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+        // Disabling GL_FRAMEBUFFER_SRGB_EXT here causes the issue
+        glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+
+        glUseProgram(mProgram);
+
+        glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, nullptr);
+
+        glDeleteFramebuffers(1, &framebuffer);
+        glDeleteTextures(1, &texture);
+
+        const GLuint buffers[] = {vertexBuffer, indexBuffer};
+        glDeleteBuffers(2, buffers);
+    }
+
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, dimensionsLarge[0], dimensionsLarge[1]);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        GLuint framebuffer;
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+        // Vulkan Validation will fail here with:
+        // "Cannot execute a render pass with renderArea not within the bound of the framebuffer"
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glDeleteFramebuffers(1, &framebuffer);
+        glDeleteTextures(1, &texture);
+    }
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
