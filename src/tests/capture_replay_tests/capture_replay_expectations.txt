@@ -123,10 +123,12 @@
 6180 : FramebufferTest_ES3.RenderAndInvalidateImmutableTextureWithBeyondMaxLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : FramebufferTest_ES3.RenderAndInvalidateImmutableTextureWithSubImageWithBeyondMaxLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : GLSLTest_ES3.InactiveFragmentShaderOutput/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6180 : ProgramBinaryTest.SRGBDecodeWithSamplerAndTexelFetchTest/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : ImageTestES3.SourceCubeTargetExternalESSL3/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : MipmapTestES3.BaseLevelTextureBug/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : OcclusionQueriesTestES3.UnresolveNotCounted/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : PBOExtensionTest.PBOWithExistingData/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramBinaryTest.SRGBDecodeWithSamplerAndTexelFetchTest/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : RenderbufferMultisampleTest.IntegerInternalformat/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : RenderbufferMultisampleTest.OddSampleCount/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DArrayCopy.CopyFromMipmap/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DArrayCopy.FlipY/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
@@ -136,26 +138,26 @@
 6180 : Texture2DArrayCopy.UnsizedFormats/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DBaseMaxTestES3.PingPongBaseLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DFloatTestES3.TextureHalfFloatLinearLegacyTest/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : Texture2DFloatTestES3.TextureHalfFloatSampleLegacyTest/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DIntegerProjectiveOffsetTestES3.NonZeroBaseLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DIntegerTestES3.IntegerTextureNonZeroBaseLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6180 : Texture2DFloatTestES3.TextureHalfFloatSampleLegacyTest/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.DrawWithBaseLevel1/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6180 : Texture2DTestES3.DrawWithLevelZeroUndefined/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.DrawWithLevelsOutsideRangeUndefined/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.DrawWithLevelsOutsideRangeWithInconsistentDimensions/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : Texture2DTestES3.DrawWithLevelZeroUndefined/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.GenerateMipmapAndBaseLevelLUMA/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.IncompatibleMipsButNoMipmapFiltering/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.NonZeroBaseEmulatedClear/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.TexStorage2DCycleThroughYuvSourcesNoData/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6180 : Texture2DTestES3.TextureBaseLevelGreaterThanMaxLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : Texture2DTestES3.TexStorage2DLargeYuvTextureCount/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.TexStorage2DSimultaneousUseOfMultipleYuvSourcesNoData/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : Texture2DTestES3.TextureBaseLevelGreaterThanMaxLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.TextureCompletenessChangesWithBaseLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.TextureCompletenessChangesWithMaxLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6180 : Texture2DTestES3.TexStorage2DLargeYuvTextureCount/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DTestES3.UpdateRenderTargetCacheOnDestroyTexStorage/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture3DCopy.CopyFromMipmap/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6180 : Texture3DCopy.FloatFormats/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture3DCopy.FlipY/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : Texture3DCopy.FloatFormats/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture3DCopy.SnormFormats/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture3DCopy.UnsignedByteFormats/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture3DCopy.UnsizedFormats/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
@@ -168,7 +170,6 @@
 6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresWithFlags/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6180 : MipmapTestES3.BaseLevelTextureBug/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 
 # Skip because CompileFailed
 6180 : FramebufferTest_ES3.ScissoredDrawSubInvalidateThenNonScissoredDraw/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
