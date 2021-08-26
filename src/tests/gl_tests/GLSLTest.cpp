@@ -515,6 +515,9 @@ class GLSLTest_ES3 : public GLSLTest
 class GLSLTest_ES31 : public GLSLTest
 {};
 
+class GLSLTest_ES31_InitOutputVariables : public GLSLTest
+{};
+
 std::string BuildBigInitialStackShader(int length)
 {
     std::string result;
@@ -13185,6 +13188,45 @@ void main() {
     EXPECT_GL_NO_ERROR();
 }
 
+// Tests initializing a shader IO block.
+TEST_P(GLSLTest_ES31_InitOutputVariables, InitIOBlock)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_io_blocks"));
+
+    const char kVS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+in vec4 position;
+out BlockType {
+    vec4 blockMember;
+} BlockTypeOut;
+
+void main()
+{
+    gl_Position = position;
+})";
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+precision mediump float;
+out vec4 colorOut;
+in BlockType {
+    vec4 blockMember;
+} BlockTypeOut;
+
+void main()
+{
+    if (BlockTypeOut.blockMember == vec4(0)) {
+        colorOut = vec4(0, 1, 0, 1);
+    } else {
+        colorOut = vec4(1, 0, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
+    drawQuad(testProgram, "position", 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(GLSLTest, WithDirectSPIRVGeneration(ES2_VULKAN()));
@@ -13206,3 +13248,7 @@ ANGLE_INSTANTIATE_TEST_ES3_AND(WebGL2GLSLTest, WithDirectSPIRVGeneration(ES3_VUL
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(GLSLTest_ES31);
 ANGLE_INSTANTIATE_TEST_ES31_AND(GLSLTest_ES31, WithDirectSPIRVGeneration(ES31_VULKAN()));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(GLSLTest_ES31_InitOutputVariables);
+ANGLE_INSTANTIATE_TEST(GLSLTest_ES31_InitOutputVariables,
+                       WithInitShaderOutputVariables(ES31_VULKAN()));
