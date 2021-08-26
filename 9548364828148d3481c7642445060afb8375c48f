@@ -16,6 +16,23 @@
       "message": "The issue in the Vulkan renderer was fixed in angleproject:6244, so the change can reland.\nI tested it with the current Chromium CI as well as with the test that used to reproduce the issue.",
       "revId": "9548364828148d3481c7642445060afb8375c48f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab1986cf_6b8fc328",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T15:27:20Z",
+      "side": 1,
+      "message": "Excellent",
+      "revId": "9548364828148d3481c7642445060afb8375c48f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
