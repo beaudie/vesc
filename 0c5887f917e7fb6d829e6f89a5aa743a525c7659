@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11645dc8_d1cedd75",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-26T21:22:28Z",
+      "side": 1,
+      "message": "nit: can you please include a comment with some of the context for why we need this flag?",
+      "range": {
+        "startLine": 685,
+        "startChar": 9,
+        "endLine": 685,
+        "endChar": 38
+      },
+      "revId": "0c5887f917e7fb6d829e6f89a5aa743a525c7659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
