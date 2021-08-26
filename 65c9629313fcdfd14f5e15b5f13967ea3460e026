@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d643dc7_c2230cbd",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T07:22:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13057ae2_bb0df29b",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89ed9bed_578e6680",
@@ -175,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28882e48_ef2bb3f5",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T07:22:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42a625b3_d6fe8938",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43bc7e18_d1dbaad9",
@@ -224,6 +260,24 @@
       "side": 1,
       "message": "OK, I didn\u0027t know that. I think this would be more readable if you just said \"if (!IsGLExtEnabled(...)) return\".",
       "parentUuid": "defcd7e9_811874ac",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "248fc0fe_937882c4",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T07:22:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6afe0f6_7b680c03",
       "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
