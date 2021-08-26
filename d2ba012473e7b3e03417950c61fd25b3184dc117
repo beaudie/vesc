@@ -94,6 +94,30 @@
       },
       "revId": "d2ba012473e7b3e03417950c61fd25b3184dc117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc0830c6_35377a77",
+        "filename": "src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-08-26T19:31:59Z",
+      "side": 1,
+      "message": "ok, I uploaded a version with the flag moved up. Is this what you were thinking?",
+      "parentUuid": "ebc3d3eb_bd301fb9",
+      "range": {
+        "startLine": 142,
+        "startChar": 3,
+        "endLine": 142,
+        "endChar": 89
+      },
+      "revId": "d2ba012473e7b3e03417950c61fd25b3184dc117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
