@@ -22,6 +22,30 @@
       },
       "revId": "280720c39d75e0ef5b74f9d2a3e8b2f76ecd61fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "517216a8_6890146f",
+        "filename": "src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-08-26T20:03:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f80e6e1_f7e599d4",
+      "range": {
+        "startLine": 58,
+        "startChar": 13,
+        "endLine": 58,
+        "endChar": 85
+      },
+      "revId": "280720c39d75e0ef5b74f9d2a3e8b2f76ecd61fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
