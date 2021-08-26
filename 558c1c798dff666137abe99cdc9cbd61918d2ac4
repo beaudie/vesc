@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90619211_3788e817",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T04:40:09Z",
+      "side": 1,
+      "message": "This fix brings the GOLD failures when switching to SPIR-V gen to a handful of images. Most of these are very minor (off by 1s) and not really unexpected.\n\nMinecraft is a little screwed up though. I took a look at the shaders and didn\u0027t find anything conclusive yet. The shader has `normalize()` in it, which makes me suspect it\u0027s the same issue as anglebug.com/6228, but not yet sure.\n\nI didn\u0027t mark the images as triaged, as I\u0027ll be rebasing this before the previous CL (which drops glslang), so the failures will end up manifesting in the other CL in the end.",
+      "revId": "558c1c798dff666137abe99cdc9cbd61918d2ac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
