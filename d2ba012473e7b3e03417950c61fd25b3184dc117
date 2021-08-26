@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0177e8fb_f411f1f7",
+        "filename": "src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-26T16:21:39Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why this is a special case for the Metal output type. Is there a way of doing this always, or making a decision not based on this domain-specific knowledge?",
+      "range": {
+        "startLine": 142,
+        "startChar": 3,
+        "endLine": 142,
+        "endChar": 89
+      },
+      "revId": "d2ba012473e7b3e03417950c61fd25b3184dc117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
