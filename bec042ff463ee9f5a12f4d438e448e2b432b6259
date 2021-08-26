@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "666e7aa5_f4b2e554",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-26T21:10:20Z",
+      "side": 1,
+      "message": "LGTM.  Sorry to take so long.  I\u0027ll let Shabi +2 since he raised an open question, that I commented on.",
+      "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8da238d_21ef363d",
@@ -85,6 +102,24 @@
       "writtenOn": "2021-08-26T19:29:01Z",
       "side": 1,
       "message": "Could you please move these to CopyImageParameters?",
+      "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ad69b4a_8b807f7d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-26T21:10:20Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "0878b942_76612901",
       "revId": "bec042ff463ee9f5a12f4d438e448e2b432b6259",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
