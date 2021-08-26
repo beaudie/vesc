@@ -33,6 +33,24 @@
       "message": "LGTM - the new test checks the condition where we had to revert before?",
       "revId": "50b88954a39153f06624d5371f48153a5d4d731a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81432bdc_2ab6475a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-26T17:53:31Z",
+      "side": 1,
+      "message": "Yes. That condition is tested in the new test and the source issue is fixed in validationES.cpp.",
+      "parentUuid": "419d0c58_ab3fc160",
+      "revId": "50b88954a39153f06624d5371f48153a5d4d731a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
