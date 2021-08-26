@@ -22,6 +22,30 @@
       },
       "revId": "195120d42958294a5c6f7e24758c2b5d150663de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23d2eee8_7bba7f9e",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-26T20:14:50Z",
+      "side": 1,
+      "message": "In SerializeTextureData\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/capture/frame_capture_utils.cpp;l\u003d1114?q\u003dSerializeTextureData\u0026ss\u003dchromium\n\nI can change this to serialize the buffer ID, that should be sufficient. The buffer contents are serialized elsewhere as you guessed.",
+      "parentUuid": "f54c5215_7004d374",
+      "range": {
+        "startLine": 1190,
+        "startChar": 0,
+        "endLine": 1190,
+        "endChar": 54
+      },
+      "revId": "195120d42958294a5c6f7e24758c2b5d150663de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
