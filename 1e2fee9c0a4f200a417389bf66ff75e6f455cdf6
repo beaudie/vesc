@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5320f60a_6f389b01",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T15:39:36Z",
+      "side": 1,
+      "message": "I see the whole file uses std::cout, but at some point we should use something that shows up on Android as well.",
+      "range": {
+        "startLine": 312,
+        "startChar": 8,
+        "endLine": 312,
+        "endChar": 17
+      },
+      "revId": "1e2fee9c0a4f200a417389bf66ff75e6f455cdf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d9f5aa4_a08887d6",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T15:39:36Z",
+      "side": 1,
+      "message": "These blocks could use some comments explaining the goal.  I think the first one is setting up with the small bound texture, renders with it, and all is good.  The second sets up the larger texture, binds it, then tries to clear it, triggering the validation error.",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 323,
+        "endChar": 5
+      },
+      "revId": "1e2fee9c0a4f200a417389bf66ff75e6f455cdf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d92d4153_f6581c80",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-26T15:39:36Z",
+      "side": 1,
+      "message": "I\u0027d say check for error right after the call you care about, for clarity.",
+      "range": {
+        "startLine": 378,
+        "startChar": 8,
+        "endLine": 378,
+        "endChar": 15
+      },
+      "revId": "1e2fee9c0a4f200a417389bf66ff75e6f455cdf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
