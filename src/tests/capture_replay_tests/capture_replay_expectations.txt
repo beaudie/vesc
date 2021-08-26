@@ -131,7 +131,6 @@
 6324 : OcclusionQueriesTestES3.UnresolveNotCounted/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : PBOExtensionTest.PBOWithExistingData/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6329 : RenderbufferMultisampleTest.OddSampleCount/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
-6331 : Texture2DArrayCopy.CopyFromMipmap/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DBaseMaxTestES3.PingPongBaseLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DFloatTestES3.TextureHalfFloatLinearLegacyTest/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : Texture2DIntegerProjectiveOffsetTestES3.NonZeroBaseLevel/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
