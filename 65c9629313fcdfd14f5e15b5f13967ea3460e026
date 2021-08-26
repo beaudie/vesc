@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96658761_6f5f945d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 1,
+      "message": "Generally looks good - a few questions / comments.\n",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13057ae2_bb0df29b",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 1,
+      "message": "Suggest adding a comment above this line describing why it\u0027s out-of-line here; i.e., that it\u0027s supported on ES 2.0 with such and such extensions.",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ed9bed_578e6680",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 1,
+      "message": "Are you sure this has the same semantics as the big switch statement being removed?",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff544b21_ebc65f43",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 1,
+      "message": "This used to use \"kEnumNotSupported\" rather than \"kInvalidFormat\". Is this an intentional change?",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a625b3_d6fe8938",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 1,
+      "message": "Maybe \"compressedTextureFormatEnabled\" or \"compressedTextureFormatExtensionEnabled\"?",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43bc7e18_d1dbaad9",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 1,
+      "message": "Is this going to skip the entire surrounding test if EXT_texture_storage isn\u0027t available? That seems wrong.",
+      "revId": "65c9629313fcdfd14f5e15b5f13967ea3460e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

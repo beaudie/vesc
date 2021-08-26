@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df414a36_92385889",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 0,
+      "message": "Are you sure this is subsumed by the validation above?",
+      "revId": "c61fd91904a5438270607157ac502ec4175534e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "826e32d0_17c6ba01",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1930,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-26T00:00:31Z",
+      "side": 0,
+      "message": "Same question about whether these checks are definitely subsumed by the above.",
+      "range": {
+        "startLine": 1930,
+        "startChar": 27,
+        "endLine": 1930,
+        "endChar": 40
+      },
+      "revId": "c61fd91904a5438270607157ac502ec4175534e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
