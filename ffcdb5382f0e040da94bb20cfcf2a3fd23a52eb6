@@ -876,6 +876,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "960e5913_aa4b36ec",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-26T20:06:46Z",
+      "side": 1,
+      "message": "Chatted offline.\n\nDone.",
+      "parentUuid": "ab48c8e6_84b9e165",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "ffcdb5382f0e040da94bb20cfcf2a3fd23a52eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa998307_633b2132",
