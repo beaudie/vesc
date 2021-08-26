@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcc58385_5f069021",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-26T15:57:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7b93a8a_f8838e7e",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 0
+      },
+      "revId": "1a770e272d428a2189ba2a6a0680b7d65ee0fbc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba1b139a_6509fa0a",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-26T15:37:57Z",
       "side": 1,
       "message": "nit: use GLTexture, GLFramebuffer and other RAII types",
+      "range": {
+        "startLine": 324,
+        "startChar": 8,
+        "endLine": 325,
+        "endChar": 35
+      },
+      "revId": "1a770e272d428a2189ba2a6a0680b7d65ee0fbc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1aa6ebc_e1f5eb23",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-26T15:57:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba1b139a_6509fa0a",
       "range": {
         "startLine": 324,
         "startChar": 8,

@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e56d2e66_033fc11b",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-26T15:57:51Z",
+      "side": 1,
+      "message": "Using just `ANGLE_SKIP_TEST_IF` eliminated the requirement for using cout. But this should be kept in mind for the rest of the tests that still do call cout.",
+      "parentUuid": "5320f60a_6f389b01",
+      "range": {
+        "startLine": 312,
+        "startChar": 8,
+        "endLine": 312,
+        "endChar": 17
+      },
+      "revId": "1e2fee9c0a4f200a417389bf66ff75e6f455cdf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d9f5aa4_a08887d6",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "839ad1b3_24ca031a",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-26T15:57:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d9f5aa4_a08887d6",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 323,
+        "endChar": 5
+      },
+      "revId": "1e2fee9c0a4f200a417389bf66ff75e6f455cdf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d92d4153_f6581c80",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-08-26T15:39:36Z",
       "side": 1,
       "message": "I\u0027d say check for error right after the call you care about, for clarity.",
+      "range": {
+        "startLine": 378,
+        "startChar": 8,
+        "endLine": 378,
+        "endChar": 15
+      },
+      "revId": "1e2fee9c0a4f200a417389bf66ff75e6f455cdf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f45653c_5003859c",
+        "filename": "src/tests/gl_tests/SRGBFramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-08-26T15:57:51Z",
+      "side": 1,
+      "message": "Using the raii types eliminates the need to call the destructors, so I now check for errors at the earliest call that makes sense.",
+      "parentUuid": "d92d4153_f6581c80",
       "range": {
         "startLine": 378,
         "startChar": 8,
