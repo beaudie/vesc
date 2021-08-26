@@ -16,6 +16,24 @@
       "message": "Yuly: please review. Thanks. (I verified the Markdown looks OK locally.)\n",
       "revId": "020b9e3e09dd4a03f88dc6fa269ecbd0d3336568",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b252176_14c2a528",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T02:46:15Z",
+      "side": 1,
+      "message": "FYI, you can also see the rendered Markdown online (by clicking on the hash next to patchset menu): https://chromium.googlesource.com/angle/angle/+/020b9e3e09dd4a03f88dc6fa269ecbd0d3336568/doc/BranchingAndRolling.md\n\nNot related to your change, but a number of links in this file are broken due to newline between [] and (). Would be nice to fix that while you\u0027re at it.",
+      "parentUuid": "8631ec0e_f2b8333c",
+      "revId": "020b9e3e09dd4a03f88dc6fa269ecbd0d3336568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
