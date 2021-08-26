@@ -22,6 +22,30 @@
       },
       "revId": "d2ba012473e7b3e03417950c61fd25b3184dc117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2b13c0a_faa6ec8b",
+        "filename": "src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T16:47:18Z",
+      "side": 1,
+      "message": "See the relevant thread in the angle-for-webkit slack room. Apparently unless the variable is EvqConst, they can\u0027t handle it. So something like `int x \u003d 10;` (even though it\u0027s constant-initialized) doesn\u0027t work.",
+      "parentUuid": "0177e8fb_f411f1f7",
+      "range": {
+        "startLine": 142,
+        "startChar": 3,
+        "endLine": 142,
+        "endChar": 89
+      },
+      "revId": "d2ba012473e7b3e03417950c61fd25b3184dc117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
