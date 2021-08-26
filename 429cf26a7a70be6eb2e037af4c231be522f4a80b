@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf2556d3_31d80056",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5088,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-26T23:47:15Z",
+      "side": 1,
+      "message": "Yes, I do plan to do this in the end. Maybe in the TextureVk.cpp when we actually picked a format.",
+      "parentUuid": "6773df8d_d5391531",
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "657591b8_18a50196",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6860286_61802d5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-26T23:47:15Z",
+      "side": 1,
+      "message": "I was trying to reduce diff for ease of code review. I do plan to move to the better location before land. Thanks for remind though. Moved.",
+      "parentUuid": "657591b8_18a50196",
+      "range": {
+        "startLine": 194,
+        "startChar": 7,
+        "endLine": 194,
+        "endChar": 34
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a157e28c_1675d1dc",
@@ -88,6 +130,30 @@
       "writtenOn": "2021-08-26T20:50:39Z",
       "side": 1,
       "message": "nit: Ditto about moving",
+      "range": {
+        "startLine": 225,
+        "startChar": 7,
+        "endLine": 225,
+        "endChar": 39
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cefd5b8_a0ab66b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-26T23:47:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a157e28c_1675d1dc",
       "range": {
         "startLine": 225,
         "startChar": 7,
@@ -135,6 +201,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "cfe7c569_388dc499",
+      "range": {
+        "startLine": 767,
+        "startChar": 18,
+        "endLine": 767,
+        "endChar": 35
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4a59c2_26505cdd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-26T23:47:15Z",
+      "side": 1,
+      "message": "Yes, in the later CL srcImage will cache mActualFOrmatID, so this will still as cheap as now.",
+      "parentUuid": "9c584eaf_4af7b7bd",
       "range": {
         "startLine": 767,
         "startChar": 18,
