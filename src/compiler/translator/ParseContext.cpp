@@ -4242,6 +4242,9 @@ TIntermTyped *TParseContext::addConstructor(TFunctionLookup *fnCall, const TSour
         return CreateZeroNode(type);
     }
 
+    // Constructors don't have a precision per spec.
+    ASSERT(type.getPrecision() == EbpUndefined);
+
     TIntermAggregate *constructorNode = TIntermAggregate::CreateConstructor(type, &arguments);
     constructorNode->setLine(line);
 
