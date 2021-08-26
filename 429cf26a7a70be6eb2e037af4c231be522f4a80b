@@ -16,6 +16,46 @@
       "message": "I am sending out all the refactoring CLs for review for now while I am still debugging the bots failure with the functional change CL. These refactoring CL are expecting no functionality change. The purpose of them is to wane off vk::Format usage in many places so that the actual functional CL will not need to worry about it (thus reduce amount of code diff in the functional CL). The end of this series of refactoring CL is ImageHelper class no longer holding on to vk::Format object. It only knows actualFormatID and intendedFormatID.",
       "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6773df8d_d5391531",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:24:52Z",
+      "side": 1,
+      "message": "Could you please add a perf warning somewhere around here if the format is emulated? We have something like this for vertex formats:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/VertexArrayVk.cpp;l\u003d67\n\nThat should flush out all the other cases where we are using a fallback.",
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfe7c569_388dc499",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-26T19:24:52Z",
+      "side": 1,
+      "message": "nit: I presume this will have an \"if\" inside later? If so, then cache in a local variable to avoid re-evaluation in the return expression.",
+      "range": {
+        "startLine": 767,
+        "startChar": 18,
+        "endLine": 767,
+        "endChar": 35
+      },
+      "revId": "429cf26a7a70be6eb2e037af4c231be522f4a80b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
