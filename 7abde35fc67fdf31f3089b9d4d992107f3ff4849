@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "074f1620_7d46073c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-27T14:51:51Z",
+      "side": 1,
+      "message": "See relevant discussion at: https://gitlab.khronos.org/opengl/GLSL/-/issues/57",
+      "revId": "7abde35fc67fdf31f3089b9d4d992107f3ff4849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
