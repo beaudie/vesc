@@ -99,6 +99,30 @@
       },
       "revId": "9efc5a842e9f5973473308f20cceba4a76b00dfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14422a15_f6993065",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-27T11:20:14Z",
+      "side": 1,
+      "message": "ANGLE has a bug here where we emit out of range values. Your team decided to make the driver handle it, but it\u0027s out-of-spec behaviour that fails on other implementations i.e. SwS. See http://anglebug.com/6200 and https://gitlab.khronos.org/vulkan/vulkan/-/issues/2776 . The bug was present in the initial implementation.",
+      "parentUuid": "0c74864a_1b832529",
+      "range": {
+        "startLine": 177,
+        "startChar": 5,
+        "endLine": 177,
+        "endChar": 17
+      },
+      "revId": "9efc5a842e9f5973473308f20cceba4a76b00dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
