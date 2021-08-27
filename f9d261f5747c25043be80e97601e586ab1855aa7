@@ -34,6 +34,24 @@
       "parentUuid": "b34455a5_a391c439",
       "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04022a66_ce5f3b72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-27T15:43:52Z",
+      "side": 1,
+      "message": "Ok I took a look at these two:\n\n    dEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uint_vertex\n    dEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uint_vertex\n\nThe shader they are trying to compile is:\n\n    #version 300 es\n    in highp vec4 a_position;\n    in highp vec4 a_in0;\n    out mediump vec4 v_color;\n    \n    void main()\n    {\n        gl_Position \u003d a_position;\n        mediump uint in0 \u003d uint(a_in0.z);\n        mediump uint res \u003d uint(0.0);\n\n        res \u003d -in0;\n\n        highp vec4 color \u003d vec4(0.0, 0.0, 0.0, 1.0);\n        color.x \u003d float(res);\n        color \u003d color * vec4(2.32831e-10, 1.0, 1.0, 1.0);\n        v_color \u003d color;\n    }\n\nwith the `lowp` version only differing in the precision specified for in0 and res (i.e. lowp). Previously, ANGLE was producing this:\n\n        highp uint _uin0 \u003d uint(_ua_in0.z);\n        mediump uint _ures \u003d 0u;\n\nBut now it produces this:\n\n        mediump uint _uin0 \u003d uint(_ua_in0.z);\n        mediump uint _ures \u003d 0u;\n\nANGLE was definitely wrong before and is correct now; the input shader specifically asked in0 to be mediump and we were previously declaring it as highp.\n\nThis might need some investigation on your part. Looking at the diff of SPIR-V for this shader before and after this change, I see only a few RelaxedPrecision decorations extra on the following:\n\n- The declaration of the variable in0\n- The OpConvertFToU instruction for uint(a_in0.z)\n- The load of in0 (in res \u003d -in0)\n- The OpSNegate instruction for -in0\n\nThis all seems to be correct. Is there perhaps a bug in your driver? Given that only the `minus` variants of the test are failing, maybe a bug in OpSNegate in combination with RelaxedPrecision?",
+      "parentUuid": "639f4550_6583763e",
+      "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
