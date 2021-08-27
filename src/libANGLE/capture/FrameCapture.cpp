@@ -2071,6 +2071,8 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
     const std::vector<gl::VertexAttribute> &vertexAttribs = vertexArray->getVertexAttributes();
     const std::vector<gl::VertexBinding> &vertexBindings  = vertexArray->getVertexBindings();
 
+    bool doES31Setup = false;
+
     for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
     {
         const gl::VertexAttribute defaultAttrib(attribIndex);
@@ -2123,18 +2125,48 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
                             *replayState, true, attribIndex, attrib.format->channelCount,
                             attrib.format->vertexAttribType, attrib.format->isNorm(),
                             attrib.vertexAttribArrayStride, attrib.pointer));
+
+                if (binding.getDivisor() != 0)
+                {
+                    Capture(setupCalls, CaptureVertexAttribDivisor(*replayState, true, attribIndex,
+                                                                   binding.getDivisor()));
+                }
             }
             else
             {
-                // TOOD: http://anglebug.com/6274. ES 3.1 vertex array state is not yet implemented.
-                UNIMPLEMENTED();
+                ASSERT(context->getClientVersion() >= gl::ES_3_1);
+                doES31Setup = true;
+
+                Capture(setupCalls,
+                        CaptureVertexAttribFormat(*replayState, true, attribIndex,
+                                                  attrib.format->channelCount,
+                                                  attrib.format->vertexAttribType,
+                                                  attrib.format->isNorm(), attrib.relativeOffset));
+                Capture(setupCalls,
+                        CaptureVertexAttribBinding(*replayState, true, attribIndex,
+                                                   attrib.bindingIndex));
             }
         }
+    }
 
-        if (binding.getDivisor() != 0)
+    if (doES31Setup)
+    {
+        for (int bindingIndex = 0; bindingIndex < gl::MAX_VERTEX_ATTRIB_BINDINGS; ++bindingIndex)
         {
-            Capture(setupCalls, CaptureVertexAttribDivisor(*replayState, true, attribIndex,
-                                                           binding.getDivisor()));
+            const gl::VertexBinding &binding = vertexBindings[bindingIndex];
+
+            if (binding.getBuffer().id().value != 0)
+            {
+                Capture(setupCalls, CaptureBindVertexBuffer(
+                                        *replayState, true, bindingIndex, binding.getBuffer().id(),
+                                        binding.getOffset(), binding.getStride()));
+            }
+
+            if (binding.getDivisor() != 0)
+            {
+                Capture(setupCalls, CaptureVertexBindingDivisor(*replayState, true, bindingIndex,
+                                                                binding.getDivisor()));
+            }
         }
     }
 
