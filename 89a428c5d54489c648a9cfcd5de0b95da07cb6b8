@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d63bcde_382a2621",
+        "filename": "doc/BranchingAndRolling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-27T19:21:16Z",
+      "side": 1,
+      "message": "Thanks, I know. I wanted to make the link persistent in case the text of the heading\u0027s changed.",
+      "parentUuid": "7edfdfd6_3340afd5",
+      "range": {
+        "startLine": 20,
+        "startChar": 18,
+        "endLine": 20,
+        "endChar": 58
+      },
+      "revId": "89a428c5d54489c648a9cfcd5de0b95da07cb6b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4efbddaf_e944fa30",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-08-27T19:07:36Z",
       "side": 1,
       "message": "You don\u0027t actually need this, there is already infra/ANGLEWrangling.md#task-3_the-auto_rollers hyperlink.",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 93,
+        "endChar": 34
+      },
+      "revId": "89a428c5d54489c648a9cfcd5de0b95da07cb6b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf82432_82227702",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-27T19:21:16Z",
+      "side": 1,
+      "message": "If the text of the heading\u0027s changed then the link will break. That\u0027s why I added the persistent HTML name.",
+      "parentUuid": "4efbddaf_e944fa30",
       "range": {
         "startLine": 93,
         "startChar": 3,
