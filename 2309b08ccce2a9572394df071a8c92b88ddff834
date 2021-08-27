@@ -46,6 +46,30 @@
       },
       "revId": "2309b08ccce2a9572394df071a8c92b88ddff834",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75108429_9e4d0996",
+        "filename": "src/compiler/translator/tree_ops/InitializeVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-27T01:24:37Z",
+      "side": 1,
+      "message": "Ack. Just checked and CreateZeroNode handles all those cases (which means this file could probably be simplified a lot)",
+      "parentUuid": "3e4266a6_f19976e6",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 51
+      },
+      "revId": "2309b08ccce2a9572394df071a8c92b88ddff834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
