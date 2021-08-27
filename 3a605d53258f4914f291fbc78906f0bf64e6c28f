@@ -67,6 +67,24 @@
       "message": "\"define that\" -\u003e \"allow this\", to match the wording higher up in this file?",
       "revId": "3a605d53258f4914f291fbc78906f0bf64e6c28f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1677fc60_7c34f3b2",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-27T20:55:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e7628c1_d2bee59c",
+      "revId": "3a605d53258f4914f291fbc78906f0bf64e6c28f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
