@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89c42d57_697957b8",
+        "filename": "src/common/vulkan/vk_google_import_io_surface.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-27T01:59:51Z",
+      "side": 1,
+      "message": "Are you reusing the extension number from `VK_EXT_external_memory_host`?\n\nYou know it\u0027s pretty simple to reserve an extension number, I suggest doing that and you\u0027ll know you\u0027ll be safe. Let me know if you need any help with that.",
+      "range": {
+        "startLine": 27,
+        "startChar": 37,
+        "endLine": 27,
+        "endChar": 40
+      },
+      "revId": "61bc50184f9dba17925c05d5a2e3c1e243efc25d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
