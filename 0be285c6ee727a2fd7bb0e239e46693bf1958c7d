@@ -22,6 +22,30 @@
       },
       "revId": "0be285c6ee727a2fd7bb0e239e46693bf1958c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4014bc3_d8638fab",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-27T22:28:38Z",
+      "side": 1,
+      "message": "Giving it a shot here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3125462",
+      "parentUuid": "71a58262_5d6c8e06",
+      "range": {
+        "startLine": 1753,
+        "startChar": 0,
+        "endLine": 1755,
+        "endChar": 99
+      },
+      "revId": "0be285c6ee727a2fd7bb0e239e46693bf1958c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
