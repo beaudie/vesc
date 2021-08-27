@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38e9f71c_50fcfcea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-08-27T08:51:37Z",
+      "side": 1,
+      "message": "The second removed set of switch-cases was never executed (except for the four S3TC formats) because the first switch returns earlier for all unknown formats.\n\nSpecial-casing S3TC for the \"format\" parameter is not specified anywhere. The new comments in the updated test contain more details.",
+      "revId": "3a605d53258f4914f291fbc78906f0bf64e6c28f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
