@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c644b087_74be47b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-27T02:59:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52438777_464cd386",
+      "range": {
+        "startLine": 9,
+        "startChar": 17,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d687165_d6047ade",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-25T23:59:50Z",
       "side": 1,
       "message": "Why do we need \u0027format\u0027 and \u0027format.actualImageFormatID\u0027?   Why can\u0027t initExternal() get \u0027format.actualImageFormatID\u0027 from \u0027format\u0027 itself?\n\nMaybe I missed a call where the actualImageFormatID comes from somewhere else, but it looks like they all do some form of this.",
+      "range": {
+        "startLine": 289,
+        "startChar": 52,
+        "endLine": 289,
+        "endChar": 86
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00dfdb1e_0246a4fc",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-27T02:59:46Z",
+      "side": 1,
+      "message": "In the next CL, format is not passed into ImageHelper object. ImageHelper only knows what\u0027s the intended and actual format is, not the entire vk::Format.",
+      "parentUuid": "1d687165_d6047ade",
       "range": {
         "startLine": 289,
         "startChar": 52,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa5e408_2c6ff5ae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-27T02:59:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af327946_a17ae85d",
+      "range": {
+        "startLine": 234,
+        "startChar": 50,
+        "endLine": 234,
+        "endChar": 92
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "faad69b3_5669fd15",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-08-25T18:03:24Z",
       "side": 1,
       "message": "nit: please call these parameters intendedFormat and actualFormat. Looks like we may have missed renaming them on a prior refactor.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 65
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa94580_43dc4a14",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-27T02:59:46Z",
+      "side": 1,
+      "message": "I did fixed one place in prior CL. Also fixed a few more places in this CL as well.",
+      "parentUuid": "faad69b3_5669fd15",
       "range": {
         "startLine": 58,
         "startChar": 0,
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15833499_49ef4e1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-27T02:59:46Z",
+      "side": 1,
+      "message": "The problem is this gets called from ImageHelper::stageRobustResourceClearWithFormat() which gets these formats from the caller. I believe the reason they gets formats from caller is that at the time it get called, the image is still invalid, we do not know the image format will be (i.e, ImageHelper::initExternal not called yet).",
+      "parentUuid": "d33b6a94_0c884e4e",
+      "range": {
+        "startLine": 705,
+        "startChar": 13,
+        "endLine": 705,
+        "endChar": 40
+      },
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1902f410_d313275c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -129,6 +249,24 @@
       "writtenOn": "2021-08-25T23:59:50Z",
       "side": 1,
       "message": "Similar to Jamie\u0027s comment above, this can be a private function of ImageHelper and then the format IDs don\u0027t need to be passed in and instead this can just call hasEmulatedImageFormat().",
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b642ea4_a59c5b2c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-27T02:59:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1902f410_d313275c",
       "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -146,6 +284,24 @@
       "writtenOn": "2021-08-25T23:59:50Z",
       "side": 1,
       "message": "I see that this assert was already here, but I think it would be better to move this assert into getActualFormat() so it\u0027s validated everywhere it\u0027s used.",
+      "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d769aaa1_d837a190",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6040,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-08-27T02:59:46Z",
+      "side": 1,
+      "message": "Not sure if we have places that calling getActualFormatID just to check if format is valid or not though. Would prefer do it as separate CL to avoid unnecessary fall out.",
+      "parentUuid": "8d76590d_1668381d",
       "revId": "6f827c373669e78be9e2e6a336ed7a41f74a12d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
