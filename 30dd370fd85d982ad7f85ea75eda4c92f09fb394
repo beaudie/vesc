@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "447690a6_8a8acc8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-27T18:15:15Z",
+      "side": 1,
+      "message": "PTAL: Reland with fixes for ChromeOS.",
+      "revId": "30dd370fd85d982ad7f85ea75eda4c92f09fb394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
