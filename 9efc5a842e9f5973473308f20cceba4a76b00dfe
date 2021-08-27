@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1fb3e9ae_dbcd3d27",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-27T02:08:18Z",
+      "side": 1,
+      "message": "Ack regarding depth. But I think you could simplify this code for LUMA like this (untested):\n\n    if (angleFormat.isLUMA() \u0026\u0026 angleFormat.alphaBits \u003e 0)\n    {\n        if (angleFormat.luminanceBits \u003e 0)\n        {\n            mBorderColor.green \u003d mBorderColor.alpha;\n        }\n        else\n        {\n            mBorderColor.red \u003d mBorderColor.alpha;\n        }\n        mBorderColor.alpha \u003d 0;\n    }\n\nThen you don\u0027t need the helper isAlpha8toR8* functions (especially as their names are not great, because they are not limited to 8-bit formats, and Alpha8ToR8G8 is really LUMAToRG).\n\nBut I agree now that the code is actually functionally correct regardless.",
+      "parentUuid": "dd1a34a4_852970cb",
+      "revId": "9efc5a842e9f5973473308f20cceba4a76b00dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01ee2c7c_8a115549",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
