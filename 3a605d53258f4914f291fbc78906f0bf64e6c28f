@@ -16,6 +16,57 @@
       "message": "The second removed set of switch-cases was never executed (except for the four S3TC formats) because the first switch returns earlier for all unknown formats.\n\nSpecial-casing S3TC for the \"format\" parameter is not specified anywhere. The new comments in the updated test contain more details.",
       "revId": "3a605d53258f4914f291fbc78906f0bf64e6c28f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b55e828d_cf15b696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-27T20:44:52Z",
+      "side": 1,
+      "message": "lgtm\n",
+      "revId": "3a605d53258f4914f291fbc78906f0bf64e6c28f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec690a6a_17d397f0",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-27T20:44:52Z",
+      "side": 1,
+      "message": "I remember taking good advantage of these semantics in desktop OpenGL a long time ago!",
+      "revId": "3a605d53258f4914f291fbc78906f0bf64e6c28f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e7628c1_d2bee59c",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-27T20:44:52Z",
+      "side": 1,
+      "message": "\"define that\" -\u003e \"allow this\", to match the wording higher up in this file?",
+      "revId": "3a605d53258f4914f291fbc78906f0bf64e6c28f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
