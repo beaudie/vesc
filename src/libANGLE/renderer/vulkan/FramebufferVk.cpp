@@ -1750,9 +1750,9 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
         {
             if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
             {
-                ANGLE_TRY(
-                    readRenderTarget->flushStagedUpdates(contextVk, &mDeferredClears, colorIndexGL,
-                                                         mCurrentFramebufferDesc.getLayerCount()));
+                // Don't collect deferred clears for the read render target because they get applied
+                // to the draw render target.
+                UNREACHABLE();
             }
             else
             {
