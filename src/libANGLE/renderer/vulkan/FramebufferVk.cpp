@@ -1742,40 +1742,34 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
     // It's possible for the read and draw color attachments to be different if different surfaces
     // are bound, so we need to flush any staged updates to both.
 
+    // Draw
+    drawRenderTarget = mRenderTargetCache.getColorDraw(mState, colorIndexGL);
+    if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
+    {
+        ANGLE_TRY(drawRenderTarget->flushStagedUpdates(contextVk, &mDeferredClears, colorIndexGL,
+                                                       mCurrentFramebufferDesc.getLayerCount()));
+    }
+    else
+    {
+        ANGLE_TRY(drawRenderTarget->flushStagedUpdates(contextVk, nullptr, 0,
+                                                       mCurrentFramebufferDesc.getLayerCount()));
+    }
+
     // Read
     if (mState.getReadBufferState() != GL_NONE && mState.getReadIndex() == colorIndexGL)
     {
+        // Flush staged updates to the read render target as well, but only if it's not the same as
+        // the draw render target.  This can happen when the read render target is bound to another
+        // surface.
         readRenderTarget = mRenderTargetCache.getColorRead(mState);
-        if (readRenderTarget)
+        if (readRenderTarget && readRenderTarget != drawRenderTarget)
         {
-            if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
-            {
-                ANGLE_TRY(
-                    readRenderTarget->flushStagedUpdates(contextVk, &mDeferredClears, colorIndexGL,
-                                                         mCurrentFramebufferDesc.getLayerCount()));
-            }
-            else
-            {
-                ANGLE_TRY(readRenderTarget->flushStagedUpdates(
-                    contextVk, nullptr, 0, mCurrentFramebufferDesc.getLayerCount()));
-            }
+            ANGLE_TRY(readRenderTarget->flushStagedUpdates(
+                contextVk, nullptr, 0, mCurrentFramebufferDesc.getLayerCount()));
         }
     }
 
-    // Draw
-    drawRenderTarget = mRenderTargetCache.getColorDraw(mState, colorIndexGL);
-    if (drawRenderTarget == nullptr || readRenderTarget == drawRenderTarget)
-    {
-        return angle::Result::Continue;
-    }
-    if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
-    {
-        return drawRenderTarget->flushStagedUpdates(contextVk, &mDeferredClears, colorIndexGL,
-                                                    mCurrentFramebufferDesc.getLayerCount());
-    }
-
-    return drawRenderTarget->flushStagedUpdates(contextVk, nullptr, 0,
-                                                mCurrentFramebufferDesc.getLayerCount());
+    return angle::Result::Continue;
 }
 
 angle::Result FramebufferVk::flushDepthStencilAttachmentUpdates(const gl::Context *context,
