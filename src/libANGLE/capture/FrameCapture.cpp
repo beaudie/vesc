@@ -2113,28 +2113,58 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
             {
                 CaptureVertexPointerES1(setupCalls, replayState, attribIndex, attrib, binding);
             }
-            else if (attrib.bindingIndex == attribIndex &&
-                     VertexBindingMatchesAttribStride(attrib, binding) &&
-                     (!buffer || binding.getOffset() == reinterpret_cast<GLintptr>(attrib.pointer)))
+            else if (context->isGLES31())
             {
-                // Check if we can use strictly ES2 semantics.
+                Capture(setupCalls,
+                        CaptureVertexAttribFormat(*replayState, true, attribIndex,
+                                                  attrib.format->channelCount,
+                                                  attrib.format->vertexAttribType,
+                                                  attrib.format->isNorm(), attrib.relativeOffset));
+
+                Capture(setupCalls, CaptureVertexAttribBinding(*replayState, true, attribIndex,
+                                                               attrib.bindingIndex));
+            }
+            else
+            {
+                // Ensure we can use strictly ES2 semantics.
+                ASSERT(
+                    attrib.bindingIndex == attribIndex &&
+                    VertexBindingMatchesAttribStride(attrib, binding) &&
+                    (!buffer || binding.getOffset() == reinterpret_cast<GLintptr>(attrib.pointer)));
+
                 Capture(setupCalls,
                         CaptureVertexAttribPointer(
                             *replayState, true, attribIndex, attrib.format->channelCount,
                             attrib.format->vertexAttribType, attrib.format->isNorm(),
                             attrib.vertexAttribArrayStride, attrib.pointer));
-            }
-            else
-            {
-                // TOOD: http://anglebug.com/6274. ES 3.1 vertex array state is not yet implemented.
-                UNIMPLEMENTED();
+
+                if (binding.getDivisor() != 0)
+                {
+                    Capture(setupCalls, CaptureVertexAttribDivisor(*replayState, true, attribIndex,
+                                                                   binding.getDivisor()));
+                }
             }
         }
+    }
 
-        if (binding.getDivisor() != 0)
+    if (context->isGLES31())
+    {
+        for (int bindingIndex = 0; bindingIndex < gl::MAX_VERTEX_ATTRIB_BINDINGS; ++bindingIndex)
         {
-            Capture(setupCalls, CaptureVertexAttribDivisor(*replayState, true, attribIndex,
-                                                           binding.getDivisor()));
+            const gl::VertexBinding &binding = vertexBindings[bindingIndex];
+
+            if (binding.getBuffer().id().value != 0)
+            {
+                Capture(setupCalls, CaptureBindVertexBuffer(
+                                        *replayState, true, bindingIndex, binding.getBuffer().id(),
+                                        binding.getOffset(), binding.getStride()));
+            }
+
+            if (binding.getDivisor() != 0)
+            {
+                Capture(setupCalls, CaptureVertexBindingDivisor(*replayState, true, bindingIndex,
+                                                                binding.getDivisor()));
+            }
         }
     }
 

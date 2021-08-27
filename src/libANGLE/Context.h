@@ -522,6 +522,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const Extensions &getExtensions() const { return mState.getExtensions(); }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
     bool isGLES1() const;
+    bool isGLES31() const;
 
     bool skipValidation() const
     {

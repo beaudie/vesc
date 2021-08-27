@@ -8866,6 +8866,11 @@ bool Context::isGLES1() const
     return mState.getClientVersion() < Version(2, 0);
 }
 
+bool Context::isGLES31() const
+{
+    return mState.getClientVersion() >= Version(3, 1);
+}
+
 void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
 {
     switch (index)
@@ -9509,7 +9514,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
 {
     const Extensions &exts = context->getExtensions();
     bool isGLES3           = context->getClientMajorVersion() >= 3;
-    bool isGLES31          = context->getClientVersion() >= Version(3, 1);
+    bool isGLES31          = context->isGLES31();
 
     mCachedValidBindTextureTypes = {{
         {TextureType::_2D, true},
