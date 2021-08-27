@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11d3096a_8ea7c5fa",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-27T19:55:31Z",
+      "side": 1,
+      "message": "Please add a comment here or in each test that these tests rely on the feature forceInitShaderOutputVariables to be enabled in order to pass",
+      "revId": "fd410cf1e69e3da501ee3d814e4e00733904cee8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
