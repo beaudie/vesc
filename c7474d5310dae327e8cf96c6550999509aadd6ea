@@ -16,6 +16,24 @@
       "message": "Starting to feel like these belong inside the texture class rather than serialization code, but let\u0027s keep landing them outside the critical path.",
       "revId": "c7474d5310dae327e8cf96c6550999509aadd6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eb387ce_289343fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-27T19:20:16Z",
+      "side": 1,
+      "message": "I agree. PTAL, I did this stuff so it no longer calls syncState and instead works internally in TextureVk and with dirty bits. Also added several tests to cover the conditions I ran into.",
+      "parentUuid": "e65748fa_38dac234",
+      "revId": "c7474d5310dae327e8cf96c6550999509aadd6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
