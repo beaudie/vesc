@@ -1376,6 +1376,9 @@ Error Display::makeCurrent(Thread *thread,
                            egl::Surface *readSurface,
                            gl::Context *context)
 {
+
+    WARN() << "TIMTIM >> Cool new debug message!";
+
     if (!mInitialized)
     {
         return NoError();
