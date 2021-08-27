@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c47b332e_57ab60f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-08-27T04:39:18Z",
+      "side": 1,
+      "message": "lgtm too for what it\u0027s worth.\n",
+      "revId": "0c5887f917e7fb6d829e6f89a5aa743a525c7659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11645dc8_d1cedd75",
