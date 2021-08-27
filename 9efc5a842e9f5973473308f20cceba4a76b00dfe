@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd1a34a4_852970cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3221,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-27T01:54:46Z",
+      "side": 1,
+      "message": "angleFormat.isLUMA() : is true when format has alpha or luma value. In some cases alpha component is missing and just has luma component. But border color just cares about RGBA. Test cases will fail which are using just LUMA component.\n\nFor hasDepthOrStencilBits() : will be true for ICDs that don\u0027t need 24 to 32 bit conversion.\ne.g. NVIDIA gpu supports 24bit format\nIn such cases clamping is not needed",
+      "parentUuid": "53336b12_237b7664",
+      "revId": "9efc5a842e9f5973473308f20cceba4a76b00dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01ee2c7c_8a115549",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
@@ -31,6 +49,30 @@
       "writtenOn": "2021-08-20T10:54:21Z",
       "side": 1,
       "message": "brandon are you going to have time to fix the out-of-range values handling? I think that\u0027s why these are failing.",
+      "range": {
+        "startLine": 177,
+        "startChar": 5,
+        "endLine": 177,
+        "endChar": 17
+      },
+      "revId": "9efc5a842e9f5973473308f20cceba4a76b00dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c74864a_1b832529",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-08-27T01:54:46Z",
+      "side": 1,
+      "message": "Is it due to out-of-range value handling? These tests pass on gpu hw icds",
+      "parentUuid": "01ee2c7c_8a115549",
       "range": {
         "startLine": 177,
         "startChar": 5,
