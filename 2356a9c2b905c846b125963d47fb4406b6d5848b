@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bdb7eb5_2aeb3d43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-27T19:36:17Z",
+      "side": 1,
+      "message": "LGTM.\n\nI think we\u0027ve agreed to just accept the new gold images for wintel bots.",
+      "revId": "2356a9c2b905c846b125963d47fb4406b6d5848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5607cbf_87939c8d",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-27T19:36:17Z",
+      "side": 1,
+      "message": "nit: It would be helpful to indicate what each node represents: left node \u003d array value, right node \u003d amount to shift(?)",
+      "range": {
+        "startLine": 1982,
+        "startChar": 67,
+        "endLine": 1982,
+        "endChar": 80
+      },
+      "revId": "2356a9c2b905c846b125963d47fb4406b6d5848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
