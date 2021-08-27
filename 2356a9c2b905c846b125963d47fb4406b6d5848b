@@ -39,6 +39,30 @@
       },
       "revId": "2356a9c2b905c846b125963d47fb4406b6d5848b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cafa6319_38a43e07",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-27T19:56:21Z",
+      "side": 1,
+      "message": "For index ops, left is array, right is index\nFor shift (a \u003c\u003c b), left is a and right is b\n\nI\u0027ll improve the comment.",
+      "parentUuid": "d5607cbf_87939c8d",
+      "range": {
+        "startLine": 1982,
+        "startChar": 67,
+        "endLine": 1982,
+        "endChar": 80
+      },
+      "revId": "2356a9c2b905c846b125963d47fb4406b6d5848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
