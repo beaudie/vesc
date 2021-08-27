@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b34455a5_a391c439",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2021-08-27T08:37:59Z",
+      "side": 1,
+      "message": "Hi Shabi\n\nThis change causes these CTS failures on Mali\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uint_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uint_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec2_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec2_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec3_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec3_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec4_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec4_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uint_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uint_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec2_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec2_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec3_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec3_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec4_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec4_fragment",
+      "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
