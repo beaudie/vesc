@@ -2054,8 +2054,19 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
             }
             else
             {
-                // TOOD: http://anglebug.com/6274. ES 3.1 vertex array state is not yet implemented.
-                UNIMPLEMENTED();
+
+                Capture(setupCalls,
+                        CaptureVertexAttribFormat(*replayState, true, attribIndex,
+                                                  attrib.format->channelCount,
+                                                  attrib.format->vertexAttribType,
+                                                  attrib.format->isNorm(), attrib.relativeOffset));
+
+                Capture(setupCalls, CaptureVertexAttribBinding(*replayState, true, attribIndex,
+                                                               attrib.bindingIndex));
+
+                Capture(setupCalls, CaptureBindVertexBuffer(
+                                        *replayState, true, attribIndex, binding.getBuffer().id(),
+                                        binding.getOffset(), binding.getStride()));
             }
         }
 
