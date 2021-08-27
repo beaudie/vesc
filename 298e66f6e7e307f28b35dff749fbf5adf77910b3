@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57c82b7b_4348fb04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-27T04:24:25Z",
+      "side": 1,
+      "message": "Needed to run Fortnite trace on Windows with SwiftShader (along with some other hacks, but this one is sensible).",
+      "revId": "298e66f6e7e307f28b35dff749fbf5adf77910b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
