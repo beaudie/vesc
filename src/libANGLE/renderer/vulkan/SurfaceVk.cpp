@@ -220,6 +220,7 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initializeWithExternalMemory(
     const vk::Format &vkFormat,
     GLint samples,
     void *buffer,
+    const void *extraAllocationInfo,
     bool isRobustResourceInitEnabled,
     bool hasProtectedContent)
 {
@@ -231,7 +232,7 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initializeWithExternalMemory(
 
     VkImportMemoryHostPointerInfoEXT importMemoryHostPointerInfo = {};
     importMemoryHostPointerInfo.sType = VK_STRUCTURE_TYPE_IMPORT_MEMORY_HOST_POINTER_INFO_EXT;
-    importMemoryHostPointerInfo.pNext = nullptr;
+    importMemoryHostPointerInfo.pNext = extraAllocationInfo;
     importMemoryHostPointerInfo.handleType =
         VK_EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT;
     importMemoryHostPointerInfo.pHostPointer = buffer;

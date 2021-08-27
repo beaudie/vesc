@@ -97,6 +97,7 @@ class OffscreenSurfaceVk : public SurfaceVk
                                                    const vk::Format &vkFormat,
                                                    GLint samples,
                                                    void *buffer,
+                                                   const void *extraAllocationInfo,
                                                    bool isRobustResourceInitEnabled,
                                                    bool hasProtectedContent);
 

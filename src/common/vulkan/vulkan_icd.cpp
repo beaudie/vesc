@@ -16,6 +16,7 @@
 #include "common/system_utils.h"
 
 #include "common/vulkan/vk_google_filtering_precision.h"
+#include "common/vulkan/vk_google_import_io_surface.h"
 
 namespace
 {
@@ -216,6 +217,8 @@ bool ScopedVkLoaderEnvironment::setCustomExtensionsEnvironment()
 
         {VK_STRUCTURE_TYPE_SAMPLER_FILTERING_PRECISION_GOOGLE,
          sizeof(VkSamplerFilteringPrecisionGOOGLE)},
+
+        {VK_STRUCTURE_TYPE_IMPORT_IO_SURFACE_GOOGLE, sizeof(VkImportIOSurfaceGOOGLE)},
 
         {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT,
          sizeof(VkPhysicalDeviceProvokingVertexFeaturesEXT)},

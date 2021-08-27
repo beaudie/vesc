@@ -16,6 +16,8 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 
+#include "common/vulkan/vk_google_import_io_surface.h"
+
 #include <IOSurface/IOSurface.h>
 
 namespace rx
@@ -113,12 +115,16 @@ angle::Result IOSurfaceSurfaceVkMac::initializeImpl(DisplayVk *displayVk)
     }
     ANGLE_VK_CHECK(displayVk, samples > 0, VK_ERROR_INITIALIZATION_FAILED);
 
+    VkImportIOSurfaceGOOGLE importIOSurface{VK_STRUCTURE_TYPE_IMPORT_IO_SURFACE_GOOGLE, nullptr,
+                                            reinterpret_cast<void *>(mIOSurface),
+                                            static_cast<uint32_t>(mPlane)};
+
     // Swiftshader will use the raw pointer to the buffer referenced by the IOSurfaceRef
     ANGLE_TRY(mColorAttachment.initializeWithExternalMemory(
         displayVk, mWidth, mHeight,
         renderer->getFormat(kIOSurfaceFormats[mFormatIndex].nativeSizedInternalFormat), samples,
-        IOSurfaceGetBaseAddressOfPlane(mIOSurface, mPlane), mState.isRobustResourceInitEnabled(),
-        mState.hasProtectedContent()));
+        IOSurfaceGetBaseAddressOfPlane(mIOSurface, mPlane), &importIOSurface,
+        mState.isRobustResourceInitEnabled(), mState.hasProtectedContent()));
     mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr, nullptr,
                             gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
 
