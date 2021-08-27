@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81da006a_ea7f5d00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-27T04:26:03Z",
+      "side": 1,
+      "message": "Jamie, sharing this as WIP for feedback and discussion.  It works for the initial scene I discussed with you.  Will throw some more stuff at it tomorrow.",
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
