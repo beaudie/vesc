@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25ad1869_6aa227d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-27T04:25:10Z",
+      "side": 1,
+      "message": "Good first CL!",
+      "revId": "f476f01af3d44b3206b814c2d077f9272001e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0149569_921edd83",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-08-27T01:53:00Z",
       "side": 1,
       "message": "nit: I suggest 0x%04x as that\u0027s how the constants are defined in the header (so they would be easy to grep)",
+      "range": {
+        "startLine": 5087,
+        "startChar": 73,
+        "endLine": 5087,
+        "endChar": 75
+      },
+      "revId": "f476f01af3d44b3206b814c2d077f9272001e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22a31162_c9dfeb3e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5087,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-27T04:25:10Z",
+      "side": 1,
+      "message": "Good suggestion.  It would be good to look at all of the unknown values to see if special formatting is needed.  Using CodeSearch, you can find the EGL API function, and then look up it\u0027s valid parameters in the EGL spec and header.",
+      "parentUuid": "f0149569_921edd83",
       "range": {
         "startLine": 5087,
         "startChar": 73,
