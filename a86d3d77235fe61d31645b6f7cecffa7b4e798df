@@ -16,6 +16,23 @@
       "message": "Another trivial change - going to self-approve. Tim feel free to follow up.",
       "revId": "a86d3d77235fe61d31645b6f7cecffa7b4e798df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3be6edb1_17167f38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-27T19:58:59Z",
+      "side": 1,
+      "message": "+2, assuming win-trace-rel is happy.",
+      "revId": "a86d3d77235fe61d31645b6f7cecffa7b4e798df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
