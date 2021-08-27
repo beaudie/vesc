@@ -259,7 +259,7 @@ bool ValidateConfigAttribute(const ValidationContext *val,
             break;
 
         default:
-            val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute.");
+            val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute: 0x%016" PRIxPTR, attribute);
             return false;
     }
 
@@ -1060,7 +1060,8 @@ bool ValidateDisplayPointer(const ValidationContext *val, const Display *display
     {
         if (val)
         {
-            val->setError(EGL_BAD_DISPLAY, "display is not a valid display.");
+            val->setError(EGL_BAD_DISPLAY, "display is not a valid display: 0x%016" PRIxPTR,
+                          display);
         }
         return false;
     }
@@ -2008,7 +2009,7 @@ bool ValidateCreateContext(const ValidationContext *val,
                 break;
 
             default:
-                val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute.");
+                val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute: 0x%016" PRIxPTR, attribute);
                 return false;
         }
     }
@@ -5083,7 +5084,7 @@ bool ValidateSurfaceAttrib(const ValidationContext *val,
             break;
 
         default:
-            val->setError(EGL_BAD_ATTRIBUTE, "Invalid surface attribute.");
+            val->setError(EGL_BAD_ATTRIBUTE, "Invalid surface attribute: %d", attribute);
             return false;
     }
 
@@ -5221,7 +5222,7 @@ bool ValidateQuerySurface(const ValidationContext *val,
         break;
 
         default:
-            val->setError(EGL_BAD_ATTRIBUTE, "Invalid surface attribute.");
+            val->setError(EGL_BAD_ATTRIBUTE, "Invalid surface attribute: %d", attribute);
             return false;
     }
 
@@ -5266,7 +5267,7 @@ bool ValidateQueryContext(const ValidationContext *val,
             break;
 
         default:
-            val->setError(EGL_BAD_ATTRIBUTE, "Invalid context attribute.");
+            val->setError(EGL_BAD_ATTRIBUTE, "Invalid context attribute: %d", attribute);
             return false;
     }
 
