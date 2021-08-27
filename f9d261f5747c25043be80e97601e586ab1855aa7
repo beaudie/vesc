@@ -16,6 +16,24 @@
       "message": "Hi Shabi\n\nThis change causes these CTS failures on Mali\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uint_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uint_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec2_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec2_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec3_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec3_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec4_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.lowp_uvec4_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uint_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uint_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec2_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec2_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec3_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec3_fragment\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec4_vertex\ndEQP-GLES3.functional.shaders.operator.unary_operator.minus.mediump_uvec4_fragment",
       "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "639f4550_6583763e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-27T14:57:37Z",
+      "side": 1,
+      "message": "Thanks for the report Sunny, I\u0027ll take a look.\n\nUnfortunately there are still precision-related bugs both in ANGLE and in glslang, and I have fixes for those I have found (that haven\u0027t landed yet). In particular, there are likely bugs in glslang left to be discovered.\n\nIf you feel up to it, you could give this set of 3 changes a try and see if they resolve the issue:\n\n- https://chromium-review.googlesource.com/c/angle/angle/+/3122317\n- https://chromium-review.googlesource.com/c/angle/angle/+/3119352 (note: this must be paired with this glslang fix: https://github.com/KhronosGroup/glslang/pull/2741)\n- https://chromium-review.googlesource.com/c/angle/angle/+/3115140\n\nThe last one switches to ANGLE\u0027s SPIR-V gen, so bugs in glslang become irrelevant.\n\nWhat I can do in the meantime is look at the SPIR-V that gets generated and see bugs I spot.",
+      "parentUuid": "b34455a5_a391c439",
+      "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
