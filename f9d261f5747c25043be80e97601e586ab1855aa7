@@ -52,6 +52,24 @@
       "parentUuid": "639f4550_6583763e",
       "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a541649_6e9a6983",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2021-08-28T06:57:31Z",
+      "side": 1,
+      "message": "The above 3 patches cannot fix the issue.\nIf it is Mali compiler issue, we will fix it",
+      "parentUuid": "04022a66_ce5f3b72",
+      "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
