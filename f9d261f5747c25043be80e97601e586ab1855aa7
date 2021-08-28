@@ -70,6 +70,24 @@
       "parentUuid": "04022a66_ce5f3b72",
       "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb0c1d5a_e4d70c47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-28T17:14:43Z",
+      "side": 1,
+      "message": "Thanks for trying them out. From my analysis, it indeed looks like the SPIR-V is correct so it would be worth checking with the Mali compiler.",
+      "parentUuid": "4a541649_6e9a6983",
+      "revId": "f9d261f5747c25043be80e97601e586ab1855aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
