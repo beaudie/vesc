@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a0e23b2_3a63cc4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-28T01:48:50Z",
+      "side": 1,
+      "message": "All (or most) of these gold failures should actually go away when my fix in glslang lands: https://github.com/KhronosGroup/glslang/pull/2741\n\nI\u0027m going to wait until that\u0027s done before landing this change.",
+      "parentUuid": "8bdb7eb5_2aeb3d43",
+      "revId": "2356a9c2b905c846b125963d47fb4406b6d5848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5607cbf_87939c8d",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "For index ops, left is array, right is index\nFor shift (a \u003c\u003c b), left is a and right is b\n\nI\u0027ll improve the comment.",
       "parentUuid": "d5607cbf_87939c8d",
+      "range": {
+        "startLine": 1982,
+        "startChar": 67,
+        "endLine": 1982,
+        "endChar": 80
+      },
+      "revId": "2356a9c2b905c846b125963d47fb4406b6d5848b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6683076e_5355645f",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-28T01:48:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cafa6319_38a43e07",
       "range": {
         "startLine": 1982,
         "startChar": 67,
