@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bcbd66e_76c337d9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-28T01:55:43Z",
+      "side": 1,
+      "message": "I think the reason for the failures is that this code is calling flush for the readRT unconditionally, even when readRT \u003d\u003d drawRT.\n\nThe logic should be inverted in my opinion, i.e. the defer vs not should apply to drawRT, and then readRT would flush without deferring and only when readRT !\u003d drawRT:\n\n    // Draw\n    drawRenderTarget \u003d mRenderTargetCache.getColorDraw(mState, colorIndexGL);\n    if (deferClears \u0026\u0026 mState.getEnabledDrawBuffers().test(colorIndexGL))\n    {\n        ANGLE_TRY(drawRenderTarget-\u003eflushStagedUpdates(contextVk, \u0026mDeferredClears, colorIndexGL,\n                  mCurrentFramebufferDesc.getLayerCount()));\n    }\n    else\n    {\n        ANGLE_TRY(drawRenderTarget-\u003eflushStagedUpdates(contextVk, nullptr, 0,\n                  mCurrentFramebufferDesc.getLayerCount()));\n    }\n\n    // Read\n    if (mState.getReadBufferState() !\u003d GL_NONE \u0026\u0026 mState.getReadIndex() \u003d\u003d colorIndexGL)\n    {\n        // flush staged updates to the read render target as well, but only if it\u0027s\n        // not the same as the draw render target.  This can happen when the\n        // read render target is bound to another surface.\n        readRenderTarget \u003d mRenderTargetCache.getColorRead(mState);\n        if (readRenderTarget \u0026\u0026 readRenderTarget !\u003d drawRenderTarget)\n        {\n            ANGLE_TRY(readRenderTarget-\u003eflushStagedUpdates(\n                contextVk, nullptr, 0, mCurrentFramebufferDesc.getLayerCount()));\n        }\n    }\n\n    return angle::Result::Continue;",
+      "revId": "6debe2eac1de570a79c311bc0511e56e61fa6136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
