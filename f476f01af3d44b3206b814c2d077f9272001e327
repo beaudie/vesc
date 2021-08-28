@@ -104,6 +104,30 @@
       },
       "revId": "f476f01af3d44b3206b814c2d077f9272001e327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36f064c9_31b371d5",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5087,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-28T01:58:29Z",
+      "side": 1,
+      "message": "Excellent. Is -1 any different from other invalid attributes? If not, 0xFF...FF is fine, especially if your concern is just the length of the printed number.",
+      "parentUuid": "d9ad3a17_5ce01137",
+      "range": {
+        "startLine": 5087,
+        "startChar": 73,
+        "endLine": 5087,
+        "endChar": 75
+      },
+      "revId": "f476f01af3d44b3206b814c2d077f9272001e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
