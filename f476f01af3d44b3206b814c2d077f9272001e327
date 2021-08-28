@@ -80,6 +80,30 @@
       },
       "revId": "f476f01af3d44b3206b814c2d077f9272001e327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9ad3a17_5ce01137",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5087,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-08-28T00:40:01Z",
+      "side": 1,
+      "message": "Thank you Shahbaz and Ian! I changed the format to 0x%04X as you suggested. I made it using uppercase hex format instead of lowercase, as I saw we use uppercase hex (EGL_RGB_BUFFER: 0x308E) in egl.h. I also changed the other 3 lines that print pointers from %016 to %04, as we use 4 digits hex in egl.h.\n\nThe only issue is that -1 will be printed out as 0xFFFFFFFF, when using 0x%04X, and printed out as 0xFFFFFFFFFFFFFFFF when using format 0x%04\" PRIXPTR. I am looking for a solution for this issue. I will keep you updated.",
+      "parentUuid": "22a31162_c9dfeb3e",
+      "range": {
+        "startLine": 5087,
+        "startChar": 73,
+        "endLine": 5087,
+        "endChar": 75
+      },
+      "revId": "f476f01af3d44b3206b814c2d077f9272001e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
