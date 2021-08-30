@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f92438_9c1fcdba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-30T14:22:38Z",
+      "side": 1,
+      "message": "Hey Shabi, could use your feedback on this.  I\u0027m hitting this VVL error on an ARM device.  Tests don\u0027t pass yet, so I must be missing something, or this is the wrong approach.  Spec language seems pretty clear though.",
+      "revId": "f0fda999a9dd6eb9d2e3a048cc61db296f0891dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
