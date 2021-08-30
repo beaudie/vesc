@@ -16,6 +16,24 @@
       "message": "Hi Geoff! Can you please take a look? It turned out that DisplayEGL is almost sufficient for our surfaceless Wayland implementation. The only required changes are 1) correct display attributes (basically the ones that DisplayGBM uses, which look the same as we pass from Chromium as well)..And it also required to use a single renderer for different contexts (if I understand correctly, it\u0027s because sufaceless uses virtual context? I got this impression from DisplayAndroid that also supports surfaceless impl).\n\nAt least, this makes Ozone/Wayland + surfaceless path work with ANGLE, webgl demos work and also webgl conform tests still pass.",
       "revId": "a5310b19ac77f5dc238d104e03651f81e04442f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7716993_787ec55d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-30T20:11:18Z",
+      "side": 1,
+      "message": "Hey Maksim! I\u0027d like this display type to merge into DisplayEGL if we can. I had a CL up a long time ago to merge DisplayAndroid into DisplayEGL but it got reverted and I haven\u0027t had a chance to get back to it (https://chromium-review.googlesource.com/c/angle/angle/+/2636678).\n\nFeel free to pair down the config requested in DisplayEGL to allow surfaceless configs but maybe prefer window surface configs if they exist. \n\nFor the shared renderer, we support that in DisplayAndroid: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/egl/android/DisplayAndroid.cpp;l\u003d198;drc\u003d82c1ae473bc26186bd4ae67c222d6cf47738df3d . I think the answer would be to duplicate that logic into DisplayEGL until I can re-land the cleanup CL.\n\nFor the most part, EGL is pretty good at not needing platform specific code so I want everything to eventually live in DisplayEGL. It can then support platform specific extensions without needing to know what platform it\u0027s on.",
+      "parentUuid": "21ef144c_b6b4f278",
+      "revId": "a5310b19ac77f5dc238d104e03651f81e04442f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
