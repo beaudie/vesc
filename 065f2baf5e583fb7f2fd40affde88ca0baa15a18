@@ -93,6 +93,30 @@
       },
       "revId": "065f2baf5e583fb7f2fd40affde88ca0baa15a18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcf5f9ac_ddb81549",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-30T16:52:26Z",
+      "side": 1,
+      "message": "Right.. there\u0027s definitely some questions about what\u0027s the \"best\" implementation, like how to make mutually exclusive tags. I suggest we prioritize matching what we have in the rest of ANGLE for now, if that\u0027s OK with you. The edge cases you\u0027re mentioning aren\u0027t that likely to cause developers to trip up with the trace tests.",
+      "parentUuid": "c2890b34_b761378f",
+      "range": {
+        "startLine": 170,
+        "startChar": 5,
+        "endLine": 170,
+        "endChar": 17
+      },
+      "revId": "065f2baf5e583fb7f2fd40affde88ca0baa15a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
