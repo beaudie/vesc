@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd9b8f61_edbb3854",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-08-30T21:59:14Z",
+      "side": 1,
+      "message": "Same as https://chromium-review.googlesource.com/c/angle/angle/+/3124071/comments/2c9a289a_3425ca40.",
+      "parentUuid": "6c521870_982cad5e",
+      "range": {
+        "startLine": 262,
+        "startChar": 65,
+        "endLine": 262,
+        "endChar": 79
+      },
+      "revId": "e89444d60f035ef5927e829a656cc14196c92260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c9a289a_3425ca40",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-08-30T20:34:00Z",
       "side": 1,
       "message": "nit: Since this is an EGLAttrib value, should this be \"0x%04X\" like below?",
+      "range": {
+        "startLine": 2012,
+        "startChar": 69,
+        "endLine": 2012,
+        "endChar": 83
+      },
+      "revId": "e89444d60f035ef5927e829a656cc14196c92260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe17538_ff48edc6",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2012,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-08-30T21:59:14Z",
+      "side": 1,
+      "message": "That\u0027s a good point! I saw that attribute data type here is EGLAttrib, which is intptr_t, so I used PRIXPTR here as the hecidecimal format for uinptr_t. I replaced it with the \"0x%04X\" and I got the same result. For consistency I changed them to use the \"0x%04X\", too.",
+      "parentUuid": "2c9a289a_3425ca40",
       "range": {
         "startLine": 2012,
         "startChar": 69,
