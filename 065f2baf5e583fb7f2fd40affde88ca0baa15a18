@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fd5cfbf_594ecd3c",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-30T16:19:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bacbeed3_93e1c685",
+      "range": {
+        "startLine": 1153,
+        "startChar": 0,
+        "endLine": 1154,
+        "endChar": 45
+      },
+      "revId": "065f2baf5e583fb7f2fd40affde88ca0baa15a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fc9d854_7a4dec53",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-30T15:34:10Z",
       "side": 1,
       "message": "use separate tags - LINUX DEBUG\n\nthat\u0027s what we do in the other expectations files, and it scales better to multiple kinds of tags.",
+      "range": {
+        "startLine": 170,
+        "startChar": 5,
+        "endLine": 170,
+        "endChar": 17
+      },
+      "revId": "065f2baf5e583fb7f2fd40affde88ca0baa15a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2890b34_b761378f",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-08-30T16:19:31Z",
+      "side": 1,
+      "message": "I was thinking about this too, but then I wondered whether this would mean \"LINUX and DEBUG\" or \"LINUX or DEBUG\". The failure in question was a Linux specific assertion (void LinuxMemFd::close(): Assertion `false\u0027 failed), so  a debug build on Windows will probably not fail. This means it should mean \"and\", but when you write \"LINUX WIN\" it certainly can\u0027t mean \"and\" ... so we would have to define a rule-set how to combine tags ...",
+      "parentUuid": "4fc9d854_7a4dec53",
       "range": {
         "startLine": 170,
         "startChar": 5,
