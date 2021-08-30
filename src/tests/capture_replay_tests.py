@@ -720,7 +720,7 @@ class TestExpectation():
             for line in f:
                 l = line.strip()
                 if l != "" and not l.startswith("#"):
-                    self.ReadOneExpectation(l)
+                    self.ReadOneExpectation(l, args.debug)
 
     def _CheckTagsWithConfig(self, tags, config_tags):
         for tag in tags:
@@ -728,7 +728,7 @@ class TestExpectation():
                 return False
         return True
 
-    def ReadOneExpectation(self, line):
+    def ReadOneExpectation(self, line, is_debug):
         (testpattern, result) = line.split('=')
         (test_info_string, test_name_string) = testpattern.split(':')
         test_name = test_name_string.strip()
@@ -739,7 +739,7 @@ class TestExpectation():
         if len(test_info) > 1:
             tags = test_info[1:]
 
-        config_tags = [GetPlatformForSkip()]
+        config_tags = [GetPlatformForSkip(is_debug)]
         if self._asan:
             config_tags += ['ASAN']
 
@@ -872,12 +872,16 @@ def DeleteTraceFolders(folder_num):
             SafeDeleteFolder(folder_path)
 
 
-def GetPlatformForSkip():
+def GetPlatformForSkip(is_debug):
     # yapf: disable
     # we want each pair on one line
     platform_map = { "win32" : "WIN",
                      "linux" : "LINUX" }
+    platform_map_debug = { "win32" : "WIN_DEBUG",
+                           "linux" : "LINUX_DEBUG" }
     # yapf: enable
+    if is_debug:
+        return platform_map_debug.get(sys.platform, "UNKNOWN")
     return platform_map.get(sys.platform, "UNKNOWN")
 
 
@@ -1146,6 +1150,9 @@ if __name__ == '__main__':
         '--show-capture-stdout', action='store_true', help='Print test stdout during capture.')
     parser.add_argument('--debug', action='store_true', help='Debug builds (default is Release).')
     args = parser.parse_args()
+    if args.debug:
+        args.out_dir = args.out_dir + "Debug"
+
     if sys.platform == "win32":
         args.test_suite += ".exe"
     if args.output_to_file:
