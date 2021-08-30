@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f2261f_d5641378",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-08-30T19:32:22Z",
+      "side": 1,
+      "message": "I think this split is good. Let\u0027s land it and then replicate it to all Android repos. We\u0027ll maintain OWNERS.android as the owners for Android rolls and merges.",
+      "revId": "87aa836767c064db60d21592a3fd5011af0d2506",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
