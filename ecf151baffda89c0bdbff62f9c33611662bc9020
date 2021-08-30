@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d8f74b0_9ecb73a7",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-08-30T22:22:01Z",
+      "side": 1,
+      "message": "Could use a comment indicating this is the line making the texture inconsistent, having a mip level same size as base.",
+      "range": {
+        "startLine": 564,
+        "startChar": 0,
+        "endLine": 565,
+        "endChar": 38
+      },
+      "revId": "ecf151baffda89c0bdbff62f9c33611662bc9020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
