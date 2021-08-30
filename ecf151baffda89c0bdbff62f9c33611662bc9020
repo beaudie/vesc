@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b8b0540_448f147d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T23:16:51Z",
+      "side": 1,
+      "message": "Which test is this referring to?\n\nBased on the TODO, it looks like you\u0027re describing reading back data for a mip-level that doesn\u0027t exist.   The new test InconsistentTexture2D is successfully reading back data for a level that does exist, even though the mip level isn\u0027t the right size (as Cody points out).",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 59
+      },
+      "revId": "ecf151baffda89c0bdbff62f9c33611662bc9020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a4a7733_7594bec9",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T23:16:51Z",
+      "side": 1,
+      "message": "Are pending updates only possible at initialization time?   Or can they occur at any time afterward.\n\nFor example, the caller can call glTexImage2D() anytime later to upload new texture data, \"initialization\" may not be accurate in that case.   In the case of textures, this means leads to InitState \u003d Initialized, but that seems specific to Textures and SubjectMessage is used by many other things.\n\nInstead, I think something like \"PendingUpdatesComplete\" or \"NoPendingUpdates\" would be better.",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 26
+      },
+      "revId": "ecf151baffda89c0bdbff62f9c33611662bc9020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff4d3f69_e72259bd",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T23:16:51Z",
+      "side": 1,
+      "message": "nit: serialize(?)",
+      "range": {
+        "startLine": 1180,
+        "startChar": 10,
+        "endLine": 1180,
+        "endChar": 14
+      },
+      "revId": "ecf151baffda89c0bdbff62f9c33611662bc9020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d8f74b0_9ecb73a7",
         "filename": "src/tests/gl_tests/GetImageTest.cpp",
         "patchSetId": 6
@@ -20,6 +89,23 @@
         "endLine": 565,
         "endChar": 38
       },
+      "revId": "ecf151baffda89c0bdbff62f9c33611662bc9020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5588087_bbf57d50",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T23:16:51Z",
+      "side": 1,
+      "message": "This is showing that reading back the mip level is working correctly.",
       "revId": "ecf151baffda89c0bdbff62f9c33611662bc9020",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
