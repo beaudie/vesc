@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ee4335_747fb585",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-30T18:05:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "425f24ab_5d714806",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 97
+      },
+      "revId": "40a1d74bab1bed3a35f026c1435f3f26d9088af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d67d0c29_330a3644",
@@ -89,6 +113,30 @@
       "writtenOn": "2021-08-30T17:54:42Z",
       "side": 1,
       "message": "nit: please put the chromium.org first so people who come via the existing open-source channels (chromium, etc) see those as the \"first hits\" and are more likely to add them as code reviewers. Sound good?",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "40a1d74bab1bed3a35f026c1435f3f26d9088af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "718eb6d1_151173c1",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-30T18:05:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d67d0c29_330a3644",
       "range": {
         "startLine": 4,
         "startChar": 0,
