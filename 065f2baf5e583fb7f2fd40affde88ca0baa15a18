@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bacbeed3_93e1c685",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-30T15:34:10Z",
+      "side": 1,
+      "message": "I don\u0027t like that it overrides this if the user sets an output dir explicitly - i.e. if they specify the option, this will always tag debug. I guess the simplest fix would be to check if the out_dir \u003d\u003d the default as well.",
+      "range": {
+        "startLine": 1153,
+        "startChar": 0,
+        "endLine": 1154,
+        "endChar": 45
+      },
+      "revId": "065f2baf5e583fb7f2fd40affde88ca0baa15a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fc9d854_7a4dec53",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-30T15:34:10Z",
+      "side": 1,
+      "message": "use separate tags - LINUX DEBUG\n\nthat\u0027s what we do in the other expectations files, and it scales better to multiple kinds of tags.",
+      "range": {
+        "startLine": 170,
+        "startChar": 5,
+        "endLine": 170,
+        "endChar": 17
+      },
+      "revId": "065f2baf5e583fb7f2fd40affde88ca0baa15a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
