@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82bf290b_f8beac05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-30T20:34:00Z",
+      "side": 1,
+      "message": "A couple more comments.",
+      "revId": "e89444d60f035ef5927e829a656cc14196c92260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c521870_982cad5e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-30T20:34:00Z",
+      "side": 1,
+      "message": "nit: Since this is an EGLAttrib value, should this be \"0x%04X\" like below?",
+      "range": {
+        "startLine": 262,
+        "startChar": 65,
+        "endLine": 262,
+        "endChar": 79
+      },
+      "revId": "e89444d60f035ef5927e829a656cc14196c92260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c9a289a_3425ca40",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2012,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-08-30T20:34:00Z",
+      "side": 1,
+      "message": "nit: Since this is an EGLAttrib value, should this be \"0x%04X\" like below?",
+      "range": {
+        "startLine": 2012,
+        "startChar": 69,
+        "endLine": 2012,
+        "endChar": 83
+      },
+      "revId": "e89444d60f035ef5927e829a656cc14196c92260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
