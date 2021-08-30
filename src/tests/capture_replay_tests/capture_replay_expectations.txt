@@ -167,6 +167,7 @@
 6180 : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphoresWithFlags/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6180 : VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6335 DEBUG : VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 
 # Skip because CompileFailed
 6180 : FramebufferTest_ES3.ScissoredDrawSubInvalidateThenNonScissoredDraw/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
