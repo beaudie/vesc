@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f9362a5_e23a3012",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2779,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T22:42:53Z",
+      "side": 1,
+      "message": "\u003e Not sure what you changed based on my comment on the doc\n\nI updated ContextVk to remove retaining texture buffers for ReadWrite:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3065799/22/src/libANGLE/renderer/vulkan/ContextVk.cpp\n\n\u003e but this needs changing at least too:\n\u003e    isImage ? vk::ResourceUseType::ReadWrite : vk::ResourceUseType::Read\n\nMaking this change breaks several tests in dEQP.GLES31/functional_texture_texture_buffer_render_modify_as_*\n\nHere\u0027s a snippet of the GL commands for dEQP.GLES31/functional_texture_texture_buffer_render_modify_as_vertex_texture_mapbuffer_write which fails with this change: https://paste.googleplex.com/5633156020436992\n\nUsing ReadWrite unconditionally works.",
+      "parentUuid": "e65a8822_c20c629f",
+      "range": {
+        "startLine": 2779,
+        "startChar": 42,
+        "endLine": 2779,
+        "endChar": 72
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d58d9457_c5d1dd0a",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 24
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-26T19:15:35Z",
       "side": 1,
       "message": "ReadWrite for future-proofing",
+      "range": {
+        "startLine": 2445,
+        "startChar": 89,
+        "endLine": 2445,
+        "endChar": 93
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d644b5f0_aade7011",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T22:42:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d58d9457_c5d1dd0a",
       "range": {
         "startLine": 2445,
         "startChar": 89,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "345aadb8_bb9840ed",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2870,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T22:42:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2213b5ec_4aa133ed",
+      "range": {
+        "startLine": 2870,
+        "startChar": 88,
+        "endLine": 2870,
+        "endChar": 92
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "590fe51a_397d9097",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-08-26T19:15:35Z",
       "side": 1,
       "message": "Neither of the mentioned cases can modify the buffer. You could change the comment to something like \"SSBO and ACB\" (or \"SSBO and XFB\"). If you meant that bound to one that reads and one that writes, you could say like \"VBO and SSBO\".",
+      "range": {
+        "startLine": 1035,
+        "startChar": 81,
+        "endLine": 1035,
+        "endChar": 96
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99067755_19bf5030",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T22:42:53Z",
+      "side": 1,
+      "message": "I\u0027m actually able to revert this change entirely.\n\nAck",
+      "parentUuid": "590fe51a_397d9097",
       "range": {
         "startLine": 1035,
         "startChar": 81,
@@ -110,6 +206,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5670753d_b238b35a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T22:42:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df95f68a_2ffdddd1",
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "501698fe_2748a448",
@@ -123,6 +237,30 @@
       "writtenOn": "2021-08-26T19:15:35Z",
       "side": 1,
       "message": "This should be pretty easy to write a regression test for, no?\n\n    glGenBuffers(\u0026buf, 1);\n    // Use as SSBO\n    // Dispatch\n    glDeleteBuffer(buf);\n    glFinish();\n\nWhat issues can arise from this code? Also, the comment says assume it\u0027s for ReadWrite, while simultaneously says ReadWrite can have issues. Could you describe the issue in more details?\n\nAlso, a question is, why is it necessary to release the write use, but not the read use here?",
+      "range": {
+        "startLine": 3673,
+        "startChar": 58,
+        "endLine": 3673,
+        "endChar": 99
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "483c06e6_be365193",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3673,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-30T22:42:53Z",
+      "side": 1,
+      "message": "I\u0027m imagining something like:\n\n  1. buffer.retainBuffer(ReadWrite)\n  2. buffer.retainBuffer(Read)\n  3. buffer.release() \u003c\u003c--- this is meant to release the Read access\n  4. isCurrentlyInUseForWrite()\n\nIf we always mWriteUse.release(), any following calls to isCurrentlyInUseForWrite() could get the wrong value if there are 2 retainBuffer() calls, since the release() can\u0027t know which retainBuffer() call the release() corresponds to.   Meaning, it can\u0027t know whether or not to skip the mWriteUse.release() because the buffer is actually still in use for ReadWrite.\n\nHowever, if the only way to release() a buffer is with glDeleteBuffers(), then we should be fine since we can\u0027t delete a buffer and then later submit commands that still use it.   That means the sequence of retainBuffer()/release() calls can\u0027t happen.   Looking at the code, this seems to the case, but I can\u0027t say it\u0027s true for certain.\n\n\u003e Also, a question is, why is it necessary to release the write use, but not the read use here?\n\nThe read use is released in collectGarbageAndReinit() just before this call.",
+      "parentUuid": "501698fe_2748a448",
       "range": {
         "startLine": 3673,
         "startChar": 58,
