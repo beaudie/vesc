@@ -16,6 +16,29 @@
       "message": "Jamie, sharing this as WIP for feedback and discussion.  It works for the initial scene I discussed with you.  Will throw some more stuff at it tomorrow.",
       "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9bf4f32_55871b23",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-30T13:32:14Z",
+      "side": 1,
+      "message": "the bindings are a totally separate set of states. I think it would make to capture them in a separate loop for the non-default-state bindings.",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2055,
+        "endChar": 13
+      },
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
