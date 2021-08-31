@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3afb4f8_1a98fb41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-31T05:30:06Z",
+      "side": 1,
+      "message": "\u003e A good future improvement would be to move that logic into the backends because only GL needs it.\n\nI\u0027ve opened anglebug.com/6322 to chase this and marked the makeCurrent() dance with a TODO.\n\n\u003e There may be a validation bug if the same context can be made current multiple times.\n\nThis should be handled today already with \u0027mHasBeenCurrent\u0027, since that\u0027s a more accurate description of \"we only want to initialize certain parts of the Context once\".   Otherwise, if we relied on \u0027isCurrent\u0027, we\u0027d reinitialize a Context (reallocate memory) everytime a Thread bounced between 2 Contexts and toggled \u0027isCurrent\u0027 over and over.",
+      "parentUuid": "b375a986_369138f3",
+      "range": {
+        "startLine": 24,
+        "startChar": 26,
+        "endLine": 24,
+        "endChar": 67
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05e1c441_f8420c47",
@@ -198,6 +222,30 @@
       "side": 1,
       "message": "If the context is deleted while current, you need to track that and defer the deletion until the next makeCurrent. We need to track the deletion state separately from the ref count I think.",
       "parentUuid": "7da2f10e_0ce35ae8",
+      "range": {
+        "startLine": 1537,
+        "startChar": 7,
+        "endLine": 1537,
+        "endChar": 59
+      },
+      "revId": "119a9958007cb01cc968e974dd3fe5e512a0ccaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "246bf6ba_015f8d63",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-31T05:30:06Z",
+      "side": 1,
+      "message": "Yup, I\u0027ve also added Context::mIsDestroyed (similar to Display::mIsTerminated), so we only destroy Contexts that have had eglDestroyContext() called for them.\n\nI\u0027ve also added the test EGLContextSharingTestNoFixture.EglDestoryContextManyTimesSameContext which does the multiple eglDestroyContext() calls on the same Context to verify we handle it correctly.",
+      "parentUuid": "1f28e73f_8da6e3ae",
       "range": {
         "startLine": 1537,
         "startChar": 7,
