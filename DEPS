@@ -632,8 +632,8 @@ deps = {
   'src/tests/restricted_traces/aliexpress': {
       'packages': [
         {
-            'package': 'angle/traces/aliexpress',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/aliexpress',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -642,8 +642,8 @@ deps = {
   'src/tests/restricted_traces/among_us': {
       'packages': [
         {
-            'package': 'angle/traces/among_us',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/among_us',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -652,8 +652,8 @@ deps = {
   'src/tests/restricted_traces/angry_birds_2_1500': {
       'packages': [
         {
-            'package': 'angle/traces/angry_birds_2_1500',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/angry_birds_2_1500',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -662,8 +662,8 @@ deps = {
   'src/tests/restricted_traces/arena_of_valor': {
       'packages': [
         {
-            'package': 'angle/traces/arena_of_valor',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/arena_of_valor',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -672,8 +672,8 @@ deps = {
   'src/tests/restricted_traces/asphalt_8': {
       'packages': [
         {
-            'package': 'angle/traces/asphalt_8',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/asphalt_8',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -682,8 +682,8 @@ deps = {
   'src/tests/restricted_traces/avakin_life': {
       'packages': [
         {
-            'package': 'angle/traces/avakin_life',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/avakin_life',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -692,8 +692,8 @@ deps = {
   'src/tests/restricted_traces/aztec_ruins': {
       'packages': [
         {
-            'package': 'angle/traces/aztec_ruins',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/aztec_ruins',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -702,8 +702,8 @@ deps = {
   'src/tests/restricted_traces/beach_buggy_racing': {
       'packages': [
         {
-            'package': 'angle/traces/beach_buggy_racing',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/beach_buggy_racing',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -712,8 +712,8 @@ deps = {
   'src/tests/restricted_traces/brawl_stars': {
       'packages': [
         {
-            'package': 'angle/traces/brawl_stars',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/brawl_stars',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -722,8 +722,8 @@ deps = {
   'src/tests/restricted_traces/bricks_breaker_quest': {
       'packages': [
         {
-            'package': 'angle/traces/bricks_breaker_quest',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/bricks_breaker_quest',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -732,8 +732,8 @@ deps = {
   'src/tests/restricted_traces/bubble_shooter': {
       'packages': [
         {
-            'package': 'angle/traces/bubble_shooter',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/bubble_shooter',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -742,8 +742,8 @@ deps = {
   'src/tests/restricted_traces/bus_simulator_indonesia': {
       'packages': [
         {
-            'package': 'angle/traces/bus_simulator_indonesia',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/bus_simulator_indonesia',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -752,8 +752,8 @@ deps = {
   'src/tests/restricted_traces/call_break_offline_card_game': {
       'packages': [
         {
-            'package': 'angle/traces/call_break_offline_card_game',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/call_break_offline_card_game',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -762,8 +762,8 @@ deps = {
   'src/tests/restricted_traces/candy_crush_500': {
       'packages': [
         {
-            'package': 'angle/traces/candy_crush_500',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/candy_crush_500',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -772,8 +772,8 @@ deps = {
   'src/tests/restricted_traces/candy_crush_soda_saga': {
       'packages': [
         {
-            'package': 'angle/traces/candy_crush_soda_saga',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/candy_crush_soda_saga',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -782,8 +782,8 @@ deps = {
   'src/tests/restricted_traces/car_parking_multiplayer': {
       'packages': [
         {
-            'package': 'angle/traces/car_parking_multiplayer',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/car_parking_multiplayer',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -792,8 +792,8 @@ deps = {
   'src/tests/restricted_traces/clash_of_clans': {
       'packages': [
         {
-            'package': 'angle/traces/clash_of_clans',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/clash_of_clans',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -802,8 +802,8 @@ deps = {
   'src/tests/restricted_traces/clash_royale': {
       'packages': [
         {
-            'package': 'angle/traces/clash_royale',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/clash_royale',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -812,8 +812,8 @@ deps = {
   'src/tests/restricted_traces/cod_mobile': {
       'packages': [
         {
-            'package': 'angle/traces/cod_mobile',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/cod_mobile',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -822,8 +822,8 @@ deps = {
   'src/tests/restricted_traces/coin_master': {
       'packages': [
         {
-            'package': 'angle/traces/coin_master',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/coin_master',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -832,8 +832,8 @@ deps = {
   'src/tests/restricted_traces/command_and_conquer_rivals': {
       'packages': [
         {
-            'package': 'angle/traces/command_and_conquer_rivals',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/command_and_conquer_rivals',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -842,8 +842,8 @@ deps = {
   'src/tests/restricted_traces/cookie_run_kingdom': {
       'packages': [
         {
-            'package': 'angle/traces/cookie_run_kingdom',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/cookie_run_kingdom',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -852,8 +852,8 @@ deps = {
   'src/tests/restricted_traces/disney_tsum_tsum': {
       'packages': [
         {
-            'package': 'angle/traces/disney_tsum_tsum',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/disney_tsum_tsum',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -862,8 +862,8 @@ deps = {
   'src/tests/restricted_traces/dr_driving': {
       'packages': [
         {
-            'package': 'angle/traces/dr_driving',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/dr_driving',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -872,8 +872,8 @@ deps = {
   'src/tests/restricted_traces/dragon_ball_legends': {
       'packages': [
         {
-            'package': 'angle/traces/dragon_ball_legends',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/dragon_ball_legends',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -882,8 +882,8 @@ deps = {
   'src/tests/restricted_traces/dragon_raja': {
       'packages': [
         {
-            'package': 'angle/traces/dragon_raja',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/dragon_raja',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -892,8 +892,8 @@ deps = {
   'src/tests/restricted_traces/efootball_pes_2021': {
       'packages': [
         {
-            'package': 'angle/traces/efootball_pes_2021',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/efootball_pes_2021',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -902,8 +902,8 @@ deps = {
   'src/tests/restricted_traces/egypt_1500': {
       'packages': [
         {
-            'package': 'angle/traces/egypt_1500',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/egypt_1500',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -912,8 +912,8 @@ deps = {
   'src/tests/restricted_traces/eight_ball_pool': {
       'packages': [
         {
-            'package': 'angle/traces/eight_ball_pool',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/eight_ball_pool',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -922,8 +922,8 @@ deps = {
   'src/tests/restricted_traces/extreme_car_driving_simulator': {
       'packages': [
         {
-            'package': 'angle/traces/extreme_car_driving_simulator',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/extreme_car_driving_simulator',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -932,8 +932,8 @@ deps = {
   'src/tests/restricted_traces/fallout_shelter_online': {
       'packages': [
         {
-            'package': 'angle/traces/fallout_shelter_online',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/fallout_shelter_online',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -942,8 +942,8 @@ deps = {
   'src/tests/restricted_traces/farm_heroes_saga': {
       'packages': [
         {
-            'package': 'angle/traces/farm_heroes_saga',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/farm_heroes_saga',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -952,8 +952,8 @@ deps = {
   'src/tests/restricted_traces/fate_grand_order': {
       'packages': [
         {
-            'package': 'angle/traces/fate_grand_order',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/fate_grand_order',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -962,8 +962,8 @@ deps = {
   'src/tests/restricted_traces/fifa_mobile': {
       'packages': [
         {
-            'package': 'angle/traces/fifa_mobile',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/fifa_mobile',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -972,8 +972,8 @@ deps = {
   'src/tests/restricted_traces/final_fantasy': {
       'packages': [
         {
-            'package': 'angle/traces/final_fantasy',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/final_fantasy',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -982,8 +982,8 @@ deps = {
   'src/tests/restricted_traces/free_fire': {
       'packages': [
         {
-            'package': 'angle/traces/free_fire',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/free_fire',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -992,8 +992,8 @@ deps = {
   'src/tests/restricted_traces/gardenscapes': {
       'packages': [
         {
-            'package': 'angle/traces/gardenscapes',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/gardenscapes',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1002,8 +1002,8 @@ deps = {
   'src/tests/restricted_traces/genshin_impact': {
       'packages': [
         {
-            'package': 'angle/traces/genshin_impact',
-            'version': 'version:2',
+            'package': 'experimental/google.com/jmadill/angle/traces/genshin_impact',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1012,8 +1012,8 @@ deps = {
   'src/tests/restricted_traces/google_maps': {
       'packages': [
         {
-            'package': 'angle/traces/google_maps',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/google_maps',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1022,8 +1022,8 @@ deps = {
   'src/tests/restricted_traces/happy_color': {
       'packages': [
         {
-            'package': 'angle/traces/happy_color',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/happy_color',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1032,8 +1032,8 @@ deps = {
   'src/tests/restricted_traces/hay_day': {
       'packages': [
         {
-            'package': 'angle/traces/hay_day',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/hay_day',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1042,8 +1042,8 @@ deps = {
   'src/tests/restricted_traces/hearthstone': {
       'packages': [
         {
-            'package': 'angle/traces/hearthstone',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/hearthstone',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1052,8 +1052,8 @@ deps = {
   'src/tests/restricted_traces/higgs_domino_island': {
       'packages': [
         {
-            'package': 'angle/traces/higgs_domino_island',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/higgs_domino_island',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1062,8 +1062,8 @@ deps = {
   'src/tests/restricted_traces/hill_climb_racing': {
       'packages': [
         {
-            'package': 'angle/traces/hill_climb_racing',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/hill_climb_racing',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1072,8 +1072,8 @@ deps = {
   'src/tests/restricted_traces/homescapes': {
       'packages': [
         {
-            'package': 'angle/traces/homescapes',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/homescapes',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1082,8 +1082,8 @@ deps = {
   'src/tests/restricted_traces/idle_heroes': {
       'packages': [
         {
-            'package': 'angle/traces/idle_heroes',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/idle_heroes',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1092,8 +1092,8 @@ deps = {
   'src/tests/restricted_traces/junes_journey': {
       'packages': [
         {
-            'package': 'angle/traces/junes_journey',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/junes_journey',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1102,8 +1102,8 @@ deps = {
   'src/tests/restricted_traces/kartrider_rush': {
       'packages': [
         {
-            'package': 'angle/traces/kartrider_rush',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/kartrider_rush',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1112,8 +1112,8 @@ deps = {
   'src/tests/restricted_traces/klondike_adventures': {
       'packages': [
         {
-            'package': 'angle/traces/klondike_adventures',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/klondike_adventures',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1122,8 +1122,8 @@ deps = {
   'src/tests/restricted_traces/league_of_legends_wild_rift': {
       'packages': [
         {
-            'package': 'angle/traces/league_of_legends_wild_rift',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/league_of_legends_wild_rift',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1132,8 +1132,8 @@ deps = {
   'src/tests/restricted_traces/lego_legacy': {
       'packages': [
         {
-            'package': 'angle/traces/lego_legacy',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/lego_legacy',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1142,8 +1142,8 @@ deps = {
   'src/tests/restricted_traces/lineage_m': {
       'packages': [
         {
-            'package': 'angle/traces/lineage_m',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/lineage_m',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1152,8 +1152,8 @@ deps = {
   'src/tests/restricted_traces/ludo_king': {
       'packages': [
         {
-            'package': 'angle/traces/ludo_king',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/ludo_king',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1162,8 +1162,8 @@ deps = {
   'src/tests/restricted_traces/magic_tiles_3': {
       'packages': [
         {
-            'package': 'angle/traces/magic_tiles_3',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/magic_tiles_3',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1172,8 +1172,8 @@ deps = {
   'src/tests/restricted_traces/manhattan_10': {
       'packages': [
         {
-            'package': 'angle/traces/manhattan_10',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/manhattan_10',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1182,8 +1182,8 @@ deps = {
   'src/tests/restricted_traces/manhattan_31': {
       'packages': [
         {
-            'package': 'angle/traces/manhattan_31',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/manhattan_31',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1192,8 +1192,8 @@ deps = {
   'src/tests/restricted_traces/mario_kart_tour': {
       'packages': [
         {
-            'package': 'angle/traces/mario_kart_tour',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/mario_kart_tour',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1202,8 +1202,8 @@ deps = {
   'src/tests/restricted_traces/marvel_contest_of_champions': {
       'packages': [
         {
-            'package': 'angle/traces/marvel_contest_of_champions',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/marvel_contest_of_champions',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1212,8 +1212,8 @@ deps = {
   'src/tests/restricted_traces/messenger_lite': {
       'packages': [
         {
-            'package': 'angle/traces/messenger_lite',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/messenger_lite',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1222,8 +1222,8 @@ deps = {
   'src/tests/restricted_traces/minecraft': {
       'packages': [
         {
-            'package': 'angle/traces/minecraft',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/minecraft',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1232,8 +1232,8 @@ deps = {
   'src/tests/restricted_traces/mobile_legends': {
       'packages': [
         {
-            'package': 'angle/traces/mobile_legends',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/mobile_legends',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1242,8 +1242,8 @@ deps = {
   'src/tests/restricted_traces/nba2k20_800': {
       'packages': [
         {
-            'package': 'angle/traces/nba2k20_800',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/nba2k20_800',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1252,8 +1252,8 @@ deps = {
   'src/tests/restricted_traces/one_punch_man': {
       'packages': [
         {
-            'package': 'angle/traces/one_punch_man',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/one_punch_man',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1262,8 +1262,8 @@ deps = {
   'src/tests/restricted_traces/plants_vs_zombies_2': {
       'packages': [
         {
-            'package': 'angle/traces/plants_vs_zombies_2',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/plants_vs_zombies_2',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1272,8 +1272,8 @@ deps = {
   'src/tests/restricted_traces/pokemon_go': {
       'packages': [
         {
-            'package': 'angle/traces/pokemon_go',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/pokemon_go',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1282,8 +1282,8 @@ deps = {
   'src/tests/restricted_traces/professional_baseball_spirits': {
       'packages': [
         {
-            'package': 'angle/traces/professional_baseball_spirits',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/professional_baseball_spirits',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1292,8 +1292,8 @@ deps = {
   'src/tests/restricted_traces/pubg_mobile_battle_royale': {
       'packages': [
         {
-            'package': 'angle/traces/pubg_mobile_battle_royale',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/pubg_mobile_battle_royale',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1302,8 +1302,8 @@ deps = {
   'src/tests/restricted_traces/pubg_mobile_lite': {
       'packages': [
         {
-            'package': 'angle/traces/pubg_mobile_lite',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/pubg_mobile_lite',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1312,8 +1312,8 @@ deps = {
   'src/tests/restricted_traces/pubg_mobile_skydive': {
       'packages': [
         {
-            'package': 'angle/traces/pubg_mobile_skydive',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/pubg_mobile_skydive',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1322,8 +1322,8 @@ deps = {
   'src/tests/restricted_traces/ragnarok_m_eternal_love': {
       'packages': [
         {
-            'package': 'angle/traces/ragnarok_m_eternal_love',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/ragnarok_m_eternal_love',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1332,8 +1332,8 @@ deps = {
   'src/tests/restricted_traces/raid_shadow_legends': {
       'packages': [
         {
-            'package': 'angle/traces/raid_shadow_legends',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/raid_shadow_legends',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1342,8 +1342,8 @@ deps = {
   'src/tests/restricted_traces/real_commando_secret_mission': {
       'packages': [
         {
-            'package': 'angle/traces/real_commando_secret_mission',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/real_commando_secret_mission',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1352,8 +1352,8 @@ deps = {
   'src/tests/restricted_traces/real_cricket_20': {
       'packages': [
         {
-            'package': 'angle/traces/real_cricket_20',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/real_cricket_20',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1362,8 +1362,8 @@ deps = {
   'src/tests/restricted_traces/real_gangster_crime': {
       'packages': [
         {
-            'package': 'angle/traces/real_gangster_crime',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/real_gangster_crime',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1372,8 +1372,8 @@ deps = {
   'src/tests/restricted_traces/rise_of_kingdoms': {
       'packages': [
         {
-            'package': 'angle/traces/rise_of_kingdoms',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/rise_of_kingdoms',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1382,8 +1382,8 @@ deps = {
   'src/tests/restricted_traces/romancing_saga': {
       'packages': [
         {
-            'package': 'angle/traces/romancing_saga',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/romancing_saga',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1392,8 +1392,8 @@ deps = {
   'src/tests/restricted_traces/rope_hero_vice_town': {
       'packages': [
         {
-            'package': 'angle/traces/rope_hero_vice_town',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/rope_hero_vice_town',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1402,8 +1402,8 @@ deps = {
   'src/tests/restricted_traces/saint_seiya_awakening': {
       'packages': [
         {
-            'package': 'angle/traces/saint_seiya_awakening',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/saint_seiya_awakening',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1412,8 +1412,8 @@ deps = {
   'src/tests/restricted_traces/sakura_school_simulator': {
       'packages': [
         {
-            'package': 'angle/traces/sakura_school_simulator',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/sakura_school_simulator',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1422,8 +1422,8 @@ deps = {
   'src/tests/restricted_traces/scrabble_go': {
       'packages': [
         {
-            'package': 'angle/traces/scrabble_go',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/scrabble_go',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1432,8 +1432,8 @@ deps = {
   'src/tests/restricted_traces/shadow_fight_2': {
       'packages': [
         {
-            'package': 'angle/traces/shadow_fight_2',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/shadow_fight_2',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1442,8 +1442,8 @@ deps = {
   'src/tests/restricted_traces/slingshot_test1': {
       'packages': [
         {
-            'package': 'angle/traces/slingshot_test1',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/slingshot_test1',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1452,8 +1452,8 @@ deps = {
   'src/tests/restricted_traces/slingshot_test2': {
       'packages': [
         {
-            'package': 'angle/traces/slingshot_test2',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/slingshot_test2',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1462,8 +1462,8 @@ deps = {
   'src/tests/restricted_traces/sniper_3d': {
       'packages': [
         {
-            'package': 'angle/traces/sniper_3d',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/sniper_3d',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1472,8 +1472,8 @@ deps = {
   'src/tests/restricted_traces/sonic_the_hedgehog': {
       'packages': [
         {
-            'package': 'angle/traces/sonic_the_hedgehog',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/sonic_the_hedgehog',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1482,8 +1482,8 @@ deps = {
   'src/tests/restricted_traces/standoff_2': {
       'packages': [
         {
-            'package': 'angle/traces/standoff_2',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/standoff_2',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1492,8 +1492,8 @@ deps = {
   'src/tests/restricted_traces/subway_princess_runner': {
       'packages': [
         {
-            'package': 'angle/traces/subway_princess_runner',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/subway_princess_runner',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1502,8 +1502,8 @@ deps = {
   'src/tests/restricted_traces/subway_surfers': {
       'packages': [
         {
-            'package': 'angle/traces/subway_surfers',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/subway_surfers',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1512,8 +1512,8 @@ deps = {
   'src/tests/restricted_traces/summoners_war': {
       'packages': [
         {
-            'package': 'angle/traces/summoners_war',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/summoners_war',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1522,8 +1522,8 @@ deps = {
   'src/tests/restricted_traces/talking_tom_hero_dash': {
       'packages': [
         {
-            'package': 'angle/traces/talking_tom_hero_dash',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/talking_tom_hero_dash',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1532,8 +1532,8 @@ deps = {
   'src/tests/restricted_traces/temple_run_2': {
       'packages': [
         {
-            'package': 'angle/traces/temple_run_2',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/temple_run_2',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1542,8 +1542,8 @@ deps = {
   'src/tests/restricted_traces/temple_run_300': {
       'packages': [
         {
-            'package': 'angle/traces/temple_run_300',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/temple_run_300',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1552,8 +1552,8 @@ deps = {
   'src/tests/restricted_traces/toon_blast': {
       'packages': [
         {
-            'package': 'angle/traces/toon_blast',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/toon_blast',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1562,8 +1562,8 @@ deps = {
   'src/tests/restricted_traces/township': {
       'packages': [
         {
-            'package': 'angle/traces/township',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/township',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1572,8 +1572,8 @@ deps = {
   'src/tests/restricted_traces/trex_200': {
       'packages': [
         {
-            'package': 'angle/traces/trex_200',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/trex_200',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1582,8 +1582,8 @@ deps = {
   'src/tests/restricted_traces/whatsapp': {
       'packages': [
         {
-            'package': 'angle/traces/whatsapp',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/whatsapp',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1592,8 +1592,8 @@ deps = {
   'src/tests/restricted_traces/words_with_friends_2': {
       'packages': [
         {
-            'package': 'angle/traces/words_with_friends_2',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/words_with_friends_2',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1602,8 +1602,8 @@ deps = {
   'src/tests/restricted_traces/wordscapes': {
       'packages': [
         {
-            'package': 'angle/traces/wordscapes',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/wordscapes',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1612,8 +1612,8 @@ deps = {
   'src/tests/restricted_traces/world_of_kings': {
       'packages': [
         {
-            'package': 'angle/traces/world_of_kings',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/world_of_kings',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1622,8 +1622,8 @@ deps = {
   'src/tests/restricted_traces/world_of_tanks_blitz': {
       'packages': [
         {
-            'package': 'angle/traces/world_of_tanks_blitz',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/world_of_tanks_blitz',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1632,8 +1632,8 @@ deps = {
   'src/tests/restricted_traces/world_war_doh': {
       'packages': [
         {
-            'package': 'angle/traces/world_war_doh',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/world_war_doh',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
@@ -1642,8 +1642,8 @@ deps = {
   'src/tests/restricted_traces/worms_zone_io': {
       'packages': [
         {
-            'package': 'angle/traces/worms_zone_io',
-            'version': 'version:1',
+            'package': 'experimental/google.com/jmadill/angle/traces/worms_zone_io',
+            'version': 'version:3',
         },
       ],
       'dep_type': 'cipd',
