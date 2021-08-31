@@ -2338,7 +2338,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     ASSERT(mState.hasBeenBoundAsAttachment());
-    if (!(mImageUsageFlags & kAttachmentImageFlags))
+    if (!mRequiresRenderableFormat)
     {
         const gl::Texture::DirtyBits dirtyBits(gl::Texture::DIRTY_BIT_BOUND_AS_ATTACHMENT);
         ANGLE_TRY(syncState(context, dirtyBits, gl::Command::Other));
@@ -3365,14 +3365,14 @@ angle::Result TextureVk::ensureRenderableFormat(ContextVk *contextVk)
         return angle::Result::Continue;
     }
 
-    if (mImageUsageFlags & kAttachmentImageFlags)
+    RendererVk *renderer     = contextVk->getRenderer();
+    const vk::Format &format = getBaseLevelFormat(renderer);
+    if (format.getActualImageFormatID(true) == format.getActualImageFormatID(false))
     {
-        // If image format is already render-able, nothing to do.
+        // If renderable or not is going to pick the same format, nothing to do.
         return angle::Result::Continue;
     }
 
-    RendererVk *renderer     = contextVk->getRenderer();
-    const vk::Format &format = getBaseLevelFormat(renderer);
     if (!mImage->valid())
     {
         // If we have staged update and it was encoded with different format, we need to flush out
