@@ -479,6 +479,10 @@ bool ValidateDiscardFramebufferBase(const Context *context,
 bool ValidateInsertEventMarkerEXT(const Context *context, GLsizei length, const char *marker);
 bool ValidatePushGroupMarkerEXT(const Context *context, GLsizei length, const char *marker);
 
+bool ValidateImageTargetTextureCommon(const Context *context,
+                                      TextureType type,
+                                      GLeglImageOES image,
+                                      bool _2DOnly);
 bool ValidateEGLImageTargetTexture2DOES(const Context *context,
                                         TextureType type,
                                         GLeglImageOES image);
