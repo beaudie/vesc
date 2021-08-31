@@ -1861,6 +1861,31 @@ angle::Result Texture::setEGLImageTarget(Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result Texture::setStorageEGLImageTarget(Context *context,
+                                                TextureType type,
+                                                egl::Image *image,
+                                                const GLint *attrib_list)
+{
+
+    ASSERT(type == mState.mType);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(orphanImages(context));
+
+    ANGLE_TRY(mTexture->setEGLImageTarget(context, type, image));
+
+    mState.mImmutableFormat = true;
+    setTargetImage(context, image);
+
+    mState.clearImageDescs();
+    mState.setImageDesc(NonCubeTextureTypeToTarget(type), 0,
+                        ImageDesc(image->getExtents(), image->getFormat(), InitState::MayNeedInit));
+    signalDirtyStorage(InitState::MayNeedInit);
+
+    return angle::Result::Continue;
+}
+
 Extents Texture::getAttachmentSize(const ImageIndex &imageIndex) const
 {
     // As an ImageIndex that represents an entire level of a cube map corresponds to 6 ImageDescs,

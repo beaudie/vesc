@@ -8,6 +8,7 @@
 #include "libANGLE/validationESEXT_autogen.h"
 
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/MemoryObject.h"
 #include "libANGLE/validationES.h"
@@ -2252,8 +2253,15 @@ bool ValidateEGLImageTargetTextureStorageEXT(const Context *context,
                                              GLeglImageOES image,
                                              const GLint *attrib_list)
 {
-    UNREACHABLE();
-    return false;
+    Texture *tex = context->getTexture({texture});
+    if (tex == nullptr)
+    {
+        context->validationError(GL_INVALID_OPERATION, kInvalidTextureName);
+        return false;
+    }
+
+    return ValidateEGLImageTargetTexStorageEXT(context, ToGLenum(tex->getState().getType()), image,
+                                               attrib_list);
 }
 
 bool ValidateEGLImageTargetTexStorageEXT(const Context *context,
@@ -2261,8 +2269,74 @@ bool ValidateEGLImageTargetTexStorageEXT(const Context *context,
                                          GLeglImageOES image,
                                          const GLint *attrib_list)
 {
-    UNREACHABLE();
-    return false;
-}
+    if (!context->getExtensions().EGLImageStorageEXT)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
 
+    if (!ValidateImageTargetTextureCommon(context, FromGLenum<TextureType>(target), image, false))
+    {
+        return false;
+    }
+
+    // attrib list validation
+    if (attrib_list != nullptr && attrib_list[0] != GL_NONE)
+    {
+        context->validationError(GL_INVALID_VALUE, kAttributeListNotNull);
+        return false;
+    }
+
+    egl::Image *imageObject     = static_cast<egl::Image *>(image);
+    gl::TextureTarget texTarget = FromGLenum<TextureTarget>(target);
+
+    GLsizei level         = static_cast<GLsizei>(1);
+    GLsizei width         = static_cast<GLsizei>(imageObject->getWidth());
+    GLsizei height        = static_cast<GLsizei>(imageObject->getHeight());
+    GLenum internalformat = imageObject->getFormat().info->sizedInternalFormat;
+
+    // image source type validation
+    switch (target)
+    {
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_EXTERNAL_OES:
+        {
+            if (imageObject->getSourceType() != EGL_GL_TEXTURE_2D_KHR)
+            {
+                context->validationError(GL_INVALID_OPERATION, kEGLImageTextureTargetMismatch);
+                return false;
+            }
+
+            return ValidateES3TexStorage2DParameters(context, gl::TextureType::_2D, level,
+                                                     internalformat, width, height, 1);
+        }
+
+        case GL_TEXTURE_3D:
+        {
+            if (imageObject->getSourceType() != EGL_GL_TEXTURE_3D_KHR)
+            {
+                context->validationError(GL_INVALID_OPERATION, kEGLImageTextureTargetMismatch);
+                return false;
+            }
+            return ValidateES3TexStorage3DParameters(context, TextureTargetToType(texTarget), level,
+                                                     internalformat, width, height, 1);
+        }
+        case GL_TEXTURE_2D_ARRAY:
+        {
+            // only images created from EGL_NATIVE_BUFFER_ANDROID
+            // can have more than 1 layer
+            if (imageObject->getSourceType() != EGL_NATIVE_BUFFER_ANDROID)
+            {
+                context->validationError(GL_INVALID_OPERATION, kEGLImageTextureTargetMismatch);
+                return false;
+            }
+
+            return ValidateES3TexStorage3DParameters(context, TextureTargetToType(texTarget), level,
+                                                     internalformat, width, height, 1);
+        }
+        default:
+            context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+            return false;
+    }
+}
 }  // namespace gl
