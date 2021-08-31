@@ -34,6 +34,24 @@
       "parentUuid": "140f99d5_07d749ad",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a4c0502_6d0fbd46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-08-31T20:55:49Z",
+      "side": 1,
+      "message": "This change will ensure that whenever we call setLabel, we send the label to D3D right away without having to perform other calls which cause syncState to be called.",
+      "parentUuid": "dd027308_0d3216cb",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
