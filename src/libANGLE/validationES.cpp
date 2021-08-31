@@ -4577,16 +4577,11 @@ bool ValidatePushGroupMarkerEXT(const Context *context, GLsizei length, const ch
     return true;
 }
 
-bool ValidateEGLImageTargetTexture2DOES(const Context *context,
-                                        TextureType type,
-                                        GLeglImageOES image)
+bool ValidateImageTargetTextureCommon(const Context *context,
+                                      TextureType type,
+                                      GLeglImageOES image,
+                                      bool _2DOnly)
 {
-    if (!context->getExtensions().EGLImageOES && !context->getExtensions().EGLImageExternalOES)
-    {
-        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
-        return false;
-    }
-
     switch (type)
     {
         case TextureType::_2D:
@@ -4611,8 +4606,34 @@ bool ValidateEGLImageTargetTexture2DOES(const Context *context,
             break;
 
         default:
-            context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
-            return false;
+            if (!_2DOnly)
+            {
+                switch (type)
+                {
+                    case TextureType::_3D:
+                        if (!context->getExtensions().texture3DOES)
+                        {
+                            context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                            return false;
+                        }
+                        break;
+                    case TextureType::CubeMap:
+                    case TextureType::CubeMapArray:
+                    {
+                        context->validationError(GL_INVALID_OPERATION,
+                                                 kEGLImageCubeMapNotSupported);
+                        return false;
+                    }
+                    default:
+                        context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+                        return false;
+                }
+            }
+            else
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+                return false;
+            }
     }
 
     egl::Image *imageObject = static_cast<egl::Image *>(image);
@@ -4658,6 +4679,19 @@ bool ValidateEGLImageTargetTexture2DOES(const Context *context,
     }
 
     return true;
+}
+
+bool ValidateEGLImageTargetTexture2DOES(const Context *context,
+                                        TextureType type,
+                                        GLeglImageOES image)
+{
+    if (!context->getExtensions().eglImageOES && !context->getExtensions().eglImageExternalOES)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return ValidateImageTargetTextureCommon(context, type, image, true);
 }
 
 bool ValidateEGLImageTargetRenderbufferStorageOES(const Context *context,

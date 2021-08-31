@@ -45,6 +45,10 @@ bool ValidTextureExternalTarget(const Context *context, TextureTarget target);
 bool ValidTexture2DDestinationTarget(const Context *context, TextureTarget target);
 bool ValidTexture3DDestinationTarget(const Context *context, TextureTarget target);
 bool ValidTexLevelDestinationTarget(const Context *context, TextureType type);
+bool ValidateImageTargetTextureCommon(const Context *context,
+                                      TextureType type,
+                                      GLeglImageOES image,
+                                      bool _2DOnly);
 bool ValidFramebufferTarget(const Context *context, GLenum target);
 bool ValidMipLevel(const Context *context, TextureType type, GLint level);
 bool ValidImageSizeParameters(const Context *context,
