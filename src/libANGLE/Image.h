@@ -163,9 +163,11 @@ class Image final : public RefCountObject, public LabeledObject
     bool isYUV() const;
     size_t getWidth() const;
     size_t getHeight() const;
+    gl::Extents getExtents() const { return mState.size; }
     bool isLayered() const;
     size_t getSamples() const;
     bool hasProtectedContent() const;
+    EGLenum getSourceType() const;
 
     Error initialize(const Display *display);
 
