@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90cd7d12_17e35807",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-31T20:33:15Z",
+      "side": 1,
+      "message": "PTAL. The GOLD failures are mostly off by ones, except for brawl_star, which looks like the new image is actually correct w.r.t to shadows while the glslang path is incorrect (at least the new image visually looks better, and matches what I see on my desktop). Could be this bug: https://github.com/KhronosGroup/glslang/issues/2740",
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
