@@ -3,6 +3,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a651bf97_af575b24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-31T14:00:16Z",
+      "side": 1,
+      "message": "Design approach generally looks good Tim, some suggestions below. One meta-request - can you split this into two changes? The API change first, then the new feature to ghost buffers. If you have time.",
+      "revId": "72c5bd853697acc04b2dd73693c394026b655859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b0629db_1f4d95dc",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-31T14:00:16Z",
+      "side": 1,
+      "message": "nit: I think having retainRead() and retainReadWrite() would be easier than passing around the type, unless I\u0027m mistaken about how far the call chain goes.",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 5
+      },
+      "revId": "72c5bd853697acc04b2dd73693c394026b655859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7a6b179_b718f68f",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-08-31T14:00:16Z",
+      "side": 1,
+      "message": "nit: I\u0027d suggest you rename ResourceUse::mUse to mReadWriteUse and introduce this variable as mReadOnlyUse or mReadUse. That way the inheritance abstraction is pretty clear. Alternately you could redo the whole class and don\u0027t use inheritance.",
+      "range": {
+        "startLine": 236,
+        "startChar": 22,
+        "endLine": 236,
+        "endChar": 31
+      },
+      "revId": "72c5bd853697acc04b2dd73693c394026b655859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f2c59e37_908ceea5",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 29
