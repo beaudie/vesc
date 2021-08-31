@@ -70,6 +70,24 @@
       "parentUuid": "f5855bfa_9becffa7",
       "revId": "6debe2eac1de570a79c311bc0511e56e61fa6136",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b23e494b_a070c8de",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-08-31T17:21:50Z",
+      "side": 1,
+      "message": "I added the test, but it passes with and without the fix.\n\nWhile the new version does look cleaner, I\u0027m still not entirely understanding what the bug was in the initial version, so I\u0027m not sure what case I should be trying to hit.\n\nLet me know if there are any tweaks you\u0027d like to it.",
+      "parentUuid": "ce4c66b0_055497c3",
+      "revId": "6debe2eac1de570a79c311bc0511e56e61fa6136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
