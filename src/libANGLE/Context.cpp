@@ -3464,6 +3464,9 @@ Extensions Context::generateSupportedExtensions() const
         // when the context version is lower than 3.0
         supportedExtensions.vertexAttribType1010102OES = false;
 
+        // GL_EXT_EGL_image_storage
+        supportedExtensions.eglImageStorageEXT = false;
+
         // GL_EXT_YUV_target requires ESSL3
         supportedExtensions.yuvTargetEXT = false;
 
@@ -8657,6 +8660,24 @@ void Context::importSemaphoreZirconHandle(SemaphoreID semaphore,
     Semaphore *semaphoreObject = getSemaphore(semaphore);
     ASSERT(semaphoreObject != nullptr);
     ANGLE_CONTEXT_TRY(semaphoreObject->importZirconHandle(this, handleType, handle));
+}
+
+void Context::eGLImageTargetTexStorage(GLenum target, GLeglImageOES image, const GLint *attrib_list)
+{
+    Texture *texture        = getTextureByType(FromGLenum<TextureType>(target));
+    egl::Image *imageObject = static_cast<egl::Image *>(image);
+    ANGLE_CONTEXT_TRY(texture->setStorageEGLImageTarget(this, FromGLenum<TextureType>(target),
+                                                        imageObject, attrib_list));
+}
+
+void Context::eGLImageTargetTextureStorage(GLuint texture,
+                                           GLeglImageOES image,
+                                           const GLint *attrib_list)
+{
+    Texture *tex            = getTexture({texture});
+    egl::Image *imageObject = static_cast<egl::Image *>(image);
+    ANGLE_CONTEXT_TRY(
+        tex->setStorageEGLImageTarget(this, tex->getState().getType(), imageObject, attrib_list));
 }
 
 void Context::eGLImageTargetTexture2D(TextureType target, GLeglImageOES image)
