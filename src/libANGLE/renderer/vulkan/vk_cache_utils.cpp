@@ -1772,6 +1772,14 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     VkPipelineVertexInputDivisorStateCreateInfoEXT divisorState = {};
     divisorState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     divisorState.pVertexBindingDivisors = divisorDesc.data();
+
+    gl::AttribArray<GLenum> attributeTypes;
+    for (sh::ShaderVariable attribute :
+         contextVk->getState().getProgramExecutable()->getProgramInputs())
+    {
+        attributeTypes[attribute.location] = attribute.type;
+    }
+
     for (size_t attribIndexSizeT : activeAttribLocationsMask)
     {
         const uint32_t attribIndex = static_cast<uint32_t>(attribIndexSizeT);
@@ -1832,9 +1840,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
                 vkFormat = convertedFormat.actualBufferVkFormat(packedAttrib.compressed);
             }
 
-            GLenum programAttributeType =
-                contextVk->getState().getProgramExecutable()->getProgramInputs()[attribIndex].type;
-            GLuint attribSize = gl::GetVertexFormatFromID(formatID).components;
+            GLenum programAttributeType = attributeTypes[attribIndex];
+            GLuint attribSize           = gl::GetVertexFormatFromID(formatID).components;
             GLuint shaderVarSize =
                 static_cast<GLuint>(gl::VariableColumnCount(programAttributeType));
 
