@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5789f460_9021f704",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2779,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-31T02:34:10Z",
+      "side": 1,
+      "message": "\u003e Making this change breaks several tests in dEQP.GLES31/functional_texture_texture_buffer_render_modify_as_*\n\nI don\u0027t know what bug is in effect here, but using ReadWrite for texture buffers will likely have undesired effects on performance. It may be that using the correct use type here is uncovering some other bug somewhere, and I think it\u0027s worth figuring it out.",
+      "parentUuid": "9f9362a5_e23a3012",
+      "range": {
+        "startLine": 2779,
+        "startChar": 42,
+        "endLine": 2779,
+        "endChar": 72
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d58d9457_c5d1dd0a",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 24
@@ -261,6 +285,30 @@
       "side": 1,
       "message": "I\u0027m imagining something like:\n\n  1. buffer.retainBuffer(ReadWrite)\n  2. buffer.retainBuffer(Read)\n  3. buffer.release() \u003c\u003c--- this is meant to release the Read access\n  4. isCurrentlyInUseForWrite()\n\nIf we always mWriteUse.release(), any following calls to isCurrentlyInUseForWrite() could get the wrong value if there are 2 retainBuffer() calls, since the release() can\u0027t know which retainBuffer() call the release() corresponds to.   Meaning, it can\u0027t know whether or not to skip the mWriteUse.release() because the buffer is actually still in use for ReadWrite.\n\nHowever, if the only way to release() a buffer is with glDeleteBuffers(), then we should be fine since we can\u0027t delete a buffer and then later submit commands that still use it.   That means the sequence of retainBuffer()/release() calls can\u0027t happen.   Looking at the code, this seems to the case, but I can\u0027t say it\u0027s true for certain.\n\n\u003e Also, a question is, why is it necessary to release the write use, but not the read use here?\n\nThe read use is released in collectGarbageAndReinit() just before this call.",
       "parentUuid": "501698fe_2748a448",
+      "range": {
+        "startLine": 3673,
+        "startChar": 58,
+        "endLine": 3673,
+        "endChar": 99
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ad5c1c7_a51e850b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-31T02:34:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure I totally follow, maybe we can GVC and talk about it. But generally this sequence doesn\u0027t make sense:\n\n  3. buffer.release() \u003c\u003c--- this is meant to release the Read access\n  4. isCurrentlyInUseForWrite()\n\nBecause if you already released the buffer, you shouldn\u0027t be accessing it anymore (be it through glDeleteBuffers, buffer ghosting, vk::DynamicBuffer freeing buffers etc), i.e. if the buffer is released already, there\u0027s no reason to want to know if it\u0027s in use.",
+      "parentUuid": "483c06e6_be365193",
       "range": {
         "startLine": 3673,
         "startChar": 58,

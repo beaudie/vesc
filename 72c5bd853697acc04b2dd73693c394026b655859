@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2c59e37_908ceea5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2868,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-08-31T02:34:10Z",
+      "side": 1,
+      "message": "The srcBuffer is `Read` :)",
+      "range": {
+        "startLine": 2868,
+        "startChar": 82,
+        "endLine": 2868,
+        "endChar": 91
+      },
+      "revId": "72c5bd853697acc04b2dd73693c394026b655859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
