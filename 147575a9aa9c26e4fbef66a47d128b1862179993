@@ -70,6 +70,24 @@
       "parentUuid": "7a4c0502_6d0fbd46",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "689ba72b_e032db24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-08-31T21:37:24Z",
+      "side": 1,
+      "message": "@Jamie, the scenario is you make GL calls such that the storage is created and then change the label by calling the KHR function. With the sync state approach, you have to perform additional GL work so that syncState can get called to update the label. With Aditya\u0027s latest change, the label gets updated with D3D right away.",
+      "parentUuid": "ff28b650_5a5a0090",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
