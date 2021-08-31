@@ -38,6 +38,7 @@ constexpr char kRenderbufferExt[]                = "EGL_KHR_gl_renderbuffer_imag
 constexpr char kCubemapExt[]                     = "EGL_KHR_gl_texture_cubemap_image";
 constexpr char kImageGLColorspaceExt[]           = "EGL_EXT_image_gl_colorspace";
 constexpr char kEGLImageArrayExt[]               = "GL_EXT_EGL_image_array";
+constexpr char kEGLImageStorageExt[]             = "GL_EXT_EGL_image_storage";
 constexpr char kEGLAndroidImageNativeBufferExt[] = "EGL_ANDROID_image_native_buffer";
 constexpr EGLint kDefaultAttribs[]               = {
     EGL_IMAGE_PRESERVED,
@@ -170,6 +171,16 @@ class ImageTest : public ANGLETest
             "{\n"
             "    fragColor = texture(tex2DArray, vec3(texcoord.x, texcoord.y, float(layer)));\n"
             "}\n";
+        constexpr char kTexture3DFS[] =
+            "#version 300 es\n"
+            "precision highp float;\n"
+            "uniform highp sampler3D tex3D;\n"
+            "in vec2 texcoord;\n"
+            "out vec4 fragColor;\n"
+            "void main()\n"
+            "{\n"
+            "    fragColor = texture(tex3D, vec3(texcoord, 0.0));\n"
+            "}\n";
         constexpr char kTextureExternalFS[] =
             "#extension GL_OES_EGL_image_external : require\n"
             "precision highp float;\n"
@@ -236,6 +247,13 @@ class ImageTest : public ANGLETest
                 glGetUniformLocation(m2DArrayTextureProgram, "tex2DArray");
             m2DArrayTextureLayerUniformLocation =
                 glGetUniformLocation(m2DArrayTextureProgram, "layer");
+            m3DTextureProgram = CompileProgram(kVS2DArray, kTexture3DFS);
+            if (m3DTextureProgram == 0)
+            {
+                FAIL() << "shader compilation failed.";
+            }
+
+            m3DTextureUniformLocation = glGetUniformLocation(m3DTextureProgram, "tex3D");
         }
 
         if (IsGLExtensionEnabled("GL_OES_EGL_image_external"))
@@ -449,7 +467,26 @@ class ImageTest : public ANGLETest
         ASSERT_GL_NO_ERROR();
     }
 
-    void createEGLImageTargetTextureExternal(EGLImageKHR image, GLTexture &targetTexture)
+    void createEGLImageTargetTextureStorage(EGLImageKHR image,
+                                            GLenum targetType,
+                                            GLuint *outTargetTexture)
+    {
+        // Create a target texture from the image
+        GLuint target;
+        glGenTextures(1, &target);
+        glBindTexture(targetType, target);
+        glEGLImageTargetTexStorageEXT(targetType, image, nullptr);
+
+        // Disable mipmapping
+        glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        ASSERT_GL_NO_ERROR();
+
+        *outTargetTexture = target;
+    }
+
+    void createEGLImageTargetTextureExternal(EGLImageKHR image, GLuint *outTargetTexture)
     {
         // Create a target texture from the image
         glBindTexture(GL_TEXTURE_EXTERNAL_OES, targetTexture);
@@ -680,6 +717,11 @@ class ImageTest : public ANGLETest
     void SourceNativeClientBufferTargetRenderbuffer_helper(const EGLint *attribs);
     void Source2DTarget2D_helper(const EGLint *attribs);
     void Source2DTarget2DArray_helper(const EGLint *attribs);
+
+    void Source2DTarget2DStorage_helper(bool withColorspace);
+    void Source2DTargetExternalStorage_helper(bool withColorspace);
+    void Source3DTarget3DStorage_helper(bool withColorspace);
+
     void Source2DTargetRenderbuffer_helper(const EGLint *attribs);
     void Source2DTargetExternal_helper(const EGLint *attribs);
     void Source2DTargetExternalESSL3_helper(const EGLint *attribs);
@@ -730,7 +772,13 @@ class ImageTest : public ANGLETest
                              m2DArrayTextureUniformLocation);
     }
 
-    void verifyResultsExternal(GLTexture &texture, const GLubyte data[4])
+    void verifyResults3D(GLuint texture, GLubyte data[4])
+    {
+        verifyResultsTexture(texture, data, GL_TEXTURE_3D, m3DTextureProgram,
+                             m3DTextureUniformLocation);
+    }
+
+    void verifyResultsExternal(GLuint texture, GLubyte data[4])
     {
         verifyResultsTexture(texture, data, GL_TEXTURE_EXTERNAL_OES, mTextureExternalProgram,
                              mTextureExternalUniformLocation);
@@ -928,6 +976,8 @@ class ImageTest : public ANGLETest
 
     bool hasEglImageArrayExt() const { return IsGLExtensionEnabled(kEGLImageArrayExt); }
 
+    bool hasEglImageStorageExt() const { return IsGLExtensionEnabled(kEGLImageStorageExt); }
+
     bool hasOESExt() const { return IsGLExtensionEnabled(kOESExt); }
 
     bool hasExternalExt() const { return IsGLExtensionEnabled(kExternalExt); }
@@ -992,9 +1042,11 @@ class ImageTest : public ANGLETest
     };
     GLuint mTextureProgram;
     GLuint m2DArrayTextureProgram;
+    GLuint m3DTextureProgram;
     GLint mTextureUniformLocation;
     GLuint m2DArrayTextureUniformLocation;
     GLuint m2DArrayTextureLayerUniformLocation;
+    GLuint m3DTextureUniformLocation;
 
     GLuint mTextureExternalProgram        = 0;
     GLint mTextureExternalUniformLocation = -1;
@@ -1633,6 +1685,50 @@ TEST_P(ImageTest, ValidationGLEGLImageExternalESSL3)
     EXPECT_GL_NO_ERROR();
 }
 
+// Check validation from the GL_EXT_EGL_image_storage extension
+TEST_P(ImageTest, ValidationGLEGLImageStorage)
+{
+    ANGLE_SKIP_TEST_IF(!hasEglImageStorageExt());
+
+    // Make sure this extension is not exposed without ES3.
+    ASSERT_GE(getClientMajorVersion(), 3);
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt() || !has3DTextureExt());
+
+    // Create the Image
+    GLuint source2D;
+    EGLImageKHR image2D;
+    createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, kDefaultAttribs, kLinearColor,
+                                  &source2D, &image2D);
+
+    // If <image> is NULL, the error INVALID_VALUE is generated.  If <image> is
+    // neither NULL nor a valid value, the behavior is undefined, up to and
+    // including program termination.
+    glEGLImageTargetTexStorageEXT(GL_TEXTURE_2D, nullptr, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // If <target> is TEXTURE_CUBE_MAP or TEXTURE_CUBE_MAP_ARRAY, the error INVALID_OPERATION is
+    // generated.
+    glEGLImageTargetTexStorageEXT(GL_TEXTURE_CUBE_MAP, image2D, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // If the GL is unable to specify a texture object using the supplied
+    // eglImageOES <image> the error INVALID_OPERATION is generated.
+    glEGLImageTargetTexStorageEXT(GL_TEXTURE_3D, image2D, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    GLint nonNullAttrib[1] = {GL_TEXTURE_2D};
+
+    // If <attrib_list> is neither NULL nor a pointer to the value GL_NONE, the
+    // error INVALID_VALUE is generated.
+    glEGLImageTargetTexStorageEXT(GL_TEXTURE_2D, image2D, nonNullAttrib);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Clean up
+    glDeleteTextures(1, &source2D);
+    eglDestroyImageKHR(getEGLWindow()->getDisplay(), image2D);
+}
+
 TEST_P(ImageTest, Source2DTarget2D)
 {
     Source2DTarget2D_helper(kDefaultAttribs);
@@ -1822,6 +1918,166 @@ void ImageTest::Source2DTarget2DArray_helper(const EGLint *attribs)
 
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), image);
+}
+
+// Testing source 2D texture, target 2D texture storage and trying to orphan target
+TEST_P(ImageTestES3, Source2DTarget2DStorage)
+{
+    Source2DTarget2DStorage_helper(false);
+}
+
+// Testing source 2D texture, target 2D texture storage with colorspace and trying to orphan target
+TEST_P(ImageTestES3, Source2DTarget2DStorage_Colorspace)
+{
+    ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
+    Source2DTarget2DStorage_helper(true);
+}
+
+void ImageTest::Source2DTarget2DStorage_helper(bool withColorspace)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt() ||
+                       !hasEglImageStorageExt());
+
+    GLubyte data[4] = {255, 0, 255, 255};
+
+    GLuint source;
+    EGLImageKHR image = NULL;
+    GLuint target;
+
+    const EGLint *attributes;
+    if (withColorspace)
+        attributes = kColorspaceAttribs;
+    else
+        attributes = kDefaultAttribs;
+
+    // Create the Image
+    createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, attributes, data, &source,
+                                  &image);
+
+    // Create the texture target
+    createEGLImageTargetTextureStorage(image, GL_TEXTURE_2D, &target);
+
+    // Expect that the target texture has the same color as the source texture
+    verifyResults2D(target, data);
+
+    // Try to orphan this target texture
+    glBindTexture(GL_TEXTURE_2D, target);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Clean up
+    glDeleteTextures(1, &source);
+    eglDestroyImageKHR(window->getDisplay(), image);
+    glDeleteTextures(1, &target);
+}
+
+// Testing source 2D texture, target external texture storage and trying to orphan target
+TEST_P(ImageTestES3, Source2DTargetExternalStorage)
+{
+    Source2DTargetExternalStorage_helper(false);
+}
+
+// Testing source 2D texture, target external texture storage with colorspace and trying to orphan
+// target
+TEST_P(ImageTestES3, Source2DTargetExternalStorage_Colorspace)
+{
+    ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
+    Source2DTargetExternalStorage_helper(true);
+}
+
+void ImageTest::Source2DTargetExternalStorage_helper(bool withColorspace)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt() || !hasExternalExt() ||
+                       !hasEglImageStorageExt());
+
+    GLubyte data[4] = {255, 0, 255, 255};
+
+    GLuint source;
+    EGLImageKHR image = NULL;
+    GLuint target;
+
+    const EGLint *attributes;
+    if (withColorspace)
+        attributes = kColorspaceAttribs;
+    else
+        attributes = kDefaultAttribs;
+
+    // Create the Image
+    createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, attributes, data, &source,
+                                  &image);
+
+    // Create the texture target
+    createEGLImageTargetTextureStorage(image, GL_TEXTURE_EXTERNAL_OES, &target);
+
+    // Expect that the target texture has the same color as the source texture
+    verifyResultsExternal(target, data);
+
+    // Try to orphan this target texture
+    glBindTexture(GL_TEXTURE_2D, target);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Clean up
+    glDeleteTextures(1, &source);
+    eglDestroyImageKHR(window->getDisplay(), image);
+    glDeleteTextures(1, &target);
+}
+
+// Testing source 3D texture, target 3D texture storage and trying to orphan target
+TEST_P(ImageTestES3, Source3DTarget3DStorage)
+{
+    Source3DTarget3DStorage_helper(false);
+}
+
+// Testing source 3D texture, target 3D texture storage with colorspace and trying to orphan target
+TEST_P(ImageTestES3, Source3DTarget3DStorage_Colorspace)
+{
+    ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
+    Source3DTarget3DStorage_helper(true);
+}
+
+void ImageTest::Source3DTarget3DStorage_helper(bool withColorspace)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt() || !has3DTextureExt() ||
+                       !hasEglImageStorageExt());
+
+    GLubyte data[4] = {255, 0, 255, 255};
+
+    GLuint source;
+    EGLImageKHR image = NULL;
+    GLuint target;
+
+    const EGLint *attributes;
+    if (withColorspace)
+        attributes = kColorspaceAttribs;
+    else
+        attributes = kDefaultAttribs;
+
+    // Create the Image
+    createEGLImage3DTextureSource(1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                                  get3DAttributes(withColorspace, 0), data, &source, &image);
+
+    // Create the texture target
+    createEGLImageTargetTextureStorage(image, GL_TEXTURE_3D, &target);
+
+    // Expect that the target texture has the same color as the source texture
+    verifyResults3D(target, data);
+
+    // Try to orphan this target texture
+    glBindTexture(GL_TEXTURE_3D, target);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 1, 1, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Clean up
+    glDeleteTextures(1, &source);
+    eglDestroyImageKHR(window->getDisplay(), image);
+    glDeleteTextures(1, &target);
 }
 
 // Testing source AHB EGL image, target 2D texture and delete when in use
