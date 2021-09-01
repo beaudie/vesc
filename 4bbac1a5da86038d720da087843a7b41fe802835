@@ -360,6 +360,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8454fce_d88c08c5",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T22:54:39Z",
+      "side": 1,
+      "message": "You can fail. You don\u0027t know up front if the parameters contain numValuesNeeded\n\nvec4(a,b)     If a and b are float the it would assert since it would run out of parameters, if a and b are vec2 then there will be enough parameters.\n\nI wasn\u0027t sure what to do here. I made the assumption that such validation happens else where. In other words if you provide too few then (a and b are float) then you get vec4(float, float) which will fail later since not enough values. Too many will pass, vec4(v3, v3).  Too too many vec4(v3, v3, v3) will fail too many parameters",
+      "parentUuid": "3830ff7d_af31e5c9",
+      "range": {
+        "startLine": 77,
+        "startChar": 40,
+        "endLine": 77,
+        "endChar": 69
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d69d6c4e_0537fa54",
         "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
         "patchSetId": 1

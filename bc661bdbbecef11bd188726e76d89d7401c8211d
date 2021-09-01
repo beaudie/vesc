@@ -33,6 +33,24 @@
       "message": "Is there any chance of a precision mismatch if the variable being defined is mediump/lowp? Only curious.",
       "revId": "bc661bdbbecef11bd188726e76d89d7401c8211d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7272a3d1_2bb0b62c",
+        "filename": "src/compiler/translator/tree_ops/ConvertUnsupportedConstructorsToFunctionCalls.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T22:54:39Z",
+      "side": 1,
+      "message": "I have no idea 😅  I changed it to EbpUndefined on the voodoo that that makes it take on whatever it needs. My fiction is it doesn\u0027t matter as it\u0027s just outputting 0.0f inside a constructor and if the object being constructed is a lowp it will be lowp even if passed highp",
+      "parentUuid": "4587a359_6bffeb77",
+      "revId": "bc661bdbbecef11bd188726e76d89d7401c8211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
