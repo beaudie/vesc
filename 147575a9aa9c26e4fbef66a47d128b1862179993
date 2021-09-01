@@ -160,6 +160,24 @@
       "parentUuid": "a3566153_f785c9bd",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45ecd79b_794d4d3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T15:04:38Z",
+      "side": 1,
+      "message": "The reason why I\u0027m bringing it up is that the storage might not be created in the Vulkan back-end until syncState, so we don\u0027t always have the ability to set the label immediately in the Vulkan version of the labelling APIs.\n\nI guess what I\u0027m asking is just for more details to help understand the motivation. I understand that you have to wait for the texture to be used to set the label - I still don\u0027t see why that\u0027s a problem. Is there a buggy situation where the texture is written/read but syncState is never called?",
+      "parentUuid": "4edd7253_a4b66b0b",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
