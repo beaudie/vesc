@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a47ee991_fb27c5f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-01T20:46:55Z",
+      "side": 1,
+      "message": "Sunny, I presume the +1 means it had a positive impact? Any numbers you can share?\n\nMy concern in general is that while this removes \"high costs\" when unnecessary setting the state to the same value, it at the same time adds \"many little costs\" when actually changing the state. I\u0027m curious to know if the gains are significant or minor.",
+      "parentUuid": "c27cb851_90016a39",
+      "revId": "40e3f840a63650eea908a01ec6e00a72a78b2d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7cd823f_eaee7142",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-01T16:52:36Z",
       "side": 1,
       "message": "Can we do the same for the indexed functions by checking mSetBlendIndexedInvoked \u0026\u0026 isBlendEnabledIndexed(index)?",
+      "revId": "40e3f840a63650eea908a01ec6e00a72a78b2d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "593b002d_8f399347",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-01T20:46:55Z",
+      "side": 1,
+      "message": "Don\u0027t need mSetBlendIndexedInvoked for these, but yes we technically could. I\u0027d rather make that a separate change though, and only when there is some benchmark/application we could test it again. As I wrote in the comment to Sunny these checks are not free, so it\u0027s better to not have them if no app is doing unnecessary state setting through these functions.",
+      "parentUuid": "e7cd823f_eaee7142",
       "revId": "40e3f840a63650eea908a01ec6e00a72a78b2d12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
