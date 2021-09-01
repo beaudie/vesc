@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "447c365a_81e87b6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T18:24:59Z",
+      "side": 1,
+      "message": "Please describe how this is done here, so developers can switch back and forth locally if they suspect issues.",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8422c605_11d37643",
@@ -77,6 +100,40 @@
       "writtenOn": "2021-09-01T11:27:56Z",
       "side": 1,
       "message": "Nice work! Bravo.",
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "546624d6_0481aa6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T18:24:59Z",
+      "side": 1,
+      "message": "LGTM\n\nI\u0027m withholding +2 for now.   I think we should decide as a team we are ready for this and make sure the various stakeholders are aware, since this is a fairly large change.   It appears to have several benefits, so I\u0027d like to land it, but I don\u0027t want to rush it either.\n\nI know you\u0027ve asking Cody to give this a shot to see how it impacts performance of the traces - is there anyone else that we think has an opinion or additional testing we can try before flipping the switch (CuttleFish, Fuschia, Chrome, etc.)?\n\nIt\u0027s also a lot more work to switch than I realized.   What will reverting this look like if we do hit a blocking bug?   With how many files this is hitting, unwinding it will likely become difficult/impossible fairly quickly.",
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "852c415f_9f3a480a",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T18:24:59Z",
+      "side": 1,
+      "message": "What does this mean in relation to SH_ADD_VULKAN_XFB_EMULATION_SUPPORT_CODE?",
       "revId": "f652976cee54529c118523d69bab0904d1e51aea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
