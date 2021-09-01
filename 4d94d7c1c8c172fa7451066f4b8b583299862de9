@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c395e2_9da70d76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T11:12:35Z",
+      "side": 1,
+      "message": "Thanks, LGTM. FWIW \"LINUX DEBUG\" should be something we support, not sure if it\u0027s working right now as I see you avoided it.",
+      "revId": "4d94d7c1c8c172fa7451066f4b8b583299862de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
