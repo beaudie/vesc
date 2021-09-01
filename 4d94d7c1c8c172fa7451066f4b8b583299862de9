@@ -52,6 +52,29 @@
       "parentUuid": "4f2d9219_02695b84",
       "revId": "4d94d7c1c8c172fa7451066f4b8b583299862de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb71413_fb7afac9",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-01T18:34:43Z",
+      "side": 1,
+      "message": "Might be worth a warning that debug is ignored if out_dir has been specified.",
+      "range": {
+        "startLine": 1156,
+        "startChar": 0,
+        "endLine": 1157,
+        "endChar": 45
+      },
+      "revId": "4d94d7c1c8c172fa7451066f4b8b583299862de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
