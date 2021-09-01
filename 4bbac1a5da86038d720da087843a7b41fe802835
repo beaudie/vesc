@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89a2bbe7_e4e3d25d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T05:20:41Z",
+      "side": 1,
+      "message": "Hi Shabi, could you please take a look? I\u0027m sure I\u0027m not doing things the best way or I\u0027m doing to few or too many cases.",
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
