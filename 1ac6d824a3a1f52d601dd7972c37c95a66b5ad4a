@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ba8aaef_0aa02770",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-01T16:05:56Z",
+      "side": 1,
+      "message": "Can you add some documentation for how to use this?  I might make it part of our standard workflow for adding new traces, so we can test them out on the fleet before landing.",
+      "revId": "1ac6d824a3a1f52d601dd7972c37c95a66b5ad4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4352f3b7_b263eb6a",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-01T16:05:56Z",
+      "side": 1,
+      "message": "This should also speed up adding new traces, thanks.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 90
+      },
+      "revId": "1ac6d824a3a1f52d601dd7972c37c95a66b5ad4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
