@@ -5,80 +5,311 @@
 //
 
 #include "compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.h"
-#include "compiler/translator/TranslatorMetalDirect/AstHelpers.h"
-#include "compiler/translator/TranslatorMetalDirect/IntermRebuild.h"
+#include "compiler/translator/ImmutableString.h"
+#include "compiler/translator/Symbol.h"
+#include "compiler/translator/TranslatorMetalDirect/MapFunctionsToDefinitions.h"
+#include "compiler/translator/tree_util/FindFunction.h"
+#include "compiler/translator/tree_util/IntermNode_util.h"
 
 using namespace sh;
 
 namespace
 {
 
-class Rewriter : public TIntermRebuild
+// Adds the argument to sequence for a scalar constructor.
+// Given scalar(scalarA) appends scalarA
+// Given scalar(vecA) appends vecA.x
+// Given scalar(matA) appends matA[0].x
+void appendScalarFromNonScalarArguments(TFunction &function, TIntermSequence *returnCtorArgs)
 {
-    SymbolEnv &mSymbolEnv;
+    const TVariable *var = function.getParam(0);
+    TIntermSymbol *v     = new TIntermSymbol(var);
 
-  public:
-    Rewriter(TCompiler &compiler, SymbolEnv &symbolEnv)
-        : TIntermRebuild(compiler, false, true), mSymbolEnv(symbolEnv)
-    {}
+    TIntermTyped &arg0 = *v->getAsTyped();
+    const TType &type  = arg0.getType();
 
-    PostResult visitAggregatePost(TIntermAggregate &callNode) override
+    if (type.isScalar())
     {
-        const size_t argCount = callNode.getChildCount();
-        const TType &retType  = callNode.getType();
+        returnCtorArgs->push_back(&arg0);
+    }
+    else if (type.isVector())
+    {
+        TIntermSwizzle *vecX = new TIntermSwizzle(arg0.deepCopy(), {0});
+        returnCtorArgs->push_back(vecX);
+    }
+    else if (type.isMatrix())
+    {
+        TIntermBinary *matRow0 =
+            new TIntermBinary(EOpIndexDirect, arg0.deepCopy(), CreateIndexNode(0));
+        TIntermSwizzle *mat00 = new TIntermSwizzle(matRow0, {0});
+        returnCtorArgs->push_back(mat00);
+    }
+}
 
-        if (callNode.isConstructor())
+// Adds the arguments to sequence for a vector constructor from a scalar.
+// Given vecN(scalarA) appends scalarA, scalarA, ... n times
+void appendVectorFromScalarArgument(const TType &type,
+                                    TFunction &function,
+                                    TIntermSequence *returnCtorArgs)
+{
+    const int vectorSize = type.getNominalSize();
+    const TVariable *var = function.getParam(0);
+    TIntermSymbol *v     = new TIntermSymbol(var);
+    for (int i = 0; i < vectorSize; ++i)
+    {
+        returnCtorArgs->push_back(v->deepCopy());
+    }
+}
+
+// Adds the arguments to sequence for vector or matrix constructor from
+// a the available arguments applying arguments in order until the
+// requested number of values have been extracted from the given arguments
+// or until there are no more arguments.
+void appendValuesFromMultipleArguments(int numValuesNeeded,
+                                       TFunction &function,
+                                       TIntermSequence *returnCtorArgs)
+{
+    size_t numParameters = function.getParamCount();
+    size_t paramIndex    = 0;
+    int colIndex         = 0;
+    int rowIndex         = 0;
+
+    for (int i = 0; i < numValuesNeeded && paramIndex < numParameters; ++i)
+    {
+        const TVariable *p       = function.getParam(paramIndex);
+        TIntermSymbol *parameter = new TIntermSymbol(p);
+        if (parameter->isScalar())
         {
-            if (IsScalarBasicType(retType))
+            returnCtorArgs->push_back(parameter);
+            ++paramIndex;
+        }
+        else if (parameter->isVector())
+        {
+            TIntermSwizzle *vecS = new TIntermSwizzle(parameter->deepCopy(), {rowIndex++});
+            returnCtorArgs->push_back(vecS);
+            if (rowIndex == parameter->getNominalSize())
             {
-                if (argCount == 1)
-                {
-                    TIntermTyped &arg   = GetArg(callNode, 0);
-                    const TType argType = arg.getType();
-                    if (argType.isVector())
-                    {
-                        return CoerceSimple(retType, SubVector(arg, 0, 1));
-                    }
-                }
+                ++paramIndex;
+                rowIndex = 0;
             }
-            else if (retType.isVector())
+        }
+        else if (parameter->isMatrix())
+        {
+            TIntermBinary *matColN =
+                new TIntermBinary(EOpIndexDirect, parameter->deepCopy(), CreateIndexNode(colIndex));
+            TIntermSwizzle *matElem = new TIntermSwizzle(matColN, {rowIndex++});
+            returnCtorArgs->push_back(matElem);
+            if (rowIndex == parameter->getSecondarySize())
             {
-                if (argCount == 1)
+                rowIndex = 0;
+                ++colIndex;
+                if (colIndex == parameter->getNominalSize())
                 {
-                    TIntermTyped &arg   = GetArg(callNode, 0);
-                    const TType argType = arg.getType();
-                    if (argType.isVector())
-                    {
-                        return CoerceSimple(retType, SubVector(arg, 0, retType.getNominalSize()));
-                    }
-                }
-                for (size_t i = 0; i < argCount; ++i)
-                {
-                    TIntermTyped &arg = GetArg(callNode, i);
-                    SetArg(callNode, i, CoerceSimple(retType.getBasicType(), arg));
-                }
-            }
-            else if (retType.isMatrix())
-            {
-                if (argCount == 1)
-                {
-                    TIntermTyped &arg   = GetArg(callNode, 0);
-                    const TType argType = arg.getType();
-                    if (argType.isMatrix())
-                    {
-                        if (retType.getCols() != argType.getCols() ||
-                            retType.getRows() != argType.getRows())
-                        {
-                            TemplateArg templateArgs[] = {retType.getCols(), retType.getRows()};
-                            return mSymbolEnv.callFunctionOverload(
-                                Name("cast"), retType, *new TIntermSequence{&arg}, 2, templateArgs);
-                        }
-                    }
+                    colIndex = 0;
+                    ++paramIndex;
                 }
             }
         }
+    }
+}
 
-        return callNode;
+// Adds the arguments for a matrix constructor from a scalar
+// putting the scalar along the diagonal and 0 everywhere else.
+void appendMatrixFromScalarArgument(const TType &type,
+                                    TFunction &function,
+                                    TIntermSequence *returnCtorArgs)
+{
+    const TVariable *var = function.getParam(0);
+    TIntermSymbol *v     = new TIntermSymbol(var);
+    const int numCols    = type.getNominalSize();
+    const int numRows    = type.getSecondarySize();
+    for (int col = 0; col < numCols; ++col)
+    {
+        for (int row = 0; row < numRows; ++row)
+        {
+            if (col == row)
+            {
+                returnCtorArgs->push_back(v->deepCopy());
+            }
+            else
+            {
+                returnCtorArgs->push_back(CreateFloatNode(0.0f, sh::EbpHigh));
+            }
+        }
+    }
+}
+
+// Add the argument for a matrix constructor from a matrix
+// copying elements from the same column/row and otherwise
+// initialize to the identity matrix.
+void appendMatrixFromMatrixArgument(const TType &type,
+                                    TFunction &function,
+                                    TIntermSequence *returnCtorArgs)
+{
+    const TVariable *var = function.getParam(0);
+    TIntermSymbol *v     = new TIntermSymbol(var);
+    const int dstCols    = type.getNominalSize();
+    const int dstRows    = type.getSecondarySize();
+    const int srcCols    = v->getNominalSize();
+    const int srcRows    = v->getSecondarySize();
+    for (int dstCol = 0; dstCol < dstCols; ++dstCol)
+    {
+        for (int dstRow = 0; dstRow < dstRows; ++dstRow)
+        {
+            if (dstRow < srcRows && dstCol < srcCols)
+            {
+                TIntermBinary *matColN =
+                    new TIntermBinary(EOpIndexDirect, v->deepCopy(), CreateIndexNode(dstCol));
+                TIntermSwizzle *matElem = new TIntermSwizzle(matColN, {dstRow});
+                returnCtorArgs->push_back(matElem);
+            }
+            else
+            {
+                returnCtorArgs->push_back(
+                    CreateFloatNode(dstRow == dstCol ? 1.0f : 0.0f, sh::EbpHigh));
+            }
+        }
+    }
+}
+
+class Traverser : public TIntermTraverser
+{
+    TVector<TIntermFunctionDefinition *> mFunctionDefs;
+
+  public:
+    explicit Traverser(TSymbolTable &symbolTable)
+        : TIntermTraverser(true, false, false, &symbolTable)
+    {}
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override
+    {
+        if (!node->isConstructor())
+        {
+            return true;
+        }
+
+        TIntermSequence &arguments = *node->getSequence();
+        if (arguments.empty())
+        {
+            return true;
+        }
+
+        const TType &type     = node->getType();
+        const TType &arg0Type = arguments[0]->getAsTyped()->getType();
+
+        // check for type_ctor(sameType)
+        // scalar(scalar) -> passthrough
+        // vecN(vecN) -> passthrough
+        // matN(matN) -> passthrough
+        if (arguments.size() == 1 && arg0Type == type)
+        {
+            return true;
+        }
+
+        // The following are simple casts:
+        //
+        // - basic(s) (where basic is int, uint, float or bool, and s is scalar).
+        // - gvecN(vN) (where the argument is a single vector with the same number of components).
+        // - matNxM(mNxM) (where the argument is a single matrix with the same dimensions).  Note
+        // that
+        //   matrices are always float, so there's no actual cast and this would be a no-op.
+        //
+        const bool isSingleScalarCast =
+            arguments.size() == 1 && type.isScalar() && arg0Type.isScalar();
+        const bool isSingleVectorCast = arguments.size() == 1 && type.isVector() &&
+                                        arg0Type.isVector() &&
+                                        type.getNominalSize() == arg0Type.getNominalSize();
+        const bool isSingleMatrixCast =
+            arguments.size() == 1 && type.isMatrix() && arg0Type.isMatrix() &&
+            type.getCols() == arg0Type.getCols() && type.getRows() == arg0Type.getRows();
+        if (isSingleScalarCast || isSingleVectorCast || isSingleMatrixCast)
+        {
+            return true;
+        }
+
+        // Cases we need to handle:
+        // scalar(vec)
+        // scalar(mat)
+        // vecN(scalar)
+        // vecN(vecM)
+        // vecN(a,...)
+        // matN(scalar) -> diag
+        // matN(vec) -> fail!
+        // manN(matM) -> corner + ident
+        // matN(a, ...)
+
+        // Build a function and pass all the constructor's arguments to it.
+        TIntermBlock *body  = new TIntermBlock;
+        TFunction *function = new TFunction(mSymbolTable, ImmutableString(""),
+                                            SymbolType::AngleInternal, &type, true);
+
+        for (size_t i = 0; i < arguments.size(); ++i)
+        {
+            TIntermTyped &arg = *arguments[i]->getAsTyped();
+            TType *argType    = new TType(arg.getBasicType(), arg.getPrecision(), EvqParamIn,
+                                       arg.getNominalSize(), arg.getSecondarySize());
+            TVariable *var    = CreateTempVariable(mSymbolTable, argType);
+            function->addParameter(var);
+        }
+
+        // Build a return statement for the function that
+        // converts the arguments into the required type.
+        TIntermSequence *returnCtorArgs = new TIntermSequence();
+
+        if (type.isScalar())
+        {
+            appendScalarFromNonScalarArguments(*function, returnCtorArgs);
+        }
+        else if (type.isVector())
+        {
+            if (arguments.size() == 1 && arg0Type.isScalar())
+            {
+                appendVectorFromScalarArgument(type, *function, returnCtorArgs);
+            }
+            else
+            {
+                appendValuesFromMultipleArguments(type.getNominalSize(), *function, returnCtorArgs);
+            }
+        }
+        else if (type.isMatrix())
+        {
+            if (arguments.size() == 1 && arg0Type.isScalar())
+            {
+                // MSL already handles this case
+                appendMatrixFromScalarArgument(type, *function, returnCtorArgs);
+            }
+            else if (arg0Type.isMatrix())
+            {
+                appendMatrixFromMatrixArgument(type, *function, returnCtorArgs);
+            }
+            else
+            {
+                appendValuesFromMultipleArguments(type.getNominalSize() * type.getSecondarySize(),
+                                                  *function, returnCtorArgs);
+            }
+        }
+
+        TIntermBranch *returnStatement =
+            new TIntermBranch(EOpReturn, TIntermAggregate::CreateConstructor(type, returnCtorArgs));
+        body->appendStatement(returnStatement);
+
+        TIntermFunctionDefinition *functionDefinition =
+            CreateInternalFunctionDefinitionNode(*function, body);
+        mFunctionDefs.push_back(functionDefinition);
+
+        TIntermTyped *functionCall = TIntermAggregate::CreateFunctionCall(*function, &arguments);
+        queueReplacement(functionCall, OriginalNode::IS_DROPPED);
+
+        return true;
+    }
+
+    bool update(TIntermBlock &root)
+    {
+        size_t firstFunctionIndex = FindFirstFunctionDefinitionIndex(&root);
+        for (TIntermFunctionDefinition *functionDefinition : mFunctionDefs)
+        {
+            root.insertChildNodes(firstFunctionIndex, TIntermSequence({functionDefinition}));
+        }
+        return true;
     }
 };
 
@@ -86,10 +317,7 @@ class Rewriter : public TIntermRebuild
 
 bool sh::AddExplicitTypeCasts(TCompiler &compiler, TIntermBlock &root, SymbolEnv &symbolEnv)
 {
-    Rewriter rewriter(compiler, symbolEnv);
-    if (!rewriter.rebuildRoot(root))
-    {
-        return false;
-    }
-    return true;
+    Traverser traverser(compiler.getSymbolTable());
+    root.traverse(&traverser);
+    return traverser.update(root) && traverser.updateTree(&compiler, &root);
 }
