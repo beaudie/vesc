@@ -16,6 +16,86 @@
       "message": "PTAL Tim/Cody. The CL is finally ready to land, and I\u0027ve made a number of changes.",
       "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ab328d_6b0304fb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 9125,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T20:42:07Z",
+      "side": 1,
+      "message": "This is the same as Context::finish().   Why do we need this and what does \"Immutable\" mean here?",
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb375df_e0522670",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T20:42:07Z",
+      "side": 1,
+      "message": "Why is this tied to forceInitShaderOutputVariables?",
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e110dc14_f7aee65c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T20:42:07Z",
+      "side": 1,
+      "message": "INFO()",
+      "range": {
+        "startLine": 1483,
+        "startChar": 4,
+        "endLine": 1483,
+        "endChar": 10
+      },
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a2198c9_30c639de",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T20:42:07Z",
+      "side": 1,
+      "message": "Why start with frame 2?",
+      "range": {
+        "startLine": 163,
+        "startChar": 42,
+        "endLine": 163,
+        "endChar": 43
+      },
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
