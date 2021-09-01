@@ -3,6 +3,52 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8422c605_11d37643",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T11:27:56Z",
+      "side": 1,
+      "message": "how long were you planning on waiting before fully removing it?",
+      "range": {
+        "startLine": 10,
+        "startChar": 59,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8725223c_4556e06e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T11:27:56Z",
+      "side": 1,
+      "message": "nit: I\u0027d replace this long list of stats with just the truncated mean, and explicitly say what the improvment % is, same with below",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 106
+      },
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "90cd7d12_17e35807",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 16
@@ -14,6 +60,23 @@
       "writtenOn": "2021-08-31T20:33:15Z",
       "side": 1,
       "message": "PTAL. The GOLD failures are mostly off by ones, except for brawl_star, which looks like the new image is actually correct w.r.t to shadows while the glslang path is incorrect (at least the new image visually looks better, and matches what I see on my desktop). Could be this bug: https://github.com/KhronosGroup/glslang/issues/2740",
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e1f1130_656ed9b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T11:27:56Z",
+      "side": 1,
+      "message": "Nice work! Bravo.",
       "revId": "f652976cee54529c118523d69bab0904d1e51aea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
