@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "350f64e0_6aef5cb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-01T21:11:54Z",
+      "side": 1,
+      "message": "Got some clarification from Khronos, and happy to learn that things are saner than previously thought.",
+      "revId": "61a66a39e6833db5b8c94027aa3c2ba61d229941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
