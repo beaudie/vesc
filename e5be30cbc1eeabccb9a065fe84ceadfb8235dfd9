@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3288fe71_7abb2802",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-01T23:42:35Z",
+      "side": 1,
+      "message": "This CL is stripped out from the last CL to make code review easier.",
+      "revId": "e5be30cbc1eeabccb9a065fe84ceadfb8235dfd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
