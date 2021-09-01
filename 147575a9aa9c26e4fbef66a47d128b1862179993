@@ -196,6 +196,24 @@
       "parentUuid": "45ecd79b_794d4d3d",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "987643cc_a0f38ebc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-09-01T16:44:06Z",
+      "side": 1,
+      "message": "One of the problem that I encountered while writing the unittest was the dirty bits setting was not persistent meaning in the current test case (TextureKHRDebugLabelWithCopyTexImage2D), if I signal the dirty bit label in setLabel (using signalDirtyState(DIRTY_BIT_LABEL)) and later when I call drawQuad which will call syncState, the storage object was initialized just fine but the expression, dirtyBits.test(gl::Texture::DirtyBitType::DIRTY_BIT_LABEL), turned out to be false. I noticed this for glTexImage2D and some others too. There were combination of things that needs to be done in the test in order to have the condition true in the syncState which then calls onLabelUpdate.\n\nTo avoid this, the latest patch would not depend on the dirty bits and if the storage object is created, it will send the label to the D3D correctly.",
+      "parentUuid": "37cc7024_15e52f8f",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
