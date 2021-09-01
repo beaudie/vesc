@@ -178,6 +178,24 @@
       "parentUuid": "4edd7253_a4b66b0b",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37cc7024_15e52f8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T15:06:46Z",
+      "side": 1,
+      "message": "Although thinking about it a bit, it\u0027s likely that in Vulkan we\u0027ll also have to have some checking for the label state when we (re)create the object, outside of syncState, so this change LGTM. Still would be curious to know more details.",
+      "parentUuid": "45ecd79b_794d4d3d",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
