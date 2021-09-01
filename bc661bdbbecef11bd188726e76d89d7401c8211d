@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c25f47_7b55e648",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-01T21:23:46Z",
+      "side": 1,
+      "message": "Amazing work Gregg! lgtm\n\nLet\u0027s discuss turning on more tests in a follow-up; maybe we\u0027re close to being able to switch from the SPIR-V Metal backend to the direct-to-Metal backend by default.\n\n+Kyle and Kimmo for visibility.\n",
+      "revId": "bc661bdbbecef11bd188726e76d89d7401c8211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4587a359_6bffeb77",
+        "filename": "src/compiler/translator/tree_ops/ConvertUnsupportedConstructorsToFunctionCalls.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-01T21:23:46Z",
+      "side": 1,
+      "message": "Is there any chance of a precision mismatch if the variable being defined is mediump/lowp? Only curious.",
+      "revId": "bc661bdbbecef11bd188726e76d89d7401c8211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
