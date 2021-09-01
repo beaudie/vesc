@@ -7095,6 +7095,7 @@ int PaParseStrings(size_t count,
     if (glslang_initialize(context))
         return 1;
 
+    fprintf(stderr, "%s\n", string[0]);
     int error = glslang_scan(count, string, length, context);
     if (!error)
         error = glslang_parse(context);
