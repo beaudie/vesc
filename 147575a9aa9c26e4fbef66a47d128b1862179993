@@ -124,6 +124,24 @@
       "parentUuid": "159e99a6_0f367894",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3566153_f785c9bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T11:11:17Z",
+      "side": 1,
+      "message": "Well, technically if you change the label it should get changed as soon as you process commands that involve this texture. Otherwise even if you get dumps, the unlabeled texture wouldn\u0027t be used in those dumps. Is that an issue?",
+      "parentUuid": "e03b9ee1_90284d33",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
