@@ -16,6 +16,23 @@
       "message": "Hey Sunny! You mentioned this was a bottleneck on Driver Overhead 2. Please let me know if this change sufficiently addresses the issue.",
       "revId": "40e3f840a63650eea908a01ec6e00a72a78b2d12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7cd823f_eaee7142",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-01T16:52:36Z",
+      "side": 1,
+      "message": "Can we do the same for the indexed functions by checking mSetBlendIndexedInvoked \u0026\u0026 isBlendEnabledIndexed(index)?",
+      "revId": "40e3f840a63650eea908a01ec6e00a72a78b2d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
