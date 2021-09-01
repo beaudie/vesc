@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78d591ed_2190fa34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T16:21:18Z",
+      "side": 1,
+      "message": "Yeah it\u0027s my intention to make a document outlining the workflow I used to verify the re-traces.",
+      "parentUuid": "8ba8aaef_0aa02770",
+      "revId": "1ac6d824a3a1f52d601dd7972c37c95a66b5ad4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4352f3b7_b263eb6a",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-09-01T16:05:56Z",
       "side": 1,
       "message": "This should also speed up adding new traces, thanks.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 90
+      },
+      "revId": "1ac6d824a3a1f52d601dd7972c37c95a66b5ad4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "737ca8bb_ab75f459",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T16:21:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4352f3b7_b263eb6a",
       "range": {
         "startLine": 77,
         "startChar": 0,
