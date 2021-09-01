@@ -42,6 +42,7 @@
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
+#include "third_party/ceval/ceval.h"
 
 #define USE_SYSTEM_ZLIB
 #include "compression_utils_portable.h"
@@ -64,6 +65,7 @@ constexpr char kCaptureLabelVarName[]   = "ANGLE_CAPTURE_LABEL";
 constexpr char kCompressionVarName[]    = "ANGLE_CAPTURE_COMPRESSION";
 constexpr char kSerializeStateVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
 constexpr char kValidationVarName[]     = "ANGLE_CAPTURE_VALIDATION";
+constexpr char kValidationExprVarName[] = "ANGLE_CAPTURE_VALIDATION_EXPR";
 
 constexpr size_t kBinaryAlignment   = 16;
 constexpr size_t kFunctionSizeLimit = 5000;
@@ -80,6 +82,7 @@ constexpr char kAndroidCaptureTrigger[] = "debug.angle.capture.trigger";
 constexpr char kAndroidCaptureLabel[]   = "debug.angle.capture.label";
 constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
 constexpr char kAndroidValidation[]     = "debug.angle.capture.validation";
+constexpr char kAndroidValidationExpr[] = "debug.angle.capture.validation_expr";
 
 struct FramebufferCaptureFuncs
 {
@@ -4267,6 +4270,14 @@ FrameCaptureShared::FrameCaptureShared()
         mValidateSerializedState = true;
     }
 
+    mValidationExpression =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kValidationExprVarName, kAndroidValidationExpr);
+
+    if (!mValidationExpression.empty())
+    {
+        INFO() << "Validation expression is " << kValidationExprVarName;
+    }
+
     if (mFrameIndex == mCaptureStartFrame)
     {
         // Capture is starting from the first frame, so set the capture active to ensure all GLES
@@ -5265,6 +5276,21 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
             maybeCapturePreCallUpdates(context, call);
             mFrameCalls.emplace_back(std::move(call));
             maybeCapturePostCallUpdates(context);
+        }
+
+        // Evaluate the validation expression to determine if we insert a validation checkpoint.
+        if (mValidateSerializedState && !mValidationExpression.empty())
+        {
+            std::string replacement = mValidationExpression;
+
+            angle::ReplaceAllSubstrings(&replacement, "frame", std::to_string(mFrameIndex));
+            angle::ReplaceAllSubstrings(&replacement, "call", std::to_string(mFrameCalls.size()));
+
+            double result = ceval_result(replacement);
+            if (result > 0)
+            {
+                CaptureValidateSerializedState(context, &mFrameCalls);
+            }
         }
     }
     else
