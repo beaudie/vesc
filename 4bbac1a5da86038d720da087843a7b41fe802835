@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce63ca65_573e8d66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Fixed most but had one question",
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9b0e020_f1e675d8",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-09-01T20:08:17Z",
       "side": 1,
       "message": "Nit: ANGLE\u0027s style with static/global functions is to use CamelCase.",
+      "range": {
+        "startLine": 23,
+        "startChar": 5,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57704479_015bf5ec",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9b0e020_f1e675d8",
       "range": {
         "startLine": 23,
         "startChar": 5,
@@ -81,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ee45d9_1143c607",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26ce5d7f_6844700d",
+      "range": {
+        "startLine": 26,
+        "startChar": 19,
+        "endLine": 26,
+        "endChar": 20
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5c34a29_715924d0",
@@ -94,6 +159,30 @@
       "writtenOn": "2021-09-01T20:08:17Z",
       "side": 1,
       "message": "no need for deep copy, you just allocated it (so the node is not simultaneously used elsewhere, which is the reason we use deepCopy()).",
+      "range": {
+        "startLine": 37,
+        "startChar": 54,
+        "endLine": 37,
+        "endChar": 65
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee43898e_1ef88ac0",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5c34a29_715924d0",
       "range": {
         "startLine": 37,
         "startChar": 54,
@@ -127,6 +216,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7864ed0d_d7bf449c",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96e68250_4a8f855c",
+      "range": {
+        "startLine": 43,
+        "startChar": 50,
+        "endLine": 43,
+        "endChar": 61
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39fe5f25_4c5787d5",
@@ -140,6 +253,30 @@
       "writtenOn": "2021-09-01T20:08:17Z",
       "side": 1,
       "message": "typo.\n\nAlso nit: we wrap to 100, so feel free to do so with comments as well.",
+      "range": {
+        "startLine": 65,
+        "startChar": 3,
+        "endLine": 65,
+        "endChar": 8
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7f76bd2_de925581",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39fe5f25_4c5787d5",
       "range": {
         "startLine": 65,
         "startChar": 3,
@@ -175,6 +312,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bf228c7_52321535",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "What is the assert? That all the parameters were used? Not sure I understand. If I should fail in that case it seems like I should generate an error, not assert?",
+      "parentUuid": "a62d19ac_626cc0d1",
+      "range": {
+        "startLine": 77,
+        "startChar": 40,
+        "endLine": 77,
+        "endChar": 69
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d69d6c4e_0537fa54",
         "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
         "patchSetId": 1
@@ -186,6 +347,30 @@
       "writtenOn": "2021-09-01T20:08:17Z",
       "side": 1,
       "message": "This is repeated three times, I suggest making a small helper at the top of the file.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 47
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e5877b0_3ca09c15",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d69d6c4e_0537fa54",
       "range": {
         "startLine": 98,
         "startChar": 0,
@@ -209,6 +394,30 @@
       "writtenOn": "2021-09-01T20:08:17Z",
       "side": 1,
       "message": "nit: ANGLE\u0027s style is to put this at the end. Generally our classes look like:\n\n    public:\n      func1();\n      func2();\n    private:\n      func3();\n      \n      var1;\n      var2;",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 55
+      },
+      "revId": "4bbac1a5da86038d720da087843a7b41fe802835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa7bc0f1_033fe664",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-01T21:01:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9dbfe47_35d47750",
       "range": {
         "startLine": 177,
         "startChar": 0,
