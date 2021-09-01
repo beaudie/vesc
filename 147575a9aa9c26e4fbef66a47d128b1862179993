@@ -142,6 +142,24 @@
       "parentUuid": "e03b9ee1_90284d33",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4edd7253_a4b66b0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-09-01T15:00:45Z",
+      "side": 1,
+      "message": "The case where we want to speed up getting the label to the underlying graphics API is where the storage gets created and the label gets set but (due to buggy or wasteful code) nothing else happens to the texture. \n\nBefore this change, you have to cause the texture to be read or written to in order for syncState to be called. With the latest patchset, the label is updated with D3D when you set the label; hence we don\u0027t have to wait for the texture to be used in order to see the label.",
+      "parentUuid": "a3566153_f785c9bd",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
