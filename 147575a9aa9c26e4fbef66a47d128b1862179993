@@ -214,6 +214,24 @@
       "parentUuid": "37cc7024_15e52f8f",
       "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c083f774_9a4aa0a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-09-01T16:51:47Z",
+      "side": 1,
+      "message": "@Jamie, apologies for me not being clear. The \"buggy code\" I referred to was not ANGLE code but, rather, code that calls ANGLE. \n\nSuppose a client of ANGLE allocates a texture using glTexStorage2D, labels it, but then (due to bugs) leaks the texture before using it. With the syncState approach, the label will never be passed down to D3D/Vulkan. With the latest patchset, the label gets passed down with the setLabel call right away, thus allowing us to see more detailed information in dumps/traces.",
+      "parentUuid": "987643cc_a0f38ebc",
+      "revId": "147575a9aa9c26e4fbef66a47d128b1862179993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
