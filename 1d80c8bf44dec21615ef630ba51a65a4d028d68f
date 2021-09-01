@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d358647_01d0b027",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T17:19:25Z",
+      "side": 1,
+      "message": "It\u0027s in the binary file, uncompressed. Since it\u0027s for testing only, I didn\u0027t bother compressing it. I had prior code to inline multi-line strings, so I left it in place as it\u0027s useful for the future.\n\nFYI the serialization is several million characters and was actually causing compilers to barf at times when inlined.",
+      "parentUuid": "5c4ecee2_0fdd0b8e",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ec6d81d5_ecda8bb7",
@@ -49,6 +67,30 @@
       "writtenOn": "2021-08-10T21:09:37Z",
       "side": 1,
       "message": "Why are these needed here?",
+      "range": {
+        "startLine": 1137,
+        "startChar": 0,
+        "endLine": 1138,
+        "endChar": 34
+      },
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eceb4815_095177b9",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T17:19:25Z",
+      "side": 1,
+      "message": "Done, removed.",
+      "parentUuid": "ec6d81d5_ecda8bb7",
       "range": {
         "startLine": 1137,
         "startChar": 0,
@@ -94,6 +136,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "beddcd1f_a6eea39a",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T17:19:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e11351e4_6275834c",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae7f152e_f5b567e5",
@@ -107,6 +167,24 @@
       "writtenOn": "2021-08-10T17:41:05Z",
       "side": 1,
       "message": "Why is this necessary?   Shouldn\u0027t the Context already do this with \u0027angle_with_capture_by_default \u003d true\u0027?   Or is that not part of the GN args for building the binary that\u0027s doing the retracing?",
+      "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6b83739_a0e34ffc",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-01T17:19:25Z",
+      "side": 1,
+      "message": "When running the traces for validation, we can disable capture (to avoid spending time writing out trace files that are never used). When we disable capture it also disables the capture limits. Because that produces different behaviour, we re-enable the limits here explicitly.\n\nNot to say the workflow is perfect, but this is necessary as of now.\n\nAdded a comment to make this clearer.",
+      "parentUuid": "ae7f152e_f5b567e5",
       "revId": "1d80c8bf44dec21615ef630ba51a65a4d028d68f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
