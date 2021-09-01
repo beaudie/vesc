@@ -849,10 +849,13 @@ void State::setClipControl(GLenum origin, GLenum depth)
 
 void State::setBlend(bool enabled)
 {
-    mBlendState.blend = enabled;
+    if (mBlendState.blend != enabled)
+    {
+        mBlendState.blend = enabled;
 
-    mBlendStateExt.setEnabled(enabled);
-    mDirtyBits.set(DIRTY_BIT_BLEND_ENABLED);
+        mBlendStateExt.setEnabled(enabled);
+        mDirtyBits.set(DIRTY_BIT_BLEND_ENABLED);
+    }
 }
 
 void State::setBlendIndexed(bool enabled, GLuint index)
@@ -863,6 +866,11 @@ void State::setBlendIndexed(bool enabled, GLuint index)
 
 void State::setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha, GLenum destAlpha)
 {
+    if (mBlendState.sourceBlendRGB == sourceRGB && mBlendState.destBlendRGB == destRGB &&
+        mBlendState.sourceBlendAlpha == sourceAlpha && mBlendState.destBlendAlpha == destAlpha)
+    {
+        return;
+    }
 
     mBlendState.sourceBlendRGB   = sourceRGB;
     mBlendState.destBlendRGB     = destRGB;
@@ -926,20 +934,28 @@ void State::setBlendColor(float red, float green, float blue, float alpha)
         alpha = clamp01(alpha);
     }
 
-    mBlendColor.red   = red;
-    mBlendColor.green = green;
-    mBlendColor.blue  = blue;
-    mBlendColor.alpha = alpha;
-    mDirtyBits.set(DIRTY_BIT_BLEND_COLOR);
+    if (mBlendColor.red != red || mBlendColor.green != green || mBlendColor.blue != blue ||
+        mBlendColor.alpha != alpha)
+    {
+        mBlendColor.red   = red;
+        mBlendColor.green = green;
+        mBlendColor.blue  = blue;
+        mBlendColor.alpha = alpha;
+        mDirtyBits.set(DIRTY_BIT_BLEND_COLOR);
+    }
 }
 
 void State::setBlendEquation(GLenum rgbEquation, GLenum alphaEquation)
 {
-    mBlendState.blendEquationRGB   = rgbEquation;
-    mBlendState.blendEquationAlpha = alphaEquation;
+    if (mBlendState.blendEquationRGB != rgbEquation ||
+        mBlendState.blendEquationAlpha != alphaEquation)
+    {
+        mBlendState.blendEquationRGB   = rgbEquation;
+        mBlendState.blendEquationAlpha = alphaEquation;
 
-    mBlendStateExt.setEquations(rgbEquation, alphaEquation);
-    mDirtyBits.set(DIRTY_BIT_BLEND_EQUATIONS);
+        mBlendStateExt.setEquations(rgbEquation, alphaEquation);
+        mDirtyBits.set(DIRTY_BIT_BLEND_EQUATIONS);
+    }
 }
 
 void State::setBlendEquationIndexed(GLenum rgbEquation, GLenum alphaEquation, GLuint index)
