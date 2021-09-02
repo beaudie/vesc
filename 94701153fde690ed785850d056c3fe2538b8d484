@@ -46,6 +46,30 @@
       },
       "revId": "94701153fde690ed785850d056c3fe2538b8d484",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d25cd18_5ab15422",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T18:07:14Z",
+      "side": 1,
+      "message": "OK, well, if that\u0027s the bug, maybe one of the other team members can help rather than adding workaround for our own bugs, lol. Tentatively un-approving in case me / Tim / Cody can check it out.",
+      "parentUuid": "1e401c48_49b8b22d",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "94701153fde690ed785850d056c3fe2538b8d484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
