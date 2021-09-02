@@ -39,6 +39,30 @@
       },
       "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7875e5de_7f59928c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-02T17:33:40Z",
+      "side": 1,
+      "message": "Put up another pass that splits out the bindings, adds in CaptureVertexBindingDivisor. Also moves VertexAttribDivisor into the same block of code for use with VertexAttribPointer.  Results are looking better with Fortnite MEC, but still working through crashes/asserts.",
+      "parentUuid": "e9bf4f32_55871b23",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2055,
+        "endChar": 13
+      },
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
