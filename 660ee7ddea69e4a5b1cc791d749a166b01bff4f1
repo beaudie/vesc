@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "add04def_4217d6ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T15:52:38Z",
+      "side": 1,
+      "message": "Actually I think you are right, we can always just pick the renderable format here since it must be a renderable format at this point. But this is much straightforward by pasisng the actual formatID. I will reword the message a bit.",
+      "parentUuid": "072995ac_e5121213",
+      "range": {
+        "startLine": 12,
+        "startChar": 32,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "660ee7ddea69e4a5b1cc791d749a166b01bff4f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f1c35bef_cfda2cee",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
