@@ -51,6 +51,24 @@
       "parentUuid": "4587a359_6bffeb77",
       "revId": "bc661bdbbecef11bd188726e76d89d7401c8211d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a95f8a7_7d2636f6",
+        "filename": "src/compiler/translator/tree_ops/ConvertUnsupportedConstructorsToFunctionCalls.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T00:48:59Z",
+      "side": 1,
+      "message": "It does matter, and I\u0027m glad you changed it to undefined. Precision gets propagated through the AST, and we have transformations that decide to do things based on precision. This transformation is done after all those, so it didn\u0027t matter in practice, but it could technically.",
+      "parentUuid": "7272a3d1_2bb0b62c",
+      "revId": "bc661bdbbecef11bd188726e76d89d7401c8211d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
