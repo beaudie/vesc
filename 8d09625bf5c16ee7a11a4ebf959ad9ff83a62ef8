@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0975df54_88899172",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-09-02T21:40:47Z",
+      "side": 1,
+      "message": "programExecutable can be null in some test cases/traces. We haven\u0027t hit this issue before as the mismatched type code path isn\u0027t tested as extensively",
+      "parentUuid": "43a4528f_dcaac3a6",
+      "revId": "8d09625bf5c16ee7a11a4ebf959ad9ff83a62ef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "707165fe_b5b6d6d8",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 4
@@ -65,6 +83,24 @@
       "writtenOn": "2021-09-02T18:45:11Z",
       "side": 1,
       "message": "nit: don\u0027t forget to clean up before submission.",
+      "revId": "8d09625bf5c16ee7a11a4ebf959ad9ff83a62ef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81eca9c1_f8e7e83f",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-09-02T21:40:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "707165fe_b5b6d6d8",
       "revId": "8d09625bf5c16ee7a11a4ebf959ad9ff83a62ef8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
