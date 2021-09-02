@@ -387,13 +387,6 @@ bool HasNonRenderableTextureFormatSupport(RendererVk *renderer, angle::FormatID 
            renderer->hasImageFormatFeatureBits(formatID, kBitsDepth);
 }
 
-size_t GetVertexInputAlignment(const vk::Format &format, bool compressed)
-{
-    const angle::Format &bufferFormat = format.actualBufferFormat(compressed);
-    size_t pixelBytes                 = bufferFormat.pixelBytes;
-    return format.vkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount);
-}
-
 GLenum GetSwizzleStateComponent(const gl::SwizzleState &swizzleState, GLenum component)
 {
     switch (component)
