@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9523e847_11c4360a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-02T17:51:44Z",
+      "side": 1,
+      "message": "I think I saw this mentioned in another CL, but it would be nice to have an enum for this rather than a bool to make it easier to read what this actually means.",
+      "range": {
+        "startLine": 424,
+        "startChar": 71,
+        "endLine": 424,
+        "endChar": 76
+      },
+      "revId": "005ed45b7246d55bb696bae3caca8de9561a9126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
