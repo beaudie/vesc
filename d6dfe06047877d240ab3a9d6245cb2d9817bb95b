@@ -16,6 +16,24 @@
       "message": "Thanks for fixing Cody. I wonder if we could make a regression test for this in GetImageTest?",
       "revId": "d6dfe06047877d240ab3a9d6245cb2d9817bb95b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44c0db3d_de42c35f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-02T20:40:24Z",
+      "side": 1,
+      "message": "Unfortunately I don\u0027t have an isolated repro.  Since this is part of MEC, there\u0027s no call sequence leading up to it, pointing out problems.  The assert is very consistent though, no matter which frame I start the capture on (once gameplay starts)\n\nBut looking at hasStagedUpdatesForSubresource, could we perhaps stage some updates to a texture level, like a clear, or change base/max level, then call GetTexImage.  I can look at this in parallel, would like to land this to unblock others though.",
+      "parentUuid": "b5d24398_37100d2b",
+      "revId": "d6dfe06047877d240ab3a9d6245cb2d9817bb95b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
