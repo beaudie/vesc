@@ -22,6 +22,30 @@
       },
       "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88f70bfd_b2ff23ba",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T16:01:39Z",
+      "side": 1,
+      "message": "Not too bad, except that in the next CL I will also have to pass isRenderable as well. Since it really only care about intended/actual format, this change will avoid diff in the next CL for this piece of code.",
+      "parentUuid": "f82beb7e_8ab0a74c",
+      "range": {
+        "startLine": 1606,
+        "startChar": 71,
+        "endLine": 1607,
+        "endChar": 68
+      },
+      "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
