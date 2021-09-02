@@ -22,6 +22,30 @@
       },
       "revId": "e5c7e5532f5c4742e9ec92eb007c10ee23d4d5a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fb7af5f_ce6dda98",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T17:49:15Z",
+      "side": 1,
+      "message": "Right. There is for sure a lot of rooms to play here.",
+      "parentUuid": "03193078_6477d491",
+      "range": {
+        "startLine": 69,
+        "startChar": 78,
+        "endLine": 70,
+        "endChar": 92
+      },
+      "revId": "e5c7e5532f5c4742e9ec92eb007c10ee23d4d5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
