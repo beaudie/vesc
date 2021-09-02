@@ -198,6 +198,13 @@ void Format::initBufferFallback(RendererVk *renderer,
     }
 }
 
+size_t Format::getVertexInputAlignment(bool compressed) const
+{
+    const angle::Format &bufferFormat = getActualBufferFormat(compressed);
+    size_t pixelBytes                 = bufferFormat.pixelBytes;
+    return vkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount);
+}
+
 bool HasEmulatedImageChannels(const angle::Format &intendedFormat,
                               const angle::Format &actualFormat)
 {
@@ -385,13 +392,6 @@ bool HasNonRenderableTextureFormatSupport(RendererVk *renderer, angle::FormatID 
 
     return renderer->hasImageFormatFeatureBits(formatID, kBitsColor) ||
            renderer->hasImageFormatFeatureBits(formatID, kBitsDepth);
-}
-
-size_t GetVertexInputAlignment(const vk::Format &format, bool compressed)
-{
-    const angle::Format &bufferFormat = format.actualBufferFormat(compressed);
-    size_t pixelBytes                 = bufferFormat.pixelBytes;
-    return format.vkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount);
 }
 
 GLenum GetSwizzleStateComponent(const gl::SwizzleState &swizzleState, GLenum component)
