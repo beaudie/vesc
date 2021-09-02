@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "072995ac_e5121213",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T14:30:36Z",
+      "side": 1,
+      "message": "nit: Is this accurate? When used with a render pass, the vk::Format can still correctly tell the actual format, no?",
+      "range": {
+        "startLine": 12,
+        "startChar": 32,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "660ee7ddea69e4a5b1cc791d749a166b01bff4f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f1c35bef_cfda2cee",
