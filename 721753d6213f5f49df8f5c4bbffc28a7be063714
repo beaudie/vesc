@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb0d0d09_deedf11b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T02:00:07Z",
+      "side": 1,
+      "message": "BTW, this is the real CL that actually picks the R4G4B4A4 format when it is not attached to FBO.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
