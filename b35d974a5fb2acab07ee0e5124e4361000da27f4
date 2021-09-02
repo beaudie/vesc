@@ -46,6 +46,30 @@
       },
       "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd52e16f_fba5a25c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T16:09:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "88f70bfd_b2ff23ba",
+      "range": {
+        "startLine": 1606,
+        "startChar": 71,
+        "endLine": 1607,
+        "endChar": 68
+      },
+      "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
