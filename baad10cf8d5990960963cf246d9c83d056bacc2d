@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e5b2f88a_f39df37e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T17:52:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "956c1869_db275d60",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "baad10cf8d5990960963cf246d9c83d056bacc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "73dc0299_dd462273",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -279,6 +303,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f50851fd_51bc12e5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4534,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T17:52:16Z",
+      "side": 1,
+      "message": "Agree about the \"passing booleans\" pattern being bad. This is cleaned up now by a prior CL so we can defer refactoring the \"isCallValid\" bool for another time.",
+      "parentUuid": "9bb118bc_43f940e1",
+      "revId": "baad10cf8d5990960963cf246d9c83d056bacc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "401fc560_ffc20d58",
@@ -292,6 +334,30 @@
       "writtenOn": "2021-07-08T16:56:32Z",
       "side": 1,
       "message": ".",
+      "range": {
+        "startLine": 4640,
+        "startChar": 69,
+        "endLine": 4640,
+        "endChar": 70
+      },
+      "revId": "baad10cf8d5990960963cf246d9c83d056bacc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79925695_fc6751f9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4640,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T17:52:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "401fc560_ffc20d58",
       "range": {
         "startLine": 4640,
         "startChar": 69,
