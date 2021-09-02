@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6edb2084_5a0366fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T16:49:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea1cd9bb_022ea3c8",
+      "range": {
+        "startLine": 111,
+        "startChar": 34,
+        "endLine": 111,
+        "endChar": 62
+      },
+      "revId": "d38e41e1f23999d19b6e24987f7213287a19c0e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76d675da_a83d352b",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-02T16:12:26Z",
       "side": 1,
       "message": "nit: can be in cpp as it was in the prior code.",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 5
+      },
+      "revId": "d38e41e1f23999d19b6e24987f7213287a19c0e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad1ef4df_5894d3fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T16:49:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76d675da_a83d352b",
       "range": {
         "startLine": 157,
         "startChar": 0,
