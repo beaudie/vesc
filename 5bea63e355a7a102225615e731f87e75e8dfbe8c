@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f2990d3_9804c70d",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-02T16:57:31Z",
+      "side": 1,
+      "message": "Yeah, I think this should be a separate feature that actually goes a bit further and includes enabling robust resource init for buffers also, so they are all grouped up together.   That should make it a bit clearer what the intention is and how to add any others that may come up in the future.\n\nI\u0027m fine marking this with a TODO until that\u0027s ready if you want to take that approach.",
+      "parentUuid": "01030d0c_a605f925",
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e110dc14_f7aee65c",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 36
