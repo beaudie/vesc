@@ -14,8 +14,8 @@
 #include "tests/perf_tests/ANGLEPerfTest.h"
 #include "tests/perf_tests/ANGLEPerfTestArgs.h"
 #include "tests/perf_tests/DrawCallPerfParams.h"
+#include "util/capture/frame_capture_test_utils.h"
 #include "util/egl_loader_autogen.h"
-#include "util/frame_capture_test_utils.h"
 #include "util/png_utils.h"
 #include "util/test_utils.h"
 
@@ -63,7 +63,7 @@ struct TracePerfParams final : public RenderTestParams
         return strstr.str();
     }
 
-    TraceInfo traceInfo;
+    TraceInfo traceInfo = {};
 };
 
 std::ostream &operator<<(std::ostream &os, const TracePerfParams &params)
@@ -116,7 +116,7 @@ class TracePerfTest : public ANGLERenderTest
     uint32_t frameCount() const
     {
         const TraceInfo &traceInfo = mParams.traceInfo;
-        return traceInfo.endFrame - traceInfo.startFrame + 1;
+        return traceInfo.frameEnd - traceInfo.frameStart + 1;
     }
 
     int getStepAlignment() const override
@@ -1112,8 +1112,8 @@ void TracePerfTest::initializeBenchmark()
         return;
     }
 
-    mStartFrame = traceInfo.startFrame;
-    mEndFrame   = traceInfo.endFrame;
+    mStartFrame = traceInfo.frameStart;
+    mEndFrame   = traceInfo.frameEnd;
     mTraceLibrary->setBinaryDataDecompressCallback(DecompressBinaryData);
 
     mTraceLibrary->setValidateSerializedStateCallback(ValidateSerializedState);
@@ -1804,9 +1804,27 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     }
 }
 
-TracePerfParams CombineTestID(const TracePerfParams &in, std::string traceName)
+TracePerfParams CombineWithName(const TracePerfParams &in, const std::string &traceName)
 {
-    const TraceInfo &traceInfo = GetTraceInfo(traceName.c_str());
+    constexpr size_t kMaxPath    = 500;
+    char rootTracePath[kMaxPath] = {};
+    if (!FindRootTraceTestDataPath(rootTracePath, kMaxPath))
+    {
+        ERR() << "Unable to find trace folder.";
+        return in;
+    }
+
+    std::stringstream traceJsonStream;
+    traceJsonStream << rootTracePath << angle::GetPathSeparator() << traceName
+                    << angle::GetPathSeparator() << traceName << ".json";
+    std::string traceJsonPath = traceJsonStream.str();
+
+    TraceInfo traceInfo = {};
+    if (!angle::LoadTraceInfoFromJSON(traceName, traceJsonPath, &traceInfo))
+    {
+        trace_angle::TraceInfo oldFormatInfo = trace_angle::GetTraceInfo(traceName.c_str());
+        traceInfo                            = *reinterpret_cast<const TraceInfo *>(&oldFormatInfo);
+    }
 
     TracePerfParams out = in;
     out.traceInfo       = traceInfo;
@@ -1860,54 +1878,16 @@ void RegisterTraceTests()
         return;
     }
 
-    // Open JSON file.
-    rapidjson::Document doc;
-    {
-        std::stringstream traceJsonStream;
-        traceJsonStream << rootTracePath << angle::GetPathSeparator() << "restricted_traces.json";
-        std::string traceJsonPath = traceJsonStream.str();
+    // Load JSON data.
+    std::stringstream traceJsonStream;
+    traceJsonStream << rootTracePath << angle::GetPathSeparator() << "restricted_traces.json";
+    std::string traceJsonPath = traceJsonStream.str();
 
-        std::ifstream ifs(traceJsonPath);
-        if (!ifs.is_open())
-        {
-            ERR() << "Unable to open trace JSON file: " << traceJsonPath;
-            return;
-        }
-
-        rapidjson::IStreamWrapper inWrapper(ifs);
-
-        doc.ParseStream(inWrapper);
-
-        if (doc.HasParseError())
-        {
-            ERR() << "Parse error reading JSON stream from " << traceJsonPath;
-            return;
-        }
-    }
-
-    if (!doc.IsObject() || !doc.HasMember("traces") || !doc["traces"].IsArray())
-    {
-        ERR() << "Trace JSON document not formed properly.";
-        return;
-    }
-
-    // Read trace json into a list of trace names.
     std::vector<std::string> traces;
-
-    rapidjson::Document::Array traceArray = doc["traces"].GetArray();
-    for (rapidjson::SizeType arrayIndex = 0; arrayIndex < traceArray.Size(); ++arrayIndex)
+    if (!LoadTraceNamesFromJSON(traceJsonPath, &traces))
     {
-        const rapidjson::Document::ValueType &arrayElement = traceArray[arrayIndex];
-
-        if (!arrayElement.IsString())
-        {
-            ERR() << "Trace JSON document not formed properly.";
-            return;
-        }
-
-        std::vector<std::string> traceAndVersion;
-        angle::SplitStringAlongWhitespace(arrayElement.GetString(), &traceAndVersion);
-        traces.push_back(traceAndVersion[0]);
+        ERR() << "Unable to load traces from JSON file: " << traceJsonPath;
+        return;
     }
 
     std::vector<SurfaceType> surfaceTypes = {SurfaceType::Window};
@@ -1927,10 +1907,10 @@ void RegisterTraceTests()
         renderers.push_back(VulkanSwiftShader<P>);
     }
 
-    PV testsWithID          = CombineWithValues({P()}, traces, CombineTestID);
-    PV testsWithSurfaceType = CombineWithValues(testsWithID, surfaceTypes, CombineWithSurfaceType);
-    PV testsWithRenderer    = CombineWithFuncs(testsWithSurfaceType, renderers);
-    PV filteredTests        = FilterTestParams(testsWithRenderer);
+    PV withName        = CombineWithValues({P()}, traces, CombineWithName);
+    PV withSurfaceType = CombineWithValues(withName, surfaceTypes, CombineWithSurfaceType);
+    PV withRenderer    = CombineWithFuncs(withSurfaceType, renderers);
+    PV filteredTests   = FilterTestParams(withRenderer);
 
     for (const TracePerfParams &params : filteredTests)
     {
