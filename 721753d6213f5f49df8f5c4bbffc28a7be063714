@@ -255,6 +255,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5bf1864d_012c3227",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2086,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T18:14:46Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "06832057_0d794273",
+      "range": {
+        "startLine": 2086,
+        "startChar": 25,
+        "endLine": 2086,
+        "endChar": 56
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "abd6f88a_0e1f91f0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -289,6 +313,24 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "This looks like a dirty bits bug. Shouldn\u0027t the front-end syncState at the right time?",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2272cc5_c8dbe3a5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T18:14:46Z",
+      "side": 1,
+      "message": "Handling the state change to renderable in getAttachmentRT is correct, but..\n\nWe haven\u0027t officially documented the API contract, but generally you should not be calling \"Impl\" functions from a back-end, just back-end functions. You should put the necessary code into a helper function and call that instead of faking dirty bits.",
+      "parentUuid": "8f478419_f99fa1c5",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -346,6 +388,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05c5a79d_96aa7c9e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T18:14:46Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "d5a4f116_870782a6",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9276de16_ddbecf38",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
         "patchSetId": 35
@@ -369,6 +429,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7078515b_dcf74690",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T18:14:46Z",
+      "side": 1,
+      "message": "+1, add vk::ImageAccess::ReadOnly and vk::ImageAccess::ReadWrite, or something similar to vk::BufferAccess (see vk_helpers.h)",
+      "parentUuid": "9276de16_ddbecf38",
+      "range": {
+        "startLine": 77,
+        "startChar": 46,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8d8ee46_b8b8c751",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
         "patchSetId": 35
@@ -380,6 +464,30 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "I also suggest renaming this to actualTexturableImageFormatID, to make it clear that it\u0027s not necessarily renderable.",
+      "range": {
+        "startLine": 97,
+        "startChar": 60,
+        "endLine": 97,
+        "endChar": 79
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1c08e37_fae44f62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T18:14:46Z",
+      "side": 1,
+      "message": "How about ReadOnly? Textureable textures can be renderable too.",
+      "parentUuid": "f8d8ee46_b8b8c751",
       "range": {
         "startLine": 97,
         "startChar": 60,
