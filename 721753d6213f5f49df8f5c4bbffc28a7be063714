@@ -1,6 +1,98 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "00c1dc08_17197071",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "nit: At least on Nvidia, these formats seem not renderable at all",
+      "range": {
+        "startLine": 10,
+        "startChar": 28,
+        "endLine": 10,
+        "endChar": 38
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f16cc60_9edea7a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "typo: being",
+      "range": {
+        "startLine": 12,
+        "startChar": 21,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac3334e_6356837f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Same typo",
+      "range": {
+        "startLine": 15,
+        "startChar": 38,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "850043f2_91f15696",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Same typo",
+      "range": {
+        "startLine": 18,
+        "startChar": 46,
+        "endLine": 18,
+        "endChar": 50
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bb0d0d09_deedf11b",
@@ -14,6 +106,424 @@
       "writtenOn": "2021-09-02T02:00:07Z",
       "side": 1,
       "message": "BTW, this is the real CL that actually picks the R4G4B4A4 format when it is not attached to FBO.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dc820c5_ead3562d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Great work Charlie. The change is very tricky though, and I\u0027m sure the pattern of use-as-texture-then-as-fbo is highly undertested. We need way more tests to make sure the code is bullet-proof. Here are some test ideas I have that would exercise paths I think could be problematic (let me know if any are not clear. A lot of them are variations of the same test, so the actual (parametric) test code should not need that much work):\n\n- glTexStorage2D followed by FBO read: Tests immutable formats\n\n- glTexImage2D followed by sample as texture, followed by FBO read: Tests image recreation when format is not immutable\n- glTexStorage2D followed by sample as texture, followed by FBO read: Tests image recreation when format is immutable\n\n- glTexImage2D/glTexStorage2D followed by sample as texture, followed by FBO blend then read: Tests image recreation in draw path (instead of readback path)\n\n- glTexImage2D/glTexStorage2D followed by sample as texture, followed by FBO blend, followed by sample as texture: Tests sampling after conversion to renderable format\n\n- glTexImage2D level 0, glTexImage2d level 1 with a different unrelated format. disable mipmapping, sample as texture, followed by FBO blend. Next, rebase image to level, attach framebuffer to level 1 and read back: Tests that out-of-range staged updates are not destroyed when re-formatting.\n\n- glTexImage2D level 0 with 4444, glTexImage2d level1 with 5551, disable mipmapping, sample as texture, followed by FBO blend.  Next, glTexImage2D level 0 with 5551, enable mipmapping and sample as texture (test both mips): Tests that the out-of-range staged update is reformated when mipmapping is enabled, but not before it.\n\n- glTexImage2D/glTexStorage2D with 4444 or 5551, (test with and without:) sample as texture, create unrelated FBO (say RGBA8), and do glCopyTexSubImage2D into the texture: Tests that the texture is reformatted when the copy is done through the draw path.\n- Same test as above but with glCopySubTextureCHROMIUM with flipping/alpha-premultiply: Tests the same thing, but higher chances of hitting the draw path\n\n- glTexImage2D/glTexStorage2D, (test with and without:) sample as texture, glClear with masked channels: Tests that the texture is reformatted when the clear is done through the draw path.\n\n- glTexImage2D/glTexStorage2D, (test with and without:) sample as texture, glBlitFramebuffer to/from (test both) RGBA8 framebuffer: Extends the current blit test already implemented to cover cases of immutable format vs not, texture already allocated vs not.\n\n- glTexImage2D level 0 and disable mipmapping, glTexImage2D level 1 with unrelated format, (test with and without:) sample as texture, glGenerateMipmap, enable mipmapping and verify all mips: Tests that glGenerateMipmap works when the format is not converted to renderable.\n- Same test as above, but after sampling as texture, attach to FBO and readback, then do glGenerateMipmap: Tests that glGenerateMipmap works when the format *is* converted to renderable.\n\n- glTexImage2D level 0, glTexImage2D level 1 with unrelated format, **enable mipmapping** (so, can\u0027t sample), attach FBO to level 0 and readback (then optionally disabling mipmapping and sample from it): Tests that when reformatting the image, incompatible updates don\u0027t cause a problem.\n- Same test as above, but instead of level 1 having a different format, it has the same format but incompatible dimensions.\n",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a8a4803_cf06e968",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "typo: images\u0027",
+      "range": {
+        "startLine": 97,
+        "startChar": 32,
+        "endLine": 97,
+        "endChar": 39
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "354ede38_cefe8608",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "typo: say",
+      "range": {
+        "startLine": 99,
+        "startChar": 49,
+        "endLine": 99,
+        "endChar": 53
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4114b382_f3412735",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Good catch. Seems like this is only a problem for RGBA-\u003eRGB copy but not the other way around. Maybe we can only add this restriction if `vk::HasEmulatedImageFormat(dest)`?\n\nAlso, a regression test would be appreciated. Could be a split change too.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b66b1491_3c520407",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "nit: remove before submission\n\nAnswer: glCopyTexImage does format conversion, while glCopyTexture doesn\u0027t. For example copy from unorm to uint results in 0/1 in the former but 0,...,255 in the latter. Something along those lines.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d2547e7_7601751d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Can you make a helper for this like \"isReformattingImage()\"? See comment in copyAndStageImageDataWithBuffer().",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 5
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06832057_0d794273",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2086,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "nit: reinitializeImageAsRenderable? Buffers are not necessarily used here.",
+      "range": {
+        "startLine": 2086,
+        "startChar": 25,
+        "endLine": 2086,
+        "endChar": 56
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abd6f88a_0e1f91f0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Can\u0027t you use the same trick as in shouldUpdateBeStaged (with isReformattingImage()) to avoid the ensureImageInitialized()?\n\nforceCPUPath is actually no longer used (so I just removed it here: https://chromium-review.googlesource.com/c/angle/angle/+/3140214)\n\nIf you can fix the above issue with copySubImageImplWithDraw, then you can greatly simplify this function by removing everything that\u0027s after the following `if`.",
+      "range": {
+        "startLine": 2109,
+        "startChar": 0,
+        "endLine": 2112,
+        "endChar": 73
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f478419_f99fa1c5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "This looks like a dirty bits bug. Shouldn\u0027t the front-end syncState at the right time?",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c6a5f9d_f4803e2c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "This should probably only check the enabled levels, in case there are updates with mismatching formats outside the range.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5ae0ad8_f90697d2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Probably a bug here if mipmapping is enabled and the image has incompatible updates. See test plan.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5a4f116_870782a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "What is this for? If this is NONE, AFAIU it means that the format won\u0027t be rendered to (like snorm) so isn\u0027t it better to keep this NONE so we can later on ASSERT on it?\n\nIf it\u0027s just there to serve the `if` added below, that could add `|| renderableFormatID \u003d\u003d NONE` instead.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9276de16_ddbecf38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Since this is used in a lot of places, I suggest adding an enum for better readability at call site.",
+      "range": {
+        "startLine": 77,
+        "startChar": 46,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8d8ee46_b8b8c751",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "I also suggest renaming this to actualTexturableImageFormatID, to make it clear that it\u0027s not necessarily renderable.",
+      "range": {
+        "startLine": 97,
+        "startChar": 60,
+        "endLine": 97,
+        "endChar": 79
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1673a6f6_ef06c6bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 6540,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "typo: Mismatched (it\u0027s one word, also one \u0027s\u0027)",
+      "range": {
+        "startLine": 6540,
+        "startChar": 38,
+        "endLine": 6540,
+        "endChar": 49
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e49b4bbd_973a76a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "These bools could also use the same enum as vk::Format for readability.",
+      "range": {
+        "startLine": 1686,
+        "startChar": 45,
+        "endLine": 1686,
+        "endChar": 60
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af45bf1a_978849d9",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "Please use `GLTexture` from `gl_raii.h`. Same with FBO below (and other functions)",
+      "range": {
+        "startLine": 1156,
+        "startChar": 0,
+        "endLine": 1157,
+        "endChar": 33
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf7f1373_7c6e45dc",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "nit: Use `EXPECT_GL_FRAMEBUFFER_COMPLETE` everywhere.",
+      "range": {
+        "startLine": 1173,
+        "startChar": 4,
+        "endLine": 1173,
+        "endChar": 88
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6331f52b_2214919a",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "nit: use ANGLE_GL_PROGRAM()",
+      "range": {
+        "startLine": 1231,
+        "startChar": 0,
+        "endLine": 1233,
+        "endChar": 28
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "926bbc0b_16841a36",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T16:00:46Z",
+      "side": 1,
+      "message": "nit: you can remove some of these ASSERT_GL_NO_ERRORs to remove clutter. Once after draw and once after EXPECT_PIXEL_EQ for example should be fine.",
+      "range": {
+        "startLine": 1245,
+        "startChar": 4,
+        "endLine": 1245,
+        "endChar": 25
+      },
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
