@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6540c690_3bfd7ebd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T01:09:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "447c365a_81e87b6a",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8422c605_11d37643",
         "filename": "/COMMIT_MSG",
         "patchSetId": 16
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-01T11:27:56Z",
       "side": 1,
       "message": "how long were you planning on waiting before fully removing it?",
+      "range": {
+        "startLine": 10,
+        "startChar": 59,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ac8f93_3269259d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T01:09:33Z",
+      "side": 1,
+      "message": "Maybe a month or two. Basically until trust is established on the new code.\n\nThe idea is to have a fallback for quick testing if we see some app having visual artifacts and you want to quickly rule out a bug in the SPIR-V gen code.",
+      "parentUuid": "8422c605_11d37643",
       "range": {
         "startLine": 10,
         "startChar": 59,
@@ -121,6 +169,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31007a68_e8e9c4de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T01:09:33Z",
+      "side": 1,
+      "message": "Ack.\n\n\u003e What will reverting this look like if we do hit a blocking bug?\n\nMost of the changes are to files we generally don\u0027t touch, so I expect revert would be simple.",
+      "parentUuid": "546624d6_0481aa6e",
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "852c415f_9f3a480a",
@@ -134,6 +200,24 @@
       "writtenOn": "2021-09-01T18:24:59Z",
       "side": 1,
       "message": "What does this mean in relation to SH_ADD_VULKAN_XFB_EMULATION_SUPPORT_CODE?",
+      "revId": "f652976cee54529c118523d69bab0904d1e51aea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00b25daf_af1cb8a2",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-02T01:09:33Z",
+      "side": 1,
+      "message": "Nothing. In the metal backend there are two paths right now, compile through SPIR-V and compile through MSL. SH_ADD_VULKAN_XFB_EMULATION_SUPPORT_CODE does the same thing regardless of how SPIR-V is generated.",
+      "parentUuid": "852c415f_9f3a480a",
       "revId": "f652976cee54529c118523d69bab0904d1e51aea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
