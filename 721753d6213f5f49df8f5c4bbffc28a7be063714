@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64bbe8f1_83104ee2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00c1dc08_17197071",
+      "range": {
+        "startLine": 10,
+        "startChar": 28,
+        "endLine": 10,
+        "endChar": 38
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f16cc60_9edea7a3",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "typo: being",
+      "range": {
+        "startLine": 12,
+        "startChar": 21,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eeaf01e_672ea03a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f16cc60_9edea7a3",
       "range": {
         "startLine": 12,
         "startChar": 21,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73961e9d_3a4da200",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ac3334e_6356837f",
+      "range": {
+        "startLine": 15,
+        "startChar": 38,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "850043f2_91f15696",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "Same typo",
+      "range": {
+        "startLine": 18,
+        "startChar": 46,
+        "endLine": 18,
+        "endChar": 50
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40e681fe_a7bd3e07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 35
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "850043f2_91f15696",
       "range": {
         "startLine": 18,
         "startChar": 46,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "174248d5_b9d1dea1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a8a4803_cf06e968",
+      "range": {
+        "startLine": 97,
+        "startChar": 32,
+        "endLine": 97,
+        "endChar": 39
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "354ede38_cefe8608",
@@ -163,6 +283,30 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "typo: say",
+      "range": {
+        "startLine": 99,
+        "startChar": 49,
+        "endLine": 99,
+        "endChar": 53
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4cde713_7e2efc47",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "354ede38_cefe8608",
       "range": {
         "startLine": 99,
         "startChar": 49,
@@ -192,6 +336,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6724a3a1_4b954d30",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "If a copyTexSubImage is called between two R5G5B5A1 textures, one has been fall back to A1R5G5B5 due to attached to FBO, their intendedFormatID will match but actualFormatID will not. And transfer will essentially do memcpy which will be wrong as well.\n\nThere are quite a few deqp tests will fail without this. And the new end2end test copyTexImageFollowedBySampling I aded bellow will also fail.",
+      "parentUuid": "4114b382_f3412735",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b66b1491_3c520407",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -203,6 +365,24 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "nit: remove before submission\n\nAnswer: glCopyTexImage does format conversion, while glCopyTexture doesn\u0027t. For example copy from unorm to uint results in 0/1 in the former but 0,...,255 in the latter. Something along those lines.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d82cc161_ab172423",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b66b1491_3c520407",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -267,6 +447,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "06832057_0d794273",
+      "range": {
+        "startLine": 2086,
+        "startChar": 25,
+        "endLine": 2086,
+        "endChar": 56
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c51bad5_6dc93621",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2086,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "`reinitImageAsRenderable` to match `initImage`",
+      "parentUuid": "5bf1864d_012c3227",
       "range": {
         "startLine": 2086,
         "startChar": 25,
@@ -400,6 +604,24 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "d5a4f116_870782a6",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8d55c23_44266fac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "This is for textures that does not have fallback format for rendering. For example,R8G8B8A8. The initializeFallbackFormat will not get called and will not update it. This line essentially saying that if initializeFallback did not touch it, we will keep it the same as actualImageFormatID.\n\nIf we leave it as None, then every time you try to retrieve a renderable format, you will have to check.\n\nWith the better formatID name and comment, I think this should be fine.",
+      "parentUuid": "05c5a79d_96aa7c9e",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -569,6 +791,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f2dfda4_468c8905",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 6540,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1673a6f6_ef06c6bf",
+      "range": {
+        "startLine": 6540,
+        "startChar": 38,
+        "endLine": 6540,
+        "endChar": 49
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e49b4bbd_973a76a6",
@@ -606,6 +852,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "e49b4bbd_973a76a6",
+      "range": {
+        "startLine": 1686,
+        "startChar": 45,
+        "endLine": 1686,
+        "endChar": 60
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7f41b71_94fd107e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ad28a06_b861e9d7",
       "range": {
         "startLine": 1686,
         "startChar": 45,

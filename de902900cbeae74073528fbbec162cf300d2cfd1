@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0506161_078a5af0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0942ff95_8d21ed95",
+      "range": {
+        "startLine": 275,
+        "startChar": 18,
+        "endLine": 275,
+        "endChar": 40
+      },
+      "revId": "de902900cbeae74073528fbbec162cf300d2cfd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3594af4b_16d48f27",
@@ -88,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0711dd_86171955",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b2e5fd3_21e59905",
+      "range": {
+        "startLine": 496,
+        "startChar": 9,
+        "endLine": 496,
+        "endChar": 34
+      },
+      "revId": "de902900cbeae74073528fbbec162cf300d2cfd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61c8cab8_c7fa0fda",
@@ -101,6 +149,30 @@
       "writtenOn": "2021-09-02T18:14:46Z",
       "side": 1,
       "message": "nit: can you cache some temporaries to decrease the indent in the expressions?",
+      "range": {
+        "startLine": 3153,
+        "startChar": 0,
+        "endLine": 3162,
+        "endChar": 0
+      },
+      "revId": "de902900cbeae74073528fbbec162cf300d2cfd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e70b256_26193f1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 3162,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61c8cab8_c7fa0fda",
       "range": {
         "startLine": 3153,
         "startChar": 0,

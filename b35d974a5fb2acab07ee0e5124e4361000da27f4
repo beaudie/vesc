@@ -34,6 +34,24 @@
       "parentUuid": "64828337_e783063a",
       "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe4fd579_c1da6b67",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-02T21:31:43Z",
+      "side": 0,
+      "message": "Yes, during debugging of bots failure in earlier patchset, one test actually getting into this code and does passes the test after this. If you look at  ImageHelper::copyImageDataToBuffer(), it does handle sourceLevelGL. This was added quite in year 2018. My guess is that this support has been added since then, possibly due to generateMipmap work since it also calls copyImageDataToBufferAndGetData.",
+      "parentUuid": "9600f31b_ab65cec0",
+      "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
