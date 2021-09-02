@@ -453,6 +453,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad2c4411_096d64a8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-02T18:21:02Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "9276de16_ddbecf38",
+      "range": {
+        "startLine": 77,
+        "startChar": 46,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8d8ee46_b8b8c751",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
         "patchSetId": 35
@@ -500,6 +524,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12ab8008_2c4d0f4d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-02T18:21:02Z",
+      "side": 1,
+      "message": "This is a case where I think we should add some comments where the member variables are declared (perhaps here too as to intention of these methods).  There\u0027s just enough subtlety here where I want to make sure nobody mistakes things in the future:-).\n\nAlso, sorry Shabi, but I had to think a bit about what \"Texturable\" means.  I\u0027m still not sure.  Maybe \"Samplable\"?",
+      "parentUuid": "f8d8ee46_b8b8c751",
+      "range": {
+        "startLine": 97,
+        "startChar": 60,
+        "endLine": 97,
+        "endChar": 79
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1673a6f6_ef06c6bf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 35
@@ -534,6 +582,30 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "These bools could also use the same enum as vk::Format for readability.",
+      "range": {
+        "startLine": 1686,
+        "startChar": 45,
+        "endLine": 1686,
+        "endChar": 60
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ad28a06_b861e9d7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-02T18:21:02Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "e49b4bbd_973a76a6",
       "range": {
         "startLine": 1686,
         "startChar": 45,
