@@ -7,8 +7,8 @@
 //   Helper functions for capture and replay of traces.
 //
 
-#ifndef UTIL_FRAME_CAPTURE_TEST_UTILS_H_
-#define UTIL_FRAME_CAPTURE_TEST_UTILS_H_
+#ifndef UTIL_CAPTURE_FRAME_CAPTURE_TEST_UTILS_H_
+#define UTIL_CAPTURE_FRAME_CAPTURE_TEST_UTILS_H_
 
 #include <iostream>
 #include <memory>
@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "common/angleutils.h"
+#include "common/debug.h"
 #include "common/system_utils.h"
 
 #define USE_SYSTEM_ZLIB
@@ -129,6 +130,37 @@ class TraceLibrary
     std::unique_ptr<Library> mTraceLibrary;
 };
 
+static constexpr size_t kTraceInfoMaxNameLen = 32;
+
+struct TraceInfo
+{
+    char name[kTraceInfoMaxNameLen];
+    uint32_t contextClientMajorVersion;
+    uint32_t contextClientMinorVersion;
+    uint32_t frameStart;
+    uint32_t frameEnd;
+    uint32_t drawSurfaceWidth;
+    uint32_t drawSurfaceHeight;
+    uint32_t drawSurfaceColorSpace;
+    uint32_t displayPlatformType;
+    uint32_t displayDeviceType;
+    int configRedBits;
+    int configBlueBits;
+    int configGreenBits;
+    int configAlphaBits;
+    int configDepthBits;
+    int configStencilBits;
+    bool isBinaryDataCompressed;
+    bool areClientArraysEnabled;
+    bool isBindGeneratesResourcesEnabled;
+    bool isWebGLCompatibilityEnabled;
+    bool isRobustResourceInitEnabled;
+};
+
+bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::string> *namesOut);
+bool LoadTraceInfoFromJSON(const std::string &traceName,
+                           const std::string &traceJsonPath,
+                           TraceInfo *traceInfoOut);
 }  // namespace angle
 
-#endif  // UTIL_FRAME_CAPTURE_TEST_UTILS_H_
+#endif  // UTIL_CAPTURE_FRAME_CAPTURE_TEST_UTILS_H_
