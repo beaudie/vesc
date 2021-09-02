@@ -1804,9 +1804,67 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     }
 }
 
-TracePerfParams CombineTestID(const TracePerfParams &in, std::string traceName)
+bool LoadJSONFromFile(const std::string &fileName, rapidjson::Document *doc)
 {
-    const TraceInfo &traceInfo = GetTraceInfo(traceName.c_str());
+    std::ifstream ifs(fileName);
+    if (!ifs.is_open())
+    {
+        return false;
+    }
+
+    rapidjson::IStreamWrapper inWrapper(ifs);
+    doc->ParseStream(inWrapper);
+    return !doc->HasParseError();
+}
+
+bool LoadTraceInfoFromJSON(const std::string &traceName, TraceInfo *traceInfoOut)
+{
+    constexpr size_t kMaxPath    = 500;
+    char rootTracePath[kMaxPath] = {};
+    if (!FindRootTraceTestDataPath(rootTracePath, kMaxPath))
+    {
+        ERR() << "Unable to find trace folder.";
+        return false;
+    }
+
+    std::stringstream traceJsonStream;
+    traceJsonStream << rootTracePath << angle::GetPathSeparator() << traceName
+                    << angle::GetPathSeparator() << traceName << ".json";
+    std::string traceJsonPath = traceJsonStream.str();
+
+    rapidjson::Document doc;
+    if (!LoadJSONFromFile(traceJsonPath, &doc))
+    {
+        return false;
+    }
+
+    if (!doc.IsObject() || !doc.HasMember("TraceMetadata"))
+    {
+        ERR() << "Trace JSON metadata is not properly specified: " << traceName;
+        return false;
+    }
+
+    const rapidjson::Document::Object &meta = doc["TraceMetadata"].GetObjectW();
+
+    strcpy(traceInfoOut->name, traceName.c_str());
+    traceInfoOut->contextClientMajorVersion = meta["ContextClientMajorVersion"].GetInt();
+    traceInfoOut->contextClientMinorVersion = meta["ContextClientMinorVersion"].GetInt();
+    traceInfoOut->drawSurfaceColorSpace     = meta["DrawSurfaceColorSpace"].GetInt();
+    traceInfoOut->drawSurfaceHeight         = meta["DrawSurfaceHeight"].GetInt();
+    traceInfoOut->drawSurfaceWidth          = meta["DrawSurfaceWidth"].GetInt();
+    traceInfoOut->endFrame                  = meta["FrameEnd"].GetInt();
+    traceInfoOut->startFrame                = meta["FrameStart"].GetInt();
+
+    return true;
+}
+
+TracePerfParams CombineTestID(const TracePerfParams &in, const std::string &traceName)
+{
+    TraceInfo traceInfo;
+    if (!LoadTraceInfoFromJSON(traceName, &traceInfo))
+    {
+        traceInfo = GetTraceInfo(traceName.c_str());
+    }
 
     TracePerfParams out = in;
     out.traceInfo       = traceInfo;
@@ -1861,28 +1919,15 @@ void RegisterTraceTests()
     }
 
     // Open JSON file.
+    std::stringstream traceJsonStream;
+    traceJsonStream << rootTracePath << angle::GetPathSeparator() << "restricted_traces.json";
+    std::string traceJsonPath = traceJsonStream.str();
+
     rapidjson::Document doc;
+    if (!LoadJSONFromFile(traceJsonPath, &doc))
     {
-        std::stringstream traceJsonStream;
-        traceJsonStream << rootTracePath << angle::GetPathSeparator() << "restricted_traces.json";
-        std::string traceJsonPath = traceJsonStream.str();
-
-        std::ifstream ifs(traceJsonPath);
-        if (!ifs.is_open())
-        {
-            ERR() << "Unable to open trace JSON file: " << traceJsonPath;
-            return;
-        }
-
-        rapidjson::IStreamWrapper inWrapper(ifs);
-
-        doc.ParseStream(inWrapper);
-
-        if (doc.HasParseError())
-        {
-            ERR() << "Parse error reading JSON stream from " << traceJsonPath;
-            return;
-        }
+        ERR() << "Unable to open trace JSON file: " << traceJsonPath;
+        return;
     }
 
     if (!doc.IsObject() || !doc.HasMember("traces") || !doc["traces"].IsArray())

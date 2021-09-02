@@ -177,8 +177,15 @@ def gen_gni(traces, gni_file, format_args):
         with open('%s/%s_capture_context%s_files.txt' % (trace, trace, context)) as f:
             files = f.readlines()
             f.close()
-        files = ['"%s/%s"' % (trace, file.strip()) for file in files]
-        test_list += ['["%s", %s, [%s], "%s"]' % (trace, context, ','.join(files), angledata_file)]
+        source_files = ['"%s/%s"' % (trace, file.strip()) for file in files]
+        data_files = ['"%s"' % angledata_file]
+        json_file_name = '%s/%s.json' % (trace, trace)
+        if os.path.exists(json_file_name):
+            data_files.append('"%s"' % json_file_name)
+        test_list += [
+            '["%s", %s, [%s], [%s]]' %
+            (trace, context, ','.join(source_files), ','.join(data_files))
+        ]
 
     format_args['test_list'] = ',\n'.join(test_list)
     gni_data = GNI_TEMPLATE.format(**format_args)
@@ -207,7 +214,16 @@ def contains_colorspace(trace):
     return contains_string(trace, 'kReplayDrawSurfaceColorSpace')
 
 
+def json_metadata_exists(trace):
+    return os.path.isfile('%s/%s.json' % (trace, trace))
+
+
 def get_trace_info(trace):
+    # Skip getting trace info we we're using JSON metadata.
+    # TODO: Remove generated code. http://anglebug.com/5133
+    if json_metadata_exists(trace):
+        return ''
+
     # Some traces don't contain major/minor version, so use defaults
     info = []
     if contains_context_version(trace):
