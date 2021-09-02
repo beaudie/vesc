@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53e02463_77a859da",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 9125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T12:26:47Z",
+      "side": 1,
+      "message": "I\u0027m unable to call finish because we have a \"const\" Context and all GLES entry points are mutable. Added a comment.",
+      "parentUuid": "35ab328d_6b0304fb",
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeb375df_e0522670",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-01T20:42:07Z",
       "side": 1,
       "message": "Why is this tied to forceInitShaderOutputVariables?",
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01030d0c_a605f925",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T12:26:47Z",
+      "side": 1,
+      "message": "It would be a bit cleaner to make a separate feature for it, or rename the feature to something like forceInitShaderVariables so it more clearly does both. I added it to work around more UB in the shaders due to uninitialized variables. I\u0027d debating on if I should rename the feature.",
+      "parentUuid": "eeb375df_e0522670",
       "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60133f21_6512b672",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T12:26:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e110dc14_f7aee65c",
+      "range": {
+        "startLine": 1483,
+        "startChar": 4,
+        "endLine": 1483,
+        "endChar": 10
+      },
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a2198c9_30c639de",
@@ -88,6 +148,30 @@
       "writtenOn": "2021-09-01T20:42:07Z",
       "side": 1,
       "message": "Why start with frame 2?",
+      "range": {
+        "startLine": 163,
+        "startChar": 42,
+        "endLine": 163,
+        "endChar": 43
+      },
+      "revId": "5bea63e355a7a102225615e731f87e75e8dfbe8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cc3a9c2_e07c9fc0",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T12:26:47Z",
+      "side": 1,
+      "message": "To trigger MEC. --retrace-mode forces a swap (end of frame 1) after Setup(). I added a comment.",
+      "parentUuid": "2a2198c9_30c639de",
       "range": {
         "startLine": 163,
         "startChar": 42,
