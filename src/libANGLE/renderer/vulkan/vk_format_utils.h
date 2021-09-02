@@ -62,8 +62,9 @@ bool HasEmulatedImageFormat(angle::FormatID intendedFormatID, angle::FormatID ac
 
 // Describes a Vulkan format. For more information on formats in the Vulkan back-end please see
 // https://chromium.googlesource.com/angle/angle/+/master/src/libANGLE/renderer/vulkan/doc/FormatTablesAndEmulation.md
-struct Format final : private angle::NonCopyable
+class Format final : private angle::NonCopyable
 {
+  public:
     Format();
 
     bool valid() const { return intendedGLFormat != 0; }
@@ -71,7 +72,8 @@ struct Format final : private angle::NonCopyable
     // The intended format is the front-end format. For Textures this usually correponds to a
     // GLenum in the headers. Buffer formats don't always have a corresponding GLenum type.
     // Some Surface formats and unsized types also don't have a corresponding GLenum.
-    const angle::Format &intendedFormat() const { return angle::Format::Get(intendedFormatID); }
+    angle::FormatID getIntendedFormatID() const { return intendedFormatID; }
+    const angle::Format &getIntendedFormat() const { return angle::Format::Get(intendedFormatID); }
 
     // The actual Image format is used to implement the front-end format for Texture/Renderbuffers.
     const angle::Format &getActualImageFormat(bool renderable) const
@@ -106,17 +108,21 @@ struct Format final : private angle::NonCopyable
         return renderable ? renderableTextureLoadFunctions(type) : textureLoadFunctions(type);
     }
 
+    LoadTextureBorderFunctionInfo getTextureBorderLoadFunctions() const
+    {
+        return textureBorderLoadFunctions();
+    }
     // The actual Buffer format is used to implement the front-end format for Buffers.  This format
     // is used by vertex buffers as well as texture buffers.  Note that all formats required for
     // GL_EXT_texture_buffer have mandatory support for vertex buffers in Vulkan, so they won't be
     // using an emulated format.
-    const angle::Format &actualBufferFormat(bool compressed) const
+    const angle::Format &getActualBufferFormat(bool compressed) const
     {
         return angle::Format::Get(compressed ? actualCompressedBufferFormatID
                                              : actualBufferFormatID);
     }
 
-    VkFormat actualBufferVkFormat(bool compressed) const
+    VkFormat getActualBufferVkFormat(bool compressed) const
     {
         return GetVkFormatFromFormatID(compressed ? actualCompressedBufferFormatID
                                                   : actualBufferFormatID);
@@ -138,6 +144,20 @@ struct Format final : private angle::NonCopyable
     {
         return gl::GetInternalFormatInfo(intendedGLFormat, type);
     }
+
+    bool canCompressBufferData() const
+    {
+        return actualCompressedBufferFormatID != angle::FormatID::NONE &&
+               actualBufferFormatID != actualCompressedBufferFormatID;
+    }
+
+    // Returns the alignment for a buffer to be used with the vertex input stage in Vulkan. This
+    // calculation is listed in the Vulkan spec at the end of the section 'Vertex Input
+    // Description'.
+    size_t getVertexInputAlignment(bool compressed) const;
+
+  private:
+    friend class FormatTable;
 
     // This is an auto-generated method in vk_format_table_autogen.cpp.
     void initialize(RendererVk *renderer, const angle::Format &intendedAngleFormat);
@@ -215,10 +235,6 @@ VkImageUsageFlags GetMaximalImageUsageFlags(RendererVk *renderer, angle::FormatI
 bool HasFullTextureFormatSupport(RendererVk *renderer, angle::FormatID formatID);
 // Checks if a Vulkan format supports all the features except rendering.
 bool HasNonRenderableTextureFormatSupport(RendererVk *renderer, angle::FormatID formatID);
-
-// Returns the alignment for a buffer to be used with the vertex input stage in Vulkan. This
-// calculation is listed in the Vulkan spec at the end of the section 'Vertex Input Description'.
-size_t GetVertexInputAlignment(const vk::Format &format, bool compressed);
 
 // Get the swizzle state based on format's requirements and emulations.
 gl::SwizzleState GetFormatSwizzle(const ContextVk *contextVk,
