@@ -22,6 +22,30 @@
       },
       "revId": "94701153fde690ed785850d056c3fe2538b8d484",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e401c48_49b8b22d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-09-02T17:52:22Z",
+      "side": 1,
+      "message": "From the top of my head it was \n glReadPixels(..., reinterpret_cast\u003cconst void *\u003e(16)); \nnow it is \n glReadPixels(..., reinterpret_cast\u003cvoid *\u003e(16));\nThe parameter type is \"void *\" and this is passed in if the data vector is not empty, but with the PIXEL_PACK_BUFFER bound this vector is empty and the offset value is passed. \nThe problem is that for some reason as a parameter GLvoidPointer is passed as \"const void *\" based on the generate_entry_points.py script There is something written about enums, that need to be passed as \"const void *\" I tested to change that code, but is was creating other errors, so I though I better not touch this since I don\u0027t understand it.",
+      "parentUuid": "c851d5d5_f9e2fc14",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "94701153fde690ed785850d056c3fe2538b8d484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
