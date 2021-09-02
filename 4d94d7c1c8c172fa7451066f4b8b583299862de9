@@ -75,6 +75,30 @@
       },
       "revId": "4d94d7c1c8c172fa7451066f4b8b583299862de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c2454d_bdecaadf",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-09-02T07:04:15Z",
+      "side": 1,
+      "message": "Debug is not ignored, only the output directory doesn\u0027t get a forced \"Debug\" suffix.",
+      "parentUuid": "7eb71413_fb7afac9",
+      "range": {
+        "startLine": 1156,
+        "startChar": 0,
+        "endLine": 1157,
+        "endChar": 45
+      },
+      "revId": "4d94d7c1c8c172fa7451066f4b8b583299862de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
