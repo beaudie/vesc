@@ -7,6 +7,7 @@
 #include "test_utils/ANGLETest.h"
 
 #include "test_utils/gl_raii.h"
+#include "util/shader_utils.h"
 
 using namespace angle;
 
@@ -550,6 +551,258 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
+}
+
+TEST_P(GLSLTest_ES3, CompareEqualityOfArrayOfVectors)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform vec3 a[3];
+uniform vec3 b[3];
+void main() {
+  bool same = a == b;
+  fragColor = vec4(0);
+  if (same) {
+    fragColor = vec4(1);
+  }
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint aLocation = glGetUniformLocation(program, "a");
+    GLint bLocation = glGetUniformLocation(program, "b");
+    EXPECT_NE(aLocation, -1);
+    EXPECT_NE(bLocation, -1);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    static float almostZeros[] = {0, 0, 0, 0, 0, 0, 0, 1, 0};
+    glUniform3fv(bLocation, 9, almostZeros);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    glUniform3fv(aLocation, 9, almostZeros);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(GLSLTest_ES3, CompareEqualityOfArrayOfMatrices)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform mat3 a[3];
+uniform mat3 b[3];
+void main() {
+  bool same = a == b;
+  fragColor = vec4(0);
+  if (same) {
+    fragColor = vec4(1);
+  }
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint aLocation = glGetUniformLocation(program, "a");
+    GLint bLocation = glGetUniformLocation(program, "b");
+    EXPECT_NE(aLocation, -1);
+    EXPECT_NE(bLocation, -1);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    static float almostZeros[] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+    };
+    glUniformMatrix3fv(bLocation, 27, false, almostZeros);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    glUniformMatrix3fv(aLocation, 27, false, almostZeros);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(GLSLTest_ES3, CompareEqualityOfArrayOfFloats)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform float a[3];
+uniform float b[3];
+void main() {
+  bool same = a == b;
+  fragColor = vec4(0);
+  if (same) {
+    fragColor = vec4(1);
+  }
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint aLocation = glGetUniformLocation(program, "a");
+    GLint bLocation = glGetUniformLocation(program, "b");
+    EXPECT_NE(aLocation, -1);
+    EXPECT_NE(bLocation, -1);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    static float almostZeros[] = {
+        0,
+        0,
+        1,
+    };
+    glUniform1fv(bLocation, 3, almostZeros);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    glUniform1fv(aLocation, 3, almostZeros);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(GLSLTest_ES3, CompareInequalityOfArrayOfVectors)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform vec3 a[3];
+uniform vec3 b[3];
+void main() {
+  bool same = a != b;
+  fragColor = vec4(0);
+  if (same) {
+    fragColor = vec4(1);
+  }
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint aLocation = glGetUniformLocation(program, "a");
+    GLint bLocation = glGetUniformLocation(program, "b");
+    EXPECT_NE(aLocation, -1);
+    EXPECT_NE(bLocation, -1);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    static float almostZeros[] = {0, 0, 0, 0, 0, 0, 0, 1, 0};
+    glUniform3fv(bLocation, 9, almostZeros);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    glUniform3fv(aLocation, 9, almostZeros);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(GLSLTest_ES3, CompareInequalityOfArrayOfMatrices)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform mat3 a[3];
+uniform mat3 b[3];
+void main() {
+  bool same = a != b;
+  fragColor = vec4(0);
+  if (same) {
+    fragColor = vec4(1);
+  }
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint aLocation = glGetUniformLocation(program, "a");
+    GLint bLocation = glGetUniformLocation(program, "b");
+    EXPECT_NE(aLocation, -1);
+    EXPECT_NE(bLocation, -1);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    static float almostZeros[] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+    };
+    glUniformMatrix3fv(bLocation, 27, false, almostZeros);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    glUniformMatrix3fv(aLocation, 27, false, almostZeros);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(GLSLTest_ES3, CompareInequalityOfArrayOfFloats)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 fragColor;
+uniform float a[3];
+uniform float b[3];
+void main() {
+  bool same = a != b;
+  fragColor = vec4(0);
+  if (same) {
+    fragColor = vec4(1);
+  }
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint aLocation = glGetUniformLocation(program, "a");
+    GLint bLocation = glGetUniformLocation(program, "b");
+    EXPECT_NE(aLocation, -1);
+    EXPECT_NE(bLocation, -1);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    static float almostZeros[] = {
+        0,
+        0,
+        1,
+    };
+    glUniform1fv(bLocation, 3, almostZeros);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    glUniform1fv(aLocation, 3, almostZeros);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 0);
+
+    ASSERT_GL_NO_ERROR();
 }
 
 // Test that array of fragment shader outputs is processed properly and draws
