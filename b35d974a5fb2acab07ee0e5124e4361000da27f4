@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f82beb7e_8ab0a74c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-02T11:48:44Z",
+      "side": 1,
+      "message": "nit: if you have the format here, it doesn\u0027t seem bad to pass it to this helper.",
+      "range": {
+        "startLine": 1606,
+        "startChar": 71,
+        "endLine": 1607,
+        "endChar": 68
+      },
+      "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
