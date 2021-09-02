@@ -742,6 +742,11 @@ void WriteCppReplayForCall(const CallCapture &call,
                     WriteParamCaptureReplay(callOut, call, param);
                 }
             }
+            else if (param.type == ParamType::TvoidPointer && param.name == "pixels" &&
+                     param.value.voidPointerVal != nullptr)
+            {
+                callOut << "reinterpret_cast<void *>(" << param.value.voidPointerVal << ")";
+            }
             else
             {
                 WriteParamCaptureReplay(callOut, call, param);
