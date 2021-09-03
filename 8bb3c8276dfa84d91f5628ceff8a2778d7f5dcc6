@@ -16,6 +16,41 @@
       "message": "FYI this change appears to break the Skia roller (win/debug bots): https://skia-review.googlesource.com/c/skia/+/445497\n\nstart unit test  EGLImageTest\ntype: 3\nFATAL: DisplayD3D.cpp:249 (makeCurrent): \t! Assert failed in makeCurrent (../../../../../../skia/third_party/externals/angle2/src/libANGLE/renderer/d3d/DisplayD3D.cpp:249): mRenderer !\u003d nullptr\n\nINFO: EGL ERROR: eglMakeCurrent:\nCaught exception 3221225477 EXCEPTION_ACCESS_VIOLATION\tunit test  EGLImageTest\nCaught exception 3221225477 EXCEPTION_ACCESS_VIOLATION, was running:\n\tunit test  EGLImageTest\n\tunit test  EGLImageTest\nLikely culprit:\n\tunit test  EGLImageTest",
       "revId": "8bb3c8276dfa84d91f5628ceff8a2778d7f5dcc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fc42f20_61feee28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T17:34:11Z",
+      "side": 1,
+      "message": "This is a valid crash if there\u0027s currently no renderer set.\n\nWhile I see the red bots in that CL, I can\u0027t find a way to where the assert is firing in any of the task pages.\n\nMy experience with this CL so far is that these failures are typically caused by bad tests (leaking resources, failure to properly cleanup, etc.), so I\u0027ll need more information on which test is failing and how to reproduce it to help get this resolved.   Making it more difficult, is that it\u0027s likely a test earlier in the \u0027batch\u0027 that caused the issue, rather than the test that failed, though it\u0027s possible it\u0027s isolated to just that bad test.\n\nIf you\u0027d like to unblock the roller, I suggest skipped the test (whichever it is) and hoping that fixes it.   Otherwise, you\u0027ll need to isolate further to find the actual test causing the failure.\n\nI\u0027d also suggest moving this to a bug rather than a comment in a closed CL.",
+      "parentUuid": "894fd736_1ee7e715",
+      "revId": "8bb3c8276dfa84d91f5628ceff8a2778d7f5dcc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae2c7578_8bdcc289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T17:34:11Z",
+      "side": 1,
+      "message": "sa",
+      "revId": "8bb3c8276dfa84d91f5628ceff8a2778d7f5dcc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
