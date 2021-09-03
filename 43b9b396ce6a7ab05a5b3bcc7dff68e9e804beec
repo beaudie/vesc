@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e924a51c_f2ffc5d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-03T14:13:54Z",
+      "side": 1,
+      "message": "LGTM, sorry for the delay Gert.",
+      "revId": "43b9b396ce6a7ab05a5b3bcc7dff68e9e804beec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
