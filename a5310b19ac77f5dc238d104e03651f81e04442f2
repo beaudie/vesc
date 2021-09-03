@@ -52,6 +52,24 @@
       "parentUuid": "e7716993_787ec55d",
       "revId": "a5310b19ac77f5dc238d104e03651f81e04442f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df74c7ef_163a46b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-09-03T20:14:01Z",
+      "side": 1,
+      "message": "FYI: I\u0027m trying to resurrect that patch here: https://chromium-review.googlesource.com/c/angle/angle/+/3140498",
+      "parentUuid": "acbbf984_adbfbb9a",
+      "revId": "a5310b19ac77f5dc238d104e03651f81e04442f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
