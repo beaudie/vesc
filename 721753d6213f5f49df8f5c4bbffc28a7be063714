@@ -626,6 +626,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5f7c48b3_78afa1b9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T18:09:50Z",
+      "side": 1,
+      "message": "Filed https://issuetracker.google.com/198788068",
+      "parentUuid": "8a849609_44dfec18",
+      "range": {
+        "startLine": 2109,
+        "startChar": 0,
+        "endLine": 2112,
+        "endChar": 73
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f478419_f99fa1c5",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -981,6 +1005,30 @@
       "side": 1,
       "message": "nit: sampling is not the correct term, because these textures can also be read via texelFetch type reads without a sampler. sorry to be so technical. I\u0027m fine if you want to defer this to later, especially if you feel differently, as it\u0027s pretty clear what SampleOnly means.",
       "parentUuid": "9a74b0a9_a299b38e",
+      "range": {
+        "startLine": 77,
+        "startChar": 46,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a93bdf5_73c38563",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T18:09:50Z",
+      "side": 1,
+      "message": "Read/Write is also not correct though: If you attach to FBO and not actually render to it, validation layer will also complain. The feature bit says ATTACHMENT, not necessary have to write.\n\nSampleOnly/Renderable may not accurate, but I think it is quite intuitive, because people usually don\u0027t refer to texture access as read/write.\n\nOr the other choice, if you want more precise: NeverAttach, Attachable.\n\nWe can discuss more on the chat and fix it in follow up CL, since this is mostly search/replace.",
+      "parentUuid": "0b0e37a8_57608b4b",
       "range": {
         "startLine": 77,
         "startChar": 46,
