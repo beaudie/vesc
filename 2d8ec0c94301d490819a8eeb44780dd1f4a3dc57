@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec44fbce_5f631951",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-09-03T17:38:01Z",
+      "side": 1,
+      "message": "Actually, just IOSurfaceGetHeightOfPlane",
+      "parentUuid": "bc73e978_927d0bfa",
+      "range": {
+        "startLine": 180,
+        "startChar": 35,
+        "endLine": 180,
+        "endChar": 66
+      },
+      "revId": "2d8ec0c94301d490819a8eeb44780dd1f4a3dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68cfe694_d2f0d978",
         "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-03T17:37:05Z",
       "side": 1,
       "message": "IOSurfaceGetElementHeightOfPlane?",
+      "range": {
+        "startLine": 226,
+        "startChar": 35,
+        "endLine": 226,
+        "endChar": 66
+      },
+      "revId": "2d8ec0c94301d490819a8eeb44780dd1f4a3dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd5f0ac6_20920744",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-09-03T17:38:01Z",
+      "side": 1,
+      "message": "Same",
+      "parentUuid": "68cfe694_d2f0d978",
       "range": {
         "startLine": 226,
         "startChar": 35,
