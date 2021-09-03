@@ -6,10 +6,6 @@
 
 import("../../../../gni/angle.gni")
 
-if (angle_has_build && ozone_platform_gbm) {
-  import("//build/config/linux/pkg_config.gni")
-}
-
 assert(angle_enable_gl)
 
 declare_args() {
@@ -163,10 +159,6 @@ if (ozone_platform_gbm) {
     "egl/gbm/SurfaceGbm.cpp",
     "egl/gbm/SurfaceGbm.h",
   ]
-
-  pkg_config("libdrm") {
-    packages = [ "libdrm" ]
-  }
 }
 
 if (is_android) {
@@ -264,6 +256,9 @@ angle_source_set("angle_gl_backend") {
       "Xext",
     ]
   }
+  if (is_android || is_linux || is_chromeos) {
+    deps += [ "$angle_root/src/common/linux:angle_dma_buf" ]
+  }
   if (is_apple) {
     frameworks = [
       "IOSurface.framework",
@@ -279,7 +274,7 @@ angle_source_set("angle_gl_backend") {
     }
   }
   if (ozone_platform_gbm) {
-    public_configs += [ ":libdrm" ]
+    public_configs += [ "$angle_root/src/common/linux:libdrm" ]
     deps += [ "//third_party/minigbm" ]
   }
 }

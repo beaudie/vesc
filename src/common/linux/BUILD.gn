@@ -1,0 +1,20 @@
+# Copyright 2021 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build/config/linux/pkg_config.gni")
+import("../../../gni/angle.gni")
+
+pkg_config("libdrm") {
+  packages = [ "libdrm" ]
+}
+
+angle_source_set("angle_dma_buf") {
+  sources = [
+    "dma_buf_utils.cpp",
+    "dma_buf_utils.h",
+  ]
+
+  public_configs += [ ":libdrm" ]
+  deps = [ "$angle_root:angle_common" ]
+}

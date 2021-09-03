@@ -408,6 +408,7 @@ angle::Result AllocateImageMemoryWithRequirements(Context *context,
                                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                                   const VkMemoryRequirements &memoryRequirements,
                                                   const void *extraAllocationInfo,
+                                                  const void *extraBindInfo,
                                                   Image *image,
                                                   DeviceMemory *deviceMemoryOut);
 
