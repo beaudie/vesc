@@ -16,6 +16,24 @@
       "message": "So, this fails on one device. I\u0027m guessing that as a driver failure? What\u0027s the way forward? Turn off the test on that device? Turn on some workaround for that device? Something else?",
       "revId": "b33ffa4ee44f1cc18130acfd1be77f951e52f015",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8884b1ae_b246e8d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-03T06:54:25Z",
+      "side": 1,
+      "message": "I thought I remembered there being a bug in this area in Qualcomm\u0027s drivers. The Nexus 5X is old, so let\u0027s just skip the new test on that configuration. In src/tests/angle_end2end_tests_expectations.txt please add a couple of lines like:\n\n5505 NEXUS5X GLES : GLSLTest_ES3.CompareInequalityOfArrayOfVectors/ES3_OpenGLES \u003d SKIP\n5505 NEXUS5X GLES : GLSLTest_ES3.CompareEqualityOfArrayOfVectors/ES3_OpenGLES \u003d SKIP\n\nHopefully that\u0027ll get past the failure.",
+      "parentUuid": "f4759298_a01dace5",
+      "revId": "b33ffa4ee44f1cc18130acfd1be77f951e52f015",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
