@@ -3584,7 +3584,7 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
                                          const VkBufferCreateInfo &requestedCreateInfo,
                                          GLeglClientBufferEXT clientBuffer)
 {
-    ASSERT(IsAndroid());
+    // ASSERT(IsAndroid());
 
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -3601,8 +3601,12 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
 
     ANGLE_VK_TRY(contextVk, mBuffer.init(renderer->getDevice(), modifiedCreateInfo));
 
-    ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &mBuffer,
-                                        &mMemoryPropertyFlags, mMemory.getExternalMemoryObject()));
+    if (IsAndroid())
+    {
+        ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &mBuffer,
+                                            &mMemoryPropertyFlags,
+                                            mMemory.getExternalMemoryObject()));
+    }
 
     ANGLE_TRY(mMemory.initExternal(clientBuffer));
 
