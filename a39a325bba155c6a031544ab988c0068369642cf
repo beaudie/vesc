@@ -46,6 +46,30 @@
       },
       "revId": "a39a325bba155c6a031544ab988c0068369642cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "111289dc_0bef8dcb",
+        "filename": "src/libANGLE/capture/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-03T15:19:07Z",
+      "side": 1,
+      "message": "Yeah, it does seem like overkill, but checking the other entrypoints, we do have precedence:\n\n void CaptureGetUniformiv_params(const State \u0026glState,\n                                 bool isCallValid,\n                                 ShaderProgramID program,\n                                 UniformLocation location,\n                                 GLint *params,\n                                 ParamCapture *paramCapture)\n {\n     // the value returned cannot have size larger than a mat4 of ints\n     paramCapture-\u003ereadBufferSizeBytes \u003d 64;\n }",
+      "parentUuid": "171deb48_b1e745a2",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 74
+      },
+      "revId": "a39a325bba155c6a031544ab988c0068369642cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
