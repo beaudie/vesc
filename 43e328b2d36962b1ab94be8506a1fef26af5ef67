@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "049aaa23_4a00b137",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:47:03Z",
+      "side": 1,
+      "message": "Can you explain why this is better, in more detail?\n\nThis leads to passing around strings and doing lots of strcmp() calls which requires more memory and executes slower.   Additionally, rather than type-checked enums, this is using strings that can contain typos that can\u0027t be caught by the compiler.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb06ae6d_3136489d",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:47:03Z",
+      "side": 1,
+      "message": "nit: These are all traces, so this is a little vague/confusing.   It looks like this is being used to ID traces by their names, so I suggest something like: isTraceNamed()",
+      "range": {
+        "startLine": 130,
+        "startChar": 9,
+        "endLine": 130,
+        "endChar": 16
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "622bb1ce_421ca195",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:47:03Z",
+      "side": 1,
+      "message": "This should be a named const somewhere so everyone uses the same value.",
+      "range": {
+        "startLine": 653,
+        "startChar": 45,
+        "endLine": 653,
+        "endChar": 72
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4a8d193_065907a7",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:47:03Z",
+      "side": 1,
+      "message": "Why so much variation in the max path length?   It\u0027s 1000 here and 500 above.",
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "260ac5d9_2cd06ce1",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:47:03Z",
+      "side": 1,
+      "message": "const ref?",
+      "range": {
+        "startLine": 1807,
+        "startChar": 57,
+        "endLine": 1807,
+        "endChar": 78
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "951fc4b8_02a178a4",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:47:03Z",
+      "side": 1,
+      "message": "Another use.   These should all use a single shared declaration.",
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43502dd7_9d08e98a",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:47:03Z",
+      "side": 1,
+      "message": "Looks like this can be removed.",
+      "range": {
+        "startLine": 133,
+        "startChar": 44,
+        "endLine": 133,
+        "endChar": 54
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
