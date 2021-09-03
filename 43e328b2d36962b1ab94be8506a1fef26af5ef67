@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fdfaacf_e88c9afc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T19:52:59Z",
+      "side": 1,
+      "message": "It leads to not needing the auto-generated code, so you can just drop json files in and things just work. It\u0027s a better design overall because things don\u0027t have to be hard coded. The ids approach requires a recompile to manage any changes, and we want to move the traces towards something a bit less compiler-focused at some point. This will help manage larger trace sets. Do you have any evidence a few strcmp calls would adversely impact our workflow?",
+      "parentUuid": "049aaa23_4a00b137",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb06ae6d_3136489d",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 9
