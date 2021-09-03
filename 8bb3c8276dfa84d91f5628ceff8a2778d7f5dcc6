@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "894fd736_1ee7e715",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003155
+      },
+      "writtenOn": "2021-09-03T17:13:41Z",
+      "side": 1,
+      "message": "FYI this change appears to break the Skia roller (win/debug bots): https://skia-review.googlesource.com/c/skia/+/445497\n\nstart unit test  EGLImageTest\ntype: 3\nFATAL: DisplayD3D.cpp:249 (makeCurrent): \t! Assert failed in makeCurrent (../../../../../../skia/third_party/externals/angle2/src/libANGLE/renderer/d3d/DisplayD3D.cpp:249): mRenderer !\u003d nullptr\n\nINFO: EGL ERROR: eglMakeCurrent:\nCaught exception 3221225477 EXCEPTION_ACCESS_VIOLATION\tunit test  EGLImageTest\nCaught exception 3221225477 EXCEPTION_ACCESS_VIOLATION, was running:\n\tunit test  EGLImageTest\n\tunit test  EGLImageTest\nLikely culprit:\n\tunit test  EGLImageTest",
+      "revId": "8bb3c8276dfa84d91f5628ceff8a2778d7f5dcc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
