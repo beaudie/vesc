@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6d7f7146_f0519a82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T11:30:00Z",
+      "side": 1,
+      "message": "nit: from -\n\nI\u0027d reword this to \n\nBut almost all support sampling with this format.",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "d8e9a177843f9735dc1b8f39b569a7a58a31aeac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "99cb4101_49deedce",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -19,6 +42,29 @@
         "startChar": 19,
         "endLine": 11,
         "endChar": 29
+      },
+      "revId": "d8e9a177843f9735dc1b8f39b569a7a58a31aeac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a80a23_33fe401a",
+        "filename": "src/tests/gl_tests/VulkanFramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T11:30:00Z",
+      "side": 1,
+      "message": "Vulkan has no mandatory support for VK_FORMAT_R4G4B4A4_UNORM_PACK16\n\nhttps://www.khronos.org/registry/vulkan/specs/1.2/html/chap33.html#features-required-format-support\n\nPlease add a precondition to the test initialization that calls hackANGLE, and then reads the format support table to ensure that the \"actualReadOnlyImageFormat\" for RGBA4444 is really 4444.",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 112,
+        "endChar": 90
       },
       "revId": "d8e9a177843f9735dc1b8f39b569a7a58a31aeac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
