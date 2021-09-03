@@ -223,6 +223,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14b6e12_d8e8da39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T01:00:43Z",
+      "side": 1,
+      "message": "Most of these you listed above as I know are already covered by deqp tests, that is how I end up spent more than a week tracking down the bots failures. I think we should focus the effort on things that you suspect we have a bug here and try to write a test to prove it, rather than essentially rewrite the deqp test again, doubling the engineering and test time. How about I create a bug tracking what you described above and we can schedule it based on priority?",
+      "parentUuid": "5dc820c5_ead3562d",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a8a4803_cf06e968",
