@@ -464,6 +464,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c06272c4_93814138",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T17:29:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d2547e7_7601751d",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 5
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06832057_0d794273",
@@ -560,6 +584,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a849609_44dfec18",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T17:29:37Z",
+      "side": 1,
+      "message": "Rather than spend another day digging on various failures comes from it, can we leave this optimization for follow up CLs? There will be more work involved to get the draw path working for all levels, and we even not sure if any real app is hitting the slow path at all.",
+      "parentUuid": "abd6f88a_0e1f91f0",
+      "range": {
+        "startLine": 2109,
+        "startChar": 0,
+        "endLine": 2112,
+        "endChar": 73
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f478419_f99fa1c5",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -643,6 +691,24 @@
       "side": 1,
       "message": "Maybe all you need here is\n\n    // Create a new image if used as attachment for the first time.\n    if (mState.hasBeenBoundAsAttachment())\n    {\n        ANGLE_TRY(ensureRenderable(contextVk));\n    }",
       "parentUuid": "a1e9357d_8883f4eb",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4e3bf6_4760e5a1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T17:29:37Z",
+      "side": 1,
+      "message": "Good point.",
+      "parentUuid": "b4ad1009_4e351caf",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

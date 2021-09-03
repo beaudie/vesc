@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb0cb287_b7e85e43",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T17:29:37Z",
+      "side": 1,
+      "message": "That is what original code works. If isInt() true, testFunction will not set to  HasFullTextureFormatSupport. Maybe there is bug with the original code, feel free to create a bug and fix.",
+      "parentUuid": "ab3f2c6a_1f029e54",
+      "range": {
+        "startLine": 161,
+        "startChar": 8,
+        "endLine": 161,
+        "endChar": 60
+      },
+      "revId": "65f4ef76e136592514748974c0c2ca5fb4f04f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9eef1d7f_8051d9fd",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 41
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-03T11:42:25Z",
       "side": 1,
       "message": "nit: flip yoda condition\n\nI don\u0027t know if we have a style bullet point for that but if you want to file a bug on me I can bring it up to the team to confirm it\u0027s agreed.",
+      "range": {
+        "startLine": 244,
+        "startChar": 7,
+        "endLine": 244,
+        "endChar": 74
+      },
+      "revId": "65f4ef76e136592514748974c0c2ca5fb4f04f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3627233_72150919",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T17:29:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eef1d7f_8051d9fd",
       "range": {
         "startLine": 244,
         "startChar": 7,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3263a1c7_d5be94be",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T17:29:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32aea06e_6dae21cc",
+      "range": {
+        "startLine": 150,
+        "startChar": 9,
+        "endLine": 150,
+        "endChar": 44
+      },
+      "revId": "65f4ef76e136592514748974c0c2ca5fb4f04f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53f1057b_64a0ad7b",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-09-03T01:47:28Z",
       "side": 1,
       "message": "typo: Mismatched (with one \u0027s\u0027)",
+      "range": {
+        "startLine": 6539,
+        "startChar": 41,
+        "endLine": 6539,
+        "endChar": 42
+      },
+      "revId": "65f4ef76e136592514748974c0c2ca5fb4f04f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb4488a8_f9410a21",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 6539,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T17:29:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53f1057b_64a0ad7b",
       "range": {
         "startLine": 6539,
         "startChar": 41,
