@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0f29e89_162d2670",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T20:22:57Z",
+      "side": 1,
+      "message": "\u003e It leads to not needing the auto-generated code, so you can just drop json files in and things just work. \n\n\u003e The ids approach requires a recompile to manage any changes, and we want to move the traces towards something a bit less compiler-focused at some point.\n\nCan you explain how this works in practice?   What \"just works\", that doesn\u0027t today?\n\nWe will always need auto-generation to fill out the .gni files so the traces can be built.   Also, the source for the traces themselves will always have to be compiled before it\u0027s run anyway.\n\nAlso, IDEs can\u0027t correlate JSON data to C++ structs, so we are losing IDE support.",
+      "parentUuid": "8fdfaacf_e88c9afc",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb06ae6d_3136489d",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 9
