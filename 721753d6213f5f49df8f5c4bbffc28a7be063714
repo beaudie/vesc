@@ -613,6 +613,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1e9357d_8883f4eb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T11:42:25Z",
+      "side": 1,
+      "message": "Process nit as below, I had to hunt around for this comment so I could unresolve it. I\u0027m pushing back on this because it\u0027s still a layering violation. Can you implement the necessary calls here without calling anything mutable in gl::Texture or rx::TextureImpl?",
+      "parentUuid": "c0562583_d4b342f3",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5c6a5f9d_f4803e2c",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -847,6 +865,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b0e37a8_57608b4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T11:42:25Z",
+      "side": 1,
+      "message": "nit: sampling is not the correct term, because these textures can also be read via texelFetch type reads without a sampler. sorry to be so technical. I\u0027m fine if you want to defer this to later, especially if you feel differently, as it\u0027s pretty clear what SampleOnly means.",
+      "parentUuid": "9a74b0a9_a299b38e",
+      "range": {
+        "startLine": 77,
+        "startChar": 46,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8d8ee46_b8b8c751",
@@ -932,6 +974,30 @@
       "side": 1,
       "message": "Lets deal with this in next CL where I made vk::Format as class. Since in that CL, you guys are asking to rename these to mClassMember anyway.",
       "parentUuid": "12ab8008_2c4d0f4d",
+      "range": {
+        "startLine": 97,
+        "startChar": 60,
+        "endLine": 97,
+        "endChar": 79
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bad18963_f098965f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T11:42:25Z",
+      "side": 1,
+      "message": "SGTM\n\nprocess nit:\n\nIf you leave resolve comments that you want us to read unresolved, it makes it easier for us to see them, and we can just hit \"Ack\" to resolve your question (can we deal with this next CL), which is usually not a problem.",
+      "parentUuid": "3e15f6a4_8a7de12d",
       "range": {
         "startLine": 97,
         "startChar": 60,

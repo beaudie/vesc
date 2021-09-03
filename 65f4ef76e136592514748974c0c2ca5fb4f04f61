@@ -26,6 +26,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9eef1d7f_8051d9fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T11:42:25Z",
+      "side": 1,
+      "message": "nit: flip yoda condition\n\nI don\u0027t know if we have a style bullet point for that but if you want to file a bug on me I can bring it up to the team to confirm it\u0027s agreed.",
+      "range": {
+        "startLine": 244,
+        "startChar": 7,
+        "endLine": 244,
+        "endChar": 74
+      },
+      "revId": "65f4ef76e136592514748974c0c2ca5fb4f04f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32aea06e_6dae21cc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T11:42:25Z",
+      "side": 1,
+      "message": "nit: I\u0027d rename this to something like hasRenderableImageFallbackFormat",
+      "range": {
+        "startLine": 150,
+        "startChar": 9,
+        "endLine": 150,
+        "endChar": 44
+      },
+      "revId": "65f4ef76e136592514748974c0c2ca5fb4f04f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53f1057b_64a0ad7b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 41
