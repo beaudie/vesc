@@ -22,6 +22,30 @@
       },
       "revId": "a39a325bba155c6a031544ab988c0068369642cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171deb48_b1e745a2",
+        "filename": "src/libANGLE/capture/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-09-03T15:06:01Z",
+      "side": 1,
+      "message": "True, I kind of misunderstood the description of the function there. In this case we should probably find a way to get the actual size, because reserving the space for a 4x4 matrix in all cases seems a bit too much.",
+      "parentUuid": "ed787539_d3d08538",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 74
+      },
+      "revId": "a39a325bba155c6a031544ab988c0068369642cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
