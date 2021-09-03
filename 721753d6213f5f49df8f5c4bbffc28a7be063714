@@ -279,6 +279,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f98de7d_4737789d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T18:55:54Z",
+      "side": 1,
+      "message": "Some of the tests are already covered in existing tests for sure. I have debugged more than a dozen tests in past two weeks and I have a list of ~30 tests failed at various point of time due to bugs in the code. I actually have a bit good surprises that how well testing coverage we have on textures, so you all should feel a bit asured. If Shabi is okay, lets defer more tests into the other CL https://chromium-review.googlesource.com/c/angle/angle/+/3141030/ and I can walk through your list see what test I can add.",
+      "parentUuid": "5978a40c_dc43f13e",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a8a4803_cf06e968",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -792,6 +810,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3a646fd_bf3b5726",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3380,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T18:55:54Z",
+      "side": 1,
+      "message": "The attempt to only do enabled levels fail some bits. I think at least for immutable tetxure we need to convert all levels. The correct fix I think we should do re-formating with CPU instead of DMA-Read-\u003eDMA. If we do in CPU, I think you dont need this block of code and is faster.  https://issuetracker.google.com/198788068",
+      "parentUuid": "cb807c54_eee0062f",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5ae0ad8_f90697d2",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -803,6 +839,24 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "Probably a bug here if mipmapping is enabled and the image has incompatible updates. See test plan.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c3af8b2_1e2b3da5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T18:55:54Z",
+      "side": 1,
+      "message": "Lets also deal with this in https://chromium-review.googlesource.com/c/angle/angle/+/3141030 where you want the test coverage.",
+      "parentUuid": "a5ae0ad8_f90697d2",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1053,6 +1107,30 @@
       "side": 1,
       "message": "I\u0027m fine with leaving it.. if you want to get precise, I\u0027d call this ImageUsage with values of ShaderRead and ShaderReadAndColorAttachment to mirror the Vulkan spec.",
       "parentUuid": "5a93bdf5_73c38563",
+      "range": {
+        "startLine": 77,
+        "startChar": 46,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb3bfe79_381fb25e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T18:55:54Z",
+      "side": 1,
+      "message": "Leaving it as is now.",
+      "parentUuid": "dd2886e7_de7948fe",
       "range": {
         "startLine": 77,
         "startChar": 46,
