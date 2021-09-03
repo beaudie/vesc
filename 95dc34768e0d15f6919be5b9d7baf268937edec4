@@ -16,6 +16,46 @@
       "message": "Great work figuring out the needed fix in the program prelude!\n\nlgtm\n\nSince this is a small self-contained fix, let me +2 it so it can land more quickly. CC\u0027ing a few others.",
       "revId": "95dc34768e0d15f6919be5b9d7baf268937edec4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dab56dde_d30e8f6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T01:25:04Z",
+      "side": 1,
+      "message": "Thanks for all the tests!",
+      "revId": "95dc34768e0d15f6919be5b9d7baf268937edec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aab4ca61_a45f224f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T01:25:04Z",
+      "side": 1,
+      "message": "nit: You can use EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white). GLColor::transparentBlack for the previous one.",
+      "range": {
+        "startLine": 591,
+        "startChar": 4,
+        "endLine": 591,
+        "endChar": 19
+      },
+      "revId": "95dc34768e0d15f6919be5b9d7baf268937edec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
