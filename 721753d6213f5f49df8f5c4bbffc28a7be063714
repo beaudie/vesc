@@ -295,6 +295,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8dffac3_0d75851b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T19:50:08Z",
+      "side": 1,
+      "message": "Ack. Follow up in a few days SGTM.\n\n\u003e I actually have a bit good surprises that how well testing coverage we have on textures\n\nToo many people have been burned by subtleties ;)",
+      "parentUuid": "1f98de7d_4737789d",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a8a4803_cf06e968",
@@ -822,6 +840,24 @@
       "side": 1,
       "message": "The attempt to only do enabled levels fail some bits. I think at least for immutable tetxure we need to convert all levels. The correct fix I think we should do re-formating with CPU instead of DMA-Read-\u003eDMA. If we do in CPU, I think you dont need this block of code and is faster.  https://issuetracker.google.com/198788068",
       "parentUuid": "cb807c54_eee0062f",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf1bb1d_d580ac73",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T19:50:08Z",
+      "side": 1,
+      "message": "Ack, immutable textures need to do all levels unconditionally.\n\nActually \"enabled levels\" should not be used, but rather \"allocated levels\". So it shouldn\u0027t matter what the current state of the sampler is, but what the image actually covers.",
+      "parentUuid": "b3a646fd_bf3b5726",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
