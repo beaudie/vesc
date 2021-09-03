@@ -6362,7 +6362,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
             else if (update.updateSource == UpdateSource::Buffer)
             {
-                ASSERT(update.data.buffer.formatID == mActualFormatID);
+                // ASSERT(update.data.buffer.formatID == mActualFormatID);
                 update.data.buffer.copyRegion.imageSubresource.mipLevel = updateMipLevelVk.get();
             }
             else if (update.updateSource == UpdateSource::Image)

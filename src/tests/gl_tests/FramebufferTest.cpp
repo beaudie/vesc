@@ -1115,8 +1115,9 @@ class FramebufferTestWithFormatFallback : public ANGLETest
     void copyTexImageFollowedBySampling(GLenum internalFormat, GLenum type);
     void cubeTexImageFollowedByFBORead(GLenum internalFormat, GLenum type);
     GLushort convertGLColorToUShort(GLenum internalFormat, const GLColor &color);
-    static constexpr GLsizei kTexWidth  = 2;
-    static constexpr GLsizei kTexHeight = 2;
+    static constexpr GLsizei kTexWidth  = 16;
+    static constexpr GLsizei kTexHeight = 16;
+    static constexpr GLsizei kMaxLevel  = 4;
 };
 
 GLushort FramebufferTestWithFormatFallback::convertGLColorToUShort(GLenum internalFormat,
@@ -1153,30 +1154,41 @@ void FramebufferTestWithFormatFallback::texImageFollowedByFBORead(GLenum interna
                                                                   GLenum type)
 {
     const GLColor kColor = GLColor::blue;
-    GLTexture blueTex2D;
-    glBindTexture(GL_TEXTURE_2D, blueTex2D);
-    const GLushort u16Color = convertGLColorToUShort(internalFormat, kColor);
-    std::vector<GLushort> bluePixels(kTexWidth * kTexHeight, u16Color);
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
-                 bluePixels.data());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    // attach blue texture to FBO
-    GLFramebuffer fbo;
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blueTex2D, 0);
-    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
-    EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColor.R, kColor.G, kColor.B, kColor.A);
-    ASSERT_GL_NO_ERROR();
+    for (int loop = 0; loop < 2; loop++)
+    {
+        GLTexture texture;
+        glBindTexture(GL_TEXTURE_2D, texture);
+        const GLushort u16Color = convertGLColorToUShort(internalFormat, kColor);
+        std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
+        if (loop == 0)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
+                         pixels.data());
+        }
+        else
+        {
+            glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, kTexWidth, kTexHeight);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTexWidth, kTexHeight, GL_RGBA, type,
+                            pixels.data());
+        }
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        // attach blue texture to FBO
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+        EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColor.R, kColor.G, kColor.B, kColor.A);
+        ASSERT_GL_NO_ERROR();
+    }
 }
-TEST_P(FramebufferTestWithFormatFallback, TexImageRGBA5551)
+TEST_P(FramebufferTestWithFormatFallback, R5G5B5A1_TexImage)
 {
-    // http://anglebug.com/6347
-    ANGLE_SKIP_TEST_IF(IsOSX());
     texImageFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
 }
-TEST_P(FramebufferTestWithFormatFallback, TexImageRGBA4444)
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_TexImage)
 {
     texImageFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
 }
@@ -1236,11 +1248,11 @@ void FramebufferTestWithFormatFallback::copyTexImageFollowedBySampling(GLenum in
                     kColor.A);
     ASSERT_GL_NO_ERROR();
 }
-TEST_P(FramebufferTestWithFormatFallback, CopyTexImageRGBA5551)
+TEST_P(FramebufferTestWithFormatFallback, R5G5B5A1_CopyTexImage)
 {
     copyTexImageFollowedBySampling(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
 }
-TEST_P(FramebufferTestWithFormatFallback, CopyTexImageRGBA4444)
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_CopyTexImage)
 {
     copyTexImageFollowedBySampling(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
 }
@@ -1304,11 +1316,11 @@ void FramebufferTestWithFormatFallback::blitCopyFollowedByFBORead(GLenum interna
     EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColor.R, kColor.G, kColor.B, kColor.A);
     ASSERT_GL_NO_ERROR();
 }
-TEST_P(FramebufferTestWithFormatFallback, BlitCopyTexImageRGBA5551)
+TEST_P(FramebufferTestWithFormatFallback, R5G5B5A1_BlitCopyTexImage)
 {
     blitCopyFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
 }
-TEST_P(FramebufferTestWithFormatFallback, BlitCopyTexImageRGBA4444)
+TEST_P(FramebufferTestWithFormatFallback, RGBA4444_BlitCopyTexImage)
 {
     blitCopyFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
 }
@@ -1347,13 +1359,230 @@ void FramebufferTestWithFormatFallback::cubeTexImageFollowedByFBORead(GLenum int
     }
     ASSERT_GL_NO_ERROR();
 }
-TEST_P(FramebufferTestWithFormatFallback, CubeTexImageRGBA5551)
+TEST_P(FramebufferTestWithFormatFallback, R5G5B5A1_CubeTexImage)
 {
     cubeTexImageFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
 }
-TEST_P(FramebufferTestWithFormatFallback, CubeTexImageRGBA4444)
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_CubeTexImage)
 {
     cubeTexImageFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
+}
+
+// Tests that the out-of-range staged update is reformated when mipmapping is enabled, but not
+// before it.
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_OutOfRangeStagedUpdateReformated)
+{
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    glUseProgram(program);
+    GLint textureLocation = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    ASSERT_NE(-1, textureLocation);
+    GLint lodLocation = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, lodLocation);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    GLushort u16Color = convertGLColorToUShort(GL_RGBA4, GLColor::red);
+    std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTexWidth, kTexHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_SHORT_4_4_4_4, pixels.data());
+    u16Color = convertGLColorToUShort(GL_RGB5_A1, GLColor::green);
+    pixels.assign(kTexWidth * kTexHeight, u16Color);
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, kTexWidth / 2, kTexHeight / 2, 0, GL_RGBA,
+                 GL_UNSIGNED_SHORT_5_5_5_1, pixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Draw quad
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1f(lodLocation, 0);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 0, 0, 255);
+
+    // Now trigger format conversion
+    GLFramebuffer readFbo;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowWidth() / 2, 255, 0, 0, 255);
+
+    // update level0 with compatible data and enable mipmap
+    u16Color = convertGLColorToUShort(GL_RGBA4, GLColor::blue);
+    pixels.assign(kTexWidth * kTexHeight, u16Color);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTexWidth, kTexHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_SHORT_4_4_4_4, pixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    // Draw quad with lod0 and lod1 and verify color
+    glUniform1f(lodLocation, 0);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 0, 0, 255, 255);
+    glUniform1f(lodLocation, 1);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 0, 0, 255, 255);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Tests that the texture is reformatted when the clear is done through the draw path.
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_MaskedClear)
+{
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    GLushort u16Color = convertGLColorToUShort(GL_RGBA4, GLColor::red);
+    std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTexWidth, kTexHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_SHORT_4_4_4_4, pixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Draw quad
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    glUseProgram(program);
+    GLint textureLocation = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    ASSERT_NE(-1, textureLocation);
+    GLint lodLocation = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, lodLocation);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUniform1f(lodLocation, 0);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 0, 0, 255);
+    ASSERT_GL_NO_ERROR();
+
+    // Now trigger format conversion with masked clear
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, 255, 0, 0, 255);
+    glClearColor(0, 1, 1, 1);
+    glColorMask(false, true, false, false);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, 255, 255, 0, 255);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Tests that glGenerateMipmap works when the format is converted to renderable..
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_GenerateMipmap)
+{
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    glUseProgram(program);
+    GLint textureLocation = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    ASSERT_NE(-1, textureLocation);
+    GLint lodLocation = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, lodLocation);
+
+    for (int loop = 0; loop < 4; loop++)
+    {
+        GLTexture texture;
+        glBindTexture(GL_TEXTURE_2D, texture);
+        GLushort u16Color = convertGLColorToUShort(GL_RGBA4, GLColor::red);
+        std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTexWidth, kTexHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_SHORT_4_4_4_4, pixels.data());
+        u16Color = convertGLColorToUShort(GL_RGBA4, GLColor::green);
+        pixels.assign(kTexWidth * kTexHeight, u16Color);
+        glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, kTexWidth / 2, kTexHeight / 2, 0, GL_RGBA,
+                     GL_UNSIGNED_SHORT_5_5_5_1, pixels.data());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        if (loop == 0 || loop == 2)
+        {
+            // Draw quad
+            glUniform1f(lodLocation, 0);
+            drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+            EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 0, 0, 255);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        if (loop > 2)
+        {
+            // Now trigger format conversion
+            GLFramebuffer readFbo;
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo);
+            glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                   texture, 0);
+            EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+            EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, 255, 0, 0, 255);
+        }
+
+        // GenerateMipmap
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        // Verify each lod
+        for (int lod = 0; lod <= kMaxLevel; lod++)
+        {
+            glUniform1f(lodLocation, lod);
+            drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+            EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 0, 0, 255);
+        }
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
+// Tests that when reformatting the image, incompatible updates don't cause a problem.
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_InCompatibleFormat)
+{
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    glUseProgram(program);
+    GLint textureLocation = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    ASSERT_NE(-1, textureLocation);
+    GLint lodLocation = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, lodLocation);
+
+    for (int loop = 0; loop < 4; loop++)
+    {
+        GLTexture texture;
+        glBindTexture(GL_TEXTURE_2D, texture);
+        // Define a texture with lod0 and lod1 with two different effective internal formats or size
+        GLushort u16Color = convertGLColorToUShort(GL_RGBA4, GLColor::red);
+        std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTexWidth, kTexHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_SHORT_4_4_4_4, pixels.data());
+        if (loop < 2)
+        {
+            u16Color = convertGLColorToUShort(GL_RGB5_A1, GLColor::green);
+            pixels.assign(kTexWidth * kTexHeight, u16Color);
+            // bad effective internal format
+            glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, kTexWidth / 2, kTexHeight / 2, 0, GL_RGBA,
+                         GL_UNSIGNED_SHORT_5_5_5_1, pixels.data());
+        }
+        else
+        {
+            u16Color = convertGLColorToUShort(GL_RGBA4, GLColor::green);
+            pixels.assign(kTexWidth * kTexHeight, u16Color);
+            // bad size
+            glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, kTexWidth, kTexHeight, 0, GL_RGBA,
+                         GL_UNSIGNED_SHORT_4_4_4_4, pixels.data());
+        }
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        // Now trigger format conversion and verify lod0
+        GLFramebuffer readFbo;
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo);
+        glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture,
+                               0);
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+        EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, 255, 0, 0, 255);
+
+        if (loop == 1 || loop == 3)
+        {
+            // Disable mipmap and sample from lod0 and verify
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glUniform1f(lodLocation, 0);
+            drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+            EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 0, 0, 255);
+        }
+    }
 }
 
 class FramebufferTest_ES31 : public ANGLETest
