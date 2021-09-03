@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03812c68_8c44316e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4844,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-03T14:21:49Z",
+      "side": 1,
+      "message": "These are interesting.  We don\u0027t actually do anything with ProgramPipelines on Reset (see MaybeResetResources), but we will eventually.  The recent refactors to make this handling generic enables us to be future looking and include these here.  Cool.",
+      "range": {
+        "startLine": 4844,
+        "startChar": 0,
+        "endLine": 4844,
+        "endChar": 54
+      },
+      "revId": "dbb875d470d86ac7cc48b75317036705aa6cc239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
