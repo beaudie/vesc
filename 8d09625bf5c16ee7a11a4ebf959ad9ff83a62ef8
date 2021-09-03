@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "02189fa9_c53763c0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-09-03T23:52:19Z",
+      "side": 1,
+      "message": "Done. Looks like the flipping signed-ness already happens on line `1817`",
+      "parentUuid": "1d5df5b2_ed5488b1",
+      "revId": "8d09625bf5c16ee7a11a4ebf959ad9ff83a62ef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "707165fe_b5b6d6d8",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 4
