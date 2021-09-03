@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aa7c915_731110e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:24:13Z",
+      "side": 1,
+      "message": "nit: and \u0027--validation-expr\u0027",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 63
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14fbb452_72ee7fb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:24:13Z",
+      "side": 1,
+      "message": "Please provide an example call that can actually be passed to --validation-expr/ANGLE_CAPTURE_VALIDATION_EXPR with real values.",
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79518a6_9169da6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:24:13Z",
+      "side": 1,
+      "message": "It would be good to clarify what \"call\" means here to be GL function calls.   Meaning, for example, between the 1100th and 1189th glTexImage2D() calls.",
+      "range": {
+        "startLine": 16,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 4
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93f33743_0786a5c6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5284,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:24:13Z",
+      "side": 1,
+      "message": "nit: This doesn\u0027t match the naming of the function it\u0027s being used with:\n\n  int ReplaceAllSubstrings(std::string *str,\n                           const std::string \u0026substring,\n                           const std::string \u0026replacement)\n                           \nThis is the \u0027str\u0027, not the \u0027replacement\u0027.   I suggest calling this something else to indicate it\u0027s the updated string with the values replaced to keep things consistent.",
+      "range": {
+        "startLine": 5284,
+        "startChar": 24,
+        "endLine": 5284,
+        "endChar": 35
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85561833_d8284b62",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5287,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-03T18:24:13Z",
+      "side": 1,
+      "message": "It would be nice to have an example of what the starting string is and what it looks like after these replacements, so we can see what they\u0027re doing.   It would also be helpful to know why these replacements are being done.",
+      "range": {
+        "startLine": 5286,
+        "startChar": 0,
+        "endLine": 5287,
+        "endChar": 98
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
