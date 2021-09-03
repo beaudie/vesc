@@ -92,6 +92,30 @@
       },
       "revId": "d8e9a177843f9735dc1b8f39b569a7a58a31aeac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "619332a2_3d141711",
+        "filename": "src/tests/gl_tests/VulkanFramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T14:13:23Z",
+      "side": 1,
+      "message": "Also see https://gitlab.khronos.org/vulkan/vulkan/-/issues/2148",
+      "parentUuid": "9e18e59e_98810e99",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 112,
+        "endChar": 90
+      },
+      "revId": "d8e9a177843f9735dc1b8f39b569a7a58a31aeac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
