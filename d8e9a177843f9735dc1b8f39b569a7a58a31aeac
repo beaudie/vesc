@@ -68,6 +68,30 @@
       },
       "revId": "d8e9a177843f9735dc1b8f39b569a7a58a31aeac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e18e59e_98810e99",
+        "filename": "src/tests/gl_tests/VulkanFramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T14:01:28Z",
+      "side": 1,
+      "message": "Good point. Independently, we should add B4G4R4A4_UNORM as fallback for R4G4B4A4_UNORM (in vk_format_map.json) before falling back to R8G8B8A8_UNORM.",
+      "parentUuid": "59a80a23_33fe401a",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 112,
+        "endChar": 90
+      },
+      "revId": "d8e9a177843f9735dc1b8f39b569a7a58a31aeac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
