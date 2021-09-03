@@ -539,6 +539,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0562583_d4b342f3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "I removed the dirtyBits here so that there is no faking of dirty bits. syncState really is not looking at dirty bit anyway.",
+      "parentUuid": "c2272cc5_c8dbe3a5",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c6a5f9d_f4803e2c",
@@ -552,6 +570,24 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "This should probably only check the enabled levels, in case there are updates with mismatching formats outside the range.",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb807c54_eee0062f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3380,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c6a5f9d_f4803e2c",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -622,6 +658,24 @@
       "side": 1,
       "message": "This is for textures that does not have fallback format for rendering. For example,R8G8B8A8. The initializeFallbackFormat will not get called and will not update it. This line essentially saying that if initializeFallback did not touch it, we will keep it the same as actualImageFormatID.\n\nIf we leave it as None, then every time you try to retrieve a renderable format, you will have to check.\n\nWith the better formatID name and comment, I think this should be fine.",
       "parentUuid": "05c5a79d_96aa7c9e",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7205dca_174bfe35",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8d55c23_44266fac",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -697,6 +751,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a74b0a9_a299b38e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Added this:\n\nenum ImageAccess\n{\n    SampleOnly,\n    Renderable,\n};\n\nAnd changed \nmRequiresRenderableStorage \u003d\u003d\u003e mRequiredImageAccess\nisRenderable()             \u003d\u003d\u003e getRequiredImageAccess()",
+      "parentUuid": "ad2c4411_096d64a8",
+      "range": {
+        "startLine": 77,
+        "startChar": 46,
+        "endLine": 77,
+        "endChar": 61
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8d8ee46_b8b8c751",
@@ -758,6 +836,30 @@
       "side": 1,
       "message": "This is a case where I think we should add some comments where the member variables are declared (perhaps here too as to intention of these methods).  There\u0027s just enough subtlety here where I want to make sure nobody mistakes things in the future:-).\n\nAlso, sorry Shabi, but I had to think a bit about what \"Texturable\" means.  I\u0027m still not sure.  Maybe \"Samplable\"?",
       "parentUuid": "f8d8ee46_b8b8c751",
+      "range": {
+        "startLine": 97,
+        "startChar": 60,
+        "endLine": 97,
+        "endChar": 79
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e15f6a4_8a7de12d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Lets deal with this in next CL where I made vk::Format as class. Since in that CL, you guys are asking to rename these to mClassMember anyway.",
+      "parentUuid": "12ab8008_2c4d0f4d",
       "range": {
         "startLine": 97,
         "startChar": 60,
@@ -909,6 +1011,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50ebe8c0_93e1e855",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af45bf1a_978849d9",
+      "range": {
+        "startLine": 1156,
+        "startChar": 0,
+        "endLine": 1157,
+        "endChar": 33
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf7f1373_7c6e45dc",
@@ -922,6 +1048,30 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "nit: Use `EXPECT_GL_FRAMEBUFFER_COMPLETE` everywhere.",
+      "range": {
+        "startLine": 1173,
+        "startChar": 4,
+        "endLine": 1173,
+        "endChar": 88
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd3919c_6c0fa72a",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf7f1373_7c6e45dc",
       "range": {
         "startLine": 1173,
         "startChar": 4,
@@ -955,6 +1105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "770180b8_c4bc22a8",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6331f52b_2214919a",
+      "range": {
+        "startLine": 1231,
+        "startChar": 0,
+        "endLine": 1233,
+        "endChar": 28
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "926bbc0b_16841a36",
@@ -968,6 +1142,30 @@
       "writtenOn": "2021-09-02T16:00:46Z",
       "side": 1,
       "message": "nit: you can remove some of these ASSERT_GL_NO_ERRORs to remove clutter. Once after draw and once after EXPECT_PIXEL_EQ for example should be fine.",
+      "range": {
+        "startLine": 1245,
+        "startChar": 4,
+        "endLine": 1245,
+        "endChar": 25
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba6184d6_5ab38de7",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-03T00:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "926bbc0b_16841a36",
       "range": {
         "startLine": 1245,
         "startChar": 4,
