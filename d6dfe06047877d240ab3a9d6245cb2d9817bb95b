@@ -34,6 +34,24 @@
       "parentUuid": "b5d24398_37100d2b",
       "revId": "d6dfe06047877d240ab3a9d6245cb2d9817bb95b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec4529d2_dc297173",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T10:59:06Z",
+      "side": 1,
+      "message": "Yeah, it would be nice to have, can be a follow-up. Basically any GetTexImage with an update staged would produce incorrect results or hit the ASSERT.",
+      "parentUuid": "44c0db3d_de42c35f",
+      "revId": "d6dfe06047877d240ab3a9d6245cb2d9817bb95b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
