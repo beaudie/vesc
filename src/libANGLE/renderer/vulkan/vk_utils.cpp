@@ -86,8 +86,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
                                               const void *extraAllocationInfo,
                                               vk::DeviceMemory *deviceMemoryOut)
 {
-    VkDevice device = context->getDevice();
-
+    VkDevice device          = context->getDevice();
     uint32_t memoryTypeIndex = 0;
     ANGLE_TRY(memoryProperties.findCompatibleMemoryIndex(
         context, memoryRequirements, requestedMemoryPropertyFlags, (extraAllocationInfo != nullptr),
@@ -108,6 +107,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     {
         if ((*memoryPropertyFlagsOut & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
         {
+
             // Can map the memory.
             ANGLE_TRY(vk::InitMappableDeviceMemory(context, deviceMemoryOut,
                                                    memoryRequirements.size, kNonZeroInitValue,
@@ -128,7 +128,6 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
                                                  vk::DeviceMemory *deviceMemoryOut)
 {
     const vk::MemoryProperties &memoryProperties = context->getRenderer()->getMemoryProperties();
-
     ANGLE_TRY(FindAndAllocateCompatibleMemory(
         context, memoryProperties, requestedMemoryPropertyFlags, memoryPropertyFlagsOut,
         memoryRequirements, extraAllocationInfo, deviceMemoryOut));
@@ -414,9 +413,9 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
         // The Vulkan spec says the following -
         //     There must be at least one memory type with the VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
         //     bit set in its propertyFlags
-        if (FindCompatibleMemory(mMemoryProperties, memoryRequirements,
-                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPropertyFlagsOut,
-                                 typeIndexOut))
+        // if (FindCompatibleMemory(mMemoryProperties, memoryRequirements,
+        //                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPropertyFlagsOut,
+        //                          typeIndexOut))
         {
             return angle::Result::Continue;
         }

@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 #include <IOSurface/IOSurface.h>
 
@@ -106,6 +107,7 @@ angle::Result IOSurfaceSurfaceVkMac::initializeImpl(DisplayVk *displayVk)
     RendererVk *renderer      = displayVk->getRenderer();
     const egl::Config *config = mState.config;
 
+    // Should never be > 1
     GLint samples = 1;
     if (config->sampleBuffers && config->samples > 1)
     {
@@ -114,11 +116,10 @@ angle::Result IOSurfaceSurfaceVkMac::initializeImpl(DisplayVk *displayVk)
     ANGLE_VK_CHECK(displayVk, samples > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // Swiftshader will use the raw pointer to the buffer referenced by the IOSurfaceRef
-    ANGLE_TRY(mColorAttachment.initializeWithExternalMemory(
+    ANGLE_TRY(mColorAttachment.initialize(
         displayVk, mWidth, mHeight,
         renderer->getFormat(kIOSurfaceFormats[mFormatIndex].nativeSizedInternalFormat), samples,
-        IOSurfaceGetBaseAddressOfPlane(mIOSurface, mPlane), mState.isRobustResourceInitEnabled(),
-        mState.hasProtectedContent()));
+        mState.isRobustResourceInitEnabled(), mState.hasProtectedContent()));
     mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr, nullptr,
                             gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
 
@@ -140,7 +141,66 @@ egl::Error IOSurfaceSurfaceVkMac::bindTexImage(const gl::Context *context,
 {
     IOSurfaceLock(mIOSurface, 0, nullptr);
 
-    return egl::NoError();
+    ContextVk *contextVk = vk::GetImpl(context);
+    DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+    RendererVk *renderer = displayVk->getRenderer();
+
+    angle::Result result = contextVk->finishImpl();
+
+    if (!mBuffer.getBuffer().valid())
+    {
+        VkMemoryPropertyFlags memoryProperyFlags =
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        // VkImageUsageFlags usageFlags =
+        //     VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+        VkBufferCreateInfo createInfo = {};
+        createInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.flags              = 0;
+        createInfo.size               = IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) *
+                          IOSurfaceGetElementHeightOfPlane(mIOSurface, mPlane);
+        createInfo.usage                 = 0x1FF;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+
+        result = mBuffer.initExternal(contextVk, memoryProperyFlags, createInfo,
+                                      IOSurfaceGetBaseAddressOfPlane(mIOSurface, mPlane));
+    }
+
+    vk::PrimaryCommandBuffer commandBuffer;
+    result = renderer->getCommandBufferOneOff(contextVk, contextVk->hasProtectedContent(),
+                                              &commandBuffer);
+
+    // barrierImpl(context, mColorAttachment.image.getAspectFlags(), ImageLayout::TransferDst,
+    // mCurrentQueueFamilyIndex,
+    //             &commandBuffer);
+
+    VkBufferImageCopy copyRegion = {};
+    copyRegion.bufferOffset      = 0;
+    copyRegion.bufferRowLength   = IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) & 0xFFFFFFFF;
+    copyRegion.bufferImageHeight =
+        IOSurfaceGetElementHeightOfPlane(mIOSurface, mPlane) & 0xFFFFFFFF;
+    copyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    copyRegion.imageExtent.width           = mWidth;
+    copyRegion.imageExtent.height          = mHeight;
+    copyRegion.imageExtent.depth           = 1;
+
+    commandBuffer.copyBufferToImage(mBuffer.getBuffer().getHandle(),
+                                    mColorAttachment.image.getImage(), VK_IMAGE_LAYOUT_GENERAL, 1,
+                                    &copyRegion);
+
+    commandBuffer.end();
+
+    Serial serial;
+    result = renderer->queueSubmitOneOff(
+        contextVk, std::move(commandBuffer), contextVk->hasProtectedContent(),
+        egl::ContextPriority::Medium, nullptr, vk::SubmitPolicy::EnsureSubmitted, &serial);
+
+    result = contextVk->finishImpl();
+
+    IOSurfaceUnlock(mIOSurface, 0, nullptr);
+
+    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
 egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EGLint buffer)
@@ -148,7 +208,43 @@ egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EG
     ASSERT(context != nullptr);
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+    RendererVk *renderer = displayVk->getRenderer();
+
     angle::Result result = contextVk->finishImpl();
+
+    IOSurfaceLock(mIOSurface, 0, nullptr);
+
+    vk::PrimaryCommandBuffer commandBuffer;
+    result = renderer->getCommandBufferOneOff(contextVk, contextVk->hasProtectedContent(),
+                                              &commandBuffer);
+
+    // barrierImpl(context, mColorAttachment.image.getAspectFlags(), ImageLayout::TransferDst,
+    // mCurrentQueueFamilyIndex,
+    //             &commandBuffer);
+
+    VkBufferImageCopy copyRegion = {};
+    copyRegion.bufferOffset      = 0;
+    copyRegion.bufferRowLength   = IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) & 0xFFFFFFFF;
+    copyRegion.bufferImageHeight =
+        IOSurfaceGetElementHeightOfPlane(mIOSurface, mPlane) & 0xFFFFFFFF;
+    copyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    copyRegion.imageExtent.width           = mWidth;
+    copyRegion.imageExtent.height          = mHeight;
+    copyRegion.imageExtent.depth           = 1;
+
+    commandBuffer.copyImageToBuffer(mColorAttachment.image.getImage(), VK_IMAGE_LAYOUT_GENERAL,
+                                    mBuffer.getBuffer().getHandle(), 1, &copyRegion);
+
+    commandBuffer.end();
+
+    Serial serial;
+    result = renderer->queueSubmitOneOff(
+        contextVk, std::move(commandBuffer), contextVk->hasProtectedContent(),
+        egl::ContextPriority::Medium, nullptr, vk::SubmitPolicy::EnsureSubmitted, &serial);
+
+    result = contextVk->finishImpl();
+
+    mBuffer.release(renderer);
 
     IOSurfaceUnlock(mIOSurface, 0, nullptr);
 
@@ -161,7 +257,7 @@ bool IOSurfaceSurfaceVkMac::ValidateAttributes(const DisplayVk *displayVk,
                                                const egl::AttributeMap &attribs)
 {
     ASSERT(displayVk != nullptr);
-    RendererVk *renderer = displayVk->getRenderer();
+    // RendererVk *renderer = displayVk->getRenderer();
 
     IOSurfaceRef ioSurface = reinterpret_cast<IOSurfaceRef>(buffer);
 
@@ -202,25 +298,25 @@ bool IOSurfaceSurfaceVkMac::ValidateAttributes(const DisplayVk *displayVk,
         return false;
     }
 
-    void *pointer = IOSurfaceGetBaseAddressOfPlane(ioSurface, plane);
-    VkMemoryHostPointerPropertiesEXT memoryHostPointerProperties = {};
-    memoryHostPointerProperties.sType = VK_STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT;
-    vkGetMemoryHostPointerPropertiesEXT(
-        renderer->getDevice(), VK_EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT,
-        pointer, &memoryHostPointerProperties);
+    // void *pointer = IOSurfaceGetBaseAddressOfPlane(ioSurface, plane);
+    // VkMemoryHostPointerPropertiesEXT memoryHostPointerProperties = {};
+    // memoryHostPointerProperties.sType = VK_STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT;
+    // vkGetMemoryHostPointerPropertiesEXT(
+    //     renderer->getDevice(), VK_EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT,
+    //     pointer, &memoryHostPointerProperties);
 
-    bool hostVisible =
-        memoryHostPointerProperties.memoryTypeBits & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-    if (!hostVisible)
-    {
-        return false;
-    }
+    // bool hostVisible =
+    //     memoryHostPointerProperties.memoryTypeBits & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+    // if (!hostVisible)
+    // {
+    //     return false;
+    // }
 
-    VkDeviceSize alignment = renderer->getMinImportedHostPointerAlignment();
-    if (reinterpret_cast<size_t>(pointer) % alignment != 0)
-    {
-        return false;
-    }
+    // VkDeviceSize alignment = renderer->getMinImportedHostPointerAlignment();
+    // if (reinterpret_cast<size_t>(pointer) % alignment != 0)
+    // {
+    //     return false;
+    // }
 
     return true;
 }

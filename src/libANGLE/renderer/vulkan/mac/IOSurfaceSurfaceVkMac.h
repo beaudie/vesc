@@ -50,6 +50,7 @@ class IOSurfaceSurfaceVkMac : public OffscreenSurfaceVk
 
   private:
     IOSurfaceRef mIOSurface;
+    vk::BufferHelper mBuffer;
 
     int mPlane;
     int mFormatIndex;

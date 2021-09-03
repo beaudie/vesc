@@ -3584,7 +3584,7 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
                                          const VkBufferCreateInfo &requestedCreateInfo,
                                          GLeglClientBufferEXT clientBuffer)
 {
-    ASSERT(IsAndroid());
+    // ASSERT(IsAndroid());
 
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -3599,10 +3599,37 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     externCreateInfo.pNext   = nullptr;
     modifiedCreateInfo.pNext = &externCreateInfo;
 
-    ANGLE_VK_TRY(contextVk, mBuffer.init(renderer->getDevice(), modifiedCreateInfo));
+    if (IsAndroid())
+    {
+        ANGLE_VK_TRY(contextVk, mBuffer.init(renderer->getDevice(), modifiedCreateInfo));
 
-    ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &mBuffer,
-                                        &mMemoryPropertyFlags, mMemory.getExternalMemoryObject()));
+        ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &mBuffer,
+                                            &mMemoryPropertyFlags,
+                                            mMemory.getExternalMemoryObject()));
+    }
+    else
+    {
+        externCreateInfo.handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT;
+
+        ANGLE_VK_TRY(contextVk, mBuffer.init(renderer->getDevice(), modifiedCreateInfo));
+
+        VkMemoryRequirements externalMemoryRequirements = {};
+        externalMemoryRequirements.size                 = requestedCreateInfo.size;
+        externalMemoryRequirements.memoryTypeBits =
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        externalMemoryRequirements.alignment = 0;
+
+        VkMemoryHostPointerPropertiesEXT memoryHostPointerProperties = {};
+        memoryHostPointerProperties.sType = VK_STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT;
+        vkGetMemoryHostPointerPropertiesEXT(
+            renderer->getDevice(),
+            VK_EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT, clientBuffer,
+            &memoryHostPointerProperties);
+
+        ANGLE_TRY(AllocateBufferMemoryWithRequirements(
+            contextVk, memoryProperties, externalMemoryRequirements, &memoryHostPointerProperties,
+            &mBuffer, &mMemoryPropertyFlags, mMemory.getExternalMemoryObject()));
+    }
 
     ANGLE_TRY(mMemory.initExternal(clientBuffer));
 
