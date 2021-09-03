@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed787539_d3d08538",
+        "filename": "src/libANGLE/capture/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-03T14:39:59Z",
+      "side": 1,
+      "message": "Is this true for matrices as well?  The spec is a little hazy.  It clearly spells out arrays, but not matrices:\n\n  In order to query the values of an array of uniforms, a GetUniform* command \n  needs to be issued for each array element.  If the uniform queried is a matrix,\n  the values of the matrix are returned in column major order.\n  \nIt doesn\u0027t look like GetUniformuiv is tested against matrices in gl_tests.",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 74
+      },
+      "revId": "a39a325bba155c6a031544ab988c0068369642cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
