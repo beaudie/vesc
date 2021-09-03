@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f3c5ae5_9204bec1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T13:38:13Z",
+      "side": 1,
+      "message": "WebGL issue: https://github.com/KhronosGroup/WebGL/issues/3331\n\nThink we should land this anyway to plug the hole.",
+      "revId": "4c3e6e70dc6b7bc1e18b4c5bfe82260bcf174c17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
