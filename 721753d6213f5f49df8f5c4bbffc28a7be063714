@@ -243,6 +243,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "753e3f39_d21bd2ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T01:47:28Z",
+      "side": 1,
+      "message": "Some of them you can implement very easily. For example using `glTexStorage2D` instead of `glTexImage2D` is just a flag and an if. I suggest doing those simply because they are trivial.\n\nThe ones I particularly suspect may turn up a bug are (and now I wish I had numbered those):\n\n- glTexImage2D level 0 with 4444, glTexImage2d level1 with 5551, disable mipmapping, sample as texture, followed by FBO blend.  Next, glTexImage2D level 0 with 5551, enable mipmapping and sample as texture (test both mips): Tests that the out-of-range staged update is reformated when mipmapping is enabled, but not before it.\n\n- glTexImage2D/glTexStorage2D with 4444 or 5551, (test with and without:) sample as texture, create unrelated FBO (say RGBA8), and do glCopyTexSubImage2D into the texture: Tests that the texture is reformatted when the copy is done through the draw path.\n\n- glTexImage2D/glTexStorage2D, (test with and without:) sample as texture, glClear with masked channels: Tests that the texture is reformatted when the clear is done through the draw path.\n\n- glTexImage2D level 0 and disable mipmapping, glTexImage2D level 1 with unrelated format, (test with and without:) sample as texture, glGenerateMipmap, enable mipmapping and verify all mips: Tests that glGenerateMipmap works when the format is not converted to renderable.\n- Same test as above, but after sampling as texture, attach to FBO and readback, then do glGenerateMipmap: Tests that glGenerateMipmap works when the format *is* converted to renderable.\n\n- glTexImage2D level 0, glTexImage2D level 1 with unrelated format, **enable mipmapping** (so, can\u0027t sample), attach FBO to level 0 and readback (then optionally disabling mipmapping and sample from it): Tests that when reformatting the image, incompatible updates don\u0027t cause a problem.\n- Same test as above, but instead of level 1 having a different format, it has the same format but incompatible dimensions.\n\nPlease bear with me, I would very much rather the change lands with a good confidence that it doesn\u0027t introduce tricky bugs. My reasoning is mostly selfish TBH; if a Fuchsia app hits a bug with this, I\u0027d have to chase it down on a platform where debugging ... leaves a lot to be desired.",
+      "parentUuid": "b14b6e12_d8e8da39",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a8a4803_cf06e968",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -366,6 +384,24 @@
       "side": 1,
       "message": "If a copyTexSubImage is called between two R5G5B5A1 textures, one has been fall back to A1R5G5B5 due to attached to FBO, their intendedFormatID will match but actualFormatID will not. And transfer will essentially do memcpy which will be wrong as well.\n\nThere are quite a few deqp tests will fail without this. And the new end2end test copyTexImageFollowedBySampling I aded bellow will also fail.",
       "parentUuid": "4114b382_f3412735",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed315024_50c9a92b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T01:47:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6724a3a1_4b954d30",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -694,6 +730,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "f8d55c23_44266fac",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee540c3c_f17085d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T01:47:28Z",
+      "side": 1,
+      "message": "Oh I see. I suggest then fixing `initImageFallback` to correctly set this. Like:\n\n    // Set renderable format.\n    if (!format.isSnorm() \u0026\u0026 !format.isBlock)\n    {\n        // Use the same format if there\u0027s no fallback.\n        actualRenderableImageFormatID \u003d actualImageFormatID;\n\n        if (testFunction !\u003d HasNonFilterableTextureFormatSupport)\n        {\n            // Rendering to SNORM textures is not supported on Android, and it\u0027s\n            // enabled by the extension EXT_render_snorm.\n            // Compressed textures also need to perform this check.\n            testFunction \u003d HasFullTextureFormatSupport;\n            i \u003d FindSupportedFormat(renderer, info, skip, static_cast\u003cuint32_t\u003e(numInfo), testFunction);\n            actualRenderableImageFormatID \u003d info[i].format;\n        }\n    }",
+      "parentUuid": "d7205dca_174bfe35",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

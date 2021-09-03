@@ -52,6 +52,24 @@
       "parentUuid": "9600f31b_ab65cec0",
       "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe55c247_64792cf7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T01:47:28Z",
+      "side": 0,
+      "message": "Huh, I always assumed the problem is somewhere in CopyImageCHROMIUM or something. Ok then!",
+      "parentUuid": "fe4fd579_c1da6b67",
+      "revId": "b35d974a5fb2acab07ee0e5124e4361000da27f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
