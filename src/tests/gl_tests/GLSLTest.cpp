@@ -10417,6 +10417,1448 @@ void main()
     GLuint program = CompileProgram(kVS, kFS);
     EXPECT_EQ(0u, program);
 }
+<<<<<<< HEAD   (822c0a [M90-LTS] Add array bounds checks for WebGL shaders)
+=======
+
+// Test that separating declarators works with structs that have been separately defined.
+TEST_P(GLSLTest_ES31, SeparateDeclaratorsOfStructType)
+{
+    constexpr char kVS[] = R"(#version 310 es
+precision highp float;
+
+struct S
+{
+    mat4 a;
+    mat4 b;
+};
+
+S s1 = S(mat4(1), mat4(2)), s2[2][3], s3[2] = S[2](S(mat4(0), mat4(3)), S(mat4(4), mat4(5)));
+
+void main() {
+    S s4[2][3] = s2, s5 = s3[0], s6[2] = S[2](s1, s5), s7 = s5;
+
+    gl_Position = vec4(s3[1].a[0].x, s2[0][2].b[1].y, s4[1][0].a[2].z, s6[0].b[3].w);
+})";
+
+    GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+
+    const char *sourceArray[1] = {kVS};
+    GLint lengths[1]           = {static_cast<GLint>(sizeof(kVS) - 1)};
+    glShaderSource(shader, 1, sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+// Test that separating declarators works with structs that are simultaneously defined.
+TEST_P(GLSLTest_ES31, SeparateDeclaratorsOfStructTypeBeingSpecified)
+{
+    constexpr char kVS[] = R"(#version 310 es
+precision highp float;
+
+struct S
+{
+    mat4 a;
+    mat4 b;
+} s1 = S(mat4(1), mat4(2)), s2[2][3], s3[2] = S[2](S(mat4(0), mat4(3)), S(mat4(4), mat4(5)));
+
+void main() {
+    struct T
+    {
+        mat4 a;
+        mat4 b;
+    } s4[2][3], s5 = T(s3[0].a, s3[0].b), s6[2] = T[2](T(s1.a, s1.b), s5), s7 = s5;
+
+    float f1 = s3[1].a[0].x, f2 = s2[0][2].b[1].y;
+
+    gl_Position = vec4(f1, f2, s4[1][0].a[2].z, s6[0].b[3].w);
+})";
+
+    GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+
+    const char *sourceArray[1] = {kVS};
+    GLint lengths[1]           = {static_cast<GLint>(sizeof(kVS) - 1)};
+    glShaderSource(shader, 1, sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+// Test that separating declarators works with structs that are simultaneously defined and that are
+// nameless.
+TEST_P(GLSLTest_ES31, SeparateDeclaratorsOfNamelessStructType)
+{
+    constexpr char kVS[] = R"(#version 310 es
+precision highp float;
+
+struct
+{
+    mat4 a;
+    mat4 b;
+} s1, s2[2][3], s3[2];
+
+void main() {
+    struct
+    {
+        mat4 a;
+        mat4 b;
+    } s4[2][3], s5, s6[2], s7 = s5;
+
+    float f1 = s1.a[0].x + s3[1].a[0].x, f2 = s2[0][2].b[1].y + s7.b[1].z;
+
+    gl_Position = vec4(f1, f2, s4[1][0].a[2].z, s6[0].b[3].w);
+})";
+
+    GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+
+    const char *sourceArray[1] = {kVS};
+    GLint lengths[1]           = {static_cast<GLint>(sizeof(kVS) - 1)};
+    glShaderSource(shader, 1, sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+// Regression test for transformation bug which separates struct declarations from uniform
+// declarations.  The bug was that the uniform variable usage in the initializer of a new
+// declaration (y below) was not being processed.
+TEST_P(GLSLTest, UniformStructBug)
+{
+    constexpr char kVS[] = R"(precision highp float;
+
+uniform struct Global
+{
+    float x;
+} u_global;
+
+void main() {
+  float y = u_global.x;
+
+  gl_Position = vec4(y);
+})";
+
+    GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+
+    const char *sourceArray[1] = {kVS};
+    GLint lengths[1]           = {static_cast<GLint>(sizeof(kVS) - 1)};
+    glShaderSource(shader, 1, sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+// Regression test for transformation bug which separates struct declarations from uniform
+// declarations.  The bug was that the arrayness of the declaration was not being applied to the
+// replaced uniform variable.
+TEST_P(GLSLTest_ES31, UniformStructBug2)
+{
+    constexpr char kVS[] = R"(#version 310 es
+precision highp float;
+
+uniform struct Global
+{
+    float x;
+} u_global[2][3];
+
+void main() {
+  float y = u_global[0][0].x;
+
+  gl_Position = vec4(y);
+})";
+
+    GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+
+    const char *sourceArray[1] = {kVS};
+    GLint lengths[1]           = {static_cast<GLint>(sizeof(kVS) - 1)};
+    glShaderSource(shader, 1, sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+// Test that providing more components to a matrix constructor than necessary works.  Based on a
+// clusterfuzz test that caught an OOB array write in glslang.
+TEST_P(GLSLTest, MatrixConstructor)
+{
+    constexpr char kVS[] = R"(attribute vec4 aPosition;
+varying vec4 vColor;
+void main()
+{
+    gl_Position = aPosition;
+    vec4 color = vec4(aPosition.xy, 0, 1);
+    mat4 m4 = mat4(color, color.yzwx, color.zwx, color.zwxy, color.wxyz);
+    vColor = m4[0];
+})";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, kVS);
+    EXPECT_NE(0u, shader);
+    glDeleteShader(shader);
+}
+
+// Test that scalar(nonScalar) constructors work.
+TEST_P(GLSLTest_ES3, ScalarConstructor)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+uniform vec4 u;
+out vec4 color;
+void main()
+{
+    float f1 = float(u);
+    mat3 m = mat3(u, u, u);
+    int i = int(m);
+    color = vec4(f1, float(i), 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint uloc = glGetUniformLocation(program, "u");
+    ASSERT_NE(uloc, -1);
+    glUniform4f(uloc, 1.0, 0.4, 0.2, 0.7);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+}
+
+// Test that initializing global variables with non-constant values work
+TEST_P(GLSLTest_ES3, InitGlobalNonConstant)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_non_constant_global_initializers"));
+
+    constexpr char kVS[] = R"(#version 300 es
+#extension GL_EXT_shader_non_constant_global_initializers : require
+uniform vec4 u;
+out vec4 color;
+
+vec4 global1 = u;
+vec4 global2 = u + vec4(1);
+vec4 global3 = global1 * global2;
+void main()
+{
+    color = global3;
+})";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, kVS);
+    EXPECT_NE(0u, shader);
+    glDeleteShader(shader);
+}
+
+// Test that initializing global variables with complex constants work
+TEST_P(GLSLTest_ES3, InitGlobalComplexConstant)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 color;
+
+struct T
+{
+    float f;
+};
+
+struct S
+{
+    vec4 v;
+    mat3x4 m[2];
+    T t;
+};
+
+S s = S(
+        vec4(0, 1, 2, 3),
+        mat3x4[2](
+                  mat3x4(
+                         vec4(4, 5, 6, 7),
+                         vec4(8, 9, 10, 11),
+                         vec4(12, 13, 14, 15)
+                  ),
+                  mat3x4(
+                         vec4(16, 17, 18, 19),
+                         vec4(20, 21, 22, 23),
+                         vec4(24, 25, 26, 27)
+                  )
+        ),
+        T(28.0)
+       );
+
+void main()
+{
+    vec4 result = vec4(0, 1, 0, 1);
+
+    if (s.v != vec4(0, 1, 2, 3))
+        result = vec4(1, 0, 0, 0);
+
+    for (int index = 0; index < 2; ++index)
+    {
+        for (int column = 0; column < 3; ++column)
+        {
+            int expect = index * 12 + column * 4 + 4;
+            if (s.m[index][column] != vec4(expect, expect + 1, expect + 2, expect + 3))
+                result = vec4(float(index + 1) / 2.0, 0, float(column + 1) / 3.0, 1);
+        }
+    }
+
+    if (s.t.f != 28.0)
+        result = vec4(0, 0, 1, 0);
+
+    color = result;
+})";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that built-ins with out parameters work
+TEST_P(GLSLTest_ES31, BuiltInsWithOutParameters)
+{
+    constexpr char kFS[] = R"(#version 310 es
+precision highp float;
+precision highp int;
+
+out vec4 color;
+
+uniform float f;    // = 3.41
+uniform uvec4 u1;   // = 0xFEDCBA98, 0x13579BDF, 0xFEDCBA98, 0x13579BDF
+uniform uvec4 u2;   // = 0xECA86420, 0x12345678, 0x12345678, 0xECA86420
+
+struct S
+{
+    float fvalue;
+    int ivalues[2];
+    uvec4 uvalues[3];
+};
+
+struct T
+{
+    S s[2];
+};
+
+void main()
+{
+    float integer;
+    float fraction = modf(f, integer);
+
+    T t;
+
+    t.s[0].fvalue     = frexp(f, t.s[0].ivalues[0]);
+    float significand = t.s[0].fvalue;
+    int exponent      = t.s[0].ivalues[0];
+
+    t.s[0].uvalues[0] = uaddCarry(u1, u2, t.s[0].uvalues[1].yxwz);
+    uvec4 addResult   = t.s[0].uvalues[0];
+    uvec4 addCarry    = t.s[0].uvalues[1].yxwz;
+
+    t.s[0].uvalues[2].wx = usubBorrow(u1.wx, u2.wx, t.s[1].uvalues[0].wx);
+    uvec2 subResult      = t.s[0].uvalues[2].wx;
+    uvec2 subBorrow      = t.s[1].uvalues[0].wx;
+
+    umulExtended(u1, u2, t.s[1].uvalues[1], t.s[1].uvalues[2]);
+    uvec4 mulMsb = t.s[1].uvalues[1];
+    uvec4 mulLsb = t.s[1].uvalues[2];
+
+    ivec2 imulMsb, imulLsb;
+    imulExtended(ivec2(u1.wz), ivec2(u2.wz), imulMsb.yx, imulLsb.yx);
+
+    bool modfPassed = abs(fraction - 0.41) < 0.0001 && integer == 3.0;
+    bool frexpPassed = abs(significand - 0.8525) < 0.0001 && exponent == 2;
+    bool addPassed =
+        addResult == uvec4(0xEB851EB8, 0x258BF257, 0x11111110, 0xFFFFFFFF) &&
+        addCarry == uvec4(1, 0, 1, 0);
+    bool subPassed = subResult == uvec2(0x26AF37BF, 0x12345678) && subBorrow == uvec2(1, 0);
+    bool mulPassed =
+        mulMsb == uvec4(0xEB9B208C, 0x01601D49, 0x121FA00A, 0x11E17CC0) &&
+        mulLsb == uvec4(0xA83AB300, 0xD6B9FA88, 0x35068740, 0x822E97E0);
+    bool imulPassed =
+        imulMsb == ivec2(0xFFEB4992, 0xFE89E0E1) &&
+        imulLsb == ivec2(0x35068740, 0x822E97E0);
+
+    color = vec4(modfPassed ? 1 : 0,
+                 frexpPassed ? 1 : 0,
+                 (addPassed ? 0.4 : 0.0) + (subPassed ? 0.6 : 0.0),
+                 (mulPassed ? 0.4 : 0.0) + (imulPassed ? 0.6 : 0.0));
+})";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint floc  = glGetUniformLocation(program, "f");
+    GLint u1loc = glGetUniformLocation(program, "u1");
+    GLint u2loc = glGetUniformLocation(program, "u2");
+    ASSERT_NE(floc, -1);
+    ASSERT_NE(u1loc, -1);
+    ASSERT_NE(u2loc, -1);
+    glUniform1f(floc, 3.41);
+    glUniform4ui(u1loc, 0xFEDCBA98u, 0x13579BDFu, 0xFEDCBA98u, 0x13579BDFu);
+    glUniform4ui(u2loc, 0xECA86420u, 0x12345678u, 0x12345678u, 0xECA86420u);
+
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+}
+
+// Test that interpolateAt* work with swizzle.  This test is disabled as swizzled interpolants are
+// only allowed in desktop GLSL.
+TEST_P(GLSLTest_ES31, InterpolateAtWithSwizzle)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_shader_multisample_interpolation"));
+
+    constexpr char kVS[] = R"(#version 310 es
+
+out vec4 interpolant;
+
+void main()
+{
+    // The following triangle is being drawn over the framebuffer.
+    //
+    //   (-1,3) |\
+    //          |   \
+    //          |      \
+    //          |         \
+    //          |            \
+    //          +--------------+
+    //          |              | \
+    //          |              |    \
+    //          | Framebuffer  |       \
+    //          |              |          \
+    //          |              |             \
+    //  (-1,-1) +--------------+--------------- (3,-1)
+    //
+    // Interpolant is set such that interpolateAtCentroid would produce the desired value for
+    // position == (0, 0), and interpolateAtOffset(0.5, -0.5) for position == (1,-1)
+    if (gl_VertexID == 0)
+    {
+        gl_Position = vec4(-1, -1, 0, 1);
+        interpolant = vec4(1.5, 0.5, 0, 0);
+    }
+    else if (gl_VertexID == 1)
+    {
+        gl_Position = vec4(3, -1, 0, 1);
+        interpolant = vec4(0, 0, 1, 2);
+    }
+    else
+    {
+        gl_Position = vec4(-1, 3, 0, 1);
+        interpolant = vec4(0, 1, -1, 2);
+    }
+})";
+
+    constexpr char kFS[] = R"(#version 310 es
+#extension GL_OES_shader_multisample_interpolation : require
+precision highp float;
+
+in vec4 interpolant;
+out vec4 color;
+
+void main()
+{
+    // Should result in (0.75, 1.0)
+    vec2 atCentroid = interpolateAtCentroid(interpolant.xw);
+    // Selecting the bottom-right corner, this should result in (0.5, 0.25), but interpolateAtOffset
+    // doesn't make guarantees regarding the range and granularity of the offset.  The interpolant
+    // is given values such that the bottom-left/top-right diagonal is interpolated to a constant
+    // value of (0, 0.5).  The top-left corner has the value (-0.5, 0.75).  We therefore make a
+    // coarse test to make sure that atOffset.x > 0 and atOffset.y < 0.5, thus ensuring at least
+    // that the offset is in the correct half of the pixel.
+    vec2 atOffset = interpolateAtOffset(interpolant.zy, vec2(0.5, -0.5));
+
+    color = vec4(atCentroid, atOffset.x > 0.0 ? 1 : 0, atOffset.y < 0.5 ? 1 : 0);
+})";
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 1, 1);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    glViewport(0, 0, 1, 1);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_NEAR(0, 0, 191, 255, 255, 255, 1);
+}
+
+class GLSLTestLoops : public GLSLTest
+{
+  protected:
+    void runTest(const char *fs)
+    {
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), fs);
+
+        drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+        EXPECT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    }
+};
+
+// Test basic for loops
+TEST_P(GLSLTestLoops, BasicFor)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+        for (int j = 0; j < 8; ++j)
+        {
+            for (int k = 0; k < 2; ++k, ++j) ++result;
+            for (int k = 0; k < 3; ++k)      ++result;
+            for (int k = 0; k < 0; ++k)      ++result;
+        }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test for loop without condition
+TEST_P(GLSLTestLoops, ForNoCondition)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+        for (int j = 0; ; ++j)
+        {
+            for (int k = 0; k < 2; ++k, ++j) ++result;
+            for (int k = 0; k < 3; ++k)      ++result;
+            for (int k = 0; k < 0; ++k)      ++result;
+
+            if (j >= 8)
+                break;
+        }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test for loop without init and expression
+TEST_P(GLSLTestLoops, ForNoInitConditionOrExpression)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+    {
+        int j = 0;
+        for (;;)
+        {
+            for (int k = 0; k < 2; ++k, ++j) ++result;
+            for (int k = 0; k < 3; ++k)      ++result;
+            for (int k = 0; k < 0; ++k)      ++result;
+
+            if (j >= 8)
+                break;
+            ++j;
+        }
+    }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test for loop with continue
+TEST_P(GLSLTestLoops, ForContinue)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+        for (int j = 0; j < 8; ++j)
+        {
+            for (int k = 0; k < 2; ++k, ++j) ++result;
+            for (int k = 0; k < 3; ++k)      ++result;
+            if (i > 3)
+                continue;
+            for (int k = 0; k < 0; ++k)      ++result;
+        }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test for loop with continue at the end of block
+TEST_P(GLSLTestLoops, ForUnconditionalContinue)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+        for (int j = 0; j < 8; ++j)
+        {
+            for (int k = 0; k < 2; ++k, ++j) ++result;
+            for (int k = 0; k < 3; ++k)      ++result;
+            for (int k = 0; k < 0; ++k)      ++result;
+            continue;
+        }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test for loop with break at the end of block
+TEST_P(GLSLTestLoops, ForUnconditionalBreak)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+        for (int j = 0; j < 8; ++j)
+        {
+            for (int k = 0; k < 2; ++k, ++j) ++result;
+            for (int k = 0; k < 3; ++k)      ++result;
+            for (int k = 0; k < 0; ++k)      ++result;
+            break;
+        }
+
+    color = result == 50 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test for loop with break and continue
+TEST_P(GLSLTestLoops, ForBreakContinue)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+        for (int j = 0; j < 8; ++j)
+        {
+            if (j < 2) continue;
+            if (j > 6) break;
+            if (i < 3) continue;
+            if (i > 8) break;
+            ++result;
+        }
+
+    color = result == 30 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test basic while loops
+TEST_P(GLSLTestLoops, BasicWhile)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    while (i < 10)
+    {
+        int j = 0;
+        while (j < 8)
+        {
+            int k = 0;
+            while (k < 2) { ++result; ++k; ++j; }
+            while (k < 5) { ++result; ++k; }
+            while (k < 4) { ++result; }
+            ++j;
+        }
+        ++i;
+    }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test while loops with continue
+TEST_P(GLSLTestLoops, WhileContinue)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    while (i < 10)
+    {
+        int j = 0;
+        while (j < 8)
+        {
+            int k = 0;
+            while (k < 2) { ++result; ++k; ++j; }
+            while (k < 5) { ++result; ++k; }
+            if (i > 3)
+            {
+                ++j;
+                continue;
+            }
+            while (k < 4) { ++result; }
+            ++j;
+        }
+        ++i;
+    }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test while loops with continue at the end of block
+TEST_P(GLSLTestLoops, WhileUnconditionalContinue)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    while (i < 10)
+    {
+        int j = 0;
+        while (j < 8)
+        {
+            int k = 0;
+            while (k < 2) { ++result; ++k; ++j; }
+            while (k < 5) { ++result; ++k; }
+            while (k < 4) { ++result; }
+            ++j;
+            continue;
+        }
+        ++i;
+    }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test while loops with break
+TEST_P(GLSLTestLoops, WhileBreak)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    while (i < 10)
+    {
+        int j = 0;
+        while (true)
+        {
+            int k = 0;
+            while (k < 2) { ++result; ++k; ++j; }
+            while (k < 5) { ++result; ++k; }
+            while (k < 4) { ++result; }
+            ++j;
+            if (j >= 8)
+                break;
+        }
+        ++i;
+    }
+
+    color = result == 150 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test while loops with continue at the end of block
+TEST_P(GLSLTestLoops, WhileUnconditionalBreak)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    while (i < 10)
+    {
+        int j = 0;
+        while (j < 8)
+        {
+            int k = 0;
+            while (k < 2) { ++result; ++k; ++j; }
+            while (k < 5) { ++result; ++k; }
+            while (k < 4) { ++result; }
+            ++j;
+            break;
+        }
+        ++i;
+    }
+
+    color = result == 50 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test basic do-while loops
+TEST_P(GLSLTestLoops, BasicDoWhile)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    do
+    {
+        int j = 0;
+        do
+        {
+            int k = 0;
+            do { ++result; ++k; ++j; } while (k < 2);
+            do { ++result; ++k;      } while (k < 5);
+            do { ++result;           } while (k < 3);
+            ++j;
+        } while (j < 8);
+        ++i;
+    } while (i < 10);
+
+    color = result == 180 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test do-while loops with continue
+TEST_P(GLSLTestLoops, DoWhileContinue)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    do
+    {
+        int j = 0;
+        do
+        {
+            int k = 0;
+            do { ++result; ++k; ++j; } while (k < 2);
+            if (i > 3)
+            {
+                ++j;
+                continue;
+            }
+            do { ++result; ++k;      } while (k < 5);
+            do { ++result;           } while (k < 3);
+            ++j;
+        } while (j < 8);
+        ++i;
+    } while (i < 10);
+
+    color = result == 108 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test do-while loops with continue at the end of block
+TEST_P(GLSLTestLoops, DoWhileUnconditionalContinue)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    do
+    {
+        int j = 0;
+        do
+        {
+            int k = 0;
+            do { ++result; ++k; ++j; continue; } while (k < 2);
+            do { ++result; ++k;      continue; } while (k < 5);
+            do { ++result;           continue; } while (k < 3);
+            ++j;
+        } while (j < 8);
+        ++i;
+    } while (i < 10);
+
+    color = result == 180 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test do-while loops with break
+TEST_P(GLSLTestLoops, DoWhileBreak)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    do
+    {
+        int j = 0;
+        do
+        {
+            int k = 0;
+            do { ++result; ++k; ++j; } while (k < 2);
+            do { ++result; ++k;      } while (k < 5);
+            do { ++result;           } while (k < 3);
+            ++j;
+            if (j >= 8)
+                break;
+        } while (true);
+        ++i;
+    } while (i < 10);
+
+    color = result == 180 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test do-while loops with break at the end of block
+TEST_P(GLSLTestLoops, DoWhileUnconditionalBreak)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    do
+    {
+        int j = 0;
+        do
+        {
+            int k = 0;
+            do { ++result; ++k; ++j; break; } while (k < 2);
+            do { ++result; ++k;      break; } while (k < 5);
+            do { ++result;           break; } while (k < 3);
+            ++j;
+        } while (j < 8);
+        ++i;
+    } while (i < 10);
+
+    color = result == 120 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test for loop with continue inside switch.
+TEST_P(GLSLTestLoops, ForContinueInSwitch)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    for (int i = 0; i < 10; ++i)
+        for (int j = 0; j < 8; ++j)
+        {
+            switch (j)
+            {
+                case 2:
+                case 3:
+                case 4:
+                    ++result;
+                    // fallthrough
+                case 5:
+                case 6:
+                    ++result;
+                    break;
+                default:
+                    continue;
+            }
+        }
+
+    color = result == 80 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test while loop with continue inside switch
+TEST_P(GLSLTestLoops, WhileContinueInSwitch)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    while (i < 10)
+    {
+        int j = 0;
+        while (j < 8)
+        {
+            switch (j)
+            {
+                case 2:
+                default:
+                case 3:
+                case 4:
+                    ++j;
+                    ++result;
+                    continue;
+                case 0:
+                case 1:
+                case 7:
+                    break;
+            }
+            ++j;
+        }
+        ++i;
+    }
+
+    color = result == 50 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test do-while loops with continue in switch
+TEST_P(GLSLTestLoops, DoWhileContinueInSwitch)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+
+void main()
+{
+    int result = 0;
+    int i = 0;
+    do
+    {
+        int j = 0;
+        do
+        {
+            switch (j)
+            {
+                case 0:
+                    ++j;
+                    continue;
+                default:
+                case 2:
+                case 3:
+                case 4:
+                    ++j;
+                    ++result;
+                    if (j >= 2 && j <= 6)
+                        break;
+                    else
+                        continue;
+            }
+            ++result;
+        } while (j < 8);
+        ++i;
+    } while (i < 10);
+
+    color = result == 120 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    runTest(kFS);
+}
+
+// Test that precision is retained for constants (which are constant folded).  Adapted from a WebGL
+// test.
+TEST_P(GLSLTest, ConstantFoldedConstantsRetainPrecision)
+{
+    constexpr char kFS[] = R"(
+// It is assumed that uTest is set to 0. It's here to make the expression not constant.
+uniform mediump float uTest;
+void main() {
+    // exact representation of 4096.5 requires 13 bits of relative precision.
+    const highp float c = 4096.5;
+    mediump float a = 0.0;
+    // Below, addition should be evaluated at highp, since one of the operands has the highp qualifier.
+    // Thus fract should also be evaluated at highp.
+    // See OpenGL ES Shading Language spec section 4.5.2.
+    // This should make the result 0.5, since highp provides at least 16 bits of relative precision.
+    // (exceptions for operation precision are allowed for a small number of computationally
+    // intensive built-in functions, but it is reasonable to think that fract is not one of those).
+    // However, if fract() is incorrectly evaluated at minimum precision fulfilling mediump criteria,
+    // or at IEEE half float precision, the result is 0.0.
+    a = fract(c + uTest);
+    // Multiply by 2.0 to make the color green.
+    gl_FragColor = vec4(0.0, 2.0 * a, 0.0, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+TEST_P(GLSLTest, VectorAndMatrixScalarizationDoesNotAffectRendering)
+{
+    ANGLE_SKIP_TEST_IF(IsWindows() && IsNVIDIA() && (IsOpenGL() || IsOpenGLES()));
+
+    constexpr char kFS[] = R"(
+precision mediump float;
+
+varying vec2 v_texCoord;
+
+float a = 0.;
+#define A 0.
+
+#define r(a)    mat2( cos( a + vec4(0,-1.5708,1.5708,0) ) )
+vec2 c;
+#define f(U,a)  ( c = (U) * r(a) , sin(10.*c.x) )
+
+void main() {
+    vec2 U = v_texCoord;
+
+    gl_FragColor = U.y > .5
+        ? vec4( f(U,a) , f(U*4.,a) , 0,1.0)   // top
+        : vec4( f(U,A) , f(U*4.,A) , 0,1.0);  // bottom
+}
+
+)";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), kFS);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+
+    // Make sure we rendered something.
+    EXPECT_PIXEL_NE(0, 0, 0, 0, 0, 0);
+
+    // Comapare one line in top half to one line in bottom half.
+    int compareWidth  = getWindowWidth();
+    int compareHeight = getWindowHeight() / 4;
+
+    ASSERT_GE(compareWidth, 2);
+    ASSERT_GE(compareHeight, 2);
+
+    GLubyte pixelValue[4];
+    constexpr int tolerance = 12;
+
+    for (int x = 0; x < compareWidth; ++x)
+    {
+        glReadPixels(x, compareHeight, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixelValue);
+        EXPECT_PIXEL_NEAR(x, getWindowHeight() - compareHeight, pixelValue[0], pixelValue[1],
+                          pixelValue[2], pixelValue[3], tolerance);
+    }
+    EXPECT_GL_NO_ERROR();
+}
+
+// Tests initializing a shader IO block using the shader translator option.
+TEST_P(GLSLTest_ES31_InitShaderVariables, InitIOBlock)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_io_blocks"));
+
+    const char kVS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+in vec4 position;
+out BlockType {
+    vec4 blockMember;
+} BlockTypeOut;
+
+void main()
+{
+    gl_Position = position;
+})";
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+precision mediump float;
+out vec4 colorOut;
+in BlockType {
+    vec4 blockMember;
+} BlockTypeOut;
+
+void main()
+{
+    if (BlockTypeOut.blockMember == vec4(0)) {
+        colorOut = vec4(0, 1, 0, 1);
+    } else {
+        colorOut = vec4(1, 0, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
+    drawQuad(testProgram, "position", 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Tests initializing a shader IO block with an array using the shader translator option.
+TEST_P(GLSLTest_ES31_InitShaderVariables, InitIOBlockWithArray)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_io_blocks"));
+
+    const char kVS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+in vec4 position;
+out BlockType {
+    vec4 blockMember[2];
+} BlockTypeOut;
+
+void main()
+{
+    gl_Position = position;
+})";
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+precision mediump float;
+out vec4 colorOut;
+in BlockType {
+    vec4 blockMember[2];
+} BlockTypeOut;
+
+void main()
+{
+    if (BlockTypeOut.blockMember[0] == vec4(0) &&
+        BlockTypeOut.blockMember[1] == vec4(0)) {
+        colorOut = vec4(0, 1, 0, 1);
+    } else {
+        colorOut = vec4(1, 0, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
+    drawQuad(testProgram, "position", 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Tests initializing a shader IO block with a struct using the shader translator option.
+TEST_P(GLSLTest_ES31_InitShaderVariables, InitIOBlockWithStruct)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_io_blocks"));
+
+    const char kVS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+in vec4 position;
+struct s {
+    float f;
+    vec2 v;
+};
+out BlockType {
+    s blockMember;
+} BlockTypeOut;
+
+void main()
+{
+    gl_Position = position;
+})";
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+precision mediump float;
+out vec4 colorOut;
+struct s {
+    float f;
+    vec2 v;
+};
+in BlockType {
+    s blockMember;
+} BlockTypeOut;
+
+void main()
+{
+    if (BlockTypeOut.blockMember.f == 0.0 &&
+        BlockTypeOut.blockMember.v == vec2(0)) {
+        colorOut = vec4(0, 1, 0, 1);
+    } else {
+        colorOut = vec4(1, 0, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
+    drawQuad(testProgram, "position", 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Tests initializing an IO block with a complicated set of types, using the shader translator.
+TEST_P(GLSLTest_ES31_InitShaderVariables, InitIOBlockWithComplexTypes)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_io_blocks"));
+
+    const char kVS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+in vec4 position;
+struct s {
+    float f;
+    vec2 v;
+};
+out BlockType {
+    vec4 v;
+    s s1;
+    s s2[2];
+} BlockTypeOut;
+
+void main()
+{
+    gl_Position = position;
+})";
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_EXT_shader_io_blocks : require
+precision mediump float;
+out vec4 colorOut;
+struct s {
+    float f;
+    vec2 v;
+};
+in BlockType {
+    vec4 v;
+    s s1;
+    s s2[2];
+} BlockTypeOut;
+
+void main()
+{
+    s sz = s(0.0, vec2(0));
+    if (BlockTypeOut.v == vec4(0) &&
+        BlockTypeOut.s1 == sz &&
+        BlockTypeOut.s2[0] == sz &&
+        BlockTypeOut.s2[1] == sz) {
+        colorOut = vec4(0, 1, 0, 1);
+    } else {
+        colorOut = vec4(1, 0, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
+    drawQuad(testProgram, "position", 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Tests an unsuccessful re-link using glBindAttribLocation.
+TEST_P(GLSLTest_ES3, UnsuccessfulRelinkWithBindAttribLocation)
+{
+    // Make a simple program.
+    ANGLE_GL_PROGRAM(testProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+
+    // Install the executable.
+    glUseProgram(testProgram);
+
+    // Re-link with a bad XFB varying and a bound attrib location.
+    const char *tfVaryings = "gl_FragColor";
+    glTransformFeedbackVaryings(testProgram, 1, &tfVaryings, GL_SEPARATE_ATTRIBS);
+    glBindAttribLocation(testProgram, 8, essl1_shaders::PositionAttrib());
+    glLinkProgram(testProgram);
+    GLint linkStatus = 999;
+    glGetProgramiv(testProgram, GL_LINK_STATUS, &linkStatus);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_EQ(linkStatus, GL_FALSE);
+
+    // Under normal GL this is not an error.
+    glDrawArrays(GL_TRIANGLES, 79, 16);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Tests an unsuccessful re-link using glBindAttribLocation under WebGL.
+TEST_P(WebGL2GLSLTest, UnsuccessfulRelinkWithBindAttribLocation)
+{
+    // Make a simple program.
+    ANGLE_GL_PROGRAM(testProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+
+    // Install the executable.
+    glUseProgram(testProgram);
+
+    // Re-link with a bad XFB varying and a bound attrib location.
+    const char *tfVaryings = "gl_FragColor";
+    glTransformFeedbackVaryings(testProgram, 1, &tfVaryings, GL_SEPARATE_ATTRIBS);
+    glBindAttribLocation(testProgram, 8, essl1_shaders::PositionAttrib());
+    glLinkProgram(testProgram);
+    GLint linkStatus = 999;
+    glGetProgramiv(testProgram, GL_LINK_STATUS, &linkStatus);
+    ASSERT_GL_NO_ERROR();
+    ASSERT_EQ(linkStatus, GL_FALSE);
+
+    // Under WebGL this is an error.
+    glDrawArrays(GL_TRIANGLES, 79, 16);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+>>>>>>> CHANGE (3ae1f3 WebGL: Make unsuccessful links fail subsequent draw calls.)
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
