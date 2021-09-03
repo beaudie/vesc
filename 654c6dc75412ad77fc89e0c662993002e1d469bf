@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f764243a_d4b53fef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T13:52:00Z",
+      "side": 1,
+      "message": "PTAL.. getting rid of the auto-gen and making the traces load info at runtime instead.",
+      "revId": "654c6dc75412ad77fc89e0c662993002e1d469bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
