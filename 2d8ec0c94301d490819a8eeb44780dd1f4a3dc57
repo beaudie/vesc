@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20ce244c_3334eedc",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-09-03T17:39:59Z",
+      "side": 1,
+      "message": "Which might always be the same as mHeight?",
+      "parentUuid": "ec44fbce_5f631951",
+      "range": {
+        "startLine": 180,
+        "startChar": 35,
+        "endLine": 180,
+        "endChar": 66
+      },
+      "revId": "2d8ec0c94301d490819a8eeb44780dd1f4a3dc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68cfe694_d2f0d978",
         "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
         "patchSetId": 3
