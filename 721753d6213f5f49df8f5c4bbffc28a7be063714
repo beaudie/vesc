@@ -631,6 +631,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4ad1009_4e351caf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T14:49:26Z",
+      "side": 1,
+      "message": "Maybe all you need here is\n\n    // Create a new image if used as attachment for the first time.\n    if (mState.hasBeenBoundAsAttachment())\n    {\n        ANGLE_TRY(ensureRenderable(contextVk));\n    }",
+      "parentUuid": "a1e9357d_8883f4eb",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5c6a5f9d_f4803e2c",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
