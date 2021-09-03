@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4759298_a01dace5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-03T05:26:43Z",
+      "side": 1,
+      "message": "So, this fails on one device. I\u0027m guessing that as a driver failure? What\u0027s the way forward? Turn off the test on that device? Turn on some workaround for that device? Something else?",
+      "revId": "b33ffa4ee44f1cc18130acfd1be77f951e52f015",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
