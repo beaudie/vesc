@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cbe782f_10f3d3bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-03T18:21:59Z",
+      "side": 1,
+      "message": "Ack. It\u0027s a little counter-intuitive, because you are not setting `actualRenderableImageFormatID` even though the format is renderable.",
+      "parentUuid": "fb0cb287_b7e85e43",
+      "range": {
+        "startLine": 161,
+        "startChar": 8,
+        "endLine": 161,
+        "endChar": 60
+      },
+      "revId": "65f4ef76e136592514748974c0c2ca5fb4f04f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9eef1d7f_8051d9fd",
