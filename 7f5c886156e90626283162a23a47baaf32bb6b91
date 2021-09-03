@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2da37f88_957fcbec",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T18:09:00Z",
+      "side": 1,
+      "message": "nit: \u0027Mismatched\u0027, although it\u0027s not clear what mismatched means here. Is there a more specific name we could use? Like \"hasActualImageFormat()\" ?",
+      "range": {
+        "startLine": 444,
+        "startChar": 8,
+        "endLine": 444,
+        "endChar": 30
+      },
+      "revId": "7f5c886156e90626283162a23a47baaf32bb6b91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9c3dfd2_eae6f924",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T18:09:00Z",
+      "side": 1,
+      "message": "nit: can you remove the \"if\" ? ensureRenderable makes the check already IIRC.",
+      "range": {
+        "startLine": 2336,
+        "startChar": 0,
+        "endLine": 2340,
+        "endChar": 0
+      },
+      "revId": "7f5c886156e90626283162a23a47baaf32bb6b91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

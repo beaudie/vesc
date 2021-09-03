@@ -261,6 +261,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5978a40c_dc43f13e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-03T18:09:00Z",
+      "side": 1,
+      "message": "More testing would be welcome, this CL adds a unique kind of statefulness that would be not covered for dEQP. Charlie can you do this as a follow-up immediately once you\u0027re done the main set of patches you have here? Shabi\u0027s test plan is very detailed and would be a great help in proofing this set of changes and ensuring it stays correct.",
+      "parentUuid": "753e3f39_d21bd2ea",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a8a4803_cf06e968",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
