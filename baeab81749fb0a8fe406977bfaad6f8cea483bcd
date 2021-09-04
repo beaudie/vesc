@@ -16,6 +16,172 @@
       "message": "The tests that Shabi requested has been added. I also moved it before the \" fallback only when render\" CL so that we can get it tested before that.\n",
       "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c36a1125_8079fd1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "Cool, thanks for adding these right away!",
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f52e3fd_fbc47d59",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "To test glTexStorage2D with a format conversion after sampling too, could you please add this snippet here too?\n\n    // Draw quad\n    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());\n    glUseProgram(program);\n    GLint textureLocation \u003d glGetUniformLocation(program, essl3_shaders::Texture2DUniform());\n    ASSERT_NE(-1, textureLocation);\n    GLint lodLocation \u003d glGetUniformLocation(program, essl3_shaders::LodUniform());\n    ASSERT_NE(-1, lodLocation);\n    glActiveTexture(GL_TEXTURE0);\n    glBindTexture(GL_TEXTURE_2D, texture);\n    glClearColor(0, 0, 0, 1);\n    glClear(GL_COLOR_BUFFER_BIT);\n    glUniform1f(lodLocation, 0);\n    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);\n    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 0, 0, 255);\n    ASSERT_GL_NO_ERROR();\n\nWould need a flag to optionally do this or not, to test both scenarios.",
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44106703_d630c7ee",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "nit: delete this",
+      "range": {
+        "startLine": 1276,
+        "startChar": 38,
+        "endLine": 1276,
+        "endChar": 96
+      },
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed901fd1_6727af86",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "Would you please also make the opposite test while you are at it? That is, the draw FBO is the texture one (so will need reformatting).",
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1b55f34_51ec104b",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "Level 1 is 5551, isn\u0027t it?",
+      "range": {
+        "startLine": 1413,
+        "startChar": 34,
+        "endLine": 1413,
+        "endChar": 42
+      },
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c6bba5f_3db0e818",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "Please add a flag to optionally do this or not.",
+      "range": {
+        "startLine": 1440,
+        "startChar": 0,
+        "endLine": 1454,
+        "endChar": 25
+      },
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcb7a517_8aecd59a",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "Please remove this readback. It\u0027s causing the format conversion to be done in glReadPixels.",
+      "range": {
+        "startLine": 1461,
+        "startChar": 0,
+        "endLine": 1461,
+        "endChar": 67
+      },
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb7a7345_055f1d37",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-04T02:07:05Z",
+      "side": 1,
+      "message": "Remove this too, again because it\u0027s causing format conversion to be done by glReadPixels instead of glGenerateMipmap.",
+      "range": {
+        "startLine": 1511,
+        "startChar": 0,
+        "endLine": 1511,
+        "endChar": 75
+      },
+      "revId": "baeab81749fb0a8fe406977bfaad6f8cea483bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
