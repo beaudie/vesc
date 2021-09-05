@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac92cedc_ce620079",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-05T00:34:18Z",
+      "side": 1,
+      "message": "lgtm to solve the immediate problem. Let\u0027s discuss in the WebGL working group whether we should make this spec change or try to make ANGLE more robust while following ES spec semantics.\n",
+      "revId": "3ae1f33606d674e81aeda7f952b190332955d8ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
