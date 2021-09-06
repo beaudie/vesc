@@ -70,6 +70,24 @@
       "parentUuid": "acbbf984_adbfbb9a",
       "revId": "a5310b19ac77f5dc238d104e03651f81e04442f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1097e80d_9087d9ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2021-09-06T05:59:58Z",
+      "side": 1,
+      "message": "Thanks. I will wait until this is merged then and see if something else needs to be done for Wayland. Do you have any estimations how long it will take to merge it? Can I expect this merge to happen this week or the following one?",
+      "parentUuid": "df74c7ef_163a46b4",
+      "revId": "a5310b19ac77f5dc238d104e03651f81e04442f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
