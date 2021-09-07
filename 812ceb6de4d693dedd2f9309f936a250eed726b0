@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab6cd3b4_399b9d42",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "1 is a pretty standard exit error code. Why do you think -1 is the correct one to return? Note that the -1 from runTest is not the same as the process exit code, that -1 is printed to stdout as a test result.",
+      "parentUuid": "eeb7e50e_8a955437",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "952d3a26_7509a5cf",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 10
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-03T19:19:41Z",
       "side": 1,
       "message": "Why is this line necessary when the memcpy() should have done the same thing?",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05146338_6c0a37b9",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1887,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "Forgot to remove it, thanks for noticing. Done.",
+      "parentUuid": "952d3a26_7509a5cf",
       "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +101,30 @@
       "writtenOn": "2021-09-03T19:19:41Z",
       "side": 1,
       "message": "nit: I think these should be reverted.   \u0027endFrame\u0027 and \u0027startFrame\u0027 read better, in my opinion.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f4bb091_9a88334b",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "I am lining up with the variables here:\n\nANGLE_CAPTURE_FRAME_START, ANGLE_CAPTURE_FRAME_END. Aiming for max consistency, using the same names everywhere. I\u0027d like to keep it as it seems like an improvement.",
+      "parentUuid": "711ea49d_a49e385b",
       "range": {
         "startLine": 71,
         "startChar": 0,
@@ -98,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa6c907_729db96f",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05c366f3_afd90cee",
+      "range": {
+        "startLine": 232,
+        "startChar": 30,
+        "endLine": 232,
+        "endChar": 38
+      },
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "093ede87_af5f57b1",
@@ -111,6 +195,30 @@
       "writtenOn": "2021-09-03T19:19:41Z",
       "side": 1,
       "message": "Why is this necessary?",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 25
+      },
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a81c11_9248553d",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "MSVC warning. Worked in Clang without it. Left a comment. This is all going away with the above TODO.",
+      "parentUuid": "093ede87_af5f57b1",
       "range": {
         "startLine": 259,
         "startChar": 0,
@@ -146,6 +254,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67445cf4_79df0e1e",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "This whole file is going away. I\u0027d like to avoid maintaining it if that\u0027s OK with you?",
+      "parentUuid": "a221e43c_3c59a24d",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 14
+      },
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49df8f2a_378bcf96",
         "filename": "src/tests/restricted_traces/restricted_traces_autogen.gni",
         "patchSetId": 10
@@ -157,6 +289,24 @@
       "writtenOn": "2021-09-03T19:19:41Z",
       "side": 1,
       "message": "Why are these lists now?",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1be3a8b1_284afe8a",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.gni",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "So it can include the json file for new traces, while being backwards-compatible with traces that don\u0027t have a json file. Make sense?",
+      "parentUuid": "49df8f2a_378bcf96",
       "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -180,6 +330,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "671d92a2_f4b28b20",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "Hm, I\u0027d prefer not to define an empty target because it\u0027s safer if the target does not exist, rather than silently including nothing if it\u0027s included by accident in a build where capture is disabled. BTW we only support frame capture when JSON is available, so I guess the check makes sense to me as is. Can you elaborate on what\u0027s wrong with the current code?",
+      "parentUuid": "e1e08353_8a10bb79",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7128a26_4d5b5c99",
         "filename": "util/capture/frame_capture_test_utils.cpp",
         "patchSetId": 10
@@ -191,6 +359,30 @@
       "writtenOn": "2021-09-03T19:19:41Z",
       "side": 1,
       "message": "These should match the exact ordering of the TraceInfo declaration, so we can easily tell when a value is missing when fields are added/modified.",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 94
+      },
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "659edaae_7805910a",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T18:05:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7128a26_4d5b5c99",
       "range": {
         "startLine": 89,
         "startChar": 0,
