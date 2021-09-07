@@ -14,7 +14,6 @@
 class JsonSerializerTest : public ::testing::Test
 {
   protected:
-    void SetUp() override;
     void check(const std::string &expect);
 
     angle::JsonSerializer js;
@@ -262,18 +261,12 @@ TEST_F(JsonSerializerTest, GroupedIntValue)
     check(expect);
 }
 
-void JsonSerializerTest::SetUp()
-{
-    js.startDocument("context");
-}
-
 void JsonSerializerTest::check(const std::string &expect)
 {
-    js.endDocument();
     EXPECT_EQ(js.data(), expect);
     EXPECT_EQ(js.length(), expect.length());
-    std::vector<uint8_t> expect_as_ubyte(expect.begin(), expect.end());
-    EXPECT_EQ(js.getData(), expect_as_ubyte);
+    std::vector<uint8_t> expectAsUbyte(expect.begin(), expect.end());
+    EXPECT_EQ(js.getData(), expectAsUbyte);
 }
 
 #endif
