@@ -5918,7 +5918,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
 
     // Serialize trace metadata into a JSON file.
     JsonSerializer json;
-    json.startDocument("TraceMetadata");
+    json.startGroup("TraceMetadata");
     json.addScalar("CaptureRevision", ANGLE_REVISION);
     json.addScalar("ContextClientMajorVersion", context->getClientMajorVersion());
     json.addScalar("ContextClientMinorVersion", context->getClientMinorVersion());
@@ -5953,6 +5953,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     json.addBool("IsBindGeneratesResourcesEnabled", glState.isBindGeneratesResourceEnabled());
     json.addBool("IsWebGLCompatibilityEnabled", glState.isWebGL());
     json.addBool("IsRobustResourceInitEnabled", glState.isRobustResourceInitEnabled());
+    json.endGroup();
     json.endDocument();
 
     {
