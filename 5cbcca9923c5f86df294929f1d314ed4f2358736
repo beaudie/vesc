@@ -16,6 +16,24 @@
       "message": "LGTM but I\u0027m not sure we test with this on the bots. Also update the requirements doc if you haven\u0027t already.",
       "revId": "5cbcca9923c5f86df294929f1d314ed4f2358736",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9939d0df_468e8d98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-07T16:47:17Z",
+      "side": 1,
+      "message": "I don\u0027t believe we do. ARM tests this however (in combination with Vulkan secondary CBs, which itself is WIP!)\n\nI think the requirement was removed long ago (or never added?). It\u0027s not there.",
+      "parentUuid": "171abafa_faf884c2",
+      "revId": "5cbcca9923c5f86df294929f1d314ed4f2358736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
