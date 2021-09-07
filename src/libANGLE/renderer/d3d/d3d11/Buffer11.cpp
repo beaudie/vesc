@@ -547,9 +547,12 @@ angle::Result Buffer11::mapRange(const gl::Context *context,
                                  size_t offset,
                                  size_t length,
                                  GLbitfield access,
+                                 bool *bufferGhosted,
                                  void **mapPtr)
 {
     ASSERT(!mMappedStorage);
+    ASSERT(bufferGhosted);
+    *bufferGhosted = false;
 
     BufferStorage *latestStorage = nullptr;
     ANGLE_TRY(getLatestBufferStorage(context, &latestStorage));
