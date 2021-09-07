@@ -23,6 +23,7 @@ class DisplayD3D : public DisplayImpl, public d3d::Context
 {
   public:
     DisplayD3D(const egl::DisplayState &state);
+    ~DisplayD3D() override;
 
     egl::Error initialize(egl::Display *display) override;
     void terminate() override;
