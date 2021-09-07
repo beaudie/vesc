@@ -50,6 +50,7 @@ class BufferNULL : public BufferImpl
                            size_t offset,
                            size_t length,
                            GLbitfield access,
+                           bool *bufferGhosted,
                            void **mapPtr) override;
     angle::Result unmap(const gl::Context *context, GLboolean *result) override;
 
