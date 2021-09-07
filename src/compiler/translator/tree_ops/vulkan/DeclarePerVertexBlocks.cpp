@@ -129,6 +129,7 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
                                     uint32_t cullDistanceArraySize)
         : TIntermTraverser(true, false, false, symbolTable),
           mShaderType(compiler->getShaderType()),
+          mShaderVersion(compiler->getShaderVersion()),
           mResources(compiler->getResources()),
           mClipDistanceArraySize(clipDistanceArraySize),
           mCullDistanceArraySize(cullDistanceArraySize),
@@ -294,7 +295,10 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
         clipDistanceType->setQualifier(EvqClipDistance);
         cullDistanceType->setQualifier(EvqCullDistance);
 
-        pointSizeType->setPrecision(EbpMedium);
+        // gl_PointSize is mediump in ES100 and highp in ES300+.
+        const TVariable *glPointSize = static_cast<const TVariable *>(
+            mSymbolTable->findBuiltIn(ImmutableString("gl_PointSize"), mShaderVersion));
+        pointSizeType->setPrecision(glPointSize->getType().getPrecision());
 
         // TODO: handle interaction with GS and T*S where the two can have different sizes.  These
         // values are valid for EvqPerVertexOut only.  For EvqPerVertexIn, the size should come from
@@ -381,6 +385,7 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
     }
 
     GLenum mShaderType;
+    int mShaderVersion;
     const ShBuiltInResources &mResources;
     uint32_t mClipDistanceArraySize;
     uint32_t mCullDistanceArraySize;
