@@ -684,6 +684,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f6360ec_18ab120b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-07T22:23:05Z",
+      "side": 1,
+      "message": "Lets use the above bug to resolve the remaining issues. Also See my reply in the other comment.",
+      "parentUuid": "5f7c48b3_78afa1b9",
+      "range": {
+        "startLine": 2109,
+        "startChar": 0,
+        "endLine": 2112,
+        "endChar": 73
+      },
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f478419_f99fa1c5",
@@ -864,6 +888,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3dc22484_9f9eabdf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3380,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-07T22:23:05Z",
+      "side": 1,
+      "message": "So we do have one bug here dealing with incompatible levels. In some way this is existing bug, not necessary new to this CL. Basically if we have a staged update on a level that was incompatibly specified, what do we do? See anglebug.com:6368 as well. I think the correct behavior is to keep it staged and never flush out until this level becomes compatibly specified. The problem with reformating is that right now we are using this code path that initImage and flush out and read out. This can not used to handle incompatibly specified levels to reformat it, since we can not even flush it out the staged update on that incompatibly specified level. The only way to deal with it is to defer it until it becomes valid and at that time use CPU loadFunction to do conversion. That is tracked by the above bug.\n\nAnd I don\u0027t believe any real app is hitting this. Not even deqp is testing this, given deqp all passed, except this artificially created tests. So we should not let this one block landing of this CL.",
+      "parentUuid": "edf1bb1d_d580ac73",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5ae0ad8_f90697d2",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 35
@@ -893,6 +935,24 @@
       "side": 1,
       "message": "Lets also deal with this in https://chromium-review.googlesource.com/c/angle/angle/+/3141030 where you want the test coverage.",
       "parentUuid": "a5ae0ad8_f90697d2",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "190cc7b2_7c2efe5c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-07T22:23:05Z",
+      "side": 1,
+      "message": "Test has been added and we do have a bug with incompatible levels. See my comment above. Lets mark this one as resolved.",
+      "parentUuid": "1c3af8b2_1e2b3da5",
       "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
