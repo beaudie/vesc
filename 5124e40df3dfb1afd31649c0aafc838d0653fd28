@@ -16,6 +16,24 @@
       "message": "Hi Sunny,\n\nThis CL makes ANGLE use Vulkan secondary command buffers. It doesn\u0027t produce any validation errors, but it\u0027s clearly buggy as it randomly fails tests on all platforms. Running some test through RenderDoc however, the test behaves correctly.\n\nI haven\u0027t pinpointed yet what the issue might be. Running it on a debug build of your driver would probably provide useful insights as to what ANGLE is doing wrong here, so I would appreciate your help with this.\n\nOnce the CL is fixed, you should be able to try it out for performance comparisons :)",
       "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04202799_5f56c242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2021-09-07T10:18:51Z",
+      "side": 1,
+      "message": "Mali Vulkan driver doesn\u0027t support inheritedQueries, so we cannot run GLES30 applications.\nFor T-Rex, its FPS drops \u003e 20%\nI can provide some more details tomorrow if it\u0027s needed",
+      "parentUuid": "e2dd023d_7b43499d",
+      "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
