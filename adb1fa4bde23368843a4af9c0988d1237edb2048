@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66816c1b_60e1127a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-07T20:28:19Z",
+      "side": 1,
+      "message": "Is this an adequate-while-still brief explanation to help avoid future merge-conflicts?",
+      "revId": "adb1fa4bde23368843a4af9c0988d1237edb2048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
