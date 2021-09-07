@@ -465,6 +465,91 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that the buffer written to by imageStore() in the CS does not race with writing to the
+// buffer when it's mapped.
+TEST_P(ComputeShaderTest, BufferImageBufferMapWrite)
+{
+    // See http://anglebug.com/3536
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsWindows());
+
+    constexpr char kCS0[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(binding = 0, offset = 4) uniform atomic_uint ac[2];
+void main()
+{
+    atomicCounterIncrement(ac[0]);
+    atomicCounterDecrement(ac[1]);
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program0, kCS0);
+    glUseProgram(program0);
+
+    unsigned int expectedBufferData[3] = {11u, 4u, 4u};
+    unsigned int bufferData[3]         = {0};
+    memcpy(bufferData, expectedBufferData, sizeof(bufferData));
+
+    GLBuffer atomicCounterBuffer;
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+    glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, atomicCounterBuffer);
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    void *mappedBuffer =
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint) * 3, GL_MAP_READ_BIT);
+    memcpy(bufferData, mappedBuffer, sizeof(bufferData));
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+
+    EXPECT_EQ(11u, bufferData[0]);
+    EXPECT_EQ(5u, bufferData[1]);
+    EXPECT_EQ(3u, bufferData[2]);
+
+    constexpr char kCS1[] = R"(#version 310 es
+layout(local_size_x=4, local_size_y=3, local_size_z=2) in;
+layout(rgba32ui) uniform highp writeonly uimage2D imageOut;
+void main()
+{
+    uvec3 temp = gl_NumWorkGroups;
+    imageStore(imageOut, ivec2(gl_GlobalInvocationID.xy), uvec4(temp, 0u));
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program1, kCS1);
+
+    GLTexture texture;
+    createMockOutputImage(texture, GL_RGBA32UI, 4, 3);
+
+    glUseProgram(program1);
+    glDispatchCompute(8, 4, 2);
+
+    glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
+    glUseProgram(program0);
+    glDispatchCompute(1, 1, 1);
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    mappedBuffer =
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint) * 3, GL_MAP_READ_BIT);
+
+    memcpy(mappedBuffer, expectedBufferData, sizeof(expectedBufferData));
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+
+    // Force the CS imageStore() writes to the buffer to complete.
+    glFinish();
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+
+    mappedBuffer =
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint) * 3, GL_MAP_READ_BIT);
+    memcpy(bufferData, mappedBuffer, sizeof(bufferData));
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+
+    EXPECT_EQ(expectedBufferData[0], bufferData[0]);
+    EXPECT_EQ(expectedBufferData[1], bufferData[1]);
+    EXPECT_EQ(expectedBufferData[2], bufferData[2]);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that binds UAV with type image to slot 0, then binds UAV with type buffer to slot 0.
 TEST_P(ComputeShaderTest, ImageAtomicCounterBuffer)
 {
