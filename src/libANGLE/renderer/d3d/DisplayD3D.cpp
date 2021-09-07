@@ -163,6 +163,11 @@ egl::Error CreateRendererD3D(egl::Display *display, RendererD3D **outRenderer)
 
 DisplayD3D::DisplayD3D(const egl::DisplayState &state) : DisplayImpl(state), mRenderer(nullptr) {}
 
+DisplayD3D::~DisplayD3D()
+{
+    SafeDelete(mRenderer);
+}
+
 SurfaceImpl *DisplayD3D::createWindowSurface(const egl::SurfaceState &state,
                                              EGLNativeWindowType window,
                                              const egl::AttributeMap &attribs)
@@ -262,7 +267,7 @@ egl::Error DisplayD3D::initialize(egl::Display *display)
 
 void DisplayD3D::terminate()
 {
-    SafeDelete(mRenderer);
+    // Nothing to do.
 }
 
 egl::ConfigSet DisplayD3D::generateConfigs()
