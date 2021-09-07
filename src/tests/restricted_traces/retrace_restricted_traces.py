@@ -18,15 +18,18 @@ import re
 import subprocess
 import sys
 
-from gen_restricted_traces import get_context as get_context
+from gen_restricted_traces import read_json as read_json
 
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_TEST_JSON = 'restricted_traces.json'
 DEFAULT_LOG_LEVEL = 'info'
 
-# We preserve select metadata in the trace header that can't be re-captured properly.
-# Currently this is just the set of default framebuffer surface config bits.
-METADATA_KEYWORDS = ['kDefaultFramebuffer']
+
+def get_context(trace, trace_path):
+    """Returns the trace context number."""
+    json_path = '%s/%s.json' % (trace_path, trace)
+    json_data = read_json(json_path)
+    return str(json_data['WindowSurfaceContextID'])
 
 
 def src_trace_path(trace):
@@ -35,61 +38,9 @@ def src_trace_path(trace):
 
 
 def context_header(trace, trace_path):
-    context_id = get_context(trace_path)
+    context_id = get_context(trace, trace_path)
     header = '%s_capture_context%s.h' % (trace, context_id)
     return os.path.join(trace_path, header)
-
-
-def get_num_frames(trace):
-    trace_path = src_trace_path(trace)
-
-    lo = 99999999
-    hi = 0
-
-    for file in os.listdir(trace_path):
-        match = re.match(r'.+_capture_context\d_frame(\d+)\.cpp', file)
-        if match:
-            frame = int(match.group(1))
-            if frame < lo:
-                lo = frame
-            if frame > hi:
-                hi = frame
-
-    return hi - lo + 1
-
-
-def get_trace_metadata(trace):
-    trace_path = src_trace_path(trace)
-    header_file = context_header(trace, trace_path)
-    metadata = []
-    with open(header_file, 'rt') as f:
-        for line in f.readlines():
-            for keyword in METADATA_KEYWORDS:
-                if keyword in line:
-                    metadata += [line]
-    return metadata
-
-
-def replace_metadata(header_file, metadata):
-    lines = []
-    replaced = False
-    with open(header_file, 'rt') as f:
-        for line in f.readlines():
-            found_keyword = False
-            for keyword in METADATA_KEYWORDS:
-                if keyword in line:
-                    found_keyword = True
-                    break
-
-            if found_keyword:
-                if not replaced:
-                    replaced = True
-                    lines += metadata
-            else:
-                lines += [line]
-
-    with open(header_file, 'wt') as f:
-        f.writelines(lines)
 
 
 def path_contains_header(path):
@@ -132,9 +83,7 @@ def main():
     script_dir = os.path.dirname(sys.argv[0])
 
     # Load trace names
-    with open(os.path.join(script_dir, DEFAULT_TEST_JSON)) as f:
-        traces = json.loads(f.read())
-
+    traces = read_json(os.path.join(script_dir, DEFAULT_TEST_JSON))
     traces = [trace.split(' ')[0] for trace in traces['traces']]
 
     binary = os.path.join(args.gn_path, DEFAULT_TEST_SUITE)
@@ -153,8 +102,10 @@ def main():
             logging.info('Skipping "%s" because the out folder already exists' % trace)
             continue
 
-        num_frames = get_num_frames(trace)
-        metadata = get_trace_metadata(trace)
+        json_path = '%s/%s.json' % (trace, trace)
+        json_data = read_json(json_path)
+        metadata = json_data['TraceMetadata']
+        num_frames = metadata['FrameEnd'] - metadata['FrameStart'] + 1
 
         logging.debug('Read metadata: %s' % str(metadata))
 
@@ -202,8 +153,6 @@ def main():
                 logging.error('There was a problem tracing "%s", could not find header file: %s' %
                               (trace, header_file))
                 failures += [trace]
-            else:
-                replace_metadata(header_file, metadata)
         except:
             logging.exception('There was an exception running "%s":' % trace)
             failures += [trace]
