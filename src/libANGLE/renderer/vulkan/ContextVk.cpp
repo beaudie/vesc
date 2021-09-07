@@ -2309,7 +2309,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
                                  VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, nullptr, 0, nullptr, 0,
                                  nullptr);
         timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
-        timestampQuery.retain(&scratchResourceUseList);
+        timestampQuery.retainReadOnly(&scratchResourceUseList);
 
         commandBuffer.setEvent(gpuDone.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
 
@@ -4867,7 +4867,7 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(vk::CommandBuffer *commandB
     // updated correctly.
     if (!driverUniforms->descriptorPoolBinding.get().usedInRecordedCommands())
     {
-        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList);
+        driverUniforms->descriptorPoolBinding.get().retainReadOnly(&mResourceUseList);
     }
 
     commandBuffer->bindDescriptorSets(
@@ -4932,7 +4932,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     {
         // The descriptor pool that this descriptor set was allocated from needs to be retained each
         // time the descriptor set is used in a new command.
-        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList);
+        driverUniforms->descriptorPoolBinding.get().retainReadOnly(&mResourceUseList);
         return angle::Result::Continue;
     }
 
@@ -5433,7 +5433,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, hasProtectedContent(), &commandBuffer));
 
     timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
-    timestampQuery.retain(&scratchResourceUseList);
+    timestampQuery.retainReadOnly(&scratchResourceUseList);
     ANGLE_VK_TRY(this, commandBuffer.end());
 
     // Create fence for the submission
@@ -6143,7 +6143,7 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
 
         imageAccess.image->recordReadBarrier(this, imageAccess.aspectFlags, imageAccess.imageLayout,
                                              &mOutsideRenderPassCommands->getCommandBuffer());
-        imageAccess.image->retain(&mResourceUseList);
+        imageAccess.image->retainReadOnly(&mResourceUseList);
     }
 
     for (const vk::CommandBufferImageWrite &imageWrite : access.getWriteImages())
@@ -6153,7 +6153,7 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
         imageWrite.access.image->recordWriteBarrier(
             this, imageWrite.access.aspectFlags, imageWrite.access.imageLayout,
             &mOutsideRenderPassCommands->getCommandBuffer());
-        imageWrite.access.image->retain(&mResourceUseList);
+        imageWrite.access.image->retainReadOnly(&mResourceUseList);
         imageWrite.access.image->onWrite(imageWrite.levelStart, imageWrite.levelCount,
                                          imageWrite.layerStart, imageWrite.layerCount,
                                          imageWrite.access.aspectFlags);

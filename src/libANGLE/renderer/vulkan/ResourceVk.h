@@ -16,6 +16,7 @@ namespace rx
 {
 namespace vk
 {
+
 // Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
 // of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
 // in the VkQueue. The reference count and serial together can determine if a resource is currently
@@ -166,18 +167,18 @@ class Resource : angle::NonCopyable
     virtual ~Resource();
 
     // Returns true if the resource is used by ANGLE in an unflushed command buffer.
-    bool usedInRecordedCommands() const { return mUse.usedInRecordedCommands(); }
+    bool usedInRecordedCommands() const { return mReadOnlyUse.usedInRecordedCommands(); }
 
     // Determine if the driver has finished execution with this resource.
     bool usedInRunningCommands(Serial lastCompletedSerial) const
     {
-        return mUse.usedInRunningCommands(lastCompletedSerial);
+        return mReadOnlyUse.usedInRunningCommands(lastCompletedSerial);
     }
 
     // Returns true if the resource is in use by ANGLE or the driver.
     bool isCurrentlyInUse(Serial lastCompletedSerial) const
     {
-        return mUse.isCurrentlyInUse(lastCompletedSerial);
+        return mReadOnlyUse.isCurrentlyInUse(lastCompletedSerial);
     }
 
     // Ensures the driver is caught up to this resource and it is only in use by ANGLE.
@@ -186,21 +187,35 @@ class Resource : angle::NonCopyable
     // Complete all recorded and in-flight commands involving this resource
     angle::Result waitForIdle(ContextVk *contextVk, const char *debugMessage);
 
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mReadWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
+
     // Adds the resource to a resource use list.
-    void retain(ResourceUseList *resourceUseList) const;
+    void retainReadOnly(ResourceUseList *resourceUseList) const;
+    void retainReadWrite(ResourceUseList *resourceUseList) const;
 
   protected:
     Resource();
     Resource(Resource &&other);
 
     // Current resource lifetime.
-    SharedResourceUse mUse;
+    SharedResourceUse mReadOnlyUse;
+    // Track write usage.
+    SharedResourceUse mReadWriteUse;
 };
 
-ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const
+ANGLE_INLINE void Resource::retainReadOnly(ResourceUseList *resourceUseList) const
 {
     // Store reference in resource list.
-    resourceUseList->add(mUse);
+    resourceUseList->add(mReadOnlyUse);
+}
+
+ANGLE_INLINE void Resource::retainReadWrite(ResourceUseList *resourceUseList) const
+{
+    retainReadOnly(resourceUseList);
+    resourceUseList->add(mReadWriteUse);
 }
 
 }  // namespace vk

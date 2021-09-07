@@ -18,22 +18,27 @@ namespace vk
 // Resource implementation.
 Resource::Resource()
 {
-    mUse.init();
+    mReadOnlyUse.init();
+    mReadWriteUse.init();
 }
 
 Resource::Resource(Resource &&other) : Resource()
 {
-    mUse = std::move(other.mUse);
+    mReadOnlyUse = std::move(other.mReadOnlyUse);
+    mReadWriteUse = std::move(other.mReadWriteUse);
 }
 
 Resource::~Resource()
 {
-    mUse.release();
+    mReadOnlyUse.release();
+    mReadWriteUse.release();
 }
 
 angle::Result Resource::finishRunningCommands(ContextVk *contextVk)
 {
-    return contextVk->finishToSerial(mUse.getSerial());
+    // mReadOnlyUse is always updated for both ReadOnly and ReadWrite, so we only need to check its
+    // Serial.
+    return contextVk->finishToSerial(mReadOnlyUse.getSerial());
 }
 
 angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessage)
