@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df99c2f5_ccbbef94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-07T17:03:28Z",
+      "side": 1,
+      "message": "This is another preparation CL that makes the main CL slightly simpler, since it also needs to call initImage.",
+      "revId": "54f0ac794cbe44c1db562dd68d48d71004d4c10b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
