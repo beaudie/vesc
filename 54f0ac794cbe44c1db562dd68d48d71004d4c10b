@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ac48d06_3a842745",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2080,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-07T20:48:18Z",
+      "side": 1,
+      "message": "initImage ignores this argument for immutable tetxure. It always allocate full mip chain for immutable texture. This argument is only used for mutable texture. Yes we can try to pass in FullMipCHain for immutable, but it will be ignored anyway and the effort in the caller will just wasted.",
+      "parentUuid": "d802c0f8_cee9e75c",
+      "range": {
+        "startLine": 2080,
+        "startChar": 47,
+        "endLine": 2080,
+        "endChar": 76
+      },
+      "revId": "54f0ac794cbe44c1db562dd68d48d71004d4c10b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7feaff6_3cfb3e03",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-07T20:11:39Z",
       "side": 1,
       "message": "Does this need to have special handling for immutable formats?   Or can this be:\n\n    if (mipLevels \u003d\u003d ImageMipLevels::FullMipChain)\n    {\n        firstLevelDesc \u003d \u0026mState.getLevelZeroDesc();\n        firstLevel     \u003d 0;\n    }\n    else\n    {\n        firstLevelDesc \u003d \u0026mState.getBaseLevelDesc();\n        firstLevel     \u003d mState.getEffectiveBaseLevel();        \n    }\n    levelCount     \u003d getMipLevelCount(mipLevels);",
+      "range": {
+        "startLine": 2756,
+        "startChar": 0,
+        "endLine": 2767,
+        "endChar": 5
+      },
+      "revId": "54f0ac794cbe44c1db562dd68d48d71004d4c10b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41c2c717_374bfa4c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2767,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-07T20:48:18Z",
+      "side": 1,
+      "message": "For mutable texture, firstLevel is always baseLevel, not 0, so you do need special handling for immutable texture.",
+      "parentUuid": "e7feaff6_3cfb3e03",
       "range": {
         "startLine": 2756,
         "startChar": 0,
