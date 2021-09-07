@@ -20,21 +20,26 @@ import stat
 import subprocess
 import sys
 
-from gen_restricted_traces import get_context as get_context
-from gen_restricted_traces import load_json_metadata as load_json_metadata
-from gen_restricted_traces import json_metadata_exists as json_metadata_exists
+from gen_restricted_traces import read_json as read_json
 
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_TEST_JSON = 'restricted_traces.json'
 DEFAULT_LOG_LEVEL = 'info'
 DEFAULT_BACKUP_FOLDER = 'retrace-backups'
 
-# We preserve select metadata in the trace header that can't be re-captured properly.
-# Currently this is just the set of default framebuffer surface config bits.
-METADATA_KEYWORDS = ['kDefaultFramebuffer']
-
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
+
+
+def load_trace_json(trace):
+    json_file_name = '%s/%s.json' % (trace, trace)
+    return read_json(json_file_name)
+
+
+def get_context(trace, trace_path):
+    """Returns the trace context number."""
+    json_data = load_trace_json(trace)
+    return str(json_data['WindowSurfaceContextID'])
 
 
 def get_script_dir():
@@ -46,67 +51,14 @@ def src_trace_path(trace):
 
 
 def context_header(trace, trace_path):
-    context_id = get_context(trace_path)
-    # TODO(jmadill): Remove after retrace. http://anglebug.com/5133
-    for try_path_expr in ['%s_capture_context%s.h', '%s_context%s.h']:
-        header = try_path_expr % (trace, context_id)
-        try_path = os.path.join(trace_path, header)
-        if os.path.isfile(try_path):
-            return try_path
-    logging.fatal('Could not find context header for %s' % trace)
-    return None
+    context_id = get_context(trace, trace_path)
+    header = '%s_context%s.h' % (trace, context_id)
+    return os.path.join(trace_path, header)
 
 
-def get_num_frames(trace):
-    trace_path = src_trace_path(trace)
-
-    lo = 99999999
-    hi = 0
-
-    for file in os.listdir(trace_path):
-        match = re.match(r'.+_context\d_frame(\d+)\.cpp', file)
-        if match:
-            frame = int(match.group(1))
-            if frame < lo:
-                lo = frame
-            if frame > hi:
-                hi = frame
-
-    return hi - lo + 1
-
-
-def get_trace_metadata(trace):
-    trace_path = src_trace_path(trace)
-    header_file = context_header(trace, trace_path)
-    metadata = []
-    with open(header_file, 'rt') as f:
-        for line in f.readlines():
-            for keyword in METADATA_KEYWORDS:
-                if keyword in line:
-                    metadata += [line]
-    return metadata
-
-
-def replace_metadata(header_file, metadata):
-    lines = []
-    replaced = False
-    with open(header_file, 'rt') as f:
-        for line in f.readlines():
-            found_keyword = False
-            for keyword in METADATA_KEYWORDS:
-                if keyword in line:
-                    found_keyword = True
-                    break
-
-            if found_keyword:
-                if not replaced:
-                    replaced = True
-                    lines += metadata
-            else:
-                lines += [line]
-
-    with open(header_file, 'wt') as f:
-        f.writelines(lines)
+def get_num_frames(json_data):
+    metadata = json_data['TraceMetadata']
+    return metadata['FrameEnd'] - metadata['FrameStart'] + 1
 
 
 def path_contains_header(path):
@@ -142,14 +94,6 @@ def backup_traces(args, traces):
         copy_trace_folder(trace_path, trace_backup_path)
 
 
-# TODO(jmadill): Remove this once migrated. http://anglebug.com/5133
-def run_code_generation():
-    python_binary = 'py.exe' if os.name == 'nt' else 'python3'
-    angle_dir = os.path.join(get_script_dir(), '..', '..', '..')
-    gen_path = os.path.join(angle_dir, 'scripts', 'run_code_generation.py')
-    subprocess.check_call([python_binary, gen_path])
-
-
 def restore_traces(args, traces):
     for trace in fnmatch.filter(traces, args.traces):
         trace_path = src_trace_path(trace)
@@ -158,13 +102,6 @@ def restore_traces(args, traces):
             logging.error('Trace folder not found at %s' % trace_backup_path)
         else:
             copy_trace_folder(trace_backup_path, trace_path)
-    # TODO(jmadill): Remove this once migrated. http://anglebug.com/5133
-    angle_dir = os.path.join(get_script_dir(), '..', '..', '..')
-    json_path = os.path.join(angle_dir, 'scripts', 'code_generation_hashes',
-                             'restricted_traces.json')
-    if os.path.exists(json_path):
-        os.unlink(json_path)
-    run_code_generation()
 
 
 def run_autoninja(args):
@@ -217,15 +154,11 @@ def upgrade_traces(args, traces):
             logging.info('Skipping "%s" because the out folder already exists' % trace)
             continue
 
-        num_frames = get_num_frames(trace)
-        metadata = get_trace_metadata(trace)
+        json_data = load_trace_json(trace)
+        num_frames = get_num_frames(json_data)
 
+        metadata = json_data['TraceMetadata']
         logging.debug('Read metadata: %s' % str(metadata))
-
-        if json_metadata_exists(trace):
-            json_metadata = load_json_metadata(trace)
-        else:
-            json_metadata = {}
 
         max_steps = min(args.limit, num_frames) if args.limit else num_frames
 
@@ -244,7 +177,7 @@ def upgrade_traces(args, traces):
             additional_env['ANGLE_FEATURE_OVERRIDES_ENABLED'] = 'forceInitShaderVariables'
         if args.validation_expr:
             additional_env['ANGLE_CAPTURE_VALIDATION_EXPR'] = args.validation_expr
-        if not json_metadata.get('IsTrimmingEnabled', args.trim):
+        if not metadata.get('IsTrimmingEnabled', args.trim):
             additional_env['ANGLE_CAPTURE_TRIM_ENABLED'] = '0'
 
         additional_args = ['--retrace-mode']
@@ -258,8 +191,6 @@ def upgrade_traces(args, traces):
                 logging.error('There was a problem tracing "%s", could not find header file: %s' %
                               (trace, header_file))
                 failures += [trace]
-            else:
-                replace_metadata(header_file, metadata)
         except:
             logging.exception('There was an exception running "%s":' % trace)
             failures += [trace]
@@ -279,7 +210,8 @@ def validate_traces(args, traces):
     additional_args = ['--validation']
 
     for trace in fnmatch.filter(traces, args.traces):
-        num_frames = get_num_frames(trace)
+        json_data = load_trace_json(trace)
+        num_frames = get_num_frames(json_data)
         max_steps = min(args.limit, num_frames) if args.limit else num_frames
         run_test_suite(args, trace, max_steps, additional_args)
 
