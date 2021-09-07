@@ -197,10 +197,69 @@ class Resource : angle::NonCopyable
     SharedResourceUse mUse;
 };
 
+class ResourceWrite : public angle::NonCopyable
+{
+  public:
+    virtual ~ResourceWrite();
+
+    // Returns true if the resource is used by ANGLE in an unflushed command buffer.
+    bool usedInRecordedCommands() const
+    {
+        return mReadOnlyUse.usedInRecordedCommands() || mReadWriteUse.usedInRecordedCommands();
+    }
+
+    // Determine if the driver has finished execution with this resource.
+    bool usedInRunningCommands(Serial lastCompletedSerial) const
+    {
+        return mReadOnlyUse.usedInRunningCommands(lastCompletedSerial) ||
+               mReadWriteUse.usedInRunningCommands(lastCompletedSerial);
+    }
+
+    // Returns true if the resource is in use by ANGLE or the driver.
+    bool isCurrentlyInUse(Serial lastCompletedSerial) const
+    {
+        return mReadOnlyUse.isCurrentlyInUse(lastCompletedSerial) ||
+               mReadWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mReadWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
+
+    // Ensures the driver is caught up to this resource and it is only in use by ANGLE.
+    angle::Result finishRunningCommands(ContextVk *contextVk);
+
+    // Complete all recorded and in-flight commands involving this resource
+    angle::Result waitForIdle(ContextVk *contextVk, const char *debugMessage);
+
+    // Adds the resource to a resource use list.
+    void retainReadOnly(ResourceUseList *resourceUseList) const;
+    void retainReadWrite(ResourceUseList *resourceUseList) const;
+
+  protected:
+    ResourceWrite();
+    ResourceWrite(ResourceWrite &&other);
+
+    SharedResourceUse mReadOnlyUse;
+    SharedResourceUse mReadWriteUse;
+};
+
 ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const
 {
     // Store reference in resource list.
     resourceUseList->add(mUse);
+}
+
+ANGLE_INLINE void ResourceWrite::retainReadOnly(ResourceUseList *resourceUseList) const
+{
+    // Store reference in resource list.
+    resourceUseList->add(mReadOnlyUse);
+}
+
+ANGLE_INLINE void ResourceWrite::retainReadWrite(ResourceUseList *resourceUseList) const
+{
+    // Store reference in resource list.
+    resourceUseList->add(mReadWriteUse);
 }
 
 }  // namespace vk

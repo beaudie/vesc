@@ -2913,7 +2913,9 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
     VkDeviceSize bufferOffset = 0;
     const vk::BufferHelper &buffer =
         vk::GetImpl(mState.getBuffer().get())->getBufferAndOffset(&bufferOffset);
+    vk::ResourceUseList &resourceUseList = contextVk->getResourceUseList();
 
+    buffer.retainReadOnly(&resourceUseList);
     retainBufferViews(&contextVk->getResourceUseList());
     return mBufferViews.getView(contextVk, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }
