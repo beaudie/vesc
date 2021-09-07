@@ -34,6 +34,24 @@
       "parentUuid": "e2dd023d_7b43499d",
       "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fabc5f02_9cd89ac8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-07T16:39:55Z",
+      "side": 1,
+      "message": "\u003e Mali Vulkan driver doesn\u0027t support inheritedQueries, so we cannot run GLES30 applications.\n\nRight, we actually should stop requiring that feature. I removed that here: https://chromium-review.googlesource.com/c/angle/angle/+/3145611\n\n\u003e For T-Rex, its FPS drops \u003e 20%\n\nThat\u0027s surprising (1). If you run deqp, do you see test failures like we see on our bots? There might be something wrong with the command buffers we submit, and I don\u0027t really know what that could be at the moment.\n\n(1) I noticed that we actually generate a lot of tiny secondary command buffers outside a render pass (basically every time an execution barrier is needed that can\u0027t be merged with the previous). That might be the reason?",
+      "parentUuid": "04202799_5f56c242",
+      "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
