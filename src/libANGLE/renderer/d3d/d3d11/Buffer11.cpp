@@ -540,16 +540,20 @@ angle::Result Buffer11::map(const gl::Context *context, GLenum access, void **ma
     // GL_OES_mapbuffer uses an enum instead of a bitfield for it's access, convert to a bitfield
     // and call mapRange.
     ASSERT(access == GL_WRITE_ONLY_OES);
-    return mapRange(context, 0, mSize, GL_MAP_WRITE_BIT, mapPtr);
+    bool bufferGhosted;
+    return mapRange(context, 0, mSize, GL_MAP_WRITE_BIT, &bufferGhosted, mapPtr);
 }
 
 angle::Result Buffer11::mapRange(const gl::Context *context,
                                  size_t offset,
                                  size_t length,
                                  GLbitfield access,
+                                 bool *bufferGhosted,
                                  void **mapPtr)
 {
     ASSERT(!mMappedStorage);
+    ASSERT(bufferGhosted);
+    *bufferGhosted = false;
 
     BufferStorage *latestStorage = nullptr;
     ANGLE_TRY(getLatestBufferStorage(context, &latestStorage));

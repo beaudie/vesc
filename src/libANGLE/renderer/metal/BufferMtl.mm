@@ -161,13 +161,15 @@ angle::Result BufferMtl::map(const gl::Context *context, GLenum access, void **m
     {
         mapRangeAccess |= GL_MAP_WRITE_BIT;
     }
-    return mapRange(context, 0, size(), mapRangeAccess, mapPtr);
+    bool bufferGhosted;
+    return mapRange(context, 0, size(), mapRangeAccess, &bufferGhosted, mapPtr);
 }
 
 angle::Result BufferMtl::mapRange(const gl::Context *context,
                                   size_t offset,
                                   size_t length,
                                   GLbitfield access,
+                                  bool *bufferGhosted,
                                   void **mapPtr)
 {
     if (access & GL_MAP_INVALIDATE_BUFFER_BIT)

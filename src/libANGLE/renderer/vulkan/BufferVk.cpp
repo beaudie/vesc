@@ -16,6 +16,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -485,7 +486,9 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
     {
         // Map the source buffer.
         void *mapPtr;
-        ANGLE_TRY(sourceVk->mapRangeImpl(contextVk, sourceOffset, size, 0, &mapPtr));
+        bool bufferGhosted;  // Don't care if the buffer was ghosted.
+        ANGLE_TRY(
+            sourceVk->mapRangeImpl(contextVk, sourceOffset, size, 0, &bufferGhosted, &mapPtr));
 
         // Update the shadow buffer with data from source buffer
         updateShadowBuffer(static_cast<uint8_t *>(mapPtr), size, destOffset);
@@ -575,23 +578,30 @@ angle::Result BufferVk::mapRange(const gl::Context *context,
                                  size_t offset,
                                  size_t length,
                                  GLbitfield access,
+                                 bool *bufferGhosted,
                                  void **mapPtr)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "BufferVk::mapRange");
-    return mapRangeImpl(vk::GetImpl(context), offset, length, access, mapPtr);
+    return mapRangeImpl(vk::GetImpl(context), offset, length, access, bufferGhosted, mapPtr);
 }
 
 angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
 {
-    return mapRangeImpl(contextVk, 0, static_cast<VkDeviceSize>(mState.getSize()), 0, mapPtr);
+    bool bufferGhosted;
+    return mapRangeImpl(contextVk, 0, static_cast<VkDeviceSize>(mState.getSize()), 0,
+                        &bufferGhosted, mapPtr);
 }
 
 angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
                                      VkDeviceSize offset,
                                      VkDeviceSize length,
                                      GLbitfield access,
+                                     bool *bufferGhosted,
                                      void **mapPtr)
 {
+    ASSERT(bufferGhosted);
+    *bufferGhosted = false;
+
     if (!mShadowBuffer.valid())
     {
         ASSERT(mBuffer && mBuffer->valid());
@@ -700,8 +710,9 @@ angle::Result BufferVk::getSubData(const gl::Context *context,
     {
         ASSERT(mBuffer && mBuffer->valid());
         ContextVk *contextVk = vk::GetImpl(context);
+        bool bufferGhosted;  // Don't care if the buffer was ghosted.
         void *mapPtr;
-        ANGLE_TRY(mapRangeImpl(contextVk, offset, size, 0, &mapPtr));
+        ANGLE_TRY(mapRangeImpl(contextVk, offset, size, 0, &bufferGhosted, &mapPtr));
         memcpy(outData, mapPtr, size);
         ANGLE_TRY(unmapImpl(contextVk));
     }
@@ -733,8 +744,9 @@ angle::Result BufferVk::getIndexRange(const gl::Context *context,
 
     ANGLE_TRACE_EVENT0("gpu.angle", "BufferVk::getIndexRange");
 
+    bool bufferGhosted;  // Don't care if the buffer was ghosted.
     void *mapPtr;
-    ANGLE_TRY(mapRangeImpl(contextVk, offset, getSize(), 0, &mapPtr));
+    ANGLE_TRY(mapRangeImpl(contextVk, offset, getSize(), 0, &bufferGhosted, &mapPtr));
     *outRange = gl::ComputeIndexRange(type, mapPtr, count, primitiveRestartEnabled);
     ANGLE_TRY(unmapImpl(contextVk));
 
