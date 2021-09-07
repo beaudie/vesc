@@ -103,8 +103,12 @@ angle::Result BufferNULL::mapRange(const gl::Context *context,
                                    size_t offset,
                                    size_t length,
                                    GLbitfield access,
+                                   bool *bufferGhosted,
                                    void **mapPtr)
 {
+    ASSERT(bufferGhosted);
+    *bufferGhosted = false;
+
     *mapPtr = mData.data() + offset;
     return angle::Result::Continue;
 }

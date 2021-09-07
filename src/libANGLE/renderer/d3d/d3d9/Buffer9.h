@@ -49,6 +49,7 @@ class Buffer9 : public BufferD3D
                            size_t offset,
                            size_t length,
                            GLbitfield access,
+                           bool *bufferGhosted,
                            void **mapPtr) override;
     angle::Result unmap(const gl::Context *context, GLboolean *result) override;
     angle::Result markTransformFeedbackUsage(const gl::Context *context) override;

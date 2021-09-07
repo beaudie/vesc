@@ -62,6 +62,7 @@ class BufferImpl : public angle::Subject
                                    size_t offset,
                                    size_t length,
                                    GLbitfield access,
+                                   bool *bufferGhosted,
                                    void **mapPtr)                                       = 0;
     virtual angle::Result unmap(const gl::Context *context, GLboolean *result)          = 0;
 
