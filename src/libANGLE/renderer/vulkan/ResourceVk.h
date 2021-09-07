@@ -16,6 +16,7 @@ namespace rx
 {
 namespace vk
 {
+
 // Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
 // of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
 // in the VkQueue. The reference count and serial together can determine if a resource is currently
@@ -197,10 +198,47 @@ class Resource : angle::NonCopyable
     SharedResourceUse mUse;
 };
 
+class ResourceWrite : public Resource
+{
+  public:
+    ~ResourceWrite() override;
+
+    bool isCurrentlyInUseForWrite(Serial lastCompletedSerial) const
+    {
+        return mReadWriteUse.isCurrentlyInUse(lastCompletedSerial);
+    }
+
+    // Adds the resource to a resource use list.
+    void retainReadOnly(ResourceUseList *resourceUseList) const;
+    void retainReadWrite(ResourceUseList *resourceUseList) const;
+
+  protected:
+    ResourceWrite();
+    ResourceWrite(ResourceWrite &&other);
+
+    // Make retain() private, so users are forced to explicitly decide whether to call
+    // retainReadOnly() or retainReadWrite();
+    using Resource::retain;
+
+    // Track write usage.
+    SharedResourceUse mReadWriteUse;
+};
+
 ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const
 {
     // Store reference in resource list.
     resourceUseList->add(mUse);
+}
+
+ANGLE_INLINE void ResourceWrite::retainReadOnly(ResourceUseList *resourceUseList) const
+{
+    retain(resourceUseList);
+}
+
+ANGLE_INLINE void ResourceWrite::retainReadWrite(ResourceUseList *resourceUseList) const
+{
+    retain(resourceUseList);
+    resourceUseList->add(mReadWriteUse);
 }
 
 }  // namespace vk

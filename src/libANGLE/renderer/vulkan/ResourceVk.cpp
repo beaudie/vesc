@@ -33,6 +33,8 @@ Resource::~Resource()
 
 angle::Result Resource::finishRunningCommands(ContextVk *contextVk)
 {
+    // mUse is always updated for both ReadOnly and ReadWrite, so we only need to check its
+    // Serial.
     return contextVk->finishToSerial(mUse.getSerial());
 }
 
@@ -57,6 +59,23 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessa
     ASSERT(!isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()));
 
     return angle::Result::Continue;
+}
+
+// Resource implementation.
+ResourceWrite::ResourceWrite()
+{
+    mReadWriteUse.init();
+}
+
+ResourceWrite::ResourceWrite(ResourceWrite &&other) : ResourceWrite()
+{
+    mUse          = std::move(other.mUse);
+    mReadWriteUse = std::move(other.mReadWriteUse);
+}
+
+ResourceWrite::~ResourceWrite()
+{
+    mReadWriteUse.release();
 }
 
 // SharedGarbage implementation.
