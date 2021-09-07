@@ -264,11 +264,12 @@ TEST_F(JsonSerializerTest, GroupedIntValue)
 
 void JsonSerializerTest::SetUp()
 {
-    js.startDocument("context");
+    js.startGroup("context");
 }
 
 void JsonSerializerTest::check(const std::string &expect)
 {
+    js.endGroup();
     js.endDocument();
     EXPECT_EQ(js.data(), expect);
     EXPECT_EQ(js.length(), expect.length());
