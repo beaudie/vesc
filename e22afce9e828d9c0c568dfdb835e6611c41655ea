@@ -34,6 +34,24 @@
       "parentUuid": "20f29606_a9d9de7f",
       "revId": "e22afce9e828d9c0c568dfdb835e6611c41655ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7035dc3_e9917d23",
+        "filename": "src/gpu_info_util/SystemInfo_linux.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-09-07T19:51:56Z",
+      "side": 0,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3144372",
+      "parentUuid": "ccb01e8a_99bf029b",
+      "revId": "e22afce9e828d9c0c568dfdb835e6611c41655ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
