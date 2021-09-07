@@ -80,6 +80,7 @@ class BufferVk : public BufferImpl
                            size_t offset,
                            size_t length,
                            GLbitfield access,
+                           bool *bufferGhosted,
                            void **mapPtr) override;
     angle::Result unmap(const gl::Context *context, GLboolean *result) override;
     angle::Result getSubData(const gl::Context *context,
@@ -119,6 +120,7 @@ class BufferVk : public BufferImpl
                                VkDeviceSize offset,
                                VkDeviceSize length,
                                GLbitfield access,
+                               bool *bufferGhosted,
                                void **mapPtr);
     angle::Result unmapImpl(ContextVk *contextVk);
 

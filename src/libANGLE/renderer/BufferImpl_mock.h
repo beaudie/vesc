@@ -38,9 +38,13 @@ class MockBufferImpl : public BufferImpl
                                GLintptr,
                                GLsizeiptr));
     MOCK_METHOD3(map, angle::Result(const gl::Context *contextImpl, GLenum, void **));
-    MOCK_METHOD5(
-        mapRange,
-        angle::Result(const gl::Context *contextImpl, size_t, size_t, GLbitfield, void **));
+    MOCK_METHOD6(mapRange,
+                 angle::Result(const gl::Context *contextImpl,
+                               size_t,
+                               size_t,
+                               GLbitfield,
+                               bool *bufferGhosted,
+                               void **));
     MOCK_METHOD2(unmap, angle::Result(const gl::Context *contextImpl, GLboolean *result));
 
     MOCK_METHOD6(getIndexRange,
