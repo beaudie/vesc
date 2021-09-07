@@ -180,12 +180,16 @@ angle::Result BufferGL::mapRange(const gl::Context *context,
                                  size_t offset,
                                  size_t length,
                                  GLbitfield access,
+                                 bool *bufferGhosted,
                                  void **mapPtr)
 {
     ContextGL *contextGL              = GetImplAs<ContextGL>(context);
     const FunctionsGL *functions      = GetFunctionsGL(context);
     StateManagerGL *stateManager      = GetStateManagerGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
+
+    ASSERT(bufferGhosted);
+    *bufferGhosted = false;
 
     if (features.keepBufferShadowCopy.enabled)
     {
