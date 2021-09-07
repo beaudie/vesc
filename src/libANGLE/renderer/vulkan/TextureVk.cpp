@@ -2240,11 +2240,20 @@ angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk)
 {
     ASSERT(mImage->valid());
 
-    gl::LevelIndex firstLevelGL = getNativeImageLevel(mImage->getFirstAllocatedLevel());
+    gl::LevelIndex levelGLStart, levelGLEnd;
+    if (mState.getImmutableFormat())
+    {
+        levelGLStart = gl::LevelIndex(0);
+        levelGLEnd   = gl::LevelIndex(mState.getImmutableLevels());
+    }
+    else
+    {
+        levelGLStart = gl::LevelIndex(mState.getEffectiveBaseLevel());
+        levelGLEnd = gl::LevelIndex(levelGLStart + getMipLevelCount(ImageMipLevels::EnabledLevels));
+    }
 
-    return mImage->flushStagedUpdates(
-        contextVk, firstLevelGL, firstLevelGL + mImage->getLevelCount(), getNativeImageLayer(0),
-        mImage->getLayerCount(), mRedefinedLevels);
+    return mImage->flushStagedUpdates(contextVk, levelGLStart, levelGLEnd, getNativeImageLayer(0),
+                                      mImage->getLayerCount(), mRedefinedLevels);
 }
 
 void TextureVk::initSingleLayerRenderTargets(ContextVk *contextVk,

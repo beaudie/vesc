@@ -6357,23 +6357,12 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
             else if (update.updateSource == UpdateSource::Buffer)
             {
-                if (update.data.buffer.formatID != mActualFormatID)
-                {
-                    // ToDo: anglebug:6368, we should handle this in higher level code.
-                    // If we have incompatible updates, skip but keept it.
-                    updatesToKeep.emplace_back(std::move(update));
-                    continue;
-                }
+                ASSERT(update.data.buffer.formatID == mActualFormatID);
                 update.data.buffer.copyRegion.imageSubresource.mipLevel = updateMipLevelVk.get();
             }
             else if (update.updateSource == UpdateSource::Image)
             {
-                if (update.data.image.formatID != mActualFormatID)
-                {
-                    // If we have incompatible updates, skip but keep it.
-                    updatesToKeep.emplace_back(std::move(update));
-                    continue;
-                }
+                ASSERT(update.data.image.formatID == mActualFormatID);
                 update.data.image.copyRegion.dstSubresource.mipLevel = updateMipLevelVk.get();
             }
 
