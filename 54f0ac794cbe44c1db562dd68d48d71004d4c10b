@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e5a1055_d81d5a86",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2080,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-07T20:56:18Z",
+      "side": 1,
+      "message": "I chnaged to FullMipChain for immutable.",
+      "parentUuid": "2ac48d06_3a842745",
+      "range": {
+        "startLine": 2080,
+        "startChar": 47,
+        "endLine": 2080,
+        "endChar": 76
+      },
+      "revId": "54f0ac794cbe44c1db562dd68d48d71004d4c10b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7feaff6_3cfb3e03",
