@@ -120,6 +120,7 @@ angle::Result Buffer9::mapRange(const gl::Context *context,
                                 size_t offset,
                                 size_t length,
                                 GLbitfield access,
+                                bool *bufferGhosted,
                                 void **mapPtr)
 {
     ANGLE_HR_UNREACHABLE(GetImplAs<Context9>(context));
