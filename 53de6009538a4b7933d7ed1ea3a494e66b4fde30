@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "049734ff_ecd7fc22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T17:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aa7c915_731110e1",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 63
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14fbb452_72ee7fb3",
@@ -43,6 +67,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5014ec8e_3abf60e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T17:32:56Z",
+      "side": 1,
+      "message": "This is the one I used... is that sufficient? I was using it to \"bisect\" problematic call ranges.",
+      "parentUuid": "14fbb452_72ee7fb3",
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f79518a6_9169da6f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 13
@@ -54,6 +96,30 @@
       "writtenOn": "2021-09-03T18:24:13Z",
       "side": 1,
       "message": "It would be good to clarify what \"call\" means here to be GL function calls.   Meaning, for example, between the 1100th and 1189th glTexImage2D() calls.",
+      "range": {
+        "startLine": 16,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 4
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a39ba1e_63716f3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T17:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f79518a6_9169da6f",
       "range": {
         "startLine": 16,
         "startChar": 47,
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88845ddf_7faa2b6a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5284,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T17:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f33743_0786a5c6",
+      "range": {
+        "startLine": 5284,
+        "startChar": 24,
+        "endLine": 5284,
+        "endChar": 35
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85561833_d8284b62",
@@ -100,6 +190,30 @@
       "writtenOn": "2021-09-03T18:24:13Z",
       "side": 1,
       "message": "It would be nice to have an example of what the starting string is and what it looks like after these replacements, so we can see what they\u0027re doing.   It would also be helpful to know why these replacements are being done.",
+      "range": {
+        "startLine": 5286,
+        "startChar": 0,
+        "endLine": 5287,
+        "endChar": 98
+      },
+      "revId": "53de6009538a4b7933d7ed1ea3a494e66b4fde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d3ee9f4_6ab7d413",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5287,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-07T17:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85561833_d8284b62",
       "range": {
         "startLine": 5286,
         "startChar": 0,
