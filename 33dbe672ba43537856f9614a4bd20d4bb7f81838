@@ -16,6 +16,24 @@
       "message": "Jamie/Shabi, any idea on why I\u0027m getting this bot failure? It passed earlier on. The test is an OpenGL end2end test, so it\u0027s not even using the vulkan backend.",
       "revId": "33dbe672ba43537856f9614a4bd20d4bb7f81838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6918418b_01a1c27e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-07T05:35:14Z",
+      "side": 1,
+      "message": "Could be that the change in the ordering of tests has exposed a bug. Please a file a bug at anglebug.com/new and suppress the test (suppressions go in angle_end2end_tests_expectations.txt now ICYMI).",
+      "parentUuid": "ae30cad4_1577b3de",
+      "revId": "33dbe672ba43537856f9614a4bd20d4bb7f81838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
