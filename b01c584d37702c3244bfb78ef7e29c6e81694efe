@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "748e495f_04a7f87d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T18:41:04Z",
+      "side": 1,
+      "message": "Even little things should be observable / quantifiable. I was able to see the impact of one memory access in draw call overhead tests. If there\u0027s a cost to optimization in terms of increasing code complexity it\u0027s worth knowing the the benefit in terms of runtime - just my two cents.\n\nDesign-wise I\u0027d be fine with not using inheritance, and just implementing two classes, vk::Resource and vk::ReadWriteResource. The code savings from the inheritance is pretty small, and generally inheritance is not a good fit a lot of the time.",
+      "parentUuid": "36e67b50_ffdb59ec",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb098f7b_29ad281b",
