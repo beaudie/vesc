@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56ca805f_23cc762d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T17:49:40Z",
+      "side": 1,
+      "message": "That\u0027s a fair point, though it would be helpful to have some data to analyze to determine the impact. Even on the most minimal microbench. Charlie what\u0027s a use case where you would be able to see the impact of the overhead? Maybe a simple draw with one state change? Or using a lot of textures?",
+      "parentUuid": "80777e97_7d1008d3",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb098f7b_29ad281b",
