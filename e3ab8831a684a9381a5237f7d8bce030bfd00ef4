@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fefc4ef_4117e551",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T16:26:38Z",
+      "side": 1,
+      "message": "Weird, I don\u0027t know why it isn\u0027t showing up as a merge conflict. Will need to rebase this on my more recent CL.",
+      "revId": "e3ab8831a684a9381a5237f7d8bce030bfd00ef4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
