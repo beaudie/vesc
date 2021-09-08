@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3b743c8_68dcaef3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-08T20:01:43Z",
+      "side": 1,
+      "message": "wasn\u0027t sure if I should figure out some way to share the code.",
+      "revId": "f44bbf145df9d7e2576c387656596652f2bf1ca9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
