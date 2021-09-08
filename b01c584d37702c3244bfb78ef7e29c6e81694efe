@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36e67b50_ffdb59ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T18:31:15Z",
+      "side": 1,
+      "message": "Right, a simple draw with lots of texture/buffers. I suggest avoid any unnecessary cost here because it is avoidable, and little things do adds up.",
+      "parentUuid": "56ca805f_23cc762d",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb098f7b_29ad281b",
@@ -96,6 +114,30 @@
       "side": 1,
       "message": "I would rename the isCurrentlyInUse method if it\u0027s not accurate. Can something be in use for write and not read? Renaming mUse to mAccessUse doesn\u0027t seem clearer to me.\n\nnb my original suggestion was to name it mReadWriteUse and mReadOnlyUse, though Tim\u0027s implementation seems OK to me as well.",
       "parentUuid": "edb017dd_3f8ba835",
+      "range": {
+        "startLine": 212,
+        "startChar": 22,
+        "endLine": 212,
+        "endChar": 30
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6afe8dc5_f1992138",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T18:31:15Z",
+      "side": 1,
+      "message": "\u003eCan something be in use for write and not read?\nFor example, bufferSubData call will only write to buffer but not read.\n\nWhat it really mean is read or write, so mReadOrWriteUse is also fine, just a bit verbose. mReadWriteUse might also be fine.",
+      "parentUuid": "f0086b08_8289f667",
       "range": {
         "startLine": 212,
         "startChar": 22,
