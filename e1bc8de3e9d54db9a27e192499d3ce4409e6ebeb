@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2526febf_47696767",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-08T18:47:45Z",
+      "side": 1,
+      "message": "Could you maybe also change it here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/scripts/roll_chromium_deps.py;l\u003d565",
+      "revId": "e1bc8de3e9d54db9a27e192499d3ce4409e6ebeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
