@@ -39,6 +39,30 @@
       },
       "revId": "b396fcde2b5629d74aa3e5024c2e70b1af861ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebd9a4e6_891558f0",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T18:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b67864dc_5b0ea2f0",
+      "range": {
+        "startLine": 311,
+        "startChar": 15,
+        "endLine": 311,
+        "endChar": 70
+      },
+      "revId": "b396fcde2b5629d74aa3e5024c2e70b1af861ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
