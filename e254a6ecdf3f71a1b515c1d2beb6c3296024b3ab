@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c14e4d66_c57ba1f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-08T05:31:14Z",
+      "side": 1,
+      "message": "This was causing a crash in GLSLTest_ES3.MissingReturnArrayOfStructs/ES3_Metal",
+      "revId": "e254a6ecdf3f71a1b515c1d2beb6c3296024b3ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
