@@ -52,6 +52,24 @@
       "parentUuid": "04202799_5f56c242",
       "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05e0b79_9f5f8ffc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2021-09-08T03:07:13Z",
+      "side": 1,
+      "message": "After switch to 3.0 context, T-Rex has no drop, and MH30/31 are also fine.\nBut the driver overhead 2 still has big drop (~60%), I see our driver has spent much time on vkCmdExecuteCommands, and this API doesn\u0027t get called before without this change.\nRegarding the deqp failure, I didn\u0027t see any failures if run the tests individually, but run the whole will cause OOM, so there is memory leak",
+      "parentUuid": "fabc5f02_9cd89ac8",
+      "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
