@@ -33,6 +33,24 @@
       "message": "You probably want to make sure the type is not an array either.",
       "revId": "e254a6ecdf3f71a1b515c1d2beb6c3296024b3ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95e4879d_2d81624d",
+        "filename": "src/compiler/translator/tree_ops/ConvertUnsupportedConstructorsToFunctionCalls.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-08T17:10:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c5dca90_264aa51e",
+      "revId": "e254a6ecdf3f71a1b515c1d2beb6c3296024b3ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
