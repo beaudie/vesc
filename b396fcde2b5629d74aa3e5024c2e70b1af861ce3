@@ -16,6 +16,29 @@
       "message": "PTAL. Not sure the best way to trigger a gold triage link to show up.",
       "revId": "b396fcde2b5629d74aa3e5024c2e70b1af861ce3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b67864dc_5b0ea2f0",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2021-09-08T18:44:06Z",
+      "side": 1,
+      "message": "I think you want to only append it here. Links from CI test runs should point directly to the image rather than a triage dashboard.",
+      "range": {
+        "startLine": 311,
+        "startChar": 15,
+        "endLine": 311,
+        "endChar": 70
+      },
+      "revId": "b396fcde2b5629d74aa3e5024c2e70b1af861ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
