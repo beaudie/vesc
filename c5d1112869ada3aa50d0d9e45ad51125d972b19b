@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28b1457a_e819316c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6362,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T11:31:22Z",
+      "side": 1,
+      "message": "nit: in the future, please use this format for TODOs:\n\n// TODO: http://anglebug.com/6368",
+      "range": {
+        "startLine": 6362,
+        "startChar": 22,
+        "endLine": 6362,
+        "endChar": 42
+      },
+      "revId": "c5d1112869ada3aa50d0d9e45ad51125d972b19b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5f21822_7e9db289",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
