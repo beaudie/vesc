@@ -1068,6 +1068,11 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     if (mParams.testID == RestrictedTraceID::world_of_kings)
     {
         addExtensionPrerequisite("GL_OES_EGL_image_external");
+        // Flaky on Intel. http://anglebug.com/6372
+        if (IsWindows() && IsIntel())
+        {
+            mSkipTest = true;
+        }
     }
 
     // We already swap in TracePerfTest::drawBenchmark, no need to swap again in the harness.
