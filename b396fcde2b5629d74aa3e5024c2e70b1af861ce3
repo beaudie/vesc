@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e98d52c9_ef34f96a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T18:16:16Z",
+      "side": 1,
+      "message": "PTAL. Not sure the best way to trigger a gold triage link to show up.",
+      "revId": "b396fcde2b5629d74aa3e5024c2e70b1af861ce3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
