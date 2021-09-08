@@ -240,6 +240,115 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f45579ee_ac0a2ef8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:31:33Z",
+      "side": 1,
+      "message": "Is this really necessary? BufferViewHelper::retain() will retain the BufferViewHelper object not the views inside, right? So what does it matter if it\u0027s added to the retain list before or after its *content* has changed?",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcdc903b_994a0dca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:31:33Z",
+      "side": 1,
+      "message": "This looks confusing, is that what the naming dispute was about? You can always make it doubly clear:\n\n    buffer-\u003eretainReadOnly(...)\n    buffer-\u003eretainReadWrite(...)\n    image-\u003eretain(...)\n\nThen have BufferHelper, ImageHelper (and others such as DescriptorPoolHelper) forward these to the appropriate ResourceVk functions (which could be named retainBufferReadOnly, retainBufferReadWrite and retainImage ..., even if all except retainBufferReadWrite have the same implementation).",
+      "range": {
+        "startLine": 1061,
+        "startChar": 11,
+        "endLine": 1061,
+        "endChar": 25
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "878c188f_0fde3016",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3494,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:31:33Z",
+      "side": 1,
+      "message": "Revert?",
+      "range": {
+        "startLine": 3494,
+        "startChar": 30,
+        "endLine": 3494,
+        "endChar": 32
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfbebc18_02712214",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3657,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:31:33Z",
+      "side": 1,
+      "message": "The comment doesn\u0027t make much sense to be honest. release() happens on a resource, and it\u0027s when you want the resource to entirely go away (doesn\u0027t matter if it\u0027s by glDeleteBuffers or other). Retain helps usage tracking. They are unrelated operations, so \"release() applying to retain()\" doesn\u0027t make any sense.\n\nIt\u0027s pretty clear IMO why there would be mWriteUse.release() inside a release() function, so the entire comment can be dropped.",
+      "range": {
+        "startLine": 3649,
+        "startChar": 0,
+        "endLine": 3657,
+        "endChar": 86
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd333cad_55189c3a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4163,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:31:33Z",
+      "side": 1,
+      "message": "Can be deleted",
+      "range": {
+        "startLine": 4161,
+        "startChar": 0,
+        "endLine": 4163,
+        "endChar": 21
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0788d5b4_9c6906c4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
