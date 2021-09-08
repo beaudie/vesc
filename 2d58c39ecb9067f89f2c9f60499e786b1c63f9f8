@@ -16,6 +16,41 @@
       "message": "Charlie, this looks great!  Great work on refactoring this to save memory, etc.\n\nAfter looking through several CLs, I am wondering if (during a \"fix-it week\") we can do something to help spin-up new ANGLE contributors on this broader format/texture/image/etc topic area.  Perhaps a slide set with video recording?  I\u0027m not sure.  Again, great job!",
       "revId": "2d58c39ecb9067f89f2c9f60499e786b1c63f9f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d923e774_8a4adfa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 56
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T21:49:57Z",
+      "side": 1,
+      "message": "Good idea. Or maybe we should capture it in a doc in the source tree covering how ImageHelper is allocated and base/max levels gets updated and mRedefinedLevels and reformating etc. I will keep it as a todo list in my queue.",
+      "parentUuid": "d41ed1e1_fb510e0e",
+      "revId": "2d58c39ecb9067f89f2c9f60499e786b1c63f9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd23175_e5bf8f92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 56
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T21:49:57Z",
+      "side": 1,
+      "message": "Thanks you all for the review of the long series of CLs",
+      "revId": "2d58c39ecb9067f89f2c9f60499e786b1c63f9f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
