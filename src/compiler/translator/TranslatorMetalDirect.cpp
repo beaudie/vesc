@@ -1039,7 +1039,9 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             {
                 return false;
             }
-            DeclareRightBeforeMain(*root, *BuiltInVariable::gl_FragCoord());
+            const TVariable *fragCoord = static_cast<const TVariable *>(
+                getSymbolTable().findBuiltIn(ImmutableString("gl_FragCoord"), getShaderVersion()));
+            DeclareRightBeforeMain(*root, *fragCoord);
         }
 
         if (!RewriteDfdy(this, compileOptions, root, getSymbolTable(), getShaderVersion(),
