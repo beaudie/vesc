@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f3cc5a3_9cfb65bb",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T19:56:07Z",
+      "side": 1,
+      "message": "Use a new message.. it gets super confusing when we override messages.",
+      "parentUuid": "655f23bf_663bf708",
+      "range": {
+        "startLine": 2309,
+        "startChar": 0,
+        "endLine": 2312,
+        "endChar": 55
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "428e6a05_be9945ca",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 40
@@ -187,6 +211,30 @@
       "side": 1,
       "message": "But the first `if` doesn\u0027t.",
       "parentUuid": "bf7dd7ff_8ee60a1a",
+      "range": {
+        "startLine": 651,
+        "startChar": 12,
+        "endLine": 651,
+        "endChar": 17
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a213282_e364e6c4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T19:56:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e8a1212_d1d063ed",
       "range": {
         "startLine": 651,
         "startChar": 12,
