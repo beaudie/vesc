@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2526747_f5b15a20",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6362,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T16:21:09Z",
+      "side": 1,
+      "message": "Thanks, will fix in the next CL.",
+      "parentUuid": "28b1457a_e819316c",
+      "range": {
+        "startLine": 6362,
+        "startChar": 22,
+        "endLine": 6362,
+        "endChar": 42
+      },
+      "revId": "c5d1112869ada3aa50d0d9e45ad51125d972b19b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5f21822_7e9db289",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-09-08T01:29:21Z",
       "side": 1,
       "message": "Actually we do have this, in TextureVk::mRedefinedLevels. I don\u0027t know why I missed that, but this *should* already be handled (if not, it\u0027s a new bug). Change of format is not the only reason an update may be incompatible, the extents of the mip could also be incompatible and this is not catching it.\n\nThis may be happening due to reformatting? In that case, maybe the reformatting code is missing an adjustment to TextureVk::mRedefinedLevels.\n\nCould you please revert this back to ASSERT and debug the issue? I\u0027ll help you the best I can with this.",
+      "revId": "c5d1112869ada3aa50d0d9e45ad51125d972b19b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b28793fb_28f945a3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6364,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T16:21:09Z",
+      "side": 1,
+      "message": "This is *before* texture reformatting CL. This occured because I added the assertion that detects the copy on a level that has incompatible data, and added the tests that exercise the incompatible level. This is an existing bug that exposed with the test and assertion. I will put a more detailed reproduce steps and what I have known so far in the bug. mRedefinedLevels is 0. I have briefly debugged this and even added an attempted fix (will upload and CC you) but it appears more things broken. I believe this incompatible level bug should be tracked and put at lower priority than other works we have, given this is not a real usage case. But anyway, feel free to grab the bug and debug it if you want.",
+      "parentUuid": "d5f21822_7e9db289",
       "revId": "c5d1112869ada3aa50d0d9e45ad51125d972b19b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
