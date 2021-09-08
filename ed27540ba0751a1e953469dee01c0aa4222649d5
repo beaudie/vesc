@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b279cea8_170a3b3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T00:54:48Z",
+      "side": 1,
+      "message": "Hey Sunny! We are having some issues with collecting GPU info with Vulkan in the wild, so we are going to disable that for now. You should be able to use the gn arg added by this change to re-enable it on your platform.",
+      "revId": "ed27540ba0751a1e953469dee01c0aa4222649d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
