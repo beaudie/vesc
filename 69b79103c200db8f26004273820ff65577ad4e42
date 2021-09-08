@@ -16,6 +16,24 @@
       "message": "Is this the best process for this kind of change? Maybe you should have a specific method for adding functions if that\u0027s something we need to do?",
       "revId": "69b79103c200db8f26004273820ff65577ad4e42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d9eb11_89210d52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T16:04:53Z",
+      "side": 1,
+      "message": "Gregg tried something recently I had never done, and that is to insert the functions before the queued replacements are processed: https://chromium-review.googlesource.com/c/angle/angle/+/3134963/7/src/compiler/translator/tree_ops/ConvertUnsupportedConstructorsToFunctionCalls.cpp#312\n\nI always assumed that would cause trouble as it changes the index of nodes, but it\u0027s seemingly fine. I should likely do something like that in the few other places we do this.\n\nThis comment from Olli (right in this function) made me hesitant to do that here:\n\n    // TODO(oetuaho@nvidia.com): It might be nicer to add the helper definitions also in the middle\n    // of traversal. Now the tree ends up in an inconsistent state in the middle, since there are\n    // function call nodes with no corresponding definition nodes. This needs special handling in\n    // TIntermLValueTrackingTraverser, and creates intricacies that are not easily apparent from a\n    // superficial reading of the code.\n\nI\u0027ll make a note to come back and see if I can avoid this disable/reenable dance everywhere.",
+      "parentUuid": "8a31ee79_17dccda7",
+      "revId": "69b79103c200db8f26004273820ff65577ad4e42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
