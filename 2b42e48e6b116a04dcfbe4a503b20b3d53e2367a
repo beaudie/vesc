@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5edc538_ef605628",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-09-08T00:06:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea77aa2e_f55d302a",
+      "range": {
+        "startLine": 1937,
+        "startChar": 0,
+        "endLine": 1937,
+        "endChar": 18
+      },
+      "revId": "2b42e48e6b116a04dcfbe4a503b20b3d53e2367a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7ec16e3_d3481a94",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-07T12:59:34Z",
       "side": 1,
       "message": "nit: suggest you cache this and verify it\u0027s not \"-1\"",
+      "range": {
+        "startLine": 1942,
+        "startChar": 27,
+        "endLine": 1942,
+        "endChar": 70
+      },
+      "revId": "2b42e48e6b116a04dcfbe4a503b20b3d53e2367a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5da2528c_eedab681",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-09-08T00:06:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7ec16e3_d3481a94",
       "range": {
         "startLine": 1942,
         "startChar": 27,
