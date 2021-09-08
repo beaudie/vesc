@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82c58cb4_0a1dd2a6",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T01:30:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ab6cd3b4_399b9d42",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "952d3a26_7509a5cf",
@@ -125,6 +143,30 @@
       "side": 1,
       "message": "I am lining up with the variables here:\n\nANGLE_CAPTURE_FRAME_START, ANGLE_CAPTURE_FRAME_END. Aiming for max consistency, using the same names everywhere. I\u0027d like to keep it as it seems like an improvement.",
       "parentUuid": "711ea49d_a49e385b",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ff09186_2657cc0e",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T01:30:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8f4bb091_9a88334b",
       "range": {
         "startLine": 71,
         "startChar": 0,
@@ -276,6 +318,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "471c319f_4fb7fb3e",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T01:30:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "67445cf4_79df0e1e",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 14
+      },
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49df8f2a_378bcf96",
@@ -311,6 +377,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eaf01d5_a038a689",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.gni",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T01:30:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1be3a8b1_284afe8a",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1e08353_8a10bb79",
@@ -342,6 +426,24 @@
       "side": 1,
       "message": "Hm, I\u0027d prefer not to define an empty target because it\u0027s safer if the target does not exist, rather than silently including nothing if it\u0027s included by accident in a build where capture is disabled. BTW we only support frame capture when JSON is available, so I guess the check makes sense to me as is. Can you elaborate on what\u0027s wrong with the current code?",
       "parentUuid": "e1e08353_8a10bb79",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8f0decd_c1a3c03b",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T01:30:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "671d92a2_f4b28b20",
       "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
