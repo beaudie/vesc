@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "830324ab_39c0740f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5961,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T15:53:52Z",
+      "side": 1,
+      "message": "Can you add a comment with an example of the file name to look for?  Might also be nice to see a preview of the contents.  I\u0027m a little concerned it is going to be harder to find this information.",
+      "range": {
+        "startLine": 5959,
+        "startChar": 0,
+        "endLine": 5961,
+        "endChar": 38
+      },
+      "revId": "8ca13811343a6ace496cd91679556b5791356498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a813f4c5_1a5cc754",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T15:53:52Z",
+      "side": 1,
+      "message": "Why is this called oldFormatInfo?",
+      "range": {
+        "startLine": 1885,
+        "startChar": 35,
+        "endLine": 1885,
+        "endChar": 49
+      },
+      "revId": "8ca13811343a6ace496cd91679556b5791356498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e8c7776_6f9dce08",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T15:53:52Z",
+      "side": 1,
+      "message": "This is really goofy, but you said it is going away, so won\u0027t ask for anything different here.",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 262,
+        "endChar": 0
+      },
+      "revId": "8ca13811343a6ace496cd91679556b5791356498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

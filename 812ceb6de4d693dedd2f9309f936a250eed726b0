@@ -448,6 +448,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82118f4a_9ad76d6a",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T15:53:52Z",
+      "side": 1,
+      "message": "No need to update, but I agree with Tim that is seems weird to condition this inclusion based on third party tool presence.",
+      "parentUuid": "f8f0decd_c1a3c03b",
+      "revId": "812ceb6de4d693dedd2f9309f936a250eed726b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7128a26_4d5b5c99",
