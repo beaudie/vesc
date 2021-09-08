@@ -88,6 +88,24 @@
       "parentUuid": "e05e0b79_9f5f8ffc",
       "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c4ceb69_f6b5f017",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2021-09-08T05:22:07Z",
+      "side": 1,
+      "message": "\u003e Yes that\u0027s likely, I probably missed some clean up or left a TODO about it there.\n\nYes, I think vkDestroyCommandPool/vkResetCommandPool are missing\n\n\u003e Does this answer your curiosity regarding whether switching to Vulkan secondary CBs would be a win or not? Do you intend to make optimization attempts to this change or your driver to see if you could turn this into a win?\n\nI didn\u0027t check further, but can you still submit this change with angle_enable_custom_vulkan_cmd_buffers\u003dfalse by default, so we can investigate in near future?",
+      "parentUuid": "9e4829dd_02c01215",
+      "revId": "5124e40df3dfb1afd31649c0aafc838d0653fd28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
