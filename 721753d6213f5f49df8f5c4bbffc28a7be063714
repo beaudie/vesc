@@ -922,6 +922,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1c6f108_f5ada6b7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 3380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T01:22:48Z",
+      "side": 1,
+      "message": "So the situation is this:\n\n- Immutable textures: these can\u0027t have incompatible updates, so they can be fully flushed\n- Mutable textures: these *can* have incompatible updates, which are specified in TextureVk::mRedefinedLevels. Updates to those levels are skipped, as you are suggesting.\n\nNow `flushImageStagedUpdates` already takes care of skipping updates to mRedefinedLevels. My doubt was whether mRedefinedLevels covers all the levels that are being flushed here (like, beyond max level), but on second look it probably does. In particular, reading back the code mRedefinedLevels is only meaningful inside the *allocated* level range for the image, so all should be good.\n\nEventually the test makes sure this is all correct.",
+      "parentUuid": "3dc22484_9f9eabdf",
+      "revId": "721753d6213f5f49df8f5c4bbffc28a7be063714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5ae0ad8_f90697d2",
