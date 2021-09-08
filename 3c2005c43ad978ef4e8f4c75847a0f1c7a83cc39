@@ -1039,6 +1039,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55ebe0e9_8e5a512e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T16:41:54Z",
+      "side": 1,
+      "message": "Ok, after more investigation and refactoring, these are both calling retainReadOnly() now, so I don\u0027t think this comment applies anymore.\n\nLet me know if there\u0027s still a name change or anything you\u0027d like here (like renaming both to retainReadImageViews/BufferViews).",
+      "parentUuid": "e95d8469_664c9a8e",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 5
+      },
+      "revId": "3c2005c43ad978ef4e8f4c75847a0f1c7a83cc39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8b7136_c076666e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7

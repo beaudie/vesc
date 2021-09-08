@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28857898_72bb57a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T16:41:54Z",
+      "side": 1,
+      "message": "I\u0027ve split out the refactoring changes to reduce the size of this CL and allow it to focus on the ghosting itself.",
+      "revId": "af87c3ed5308850d3644e169807b854d9d8cf233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

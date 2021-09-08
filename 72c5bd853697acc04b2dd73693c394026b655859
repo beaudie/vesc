@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2e108fb_9f9fbd98",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T16:41:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b0629db_1f4d95dc",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 5
+      },
+      "revId": "72c5bd853697acc04b2dd73693c394026b655859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7a6b179_b718f68f",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d9708ef_46c3feb3",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T16:41:54Z",
+      "side": 1,
+      "message": "\u003e Alternately you could redo the whole class and don\u0027t use inheritance.\n\nI took this approach.\n\nI\u0027m going to mark this comment resolved, so any comments on the new class can be started with a new chain.",
+      "parentUuid": "d7a6b179_b718f68f",
+      "range": {
+        "startLine": 236,
+        "startChar": 22,
+        "endLine": 236,
+        "endChar": 31
+      },
+      "revId": "72c5bd853697acc04b2dd73693c394026b655859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2c59e37_908ceea5",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-08-31T02:34:10Z",
       "side": 1,
       "message": "The srcBuffer is `Read` :)",
+      "range": {
+        "startLine": 2868,
+        "startChar": 82,
+        "endLine": 2868,
+        "endChar": 91
+      },
+      "revId": "72c5bd853697acc04b2dd73693c394026b655859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f715ada_7d4071f2",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2868,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T16:41:54Z",
+      "side": 1,
+      "message": "Oops. Duh.",
+      "parentUuid": "f2c59e37_908ceea5",
       "range": {
         "startLine": 2868,
         "startChar": 82,

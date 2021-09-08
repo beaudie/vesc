@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ee1cada_834cc59c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2779,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T16:41:54Z",
+      "side": 1,
+      "message": "I found the bug.\n\nThe issue is that the buffer view wasn\u0027t being recreated when the buffer was ghosted, so the second draw wasn\u0027t seeing the new buffer data (but was using the old buffer data instead).\n\nThe fix is to return if the buffer was ghosted back to the front end so it can mark dirty bits and allow the back end to perform any necessary updates.   This is done in the prior CL in this chain.",
+      "parentUuid": "5789f460_9021f704",
+      "range": {
+        "startLine": 2779,
+        "startChar": 42,
+        "endLine": 2779,
+        "endChar": 72
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d58d9457_c5d1dd0a",
@@ -309,6 +333,30 @@
       "side": 1,
       "message": "I\u0027m not sure I totally follow, maybe we can GVC and talk about it. But generally this sequence doesn\u0027t make sense:\n\n  3. buffer.release() \u003c\u003c--- this is meant to release the Read access\n  4. isCurrentlyInUseForWrite()\n\nBecause if you already released the buffer, you shouldn\u0027t be accessing it anymore (be it through glDeleteBuffers, buffer ghosting, vk::DynamicBuffer freeing buffers etc), i.e. if the buffer is released already, there\u0027s no reason to want to know if it\u0027s in use.",
       "parentUuid": "483c06e6_be365193",
+      "range": {
+        "startLine": 3673,
+        "startChar": 58,
+        "endLine": 3673,
+        "endChar": 99
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "819e7638_09d98a40",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3673,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T16:41:54Z",
+      "side": 1,
+      "message": "Yeah, maybe that\u0027s really the question.   Can you retain a buffer for multiple uses, and then release it later when one of those uses is no longer required?\n\nI don\u0027t know the answer, but the code appears to support that case which is all I\u0027m trying to point out here.   I can remove the comment if that is better though.",
+      "parentUuid": "8ad5c1c7_a51e850b",
       "range": {
         "startLine": 3673,
         "startChar": 58,
