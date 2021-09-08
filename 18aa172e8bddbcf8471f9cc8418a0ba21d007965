@@ -20,6 +20,138 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "655f23bf_663bf708",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "I think if you just put this under SubjectMapped, you should be good. No need for a new message.\n\nAfter all, that\u0027s how VertexArray is dealing with this (otherwise your \"Nothing to do\" case in VertexArray would have caused some test to fail). You can always either write a test like \"bind to VAO, draw, ghost, draw\" and make sure the second draw uses the new data, or see if we already have such a test (we probably do) and check how ghosting is handled (and how VertexArrayVk::mCurrentElementArrayBuffer stays in sync).",
+      "range": {
+        "startLine": 2309,
+        "startChar": 0,
+        "endLine": 2312,
+        "endChar": 55
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "428e6a05_be9945ca",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "The block that uses these `return`s at the end, so these can be local to that.",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 600,
+        "endChar": 0
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57a9f3d4_6c741bfc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "What does this mean?",
+      "range": {
+        "startLine": 607,
+        "startChar": 53,
+        "endLine": 607,
+        "endChar": 83
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd8cdb43_5eda1af5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "The contents of this if could be in a helper to make this function a bit easier to understand.",
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35e5d02d_74d1b36f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 624,
+        "startChar": 85,
+        "endLine": 624,
+        "endChar": 89
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12c53a78_d3497e1e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "What does this mean?",
+      "range": {
+        "startLine": 640,
+        "startChar": 48,
+        "endLine": 640,
+        "endChar": 69
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf7dd7ff_8ee60a1a",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 40
@@ -37,6 +169,47 @@
         "endLine": 651,
         "endChar": 17
       },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e8a1212_d1d063ed",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "But the first `if` doesn\u0027t.",
+      "parentUuid": "bf7dd7ff_8ee60a1a",
+      "range": {
+        "startLine": 651,
+        "startChar": 12,
+        "endLine": 651,
+        "endChar": 17
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cddf5214_f6ae5765",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:50:14Z",
+      "side": 1,
+      "message": "Can be removed. The block that sets this also `return`s.",
       "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
