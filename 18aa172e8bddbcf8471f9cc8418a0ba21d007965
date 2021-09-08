@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b611121_2058ca4a",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T20:26:08Z",
+      "side": 1,
+      "message": "But we are not overriding a message. SubjectMapped is already sent (and ignored instead of handled), and it\u0027s saying exactly what\u0027s going on; the buffer was mapped.\n\nBut ok, I realize now that handling things in SubjectMapped would mean more syncStates than necessary.",
+      "parentUuid": "8f3cc5a3_9cfb65bb",
+      "range": {
+        "startLine": 2309,
+        "startChar": 0,
+        "endLine": 2312,
+        "endChar": 55
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "428e6a05_be9945ca",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 40
