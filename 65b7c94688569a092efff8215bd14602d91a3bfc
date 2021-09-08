@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9059391e_2565fd29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T16:45:09Z",
+      "side": 1,
+      "message": "You should be able to achieve the same effect using the observer pattern.. \n\nclass BufferImpl : public angle::Subject\n\nThe angle::Subject mixin class allows you to call \"onStateChange\" in BufferVk.cpp, which will call back into gl::Buffer with the message you\u0027ve selected. I recommend defining a new message.",
+      "revId": "65b7c94688569a092efff8215bd14602d91a3bfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
