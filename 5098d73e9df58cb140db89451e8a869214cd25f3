@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a72bbf_7aa3ec0d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2779,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:31:39Z",
+      "side": 1,
+      "message": "🎉",
+      "parentUuid": "2ee1cada_834cc59c",
+      "range": {
+        "startLine": 2779,
+        "startChar": 42,
+        "endLine": 2779,
+        "endChar": 72
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d58d9457_c5d1dd0a",
@@ -357,6 +381,30 @@
       "side": 1,
       "message": "Yeah, maybe that\u0027s really the question.   Can you retain a buffer for multiple uses, and then release it later when one of those uses is no longer required?\n\nI don\u0027t know the answer, but the code appears to support that case which is all I\u0027m trying to point out here.   I can remove the comment if that is better though.",
       "parentUuid": "8ad5c1c7_a51e850b",
+      "range": {
+        "startLine": 3673,
+        "startChar": 58,
+        "endLine": 3673,
+        "endChar": 99
+      },
+      "revId": "5098d73e9df58cb140db89451e8a869214cd25f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7925ca37_917b667f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-08T19:31:39Z",
+      "side": 1,
+      "message": "I commented on the split patch set, but here is more of the same:\n\nWhen you release the buffer (helper), it\u0027s gone. It cannot be used for any other purpose. Its corresponding Vulkan object will be destroyed when its corresponding serial is finished, and that serial is updated by the \"retain\"s. So multiple retains should just work, updating the serial as appropriate, and the Vulkan object will be destroyed when appropriate.\n\nSo, nothing to worry about here.",
+      "parentUuid": "819e7638_09d98a40",
       "range": {
         "startLine": 3673,
         "startChar": 58,
