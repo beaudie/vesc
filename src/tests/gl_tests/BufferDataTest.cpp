@@ -1127,6 +1127,34 @@ TEST_P(BufferStorageTestES3, StorageBufferSubDataMapped)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test to triger large VAO dirty bit handling in glBufferData.
+TEST_P(BufferDataTestES3, BoundWithMutiVAO)
+{
+    GLuint mVertexArray;
+    // Bind one VBO to 1000 VAOs.
+    for (GLuint i = 1; i <= 1000; i++)
+    {
+        glGenVertexArrays(1, &mVertexArray);
+        glBindVertexArray(mVertexArray);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glEnableVertexAttribArray(mAttribLocation);
+        glVertexAttribPointer(mAttribLocation, 1, GL_FLOAT, GL_FALSE, 4, nullptr);
+        glVertexAttribDivisor(mAttribLocation, 1);
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 128, nullptr, GL_STATIC_DRAW);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    for (GLuint i = 1; i <= 1000; i++)
+    {
+        glDeleteVertexArrays(1, &i);
+    }
+}
+
 ANGLE_INSTANTIATE_TEST_ES2(BufferDataTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BufferDataTestES3);
