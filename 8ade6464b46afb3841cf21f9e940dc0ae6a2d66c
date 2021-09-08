@@ -57,6 +57,24 @@
       "parentUuid": "7b763e94_b85cab76",
       "revId": "8ade6464b46afb3841cf21f9e940dc0ae6a2d66c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc943026_7745b00f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T18:27:04Z",
+      "side": 1,
+      "message": "More specifically, how did our trace test runs complete successfully if we weren\u0027t actually loading the trace shared objects?  I saw these ERR() vs. FAIL() in the review, but I presumed (wrongly) that something else would blow up if we couldn\u0027t even load the traces.\n\nI see now, we simply SKIPPED all tests, which is considered a PASS.",
+      "parentUuid": "0d5f28cb_4de72e7e",
+      "revId": "8ade6464b46afb3841cf21f9e940dc0ae6a2d66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
