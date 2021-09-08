@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c988d6f4_bbd6df6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T18:55:12Z",
+      "side": 1,
+      "message": "Nice work.",
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf7dd7ff_8ee60a1a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T18:55:12Z",
+      "side": 1,
+      "message": "nit: can flatten this since the return above always exits this scope",
+      "range": {
+        "startLine": 651,
+        "startChar": 12,
+        "endLine": 651,
+        "endChar": 17
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8803fd94_ec8946d1",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 3121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T18:55:12Z",
+      "side": 1,
+      "message": "nit: you can make a lot of these into ASSERT checks since usually the test can\u0027t continue if there\u0027s an error.",
+      "range": {
+        "startLine": 3121,
+        "startChar": 4,
+        "endLine": 3121,
+        "endChar": 22
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
