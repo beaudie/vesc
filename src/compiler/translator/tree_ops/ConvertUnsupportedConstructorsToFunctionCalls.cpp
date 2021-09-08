@@ -194,6 +194,11 @@ class Traverser : public TIntermTraverser
         const TType &type     = node->getType();
         const TType &arg0Type = arguments[0]->getAsTyped()->getType();
 
+        if (!type.isScalar() && !type.isVector() && !type.isMatrix())
+        {
+            return false;
+        }
+
         // check for type_ctor(sameType)
         // scalar(scalar) -> passthrough
         // vecN(vecN) -> passthrough
