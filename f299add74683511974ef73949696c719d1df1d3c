@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f4ef528_4fce7849",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T15:13:58Z",
+      "side": 1,
+      "message": "What\u0027s the motivation for turning these into asserts?  Seeing the warning has been sufficient (even helpful) so far.",
+      "range": {
+        "startLine": 1075,
+        "startChar": 0,
+        "endLine": 1077,
+        "endChar": 33
+      },
+      "revId": "f299add74683511974ef73949696c719d1df1d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "034f6ede_30866887",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1909,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T15:13:58Z",
+      "side": 1,
+      "message": "Can you remind me why we lump trace name and version together in one element?",
+      "range": {
+        "startLine": 1909,
+        "startChar": 15,
+        "endLine": 1909,
+        "endChar": 41
+      },
+      "revId": "f299add74683511974ef73949696c719d1df1d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5855ba99_7c417a29",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-08T15:13:58Z",
+      "side": 1,
+      "message": "Nice little cheat sheet to get current trace count.",
+      "range": {
+        "startLine": 122,
+        "startChar": 30,
+        "endLine": 122,
+        "endChar": 33
+      },
+      "revId": "f299add74683511974ef73949696c719d1df1d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
