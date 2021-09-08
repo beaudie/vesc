@@ -120,6 +120,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe02c09_c3596f0f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T01:26:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "543e46e5_0d58501f",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 66
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb06ae6d_3136489d",
@@ -368,6 +392,30 @@
       "side": 1,
       "message": "Ack, can I leave this for now? This whole file is going away and there\u0027s not much value in getting it super clean here, it would just cost me some time to fix.",
       "parentUuid": "43502dd7_9d08e98a",
+      "range": {
+        "startLine": 133,
+        "startChar": 44,
+        "endLine": 133,
+        "endChar": 54
+      },
+      "revId": "43e328b2d36962b1ab94be8506a1fef26af5ef67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "024a6dd9_88465dc7",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-08T01:26:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "15813bc4_fa32898b",
       "range": {
         "startLine": 133,
         "startChar": 44,
