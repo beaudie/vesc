@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0086b08_8289f667",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-08T17:53:14Z",
+      "side": 1,
+      "message": "I would rename the isCurrentlyInUse method if it\u0027s not accurate. Can something be in use for write and not read? Renaming mUse to mAccessUse doesn\u0027t seem clearer to me.\n\nnb my original suggestion was to name it mReadWriteUse and mReadOnlyUse, though Tim\u0027s implementation seems OK to me as well.",
+      "parentUuid": "edb017dd_3f8ba835",
+      "range": {
+        "startLine": 212,
+        "startChar": 22,
+        "endLine": 212,
+        "endChar": 30
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0788d5b4_9c6906c4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
