@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80777e97_7d1008d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T17:47:22Z",
+      "side": 1,
+      "message": "So in this CL you chosed always track R/W for all resources. My recommendation is still go with inheritance. The reason is simply that what you try to solve is a limited case, but why have all usage cases take extra CPU cost to have to update two mUse. retain/release are called on every resource used at each renderpass (when we do submission for each RP).",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb098f7b_29ad281b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T17:47:22Z",
+      "side": 1,
+      "message": "This is no longer needed.",
+      "range": {
+        "startLine": 19,
+        "startChar": 11,
+        "endLine": 19,
+        "endChar": 26
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edb017dd_3f8ba835",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T17:47:22Z",
+      "side": 1,
+      "message": "This is always updated regardless read or write, I think better name it mAccessUse to reflect that this is tracking any GPU access, read or write. Otherwise, the naming is a bit confusing. For example, if you look at isCurrentlyInUse(), it is checking mReadUse. People will ask why mWriteUse is not checked since write is also considered as \"inUse\".",
+      "range": {
+        "startLine": 212,
+        "startChar": 22,
+        "endLine": 212,
+        "endChar": 30
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0788d5b4_9c6906c4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7742,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-08T17:47:22Z",
+      "side": 1,
+      "message": "I thought these can be write?",
+      "range": {
+        "startLine": 7742,
+        "startChar": 4,
+        "endLine": 7742,
+        "endChar": 18
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
