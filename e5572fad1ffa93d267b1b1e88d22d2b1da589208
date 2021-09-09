@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6b924a3_8c7a0056",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-09T22:59:09Z",
+      "side": 1,
+      "message": "Mentioned in chat the other day, noticed there were lots of places not updating max readbuffer size for calls.  Centralizing the calls is also a lead up to tracking resource usage for Setup filtering.",
+      "revId": "e5572fad1ffa93d267b1b1e88d22d2b1da589208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
