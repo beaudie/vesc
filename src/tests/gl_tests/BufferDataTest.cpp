@@ -1090,6 +1090,39 @@ TEST_P(BufferStorageTestES3, StorageCopyBufferSubDataMapped)
     ASSERT_GL_NO_ERROR();
 }
 
+// Verify persistently mapped element array buffers can use glDrawElements
+// Tests a pattern used by Fortnite's GLES backend
+TEST_P(BufferStorageTestES3, DrawElementsElementArrayBufferMapped)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 ||
+                       !IsGLExtensionEnabled("GL_EXT_buffer_storage") ||
+                       !IsGLExtensionEnabled("GL_EXT_map_buffer_range"));
+
+    const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::green, GLColor::blue,
+                                                 GLColor::yellow};
+
+    // Set up the read buffer
+    GLBuffer readBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, readBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(kInitialData), kInitialData.data(), GL_DYNAMIC_DRAW);
+
+    // Set up the element array buffer to be persistently mapped
+    static constexpr int kIndexBuffer[] = {0, 1, 2};
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
+    glBufferStorageEXT(GL_ELEMENT_ARRAY_BUFFER, sizeof(kIndexBuffer), nullptr,
+                       GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT_EXT | GL_MAP_COHERENT_BIT_EXT);
+    void *readMapPtr =
+        glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(kIndexBuffer),
+                         GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT_EXT | GL_MAP_COHERENT_BIT_EXT);
+    ASSERT_NE(nullptr, readMapPtr);
+    ASSERT_GL_NO_ERROR();
+    memcpy(readMapPtr, kIndexBuffer, sizeof(kIndexBuffer));
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    ASSERT_GL_NO_ERROR();
+    glFinish();
+}
+
 // Verify persistently mapped buffers can use glBufferSubData
 TEST_P(BufferStorageTestES3, StorageBufferSubDataMapped)
 {
