@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4506afb_25aaf31c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-09T06:09:24Z",
+      "side": 1,
+      "message": "Sending this WIP again.  This builds upon your work in http://crrev/c/1969063.  It very much needs a refactor to avoid passing the context around so much, but this CL is working locally.  I\u0027ll split out the lambda removal to a leading CL, since that\u0027s only semi related.",
+      "revId": "3443306a86ad7067c7f37a23543ba8c9f93f6347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
