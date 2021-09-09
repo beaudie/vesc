@@ -689,6 +689,11 @@ void ANGLERenderTest::addExtensionPrerequisite(const char *extensionName)
     mExtensionPrerequisites.push_back(extensionName);
 }
 
+void ANGLERenderTest::addExtensionPrerequisiteEGL(const char *extensionName)
+{
+    mExtensionPrerequisitesEGL.push_back(extensionName);
+}
+
 void ANGLERenderTest::SetUp()
 {
     if (mSkipTest)
@@ -743,11 +748,31 @@ void ANGLERenderTest::SetUp()
         mConfigParams.swapInterval = 0;
     }
 
-    if (!mGLWindow->initializeGL(mOSWindow, mEntryPointsLib.get(), mTestParams.driver, withMethods,
-                                 mConfigParams))
+    if (!mGLWindow->initializeDisplay(mOSWindow, mEntryPointsLib.get(), mTestParams.driver,
+                                      withMethods))
     {
         mSkipTest = true;
-        FAIL() << "Failed initializing GL Window";
+        FAIL() << "Failed initializing EGL display";
+        // FAIL returns.
+    }
+
+    if (!areExtensionPrerequisitesFulfilledEGL())
+    {
+        mSkipTest = true;
+        return;
+    }
+
+    if (!mGLWindow->initializeSurface(mOSWindow, mEntryPointsLib.get(), mConfigParams))
+    {
+        mSkipTest = true;
+        FAIL() << "Failed initializing EGL surface";
+        // FAIL returns.
+    }
+
+    if (!mGLWindow->initializeContext())
+    {
+        mSkipTest = true;
+        FAIL() << "Failed initializing GL context";
         // FAIL returns.
     }
 
@@ -992,18 +1017,33 @@ GLWindowBase *ANGLERenderTest::getGLWindow()
     return mGLWindow;
 }
 
-bool ANGLERenderTest::areExtensionPrerequisitesFulfilled() const
+bool CheckExtensionPrerequisites(const std::vector<const char *> &prerequisites,
+                                 const char *extensions)
 {
-    for (const char *extension : mExtensionPrerequisites)
+    for (const char *extension : prerequisites)
     {
-        if (!CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
-                                  extension))
+        if (!CheckExtensionExists(extensions, extension))
         {
             std::cout << "Test skipped due to missing extension: " << extension << std::endl;
             return false;
         }
     }
     return true;
+}
+
+bool ANGLERenderTest::areExtensionPrerequisitesFulfilled() const
+{
+    const char *glExtensions = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
+    return CheckExtensionPrerequisites(mExtensionPrerequisites, glExtensions);
+}
+
+bool ANGLERenderTest::areExtensionPrerequisitesFulfilledEGL() const
+{
+    std::string eglExtensions;
+    eglExtensions.append(eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS));
+    eglExtensions.append(" ");
+    eglExtensions.append(eglQueryString(mGLWindow->getEGLDisplay(), EGL_EXTENSIONS));
+    return CheckExtensionPrerequisites(mExtensionPrerequisitesEGL, eglExtensions.c_str());
 }
 
 void ANGLERenderTest::setWebGLCompatibilityEnabled(bool webglCompatibility)

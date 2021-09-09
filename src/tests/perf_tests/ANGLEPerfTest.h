@@ -156,6 +156,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     ~ANGLERenderTest() override;
 
     void addExtensionPrerequisite(const char *extensionName);
+    void addExtensionPrerequisiteEGL(const char *extensionName);
 
     virtual void initializeBenchmark() {}
     virtual void destroyBenchmark() {}
@@ -203,10 +204,12 @@ class ANGLERenderTest : public ANGLEPerfTest
     void computeGPUTime() override;
 
     bool areExtensionPrerequisitesFulfilled() const;
+    bool areExtensionPrerequisitesFulfilledEGL() const;
 
     GLWindowBase *mGLWindow;
     OSWindow *mOSWindow;
     std::vector<const char *> mExtensionPrerequisites;
+    std::vector<const char *> mExtensionPrerequisitesEGL;
     angle::PlatformMethods mPlatformMethods;
     ConfigParameters mConfigParams;
     bool mSwapEnabled;

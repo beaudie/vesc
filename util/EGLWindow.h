@@ -77,13 +77,28 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
                               angle::GLESDriverType driverType,
                               const EGLPlatformParameters &platformParams,
                               const ConfigParameters &configParams) = 0;
-    virtual bool isGLInitialized() const                            = 0;
-    virtual void swap()                                             = 0;
-    virtual void destroyGL()                                        = 0;
-    virtual bool makeCurrent()                                      = 0;
-    virtual bool hasError() const                                   = 0;
-    virtual bool setSwapInterval(EGLint swapInterval)               = 0;
-    virtual angle::GenericProc getProcAddress(const char *name)     = 0;
+
+    // Only initializes the Display.
+    virtual bool initializeDisplay(OSWindow *osWindow,
+                                   angle::Library *glWindowingLibrary,
+                                   angle::GLESDriverType driverType,
+                                   const EGLPlatformParameters &params) = 0;
+
+    // Only initializes the Surface.
+    virtual bool initializeSurface(OSWindow *osWindow,
+                                   angle::Library *glWindowingLibrary,
+                                   const ConfigParameters &params) = 0;
+
+    // Only initializes the Context.
+    virtual bool initializeContext() = 0;
+
+    virtual bool isGLInitialized() const                        = 0;
+    virtual void swap()                                         = 0;
+    virtual void destroyGL()                                    = 0;
+    virtual bool makeCurrent()                                  = 0;
+    virtual bool hasError() const                               = 0;
+    virtual bool setSwapInterval(EGLint swapInterval)           = 0;
+    virtual angle::GenericProc getProcAddress(const char *name) = 0;
     // EGLContext and HGLRC (WGL) are both "handles", which are implemented as pointers.
     // Use void* here and let the underlying implementation handle interpreting the type correctly.
     virtual GLWindowContext getCurrentContextGeneric()                  = 0;
@@ -97,6 +112,8 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
 
     const EGLPlatformParameters &getPlatform() const { return mPlatform; }
     const ConfigParameters &getConfigParams() const { return mConfigParams; }
+
+    virtual EGLDisplay getEGLDisplay() const = 0;
 
   protected:
     GLWindowBase(EGLint glesMajorVersion, EGLint glesMinorVersion);
@@ -146,12 +163,12 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
     bool initializeDisplay(OSWindow *osWindow,
                            angle::Library *glWindowingLibrary,
                            angle::GLESDriverType driverType,
-                           const EGLPlatformParameters &params);
+                           const EGLPlatformParameters &params) override;
 
     // Only initializes the Surface.
     bool initializeSurface(OSWindow *osWindow,
                            angle::Library *glWindowingLibrary,
-                           const ConfigParameters &params);
+                           const ConfigParameters &params) override;
 
     // Create an EGL context with this window's configuration
     EGLContext createContext(EGLContext share);
@@ -159,12 +176,14 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
     bool makeCurrent(EGLContext context);
 
     // Only initializes the Context.
-    bool initializeContext();
+    bool initializeContext() override;
 
     void destroySurface();
     void destroyContext();
 
     bool isDisplayInitialized() const { return mDisplay != EGL_NO_DISPLAY; }
+
+    EGLDisplay getEGLDisplay() const override { return mDisplay; }
 
   private:
     EGLWindow(EGLint glesMajorVersion, EGLint glesMinorVersion);
