@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfbd0855_1ef432ca",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-09T20:45:30Z",
+      "side": 1,
+      "message": "can you use gl::AttributesMask ? Yeah these are bindings but I think we static_assert that the binding max count \u003d\u003d the attrib max count in places. Then no need for heap storage, or tree-based storage. You can use BitSet::flip() to get the right bits for range-for iteration.",
+      "range": {
+        "startLine": 2074,
+        "startChar": 4,
+        "endLine": 2074,
+        "endChar": 43
+      },
+      "revId": "2dde14f5ffa0b97d2c1b191bc5bec1da7484f5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
