@@ -3329,41 +3329,13 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
         return angle::Result::Continue;
     }
 
-    if (!mImage->valid())
-    {
-        // Immutable texture must already have a valid image
-        ASSERT(!mState.getImmutableFormat());
-        // If we have staged update and it was encoded with different format, we need to flush out
-        // these staged update. The respecifyImageStorage should handle read back data and re-stage
-        // data with new format.
-        angle::FormatID intendedFormatID = format.getIntendedFormatID();
-        angle::FormatID actualFormatID = format.getActualImageFormatID(vk::ImageAccess::Renderable);
+    angle::FormatID previousActualFormatID =
+        format.getActualImageFormatID(vk::ImageAccess::SampleOnly);
+    angle::FormatID actualFormatID = format.getActualImageFormatID(vk::ImageAccess::Renderable);
 
-        gl::LevelIndex levelGLStart, levelGLEnd;
-        ImageMipLevels mipLevels;
-        if (mState.getImmutableFormat())
-        {
-            levelGLStart = gl::LevelIndex(0);
-            levelGLEnd   = gl::LevelIndex(mState.getImmutableLevels());
-            mipLevels    = ImageMipLevels::FullMipChain;
-        }
-        else
-        {
-            levelGLStart = gl::LevelIndex(mState.getEffectiveBaseLevel());
-            levelGLEnd =
-                gl::LevelIndex(levelGLStart + getMipLevelCount(ImageMipLevels::EnabledLevels));
-            mipLevels = ImageMipLevels::EnabledLevels;
-        }
-
-        if (mImage->hasStagedUpdatesWithMismatchedFormat(levelGLStart, levelGLEnd, actualFormatID))
-        {
-            angle::FormatID sampleOnlyFormatID =
-                format.getActualImageFormatID(vk::ImageAccess::SampleOnly);
-
-            ANGLE_TRY(initImage(contextVk, intendedFormatID, sampleOnlyFormatID, mipLevels));
-            ANGLE_TRY(flushImageStagedUpdates(contextVk));
-        }
-    }
+    // First try to convert any staged buffer updates from old format to new format using
+    // CPU.
+    ANGLE_TRY(mImage->reformatStagedUpdate(contextVk, previousActualFormatID, actualFormatID));
 
     // Make sure we update mImageUsage bits
     ANGLE_TRY(ensureImageAllocated(contextVk, format));
