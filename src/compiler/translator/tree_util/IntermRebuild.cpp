@@ -8,8 +8,8 @@
 
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/SymbolTable.h"
-#include "compiler/translator/TranslatorMetalDirect/IntermRebuild.h"
 #include "compiler/translator/tree_util/AsNode.h"
+#include "compiler/translator/tree_util/IntermRebuild.h"
 
 #define GUARD2(cond, failVal) \
     do                        \
@@ -251,7 +251,7 @@ bool TIntermRebuild::traverseAnyAs(TIntermNode &node, Node *&out)
         return true;
     }
     out = asNode<Node>(result.mSingle);
-    return out;
+    return out != nullptr;
 }
 
 bool TIntermRebuild::traverseAggregateBaseChildren(TIntermAggregateBase &node)
@@ -382,6 +382,9 @@ PreResult TIntermRebuild::traversePre(TIntermNode &originalNode)
             return visitLoopPre(*originalNode.getAsLoopNode());
         case NodeType::Branch:
             return visitBranchPre(*originalNode.getAsBranchNode());
+        default:
+            ASSERT(false);
+            return Fail();
     }
 }
 
@@ -513,6 +516,9 @@ PostResult TIntermRebuild::traversePost(NodeType currNodeType,
             return visitLoopPost(*currNode.getAsLoopNode());
         case NodeType::Branch:
             return visitBranchPost(*currNode.getAsBranchNode());
+        default:
+            ASSERT(false);
+            return Fail();
     }
 }
 
