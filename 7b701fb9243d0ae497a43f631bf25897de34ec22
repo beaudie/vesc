@@ -80,6 +80,30 @@
       },
       "revId": "7b701fb9243d0ae497a43f631bf25897de34ec22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cb6b2b9_823d7cda",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-09T14:22:24Z",
+      "side": 1,
+      "message": "WGL supports colorspace selection:\n\nhttps://www.khronos.org/registry/OpenGL/extensions/EXT/WGL_EXT_colorspace.txt\n\nWhen translating these calls to WGL we can use that. Then the question is how do we best check support at runtime? One way is to just add a new function like \u0027supportsSurfaceColorspaces\u0027 or something like that specific to this feature. Or we could add a general \u0027supportsEGLFunctionality\u0027 or something to verify ext lists.",
+      "parentUuid": "0a81e188_be4c3b2e",
+      "range": {
+        "startLine": 97,
+        "startChar": 12,
+        "endLine": 97,
+        "endChar": 17
+      },
+      "revId": "7b701fb9243d0ae497a43f631bf25897de34ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
