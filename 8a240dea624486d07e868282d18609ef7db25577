@@ -33,6 +33,24 @@
       "message": "DisplayVk::terminate destroys all resources and VK devices using RendererVk::onDestroy which was the equivalent of what the RendererD3D destructor did. Since a DisplayImpl is never deleted I think we\u0027ll leak all the D3D devices/resources.\n\nI think the fix is in our Display::terminate code. The docs say:\n\n   Termination marks all EGL resources associated with the EGL display connection for deletion. If contexts or surfaces associated with display is current to any thread, they are not released until they are no longer current as a result of eglMakeCurrent.\n   \nDisplay::terminate needs to wait for the contexts and surfaces that are still not deleted due to being current before calling mImplementation-\u003eterminate().  Looks like there is some logic like that now but maybe it\u0027s bugged: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Display.cpp;l\u003d971-983",
       "revId": "8a240dea624486d07e868282d18609ef7db25577",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c37727_5693f21a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-09T20:16:47Z",
+      "side": 1,
+      "message": "Yup, the new unit test shows that the Display::releaseContext() calls were missing.   Once that was added back, it exposed the recursive call to terminate(), which instead needs to be moved into destroyContext() to make sure the Display is terminated once none of the Contexts are current on any Thread.",
+      "parentUuid": "57b7a433_02056bdb",
+      "revId": "8a240dea624486d07e868282d18609ef7db25577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
