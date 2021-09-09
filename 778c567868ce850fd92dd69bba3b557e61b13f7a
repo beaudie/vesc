@@ -16,6 +16,23 @@
       "message": "Not sure how this works. Made 2 CLs. They show up chained here. Do I submit them to the CQ separately ?\n\nHere\u0027s the other\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3152167",
       "revId": "778c567868ce850fd92dd69bba3b557e61b13f7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a70b52c_d64c6060",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-09T22:44:01Z",
+      "side": 1,
+      "message": "lgtm\n\nI recall Shabi saying that the Metal backend had reimplemented some functionality already in the translator, so not +2\u0027ing in case the IntermRebuild phase was one of these.\n",
+      "revId": "778c567868ce850fd92dd69bba3b557e61b13f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
