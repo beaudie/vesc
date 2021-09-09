@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a251c8_9ef2eb9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-09T22:36:14Z",
+      "side": 1,
+      "message": "Not sure how this works. Made 2 CLs. They show up chained here. Do I submit them to the CQ separately ?\n\nHere\u0027s the other\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3152167",
+      "revId": "778c567868ce850fd92dd69bba3b557e61b13f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
