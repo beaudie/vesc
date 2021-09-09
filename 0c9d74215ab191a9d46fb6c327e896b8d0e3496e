@@ -135,6 +135,30 @@
       },
       "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1d6266a_3fee1b10",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-09T16:46:30Z",
+      "side": 1,
+      "message": "Well, if the app mixes 3.1 and 2.0 calls, we should be able to reconstruct that. Although it may not really happen in the wild. We could go with the totally separated method if you prefer for now, but it shouldn\u0027t be based on context version, but rather what the app uses.\n\nMaybe that\u0027s the best option - use the detection logic I have here in a pre-pass, and if you detect ES 2.0 semantics do that, and if you detect 3.1 semantics do all that. If there\u0027s a mixed semantic set, do unimplemented()",
+      "parentUuid": "961c443f_4af03c2a",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2055,
+        "endChar": 13
+      },
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
