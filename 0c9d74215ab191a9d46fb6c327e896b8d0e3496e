@@ -111,6 +111,30 @@
       },
       "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "961c443f_4af03c2a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-09T16:40:02Z",
+      "side": 1,
+      "message": "Ah, I see that now.  VertexAttribPointer can\u0027t entirely be replaced with new calls.  From the spec:\n\n They are equivalent to...:\n ...\n VERTEX_ATTRIB_ARRAY_STRIDE[index] \u003dstride;\n VERTEX_ATTRIB_ARRAY_POINTER[index] \u003dpointer;\n ...\n \nWhat I just put up is a clunkier version I was trying to avoid, similar to patchset #4, but includes a check on whether to emit BindVertexBuffer/VertexBindingDivisor.\n\nThe alternative is to split this up farther, like CaptureVertexArrayState and CaptureVertexArrayStateES31, but it seemed like too much code duplication.  The intent is avoid mixing VertexAttribPointer with ES3.1 calls.",
+      "parentUuid": "2eb19e79_4e9f761d",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2055,
+        "endChar": 13
+      },
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
