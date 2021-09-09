@@ -16,6 +16,23 @@
       "message": "In order to skip tests that use sRGB surfaces on platforms where EGL_KHR_gl_colorspace is not available, ANGLEPerfTest needs to check for EGL extensions before a surface is initialized.\n\nFor this I needed to split calling the full EGL init done in initializeGL into steps by exposing functions from EGLWindow to GLWindowBase. Also the EGLDisplay needed to be exposed in the same manner. I added a addExtensionPrerequisiteEGL function where EGL display and non display extensions can be added to the prerequisites in TracePerfTest.",
       "revId": "7b701fb9243d0ae497a43f631bf25897de34ec22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5524cbb_3e57389a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-09T14:11:50Z",
+      "side": 1,
+      "message": "This will need some rework to mind WGL.",
+      "revId": "7b701fb9243d0ae497a43f631bf25897de34ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
