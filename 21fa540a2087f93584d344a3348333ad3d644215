@@ -93,6 +93,30 @@
       },
       "revId": "21fa540a2087f93584d344a3348333ad3d644215",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ea835d_f45a862d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 5095,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-09T17:21:09Z",
+      "side": 1,
+      "message": "These are not optimized very well, trust me. I saved hundreds of kb of binary size simply by switching away from streams. We should never use them in libANGLE though we do currently in a few places.",
+      "parentUuid": "4dab2785_9f55abb1",
+      "range": {
+        "startLine": 5091,
+        "startChar": 11,
+        "endLine": 5095,
+        "endChar": 79
+      },
+      "revId": "21fa540a2087f93584d344a3348333ad3d644215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
