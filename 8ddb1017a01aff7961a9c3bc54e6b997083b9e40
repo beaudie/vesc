@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3f4853d_f1b8d477",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-09T21:45:30Z",
+      "side": 1,
+      "message": "Still seems weird to trigger this off rapidjson, but at least there\u0027s a way to force it off now.",
+      "range": {
+        "startLine": 122,
+        "startChar": 2,
+        "endLine": 122,
+        "endChar": 47
+      },
+      "revId": "8ddb1017a01aff7961a9c3bc54e6b997083b9e40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
