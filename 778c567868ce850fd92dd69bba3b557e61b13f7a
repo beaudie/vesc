@@ -33,6 +33,24 @@
       "message": "lgtm\n\nI recall Shabi saying that the Metal backend had reimplemented some functionality already in the translator, so not +2\u0027ing in case the IntermRebuild phase was one of these.\n",
       "revId": "778c567868ce850fd92dd69bba3b557e61b13f7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "024ea1cd_a318f41c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-09T23:30:27Z",
+      "side": 1,
+      "message": "It might be. The regular code as TIntermTraverser but it has issues with recursiveness in that you queue changes that happen after traversal has finished. If those changes reference nested changes then some changes will be lost. You can workaround this by recursing through changes yourself using more TIntermTraversers but my impression was TIntermRebuild provides a cleaner solution, at least for this case. It\u0027s less code in ConvertUnsupportedConstructorsToFunctionCalls and the recursion issue is just handled. In fact I wonder if more of the transformers would simplify if switched to TIntermRebuild.",
+      "parentUuid": "1a70b52c_d64c6060",
+      "revId": "778c567868ce850fd92dd69bba3b557e61b13f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
