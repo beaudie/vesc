@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e0fe2b9_f835bc7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-09T22:55:15Z",
+      "side": 1,
+      "message": "PTAL\n\nPerformance test to try and stress the different vk::Resource implementations.",
+      "revId": "db3baf33b8a7b6c547ce0d67cdaea84f1ce5c500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
