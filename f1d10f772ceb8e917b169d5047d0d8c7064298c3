@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cff4928_2f5f67e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-09T22:42:13Z",
+      "side": 1,
+      "message": "lgtm\n\nNot +2\u0027ing in case Shabi thinks this code is redundant with some other translator code.\n",
+      "revId": "f1d10f772ceb8e917b169d5047d0d8c7064298c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
