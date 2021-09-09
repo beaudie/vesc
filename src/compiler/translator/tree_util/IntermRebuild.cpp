@@ -8,8 +8,8 @@
 
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/SymbolTable.h"
-#include "compiler/translator/TranslatorMetalDirect/IntermRebuild.h"
 #include "compiler/translator/tree_util/AsNode.h"
+#include "compiler/translator/tree_util/IntermRebuild.h"
 
 #define GUARD2(cond, failVal) \
     do                        \
@@ -251,7 +251,7 @@ bool TIntermRebuild::traverseAnyAs(TIntermNode &node, Node *&out)
         return true;
     }
     out = asNode<Node>(result.mSingle);
-    return out;
+    return out != nullptr;
 }
 
 bool TIntermRebuild::traverseAggregateBaseChildren(TIntermAggregateBase &node)
