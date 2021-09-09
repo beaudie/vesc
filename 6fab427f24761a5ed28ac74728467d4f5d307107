@@ -16,6 +16,23 @@
       "message": "Jamie, PTAL. Recipe-side in crrev.com/c/3149536\nBrian, FYI.",
       "revId": "6fab427f24761a5ed28ac74728467d4f5d307107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "849b54f8_c576c896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-09T20:29:33Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "6fab427f24761a5ed28ac74728467d4f5d307107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
