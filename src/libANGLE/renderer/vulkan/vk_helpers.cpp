@@ -5629,6 +5629,66 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::reformatStagedUpdate(ContextVk *contextVk,
+                                                angle::FormatID srcFormatID,
+                                                angle::FormatID dstFormatID)
+{
+    const angle::Format &srcFormat = angle::Format::Get(srcFormatID);
+    const angle::Format &dstFormat = angle::Format::Get(dstFormatID);
+    const gl::InternalFormat &destFormatInfo =
+        gl::GetSizedInternalFormatInfo(dstFormat.glInternalFormat);
+
+    for (std::vector<SubresourceUpdate> &levelUpdates : mSubresourceUpdates)
+    {
+        for (SubresourceUpdate &update : levelUpdates)
+        {
+            if (update.updateSource == UpdateSource::Buffer &&
+                update.data.buffer.formatID == srcFormatID)
+            {
+                const VkBufferImageCopy &copy = update.data.buffer.copyRegion;
+
+                // Source and dest data are tightly packed
+                GLuint srcDataRowPitch = copy.imageExtent.width * srcFormat.pixelBytes;
+                GLuint dstDataRowPitch = copy.imageExtent.width * dstFormat.pixelBytes;
+
+                GLuint srcDataDepthPitch = srcDataRowPitch * copy.imageExtent.height;
+                GLuint dstDataDepthPitch = dstDataRowPitch * copy.imageExtent.height;
+
+                // Retrieve source buffer
+                vk::BufferHelper *srcBuffer = update.data.buffer.bufferHelper;
+                uint8_t *srcData            = srcBuffer->getMappedMemory();
+
+                // Allocate memory with dstFormat
+                uint8_t *dstData             = nullptr;
+                VkBuffer dstBufferHandle     = VK_NULL_HANDLE;
+                VkDeviceSize dstBufferOffset = 0;
+                GLuint dstBufferSize         = dstDataDepthPitch * copy.imageExtent.depth;
+                ANGLE_TRY(mStagingBuffer.allocateWithAlignment(
+                    contextVk, dstBufferSize, mStagingBuffer.getAlignment(), &dstData,
+                    &dstBufferHandle, &dstBufferOffset, nullptr));
+                BufferHelper *dstBuffer = mStagingBuffer.getCurrentBuffer();
+
+                rx::PixelReadFunction pixelReadFunction   = srcFormat.pixelReadFunction;
+                rx::PixelWriteFunction pixelWriteFunction = dstFormat.pixelWriteFunction;
+
+                CopyImageCHROMIUM(srcData, srcDataRowPitch, srcFormat.pixelBytes, srcDataDepthPitch,
+                                  pixelReadFunction, dstData, dstDataRowPitch, dstFormat.pixelBytes,
+                                  dstDataDepthPitch, pixelWriteFunction, destFormatInfo.format,
+                                  destFormatInfo.componentType, copy.imageExtent.width,
+                                  copy.imageExtent.height, copy.imageExtent.depth, false, false,
+                                  false);
+
+                // Replace srcBuffer with dstBuffer
+                update.data.buffer.bufferHelper            = dstBuffer;
+                update.data.buffer.copyRegion.bufferOffset = dstBufferOffset;
+                update.data.buffer.formatID                = dstFormatID;
+            }
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ImageHelper::CalculateBufferInfo(ContextVk *contextVk,
                                                const gl::Extents &glExtents,
                                                const gl::InternalFormat &formatInfo,

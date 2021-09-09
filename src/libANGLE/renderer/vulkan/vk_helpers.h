@@ -1928,6 +1928,9 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasStagedUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
                                               gl::LevelIndex levelEnd,
                                               angle::FormatID formatID) const;
+    angle::Result reformatStagedUpdate(ContextVk *contextVk,
+                                       angle::FormatID srcFormatID,
+                                       angle::FormatID dstFormatID);
 
   private:
     enum class UpdateSource

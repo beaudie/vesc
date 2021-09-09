@@ -3329,16 +3329,23 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
         return angle::Result::Continue;
     }
 
+    angle::FormatID previousActualFormatID =
+        format.getActualImageFormatID(vk::ImageAccess::SampleOnly);
+    angle::FormatID actualFormatID = format.getActualImageFormatID(vk::ImageAccess::Renderable);
+
+    // First try to direct convert any staged buffer updates from old format to new format using
+    // CPU.
+    ANGLE_TRY(mImage->reformatStagedUpdate(contextVk, previousActualFormatID, actualFormatID));
+
     if (!mImage->valid())
     {
         // Immutable texture must already have a valid image
         ASSERT(!mState.getImmutableFormat());
-        // If we have staged update and it was encoded with different format, we need to flush out
-        // these staged update. The respecifyImageStorage should handle read back data and re-stage
-        // data with new format.
-        angle::FormatID intendedFormatID = format.getIntendedFormatID();
-        angle::FormatID actualFormatID = format.getActualImageFormatID(vk::ImageAccess::Renderable);
 
+        angle::FormatID intendedFormatID = format.getIntendedFormatID();
+        // If we still have staged update and it was encoded with different format, we need to flush
+        // out these staged update. The respecifyImageStorage should handle read back data and
+        // re-stage data with new format.
         gl::LevelIndex levelGLStart, levelGLEnd;
         ImageMipLevels mipLevels;
         if (mState.getImmutableFormat())
