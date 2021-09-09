@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf29724c_7b45422d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-09T14:54:23Z",
+      "side": 1,
+      "message": "Changes LGTM, although from usability standpoint, I think it is cleaner to have explicit startDocument to match the explicit endDocument.",
+      "revId": "cd861ba4935016a9adaae5a65b28125c824a6894",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
