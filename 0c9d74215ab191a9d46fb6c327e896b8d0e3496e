@@ -87,6 +87,30 @@
       },
       "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb19e79_4e9f761d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-09T11:36:06Z",
+      "side": 1,
+      "message": "I think this will break validation because it won\u0027t correctly reconstruct VertexAttribPointer calls, which is the only way to set the vertexAttribArrayStride. Can we do it without the version checks and instead using checks for non-default values like it was before?",
+      "parentUuid": "93239b48_24fbc363",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2055,
+        "endChar": 13
+      },
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
