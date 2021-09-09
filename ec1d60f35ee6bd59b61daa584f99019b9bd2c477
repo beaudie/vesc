@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9f12277_8faadc50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-09T18:58:30Z",
+      "side": 1,
+      "message": "+2 with Shabi\u0027s changes.",
+      "revId": "ec1d60f35ee6bd59b61daa584f99019b9bd2c477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ee1d156_7b3721d5",
@@ -37,6 +54,30 @@
       "writtenOn": "2021-09-09T18:39:43Z",
       "side": 1,
       "message": "nit: suggest 0x%04X for copy-pastable values to grep in the GL headers. (for here and VertexArrayVk.cpp)",
+      "range": {
+        "startLine": 5093,
+        "startChar": 72,
+        "endLine": 5093,
+        "endChar": 76
+      },
+      "revId": "ec1d60f35ee6bd59b61daa584f99019b9bd2c477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60b883bd_a591d7c5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 5093,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-09T18:58:30Z",
+      "side": 1,
+      "message": "I think this change may would be a good idea to keep within the 100 char limit anyway, so we know the value printed is only ever exactly 4 chars.\n\n  $ echo \"The Vulkan driver does not support vertex attribute format 0x%x, emulating with 0x%x\" | wc\n      1      13      85",
+      "parentUuid": "9e2a38b1_9b4a3de5",
       "range": {
         "startLine": 5093,
         "startChar": 72,
