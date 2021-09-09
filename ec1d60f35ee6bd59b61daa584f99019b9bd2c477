@@ -90,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a8eff9f_708bdc3c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 5093,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-09T19:04:34Z",
+      "side": 1,
+      "message": "FYI %4X doesn\u0027t guarantee exactly 4 characters, just minimum. Given -1 for example it will happily print FFFFFFFF.\n\nThe 100 character limit is fine though, we should always be dealing with valid 4-nibble values.",
+      "parentUuid": "60b883bd_a591d7c5",
+      "range": {
+        "startLine": 5093,
+        "startChar": 72,
+        "endLine": 5093,
+        "endChar": 76
+      },
+      "revId": "ec1d60f35ee6bd59b61daa584f99019b9bd2c477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e0a8e68_8edf95a8",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 30
