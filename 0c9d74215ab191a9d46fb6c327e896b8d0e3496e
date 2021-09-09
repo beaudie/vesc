@@ -183,6 +183,30 @@
       },
       "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ae87d4_b84d9251",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-09T17:28:59Z",
+      "side": 1,
+      "message": "I considered that, but it\u0027s not correct. The app could call BindVertexBuffer for some bindings that are never used in the current VAO state, then use those bindings later on (after MEC) which would lead to incorrect behaviour.\n\nIt might work the other way round - you track which bindings are set by VertexAttribPointer then only scan the bindings that explicitly *not* using 2.0 sets.",
+      "parentUuid": "36730e96_2e1daf85",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2055,
+        "endChar": 13
+      },
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
