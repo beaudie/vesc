@@ -207,6 +207,30 @@
       },
       "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1921d13_dbdefb0c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-09T19:13:36Z",
+      "side": 1,
+      "message": "Put up an untested version that does this, looks reasonable.",
+      "parentUuid": "24ae87d4_b84d9251",
+      "range": {
+        "startLine": 2042,
+        "startChar": 0,
+        "endLine": 2055,
+        "endChar": 13
+      },
+      "revId": "0c9d74215ab191a9d46fb6c327e896b8d0e3496e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
