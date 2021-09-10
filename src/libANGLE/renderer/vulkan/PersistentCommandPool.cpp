@@ -87,7 +87,13 @@ angle::Result PersistentCommandPool::collect(vk::Context *context,
 {
     // VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT NOT set, The CommandBuffer
     // can still hold the memory resource
+// SVDT: Added tarces to CommandBuffer.
+//       Refactoring: use CommandBuffer method instead of direct Vulkan call.
+#if SVDT_GLOBAL_CHANGES
+    ANGLE_VK_TRY(context, buffer.reset());
+#else
     ANGLE_VK_TRY(context, vkResetCommandBuffer(buffer.getHandle(), 0));
+#endif
 
     mFreeBuffers.emplace_back(std::move(buffer));
     return angle::Result::Continue;

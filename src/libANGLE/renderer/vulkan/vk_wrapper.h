@@ -737,6 +737,11 @@ ANGLE_INLINE void CommandBuffer::blitImage(const Image &srcImage,
 
 ANGLE_INLINE VkResult CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
 {
+// SVDT: Added tarces to CommandBuffer.
+//       Refactoring: use CommandBuffer method instead of direct Vulkan call.
+#if SVDT_GLOBAL_CHANGES
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandBuffer::begin");
+#endif
     ASSERT(valid());
     return vkBeginCommandBuffer(mHandle, &info);
 }
@@ -750,6 +755,11 @@ ANGLE_INLINE VkResult CommandBuffer::end()
 
 ANGLE_INLINE VkResult CommandBuffer::reset()
 {
+// SVDT: Added tarces to CommandBuffer.
+//       Refactoring: use CommandBuffer method instead of direct Vulkan call.
+#if SVDT_GLOBAL_CHANGES
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandBuffer::reset");
+#endif
     ASSERT(valid());
     return vkResetCommandBuffer(mHandle, 0);
 }
