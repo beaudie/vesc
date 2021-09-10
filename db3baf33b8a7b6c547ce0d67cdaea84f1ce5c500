@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b07656d_4699d42b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-10T15:44:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c5ff787b_c224936e",
+      "revId": "db3baf33b8a7b6c547ce0d67cdaea84f1ce5c500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de5d5e49_da2119b0",
@@ -90,6 +108,30 @@
       "side": 1,
       "message": "Just a note that this is not the new test being added, or the test I\u0027ll be using to measure the impact of the vk::Resource changes.\n\nRegardless, adding the buffer binding changes to DrawWithEightTextures() increases the retain count from 44,188 to 163,860.",
       "parentUuid": "de5d5e49_da2119b0",
+      "range": {
+        "startLine": 387,
+        "startChar": 4,
+        "endLine": 387,
+        "endChar": 52
+      },
+      "revId": "db3baf33b8a7b6c547ce0d67cdaea84f1ce5c500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d18487d2_bc70c8bc",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-10T15:44:04Z",
+      "side": 1,
+      "message": "Right, I was thinking we only added it once per RP. But just looked at the code, we are calling retain regardless mUsedBuffers.contain() return true. I think that is a small optimization opportunity.",
+      "parentUuid": "ed490706_efd73ba6",
       "range": {
         "startLine": 387,
         "startChar": 4,
