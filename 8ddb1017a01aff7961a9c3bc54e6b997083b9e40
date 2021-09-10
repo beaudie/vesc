@@ -22,6 +22,30 @@
       },
       "revId": "8ddb1017a01aff7961a9c3bc54e6b997083b9e40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d8fb8bd_7b34057f",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T00:17:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b3f4853d_f1b8d477",
+      "range": {
+        "startLine": 122,
+        "startChar": 2,
+        "endLine": 122,
+        "endChar": 47
+      },
+      "revId": "8ddb1017a01aff7961a9c3bc54e6b997083b9e40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
