@@ -93,6 +93,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30dcc1dd_5b243dcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-10T21:39:47Z",
+      "side": 1,
+      "message": "There is a test for this already. See FramebufferTestWithFormatFallback.copyTexImageFollowedBySampling (and this actually was extracted from deqp. deqp has a very completed tests on this loops through all format/target combinations for glCopyTexImage2D.)\n\nWhen CopyTexImage is called, we always first call ensureImageInitialized(). This means we always end up with a valid mImage when we staged image update, which mean we always stage image update that has the same format as mImage. The TextureVk::reinitImageAsRenderable() call handles the staged image update by calling flushImageStagedUpdates before read out data. \n\nThe only case the now removed code try to handle is the case that mImage is invalid (that is why you see there is a check of if(!mImage-\u003evalid) before) and we have staged update. I removed this check here for a small optimization that if mImage is valid and we have staged buffer update, rather than having to flush out at the reinitImageAsRenderable() call (which means we have to wait for DMA to finish), simply use CPU to handle it usually is simpler and faster.",
+      "parentUuid": "75c462d0_566ca457",
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f030f211_9c0a875a",
@@ -106,6 +124,30 @@
       "writtenOn": "2021-09-10T20:44:24Z",
       "side": 1,
       "message": "TextureVk::copySubTextureImpl() and TextureVk::reinitImageAsRenderable() have extra checking to handle LUMA:\n\n    // Fix up the read/write functions for the sake of luminance/alpha that are emulated with\n    // formats whose channels don\u0027t correspond to the original format (alpha is emulated with red,\n    // and luminance/alpha is emulated with red/green).\n    if (sourceIntendedFormat.isLUMA())\n    {\n        pixelReadFunction \u003d sourceIntendedFormat.pixelReadFunction;\n    }\n    if (destVkFormat.getIntendedFormat().isLUMA())\n    {\n        pixelWriteFunction \u003d destVkFormat.getIntendedFormat().pixelWriteFunction;\n    }\n    \nIs that necessary here also?",
+      "range": {
+        "startLine": 5671,
+        "startChar": 0,
+        "endLine": 5672,
+        "endChar": 89
+      },
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65bf2b2d_c174ab81",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5672,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-10T21:39:47Z",
+      "side": 1,
+      "message": "Good catch. I removed it because I realized that there is no fallback for any of lunimance format. I will replace it with assert.",
+      "parentUuid": "f030f211_9c0a875a",
       "range": {
         "startLine": 5671,
         "startChar": 0,
