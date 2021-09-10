@@ -50,6 +50,24 @@
       "message": "After mapping the buffer, I suggest changing its contents (so say initialize it with something bad like {2, 2, 2, 2}, then overwrite it after map with {0, 1, 2, 3}.\n\nThen replace this `glFinish` with `EXPECT_PIXEL_COLOR_EQ` to make sure that rendering was also done correctly.",
       "revId": "7741d906afd5d1c2896ee2b05bcabce215225203",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3be20c1_82d5220d",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2021-09-10T23:55:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8edeaf42_49a13b10",
+      "revId": "7741d906afd5d1c2896ee2b05bcabce215225203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
