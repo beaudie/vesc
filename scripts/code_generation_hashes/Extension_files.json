@@ -1,0 +1,10 @@
+{
+  "scripts/registry_xml.py":
+    "1facf18023da033a090232bf113e2f26",
+  "src/libANGLE/gen_extensions.py":
+    "ba8eac479dd60b98e8b224b59248c22b",
+  "src/libANGLE/gles_extensions_autogen.cpp":
+    "edc946580adaea9cd30772800b2a60ce",
+  "src/libANGLE/gles_extensions_autogen.h":
+    "ec5d063d464256744130aa88be739eec"
+}
