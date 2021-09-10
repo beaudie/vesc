@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab1cc443_76abdb5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T14:59:19Z",
+      "side": 1,
+      "message": "LGTM - could you also implement the color space support in WGL before landing the trace?",
+      "revId": "6f29f1967e6e7334853847e62491e08ab5675fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aee1ddd4_126f8719",
+        "filename": "util/EGLWindow.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T14:59:19Z",
+      "side": 1,
+      "message": "instead of doing this, I suggest we pick a different value to avoid undef shenanigans. I suggest NoError, since we use that in a bunch of places, but something like Initialized is ok as well.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 6
+      },
+      "revId": "6f29f1967e6e7334853847e62491e08ab5675fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
