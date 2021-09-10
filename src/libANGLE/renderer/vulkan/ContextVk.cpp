@@ -5454,6 +5454,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     timestampQuery.retain(&scratchResourceUseList);
     ANGLE_VK_TRY(this, commandBuffer.end());
 
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
     // Create fence for the submission
     VkFenceCreateInfo fenceInfo = {};
     fenceInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -5461,15 +5462,29 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
 
     vk::DeviceScoped<vk::Fence> fence(device);
     ANGLE_VK_TRY(this, fence.get().init(device, fenceInfo));
+#endif
 
     Serial throwAwaySerial;
     ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), hasProtectedContent(),
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+                                           mContextPriority, nullptr,
+                                           vk::SubmitPolicy::AllowDeferred, &throwAwaySerial));
+#else
                                            mContextPriority, &fence.get(),
                                            vk::SubmitPolicy::EnsureSubmitted, &throwAwaySerial));
+#endif
 
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    // CommandQueue2 will first wait for the Submit to finish and then will wait on the Fence
+    VkResult waitResult = VK_SUCCESS;
+    ANGLE_TRY(mRenderer->waitForSerialWithUserTimeout(this, throwAwaySerial,
+            mRenderer->getMaxFenceWaitTimeNs(), &waitResult));
+    ANGLE_VK_TRY(this, waitResult);
+#else
     ANGLE_VK_TRY(this, fence.get().wait(device, mRenderer->getMaxFenceWaitTimeNs()));
+#endif
     scratchResourceUseList.releaseResourceUsesAndUpdateSerials(throwAwaySerial);
 
     // Get the query results
