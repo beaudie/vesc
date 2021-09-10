@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69f41830_99382def",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-10T20:19:24Z",
+      "side": 1,
+      "message": "Why do we need to collect vertexPointerBindings and then do this separate loop, rather than doing this work immediately in the final \u0027else\u0027 block above that handles ES3.1?",
+      "revId": "b73d3290a7b95889f12a535266e48c73135a3178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
