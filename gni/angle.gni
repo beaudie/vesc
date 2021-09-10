@@ -19,6 +19,14 @@ declare_args() {
 
   # Enables OpenCL support, off by default.
   angle_enable_cl = false
+
+  # ====== SVDT BEGIN ======
+
+  # Always enable this because it may be required for other features
+  # Refers to fixes/changes that do not have own category
+  svdt_global_changes = true
+
+  # ====== SVDT END ======
 }
 
 if (angle_has_build) {

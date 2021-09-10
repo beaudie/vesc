@@ -708,6 +708,13 @@ config("angle_backend_config") {
     defines += [ "ANGLE_EXPOSE_NON_CONFORMANT_EXTENSIONS_AND_VERSIONS" ]
   }
 
+  # ====== SVDT BEGIN ======
+
+  defines += [ "SVDT_GLOBAL_CHANGES=" +
+             "${svdt_global_changes}" ]
+
+  # ====== SVDT END ======
+
   configs = []
 
   if (angle_enable_d3d11) {
