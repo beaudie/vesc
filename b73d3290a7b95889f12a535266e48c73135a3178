@@ -16,6 +16,24 @@
       "message": "Why do we need to collect vertexPointerBindings and then do this separate loop, rather than doing this work immediately in the final \u0027else\u0027 block above that handles ES3.1?",
       "revId": "b73d3290a7b95889f12a535266e48c73135a3178",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41950b04_a6865037",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-10T23:04:30Z",
+      "side": 1,
+      "message": "That was based on earlier feedback to have a separate loop, and I\u0027d originally planned to emit ES 3.1 support completely separate from ES 2.0 (i.e. you get one or the other).  Now that we are mixing them, might make sense to bring it back in the loop.  Jamie, LMKWYT.",
+      "parentUuid": "69f41830_99382def",
+      "revId": "b73d3290a7b95889f12a535266e48c73135a3178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
