@@ -911,8 +911,10 @@ CommandBufferHelper::~CommandBufferHelper()
 void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
 {
     ASSERT(mUsedBuffers.empty());
+#if !SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
     constexpr size_t kInitialBufferCount = 128;
     mUsedBuffers.ensureCapacity(kInitialBufferCount);
+#endif
 
     mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
     // Push a scope into the pool allocator so we can easily free and re-init on reset()
@@ -962,17 +964,37 @@ void CommandBufferHelper::reset()
 
 bool CommandBufferHelper::usesBuffer(const BufferHelper &buffer) const
 {
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    const uint32_t serialValue = buffer.getBufferSerial().getValue();
+    const auto it = mUsedBuffers.find(serialValue >> 5);
+    if (it == mUsedBuffers.end())
+    {
+        return false;
+    }
+    return it->second[serialValue & 31]; // Low 32 bits is R/W usage
+#else
     return mUsedBuffers.contains(buffer.getBufferSerial().getValue());
+#endif
 }
 
 bool CommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer) const
 {
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    const uint32_t serialValue = buffer.getBufferSerial().getValue();
+    const auto it = mUsedBuffers.find(serialValue >> 5);
+    if (it == mUsedBuffers.end())
+    {
+        return false;
+    }
+    return it->second[(serialValue & 31) + 32]; // High 32 bits is BufferAccess::Write
+#else
     BufferAccess access;
     if (!mUsedBuffers.get(buffer.getBufferSerial().getValue(), &access))
     {
         return false;
     }
     return access == BufferAccess::Write;
+#endif
 }
 
 void CommandBufferHelper::bufferRead(ContextVk *contextVk,
@@ -988,10 +1010,16 @@ void CommandBufferHelper::bufferRead(ContextVk *contextVk,
     }
 
     ASSERT(!usesBufferForWrite(*buffer));
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    const uint32_t serialValue = buffer->getBufferSerial().getValue();
+    SerialUseBitSet &bitset = mUsedBuffers[serialValue >> 5];
+    bitset.set(serialValue & 31, true); // Set low bit
+#else
     if (!mUsedBuffers.contains(buffer->getBufferSerial().getValue()))
     {
         mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Read);
     }
+#endif
 }
 
 void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
@@ -1014,7 +1042,14 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
     if (aliasingMode == AliasingMode::Disallowed)
     {
         ASSERT(!usesBuffer(*buffer));
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        const uint32_t serialValue = buffer->getBufferSerial().getValue();
+        SerialUseBitSet &bitset = mUsedBuffers[serialValue >> 5];
+        // Set low and high bits
+        bitset |= SerialUseBitSet(uint64_t(0x01'0000'0001) << (serialValue & 31));
+#else
         mUsedBuffers.insert(buffer->getBufferSerial().getValue(), BufferAccess::Write);
+#endif
     }
 
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
@@ -1042,10 +1077,14 @@ void CommandBufferHelper::imageRead(ContextVk *contextVk,
     {
         // As noted in the header we don't support multiple read layouts for Images.
         // We allow duplicate uses in the RP to accomodate for normal GL sampler usage.
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        useImageInRenderPass(*image);
+#else
         if (!usesImageInRenderPass(*image))
         {
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         }
+#endif
     }
 }
 
@@ -1070,10 +1109,14 @@ void CommandBufferHelper::imageWrite(ContextVk *contextVk,
         {
             ASSERT(!usesImageInRenderPass(*image));
         }
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        useImageInRenderPass(*image);
+#else
         if (!usesImageInRenderPass(*image))
         {
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         }
+#endif
     }
 }
 
@@ -1086,12 +1129,16 @@ void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
     ASSERT(packedAttachmentIndex < mColorImagesCount);
 
     image->retain(resourceUseList);
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    useImageInRenderPass(*image);
+#else
     if (!usesImageInRenderPass(*image))
     {
         // This is possible due to different layers of the same texture being attached to different
         // attachments
         mRenderPassUsedImages.insert(image->getImageSerial().getValue());
     }
+#endif
     ASSERT(mColorImages[packedAttachmentIndex] == nullptr);
     mColorImages[packedAttachmentIndex] = image;
     image->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
@@ -1099,10 +1146,14 @@ void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
     if (resolveImage)
     {
         resolveImage->retain(resourceUseList);
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        useImageInRenderPass(*resolveImage);
+#else
         if (!usesImageInRenderPass(*resolveImage))
         {
             mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
         }
+#endif
         ASSERT(mColorResolveImages[packedAttachmentIndex] == nullptr);
         mColorResolveImages[packedAttachmentIndex] = resolveImage;
         resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
@@ -1124,7 +1175,11 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
     // defer the image layout changes until endRenderPass time or when images going away so that we
     // only insert layout change barrier once.
     image->retain(resourceUseList);
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    useImageInRenderPass(*image);
+#else
     mRenderPassUsedImages.insert(image->getImageSerial().getValue());
+#endif
     mDepthStencilImage      = image;
     mDepthStencilLevelIndex = level;
     mDepthStencilLayerIndex = layerStart;
@@ -1137,7 +1192,11 @@ void CommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseLis
         // depth/stencil image as currently it can only ever come from
         // multisampled-render-to-texture renderbuffers.
         resolveImage->retain(resourceUseList);
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        useImageInRenderPass(*resolveImage);
+#else
         mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
+#endif
         mDepthStencilResolveImage = resolveImage;
         resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
     }

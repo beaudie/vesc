@@ -1690,8 +1690,15 @@ class DriverUniformsDescriptorSetCache final
 
     ANGLE_INLINE bool get(uint32_t serial, VkDescriptorSet *descriptorSet)
     {
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        const auto it = mPayload.find(serial);
+        if (it != mPayload.end())
+        {
+            *descriptorSet = it->second;
+#else
         if (mPayload.get(serial, descriptorSet))
         {
+#endif
             mCacheStats.hit();
             return true;
         }
@@ -1701,13 +1708,21 @@ class DriverUniformsDescriptorSetCache final
 
     ANGLE_INLINE void insert(uint32_t serial, VkDescriptorSet descriptorSet)
     {
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        mPayload[serial] = descriptorSet;
+#else
         mPayload.insert(serial, descriptorSet);
+#endif
     }
 
     ANGLE_INLINE void clear() { mPayload.clear(); }
 
   private:
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    angle::HashMap<uint32_t, VkDescriptorSet> mPayload;
+#else
     angle::FastIntegerMap<VkDescriptorSet> mPayload;
+#endif
 };
 
 // Templated Descriptors Cache

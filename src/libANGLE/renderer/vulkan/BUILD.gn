@@ -16,6 +16,13 @@ declare_args() {
 
   # Enable Vulkan GPU trace event capability
   angle_enable_vulkan_gpu_trace_events = false
+
+  # ====== SVDT BEGIN ======
+
+  # Other Fixes
+  svdt_disable_vulkan_fast_integer_map_for_serials = true  # fixes memory problem
+
+  # ====== SVDT END ======
 }
 
 _vulkan_backend_sources = [
@@ -223,6 +230,14 @@ config("angle_vulkan_backend_config") {
   if (angle_enable_vulkan_validation_layers) {
     defines += [ "ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS" ]
   }
+
+  # ====== SVDT BEGIN ======
+
+  # Other Fixes
+  defines += [ "SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS=" +
+             "${svdt_disable_vulkan_fast_integer_map_for_serials}" ]
+
+  # ====== SVDT END ======
 }
 
 angle_source_set("angle_vk_mem_alloc_wrapper") {

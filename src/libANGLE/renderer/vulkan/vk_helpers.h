@@ -1019,6 +1019,11 @@ constexpr uint32_t kInfiniteCmdSize = 0xFFFFFFFF;
 //  those commands to the queue.
 class CommandBufferHelper : angle::NonCopyable
 {
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    using SerialUseBitSet = angle::BitSet64<64>;
+    using SerialUseMap = angle::HashMap<uint32_t, SerialUseBitSet>;
+#endif
+
   public:
     CommandBufferHelper();
     ~CommandBufferHelper();
@@ -1176,8 +1181,24 @@ class CommandBufferHelper : angle::NonCopyable
 
     bool usesBuffer(const BufferHelper &buffer) const;
     bool usesBufferForWrite(const BufferHelper &buffer) const;
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    void useImageInRenderPass(const ImageHelper &image);
+#endif
     bool usesImageInRenderPass(const ImageHelper &image) const;
-    size_t getUsedBuffersCount() const { return mUsedBuffers.size(); }
+    size_t getUsedBuffersCount() const
+    {
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+        size_t result = 0;
+        for (auto &item : mUsedBuffers)
+        {
+            // Count only low 32 bits
+            result += (item.second & SerialUseBitSet(0xFFFF'FFFF)).count();
+        }
+        return result;
+#else
+        return mUsedBuffers.size();
+#endif
+    }
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
@@ -1303,8 +1324,13 @@ class CommandBufferHelper : angle::NonCopyable
     // Tracks resources used in the command buffer.
     // For Buffers, we track the read/write access type so we can enable simultaneous reads.
     // Images have unique layouts unlike buffers therefore we don't support multi-read.
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    SerialUseMap mUsedBuffers; // Low 32 bits - R/W usage; High 32 bits - Write usage
+    SerialUseMap mRenderPassUsedImages;
+#else
     angle::FastIntegerMap<BufferAccess> mUsedBuffers;
     angle::FastIntegerSet mRenderPassUsedImages;
+#endif
 
     ImageHelper *mDepthStencilImage;
     ImageHelper *mDepthStencilResolveImage;
@@ -2602,10 +2628,28 @@ class ActiveHandleCounter final : angle::NonCopyable
     angle::PackedEnumMap<HandleType, uint32_t> mAllocatedCounts;
 };
 
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+ANGLE_INLINE void CommandBufferHelper::useImageInRenderPass(const ImageHelper &image)
+{
+    const uint32_t serialValue = image.getImageSerial().getValue();
+    mRenderPassUsedImages[serialValue >> 6].set(serialValue & 63, true);
+}
+#endif
+
 ANGLE_INLINE bool CommandBufferHelper::usesImageInRenderPass(const ImageHelper &image) const
 {
     ASSERT(mIsRenderPassCommandBuffer);
+#if SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    const uint32_t serialValue = image.getImageSerial().getValue();
+    const auto it = mRenderPassUsedImages.find(serialValue >> 6);
+    if (it == mRenderPassUsedImages.end())
+    {
+        return false;
+    }
+    return it->second[serialValue & 63];
+#else
     return mRenderPassUsedImages.contains(image.getImageSerial().getValue());
+#endif
 }
 
 // Sometimes ANGLE issues a command internally, such as copies, draws and dispatches that do not
