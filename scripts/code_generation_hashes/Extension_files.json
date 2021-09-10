@@ -1,0 +1,12 @@
+{
+  "doc/SupportedExtensions.md":
+    "844be7714a0b7e33971fd6c584366850",
+  "scripts/registry_xml.py":
+    "9898252dfc77baee4a69d5ec3ea4b10b",
+  "src/libANGLE/gen_extensions.py":
+    "864cd2c77e962fb1cf37d6094acb0f5b",
+  "src/libANGLE/gles_extensions_autogen.cpp":
+    "edc946580adaea9cd30772800b2a60ce",
+  "src/libANGLE/gles_extensions_autogen.h":
+    "ec5d063d464256744130aa88be739eec"
+}
