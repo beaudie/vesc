@@ -16,6 +16,23 @@
       "message": "Please help to review the changes.\n\nthanks\n\nhailin ",
       "revId": "2f78c3fe62cd08094a3615dece08d7fc31b05226",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c9303d5_7f13d26a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-10T02:13:59Z",
+      "side": 1,
+      "message": "Thanks for your contribution! Two points:\n\n1. Please add yourself to the `CONTRIBUTORS` file!\n2. It is greatly appreciated if you would add a regression test for this. That would go in src/tests/gl_tests/BufferDataTest.cpp. You could model the test after StorageCopyBufferSubDataMapped for example, except that it does a draw call instead of glCopyBufferSubData.",
+      "revId": "2f78c3fe62cd08094a3615dece08d7fc31b05226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
