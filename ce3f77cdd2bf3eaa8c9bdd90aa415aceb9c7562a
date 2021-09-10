@@ -22,6 +22,30 @@
       },
       "revId": "ce3f77cdd2bf3eaa8c9bdd90aa415aceb9c7562a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cd35234_b8db10d3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-10T17:21:31Z",
+      "side": 1,
+      "message": "Cool, good idea, should be a little faster this way.",
+      "parentUuid": "276e8c3f_9cb3bd43",
+      "range": {
+        "startLine": 2152,
+        "startChar": 0,
+        "endLine": 2158,
+        "endChar": 9
+      },
+      "revId": "ce3f77cdd2bf3eaa8c9bdd90aa415aceb9c7562a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
