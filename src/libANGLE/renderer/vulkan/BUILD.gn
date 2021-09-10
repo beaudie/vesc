@@ -23,6 +23,7 @@ declare_args() {
   svdt_enable_vulkan_command_queue_2 = true
   svdt_enable_vulkan_submit_thread_task_queue = false  # also enables "asyncCommandQueue" feature
   svdt_enable_vulkan_async_command_queue = false
+  svdt_enable_vulkan_async_command_queue_last_submitted_serial_wa = true  # Not required for CommandQueue2
 
   # Fence Waiting
   svdt_enable_vulkan_command_queue_concurrent_wait = true
@@ -251,6 +252,8 @@ config("angle_vulkan_backend_config") {
              "${svdt_enable_vulkan_submit_thread_task_queue}" ]
   defines += [ "SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE=" +
              "${svdt_enable_vulkan_async_command_queue}" ]
+  defines += [ "SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE_LAST_SUBMITTED_SERIAL_WA=" +
+             "${svdt_enable_vulkan_async_command_queue_last_submitted_serial_wa}" ]
 
   # Fence Waiting
   assert(svdt_enable_vulkan_command_queue_2 || !svdt_enable_vulkan_command_queue_concurrent_wait)

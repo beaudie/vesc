@@ -824,6 +824,9 @@ angle::Result CommandProcessor::submitFrame(
                                               submitQueueSerial, &itemIndex));
     task.initFlushAndQueueSubmit(std::move(currentGarbage), itemIndex);
 #else
+#if SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE_LAST_SUBMITTED_SERIAL_WA
+    mCommandQueue.setLastSubmittedQueueSerial(context, submitQueueSerial);
+#endif
     task.initFlushAndQueueSubmit(waitSemaphores, waitSemaphoreStageMasks, signalSemaphore,
                                  hasProtectedContent, priority, std::move(currentGarbage),
                                  submitQueueSerial);
@@ -853,6 +856,9 @@ angle::Result CommandProcessor::queueSubmitOneOff(Context *context,
                                               submitQueueSerial, &itemIndex));
     task.initOneOffQueueSubmit(itemIndex);
 #else
+#if SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE_LAST_SUBMITTED_SERIAL_WA
+    mCommandQueue.setLastSubmittedQueueSerial(context, submitQueueSerial);
+#endif
     task.initOneOffQueueSubmit(commandBufferHandle, hasProtectedContent, contextPriority, fence,
                                submitQueueSerial);
 #endif
@@ -1429,7 +1435,12 @@ angle::Result CommandQueue::queueSubmit(Context *context,
     VkFence fenceHandle = fence ? fence->getHandle() : VK_NULL_HANDLE;
     VkQueue queue       = getQueue(contextPriority);
     ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fenceHandle));
-    mLastSubmittedQueueSerial = submitQueueSerial;
+#if SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE_LAST_SUBMITTED_SERIAL_WA
+    if (!renderer->getFeatures().asyncCommandQueue.enabled)
+#endif
+    {
+        mLastSubmittedQueueSerial = submitQueueSerial;
+    }
 
     // Now that we've submitted work, clean up RendererVk garbage
     return renderer->cleanupGarbage(mLastCompletedQueueSerial);
@@ -1456,6 +1467,14 @@ Serial CommandQueue::getCurrentQueueSerial() const
 {
     return mCurrentQueueSerial;
 }
+
+#if SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE_LAST_SUBMITTED_SERIAL_WA
+void CommandQueue::setLastSubmittedQueueSerial(Context *context, Serial submitQueueSerial)
+{
+    ASSERT(context->getRenderer()->getFeatures().asyncCommandQueue.enabled);
+    mLastSubmittedQueueSerial = submitQueueSerial;
+}
+#endif
 #endif // !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
 
 // QueuePriorities:

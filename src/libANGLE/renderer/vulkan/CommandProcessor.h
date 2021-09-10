@@ -425,6 +425,10 @@ class CommandQueue final : public CommandQueueInterface
     Serial getLastCompletedQueueSerial() const override;
     Serial getCurrentQueueSerial() const override;
 
+#if SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE_LAST_SUBMITTED_SERIAL_WA
+    void setLastSubmittedQueueSerial(Context *context, Serial submitQueueSerial);
+#endif
+
     angle::Result queueSubmit(Context *context,
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
