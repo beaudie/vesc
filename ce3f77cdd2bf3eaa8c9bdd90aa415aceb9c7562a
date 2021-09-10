@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "276e8c3f_9cb3bd43",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T11:15:01Z",
+      "side": 1,
+      "message": "nit: instead of doing this, you can go\n\nfor (size_t bindingIndex : vertexPointerBindings.flip())\n{\n}",
+      "range": {
+        "startLine": 2152,
+        "startChar": 0,
+        "endLine": 2158,
+        "endChar": 9
+      },
+      "revId": "ce3f77cdd2bf3eaa8c9bdd90aa415aceb9c7562a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
