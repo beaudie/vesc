@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d5ff9c_9b148a28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T12:58:35Z",
+      "side": 1,
+      "message": "Filed http://crbug.com/1248400 for the infra error",
+      "revId": "b7f49a241f4cf9445e4321cf638230f6e955340c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
