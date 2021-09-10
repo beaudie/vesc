@@ -16,6 +16,24 @@
       "message": "lgtm\n\nNot +2\u0027ing in case Shabi thinks this code is redundant with some other translator code.\n",
       "revId": "f1d10f772ceb8e917b169d5047d0d8c7064298c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f01ce3_d1458495",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-10T02:02:26Z",
+      "side": 1,
+      "message": "It is, but looking at the next CL, it does simplify things so it has some utility. It needs some work to bring this to ANGLE\u0027s style, but it\u0027s ok with me if that\u0027s deferred.",
+      "parentUuid": "1cff4928_2f5f67e6",
+      "revId": "f1d10f772ceb8e917b169d5047d0d8c7064298c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
