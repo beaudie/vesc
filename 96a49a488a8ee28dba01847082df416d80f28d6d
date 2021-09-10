@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f64f0ff_3ca30cb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T20:35:22Z",
+      "side": 1,
+      "message": "Note this extension is only defined for desktop GL - see http://anglebug.com/6380",
+      "revId": "96a49a488a8ee28dba01847082df416d80f28d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
