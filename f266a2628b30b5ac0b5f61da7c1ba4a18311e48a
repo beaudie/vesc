@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cfde996_042c2918",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-10T21:33:42Z",
+      "side": 1,
+      "message": "Something like sample_count/args.shard_count would be more efficient when sample_count \u003e args.shard_count. But since DEFAULT_SAMPLES\u003d5 this is probably isn\u0027t the usual case.\n\nBut maybe what needs to be split is sample_count * trials_per_sample * steps_per_trial?",
+      "range": {
+        "startLine": 179,
+        "startChar": 49,
+        "endLine": 179,
+        "endChar": 50
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d465e80e_111219f1",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-10T21:33:42Z",
+      "side": 1,
+      "message": "Seems to be unused.\nExcept in one place below, where I think it shouldn\u0027t be used.",
+      "range": {
+        "startLine": 337,
+        "startChar": 12,
+        "endLine": 337,
+        "endChar": 28
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b847ac7_07d96332",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-10T21:33:42Z",
+      "side": 1,
+      "message": "test_name",
+      "range": {
+        "startLine": 376,
+        "startChar": 80,
+        "endLine": 376,
+        "endChar": 84
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f39ea1_0ec82e96",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-10T21:33:42Z",
+      "side": 1,
+      "message": "test_name",
+      "range": {
+        "startLine": 377,
+        "startChar": 25,
+        "endLine": 377,
+        "endChar": 40
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
