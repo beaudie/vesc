@@ -291,6 +291,10 @@ class RendererVk : angle::NonCopyable
 
     uint64_t getMaxFenceWaitTimeNs() const;
 
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT
+    std::mutex &getCommandQueueMutex() { return mCommandQueueMutex; }
+#endif
+
     ANGLE_INLINE Serial getCurrentQueueSerial()
     {
         if (mFeatures.asyncCommandQueue.enabled)
@@ -299,7 +303,9 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
             std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+#endif
             return mCommandQueue.getCurrentQueueSerial();
         }
     }
@@ -312,7 +318,9 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
             std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+#endif
             return mCommandQueue.getLastSubmittedQueueSerial();
         }
     }
@@ -325,7 +333,9 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
             std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+#endif
             return mCommandQueue.getLastCompletedQueueSerial();
         }
     }
@@ -383,6 +393,9 @@ class RendererVk : angle::NonCopyable
                                                VkResult *result);
     angle::Result finish(vk::Context *context, bool hasProtectedContent);
     angle::Result checkCompletedCommands(vk::Context *context);
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    angle::Result cleanupAllGarbage(vk::Context *context);
+#endif
 
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           bool hasProtectedContent,
@@ -545,7 +558,11 @@ class RendererVk : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
     std::mutex mCommandQueueMutex;
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    vk::CommandQueue2 mCommandQueue;
+#else
     vk::CommandQueue mCommandQueue;
+#endif
 
     // Command buffer pool management.
     std::mutex mCommandBufferHelperFreeListMutex;

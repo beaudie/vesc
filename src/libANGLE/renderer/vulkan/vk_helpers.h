@@ -2765,6 +2765,89 @@ class CommandBufferAccess : angle::NonCopyable
     ReadImages mReadImages;
     WriteImages mWriteImages;
 };
+
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+struct CondVarHelper final
+{
+    std::condition_variable cv;
+    bool isWaiting = false;
+
+    void wait(std::unique_lock<std::mutex> &lock)
+    {
+        isWaiting = true;
+        cv.wait(lock);
+    }
+
+    template <class Rep, class Period>
+    std::cv_status waitFor(std::unique_lock<std::mutex> &lock,
+                           const std::chrono::duration<Rep, Period> &duration)
+    {
+        isWaiting = true;
+        return cv.wait_for(lock, duration);
+    }
+
+    void unlockAndNotifyAll(std::unique_lock<std::mutex> &lock)
+    {
+        ASSERT(lock.owns_lock());
+        if (ANGLE_UNLIKELY(isWaiting)) // Optimization. Avoid calling expensive function if not required
+        {
+            isWaiting = false;
+            lock.unlock();
+            cv.notify_all();
+        }
+        else
+        {
+            lock.unlock();
+        }
+    }
+
+    void notifyAll(std::unique_lock<std::mutex> &lock)
+    {
+        ASSERT(lock.owns_lock());
+        if (ANGLE_UNLIKELY(isWaiting))
+        {
+            isWaiting = false;
+            cv.notify_all();
+        }
+    }
+};
+#endif
+
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT
+template <class MUTEX_TYPE>
+class MutexUnlock final : angle::NonCopyable
+{
+  public:
+    MutexUnlock() = default;
+    explicit MutexUnlock(MUTEX_TYPE *mutex) { unlock(mutex); }
+    ~MutexUnlock() { lockIfUnlocked(); }
+
+    void unlock(MUTEX_TYPE *mutex)
+    {
+        ASSERT(!mMutex && mutex);
+        mMutex = mutex;
+        mMutex->unlock();
+    }
+
+    void lock()
+    {
+        ASSERT(mMutex);
+        mMutex->lock();
+        mMutex = nullptr;
+    }
+
+    void lockIfUnlocked()
+    {
+        if (mMutex)
+        {
+            lock();
+        }
+    }
+
+  private:
+    MUTEX_TYPE *mMutex = nullptr;
+};
+#endif
 }  // namespace vk
 }  // namespace rx
 

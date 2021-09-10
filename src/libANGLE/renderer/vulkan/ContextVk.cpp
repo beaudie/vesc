@@ -5343,6 +5343,9 @@ angle::Result ContextVk::finishImpl()
 
     ANGLE_TRY(flushImpl(nullptr));
     ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    ANGLE_TRY(mRenderer->cleanupAllGarbage(this));
+#endif
 
     clearAllGarbage();
 

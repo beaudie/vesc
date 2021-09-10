@@ -19,6 +19,13 @@ declare_args() {
 
   # ====== SVDT BEGIN ======
 
+  # Command Queue
+  svdt_enable_vulkan_command_queue_2 = true
+  svdt_enable_vulkan_submit_thread_task_queue = false  # also enables "asyncCommandQueue" feature
+
+  # Fence Waiting
+  svdt_enable_vulkan_command_queue_concurrent_wait = true
+
   # Other Fixes
   svdt_disable_vulkan_fast_integer_map_for_serials = true  # fixes memory problem
   svdt_enable_vulkan_caches_race_condition_fix = true
@@ -233,6 +240,19 @@ config("angle_vulkan_backend_config") {
   }
 
   # ====== SVDT BEGIN ======
+
+  # Command Queue
+  assert(svdt_global_changes || !svdt_enable_vulkan_command_queue_2)
+  defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2=" +
+             "${svdt_enable_vulkan_command_queue_2}" ]
+  assert(svdt_enable_vulkan_command_queue_2 || !svdt_enable_vulkan_submit_thread_task_queue)
+  defines += [ "SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE=" +
+             "${svdt_enable_vulkan_submit_thread_task_queue}" ]
+
+  # Fence Waiting
+  assert(svdt_enable_vulkan_command_queue_2 || !svdt_enable_vulkan_command_queue_concurrent_wait)
+  defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT=" +
+             "${svdt_enable_vulkan_command_queue_concurrent_wait}" ]
 
   # Other Fixes
   defines += [ "SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS=" +
