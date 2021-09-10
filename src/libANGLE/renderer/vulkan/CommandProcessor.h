@@ -78,6 +78,10 @@ class CommandProcessorTask
 {
   public:
     CommandProcessorTask() { initTask(); }
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if SVDT_GLOBAL_CHANGES
+    ~CommandProcessorTask() { mRenderPass.release(); }
+#endif
 
     void initTask();
 
@@ -127,7 +131,12 @@ class CommandProcessorTask
     VkCommandBuffer getOneOffCommandBufferVk() const { return mOneOffCommandBufferVk; }
     const Fence *getOneOffFence() { return mOneOffFence; }
     const VkPresentInfoKHR &getPresentInfo() const { return mPresentInfo; }
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if SVDT_GLOBAL_CHANGES
+    const RenderPass &getRenderPass() const { return mRenderPass; }
+#else
     const RenderPass *getRenderPass() const { return mRenderPass; }
+#endif
     CommandBufferHelper *getCommandBuffer() const { return mCommandBuffer; }
 
   private:
@@ -136,7 +145,12 @@ class CommandProcessorTask
     CustomTask mTask;
 
     // ProcessCommands
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if SVDT_GLOBAL_CHANGES
+    RenderPass mRenderPass;
+#else
     const RenderPass *mRenderPass;
+#endif
     CommandBufferHelper *mCommandBuffer;
 
     // Flush data

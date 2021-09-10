@@ -99,7 +99,10 @@ void FenceRecycler::destroy(vk::Context *context)
 void CommandProcessorTask::initTask()
 {
     mTask                        = CustomTask::Invalid;
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if !SVDT_GLOBAL_CHANGES
     mRenderPass                  = nullptr;
+#endif
     mCommandBuffer               = nullptr;
     mSemaphore                   = nullptr;
     mOneOffFence                 = nullptr;
@@ -120,8 +123,21 @@ void CommandProcessorTask::initProcessCommands(bool hasProtectedContent,
 {
     mTask                = CustomTask::ProcessCommands;
     mCommandBuffer       = commandBuffer;
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if !SVDT_GLOBAL_CHANGES
     mRenderPass          = renderPass;
+#endif
     mHasProtectedContent = hasProtectedContent;
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if SVDT_GLOBAL_CHANGES
+    // Do not store "renderPass" pointer, because it may point to temp memory inside cache data
+    if (renderPass)
+    {
+        ASSERT(renderPass->valid());
+        ASSERT(!mRenderPass.valid());
+        mRenderPass.setHandle(renderPass->getHandle());
+    }
+#endif
 }
 
 void CommandProcessorTask::copyPresentInfo(const VkPresentInfoKHR &other)
@@ -499,10 +515,20 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
             ASSERT(!task->getCommandBuffer()->empty());
 
             CommandBufferHelper *commandBuffer = task->getCommandBuffer();
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if SVDT_GLOBAL_CHANGES
+            if (task->getRenderPass().valid())
+#else
             if (task->getRenderPass())
+#endif
             {
                 ANGLE_TRY(mCommandQueue.flushRenderPassCommands(
+// SVDT: Fixed CRASH when "asyncCommandQueue" feature is enabled.
+#if SVDT_GLOBAL_CHANGES
+                    this, task->hasProtectedContent(), task->getRenderPass(), &commandBuffer));
+#else
                     this, task->hasProtectedContent(), *task->getRenderPass(), &commandBuffer));
+#endif
             }
             else
             {
