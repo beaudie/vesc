@@ -2448,7 +2448,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, isNvidia || isAMD || isIntel);
 
     // Currently disabled by default: http://anglebug.com/4324
-#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+#if (SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE) || \
+    SVDT_ENABLE_VULKAN_ASYNC_COMMAND_QUEUE
     ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, true);
 #else
     ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, false);
