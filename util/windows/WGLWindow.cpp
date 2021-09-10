@@ -69,16 +69,16 @@ WGLWindow::WGLWindow(int glesMajorVersion, int glesMinorVersion)
 WGLWindow::~WGLWindow() {}
 
 // Internally initializes GL resources.
-bool WGLWindow::initializeGL(OSWindow *osWindow,
-                             angle::Library *glWindowingLibrary,
-                             angle::GLESDriverType driverType,
-                             const EGLPlatformParameters &platformParams,
-                             const ConfigParameters &configParams)
+GLWindowResult WGLWindow::initializeGL(OSWindow *osWindow,
+                                       angle::Library *glWindowingLibrary,
+                                       angle::GLESDriverType driverType,
+                                       const EGLPlatformParameters &platformParams,
+                                       const ConfigParameters &configParams)
 {
     if (driverType != angle::GLESDriverType::SystemWGL)
     {
         std::cerr << "WGLWindow requires angle::GLESDriverType::SystemWGL.\n";
-        return false;
+        return GLWindowResult::Error;
     }
 
     glWindowingLibrary->getAs("wglGetProcAddress", &gCurrentWGLGetProcAddress);
@@ -86,7 +86,7 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
     if (!gCurrentWGLGetProcAddress)
     {
         std::cerr << "Error loading wglGetProcAddress." << std::endl;
-        return false;
+        return GLWindowResult::Error;
     }
 
     gCurrentModule = reinterpret_cast<HMODULE>(glWindowingLibrary->getNative());
@@ -101,7 +101,7 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
     {
         std::cerr << "Could not find a compatible pixel format." << std::endl;
         DumpLastWindowsError();
-        return false;
+        return GLWindowResult::Error;
     }
 
     // According to the Windows docs, it is an error to set a pixel format twice.
@@ -112,26 +112,26 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
         {
             std::cerr << "Failed to set the pixel format." << std::endl;
             DumpLastWindowsError();
-            return false;
+            return GLWindowResult::Error;
         }
     }
 
     mWGLContext = createContext(configParams, nullptr);
     if (mWGLContext == nullptr)
     {
-        return false;
+        return GLWindowResult::Error;
     }
 
     if (!makeCurrent())
     {
-        return false;
+        return GLWindowResult::Error;
     }
 
     mPlatform     = platformParams;
     mConfigParams = configParams;
 
     angle::LoadGLES(GetProcAddressWithFallback);
-    return true;
+    return GLWindowResult::Success;
 }
 
 HGLRC WGLWindow::createContext(const ConfigParameters &configParams, HGLRC shareContext)

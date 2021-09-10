@@ -28,11 +28,11 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
     static void Delete(WGLWindow **window);
 
     // Internally initializes GL resources.
-    bool initializeGL(OSWindow *osWindow,
-                      angle::Library *glWindowingLibrary,
-                      angle::GLESDriverType driverType,
-                      const EGLPlatformParameters &platformParams,
-                      const ConfigParameters &configParams) override;
+    GLWindowResult initializeGL(OSWindow *osWindow,
+                                angle::Library *glWindowingLibrary,
+                                angle::GLESDriverType driverType,
+                                const EGLPlatformParameters &platformParams,
+                                const ConfigParameters &configParams) override;
     void destroyGL() override;
     bool isGLInitialized() const override;
     bool makeCurrent() override;
