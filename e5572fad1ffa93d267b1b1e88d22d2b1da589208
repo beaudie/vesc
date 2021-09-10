@@ -33,6 +33,24 @@
       "message": "cody: could we do a post-process that just scans all the functions after the setup function or capturecall?",
       "revId": "e5572fad1ffa93d267b1b1e88d22d2b1da589208",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f8f3ad2_1bb2ad84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-10T15:36:55Z",
+      "side": 1,
+      "message": "Yeah, I think that could work just as well.  Might be a little more expensive, but I\u0027m not thrilled with the approach in this CL either.  The challenges would be doing it quickly, and make sure the post-process is always run after any instructions are added.  We have multiple setup functions now.",
+      "parentUuid": "21d615e8_7b45e9e6",
+      "revId": "e5572fad1ffa93d267b1b1e88d22d2b1da589208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
