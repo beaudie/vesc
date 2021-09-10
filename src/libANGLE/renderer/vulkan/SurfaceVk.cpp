@@ -797,11 +797,17 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
 
     VkResult vkResult = acquireNextSwapchainImage(displayVk);
+// SVDT: Fixed bugs in "rx::WindowSurfaceVk" with "VK_SUBOPTIMAL_KHR" Image Acquire result.
+#if SVDT_GLOBAL_CHANGES
+    ASSERT(vkResult != VK_SUBOPTIMAL_KHR);
+    ANGLE_VK_TRY(displayVk, vkResult);
+#else
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
     if (ANGLE_UNLIKELY((vkResult != VK_SUCCESS) && (vkResult != VK_SUBOPTIMAL_KHR)))
     {
         ANGLE_VK_TRY(displayVk, vkResult);
     }
+#endif
 
     return angle::Result::Continue;
 }
@@ -1588,9 +1594,16 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 
         VkResult result = acquireNextSwapchainImage(contextVk);
 
+// SVDT: Fixed bugs in "rx::WindowSurfaceVk" with "VK_SUBOPTIMAL_KHR" Image Acquire result.
+#if SVDT_GLOBAL_CHANGES
+        ASSERT(result != VK_SUBOPTIMAL_KHR);
+        // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before continuing.
+        if (ANGLE_UNLIKELY(result == VK_ERROR_OUT_OF_DATE_KHR))
+#else
         // If SUBOPTIMAL/OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain
         // before continuing.
         if (ANGLE_UNLIKELY((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR)))
+#endif
         {
             ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, true));
             // Try one more time and bail if we fail
@@ -1619,7 +1632,13 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
                                    acquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
                                    &mCurrentSwapchainImageIndex);
+// SVDT: Fixed bugs in "rx::WindowSurfaceVk" with "VK_SUBOPTIMAL_KHR" Image Acquire result.
+#if SVDT_GLOBAL_CHANGES
+    // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
+    if (ANGLE_UNLIKELY((result != VK_SUCCESS) && (result != VK_SUBOPTIMAL_KHR)))
+#else
     if (ANGLE_UNLIKELY(result != VK_SUCCESS))
+#endif
     {
         return result;
     }
