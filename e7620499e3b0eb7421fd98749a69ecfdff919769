@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d569db8_bb381a8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-09-10T06:02:48Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "529f75e0_299f2a9d",
+      "revId": "e7620499e3b0eb7421fd98749a69ecfdff919769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5939cd0d_50b10312",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-08T13:36:37Z",
       "side": 1,
       "message": "Please instead put this before the for loop:\n\n    GLVertexArray vertexArrays[1000];\n\nThat\u0027s from gl_raii.h, and it will automatically handle generating and deleting the VAOs.",
+      "revId": "e7620499e3b0eb7421fd98749a69ecfdff919769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d206d998_4522b56e",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-09-10T06:02:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5939cd0d_50b10312",
       "revId": "e7620499e3b0eb7421fd98749a69ecfdff919769",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
