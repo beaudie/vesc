@@ -33,6 +33,23 @@
       "message": "The change LGTM, but I don\u0027t see an approval for merge to M90.",
       "revId": "89149928180d17005df3d9a12dc43800ff2bd4c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c1c5075_836022ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306504
+      },
+      "writtenOn": "2021-09-10T12:30:16Z",
+      "side": 1,
+      "message": "Shahbaz, the merge was approved. Please merge it, since I have no rights in angle.",
+      "revId": "89149928180d17005df3d9a12dc43800ff2bd4c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
