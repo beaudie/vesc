@@ -49,12 +49,12 @@ bool IsAngleEGLConfigSupported(const PlatformParameters &param, OSWindow *osWind
 
     EGLWindow *eglWindow = EGLWindow::New(param.majorVersion, param.minorVersion);
     ConfigParameters configParams;
-    bool result =
+    GLWindowResult result =
         eglWindow->initializeGL(osWindow, eglLibrary.get(), angle::GLESDriverType::AngleEGL,
                                 param.eglParameters, configParams);
     eglWindow->destroyGL();
     EGLWindow::Delete(&eglWindow);
-    return result;
+    return result == GLWindowResult::Success;
 }
 
 bool IsSystemWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
@@ -65,12 +65,12 @@ bool IsSystemWGLConfigSupported(const PlatformParameters &param, OSWindow *osWin
 
     WGLWindow *wglWindow = WGLWindow::New(param.majorVersion, param.minorVersion);
     ConfigParameters configParams;
-    bool result =
+    GLWindowResult result =
         wglWindow->initializeGL(osWindow, openglLibrary.get(), angle::GLESDriverType::SystemWGL,
                                 param.eglParameters, configParams);
     wglWindow->destroyGL();
     WGLWindow::Delete(&wglWindow);
-    return result;
+    return result == GLWindowResult::Success;
 #else
     return false;
 #endif  // defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_UTIL_LOADER)
@@ -86,12 +86,12 @@ bool IsSystemEGLConfigSupported(const PlatformParameters &param, OSWindow *osWin
 
     EGLWindow *eglWindow = EGLWindow::New(param.majorVersion, param.minorVersion);
     ConfigParameters configParams;
-    bool result =
+    GLWindowResult result =
         eglWindow->initializeGL(osWindow, eglLibrary.get(), angle::GLESDriverType::SystemEGL,
                                 param.eglParameters, configParams);
     eglWindow->destroyGL();
     EGLWindow::Delete(&eglWindow);
-    return result;
+    return result == GLWindowResult::Success;
 #else
     return false;
 #endif
