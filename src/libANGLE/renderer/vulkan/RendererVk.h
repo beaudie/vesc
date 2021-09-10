@@ -222,7 +222,19 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
+// SVDT: CRITICAL bug fixed in "rx::RendererVk" class when "asyncCommandQueue" is enabled.
+#if SVDT_GLOBAL_CHANGES
+        if (mFeatures.asyncCommandQueue.enabled)
+        {
+            return mCommandProcessor.getDriverPriority(priority);
+        }
+        else
+        {
+            return mCommandQueue.getDriverPriority(priority);
+        }
+#else
         return mCommandQueue.getDriverPriority(priority);
+#endif
     }
 
     // This command buffer should be submitted immediately via queueSubmitOneOff.

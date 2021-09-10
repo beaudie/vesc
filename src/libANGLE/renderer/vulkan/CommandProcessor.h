@@ -379,6 +379,10 @@ class CommandQueue final : public CommandQueueInterface
 
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
+// SVDT: CRITICAL bug fixed in "rx::RendererVk" class when "asyncCommandQueue" is enabled.
+#if SVDT_GLOBAL_CHANGES
+        ASSERT(mQueueMap.valid());
+#endif
         return mQueueMap.getDevicePriority(priority);
     }
 
@@ -454,6 +458,14 @@ class CommandProcessor : public Context, public CommandQueueInterface
   public:
     CommandProcessor(RendererVk *renderer);
     ~CommandProcessor() override;
+
+// SVDT: CRITICAL bug fixed in "rx::RendererVk" class when "asyncCommandQueue" is enabled.
+#if SVDT_GLOBAL_CHANGES
+    egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
+    {
+        return mCommandQueue.getDriverPriority(priority);
+    }
+#endif
 
     // Used by main thread to wait for worker thread to complete all outstanding work.
     // TODO(jmadill): Make private. b/172704839
