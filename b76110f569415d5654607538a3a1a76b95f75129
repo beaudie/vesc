@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c5a3a92d_7935cc77",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-10T22:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48734aa4_0d2b93ac",
+      "range": {
+        "startLine": 15,
+        "startChar": 41,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "6575d130_43ac5e25",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -148,6 +172,30 @@
       "side": 1,
       "message": "Good catch. I removed it because I realized that there is no fallback for any of lunimance format. I will replace it with assert.",
       "parentUuid": "f030f211_9c0a875a",
+      "range": {
+        "startLine": 5671,
+        "startChar": 0,
+        "endLine": 5672,
+        "endChar": 89
+      },
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edba3c02_b850c686",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5672,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-10T22:38:28Z",
+      "side": 1,
+      "message": "Replaced it with assertion. This was carried over when I copied the code from copySubTexImpl.",
+      "parentUuid": "65bf2b2d_c174ab81",
       "range": {
         "startLine": 5671,
         "startChar": 0,
