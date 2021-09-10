@@ -304,6 +304,11 @@ class WindowSurfaceVk : public SurfaceVk
     std::vector<VkPresentModeKHR> mPresentModes;
 
     VkSwapchainKHR mSwapchain;
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    bool mIsSwapchainValid;
+    bool mHasPendingPresent;
+#endif
     // Cached information used to recreate swapchains.
     VkPresentModeKHR mSwapchainPresentMode;         // Current swapchain mode
     VkPresentModeKHR mDesiredSwapchainPresentMode;  // Desired mode set through setSwapInterval()

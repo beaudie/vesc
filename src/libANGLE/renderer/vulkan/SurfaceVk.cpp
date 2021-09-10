@@ -489,6 +489,11 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mSurface(VK_NULL_HANDLE),
       mSupportsProtectedSwapchain(false),
       mSwapchain(VK_NULL_HANDLE),
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+      mIsSwapchainValid(false),
+      mHasPendingPresent(false),
+#endif
       mSwapchainPresentMode(VK_PRESENT_MODE_FIFO_KHR),
       mDesiredSwapchainPresentMode(VK_PRESENT_MODE_FIFO_KHR),
       mMinImageCount(0),
@@ -532,6 +537,14 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     if (mSwapchain)
     {
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+        if (mHasPendingPresent)
+        {
+            (void)renderer->getLastPresentResult(mSwapchain);
+            mHasPendingPresent = false;
+        }
+#endif
         vkDestroySwapchainKHR(device, mSwapchain, nullptr);
         mSwapchain = VK_NULL_HANDLE;
     }
@@ -828,6 +841,14 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
 
 angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl::Extents &extents)
 {
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    ASSERT(!mHasPendingPresent);
+    ASSERT(mNeedToAcquireNextSwapchainImage);  // Must not have current image in recreate
+
+    mIsSwapchainValid = false;  // Indicate that we are no longer have a valid Swapchain
+#endif
+
     // If mOldSwapchains is not empty, it means that a new swapchain was created, but before
     // any of its images were presented, it's asked to be recreated.  In this case, we can destroy
     // the current swapchain immediately (although the old swapchains still need to be kept to be
@@ -889,8 +910,14 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         static constexpr size_t kMaxOldSwapchains = 5;
         if (mOldSwapchains.size() > kMaxOldSwapchains)
         {
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+            // Too late to return here
+            (void)contextVk->getRenderer()->finish(contextVk, contextVk->hasProtectedContent());
+#else
             ANGLE_TRY(
                 contextVk->getRenderer()->finish(contextVk, contextVk->hasProtectedContent()));
+#endif
             for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
             {
                 oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
@@ -917,6 +944,22 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     }
 
     angle::Result result = createSwapChain(contextVk, swapchainExtents, lastSwapchain);
+
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    if ((result != angle::Result::Continue) && (lastSwapchain != swapchainToDestroy))
+    {
+        // "lastSwapchain" may be "non-retired" if failed before "vkCreateSwapchainKHR()"
+        ASSERT(mOldSwapchains.back().swapchain == lastSwapchain);
+        lastSwapchain = VK_NULL_HANDLE;
+        (void)contextVk->getRenderer()->finish(contextVk, contextVk->hasProtectedContent());
+        for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
+        {
+            oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
+        }
+        mOldSwapchains.clear();
+    }
+#endif
 
     // Notify the parent classes of the surface's new state.
     onStateChange(angle::SubjectMessage::SurfaceChanged);
@@ -1154,6 +1197,11 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         // We will need to pass depth/stencil image views to the RenderTargetVk in the future.
     }
 
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    mIsSwapchainValid = true;
+#endif
+
     return angle::Result::Continue;
 }
 
@@ -1366,6 +1414,12 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
                                        const void *pNextChain,
                                        bool *presentOutOfDate)
 {
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    ASSERT(mIsSwapchainValid);
+    ASSERT(!mNeedToAcquireNextSwapchainImage);
+#endif
+
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -1509,12 +1563,32 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    // Set FrameNumber for the presented image.
+    mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;
+#endif
+
     VkResult result = renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo);
 
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    if (contextVk->getFeatures().asyncCommandQueue.enabled)
+    {
+        // Must never fail because it is a simple enqueue operation
+        ASSERT(result == VK_SUCCESS);
+        mHasPendingPresent = true;
+    }
+    else
+    {
+        ANGLE_TRY(computePresentOutOfDate(contextVk, result, presentOutOfDate));
+    }
+#else
     // Set FrameNumber for the presented image.
     mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;
 
     ANGLE_TRY(computePresentOutOfDate(contextVk, result, presentOutOfDate));
+#endif
 
     return angle::Result::Continue;
 }
@@ -1539,12 +1613,20 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
 
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    // Defer acquiring the next swapchain image in any case (even if the swapchain is out-of-date).
+    deferAcquireNextImage(context);
+
+    if (presentOutOfDate)
+#else
     if (!presentOutOfDate)
     {
         // Defer acquiring the next swapchain image since the swapchain is not out-of-date.
         deferAcquireNextImage(context);
     }
     else
+#endif
     {
         // Immediately try to acquire the next image, which will recognize the out-of-date
         // swapchain (potentially because of a rotation change), and recreate it.
@@ -1574,10 +1656,25 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    if (!mIsSwapchainValid)
+    {
+        ASSERT(!mHasPendingPresent);
+        WARN() << "mIsSwapchainValid == false";
+        presentOutOfDate = true;
+    }
+    else if (mHasPendingPresent)
+#else
     // TODO(jmadill): Expose in CommandQueueInterface, or manage in CommandQueue. b/172704839
     if (contextVk->getFeatures().asyncCommandQueue.enabled)
+#endif
     {
         VkResult result = contextVk->getRenderer()->getLastPresentResult(mSwapchain);
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+        mHasPendingPresent = false;
+#endif
 
         // Now that we have the result from the last present need to determine if it's out of date
         // or not.
@@ -1620,6 +1717,11 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 
 VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 {
+// SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
+#if SVDT_GLOBAL_CHANGES
+    ASSERT(mIsSwapchainValid);
+#endif
+
     VkDevice device = context->getDevice();
 
     vk::DeviceScoped<vk::Semaphore> acquireImageSemaphore(device);
