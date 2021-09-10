@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6575d130_43ac5e25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T17:13:44Z",
+      "side": 1,
+      "message": "LGTM, clever re-use of CopyImageCHROMIUM. Can we end up with formats not supported?",
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
