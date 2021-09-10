@@ -29,7 +29,9 @@ angle::Result SamplerVk::syncState(const gl::Context *context, const bool dirty)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+#if !SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
     RendererVk *renderer = contextVk->getRenderer();
+#endif
     if (mSampler.valid())
     {
         if (!dirty)
@@ -40,7 +42,11 @@ angle::Result SamplerVk::syncState(const gl::Context *context, const bool dirty)
     }
 
     vk::SamplerDesc desc(contextVk, mState, false, 0, static_cast<angle::FormatID>(0));
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    ANGLE_TRY(contextVk->getSamplerCache().getSampler(contextVk, desc, &mSampler));
+#else
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, desc, &mSampler));
+#endif
 
     return angle::Result::Continue;
 }

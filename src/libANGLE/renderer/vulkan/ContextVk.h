@@ -200,6 +200,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         return mShareGroupVk->getDescriptorSetLayoutCache();
     }
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    SamplerCache &getSamplerCache()
+    {
+        return mShareGroupVk->getSamplerCache();
+    }
+#endif
 
     // Device loss
     gl::GraphicsResetStatus getResetStatus() override;

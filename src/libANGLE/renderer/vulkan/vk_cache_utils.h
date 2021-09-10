@@ -1674,6 +1674,9 @@ class SamplerYcbcrConversionCache final
         T format,
         const SamplerYcbcrConversionMap<T> &payload) const;
 
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    mutable std::mutex mPayloadMutex;
+#endif
     SamplerYcbcrConversionMap<uint64_t> mExternalFormatPayload;
     SamplerYcbcrConversionMap<VkFormat> mVkFormatPayload;
 };

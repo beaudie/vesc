@@ -320,6 +320,9 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
 
     mPipelineLayoutCache.destroy(displayVk->getRenderer());
     mDescriptorSetLayoutCache.destroy(displayVk->getRenderer());
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    mSamplerCache.destroy(displayVk->getRenderer());
+#endif
 
     ASSERT(mResourceUseLists.empty());
 }

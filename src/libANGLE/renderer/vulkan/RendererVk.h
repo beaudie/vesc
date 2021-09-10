@@ -340,7 +340,10 @@ class RendererVk : angle::NonCopyable
     bool enableDebugUtils() const { return mEnableDebugUtils; }
     bool angleDebuggerMode() const { return mAngleDebuggerMode; }
 
+#if !SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    // Moved to the ShareGroupVk
     SamplerCache &getSamplerCache() { return mSamplerCache; }
+#endif
     SamplerYcbcrConversionCache &getYuvConversionCache() { return mYuvConversionCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
@@ -552,7 +555,10 @@ class RendererVk : angle::NonCopyable
     vk::CommandProcessor mCommandProcessor;
 
     vk::Allocator mAllocator;
+#if !SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    // Moved to the ShareGroupVk
     SamplerCache mSamplerCache;
+#endif
     SamplerYcbcrConversionCache mYuvConversionCache;
     angle::HashMap<VkFormat, uint32_t> mVkFormatDescriptorCountMap;
     vk::ActiveHandleCounter mActiveHandleCounts;

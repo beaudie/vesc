@@ -3809,6 +3809,10 @@ angle::Result SamplerYcbcrConversionCache::getYuvConversionImpl(
     const VkSamplerYcbcrConversionCreateInfo &yuvConversionCreateInfo,
     vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut)
 {
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    std::lock_guard<std::mutex> lock(mPayloadMutex);
+#endif
+
     const auto iter = payload->find(format);
     if (iter != payload->end())
     {
@@ -3857,6 +3861,10 @@ VkSamplerYcbcrConversion SamplerYcbcrConversionCache::getSamplerYcbcrConversionI
     T format,
     const SamplerYcbcrConversionMap<T> &payload) const
 {
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    std::lock_guard<std::mutex> lock(mPayloadMutex);
+#endif
+
     const auto iter = payload.find(format);
     if (iter != payload.end())
     {

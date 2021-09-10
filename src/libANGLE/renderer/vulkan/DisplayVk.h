@@ -33,6 +33,9 @@ class ShareGroupVk : public ShareGroupImpl
     // synchronous update to the caches.
     PipelineLayoutCache &getPipelineLayoutCache() { return mPipelineLayoutCache; }
     DescriptorSetLayoutCache &getDescriptorSetLayoutCache() { return mDescriptorSetLayoutCache; }
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    SamplerCache &getSamplerCache() { return mSamplerCache; }
+#endif
     ContextVkSet *getContexts() { return &mContexts; }
 
     std::vector<vk::ResourceUseList> &&releaseResourceUseLists()
@@ -54,6 +57,12 @@ class ShareGroupVk : public ShareGroupImpl
 
     // DescriptorSetLayouts are also managed in a cache.
     DescriptorSetLayoutCache mDescriptorSetLayoutCache;
+
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    // Moved from the "RendererVk" because "SamplerCache" may be accessed
+    // from resources that are in different Share Groups.
+    SamplerCache mSamplerCache;
+#endif
 
     // The list of contexts within the share group
     ContextVkSet mContexts;

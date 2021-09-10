@@ -1755,7 +1755,9 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 
 angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 {
+#if !SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
     RendererVk *renderer = contextVk->getRenderer();
+#endif
 
     // Requires that the image:
     //
@@ -1785,7 +1787,11 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 
     vk::BindingPointer<vk::SamplerHelper> sampler;
     vk::SamplerDesc samplerDesc(contextVk, samplerState, false, 0, static_cast<angle::FormatID>(0));
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    ANGLE_TRY(contextVk->getSamplerCache().getSampler(contextVk, samplerDesc, &sampler));
+#else
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &sampler));
+#endif
 
     // If the image has more levels than supported, generate as many mips as possible at a time.
     const vk::LevelIndex maxGenerateLevels(UtilsVk::GetGenerateMipmapMaxLevels(contextVk));
@@ -2719,7 +2725,11 @@ angle::Result TextureVk::syncState(const gl::Context *context,
 
     vk::SamplerDesc samplerDesc(contextVk, mState.getSamplerState(), mState.isStencilMode(),
                                 mImage->getExternalFormat(), mImage->getIntendedFormatID());
+#if SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
+    ANGLE_TRY(contextVk->getSamplerCache().getSampler(contextVk, samplerDesc, &mSampler));
+#else
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &mSampler));
+#endif
 
     return angle::Result::Continue;
 }

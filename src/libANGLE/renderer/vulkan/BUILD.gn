@@ -21,6 +21,7 @@ declare_args() {
 
   # Other Fixes
   svdt_disable_vulkan_fast_integer_map_for_serials = true  # fixes memory problem
+  svdt_enable_vulkan_caches_race_condition_fix = true
 
   # ====== SVDT END ======
 }
@@ -236,6 +237,8 @@ config("angle_vulkan_backend_config") {
   # Other Fixes
   defines += [ "SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS=" +
              "${svdt_disable_vulkan_fast_integer_map_for_serials}" ]
+  defines += [ "SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX=" +
+             "${svdt_enable_vulkan_caches_race_condition_fix}" ]
 
   # ====== SVDT END ======
 }

@@ -776,7 +776,9 @@ void RendererVk::onDestroy(vk::Context *context)
     mOneOffCommandPool.destroy(mDevice);
 
     mPipelineCache.destroy(mDevice);
+#if !SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX
     mSamplerCache.destroy(this);
+#endif
     mYuvConversionCache.destroy(this);
     mVkFormatDescriptorCountMap.clear();
 
