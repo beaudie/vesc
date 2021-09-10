@@ -146,8 +146,16 @@ angle::Result SyncHelper::clientWait(Context *context,
             ANGLE_TRY(contextVk->flushImpl(nullptr));
         }
     }
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if SVDT_GLOBAL_CHANGES
+        // Above flushImpl() may not flush the "SyncHelper" if it is still
+        // in the "SecondaryCommandBuffer" of another "ContextVk".
+        // This may happen, for example, if there was no "glFlush()" call after "glFenceSync()",
+        // but the "glClientWaitSync()" is called from another Context.
+#else
     else
     {
+#endif
         if (!mUse.getSerial().valid())
         {
             // The sync object wasn't flushed before waiting, so the wait will always necessarily
@@ -157,7 +165,10 @@ angle::Result SyncHelper::clientWait(Context *context,
             *outResult = VK_TIMEOUT;
             return angle::Result::Continue;
         }
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if !SVDT_GLOBAL_CHANGES
     }
+#endif
 
     // If timeout is zero, there's no need to wait, so return timeout already.
     // Do this after (possibly) flushing, since some apps/tests/traces are relying on this behavior.
@@ -187,7 +198,12 @@ angle::Result SyncHelper::serverWait(ContextVk *contextVk)
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
     commandBuffer->waitEvents(1, mEvent.ptr(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if SVDT_GLOBAL_CHANGES
+                              VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, nullptr, 0, nullptr, 0,
+#else
                               VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, nullptr, 0, nullptr, 0,
+#endif
                               nullptr);
     retain(&contextVk->getResourceUseList());
     return angle::Result::Continue;
@@ -322,7 +338,12 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     }
 
     VkResult status = VK_SUCCESS;
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if SVDT_GLOBAL_CHANGES
+    if (mUse.getSerial().valid())
+#else
     if (mUse.valid())
+#endif
     {
         // We have a valid serial to wait on
         ANGLE_TRY(
@@ -374,7 +395,12 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
 angle::Result SyncHelperNativeFence::getStatus(Context *context, bool *signaled) const
 {
     // We've got a serial, check if the serial is still in use
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if SVDT_GLOBAL_CHANGES
+    if (mUse.getSerial().valid())
+#else
     if (mUse.valid())
+#endif
     {
         *signaled = !isCurrentlyInUse(context->getRenderer()->getLastCompletedQueueSerial());
         return angle::Result::Continue;
@@ -469,7 +495,12 @@ angle::Result SyncVk::serverWait(const gl::Context *context, GLbitfield flags, G
 angle::Result SyncVk::getStatus(const gl::Context *context, GLint *outResult)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if SVDT_GLOBAL_CHANGES
+    if (mSyncHelper.usedInRecordedCommands())
+#else
     if (contextVk->getShareGroupVk()->isSyncObjectPendingFlush())
+#endif
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }

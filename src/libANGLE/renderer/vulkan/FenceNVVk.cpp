@@ -35,7 +35,12 @@ angle::Result FenceNVVk::set(const gl::Context *context, GLenum condition)
 angle::Result FenceNVVk::test(const gl::Context *context, GLboolean *outFinished)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if SVDT_GLOBAL_CHANGES
+    if (mFenceSync.usedInRecordedCommands())
+#else
     if (contextVk->getShareGroupVk()->isSyncObjectPendingFlush())
+#endif
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }

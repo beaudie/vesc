@@ -5273,6 +5273,10 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     // We must set this to false before calling flushCommandsAndEndRenderPass to prevent it from
     // calling back to flushImpl.
     mHasDeferredFlush = false;
+// SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
+#if SVDT_GLOBAL_CHANGES
+    mEGLSyncObjectPendingFlush = false;
+#endif
     getShareGroupVk()->clearSyncObjectPendingFlush();
 
     ANGLE_TRY(flushCommandsAndEndRenderPass());
