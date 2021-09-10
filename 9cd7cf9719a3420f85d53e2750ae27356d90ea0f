@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f401623f_86e3485b",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T21:16:52Z",
+      "side": 1,
+      "message": "GN-ism. It won\u0027t let you overwrite a non-empty \"scope\". Scopes are like GN objects, and read_file returns a scope when it loads JSON. Added a comment.",
+      "parentUuid": "2daabea5_3e0c4cd9",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 5
+      },
+      "revId": "9cd7cf9719a3420f85d53e2750ae27356d90ea0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6ecb0fa_0eed3dc2",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-10T20:30:22Z",
       "side": 1,
       "message": "It\u0027s probably be worth indicating that this is for backwards compatibility if it\u0027s going to stick around.   Or mark with the same http://anglebug.com/5133 TODO.",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 84
+      },
+      "revId": "9cd7cf9719a3420f85d53e2750ae27356d90ea0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fc538d4_e490a2ed",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T21:16:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6ecb0fa_0eed3dc2",
       "range": {
         "startLine": 190,
         "startChar": 0,
