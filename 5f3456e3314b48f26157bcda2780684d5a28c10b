@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "898ae78b_7813daee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T20:31:08Z",
+      "side": 1,
+      "message": "Note that this extension isn\u0027t defined for GLES, only for desktop GL. Filed http://anglebug.com/6380 to clean this up.",
+      "revId": "5f3456e3314b48f26157bcda2780684d5a28c10b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
