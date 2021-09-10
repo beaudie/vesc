@@ -1032,7 +1032,11 @@ class CommandProcessor : public Context, public CommandQueueInterface
     std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_ASYNC_COMMAND_ENQUEUE
+    CondVarHelper mWorkAvailableCondition;
+#else
     std::condition_variable mWorkAvailableCondition;
+#endif
     // Signal main thread when all work completed
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes

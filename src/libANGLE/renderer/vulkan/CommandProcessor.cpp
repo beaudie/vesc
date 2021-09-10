@@ -426,10 +426,17 @@ void CommandProcessor::queueCommand(CommandProcessorTask &&task)
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::queueCommand");
     // Grab the worker mutex so that we put things on the queue in the same order as we give out
     // serials.
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_ASYNC_COMMAND_ENQUEUE
+    std::unique_lock<std::mutex> queueLock(mWorkerMutex);
+
+    mTasks.emplace(std::move(task));
+    mWorkAvailableCondition.unlockAndNotifyAll(queueLock);
+#else
     std::lock_guard<std::mutex> queueLock(mWorkerMutex);
 
     mTasks.emplace(std::move(task));
     mWorkAvailableCondition.notify_one();
+#endif
 }
 
 void CommandProcessor::processTasks()
@@ -459,12 +466,25 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
     while (true)
     {
         std::unique_lock<std::mutex> lock(mWorkerMutex);
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_ASYNC_COMMAND_ENQUEUE
+        // Spin-Sleep to avoid expensive "wake from Wait by Notify" in the Context thread
+        for (int i = 0; mTasks.empty() && i < 20; ++i)
+        {
+            lock.unlock();
+            std::this_thread::sleep_for(std::chrono::microseconds(1000));
+            lock.lock();
+        }
+#endif
         if (mTasks.empty())
         {
             mWorkerThreadIdle = true;
             mWorkerIdleCondition.notify_all();
             // Only wake if notified and command queue is not empty
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_ASYNC_COMMAND_ENQUEUE
+            do { mWorkAvailableCondition.wait(lock); } while (mTasks.empty());
+#else
             mWorkAvailableCondition.wait(lock, [this] { return !mTasks.empty(); });
+#endif
         }
         mWorkerThreadIdle = false;
         CommandProcessorTask task(std::move(mTasks.front()));
