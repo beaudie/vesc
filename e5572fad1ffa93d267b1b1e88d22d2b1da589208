@@ -16,6 +16,23 @@
       "message": "Mentioned in chat the other day, noticed there were lots of places not updating max readbuffer size for calls.  Centralizing the calls is also a lead up to tracking resource usage for Setup filtering.",
       "revId": "e5572fad1ffa93d267b1b1e88d22d2b1da589208",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d615e8_7b45e9e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-10T00:41:16Z",
+      "side": 1,
+      "message": "cody: could we do a post-process that just scans all the functions after the setup function or capturecall?",
+      "revId": "e5572fad1ffa93d267b1b1e88d22d2b1da589208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
