@@ -307,13 +307,22 @@ void CommandProcessor::handleError(VkResult errorCode,
 {
     ASSERT(errorCode != VK_SUCCESS);
 
+// SVDT: Updates and fixes in the "rx::vk::CommandProcessor" class.
+#if SVDT_GLOBAL_CHANGES
+    WARN() << "Internal Vulkan error (" << errorCode << "): " << VulkanResultString(errorCode)
+           << ". (" << function << "(): " << line << ")";
+#else
     std::stringstream errorStream;
     errorStream << "Internal Vulkan error (" << errorCode << "): " << VulkanResultString(errorCode)
                 << ".";
+#endif
 
     if (errorCode == VK_ERROR_DEVICE_LOST)
     {
+// SVDT: Updates and fixes in the "rx::vk::CommandProcessor" class.
+#if !SVDT_GLOBAL_CHANGES
         WARN() << errorStream.str();
+#endif
         handleDeviceLost(mRenderer);
     }
 
@@ -594,7 +603,10 @@ angle::Result CommandProcessor::finishToSerial(Context *context, Serial serial, 
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishToSerial");
 
+// SVDT: Updates and fixes in the "rx::vk::CommandProcessor" class.
+#if !SVDT_GLOBAL_CHANGES
     ANGLE_TRY(checkAndPopPendingError(context));
+#endif
 
     CommandProcessorTask task;
     task.initFinishToSerial(serial);
