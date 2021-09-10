@@ -16,6 +16,24 @@
       "message": "LGTM, clever re-use of CopyImageCHROMIUM. Can we end up with formats not supported?",
       "revId": "b76110f569415d5654607538a3a1a76b95f75129",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0932c8a3_47339cce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-10T17:22:07Z",
+      "side": 1,
+      "message": "The actual format conversion is done via srcFormat.pixelReadFunction and dstFormat.pixelWriteFunction, so they should be able to handle conversions for all formats.",
+      "parentUuid": "6575d130_43ac5e25",
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
