@@ -17,7 +17,12 @@ namespace vk
 {
 namespace
 {
+// SVDT: Reduced "rx::vk::kInFlightCommandsLimit" from "100" to "50".
+#if SVDT_GLOBAL_CHANGES
+constexpr size_t kInFlightCommandsLimit = 50u;
+#else
 constexpr size_t kInFlightCommandsLimit = 100u;
+#endif
 constexpr bool kOutputVmaStatsString    = false;
 
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
