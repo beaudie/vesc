@@ -16,6 +16,23 @@
       "message": "Move end2end test to src/tests/perf_tests.",
       "revId": "697878564ab97d7c135e554d49a15473e73850d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4a44d05_fa5fc47e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-10T14:20:58Z",
+      "side": 1,
+      "message": "Thanks! LGTM.",
+      "revId": "697878564ab97d7c135e554d49a15473e73850d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
