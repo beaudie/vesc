@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c5ff787b_c224936e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-10T02:30:08Z",
+      "side": 1,
+      "message": "\u003e I am wondering if buffer will be better candidate than texture for the test purpose (i.e, whichever has overall lower CPU overhead for bind/unbind).\n\nThe point of this test is to verify if your concerns about vk::Retain::mWriteUse are measurable for objects that don\u0027t use mWriteUse (like textures), or if inheritance or separate classes is best.\n\nThere is already a test that uses multiple buffers (_manyvbos_change).   However, buffers will have to track both reads and writes, so they are stuck with the necessary overhead of whichever implementation we choose.   The concern is about whether the extra tracking is affecting other objects also.",
+      "parentUuid": "bc420fe2_d4aaf03b",
+      "revId": "db3baf33b8a7b6c547ce0d67cdaea84f1ce5c500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de5d5e49_da2119b0",
         "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
         "patchSetId": 1
@@ -48,6 +66,30 @@
       "writtenOn": "2021-09-10T00:05:38Z",
       "side": 1,
       "message": "I dont think it will repeatedly retain/release with this. As long as same RP, the second time you bind it will find it in the used list and skip retain. SO this for loop wont excercise the retain/release, I think. In order to do that you need to bind different texture.",
+      "range": {
+        "startLine": 387,
+        "startChar": 4,
+        "endLine": 387,
+        "endChar": 52
+      },
+      "revId": "db3baf33b8a7b6c547ce0d67cdaea84f1ce5c500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed490706_efd73ba6",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-10T02:30:08Z",
+      "side": 1,
+      "message": "Just a note that this is not the new test being added, or the test I\u0027ll be using to measure the impact of the vk::Resource changes.\n\nRegardless, adding the buffer binding changes to DrawWithEightTextures() increases the retain count from 44,188 to 163,860.",
+      "parentUuid": "de5d5e49_da2119b0",
       "range": {
         "startLine": 387,
         "startChar": 4,
