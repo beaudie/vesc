@@ -177,8 +177,11 @@ struct CommandBatch final : angle::NonCopyable
     void destroy(VkDevice device);
 
     PrimaryCommandBuffer primaryCommands;
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     // commandPool is for secondary CommandBuffer allocation
     CommandPool commandPool;
+#endif
     Shared<Fence> fence;
     Serial serial;
     bool hasProtectedContent;
@@ -271,7 +274,10 @@ class CommandQueueInterface : angle::NonCopyable
         const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
         const Semaphore *signalSemaphore,
         GarbageList &&currentGarbage,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
         CommandPool *commandPool,
+#endif
         Serial submitQueueSerial)                                      = 0;
     virtual angle::Result queueSubmitOneOff(Context *context,
                                             bool hasProtectedContent,
@@ -329,7 +335,10 @@ class CommandQueue final : public CommandQueueInterface
                               const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                               const Semaphore *signalSemaphore,
                               GarbageList &&currentGarbage,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
                               CommandPool *commandPool,
+#endif
                               Serial submitQueueSerial) override;
 
     angle::Result queueSubmitOneOff(Context *context,
@@ -374,11 +383,14 @@ class CommandQueue final : public CommandQueueInterface
     }
 
   private:
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     angle::Result releaseToCommandBatch(Context *context,
                                         bool hasProtectedContent,
                                         PrimaryCommandBuffer &&commandBuffer,
                                         CommandPool *commandPool,
                                         CommandBatch *batch);
+#endif
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
 
@@ -477,7 +489,10 @@ class CommandProcessor : public Context, public CommandQueueInterface
                               const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                               const Semaphore *signalSemaphore,
                               GarbageList &&currentGarbage,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
                               CommandPool *commandPool,
+#endif
                               Serial submitQueueSerial) override;
 
     angle::Result queueSubmitOneOff(Context *context,
@@ -543,8 +558,11 @@ class CommandProcessor : public Context, public CommandQueueInterface
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     // Command pool to allocate processor thread primary command buffers from
     CommandPool mCommandPool;
+#endif
     CommandQueue mCommandQueue;
 
     mutable std::mutex mQueueSerialMutex;

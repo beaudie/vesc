@@ -278,7 +278,10 @@ CommandBatch::CommandBatch(CommandBatch &&other)
 CommandBatch &CommandBatch::operator=(CommandBatch &&other)
 {
     std::swap(primaryCommands, other.primaryCommands);
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     std::swap(commandPool, other.commandPool);
+#endif
     std::swap(fence, other.fence);
     std::swap(serial, other.serial);
     std::swap(hasProtectedContent, other.hasProtectedContent);
@@ -288,7 +291,10 @@ CommandBatch &CommandBatch::operator=(CommandBatch &&other)
 void CommandBatch::destroy(VkDevice device)
 {
     primaryCommands.destroy(device);
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     commandPool.destroy(device);
+#endif
     fence.reset(device);
     hasProtectedContent = false;
 }
@@ -420,7 +426,10 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                                                    mRenderer->getMaxFenceWaitTimeNs()));
             // Shutting down so cleanup
             mCommandQueue.destroy(this);
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
             mCommandPool.destroy(mRenderer->getDevice());
+#endif
             break;
         }
         case CustomTask::FlushAndQueueSubmit:
@@ -432,7 +441,12 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
             ANGLE_TRY(mCommandQueue.submitFrame(
                 this, task->hasProtectedContent(), task->getPriority(), task->getWaitSemaphores(),
                 task->getWaitSemaphoreStageMasks(), task->getSemaphore(),
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+                std::move(task->getGarbage()), task->getQueueSerial()));
+#else
                 std::move(task->getGarbage()), &mCommandPool, task->getQueueSerial()));
+#endif
 
             ASSERT(task->getGarbage().empty());
             break;
@@ -648,7 +662,10 @@ angle::Result CommandProcessor::submitFrame(
     const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
     const Semaphore *signalSemaphore,
     GarbageList &&currentGarbage,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     CommandPool *commandPool,
+#endif
     Serial submitQueueSerial)
 {
     ANGLE_TRY(checkAndPopPendingError(context));
@@ -824,7 +841,10 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
     ASSERT(finishedCount > 0);
 
     RendererVk *renderer = context->getRenderer();
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     VkDevice device      = renderer->getDevice();
+#endif
 
     for (size_t commandIndex = 0; commandIndex < finishedCount; ++commandIndex)
     {
@@ -833,7 +853,10 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
         mLastCompletedQueueSerial = batch.serial;
         mFenceRecycler.resetSharedFence(&batch.fence);
         ANGLE_TRACE_EVENT0("gpu.angle", "command buffer recycling");
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
         batch.commandPool.destroy(device);
+#endif
         PersistentCommandPool &commandPool = getCommandPool(batch.hasProtectedContent);
         ANGLE_TRY(commandPool.collect(context, std::move(batch.primaryCommands)));
     }
@@ -870,6 +893,8 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
     return angle::Result::Continue;
 }
 
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
 angle::Result CommandQueue::releaseToCommandBatch(Context *context,
                                                   bool hasProtectedContent,
                                                   PrimaryCommandBuffer &&commandBuffer,
@@ -901,6 +926,7 @@ angle::Result CommandQueue::releaseToCommandBatch(Context *context,
 
     return angle::Result::Continue;
 }
+#endif
 
 void CommandQueue::clearAllGarbage(RendererVk *renderer)
 {
@@ -931,7 +957,10 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
         // by CommandPool::destroy
         batch.primaryCommands.destroy(device);
 
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
         batch.commandPool.destroy(device);
+#endif
         batch.fence.reset(device);
     }
     mInFlightCommands.clear();
@@ -996,7 +1025,10 @@ angle::Result CommandQueue::submitFrame(
     const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
     const Semaphore *signalSemaphore,
     GarbageList &&currentGarbage,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     CommandPool *commandPool,
+#endif
     Serial submitQueueSerial)
 {
     // Start an empty primary buffer if we have an empty submit.
@@ -1036,17 +1068,32 @@ angle::Result CommandQueue::submitFrame(
         mGarbageQueue.emplace_back(std::move(currentGarbage), batch.serial);
     }
 
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+    // Store the primary/protected CommandBuffer in the in-flight list.
+#else
     // Store the primary CommandBuffer and command pool used for secondary CommandBuffers
     // in the in-flight list.
+#endif
     if (hasProtectedContent)
     {
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+        batch.primaryCommands = std::move(mProtectedCommands);
+#else
         ANGLE_TRY(releaseToCommandBatch(context, hasProtectedContent, std::move(mProtectedCommands),
                                         commandPool, &batch));
+#endif
     }
     else
     {
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+        batch.primaryCommands = std::move(mPrimaryCommands);
+#else
         ANGLE_TRY(releaseToCommandBatch(context, hasProtectedContent, std::move(mPrimaryCommands),
                                         commandPool, &batch));
+#endif
     }
     mInFlightCommands.emplace_back(scopedBatch.release());
 

@@ -352,8 +352,13 @@ class RendererVk : angle::NonCopyable
                               std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                               const vk::Semaphore *signalSemaphore,
                               std::vector<vk::ResourceUseList> &&resourceUseLists,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+                              vk::GarbageList &&currentGarbage);
+#else
                               vk::GarbageList &&currentGarbage,
                               vk::CommandPool *commandPool);
+#endif
 
     void handleDeviceLost();
     angle::Result finishToSerial(vk::Context *context, Serial serial);

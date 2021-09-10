@@ -3048,8 +3048,13 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
                                       std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                       const vk::Semaphore *signalSemaphore,
                                       std::vector<vk::ResourceUseList> &&resourceUseLists,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+                                      vk::GarbageList &&currentGarbage)
+#else
                                       vk::GarbageList &&currentGarbage,
                                       vk::CommandPool *commandPool)
+#endif
 {
     std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
 
@@ -3061,7 +3066,12 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
         ANGLE_TRY(mCommandProcessor.submitFrame(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+            signalSemaphore, std::move(currentGarbage), submitQueueSerial));
+#else
             signalSemaphore, std::move(currentGarbage), commandPool, submitQueueSerial));
+#endif
     }
     else
     {
@@ -3069,7 +3079,12 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
         ANGLE_TRY(mCommandQueue.submitFrame(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+            signalSemaphore, std::move(currentGarbage), submitQueueSerial));
+#else
             signalSemaphore, std::move(currentGarbage), commandPool, submitQueueSerial));
+#endif
     }
 
     waitSemaphores.clear();

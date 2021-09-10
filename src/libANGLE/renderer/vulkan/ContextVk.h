@@ -403,7 +403,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
 
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     const vk::CommandPool &getCommandPool() const;
+#endif
 
     Serial getCurrentQueueSerial() const { return mRenderer->getCurrentQueueSerial(); }
     Serial getLastSubmittedQueueSerial() const { return mRenderer->getLastSubmittedQueueSerial(); }
@@ -1080,8 +1083,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     gl::AttributesMask mDirtyDefaultAttribsMask;
     gl::AttribArray<vk::DynamicBuffer> mDefaultAttribBuffers;
 
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     // We use a single pool for recording commands. We also keep a free list for pool recycling.
     vk::CommandPool mCommandPool;
+#endif
 
     vk::GarbageList mCurrentGarbage;
 

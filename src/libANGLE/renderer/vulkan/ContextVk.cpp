@@ -639,7 +639,10 @@ void ContextVk::onDestroy(const gl::Context *context)
     mRenderPassCache.destroy(mRenderer);
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
     mCommandPool.destroy(device);
+#endif
 
     ASSERT(mCurrentGarbage.empty());
     ASSERT(mResourceUseList.empty());
@@ -2178,7 +2181,12 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore)
     ANGLE_TRY(mRenderer->submitFrame(
         this, hasProtectedContent(), mContextPriority, std::move(mWaitSemaphores),
         std::move(mWaitSemaphoreStageMasks), signalSemaphore,
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if SVDT_GLOBAL_CHANGES
+        getShareGroupVk()->releaseResourceUseLists(), std::move(mCurrentGarbage)));
+#else
         getShareGroupVk()->releaseResourceUseLists(), std::move(mCurrentGarbage), &mCommandPool));
+#endif
 
     onRenderPassFinished();
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
@@ -5359,10 +5367,13 @@ void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags sta
     mWaitSemaphoreStageMasks.push_back(stageMask);
 }
 
+// SVDT: Removed dead code related to the uninitialized/unused CommandPool.
+#if !SVDT_GLOBAL_CHANGES
 const vk::CommandPool &ContextVk::getCommandPool() const
 {
     return mCommandPool;
 }
+#endif
 
 bool ContextVk::isSerialInUse(Serial serial) const
 {
