@@ -34,6 +34,23 @@
       "parentUuid": "6575d130_43ac5e25",
       "revId": "b76110f569415d5654607538a3a1a76b95f75129",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c462d0_566ca457",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-10T20:37:10Z",
+      "side": 1,
+      "message": "This doesn\u0027t handle image updates. You could repurpose some UtilsVk code that TextureVk uses for that too.\n\nHere\u0027s a test to demonstrate the issue:\n\n- Create texture A with 4444 format\n- Attach it to framebuffer (it\u0027s now 8888)\n- glCopyTexImage2D into texture B with 4444 format\n- Sample from B\n\nSince texture B was never used and is mutable, the result of the copy can be a staged image. Now I\u0027m actually not sure what\u0027s going to happen now; since UtilsVk uses a draw call, it should make sure the texture is drawable before doing that (which means the texture and its update become 8888), but I don\u0027t see ensureDrawable in the code in that path. Probably then it\u0027s falling back to a CPU readback, which means there is no bug.\n\nWould you please add that test and see what happens? It may be currently impossible for an image update to need reformatting. In that case, please add an ASSERT in your new code to make sure no image update has the previous format.",
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
