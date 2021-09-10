@@ -134,6 +134,22 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
     return true;
 }
 
+GLWindowResult WGLWindow::initializeGLWithResult(OSWindow *osWindow,
+                                                 angle::Library *glWindowingLibrary,
+                                                 angle::GLESDriverType driverType,
+                                                 const EGLPlatformParameters &platformParams,
+                                                 const ConfigParameters &configParams)
+{
+    if (initializeGL(osWindow, glWindowingLibrary, driverType, platformParams, configParams))
+    {
+        return GLWindowResult::NoError;
+    }
+    else
+    {
+        return GLWindowResult::Error;
+    }
+}
+
 HGLRC WGLWindow::createContext(const ConfigParameters &configParams, HGLRC shareContext)
 {
     HGLRC context = _wglCreateContext(mDeviceContext);
