@@ -29,6 +29,9 @@ declare_args() {
   # Fence Waiting
   svdt_enable_vulkan_command_queue_concurrent_wait = true
 
+  # Other Optimizations
+  svdt_enable_vulkan_query_get_result_optimization = true
+
   # Other Fixes
   svdt_disable_vulkan_fast_integer_map_for_serials = true  # fixes memory problem
   svdt_enable_vulkan_caches_race_condition_fix = true
@@ -262,6 +265,10 @@ config("angle_vulkan_backend_config") {
   assert(svdt_enable_vulkan_command_queue_2 || !svdt_enable_vulkan_command_queue_concurrent_wait)
   defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT=" +
              "${svdt_enable_vulkan_command_queue_concurrent_wait}" ]
+
+  # Other Optimizations
+  defines += [ "SVDT_ENABLE_VULKAN_QUERY_GET_RESULT_OPTIMIZATION=" +
+             "${svdt_enable_vulkan_query_get_result_optimization}" ]
 
   # Other Fixes
   defines += [ "SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS=" +
