@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f3960c_75f2f3b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1111944
+      },
+      "writtenOn": "2021-09-11T00:01:50Z",
+      "side": 1,
+      "message": "LGTM, for what it\u0027s worth! Thanks!",
+      "revId": "45978ce055a53228d0efd9e975f6c756d28fb446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
