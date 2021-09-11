@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "32cfad2b_005d8a73",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "\u003e You can always either write a test like \"bind to VAO, draw, ghost, draw\" and make sure the second draw uses the new data\n\nI added BufferDataTest::MapWriteArrayBufferData().   Even with emptying out the case angle::SubjectMessage::SubjectMapped in VertexArray::onSubjectStateChange(), the test still passes.   I\u0027m not sure what exactly causes the second draw to see the new data, but things are working.   Let me know if there\u0027s something in particular you\u0027d like to dig into further.",
+      "parentUuid": "2b611121_2058ca4a",
+      "range": {
+        "startLine": 2309,
+        "startChar": 0,
+        "endLine": 2312,
+        "endChar": 55
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "428e6a05_be9945ca",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 40
@@ -102,6 +126,30 @@
       "writtenOn": "2021-09-08T19:50:14Z",
       "side": 1,
       "message": "The block that uses these `return`s at the end, so these can be local to that.",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 600,
+        "endChar": 0
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd23655_881c4bfd",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "428e6a05_be9945ca",
       "range": {
         "startLine": 598,
         "startChar": 0,
@@ -135,6 +183,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "342bb5f4_db179711",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "This was referring to GL_MAP_WRITE_BIT, but we aren\u0027t actually checking that so I removed this portion of the comment.",
+      "parentUuid": "57a9f3d4_6c741bfc",
+      "range": {
+        "startLine": 607,
+        "startChar": 53,
+        "endLine": 607,
+        "endChar": 83
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd8cdb43_5eda1af5",
@@ -148,6 +220,24 @@
       "writtenOn": "2021-09-08T19:50:14Z",
       "side": 1,
       "message": "The contents of this if could be in a helper to make this function a bit easier to understand.",
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6da7d0a_2d09afe5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd8cdb43_5eda1af5",
       "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -175,6 +265,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c3632c_d998c21d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35e5d02d_74d1b36f",
+      "range": {
+        "startLine": 624,
+        "startChar": 85,
+        "endLine": 624,
+        "endChar": 89
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12c53a78_d3497e1e",
@@ -188,6 +302,30 @@
       "writtenOn": "2021-09-08T19:50:14Z",
       "side": 1,
       "message": "What does this mean?",
+      "range": {
+        "startLine": 640,
+        "startChar": 48,
+        "endLine": 640,
+        "endChar": 69
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92b0ed2c_35e71d7e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "Removed and clarified the comment, since we\u0027re asserting that the memory is host coherent.",
+      "parentUuid": "12c53a78_d3497e1e",
       "range": {
         "startLine": 640,
         "startChar": 48,
@@ -286,6 +424,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63e6bd2e_bd757772",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cddf5214_f6ae5765",
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8803fd94_ec8946d1",
@@ -299,6 +455,30 @@
       "writtenOn": "2021-09-08T18:55:12Z",
       "side": 1,
       "message": "nit: you can make a lot of these into ASSERT checks since usually the test can\u0027t continue if there\u0027s an error.",
+      "range": {
+        "startLine": 3121,
+        "startChar": 4,
+        "endLine": 3121,
+        "endChar": 22
+      },
+      "revId": "18aa172e8bddbcf8471f9cc8418a0ba21d007965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39b2517_0fbd6db4",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 3121,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T02:00:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8803fd94_ec8946d1",
       "range": {
         "startLine": 3121,
         "startChar": 4,
