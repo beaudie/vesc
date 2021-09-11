@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ef0e6fc8_35d58ba8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "Here are the results with the new test _many_tex_draw:\n\n- main\n  vulkan_many_tex_draw: 0.16795\n  vulkan_offscreen_many_tex_draw: 0.16595\n  vulkan_null_many_tex_draw: 0.1687571429\n- This version (single class)\n  vulkan_many_tex_draw: 0.165925\n  vulkan_offscreen_many_tex_draw: 0.1650333333\n  vulkan_null_many_tex_draw: 0.16684\n- Inheritance (class ResourceWrite : public Resource)\n  vulkan_many_tex_draw: 0.1698928571\n  vulkan_offscreen_many_tex_draw: 0.1651076923\n  vulkan_null_many_tex_draw: 0.16897\n  \nBased on these values, I would normally keep this implementation since it\u0027s the simplest and appears to have no impact on performance.   However, based on feedback about the naming that this approach forces (calling retainReadOnly, even if an image is being written to), going with inheritance (class ResourceWrite : public Resource) is the right approach.   That solves the naming issue while having a minimal (if any) performance impact.\n\nIf you\u0027re interested in the values, there are available at:\nhttps://paste.googleplex.com/5616965080055808",
+      "parentUuid": "748e495f_04a7f87d",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb098f7b_29ad281b",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 5
@@ -85,6 +103,30 @@
       "writtenOn": "2021-09-08T17:47:22Z",
       "side": 1,
       "message": "This is no longer needed.",
+      "range": {
+        "startLine": 19,
+        "startChar": 11,
+        "endLine": 19,
+        "endChar": 26
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "375bbe76_1ad18f4b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "Oops, yup.",
+      "parentUuid": "eb098f7b_29ad281b",
       "range": {
         "startLine": 19,
         "startChar": 11,
@@ -238,6 +280,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb8529e7_a317e9c3",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "With the move back to using inheritance, this has been reverted back to being called \u0027mUse\u0027.",
+      "parentUuid": "7ccff3b7_ab676233",
+      "range": {
+        "startLine": 212,
+        "startChar": 22,
+        "endLine": 212,
+        "endChar": 30
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f45579ee_ac0a2ef8",
@@ -255,6 +321,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "216d307d_b29e97cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "Yeah, you\u0027re right.   This can be reverted with the fixes to correctly inform the frontend when the buffer has been ghosted.",
+      "parentUuid": "f45579ee_ac0a2ef8",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcdc903b_994a0dca",
@@ -268,6 +352,30 @@
       "writtenOn": "2021-09-08T19:31:33Z",
       "side": 1,
       "message": "This looks confusing, is that what the naming dispute was about? You can always make it doubly clear:\n\n    buffer-\u003eretainReadOnly(...)\n    buffer-\u003eretainReadWrite(...)\n    image-\u003eretain(...)\n\nThen have BufferHelper, ImageHelper (and others such as DescriptorPoolHelper) forward these to the appropriate ResourceVk functions (which could be named retainBufferReadOnly, retainBufferReadWrite and retainImage ..., even if all except retainBufferReadWrite have the same implementation).",
+      "range": {
+        "startLine": 1061,
+        "startChar": 11,
+        "endLine": 1061,
+        "endChar": 25
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c05352e_86b83f5f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "The point of naming it retainReadOnly() is to make it clear the caller that they need to decide between ReadOnly or ReadWrite usage when performing the retain call.   However, having a single class that everyone inherits from but only 1 actively participates with (only BufferHelpers currently care about ReadOnly vs ReadWrite) means we end up with what we\u0027ve got here.\n\nForcing every class that inherits from vk::Resource to also implement retain() and redirect to retainReadOnly() or retainReadWrite() doesn\u0027t sound like the right fix to me, since that adds lots of extra code complexity/maintenance for little benefit overall.   Instead, I think we should use the inheritance chain to allow everyone except BufferHelper to inherit from Resource and BufferHelper inherits from ResourceWrite.\n\nThe performance numbers indicate that there is a very slight hit with that approach, though it looks close enough that it could just be just noise.",
+      "parentUuid": "fcdc903b_994a0dca",
       "range": {
         "startLine": 1061,
         "startChar": 11,
@@ -301,6 +409,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8603033_27fffeed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3494,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "878c188f_0fde3016",
+      "range": {
+        "startLine": 3494,
+        "startChar": 30,
+        "endLine": 3494,
+        "endChar": 32
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfbebc18_02712214",
@@ -314,6 +446,30 @@
       "writtenOn": "2021-09-08T19:31:33Z",
       "side": 1,
       "message": "The comment doesn\u0027t make much sense to be honest. release() happens on a resource, and it\u0027s when you want the resource to entirely go away (doesn\u0027t matter if it\u0027s by glDeleteBuffers or other). Retain helps usage tracking. They are unrelated operations, so \"release() applying to retain()\" doesn\u0027t make any sense.\n\nIt\u0027s pretty clear IMO why there would be mWriteUse.release() inside a release() function, so the entire comment can be dropped.",
+      "range": {
+        "startLine": 3649,
+        "startChar": 0,
+        "endLine": 3657,
+        "endChar": 86
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8a23e30_c8c2fcd4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3657,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "dfbebc18_02712214",
       "range": {
         "startLine": 3649,
         "startChar": 0,
@@ -347,6 +503,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d54717dc_2cb8da3d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4163,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "No longer applies.",
+      "parentUuid": "dd333cad_55189c3a",
+      "range": {
+        "startLine": 4161,
+        "startChar": 0,
+        "endLine": 4163,
+        "endChar": 21
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0788d5b4_9c6906c4",
@@ -360,6 +540,30 @@
       "writtenOn": "2021-09-08T17:47:22Z",
       "side": 1,
       "message": "I thought these can be write?",
+      "range": {
+        "startLine": 7742,
+        "startChar": 4,
+        "endLine": 7742,
+        "endChar": 18
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0988cd2b_7e93d532",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7742,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-11T01:59:40Z",
+      "side": 1,
+      "message": "It can, but we only track reads for everything except Textures.   See Shabi\u0027s comment for a discussion about how to handle this.",
+      "parentUuid": "0788d5b4_9c6906c4",
       "range": {
         "startLine": 7742,
         "startChar": 4,
