@@ -33,6 +33,24 @@
       "message": "Thanks! LGTM.",
       "revId": "697878564ab97d7c135e554d49a15473e73850d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a4c383_4ea80463",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2021-09-12T14:30:19Z",
+      "side": 1,
+      "message": "Can you please +2? or add someone else to review?",
+      "parentUuid": "a4a44d05_fa5fc47e",
+      "revId": "697878564ab97d7c135e554d49a15473e73850d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
