@@ -39,6 +39,30 @@
       },
       "revId": "e5c704290a0df27bf17fbcb5596e84b97cb91ca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b2a680_d412e809",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2021-09-12T04:26:47Z",
+      "side": 1,
+      "message": "Done.\ninside testSetUp. seems already have a glClear?",
+      "parentUuid": "b4b57596_001f075a",
+      "range": {
+        "startLine": 1126,
+        "startChar": 41,
+        "endLine": 1126,
+        "endChar": 57
+      },
+      "revId": "e5c704290a0df27bf17fbcb5596e84b97cb91ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
