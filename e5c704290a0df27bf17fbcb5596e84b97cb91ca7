@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7182692_92ed1523",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-12T01:54:06Z",
+      "side": 1,
+      "message": "Thanks for improving the test. I have one last suggestion.",
+      "revId": "e5c704290a0df27bf17fbcb5596e84b97cb91ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b57596_001f075a",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-12T01:54:06Z",
+      "side": 1,
+      "message": "You need to do this before the draw call to make sure this doesn\u0027t make the test flaky:\n\n    glClearColor(0, 0, 0, 0);\n    glClear(GL_COLOR_BUFFER_BIT);",
+      "range": {
+        "startLine": 1126,
+        "startChar": 41,
+        "endLine": 1126,
+        "endChar": 57
+      },
+      "revId": "e5c704290a0df27bf17fbcb5596e84b97cb91ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
