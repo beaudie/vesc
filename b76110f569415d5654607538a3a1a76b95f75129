@@ -135,6 +135,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00801da9_643bdbae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-12T01:52:07Z",
+      "side": 1,
+      "message": "\u003e When CopyTexImage is called, we always first call ensureImageInitialized()\n\nThat\u0027s not quite true. We don\u0027t do that for mutable images that have never been used (i.e. !mImage.valid()). So they do still think their format should be 4444.\n\nI would appreciate it if you added the ASSERT in Ref. I believe things work now because `CanCopyWithDraw` will return false on the destination texture, and that may be changed in the future to instead `reinitImageAsRenderable()` (if that helps any app).",
+      "parentUuid": "30dcc1dd_5b243dcf",
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f030f211_9c0a875a",
