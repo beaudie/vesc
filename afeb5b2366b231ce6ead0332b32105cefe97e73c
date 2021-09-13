@@ -22,6 +22,30 @@
       },
       "revId": "afeb5b2366b231ce6ead0332b32105cefe97e73c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc8bcc16_85a9dc21",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5993,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-13T11:30:04Z",
+      "side": 1,
+      "message": "Yeah, also updated the message to clarify that.",
+      "parentUuid": "0cc09e22_49232aff",
+      "range": {
+        "startLine": 5993,
+        "startChar": 4,
+        "endLine": 5993,
+        "endChar": 62
+      },
+      "revId": "afeb5b2366b231ce6ead0332b32105cefe97e73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
