@@ -22,6 +22,30 @@
       },
       "revId": "e1befb35d4688500faf05736d0b2b8cbec2585a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29236255_7ca2faa9",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2021-09-13T19:35:26Z",
+      "side": 1,
+      "message": "yes it is copy/paste error. submit a patch",
+      "parentUuid": "2393fbf5_461843bc",
+      "range": {
+        "startLine": 1094,
+        "startChar": 0,
+        "endLine": 1094,
+        "endChar": 50
+      },
+      "revId": "e1befb35d4688500faf05736d0b2b8cbec2585a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
