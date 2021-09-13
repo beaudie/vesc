@@ -189,6 +189,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bffc37d6_b296c651",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-13T18:50:46Z",
+      "side": 1,
+      "message": "Good catch. Right the reason is that the source is 8888 (because it is FBO) and dest is 4444, so  CanCopyWithTransferForTexImage returns false. And because you can render to 4444, to canCopyWithDraw also fail, so we end up doing the CPU read and stage path.",
+      "parentUuid": "6666735d_7d73f156",
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f030f211_9c0a875a",
