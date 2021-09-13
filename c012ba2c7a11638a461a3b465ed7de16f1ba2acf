@@ -46,6 +46,30 @@
       },
       "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee0d7208_dde93679",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-13T15:48:09Z",
+      "side": 1,
+      "message": "Tim, in our scheme an object isn\u0027t really \"just\" written to, it\u0027s either read-only or read/write. So that\u0027s why I was proposing you rename \"read, write, or anything\" to mReadWriteUse, and have a separate mReadOnlyUse. In that scheme, the base class would store the \"write\" use and the inherited value would store the read-only. I don\u0027t think your code would change too much, you\u0027d just swap a couple member variables in the class itself.",
+      "parentUuid": "0fd7f7f9_3b19cd5f",
+      "range": {
+        "startLine": 224,
+        "startChar": 22,
+        "endLine": 224,
+        "endChar": 35
+      },
+      "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
