@@ -85,7 +85,24 @@ std::string GetModuleDirectory()
     Optional<std::string> cwd = GetCWD();
     if (cwd.valid() && !IsFullPath(directory))
     {
-        directory = ConcatenatePath(cwd.value(), directory);
+        auto iDir = directory.rbegin();
+        while (*iDir == '/')
+            ++iDir;
+
+        auto iCwd = cwd.value().rbegin();
+        while (*iCwd == '/')
+            ++iCwd;
+
+        while (iDir != directory.rend() && iCwd != cwd.value().rend() && *iDir == *iCwd)
+        {
+            ++iDir;
+            ++iCwd;
+        }
+
+        if (iDir != directory.rend())
+            directory = ConcatenatePath(cwd.value(), directory);
+        else
+            directory = cwd.value() + "/";
     }
     return directory;
 }
