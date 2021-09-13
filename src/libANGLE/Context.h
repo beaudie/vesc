@@ -621,6 +621,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     size_t getRefCount() const { return mRefCount; }
 
     egl::ShareGroup *getShareGroup() const { return mState.getShareGroup(); }
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    egl::SharedContextMutex *getSharedMutex() const { return mState.getSharedContextMutex(); }
+#endif
 
     bool supportsGeometryOrTesselation() const;
     void dirtyAllState();

@@ -28,6 +28,10 @@
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/TextureImpl.h"
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+#    include "libANGLE/Display.h"
+#endif
+
 namespace gl
 {
 
@@ -301,6 +305,9 @@ State::State(const State *shareContextState,
       mHasProtectedContent(hasProtectedContent),
       mClientVersion(clientVersion),
       mShareGroup(shareGroup),
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+      mSharedContextMutex(shareGroup->getContextMutex()),
+#endif
       mBufferManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mBufferManager)),
       mShaderProgramManager(
           AllocateOrGetSharedResourceManager(shareContextState, &State::mShaderProgramManager)),

@@ -31,6 +31,10 @@
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/queryconversions.h"
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+#    include "libGLESv2/global_state.h"
+#endif
+
 namespace gl
 {
 
@@ -4283,8 +4287,13 @@ egl::Error QuerySurfaceAttrib(const Display *display,
             *value = surface->isTimestampsEnabled();
             break;
         case EGL_BUFFER_AGE_EXT:
+        {
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+            auto contextLock = GetContextLock(context);
+#endif
             ANGLE_TRY(surface->getBufferAge(context, value));
             break;
+        }
         default:
             UNREACHABLE();
             break;

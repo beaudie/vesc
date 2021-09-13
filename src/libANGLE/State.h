@@ -33,6 +33,9 @@
 namespace egl
 {
 class ShareGroup;
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+class SharedContextMutex;
+#endif
 }  // namespace egl
 
 namespace gl
@@ -120,6 +123,9 @@ class State : angle::NonCopyable
     const Extensions &getExtensions() const { return mExtensions; }
     const Limitations &getLimitations() const { return mLimitations; }
     egl::ShareGroup *getShareGroup() const { return mShareGroup; }
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    egl::SharedContextMutex *getSharedContextMutex() const { return mSharedContextMutex; }
+#endif
 
     bool isWebGL() const { return mExtensions.webglCompatibilityANGLE; }
 
@@ -994,6 +1000,9 @@ class State : angle::NonCopyable
     Limitations mLimitations;
 
     egl::ShareGroup *mShareGroup;
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    egl::SharedContextMutex *mSharedContextMutex;  // Simple pointer without reference counting
+#endif
 
     // Resource managers.
     BufferManager *mBufferManager;

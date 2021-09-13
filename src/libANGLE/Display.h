@@ -74,6 +74,66 @@ struct DisplayState final : private angle::NonCopyable
 
 using ContextSet = std::set<gl::Context *>;
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+class SharedContextMutex final : public std::recursive_mutex
+{
+  public:
+    // Prevents destruction while locked
+    class AddRefLock final : angle::NonCopyable
+    {
+      public:
+        AddRefLock() = default;
+        AddRefLock(SharedContextMutex *mutex) { lock(mutex); }
+        ~AddRefLock() { unlockIfLocked(); }
+
+        void lock(SharedContextMutex *mutex)
+        {
+            ASSERT(!mMutex && mutex);
+            mMutex = mutex;
+            mMutex->addRef();
+            mMutex->lock();
+        }
+
+        void unlock()
+        {
+            ASSERT(mMutex);
+            mMutex->unlock();
+            mMutex->release();
+            mMutex = nullptr;
+        }
+
+        void unlockIfLocked()
+        {
+            if (mMutex)
+            {
+                unlock();
+            }
+        }
+
+      private:
+        SharedContextMutex *mMutex = nullptr;
+    };
+
+  public:
+    SharedContextMutex();
+    ~SharedContextMutex();
+
+    void addRef() { ++mRefCount; }
+
+    void release()
+    {
+        ASSERT(mRefCount > 0);
+        if (--mRefCount == 0)
+        {
+            delete this;
+        }
+    }
+
+  private:
+    size_t mRefCount;
+};
+#endif  // SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+
 class ShareGroup final : angle::NonCopyable
 {
   public:
@@ -96,6 +156,10 @@ class ShareGroup final : angle::NonCopyable
 
     size_t getShareGroupContextCount() const { return mContexts.size(); }
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    SharedContextMutex *getContextMutex() const { return mContextMutex; }
+#endif
+
   protected:
     ~ShareGroup();
 
@@ -109,6 +173,10 @@ class ShareGroup final : angle::NonCopyable
 
     // The list of contexts within the share group
     ContextSet mContexts;
+
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    SharedContextMutex *mContextMutex;  // Reference counted
+#endif
 };
 
 // Constant coded here as a reasonable limit.

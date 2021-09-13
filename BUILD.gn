@@ -713,6 +713,9 @@ config("angle_backend_config") {
   defines += [ "SVDT_GLOBAL_CHANGES=" +
              "${svdt_global_changes}" ]
 
+  defines += [ "SVDT_ENABLE_SHARED_CONTEXT_MUTEX=" +
+             "${svdt_enable_shared_context_mutex}" ]
+
   # ====== SVDT END ======
 
   configs = []

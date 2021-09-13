@@ -14,11 +14,19 @@
 #include "libANGLE/Thread.h"
 #include "libANGLE/features.h"
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+#    include "libANGLE/Display.h"
+#endif
+
 #include <mutex>
 
 namespace angle
 {
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+using GlobalMutex = egl::SharedContextMutex;
+#else
 using GlobalMutex = std::recursive_mutex;
+#endif
 
 //  - TLS_SLOT_OPENGL and TLS_SLOT_OPENGL_API: These two aren't used by bionic
 //    itself, but allow the graphics code to access TLS directly rather than
@@ -113,6 +121,13 @@ class ScopedSyncCurrentContextFromThread
 #define ANGLE_SCOPED_GLOBAL_LOCK() \
     std::lock_guard<angle::GlobalMutex> globalMutexLock(egl::GetGlobalMutex())
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+#    define SVDT_EGL_SCOPED_CONTEXT_LOCK(EP, THREAD, ...) \
+        auto contextLock = GetContextLock_##EP(THREAD, ##__VA_ARGS__)
+#else
+#    define SVDT_EGL_SCOPED_CONTEXT_LOCK(EP, THREAD, ...)
+#endif
+
 namespace gl
 {
 ANGLE_INLINE Context *GetGlobalContext()
@@ -165,6 +180,18 @@ static ANGLE_INLINE void DirtyContextIfNeeded(Context *context)
 
 #endif
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(const Context *context)
+{
+    return std::unique_lock<angle::GlobalMutex>(*context->getSharedMutex());
+}
+
+ANGLE_INLINE std::unique_lock<angle::GlobalMutex> TryGetContextLock(const Context *context)
+{
+    return context ? GetContextLock(context) : std::unique_lock<angle::GlobalMutex>();
+}
+
+#else  // !SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(Context *context)
 {
 #if defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)
@@ -177,7 +204,18 @@ ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(Context *contex
                                : std::unique_lock<angle::GlobalMutex>();
 #endif
 }
+#endif  // !SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 
 }  // namespace gl
+
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+namespace egl
+{
+ANGLE_INLINE std::unique_lock<angle::GlobalMutex> TryGetContextLock(const Thread *thread)
+{
+    return TryGetContextLock(thread->getContext());
+}
+}  // namespace egl
+#endif  // SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 
 #endif  // LIBGLESV2_GLOBALSTATE_H_

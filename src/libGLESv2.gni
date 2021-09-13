@@ -582,6 +582,8 @@ if (is_win) {
 }
 
 libglesv2_sources = [
+  "src/libGLESv2/egl_context_lock.cpp",
+  "src/libGLESv2/egl_context_lock_autogen.h",
   "src/libGLESv2/egl_ext_stubs.cpp",
   "src/libGLESv2/egl_ext_stubs_autogen.h",
   "src/libGLESv2/egl_stubs.cpp",

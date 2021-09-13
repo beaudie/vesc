@@ -525,12 +525,27 @@ static constexpr uint32_t kScratchBufferLifetime = 64u;
 
 }  // anonymous namespace
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+// SharedContextMutex
+SharedContextMutex::SharedContextMutex() : mRefCount(0) {}
+
+SharedContextMutex::~SharedContextMutex()
+{
+    ASSERT(mRefCount == 0);
+}
+#endif  // SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+
 // ShareGroup
 ShareGroup::ShareGroup(rx::EGLImplFactory *factory)
     : mRefCount(1),
       mImplementation(factory->createShareGroup()),
       mFrameCaptureShared(new angle::FrameCaptureShared)
-{}
+{
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    mContextMutex = new SharedContextMutex();
+    mContextMutex->addRef();
+#endif
+}
 
 void ShareGroup::finishAllContexts()
 {
@@ -551,6 +566,9 @@ void ShareGroup::addSharedContext(gl::Context *context)
 ShareGroup::~ShareGroup()
 {
     SafeDelete(mImplementation);
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    mContextMutex->release();
+#endif
 }
 
 void ShareGroup::addRef()
@@ -1369,6 +1387,11 @@ Error Display::makeCurrent(Thread *thread,
     bool contextChanged = context != previousContext;
     if (previousContext != nullptr && contextChanged)
     {
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+        // Need AddRefLock because there may be Context destruction
+        SharedContextMutex::AddRefLock lock(previousContext->getSharedMutex());
+#endif
+
         previousContext->release();
         thread->setCurrent(nullptr);
 
@@ -1382,6 +1405,14 @@ Error Display::makeCurrent(Thread *thread,
         ANGLE_TRY(error);
     }
 
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    std::unique_lock<SharedContextMutex> contextLock;
+    if (context != nullptr)
+    {
+        contextLock = std::unique_lock<SharedContextMutex>(*context->getSharedMutex());
+    }
+#endif
+
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
@@ -1393,6 +1424,9 @@ Error Display::makeCurrent(Thread *thread,
         {
             context->addRef();
         }
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+        contextLock.unlock();  // Early unlock
+#endif
     }
 
     // Tick all the scratch buffers to make sure they get cleaned up eventually if they stop being
@@ -1548,6 +1582,10 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
     // make sure the native context is current.
     if (context->isExternal())
     {
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+        // Need AddRefLock because there will be Context destruction
+        SharedContextMutex::AddRefLock lock(context->getSharedMutex());
+#endif
         ANGLE_TRY(releaseContext(context, thread));
     }
     else

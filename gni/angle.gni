@@ -26,6 +26,8 @@ declare_args() {
   # Refers to fixes/changes that do not have own category
   svdt_global_changes = true
 
+  svdt_enable_shared_context_mutex = true
+
   # ====== SVDT END ======
 }
 
