@@ -31,6 +31,7 @@ declare_args() {
 
   # Swapchain / Surface
   svdt_enable_vulkan_reuse_semaphore = true
+  svdt_enable_vulkan_android_swapchain_acquire_timeout_wa = is_android
 
   # Buffer Suballocations
   svdt_enable_vulkan_buffer_suballocator = true
@@ -279,6 +280,9 @@ config("angle_vulkan_backend_config") {
   # Swapchain / Surface
   defines += [ "SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE=" +
              "${svdt_enable_vulkan_reuse_semaphore}" ]
+  assert(is_android || !svdt_enable_vulkan_android_swapchain_acquire_timeout_wa)
+  defines += [ "SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA=" +
+             "${svdt_enable_vulkan_android_swapchain_acquire_timeout_wa}" ]
 
   # Buffer Suballocations
   defines += [ "SVDT_ENABLE_VULKAN_BUFFER_SUBALLOCATOR=" +

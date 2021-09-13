@@ -261,6 +261,9 @@ class WindowSurfaceVk : public SurfaceVk
     VkSurfaceKHR mSurface;
     VkSurfaceCapabilitiesKHR mSurfaceCaps;
     VkBool32 mSupportsProtectedSwapchain;
+#if SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA
+    bool mForceAsyncPresentMode;
+#endif
 
   private:
     virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)      = 0;

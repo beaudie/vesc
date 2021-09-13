@@ -23,6 +23,11 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
 
+#if SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA
+int32_t ANativeWindow_getMinUndequeuedBuffers(ANativeWindow* window);
+int32_t ANativeWindow_setDequeueTimeout(ANativeWindow* window, int64_t timeout);
+#endif
+
 namespace rx
 {
 
@@ -488,6 +493,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mNativeWindowType(window),
       mSurface(VK_NULL_HANDLE),
       mSupportsProtectedSwapchain(false),
+#if SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA
+      mForceAsyncPresentMode(false),
+#endif
       mSwapchain(VK_NULL_HANDLE),
 // SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
 #if SVDT_GLOBAL_CHANGES
@@ -606,6 +614,27 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     gl::Extents windowSize;
     ANGLE_TRY(createSurfaceVk(displayVk, &windowSize));
+
+#if SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA
+    const int32_t minUndequeuedBuffers1 = ANativeWindow_getMinUndequeuedBuffers(mNativeWindowType);
+    ANGLE_VK_CHECK(displayVk, minUndequeuedBuffers1 >= 0, VK_ERROR_INITIALIZATION_FAILED);
+    if (minUndequeuedBuffers1 > 1)
+    {
+        // Temporary set "finite" timeout to see how it will affect "minUndequeuedBuffers"
+        int32_t ret = ANativeWindow_setDequeueTimeout(mNativeWindowType, INT64_MAX);
+        ANGLE_VK_CHECK(displayVk, ret == 0, VK_ERROR_INITIALIZATION_FAILED);
+
+        int32_t minUndequeuedBuffers2 = ANativeWindow_getMinUndequeuedBuffers(mNativeWindowType);
+        ANGLE_VK_CHECK(displayVk, minUndequeuedBuffers2 >= 0, VK_ERROR_INITIALIZATION_FAILED);
+
+        // If value decreased, this means that the Window is asynchronous if "infinite" timeout
+        mForceAsyncPresentMode = (minUndequeuedBuffers2 < minUndequeuedBuffers1);
+
+        // Set "infinite" timeout, because "vkCreateSwapchainKHR()" will set it later anyway.
+        ret = ANativeWindow_setDequeueTimeout(mNativeWindowType, -1);
+        ANGLE_VK_CHECK(displayVk, ret == 0, VK_ERROR_INITIALIZATION_FAILED);
+    }
+#endif
 
     uint32_t presentQueue = 0;
     ANGLE_TRY(renderer->selectPresentQueueForSurface(displayVk, mSurface, &presentQueue));
@@ -1150,6 +1179,12 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 #else  // !SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
     ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
 #endif  // !SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+
+#if SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA
+    // Set timeout to "infinity" in case if there is a bug in the "vkCreateSwapchainKHR()"
+    const int32_t ret = ANativeWindow_setDequeueTimeout(mNativeWindowType, -1);
+    ANGLE_VK_CHECK(context, ret == 0, VK_ERROR_INITIALIZATION_FAILED);
+#endif
 
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
@@ -1879,6 +1914,12 @@ void WindowSurfaceVk::setSwapInterval(EGLint interval)
     ASSERT(maxSwapInterval == 0 || maxSwapInterval == 1);
 
     interval = gl::clamp(interval, minSwapInterval, maxSwapInterval);
+#if SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA
+    if (mForceAsyncPresentMode)
+    {
+        interval = 0;
+    }
+#endif
 
     mDesiredSwapchainPresentMode = GetDesiredPresentMode(mPresentModes, interval);
 
