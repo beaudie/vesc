@@ -22,6 +22,30 @@
       },
       "revId": "261dfd1618cf3bade630a8915b17ce494c956a92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e89744a_054c3c8a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5645,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-13T19:55:39Z",
+      "side": 1,
+      "message": "If it is valid, TextureVk::reinitImageAsRenderable() call is able to handle it by flushImageStagedUpdates(). The specific thing this CL try to improve is if image is invalid, where we previously was calling initImage just so we can flush.\n\nYes currently it is impossible to have different formatID, but even if we do, as long as image is valid, it is still okay.",
+      "parentUuid": "8e17f979_3448bb52",
+      "range": {
+        "startLine": 5645,
+        "startChar": 19,
+        "endLine": 5645,
+        "endChar": 30
+      },
+      "revId": "261dfd1618cf3bade630a8915b17ce494c956a92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
