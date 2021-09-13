@@ -63,6 +63,30 @@
       },
       "revId": "e5c704290a0df27bf17fbcb5596e84b97cb91ca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "754f1ac1_6bea6297",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-13T18:03:19Z",
+      "side": 1,
+      "message": "You\u0027re right there already was a clear. I prefer it like this though, so it\u0027s clear what the test does exactly.",
+      "parentUuid": "e3b2a680_d412e809",
+      "range": {
+        "startLine": 1126,
+        "startChar": 41,
+        "endLine": 1126,
+        "endChar": 57
+      },
+      "revId": "e5c704290a0df27bf17fbcb5596e84b97cb91ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
