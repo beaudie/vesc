@@ -675,9 +675,27 @@ SpirvDecorations SPIRVBuilder::getDecorations(const TType &type)
     return decorations;
 }
 
-SpirvDecorations SPIRVBuilder::getArithmeticDecorations(const TType &type, bool isPrecise)
+SpirvDecorations SPIRVBuilder::getArithmeticDecorations(const TType &type,
+                                                        bool isPrecise,
+                                                        TOperator op)
 {
     SpirvDecorations decorations = getDecorations(type);
+
+    // In GLSL, findMsb operates on a highp operand, while returning a lowp result.  In SPIR-V,
+    // RelaxedPrecision cannot be applied on the FindSMsb instruction as that affects the operand as
+    // well.  Here, we remove RelaxedPrecision from such problematic instructions.
+    switch (op)
+    {
+        case EOpFindMSB:
+            // Currently getDecorations() only adds RelaxedPrecision, so removing the
+            // RelaxedPrecision decoration is simply done by clearing the vector.
+            ASSERT(decorations.empty() ||
+                   (decorations.size() == 1 && decorations[0] == spv::DecorationRelaxedPrecision));
+            decorations.clear();
+            break;
+        default:
+            break;
+    }
 
     // Handle |precise|.
     if (isPrecise)
