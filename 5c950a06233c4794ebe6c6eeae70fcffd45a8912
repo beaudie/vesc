@@ -16,6 +16,24 @@
       "message": "Ref: Please add this ASSERT:\n\n    ASSERT(update.updateSource !\u003d UpdateSource::Image ||\n           update.data.image.formatID \u003d\u003d srcFormatID);",
       "revId": "5c950a06233c4794ebe6c6eeae70fcffd45a8912",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f338e35_d1624944",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5644,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-13T18:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "485bf610_62721c4a",
+      "revId": "5c950a06233c4794ebe6c6eeae70fcffd45a8912",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
