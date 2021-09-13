@@ -70,6 +70,30 @@
       },
       "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cb32c8b_f8225d61",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-13T16:04:31Z",
+      "side": 1,
+      "message": "In that case, the classes would be defined as:\n\n  // Only inherited by BufferHelper\n  class Resource : angle::NonCopyable\n  {\n  ...\n      mReadWriteUse;\n  }\n  \n  // Inherited by everything else, even though Images, etc. are written to.\n  class ResourceReadOnly : public Resource\n  {\n  ...\n      retainReadOnly() {}\n  \n      mReadOnlyUse;\n  }\n  \nThis doesn\u0027t seem clearer, especially since the goal is to track write usages. This also brings it back to having bad retainReadOnly() naming for objects being written to (as Charlie and Shabi pointed out).\n\nCan you provide an example of what you\u0027re describing?",
+      "parentUuid": "ee0d7208_dde93679",
+      "range": {
+        "startLine": 224,
+        "startChar": 22,
+        "endLine": 224,
+        "endChar": 35
+      },
+      "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
