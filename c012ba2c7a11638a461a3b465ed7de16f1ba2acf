@@ -22,6 +22,30 @@
       },
       "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fd7f7f9_3b19cd5f",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-13T15:45:24Z",
+      "side": 1,
+      "message": "\u003e can you make vk::Resource store mReadWriteUse, and this one store mReadOnlyUse?\n\nThat\u0027s the opposite of what\u0027s being tracked by these classes.   Resource tracks if an object is used for read, write, or anything (like a sync object that is neither read nor written).   ResourceWrite tracks when we know an object is being written to, though I\u0027m not sure if we know it\u0027s only being written to.\n\n\u003e mUse and mReadWriteUse seem to overlap.\n\nmUse is about as accurate as it can be, since it needs to cover read, write, and just \"use\" (as stated earlier).\n\nMaybe mReadWriteUse can just be mWriteUse?",
+      "parentUuid": "f7727a30_5f6f49fe",
+      "range": {
+        "startLine": 224,
+        "startChar": 22,
+        "endLine": 224,
+        "endChar": 35
+      },
+      "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
