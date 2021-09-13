@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2393fbf5_461843bc",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-13T18:54:48Z",
+      "side": 1,
+      "message": "I think this was a copy/paste error?  Or have you seen this with Fortnite?  I haven\u0027t.",
+      "range": {
+        "startLine": 1094,
+        "startChar": 0,
+        "endLine": 1094,
+        "endChar": 50
+      },
+      "revId": "e1befb35d4688500faf05736d0b2b8cbec2585a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
