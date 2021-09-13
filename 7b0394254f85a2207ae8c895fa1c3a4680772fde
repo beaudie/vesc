@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50869e96_6cda98fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-13T18:59:54Z",
+      "side": 1,
+      "message": "Verified locally that with SwiftShader (which now has this extension enabled) syncval no longer produces an error with the added test.\n\nWe won\u0027t have any *real* testing of this extension until ARM or IMG implement it, but this change should be good to land. I\u0027ll soon work on landing syncval.",
+      "revId": "7b0394254f85a2207ae8c895fa1c3a4680772fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
