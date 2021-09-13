@@ -171,6 +171,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6666735d_7d73f156",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-13T18:35:33Z",
+      "side": 1,
+      "message": "That\u0027s called on the source Charlie, not the destination (i.e. `this`).",
+      "parentUuid": "e9dbc4cb_bd044687",
+      "revId": "b76110f569415d5654607538a3a1a76b95f75129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f030f211_9c0a875a",
