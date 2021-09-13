@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d26e4b77_96a7da72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-13T13:57:27Z",
+      "side": 1,
+      "message": "Pretty good findings. Glad the test was illustrative. I have one suggestion about how to clean up the inheritance.",
+      "parentUuid": "ef0e6fc8_35d58ba8",
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb098f7b_29ad281b",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 5

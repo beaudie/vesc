@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7727a30_5f6f49fe",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-13T13:57:27Z",
+      "side": 1,
+      "message": "can you make vk::Resource store mReadWriteUse, and this one store mReadOnlyUse? mUse and mReadWriteUse seem to overlap.",
+      "range": {
+        "startLine": 224,
+        "startChar": 22,
+        "endLine": 224,
+        "endChar": 35
+      },
+      "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
