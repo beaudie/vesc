@@ -800,6 +800,17 @@ VkResult CommandProcessor::getLastAndClearPresentResult(VkSwapchainKHR swapchain
     return result;
 }
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+void CommandProcessor::setLastPresentResult(VkSwapchainKHR swapchain, VkResult result)
+{
+    {
+        std::lock_guard<std::mutex> lock(mSwapchainStatusMutex);
+        mSwapchainStatus[swapchain] = result;
+    }
+    mSwapchainStatusCondition.notify_all();
+}
+#endif
+
 #if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
 VkResult CommandProcessor::present(egl::ContextPriority priority,
                                    const VkPresentInfoKHR &presentInfo)

@@ -347,6 +347,13 @@ class RendererVk : angle::NonCopyable
         return mCommandProcessor.getLastPresentResult(swapchain);
     }
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    void setLastPresentResult(VkSwapchainKHR swapchain, VkResult result)
+    {
+        return mCommandProcessor.setLastPresentResult(swapchain, result);
+    }
+#endif
+
     bool enableDebugUtils() const { return mEnableDebugUtils; }
     bool angleDebuggerMode() const { return mAngleDebuggerMode; }
 

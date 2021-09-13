@@ -2938,7 +2938,8 @@ class CommandBufferAccess : angle::NonCopyable
     WriteImages mWriteImages;
 };
 
-#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 || SVDT_ENABLE_VULKAN_OPTIMIZED_ASYNC_COMMAND_ENQUEUE
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 || SVDT_ENABLE_VULKAN_OPTIMIZED_ASYNC_COMMAND_ENQUEUE || \
+    SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
 struct CondVarHelper final
 {
     std::condition_variable cv;

@@ -173,11 +173,14 @@ struct Error
 class Context : angle::NonCopyable
 {
   public:
-#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
-    Context(RendererVk *renderer, egl::SharedContextMutex *sharedMutex = nullptr);
-#else
-    Context(RendererVk *renderer);
+    Context(RendererVk *renderer
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+          , ContextVk *contextVk = nullptr
 #endif
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+          , egl::SharedContextMutex *sharedMutex = nullptr
+#endif
+            );
     virtual ~Context();
 
     virtual void handleError(VkResult result,
@@ -186,6 +189,9 @@ class Context : angle::NonCopyable
                              unsigned int line) = 0;
     VkDevice getDevice() const;
     RendererVk *getRenderer() const { return mRenderer; }
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    ContextVk *getContextVk() const { return mContextVk; }
+#endif
 #if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
     // NULL if it is not "ContextVk"
     egl::SharedContextMutex *getSharedMutex() const { return mSharedMutex; }
@@ -193,6 +199,9 @@ class Context : angle::NonCopyable
 
   protected:
     RendererVk *const mRenderer;
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    ContextVk *const mContextVk;
+#endif
 #if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
     egl::SharedContextMutex *const mSharedMutex;
 #endif

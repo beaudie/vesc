@@ -10,6 +10,10 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_SURFACEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_SURFACEVK_H_
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+#    include <thread>
+#endif
+
 #include "common/vulkan/vk_headers.h"
 #include "libANGLE/renderer/SurfaceImpl.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
@@ -276,6 +280,9 @@ class WindowSurfaceVk : public SurfaceVk
                                   VkSwapchainKHR oldSwapchain);
     angle::Result queryAndAdjustSurfaceCaps(ContextVk *contextVk,
                                             VkSurfaceCapabilitiesKHR *surfaceCaps);
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    bool isNeedRecreateSwapchain(ContextVk *contextVk);
+#endif
     angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk, bool presentOutOfDate);
     angle::Result resizeSwapchainImages(vk::Context *context, uint32_t imageCount);
     void releaseSwapchainImages(ContextVk *contextVk);
@@ -376,6 +383,50 @@ class WindowSurfaceVk : public SurfaceVk
     };
     std::deque<SemaphoreResource> mAcquireSemaphoreQueue;
 #endif
+
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    class ImageAcquireHelper final : angle::NonCopyable
+    {
+      public:
+        static constexpr bool kThreadSupportEnabled =
+            SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC_THREAD;
+
+      public:
+        angle::Result init(vk::Context *context, WindowSurfaceVk *owner);
+        void destroy(vk::Context *context);
+
+        bool idle() const { return !mThread.joinable(); }
+
+        VkResult acquireNextImage(vk::Context *context, vk::Semaphore *semaphoreInOut,
+                                  uint32_t *imageIndexOut);
+        void notifyPendingPresent();
+
+      private:
+        VkResult doAcquireNextImage(ContextVk *contextVk, bool waitPresent,
+                                    vk::Semaphore *semaphore, uint32_t *imageIndexOut);
+
+        void startThread();
+        void stopThread();
+        void threadWorker();
+
+      private:
+        RendererVk *mRenderer = nullptr;
+        WindowSurfaceVk *mOwner = nullptr;
+
+        bool mIsThreadSupported = false;
+
+        std::thread mThread;
+        std::mutex mMutex;
+        vk::CondVarHelper mCondVar;
+
+        vk::Semaphore mPendingSemaphore;
+        uint32_t mPendingImageIndex = -1;
+        VkResult mPendingResult = VK_SUCCESS;
+        bool mIsPendingResultReady = false;
+    };
+
+    ImageAcquireHelper mImageAcquireHelper;
+#endif // SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
 };
 
 }  // namespace rx

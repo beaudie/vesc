@@ -418,11 +418,14 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
 // ContextVk implementation.
 ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
     : ContextImpl(state, errorSet),
-#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
-      vk::Context(renderer, mState.getSharedContextMutex()),
-#else
-      vk::Context(renderer),
+      vk::Context(renderer
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+                , this
 #endif
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+                , mState.getSharedContextMutex()
+#endif
+                  ),
       mGraphicsDirtyBitHandlers{},
       mComputeDirtyBitHandlers{},
       mRenderPassCommandBuffer(nullptr),

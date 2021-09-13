@@ -937,6 +937,9 @@ class CommandProcessor : public Context, public CommandQueueInterface
     {
         return getLastAndClearPresentResult(swapchain);
     }
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    void setLastPresentResult(VkSwapchainKHR swapchain, VkResult result);
+#endif
 
     // vk::Context
     void handleError(VkResult result,

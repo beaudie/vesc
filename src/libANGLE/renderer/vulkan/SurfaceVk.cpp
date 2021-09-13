@@ -544,6 +544,10 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     // flush the pipe.
     (void)renderer->finish(displayVk, mState.hasProtectedContent());
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    mImageAcquireHelper.destroy(displayVk);
+#endif
+
     destroySwapChainImages(displayVk);
 
     if (mSwapchain)
@@ -854,6 +858,10 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    ANGLE_TRY(mImageAcquireHelper.init(displayVk, this));
+#endif
+
     VkResult vkResult = acquireNextSwapchainImage(displayVk);
 // SVDT: Fixed bugs in "rx::WindowSurfaceVk" with "VK_SUBOPTIMAL_KHR" Image Acquire result.
 #if SVDT_GLOBAL_CHANGES
@@ -888,6 +896,9 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
 {
 // SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
 #if SVDT_GLOBAL_CHANGES
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    ASSERT(mImageAcquireHelper.idle());
+#endif
     ASSERT(!mHasPendingPresent);
     ASSERT(mNeedToAcquireNextSwapchainImage);  // Must not have current image in recreate
 
@@ -1298,6 +1309,37 @@ angle::Result WindowSurfaceVk::queryAndAdjustSurfaceCaps(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+bool WindowSurfaceVk::isNeedRecreateSwapchain(ContextVk *contextVk)
+{
+    if (mSwapchainPresentMode != mDesiredSwapchainPresentMode)
+    {
+        return true;
+    }
+
+    if (contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled)
+    {
+        VkSurfaceCapabilitiesKHR surfaceCaps{};
+        const angle::Result result = queryAndAdjustSurfaceCaps(contextVk, &surfaceCaps);
+        if (result != angle::Result::Continue)
+        {
+            WARN() << "queryAndAdjustSurfaceCaps() failed! Try recreate Swapchain...";
+            return true;
+        }
+        const uint32_t swapchainWidth  = getWidth();
+        const uint32_t swapchainHeight = getHeight();
+        if (mSurfaceCaps.currentTransform != mPreTransform ||
+            mSurfaceCaps.currentExtent.width != swapchainWidth ||
+            mSurfaceCaps.currentExtent.height != swapchainHeight)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+#endif  // SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+
 angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
                                                           bool presentOutOfDate)
 {
@@ -1584,7 +1626,12 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     presentInfo.pWaitSemaphores    = presentSemaphore->ptr();
     presentInfo.swapchainCount     = 1;
     presentInfo.pSwapchains        = &mSwapchain;
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    const uint32_t imageIndex      = mCurrentSwapchainImageIndex;
+    presentInfo.pImageIndices      = &imageIndex;
+#else
     presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
+#endif
     presentInfo.pResults           = nullptr;
 
     VkPresentRegionKHR presentRegion   = {};
@@ -1634,6 +1681,19 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;
 #endif
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    if (contextVk->getFeatures().asyncCommandQueue.enabled && mSwapchainImages.size() > 3)
+    {
+        // This function will wait for the previous Present (if any) and next frame Acquire
+        // If previous Present is VK_SUBOPTIMAL_KHR and "enablePreRotateSurfaces" is enabled,
+        // this function will skip the Acquire operation and return VK_ERROR_OUT_OF_DATE_KHR.
+        VkResult result = acquireNextSwapchainImage(contextVk);
+        ASSERT(result != VK_SUBOPTIMAL_KHR);
+        // Do not abort "queuePresent()"
+        (void)computePresentOutOfDate(contextVk, result, presentOutOfDate);
+    }
+#endif
+
     VkResult result = renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo);
 
 // SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
@@ -1678,12 +1738,27 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    if (mAcquireImageSemaphore.valid())
+    {
+        // We have Swapchain Image for the next (already current) frame
+        ASSERT(contextVk->getFeatures().asyncCommandQueue.enabled);
+        ASSERT(!presentOutOfDate);
+        mImageAcquireHelper.notifyPendingPresent();
+        return angle::Result::Continue;
+    }
+#endif
+
 // SVDT: Improved error handling in "rx::WindowSurfaceVk" class.
 #if SVDT_GLOBAL_CHANGES
     // Defer acquiring the next swapchain image in any case (even if the swapchain is out-of-date).
     deferAcquireNextImage(context);
 
+#    if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    if (mSwapchainImages.size() > 3 || presentOutOfDate)
+#    else
     if (presentOutOfDate)
+#    endif
 #else
     if (!presentOutOfDate)
     {
@@ -1726,6 +1801,10 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
     }
 #endif
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    ASSERT(mImageAcquireHelper.idle());
+#endif
+
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
@@ -1751,7 +1830,13 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 
         // Now that we have the result from the last present need to determine if it's out of date
         // or not.
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+        const bool oldPresentOutOfDate = presentOutOfDate;
+#endif
         ANGLE_TRY(computePresentOutOfDate(contextVk, result, &presentOutOfDate));
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+        presentOutOfDate |= oldPresentOutOfDate;
+#endif
     }
 
     ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, presentOutOfDate));
@@ -1825,9 +1910,14 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     }
 #endif
 
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    result = mImageAcquireHelper.acquireNextImage(context, &acquireImageSemaphore.get(),
+                                                  &mCurrentSwapchainImageIndex);
+#else
     result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
                                    acquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
                                    &mCurrentSwapchainImageIndex);
+#endif
 // SVDT: Fixed bugs in "rx::WindowSurfaceVk" with "VK_SUBOPTIMAL_KHR" Image Acquire result.
 #if SVDT_GLOBAL_CHANGES
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
@@ -1933,7 +2023,12 @@ void WindowSurfaceVk::setSwapInterval(EGLint interval)
     //   nvidia + windowed mode), we could get away with a smaller number.
     //
     // For simplicity, we always allocate at least three images.
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+    const bool isFifo = (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_FIFO_KHR);
+    mMinImageCount = std::max(isFifo ? 4u : 3u, mSurfaceCaps.minImageCount);
+#else
     mMinImageCount = std::max(3u, mSurfaceCaps.minImageCount);
+#endif
 
     // Make sure we don't exceed maxImageCount.
     if (mSurfaceCaps.maxImageCount > 0 && mMinImageCount > mSurfaceCaps.maxImageCount)
@@ -2227,5 +2322,171 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
     }
     return egl::NoError();
 }
+
+#if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+angle::Result WindowSurfaceVk::ImageAcquireHelper::init(vk::Context *context, WindowSurfaceVk *owner)
+{
+    mRenderer = context->getRenderer();
+    mOwner = owner;
+
+    mIsThreadSupported = (kThreadSupportEnabled &&
+            mRenderer->getFeatures().asyncCommandQueue.enabled);
+
+    if (mIsThreadSupported)
+    {
+        ANGLE_VK_TRY(context, mPendingSemaphore.init(context->getDevice()));
+    }
+
+    return angle::Result::Continue;
+}
+
+void WindowSurfaceVk::ImageAcquireHelper::destroy(vk::Context *context)
+{
+    stopThread();
+
+    mRenderer = nullptr;
+    mOwner = nullptr;
+
+    mPendingSemaphore.destroy(context->getDevice());
+}
+
+VkResult WindowSurfaceVk::ImageAcquireHelper::acquireNextImage(
+        vk::Context *context, vk::Semaphore *semaphoreInOut, uint32_t *imageIndexOut)
+{
+    ContextVk *contextVk = context->getContextVk();
+
+    if (!mThread.joinable())
+    {
+        VkResult result = VK_ERROR_DEVICE_LOST;
+        const bool waitPresent = mOwner->mHasPendingPresent;
+        mOwner->mReentrancyLock = true;
+        {
+            vk::GlobalMutexUnlock unlock(context);
+            result = doAcquireNextImage(contextVk, waitPresent, semaphoreInOut, imageIndexOut);
+        }
+        mOwner->mReentrancyLock = false;
+        mOwner->mHasPendingPresent = false;
+        return result;
+    }
+
+    ASSERT(mOwner->mHasPendingPresent);
+    mOwner->mReentrancyLock = true;
+    {
+        vk::GlobalMutexUnlock unlock(context);
+        std::unique_lock<std::mutex> lock(mMutex);
+        while (!mIsPendingResultReady)
+        {
+            mCondVar.wait(lock);
+        }
+        mIsPendingResultReady = false;
+    }
+    mOwner->mReentrancyLock = false;
+    mOwner->mHasPendingPresent = false;
+
+    if ((mPendingResult == VK_SUCCESS) || (mPendingResult == VK_SUBOPTIMAL_KHR))
+    {
+        std::swap(*semaphoreInOut, mPendingSemaphore);
+        if (contextVk && mOwner->isNeedRecreateSwapchain(contextVk))
+        {
+            contextVk->addWaitSemaphore(semaphoreInOut->getHandle(),
+                                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
+#    if SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE
+            mOwner->recycleAcquireImageSemaphore(contextVk, std::move(*semaphoreInOut));
+#    else
+            contextVk->addGarbage(semaphoreInOut);
+#    endif
+            stopThread();
+            return VK_ERROR_OUT_OF_DATE_KHR;
+        }
+        *imageIndexOut = mPendingImageIndex;
+    }
+    else
+    {
+        mThread.join();
+    }
+
+    return mPendingResult;
+}
+
+void WindowSurfaceVk::ImageAcquireHelper::notifyPendingPresent()
+{
+    ASSERT(mOwner->mHasPendingPresent);
+    if (kThreadSupportEnabled && mIsThreadSupported && !mThread.joinable())
+    {
+        startThread();
+    }
+}
+
+VkResult WindowSurfaceVk::ImageAcquireHelper::doAcquireNextImage(
+        ContextVk *contextVk, bool waitPresent, vk::Semaphore *semaphore, uint32_t *imageIndexOut)
+{
+    VkResult result = VK_SUCCESS;
+
+    if (waitPresent)
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "getLastPresentResult");
+        result = mRenderer->getLastPresentResult(mOwner->mSwapchain);
+        if (ANGLE_UNLIKELY(result == VK_SUBOPTIMAL_KHR &&
+                mRenderer->getFeatures().enablePreRotateSurfaces.enabled))
+        {
+            // To skip the Acquire operation and trigger Swapchain recreate
+            result = VK_ERROR_OUT_OF_DATE_KHR;
+        }
+    }
+
+    if ((result == VK_SUCCESS) || (result == VK_SUBOPTIMAL_KHR))
+    {
+        if (contextVk && waitPresent && mOwner->isNeedRecreateSwapchain(contextVk))
+        {
+            return VK_ERROR_OUT_OF_DATE_KHR;
+        }
+        const VkResult acquireResult = vkAcquireNextImageKHR(
+                mRenderer->getDevice(), mOwner->mSwapchain, UINT64_MAX,
+                semaphore->getHandle(), VK_NULL_HANDLE, imageIndexOut);
+        if (ANGLE_UNLIKELY(acquireResult != VK_SUCCESS))
+        {
+            result = acquireResult;
+        }
+    }
+
+    return result;
+}
+
+void WindowSurfaceVk::ImageAcquireHelper::startThread()
+{
+    ASSERT(mIsThreadSupported);
+    ASSERT(!mThread.joinable());
+
+    mIsPendingResultReady = false;
+    mThread = std::thread([this] { threadWorker(); });
+}
+
+void WindowSurfaceVk::ImageAcquireHelper::stopThread()
+{
+    if (mThread.joinable())
+    {
+        mRenderer->setLastPresentResult(mOwner->mSwapchain, VK_RESULT_MAX_ENUM);
+        mThread.join();
+        mOwner->mHasPendingPresent = false;
+    }
+}
+
+void WindowSurfaceVk::ImageAcquireHelper::threadWorker()
+{
+    mPendingResult = VK_SUCCESS;
+
+    while ((mPendingResult == VK_SUCCESS) || (mPendingResult == VK_SUBOPTIMAL_KHR))
+    {
+        mPendingResult = doAcquireNextImage(nullptr, true, &mPendingSemaphore, &mPendingImageIndex);
+
+        if (mPendingResult != VK_RESULT_MAX_ENUM)
+        {
+            std::unique_lock<std::mutex> lock(mMutex);
+            mIsPendingResultReady = true;
+            mCondVar.unlockAndNotifyAll(lock);
+        }
+    }
+}
+#endif // SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
 
 }  // namespace rx
