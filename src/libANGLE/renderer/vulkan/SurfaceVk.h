@@ -236,6 +236,9 @@ class WindowSurfaceVk : public SurfaceVk
                                         vk::Framebuffer **framebufferOut);
 
     vk::Semaphore getAcquireImageSemaphore();
+#if SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE
+    void recycleAcquireImageSemaphore(ContextVk *contextVk, vk::Semaphore &&semaphore);
+#endif
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() const
     {
@@ -357,6 +360,18 @@ class WindowSurfaceVk : public SurfaceVk
 
 #if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
     bool mReentrancyLock;
+#endif
+
+#if SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE
+    class SemaphoreResource final : public vk::Resource
+    {
+      public:
+        SemaphoreResource(vk::Semaphore &&semaphore) : mSemaphore(std::move(semaphore)) {}
+        vk::Semaphore &&release() { return std::move(mSemaphore); }
+      private:
+        vk::Semaphore mSemaphore;
+    };
+    std::deque<SemaphoreResource> mAcquireSemaphoreQueue;
 #endif
 };
 

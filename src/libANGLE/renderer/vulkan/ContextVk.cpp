@@ -2241,7 +2241,11 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore)
         {
             addWaitSemaphore(waitSemaphore.getHandle(),
                              VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+#if SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE
+            mCurrentWindowSurface->recycleAcquireImageSemaphore(this, std::move(waitSemaphore));
+#else
             addGarbage(&waitSemaphore);
+#endif
         }
     }
 

@@ -29,6 +29,9 @@ declare_args() {
   # Fence Waiting
   svdt_enable_vulkan_command_queue_concurrent_wait = true
 
+  # Swapchain / Surface
+  svdt_enable_vulkan_reuse_semaphore = true
+
   # Buffer Suballocations
   svdt_enable_vulkan_buffer_suballocator = true
   svdt_enable_vulkan_buffer_barrier_support = true
@@ -272,6 +275,10 @@ config("angle_vulkan_backend_config") {
   assert(svdt_enable_vulkan_command_queue_2 || !svdt_enable_vulkan_command_queue_concurrent_wait)
   defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT=" +
              "${svdt_enable_vulkan_command_queue_concurrent_wait}" ]
+
+  # Swapchain / Surface
+  defines += [ "SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE=" +
+             "${svdt_enable_vulkan_reuse_semaphore}" ]
 
   # Buffer Suballocations
   defines += [ "SVDT_ENABLE_VULKAN_BUFFER_SUBALLOCATOR=" +

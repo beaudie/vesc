@@ -570,6 +570,15 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     mAcquireImageSemaphore.destroy(device);
     mPresentSemaphoreRecycler.destroy(device);
+
+#if SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE
+    while (!mAcquireSemaphoreQueue.empty())
+    {
+        vk::Semaphore semaphore(mAcquireSemaphoreQueue.front().release());
+        semaphore.destroy(device);
+        mAcquireSemaphoreQueue.pop_front();
+    }
+#endif
 }
 
 egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
@@ -1754,11 +1763,32 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     VkDevice device = context->getDevice();
 
     vk::DeviceScoped<vk::Semaphore> acquireImageSemaphore(device);
+
+#if SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE
+    VkResult result;
+    const Serial lastCompletedSerial = context->getRenderer()->getLastCompletedQueueSerial();
+    if (!mAcquireSemaphoreQueue.empty() &&
+        !mAcquireSemaphoreQueue.front().isCurrentlyInUse(lastCompletedSerial))
+    {
+        acquireImageSemaphore.get() = mAcquireSemaphoreQueue.front().release();
+        mAcquireSemaphoreQueue.pop_front();
+        ASSERT(acquireImageSemaphore.get().valid());
+    }
+    else
+    {
+        result = acquireImageSemaphore.get().init(device);
+        if (ANGLE_UNLIKELY(result != VK_SUCCESS))
+        {
+            return result;
+        }
+    }
+#else
     VkResult result = acquireImageSemaphore.get().init(device);
     if (ANGLE_UNLIKELY(result != VK_SUCCESS))
     {
         return result;
     }
+#endif
 
     result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
                                    acquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
@@ -2039,6 +2069,15 @@ vk::Semaphore WindowSurfaceVk::getAcquireImageSemaphore()
 {
     return std::move(mAcquireImageSemaphore);
 }
+
+#if SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE
+void WindowSurfaceVk::recycleAcquireImageSemaphore(ContextVk *contextVk, vk::Semaphore &&semaphore)
+{
+    ASSERT(semaphore.valid());
+    mAcquireSemaphoreQueue.emplace_back(std::move(semaphore));
+    mAcquireSemaphoreQueue.back().retain(&contextVk->getResourceUseList());
+}
+#endif
 
 angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
                                                   const gl::ImageIndex &imageIndex)
