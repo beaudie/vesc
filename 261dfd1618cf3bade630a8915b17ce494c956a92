@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e17f979_3448bb52",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5645,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-13T19:11:11Z",
+      "side": 1,
+      "message": "This doesn\u0027t belong here. The image could be valid() and yet have staged updates for whatever reason.\n\nCould you please also add a comment like:\n\n    // Currently it\u0027s impossible for image updates to have a different format ID because paths that stage image updates use a draw call.\n\nOr something to that effect.",
+      "range": {
+        "startLine": 5645,
+        "startChar": 19,
+        "endLine": 5645,
+        "endChar": 30
+      },
+      "revId": "261dfd1618cf3bade630a8915b17ce494c956a92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
