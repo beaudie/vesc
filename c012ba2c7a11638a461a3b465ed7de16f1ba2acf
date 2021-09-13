@@ -118,6 +118,30 @@
       },
       "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bec9dd9_3eaffc31",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-13T16:21:24Z",
+      "side": 1,
+      "message": "The concern is calls like this:\n\n  void CommandBufferHelper::imageWrite(ContextVk *contextVk,\n                                     gl::LevelIndex level,\n                                     uint32_t layerStart,\n                                     uint32_t layerCount,\n                                     VkImageAspectFlags aspectFlags,\n                                     ImageLayout imageLayout,\n                                     AliasingMode aliasingMode,\n                                     ImageHelper *image)\n  {\n      image-\u003eretainReadOnly(\u0026contextVk-\u003egetResourceUseList());\n\nThe goal was to avoid the overhead of tracking write accesses for objects we don\u0027t need to.   However, trying to classify things has either read-only or read/write without actually tracking the different access types leads to these types of calls, which don\u0027t make too much sense and instead look like a bug.   Moving to having ImageHelper (among others) inherit from ResourceReadOnly has the same issue.",
+      "parentUuid": "b98c0ccc_96931f09",
+      "range": {
+        "startLine": 224,
+        "startChar": 22,
+        "endLine": 224,
+        "endChar": 35
+      },
+      "revId": "c012ba2c7a11638a461a3b465ed7de16f1ba2acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
