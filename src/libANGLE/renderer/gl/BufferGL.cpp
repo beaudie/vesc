@@ -160,11 +160,11 @@ angle::Result BufferGL::map(const gl::Context *context, GLenum access, void **ma
     }
     else
     {
-        ASSERT(functions->mapBufferRange && access == GL_WRITE_ONLY_OES);
+        ASSERT(functions->mapBufferRangeEXT && access == GL_WRITE_ONLY_OES);
         stateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-        *mapPtr =
-            ANGLE_GL_TRY(context, functions->mapBufferRange(gl::ToGLenum(DestBufferOperationTarget),
-                                                            0, mBufferSize, GL_MAP_WRITE_BIT));
+        *mapPtr = ANGLE_GL_TRY(
+            context, functions->mapBufferRangeEXT(gl::ToGLenum(DestBufferOperationTarget), 0,
+                                                  mBufferSize, GL_MAP_WRITE_BIT));
     }
 
     mIsMapped  = true;
@@ -194,9 +194,9 @@ angle::Result BufferGL::mapRange(const gl::Context *context,
     else
     {
         stateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-        *mapPtr =
-            ANGLE_GL_TRY(context, functions->mapBufferRange(gl::ToGLenum(DestBufferOperationTarget),
-                                                            offset, length, access));
+        *mapPtr = ANGLE_GL_TRY(
+            context, functions->mapBufferRangeEXT(gl::ToGLenum(DestBufferOperationTarget), offset,
+                                                  length, access));
     }
 
     mIsMapped  = true;
