@@ -34,6 +34,24 @@
       "parentUuid": "69f41830_99382def",
       "revId": "b73d3290a7b95889f12a535266e48c73135a3178",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8e8c4a2_97c07134",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-13T11:33:50Z",
+      "side": 1,
+      "message": "You need two loops to handle either detecting ES 3.1 sematics in a pre-pass, or to handle mixed ES 3.1 and 2.0. It wasn\u0027t that hard to transform the current code to handle mixed sematics so we went with that. I\u0027m good with the code as-is.\n\nTim - the one value of the vertex attrib stride is only settable via VertexAttribPointer, so you can\u0027t override 2.0 with 3.1 and get the same serialization.",
+      "parentUuid": "41950b04_a6865037",
+      "revId": "b73d3290a7b95889f12a535266e48c73135a3178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
