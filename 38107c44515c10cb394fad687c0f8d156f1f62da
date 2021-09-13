@@ -16,6 +16,23 @@
       "message": "Just for discussing ideas ...",
       "revId": "38107c44515c10cb394fad687c0f8d156f1f62da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b736d45c_08d28d30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-13T13:58:33Z",
+      "side": 1,
+      "message": "Geoff: can you advise on how to fix GetModuleDir when ANGLE changes the CWD? We could CWD back right before the call, but it\u0027s a bit messy that way.",
+      "revId": "38107c44515c10cb394fad687c0f8d156f1f62da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
