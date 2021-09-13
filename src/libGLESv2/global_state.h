@@ -24,6 +24,8 @@ namespace angle
 {
 #if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 using GlobalMutex = egl::SharedContextMutex;
+#elif SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+using GlobalMutex = std::mutex;
 #else
 using GlobalMutex = std::recursive_mutex;
 #endif
@@ -116,10 +118,59 @@ class ScopedSyncCurrentContextFromThread
     egl::Thread *const mThread;
 };
 
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+class GlobalMutexHelper final : angle::NonCopyable
+{
+  public:
+    GlobalMutexHelper() : mMutex(GetGlobalMutex()) {}
+
+    static angle::ThreadId GetOwnerThreadId()
+    {
+        return sOwnerThreadId.load(std::memory_order_relaxed);
+    }
+
+    void lock(angle::ThreadId id)
+    {
+        ASSERT(id == angle::GetCurrentThreadId());
+        mMutex.lock();
+        SetOwnerThreadId(id);
+    }
+
+    void unlock()
+    {
+        ASSERT(GetOwnerThreadId() == angle::GetCurrentThreadId());
+        SetOwnerThreadId(angle::kInvalidThreadId);
+        mMutex.unlock();
+    }
+
+  private:
+    static void SetOwnerThreadId(angle::ThreadId id)
+    {
+        sOwnerThreadId.store(id, std::memory_order_relaxed);
+    }
+
+  private:
+    static std::atomic<angle::ThreadId> sOwnerThreadId;
+    angle::GlobalMutex &mMutex;
+};
+
+class GlobalLock final : angle::NonCopyable
+{
+  public:
+    GlobalLock() { mHelper.lock(angle::GetCurrentThreadId()); }
+    ~GlobalLock() { mHelper.unlock(); }
+  private:
+    GlobalMutexHelper mHelper;
+};
+#endif  // SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
 }  // namespace egl
 
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+#define ANGLE_SCOPED_GLOBAL_LOCK() egl::GlobalLock globalMutexLock
+#else
 #define ANGLE_SCOPED_GLOBAL_LOCK() \
     std::lock_guard<angle::GlobalMutex> globalMutexLock(egl::GetGlobalMutex())
+#endif
 
 #if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 #    define SVDT_EGL_SCOPED_CONTEXT_LOCK(EP, THREAD, ...) \

@@ -29,6 +29,10 @@
 #include "platform/Feature.h"
 #include "platform/FrontendFeatures.h"
 
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && defined(ANGLE_ENABLE_ASSERTS)
+#    include "libANGLE/Thread.h"
+#endif
+
 namespace angle
 {
 class FrameCaptureShared;
@@ -75,7 +79,11 @@ struct DisplayState final : private angle::NonCopyable
 using ContextSet = std::set<gl::Context *>;
 
 #if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+#    if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+class SharedContextMutex final : public std::mutex
+#    else
 class SharedContextMutex final : public std::recursive_mutex
+#    endif
 {
   public:
     // Prevents destruction while locked
@@ -131,6 +139,35 @@ class SharedContextMutex final : public std::recursive_mutex
 
   private:
     size_t mRefCount;
+
+#    if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && defined(ANGLE_ENABLE_ASSERTS)
+  public:
+    void lock()
+    {
+        std::mutex::lock();
+        mOwnerThreadId.store(angle::GetCurrentThreadId(), std::memory_order_relaxed);
+    }
+
+    bool try_lock()
+    {
+        if (std::mutex::try_lock())
+        {
+            mOwnerThreadId.store(angle::GetCurrentThreadId(), std::memory_order_relaxed);
+            return true;
+        }
+        return false;
+    }
+
+    void unlock()
+    {
+        ASSERT(mOwnerThreadId.load(std::memory_order_relaxed) == angle::GetCurrentThreadId());
+        mOwnerThreadId.store(angle::kInvalidThreadId, std::memory_order_relaxed);
+        std::mutex::unlock();
+    }
+
+  private:
+    std::atomic<angle::ThreadId> mOwnerThreadId;
+#    endif  // SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && defined(ANGLE_ENABLE_ASSERTS)
 };
 #endif  // SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 

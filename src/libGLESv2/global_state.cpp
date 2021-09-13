@@ -116,6 +116,9 @@ ScopedSyncCurrentContextFromThread::~ScopedSyncCurrentContextFromThread()
     SetContextCurrent(mThread, mThread->getContext());
 }
 
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+std::atomic<angle::ThreadId> GlobalMutexHelper::sOwnerThreadId{ angle::kInvalidThreadId };
+#endif
 }  // namespace egl
 
 namespace gl

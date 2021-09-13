@@ -13,9 +13,24 @@
 
 #include "libANGLE/Debug.h"
 
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+#    include <unistd.h>
+#endif
+
 namespace angle
 {
 extern bool gUseAndroidOpenGLTlsSlot;
+
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+using ThreadId = pid_t;
+
+constexpr ThreadId kInvalidThreadId = -1;
+
+ANGLE_INLINE ThreadId GetCurrentThreadId()
+{
+    return gettid();
+}
+#endif
 }  // namespace angle
 
 namespace gl

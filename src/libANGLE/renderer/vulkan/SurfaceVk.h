@@ -354,6 +354,10 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
+
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+    bool mReentrancyLock;
+#endif
 };
 
 }  // namespace rx

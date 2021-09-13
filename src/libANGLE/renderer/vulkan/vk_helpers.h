@@ -2985,7 +2985,8 @@ struct CondVarHelper final
 };
 #endif
 
-#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT || \
+    SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 template <class MUTEX_TYPE>
 class MutexUnlock final : angle::NonCopyable
 {
@@ -3020,6 +3021,70 @@ class MutexUnlock final : angle::NonCopyable
     MUTEX_TYPE *mMutex = nullptr;
 };
 #endif
+
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+enum class GlobalEglUnlockType
+{
+    IfOwned,
+    Always,
+};
+
+class GlobalEglUnlock final : angle::NonCopyable
+{
+  public:
+    GlobalEglUnlock() = default;
+    explicit GlobalEglUnlock(GlobalEglUnlockType type) { unlock(type); }
+    ~GlobalEglUnlock() { lockIfUnlocked(); }
+
+    void unlock(GlobalEglUnlockType type);
+    void lockIfUnlocked();
+
+  private:
+    egl::GlobalMutexHelper mHelper;
+    angle::ThreadId mLockThreadId = angle::kInvalidThreadId;
+};
+
+#if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+class GlobalContextUnlock final : angle::NonCopyable
+{
+  public:
+    GlobalContextUnlock() = default;
+    explicit GlobalContextUnlock(Context *context) { unlock(context); }
+    explicit GlobalContextUnlock(ContextVk *contextVk) { unlock(contextVk); }
+    explicit GlobalContextUnlock(DisplayVk *displayVk) { unlock(displayVk); }
+
+    void unlock(Context *context);
+    void unlock(ContextVk *contextVk);
+    void unlock(DisplayVk *displayVk);
+    void lockIfUnlocked();
+
+  private:
+    // List in unlock order (destructor will lock in reverse order)
+    MutexUnlock<egl::SharedContextMutex> mContextUnlock;
+    GlobalEglUnlock mEglUnlock;
+};
+
+// Alias to avoid checking for "SVDT_ENABLE_SHARED_CONTEXT_MUTEX"
+using GlobalMutexUnlock = GlobalContextUnlock;
+#elif  !SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+
+// Helper to avoid checking for "SVDT_ENABLE_SHARED_CONTEXT_MUTEX"
+class GlobalMutexUnlock final : angle::NonCopyable
+{
+  public:
+    GlobalMutexUnlock() = default;
+    explicit GlobalMutexUnlock(Context *context) { unlock(context); }
+    explicit GlobalMutexUnlock(DisplayVk *displayVk) { unlock(displayVk); }
+
+    void unlock(Context *) { mEglUnlock.unlock(GlobalEglUnlockType::IfOwned); }
+    void unlock(DisplayVk *) { mEglUnlock.unlock(GlobalEglUnlockType::Always); }
+    void lockIfUnlocked() { mEglUnlock.lockIfUnlocked(); }
+
+  private:
+    GlobalEglUnlock mEglUnlock;
+};
+#    endif  // !SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+#endif  // SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
 }  // namespace vk
 }  // namespace rx
 

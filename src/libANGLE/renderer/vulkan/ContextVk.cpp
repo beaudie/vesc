@@ -418,7 +418,11 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
 // ContextVk implementation.
 ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
     : ContextImpl(state, errorSet),
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+      vk::Context(renderer, mState.getSharedContextMutex()),
+#else
       vk::Context(renderer),
+#endif
       mGraphicsDirtyBitHandlers{},
       mComputeDirtyBitHandlers{},
       mRenderPassCommandBuffer(nullptr),

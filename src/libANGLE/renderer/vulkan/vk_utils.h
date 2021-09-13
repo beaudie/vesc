@@ -25,6 +25,10 @@
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 #include "vulkan/vulkan_fuchsia_ext.h"
 
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+#    include "libGLESv2/global_state.h"
+#endif
+
 #define ANGLE_GL_OBJECTS_X(PROC) \
     PROC(Buffer)                 \
     PROC(Context)                \
@@ -169,7 +173,11 @@ struct Error
 class Context : angle::NonCopyable
 {
   public:
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    Context(RendererVk *renderer, egl::SharedContextMutex *sharedMutex = nullptr);
+#else
     Context(RendererVk *renderer);
+#endif
     virtual ~Context();
 
     virtual void handleError(VkResult result,
@@ -178,9 +186,16 @@ class Context : angle::NonCopyable
                              unsigned int line) = 0;
     VkDevice getDevice() const;
     RendererVk *getRenderer() const { return mRenderer; }
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    // NULL if it is not "ContextVk"
+    egl::SharedContextMutex *getSharedMutex() const { return mSharedMutex; }
+#endif
 
   protected:
     RendererVk *const mRenderer;
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+    egl::SharedContextMutex *const mSharedMutex;
+#endif
 };
 
 #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS

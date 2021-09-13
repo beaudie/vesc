@@ -716,6 +716,10 @@ config("angle_backend_config") {
   defines += [ "SVDT_ENABLE_SHARED_CONTEXT_MUTEX=" +
              "${svdt_enable_shared_context_mutex}" ]
 
+  assert(is_android || !svdt_enable_global_mutex_unlock)
+  defines += [ "SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK=" +
+             "${svdt_enable_global_mutex_unlock}" ]
+
   # ====== SVDT END ======
 
   configs = []

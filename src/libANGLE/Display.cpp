@@ -527,7 +527,13 @@ static constexpr uint32_t kScratchBufferLifetime = 64u;
 
 #if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 // SharedContextMutex
-SharedContextMutex::SharedContextMutex() : mRefCount(0) {}
+SharedContextMutex::SharedContextMutex()
+    : mRefCount(0)
+#    if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && defined(ANGLE_ENABLE_ASSERTS)
+      ,
+      mOwnerThreadId(angle::kInvalidThreadId)
+#    endif
+{}
 
 SharedContextMutex::~SharedContextMutex()
 {

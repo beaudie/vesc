@@ -8670,5 +8670,68 @@ void BufferSuballocatorVk::BufferAllocation::release(ContextVk *contextVk)
     mBuffer = nullptr;
 }
 #endif
+
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+// GlobalEglUnlock implementation.
+void GlobalEglUnlock::unlock(GlobalEglUnlockType type)
+{
+    ASSERT(mLockThreadId == angle::kInvalidThreadId);
+
+    const angle::ThreadId ownerThreadId = egl::GlobalMutexHelper::GetOwnerThreadId();
+
+    if ((type == GlobalEglUnlockType::Always) || (ownerThreadId == angle::GetCurrentThreadId()))
+    {
+        mHelper.unlock();
+        mLockThreadId = ownerThreadId;
+    }
+}
+
+void GlobalEglUnlock::lockIfUnlocked()
+{
+    if (mLockThreadId != angle::kInvalidThreadId)
+    {
+        mHelper.lock(mLockThreadId);
+        mLockThreadId = angle::kInvalidThreadId;
+    }
+}
+
+#    if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+// GlobalContextUnlock implementation.
+void GlobalContextUnlock::unlock(Context *context)
+{
+    ASSERT(context);
+    if (context->getSharedMutex())
+    {
+        // "context" must be "ContextVk"
+        mContextUnlock.unlock(context->getSharedMutex());
+        mEglUnlock.unlock(GlobalEglUnlockType::IfOwned);
+    }
+    else
+    {
+        // "context" must be "DisplayVk"
+        mEglUnlock.unlock(GlobalEglUnlockType::Always);
+    }
+}
+
+void GlobalContextUnlock::unlock(ContextVk *contextVk)
+{
+    ASSERT(contextVk);
+    mContextUnlock.unlock(contextVk->getSharedMutex());
+    mEglUnlock.unlock(GlobalEglUnlockType::IfOwned);
+}
+
+void GlobalContextUnlock::unlock(DisplayVk *displayVk)
+{
+    ASSERT(displayVk);
+    mEglUnlock.unlock(GlobalEglUnlockType::Always);
+}
+
+void GlobalContextUnlock::lockIfUnlocked()
+{
+    mEglUnlock.lockIfUnlocked();
+    mContextUnlock.lockIfUnlocked();
+}
+#    endif  // SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+#endif  // SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
 }  // namespace vk
 }  // namespace rx

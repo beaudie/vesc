@@ -332,7 +332,14 @@ VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format)
 }
 
 // Context implementation.
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK && SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+Context::Context(RendererVk *renderer, egl::SharedContextMutex *sharedMutex)
+    : mRenderer(renderer),
+      mSharedMutex(sharedMutex)
+{}
+#else
 Context::Context(RendererVk *renderer) : mRenderer(renderer) {}
+#endif
 
 Context::~Context() {}
 

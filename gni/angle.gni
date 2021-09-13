@@ -27,6 +27,7 @@ declare_args() {
   svdt_global_changes = true
 
   svdt_enable_shared_context_mutex = true
+  svdt_enable_global_mutex_unlock = is_android
 
   # ====== SVDT END ======
 }

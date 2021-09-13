@@ -506,6 +506,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
       mFrameCount(1)
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+    , mReentrancyLock(false)
+#endif
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -557,6 +560,10 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     if (mSurface)
     {
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+        // This call is only possible from the EGL API.
+        vk::GlobalMutexUnlock unlock(displayVk);
+#endif
         vkDestroySurfaceKHR(instance, mSurface, nullptr);
         mSurface = VK_NULL_HANDLE;
     }
@@ -1120,7 +1127,21 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // TODO(syoussefi): Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old
     // swapchain need to carry over to the new one.  http://anglebug.com/2942
     VkSwapchainKHR newSwapChain = VK_NULL_HANDLE;
+
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+    mReentrancyLock = true;  // Must not happen - for debugging
+    VkResult result = VK_ERROR_DEVICE_LOST;
+    {
+        // Possible from EGL, EGL+Context, and Context only
+        vk::GlobalMutexUnlock unlock(context);
+        result = vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain);
+    }
+    mReentrancyLock = false;
+    ANGLE_VK_TRY(context, result);
+#else  // !SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
     ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
+#endif  // !SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
 
@@ -1653,6 +1674,14 @@ void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
 angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *context,
                                                           bool presentOutOfDate)
 {
+#if SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+    if (mReentrancyLock)
+    {
+        UNREACHABLE();
+        return angle::Result::Stop;
+    }
+#endif
+
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
