@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "485d7a58_31572c65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-13T22:22:28Z",
+      "side": 1,
+      "message": "Nice cleanup, LGTM",
+      "revId": "edfbdb29eb3403ea20160ebea310b390fb5d804f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef05922f_6a9ef370",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-13T22:22:28Z",
+      "side": 1,
+      "message": "Nice implicit cast removal.",
+      "range": {
+        "startLine": 842,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 48
+      },
+      "revId": "edfbdb29eb3403ea20160ebea310b390fb5d804f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
