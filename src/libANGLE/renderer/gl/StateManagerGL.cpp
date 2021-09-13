@@ -925,7 +925,12 @@ void StateManagerGL::updateProgramTextureBindings(const gl::Context *context)
         if (texture != nullptr)
         {
             const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
-            ASSERT(!texture->hasAnyDirtyBit());
+            // The DIRTY_BIT_BOUND_AS_ATTACHMENT may get inserted when texture is been attached to
+            // FBO and if we did not rebind texture, Texture::syncState may not get called and dirty
+            // bit not been cleared. But this bit is not used by GL backend at all, so it is
+            // harmless even though we expect texture is clean when reach here. It will still gets
+            // cleared next time syncState been called.
+            ASSERT(!texture->hasAnyDirtyBitExcludingBoundAsAttachmentBit());
             ASSERT(!textureGL->hasAnyDirtyBit());
 
             activeTexture(textureUnitIndex);
