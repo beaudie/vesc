@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16ad2ecc_ce8f3a35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T11:37:42Z",
+      "side": 1,
+      "message": "LGTM, thanks Tim. Two last requests.",
+      "revId": "ce476b9e9cae60ee0fb536cbc353674a36632bc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f27f7ff_b63f0154",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T11:37:42Z",
+      "side": 1,
+      "message": "nit: can you put this in an anonymous namespace block?",
+      "range": {
+        "startLine": 20,
+        "startChar": 14,
+        "endLine": 20,
+        "endChar": 25
+      },
+      "revId": "ce476b9e9cae60ee0fb536cbc353674a36632bc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdd54550_39a5f33c",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T11:37:42Z",
+      "side": 1,
+      "message": "could we call this a \u0027ReadWriteResource\u0027, since the point is that it tracks reads/writes separately, while Resource just tracks use in general?",
+      "range": {
+        "startLine": 200,
+        "startChar": 6,
+        "endLine": 200,
+        "endChar": 20
+      },
+      "revId": "ce476b9e9cae60ee0fb536cbc353674a36632bc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
