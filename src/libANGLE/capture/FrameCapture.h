@@ -395,7 +395,8 @@ class FrameCaptureShared final : angle::NonCopyable
                             gl::BufferID id,
                             GLintptr offset,
                             GLsizeiptr length,
-                            bool writable);
+                            bool writable,
+                            bool coherent);
 
     void trackTextureUpdate(const gl::Context *context, const CallCapture &call);
 
@@ -423,6 +424,9 @@ class FrameCaptureShared final : angle::NonCopyable
                                                     gl::TextureTarget target,
                                                     GLint level,
                                                     EntryPoint entryPoint);
+
+    // Capture coherent buffer storages
+    void captureCoherentBufferSnapshot(const gl::Context *context, gl::BufferID bufferID);
 
     // Remove any cached texture levels on deletion
     void deleteCachedTextureLevelData(gl::TextureID id);
@@ -512,6 +516,7 @@ class FrameCaptureShared final : angle::NonCopyable
     void maybeCaptureDrawElementsClientData(const gl::Context *context,
                                             CallCapture &call,
                                             size_t instanceCount);
+    void maybeCaptureCoherentBuffers(const gl::Context *context);
     void updateCopyImageSubData(CallCapture &call);
     void overrideProgramBinary(const gl::Context *context,
                                CallCapture &call,
@@ -547,6 +552,8 @@ class FrameCaptureShared final : angle::NonCopyable
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
     BufferDataMap mBufferDataMap;
+    // Map from coherent buffer id to hash
+    std::map<gl::BufferID, size_t> mCoherentBuffers;
     bool mValidateSerializedState = false;
     std::string mValidationExpression;
     PackedEnumMap<ResourceIDType, uint32_t> mMaxAccessedResourceIDs;
