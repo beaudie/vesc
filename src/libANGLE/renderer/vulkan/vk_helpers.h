@@ -3086,6 +3086,22 @@ class GlobalMutexUnlock final : angle::NonCopyable
 };
 #    endif  // !SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 #endif  // SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+
+#if SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_GLOBAL_MUTEX_UNLOCK
+class ErrorProxyContext final : public Context
+{
+public:
+    ErrorProxyContext(Context *errorHandlingContext);
+    virtual ~ErrorProxyContext() override;
+    virtual void handleError(VkResult result,
+                             const char *file,
+                             const char *function,
+                             unsigned int line) override;
+private:
+    Context *const mErrorHandlingContext;
+    std::deque<Error> mErrors;
+};
+#endif  // SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_GLOBAL_MUTEX_UNLOCK
 }  // namespace vk
 }  // namespace rx
 

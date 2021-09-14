@@ -181,7 +181,16 @@ angle::Result SyncHelper::clientWait(Context *context,
     ASSERT(mUse.getSerial().valid());
 
     VkResult status = VK_SUCCESS;
+#if SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_GLOBAL_MUTEX_UNLOCK
+    {
+        const Serial serial = mUse.getSerial();
+        ErrorProxyContext proxyContext(context);
+        GlobalMutexUnlock unlock(context);
+        ANGLE_TRY(renderer->waitForSerialWithUserTimeout(&proxyContext, serial, timeout, &status));
+    }
+#else
     ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+#endif
 
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
@@ -345,9 +354,16 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     if (mUse.valid())
 #endif
     {
+#if SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_GLOBAL_MUTEX_UNLOCK
+        const Serial serial = mUse.getSerial();
+        ErrorProxyContext proxyContext(context);
+        GlobalMutexUnlock unlock(context);
+        ANGLE_TRY(renderer->waitForSerialWithUserTimeout(&proxyContext, serial, timeout, &status));
+#else
         // We have a valid serial to wait on
         ANGLE_TRY(
             renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+#endif
     }
     else
     {

@@ -8733,5 +8733,40 @@ void GlobalContextUnlock::lockIfUnlocked()
 }
 #    endif  // SVDT_ENABLE_SHARED_CONTEXT_MUTEX
 #endif  // SVDT_ENABLE_GLOBAL_MUTEX_UNLOCK
+
+#if SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_GLOBAL_MUTEX_UNLOCK
+// ErrorProxyContext implementation.
+ErrorProxyContext::ErrorProxyContext(Context *errorHandlingContext) : Context(
+        errorHandlingContext->getRenderer()
+#    if SVDT_ENABLE_VULKAN_OPTIMIZED_SWAPCHAIN_SYNC
+      , errorHandlingContext->getContextVk()
+#    endif
+#    if SVDT_ENABLE_SHARED_CONTEXT_MUTEX
+      , errorHandlingContext->getSharedMutex()
+#    endif
+    ),
+    mErrorHandlingContext(errorHandlingContext)
+{}
+
+ErrorProxyContext::~ErrorProxyContext()
+{
+    while (!mErrors.empty())
+    {
+        Error err = mErrors.front();
+        mErrors.pop_front();
+        mErrorHandlingContext->handleError(err.errorCode, err.file, err.function, err.line);
+    }
+}
+
+void ErrorProxyContext::handleError(VkResult result,
+                                    const char *file,
+                                    const char *function,
+                                    unsigned int line)
+{
+    ASSERT(result != VK_SUCCESS);
+    Error error = {result, file, function, line};
+    mErrors.emplace_back(error);
+}
+#endif  // SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_GLOBAL_MUTEX_UNLOCK
 }  // namespace vk
 }  // namespace rx
