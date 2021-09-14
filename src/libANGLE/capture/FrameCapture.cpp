@@ -2664,7 +2664,8 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
             frameCaptureShared->trackBufferMapping(
                 &setupCalls->back(), buffer->id(), static_cast<GLsizeiptr>(buffer->getMapOffset()),
                 static_cast<GLsizeiptr>(buffer->getMapLength()),
-                (buffer->getAccessFlags() & GL_MAP_WRITE_BIT) != 0);
+                (buffer->getAccessFlags() & GL_MAP_WRITE_BIT) != 0,
+                (buffer->getAccessFlags() & GL_MAP_COHERENT_BIT_EXT) != 0);
         }
         else
         {
@@ -4569,7 +4570,8 @@ void FrameCaptureShared::trackBufferMapping(CallCapture *call,
                                             gl::BufferID id,
                                             GLintptr offset,
                                             GLsizeiptr length,
-                                            bool writable)
+                                            bool writable,
+                                            bool coherent)
 {
     // Track that the buffer was mapped
     mResourceTracker.setBufferMapped(id.value);
@@ -4586,6 +4588,11 @@ void FrameCaptureShared::trackBufferMapping(CallCapture *call,
 
         // Track the bufferID that was just mapped for use when writing return value
         call->params.setMappedBufferID(id);
+
+        if (coherent && mCoherentBuffers.find(id) == mCoherentBuffers.end())
+        {
+            mCoherentBuffers[id] = 0;
+        }
     }
 }
 
@@ -4800,6 +4807,19 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
     }
 }
 
+void FrameCaptureShared::maybeCaptureCoherentBuffers(const gl::Context *context)
+{
+    if (!isCaptureActive())
+    {
+        return;
+    }
+
+    for (auto pair : mCoherentBuffers)
+    {
+        captureCoherentBufferSnapshot(context, pair.first);
+    }
+}
+
 void FrameCaptureShared::maybeCaptureDrawArraysClientData(const gl::Context *context,
                                                           CallCapture &call,
                                                           size_t instanceCount)
@@ -5004,6 +5024,13 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
             break;
         }
 
+        case EntryPoint::GLFinish:
+        case EntryPoint::GLFenceSync:
+        {
+            maybeCaptureCoherentBuffers(context);
+            break;
+        }
+
         case EntryPoint::GLDrawArrays:
         {
             maybeCaptureDrawArraysClientData(context, call, 1);
@@ -5174,9 +5201,12 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
             bool writable =
                 access == GL_WRITE_ONLY_OES || access == GL_WRITE_ONLY || access == GL_READ_WRITE;
 
+            bool coherent = access & GL_MAP_COHERENT_BIT_EXT;
+
             FrameCaptureShared *frameCaptureShared =
                 context->getShareGroup()->getFrameCaptureShared();
-            frameCaptureShared->trackBufferMapping(&call, buffer->id(), offset, length, writable);
+            frameCaptureShared->trackBufferMapping(&call, buffer->id(), offset, length, writable,
+                                                   coherent);
             break;
         }
 
@@ -5204,7 +5234,8 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
             FrameCaptureShared *frameCaptureShared =
                 context->getShareGroup()->getFrameCaptureShared();
             frameCaptureShared->trackBufferMapping(&call, buffer->id(), offset, length,
-                                                   access & GL_MAP_WRITE_BIT);
+                                                   access & GL_MAP_WRITE_BIT,
+                                                   access & GL_MAP_COHERENT_BIT_EXT);
             break;
         }
 
@@ -5220,6 +5251,12 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
                     .value.BufferBindingVal;
             gl::Buffer *buffer = context->getState().getTargetBuffer(target);
             mResourceTracker.setBufferUnmapped(buffer->id().value);
+
+            // Remove from mCoherentBuffers
+            if (mCoherentBuffers.find(buffer->id()) != mCoherentBuffers.end())
+            {
+                mCoherentBuffers.erase(buffer->id());
+            }
             break;
         }
 
@@ -5475,6 +5512,68 @@ void FrameCaptureShared::captureClientArraySnapshot(const gl::Context *context,
                 std::max(mClientArraySizes[attribIndex], bytesToCapture);
         }
     }
+}
+
+void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *context, gl::BufferID id)
+{
+    FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
+
+    gl::Buffer *buffer = nullptr;
+
+    const gl::State &apiState              = context->getState();
+    const gl::BoundBufferMap &boundBuffers = apiState.getBoundBuffersForCapture();
+    for (gl::BufferBinding binding : angle::AllEnums<gl::BufferBinding>())
+    {
+        if (id == boundBuffers[binding].id())
+        {
+            buffer = context->getState().getTargetBuffer(binding);
+            break;
+        }
+    }
+
+    if (!buffer)
+    {
+        // Could not find buffer binding
+        return;
+    }
+
+    if (!frameCaptureShared->hasBufferData(id))
+    {
+        // This buffer was not marked writable, so we did not back it up
+        return;
+    }
+
+    ASSERT(buffer->isMapped());
+
+    const uint8_t *data = reinterpret_cast<const uint8_t *>(buffer->getMapPointer());
+
+    GLsizeiptr length = mBufferDataMap[id].second;
+    size_t hash       = angle::ComputeGenericHash(data, length);
+
+    if (mCoherentBuffers[id] == hash)
+    {
+        // Already captured this hash
+        return;
+    }
+
+    // Create the parameters to our helper for use during replay
+    ParamBuffer dataParamBuffer;
+
+    // Pass in the target buffer ID
+    dataParamBuffer.addValueParam("dest", ParamType::TGLuint, buffer->id().value);
+
+    // Capture the current buffer data with a binary param
+    ParamCapture captureData("source", ParamType::TvoidConstPointer);
+    CaptureMemory(data, length, &captureData);
+    dataParamBuffer.addParam(std::move(captureData));
+
+    // Also track its size for use with memcpy
+    dataParamBuffer.addValueParam<GLsizeiptr>("size", ParamType::TGLsizeiptr, length);
+
+    // Call the helper that populates the buffer with captured data
+    mFrameCalls.emplace_back("UpdateClientBufferData2", std::move(dataParamBuffer));
+
+    mCoherentBuffers[id] = hash;
 }
 
 void FrameCaptureShared::captureMappedBufferSnapshot(const gl::Context *context,
