@@ -2594,10 +2594,7 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
     const gl::State &apiState              = context->getState();
 
     // Small helper function to make the code more readable.
-    auto cap = [frameCaptureShared, setupCalls](CallCapture &&call) {
-        frameCaptureShared->updateReadBufferSize(call.params.getReadBufferSize());
-        setupCalls->emplace_back(std::move(call));
-    };
+    auto cap = [setupCalls](CallCapture &&call) { setupCalls->emplace_back(std::move(call)); };
 
     // Capture Buffer data.
     const gl::BufferManager &buffers = apiState.getBufferManagerForCapture();
@@ -5573,6 +5570,16 @@ void FrameCaptureShared::checkForCaptureTrigger()
     }
 }
 
+void FrameCaptureShared::scanSetupCalls(const gl::Context *context,
+                                        std::vector<CallCapture> &setupCalls)
+{
+    // Scan all the instructions in the list for tracking
+    for (CallCapture &call : setupCalls)
+    {
+        updateReadBufferSize(call.params.getReadBufferSize());
+    }
+}
+
 void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
 {
     // Make sure all pending work for every Context in the share group has completed so all data
@@ -5591,6 +5598,8 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
     CaptureShareGroupMidExecutionSetup(mainContext, &shareGroupSetupCalls, &mResourceTracker,
                                        mainContextReplayState);
 
+    scanSetupCalls(mainContext, shareGroupSetupCalls);
+
     WriteShareGroupCppSetupReplay(mCompression, mOutDirectory, mCaptureLabel, 1, 1,
                                   shareGroupSetupCalls, &mResourceTracker, &mBinaryData,
                                   mSerializeStateEnabled, *this);
@@ -5605,6 +5614,7 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
                                      &mResourceTracker, mainContextReplayState,
                                      mValidateSerializedState);
+            scanSetupCalls(mainContext, frameCapture->getSetupCalls());
         }
         else
         {
@@ -5617,6 +5627,8 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
                                      &mResourceTracker, auxContextReplayState,
                                      mValidateSerializedState);
+
+            scanSetupCalls(mainContext, frameCapture->getSetupCalls());
 
             WriteAuxiliaryContextCppSetupReplay(mCompression, mOutDirectory, shareContext,
                                                 mCaptureLabel, 1, frameCapture->getSetupCalls(),
