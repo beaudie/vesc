@@ -175,6 +175,30 @@
       },
       "revId": "03198a7557a12e860db7c1fdf329bf2b68cc5451",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1931d6d6_a8b06936",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-14T18:30:30Z",
+      "side": 1,
+      "message": "Actually, I see now based on the title of the CL, your intent was to limit this change to GLES extensions.  These are EGL extensions, and this is just a little spillover.  That\u0027s the part I was missing.  Might be worth a TODO, but I don\u0027t know the right way to track/prioritize that work.",
+      "parentUuid": "848a6513_c456b379",
+      "range": {
+        "startLine": 1176,
+        "startChar": 0,
+        "endLine": 1180,
+        "endChar": 51
+      },
+      "revId": "03198a7557a12e860db7c1fdf329bf2b68cc5451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
