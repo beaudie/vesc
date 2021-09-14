@@ -332,6 +332,30 @@
       },
       "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "665d08e9_98954ed2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3679,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-14T21:08:06Z",
+      "side": 1,
+      "message": "I was just talking with Tim about this. My suggestion is for the bufferWrite() case to retain() both \"use\"s, then we have an any use that can be used everywhere as it currently does.",
+      "parentUuid": "9516a096_5fc02231",
+      "range": {
+        "startLine": 3674,
+        "startChar": 4,
+        "endLine": 3679,
+        "endChar": 29
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
