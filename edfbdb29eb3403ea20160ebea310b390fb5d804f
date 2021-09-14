@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6050eb8e_e837b008",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T18:22:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ef05922f_6a9ef370",
+      "range": {
+        "startLine": 842,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 48
+      },
+      "revId": "edfbdb29eb3403ea20160ebea310b390fb5d804f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b9acb6d_ea0c6545",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-14T17:36:54Z",
       "side": 1,
       "message": "\"timestampValidBits is the unsigned integer count of meaningful bits in the timestamps written via vkCmdWriteTimestamp2KHR or vkCmdWriteTimestamp. The valid range for the count is 36..64 bits, or a value of 0, indicating no support for timestamps. Bits outside the valid range are guaranteed to be zeros.\"\n\nSeems like this is not the right value for TimeElapsed and Timestamp?",
+      "range": {
+        "startLine": 434,
+        "startChar": 50,
+        "endLine": 435,
+        "endChar": 91
+      },
+      "revId": "edfbdb29eb3403ea20160ebea310b390fb5d804f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d924131b_109c6789",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T18:22:07Z",
+      "side": 1,
+      "message": "GLES spec:\n\n    If \u003cpname\u003e is QUERY_COUNTER_BITS_EXT, the implementation-dependent number\n    of bits used to hold the query result for \u003ctarget\u003e will be placed in\n    \u003cparams\u003e.  The number of query counter bits may be zero, in which case\n    the counter contains no useful information.\n    \nSeems similar. I\u0027m not actually sure. Definitely unrelated to this CL though.",
+      "parentUuid": "8b9acb6d_ea0c6545",
       "range": {
         "startLine": 434,
         "startChar": 50,
