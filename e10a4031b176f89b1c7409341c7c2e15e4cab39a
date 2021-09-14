@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9643f3e_8bd7483c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T11:42:13Z",
+      "side": 1,
+      "message": "Just wondering, why wasn\u0027t there a draw call in the test? Without a draw call many updates won\u0027t complete.",
+      "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
