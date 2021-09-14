@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d074f0c8_5c40c3b0",
+        "filename": "doc/SupportedExtensions.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-14T20:02:34Z",
+      "side": 1,
+      "message": "\u0027angle_end2end_tests --gtest_filter\u003d\u0027 missing here",
+      "revId": "fd3eea1b55ffe46e96b4e4b042dcf28c7bfadb2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da946eb_44841fdb",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-14T20:02:34Z",
+      "side": 1,
+      "message": "Should this go in scripts/?",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 1
+      },
+      "revId": "fd3eea1b55ffe46e96b4e4b042dcf28c7bfadb2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaa2ef4b_e8a94503",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-14T20:02:34Z",
+      "side": 1,
+      "message": "nit: could you trim the extension vendor from the front before sorting? that way extensions like instancedArraysANGLE vs instancedArraysEXT will appear next to each other",
+      "range": {
+        "startLine": 282,
+        "startChar": 19,
+        "endLine": 282,
+        "endChar": 25
+      },
+      "revId": "fd3eea1b55ffe46e96b4e4b042dcf28c7bfadb2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
