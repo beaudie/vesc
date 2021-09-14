@@ -15,6 +15,10 @@
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 
+#if SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_WAIT_UNTIL_FLUSHED
+#    include "common/system_utils.h"
+#endif
+
 #if !defined(ANGLE_PLATFORM_WINDOWS)
 #    include <poll.h>
 #    include <unistd.h>
@@ -158,12 +162,41 @@ angle::Result SyncHelper::clientWait(Context *context,
 #endif
         if (!mUse.getSerial().valid())
         {
+#if SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_WAIT_UNTIL_FLUSHED
+            // The sync object may be flushed later from another thread.
+            double lastTime =
+                    (timeout > 0 && timeout != EGL_FOREVER_KHR) ? angle::GetCurrentTime() : 0.0;
+            // Do not spin forever, in case if there will be no flush (but spec. allows).
+            for (int i = 0; i < 100 && timeout > 0 && !mUse.getSerial().valid(); ++i)
+            {
+                {
+                    // Need unlock so the other thread can flush
+                    GlobalMutexUnlock unlock(context);
+                    std::this_thread::sleep_for(std::chrono::microseconds(1000));
+                }
+                if (timeout != EGL_FOREVER_KHR)
+                {
+                    const double nowTime = angle::GetCurrentTime();
+                    const uint64_t timePassed = uint64_t((nowTime - lastTime) * 1e+9);
+                    lastTime = nowTime;
+                    timeout -= std::min(timeout, timePassed);
+                }
+            }
+            if (!mUse.getSerial().valid())
+            {
+                WARN() << "clientWaitSync called without flushing sync object "
+                            "and give up/timeout waiting for the flush.";
+                *outResult = VK_TIMEOUT;
+                return angle::Result::Continue;
+            }
+#else
             // The sync object wasn't flushed before waiting, so the wait will always necessarily
             // time out.
             WARN() << "clientWaitSync called without flushing sync object and/or a valid context "
                       "active.";
             *outResult = VK_TIMEOUT;
             return angle::Result::Continue;
+#endif
         }
 // SVDT: Bug fixes in "SyncVk.cpp" and "FenceNVVk.cpp" classes.
 #if !SVDT_GLOBAL_CHANGES

@@ -29,6 +29,7 @@ declare_args() {
   # Fence Waiting
   svdt_enable_vulkan_command_queue_concurrent_wait = true
   svdt_enable_vulkan_client_wait_sync_global_mutex_unlock = is_android
+  svdt_enable_vulkan_client_wait_sync_wait_until_flushed = is_android
 
   # Swapchain / Surface
   svdt_enable_vulkan_reuse_semaphore = true
@@ -283,6 +284,9 @@ config("angle_vulkan_backend_config") {
   assert(svdt_enable_global_mutex_unlock && svdt_enable_vulkan_command_queue_concurrent_wait || !svdt_enable_vulkan_client_wait_sync_global_mutex_unlock)
   defines += [ "SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_GLOBAL_MUTEX_UNLOCK=" +
              "${svdt_enable_vulkan_client_wait_sync_global_mutex_unlock}" ]
+  assert(svdt_global_changes && svdt_enable_global_mutex_unlock || !svdt_enable_vulkan_client_wait_sync_wait_until_flushed)
+  defines += [ "SVDT_ENABLE_VULKAN_CLIENT_WAIT_SYNC_WAIT_UNTIL_FLUSHED=" +
+             "${svdt_enable_vulkan_client_wait_sync_wait_until_flushed}" ]
 
   # Swapchain / Surface
   defines += [ "SVDT_ENABLE_VULKAN_REUSE_SEMAPHORE=" +
