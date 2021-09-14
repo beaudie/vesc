@@ -1203,6 +1203,12 @@ class CommandBufferHelper : angle::NonCopyable
     // General Functions (non-renderPass specific)
     void initialize(bool isRenderPassCommandBuffer);
 
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    void attachAllocator(angle::SharedRingBufferAllocator *allocator);
+    angle::SharedRingBufferAllocator *detachAllocator();
+    bool hasAllocatorLinks() const { return mAllocator || mAllocSharedCP; }
+#endif
+
     void bufferRead(ContextVk *contextVk,
                     VkAccessFlags readAccessType,
                     PipelineStage readStage,
@@ -1438,9 +1444,15 @@ class CommandBufferHelper : angle::NonCopyable
                                      VkImageAspectFlags aspectFlags,
                                      ImageLayout imageLayout);
 
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    angle::SharedRingBufferAllocator *mAllocator;
+    angle::SharedRingBufferAllocator::CheckPoint *mAllocSharedCP;
+    angle::RingBufferAllocator::CheckPoint mAllocRelaseCP;
+#else
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
     //  that occur w/ shared allocator between multiple CBHs.
     angle::PoolAllocator mAllocator;
+#endif
 
     // General state (non-renderPass related)
     PipelineBarrierArray mPipelineBarriers;

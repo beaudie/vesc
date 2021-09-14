@@ -3307,6 +3307,9 @@ void RendererVk::recycleCommandBufferHelper(vk::CommandBufferHelper *commandBuff
     std::lock_guard<std::mutex> lock(mCommandBufferHelperFreeListMutex);
 
     ASSERT(commandBuffer->empty());
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    ASSERT(!commandBuffer->hasAllocatorLinks());
+#endif
     commandBuffer->markOpen();
     mCommandBufferHelperFreeList.push_back(commandBuffer);
 }

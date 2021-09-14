@@ -47,6 +47,7 @@ declare_args() {
   svdt_enable_vulkan_query_get_result_optimization = true
   svdt_enable_vulkan_global_descriptorset_cache = true
   svdt_vulkan_new_thread_affinity = 0  # "0" - do not change; "< 0" - ALL cores
+  svdt_enable_vulkan_shared_ring_buffer_cmd_alloc = true
 
   # Other Fixes
   svdt_disable_vulkan_fast_integer_map_for_serials = true  # fixes memory problem
@@ -321,6 +322,8 @@ config("angle_vulkan_backend_config") {
   assert(is_android || !svdt_vulkan_new_thread_affinity)
   defines += [ "SVDT_VULKAN_NEW_THREAD_AFFINITY=" +
              "${svdt_vulkan_new_thread_affinity}" ]
+  defines += [ "SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC=" +
+             "${svdt_enable_vulkan_shared_ring_buffer_cmd_alloc}" ]
 
   # Other Fixes
   defines += [ "SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS=" +

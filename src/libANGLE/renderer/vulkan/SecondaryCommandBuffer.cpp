@@ -142,6 +142,9 @@ ANGLE_INLINE const CommandHeader *NextCommand(const CommandHeader *command)
 void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "SecondaryCommandBuffer::executeCommands");
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    terminateLastCommandBlock();
+#endif
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
@@ -596,6 +599,10 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
 void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
                                                  size_t *allocatedMemoryOut) const
 {
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    *usedMemoryOut = getCommandSize();
+    *allocatedMemoryOut = getCommandSize();
+#else
     *allocatedMemoryOut = kBlockSize * mCommands.size();
 
     *usedMemoryOut = 0;
@@ -612,6 +619,7 @@ void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
     }
 
     ASSERT(*usedMemoryOut <= *allocatedMemoryOut);
+#endif
 }
 
 std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const

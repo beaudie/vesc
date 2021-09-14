@@ -11,7 +11,11 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_SECONDARYCOMMANDBUFFERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_SECONDARYCOMMANDBUFFERVK_H_
 
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+#include "common/RingBufferAllocator.h"
+#else
 #include "common/PoolAlloc.h"
+#endif
 #include "common/vulkan/vk_headers.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 
@@ -466,6 +470,9 @@ ANGLE_INLINE const DestT *Offset(const T *ptr, size_t bytes)
 }
 
 class SecondaryCommandBuffer final : angle::NonCopyable
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+                                   , angle::RingBufferAllocator::IAllocateListener
+#endif
 {
   public:
     SecondaryCommandBuffer();
@@ -686,13 +693,82 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     // Traverse the list of commands and build a summary for diagnostics.
     std::string dumpCommands(const char *separator) const;
 
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
     // Pool Alloc uses 16kB pages w/ 16byte header = 16368bytes. To minimize waste
     //  using a 16368/12 = 1364. Also better perf than 1024 due to fewer block allocations
     static constexpr size_t kBlockSize = 1364;
     // Make sure block size is 4-byte aligned to avoid Android errors
     static_assert((kBlockSize % 4) == 0, "Check kBlockSize alignment");
+#endif
 
     // Initialize the SecondaryCommandBuffer by setting the allocator it will use
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    void attachAllocator(angle::RingBufferAllocator &&source)
+    {
+        ASSERT(source.valid());
+        ASSERT(mCommands.empty());
+        ASSERT(mLastCommandBlock == nullptr);
+        ASSERT(mFinishedCommandSize == 0);
+        ASSERT(!mAllocator.valid());
+        mAllocator = std::move(source);
+        mAllocator.setFragmentReserve(sizeof(CommandHeader));
+        pushNewCommandBlock(mAllocator.allocate(0));
+        mAllocator.setListener(this);
+    }
+
+    void detachAllocator(angle::RingBufferAllocator &destination)
+    {
+        ASSERT(!destination.valid());
+        ASSERT(mAllocator.valid());
+        mAllocator.setListener(nullptr);
+        finishLastCommandBlock();
+        if (mFinishedCommandSize == 0)
+        {
+            mCommands.clear();
+        }
+        else
+        {
+            mAllocator.setFragmentReserve(0);
+            (void)mAllocator.allocate(sizeof(CommandHeader));
+        }
+        destination = std::move(mAllocator);
+    }
+
+    void pushNewCommandBlock(uint8_t *block)
+    {
+        mCommands.push_back(reinterpret_cast<CommandHeader *>(block));
+        mLastCommandBlock = block;
+    }
+
+    void terminateLastCommandBlock()
+    {
+        if (mLastCommandBlock)
+        {
+            ASSERT(mAllocator.valid());
+            ASSERT(mAllocator.getPointer() >= mLastCommandBlock);
+            ASSERT(mAllocator.getFragmentSize() >= sizeof(CommandHeader));
+            reinterpret_cast<CommandHeader *>(mAllocator.getPointer())->id = CommandID::Invalid;
+        }
+    }
+
+    void finishLastCommandBlock()
+    {
+        mFinishedCommandSize = getCommandSize();
+        terminateLastCommandBlock();
+        mLastCommandBlock = nullptr;
+    }
+
+    virtual void onRingBufferNewFragment() override
+    {
+        pushNewCommandBlock(mAllocator.getPointer());
+    }
+
+    virtual void onRingBufferFragmentEnd() override
+    {
+        finishLastCommandBlock();
+    }
+#else  // SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+
     void initialize(angle::PoolAllocator *allocator)
     {
         ASSERT(allocator);
@@ -702,6 +778,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         // Set first command to Invalid to start
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
     }
+#endif
 
     void open() { mIsOpen = true; }
     void close() { mIsOpen = false; }
@@ -709,23 +786,52 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void reset()
     {
         mCommands.clear();
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+        mLastCommandBlock = nullptr;
+        mFinishedCommandSize = 0;
+        if (mAllocator.valid())
+        {
+            mAllocator.release(mAllocator.getReleaseCheckPoint());
+            pushNewCommandBlock(mAllocator.allocate(0));
+        }
+#else
         initialize(mAllocator);
+#endif
     }
 
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    bool valid() const { return mAllocator.valid(); }
+#else
     // This will cause the SecondaryCommandBuffer to become invalid by clearing its allocator
     void releaseHandle() { mAllocator = nullptr; }
     // The SecondaryCommandBuffer is valid if it's been initialized
     bool valid() const { return mAllocator != nullptr; }
+#endif
 
     static bool CanKnowIfEmpty() { return true; }
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    bool empty() const { return getCommandSize() == 0; }
+#else
     bool empty() const { return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid; }
+#endif
     // The following is used to give the size of the command buffer in bytes
     uint32_t getCommandSize() const
     {
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+        uint32_t result = mFinishedCommandSize;
+        if (mLastCommandBlock)
+        {
+            ASSERT(mAllocator.valid());
+            ASSERT(mAllocator.getPointer() >= mLastCommandBlock);
+            result += static_cast<uint32_t>(mAllocator.getPointer() - mLastCommandBlock);
+        }
+        return result;
+#else
         ASSERT(mCommands.size() > 0 || mCurrentBytesRemaining == 0);
         uint32_t rtn =
             static_cast<uint32_t>((mCommands.size() * kBlockSize) - mCurrentBytesRemaining);
         return rtn;
+#endif
     }
 
   private:
@@ -734,18 +840,27 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     ANGLE_INLINE StructType *commonInit(CommandID cmdID, size_t allocationSize)
     {
         ASSERT(mIsOpen);
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+        CommandHeader *header = reinterpret_cast<CommandHeader *>(
+            mAllocator.allocate(static_cast<uint32_t>(allocationSize)));
+#else
         mCurrentBytesRemaining -= allocationSize;
 
         CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
+#endif
         header->id            = cmdID;
         header->size          = static_cast<uint16_t>(allocationSize);
         ASSERT(allocationSize <= std::numeric_limits<uint16_t>::max());
 
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
         mCurrentWritePointer += allocationSize;
         // Set next cmd header to Invalid (0) so cmd sequence will be terminated
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
+#endif
         return Offset<StructType>(header, sizeof(CommandHeader));
     }
+
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
     ANGLE_INLINE void allocateNewBlock(size_t blockSize = kBlockSize)
     {
         ASSERT(mAllocator);
@@ -753,6 +868,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         mCurrentBytesRemaining = blockSize;
         mCommands.push_back(reinterpret_cast<CommandHeader *>(mCurrentWritePointer));
     }
+#endif
 
     // Allocate and initialize memory for given commandID & variable param size, setting
     // variableDataPtr to the byte following fixed cmd data where variable-sized ptr data will
@@ -764,6 +880,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     {
         constexpr size_t fixedAllocationSize = sizeof(StructType) + sizeof(CommandHeader);
         const size_t allocationSize          = fixedAllocationSize + variableSize;
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+        StructType *const result = commonInit<StructType>(cmdID, allocationSize);
+        *variableDataPtr = Offset<uint8_t>(result, sizeof(StructType));
+        return result;
+#else
         // Make sure we have enough room to mark follow-on header "Invalid"
         const size_t requiredSize = allocationSize + sizeof(CommandHeader);
         if (mCurrentBytesRemaining < requiredSize)
@@ -781,6 +902,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         }
         *variableDataPtr = Offset<uint8_t>(mCurrentWritePointer, fixedAllocationSize);
         return commonInit<StructType>(cmdID, allocationSize);
+#endif
     }
 
     // Initialize a command that doesn't have variable-sized ptr data
@@ -790,12 +912,14 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         constexpr size_t paramSize =
             std::is_same<StructType, EmptyParams>::value ? 0 : sizeof(StructType);
         constexpr size_t allocationSize = paramSize + sizeof(CommandHeader);
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
         // Make sure we have enough room to mark follow-on header "Invalid"
         if (mCurrentBytesRemaining < (allocationSize + sizeof(CommandHeader)))
         {
             ASSERT((allocationSize + sizeof(CommandHeader)) < kBlockSize);
             allocateNewBlock();
         }
+#endif
         return commonInit<StructType>(cmdID, allocationSize);
     }
 
@@ -822,14 +946,25 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     std::vector<CommandHeader *> mCommands;
 
     // Allocator used by this class. If non-null then the class is valid.
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    angle::RingBufferAllocator mAllocator;
+
+    uint8_t *mLastCommandBlock;
+    uint32_t mFinishedCommandSize;
+#else
     angle::PoolAllocator *mAllocator;
 
     uint8_t *mCurrentWritePointer;
     size_t mCurrentBytesRemaining;
+#endif
 };
 
 ANGLE_INLINE SecondaryCommandBuffer::SecondaryCommandBuffer()
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    : mIsOpen(true), mLastCommandBlock(nullptr), mFinishedCommandSize(0)
+#else
     : mIsOpen(true), mAllocator(nullptr), mCurrentWritePointer(nullptr), mCurrentBytesRemaining(0)
+#endif
 {}
 
 ANGLE_INLINE SecondaryCommandBuffer::~SecondaryCommandBuffer() {}
