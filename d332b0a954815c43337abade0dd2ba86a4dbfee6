@@ -188,6 +188,30 @@
       },
       "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6411883_3ca14bee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3679,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-14T20:24:57Z",
+      "side": 1,
+      "message": "I think Shabi is saying the same thing. The problem is this patchset, there isn\u0027t a mUse that tracking \"Any\" use.",
+      "parentUuid": "966ca571_badd057c",
+      "range": {
+        "startLine": 3674,
+        "startChar": 4,
+        "endLine": 3679,
+        "endChar": 29
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
