@@ -199,6 +199,54 @@
       },
       "revId": "03198a7557a12e860db7c1fdf329bf2b68cc5451",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a219c4_750bcae2",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T18:36:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1931d6d6_a8b06936",
+      "range": {
+        "startLine": 1176,
+        "startChar": 0,
+        "endLine": 1180,
+        "endChar": 51
+      },
+      "revId": "03198a7557a12e860db7c1fdf329bf2b68cc5451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35c10bea_5b209530",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T18:36:33Z",
+      "side": 1,
+      "message": "Ack, sorry, didn\u0027t realize you thought they were GLES extensions. Yes can confirm they\u0027re EGL.",
+      "parentUuid": "1931d6d6_a8b06936",
+      "range": {
+        "startLine": 1176,
+        "startChar": 0,
+        "endLine": 1180,
+        "endChar": 51
+      },
+      "revId": "03198a7557a12e860db7c1fdf329bf2b68cc5451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
