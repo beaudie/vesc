@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1117ede_1cf52f4b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-14T17:02:03Z",
+      "side": 1,
+      "message": "This should move to around line 199.",
+      "range": {
+        "startLine": 249,
+        "startChar": 18,
+        "endLine": 249,
+        "endChar": 34
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bd4a059_4bf0a251",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-14T17:02:03Z",
+      "side": 1,
+      "message": "This looks like redundent? since it is defined as:\nbool CommandBufferHelper::usesBuffer(const BufferHelper \u0026buffer) const\n{\n    return mUsedBuffers.contains(buffer.getBufferSerial().getValue());\n}",
+      "range": {
+        "startLine": 991,
+        "startChar": 68,
+        "endLine": 991,
+        "endChar": 92
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ee44a8c_86be8f13",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3679,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-14T17:02:03Z",
+      "side": 1,
+      "message": "What if both mReadWriteUse and mReadOnlyUse are busy, but mReadWriteUse is after mReadOnlyUse? I think this will free memory based on mReadOnlyUse and causing mReadWriteUse to generate GPU fault. With your new model that tracks ReadOnly and ReadWrite completely independently, I think you need to find out which is the last use and call collectGarbageAndReinit on the very last use.",
+      "range": {
+        "startLine": 3674,
+        "startChar": 4,
+        "endLine": 3679,
+        "endChar": 29
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
