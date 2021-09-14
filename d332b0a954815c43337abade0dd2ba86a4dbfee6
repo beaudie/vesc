@@ -284,6 +284,30 @@
       },
       "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89648f9a_95f65290",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3679,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T20:45:40Z",
+      "side": 1,
+      "message": "Yes, isCurrentlyInUse shouldn\u0027t be called often, right? Compared to how often we draw with things.\n\n\u003e collectGarbageAndReinit() needs to figure out last use is what I am saying\n\nIs there a test that could repro the problem? Tim\u0027s comment suggests it\u0027s a non-issue, but I haven\u0027t really understood the situation.\n\nMaybe we should go back to ddoc space?",
+      "parentUuid": "e4c56096_ace23d54",
+      "range": {
+        "startLine": 3674,
+        "startChar": 4,
+        "endLine": 3679,
+        "endChar": 29
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
