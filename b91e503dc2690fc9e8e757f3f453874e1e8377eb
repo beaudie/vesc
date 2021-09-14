@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "348fe900_4d3ba643",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-14T23:05:25Z",
+      "side": 1,
+      "message": "ghostBuffer is calling onStateChange(SubjectGohsted), but why acquireBufferHelper() does not need it? Looks like there is a bug in acquireBufferHelper() as well?",
+      "range": {
+        "startLine": 647,
+        "startChar": 12,
+        "endLine": 654,
+        "endChar": 13
+      },
+      "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
