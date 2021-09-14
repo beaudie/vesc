@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7548dda_90034a1b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-14T16:29:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f27f7ff_b63f0154",
+      "range": {
+        "startLine": 20,
+        "startChar": 14,
+        "endLine": 20,
+        "endChar": 25
+      },
+      "revId": "ce476b9e9cae60ee0fb536cbc353674a36632bc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdd54550_39a5f33c",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-14T11:37:42Z",
       "side": 1,
       "message": "could we call this a \u0027ReadWriteResource\u0027, since the point is that it tracks reads/writes separately, while Resource just tracks use in general?",
+      "range": {
+        "startLine": 200,
+        "startChar": 6,
+        "endLine": 200,
+        "endChar": 20
+      },
+      "revId": "ce476b9e9cae60ee0fb536cbc353674a36632bc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0af8009d_bacee7c7",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-14T16:29:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdd54550_39a5f33c",
       "range": {
         "startLine": 200,
         "startChar": 6,
