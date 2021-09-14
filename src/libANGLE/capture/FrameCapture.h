@@ -11,6 +11,7 @@
 #define LIBANGLE_FRAME_CAPTURE_H_
 
 #include "common/PackedEnums.h"
+#include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/capture/frame_capture_utils_autogen.h"
@@ -375,6 +376,78 @@ class FrameCapture final : angle::NonCopyable
     std::vector<CallCapture> mSetupCalls;
 };
 
+class CoherentBuffer
+{
+  public:
+    CoherentBuffer(uintptr_t start, size_t size, size_t pageSize);
+    ~CoherentBuffer();
+
+    // Sets the a range in the buffer clean and protects a selected range
+    void protectPageRange(const std::pair<int32_t, int32_t> &pageRange);
+
+    // Sets a page dirty and removes it's protection
+    void setDirty(size_t relativePage);
+
+    void setClean(size_t relativePage);
+
+    // Removes protection completely
+    void removeProtection();
+
+    bool contains(size_t page, size_t *relativePage);
+    bool isDirty();
+
+    // Returns dirty page ranges
+    std::vector<std::pair<int32_t, int32_t>> getDirtyPageRanges();
+
+    // Calculates address range from page range
+    std::pair<uintptr_t, size_t> getDirtyAddressRange(
+        const std::pair<int32_t, int32_t> &dirtyPageRange);
+
+  private:
+    // Actual buffer start and size
+    uintptr_t mStart;
+    size_t mSize;
+
+    // Start and size of page aligned protected area
+    uintptr_t mProtectionStart;
+    size_t mProtectionSize;
+
+    size_t mPageCount;
+    size_t mPageSize;
+
+    // Clean pages are protected
+    std::vector<bool> mDirtyPages;
+};
+
+class CoherentBufferTracker final : angle::NonCopyable
+{
+  public:
+    CoherentBufferTracker();
+    ~CoherentBufferTracker();
+
+    bool isDirty(gl::BufferID id);
+    void addBuffer(gl::BufferID id, uintptr_t start, size_t size);
+    void removeBuffer(gl::BufferID id);
+    void disable();
+    void enable();
+
+  private:
+    // Returns a map to found buffers and the corresponding pages for a given address.
+    // For addresses that are in a page shared by 2 buffers, 2 results are returned.
+    std::map<std::shared_ptr<CoherentBuffer>, size_t> getBufferPagesForAddress(uintptr_t address);
+    SignalRangeType handleWrite(uintptr_t address);
+    bool haveBuffer(gl::BufferID id);
+
+  public:
+    std::mutex mMutex;
+    std::map<gl::BufferID, std::shared_ptr<CoherentBuffer>> mBuffers;
+
+  private:
+    bool mEnabled = false;
+    PageFaultHandler *mPageFaultHandler;
+    size_t mPageSize;
+};
+
 // Shared class for any items that need to be tracked by FrameCapture across shared contexts
 class FrameCaptureShared final : angle::NonCopyable
 {
@@ -398,9 +471,11 @@ class FrameCaptureShared final : angle::NonCopyable
 
     void trackBufferMapping(CallCapture *call,
                             gl::BufferID id,
+                            gl::Buffer *buffer,
                             GLintptr offset,
                             GLsizeiptr length,
-                            bool writable);
+                            bool writable,
+                            bool coherent);
 
     void trackTextureUpdate(const gl::Context *context, const CallCapture &call);
 
@@ -428,6 +503,9 @@ class FrameCaptureShared final : angle::NonCopyable
                                                     gl::TextureTarget target,
                                                     GLint level,
                                                     EntryPoint entryPoint);
+
+    // Capture coherent buffer storages
+    void captureCoherentBufferSnapshot(const gl::Context *context, gl::BufferID bufferID);
 
     // Remove any cached texture levels on deletion
     void deleteCachedTextureLevelData(gl::TextureID id);
@@ -525,6 +603,7 @@ class FrameCaptureShared final : angle::NonCopyable
     void maybeCaptureDrawElementsClientData(const gl::Context *context,
                                             CallCapture &call,
                                             size_t instanceCount);
+    void maybeCaptureCoherentBuffers(const gl::Context *context);
     void updateCopyImageSubData(CallCapture &call);
     void overrideProgramBinary(const gl::Context *context,
                                CallCapture &call,
@@ -567,6 +646,7 @@ class FrameCaptureShared final : angle::NonCopyable
     std::string mValidationExpression;
     bool mTrimEnabled = true;
     PackedEnumMap<ResourceIDType, uint32_t> mMaxAccessedResourceIDs;
+    CoherentBufferTracker mCoherentBufferTracker;
 
     ResourceTracker mResourceTracker;
 
