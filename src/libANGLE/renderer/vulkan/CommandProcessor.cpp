@@ -11,6 +11,10 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/trace.h"
 
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+#    include "libANGLE/Thread.h"
+#endif
+
 namespace rx
 {
 namespace vk
@@ -441,6 +445,10 @@ void CommandProcessor::queueCommand(CommandProcessorTask &&task)
 
 void CommandProcessor::processTasks()
 {
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+    angle::SetCurrentThreadAffinity(SVDT_VULKAN_NEW_THREAD_AFFINITY);
+#endif
+
     while (true)
     {
         bool exitThread      = false;
@@ -2993,6 +3001,10 @@ void CommandQueue2::SubmitThreadTaskQueue::waitIdle()
 
 void CommandQueue2::SubmitThreadTaskQueue::processTaskQueue()
 {
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+    angle::SetCurrentThreadAffinity(SVDT_VULKAN_NEW_THREAD_AFFINITY);
+#endif
+
     for (;;)
     {
         QueueTask task;

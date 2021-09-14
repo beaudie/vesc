@@ -12,9 +12,33 @@
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+#    include <unistd.h>
+#    include <sys/syscall.h>
+#endif
+
 namespace angle
 {
 bool gUseAndroidOpenGLTlsSlot;
+
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+void SetCurrentThreadAffinity(int32_t affinity)
+{
+    if (affinity == 0)
+    {
+        return;
+    }
+    const pid_t tid = gettid();
+    const unsigned mask = (affinity > 0) ? static_cast<unsigned>(affinity) : UINT32_MAX;
+    const long result = syscall(__NR_sched_setaffinity, tid, sizeof(mask), &mask);
+    INFO() << "Set Thread affinity: tid=" << tid << "; mask=" << mask;
+    if (result != 0)
+    {
+        ERR() << "Failed to set Thread affinity: tid=" << tid
+            << "; mask=" << mask << "; errno=" << errno << ";";
+    }
+}
+#endif
 }  // namespace angle
 
 namespace egl

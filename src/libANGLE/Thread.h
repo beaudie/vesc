@@ -31,6 +31,12 @@ ANGLE_INLINE ThreadId GetCurrentThreadId()
     return gettid();
 }
 #endif
+
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+// affinity = 0 - Do not change
+// affinity < 0 - ALL cores
+void SetCurrentThreadAffinity(int32_t affinity);
+#endif
 }  // namespace angle
 
 namespace gl

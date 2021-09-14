@@ -23,6 +23,10 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
 
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+#    include "libANGLE/Thread.h"
+#endif
+
 #if SVDT_ENABLE_VULKAN_ANDROID_SWAPCHAIN_ACQUIRE_TIMEOUT_WA
 int32_t ANativeWindow_getMinUndequeuedBuffers(ANativeWindow* window);
 int32_t ANativeWindow_setDequeueTimeout(ANativeWindow* window, int64_t timeout);
@@ -2473,6 +2477,10 @@ void WindowSurfaceVk::ImageAcquireHelper::stopThread()
 
 void WindowSurfaceVk::ImageAcquireHelper::threadWorker()
 {
+#if SVDT_VULKAN_NEW_THREAD_AFFINITY != 0
+    angle::SetCurrentThreadAffinity(SVDT_VULKAN_NEW_THREAD_AFFINITY);
+#endif
+
     mPendingResult = VK_SUCCESS;
 
     while ((mPendingResult == VK_SUCCESS) || (mPendingResult == VK_SUBOPTIMAL_KHR))
