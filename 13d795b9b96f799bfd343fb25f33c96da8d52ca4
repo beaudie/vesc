@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b098ad8_66a23912",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-14T05:20:36Z",
+      "side": 1,
+      "message": "nit: I think it would be better to quote the SPIR-V spec here from Christopher\u0027s email:\n\n\u003e The RelaxedPrecision Decoration can be applied to:\n\u003e The Result \u003cid\u003e of an instruction that operates on numerical types, meaning the instruction is to operate at relaxed precision. The instruction’s operands may also be truncated to the relaxed precision.\n\nI\u0027m not finding anything that calls out \n\nIs there a reason just FindSMsb is special here, or should all Find*Msb instructions drop RelaxedPrecision (or even all instructions here)?",
+      "range": {
+        "startLine": 684,
+        "startChar": 85,
+        "endLine": 686,
+        "endChar": 82
+      },
+      "revId": "13d795b9b96f799bfd343fb25f33c96da8d52ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
