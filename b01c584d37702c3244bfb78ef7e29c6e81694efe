@@ -404,6 +404,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c1e173_9ddd592a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-14T05:59:04Z",
+      "side": 1,
+      "message": "Resolving this for now, since there was another refactor that created a new ResourceWrite class which tracks read/write accesses and left these retain() calls as-is.",
+      "parentUuid": "2c05352e_86b83f5f",
+      "range": {
+        "startLine": 1061,
+        "startChar": 11,
+        "endLine": 1061,
+        "endChar": 25
+      },
+      "revId": "b01c584d37702c3244bfb78ef7e29c6e81694efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "878c188f_0fde3016",
