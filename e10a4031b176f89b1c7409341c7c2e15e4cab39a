@@ -16,6 +16,52 @@
       "message": "Just wondering, why wasn\u0027t there a draw call in the test? Without a draw call many updates won\u0027t complete.",
       "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cdf0cbc_6f8a3db4",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T11:46:34Z",
+      "side": 1,
+      "message": "nit: should use mNaming\n\nalso the first iteration of the loop will generate all these vertex arrays. to ensure more consistent performance you should explicitly gen them before the first loop.",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4360964_d97f1626",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-14T11:46:34Z",
+      "side": 1,
+      "message": "nit: you should make this a constant. note that you could also make it a parameter to the test.",
+      "range": {
+        "startLine": 62,
+        "startChar": 31,
+        "endLine": 62,
+        "endChar": 35
+      },
+      "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
