@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff9964a2_3d93b733",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-14T20:00:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1117ede_1cf52f4b",
+      "range": {
+        "startLine": 249,
+        "startChar": 18,
+        "endLine": 249,
+        "endChar": 34
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bd4a059_4bf0a251",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cbf900d_e1ee12ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-14T20:00:30Z",
+      "side": 1,
+      "message": "Yeah, I think it can be removed.",
+      "parentUuid": "0bd4a059_4bf0a251",
+      "range": {
+        "startLine": 991,
+        "startChar": 68,
+        "endLine": 991,
+        "endChar": 92
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ee44a8c_86be8f13",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-09-14T17:02:03Z",
       "side": 1,
       "message": "What if both mReadWriteUse and mReadOnlyUse are busy, but mReadWriteUse is after mReadOnlyUse? I think this will free memory based on mReadOnlyUse and causing mReadWriteUse to generate GPU fault. With your new model that tracks ReadOnly and ReadWrite completely independently, I think you need to find out which is the last use and call collectGarbageAndReinit on the very last use.",
+      "range": {
+        "startLine": 3674,
+        "startChar": 4,
+        "endLine": 3679,
+        "endChar": 29
+      },
+      "revId": "d332b0a954815c43337abade0dd2ba86a4dbfee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d959c582_148d30b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3679,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-14T20:00:30Z",
+      "side": 1,
+      "message": "I initially went down that path also, but I don\u0027t think it\u0027s necessary based on Shabi\u0027s discussion about how/when BufferHelper::release() is called.\n\nBufferHelper::release() is only called during glDeleteBuffers(), after which the buffer can\u0027t be used anymore.   So, if the buffer is used at all (for either read or readWrite), we don\u0027t really care which it is since they\u0027ll both have to be as part of the \"next\" serial anyway (the serial generated in the next submission, which the buffer is used in).   This means both mReadOnlyUse and mReadWriteUse will have the same final serial value to indicate the buffer can be destroyed, since the buffer can\u0027t be retain()\u0027ed anymore after it\u0027s been glDeleteBuffers()\u0027ed.\n\nThat\u0027s my understanding of how things work anyway.   Let me know if there\u0027s a gap I\u0027m missing somewhere.",
+      "parentUuid": "4ee44a8c_86be8f13",
       "range": {
         "startLine": 3674,
         "startChar": 4,
