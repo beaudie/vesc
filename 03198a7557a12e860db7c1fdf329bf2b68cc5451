@@ -110,6 +110,30 @@
       },
       "revId": "03198a7557a12e860db7c1fdf329bf2b68cc5451",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3979397_0d83526c",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-14T18:20:04Z",
+      "side": 1,
+      "message": "To be clear, I\u0027m asking why you don\u0027t apply this approach to all the other extension bools surrounding this change.  Might as well do them all at once?",
+      "parentUuid": "1682e7d6_d29cb933",
+      "range": {
+        "startLine": 1176,
+        "startChar": 0,
+        "endLine": 1180,
+        "endChar": 51
+      },
+      "revId": "03198a7557a12e860db7c1fdf329bf2b68cc5451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
