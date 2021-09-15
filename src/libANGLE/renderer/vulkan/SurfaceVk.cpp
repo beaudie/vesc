@@ -6,7 +6,6 @@
 // SurfaceVk.cpp:
 //    Implements the class methods for SurfaceVk.
 //
-
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 
 #include "common/debug.h"
@@ -596,13 +595,25 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
         surfaceCaps2.sType                     = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
         surfaceCaps2.pNext                     = nullptr;
 
+        VkSharedPresentSurfaceCapabilitiesKHR sharedPresentSurfaceCaps = {};
+        if (renderer->getFeatures().supportsSharedPresentableImageExtension.enabled)
+        {
+            sharedPresentSurfaceCaps.sType =
+                VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR;
+            sharedPresentSurfaceCaps.pNext = nullptr;
+            sharedPresentSurfaceCaps.sharedPresentSupportedUsageFlags =
+                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+            vk::AddToPNextChain(&surfaceCaps2, &sharedPresentSurfaceCaps);
+        }
+
         VkSurfaceProtectedCapabilitiesKHR surfaceProtectedCaps = {};
         if (renderer->getFeatures().supportsSurfaceProtectedCapabilitiesExtension.enabled)
         {
             surfaceProtectedCaps.sType = VK_STRUCTURE_TYPE_SURFACE_PROTECTED_CAPABILITIES_KHR;
             surfaceProtectedCaps.pNext = nullptr;
 
-            surfaceCaps2.pNext = &surfaceProtectedCaps;
+            vk::AddToPNextChain(&surfaceCaps2, &surfaceProtectedCaps);
         }
 
         ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceCapabilities2KHR(
@@ -1061,6 +1072,11 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.presentMode           = mDesiredSwapchainPresentMode;
     swapchainInfo.clipped               = VK_TRUE;
     swapchainInfo.oldSwapchain          = lastSwapchain;
+
+    if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    {
+        swapchainInfo.minImageCount = 1;
+    }
 
     // On Android, vkCreateSwapchainKHR destroys lastSwapchain, which is incorrect.  Wait idle in
     // that case as a workaround.
@@ -1997,6 +2013,18 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
         }
     }
     return egl::NoError();
+}
+
+void WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
+{
+    if (renderBuffer == EGL_SINGLE_BUFFER)
+    {
+        mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
+    }
+    else  // EGL_BACK_BUFFER
+    {
+        mDesiredSwapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
+    }
 }
 
 }  // namespace rx

@@ -77,6 +77,8 @@ class OffscreenSurfaceVk : public SurfaceVk
 
     vk::ImageHelper *getColorAttachmentImage();
 
+    void setRenderBuffer(EGLint value) override { return; }
+
   protected:
     struct AttachmentImage final : angle::NonCopyable
     {
@@ -247,6 +249,8 @@ class WindowSurfaceVk : public SurfaceVk
     }
 
     egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
+
+    void setRenderBuffer(EGLint renderBuffer) override;
 
   protected:
     angle::Result swapImpl(const gl::Context *context,
