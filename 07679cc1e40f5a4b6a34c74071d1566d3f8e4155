@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "798e572d_1a1f881e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-15T21:09:25Z",
+      "side": 1,
+      "message": "lgtm\n\nThanks for the quick suppression.\n",
+      "revId": "07679cc1e40f5a4b6a34c74071d1566d3f8e4155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
