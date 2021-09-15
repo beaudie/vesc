@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b93d5e2_757c35b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T19:41:20Z",
+      "side": 1,
+      "message": "Not a big fan of camel case being applied to acronyms.  Can you spell out the rules you used in the CL?  It looks like you are referring to the name of the extension and keeping sections lower case (except for first letter) unless it was all caps in the extension, then is stays all caps.  I\u0027d lean toward homogenizing to all caps for acronyms in the bools, but I don\u0027t feel strongly enough about it to hold this up, as long as the rules are clear and discoverable.  They are going to look goofy either way.",
+      "revId": "b878635a78971cc00dc0e1d45e9939a1e94b628b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
