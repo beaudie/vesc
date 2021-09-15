@@ -647,6 +647,13 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
             if ((access & GL_MAP_INVALIDATE_BUFFER_BIT) != 0)
             {
                 ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize())));
+                // Tell the observers (front end) that a new buffer was created, so the necessary
+                // dirty bits can be set. This allows the buffer views pointing to the old buffer to
+                // be recreated and point to the new buffer, along with updating the descriptor sets
+                // to use the new buffer. Just a note that the buffer is not fully "ghosted", since
+                // the old data isn't being copied into the new buffer, but the same handling is
+                // required.
+                onStateChange(angle::SubjectMessage::SubjectGhosted);
             }
             else if (!mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
             {
