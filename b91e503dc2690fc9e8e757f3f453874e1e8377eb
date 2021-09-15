@@ -94,6 +94,30 @@
       },
       "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b073a65b_ade98068",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T18:09:17Z",
+      "side": 1,
+      "message": "Done.\n\nFix + test: https://chromium-review.googlesource.com/c/angle/angle/+/3163244\n\nOpenGL backend bug: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6396",
+      "parentUuid": "ed5b9118_cc9f04e7",
+      "range": {
+        "startLine": 647,
+        "startChar": 12,
+        "endLine": 654,
+        "endChar": 13
+      },
+      "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
