@@ -501,7 +501,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
-      mFrameCount(1)
+      mFrameCount(1),
+      mChangePresentationMode(false)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -1062,6 +1063,16 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.clipped               = VK_TRUE;
     swapchainInfo.oldSwapchain          = lastSwapchain;
 
+    if (mChangePresentationMode != false)
+    {
+        if (mChangePresentationMode == EGL_SINGLE_BUFFER)
+        {
+            swapchainInfo.minImageCount = 1;
+            swapchainInfo.presentMode   = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
+        }
+        mChangePresentationMode = false;
+    }
+
     // On Android, vkCreateSwapchainKHR destroys lastSwapchain, which is incorrect.  Wait idle in
     // that case as a workaround.
     if (lastSwapchain && renderer->getFeatures().waitIdleBeforeSwapchainRecreation.enabled)
@@ -1184,7 +1195,7 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
                                                           bool presentOutOfDate)
 {
     bool swapIntervalChanged = mSwapchainPresentMode != mDesiredSwapchainPresentMode;
-    presentOutOfDate         = presentOutOfDate || swapIntervalChanged;
+    presentOutOfDate         = presentOutOfDate || swapIntervalChanged || mChangePresentationMode;
 
     // If there's no change, early out.
     if (!contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled &&
@@ -1996,6 +2007,18 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
             *age = static_cast<EGLint>(mFrameCount - frameNumber);
         }
     }
+    return egl::NoError();
+}
+
+egl::Error WindowSurfaceVk::setRenderBuffer(EGLint value)
+{
+    if (std::find(mPresentModes.begin(), mPresentModes.end(),
+                  VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) == mPresentModes.end())
+    {
+        return egl::EglBadMatch();
+    }
+
+    mChangePresentationMode = value;
     return egl::NoError();
 }
 
