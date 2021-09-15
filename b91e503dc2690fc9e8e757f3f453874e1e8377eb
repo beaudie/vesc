@@ -46,6 +46,30 @@
       },
       "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9948fb8_39606ebd",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-15T01:14:16Z",
+      "side": 1,
+      "message": "\u003e there isn\u0027t a test that maps a texture buffer with GL_MAP_INVALIDATE_BUFFER_BIT, writes to it, and expects to see the new data.\n\nThen please write one? That doesn\u0027t seem like a farfetched thing to do.\n\nThat said, any bug with that should already be present with the current code, which also does acquireBufferHelper without signalling the front-end, so deferring it SGTM. Although to be honest you might as well fix it while you are here (it\u0027s just one line anyway).",
+      "parentUuid": "1be12c06_c5db4034",
+      "range": {
+        "startLine": 647,
+        "startChar": 12,
+        "endLine": 654,
+        "endChar": 13
+      },
+      "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
