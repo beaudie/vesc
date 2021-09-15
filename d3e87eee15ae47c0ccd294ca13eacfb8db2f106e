@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0aa78253_7beaf8c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-09-15T22:23:23Z",
+      "side": 1,
+      "message": "Thank you Jamie. I have moved these notes from the CL description to the ticket https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6152.",
+      "parentUuid": "44a40e26_6a7def63",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 41
+      },
+      "revId": "d3e87eee15ae47c0ccd294ca13eacfb8db2f106e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bb2c200d_32456ba1",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
