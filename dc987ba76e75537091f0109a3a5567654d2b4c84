@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c662ee5_ef9a19a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-15T16:27:27Z",
+      "side": 1,
+      "message": "LGTM, could be good to manually check the extensions we\u0027re exposing on a couple different bots before/after this patch just for safety",
+      "revId": "dc987ba76e75537091f0109a3a5567654d2b4c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
