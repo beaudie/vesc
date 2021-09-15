@@ -108,6 +108,7 @@ class CommandProcessorTask
     void initOneOffQueueSubmit(VkCommandBuffer commandBufferHandle,
                                bool hasProtectedContent,
                                egl::ContextPriority priority,
+                               const Semaphore *semaphore,
                                const Fence *fence,
                                Serial submitQueueSerial);
 
@@ -132,6 +133,7 @@ class CommandProcessorTask
     egl::ContextPriority getPriority() const { return mPriority; }
     bool hasProtectedContent() const { return mHasProtectedContent; }
     VkCommandBuffer getOneOffCommandBufferVk() const { return mOneOffCommandBufferVk; }
+    const Semaphore *getOneOffSemaphore() { return mOneOffSemaphore; }
     const Fence *getOneOffFence() { return mOneOffFence; }
     const VkPresentInfoKHR &getPresentInfo() const { return mPresentInfo; }
     const RenderPass *getRenderPass() const { return mRenderPass; }
@@ -170,6 +172,7 @@ class CommandProcessorTask
 
     // Used by OneOffQueueSubmit
     VkCommandBuffer mOneOffCommandBufferVk;
+    const Semaphore *mOneOffSemaphore;
     const Fence *mOneOffFence;
 
     // Flush, Present & QueueWaitIdle data
@@ -291,6 +294,7 @@ class CommandQueueInterface : angle::NonCopyable
                                             bool hasProtectedContent,
                                             egl::ContextPriority contextPriority,
                                             VkCommandBuffer commandBufferHandle,
+                                            const Semaphore *semaphore,
                                             const Fence *fence,
                                             SubmitPolicy submitPolicy,
                                             Serial submitQueueSerial)  = 0;
@@ -355,6 +359,7 @@ class CommandQueue final : public CommandQueueInterface
                                     bool hasProtectedContent,
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
+                                    const Semaphore *semaphore,
                                     const Fence *fence,
                                     SubmitPolicy submitPolicy,
                                     Serial submitQueueSerial) override;
@@ -502,6 +507,7 @@ class CommandProcessor : public Context, public CommandQueueInterface
                                     bool hasProtectedContent,
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
+                                    const Semaphore *semaphore,
                                     const Fence *fence,
                                     SubmitPolicy submitPolicy,
                                     Serial submitQueueSerial) override;

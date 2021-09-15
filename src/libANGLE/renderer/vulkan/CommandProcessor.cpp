@@ -103,6 +103,7 @@ void CommandProcessorTask::initTask()
     mCommandBuffer               = nullptr;
     mSemaphore                   = nullptr;
     mCommandPool                 = nullptr;
+    mOneOffSemaphore             = nullptr;
     mOneOffFence                 = nullptr;
     mPresentInfo                 = {};
     mPresentInfo.pResults        = nullptr;
@@ -236,11 +237,13 @@ void CommandProcessorTask::initFlushAndQueueSubmit(
 void CommandProcessorTask::initOneOffQueueSubmit(VkCommandBuffer commandBufferHandle,
                                                  bool hasProtectedContent,
                                                  egl::ContextPriority priority,
+                                                 const Semaphore *semaphore,
                                                  const Fence *fence,
                                                  Serial submitQueueSerial)
 {
     mTask                  = CustomTask::OneOffQueueSubmit;
     mOneOffCommandBufferVk = commandBufferHandle;
+    mOneOffSemaphore       = semaphore;
     mOneOffFence           = fence;
     mPriority              = priority;
     mHasProtectedContent   = hasProtectedContent;
@@ -260,6 +263,7 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
     std::swap(mWaitSemaphores, rhs.mWaitSemaphores);
     std::swap(mWaitSemaphoreStageMasks, rhs.mWaitSemaphoreStageMasks);
     std::swap(mSemaphore, rhs.mSemaphore);
+    std::swap(mOneOffSemaphore, rhs.mOneOffSemaphore);
     std::swap(mOneOffFence, rhs.mOneOffFence);
     std::swap(mCommandPool, rhs.mCommandPool);
     std::swap(mGarbage, rhs.mGarbage);
@@ -469,8 +473,8 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
 
             ANGLE_TRY(mCommandQueue.queueSubmitOneOff(
                 this, task->hasProtectedContent(), task->getPriority(),
-                task->getOneOffCommandBufferVk(), task->getOneOffFence(),
-                SubmitPolicy::EnsureSubmitted, task->getQueueSerial()));
+                task->getOneOffCommandBufferVk(), task->getOneOffSemaphore(),
+                task->getOneOffFence(), SubmitPolicy::EnsureSubmitted, task->getQueueSerial()));
             ANGLE_TRY(mCommandQueue.checkCompletedCommands(this));
             break;
         }
@@ -701,6 +705,7 @@ angle::Result CommandProcessor::queueSubmitOneOff(Context *context,
                                                   bool hasProtectedContent,
                                                   egl::ContextPriority contextPriority,
                                                   VkCommandBuffer commandBufferHandle,
+                                                  const Semaphore *semaphore,
                                                   const Fence *fence,
                                                   SubmitPolicy submitPolicy,
                                                   Serial submitQueueSerial)
@@ -708,8 +713,8 @@ angle::Result CommandProcessor::queueSubmitOneOff(Context *context,
     ANGLE_TRY(checkAndPopPendingError(context));
 
     CommandProcessorTask task;
-    task.initOneOffQueueSubmit(commandBufferHandle, hasProtectedContent, contextPriority, fence,
-                               submitQueueSerial);
+    task.initOneOffQueueSubmit(commandBufferHandle, hasProtectedContent, contextPriority, semaphore,
+                               fence, submitQueueSerial);
     queueCommand(std::move(task));
     if (submitPolicy == SubmitPolicy::EnsureSubmitted)
     {
@@ -1180,6 +1185,7 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
                                               bool hasProtectedContent,
                                               egl::ContextPriority contextPriority,
                                               VkCommandBuffer commandBufferHandle,
+                                              const Semaphore *semaphore,
                                               const Fence *fence,
                                               SubmitPolicy submitPolicy,
                                               Serial submitQueueSerial)
@@ -1200,6 +1206,12 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
     {
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers    = &commandBufferHandle;
+    }
+
+    if (semaphore != nullptr)
+    {
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores    = semaphore->ptr();
     }
 
     return queueSubmit(context, contextPriority, submitInfo, fence, submitQueueSerial);

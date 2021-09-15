@@ -1750,6 +1750,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Initialize features and workarounds.
     initFeatures(displayVk, deviceExtensionNames);
 
+    // Enable VK_KHR_shared_presentable_image
+    if (ExtensionFound(VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME, deviceExtensionNames))
+    {
+        mEnabledDeviceExtensions.push_back(VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME);
+        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSharedPresentableImageExtension, true);
+    }
+
     // Enable VK_EXT_depth_clip_enable, if supported
     if (ExtensionFound(VK_EXT_DEPTH_CLIP_ENABLE_EXTENSION_NAME, deviceExtensionNames))
     {
@@ -3068,6 +3075,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             vk::PrimaryCommandBuffer &&primary,
                                             bool hasProtectedContent,
                                             egl::ContextPriority priority,
+                                            const vk::Semaphore *semaphore,
                                             const vk::Fence *fence,
                                             vk::SubmitPolicy submitPolicy,
                                             Serial *serialOut)
@@ -3081,15 +3089,15 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     {
         submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
         ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(context, hasProtectedContent, priority,
-                                                      primary.getHandle(), fence, submitPolicy,
-                                                      submitQueueSerial));
+                                                      primary.getHandle(), semaphore, fence,
+                                                      submitPolicy, submitQueueSerial));
     }
     else
     {
         submitQueueSerial = mCommandQueue.reserveSubmitSerial();
         ANGLE_TRY(mCommandQueue.queueSubmitOneOff(context, hasProtectedContent, priority,
-                                                  primary.getHandle(), fence, submitPolicy,
-                                                  submitQueueSerial));
+                                                  primary.getHandle(), semaphore, fence,
+                                                  submitPolicy, submitQueueSerial));
     }
 
     *serialOut = submitQueueSerial;
