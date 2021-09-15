@@ -33,6 +33,24 @@
       "message": "Did you make an attempt to skip every potentially flaky test? The three runs of the experimental bot I saw all had different failure sets, so this might end up being a bit whack-a-mole:\n\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-exp/4/overview\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-exp/3/overview\nhttps://chromium-swarm.appspot.com/task?id\u003d55fee2eab27e3910\nhttps://chromium-swarm.appspot.com/task?id\u003d55fee2ed3f0db710\n\n",
       "revId": "c45749f6cfe3668e4a1b1a32b7e63e3313408fad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6df82580_b517216b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T12:22:59Z",
+      "side": 1,
+      "message": "Actually, what we should do here is enable flaky retries on this config.\n\nSteps:\n\n 1) update infra/specs/test_suites.pyl and add \u0027mac_intel_experimental_gtests\u0027 that clones \u0027mac_amd_and_intel_gtests\u0027, but replaces \u0027angle_end2end_gtests\u0027 with \u0027angle_end2end_with_retry_gtests\u0027. \n 2) updat ewaterfalls.pyl to change \u0027mac-intel-exp\u0027 to use the new test suite. \n 3) re-run code generation (scripts/run_code_generation.py)\n 4) git add/commit the modified files.\n \nLMK if you need any help with this.",
+      "parentUuid": "c032051c_f0f24d65",
+      "revId": "c45749f6cfe3668e4a1b1a32b7e63e3313408fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
