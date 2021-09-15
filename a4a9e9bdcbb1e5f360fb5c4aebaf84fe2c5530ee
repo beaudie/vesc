@@ -38,6 +38,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d3b37826_1f1c7422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-15T18:45:43Z",
+      "side": 1,
+      "message": "lgtm too though let\u0027s let Geoff +2 this.\n\nThanks for following up and fixing this more robustly.\n",
+      "revId": "a4a9e9bdcbb1e5f360fb5c4aebaf84fe2c5530ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5d4be54a_54891e4f",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 1
