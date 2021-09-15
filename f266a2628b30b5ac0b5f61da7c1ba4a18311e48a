@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce634cd8_1f4a05ba",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T13:41:35Z",
+      "side": 1,
+      "message": "We can\u0027t really split trials or steps, those are atomic to a single invocation on the tests (a sample). Splitting samples seems like the way to go to me.",
+      "parentUuid": "7cfde996_042c2918",
+      "range": {
+        "startLine": 179,
+        "startChar": 49,
+        "endLine": 179,
+        "endChar": 50
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d465e80e_111219f1",
         "filename": "src/tests/run_perf_tests.py",
         "patchSetId": 1
@@ -73,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ca9cb51f_30f16fed",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T13:41:35Z",
+      "side": 1,
+      "message": "So, I need to split each sample into a different test result because they\u0027re run on different machines. If I give multiple samples the same name, when run in an environment with more samples, it\u0027ll have name collisions because two shards will report the same result and the result merger will barf.\n\nI could change --smoke-test-mode to run multiple samples. Right now it only runs one so this error wasn\u0027t caught. It would instead use a bit more CQ resources. WDYT?\n\nI updated this code to produce a different test result per-sample always.",
+      "parentUuid": "f768265e_19c21461",
+      "range": {
+        "startLine": 337,
+        "startChar": 12,
+        "endLine": 337,
+        "endChar": 28
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b847ac7_07d96332",
         "filename": "src/tests/run_perf_tests.py",
         "patchSetId": 1
@@ -84,6 +132,30 @@
       "writtenOn": "2021-09-10T21:33:42Z",
       "side": 1,
       "message": "test_name",
+      "range": {
+        "startLine": 376,
+        "startChar": 80,
+        "endLine": 376,
+        "endChar": 84
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ce1a38d_101fe8c2",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T13:41:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4b847ac7_07d96332",
       "range": {
         "startLine": 376,
         "startChar": 80,
@@ -107,6 +179,30 @@
       "writtenOn": "2021-09-10T21:33:42Z",
       "side": 1,
       "message": "test_name",
+      "range": {
+        "startLine": 377,
+        "startChar": 25,
+        "endLine": 377,
+        "endChar": 40
+      },
+      "revId": "f266a2628b30b5ac0b5f61da7c1ba4a18311e48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f6cdf09_bdd8f8f4",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T13:41:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "10f39ea1_0ec82e96",
       "range": {
         "startLine": 377,
         "startChar": 25,
