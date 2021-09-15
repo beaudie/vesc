@@ -22,6 +22,30 @@
       },
       "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "633e7979_aeeabb7f",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-15T14:09:09Z",
+      "side": 1,
+      "message": "I feel like we are repeating the same discussions! `mReadUse` is inaccurate since it\u0027s also used for images (which are read-write), and sync primitives (where read doesn\u0027t make sense). My original suggestion was `mAnyUse` because this is what it is, it\u0027s retained on any use, but mUse is ok with me too.",
+      "parentUuid": "b0d277dd_c7040785",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 26
+      },
+      "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
