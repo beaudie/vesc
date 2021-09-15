@@ -77,6 +77,8 @@ class OffscreenSurfaceVk : public SurfaceVk
 
     vk::ImageHelper *getColorAttachmentImage();
 
+    void setRenderBuffer(EGLint value) override { return; }
+
   protected:
     struct AttachmentImage final : angle::NonCopyable
     {
@@ -248,6 +250,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
 
+    void setRenderBuffer(EGLint value) override;
+
   protected:
     angle::Result swapImpl(const gl::Context *context,
                            const EGLint *rects,
@@ -349,6 +353,10 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
+
+    // EGL_KHR_mutable_render_buffer, 0 means no change,
+    // EGL_SINGLE_BUFFER, or EGL_BACK_BUFFER means to change to that mode.
+    EGLint mChangePresentationMode;
 };
 
 }  // namespace rx

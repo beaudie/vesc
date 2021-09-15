@@ -693,6 +693,7 @@ void Surface::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
 
 void Surface::setRenderBuffer(EGLint value)
 {
+    mImplementation->setRenderBuffer(value);
     mRenderBuffer = value;
 }
 
