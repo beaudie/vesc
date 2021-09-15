@@ -46,6 +46,30 @@
       },
       "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f37d7b6_a924c49b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T14:14:13Z",
+      "side": 1,
+      "message": "mReadUse matches retainReadOnly. Avoid premature generalization is my advice here and stick with mReadUse and mWriteUse. These are crystal clear and match the APIs. Note this class is only used for buffers right now.",
+      "parentUuid": "633e7979_aeeabb7f",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 26
+      },
+      "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
