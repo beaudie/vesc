@@ -16,6 +16,24 @@
       "message": "Doesn\u0027t this already handle all the above as well?\n\nAlso you might want to assert that the first two characters are \"gl\".",
       "revId": "9221199aaba0eabf48f15740f6c1849e337e24a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c46c18f_304cef8a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:05:11Z",
+      "side": 1,
+      "message": "+1, the default case nullifies the need for special handling.\n\nIf you decide to remove the default case, please update all the string lengths used in find (they\u0027re all tied to the length of glDraw at the moment).",
+      "parentUuid": "7de84be7_8e33a2e3",
+      "revId": "9221199aaba0eabf48f15740f6c1849e337e24a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
