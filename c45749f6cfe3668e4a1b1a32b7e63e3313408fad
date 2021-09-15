@@ -51,6 +51,24 @@
       "parentUuid": "c032051c_f0f24d65",
       "revId": "c45749f6cfe3668e4a1b1a32b7e63e3313408fad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6baafab7_077f1c75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-15T16:00:15Z",
+      "side": 1,
+      "message": "The failures in these two runs are identical:\n\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-exp/3/overview\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-exp/4/overview\n\nFor some reason they\u0027re not reported in the same order at the top of the run, but in the \"unexpected failures\" block of the \"angle_end2end_tests on Intel GPU on Mac on Mac-11.5.2\" run, they\u0027re the same.\n\nI don\u0027t think turning on flaky retries is needed. These failures look deterministic.",
+      "parentUuid": "6df82580_b517216b",
+      "revId": "c45749f6cfe3668e4a1b1a32b7e63e3313408fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
