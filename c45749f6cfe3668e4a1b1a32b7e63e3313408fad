@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cdec890_cbf7a2b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-15T09:21:51Z",
+      "side": 1,
+      "message": "Talked to KBR and we decided to suppress the errors now and then next I\u0027ll spend a little time trying to see if I can fix the state leak between backends so we can remove the https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6390 suppressions. We want to make sure the direct metal backend is being tested so we don\u0027t regress.",
+      "revId": "c45749f6cfe3668e4a1b1a32b7e63e3313408fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
