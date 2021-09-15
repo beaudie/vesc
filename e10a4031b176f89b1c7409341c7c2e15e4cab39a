@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b867db77_c7504928",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-09-15T03:42:21Z",
+      "side": 1,
+      "message": "This test tends to reproduce issue that large VAO dirty bit handling will cause high cpu load of glBufferData,thus draw call isn\u0027t needed in this case.",
+      "parentUuid": "e9643f3e_8bd7483c",
+      "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6cdf0cbc_6f8a3db4",
@@ -59,6 +77,30 @@
         "startChar": 31,
         "endLine": 62,
         "endChar": 35
+      },
+      "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02cf5a94_9b25d3bb",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-09-15T03:42:21Z",
+      "side": 1,
+      "message": "Thanks for the advice,but i think what time are vertex arrays generated may not affect glBufferData\u0027s cpu loading time.",
+      "parentUuid": "6cdf0cbc_6f8a3db4",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 30
       },
       "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
