@@ -51,6 +51,103 @@
       "message": "@Tim and Jamie, PTAL",
       "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5d29df5_4f04d0d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T18:59:40Z",
+      "side": 1,
+      "message": "Is it possible to break out the refactor changes, like passing around the commandPool parameters, so it makes the functional changes easier to see?",
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a415640f_1229b24a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T18:59:40Z",
+      "side": 1,
+      "message": "Should this be:\n\n    #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS\n        commandPool.destroy(device);\n    #else\n        for (CommandBuffer \u0026secondary : commandBuffersToReset)\n        {\n            // Note: we currently free the command buffers individually, but we could potentially reset\n            // the entire command pool.  https://issuetracker.google.com/issues/166793850\n            commandPool-\u003efreeCommandBuffers(device, 1, secondary.ptr());\n            secondary.releaseHandle();\n        }\n        commandBuffersToReset.clear();\n    #endif\n    \nThis would break releaseToCommandBatch(), since that doesn\u0027t recreate the pool anymore, but I\u0027m not seeing how the normal ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS case is being reset or destroyed/recreated.",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 310,
+        "endChar": 6
+      },
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68c0319d_561e5320",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T18:59:40Z",
+      "side": 1,
+      "message": "Is there a way to avoid doing all of this when ANGLE\u0027s secondary command buffers are being used?",
+      "range": {
+        "startLine": 1625,
+        "startChar": 0,
+        "endLine": 1630,
+        "endChar": 95
+      },
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98555072_df200557",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T18:59:40Z",
+      "side": 1,
+      "message": "This can be incremented every time to avoid the branch.",
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e15aef12_5fbf11bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T18:59:40Z",
+      "side": 1,
+      "message": "These onRecordCommand() in every command seem like something that will get missed when new commands are added.   I may have missed it, but is there a way to ensure the count is \u003e0 later to make sure all commands are being counted?",
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
