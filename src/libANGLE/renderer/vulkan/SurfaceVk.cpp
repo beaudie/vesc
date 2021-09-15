@@ -6,7 +6,6 @@
 // SurfaceVk.cpp:
 //    Implements the class methods for SurfaceVk.
 //
-
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 
 #include "common/debug.h"
@@ -501,7 +500,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
-      mFrameCount(1)
+      mFrameCount(1),
+      mChangePresentationMode(false)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -596,13 +596,28 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
         surfaceCaps2.sType                     = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
         surfaceCaps2.pNext                     = nullptr;
 
+        void **pNextPtr = &surfaceCaps2.pNext;
+
+        VkSharedPresentSurfaceCapabilitiesKHR sharedPresentSurfaceCaps = {};
+        if (renderer->getFeatures().supportsSharedPresentableImageExtension.enabled)
+        {
+            sharedPresentSurfaceCaps.sType =
+                VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR;
+            sharedPresentSurfaceCaps.pNext = nullptr;
+            sharedPresentSurfaceCaps.sharedPresentSupportedUsageFlags =
+                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+            *pNextPtr = &sharedPresentSurfaceCaps;
+            pNextPtr  = &sharedPresentSurfaceCaps.pNext;
+        }
+
         VkSurfaceProtectedCapabilitiesKHR surfaceProtectedCaps = {};
         if (renderer->getFeatures().supportsSurfaceProtectedCapabilitiesExtension.enabled)
         {
             surfaceProtectedCaps.sType = VK_STRUCTURE_TYPE_SURFACE_PROTECTED_CAPABILITIES_KHR;
             surfaceProtectedCaps.pNext = nullptr;
 
-            surfaceCaps2.pNext = &surfaceProtectedCaps;
+            *pNextPtr = &surfaceProtectedCaps;
         }
 
         ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceCapabilities2KHR(
@@ -1062,6 +1077,16 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.clipped               = VK_TRUE;
     swapchainInfo.oldSwapchain          = lastSwapchain;
 
+    if (mChangePresentationMode != false)
+    {
+        if (mChangePresentationMode == EGL_SINGLE_BUFFER)
+        {
+            swapchainInfo.minImageCount = 1;
+            swapchainInfo.presentMode   = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
+        }
+        mChangePresentationMode = false;
+    }
+
     // On Android, vkCreateSwapchainKHR destroys lastSwapchain, which is incorrect.  Wait idle in
     // that case as a workaround.
     if (lastSwapchain && renderer->getFeatures().waitIdleBeforeSwapchainRecreation.enabled)
@@ -1184,7 +1209,7 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
                                                           bool presentOutOfDate)
 {
     bool swapIntervalChanged = mSwapchainPresentMode != mDesiredSwapchainPresentMode;
-    presentOutOfDate         = presentOutOfDate || swapIntervalChanged;
+    presentOutOfDate         = presentOutOfDate || swapIntervalChanged || mChangePresentationMode;
 
     // If there's no change, early out.
     if (!contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled &&
@@ -1997,6 +2022,11 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
         }
     }
     return egl::NoError();
+}
+
+void WindowSurfaceVk::setRenderBuffer(EGLint value)
+{
+    mChangePresentationMode = value;
 }
 
 }  // namespace rx

@@ -6,7 +6,6 @@
 // DisplayVk.cpp:
 //    Implements the class methods for DisplayVk.
 //
-
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 
 #include "common/debug.h"
@@ -259,6 +258,9 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
          getRenderer()->getFeatures().supportsSurfaceProtectedSwapchains.enabled);
 
     outExtensions->createSurfaceSwapIntervalANGLE = true;
+
+    outExtensions->mutableRenderBufferKHR =
+        getRenderer()->getFeatures().supportsSharedPresentableImageExtension.enabled;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
