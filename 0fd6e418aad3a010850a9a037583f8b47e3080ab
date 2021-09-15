@@ -16,6 +16,23 @@
       "message": "PTAL. Prerequisite for logging a JSON list of extensions in angle_end2end_tests.",
       "revId": "0fd6e418aad3a010850a9a037583f8b47e3080ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf8f8ac_18a883ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:57:29Z",
+      "side": 1,
+      "message": "You need to add the new files.  They just show up as deleted in patchset 1.",
+      "revId": "0fd6e418aad3a010850a9a037583f8b47e3080ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
