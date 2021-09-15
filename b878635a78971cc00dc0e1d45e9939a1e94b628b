@@ -52,6 +52,24 @@
       "parentUuid": "8e74ae34_0d7ce1ac",
       "revId": "b878635a78971cc00dc0e1d45e9939a1e94b628b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f58fcfe_ebb41dad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T19:45:25Z",
+      "side": 1,
+      "message": "Note there are no \"ifs\" in this set of rules.",
+      "parentUuid": "6aa89b9c_c2abbc05",
+      "revId": "b878635a78971cc00dc0e1d45e9939a1e94b628b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
