@@ -16,6 +16,29 @@
       "message": "LGTM - funny that we can return max\u003csize_t\u003e now instead. Seems good enough to do that instead of somehow piping an error down.",
       "revId": "a4a9e9bdcbb1e5f360fb5c4aebaf84fe2c5530ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d4be54a_54891e4f",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5288,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-09-15T18:05:35Z",
+      "side": 1,
+      "message": "Note: this replaces the previous value, 795418649, which was making the test pass despite the integer overflow issue, with 556007917, which was making the test fail when the integer overflow issue happened.",
+      "range": {
+        "startLine": 5288,
+        "startChar": 23,
+        "endLine": 5288,
+        "endChar": 32
+      },
+      "revId": "a4a9e9bdcbb1e5f360fb5c4aebaf84fe2c5530ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
