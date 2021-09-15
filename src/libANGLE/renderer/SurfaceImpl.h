@@ -118,6 +118,7 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
                                    EGLint *bufferPitchOut);
     virtual egl::Error unlockSurface(const egl::Display *display, bool preservePixels);
     virtual EGLint origin() const;
+    virtual egl::Error setRenderBuffer(EGLint renderBuffer);
 
   protected:
     const egl::SurfaceState &mState;

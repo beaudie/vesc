@@ -1402,6 +1402,7 @@ enum class ImageLayout
     DepthStencilAttachment,
     DepthStencilResolveAttachment,
     Present,
+    SharedPresent,
     // The rest of the layouts.
     ExternalPreInitialized,
     ExternalShadersReadOnly,
@@ -1675,7 +1676,15 @@ class ImageHelper final : public Resource, public angle::Subject
         return mImageSerial;
     }
 
-    void setCurrentImageLayout(ImageLayout newLayout) { mCurrentLayout = newLayout; }
+    void setCurrentImageLayout(ImageLayout newLayout)
+    {
+        // Once you transition to ImageLayout::SharedPresent, you never transition out of it.
+        if (mCurrentLayout == ImageLayout::SharedPresent)
+        {
+            return;
+        }
+        mCurrentLayout = newLayout;
+    }
     ImageLayout getCurrentImageLayout() const { return mCurrentLayout; }
     VkImageLayout getCurrentLayout() const;
 
@@ -1850,6 +1859,13 @@ class ImageHelper final : public Resource, public angle::Subject
                             CommandBuffer *commandBuffer)
     {
         barrierImpl(context, aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
+    }
+
+    void recordWriteBarrierOneOff(Context *context,
+                                  ImageLayout newLayout,
+                                  PrimaryCommandBuffer *commandBuffer)
+    {
+        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex, commandBuffer);
     }
 
     // This function can be used to prevent issuing redundant layout transition commands.
