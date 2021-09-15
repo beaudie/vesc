@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc40fef_1a5470f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-09-15T00:19:46Z",
+      "side": 1,
+      "message": "@Shahbaz, So I tried to use the ImageHelper that is part of the surface\u0027s Image. Then used BufferHelper to copy buffer to or from Image. Basically following TextureVk  copyBufferDateToImage(). And I added a Finish() when done. Everything seems to work except the copy. When I call Finish() there are no commands to process. So I\u0027m missing something. And I\u0027m trying to use the OneOff Command Buffer feature of RendererVk to do the copy.\n\nSeveral functions regarding mapping the new allocated buffer are duplicates with name \"2\" appended. Its still a bit hacky, just trying to get it to work. Here I just needed to use DisplayVk instead of ContextVk.\n",
+      "revId": "fee2d08fda10da887b36e117724440d39298ac33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
