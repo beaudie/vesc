@@ -142,6 +142,30 @@
       },
       "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46786950_c7ef7a76",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-15T16:27:23Z",
+      "side": 1,
+      "message": "I do not object as well. Was just casting my vote, if it counts:-)",
+      "parentUuid": "59f899ec_70e8fdef",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 26
+      },
+      "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
