@@ -104,6 +104,30 @@
       },
       "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c03a7a07_817f570a",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T12:09:36Z",
+      "side": 1,
+      "message": "You don\u0027t think generating 1000 vertex arrays would affect CPU time? Seems like it would affect the first frame.",
+      "parentUuid": "02cf5a94_9b25d3bb",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
