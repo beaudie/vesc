@@ -588,6 +588,11 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsSurfaceProtectedSwapchains = {
         "supportsSurfaceProtectedSwapchains", FeatureCategory::VulkanFeatures,
         "VkSurface supportsProtected for protected swapchains", &members};
+
+    // Whether the VkSurface supports VK_KHR_shared_presentable_images.
+    Feature supportsSharedPresentableImageExtension = {
+        "supportsSharedPresentableImageExtension", FeatureCategory::VulkanFeatures,
+        "VkSurface supports the VK_KHR_shared_presentable_images extension", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

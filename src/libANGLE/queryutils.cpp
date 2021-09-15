@@ -4289,7 +4289,7 @@ egl::Error QuerySurfaceAttrib(const Display *display,
     return NoError();
 }
 
-void SetSurfaceAttrib(Surface *surface, EGLint attribute, EGLint value)
+egl::Error SetSurfaceAttrib(Surface *surface, EGLint attribute, EGLint value)
 {
     switch (attribute)
     {
@@ -4312,12 +4312,12 @@ void SetSurfaceAttrib(Surface *surface, EGLint attribute, EGLint value)
             surface->setTimestampsEnabled(value != EGL_FALSE);
             break;
         case EGL_RENDER_BUFFER:
-            surface->setRenderBuffer(value);
-            break;
+            return surface->setRenderBuffer(value);
         default:
             UNREACHABLE();
             break;
     }
+    return NoError();
 }
 
 Error GetSyncAttrib(Display *display, Sync *sync, EGLint attribute, EGLint *value)
