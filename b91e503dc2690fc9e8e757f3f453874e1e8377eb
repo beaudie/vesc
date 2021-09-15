@@ -22,6 +22,30 @@
       },
       "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1be12c06_c5db4034",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T00:43:47Z",
+      "side": 1,
+      "message": "That\u0027s an interesting question.\n\nI was hitting bugs without the onStateChange() call with ghostBuffer(), since we need the dirty bits set to trigger the buffer view and descriptor set to point to the new buffer.   Without that change, the next draw sees the old buffer data and renders incorrectly.\n\nIntuitively, it seems like that same issue should be occurring with GL_MAP_INVALIDATE_BUFFER_BIT, so I added an UNREACHABLE() to that block to see which tests fails in CQ.   It turns out, there is only one:\n\n  BufferDataTestES3.MapInvalidateThenBufferSubData/ES3_Vulkan*\n  \nThe key difference is that ghostBuffer() is called in tests that use texture buffers, which is currently the only way that buffers can be mapped and require calling onStateChange() if its ghosted.   It\u0027s possible that the GL_MAP_INVALIDATE_BUFFER_BIT case requires it also, but there isn\u0027t a test that maps a texture buffer with GL_MAP_INVALIDATE_BUFFER_BIT, writes to it, and expects to see the new data.\n\nSo, the answer is: possibly?   Intuitively, I agree that it should require the same fix since we\u0027re allocating a new buffer, but it seems that use-case hasn\u0027t come up yet.   I\u0027m willing to open a bug and mark it with a TODO if others agree this looks like an issue.",
+      "parentUuid": "348fe900_4d3ba643",
+      "range": {
+        "startLine": 647,
+        "startChar": 12,
+        "endLine": 654,
+        "endChar": 13
+      },
+      "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
