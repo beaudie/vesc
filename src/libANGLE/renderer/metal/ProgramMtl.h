@@ -158,8 +158,6 @@ class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecialize
         return mMslShaderTranslateInfo[shaderType].metalShaderSource;
     }
 
-    mtl::RenderPipelineCache *mMetalXfbRenderPipelineCache;
-
   private:
     template <int cols, int rows>
     void setUniformMatrixfv(GLint location,
