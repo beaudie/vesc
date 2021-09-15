@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6201cc63_29527bf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "Mostly questions and comments to make it easier to understand this change.  +2\u0027ing to facilitate timezone differences.",
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e82584e7_b8160073",
+        "filename": "src/libANGLE/Context_gles_ext_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "Maybe the same question here, what do these mean?  I see ANGLE extensions above under \"/* GLES2+ Extensions */\".  What is the distinction?  Maybe this could use a different or more descriptive title.",
+      "range": {
+        "startLine": 295,
+        "startChar": 4,
+        "endLine": 295,
+        "endChar": 27
+      },
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "329080c5_1ab894fb",
+        "filename": "src/libANGLE/capture/gl_enum_utils_autogen.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "Always nice to see fallout like this when things are automated.",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 40
+      },
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8b3426a_b465d0fe",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "I had to look up what requestable means. From below:\n\n    // If this extension can be enabled or disabled  with glRequestExtension\n    // (GL_ANGLE_request_extension)\n    bool Requestable \u003d false;\n\nWorth a brief comment (somewhere) what distinguishes these.",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 11
+      },
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a676ec_d17d5d88",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "Jamie, can you migrate your explanation of the formatting rules over here as a comment?  Important for future maintainers.",
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff83a28_2b65b694",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "This could use an example of what the extension looks like before being split up.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 5
+      },
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1daf8984_42e015f5",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "Do these need to be relative paths, or should they use your constants from the beginning of the file?",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 55
+      },
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84eeb764_73e2068b",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-15T21:49:47Z",
+      "side": 1,
+      "message": "This can just assert the number of inputs it expects rather than check for more than one, since it is expected this will be called from another script.",
+      "range": {
+        "startLine": 245,
+        "startChar": 4,
+        "endLine": 245,
+        "endChar": 25
+      },
+      "revId": "1eacb95f5d1de57d94a54f5edd3955d118ca0873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
