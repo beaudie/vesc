@@ -991,6 +991,12 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceProtectedCapabilitiesExtension, true);
     }
 
+    if (ExtensionFound(VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME, instanceExtensionNames))
+    {
+        enabledInstanceExtensions.push_back(VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME);
+        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSharedPresentableImageExtension, true);
+    }
+
     // Verify the required extensions are in the extension names set. Fail if not.
     std::sort(enabledInstanceExtensions.begin(), enabledInstanceExtensions.end(), StrLess);
     ANGLE_VK_TRY(displayVk,

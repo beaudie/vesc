@@ -120,4 +120,10 @@ egl::Error SurfaceImpl::getBufferAge(const gl::Context *context, EGLint *age)
     return egl::EglBadMatch();
 }
 
+egl::Error SurfaceImpl::setRenderBuffer(EGLint value)
+{
+    UNREACHABLE();
+    return egl::EglBadMatch();
+}
+
 }  // namespace rx

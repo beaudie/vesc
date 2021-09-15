@@ -691,9 +691,14 @@ void Surface::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
     }
 }
 
-void Surface::setRenderBuffer(EGLint value)
+Error Surface::setRenderBuffer(EGLint value)
 {
-    mRenderBuffer = value;
+    egl::Error result = mImplementation->setRenderBuffer(value);
+    if (!result.isError())
+    {
+        mRenderBuffer = value;
+    }
+    return result;
 }
 
 WindowSurface::WindowSurface(rx::EGLImplFactory *implFactory,
