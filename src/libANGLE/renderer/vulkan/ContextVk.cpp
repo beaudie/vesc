@@ -1334,9 +1334,40 @@ angle::Result ContextVk::handleDirtyEventLogImpl(vk::CommandBuffer *commandBuffe
     // ---vkCmdEndDebugUtilsLabelEXT() #2 for "OpenGL ES Commands"
     // --VK SetupDraw & Draw-related commands will be embedded here under glDraw #1
     // --vkCmdEndDebugUtilsLabelEXT() #1 is called after each vkDraw* or vkDispatch* call
+    std::string topLevelCommand = mEventLog.back();
+    // AGI desires a simple string for the top-level of the hierarchy.
+    if (topLevelCommand.find("glDraw", 0, 6) != std::string::npos)
+    {
+        topLevelCommand = "Draw";
+    }
+    else if (topLevelCommand.find("glClear", 0, 6) != std::string::npos)
+    {
+        topLevelCommand = "Clear";
+    }
+    else if (topLevelCommand.find("glDispatch", 0, 6) != std::string::npos)
+    {
+        topLevelCommand = "Dispatch";
+    }
+    else if (topLevelCommand.find("glBeginQuery", 0, 6) != std::string::npos)
+    {
+        topLevelCommand = "BeginQuery";
+    }
+    else if (topLevelCommand.find("glEndQuery", 0, 6) != std::string::npos)
+    {
+        topLevelCommand = "EndQuery";
+    }
+    else
+    {
+        // For an unknown command, remove the "gl" and everything after the command name:
+        size_t startOfParameters = topLevelCommand.find("(", 0);
+        if (startOfParameters != std::string::npos)
+        {
+            topLevelCommand = topLevelCommand.substr(2, startOfParameters - 2);
+        }
+    }
     VkDebugUtilsLabelEXT label = {VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
                                   nullptr,
-                                  mEventLog.back().c_str(),
+                                  topLevelCommand.c_str(),
                                   {0.0f, 0.0f, 0.0f, 0.0f}};
     // This is #1 from comment above
     commandBuffer->beginDebugUtilsLabelEXT(label);
@@ -3130,7 +3161,7 @@ angle::Result ContextVk::handleNoopDrawEvent()
 
 angle::Result ContextVk::handleGraphicsEventLog(GraphicsEventCmdBuf queryEventType)
 {
-    ASSERT(mQueryEventType == GraphicsEventCmdBuf::NotInQueryCmd);
+    ASSERT(mQueryEventType == GraphicsEventCmdBuf::NotInQueryCmd || mEventLog.empty());
     if (!mRenderer->angleDebuggerMode())
     {
         return angle::Result::Continue;
