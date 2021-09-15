@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5610116_84af20c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-15T22:50:48Z",
+      "side": 1,
+      "message": "Thanks for following up!\nProbably all the UniformBlockWithOneLargeArrayMemberTest tests that fail on Intel also have a chance to fail on NVIDIA. We\u0027ll see as we accumulate more builder runs.",
+      "revId": "0cea3fe2dc6e157aa765f0ee62ed48b3f45fb19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
