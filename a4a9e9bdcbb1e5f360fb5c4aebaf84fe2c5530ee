@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "179cfda3_684382eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T17:49:04Z",
+      "side": 1,
+      "message": "LGTM - funny that we can return max\u003csize_t\u003e now instead. Seems good enough to do that instead of somehow piping an error down.",
+      "revId": "a4a9e9bdcbb1e5f360fb5c4aebaf84fe2c5530ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
