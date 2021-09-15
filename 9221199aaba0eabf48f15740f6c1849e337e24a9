@@ -34,6 +34,24 @@
       "parentUuid": "7de84be7_8e33a2e3",
       "revId": "9221199aaba0eabf48f15740f6c1849e337e24a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a48460a0_d339ef1f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-15T21:09:06Z",
+      "side": 1,
+      "message": "\u003e Does this already handle ...?\n\nYes.  I\u0027m going to just keep the default case.",
+      "parentUuid": "9c46c18f_304cef8a",
+      "revId": "9221199aaba0eabf48f15740f6c1849e337e24a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
