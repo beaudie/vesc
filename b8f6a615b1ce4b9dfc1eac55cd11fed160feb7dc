@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f87a0eee_79369f20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-15T20:30:14Z",
+      "side": 1,
+      "message": "Shabi, Jonah: please review. Thanks.\n\nOthers: FYI.\n\nNote that this should be done after Gregg\u0027s https://chromium-review.googlesource.com/c/angle/angle/+/3152156 , and the angle_end2end_tests transform feedback suppressions should be removed in this CL.\n",
+      "revId": "b8f6a615b1ce4b9dfc1eac55cd11fed160feb7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
