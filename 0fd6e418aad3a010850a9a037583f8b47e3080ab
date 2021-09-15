@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e3971b7_71919e6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T20:03:53Z",
+      "side": 1,
+      "message": "PTAL. Prerequisite for logging a JSON list of extensions in angle_end2end_tests.",
+      "revId": "0fd6e418aad3a010850a9a037583f8b47e3080ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
