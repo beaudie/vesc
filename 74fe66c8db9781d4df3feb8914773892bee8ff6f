@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0d277dd_c7040785",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T12:06:36Z",
+      "side": 1,
+      "message": "nit: I\u0027d rename these to mReadUse and mWriteUse to try and disambiguate them. Now that you\u0027re adding the uses during the retainReadWrite call it makes more sense. Otherwise LGTM.",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 26
+      },
+      "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
