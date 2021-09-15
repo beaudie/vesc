@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "049e1d0a_670c834e",
+        "filename": "doc/SupportedExtensions.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T12:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d074f0c8_5c40c3b0",
+      "revId": "fd3eea1b55ffe46e96b4e4b042dcf28c7bfadb2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3da946eb_44841fdb",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6eeca3d1_a4346fae",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T12:45:12Z",
+      "side": 1,
+      "message": "It could. I decided to put it in libANGLE because that\u0027s what uses the extension code. We have scripts in both places.",
+      "parentUuid": "3da946eb_44841fdb",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 1
+      },
+      "revId": "fd3eea1b55ffe46e96b4e4b042dcf28c7bfadb2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eaa2ef4b_e8a94503",
         "filename": "src/libANGLE/gen_extensions.py",
         "patchSetId": 3
@@ -54,6 +96,30 @@
       "writtenOn": "2021-09-14T20:02:34Z",
       "side": 1,
       "message": "nit: could you trim the extension vendor from the front before sorting? that way extensions like instancedArraysANGLE vs instancedArraysEXT will appear next to each other",
+      "range": {
+        "startLine": 282,
+        "startChar": 19,
+        "endLine": 282,
+        "endChar": 25
+      },
+      "revId": "fd3eea1b55ffe46e96b4e4b042dcf28c7bfadb2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a649b6f_e295008c",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T12:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eaa2ef4b_e8a94503",
       "range": {
         "startLine": 282,
         "startChar": 19,
