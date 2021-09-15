@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "57f06de2_97b81264",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-09-15T18:09:17Z",
+      "side": 1,
+      "message": "We\u0027re also less likely to get an integer overflow when sizeof(size_t) is 8 bytes, since all this math is now done using size_t instead of int.",
+      "parentUuid": "179cfda3_684382eb",
+      "revId": "a4a9e9bdcbb1e5f360fb5c4aebaf84fe2c5530ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5d4be54a_54891e4f",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 1
