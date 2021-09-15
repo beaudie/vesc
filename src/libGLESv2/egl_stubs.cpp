@@ -616,7 +616,12 @@ EGLBoolean SurfaceAttrib(Thread *thread,
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglSurfaceAttrib",
                          GetDisplayIfValid(display), EGL_FALSE);
-    SetSurfaceAttrib(eglSurface, attribute, value);
+    egl::Error error = SetSurfaceAttrib(eglSurface, attribute, value);
+    if (error.isError())
+    {
+        thread->setError(error, "eglSurfaceAttrib", eglSurface);
+        return EGL_FALSE;
+    }
 
     thread->setSuccess();
     return EGL_TRUE;
