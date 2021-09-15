@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7db44b36_c5663ec9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-15T19:56:35Z",
+      "side": 1,
+      "message": "Some flakes did pop up on the CI bots:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/mac-rel/8209/overview\nCould you please skip them as well?",
+      "revId": "085ab6e80c9451230bbc17ee27fc1b580a2a5cf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
