@@ -16,6 +16,24 @@
       "message": "LGTM, could be good to manually check the extensions we\u0027re exposing on a couple different bots before/after this patch just for safety",
       "revId": "dc987ba76e75537091f0109a3a5567654d2b4c84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51cd937e_e50a03ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T16:29:08Z",
+      "side": 1,
+      "message": "I was looking into a way to do that programatically, by capturing EXTs to JSON. Haven\u0027t got it going yet. We could use the JSON in the generator script to log extensions in our wiki markdown.",
+      "parentUuid": "3c662ee5_ef9a19a8",
+      "revId": "dc987ba76e75537091f0109a3a5567654d2b4c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
