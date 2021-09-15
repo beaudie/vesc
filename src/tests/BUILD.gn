@@ -16,6 +16,11 @@ declare_args() {
       is_win || is_linux || is_chromeos || is_android || is_apple || is_fuchsia
 }
 
+# dma_buf tests are only built with chromium as it contains the wayland sources as third_party.  To
+# enable these tests in standalone ANGLE, the relevant third_party repos must be added and
+# autorollers set up.
+_build_dma_buf_tests = build_with_chromium && (is_linux || is_chromeos)
+
 if (is_android) {
   android_library("native_test_java") {
     testonly = true
@@ -207,6 +212,13 @@ angle_test("angle_unittests") {
   }
 }
 
+if (_build_dma_buf_tests) {
+  import("//build/config/linux/pkg_config.gni")
+  pkg_config("libdrm") {
+    packages = [ "libdrm" ]
+  }
+}
+
 if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
   import("angle_end2end_tests.gni")
 
@@ -249,6 +261,16 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
 
     if (is_android) {
       include_dirs += [ "${android_ndk_root}/sysroot/usr/includes" ]
+    }
+    if (_build_dma_buf_tests) {
+      sources += [ "egl_tests/EGLImageDmaBufImportTest.cpp" ]
+      public_configs += [ ":libdrm" ]
+      deps += [
+        "//third_party/minigbm",
+        "//third_party/wayland:wayland_client",
+        "//third_party/wayland-protocols:linux_dmabuf_protocol",
+        "//third_party/wayland-protocols:xdg_shell_protocol",
+      ]
     }
 
     data_deps = [
