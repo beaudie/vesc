@@ -141,4 +141,9 @@ EGLint SurfaceImpl::origin() const
     return EGL_LOWER_LEFT_KHR;
 }
 
+egl::Error SurfaceImpl::setRenderBuffer(EGLint renderBuffer)
+{
+    return egl::EglBadMatch();
+}
+
 }  // namespace rx

@@ -306,6 +306,7 @@ class RendererVk : angle::NonCopyable
                                     vk::PrimaryCommandBuffer &&primary,
                                     bool hasProtectedContent,
                                     egl::ContextPriority priority,
+                                    const vk::Semaphore *semaphore,
                                     const vk::Fence *fence,
                                     vk::SubmitPolicy submitPolicy,
                                     Serial *serialOut);

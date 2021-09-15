@@ -1222,6 +1222,20 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceProtectedCapabilitiesExtension, true);
     }
 
+    if (ExtensionFound(VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME, instanceExtensionNames))
+    {
+        enabledInstanceExtensions.push_back(VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME);
+        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSharedPresentableImageExtension, true);
+    }
+    else  // Debug J.Vigil
+    {
+        if (IsAndroid())
+        {
+            WARN() << "Debug: VK_KHR_shared_presentable_image extension not detected, "
+                      "SHARED PRESENT not enabled, no mutable_render_buffer. jvigil";
+        }
+    }
+
     // Verify the required extensions are in the extension names set. Fail if not.
     std::sort(mEnabledInstanceExtensions.begin(), mEnabledInstanceExtensions.end(), StrLess);
     ANGLE_VK_TRY(displayVk,
@@ -3075,6 +3089,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             vk::PrimaryCommandBuffer &&primary,
                                             bool hasProtectedContent,
                                             egl::ContextPriority priority,
+                                            const vk::Semaphore *semaphore,
                                             const vk::Fence *fence,
                                             vk::SubmitPolicy submitPolicy,
                                             Serial *serialOut)
@@ -3088,15 +3103,15 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     {
         submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
         ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(context, hasProtectedContent, priority,
-                                                      primary.getHandle(), fence, submitPolicy,
-                                                      submitQueueSerial));
+                                                      primary.getHandle(), semaphore, fence,
+                                                      submitPolicy, submitQueueSerial));
     }
     else
     {
         submitQueueSerial = mCommandQueue.reserveSubmitSerial();
         ANGLE_TRY(mCommandQueue.queueSubmitOneOff(context, hasProtectedContent, priority,
-                                                  primary.getHandle(), fence, submitPolicy,
-                                                  submitQueueSerial));
+                                                  primary.getHandle(), semaphore, fence,
+                                                  submitPolicy, submitQueueSerial));
     }
 
     *serialOut = submitQueueSerial;
