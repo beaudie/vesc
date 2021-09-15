@@ -1183,6 +1183,10 @@ egl::Config GenerateDefaultConfig(DisplayVk *display,
     config.sampleBuffers      = (sampleCount > 0) ? 1 : 0;
     config.samples            = sampleCount;
     config.surfaceType        = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
+    if (display->getExtensions().mutableRenderBufferKHR)
+    {
+        config.surfaceType |= EGL_MUTABLE_RENDER_BUFFER_BIT_KHR;
+    }
     // Vulkan surfaces use a different origin than OpenGL, always prefer to be flipped vertically if
     // possible.
     config.optimalOrientation    = EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE;

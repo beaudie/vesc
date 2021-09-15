@@ -1403,6 +1403,7 @@ enum class ImageLayout
     DepthStencilAttachment,
     DepthStencilResolveAttachment,
     Present,
+    SharedPresent,
     // The rest of the layouts.
     ExternalPreInitialized,
     ExternalShadersReadOnly,

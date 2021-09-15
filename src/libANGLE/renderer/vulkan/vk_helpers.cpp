@@ -303,6 +303,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::SharedPresent,
+        ImageMemoryBarrierData{
+            "SharedPresent",
+            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            // transition to: VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR and stay, same as General + Present:
+            0,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::Write,
+            PipelineStage::BottomOfPipe,
+        },
+    },
+    {
         ImageLayout::ExternalPreInitialized,
         ImageMemoryBarrierData{
             "ExternalPreInitialized",
@@ -5030,6 +5045,9 @@ void ImageHelper::barrierImpl(Context *context,
                               uint32_t newQueueFamilyIndex,
                               CommandBufferT *commandBuffer)
 {
+    // Make sure we never transition out of SharedPresent
+    ASSERT(mCurrentLayout != ImageLayout::SharedPresent || newLayout == ImageLayout::SharedPresent);
+
     const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
     const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
 
@@ -5063,6 +5081,11 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
                                          ImageLayout newLayout,
                                          PipelineBarrier *barrier)
 {
+    // Once you transition to ImageLayout::SharedPresent, you never transition out of it.
+    if (mCurrentLayout == ImageLayout::SharedPresent)
+    {
+        newLayout = ImageLayout::SharedPresent;
+    }
     bool barrierModified = false;
     if (newLayout == mCurrentLayout)
     {
@@ -5142,7 +5165,8 @@ void ImageHelper::clearColor(const VkClearColorValue &color,
 {
     ASSERT(valid());
 
-    ASSERT(mCurrentLayout == ImageLayout::TransferDst);
+    ASSERT(mCurrentLayout == ImageLayout::TransferDst ||
+           mCurrentLayout == ImageLayout::SharedPresent);
 
     VkImageSubresourceRange range = {};
     range.aspectMask              = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -5463,7 +5487,8 @@ void ImageHelper::resolve(ImageHelper *dest,
                           const VkImageResolve &region,
                           CommandBuffer *commandBuffer)
 {
-    ASSERT(mCurrentLayout == ImageLayout::TransferSrc);
+    ASSERT(mCurrentLayout == ImageLayout::TransferSrc ||
+           mCurrentLayout == ImageLayout::SharedPresent);
     commandBuffer->resolveImage(getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dest->getImage(),
                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 }
