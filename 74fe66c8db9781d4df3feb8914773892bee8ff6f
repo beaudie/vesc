@@ -190,6 +190,30 @@
       },
       "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7733c55e_0f9ae698",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-15T19:31:57Z",
+      "side": 1,
+      "message": "Can we go back to inheritance, since the two classes are essentially the same?",
+      "parentUuid": "02aaa89e_98dff89c",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 26
+      },
+      "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
