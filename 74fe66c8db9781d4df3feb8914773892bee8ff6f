@@ -118,6 +118,30 @@
       },
       "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f899ec_70e8fdef",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-15T16:24:49Z",
+      "side": 1,
+      "message": "I\u0027m still in favor of Read/Write.",
+      "parentUuid": "a3e48b98_c617a84f",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 26
+      },
+      "revId": "74fe66c8db9781d4df3feb8914773892bee8ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
