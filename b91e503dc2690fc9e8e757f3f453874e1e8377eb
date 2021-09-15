@@ -70,6 +70,30 @@
       },
       "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed5b9118_cc9f04e7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 49
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-15T16:24:16Z",
+      "side": 1,
+      "message": "Given GL_MAP_INVALIDATE_BUFFER_BIT is recommended usage and we are seeing apps using buffer texture, I think we should fix it while it is still hot on the table (in the separate CL). But if you want to just file a bug, please list the test that exposed this issue in the bug to make future debugging easier.",
+      "parentUuid": "e9948fb8_39606ebd",
+      "range": {
+        "startLine": 647,
+        "startChar": 12,
+        "endLine": 654,
+        "endChar": 13
+      },
+      "revId": "b91e503dc2690fc9e8e757f3f453874e1e8377eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
