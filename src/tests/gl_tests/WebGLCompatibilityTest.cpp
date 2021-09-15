@@ -4942,6 +4942,101 @@ TEST_P(WebGLCompatibilityTest, EnableCompressedTextureExtensionLossyDecode)
                                               "GL_ANGLE_lossy_etc_decode", true);
 }
 
+<<<<<<< HEAD   (326b46 [M90-LTS] WebGL: Make unsuccessful links fail subsequent dra)
+=======
+// Reject attempts to allocate too-large arrays in shaders.
+// This is an implementation-defined limit - crbug.com/1220237 .
+TEST_P(WebGLCompatibilityTest, ValidateArraySizes)
+{
+    // Note: on macOS with ANGLE's OpenGL backend, getting anywhere
+    // close to this limit causes pathologically slow shader
+    // compilation in the driver. For the "ok" case, therefore, use a
+    // fairly small array.
+    constexpr char kVSArrayOK[] =
+        R"(varying vec4 color;
+const int array_size = 1000;
+void main()
+{
+    mat2 array[array_size];
+    if (array[0][0][0] == 2.0)
+        color = vec4(0.0, 1.0, 0.0, 1.0);
+    else
+        color = vec4(1.0, 0.0, 0.0, 1.0);
+})";
+
+    constexpr char kVSArrayTooLarge[] =
+        R"(varying vec4 color;
+// 2 GB / 32 aligned bytes per mat2 = 67108864
+const int array_size = 67108865;
+void main()
+{
+    mat2 array[array_size];
+    if (array[0][0][0] == 2.0)
+        color = vec4(0.0, 1.0, 0.0, 1.0);
+    else
+        color = vec4(1.0, 0.0, 0.0, 1.0);
+})";
+
+    constexpr char kVSArrayMuchTooLarge[] =
+        R"(varying vec4 color;
+const int array_size = 556007917;
+void main()
+{
+    mat2 array[array_size];
+    if (array[0][0][0] == 2.0)
+        color = vec4(0.0, 1.0, 0.0, 1.0);
+    else
+        color = vec4(1.0, 0.0, 0.0, 1.0);
+})";
+
+    constexpr char kFS[] =
+        R"(precision mediump float;
+varying vec4 color;
+void main()
+{
+    gl_FragColor = vec4(color.r - 0.5, 0.0, 0.0, 1.0);
+})";
+
+    GLuint program = CompileProgram(kVSArrayOK, kFS);
+    EXPECT_NE(0u, program);
+
+    program = CompileProgram(kVSArrayTooLarge, kFS);
+    EXPECT_EQ(0u, program);
+
+    program = CompileProgram(kVSArrayMuchTooLarge, kFS);
+    EXPECT_EQ(0u, program);
+}
+
+// Reject attempts to allocate too-large structs in shaders.
+// This is an implementation-defined limit - crbug.com/1220237 .
+TEST_P(WebGLCompatibilityTest, ValidateStructSizes)
+{
+    // Note: on macOS with ANGLE's OpenGL backend, getting anywhere
+    // close to this limit causes pathologically slow shader
+    // compilation in the driver. For this reason, only perform a
+    // negative test.
+    constexpr char kFSStructTooLarge[] =
+        R"(precision mediump float;
+struct Light {
+// 2 GB / 32 aligned bytes per mat2 = 67108864
+mat2 array[67108865];
+};
+
+uniform Light light;
+
+void main()
+{
+    if (light.array[0][0][0] == 2.0)
+        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+    else
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+})";
+
+    GLuint program = CompileProgram(essl1_shaders::vs::Simple(), kFSStructTooLarge);
+    EXPECT_EQ(0u, program);
+}
+
+>>>>>>> CHANGE (158ef3 Fix integer overflow in BlockLayoutEncoder)
 // Linking should fail when corresponding vertex/fragment uniform blocks have different precision
 // qualifiers.
 TEST_P(WebGL2CompatibilityTest, UniformBlockPrecisionMismatch)
