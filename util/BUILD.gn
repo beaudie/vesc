@@ -56,6 +56,14 @@ if (angle_use_x11) {
   ]
 }
 
+if (is_linux || is_chromeos) {
+  _util_sources += [
+    "wayland/linux-dmabuf-unstable-v1-client-protocol.h",
+    "wayland/xdg-shell-client-protocol.h",
+    "wayland/xdg-shell-protocol.c",
+  ]
+}
+
 if (is_fuchsia) {
   _util_sources += [
     "fuchsia/FuchsiaPixmap.cpp",

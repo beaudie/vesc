@@ -207,6 +207,13 @@ angle_test("angle_unittests") {
   }
 }
 
+if (is_linux || is_chromeos) {
+  import("//build/config/linux/pkg_config.gni")
+  pkg_config("libdrm") {
+    packages = [ "libdrm" ]
+  }
+}
+
 if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
   import("angle_end2end_tests.gni")
 
@@ -249,6 +256,11 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
 
     if (is_android) {
       include_dirs += [ "${android_ndk_root}/sysroot/usr/includes" ]
+    }
+    if (is_linux || is_chromeos) {
+      sources += [ "egl_tests/EGLImageDmaBufImportTest.cpp" ]
+      public_configs += [ ":libdrm" ]
+      deps += [ "//third_party/minigbm" ]
     }
 
     data_deps = [
