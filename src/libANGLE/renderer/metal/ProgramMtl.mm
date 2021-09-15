@@ -246,14 +246,9 @@ ProgramMtl::ProgramMtl(const gl::ProgramState &state)
       mShadowCompareModes(),
       mMetalRenderPipelineCache(this),
       mAuxBufferPool(nullptr)
-{
-    mMetalXfbRenderPipelineCache = new mtl::RenderPipelineCache(this);
-}
+{}
 
-ProgramMtl::~ProgramMtl()
-{
-    delete mMetalXfbRenderPipelineCache;
-}
+ProgramMtl::~ProgramMtl() {}
 
 void ProgramMtl::destroy(const gl::Context *context)
 {
@@ -300,7 +295,6 @@ void ProgramMtl::reset(ContextMtl *context)
         }
     }
     mMetalRenderPipelineCache.clear();
-    mMetalXfbRenderPipelineCache->clear();
 }
 
 void ProgramMtl::saveTranslatedShaders(gl::BinaryOutputStream *stream)
@@ -425,7 +419,7 @@ angle::Result ProgramMtl::linkImplDirect(const gl::Context *glContext,
     ANGLE_TRY(mtl::GlslangGetMSL(glContext, mState, contextMtl->getCaps(), shaderSources,
                                  variableInfoMap, &mMslShaderTranslateInfo, &translatedMslShaders,
                                  mState.getExecutable().getTransformFeedbackBufferCount()));
-
+    mMslXfbOnlyVertexShaderInfo = mMslShaderTranslateInfo[gl::ShaderType::Vertex];
     for (gl::ShaderType shaderType : gl::kAllGLES2ShaderTypes)
     {
         // Create actual Metal shader
@@ -624,8 +618,9 @@ angle::Result ProgramMtl::getSpecializedShader(mtl::Context *context,
             {
                 // Lazily compile XFB only shader
                 gl::InfoLog infoLog;
-                ANGLE_TRY(
-                    createMslShaderLib(context, shaderType, infoLog, &mMslXfbOnlyVertexShaderInfo));
+                ANGLE_TRY(createMslShaderLib(context, shaderType, infoLog,
+                                             &mMslXfbOnlyVertexShaderInfo,
+                                             @{@"TRANSFORM_FEEDBACK_ENABLED" : @"1"}));
                 translatedMslInfo->metalLibrary.get().label = @"TransformFeedback";
             }
         }
