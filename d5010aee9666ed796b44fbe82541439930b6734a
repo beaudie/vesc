@@ -16,6 +16,23 @@
       "message": "This is a change that the AGI team requested.  It changes the top-level hierarchy of the debug-utils markers for AGI, per the bug.",
       "revId": "d5010aee9666ed796b44fbe82541439930b6734a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8a41e3c_ad27948f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1522628
+      },
+      "writtenOn": "2021-09-15T20:37:02Z",
+      "side": 1,
+      "message": "Can we add a default case that looks for the open parenthesis and chops off the rest of the string?",
+      "revId": "d5010aee9666ed796b44fbe82541439930b6734a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
