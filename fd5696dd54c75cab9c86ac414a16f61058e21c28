@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7118abf3_9deb7778",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:36:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8faf45f_d0612c27",
+      "range": {
+        "startLine": 364,
+        "startChar": 11,
+        "endLine": 364,
+        "endChar": 39
+      },
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "741fc54c_23cfc565",
@@ -54,6 +78,54 @@
       "writtenOn": "2021-09-16T17:10:25Z",
       "side": 1,
       "message": "similarly, you can use ANGLE_VK_CHECK for all these. is there an overriding reason you decided not to generate errors?",
+      "range": {
+        "startLine": 382,
+        "startChar": 7,
+        "endLine": 382,
+        "endChar": 35
+      },
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2434bd00_f119896a",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:36:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "741fc54c_23cfc565",
+      "range": {
+        "startLine": 382,
+        "startChar": 7,
+        "endLine": 382,
+        "endChar": 35
+      },
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f989abf_fdb214cd",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:36:40Z",
+      "side": 1,
+      "message": "Done, no reason, just wasn\u0027t focused on that part.",
+      "parentUuid": "741fc54c_23cfc565",
       "range": {
         "startLine": 382,
         "startChar": 7,
@@ -87,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ed78788_e8a7d570",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:36:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77dd21e8_f951de9e",
+      "range": {
+        "startLine": 408,
+        "startChar": 0,
+        "endLine": 409,
+        "endChar": 43
+      },
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ebf095e_cea0fee8",
@@ -100,6 +196,30 @@
       "writtenOn": "2021-09-16T17:10:25Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 426,
+        "startChar": 0,
+        "endLine": 426,
+        "endChar": 35
+      },
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a50dcb97_06857522",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:36:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ebf095e_cea0fee8",
       "range": {
         "startLine": 426,
         "startChar": 0,
@@ -176,6 +296,30 @@
       "writtenOn": "2021-09-16T17:10:25Z",
       "side": 1,
       "message": "you can remove this TODO",
+      "range": {
+        "startLine": 4386,
+        "startChar": 4,
+        "endLine": 4386,
+        "endChar": 69
+      },
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f03c10_f5b5bb73",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:36:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df5c92bf_0ddb3c91",
       "range": {
         "startLine": 4386,
         "startChar": 4,
