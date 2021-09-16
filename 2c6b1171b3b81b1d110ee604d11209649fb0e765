@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "14bd389f_f699fef0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-16T23:52:24Z",
+      "side": 1,
+      "message": "Could you mention the contents of your comment below here - that this affects the tests running in Xcode?",
+      "revId": "2c6b1171b3b81b1d110ee604d11209649fb0e765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c42a320e_909865ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-16T23:52:24Z",
+      "side": 1,
+      "message": "I just closed out 5505. Would you mind referencing 6394 instead?",
+      "revId": "2c6b1171b3b81b1d110ee604d11209649fb0e765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "06aa9e95_e16d9eb0",
@@ -14,6 +48,23 @@
       "writtenOn": "2021-09-16T00:17:02Z",
       "side": 1,
       "message": "AFAICT this doesn\u0027t affect any tests though it does affect running them inside XCode. In any case these should match.",
+      "revId": "2c6b1171b3b81b1d110ee604d11209649fb0e765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93bcab4e_afbe98e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-16T23:52:24Z",
+      "side": 1,
+      "message": "lgtm\n",
       "revId": "2c6b1171b3b81b1d110ee604d11209649fb0e765",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
