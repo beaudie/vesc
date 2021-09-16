@@ -16,6 +16,207 @@
       "message": "Jamie, take a look at this approach.  This changes things by marking all calls as active by default, then flips the Programs to inactive by using CaptureWithTracking.  Working pretty well locally.  Don\u0027t do a detailed review yet, I know I can tighten up parameters here and there.",
       "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d06541a6_19cd0254",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "Nice work Cody. I have some initial comments below. Looking forward to getting this landed.",
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c17492b_b6df85da",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "same comment here.",
+      "range": {
+        "startLine": 1486,
+        "startChar": 0,
+        "endLine": 1488,
+        "endChar": 0
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be2be00f_ebd39168",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "ideally we wouldn\u0027t need something like this.",
+      "range": {
+        "startLine": 1499,
+        "startChar": 0,
+        "endLine": 1502,
+        "endChar": 1
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf2dbbae_cab896f9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "just an idea - maybe instead we should make a class that is \n\n{ calls, tracking } \n\nand pass that around instead.\n\nI guess you\u0027re trying to avoid adding indexes for programs that get compiled during the trace. It would be nice if we could do that as a \"scan\" thing instead of having the \"AreSetupCalls\" functionality. Maybe we could do that instead?\n\nAlso it would be nice if we didn\u0027t need to separate Capture and CaptureWtihTracking.",
+      "range": {
+        "startLine": 1506,
+        "startChar": 35,
+        "endLine": 1506,
+        "endChar": 69
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42baff97_c11c23ca",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3624,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "It\u0027s a bit messy that you\u0027re mutating context here. Just pass around the two structs (indexes map and setup calls).",
+      "range": {
+        "startLine": 3621,
+        "startChar": 0,
+        "endLine": 3624,
+        "endChar": 96
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6338e5b2_54b2d06e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "same here, avoid calling context-\u003egetShareGroup(), just pass around the necessary data. I\u0027m wondering if we should remove getFrameCaptureShared() to avoid this pattern.",
+      "range": {
+        "startLine": 5414,
+        "startChar": 16,
+        "endLine": 5414,
+        "endChar": 70
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f42c720_68240ddc",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "nit: I\u0027d capitalize \u0027To\u0027 for consistency.",
+      "range": {
+        "startLine": 334,
+        "startChar": 6,
+        "endLine": 334,
+        "endChar": 29
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03fc9c83_a5e2c2a7",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "maybe it would be better to use member functions than mutable accessors.",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 90
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ce78009_26246c37",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:16:27Z",
+      "side": 1,
+      "message": "nit: just mSetupCalls is sufficient since this is a FrameCaptureShared, the share group is implied.",
+      "range": {
+        "startLine": 582,
+        "startChar": 29,
+        "endLine": 582,
+        "endChar": 50
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
