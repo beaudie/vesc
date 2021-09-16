@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf0e9c64_4383f9f3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T21:26:55Z",
+      "side": 1,
+      "message": "The function only does one thing right now, so I think the comment is okay.  Agree we can remove it when we expand this function, which will happen with a follow.  Okay to wait for that?",
+      "parentUuid": "c7ff46b1_ae3f9b6b",
+      "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebcbad92_b76d332a",
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Ah, yeah, I missed that.   This version is fine for now, since that may lead to a larger refactor.",
       "parentUuid": "ed4c71e4_1a5ebe14",
+      "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d88c7d11_da54f00e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5601,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T21:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb46f75b_6579f726",
       "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
