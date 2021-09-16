@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7910879c_d54ebca4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T05:15:30Z",
+      "side": 1,
+      "message": "Jamie, take a look at this approach.  This changes things by marking all calls as active by default, then flips the Programs to inactive by using CaptureWithTracking.  Working pretty well locally.  Don\u0027t do a detailed review yet, I know I can tighten up parameters here and there.",
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
