@@ -111,6 +111,7 @@ struct CallCapture
     EntryPoint entryPoint;
     std::string customFunctionName;
     ParamBuffer params;
+    bool isActive = true;
 };
 
 class ReplayContext
@@ -328,7 +329,9 @@ class ResourceTracker final : angle::NonCopyable
 };
 
 // Used by the CPP replay to filter out unnecessary code.
-using HasResourceTypeMap = angle::PackedEnumBitSet<ResourceIDType>;
+using HasResourceTypeMap     = angle::PackedEnumBitSet<ResourceIDType>;
+using ResourceID             = std::pair<ResourceIDType, GLuint>;
+using ResourceIDtoIndexesMap = std::map<ResourceID, std::vector<size_t>>;
 
 // Map of buffer ID to offset and size used when mapped
 using BufferDataMap = std::map<gl::BufferID, std::pair<GLintptr, GLsizeiptr>>;
@@ -460,6 +463,9 @@ class FrameCaptureShared final : angle::NonCopyable
 
     gl::ContextID getWindowSurfaceContextID() const { return mWindowSurfaceContextID; }
 
+    ResourceIDtoIndexesMap *getResourceIDtoIndexesMap() { return &mResourceIDtoIndexes; }
+    std::vector<CallCapture> *getShareGroupSetupCalls() { return &mShareGroupSetupCalls; }
+
     void updateReadBufferSize(size_t readBufferSize)
     {
         mReadBufferSize = std::max(mReadBufferSize, readBufferSize);
@@ -548,6 +554,7 @@ class FrameCaptureShared final : angle::NonCopyable
     gl::AttribArray<size_t> mClientArraySizes;
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
+    ResourceIDtoIndexesMap mResourceIDtoIndexes;
     BufferDataMap mBufferDataMap;
     bool mValidateSerializedState = false;
     std::string mValidationExpression;
@@ -571,6 +578,8 @@ class FrameCaptureShared final : angle::NonCopyable
     TextureLevelDataMap mCachedTextureLevelData;
 
     gl::ContextID mWindowSurfaceContextID;
+
+    std::vector<CallCapture> mShareGroupSetupCalls;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>

@@ -1193,6 +1193,39 @@ void MaybeResetOpaqueTypeObjects(std::stringstream &out,
     MaybeResetFenceSyncObjects(out, dataTracker, header, resourceTracker, binaryData);
 }
 
+bool FindShaderProgramIDInCall(const CallCapture &call, gl::ShaderProgramID *idOut)
+{
+    for (const ParamCapture &param : call.params.getParamCaptures())
+    {
+        // Only checking for programs right now, but could be expanded to all ResourceTypes
+        if (param.type == ParamType::TShaderProgramID && param.name == "programPacked")
+        {
+            *idOut = param.value.ShaderProgramIDVal;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void MarkResourceIDActive(ResourceID resourceID,
+                          std::vector<CallCapture> *setupCalls,
+                          const ResourceIDtoIndexesMap *resourceIDToIndexesMap)
+{
+    const auto iter = resourceIDToIndexesMap->find(resourceID);
+    if (iter == resourceIDToIndexesMap->end())
+    {
+        return;
+    }
+
+    // Mark all of the call indexes active that were used to initialize this resource
+    const std::vector<size_t> &indexes = iter->second;
+    for (size_t index : indexes)
+    {
+        (*setupCalls)[index].isActive = true;
+    }
+}
+
 void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
                                      ReplayFunc replayFunc,
                                      DataTracker *dataTracker,
@@ -1219,6 +1252,12 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
 
     for (const CallCapture &call : calls)
     {
+        if (!call.isActive)
+        {
+            // Don't write setup calls for inactive resources
+            continue;
+        }
+
         callStreamParts << "    ";
         WriteCppReplayForCall(call, dataTracker, callStreamParts, header, binaryData);
         callStreamParts << ";\n";
@@ -1418,7 +1457,8 @@ void CaptureUpdateResourceIDs(const CallCapture &call,
     GLsizei n = call.params.getParamFlexName("n", "count", ParamType::TGLsizei, 0).value.GLsizeiVal;
     ASSERT(param.data.size() == 1);
     ResourceIDType resourceIDType = GetResourceIDTypeFromParamType(param.type);
-    ASSERT(resourceIDType != ResourceIDType::InvalidEnum);
+    ASSERT(resourceIDType != ResourceIDType::InvalidEnum &&
+           resourceIDType != ResourceIDType::ShaderProgram);
     const char *resourceName = GetResourceIDTypeName(resourceIDType);
 
     std::stringstream updateFuncNameStr;
@@ -1438,7 +1478,32 @@ void CaptureUpdateResourceIDs(const CallCapture &call,
     }
 }
 
-void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallCapture> *callsOut)
+void CaptureWithTracking(const gl::Context *context,
+                         std::vector<CallCapture> *setupCalls,
+                         ResourceID resourceID,
+                         CallCapture &&call)
+{
+    ResourceIDtoIndexesMap *resourceIDtoIndexes =
+        context->getShareGroup()->getFrameCaptureShared()->getResourceIDtoIndexesMap();
+
+    // For calls that we want to track, mark them inactive.  They will be marked active when used.
+    call.isActive = false;
+
+    // Track the indices of instructions used to set up a resource
+    std::vector<size_t> &indexes = (*resourceIDtoIndexes)[resourceID];
+    indexes.push_back(setupCalls->size());
+
+    setupCalls->emplace_back(std::move(call));
+}
+
+bool AreSetupCalls(const gl::Context *context, std::vector<CallCapture> *calls)
+{
+    return calls == context->getShareGroup()->getFrameCaptureShared()->getShareGroupSetupCalls();
+}
+
+void CaptureUpdateUniformLocations(const gl::Context *context,
+                                   const gl::Program *program,
+                                   std::vector<CallCapture> *callsOut)
 {
     const std::vector<gl::LinkedUniform> &uniforms     = program->getState().getUniforms();
     const std::vector<gl::VariableLocation> &locations = program->getUniformLocations();
@@ -1492,7 +1557,18 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
         params.addParam(std::move(nameParam));
         params.addValueParam("location", ParamType::TGLint, location);
         params.addValueParam("count", ParamType::TGLint, static_cast<GLint>(count));
-        callsOut->emplace_back("UpdateUniformLocation2", std::move(params));
+
+        if (AreSetupCalls(context, callsOut))
+        {
+            // Track this call if we're populating setup calls
+            CaptureWithTracking(context, callsOut,
+                                {ResourceIDType::ShaderProgram, program->id().value},
+                                {"UpdateUniformLocation2", std::move(params)});
+        }
+        else
+        {
+            callsOut->emplace_back("UpdateUniformLocation2", std::move(params));
+        }
     }
 }
 
@@ -1518,7 +1594,8 @@ void CaptureValidateSerializedState(const gl::Context *context, std::vector<Call
     callsOut->emplace_back("VALIDATE_CHECKPOINT", std::move(params));
 }
 
-void CaptureUpdateUniformBlockIndexes(const gl::Program *program,
+void CaptureUpdateUniformBlockIndexes(const gl::Context *context,
+                                      const gl::Program *program,
                                       std::vector<CallCapture> *callsOut)
 {
     const std::vector<gl::InterfaceBlock> &uniformBlocks = program->getState().getUniformBlocks();
@@ -1535,7 +1612,18 @@ void CaptureUpdateUniformBlockIndexes(const gl::Program *program,
         params.addParam(std::move(nameParam));
 
         params.addValueParam("index", ParamType::TGLuint, index);
-        callsOut->emplace_back("UpdateUniformBlockIndex", std::move(params));
+
+        if (AreSetupCalls(context, callsOut))
+        {
+            // Track this call if we're populating setup calls
+            CaptureWithTracking(context, callsOut,
+                                {ResourceIDType::ShaderProgram, program->id().value},
+                                {"UpdateUniformBlockIndex", std::move(params)});
+        }
+        else
+        {
+            callsOut->emplace_back("UpdateUniformBlockIndex", std::move(params));
+        }
     }
 }
 
@@ -1657,7 +1745,9 @@ void MaybeCaptureUpdateResourceIDs(std::vector<CallCapture> *callsOut)
     }
 }
 
-void CaptureUpdateCurrentProgram(const CallCapture &call, std::vector<CallCapture> *callsOut)
+void CaptureUpdateCurrentProgram(const gl::Context *context,
+                                 const CallCapture &call,
+                                 std::vector<CallCapture> *callsOut)
 {
     const ParamCapture &param =
         call.params.getParam("programPacked", ParamType::TShaderProgramID, 0);
@@ -1666,7 +1756,16 @@ void CaptureUpdateCurrentProgram(const CallCapture &call, std::vector<CallCaptur
     ParamBuffer paramBuffer;
     paramBuffer.addValueParam("program", ParamType::TShaderProgramID, programID);
 
-    callsOut->emplace_back("UpdateCurrentProgram", std::move(paramBuffer));
+    if (AreSetupCalls(context, callsOut))
+    {
+        // Track this call if we're populating setup calls
+        CaptureWithTracking(context, callsOut, {ResourceIDType::ShaderProgram, programID.value},
+                            {"UpdateCurrentProgram", std::move(paramBuffer)});
+    }
+    else
+    {
+        callsOut->emplace_back("UpdateCurrentProgram", std::move(paramBuffer));
+    }
 }
 
 bool IsDefaultCurrentValue(const gl::VertexAttribCurrentValueData &currentValue)
@@ -1800,8 +1899,9 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
     // We need to bind the program and update its uniforms
     if (!replayState.getProgram() || replayState.getProgram()->id() != program->id())
     {
-        Capture(callsOut, CaptureUseProgram(replayState, true, program->id()));
-        CaptureUpdateCurrentProgram(callsOut->back(), callsOut);
+        CaptureWithTracking(context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUseProgram(replayState, true, program->id()));
+        CaptureUpdateCurrentProgram(context, callsOut->back(), callsOut);
     }
 
     const std::vector<gl::LinkedUniform> &uniforms = program->getState().getUniforms();
@@ -1853,8 +1953,10 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                                       uniformBuffer.data() + index * componentCount);
             }
 
-            Capture(callsOut, CaptureUniform1iv(replayState, true, uniformLoc, uniformCount,
-                                                uniformBuffer.data()));
+            CaptureWithTracking(context, callsOut,
+                                {ResourceIDType::ShaderProgram, program->id().value},
+                                CaptureUniform1iv(replayState, true, uniformLoc, uniformCount,
+                                                  uniformBuffer.data()));
 
             continue;
         }
@@ -1873,65 +1975,82 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                 {
                     // Note: All matrix uniforms are populated without transpose
                     case GL_FLOAT_MAT4x3:
-                        Capture(callsOut, CaptureUniformMatrix4x3fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix4x3fv(replayState, true, uniformLoc, uniformCount,
+                                                      false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT4x2:
-                        Capture(callsOut, CaptureUniformMatrix4x2fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix4x2fv(replayState, true, uniformLoc, uniformCount,
+                                                      false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT4:
-                        Capture(callsOut,
-                                CaptureUniformMatrix4fv(replayState, true, uniformLoc, uniformCount,
-                                                        false, uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix4fv(replayState, true, uniformLoc, uniformCount,
+                                                    false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT3x4:
-                        Capture(callsOut, CaptureUniformMatrix3x4fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix3x4fv(replayState, true, uniformLoc, uniformCount,
+                                                      false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT3x2:
-                        Capture(callsOut, CaptureUniformMatrix3x2fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix3x2fv(replayState, true, uniformLoc, uniformCount,
+                                                      false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT3:
-                        Capture(callsOut,
-                                CaptureUniformMatrix3fv(replayState, true, uniformLoc, uniformCount,
-                                                        false, uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix3fv(replayState, true, uniformLoc, uniformCount,
+                                                    false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT2x4:
-                        Capture(callsOut, CaptureUniformMatrix2x4fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix2x4fv(replayState, true, uniformLoc, uniformCount,
+                                                      false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT2x3:
-                        Capture(callsOut, CaptureUniformMatrix2x3fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix2x3fv(replayState, true, uniformLoc, uniformCount,
+                                                      false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_MAT2:
-                        Capture(callsOut,
-                                CaptureUniformMatrix2fv(replayState, true, uniformLoc, uniformCount,
-                                                        false, uniformBuffer.data()));
+                        CaptureWithTracking(
+                            context, callsOut, {ResourceIDType::ShaderProgram, program->id().value},
+                            CaptureUniformMatrix2fv(replayState, true, uniformLoc, uniformCount,
+                                                    false, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_VEC4:
-                        Capture(callsOut, CaptureUniform4fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform4fv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_VEC3:
-                        Capture(callsOut, CaptureUniform3fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform3fv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     case GL_FLOAT_VEC2:
-                        Capture(callsOut, CaptureUniform2fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform2fv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     case GL_FLOAT:
-                        Capture(callsOut, CaptureUniform1fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform1fv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     default:
                         UNIMPLEMENTED();
@@ -1950,20 +2069,28 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                 switch (componentCount)
                 {
                     case 4:
-                        Capture(callsOut, CaptureUniform4iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform4iv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     case 3:
-                        Capture(callsOut, CaptureUniform3iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform3iv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     case 2:
-                        Capture(callsOut, CaptureUniform2iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform2iv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     case 1:
-                        Capture(callsOut, CaptureUniform1iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform1iv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
                         break;
                     default:
                         UNIMPLEMENTED();
@@ -1983,20 +2110,28 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                 switch (componentCount)
                 {
                     case 4:
-                        Capture(callsOut, CaptureUniform4uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform4uiv(replayState, true, uniformLoc,
+                                                               uniformCount, uniformBuffer.data()));
                         break;
                     case 3:
-                        Capture(callsOut, CaptureUniform3uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform3uiv(replayState, true, uniformLoc,
+                                                               uniformCount, uniformBuffer.data()));
                         break;
                     case 2:
-                        Capture(callsOut, CaptureUniform2uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform2uiv(replayState, true, uniformLoc,
+                                                               uniformCount, uniformBuffer.data()));
                         break;
                     case 1:
-                        Capture(callsOut, CaptureUniform1uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        CaptureWithTracking(context, callsOut,
+                                            {ResourceIDType::ShaderProgram, program->id().value},
+                                            CaptureUniform1uiv(replayState, true, uniformLoc,
+                                                               uniformCount, uniformBuffer.data()));
                         break;
                     default:
                         UNIMPLEMENTED();
@@ -2373,12 +2508,17 @@ void GenerateLinkedProgram(const gl::Context *context,
         }
 
         // Compile and attach the temporary shader. Then free it immediately.
-        Capture(setupCalls, CaptureCreateShader(replayState, true, shaderType, tempShaderID.value));
-        Capture(setupCalls,
-                CaptureShaderSource(replayState, true, tempShaderID, 1, &sourcePointer, nullptr));
-        Capture(setupCalls, CaptureCompileShader(replayState, true, tempShaderID));
-        Capture(setupCalls, CaptureAttachShader(replayState, true, id, tempShaderID));
-        Capture(setupCalls, CaptureDeleteShader(replayState, true, tempShaderID));
+        CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                            CaptureCreateShader(replayState, true, shaderType, tempShaderID.value));
+        CaptureWithTracking(
+            context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+            CaptureShaderSource(replayState, true, tempShaderID, 1, &sourcePointer, nullptr));
+        CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                            CaptureCompileShader(replayState, true, tempShaderID));
+        CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                            CaptureAttachShader(replayState, true, id, tempShaderID));
+        CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                            CaptureDeleteShader(replayState, true, tempShaderID));
     }
 
     // Gather XFB varyings
@@ -2398,7 +2538,8 @@ void GenerateLinkedProgram(const gl::Context *context,
         }
 
         GLenum xfbMode = program->getState().getTransformFeedbackBufferMode();
-        Capture(setupCalls, CaptureTransformFeedbackVaryings(replayState, true, id,
+        CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                            CaptureTransformFeedbackVaryings(replayState, true, id,
                                                              static_cast<GLint>(xfbVaryings.size()),
                                                              varyingsStrings.data(), xfbMode));
     }
@@ -2417,7 +2558,8 @@ void GenerateLinkedProgram(const gl::Context *context,
         if (program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Vertex))
         {
             ASSERT(attrib.location != -1);
-            Capture(setupCalls, CaptureBindAttribLocation(replayState, true, id,
+            CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                                CaptureBindAttribLocation(replayState, true, id,
                                                           static_cast<GLuint>(attrib.location),
                                                           attrib.name.c_str()));
         }
@@ -2427,14 +2569,16 @@ void GenerateLinkedProgram(const gl::Context *context,
     {
         // MEC manually recreates separable programs, rather than attempting to recreate a call
         // to glCreateShaderProgramv(), so insert a call to mark it separable.
-        Capture(setupCalls,
-                CaptureProgramParameteri(replayState, true, id, GL_PROGRAM_SEPARABLE, GL_TRUE));
+        CaptureWithTracking(
+            context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+            CaptureProgramParameteri(replayState, true, id, GL_PROGRAM_SEPARABLE, GL_TRUE));
     }
 
-    Capture(setupCalls, CaptureLinkProgram(replayState, true, id));
-    CaptureUpdateUniformLocations(program, setupCalls);
+    CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                        CaptureLinkProgram(replayState, true, id));
+    CaptureUpdateUniformLocations(context, program, setupCalls);
     CaptureUpdateUniformValues(replayState, context, program, setupCalls);
-    CaptureUpdateUniformBlockIndexes(program, setupCalls);
+    CaptureUpdateUniformBlockIndexes(context, program, setupCalls);
 
     // Capture uniform block bindings for each program
     for (unsigned int uniformBlockIndex = 0;
@@ -3019,7 +3163,8 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
         const ProgramSources &linkedSources =
             context->getShareGroup()->getFrameCaptureShared()->getProgramSources(id);
 
-        cap(CaptureCreateProgram(replayState, true, id.value));
+        CaptureWithTracking(context, setupCalls, {ResourceIDType::ShaderProgram, id.value},
+                            CaptureCreateProgram(replayState, true, id.value));
 
         GenerateLinkedProgram(context, replayState, resourceTracker, setupCalls, program, id,
                               linkedSources);
@@ -3049,7 +3194,9 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
             continue;
         }
 
-        cap(CaptureCreateShader(replayState, true, shader->getType(), id.value));
+        CaptureWithTracking(context, setupCalls,
+                            ResourceID(ResourceIDType::ShaderProgram, id.value),
+                            CaptureCreateShader(replayState, true, shader->getType(), id.value));
 
         std::string shaderSource  = shader->getSourceString();
         const char *sourcePointer = shaderSource.empty() ? nullptr : shaderSource.c_str();
@@ -3067,13 +3214,19 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                 sourcePointer = capturedSource.c_str();
             }
 
-            cap(CaptureShaderSource(replayState, true, id, 1, &sourcePointer, nullptr));
-            cap(CaptureCompileShader(replayState, true, id));
+            CaptureWithTracking(
+                context, setupCalls, ResourceID(ResourceIDType::ShaderProgram, id.value),
+                CaptureShaderSource(replayState, true, id, 1, &sourcePointer, nullptr));
+            CaptureWithTracking(context, setupCalls,
+                                ResourceID(ResourceIDType::ShaderProgram, id.value),
+                                CaptureCompileShader(replayState, true, id));
         }
 
         if (sourcePointer && (!shader->isCompiled() || sourcePointer != shaderSource.c_str()))
         {
-            cap(CaptureShaderSource(replayState, true, id, 1, &sourcePointer, nullptr));
+            CaptureWithTracking(
+                context, setupCalls, ResourceID(ResourceIDType::ShaderProgram, id.value),
+                CaptureShaderSource(replayState, true, id, 1, &sourcePointer, nullptr));
         }
     }
 
@@ -3461,13 +3614,19 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         if (apiState.getProgram())
         {
             cap(CaptureUseProgram(replayState, true, apiState.getProgram()->id()));
-            CaptureUpdateCurrentProgram(setupCalls->back(), setupCalls);
+            CaptureUpdateCurrentProgram(context, setupCalls->back(), setupCalls);
             (void)replayState.setProgram(context, apiState.getProgram());
+
+            // Set this program as active so it will be generated in Setup
+            MarkResourceIDActive(
+                ResourceID(ResourceIDType::ShaderProgram, apiState.getProgram()->id().value),
+                context->getShareGroup()->getFrameCaptureShared()->getShareGroupSetupCalls(),
+                context->getShareGroup()->getFrameCaptureShared()->getResourceIDtoIndexesMap());
         }
         else if (replayState.getProgram())
         {
             cap(CaptureUseProgram(replayState, true, {0}));
-            CaptureUpdateCurrentProgram(setupCalls->back(), setupCalls);
+            CaptureUpdateCurrentProgram(context, setupCalls->back(), setupCalls);
             (void)replayState.setProgram(context, nullptr);
         }
 
@@ -4014,20 +4173,6 @@ bool SkipCall(EntryPoint entryPoint)
     return false;
 }
 
-bool FindShaderProgramIDInCall(const CallCapture &call, gl::ShaderProgramID *idOut)
-{
-    for (const ParamCapture &param : call.params.getParamCaptures())
-    {
-        if (param.type == ParamType::TShaderProgramID && param.name == "programPacked")
-        {
-            *idOut = param.value.ShaderProgramIDVal;
-            return true;
-        }
-    }
-
-    return false;
-}
-
 GLint GetAdjustedTextureCacheLevel(gl::TextureTarget target, GLint level)
 {
     GLint adjustedLevel = level;
@@ -4169,6 +4314,7 @@ CallCapture &CallCapture::operator=(CallCapture &&other)
     std::swap(entryPoint, other.entryPoint);
     std::swap(customFunctionName, other.customFunctionName);
     std::swap(params, other.params);
+    std::swap(isActive, other.isActive);
     return *this;
 }
 
@@ -5258,6 +5404,15 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(const gl::Context *context, 
     if (FindShaderProgramIDInCall(call, &shaderProgramID))
     {
         mResourceTracker.onShaderProgramAccess(shaderProgramID);
+
+        if (isCaptureActive())
+        {
+            // Track that this call referenced a ShaderProgram, setting it active for Setup
+            MarkResourceIDActive(
+                ResourceID(ResourceIDType::ShaderProgram, shaderProgramID.value),
+                &mShareGroupSetupCalls,
+                context->getShareGroup()->getFrameCaptureShared()->getResourceIDtoIndexesMap());
+        }
     }
 
     updatePreCallResourceCounts(call);
@@ -5336,6 +5491,12 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
         // Need to loop on any new calls we added during override
         for (CallCapture &call : outCalls)
         {
+            // During capture, consider all frame calls active
+            if (isCaptureActive())
+            {
+                call.isActive = true;
+            }
+
             maybeCapturePreCallUpdates(context, call);
             mFrameCalls.emplace_back(std::move(call));
             maybeCapturePostCallUpdates(context);
@@ -5381,8 +5542,8 @@ void FrameCaptureShared::maybeCapturePostCallUpdates(const gl::Context *context)
             gl::ShaderProgramID programId;
             programId.value            = lastCall.params.getReturnValue().value.GLuintVal;
             const gl::Program *program = context->getProgramResolveLink(programId);
-            CaptureUpdateUniformLocations(program, &mFrameCalls);
-            CaptureUpdateUniformBlockIndexes(program, &mFrameCalls);
+            CaptureUpdateUniformLocations(context, program, &mFrameCalls);
+            CaptureUpdateUniformBlockIndexes(context, program, &mFrameCalls);
             break;
         }
         case EntryPoint::GLLinkProgram:
@@ -5391,12 +5552,12 @@ void FrameCaptureShared::maybeCapturePostCallUpdates(const gl::Context *context)
                 lastCall.params.getParam("programPacked", ParamType::TShaderProgramID, 0);
             const gl::Program *program =
                 context->getProgramResolveLink(param.value.ShaderProgramIDVal);
-            CaptureUpdateUniformLocations(program, &mFrameCalls);
-            CaptureUpdateUniformBlockIndexes(program, &mFrameCalls);
+            CaptureUpdateUniformLocations(context, program, &mFrameCalls);
+            CaptureUpdateUniformBlockIndexes(context, program, &mFrameCalls);
             break;
         }
         case EntryPoint::GLUseProgram:
-            CaptureUpdateCurrentProgram(lastCall, &mFrameCalls);
+            CaptureUpdateCurrentProgram(context, lastCall, &mFrameCalls);
             break;
         case EntryPoint::GLDeleteProgram:
         {
@@ -5594,15 +5755,10 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
                                      contextState.hasProtectedContent());
     mainContextReplayState.initializeForCapture(mainContext);
 
-    std::vector<CallCapture> shareGroupSetupCalls;
-    CaptureShareGroupMidExecutionSetup(mainContext, &shareGroupSetupCalls, &mResourceTracker,
+    CaptureShareGroupMidExecutionSetup(mainContext, &mShareGroupSetupCalls, &mResourceTracker,
                                        mainContextReplayState);
 
-    scanSetupCalls(mainContext, shareGroupSetupCalls);
-
-    WriteShareGroupCppSetupReplay(mCompression, mOutDirectory, mCaptureLabel, 1, 1,
-                                  shareGroupSetupCalls, &mResourceTracker, &mBinaryData,
-                                  mSerializeStateEnabled, *this);
+    scanSetupCalls(mainContext, mShareGroupSetupCalls);
 
     for (const gl::Context *shareContext : shareGroup->getContexts())
     {
@@ -5706,6 +5862,11 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
 
     if (mFrameIndex == mCaptureEndFrame)
     {
+        // Write shared MEC after frame sequence so we can eliminate unused assets like programs
+        WriteShareGroupCppSetupReplay(mCompression, mOutDirectory, mCaptureLabel, 1, 1,
+                                      mShareGroupSetupCalls, &mResourceTracker, &mBinaryData,
+                                      mSerializeStateEnabled, *this);
+
         // Save the index files after the last frame.
         writeCppReplayIndexFiles(context, false);
         SaveBinaryData(mCompression, mOutDirectory, kSharedContextId, mCaptureLabel, mBinaryData);
