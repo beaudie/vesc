@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8863a8b_62dec1d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T16:58:18Z",
+      "side": 1,
+      "message": "I made some progress towards a regression test [1], but I\u0027m blocked by a number of issues. One is that my laptop doesn\u0027t expose EGL_EXT_image_dma_buf_import_modifiers, and I\u0027m not sure it would be easy to upgrade mesa and/or the kernel without support from the gLinux team.\n\nAs such, I don\u0027t know if this code has any bugs, but until such time as testing is possible, I think it\u0027s better to have it landed so it won\u0027t conflict with other related work. Also would make it easier to test (when possible) if the tester is not myself.\n\n[1]: https://chromium-review.googlesource.com/c/angle/angle/+/3163363",
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
