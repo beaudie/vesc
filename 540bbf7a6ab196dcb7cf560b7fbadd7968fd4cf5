@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62fa1332_7c5e903c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-16T22:20:11Z",
+      "side": 1,
+      "message": "Let\u0027s say \"Upstream Apple\u0027s Metal backend to July 1, 2021.\"",
+      "revId": "540bbf7a6ab196dcb7cf560b7fbadd7968fd4cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a00ac600_55a57157",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-16T22:20:11Z",
+      "side": 1,
+      "message": "Let\u0027s reference:\n\nBug: angleproject:6395",
+      "revId": "540bbf7a6ab196dcb7cf560b7fbadd7968fd4cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
