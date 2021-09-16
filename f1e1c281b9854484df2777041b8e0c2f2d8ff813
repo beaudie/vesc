@@ -67,6 +67,24 @@
       "message": "I think these calls should be in CaptureShareGroupMidExecutionSetup() and CaptureMidExecutionSetup(), so they always get called in case those are added/moved/etc.",
       "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed4c71e4_1a5ebe14",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5601,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T18:37:27Z",
+      "side": 1,
+      "message": "I have it outside since those are anonymous calls and updateReadBufferSize is part of the FrameCaptureShared class.  I\u0027d prefer them inside too, we\u0027d just need to access the class inside the function.  Are we okay with that?",
+      "parentUuid": "ebcbad92_b76d332a",
+      "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
