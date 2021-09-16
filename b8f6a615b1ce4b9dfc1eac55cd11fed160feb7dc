@@ -50,6 +50,23 @@
       "message": "Nice!\n\nDoes this fix tests in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/gl_tests/TransformFeedbackTest.cpp ?\nIf so can you remove the suppressions in this CL?",
       "revId": "b8f6a615b1ce4b9dfc1eac55cd11fed160feb7dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e3ca5b_e316e28e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-16T00:13:11Z",
+      "side": 1,
+      "message": "lgtm but can you remove the suppressions in src/test/angle_end2end_test_expectations.txt, all the lines that start with 6375",
+      "revId": "b8f6a615b1ce4b9dfc1eac55cd11fed160feb7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
