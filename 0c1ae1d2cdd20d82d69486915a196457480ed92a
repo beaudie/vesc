@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c92ad60_31d4b53a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-16T22:15:03Z",
+      "side": 1,
+      "message": "The mac-rel trybot failures seem reproducible locally with:\n\nout/Debug/angle_end2end_tests --gtest_filter\u003dTransformFeedbackTest\\*ES3_Metal\\* --bot-mode\n\nThis runs first the Metal SPIR-V tests, then the direct-to-Metal version of the tests. There are known bugs with running them interleaved, but we expect them to run more or less correctly when run in batches because the test harness is supposed to fully reinitialize the EGLDisplay in between.\n",
+      "revId": "0c1ae1d2cdd20d82d69486915a196457480ed92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
