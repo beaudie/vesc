@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59eb5437_674e11ee",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-16T16:21:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ee4a81c_4f5ad099",
+      "range": {
+        "startLine": 1340,
+        "startChar": 59,
+        "endLine": 1340,
+        "endChar": 61
+      },
+      "revId": "e16a41fc12075b50f69a0b99db701b3b5e816e6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7e9de19_3920c293",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-09-16T16:00:21Z",
       "side": 1,
       "message": "Didn\u0027t you want to start at 2 after the \"gl\"? You can first ASSERT that it starts with \"gl\", then put 2 here.",
+      "range": {
+        "startLine": 1343,
+        "startChar": 49,
+        "endLine": 1343,
+        "endChar": 50
+      },
+      "revId": "e16a41fc12075b50f69a0b99db701b3b5e816e6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "785825b9_d2892bce",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-16T16:21:47Z",
+      "side": 1,
+      "message": "Thanks, but we decided to keep the whole command name (with the prefix).",
+      "parentUuid": "d7e9de19_3920c293",
       "range": {
         "startLine": 1343,
         "startChar": 49,
