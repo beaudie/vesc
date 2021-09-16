@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d88cd2c8_76860d60",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T21:04:59Z",
+      "side": 1,
+      "message": "Be cautious about overloading messages with different events. The implementation storage is not the same as the front-end\u0027s understanding of the storage. i.e. it sounds a lot like a BufferData or BufferStorage call just happened which could need different handling. \n\n+1 to making dirty bits super-specific to the event that\u0027s firing them. We can micro-optimize and bin together common events to improve perf later if it becomes a performance concern.",
+      "parentUuid": "10f91f12_fa30a754",
+      "range": {
+        "startLine": 653,
+        "startChar": 42,
+        "endLine": 655,
+        "endChar": 28
+      },
+      "revId": "c2a7629342a3db1347d33527707ba3c831af1dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7f112c4_437d3002",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
