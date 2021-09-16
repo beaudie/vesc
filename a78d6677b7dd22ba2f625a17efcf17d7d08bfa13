@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7160f8d0_c54e7b11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T20:10:06Z",
+      "side": 1,
+      "message": "I\u0027ll see what I can do. Refactoring like that risks being meaningless to the reviewers until the last change.",
+      "parentUuid": "d5d29df5_4f04d0d8",
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a415640f_1229b24a",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 5
@@ -83,6 +101,30 @@
       "writtenOn": "2021-09-15T18:59:40Z",
       "side": 1,
       "message": "Should this be:\n\n    #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS\n        commandPool.destroy(device);\n    #else\n        for (CommandBuffer \u0026secondary : commandBuffersToReset)\n        {\n            // Note: we currently free the command buffers individually, but we could potentially reset\n            // the entire command pool.  https://issuetracker.google.com/issues/166793850\n            commandPool-\u003efreeCommandBuffers(device, 1, secondary.ptr());\n            secondary.releaseHandle();\n        }\n        commandBuffersToReset.clear();\n    #endif\n    \nThis would break releaseToCommandBatch(), since that doesn\u0027t recreate the pool anymore, but I\u0027m not seeing how the normal ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS case is being reset or destroyed/recreated.",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 310,
+        "endChar": 6
+      },
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3696abef_a1ee432f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T20:10:06Z",
+      "side": 1,
+      "message": "No. In fact, CommandBatch::commandPool was unused and it was just moved around in refactoring. The command pool recreating code was never exercised because commandPool was never initialized in the first place.",
+      "parentUuid": "a415640f_1229b24a",
       "range": {
         "startLine": 301,
         "startChar": 0,
@@ -118,6 +160,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14041a1d_a3e92446",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T20:10:06Z",
+      "side": 1,
+      "message": "The `getCompatibleRenderPass` part is annoying I agree. The rest should be optimized out I believe since the function is inline and expands to nothing. I\u0027ll see if I can avoid an ifdef while getting rid of the `getCompatibleRenderPass`.",
+      "parentUuid": "68c0319d_561e5320",
+      "range": {
+        "startLine": 1625,
+        "startChar": 0,
+        "endLine": 1630,
+        "endChar": 95
+      },
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98555072_df200557",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 5
@@ -129,6 +195,24 @@
       "writtenOn": "2021-09-15T18:59:40Z",
       "side": 1,
       "message": "This can be incremented every time to avoid the branch.",
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44b81c6e_dae05d4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T20:10:06Z",
+      "side": 1,
+      "message": "On the contrary, the branch condition is a compile time constant, so the branch gets optimized out either way. The upside is that the contents of the if also gets optimized when using ANGLE\u0027s SCB.",
+      "parentUuid": "98555072_df200557",
       "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -146,6 +230,24 @@
       "writtenOn": "2021-09-15T18:59:40Z",
       "side": 1,
       "message": "These onRecordCommand() in every command seem like something that will get missed when new commands are added.   I may have missed it, but is there a way to ensure the count is \u003e0 later to make sure all commands are being counted?",
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8b3965c_75389b88",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T20:10:06Z",
+      "side": 1,
+      "message": "I don\u0027t think there is a way. In fact, I went overboard with this and it can probably be removed from most functions. I\u0027m saying that to reassure you that any new functions that might be added would 99.999999% not need this.\n\nI _think_ you only need this for draw calls, but I haven\u0027t bothered micro-optimizing that. What this is emulating is ANGLE SCB\u0027s query of whether there has been any commands recorded since some event, and is used by the framebuffer code to determine what render pass ops to use based on events such as depth-test being enabled/disabled etc.\n\nNothing is recorded in the command buffer in that case until a draw call is issued, so tracking draw calls _should_ be sufficient. I don\u0027t believe it would be any time soon that we need to add a new draw or dispatch call 😄",
+      "parentUuid": "e15aef12_5fbf11bc",
       "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
