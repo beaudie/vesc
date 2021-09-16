@@ -908,7 +908,9 @@ CommandBufferHelper::~CommandBufferHelper()
     mFramebuffer.setHandle(VK_NULL_HANDLE);
 }
 
-void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
+angle::Result CommandBufferHelper::initialize(Context *context,
+                                              bool isRenderPassCommandBuffer,
+                                              CommandPool *commandPool)
 {
     ASSERT(mUsedBuffers.empty());
     constexpr size_t kInitialBufferCount = 128;
@@ -917,15 +919,31 @@ void CommandBufferHelper::initialize(bool isRenderPassCommandBuffer)
     mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
     // Push a scope into the pool allocator so we can easily free and re-init on reset()
     mAllocator.push();
-    mCommandBuffer.initialize(&mAllocator);
+
     mIsRenderPassCommandBuffer = isRenderPassCommandBuffer;
+
+    return initializeCommandBuffer(context, commandPool);
 }
 
-void CommandBufferHelper::reset()
+angle::Result CommandBufferHelper::initializeCommandBuffer(Context *context,
+                                                           CommandPool *commandPool)
+{
+    ANGLE_VK_TRY(context, vk::SecondaryCommandBufferInitialize(&mCommandBuffer,
+                                                               context->getRenderer()->getDevice(),
+                                                               commandPool, &mAllocator));
+
+    return angle::Result::Continue;
+}
+
+angle::Result CommandBufferHelper::reset(Context *context, CommandPool *commandPool)
 {
     mAllocator.pop();
     mAllocator.push();
-    mCommandBuffer.reset();
+
+    // Reset and re-initialize the command buffer
+    context->getRenderer()->resetSecondaryCommandBuffer(std::move(mCommandBuffer));
+    ANGLE_TRY(initializeCommandBuffer(context, commandPool));
+
     mUsedBuffers.clear();
 
     if (mIsRenderPassCommandBuffer)
@@ -958,6 +976,8 @@ void CommandBufferHelper::reset()
     ASSERT(!mRebindTransformFeedbackBuffers);
     ASSERT(!mIsTransformFeedbackActiveUnpaused);
     ASSERT(mRenderPassUsedImages.empty());
+
+    return angle::Result::Continue;
 }
 
 bool CommandBufferHelper::usesBuffer(const BufferHelper &buffer) const
@@ -1602,14 +1622,16 @@ void CommandBufferHelper::finalizeDepthStencilImageLayoutAndLoadStore(Context *c
     mDepthStencilImage->resetRenderPassUsageFlags();
 }
 
-void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
-                                          const gl::Rectangle &renderArea,
-                                          const RenderPassDesc &renderPassDesc,
-                                          const AttachmentOpsArray &renderPassAttachmentOps,
-                                          const vk::PackedAttachmentCount colorAttachmentCount,
-                                          const PackedAttachmentIndex depthStencilAttachmentIndex,
-                                          const PackedClearValuesArray &clearValues,
-                                          CommandBuffer **commandBufferOut)
+angle::Result CommandBufferHelper::beginRenderPass(
+    ContextVk *contextVk,
+    const Framebuffer &framebuffer,
+    const gl::Rectangle &renderArea,
+    const RenderPassDesc &renderPassDesc,
+    const AttachmentOpsArray &renderPassAttachmentOps,
+    const vk::PackedAttachmentCount colorAttachmentCount,
+    const PackedAttachmentIndex depthStencilAttachmentIndex,
+    const PackedClearValuesArray &clearValues,
+    CommandBuffer **commandBufferOut)
 {
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());
@@ -1625,9 +1647,11 @@ void CommandBufferHelper::beginRenderPass(const Framebuffer &framebuffer,
 
     mRenderPassStarted = true;
     mCounter++;
+
+    return angle::Result::Continue;
 }
 
-void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
+angle::Result CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
     for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
     {
@@ -1643,7 +1667,7 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
     {
-        return;
+        return angle::Result::Continue;
     }
 
     // Do depth stencil layout change and load store optimization.
@@ -1655,6 +1679,8 @@ void CommandBufferHelper::endRenderPass(ContextVk *contextVk)
     {
         finalizeDepthStencilResolveImageLayout(contextVk);
     }
+
+    return angle::Result::Continue;
 }
 
 void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
@@ -1719,15 +1745,16 @@ void CommandBufferHelper::invalidateRenderPassStencilAttachment(
     ExtendRenderPassInvalidateArea(invalidateArea, &mStencilInvalidateArea);
 }
 
-angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &features,
+angle::Result CommandBufferHelper::flushToPrimary(Context *context,
                                                   PrimaryCommandBuffer *primary,
+                                                  CommandPool *secondaryCommandPool,
                                                   const RenderPass *renderPass)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(features, primary);
+    executeBarriers(context->getRenderer()->getFeatures(), primary);
 
     if (mIsRenderPassCommandBuffer)
     {
@@ -1755,9 +1782,7 @@ angle::Result CommandBufferHelper::flushToPrimary(const angle::FeaturesVk &featu
     }
 
     // Restart the command buffer.
-    reset();
-
-    return angle::Result::Continue;
+    return reset(context, secondaryCommandPool);
 }
 
 void CommandBufferHelper::updateRenderPassForResolve(ContextVk *contextVk,
@@ -1941,6 +1966,62 @@ void CommandBufferHelper::growRenderArea(ContextVk *contextVk, const gl::Rectang
         mStencilInvalidateArea     = gl::Rectangle();
         mStencilCmdSizeInvalidated = kInfiniteCmdSize;
     }
+}
+
+// CommandBufferRecycler implementation.
+CommandBufferRecycler::CommandBufferRecycler()  = default;
+CommandBufferRecycler::~CommandBufferRecycler() = default;
+
+void CommandBufferRecycler::onDestroy()
+{
+    for (vk::CommandBufferHelper *commandBufferHelper : mCommandBufferHelperFreeList)
+    {
+        SafeDelete(commandBufferHelper);
+    }
+    mCommandBufferHelperFreeList.clear();
+}
+
+angle::Result CommandBufferRecycler::getCommandBufferHelper(
+    Context *context,
+    bool hasRenderPass,
+    CommandPool *commandPool,
+    CommandBufferHelper **commandBufferHelperOut)
+{
+    if (mCommandBufferHelperFreeList.empty())
+    {
+        vk::CommandBufferHelper *commandBuffer = new vk::CommandBufferHelper();
+        *commandBufferHelperOut                = commandBuffer;
+
+        return commandBuffer->initialize(context, hasRenderPass, commandPool);
+    }
+    else
+    {
+        vk::CommandBufferHelper *commandBuffer = mCommandBufferHelperFreeList.back();
+        mCommandBufferHelperFreeList.pop_back();
+        commandBuffer->setHasRenderPass(hasRenderPass);
+        *commandBufferHelperOut = commandBuffer;
+        return angle::Result::Continue;
+    }
+}
+
+void CommandBufferRecycler::recycleCommandBufferHelper(VkDevice device,
+                                                       vk::CommandBufferHelper *commandBuffer,
+                                                       vk::CommandPool *commandPool)
+{
+    ASSERT(commandBuffer->empty());
+    commandBuffer->markOpen();
+    recycleImpl(device, commandBuffer, commandPool);
+}
+
+void CommandBufferRecycler::recycleImpl(VkDevice device,
+                                        CommandBufferHelper *commandBuffer,
+                                        CommandPool *commandPool)
+{
+    mCommandBufferHelperFreeList.push_back(commandBuffer);
+}
+void CommandBufferRecycler::resetCommandBufferHelper(CommandBuffer &&commandBuffer)
+{
+    commandBuffer.reset();
 }
 
 // DynamicBuffer implementation.
