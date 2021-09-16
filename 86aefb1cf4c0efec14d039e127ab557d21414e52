@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d89195_04b6d4e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T16:11:37Z",
+      "side": 1,
+      "message": "+Tim for visibility",
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c17492b_b6df85da",
@@ -83,6 +100,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff6148f2_9a1dcc6a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T16:11:37Z",
+      "side": 1,
+      "message": "I agree, this is one of the remaining warts here.  This stems from GenerateLinkedProgram being called two ways: during MEC and during the run.  We can\u0027t apply tracking during the run since it is predicated on the location of the call in mSetupCalls.  Trying to apply tracking on mFrameCalls breaks things.\n\nIf we find a way to post process these, then this won\u0027t be needed.",
+      "parentUuid": "be2be00f_ebd39168",
+      "range": {
+        "startLine": 1499,
+        "startChar": 0,
+        "endLine": 1502,
+        "endChar": 1
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf2dbbae_cab896f9",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 3
@@ -106,6 +147,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c64b8381_5adfb37a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T16:11:37Z",
+      "side": 1,
+      "message": "The challenge with doing activity tracking post process is knowing which Setup calls are needed to fully create a program.  Right now it is explicit.  We dictate \"This call is needed to setup this program\", and that call is added to the indexes.\n\nIf we tried to do this post process (which I\u0027m open to), we just need a way to know exactly which calls were used to Setup a program.  Note that it is not a constant set, each program has a different set of calls.  For instance, the Uniform calls vary per program, although the ones at the beginning are fairly steady (i.e. CreateProgram).",
+      "parentUuid": "cf2dbbae_cab896f9",
+      "range": {
+        "startLine": 1506,
+        "startChar": 35,
+        "endLine": 1506,
+        "endChar": 69
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42baff97_c11c23ca",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 3
@@ -117,6 +182,30 @@
       "writtenOn": "2021-09-16T13:16:27Z",
       "side": 1,
       "message": "It\u0027s a bit messy that you\u0027re mutating context here. Just pass around the two structs (indexes map and setup calls).",
+      "range": {
+        "startLine": 3621,
+        "startChar": 0,
+        "endLine": 3624,
+        "endChar": 96
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37d2a309_deae2a90",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3624,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T16:11:37Z",
+      "side": 1,
+      "message": "Yeah, I didn\u0027t mean for you to optimize the methods and classes yet, that\u0027s what I meant by\n\u003e \"Don\u0027t do a detailed review yet, I know I can tighten up parameters here and there.\"",
+      "parentUuid": "42baff97_c11c23ca",
       "range": {
         "startLine": 3621,
         "startChar": 0,
