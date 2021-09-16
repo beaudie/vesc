@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06aa9e95_e16d9eb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-16T00:17:02Z",
+      "side": 1,
+      "message": "AFAICT this doesn\u0027t affect any tests though it does affect running them inside XCode. In any case these should match.",
+      "revId": "2c6b1171b3b81b1d110ee604d11209649fb0e765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
