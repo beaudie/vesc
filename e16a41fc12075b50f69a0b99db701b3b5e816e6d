@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ecdc2a0_5d6e20eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T15:35:06Z",
+      "side": 1,
+      "message": "LGTM.  +1 in case Shabi wants to chime in again.",
+      "revId": "e16a41fc12075b50f69a0b99db701b3b5e816e6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ee4a81c_4f5ad099",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-16T15:35:06Z",
+      "side": 1,
+      "message": "nit: Zero is the default here, you can omit this.",
+      "range": {
+        "startLine": 1340,
+        "startChar": 59,
+        "endLine": 1340,
+        "endChar": 61
+      },
+      "revId": "e16a41fc12075b50f69a0b99db701b3b5e816e6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
