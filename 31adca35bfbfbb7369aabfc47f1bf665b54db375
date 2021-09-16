@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a01e586_735bd030",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-09-16T19:49:14Z",
+      "side": 1,
+      "message": "Thanks for cleaning this up, it\u0027s been a nagging issue for a long time",
+      "revId": "31adca35bfbfbb7369aabfc47f1bf665b54db375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
