@@ -178,7 +178,7 @@ struct CommandBatch final : angle::NonCopyable
 
     PrimaryCommandBuffer primaryCommands;
     // commandPool is for secondary CommandBuffer allocation
-    CommandPool commandPool;
+    CommandPool *commandPool;
     Shared<Fence> fence;
     Serial serial;
     bool hasProtectedContent;
@@ -295,10 +295,12 @@ class CommandQueueInterface : angle::NonCopyable
 
     virtual angle::Result flushOutsideRPCommands(Context *context,
                                                  bool hasProtectedContent,
+                                                 CommandPool *commandPool,
                                                  CommandBufferHelper **outsideRPCommands)   = 0;
     virtual angle::Result flushRenderPassCommands(Context *context,
                                                   bool hasProtectedContent,
                                                   const RenderPass &renderPass,
+                                                  CommandPool *commandPool,
                                                   CommandBufferHelper **renderPassCommands) = 0;
 
     virtual Serial getLastSubmittedQueueSerial() const = 0;
@@ -352,10 +354,12 @@ class CommandQueue final : public CommandQueueInterface
 
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
+                                         CommandPool *commandPool,
                                          CommandBufferHelper **outsideRPCommands) override;
     angle::Result flushRenderPassCommands(Context *context,
                                           bool hasProtectedContent,
                                           const RenderPass &renderPass,
+                                          CommandPool *commandPool,
                                           CommandBufferHelper **renderPassCommands) override;
 
     Serial getLastSubmittedQueueSerial() const override;
@@ -372,13 +376,13 @@ class CommandQueue final : public CommandQueueInterface
     {
         return mQueueMap.getDevicePriority(priority);
     }
+    uint32_t getDeviceQueueIndex() const { return mQueueMap.getIndex(); }
 
   private:
-    angle::Result releaseToCommandBatch(Context *context,
-                                        bool hasProtectedContent,
-                                        PrimaryCommandBuffer &&commandBuffer,
-                                        CommandPool *commandPool,
-                                        CommandBatch *batch);
+    void releaseToCommandBatch(bool hasProtectedContent,
+                               PrimaryCommandBuffer &&commandBuffer,
+                               CommandPool *commandPool,
+                               CommandBatch *batch);
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
 
@@ -390,7 +394,7 @@ class CommandQueue final : public CommandQueueInterface
     {
         if (hasProtectedContent)
         {
-            return mProtectedCommands;
+            return mProtectedPrimaryCommands;
         }
         else
         {
@@ -402,7 +406,7 @@ class CommandQueue final : public CommandQueueInterface
     {
         if (hasProtectedContent)
         {
-            return mProtectedCommandPool;
+            return mProtectedPrimaryCommandPool;
         }
         else
         {
@@ -417,8 +421,8 @@ class CommandQueue final : public CommandQueueInterface
     // Keeps a free list of reusable primary command buffers.
     PrimaryCommandBuffer mPrimaryCommands;
     PersistentCommandPool mPrimaryCommandPool;
-    PrimaryCommandBuffer mProtectedCommands;
-    PersistentCommandPool mProtectedCommandPool;
+    PrimaryCommandBuffer mProtectedPrimaryCommands;
+    PersistentCommandPool mProtectedPrimaryCommandPool;
 
     // Queue serial management.
     AtomicSerialFactory mQueueSerialFactory;
@@ -499,10 +503,12 @@ class CommandProcessor : public Context, public CommandQueueInterface
 
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
+                                         CommandPool *commandPool,
                                          CommandBufferHelper **outsideRPCommands) override;
     angle::Result flushRenderPassCommands(Context *context,
                                           bool hasProtectedContent,
                                           const RenderPass &renderPass,
+                                          CommandPool *commandPool,
                                           CommandBufferHelper **renderPassCommands) override;
 
     Serial getLastSubmittedQueueSerial() const override;
@@ -513,6 +519,7 @@ class CommandProcessor : public Context, public CommandQueueInterface
     {
         return mCommandQueue.getDriverPriority(priority);
     }
+    uint32_t getDeviceQueueIndex() const { return mCommandQueue.getDeviceQueueIndex(); }
 
   private:
     bool hasPendingError() const
@@ -540,6 +547,18 @@ class CommandProcessor : public Context, public CommandQueueInterface
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
     VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
+    CommandPool &getCommandPool(bool hasProtectedContent)
+    {
+        if (hasProtectedContent)
+        {
+            return mProtectedCommandPool;
+        }
+        else
+        {
+            return mCommandPool;
+        }
+    }
+
     std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
@@ -548,8 +567,9 @@ class CommandProcessor : public Context, public CommandQueueInterface
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
-    // Command pool to allocate processor thread primary command buffers from
+    // Command pool to allocate processor thread secondary command buffers from
     CommandPool mCommandPool;
+    CommandPool mProtectedCommandPool;
     CommandQueue mCommandQueue;
 
     mutable std::mutex mQueueSerialMutex;
