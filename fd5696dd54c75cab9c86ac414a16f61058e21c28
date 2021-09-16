@@ -129,6 +129,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "366e1825_106229ee",
+        "filename": "src/libANGLE/renderer/vulkan/linux/display/DisplayVkSimple.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T17:35:31Z",
+      "side": 1,
+      "message": "This file has always been only built under is_linux. We could refactor if there is ever a need for this on !linux?",
+      "parentUuid": "d81888e6_644d7803",
+      "revId": "fd5696dd54c75cab9c86ac414a16f61058e21c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "df5c92bf_0ddb3c91",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
