@@ -33,6 +33,40 @@
       "message": "LGTM",
       "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7ff46b1_ae3f9b6b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-16T17:43:50Z",
+      "side": 1,
+      "message": "nit: This comment is more about what the function does, not what this particular block is doing, so it\u0027s a little misleading/confusing.   I suggest moving it above the function name or just dropping it.",
+      "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebcbad92_b76d332a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5601,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-16T17:43:50Z",
+      "side": 1,
+      "message": "I think these calls should be in CaptureShareGroupMidExecutionSetup() and CaptureMidExecutionSetup(), so they always get called in case those are added/moved/etc.",
+      "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
