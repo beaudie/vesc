@@ -77,6 +77,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87b463c5_c2fc1a97",
+        "filename": "doc/SupportedExtensions.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:02:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca487f65_84a8d74b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "dc987ba76e75537091f0109a3a5567654d2b4c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edea7035_a49c5a0b",
@@ -90,6 +114,30 @@
       "writtenOn": "2021-09-15T21:49:47Z",
       "side": 1,
       "message": "What does requestable mean here?\nEdit: Figured it out, another comment below.",
+      "range": {
+        "startLine": 61,
+        "startChar": 5,
+        "endLine": 61,
+        "endChar": 16
+      },
+      "revId": "dc987ba76e75537091f0109a3a5567654d2b4c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23825c25_1718112e",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:02:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "edea7035_a49c5a0b",
       "range": {
         "startLine": 61,
         "startChar": 5,
