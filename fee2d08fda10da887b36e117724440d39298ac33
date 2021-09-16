@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87bee182_8d5905d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:47:03Z",
+      "side": 1,
+      "message": "Jeff, could you please split this change in three; the autogen part (which can land immediately), the front-end and the back-end support?\n\nThat should make review simpler.",
+      "revId": "fee2d08fda10da887b36e117724440d39298ac33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2d6b9d2_643bd9bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:47:03Z",
+      "side": 1,
+      "message": "You can simplify things a lot by not using the DynamicBuffer for this purpose. Just have the surface allocate a vk::BufferHelper once directly (i.e. dedicated allocation) and reuse it until destruction.",
+      "revId": "fee2d08fda10da887b36e117724440d39298ac33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "537a60c3_225ff8a5",
@@ -48,6 +82,24 @@
       "writtenOn": "2021-09-15T13:42:35Z",
       "side": 1,
       "message": "Here is where command are used. Copy is not happening.",
+      "revId": "fee2d08fda10da887b36e117724440d39298ac33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8346dfd_c7b689c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-16T19:47:03Z",
+      "side": 1,
+      "message": "Can you be a bit more specific about what\u0027s happening? Is the copy command itself not being submitted to the GPU? Is the command submitted, but the GPU doesn\u0027t do the copy?\n\nIf something is actually sent to the GPU, you can check what\u0027s going on with renderdoc. You can run an end2end test under renderdoc with `--renderdoc` which will automatically capture what the test does in one renderdoc \"frame\".",
+      "parentUuid": "537a60c3_225ff8a5",
       "revId": "fee2d08fda10da887b36e117724440d39298ac33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
