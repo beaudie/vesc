@@ -16,6 +16,23 @@
       "message": "Replaces the other approach of centralizing call captures (http://crrev/c/3152169)",
       "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f53c26d4_a18c0c12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-16T13:05:02Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "f1e1c281b9854484df2777041b8e0c2f2d8ff813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
