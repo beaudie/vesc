@@ -3649,6 +3649,9 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSi
     stagingBuffer.collectGarbage(renderer, serial);
     mUse.updateSerialOneOff(serial);
 
+    // TIMTIM
+    UNREACHABLE();
+
     return angle::Result::Continue;
 }
 
