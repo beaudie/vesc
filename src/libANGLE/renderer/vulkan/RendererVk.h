@@ -231,6 +231,17 @@ class RendererVk : angle::NonCopyable
             return mCommandQueue.getDriverPriority(priority);
         }
     }
+    ANGLE_INLINE uint32_t getDeviceQueueIndex()
+    {
+        if (mFeatures.asyncCommandQueue.enabled)
+        {
+            return mCommandProcessor.getDeviceQueueIndex();
+        }
+        else
+        {
+            return mCommandQueue.getDeviceQueueIndex();
+        }
+    }
 
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
