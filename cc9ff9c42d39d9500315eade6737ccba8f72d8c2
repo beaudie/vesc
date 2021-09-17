@@ -16,6 +16,23 @@
       "message": "Jamie, PTAL, this passed dryrun in crrev.com/c/3046764.\n\nI need this to land crrev.com/c/3046764.\nCurrent code applies sharding to the batch the host passes via --gtest_filter.\nSo, when we retry 13 tests with 20 shards, testSet end up empty, thus the failure in PS1 of crrev.com/c/3046764.\nhttps://ci.chromium.org/ui/p/angle/builders/try/android-arm64-rel/2195/overview\n(All the 13 tests still run, just the accounting in testSet is wrong).",
       "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b950da8_b1cc9e3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T21:18:10Z",
+      "side": 1,
+      "message": "What does this do exactly? It ignores the sharding arguments on Android?",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
