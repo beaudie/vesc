@@ -51,6 +51,47 @@
       "parentUuid": "01efa410_1d4a9741",
       "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52c21266_231e681b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T21:22:32Z",
+      "side": 1,
+      "message": "LGTM with a TODO to remove this workaround in the future. If a TODO isn\u0027t possible let me know and I\u0027d like to see if we can come up with another solution that doesn\u0027t use IsAndroid()",
+      "parentUuid": "7ee39eb8_808b96a4",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07d3214a_316189e8",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T21:22:32Z",
+      "side": 1,
+      "message": "can you replace this with IsAndroid()? Or add a function UsesExternalBatching() that does this instead of setting a locally scoped bool.",
+      "range": {
+        "startLine": 1056,
+        "startChar": 0,
+        "endLine": 1063,
+        "endChar": 0
+      },
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
