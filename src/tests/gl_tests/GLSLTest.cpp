@@ -9451,6 +9451,48 @@ void main()
     EXPECT_TRUE(VerifyBuffer(ssboStd430RowMajorOut, dataStd430RowMajor, sizeStd430RowMajor));
 }
 
+TEST_P(GLSLTest_ES3, RowMajorMatrix_NestedExpression)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+
+uniform Ubo {
+  layout(row_major) mat4 u_mat[3];
+  layout(row_major) mat4 u_ndx[3];
+} stuff;
+
+
+out vec4 theColor;
+
+void main() {
+  theColor = stuff.u_mat[int(stuff.u_ndx[1][3])][2] / 255.0;
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    EXPECT_GL_NO_ERROR();
+
+    typedef float vec4[4];
+    typedef vec4 mat4[4];
+
+    mat4 data[] = {
+        {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}},
+        {{0, 4, 8, 12}, {1, 5, 9, 13}, {2, 6, 10, 14}, {3, 7, 11, 15}},
+        {{0, 2, 4, 6}, {8, 10, 12, 14}, {16, 18, 20, 22}, {24, 26, 28, 30}},
+        {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}},
+        {{0, 0, 0, 0}, {0, 0, 0, 2}, {0, 0, 0, 0}, {0, 0, 1, 0}},
+        {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}},
+    };
+
+    GLBuffer ubos;
+    InitBuffer(program, "Ubo", ubos, 0, data, sizeof(data), true);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_NEAR(0, 0, 9, 10, 11, 12, 0);
+}
+
 // Test that array UBOs are transformed correctly.
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration)
 {
