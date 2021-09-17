@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b508f3_7824c2b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-09-17T20:33:35Z",
+      "side": 1,
+      "message": "I fixed a small mistake in your CL, but I didn\u0027t have permission to modify it, so I uploaded a new one:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3169472\n\n",
+      "revId": "febd530d930083868a7aaf8bb6517da605205c93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d62aa353_c5b983f4",
