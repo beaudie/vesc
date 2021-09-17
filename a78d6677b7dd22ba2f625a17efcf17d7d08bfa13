@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50a60384_f0d8c5fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T01:54:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7160f8d0_c54e7b11",
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a415640f_1229b24a",
@@ -172,6 +190,30 @@
       "side": 1,
       "message": "The `getCompatibleRenderPass` part is annoying I agree. The rest should be optimized out I believe since the function is inline and expands to nothing. I\u0027ll see if I can avoid an ifdef while getting rid of the `getCompatibleRenderPass`.",
       "parentUuid": "68c0319d_561e5320",
+      "range": {
+        "startLine": 1625,
+        "startChar": 0,
+        "endLine": 1630,
+        "endChar": 95
+      },
+      "revId": "a78d6677b7dd22ba2f625a17efcf17d7d08bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dd0594c_ade7f022",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T01:54:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14041a1d_a3e92446",
       "range": {
         "startLine": 1625,
         "startChar": 0,
