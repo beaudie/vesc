@@ -69,6 +69,7 @@ enum class HandleType
 ANGLE_HANDLE_TYPES_X(ANGLE_PRE_DECLARE_CLASS_FUNC)
 namespace priv
 {
+template <bool IsSecondary>
 class CommandBuffer;
 }  // namespace priv
 #undef ANGLE_PRE_DECLARE_CLASS_FUNC
@@ -85,8 +86,8 @@ struct HandleTypeHelper;
     };
 
 ANGLE_HANDLE_TYPES_X(ANGLE_HANDLE_TYPE_HELPER_FUNC)
-template <>
-struct HandleTypeHelper<priv::CommandBuffer>
+template <bool IsSecondary>
+struct HandleTypeHelper<priv::CommandBuffer<IsSecondary>>
 {
     constexpr static HandleType kHandleType = HandleType::CommandBuffer;
 };
@@ -163,7 +164,8 @@ namespace priv
 {
 
 // Helper class that wraps a Vulkan command buffer.
-class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
+template <bool IsSecondary>
+class CommandBuffer : public WrappedObject<CommandBuffer<IsSecondary>, VkCommandBuffer>
 {
   public:
     CommandBuffer() = default;
@@ -178,11 +180,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
 
     VkResult init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo);
 
-    // There is no way to know if the command buffer contains any commands.
-    static bool CanKnowIfEmpty() { return false; }
-    bool empty() const { return false; }
-
-    using WrappedObject::operator=;
+    using WrappedObject<CommandBuffer<IsSecondary>, VkCommandBuffer>::operator=;
 
     static bool SupportsQueries(const VkPhysicalDeviceFeatures &features)
     {
@@ -303,7 +301,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     VkResult end();
     void endQuery(const QueryPool &queryPool, uint32_t query);
     void endRenderPass();
-    void executeCommands(uint32_t commandBufferCount, const CommandBuffer *commandBuffers);
+    void executeCommands(uint32_t commandBufferCount, const CommandBuffer<true> *commandBuffers);
 
     void getMemoryUsageStats(size_t *usedMemoryOut, size_t *allocatedMemoryOut) const;
 
@@ -390,6 +388,24 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
     void endDebugUtilsLabelEXT();
     void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
+
+    // Only used when the command buffer is used as a Vulkan secondary command buffer.
+    void open() const {}
+    void close() const {}
+    bool empty() const { return mSize == 0; }
+    uint32_t getCommandSize() const { return mSize; }
+    std::string dumpCommands(const char *separator) const { return ""; }
+
+  private:
+    // Only used when the command buffer is used as a Vulkan secondary command buffer.
+    void onRecordCommand()
+    {
+        if (IsSecondary)
+        {
+            ++mSize;
+        }
+    }
+    uint32_t mSize;
 };
 }  // namespace priv
 
@@ -708,533 +724,672 @@ namespace priv
 {
 
 // CommandBuffer implementation.
-ANGLE_INLINE VkCommandBuffer CommandBuffer::releaseHandle()
+template <bool IsSecondary>
+ANGLE_INLINE VkCommandBuffer CommandBuffer<IsSecondary>::releaseHandle()
 {
-    VkCommandBuffer handle = mHandle;
-    mHandle                = nullptr;
+    VkCommandBuffer handle = this->mHandle;
+    this->mHandle          = nullptr;
+    mSize                  = 0;
     return handle;
 }
 
-ANGLE_INLINE VkResult CommandBuffer::init(VkDevice device,
-                                          const VkCommandBufferAllocateInfo &createInfo)
+template <bool IsSecondary>
+ANGLE_INLINE VkResult
+CommandBuffer<IsSecondary>::init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo)
 {
-    ASSERT(!valid());
-    return vkAllocateCommandBuffers(device, &createInfo, &mHandle);
+    ASSERT(!this->valid());
+    mSize = 0;
+    return vkAllocateCommandBuffers(device, &createInfo, &this->mHandle);
 }
 
-ANGLE_INLINE void CommandBuffer::blitImage(const Image &srcImage,
-                                           VkImageLayout srcImageLayout,
-                                           const Image &dstImage,
-                                           VkImageLayout dstImageLayout,
-                                           uint32_t regionCount,
-                                           const VkImageBlit *regions,
-                                           VkFilter filter)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::blitImage(const Image &srcImage,
+                                                        VkImageLayout srcImageLayout,
+                                                        const Image &dstImage,
+                                                        VkImageLayout dstImageLayout,
+                                                        uint32_t regionCount,
+                                                        const VkImageBlit *regions,
+                                                        VkFilter filter)
 {
-    ASSERT(valid() && srcImage.valid() && dstImage.valid());
+    ASSERT(this->valid() && srcImage.valid() && dstImage.valid());
     ASSERT(regionCount == 1);
-    vkCmdBlitImage(mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
+    vkCmdBlitImage(this->mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
                    dstImageLayout, 1, regions, filter);
 }
 
-ANGLE_INLINE VkResult CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
+template <bool IsSecondary>
+ANGLE_INLINE VkResult CommandBuffer<IsSecondary>::begin(const VkCommandBufferBeginInfo &info)
 {
-    ASSERT(valid());
-    return vkBeginCommandBuffer(mHandle, &info);
+    ASSERT(this->valid());
+    ASSERT(mSize == 0);
+    return vkBeginCommandBuffer(this->mHandle, &info);
 }
 
-ANGLE_INLINE VkResult CommandBuffer::end()
+template <bool IsSecondary>
+ANGLE_INLINE VkResult CommandBuffer<IsSecondary>::end()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandBuffer::end");
-    ASSERT(valid());
-    return vkEndCommandBuffer(mHandle);
+    ASSERT(this->valid());
+    return vkEndCommandBuffer(this->mHandle);
 }
 
-ANGLE_INLINE VkResult CommandBuffer::reset()
+template <bool IsSecondary>
+ANGLE_INLINE VkResult CommandBuffer<IsSecondary>::reset()
 {
-    ASSERT(valid());
-    return vkResetCommandBuffer(mHandle, 0);
+    ASSERT(this->valid());
+    mSize = 0;
+    return vkResetCommandBuffer(this->mHandle, 0);
 }
 
-ANGLE_INLINE void CommandBuffer::memoryBarrier(VkPipelineStageFlags srcStageMask,
-                                               VkPipelineStageFlags dstStageMask,
-                                               const VkMemoryBarrier *memoryBarrier)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::memoryBarrier(VkPipelineStageFlags srcStageMask,
+                                                            VkPipelineStageFlags dstStageMask,
+                                                            const VkMemoryBarrier *memoryBarrier)
 {
-    ASSERT(valid());
-    vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, 0, 1, memoryBarrier, 0, nullptr, 0,
-                         nullptr);
-}
-
-ANGLE_INLINE void CommandBuffer::nextSubpass(VkSubpassContents subpassContents)
-{
-    ASSERT(valid());
-    vkCmdNextSubpass(mHandle, subpassContents);
-}
-
-ANGLE_INLINE void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
-                                                 VkPipelineStageFlags dstStageMask,
-                                                 VkDependencyFlags dependencyFlags,
-                                                 uint32_t memoryBarrierCount,
-                                                 const VkMemoryBarrier *memoryBarriers,
-                                                 uint32_t bufferMemoryBarrierCount,
-                                                 const VkBufferMemoryBarrier *bufferMemoryBarriers,
-                                                 uint32_t imageMemoryBarrierCount,
-                                                 const VkImageMemoryBarrier *imageMemoryBarriers)
-{
-    ASSERT(valid());
-    vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount,
-                         memoryBarriers, bufferMemoryBarrierCount, bufferMemoryBarriers,
-                         imageMemoryBarrierCount, imageMemoryBarriers);
-}
-
-ANGLE_INLINE void CommandBuffer::executionBarrier(VkPipelineStageFlags stageMask)
-{
-    ASSERT(valid());
-    vkCmdPipelineBarrier(mHandle, stageMask, stageMask, 0, 0, nullptr, 0, nullptr, 0, nullptr);
-}
-
-ANGLE_INLINE void CommandBuffer::bufferBarrier(VkPipelineStageFlags srcStageMask,
-                                               VkPipelineStageFlags dstStageMask,
-                                               const VkBufferMemoryBarrier *bufferMemoryBarrier)
-{
-    ASSERT(valid());
-    vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, 0, 0, nullptr, 1, bufferMemoryBarrier,
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdPipelineBarrier(this->mHandle, srcStageMask, dstStageMask, 0, 1, memoryBarrier, 0, nullptr,
                          0, nullptr);
 }
 
-ANGLE_INLINE void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
-                                              VkPipelineStageFlags dstStageMask,
-                                              const VkImageMemoryBarrier &imageMemoryBarrier)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::nextSubpass(VkSubpassContents subpassContents)
 {
-    ASSERT(valid());
-    vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdNextSubpass(this->mHandle, subpassContents);
+}
+
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::pipelineBarrier(
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    VkDependencyFlags dependencyFlags,
+    uint32_t memoryBarrierCount,
+    const VkMemoryBarrier *memoryBarriers,
+    uint32_t bufferMemoryBarrierCount,
+    const VkBufferMemoryBarrier *bufferMemoryBarriers,
+    uint32_t imageMemoryBarrierCount,
+    const VkImageMemoryBarrier *imageMemoryBarriers)
+{
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdPipelineBarrier(this->mHandle, srcStageMask, dstStageMask, dependencyFlags,
+                         memoryBarrierCount, memoryBarriers, bufferMemoryBarrierCount,
+                         bufferMemoryBarriers, imageMemoryBarrierCount, imageMemoryBarriers);
+}
+
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::executionBarrier(VkPipelineStageFlags stageMask)
+{
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdPipelineBarrier(this->mHandle, stageMask, stageMask, 0, 0, nullptr, 0, nullptr, 0,
+                         nullptr);
+}
+
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bufferBarrier(
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    const VkBufferMemoryBarrier *bufferMemoryBarrier)
+{
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdPipelineBarrier(this->mHandle, srcStageMask, dstStageMask, 0, 0, nullptr, 1,
+                         bufferMemoryBarrier, 0, nullptr);
+}
+
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::imageBarrier(
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    const VkImageMemoryBarrier &imageMemoryBarrier)
+{
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdPipelineBarrier(this->mHandle, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
                          &imageMemoryBarrier);
 }
 
-ANGLE_INLINE void CommandBuffer::destroy(VkDevice device)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::destroy(VkDevice device)
 {
     releaseHandle();
 }
 
-ANGLE_INLINE void CommandBuffer::destroy(VkDevice device, const vk::CommandPool &commandPool)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::destroy(VkDevice device,
+                                                      const vk::CommandPool &commandPool)
 {
-    if (valid())
+    if (this->valid())
     {
         ASSERT(commandPool.valid());
-        vkFreeCommandBuffers(device, commandPool.getHandle(), 1, &mHandle);
-        mHandle = VK_NULL_HANDLE;
+        vkFreeCommandBuffers(device, commandPool.getHandle(), 1, &this->mHandle);
+        this->mHandle = VK_NULL_HANDLE;
+        mSize         = 0;
     }
 }
 
-ANGLE_INLINE void CommandBuffer::copyBuffer(const Buffer &srcBuffer,
-                                            const Buffer &destBuffer,
-                                            uint32_t regionCount,
-                                            const VkBufferCopy *regions)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::copyBuffer(const Buffer &srcBuffer,
+                                                         const Buffer &destBuffer,
+                                                         uint32_t regionCount,
+                                                         const VkBufferCopy *regions)
 {
-    ASSERT(valid() && srcBuffer.valid() && destBuffer.valid());
-    vkCmdCopyBuffer(mHandle, srcBuffer.getHandle(), destBuffer.getHandle(), regionCount, regions);
+    onRecordCommand();
+    ASSERT(this->valid() && srcBuffer.valid() && destBuffer.valid());
+    vkCmdCopyBuffer(this->mHandle, srcBuffer.getHandle(), destBuffer.getHandle(), regionCount,
+                    regions);
 }
 
-ANGLE_INLINE void CommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
-                                                   const Image &dstImage,
-                                                   VkImageLayout dstImageLayout,
-                                                   uint32_t regionCount,
-                                                   const VkBufferImageCopy *regions)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::copyBufferToImage(VkBuffer srcBuffer,
+                                                                const Image &dstImage,
+                                                                VkImageLayout dstImageLayout,
+                                                                uint32_t regionCount,
+                                                                const VkBufferImageCopy *regions)
 {
-    ASSERT(valid() && dstImage.valid());
+    onRecordCommand();
+    ASSERT(this->valid() && dstImage.valid());
     ASSERT(srcBuffer != VK_NULL_HANDLE);
     ASSERT(regionCount == 1);
-    vkCmdCopyBufferToImage(mHandle, srcBuffer, dstImage.getHandle(), dstImageLayout, 1, regions);
+    vkCmdCopyBufferToImage(this->mHandle, srcBuffer, dstImage.getHandle(), dstImageLayout, 1,
+                           regions);
 }
 
-ANGLE_INLINE void CommandBuffer::copyImageToBuffer(const Image &srcImage,
-                                                   VkImageLayout srcImageLayout,
-                                                   VkBuffer dstBuffer,
-                                                   uint32_t regionCount,
-                                                   const VkBufferImageCopy *regions)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::copyImageToBuffer(const Image &srcImage,
+                                                                VkImageLayout srcImageLayout,
+                                                                VkBuffer dstBuffer,
+                                                                uint32_t regionCount,
+                                                                const VkBufferImageCopy *regions)
 {
-    ASSERT(valid() && srcImage.valid());
+    onRecordCommand();
+    ASSERT(this->valid() && srcImage.valid());
     ASSERT(dstBuffer != VK_NULL_HANDLE);
     ASSERT(regionCount == 1);
-    vkCmdCopyImageToBuffer(mHandle, srcImage.getHandle(), srcImageLayout, dstBuffer, 1, regions);
+    vkCmdCopyImageToBuffer(this->mHandle, srcImage.getHandle(), srcImageLayout, dstBuffer, 1,
+                           regions);
 }
 
-ANGLE_INLINE void CommandBuffer::clearColorImage(const Image &image,
-                                                 VkImageLayout imageLayout,
-                                                 const VkClearColorValue &color,
-                                                 uint32_t rangeCount,
-                                                 const VkImageSubresourceRange *ranges)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::clearColorImage(const Image &image,
+                                                              VkImageLayout imageLayout,
+                                                              const VkClearColorValue &color,
+                                                              uint32_t rangeCount,
+                                                              const VkImageSubresourceRange *ranges)
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     ASSERT(rangeCount == 1);
-    vkCmdClearColorImage(mHandle, image.getHandle(), imageLayout, &color, 1, ranges);
+    vkCmdClearColorImage(this->mHandle, image.getHandle(), imageLayout, &color, 1, ranges);
 }
 
-ANGLE_INLINE void CommandBuffer::clearDepthStencilImage(
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::clearDepthStencilImage(
     const Image &image,
     VkImageLayout imageLayout,
     const VkClearDepthStencilValue &depthStencil,
     uint32_t rangeCount,
     const VkImageSubresourceRange *ranges)
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     ASSERT(rangeCount == 1);
-    vkCmdClearDepthStencilImage(mHandle, image.getHandle(), imageLayout, &depthStencil, 1, ranges);
+    vkCmdClearDepthStencilImage(this->mHandle, image.getHandle(), imageLayout, &depthStencil, 1,
+                                ranges);
 }
 
-ANGLE_INLINE void CommandBuffer::clearAttachments(uint32_t attachmentCount,
-                                                  const VkClearAttachment *attachments,
-                                                  uint32_t rectCount,
-                                                  const VkClearRect *rects)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::clearAttachments(uint32_t attachmentCount,
+                                                               const VkClearAttachment *attachments,
+                                                               uint32_t rectCount,
+                                                               const VkClearRect *rects)
 {
-    ASSERT(valid());
-    vkCmdClearAttachments(mHandle, attachmentCount, attachments, rectCount, rects);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdClearAttachments(this->mHandle, attachmentCount, attachments, rectCount, rects);
 }
 
-ANGLE_INLINE void CommandBuffer::copyImage(const Image &srcImage,
-                                           VkImageLayout srcImageLayout,
-                                           const Image &dstImage,
-                                           VkImageLayout dstImageLayout,
-                                           uint32_t regionCount,
-                                           const VkImageCopy *regions)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::copyImage(const Image &srcImage,
+                                                        VkImageLayout srcImageLayout,
+                                                        const Image &dstImage,
+                                                        VkImageLayout dstImageLayout,
+                                                        uint32_t regionCount,
+                                                        const VkImageCopy *regions)
 {
-    ASSERT(valid() && srcImage.valid() && dstImage.valid());
+    onRecordCommand();
+    ASSERT(this->valid() && srcImage.valid() && dstImage.valid());
     ASSERT(regionCount == 1);
-    vkCmdCopyImage(mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
+    vkCmdCopyImage(this->mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
                    dstImageLayout, 1, regions);
 }
 
-ANGLE_INLINE void CommandBuffer::beginRenderPass(const VkRenderPassBeginInfo &beginInfo,
-                                                 VkSubpassContents subpassContents)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::beginRenderPass(
+    const VkRenderPassBeginInfo &beginInfo,
+    VkSubpassContents subpassContents)
 {
-    ASSERT(valid());
-    vkCmdBeginRenderPass(mHandle, &beginInfo, subpassContents);
+    ASSERT(this->valid());
+    vkCmdBeginRenderPass(this->mHandle, &beginInfo, subpassContents);
 }
 
-ANGLE_INLINE void CommandBuffer::endRenderPass()
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::endRenderPass()
 {
-    ASSERT(mHandle != VK_NULL_HANDLE);
-    vkCmdEndRenderPass(mHandle);
+    ASSERT(this->mHandle != VK_NULL_HANDLE);
+    vkCmdEndRenderPass(this->mHandle);
 }
 
-ANGLE_INLINE void CommandBuffer::bindIndexBuffer(const Buffer &buffer,
-                                                 VkDeviceSize offset,
-                                                 VkIndexType indexType)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bindIndexBuffer(const Buffer &buffer,
+                                                              VkDeviceSize offset,
+                                                              VkIndexType indexType)
 {
-    ASSERT(valid());
-    vkCmdBindIndexBuffer(mHandle, buffer.getHandle(), offset, indexType);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdBindIndexBuffer(this->mHandle, buffer.getHandle(), offset, indexType);
 }
 
-ANGLE_INLINE void CommandBuffer::bindDescriptorSets(const PipelineLayout &layout,
-                                                    VkPipelineBindPoint pipelineBindPoint,
-                                                    DescriptorSetIndex firstSet,
-                                                    uint32_t descriptorSetCount,
-                                                    const VkDescriptorSet *descriptorSets,
-                                                    uint32_t dynamicOffsetCount,
-                                                    const uint32_t *dynamicOffsets)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bindDescriptorSets(
+    const PipelineLayout &layout,
+    VkPipelineBindPoint pipelineBindPoint,
+    DescriptorSetIndex firstSet,
+    uint32_t descriptorSetCount,
+    const VkDescriptorSet *descriptorSets,
+    uint32_t dynamicOffsetCount,
+    const uint32_t *dynamicOffsets)
 {
-    ASSERT(valid() && layout.valid());
+    onRecordCommand();
+    ASSERT(this->valid() && layout.valid());
     vkCmdBindDescriptorSets(this->mHandle, pipelineBindPoint, layout.getHandle(),
                             ToUnderlying(firstSet), descriptorSetCount, descriptorSets,
                             dynamicOffsetCount, dynamicOffsets);
 }
 
-ANGLE_INLINE void CommandBuffer::executeCommands(uint32_t commandBufferCount,
-                                                 const CommandBuffer *commandBuffers)
+template <>
+ANGLE_INLINE void CommandBuffer<false>::executeCommands(uint32_t commandBufferCount,
+                                                        const CommandBuffer<true> *commandBuffers)
 {
-    ASSERT(valid());
-    vkCmdExecuteCommands(mHandle, commandBufferCount, commandBuffers[0].ptr());
+    ASSERT(this->valid());
+    vkCmdExecuteCommands(this->mHandle, commandBufferCount, commandBuffers[0].ptr());
 }
 
-ANGLE_INLINE void CommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
-                                                     size_t *allocatedMemoryOut) const
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::getMemoryUsageStats(size_t *usedMemoryOut,
+                                                                  size_t *allocatedMemoryOut) const
 {
     // No data available.
     *usedMemoryOut      = 0;
     *allocatedMemoryOut = 1;
 }
 
-ANGLE_INLINE void CommandBuffer::fillBuffer(const Buffer &dstBuffer,
-                                            VkDeviceSize dstOffset,
-                                            VkDeviceSize size,
-                                            uint32_t data)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::fillBuffer(const Buffer &dstBuffer,
+                                                         VkDeviceSize dstOffset,
+                                                         VkDeviceSize size,
+                                                         uint32_t data)
 {
-    ASSERT(valid());
-    vkCmdFillBuffer(mHandle, dstBuffer.getHandle(), dstOffset, size, data);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdFillBuffer(this->mHandle, dstBuffer.getHandle(), dstOffset, size, data);
 }
 
-ANGLE_INLINE void CommandBuffer::pushConstants(const PipelineLayout &layout,
-                                               VkShaderStageFlags flag,
-                                               uint32_t offset,
-                                               uint32_t size,
-                                               const void *data)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::pushConstants(const PipelineLayout &layout,
+                                                            VkShaderStageFlags flag,
+                                                            uint32_t offset,
+                                                            uint32_t size,
+                                                            const void *data)
 {
-    ASSERT(valid() && layout.valid());
+    onRecordCommand();
+    ASSERT(this->valid() && layout.valid());
     ASSERT(offset == 0);
-    vkCmdPushConstants(mHandle, layout.getHandle(), flag, 0, size, data);
+    vkCmdPushConstants(this->mHandle, layout.getHandle(), flag, 0, size, data);
 }
 
-ANGLE_INLINE void CommandBuffer::setEvent(VkEvent event, VkPipelineStageFlags stageMask)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::setEvent(VkEvent event,
+                                                       VkPipelineStageFlags stageMask)
 {
-    ASSERT(valid() && event != VK_NULL_HANDLE);
-    vkCmdSetEvent(mHandle, event, stageMask);
+    onRecordCommand();
+    ASSERT(this->valid() && event != VK_NULL_HANDLE);
+    vkCmdSetEvent(this->mHandle, event, stageMask);
 }
 
-ANGLE_INLINE void CommandBuffer::setViewport(uint32_t firstViewport,
-                                             uint32_t viewportCount,
-                                             const VkViewport *viewports)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::setViewport(uint32_t firstViewport,
+                                                          uint32_t viewportCount,
+                                                          const VkViewport *viewports)
 {
-    ASSERT(valid() && viewports != nullptr);
-    vkCmdSetViewport(mHandle, firstViewport, viewportCount, viewports);
+    onRecordCommand();
+    ASSERT(this->valid() && viewports != nullptr);
+    vkCmdSetViewport(this->mHandle, firstViewport, viewportCount, viewports);
 }
 
-ANGLE_INLINE void CommandBuffer::setScissor(uint32_t firstScissor,
-                                            uint32_t scissorCount,
-                                            const VkRect2D *scissors)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::setScissor(uint32_t firstScissor,
+                                                         uint32_t scissorCount,
+                                                         const VkRect2D *scissors)
 {
-    ASSERT(valid() && scissors != nullptr);
-    vkCmdSetScissor(mHandle, firstScissor, scissorCount, scissors);
+    onRecordCommand();
+    ASSERT(this->valid() && scissors != nullptr);
+    vkCmdSetScissor(this->mHandle, firstScissor, scissorCount, scissors);
 }
 
-ANGLE_INLINE void CommandBuffer::resetEvent(VkEvent event, VkPipelineStageFlags stageMask)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::resetEvent(VkEvent event,
+                                                         VkPipelineStageFlags stageMask)
 {
-    ASSERT(valid() && event != VK_NULL_HANDLE);
-    vkCmdResetEvent(mHandle, event, stageMask);
+    onRecordCommand();
+    ASSERT(this->valid() && event != VK_NULL_HANDLE);
+    vkCmdResetEvent(this->mHandle, event, stageMask);
 }
 
-ANGLE_INLINE void CommandBuffer::waitEvents(uint32_t eventCount,
-                                            const VkEvent *events,
-                                            VkPipelineStageFlags srcStageMask,
-                                            VkPipelineStageFlags dstStageMask,
-                                            uint32_t memoryBarrierCount,
-                                            const VkMemoryBarrier *memoryBarriers,
-                                            uint32_t bufferMemoryBarrierCount,
-                                            const VkBufferMemoryBarrier *bufferMemoryBarriers,
-                                            uint32_t imageMemoryBarrierCount,
-                                            const VkImageMemoryBarrier *imageMemoryBarriers)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::waitEvents(
+    uint32_t eventCount,
+    const VkEvent *events,
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    uint32_t memoryBarrierCount,
+    const VkMemoryBarrier *memoryBarriers,
+    uint32_t bufferMemoryBarrierCount,
+    const VkBufferMemoryBarrier *bufferMemoryBarriers,
+    uint32_t imageMemoryBarrierCount,
+    const VkImageMemoryBarrier *imageMemoryBarriers)
 {
-    ASSERT(valid());
-    vkCmdWaitEvents(mHandle, eventCount, events, srcStageMask, dstStageMask, memoryBarrierCount,
-                    memoryBarriers, bufferMemoryBarrierCount, bufferMemoryBarriers,
-                    imageMemoryBarrierCount, imageMemoryBarriers);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdWaitEvents(this->mHandle, eventCount, events, srcStageMask, dstStageMask,
+                    memoryBarrierCount, memoryBarriers, bufferMemoryBarrierCount,
+                    bufferMemoryBarriers, imageMemoryBarrierCount, imageMemoryBarriers);
 }
 
-ANGLE_INLINE void CommandBuffer::resetQueryPool(const QueryPool &queryPool,
-                                                uint32_t firstQuery,
-                                                uint32_t queryCount)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::resetQueryPool(const QueryPool &queryPool,
+                                                             uint32_t firstQuery,
+                                                             uint32_t queryCount)
 {
-    ASSERT(valid() && queryPool.valid());
-    vkCmdResetQueryPool(mHandle, queryPool.getHandle(), firstQuery, queryCount);
+    onRecordCommand();
+    ASSERT(this->valid() && queryPool.valid());
+    vkCmdResetQueryPool(this->mHandle, queryPool.getHandle(), firstQuery, queryCount);
 }
 
-ANGLE_INLINE void CommandBuffer::resolveImage(const Image &srcImage,
-                                              VkImageLayout srcImageLayout,
-                                              const Image &dstImage,
-                                              VkImageLayout dstImageLayout,
-                                              uint32_t regionCount,
-                                              const VkImageResolve *regions)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::resolveImage(const Image &srcImage,
+                                                           VkImageLayout srcImageLayout,
+                                                           const Image &dstImage,
+                                                           VkImageLayout dstImageLayout,
+                                                           uint32_t regionCount,
+                                                           const VkImageResolve *regions)
 {
-    ASSERT(valid() && srcImage.valid() && dstImage.valid());
-    vkCmdResolveImage(mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
+    onRecordCommand();
+    ASSERT(this->valid() && srcImage.valid() && dstImage.valid());
+    vkCmdResolveImage(this->mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
                       dstImageLayout, regionCount, regions);
 }
 
-ANGLE_INLINE void CommandBuffer::beginQuery(const QueryPool &queryPool,
-                                            uint32_t query,
-                                            VkQueryControlFlags flags)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::beginQuery(const QueryPool &queryPool,
+                                                         uint32_t query,
+                                                         VkQueryControlFlags flags)
 {
-    ASSERT(valid() && queryPool.valid());
-    vkCmdBeginQuery(mHandle, queryPool.getHandle(), query, flags);
+    onRecordCommand();
+    ASSERT(this->valid() && queryPool.valid());
+    vkCmdBeginQuery(this->mHandle, queryPool.getHandle(), query, flags);
 }
 
-ANGLE_INLINE void CommandBuffer::endQuery(const QueryPool &queryPool, uint32_t query)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::endQuery(const QueryPool &queryPool, uint32_t query)
 {
-    ASSERT(valid() && queryPool.valid());
-    vkCmdEndQuery(mHandle, queryPool.getHandle(), query);
+    onRecordCommand();
+    ASSERT(this->valid() && queryPool.valid());
+    vkCmdEndQuery(this->mHandle, queryPool.getHandle(), query);
 }
 
-ANGLE_INLINE void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
-                                                const QueryPool &queryPool,
-                                                uint32_t query)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
+                                                             const QueryPool &queryPool,
+                                                             uint32_t query)
 {
-    ASSERT(valid());
-    vkCmdWriteTimestamp(mHandle, pipelineStage, queryPool.getHandle(), query);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdWriteTimestamp(this->mHandle, pipelineStage, queryPool.getHandle(), query);
 }
 
-ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount,
-                                      uint32_t instanceCount,
-                                      uint32_t firstVertex,
-                                      uint32_t firstInstance)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::draw(uint32_t vertexCount,
+                                                   uint32_t instanceCount,
+                                                   uint32_t firstVertex,
+                                                   uint32_t firstInstance)
 {
-    ASSERT(valid());
-    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDraw(this->mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
 }
 
-ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::draw(uint32_t vertexCount, uint32_t firstVertex)
 {
-    ASSERT(valid());
-    vkCmdDraw(mHandle, vertexCount, 1, firstVertex, 0);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDraw(this->mHandle, vertexCount, 1, firstVertex, 0);
 }
 
-ANGLE_INLINE void CommandBuffer::drawInstanced(uint32_t vertexCount,
-                                               uint32_t instanceCount,
-                                               uint32_t firstVertex)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawInstanced(uint32_t vertexCount,
+                                                            uint32_t instanceCount,
+                                                            uint32_t firstVertex)
 {
-    ASSERT(valid());
-    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, 0);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDraw(this->mHandle, vertexCount, instanceCount, firstVertex, 0);
 }
 
-ANGLE_INLINE void CommandBuffer::drawInstancedBaseInstance(uint32_t vertexCount,
-                                                           uint32_t instanceCount,
-                                                           uint32_t firstVertex,
-                                                           uint32_t firstInstance)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawInstancedBaseInstance(uint32_t vertexCount,
+                                                                        uint32_t instanceCount,
+                                                                        uint32_t firstVertex,
+                                                                        uint32_t firstInstance)
 {
-    ASSERT(valid());
-    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDraw(this->mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount,
-                                             uint32_t instanceCount,
-                                             uint32_t firstIndex,
-                                             int32_t vertexOffset,
-                                             uint32_t firstInstance)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndexed(uint32_t indexCount,
+                                                          uint32_t instanceCount,
+                                                          uint32_t firstIndex,
+                                                          int32_t vertexOffset,
+                                                          uint32_t firstInstance)
 {
-    ASSERT(valid());
-    vkCmdDrawIndexed(mHandle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndexed(this->mHandle, indexCount, instanceCount, firstIndex, vertexOffset,
+                     firstInstance);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndexed(uint32_t indexCount)
 {
-    ASSERT(valid());
-    vkCmdDrawIndexed(mHandle, indexCount, 1, 0, 0, 0);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndexed(this->mHandle, indexCount, 1, 0, 0, 0);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndexedBaseVertex(uint32_t indexCount, uint32_t vertexOffset)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndexedBaseVertex(uint32_t indexCount,
+                                                                    uint32_t vertexOffset)
 {
-    ASSERT(valid());
-    vkCmdDrawIndexed(mHandle, indexCount, 1, 0, vertexOffset, 0);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndexed(this->mHandle, indexCount, 1, 0, vertexOffset, 0);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndexedInstanced(uint32_t indexCount,
+                                                                   uint32_t instanceCount)
 {
-    ASSERT(valid());
-    vkCmdDrawIndexed(mHandle, indexCount, instanceCount, 0, 0, 0);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndexed(this->mHandle, indexCount, instanceCount, 0, 0, 0);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndexedInstancedBaseVertex(uint32_t indexCount,
-                                                                uint32_t instanceCount,
-                                                                uint32_t vertexOffset)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndexedInstancedBaseVertex(uint32_t indexCount,
+                                                                             uint32_t instanceCount,
+                                                                             uint32_t vertexOffset)
 {
-    ASSERT(valid());
-    vkCmdDrawIndexed(mHandle, indexCount, instanceCount, 0, vertexOffset, 0);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndexed(this->mHandle, indexCount, instanceCount, 0, vertexOffset, 0);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndexedInstancedBaseVertexBaseInstance(uint32_t indexCount,
-                                                                            uint32_t instanceCount,
-                                                                            uint32_t firstIndex,
-                                                                            int32_t vertexOffset,
-                                                                            uint32_t firstInstance)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndexedInstancedBaseVertexBaseInstance(
+    uint32_t indexCount,
+    uint32_t instanceCount,
+    uint32_t firstIndex,
+    int32_t vertexOffset,
+    uint32_t firstInstance)
 {
-    ASSERT(valid());
-    vkCmdDrawIndexed(mHandle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndexed(this->mHandle, indexCount, instanceCount, firstIndex, vertexOffset,
+                     firstInstance);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndexedIndirect(const Buffer &buffer,
-                                                     VkDeviceSize offset,
-                                                     uint32_t drawCount,
-                                                     uint32_t stride)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndexedIndirect(const Buffer &buffer,
+                                                                  VkDeviceSize offset,
+                                                                  uint32_t drawCount,
+                                                                  uint32_t stride)
 {
-    ASSERT(valid());
-    vkCmdDrawIndexedIndirect(mHandle, buffer.getHandle(), offset, drawCount, stride);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndexedIndirect(this->mHandle, buffer.getHandle(), offset, drawCount, stride);
 }
 
-ANGLE_INLINE void CommandBuffer::drawIndirect(const Buffer &buffer,
-                                              VkDeviceSize offset,
-                                              uint32_t drawCount,
-                                              uint32_t stride)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::drawIndirect(const Buffer &buffer,
+                                                           VkDeviceSize offset,
+                                                           uint32_t drawCount,
+                                                           uint32_t stride)
 {
-    ASSERT(valid());
-    vkCmdDrawIndirect(mHandle, buffer.getHandle(), offset, drawCount, stride);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDrawIndirect(this->mHandle, buffer.getHandle(), offset, drawCount, stride);
 }
 
-ANGLE_INLINE void CommandBuffer::dispatch(uint32_t groupCountX,
-                                          uint32_t groupCountY,
-                                          uint32_t groupCountZ)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::dispatch(uint32_t groupCountX,
+                                                       uint32_t groupCountY,
+                                                       uint32_t groupCountZ)
 {
-    ASSERT(valid());
-    vkCmdDispatch(mHandle, groupCountX, groupCountY, groupCountZ);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDispatch(this->mHandle, groupCountX, groupCountY, groupCountZ);
 }
 
-ANGLE_INLINE void CommandBuffer::dispatchIndirect(const Buffer &buffer, VkDeviceSize offset)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::dispatchIndirect(const Buffer &buffer,
+                                                               VkDeviceSize offset)
 {
-    ASSERT(valid());
-    vkCmdDispatchIndirect(mHandle, buffer.getHandle(), offset);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdDispatchIndirect(this->mHandle, buffer.getHandle(), offset);
 }
 
-ANGLE_INLINE void CommandBuffer::bindPipeline(VkPipelineBindPoint pipelineBindPoint,
-                                              const Pipeline &pipeline)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bindPipeline(VkPipelineBindPoint pipelineBindPoint,
+                                                           const Pipeline &pipeline)
 {
-    ASSERT(valid() && pipeline.valid());
-    vkCmdBindPipeline(mHandle, pipelineBindPoint, pipeline.getHandle());
+    onRecordCommand();
+    ASSERT(this->valid() && pipeline.valid());
+    vkCmdBindPipeline(this->mHandle, pipelineBindPoint, pipeline.getHandle());
 }
 
-ANGLE_INLINE void CommandBuffer::bindGraphicsPipeline(const Pipeline &pipeline)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bindGraphicsPipeline(const Pipeline &pipeline)
 {
-    ASSERT(valid() && pipeline.valid());
-    vkCmdBindPipeline(mHandle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getHandle());
+    onRecordCommand();
+    ASSERT(this->valid() && pipeline.valid());
+    vkCmdBindPipeline(this->mHandle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getHandle());
 }
 
-ANGLE_INLINE void CommandBuffer::bindComputePipeline(const Pipeline &pipeline)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bindComputePipeline(const Pipeline &pipeline)
 {
-    ASSERT(valid() && pipeline.valid());
-    vkCmdBindPipeline(mHandle, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline.getHandle());
+    onRecordCommand();
+    ASSERT(this->valid() && pipeline.valid());
+    vkCmdBindPipeline(this->mHandle, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline.getHandle());
 }
 
-ANGLE_INLINE void CommandBuffer::bindVertexBuffers(uint32_t firstBinding,
-                                                   uint32_t bindingCount,
-                                                   const VkBuffer *buffers,
-                                                   const VkDeviceSize *offsets)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bindVertexBuffers(uint32_t firstBinding,
+                                                                uint32_t bindingCount,
+                                                                const VkBuffer *buffers,
+                                                                const VkDeviceSize *offsets)
 {
-    ASSERT(valid());
-    vkCmdBindVertexBuffers(mHandle, firstBinding, bindingCount, buffers, offsets);
+    onRecordCommand();
+    ASSERT(this->valid());
+    vkCmdBindVertexBuffers(this->mHandle, firstBinding, bindingCount, buffers, offsets);
 }
 
-ANGLE_INLINE void CommandBuffer::beginTransformFeedback(uint32_t firstCounterBuffer,
-                                                        uint32_t counterBufferCount,
-                                                        const VkBuffer *counterBuffers,
-                                                        const VkDeviceSize *counterBufferOffsets)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::beginTransformFeedback(
+    uint32_t firstCounterBuffer,
+    uint32_t counterBufferCount,
+    const VkBuffer *counterBuffers,
+    const VkDeviceSize *counterBufferOffsets)
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     ASSERT(vkCmdBeginTransformFeedbackEXT);
-    vkCmdBeginTransformFeedbackEXT(mHandle, firstCounterBuffer, counterBufferCount, counterBuffers,
-                                   counterBufferOffsets);
+    vkCmdBeginTransformFeedbackEXT(this->mHandle, firstCounterBuffer, counterBufferCount,
+                                   counterBuffers, counterBufferOffsets);
 }
 
-ANGLE_INLINE void CommandBuffer::endTransformFeedback(uint32_t firstCounterBuffer,
-                                                      uint32_t counterBufferCount,
-                                                      const VkBuffer *counterBuffers,
-                                                      const VkDeviceSize *counterBufferOffsets)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::endTransformFeedback(
+    uint32_t firstCounterBuffer,
+    uint32_t counterBufferCount,
+    const VkBuffer *counterBuffers,
+    const VkDeviceSize *counterBufferOffsets)
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     ASSERT(vkCmdEndTransformFeedbackEXT);
-    vkCmdEndTransformFeedbackEXT(mHandle, firstCounterBuffer, counterBufferCount, counterBuffers,
-                                 counterBufferOffsets);
+    vkCmdEndTransformFeedbackEXT(this->mHandle, firstCounterBuffer, counterBufferCount,
+                                 counterBuffers, counterBufferOffsets);
 }
 
-ANGLE_INLINE void CommandBuffer::bindTransformFeedbackBuffers(uint32_t firstBinding,
-                                                              uint32_t bindingCount,
-                                                              const VkBuffer *buffers,
-                                                              const VkDeviceSize *offsets,
-                                                              const VkDeviceSize *sizes)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::bindTransformFeedbackBuffers(
+    uint32_t firstBinding,
+    uint32_t bindingCount,
+    const VkBuffer *buffers,
+    const VkDeviceSize *offsets,
+    const VkDeviceSize *sizes)
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     ASSERT(vkCmdBindTransformFeedbackBuffersEXT);
-    vkCmdBindTransformFeedbackBuffersEXT(mHandle, firstBinding, bindingCount, buffers, offsets,
-                                         sizes);
+    vkCmdBindTransformFeedbackBuffersEXT(this->mHandle, firstBinding, bindingCount, buffers,
+                                         offsets, sizes);
 }
 
-ANGLE_INLINE void CommandBuffer::beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::beginDebugUtilsLabelEXT(
+    const VkDebugUtilsLabelEXT &labelInfo)
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     {
 #if !defined(ANGLE_SHARED_LIBVULKAN)
         // When the vulkan-loader is statically linked, we need to use the extension
@@ -1243,22 +1398,27 @@ ANGLE_INLINE void CommandBuffer::beginDebugUtilsLabelEXT(const VkDebugUtilsLabel
         using rx::vkCmdBeginDebugUtilsLabelEXT;
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
         ASSERT(vkCmdBeginDebugUtilsLabelEXT);
-        vkCmdBeginDebugUtilsLabelEXT(mHandle, &labelInfo);
+        vkCmdBeginDebugUtilsLabelEXT(this->mHandle, &labelInfo);
     }
 }
 
-ANGLE_INLINE void CommandBuffer::endDebugUtilsLabelEXT()
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::endDebugUtilsLabelEXT()
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     ASSERT(vkCmdEndDebugUtilsLabelEXT);
-    vkCmdEndDebugUtilsLabelEXT(mHandle);
+    vkCmdEndDebugUtilsLabelEXT(this->mHandle);
 }
 
-ANGLE_INLINE void CommandBuffer::insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo)
+template <bool IsSecondary>
+ANGLE_INLINE void CommandBuffer<IsSecondary>::insertDebugUtilsLabelEXT(
+    const VkDebugUtilsLabelEXT &labelInfo)
 {
-    ASSERT(valid());
+    onRecordCommand();
+    ASSERT(this->valid());
     ASSERT(vkCmdInsertDebugUtilsLabelEXT);
-    vkCmdInsertDebugUtilsLabelEXT(mHandle, &labelInfo);
+    vkCmdInsertDebugUtilsLabelEXT(this->mHandle, &labelInfo);
 }
 }  // namespace priv
 
