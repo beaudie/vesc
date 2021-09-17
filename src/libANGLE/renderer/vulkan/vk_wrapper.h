@@ -178,10 +178,6 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
 
     VkResult init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo);
 
-    // There is no way to know if the command buffer contains any commands.
-    static bool CanKnowIfEmpty() { return false; }
-    bool empty() const { return false; }
-
     using WrappedObject::operator=;
 
     static bool SupportsQueries(const VkPhysicalDeviceFeatures &features)
