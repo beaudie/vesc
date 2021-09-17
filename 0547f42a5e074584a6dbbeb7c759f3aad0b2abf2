@@ -33,6 +33,24 @@
       "message": "LGTM, sorry for the slow review latency. Please feel free to send ping emails, I don\u0027t mind at all.",
       "revId": "0547f42a5e074584a6dbbeb7c759f3aad0b2abf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07d09158_44632f4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2021-09-17T05:11:12Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "824563bd_90e7a55c",
+      "revId": "0547f42a5e074584a6dbbeb7c759f3aad0b2abf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
