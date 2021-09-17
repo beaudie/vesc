@@ -128,6 +128,30 @@
       },
       "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59b12293_b0ec0e83",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-09-17T06:53:36Z",
+      "side": 1,
+      "message": "Generating 1000 vertex arrays do affect CPU time,but in this test,when to generate vaos will not affect the total cpu time.What we really care about is glBufferData\u0027s calling time not every iteration for vao handling.",
+      "parentUuid": "c03a7a07_817f570a",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "e10a4031b176f89b1c7409341c7c2e15e4cab39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
