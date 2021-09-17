@@ -14,7 +14,7 @@ static char gDefaultMetallibSrc[] = R"(
 # 1 "temp_master_source.metal"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
-# 386 "<built-in>" 3
+# 369 "<built-in>" 3
 # 1 "<command line>" 1
 # 1 "<built-in>" 2
 # 1 "temp_master_source.metal" 2
@@ -30,7 +30,6 @@ static char gDefaultMetallibSrc[] = R"(
 # 13 "./common.h"
 # include <simd/simd.h>
 # include <metal_stdlib>
-
 
 
 # 1 "./constants.h" 1
@@ -1467,7 +1466,6 @@ kernel void generate2DArrayMipmaps(uint lIndex [[thread_index_in_threadgroup]],
 # 1 "./copy_buffer.metal" 1
 # 12 "./copy_buffer.metal"
 #include <metal_pack>
-
 
 
 # 1 "./format_autogen.h" 1
