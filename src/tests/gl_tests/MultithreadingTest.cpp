@@ -39,6 +39,19 @@ class MultithreadingTest : public ANGLETest
     }
     bool hasGLSyncExtension() const { return IsGLExtensionEnabled("GL_OES_EGL_sync"); }
 
+    EGLContext createMultithreadedContext(EGLWindow *window, EGLContext shareCtx)
+    {
+        EGLint attribs[] = {EGL_CONTEXT_VIRTUALIZATION_GROUP_ANGLE, mVirtualizationGroup++,
+                            EGL_NONE};
+        if (!IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
+                                          "EGL_ANGLE_context_virtualization"))
+        {
+            attribs[0] = EGL_NONE;
+        }
+
+        return window->createContext(shareCtx, attribs);
+    }
+
     void runMultithreadedGLTest(
         std::function<void(EGLSurface surface, size_t threadIndex)> testBody,
         size_t threadCount)
@@ -68,7 +81,7 @@ class MultithreadingTest : public ANGLETest
                     surface = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
                     EXPECT_EGL_SUCCESS();
 
-                    ctx = window->createContext(EGL_NO_CONTEXT);
+                    ctx = createMultithreadedContext(window, EGL_NO_CONTEXT);
                     EXPECT_NE(EGL_NO_CONTEXT, ctx);
 
                     EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
@@ -96,6 +109,8 @@ class MultithreadingTest : public ANGLETest
             thread.join();
         }
     }
+
+    std::atomic<EGLint> mVirtualizationGroup;
 };
 
 class MultithreadingTestES3 : public MultithreadingTest
@@ -232,8 +247,8 @@ TEST_P(MultithreadingTest, MultiContextDeleteDraw)
         // 5000 is chosen here as it reliably reproduces the former crash.
         for (int i = 0; i < 5000; i++)
         {
-            EGLContext ctx1 = window->createContext(EGL_NO_CONTEXT);
-            EGLContext ctx2 = window->createContext(EGL_NO_CONTEXT);
+            EGLContext ctx1 = createMultithreadedContext(window, EGL_NO_CONTEXT);
+            EGLContext ctx2 = createMultithreadedContext(window, EGL_NO_CONTEXT);
 
             EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, ctx2));
             EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, ctx1));
@@ -251,7 +266,7 @@ TEST_P(MultithreadingTest, MultiContextDeleteDraw)
         EGLSurface surface = eglCreatePbufferSurface(dpy, config, pbufferAttributes);
         EXPECT_EGL_SUCCESS();
 
-        auto ctx = window->createContext(EGL_NO_CONTEXT);
+        auto ctx = createMultithreadedContext(window, EGL_NO_CONTEXT);
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
 
         constexpr size_t kIterationsPerThread = 512;
@@ -467,7 +482,7 @@ TEST_P(MultithreadingTest, MultiCreateContext)
         threads[threadIdx] = std::thread([&, threadIdx]() {
             contexts[threadIdx] = EGL_NO_CONTEXT;
             {
-                contexts[threadIdx] = window->createContext(EGL_NO_CONTEXT);
+                contexts[threadIdx] = createMultithreadedContext(window, EGL_NO_CONTEXT);
                 EXPECT_NE(EGL_NO_CONTEXT, contexts[threadIdx]);
 
                 barrier++;
@@ -509,7 +524,7 @@ void MultithreadingTestES3::textureThreadFunction(bool useDraw)
     EXPECT_EGL_SUCCESS();
     EXPECT_NE(EGL_NO_SURFACE, surface);
 
-    ctx = window->createContext(window->getContext());
+    ctx = createMultithreadedContext(window, window->getContext());
     EXPECT_NE(EGL_NO_CONTEXT, ctx);
 
     EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, ctx));
@@ -768,21 +783,21 @@ TEST_P(MultithreadingTest, NoFlushNoContextReturnsTimeout)
 // TODO(geofflang): Test sharing a program between multiple shared contexts on multiple threads
 
 ANGLE_INSTANTIATE_TEST(MultithreadingTest,
-                       WithNoVirtualContexts(ES2_OPENGL()),
-                       WithNoVirtualContexts(ES3_OPENGL()),
-                       WithNoVirtualContexts(ES2_OPENGLES()),
-                       WithNoVirtualContexts(ES3_OPENGLES()),
-                       WithNoVirtualContexts(ES3_VULKAN()),
-                       WithNoVirtualContexts(ES3_VULKAN_SWIFTSHADER()),
-                       WithNoVirtualContexts(ES2_D3D11()),
-                       WithNoVirtualContexts(ES3_D3D11()));
+                       ES2_OPENGL(),
+                       ES3_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES3_OPENGLES(),
+                       ES3_VULKAN(),
+                       ES3_VULKAN_SWIFTSHADER(),
+                       ES2_D3D11(),
+                       ES3_D3D11());
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultithreadingTestES3);
 ANGLE_INSTANTIATE_TEST(MultithreadingTestES3,
-                       WithNoVirtualContexts(ES3_OPENGL()),
-                       WithNoVirtualContexts(ES3_OPENGLES()),
-                       WithNoVirtualContexts(ES3_VULKAN()),
-                       WithNoVirtualContexts(ES3_VULKAN_SWIFTSHADER()),
-                       WithNoVirtualContexts(ES3_D3D11()));
+                       ES3_OPENGL(),
+                       ES3_OPENGLES(),
+                       ES3_VULKAN(),
+                       ES3_VULKAN_SWIFTSHADER(),
+                       ES3_D3D11());
 
 }  // namespace angle
