@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d62aa353_c5b983f4",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-09-17T19:15:43Z",
+      "side": 1,
+      "message": "This isn\u0027t used correctly. rowLength is in pixels, not in bytes, so something like:\n(IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) / IOSurfaceGetBytesPerElementOfPlane(mIOSurface, mPlane)) \u0026 0xFFFFFFFF;\nshould work, as long as IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) is an exact multiple of IOSurfaceGetBytesPerElementOfPlane(mIOSurface, mPlane)",
+      "range": {
+        "startLine": 155,
+        "startChar": 30,
+        "endLine": 155,
+        "endChar": 94
+      },
+      "revId": "febd530d930083868a7aaf8bb6517da605205c93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
