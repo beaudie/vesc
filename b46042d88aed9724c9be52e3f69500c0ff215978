@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67b1baa5_68b64599",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-17T03:48:56Z",
+      "side": 1,
+      "message": "CQ passes with this reverted back to retainReadOnly().\n\nHowever, while the \u0027src\u0027 buffer may have had retainReadWrite() called already, I don\u0027t think this is entirely correct.   Instead, I think what we want is to move these retain calls down to the copyFromBuffer() call:\n\n    if (!copyRegions.empty())\n    {\n        src-\u003eretainReadOnly(\u0026contextVk-\u003egetResourceUseList());\n        mBuffer-\u003eretainReadWrite(\u0026contextVk-\u003egetResourceUseList());\n        ANGLE_TRY(mBuffer-\u003ecopyFromBuffer(contextVk, src, static_cast\u003cuint32_t\u003e(copyRegions.size()),\n                                          copyRegions.data()));\n    }\n    \nThe acquireBufferHelper() call will create a new buffer, so we need to call retainReadWrite() on it since it cannot have been retained before now (since it didn\u0027t exist until now).\n\nThoughts?",
+      "parentUuid": "8f2ca9fa_b823104d",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8abee2_963ab2ac",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 16
@@ -82,6 +100,30 @@
       "writtenOn": "2021-09-16T13:25:06Z",
       "side": 1,
       "message": "nit: mReadOnlyUse (I was suggesting mReadUse and mWriteUse but this is fine too)",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 31
+      },
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b03837a9_d33fc132",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-17T03:48:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d8abee2_963ab2ac",
       "range": {
         "startLine": 247,
         "startChar": 22,
@@ -111,6 +153,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65cadf90_da0b09d0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-17T03:48:56Z",
+      "side": 1,
+      "message": "I pulled in your change and added a test.\n\nI added the test ComputeShaderTest::BufferImageBufferMapWrite(), which is based off of BufferImageBuffer().   Unfortunately, it doesn\u0027t hit any errors, with or without your fix.\n\nLet me know if there are any changes to the test you\u0027d like.",
+      "parentUuid": "c4cbd1b5_b1886832",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "396e862a_8a563790",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
@@ -122,6 +182,24 @@
       "writtenOn": "2021-09-16T14:48:09Z",
       "side": 1,
       "message": "This should update both mReadOnlyUse and mReadWriteUse!\n\nRegression test could probably be something like: Use WithAllocateNonZeroMemory on the test, then create a buffer (and make sure this function is called), then delete the buffer, call glFlush() and observe a Vulkan validation error regarding use-after-destroy.",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d0fdfd4_9bf20f01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-17T03:48:56Z",
+      "side": 1,
+      "message": "I\u0027ve made the update, since it\u0027s the correct thing to do.\n\nHowever, nothing in ANGLE\u0027s CQ uses this function:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3167015\n\nI\u0027m not sure how expected this is, since it seems a few things have to line up:\n  1. allocateNonZeroMemory.enabled\n  2. (mMemoryPropertyFlags \u0026 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) \u003d\u003d 0 \n  3. (requestedCreateInfo.usage \u0026 VK_BUFFER_USAGE_TRANSFER_DST_BIT) !\u003d 0\n\nSince it\u0027s not currently tested, and I\u0027m not sure how involved it will be to get into this path, I\u0027m going to open a bug to add testing in this area (unless you can think of a quick way to get into here).",
+      "parentUuid": "396e862a_8a563790",
       "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
