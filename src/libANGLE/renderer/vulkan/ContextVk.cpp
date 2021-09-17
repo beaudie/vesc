@@ -752,6 +752,9 @@ angle::Result ContextVk::initialize()
     mEmulateSeamfulCubeMapSampling = shouldEmulateSeamfulCubeMapSampling();
 
     // Assign initial command buffers from queue
+    ANGLE_VK_TRY(this, vk::SecondaryCommandPoolInitialize(&mCommandPool, getDevice(),
+                                                          mRenderer->getDeviceQueueIndex(),
+                                                          hasProtectedContent()));
     ANGLE_TRY(
         mRenderer->getCommandBufferHelper(this, false, &mCommandPool, &mOutsideRenderPassCommands));
     ANGLE_TRY(mRenderer->getCommandBufferHelper(this, true, &mCommandPool, &mRenderPassCommands));

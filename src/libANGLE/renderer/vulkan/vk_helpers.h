@@ -1330,7 +1330,6 @@ class CommandBufferHelper : angle::NonCopyable
 
 // The following class helps support both Vulkan and ANGLE secondary command buffers by
 // encapsulating their differences.
-// TODO: support ANGLE secondary command buffers.  http://anglebug.com/6100
 class CommandBufferRecycler
 {
   public:
@@ -1350,10 +1349,16 @@ class CommandBufferRecycler
 
     void resetCommandBufferHelper(CommandBuffer &&commandBuffer);
 
+    SecondaryCommandBufferList &&getCommandBuffersToReset()
+    {
+        return std::move(mSecondaryCommandBuffersToReset);
+    }
+
   private:
     void recycleImpl(VkDevice device, CommandBufferHelper *commandBuffer, CommandPool *commandPool);
 
     std::vector<vk::CommandBufferHelper *> mCommandBufferHelperFreeList;
+    SecondaryCommandBufferList mSecondaryCommandBuffersToReset;
 };
 
 // Imagine an image going through a few layout transitions:
