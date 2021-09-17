@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a73fea5a_fe73808f",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T16:45:51Z",
+      "side": 1,
+      "message": "nit: Google style guide recommends c++-style casts, you can find it online.",
+      "range": {
+        "startLine": 121,
+        "startChar": 23,
+        "endLine": 121,
+        "endChar": 28
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7272189_72d609c8",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T16:45:51Z",
+      "side": 1,
+      "message": "these all seem independent of the draw, couldn\u0027t they be cached rather than executed every draw?",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 95
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28216746_6dbad4dd",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T16:45:51Z",
+      "side": 1,
+      "message": "we have a method for time-based updates:\n\n    void step(float dt, double totalTime) override\n    \ncan you use that design instead of std::chrono?",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 41
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e01d342_2b672d27",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T16:45:51Z",
+      "side": 1,
+      "message": "nit: we don\u0027t use assert in ANGLE because of unpredictable behaviour. Prefer ASSERT macro type stuff or other checks.",
+      "range": {
+        "startLine": 165,
+        "startChar": 8,
+        "endLine": 165,
+        "endChar": 14
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bebe7c22_e1d731c9",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T16:45:51Z",
+      "side": 1,
+      "message": "suggest you default init all values.",
+      "range": {
+        "startLine": 197,
+        "startChar": 4,
+        "endLine": 197,
+        "endChar": 11
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
