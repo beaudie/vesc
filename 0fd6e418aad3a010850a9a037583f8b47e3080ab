@@ -33,6 +33,24 @@
       "message": "You need to add the new files.  They just show up as deleted in patchset 1.",
       "revId": "0fd6e418aad3a010850a9a037583f8b47e3080ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dae5c48_c013682c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T12:34:56Z",
+      "side": 1,
+      "message": "My bad... I think git reset unstaged them after I used git mv. Anyway fixed in latest PS.",
+      "parentUuid": "9bf8f8ac_18a883ce",
+      "revId": "0fd6e418aad3a010850a9a037583f8b47e3080ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
