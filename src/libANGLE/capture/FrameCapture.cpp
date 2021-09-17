@@ -5517,18 +5517,10 @@ void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *contex
 {
     FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
 
-    gl::Buffer *buffer = nullptr;
+    const gl::State &apiState        = context->getState();
+    const gl::BufferManager &buffers = apiState.getBufferManagerForCapture();
 
-    const gl::State &apiState              = context->getState();
-    const gl::BoundBufferMap &boundBuffers = apiState.getBoundBuffersForCapture();
-    for (gl::BufferBinding binding : angle::AllEnums<gl::BufferBinding>())
-    {
-        if (id == boundBuffers[binding].id())
-        {
-            buffer = context->getState().getTargetBuffer(binding);
-            break;
-        }
-    }
+    gl::Buffer *buffer = buffers.getBuffer(id);
 
     if (!buffer)
     {
