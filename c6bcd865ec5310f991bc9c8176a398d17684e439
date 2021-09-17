@@ -16,6 +16,24 @@
       "message": "This is an initial draft for capturing bufferstorages with the coherent map bit.\nFor Dota Underlords it is sufficient to check for changes on glFenceSync, as it behaves according to spec when using the GL_MAP_COHERENT_BIT.\nBefore capture the buffer is hashed to see if any changes occured.\nSince this also needs to happen for unbound (but mapped) buffers, I will improve this by utilizing mprotect to detect writes.\n",
       "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f4587a_5e54d09a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T16:46:55Z",
+      "side": 1,
+      "message": "Hey Lubosz,\n\nIs this your proposed final implementation? Seems like FenceSync isn\u0027t directly related to BufferStorage behaiour.",
+      "parentUuid": "c625aa30_f229aa3e",
+      "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
