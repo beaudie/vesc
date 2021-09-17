@@ -16,6 +16,24 @@
       "message": "Should the bug reference be 6254 here?",
       "revId": "bf7fac123ca96b1c88ffaaabae771d2f7a966374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0bfc243_c535d9de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T15:01:53Z",
+      "side": 1,
+      "message": "Yes, that\u0027s right",
+      "parentUuid": "bbadd76b_fa42a0f9",
+      "revId": "bf7fac123ca96b1c88ffaaabae771d2f7a966374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
