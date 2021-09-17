@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2609e16_db87c4f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T01:54:05Z",
+      "side": 1,
+      "message": "Another split change. The changes in vk_wrapper.h shouldn\u0027t affect the ANGLE SCB build.",
+      "revId": "d3179b9a86779988ee1701428a41a6aeefc909e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
