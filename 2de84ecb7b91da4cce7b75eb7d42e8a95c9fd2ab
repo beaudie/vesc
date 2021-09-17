@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e4457b_5b65b3c5",
+        "filename": "src/common/third_party/base/anglebase/numerics/safe_math_impl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T13:37:40Z",
+      "side": 1,
+      "message": "Got it. Would you prefer this reverted?",
+      "parentUuid": "0a3d1437_a2fdc9fa",
+      "range": {
+        "startLine": 372,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 19
+      },
+      "revId": "2de84ecb7b91da4cce7b75eb7d42e8a95c9fd2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fded91c_bb7f0501",
