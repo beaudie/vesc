@@ -71,6 +71,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d701b7_8fd88dcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-17T22:02:55Z",
+      "side": 1,
+      "message": "Basically, this makes sure that testSet actually corresponds to what\u0027s being run.\nSo yeah, it ignores sharding arguments when running a batch of tests specified with --gtest_filter.\nThe old code used to ignore sharding arguments as well, because of the bug with argv I\u0027ve mentioned earlier, so it sill ran the whole batch of tests.\nBut it didn\u0027t ignore the sharding for testSet, so accounting of test results was possibly wrong.\nNow you can say it ignores sharding for both.\n\nOne thing that still uses sharding args is listing tests.\nWhich reminds me, I need to figure out how this will work when I\u0027ll remove the custom script.",
+      "parentUuid": "9b950da8_b1cc9e3a",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c9d4952_1815fc82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-17T22:02:55Z",
+      "side": 1,
+      "message": "I don\u0027t consider this a workaround.\nWe do need to pass sharding info (I need to figure out how), so that we list only the relevant tests.\nAnd we need to ignore sharding info when we have --gtest_filter, since Android runner tells us what to run and we can\u0027t modify that.\n\nSo, the only way this can be removed is together with Android runner.\nAt which point it would make sense to remove all !mBotMode code, not just the part that I touch here.",
+      "parentUuid": "52c21266_231e681b",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07d3214a_316189e8",
