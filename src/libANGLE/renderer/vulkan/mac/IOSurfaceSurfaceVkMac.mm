@@ -15,6 +15,8 @@
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
+#include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 #include <IOSurface/IOSurface.h>
 
@@ -106,19 +108,23 @@ angle::Result IOSurfaceSurfaceVkMac::initializeImpl(DisplayVk *displayVk)
     RendererVk *renderer      = displayVk->getRenderer();
     const egl::Config *config = mState.config;
 
+    // Should never be > 1
     GLint samples = 1;
     if (config->sampleBuffers && config->samples > 1)
     {
         samples = config->samples;
     }
-    ANGLE_VK_CHECK(displayVk, samples > 0, VK_ERROR_INITIALIZATION_FAILED);
+    ANGLE_VK_CHECK(displayVk, samples == 1, VK_ERROR_INITIALIZATION_FAILED);
 
     // Swiftshader will use the raw pointer to the buffer referenced by the IOSurfaceRef
-    ANGLE_TRY(mColorAttachment.initializeWithExternalMemory(
+    ANGLE_TRY(mColorAttachment.initialize(
         displayVk, mWidth, mHeight,
         renderer->getFormat(kIOSurfaceFormats[mFormatIndex].nativeSizedInternalFormat), samples,
-        IOSurfaceGetBaseAddressOfPlane(mIOSurface, mPlane), mState.isRobustResourceInitEnabled(),
-        mState.hasProtectedContent()));
+        mState.isRobustResourceInitEnabled(), mState.hasProtectedContent()));
+
+    mColorAttachment.image.initStagingBuffer(
+        renderer, renderer->getMinImportedHostPointerAlignment(), vk::kStagingBufferFlags,
+        IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) * mHeight);
     mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr, nullptr,
                             gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
 
@@ -140,7 +146,37 @@ egl::Error IOSurfaceSurfaceVkMac::bindTexImage(const gl::Context *context,
 {
     IOSurfaceLock(mIOSurface, 0, nullptr);
 
-    return egl::NoError();
+    ContextVk *contextVk = vk::GetImpl(context);
+    DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+    RendererVk *renderer = displayVk->getRenderer();
+
+    size_t width             = IOSurfaceGetWidthOfPlane(mIOSurface, mPlane);
+    size_t height            = IOSurfaceGetHeightOfPlane(mIOSurface, mPlane);
+    size_t rowLengthInPixels = IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) /
+                               IOSurfaceGetBytesPerElementOfPlane(mIOSurface, mPlane);
+    VkDeviceSize alignment = renderer->getMinImportedHostPointerAlignment();
+
+    gl::PixelUnpackState pixelUnpack;
+    pixelUnpack.alignment   = static_cast<GLint>(alignment);
+    pixelUnpack.rowLength   = static_cast<GLint>(rowLengthInPixels);
+    pixelUnpack.imageHeight = static_cast<GLint>(height);
+
+    void *source                     = IOSurfaceGetBaseAddressOfPlane(mIOSurface, mPlane);
+    GLenum nativeSizedInternalFormat = kIOSurfaceFormats[mFormatIndex].nativeSizedInternalFormat;
+
+    const gl::InternalFormat &internalFormatInfo =
+        gl::GetSizedInternalFormatInfo(nativeSizedInternalFormat);
+    const vk::Format &rendererFormat = renderer->getFormat(nativeSizedInternalFormat);
+
+    angle::Result result = mColorAttachment.image.stageSubresourceUpdate(
+        contextVk, gl::ImageIndex::Make2D(0),
+        gl::Extents(static_cast<int>(width), pixelUnpack.imageHeight, 1), gl::Offset(),
+        internalFormatInfo, pixelUnpack, nullptr, kIOSurfaceFormats[mFormatIndex].type,
+        reinterpret_cast<uint8_t *>(source), rendererFormat, vk::ImageAccess::Renderable);
+
+    IOSurfaceUnlock(mIOSurface, 0, nullptr);
+
+    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
 egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EGLint buffer)
@@ -148,7 +184,28 @@ egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EG
     ASSERT(context != nullptr);
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
-    angle::Result result = contextVk->finishImpl();
+    RendererVk *renderer = displayVk->getRenderer();
+
+    IOSurfaceLock(mIOSurface, 0, nullptr);
+
+    angle::Result result = mColorAttachment.image.flushAllStagedUpdates(contextVk);
+
+    gl::Rectangle bounds(0, 0, mWidth, mHeight);
+
+    GLenum nativeSizedInternalFormat = kIOSurfaceFormats[mFormatIndex].nativeSizedInternalFormat;
+    const vk::Format &vkFormat       = renderer->getFormat(nativeSizedInternalFormat);
+    const angle::Format &destFormat =
+        angle::Format::Get(angle::Format::InternalFormatToID(nativeSizedInternalFormat));
+    const angle::Format &storageFormat = vkFormat.getActualImageFormat(vk::ImageAccess::Renderable);
+
+    size_t outputRowPitchInBytes = storageFormat.pixelBytes * bounds.width;
+
+    PackPixelsParams params(bounds, destFormat, static_cast<GLuint>(outputRowPitchInBytes),
+                            contextVk->isViewportFlipEnabledForDrawFBO(), nullptr, 0);
+
+    result = mColorAttachment.image.readPixels(
+        contextVk, bounds, params, VK_IMAGE_ASPECT_COLOR_BIT, gl::LevelIndex(0), 0,
+        IOSurfaceGetBaseAddressOfPlane(mIOSurface, mPlane), contextVk->getStagingBuffer());
 
     IOSurfaceUnlock(mIOSurface, 0, nullptr);
 
@@ -202,20 +259,7 @@ bool IOSurfaceSurfaceVkMac::ValidateAttributes(const DisplayVk *displayVk,
         return false;
     }
 
-    void *pointer = IOSurfaceGetBaseAddressOfPlane(ioSurface, plane);
-    VkMemoryHostPointerPropertiesEXT memoryHostPointerProperties = {};
-    memoryHostPointerProperties.sType = VK_STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT;
-    vkGetMemoryHostPointerPropertiesEXT(
-        renderer->getDevice(), VK_EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT,
-        pointer, &memoryHostPointerProperties);
-
-    bool hostVisible =
-        memoryHostPointerProperties.memoryTypeBits & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-    if (!hostVisible)
-    {
-        return false;
-    }
-
+    void *pointer          = IOSurfaceGetBaseAddressOfPlane(ioSurface, plane);
     VkDeviceSize alignment = renderer->getMinImportedHostPointerAlignment();
     if (reinterpret_cast<size_t>(pointer) % alignment != 0)
     {
