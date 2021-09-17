@@ -8,12 +8,19 @@
 //
 
 #include "ANGLEPerfTest.h"
+#include "DrawCallPerfParams.h"
 #include "test_utils/gl_raii.h"
 
 using namespace angle;
 
 namespace
 {
+enum class TestMode
+{
+    BufferData,
+    BindBuffer,
+};
+
 struct VertexArrayParams final : public RenderTestParams
 {
     VertexArrayParams()
@@ -28,6 +35,10 @@ struct VertexArrayParams final : public RenderTestParams
     }
 
     std::string story() const override;
+
+    int numVertexArrays = 1000;
+    int numBuffers      = 5;
+    TestMode testMode   = TestMode::BufferData;
 };
 
 std::ostream &operator<<(std::ostream &os, const VertexArrayParams &params)
@@ -41,6 +52,11 @@ std::string VertexArrayParams::story() const
     std::stringstream strstr;
 
     strstr << RenderTestParams::story();
+
+    if (testMode == TestMode::BindBuffer)
+    {
+        strstr << "_bindbuffer";
+    }
 
     return strstr.str();
 }
@@ -56,10 +72,10 @@ class VertexArrayBenchmark : public ANGLERenderTest,
     void drawBenchmark() override;
 
   private:
-    GLBuffer mBuffer;
+    std::vector<GLuint> mBuffers;
     GLuint mProgram       = 0;
     GLint mAttribLocation = 0;
-    GLVertexArray vertexArrays[1000];
+    std::vector<GLuint> mVertexArrays;
 };
 
 VertexArrayBenchmark::VertexArrayBenchmark() : ANGLERenderTest("VertexArrayPerf", GetParam()) {}
@@ -87,20 +103,21 @@ void main()
 
     mAttribLocation = glGetAttribLocation(mProgram, "in_attrib");
     ASSERT_NE(mAttribLocation, -1);
-}
 
-void VertexArrayBenchmark::destroyBenchmark()
-{
-    glDeleteProgram(mProgram);
-}
+    // Generate 5 buffers.
+    int numBuffers = GetParam().numBuffers;
+    mBuffers.resize(numBuffers, 0);
+    glGenBuffers(numBuffers, mBuffers.data());
 
-void VertexArrayBenchmark::drawBenchmark()
-{
+    int numVertexArrays = GetParam().numVertexArrays;
+    mVertexArrays.resize(numVertexArrays, 0);
+    glGenVertexArrays(numVertexArrays, mVertexArrays.data());
+
     // Bind one VBO to 1000 VAOs.
-    for (GLuint i = 0; i < 1000; i++)
+    for (GLuint vertexArray : mVertexArrays)
     {
-        glBindVertexArray(vertexArrays[i]);
-        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBindVertexArray(vertexArray);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffers[0]);
         glEnableVertexAttribArray(mAttribLocation);
         glVertexAttribPointer(mAttribLocation, 1, GL_FLOAT, GL_FALSE, 4, nullptr);
         glVertexAttribDivisor(mAttribLocation, 1);
@@ -108,18 +125,41 @@ void VertexArrayBenchmark::drawBenchmark()
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
-    glBufferData(GL_ARRAY_BUFFER, 128, nullptr, GL_STATIC_DRAW);
     glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffers[0]);
 }
 
-VertexArrayParams VulkanParams()
+void VertexArrayBenchmark::destroyBenchmark()
 {
-    VertexArrayParams params;
-    params.eglParameters = egl_platform::VULKAN();
+    glDeleteProgram(mProgram);
+    glDeleteVertexArrays(static_cast<GLsizei>(mVertexArrays.size()), mVertexArrays.data());
+    mVertexArrays.clear();
+    glDeleteBuffers(static_cast<GLsizei>(mBuffers.size()), mBuffers.data());
+    mBuffers.clear();
+}
 
-    return params;
+void VertexArrayBenchmark::drawBenchmark()
+{
+    const VertexArrayParams &params = GetParam();
+    if (params.testMode == TestMode::BufferData)
+    {
+        glBufferData(GL_ARRAY_BUFFER, 128, nullptr, GL_STATIC_DRAW);
+    }
+    else
+    {
+        int bufferIndex = 0;
+        for (GLuint vertexArray : mVertexArrays)
+        {
+            bufferIndex = ((bufferIndex + 1) == params.numBuffers) ? 0 : (bufferIndex + 1);
+            glBindVertexArray(vertexArray);
+            glBindBuffer(GL_ARRAY_BUFFER, mBuffers[bufferIndex]);
+            glEnableVertexAttribArray(mAttribLocation);
+            glVertexAttribPointer(mAttribLocation, 1, GL_FLOAT, GL_FALSE, 4, nullptr);
+            glVertexAttribDivisor(mAttribLocation, 1);
+            glBindVertexArray(0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+    }
 }
 
 TEST_P(VertexArrayBenchmark, Run)
@@ -127,6 +167,25 @@ TEST_P(VertexArrayBenchmark, Run)
     run();
 }
 
+VertexArrayParams VulkanParams()
+{
+    VertexArrayParams params;
+    params.eglParameters = egl_platform::VULKAN();
+    return params;
+}
+
+VertexArrayParams VulkanNullParams(TestMode testMode)
+{
+    VertexArrayParams params;
+    params.eglParameters = egl_platform::VULKAN_NULL();
+    params.testMode      = testMode;
+    return params;
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexArrayBenchmark);
-ANGLE_INSTANTIATE_TEST(VertexArrayBenchmark, VulkanParams());
+ANGLE_INSTANTIATE_TEST(VertexArrayBenchmark,
+                       VulkanParams(),
+                       VulkanNullParams(TestMode::BindBuffer),
+                       VulkanNullParams(TestMode::BufferData),
+                       params::Native(VertexArrayParams()));
 }  // namespace
