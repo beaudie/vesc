@@ -185,7 +185,7 @@ class Context : angle::NonCopyable
 
 class RenderPassDesc;
 
-using PrimaryCommandBuffer = priv::CommandBuffer;
+using PrimaryCommandBuffer = priv::CommandBuffer<false>;
 
 #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
 using CommandBuffer = priv::SecondaryCommandBuffer;
@@ -198,7 +198,7 @@ ANGLE_NO_DISCARD inline VkResult SecondaryCommandBufferInitialize(CommandBuffer 
     return VK_SUCCESS;
 }
 #else
-using CommandBuffer = priv::CommandBuffer;
+using CommandBuffer = priv::CommandBuffer<true>;
 ANGLE_NO_DISCARD VkResult SecondaryCommandBufferInitialize(CommandBuffer *secondary,
                                                            VkDevice device,
                                                            vk::CommandPool *pool,
