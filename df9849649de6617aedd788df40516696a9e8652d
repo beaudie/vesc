@@ -72,6 +72,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "111fab84_e58586af",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T13:38:29Z",
+      "side": 1,
+      "message": "Yes there is. Vulkan secondary command buffers won\u0027t work. The final change in this series starts using these.",
+      "parentUuid": "83efc7e1_11edcc9e",
+      "revId": "df9849649de6617aedd788df40516696a9e8652d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "48bb77a3_9ce139f2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
