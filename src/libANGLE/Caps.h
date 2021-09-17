@@ -636,6 +636,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_create_surface_swap_interval
     bool createSurfaceSwapIntervalANGLE = false;
+
+    // EGL_ANGLE_context_virtualization
+    bool contextVirtualizationANGLE = false;
 };
 
 struct DeviceExtensions
@@ -695,9 +698,6 @@ struct ClientExtensions
 
     // EGL_ANGLE_platform_angle_metal
     bool platformANGLEMetal = false;
-
-    // EGL_ANGLE_platform_angle_context_virtualization
-    bool platformANGLEContextVirtualization = false;
 
     // EGL_ANGLE_platform_angle_device_context_volatile_eagl
     bool platformANGLEDeviceContextVolatileEagl = false;
