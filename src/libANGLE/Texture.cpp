@@ -2248,8 +2248,8 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             {
                 // If the contents of the buffer attached to a texture buffer has changed, mark the
                 // texture dirty.
-                signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
-                onStateChange(angle::SubjectMessage::ContentsChanged);
+                // signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
+                // onStateChange(angle::SubjectMessage::ContentsChanged);
             }
             else
             {
