@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2659dbcb_0f70a7f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T04:30:45Z",
+      "side": 1,
+      "message": "LGTM. I won\u0027t block this change any further on the regression tests, it\u0027s up to you to add them here or as a follow up. If you prefer to do them as a follow up, please take out the ineffective test and we\u0027ll work over it in the follow up.",
+      "revId": "c55c78fc87c457163a4a867690e0be51bcd3af27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
