@@ -88,6 +88,24 @@
       "parentUuid": "b2ece147_7197c010",
       "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b4a6e98_105fe6ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T17:47:03Z",
+      "side": 1,
+      "message": "Buffer writes by the CPU and usage on the GPU must necessarily be synchronized one way or another. So checking for changes on glFenceSync is sane IMO. But glFenceSync is not enough, glFinish is another synchronization point. There are probably others too.\n\nI think mprotect is an additional optimization, in that you can tell _if_ you should update the buffer on sync points, but the update still happens in sync points.",
+      "parentUuid": "b797fdca_bd1e4be2",
+      "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
