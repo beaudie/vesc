@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1fbd45b_bb8a7b4c",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-17T20:54:48Z",
+      "side": 0,
+      "message": "This doesn\u0027t work, since a previous call to testing::internal::ParseGoogleTestFlagsOnly() for getting filtered tests removes the filter from argv.\nSo we end up setting argv[2] while argc\u003d\u003d2 and last argument is argv[1].\n\nI could fix it by making a copy of argv for the 2nd call of ParseGoogleTestFlagsOnly(), but I can\u0027t find a reason someone would want to use sharding without bot mode on non-Android, so I think it\u0027s better to disable support for it and not maintain dead code.",
+      "range": {
+        "startLine": 1204,
+        "startChar": 0,
+        "endLine": 1204,
+        "endChar": 93
+      },
+      "revId": "653973e47223bc3dd1ade96961797926eb3050d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
