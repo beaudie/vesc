@@ -34,6 +34,24 @@
       "parentUuid": "c625aa30_f229aa3e",
       "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4691eacd_3f336fb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-17T16:54:33Z",
+      "side": 1,
+      "message": "This is only a draft of my current implementation, which I published to show my current approach, as it also works with Dota Underlords.\nI will replace this approach by using mprotect.\n\nThe reason why I am checking for updates on glFenceSync is from https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_buffer_storage.txt:\n\nIf MAP_COHERENT_BIT_EXT is set and the server does a write, the app must\ncall FenceSync with SYNC_GPU_COMMANDS_COMPLETE (or Finish). Then the\nCPU will see the writes after the sync is complete.\n\nFor Dota is also sufficient to check for updates on glFenceSync, which is called far less frequently than i.e. glDrawElementsInstanced.",
+      "parentUuid": "71f4587a_5e54d09a",
+      "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
