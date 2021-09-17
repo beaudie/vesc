@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb808d9_7f663964",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T01:40:58Z",
+      "side": 1,
+      "message": "Ack. No big deal (and not blocking the change on this)\n\nInternalMemoryAllocationChanged?",
+      "parentUuid": "d88cd2c8_76860d60",
+      "range": {
+        "startLine": 653,
+        "startChar": 42,
+        "endLine": 655,
+        "endChar": 28
+      },
+      "revId": "c2a7629342a3db1347d33527707ba3c831af1dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7f112c4_437d3002",
