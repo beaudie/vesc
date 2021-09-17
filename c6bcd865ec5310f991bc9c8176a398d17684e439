@@ -52,6 +52,24 @@
       "parentUuid": "71f4587a_5e54d09a",
       "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2ece147_7197c010",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T16:56:34Z",
+      "side": 1,
+      "message": "Hm, okay. Some kind of test showing their behaviour would be warranted. That might handle server writes that DotA reads back, but it doesn\u0027t handle client writes that ANGLE then reads. Are they reading from or writing to this buffer?",
+      "parentUuid": "4691eacd_3f336fb1",
+      "revId": "c6bcd865ec5310f991bc9c8176a398d17684e439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
