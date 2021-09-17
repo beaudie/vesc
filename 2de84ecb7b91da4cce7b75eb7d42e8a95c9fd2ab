@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f85b60d6_40e0b823",
+        "filename": "src/common/third_party/base/anglebase/numerics/safe_math_impl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T01:57:59Z",
+      "side": 1,
+      "message": "Just happened to notice them. `NOTREACHABLE` was a sort of hack added for a specific case, and wasn\u0027t needed in these places.",
+      "parentUuid": "02a48715_f60587e5",
+      "range": {
+        "startLine": 372,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 19
+      },
+      "revId": "2de84ecb7b91da4cce7b75eb7d42e8a95c9fd2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fded91c_bb7f0501",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-16T20:56:47Z",
       "side": 1,
       "message": "can you do this without a void*?",
+      "range": {
+        "startLine": 137,
+        "startChar": 55,
+        "endLine": 137,
+        "endChar": 60
+      },
+      "revId": "2de84ecb7b91da4cce7b75eb7d42e8a95c9fd2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f2cc9ae_1f033346",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-17T01:57:59Z",
+      "side": 1,
+      "message": "Currently it only takes one type of extension, so yes. If there were different options in the future, it would have to revert to void *.\n\nDone.",
+      "parentUuid": "2fded91c_bb7f0501",
       "range": {
         "startLine": 137,
         "startChar": 55,
