@@ -933,6 +933,13 @@ angle::Result CommandBufferHelper::initializeCommandBuffer(Context *context)
                                                                context->getRenderer()->getDevice(),
                                                                mCommandPool, &mAllocator));
 
+    if (!mIsRenderPassCommandBuffer)
+    {
+        VkCommandBufferInheritanceInfo inheritanceInfo = {};
+        inheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
+        ANGLE_VK_TRY(context, vk::SecondaryCommandBufferBegin(&mCommandBuffer, inheritanceInfo));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1637,6 +1644,11 @@ angle::Result CommandBufferHelper::beginRenderPass(
     ASSERT(mIsRenderPassCommandBuffer);
     ASSERT(empty());
 
+    VkCommandBufferInheritanceInfo inheritanceInfo = {};
+    ANGLE_TRY(vk::SecondaryCommandBufferInitializeRenderPassInheritanceInfo(
+        contextVk, framebuffer, renderPassDesc, &inheritanceInfo));
+    ANGLE_VK_TRY(contextVk, vk::SecondaryCommandBufferBegin(&mCommandBuffer, inheritanceInfo));
+
     mRenderPassDesc              = renderPassDesc;
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
@@ -1654,6 +1666,8 @@ angle::Result CommandBufferHelper::beginRenderPass(
 
 angle::Result CommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
+    ANGLE_VK_TRY(contextVk, vk::SecondaryCommandBufferEnd(&mCommandBuffer));
+
     for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
     {
         if (mColorImages[index])
@@ -1772,13 +1786,14 @@ angle::Result CommandBufferHelper::flushToPrimary(Context *context,
         beginInfo.pClearValues    = mClearValues.data();
 
         // Run commands inside the RenderPass.
-        primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
-        mCommandBuffer.executeCommands(primary->getHandle());
+        primary->beginRenderPass(beginInfo, vk::kSubpassContents);
+        vk::CommandBufferExecuteSecondary(primary, &mCommandBuffer);
         primary->endRenderPass();
     }
     else
     {
-        mCommandBuffer.executeCommands(primary->getHandle());
+        ANGLE_VK_TRY(context, vk::SecondaryCommandBufferEnd(&mCommandBuffer));
+        vk::CommandBufferExecuteSecondary(primary, &mCommandBuffer);
     }
 
     // Restart the command buffer.
@@ -1979,6 +1994,8 @@ void CommandBufferRecycler::onDestroy()
         SafeDelete(commandBufferHelper);
     }
     mCommandBufferHelperFreeList.clear();
+
+    ASSERT(mSecondaryCommandBuffersToReset.empty());
 }
 
 angle::Result CommandBufferRecycler::getCommandBufferHelper(
@@ -2012,6 +2029,7 @@ void CommandBufferRecycler::recycleCommandBufferHelper(VkDevice device,
     recycleImpl(device, commandBuffer);
 }
 
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
 void CommandBufferRecycler::recycleImpl(VkDevice device, CommandBufferHelper *commandBuffer)
 {
     mCommandBufferHelperFreeList.push_back(commandBuffer);
@@ -2020,6 +2038,19 @@ void CommandBufferRecycler::resetCommandBufferHelper(CommandBuffer &&commandBuff
 {
     commandBuffer.reset();
 }
+#else   // ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+void CommandBufferRecycler::recycleImpl(VkDevice device, CommandBufferHelper *commandBuffer)
+{
+    commandBuffer->getCommandPool()->freeCommandBuffers(device, 1,
+                                                        commandBuffer->getCommandBuffer().ptr());
+    commandBuffer->getCommandBuffer().releaseHandle();
+    delete commandBuffer;
+}
+void CommandBufferRecycler::resetCommandBufferHelper(CommandBuffer &&commandBuffer)
+{
+    mSecondaryCommandBuffersToReset.push_back(std::move(commandBuffer));
+}
+#endif  // ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
 
 // DynamicBuffer implementation.
 DynamicBuffer::DynamicBuffer()
