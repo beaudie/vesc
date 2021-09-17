@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a3d1437_a2fdc9fa",
+        "filename": "src/common/third_party/base/anglebase/numerics/safe_math_impl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-17T11:57:21Z",
+      "side": 1,
+      "message": "It\u0027s not a hack, it\u0027s left that way because we copy/pasted this code from Chromium, and that\u0027s what the original code has (because Chromium doesn\u0027t have UNREACHABLE()).",
+      "parentUuid": "f85b60d6_40e0b823",
+      "range": {
+        "startLine": 372,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 19
+      },
+      "revId": "2de84ecb7b91da4cce7b75eb7d42e8a95c9fd2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fded91c_bb7f0501",
