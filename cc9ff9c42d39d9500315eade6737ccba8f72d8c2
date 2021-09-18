@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be5b9e6f_f4ec589c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-18T01:17:52Z",
+      "side": 1,
+      "message": "OK, so this works now both with https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-rel/3470/overview\nand without https://ci.chromium.org/ui/p/chromium/builders/try/android-angle-try/2152/overview\nwrapper script.\n\nTurns out there is no need to pass sharding info to TestSuite, since without wrapper script Android harness gets sharding info and does the split.\nThe drawback is that every shard will list all the tests, not just the ones in shard, but I think this is unavoidable.",
+      "parentUuid": "0c9d4952_1815fc82",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07d3214a_316189e8",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 1
@@ -125,6 +143,29 @@
         "startChar": 0,
         "endLine": 1063,
         "endChar": 0
+      },
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bec9ceb_028b1088",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-18T01:17:52Z",
+      "side": 1,
+      "message": "I think I can remove this if I remove the wrapper script.\nSince we won\u0027t have mShardIndex and mShardCount set at all.\nSo listing and running tests will follow the same path.\nThe drawback is that we\u0027ll have to list all the tests, not just the ones in this shard, and then have the host to do the split.\n\nI\u0027m going to add a couple more CLs to this stack, one that removes script usage in standalone and one that will disable sharding on Android completely.",
+      "range": {
+        "startLine": 1216,
+        "startChar": 36,
+        "endLine": 1216,
+        "endChar": 69
       },
       "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
