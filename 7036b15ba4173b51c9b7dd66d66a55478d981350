@@ -16,6 +16,23 @@
       "message": "Here\u0027s the reason this was added\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3108339\n\nWhat changed that this is no longer needed?",
       "revId": "7036b15ba4173b51c9b7dd66d66a55478d981350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd067626_638c22d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-18T02:09:13Z",
+      "side": 1,
+      "message": "Yes, running on the CQ WebGL2CompatibilityTest.VertexShaderAttributeTypeMismatch/ES3_Metal_DirectMetalGen failed. It fails because it\u0027s searching for \"intInput __unassigned_attribute__\" which it mistakenly finds as a substring of \"uintInput __unassigned_attribute__;",
+      "revId": "7036b15ba4173b51c9b7dd66d66a55478d981350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
