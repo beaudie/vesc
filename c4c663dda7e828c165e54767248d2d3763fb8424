@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a121c185_9003c1db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-20T20:24:49Z",
+      "side": 1,
+      "message": "Thanks for updating the commit message. Feel free to add the Skip suppression for the flaky test on \"MAC NVIDIA METAL\" in this CL.\n",
+      "revId": "c4c663dda7e828c165e54767248d2d3763fb8424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
