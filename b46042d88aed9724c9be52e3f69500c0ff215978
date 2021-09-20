@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc19b7c3_a01df09e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-20T23:36:43Z",
+      "side": 1,
+      "message": "Oh, good find.   Even better.",
+      "parentUuid": "11194f6f_e5bb7cdc",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8abee2_963ab2ac",
@@ -207,6 +225,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3df9529d_85d9f260",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-20T23:36:43Z",
+      "side": 1,
+      "message": "I\u0027ve updated the test and verified it\u0027s going through the isImage\u003dtrue path.   I\u0027ve tried it with the ghosting change (with and without the fix), and it doesn\u0027t generate an error.",
+      "parentUuid": "c7c18476_81766952",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "396e862a_8a563790",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
@@ -254,6 +290,24 @@
       "side": 1,
       "message": "WithInitializeNonZeroMemory should take care of 1. For 2, I don\u0027t know I have to check. 3 should always be satisfied.\n\nOdd that no test uses this though :-S",
       "parentUuid": "0d0fdfd4_9bf20f01",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c8301a3_ef7d2ae8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-20T23:36:43Z",
+      "side": 1,
+      "message": "I opened a bug to add some testing for BufferHelper::initializeNonZeroMemory():\n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6420",
+      "parentUuid": "381ea33d_5150cd14",
       "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
