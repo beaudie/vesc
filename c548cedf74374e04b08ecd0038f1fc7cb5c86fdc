@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3037438_9c72370c",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-20T16:25:08Z",
+      "side": 1,
+      "message": "nit: Rename this to be positive, to help remove the double negative when the returning \u0027false\u0027 (i.e., \"it\u0027s not unused\", means it\u0027s used).\n\n  IsTopLevelNodeUsedFunction()",
+      "range": {
+        "startLine": 66,
+        "startChar": 5,
+        "endLine": 66,
+        "endChar": 33
+      },
+      "revId": "c548cedf74374e04b08ecd0038f1fc7cb5c86fdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
