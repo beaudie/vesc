@@ -33,6 +33,24 @@
       "message": "Do you have any thoughts on how to handle this one test? You may be able to send this CL to \"gpu-fyi-try-mac-asan\" via the \"CHOOSE TRYJOBS\" button to make sure that removing the skip actually works. Then we could actually close out anglebug.com/5345. If so then we should add another \"Bug: angleproject:5345\" line to the CL description so that bug gets updated when this CL lands.",
       "revId": "edeebb8ae20fcdda93ee0792ea07fb18c9564db7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb1feba_ec53f60d",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-20T22:10:50Z",
+      "side": 1,
+      "message": "After discussing this on Slack we decided to leave the ASAN skip alone because it was happening with the SPIR-V Metal backend and this CL shouldn\u0027t affect that backend.",
+      "parentUuid": "a40f5b2c_e119c15b",
+      "revId": "edeebb8ae20fcdda93ee0792ea07fb18c9564db7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
