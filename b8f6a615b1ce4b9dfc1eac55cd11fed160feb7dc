@@ -67,6 +67,42 @@
       "message": "lgtm but can you remove the suppressions in src/test/angle_end2end_test_expectations.txt, all the lines that start with 6375",
       "revId": "b8f6a615b1ce4b9dfc1eac55cd11fed160feb7dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a92d5e_a1a393cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-20T22:11:49Z",
+      "side": 1,
+      "message": "Done in the latest patchset.",
+      "parentUuid": "16e3ca5b_e316e28e",
+      "revId": "b8f6a615b1ce4b9dfc1eac55cd11fed160feb7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "038d9606_5e425119",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-20T22:11:49Z",
+      "side": 1,
+      "message": "Done in the latest patchset.",
+      "parentUuid": "6d3acc5c_a972a5f6",
+      "revId": "b8f6a615b1ce4b9dfc1eac55cd11fed160feb7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
