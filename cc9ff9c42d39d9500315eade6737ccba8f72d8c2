@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96d10f5d_c066f9f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-20T17:49:18Z",
+      "side": 1,
+      "message": "Sounds fine to me to list the tests often. By shard, do you mean every Android test runner group of 256 tests? Anyway if that\u0027s what we need to do sounds totally fine.\n\nIs this CL still necessary? I wasn\u0027t totally sure.",
+      "parentUuid": "be5b9e6f_f4ec589c",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07d3214a_316189e8",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 1
