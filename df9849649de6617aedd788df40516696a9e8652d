@@ -197,6 +197,24 @@
       "message": "How does this work with all the move semantics to get here?   I\u0027m not an expert in this area, but it seems that all of the std::move() calls mean that someone at the end needs to take ownership of the object, since all of the old ones will be \"empty\" (including the original being passed in).   Since no one owns \u0027commandBuffer\u0027 here, what happens to this instance that\u0027s being reset, and what\u0027s in the original instance?",
       "revId": "df9849649de6617aedd788df40516696a9e8652d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10a19440_88c935aa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-20T17:49:15Z",
+      "side": 1,
+      "message": "Although frequently used as such, `std::move()` doesn\u0027t actually mean I\u0027m no longer the owner. It just creates a reference. It\u0027s a special reference so that `f(X \u0026)` can be overloaded with `f(X \u0026\u0026)` and be a different function, otherwise `X \u0026` and `X \u0026\u0026` are practically the same thing (and so is `X *` in the end)\n\nThe reason I get a `CommandBuffer \u0026\u0026` here is for the sake of the last change in this CL that implements this for Vulkan secondary command buffers which do `std::move()` the argument and pass it around. See here: https://chromium-review.googlesource.com/c/angle/angle/+/2987873/6/src/libANGLE/renderer/vulkan/vk_helpers.cpp#2053\n\nI could have also passed in a pointer, but we conventionally use that for outputs.",
+      "parentUuid": "3cf478ef_34b4c985",
+      "revId": "df9849649de6617aedd788df40516696a9e8652d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
