@@ -16,6 +16,23 @@
       "message": "Another split change. The changes in vk_wrapper.h shouldn\u0027t affect the ANGLE SCB build.",
       "revId": "d3179b9a86779988ee1701428a41a6aeefc909e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e83eb94c_d189737d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-20T18:01:39Z",
+      "side": 1,
+      "message": "Should this ASSERT(mSize \u003d\u003d 0), with the assumption being that we only begin() command buffers that are new/reset?",
+      "revId": "d3179b9a86779988ee1701428a41a6aeefc909e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
