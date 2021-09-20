@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8faeca4_22db4248",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-20T20:21:31Z",
+      "side": 1,
+      "message": "Yes, this CL is still necessary, the builds above ran on top of it.\n\nBy \"shard\" I mean Swarming shard. I refer to GTest shards as batches.",
+      "parentUuid": "96d10f5d_c066f9f9",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07d3214a_316189e8",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 1
