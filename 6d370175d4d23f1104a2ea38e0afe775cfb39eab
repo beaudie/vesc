@@ -16,6 +16,29 @@
       "message": "Let\u0027s see how the latest patch set runs on the bots.\n",
       "revId": "6d370175d4d23f1104a2ea38e0afe775cfb39eab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db0e03ea_a817c09b",
+        "filename": "src/libANGLE/renderer/metal/mtl_glslang_mtl_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-20T20:35:03Z",
+      "side": 1,
+      "message": "nit: Slight preference for Rewriter::createRenamed over line numbers as it\u0027ll rot slower\nSame goes for below",
+      "range": {
+        "startLine": 179,
+        "startChar": 96,
+        "endLine": 180,
+        "endChar": 21
+      },
+      "revId": "6d370175d4d23f1104a2ea38e0afe775cfb39eab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
