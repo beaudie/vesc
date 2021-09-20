@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfa3d657_cf9dae1a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-20T17:42:06Z",
+      "side": 1,
+      "message": "Sounds like you should redesign to make the CommandQueue own the pools in all cases, whether it is async or sync.",
+      "parentUuid": "5a6ae08e_80c91b68",
+      "range": {
+        "startLine": 731,
+        "startChar": 61,
+        "endLine": 731,
+        "endChar": 97
+      },
+      "revId": "df9849649de6617aedd788df40516696a9e8652d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e8464794_1600a924",
