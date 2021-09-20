@@ -18,6 +18,29 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b653e85_768a843b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-20T16:57:24Z",
+      "side": 1,
+      "message": "Why does CommandQueue use the passed in CommandPool, but CommandProcessor queries for it here?",
+      "range": {
+        "startLine": 731,
+        "startChar": 61,
+        "endLine": 731,
+        "endChar": 97
+      },
+      "revId": "df9849649de6617aedd788df40516696a9e8652d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e8464794_1600a924",
@@ -107,6 +130,23 @@
         "endLine": 630,
         "endChar": 91
       },
+      "revId": "df9849649de6617aedd788df40516696a9e8652d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf478ef_34b4c985",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-20T16:57:24Z",
+      "side": 1,
+      "message": "How does this work with all the move semantics to get here?   I\u0027m not an expert in this area, but it seems that all of the std::move() calls mean that someone at the end needs to take ownership of the object, since all of the old ones will be \"empty\" (including the original being passed in).   Since no one owns \u0027commandBuffer\u0027 here, what happens to this instance that\u0027s being reset, and what\u0027s in the original instance?",
       "revId": "df9849649de6617aedd788df40516696a9e8652d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
