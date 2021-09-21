@@ -33,6 +33,24 @@
       "message": "Is the shader supposed to compile correctly?   It looks like the win-clang bots don\u0027t like it:\n\n  [ RUN      ] GLSLTest.HandleExcessiveLoopBug/ES2_D3D9\n  shader compilation failed: ERROR: 0:1: \u0027for\u0027 : Invalid init declaration\n\nAll I can find about the HLSL for-statement is this:\n\nhttps://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-for\n\u003e Initializer\n\u003e The initial value of the loop counter.",
       "revId": "8dd1d78365f5ea100c273a1e8eafd6c026868a3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43fba973_7b8faae9",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 12561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T01:30:17Z",
+      "side": 1,
+      "message": "That\u0027s some d3d9 code gen bug, unrelated to this particular fix. I\u0027ll suppress before landing.",
+      "parentUuid": "0ee6fcdf_e12f6507",
+      "revId": "8dd1d78365f5ea100c273a1e8eafd6c026868a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
