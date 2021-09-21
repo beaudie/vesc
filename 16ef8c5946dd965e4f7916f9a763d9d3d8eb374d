@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a480702_40352a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-21T15:06:37Z",
+      "side": 1,
+      "message": "This is a possible fix for 6398.\nI\u0027ve added an explanation of the issue to the bug report.",
+      "revId": "16ef8c5946dd965e4f7916f9a763d9d3d8eb374d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
