@@ -315,6 +315,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88dfe184_72370341",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-21T17:19:57Z",
+      "side": 1,
+      "message": "\u003e Ah cool, then you should be able to remove these retains here Tim.\n\nDone.\n\n\u003e Looking again, you can tell this is the wrong spot to retain because this is called when updating a descriptor set, and it may very well not be called for many frames if the desc/set doesn\u0027t change.\n\nBased on this discussion, it looks like the retain of the buffer view here can be removed also, since there are also retainBufferViews() calls in both handleDirtyTexturesImpl() and updateActiveTextures() (corresponding to the buffer retain calls).   Does that sound right?",
+      "parentUuid": "6a68fca6_1d52fcbe",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "396e862a_8a563790",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
