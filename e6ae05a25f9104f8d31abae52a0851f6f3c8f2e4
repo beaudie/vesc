@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5ae8482_b293c220",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-21T18:07:52Z",
+      "side": 1,
+      "message": "I agree with the changes.  We should clean this up (e.g. remove the #ifdef\u0027s and just go with the proposed new code.  IN ADDITION, we should add a comment to help explain why SUBOPTIMAL won\u0027t be returned by acquireNextSwapchainImage()\n\nI can create a new CL (since I can\u0027t push to Jamie\u0027s CL) if that\u0027s okay with Shabi",
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e812be8_822b2968",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-21T18:07:52Z",
+      "side": 1,
+      "message": "This is because acquireNextSwapchainImage can no longer return SUBOPTIMAL, only VK_SUCCESS or VK_ERROR_*",
+      "range": {
+        "startLine": 802,
+        "startChar": 4,
+        "endLine": 802,
+        "endChar": 42
+      },
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43bea2e0_e3a3e5d4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-21T18:07:52Z",
+      "side": 1,
+      "message": "This is because acquireNextSwapchainImage can no longer return SUBOPTIMAL, only VK_SUCCESS or VK_ERROR_*",
+      "range": {
+        "startLine": 1599,
+        "startChar": 8,
+        "endLine": 1599,
+        "endChar": 44
+      },
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52588587_e0b9f32a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-21T18:07:52Z",
+      "side": 1,
+      "message": "We should add a comment here with the possible return values and the implications of them.  We should then check all calls to make sure that the caller is making the correct decisions based on the return values.",
+      "range": {
+        "startLine": 1621,
+        "startChar": 0,
+        "endLine": 1621,
+        "endChar": 73
+      },
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2905c362_9bc1f205",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-21T18:07:52Z",
+      "side": 1,
+      "message": "Agreed",
+      "range": {
+        "startLine": 1637,
+        "startChar": 7,
+        "endLine": 1637,
+        "endChar": 94
+      },
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf41b5d6_b2c24f24",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-21T18:07:52Z",
+      "side": 1,
+      "message": "At this point, the function will return a VK_ERROR_* return value.  We don\u0027t know why a failure result occurred (e.g. could be out-of-date, which requires the swapchain to be recreated; or it could be out-of-memory, which will be fatal).\n\nIs there a problem with not calling acquireImageSemaphore.release()?",
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c21f0c16_69750a90",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1668,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-21T18:07:52Z",
+      "side": 1,
+      "message": "At this point, regardless of SUBOPTIMAL or not, there is an image to present to",
+      "range": {
+        "startLine": 1668,
+        "startChar": 3,
+        "endLine": 1668,
+        "endChar": 22
+      },
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
