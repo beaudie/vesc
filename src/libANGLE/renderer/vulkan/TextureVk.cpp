@@ -1944,7 +1944,7 @@ angle::Result TextureVk::setBaseLevel(const gl::Context *context, GLuint baseLev
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
+angle::Result TextureVk::updateBaseMaxLevels(const gl::Context *context,
                                              bool baseLevelChanged,
                                              bool maxLevelChanged)
 {
@@ -1995,6 +1995,7 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
     {
         // Don't need to respecify the texture; but do need to update which vkImageView's are
         // served up by ImageViewHelper
+        ContextVk *contextVk = vk::GetImpl(context);
 
         // Update the current max level in ImageViewHelper
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
@@ -2007,7 +2008,7 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
                               layerCount);
     }
 
-    return respecifyImageStorageAndLevels(contextVk, mImage->getFirstAllocatedLevel(), baseLevel,
+    return respecifyImageStorageAndLevels(context, mImage->getFirstAllocatedLevel(), baseLevel,
                                           maxLevel);
 }
 
@@ -2181,18 +2182,20 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
+angle::Result TextureVk::respecifyImageStorage(const gl::Context *context)
 {
-    return respecifyImageStorageAndLevels(contextVk, mImage->getFirstAllocatedLevel(),
+    return respecifyImageStorageAndLevels(context, mImage->getFirstAllocatedLevel(),
                                           gl::LevelIndex(mState.getEffectiveBaseLevel()),
                                           gl::LevelIndex(mState.getEffectiveMaxLevel()));
 }
 
-angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
+angle::Result TextureVk::respecifyImageStorageAndLevels(const gl::Context *context,
                                                         gl::LevelIndex previousFirstAllocateLevel,
                                                         gl::LevelIndex baseLevel,
                                                         gl::LevelIndex maxLevel)
 {
+    ContextVk *contextVk = vk::GetImpl(context);
+
     if (!mImage->valid())
     {
         ASSERT((mImage->getFirstAllocatedLevel() == gl::LevelIndex(0)) ||
@@ -2201,9 +2204,19 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
+    // Because the check itself will look into RenderTargetVk, we must check this before render
+    // targets gets freed.
+    bool isUsedByCurrentDrawFramebuffer = false;
+    bool isUsedByCurrentReadFramebuffer = false;
+    if (!mSingleLayerRenderTargets.empty() || !mMultiLayerRenderTargets.empty())
+    {
+        isUsedByCurrentDrawFramebuffer = contextVk->isImageUsedByCurrentDrawFramebuffer(mImage);
+        isUsedByCurrentDrawFramebuffer = contextVk->isImageUsedByCurrentReadFramebuffer(mImage);
+    }
+
     // Recreate the image to reflect new base or max levels.
     // First, flush any pending updates so we have good data in the current mImage
-    if (mImage->valid() && mImage->hasStagedUpdatesInAllocatedLevels())
+    if (mImage->hasStagedUpdatesInAllocatedLevels())
     {
         ANGLE_TRY(flushImageStagedUpdates(contextVk));
     }
@@ -2258,6 +2271,14 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
 
     mImage->retain(&contextVk->getResourceUseList());
 
+    if (isUsedByCurrentDrawFramebuffer || isUsedByCurrentReadFramebuffer)
+    {
+        // FramebufferVk caches RenderTargetVk object and FBO gets validated before texture. Because
+        // this function changes RenderTargetVk, we must tell context to update current FBO's
+        // cached RenderTargetVks.
+        ANGLE_TRY(contextVk->onRespecifyImageStorage(context, mImage));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -2303,12 +2324,10 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     ASSERT(mState.hasBeenBoundAsAttachment());
-    ANGLE_TRY(ensureRenderable(contextVk));
+    ANGLE_TRY(ensureRenderable(context));
 
     if (!mImage->valid())
     {
-        // Immutable texture must already have a valid image
-        ASSERT(!mState.getImmutableFormat());
         const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
         ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
                             format.getActualImageFormatID(getRequiredImageAccess()),
@@ -2589,7 +2608,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // Create a new image if used as attachment for the first time.
     if (mState.hasBeenBoundAsAttachment())
     {
-        ANGLE_TRY(ensureRenderable(contextVk));
+        ANGLE_TRY(ensureRenderable(context));
     }
 
     // If we're handling dirty srgb decode/override state, we may have to reallocate the image with
@@ -2622,7 +2641,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (mState.getImmutableFormat() &&
         (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags))
     {
-        ANGLE_TRY(respecifyImageStorage(contextVk));
+        ANGLE_TRY(respecifyImageStorage(context));
         oldUsageFlags  = mImageUsageFlags;
         oldCreateFlags = mImageCreateFlags;
     }
@@ -2632,7 +2651,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     bool maxLevelChanged  = dirtyBits.test(gl::Texture::DIRTY_BIT_MAX_LEVEL);
     if (maxLevelChanged || baseLevelChanged)
     {
-        ANGLE_TRY(updateBaseMaxLevels(contextVk, baseLevelChanged, maxLevelChanged));
+        ANGLE_TRY(updateBaseMaxLevels(context, baseLevelChanged, maxLevelChanged));
 
         // Updating levels could have respecified the storage, recapture mImageCreateFlags
         oldCreateFlags = mImageCreateFlags;
@@ -2679,7 +2698,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
         mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
     {
-        ANGLE_TRY(respecifyImageStorage(contextVk));
+        ANGLE_TRY(respecifyImageStorage(context));
     }
 
     // Initialize the image storage and flush the pixel buffer.
@@ -3291,7 +3310,7 @@ angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
+angle::Result TextureVk::ensureMutable(const gl::Context *context)
 {
     if (mRequiresMutableStorage)
     {
@@ -3301,13 +3320,15 @@ angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
     mRequiresMutableStorage = true;
     mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
 
-    ANGLE_TRY(respecifyImageStorage(contextVk));
+    ANGLE_TRY(respecifyImageStorage(context));
+
+    ContextVk *contextVk = vk::GetImpl(context);
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
     return refreshImageViews(contextVk);
 }
 
-angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
+angle::Result TextureVk::ensureRenderable(const gl::Context *context)
 {
     if (mRequiredImageAccess == vk::ImageAccess::Renderable)
     {
@@ -3322,6 +3343,7 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
         return angle::Result::Continue;
     }
 
+    ContextVk *contextVk     = vk::GetImpl(context);
     RendererVk *renderer     = contextVk->getRenderer();
     const vk::Format &format = getBaseLevelFormat(renderer);
     if (!format.hasRenderableImageFallbackFormat())
@@ -3345,7 +3367,7 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
     // Make sure we update mImageUsage bits
     ANGLE_TRY(ensureImageAllocated(contextVk, format));
 
-    ANGLE_TRY(respecifyImageStorage(contextVk));
+    ANGLE_TRY(respecifyImageStorage(context));
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
     return refreshImageViews(contextVk);

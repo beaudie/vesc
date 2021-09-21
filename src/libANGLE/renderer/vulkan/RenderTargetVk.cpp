@@ -287,6 +287,11 @@ void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image,
     mResolveImageViews = resolveImageViews;
 }
 
+bool RenderTargetVk::usesImage(const vk::ImageHelper *image) const
+{
+    return mImage == image || mResolveImage == image;
+}
+
 vk::ImageHelper &RenderTargetVk::getImageForCopy() const
 {
     ASSERT(mImage && mImage->valid() && (mResolveImage == nullptr || mResolveImage->valid()));

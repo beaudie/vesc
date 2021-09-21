@@ -138,6 +138,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
         return mTransience == RenderTargetTransience::EntirelyTransient;
     }
 
+    bool usesImage(const vk::ImageHelper *image) const;
+
   private:
     angle::Result getImageViewImpl(ContextVk *contextVk,
                                    const vk::ImageHelper &image,

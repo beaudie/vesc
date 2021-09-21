@@ -161,6 +161,9 @@ class FramebufferVk : public FramebufferImpl
 
     void onSwitchProgramFramebufferFetch(ContextVk *contextVk, bool programUsesFramebufferFetch);
 
+    bool usesImage(const vk::ImageHelper *image) const;
+    angle::Result onRespecifyImageStorage(const gl::Context *context, const vk::ImageHelper *image);
+
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,

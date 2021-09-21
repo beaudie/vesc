@@ -1798,6 +1798,61 @@ angle::Result FramebufferVk::flushDepthStencilAttachmentUpdates(const gl::Contex
                                               mCurrentFramebufferDesc.getLayerCount());
 }
 
+// Returns true if image is been used by this framebuffer.
+bool FramebufferVk::usesImage(const vk::ImageHelper *image) const
+{
+    gl::DrawBufferMask colorAttachmentMask = mState.getColorAttachmentsMask();
+    for (size_t colorIndexGL = 0;
+         colorIndexGL < colorAttachmentMask.size() && colorAttachmentMask.any(); ++colorIndexGL)
+    {
+        if (colorAttachmentMask[colorIndexGL])
+        {
+            RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+            if (renderTarget && renderTarget->usesImage(image))
+            {
+                return true;
+            }
+            colorAttachmentMask.reset(colorIndexGL);
+        }
+    }
+
+    RenderTargetVk *depthStencilRT = getDepthStencilRenderTarget();
+    return depthStencilRT && depthStencilRT->usesImage(image);
+}
+
+// When image storage changes, RenderTargetVks also gets recreated. We must update
+// mRenderTargetCache and  mCurrentFramebufferDesc and recreate Framebuffers with the new render
+// targets.
+angle::Result FramebufferVk::onRespecifyImageStorage(const gl::Context *context,
+                                                     const vk::ImageHelper *image)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    gl::DrawBufferMask colorAttachmentMask = mState.getColorAttachmentsMask();
+    for (uint32_t colorIndexGL = 0;
+         colorIndexGL < colorAttachmentMask.size() && colorAttachmentMask.any(); ++colorIndexGL)
+    {
+        if (colorAttachmentMask[colorIndexGL])
+        {
+            ANGLE_TRY(updateColorAttachment(context, colorIndexGL));
+            colorAttachmentMask.reset(colorIndexGL);
+        }
+    }
+
+    RenderTargetVk *depthStencilRT = getDepthStencilRenderTarget();
+    if (depthStencilRT)
+    {
+        ANGLE_TRY(updateDepthStencilAttachment(context));
+    }
+
+    updateRenderPassDesc(contextVk);
+
+    // Deactivate Framebuffer
+    mFramebuffer = nullptr;
+
+    return angle::Result::Continue;
+}
+
 angle::Result FramebufferVk::syncState(const gl::Context *context,
                                        GLenum binding,
                                        const gl::Framebuffer::DirtyBits &dirtyBits,

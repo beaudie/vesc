@@ -5091,7 +5091,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         {
             // Make sure we use the MUTABLE bit for the storage. Because the "skip decode" is a
             // Sampler state we might not have caught this setting in TextureVk::syncState.
-            ANGLE_TRY(textureVk->ensureMutable(this));
+            ANGLE_TRY(textureVk->ensureMutable(context));
         }
 
         if (textureVk->getImage().hasEmulatedImageFormat())
@@ -6366,4 +6366,32 @@ ContextVkPerfCounters ContextVk::getAndResetObjectPerfCounters()
     mContextPerfCounters.descriptorSetsAllocated = {};
     return counters;
 }
+
+bool ContextVk::isImageUsedByCurrentDrawFramebuffer(const vk::ImageHelper *image) const
+{
+    return mDrawFramebuffer && mDrawFramebuffer->usesImage(image);
+}
+bool ContextVk::isImageUsedByCurrentReadFramebuffer(const vk::ImageHelper *image) const
+{
+    FramebufferVk *readFramebuffer = vk::GetImpl(mState.getReadFramebuffer());
+    return readFramebuffer && readFramebuffer != mDrawFramebuffer &&
+           readFramebuffer->usesImage(image);
+}
+
+angle::Result ContextVk::onRespecifyImageStorage(const gl::Context *context,
+                                                 const vk::ImageHelper *image)
+{
+    if (mDrawFramebuffer)
+    {
+        ANGLE_TRY(mDrawFramebuffer->onRespecifyImageStorage(context, image));
+    }
+
+    FramebufferVk *readFramebuffer = vk::GetImpl(mState.getReadFramebuffer());
+    if (readFramebuffer && readFramebuffer != mDrawFramebuffer)
+    {
+        ANGLE_TRY(readFramebuffer->onRespecifyImageStorage(context, image));
+    }
+    return angle::Result::Continue;
+}
+
 }  // namespace rx
