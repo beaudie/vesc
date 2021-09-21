@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5491a047_3e3d569e",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T16:25:57Z",
+      "side": 1,
+      "message": "Is this a performance or correctness concern?\n\nIs the basic performance concern that changing buffer data should not always trigger a VAO update?\n\nIf so I\u0027m planning on looking at that in http://anglebug.com/6371 . map/unmap state updates weren\u0027t on my radar but are similar to how SubData calls are handled.\n\n\u003e so that the map/unmap messages become no-op just like they are with Texture.\n\nTexture can\u0027t map/unmap, what are you referring to here?",
+      "parentUuid": "69f0908e_8afd2462",
+      "revId": "399ba0d4ebc16ccf53452562cdf278c7887591f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48d8c19c_3edf8ada",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 51
