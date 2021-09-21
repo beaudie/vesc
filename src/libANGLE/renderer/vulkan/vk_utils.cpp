@@ -574,17 +574,17 @@ void BufferMemory::invalidate(RendererVk *renderer,
     }
 }
 
-angle::Result BufferMemory::mapImpl(ContextVk *contextVk, VkDeviceSize size)
+angle::Result BufferMemory::mapImpl(Context *context, VkDeviceSize size)
 {
     if (isExternalBuffer())
     {
-        ANGLE_VK_TRY(contextVk, mExternalMemory.map(contextVk->getRenderer()->getDevice(), 0, size,
-                                                    0, &mMappedMemory));
+        ANGLE_VK_TRY(context, mExternalMemory.map(context->getRenderer()->getDevice(), 0, size, 0,
+                                                  &mMappedMemory));
     }
     else
     {
-        ANGLE_VK_TRY(contextVk,
-                     mAllocation.map(contextVk->getRenderer()->getAllocator(), &mMappedMemory));
+        ANGLE_VK_TRY(context,
+                     mAllocation.map(context->getRenderer()->getAllocator(), &mMappedMemory));
     }
 
     return angle::Result::Continue;
@@ -1750,13 +1750,13 @@ angle::Result BufferBlock::init(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void BufferBlock::initWithoutVirtualBlock(ContextVk *contextVk,
+void BufferBlock::initWithoutVirtualBlock(Context *context,
                                           Buffer &buffer,
                                           Allocation &allocation,
                                           VkMemoryPropertyFlags memoryPropertyFlags,
                                           VkDeviceSize size)
 {
-    RendererVk *renderer = contextVk->getRenderer();
+    RendererVk *renderer = context->getRenderer();
     ASSERT(!mVirtualBlock.valid());
     ASSERT(!mBuffer.valid());
     ASSERT(!mAllocation.valid());
@@ -1810,11 +1810,10 @@ bool BufferBlock::isMapped() const
     return mMappedMemory != nullptr;
 }
 
-angle::Result BufferBlock::map(ContextVk *contextVk)
+angle::Result BufferBlock::map(Context *context)
 {
     ASSERT(mMappedMemory == nullptr);
-    ANGLE_VK_TRY(contextVk,
-                 mAllocation.map(contextVk->getRenderer()->getAllocator(), &mMappedMemory));
+    ANGLE_VK_TRY(context, mAllocation.map(context->getRenderer()->getAllocator(), &mMappedMemory));
     return angle::Result::Continue;
 }
 
@@ -1869,7 +1868,7 @@ VkResult BufferSubAllocation::init(VkDevice device,
     return CreateVmaBufferSubAllocation(block, offset, size, &mHandle);
 }
 
-VkResult BufferSubAllocation::initWithEntireBuffer(ContextVk *contextVk,
+VkResult BufferSubAllocation::initWithEntireBuffer(Context *context,
                                                    Buffer &buffer,
                                                    Allocation &allocation,
                                                    VkMemoryPropertyFlags memoryPropertyFlags,
@@ -1878,7 +1877,7 @@ VkResult BufferSubAllocation::initWithEntireBuffer(ContextVk *contextVk,
     ASSERT(!valid());
 
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
-    block->initWithoutVirtualBlock(contextVk, buffer, allocation, memoryPropertyFlags, size);
+    block->initWithoutVirtualBlock(context, buffer, allocation, memoryPropertyFlags, size);
 
     VmaBufferSubAllocation vmaBufferSubAllocation = new VmaBufferSubAllocation_T;
     if (vmaBufferSubAllocation == nullptr)
