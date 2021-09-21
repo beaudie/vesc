@@ -297,6 +297,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a68fca6_1d52fcbe",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T16:34:42Z",
+      "side": 1,
+      "message": "Ah cool, then you should be able to remove these retains here Tim.",
+      "parentUuid": "eab65570_c94e4076",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "396e862a_8a563790",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
