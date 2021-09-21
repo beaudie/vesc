@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "228bc5f6_d9e57613",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-21T17:15:51Z",
+      "side": 1,
+      "message": "It looks like something went wrong with the Android device which ran one shard of angle_end2end_tests. That device looks healthy overall though. Re-CQ\u0027ing.\n",
+      "revId": "4b2a7dad4ed8509bfd8dc8eb11b540b5d3f67d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
