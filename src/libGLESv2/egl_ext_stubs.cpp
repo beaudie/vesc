@@ -799,7 +799,6 @@ EGLBoolean LockSurfaceKHR(Thread *thread,
                           Surface *surface,
                           const EGLint *attrib_list)
 {
-#if 0
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglLockSurfaceKHR",
                          GetDisplayIfValid(display), EGL_FALSE);
 
@@ -807,20 +806,19 @@ EGLBoolean LockSurfaceKHR(Thread *thread,
 
     ANGLE_EGL_TRY_RETURN(thread, surface->lockSurfaceKHR(display, attributes), "eglLockSurfaceKHR",
                          GetSurfaceIfValid(display, surface), EGL_FALSE);
-#endif
+
     thread->setSuccess();
     return EGL_TRUE;
 }
 
 EGLBoolean UnlockSurfaceKHR(Thread *thread, egl::Display *display, Surface *surface)
 {
-#if 0
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglUnlockSurfaceKHR",
                          GetDisplayIfValid(display), EGL_FALSE);
 
     ANGLE_EGL_TRY_RETURN(thread, surface->unlockSurfaceKHR(display), "eglQuerySurface64KHR",
                          GetSurfaceIfValid(display, surface), EGL_FALSE);
-#endif
+
     thread->setSuccess();
     return EGL_TRUE;
 }
@@ -831,14 +829,13 @@ EGLBoolean QuerySurface64KHR(Thread *thread,
                              EGLint attribute,
                              EGLAttribKHR *value)
 {
-#if 0
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglQuerySurface64KHR",
                          GetDisplayIfValid(display), EGL_FALSE);
 
     ANGLE_EGL_TRY_RETURN(
         thread, QuerySurfaceAttrib64KHR(display, thread->getContext(), surface, attribute, value),
         "eglQuerySurface64KHR", GetSurfaceIfValid(display, surface), EGL_FALSE);
-#endif
+
     thread->setSuccess();
     return EGL_TRUE;
 }

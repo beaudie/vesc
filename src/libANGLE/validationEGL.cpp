@@ -4506,13 +4506,13 @@ bool ValidateSwapBuffers(const ValidationContext *val,
         val->setError(EGL_CONTEXT_LOST);
         return false;
     }
-#if 0
+
     if (eglSurface->lockedSurface())
     {
         val->setError(EGL_BAD_ACCESS);
         return false;
     }
-#endif
+
     if (eglSurface == EGL_NO_SURFACE || !val->eglThread->getContext() ||
         val->eglThread->getCurrentDrawSurface() != eglSurface)
     {
@@ -4556,13 +4556,13 @@ bool ValidateSwapBuffersWithDamageKHR(const ValidationContext *val,
         val->setError(EGL_BAD_PARAMETER, "n_rects cannot be greater than zero when rects is NULL.");
         return false;
     }
-#if 0
+
     if (surface->lockedSurface())
     {
         val->setError(EGL_BAD_ACCESS);
         return false;
     }
-#endif
+
     // TODO(jmadill): Validate Surface is bound to the thread.
 
     return true;
@@ -4634,13 +4634,13 @@ bool ValidateBindTexImage(const ValidationContext *val,
         val->setError(EGL_BAD_MATCH);
         return false;
     }
-#if 0
+
     if (surface->lockedSurface())
     {
         val->setError(EGL_BAD_ACCESS);
         return false;
     }
-#endif
+
     gl::Context *context = val->eglThread->getContext();
     if (context)
     {
@@ -6159,13 +6159,13 @@ bool ValidateQuerySurface64KHR(const ValidationContext *val,
         val->setError(EGL_BAD_PARAMETER, "value is NULL.");
         return false;
     }
-#if 0
+
     if (!surface->lockedSurface())
     {
         val->setError(EGL_BAD_ACCESS, "Surface is not locked");
         return false;
     }
-#endif
+
     return true;
 }
 
