@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2a64399_96ecc2ca",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T16:54:45Z",
+      "side": 1,
+      "message": "\u003e If you have to modify the implementation to make the test fail, is there still a correctness concern?\n\nNo, there is no correctness concern. And yes, definitely defer it. I tried to be clear:\n\n\u003e This can be optimized (as a follow up for example under a new bug)\n\nI would just like to get the regression test in.",
+      "parentUuid": "aa68c2cb_a45a67fa",
+      "revId": "399ba0d4ebc16ccf53452562cdf278c7887591f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48d8c19c_3edf8ada",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 51
