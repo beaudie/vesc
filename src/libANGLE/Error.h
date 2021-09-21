@@ -129,8 +129,19 @@ inline Error NoError()
         }                                             \
     } while (0)
 
+#define ANGLE_TRY_TEMPLATE2(EXPR, RETURN)             \
+    do                                                \
+    {                                                 \
+        auto ANGLE_LOCAL_VAR = EXPR;                  \
+        if (ANGLE_UNLIKELY(IsError(ANGLE_LOCAL_VAR))) \
+        {                                             \
+            return (RETURN);                          \
+        }                                             \
+    } while (0)
+
 #define ANGLE_RETURN(X) return X;
 #define ANGLE_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_RETURN)
+#define ANGLE_TRY_RETURN(EXPR, RETURN) ANGLE_TRY_TEMPLATE2(EXPR, RETURN)
 
 // TODO(jmadill): Remove after EGL error refactor. http://anglebug.com/3041
 #define ANGLE_SWALLOW_ERR(EXPR)                                       \
