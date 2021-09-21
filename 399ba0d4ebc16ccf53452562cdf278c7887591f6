@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1932b915_aa6abf03",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T16:43:37Z",
+      "side": 1,
+      "message": "The double-message in the other comment was a performance note. The test here is for correctness, but my comment also has a performance concern\n\n\u003e Is the basic performance concern that changing buffer data should not always trigger a VAO update?\n\nYeap, if the change is done in place (no memory reallocation) there is no need for the VAO to syncState.\n\n\u003e \u003e so that the map/unmap messages become no-op just like they are with Texture.\n\n\u003e Texture can\u0027t map/unmap, what are you referring to here?\n\nTheir subjects can in the case of texture buffers, which is the whole reason for the SubjectGhosted message :) Initially I suggested SubjectMapped be used for the purpose SubjectGhosted was used, but I agree that leads to unnecessary updates, and I suggest VAOs should act on SubjectGhosted instead of SubjectMapped for the very same reason.",
+      "parentUuid": "5491a047_3e3d569e",
+      "revId": "399ba0d4ebc16ccf53452562cdf278c7887591f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48d8c19c_3edf8ada",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 51
