@@ -50,6 +50,42 @@
       "message": "+Lubosz who was also looking at this issue.",
       "revId": "a5d08e89ea1bb266296a561e57a994a00e06d53f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c28f0936_2291575b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-09-21T17:54:14Z",
+      "side": 1,
+      "message": "Thank you Cody. Yes this fixed the replay of the Mini World trace I am working on.",
+      "parentUuid": "75dc8b26_62406a99",
+      "revId": "a5d08e89ea1bb266296a561e57a994a00e06d53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ee2baf_5c9badf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-09-21T17:54:14Z",
+      "side": 1,
+      "message": "Thank you Jamie and Cody for helping propose this fix. It addressed the app trace issue nicely!",
+      "parentUuid": "8ac91245_aace6769",
+      "revId": "a5d08e89ea1bb266296a561e57a994a00e06d53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
