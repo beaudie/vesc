@@ -129,7 +129,7 @@ class DynamicBuffer : angle::NonCopyable
     }
 
     // After a sequence of writes, call flush to ensure the data is visible to the device.
-    angle::Result flush(ContextVk *contextVk);
+    angle::Result flush(vk::Context *context);
 
     // After a sequence of writes, call invalidate to ensure the data is visible to the host.
     angle::Result invalidate(ContextVk *contextVk);
@@ -138,7 +138,7 @@ class DynamicBuffer : angle::NonCopyable
     void release(RendererVk *renderer);
 
     // This releases all the buffers that have been allocated since this was last called.
-    void releaseInFlightBuffers(ContextVk *contextVk);
+    void releaseInFlightBuffers(vk::Context *context);
 
     // This adds inflight buffers to the context's mResourceUseList and then releases them
     void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
@@ -843,7 +843,7 @@ class BufferHelper final : public ReadWriteResource
     BufferHelper();
     ~BufferHelper() override;
 
-    angle::Result init(ContextVk *contextVk,
+    angle::Result init(vk::Context *context,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
     angle::Result initExternal(ContextVk *contextVk,
@@ -881,18 +881,12 @@ class BufferHelper final : public ReadWriteResource
                                  uint32_t regionCount,
                                  const VkBufferCopy *copyRegions);
 
-    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
+    angle::Result map(vk::Context *context, uint8_t **ptrOut)
     {
-        return mMemory.map(contextVk, mSize, ptrOut);
+        return mMemory.map(context, mSize, ptrOut);
     }
 
-    angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
-    {
-        uint8_t *mapBufPointer;
-        ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
-        *ptrOut = mapBufPointer + offset;
-        return angle::Result::Continue;
-    }
+    angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset);
 
     void unmap(RendererVk *renderer);
 
@@ -1917,6 +1911,20 @@ class ImageHelper final : public Resource, public angle::Subject
                                         size_t *bufferSize,
                                         StagingBufferOffsetArray *bufferOffsetsOut,
                                         uint8_t **outDataPtr);
+
+    angle::Result copySurfaceImageToBuffer(DisplayVk *displayVk,
+                                           gl::LevelIndex sourceLevelGL,
+                                           uint32_t layerCount,
+                                           uint32_t baseLayer,
+                                           const gl::Box &sourceArea,
+                                           vk::BufferHelper *bufferHelperOut);
+
+    angle::Result copyBufferToSurfaceImage(DisplayVk *displayVk,
+                                           gl::LevelIndex destLevelGL,
+                                           uint32_t layerCount,
+                                           uint32_t baseLayer,
+                                           const gl::Box &destArea,
+                                           vk::BufferHelper *bufferHelper);
 
     static angle::Result GetReadPixelsParams(ContextVk *contextVk,
                                              const gl::PixelPackState &packState,
