@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31d5306a_72f8c2dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-21T18:05:14Z",
+      "side": 1,
+      "message": "I haven\u0027t run this in a while, but presuming the warnings come from the app instead of ANGLE, fixes would need to go upstream.",
+      "parentUuid": "f2936e32_b90394f9",
+      "revId": "d3465846e988647c108e416290cb68ffcb11d029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f66f634d_dd6a5e68",
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "Or, you can just turn the latter `cflags \u003d` to `cflags +\u003d`.",
       "parentUuid": "f66f634d_dd6a5e68",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 28
+      },
+      "revId": "d3465846e988647c108e416290cb68ffcb11d029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18789b7e_1c4c6904",
+        "filename": "third_party/glmark2/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-21T18:05:14Z",
+      "side": 1,
+      "message": "Right, what Shabi said.  Since the first one is unconditional, just change the second one to `+\u003d`.",
+      "parentUuid": "d1e8a607_9cc307e4",
       "range": {
         "startLine": 45,
         "startChar": 2,
