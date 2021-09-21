@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c07ea194_286a75f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T16:29:50Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "796dc5629afaef5d9e022eacbe63b0dd5417c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9019fe8_1ef0ea14",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T16:29:50Z",
+      "side": 1,
+      "message": "We define IsGLExtensionEnabled in SampleApplication.cpp, can you expose that in the header (SampleApplication.h) and use it here?",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 9
+      },
+      "revId": "796dc5629afaef5d9e022eacbe63b0dd5417c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
