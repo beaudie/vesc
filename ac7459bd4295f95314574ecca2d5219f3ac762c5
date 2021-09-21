@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09db5d2a_2c147a2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T18:57:23Z",
+      "side": 1,
+      "message": "Thanks for the contribution. Please add `Bug: angleproject:6419` to the commit message too. It would also be good to have some negative tests, verifying that the validation is correct.",
+      "revId": "ac7459bd4295f95314574ecca2d5219f3ac762c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d1b3805_2486d98f",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-09-21T18:34:55Z",
       "side": 1,
       "message": "is any of this duplicated somewhere we can re-use?",
+      "range": {
+        "startLine": 2279,
+        "startChar": 2,
+        "endLine": 2289,
+        "endChar": 35
+      },
+      "revId": "ac7459bd4295f95314574ecca2d5219f3ac762c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb2ac63_2173171c",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T18:57:23Z",
+      "side": 1,
+      "message": "ValidateEGLImageTargetTexture2DOES looks like a limited version of this function.",
+      "parentUuid": "6d1b3805_2486d98f",
       "range": {
         "startLine": 2279,
         "startChar": 2,
@@ -151,6 +192,29 @@
         "startChar": 0,
         "endLine": 238,
         "endChar": 0
+      },
+      "revId": "ac7459bd4295f95314574ecca2d5219f3ac762c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c342b6ab_9dd74516",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T18:57:23Z",
+      "side": 1,
+      "message": "nit: you can make these tests part of ImageTestES3, and then remove this. Otherwise the test is running twice and skipped once for no reason.",
+      "range": {
+        "startLine": 1870,
+        "startChar": 4,
+        "endLine": 1870,
+        "endChar": 52
       },
       "revId": "ac7459bd4295f95314574ecca2d5219f3ac762c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
