@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa68c2cb_a45a67fa",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T16:46:16Z",
+      "side": 1,
+      "message": "If you have to modify the implementation to make the test fail, is there still a correctness concern?\n\nI\u0027d suggest deferring this so Tim can land his CLs. I\u0027d like to take a look at the \"data change only\" updates for VAOs.",
+      "parentUuid": "1932b915_aa6abf03",
+      "revId": "399ba0d4ebc16ccf53452562cdf278c7887591f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48d8c19c_3edf8ada",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 51
