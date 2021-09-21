@@ -259,6 +259,8 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
          getRenderer()->getFeatures().supportsSurfaceProtectedSwapchains.enabled);
 
     outExtensions->createSurfaceSwapIntervalANGLE = true;
+
+    outExtensions->lockSurface3KHR = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const

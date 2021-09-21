@@ -115,6 +115,14 @@ class DynamicBuffer : angle::NonCopyable
                                         VkDeviceSize *offsetOut,
                                         bool *newBufferAllocatedOut);
 
+    angle::Result allocateWithAlignment2(DisplayVk *displayVk,
+                                         size_t sizeInBytes,
+                                         size_t alignment,
+                                         uint8_t **ptrOut,
+                                         VkBuffer *bufferOut,
+                                         VkDeviceSize *offsetOut,
+                                         bool *newBufferAllocatedOut);
+
     // Allocate with default alignment
     angle::Result allocate(ContextVk *contextVk,
                            size_t sizeInBytes,
@@ -167,6 +175,7 @@ class DynamicBuffer : angle::NonCopyable
   private:
     void reset();
     angle::Result allocateNewBuffer(ContextVk *contextVk);
+    angle::Result allocateNewBuffer2(DisplayVk *displayVk);
 
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
@@ -819,6 +828,15 @@ class BufferMemory : angle::NonCopyable
         *ptrOut = mMappedMemory;
         return angle::Result::Continue;
     }
+    angle::Result map2(DisplayVk *displayVk, VkDeviceSize size, uint8_t **ptrOut)
+    {
+        if (mMappedMemory == nullptr)
+        {
+            ANGLE_TRY(mapImpl2(displayVk, size));
+        }
+        *ptrOut = mMappedMemory;
+        return angle::Result::Continue;
+    }
     void unmap(RendererVk *renderer);
     void flush(RendererVk *renderer,
                VkMemoryMapFlags memoryPropertyFlags,
@@ -837,6 +855,7 @@ class BufferMemory : angle::NonCopyable
 
   private:
     angle::Result mapImpl(ContextVk *contextVk, VkDeviceSize size);
+    angle::Result mapImpl2(DisplayVk *displayVk, VkDeviceSize size);
 
     Allocation mAllocation;        // use mAllocation if isExternalBuffer() is false
     DeviceMemory mExternalMemory;  // use mExternalMemory if isExternalBuffer() is true
@@ -854,6 +873,9 @@ class BufferHelper final : public Resource
     angle::Result init(ContextVk *contextVk,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
+    angle::Result init2(DisplayVk *displayVk,
+                        const VkBufferCreateInfo &createInfo,
+                        VkMemoryPropertyFlags memoryPropertyFlags);
     angle::Result initExternal(ContextVk *contextVk,
                                VkMemoryPropertyFlags memoryProperties,
                                const VkBufferCreateInfo &requestedCreateInfo,
@@ -892,6 +914,10 @@ class BufferHelper final : public Resource
     angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
     {
         return mMemory.map(contextVk, mSize, ptrOut);
+    }
+    angle::Result map2(DisplayVk *displayVk, uint8_t **ptrOut)
+    {
+        return mMemory.map2(displayVk, mSize, ptrOut);
     }
 
     angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
@@ -1860,6 +1886,22 @@ class ImageHelper final : public Resource, public angle::Subject
                                         size_t *bufferSize,
                                         StagingBufferOffsetArray *bufferOffsetsOut,
                                         uint8_t **outDataPtr);
+
+    angle::Result copySurfaceImageToBuffer(DisplayVk *displayVk,
+                                           bool copyPixels,
+                                           gl::LevelIndex sourceLevelGL,
+                                           uint32_t layerCount,
+                                           uint32_t baseLayer,
+                                           const gl::Box &sourceArea,
+                                           uint8_t **outDataPtr,
+                                           int32_t *bufferPitchOut);
+
+    angle::Result copyBufferToSurfaceImage(DisplayVk *displayVk,
+                                           bool copyPixels,
+                                           gl::LevelIndex destLevelGL,
+                                           uint32_t layerCount,
+                                           uint32_t baseLayer,
+                                           const gl::Box &destArea);
 
     static angle::Result GetReadPixelsParams(ContextVk *contextVk,
                                              const gl::PixelPackState &packState,
