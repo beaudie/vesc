@@ -430,6 +430,11 @@ bool Image::hasProtectedContent() const
     return mState.hasProtectedContent;
 }
 
+EGLenum Image::getSourceType() const
+{
+    return mState.sourceType;
+}
+
 rx::ImageImpl *Image::getImplementation() const
 {
     return mImplementation;

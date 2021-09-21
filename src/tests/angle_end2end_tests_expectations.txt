@@ -170,6 +170,9 @@
 6193 NEXUS5X GLES : GLSLTest_ES31.BuiltInsWithOutParameters/* = SKIP
 5505 NEXUS5X GLES : GLSLTest_ES3.CompareInequalityOfArrayOfVectors/* = SKIP
 5505 NEXUS5X GLES : GLSLTest_ES3.CompareEqualityOfArrayOfVectors/* = SKIP
+6392 NEXUS5X GLES : ImageTest.Source2DTarget2DStorage/* = SKIP
+6392 NEXUS5X GLES : ImageTest.Source2DTargetExternalStorage/* = SKIP
+6392 NEXUS5X GLES : ImageTest.Source3DTarget3DStorage/* = SKIP
 
 // Pixel 4 expectations.
 5981 PIXEL4ORXL GLES : BlitFramebufferTest.BlitSRGBToRGBOversizedDestArea/* = SKIP
@@ -191,6 +194,12 @@
 5981 PIXEL4ORXL GLES : ImageTest.SourceRenderbufferTargetRenderbuffer_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTest.SourceRenderbufferTargetTexture_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTest.SourceRenderbufferTargetTextureExternal_Colorspace/* = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source2DTarget2DStorage/* = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source2DTargetExternalStorage/* = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source3DTarget3DStorage/* = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source2DTarget2DStorage_Colorspace/* = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source2DTargetExternalStorage_Colorspace/* = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source3DTarget3DStorage_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTestES3.Source2DTargetExternalESSL3_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTestES3.Source3DTargetExternalESSL3_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTestES3.SourceAHBTargetExternalESSL3_Colorspace/* = SKIP
