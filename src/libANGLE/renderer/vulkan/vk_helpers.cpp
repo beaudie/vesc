@@ -5131,7 +5131,6 @@ void ImageHelper::clear(VkImageAspectFlags aspectFlags,
     else
     {
         ASSERT(!angleFormat.isBlock);
-
         clearColor(value.color, mipLevel, 1, baseArrayLayer, layerCount, commandBuffer);
     }
 }

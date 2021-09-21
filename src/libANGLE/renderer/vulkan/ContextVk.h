@@ -507,6 +507,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                     layerCount, image, resolveImage);
     }
 
+    bool isCurrentFramebufferUsesImage(const vk::ImageHelper *image) const;
+    angle::Result onRespecifyImageStorage(const gl::Context *context, const vk::ImageHelper *image);
+
     void finalizeImageLayout(const vk::ImageHelper *image)
     {
         if (mRenderPassCommands->started())

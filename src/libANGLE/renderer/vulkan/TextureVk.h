@@ -278,8 +278,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return mState.getSRGBOverride() != gl::SrgbOverride::Default;
     }
 
-    angle::Result ensureMutable(ContextVk *contextVk);
-    angle::Result ensureRenderable(ContextVk *contextVk);
+    angle::Result ensureMutable(const gl::Context *context);
+    angle::Result ensureRenderable(const gl::Context *context);
 
     bool getAndResetImmutableSamplerDirtyState()
     {
@@ -462,14 +462,14 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     const vk::Format &getBaseLevelFormat(RendererVk *renderer) const;
     // Queues a flush of any modified image attributes. The image will be reallocated with its new
     // attributes at the next opportunity.
-    angle::Result respecifyImageStorage(ContextVk *contextVk);
-    angle::Result respecifyImageStorageAndLevels(ContextVk *contextVk,
+    angle::Result respecifyImageStorage(const gl::Context *context);
+    angle::Result respecifyImageStorageAndLevels(const gl::Context *context,
                                                  gl::LevelIndex previousFirstAllocateLevelGL,
                                                  gl::LevelIndex baseLevelGL,
                                                  gl::LevelIndex maxLevelGL);
 
     // Update base and max levels, and re-create image if needed.
-    angle::Result updateBaseMaxLevels(ContextVk *contextVk,
+    angle::Result updateBaseMaxLevels(const gl::Context *context,
                                       bool baseLevelChanged,
                                       bool maxLevelChanged);
 
