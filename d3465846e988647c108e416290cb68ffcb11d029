@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2936e32_b90394f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T16:38:30Z",
+      "side": 1,
+      "message": "How about is ANGLE when this is enabled? I wonder if it\u0027s simpler to just fix it?",
+      "revId": "d3465846e988647c108e416290cb68ffcb11d029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f66f634d_dd6a5e68",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-09-21T16:23:00Z",
       "side": 1,
       "message": "Based on the error:\n\n ERROR at //third_party/glmark2/BUILD.gn:54:7: Replacing nonempty list.\n      cflags \u003d [\n      ^-----\n This overwrites a previously-defined nonempty list with another nonempty list.\n See //third_party/glmark2/BUILD.gn:45:12: for previous definition\n   cflags \u003d [ \"-Wno-shadow\" ]\n           ^---------------\n Did you mean to append/modify instead? If you really want to overwrite, do:\n   foo \u003d []\n  \nI think you could use the last example and do something like:\n\n cflags \u003d []\n cflags +\u003d [ \"-Wno-shadow\" ]\n ...\n if (!is_clang) {\n   cflags +\u003d [ ... ]",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 28
+      },
+      "revId": "d3465846e988647c108e416290cb68ffcb11d029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1e8a607_9cc307e4",
+        "filename": "third_party/glmark2/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T16:38:30Z",
+      "side": 1,
+      "message": "Or, you can just turn the latter `cflags \u003d` to `cflags +\u003d`.",
+      "parentUuid": "f66f634d_dd6a5e68",
       "range": {
         "startLine": 45,
         "startChar": 2,
