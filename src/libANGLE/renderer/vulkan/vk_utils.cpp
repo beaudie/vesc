@@ -572,17 +572,17 @@ void BufferMemory::invalidate(RendererVk *renderer,
     }
 }
 
-angle::Result BufferMemory::mapImpl(ContextVk *contextVk, VkDeviceSize size)
+angle::Result BufferMemory::mapImpl(vk::Context *context, VkDeviceSize size)
 {
     if (isExternalBuffer())
     {
-        ANGLE_VK_TRY(contextVk, mExternalMemory.map(contextVk->getRenderer()->getDevice(), 0, size,
-                                                    0, &mMappedMemory));
+        ANGLE_VK_TRY(context, mExternalMemory.map(context->getRenderer()->getDevice(), 0, size, 0,
+                                                  &mMappedMemory));
     }
     else
     {
-        ANGLE_VK_TRY(contextVk,
-                     mAllocation.map(contextVk->getRenderer()->getAllocator(), &mMappedMemory));
+        ANGLE_VK_TRY(context,
+                     mAllocation.map(context->getRenderer()->getAllocator(), &mMappedMemory));
     }
 
     return angle::Result::Continue;
