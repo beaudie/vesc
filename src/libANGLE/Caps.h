@@ -636,6 +636,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_create_surface_swap_interval
     bool createSurfaceSwapIntervalANGLE = false;
+
+    // EGL_KHR_lock_surface3
+    bool lockSurface3KHR = false;
 };
 
 struct DeviceExtensions
