@@ -261,6 +261,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6cf36e88_33502a7c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T16:24:51Z",
+      "side": 1,
+      "message": "Ok I diagnosed this. The reason it works is that ContextVk::updateActiveImages is already calling bufferWrite() on this buffer, so this retain (for the isImage case) is actually redundant.\n\nThere\u0027s a discrepancy here that ContextVk::updateActiveTextures doesn\u0027t call bufferRead(), and I don\u0027t know why at the moment. There is probably a bug there. Until that is fixed, you should be able to safely change this to:\n\n    if (!isImage)\n    {\n        // Image buffers are already retained by ContextVk::updateActiveImages\n        buffer.retainReadOnly(\u0026resourceUseList);\n    }\n\nWhen that bug is fixed, this if can be entirely removed. Looking again, you can tell this is the wrong spot to retain because this is called when updating a descriptor set, and it may very well not be called for many frames if the desc/set doesn\u0027t change.",
+      "parentUuid": "609eef98_7fd90071",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "396e862a_8a563790",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
