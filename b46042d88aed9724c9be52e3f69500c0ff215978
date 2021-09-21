@@ -243,6 +243,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "609eef98_7fd90071",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T01:28:24Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll have to take a look. The fix is fine, and the test with a cursory look, so feel free to land.",
+      "parentUuid": "3df9529d_85d9f260",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "396e862a_8a563790",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
