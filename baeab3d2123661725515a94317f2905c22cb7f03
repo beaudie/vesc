@@ -16,6 +16,24 @@
       "message": "Could there be an ASSERT instead of this?",
       "revId": "baeab3d2123661725515a94317f2905c22cb7f03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "332dd2e0_601b486c",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T18:55:32Z",
+      "side": 0,
+      "message": "It\u0027s not an invariant or anything like that, just an optimization on detach. AFAIK this only happens on deleteBuffers calls so not super important to optimize.",
+      "parentUuid": "8273a20f_fe4f3a72",
+      "revId": "baeab3d2123661725515a94317f2905c22cb7f03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
