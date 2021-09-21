@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48d8c19c_3edf8ada",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T15:34:45Z",
+      "side": 1,
+      "message": "@Jamie, I\u0027m looking at this test, and it turns out this call is making the VertexArray get notified twice about the map (and unmap). Does that sound normal? The observers of the buffer are:\n\n    mObserver \u003d 0x555559246d50,\n    mIndex \u003d 1\n\nand\n\n    mObserver \u003d 0x555559246d50,\n    mIndex \u003d 0\n\nWhy are there two of these?",
+      "revId": "399ba0d4ebc16ccf53452562cdf278c7887591f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
