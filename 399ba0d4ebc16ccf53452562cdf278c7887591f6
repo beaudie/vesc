@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69f0908e_8afd2462",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T16:00:22Z",
+      "side": 1,
+      "message": "Tim, I modified this test to reproduce the issue. The test currently works because drawQuad changes state a lot. Using glDrawArrays directly makes sure there is no other side effect than the one being checked for (map). I can make the test fail by commenting out `setDependentDirtyBit(true, index)` in `VertexArray::onSubjectStateChange` under `angle::SubjectMessage::SubjectUnmapped`.\n\nThis is proof that VAOs work with mapped buffers by relying on angle::SubjectMessage::SubjectUnmapped and assuming the memory has necessarily changed under the hood. This can be optimized (as a follow up for example under a new bug) by moving some stuff under `angle::SubjectMessage::SubjectGhosted`, so that the map/unmap messages become no-op just like they are with Texture. In general, I think Texture and VertexArray should respond identically to map/unmap.\n\nHere is the modified test:\n\n    // Verify that we can map and write the buffer between draws and the second draw sees the new buffer\n    // data.\n    TEST_P(BufferDataTest, MapWriteArrayBufferData)\n    {\n        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(\"GL_EXT_map_buffer_range\"));\n    \n        std::vector\u003cGLfloat\u003e data(6, 0.0f);\n    \n        glUseProgram(mProgram);\n    \n        GLint positionLocation \u003d glGetAttribLocation(mProgram, \"position\");\n        ASSERT_NE(-1, positionLocation);\n    \n        // Set up position attribute, don\u0027t use drawQuad.\n        auto quadVertices \u003d GetQuadVertices();\n    \n        GLBuffer positionBuffer;\n        glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);\n        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * quadVertices.size() * 3, quadVertices.data(),\n                     GL_DYNAMIC_DRAW);\n        glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);\n        glEnableVertexAttribArray(positionLocation);\n        EXPECT_GL_NO_ERROR();\n    \n        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);\n        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data.size(), nullptr, GL_STATIC_DRAW);\n        glVertexAttribPointer(mAttribLocation, 1, GL_FLOAT, GL_FALSE, 0, nullptr);\n        glEnableVertexAttribArray(mAttribLocation);\n        EXPECT_GL_NO_ERROR();\n    \n        // Don\u0027t read back to verify black, so we don\u0027t break the render pass.\n        glDrawArrays(GL_TRIANGLES, 0, 6);\n        EXPECT_GL_NO_ERROR();\n    \n        // Map and write.\n        std::vector\u003cGLfloat\u003e data2(6, 1.0f);\n        void *mapPtr \u003d glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);\n        ASSERT_NE(nullptr, mapPtr);\n        ASSERT_GL_NO_ERROR();\n        memcpy(mapPtr, data2.data(), sizeof(GLfloat) * data2.size());\n        glUnmapBufferOES(GL_ARRAY_BUFFER);\n    \n        glDrawArrays(GL_TRIANGLES, 0, 6);\n        EXPECT_PIXEL_COLOR_EQ(8, 8, GLColor::red);\n        EXPECT_GL_NO_ERROR();\n    }",
+      "revId": "399ba0d4ebc16ccf53452562cdf278c7887591f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48d8c19c_3edf8ada",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 51
