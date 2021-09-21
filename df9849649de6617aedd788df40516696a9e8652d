@@ -137,6 +137,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e91c9688_053fbd60",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-21T19:34:07Z",
+      "side": 1,
+      "message": "We don\u0027t need N pools in the async case, since there is only one user of the pools (CommandProcessor). Using N pools would just use more memory.",
+      "parentUuid": "db1d3fe9_b6c434c4",
+      "range": {
+        "startLine": 731,
+        "startChar": 61,
+        "endLine": 731,
+        "endChar": 97
+      },
+      "revId": "df9849649de6617aedd788df40516696a9e8652d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e8464794_1600a924",
