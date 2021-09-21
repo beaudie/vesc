@@ -383,11 +383,11 @@ class BufferMemory : angle::NonCopyable
 
     void destroy(RendererVk *renderer);
 
-    angle::Result map(ContextVk *contextVk, VkDeviceSize size, uint8_t **ptrOut)
+    angle::Result map(Context *context, VkDeviceSize size, uint8_t **ptrOut)
     {
         if (mMappedMemory == nullptr)
         {
-            ANGLE_TRY(mapImpl(contextVk, size));
+            ANGLE_TRY(mapImpl(context, size));
         }
         *ptrOut = mMappedMemory;
         return angle::Result::Continue;
@@ -409,7 +409,7 @@ class BufferMemory : angle::NonCopyable
     Allocation *getMemoryObject() { return &mAllocation; }
 
   private:
-    angle::Result mapImpl(ContextVk *contextVk, VkDeviceSize size);
+    angle::Result mapImpl(Context *context, VkDeviceSize size);
 
     Allocation mAllocation;        // use mAllocation if isExternalBuffer() is false
     DeviceMemory mExternalMemory;  // use mExternalMemory if isExternalBuffer() is true

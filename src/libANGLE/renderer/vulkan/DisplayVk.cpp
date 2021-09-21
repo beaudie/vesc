@@ -271,6 +271,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
         getRenderer()->getFeatures().supportsSharedPresentableImageExtension.enabled;
 
     outExtensions->vulkanImageANGLE = true;
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    outExtensions->lockSurface3KHR = true;
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
