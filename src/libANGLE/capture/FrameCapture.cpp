@@ -5969,6 +5969,11 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     const SurfaceParams &surfaceParams = mDrawSurfaceParams.at(contextId);
     const gl::State &glState           = context->getState();
 
+    // Synchronize mMaxAccessedResourceIDs with mMaxShaderPrograms from ResourceTracker
+    gl::ShaderProgramID maxShaderID = {mResourceTracker.getMaxShaderPrograms()};
+    mMaxAccessedResourceIDs[ResourceIDType::ShaderProgram] =
+        std::max(mMaxAccessedResourceIDs[ResourceIDType::ShaderProgram], maxShaderID.value);
+
     // Serialize trace metadata into a JSON file. The JSON file will be named "trace_prefix.json".
     //
     // As of writing, it will have the format like so:
