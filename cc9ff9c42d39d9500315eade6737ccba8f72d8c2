@@ -163,6 +163,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89f5f34a_f04e112f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T18:17:09Z",
+      "side": 1,
+      "message": "Spoke offline - hopefully we can remove the external batching tracking from TestSuite.cpp once we switch to remove the wrapper scripts.",
+      "parentUuid": "a8faeca4_22db4248",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8873f64_cc859064",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T18:17:09Z",
+      "side": 1,
+      "message": "re-lgtm, feel free to resolve open comments and land.",
+      "revId": "cc9ff9c42d39d9500315eade6737ccba8f72d8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07d3214a_316189e8",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 1
