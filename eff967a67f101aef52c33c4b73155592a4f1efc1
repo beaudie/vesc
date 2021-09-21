@@ -33,6 +33,23 @@
       "message": "In patch set 3 I tried to put log messages to indicate that the vulkan extension was supported, and to print when switching from multi-image swapchain to a single image swapchain. But, that never prints out. But some suites run the tests without any message. Only those that do not support the extension printed that and printed out \"Not Supported\" by the test. So it doesn\u0027t seem definitive that we have a pass case.",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dbe6cb6_2bb69490",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-09-21T23:59:59Z",
+      "side": 1,
+      "message": "One missing requirement is the Image needs to transition to SHARED_LAYOUT before first use. - This is not done.",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
