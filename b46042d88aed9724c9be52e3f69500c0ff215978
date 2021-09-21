@@ -279,6 +279,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eab65570_c94e4076",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-21T16:31:52Z",
+      "side": 1,
+      "message": "bufferRead is called in handleDirtyTexturesImpl. updateActiveTextures is \"lazier\" so we need to ensure the resource uses are marked in ContextVk::setupDraw, not in ContextVk::syncState.",
+      "parentUuid": "6cf36e88_33502a7c",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "396e862a_8a563790",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
