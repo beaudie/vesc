@@ -176,6 +176,7 @@
 6193 NEXUS5X GLES : GLSLTest_ES31.BuiltInsWithOutParameters/* = SKIP
 5505 NEXUS5X GLES : GLSLTest_ES3.CompareInequalityOfArrayOfVectors/ES3_OpenGLES = SKIP
 5505 NEXUS5X GLES : GLSLTest_ES3.CompareEqualityOfArrayOfVectors/ES3_OpenGLES = SKIP
+6392 NEXUS5X GLES : ImageTest.Source*Target*Storage/ES3_OpenGLES = SKIP
 
 // Pixel 4 expectations.
 5981 PIXEL4ORXL GLES : BlitFramebufferTest.BlitSRGBToRGBOversizedDestArea/* = SKIP
@@ -197,6 +198,8 @@
 5981 PIXEL4ORXL GLES : ImageTest.SourceRenderbufferTargetRenderbuffer_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTest.SourceRenderbufferTargetTexture_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTest.SourceRenderbufferTargetTextureExternal_Colorspace/* = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source*Target*Storage/ES3_OpenGLES = SKIP
+6392 PIXEL4ORXL GLES : ImageTest.Source*Target*Storage_Colorspace/ES3_OpenGLES = SKIP
 5981 PIXEL4ORXL GLES : ImageTestES3.Source2DTargetExternalESSL3_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTestES3.Source3DTargetExternalESSL3_Colorspace/* = SKIP
 5981 PIXEL4ORXL GLES : ImageTestES3.SourceAHBTargetExternalESSL3_Colorspace/* = SKIP
@@ -231,6 +234,7 @@
 5981 PIXEL4ORXL GLES : TransformFeedbackTestIOBlocks.Separate/* = SKIP
 5981 PIXEL4ORXL GLES : VulkanExternalImageTest.ShouldClearOpaqueFdRGBA8/* = SKIP
 5981 PIXEL4ORXL GLES : VulkanExternalImageTest.TextureFormatCompatChromiumFd/* = SKIP
+
 
 5946 PIXEL4ORXL VULKAN : TransformFeedbackTestES32.PrimitivesWrittenAndGenerated/* = SKIP
 5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawFetchBlitDrawFetch_NonCoherent/* = SKIP
