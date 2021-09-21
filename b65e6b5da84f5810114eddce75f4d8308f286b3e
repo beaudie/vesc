@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc0bd1d0_2314a5ab",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-21T15:51:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a73fea5a_fe73808f",
+      "range": {
+        "startLine": 121,
+        "startChar": 23,
+        "endLine": 121,
+        "endChar": 28
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7272189_72d609c8",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-17T16:45:51Z",
       "side": 1,
       "message": "these all seem independent of the draw, couldn\u0027t they be cached rather than executed every draw?",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 95
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34d0c3e6_c618ebde",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-21T15:51:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7272189_72d609c8",
       "range": {
         "startLine": 122,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dc3278d_07315f61",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-21T15:51:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28216746_6dbad4dd",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 41
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e01d342_2b672d27",
@@ -93,6 +165,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab123606_a69979a6",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-21T15:51:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e01d342_2b672d27",
+      "range": {
+        "startLine": 165,
+        "startChar": 8,
+        "endLine": 165,
+        "endChar": 14
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bebe7c22_e1d731c9",
@@ -106,6 +202,30 @@
       "writtenOn": "2021-09-17T16:45:51Z",
       "side": 1,
       "message": "suggest you default init all values.",
+      "range": {
+        "startLine": 197,
+        "startChar": 4,
+        "endLine": 197,
+        "endChar": 11
+      },
+      "revId": "b65e6b5da84f5810114eddce75f4d8308f286b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9775efc0_61e9695e",
+        "filename": "samples/torus_lighting/TorusBufferStorage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-21T15:51:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bebe7c22_e1d731c9",
       "range": {
         "startLine": 197,
         "startChar": 4,
