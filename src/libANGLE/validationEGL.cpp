@@ -4507,6 +4507,12 @@ bool ValidateSwapBuffers(const ValidationContext *val,
         return false;
     }
 
+    if (eglSurface->lockedSurface())
+    {
+        val->setError(EGL_BAD_ACCESS);
+        return false;
+    }
+
     if (eglSurface == EGL_NO_SURFACE || !val->eglThread->getContext() ||
         val->eglThread->getCurrentDrawSurface() != eglSurface)
     {
@@ -4548,6 +4554,12 @@ bool ValidateSwapBuffersWithDamageKHR(const ValidationContext *val,
     if (n_rects > 0 && rects == nullptr)
     {
         val->setError(EGL_BAD_PARAMETER, "n_rects cannot be greater than zero when rects is NULL.");
+        return false;
+    }
+
+    if (surface->lockedSurface())
+    {
+        val->setError(EGL_BAD_ACCESS);
         return false;
     }
 
@@ -4620,6 +4632,12 @@ bool ValidateBindTexImage(const ValidationContext *val,
     if (surface->getTextureFormat() == TextureFormat::NoTexture)
     {
         val->setError(EGL_BAD_MATCH);
+        return false;
+    }
+
+    if (surface->lockedSurface())
+    {
+        val->setError(EGL_BAD_ACCESS);
         return false;
     }
 
@@ -6139,6 +6157,12 @@ bool ValidateQuerySurface64KHR(const ValidationContext *val,
     if (value == nullptr)
     {
         val->setError(EGL_BAD_PARAMETER, "value is NULL.");
+        return false;
+    }
+
+    if (!surface->lockedSurface())
+    {
+        val->setError(EGL_BAD_ACCESS, "Surface is not locked");
         return false;
     }
 
