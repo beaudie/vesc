@@ -122,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "593d517f_7d09aa0a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T05:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff6148f2_9a1dcc6a",
+      "range": {
+        "startLine": 1499,
+        "startChar": 0,
+        "endLine": 1502,
+        "endChar": 1
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf2dbbae_cab896f9",
@@ -159,6 +183,30 @@
       "side": 1,
       "message": "The challenge with doing activity tracking post process is knowing which Setup calls are needed to fully create a program.  Right now it is explicit.  We dictate \"This call is needed to setup this program\", and that call is added to the indexes.\n\nIf we tried to do this post process (which I\u0027m open to), we just need a way to know exactly which calls were used to Setup a program.  Note that it is not a constant set, each program has a different set of calls.  For instance, the Uniform calls vary per program, although the ones at the beginning are fairly steady (i.e. CreateProgram).",
       "parentUuid": "cf2dbbae_cab896f9",
+      "range": {
+        "startLine": 1506,
+        "startChar": 35,
+        "endLine": 1506,
+        "endChar": 69
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3d44085_871df0ab",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T05:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c64b8381_5adfb37a",
       "range": {
         "startLine": 1506,
         "startChar": 35,
@@ -262,6 +310,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "829e3b1c_980b155f",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T05:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f42c720_68240ddc",
+      "range": {
+        "startLine": 334,
+        "startChar": 6,
+        "endLine": 334,
+        "endChar": 29
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03fc9c83_a5e2c2a7",
@@ -298,6 +370,30 @@
       "writtenOn": "2021-09-16T13:16:27Z",
       "side": 1,
       "message": "nit: just mSetupCalls is sufficient since this is a FrameCaptureShared, the share group is implied.",
+      "range": {
+        "startLine": 582,
+        "startChar": 29,
+        "endLine": 582,
+        "endChar": 50
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84260799_166f1be7",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T05:59:21Z",
+      "side": 1,
+      "message": "I agree in principle, but in practice, mSetupCalls is used in a lot of places, and it is helpful for this to clearly be for the share group.",
+      "parentUuid": "2ce78009_26246c37",
       "range": {
         "startLine": 582,
         "startChar": 29,
