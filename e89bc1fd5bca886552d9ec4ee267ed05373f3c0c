@@ -16,6 +16,23 @@
       "message": "This is an edited version of crrev/c/3165661",
       "revId": "e89bc1fd5bca886552d9ec4ee267ed05373f3c0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f03b8f46_4b30443b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1626,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-22T01:25:19Z",
+      "side": 1,
+      "message": "Is there a problem with not calling acquireImageSemaphore.release() here?",
+      "revId": "e89bc1fd5bca886552d9ec4ee267ed05373f3c0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
