@@ -16,6 +16,23 @@
       "message": "Jamie, FYI.\nGoing to TBR this, to unblock rolling Chromium into ANGLE.\n",
       "revId": "2c380df5717a67d51bc9fe577f62883275d01172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dc659ab_91deb838",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-22T23:30:23Z",
+      "side": 1,
+      "message": "Thanks!\nBTW, PS2 because \"licicfg validate\" was complaining, not really related to this CL.",
+      "revId": "2c380df5717a67d51bc9fe577f62883275d01172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
