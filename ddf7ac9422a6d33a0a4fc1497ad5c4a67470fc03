@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32577526_878c0a99",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T13:21:40Z",
+      "side": 1,
+      "message": "I don\u0027t trust that this gets optimized out. Can you check the binary? Also making this a template class is a bit of unfortunate overhead. Is there another non-templated solution?",
+      "range": {
+        "startLine": 401,
+        "startChar": 1,
+        "endLine": 407,
+        "endChar": 5
+      },
+      "revId": "ddf7ac9422a6d33a0a4fc1497ad5c4a67470fc03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
