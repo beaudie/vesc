@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed5b2f2e_f1d875fd",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-22T20:43:12Z",
+      "side": 1,
+      "message": "A bit late discovery: I don\u0027t think this is safe to delete. There is a possibility that during acquireBufferHelper() call, buffer gets released. If GPU is completed by then, it might gets freed and you will getting use-after-free. Basically this retain is preventing it to get actually released by acquireBufferHelper. The retain call in the copyFromBuffer is too late.",
+      "parentUuid": "bc19b7c3_a01df09e",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8abee2_963ab2ac",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 16
