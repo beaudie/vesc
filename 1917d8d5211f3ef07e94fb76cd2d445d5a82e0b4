@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd11bb9_88740276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-22T19:02:30Z",
+      "side": 1,
+      "message": "LGTM with one minor comment.",
+      "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b01f6cb_52066f6e",
@@ -67,6 +84,29 @@
         "startChar": 5,
         "endLine": 345,
         "endChar": 45
+      },
+      "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ca11a9d_e26f89ed",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-22T19:02:30Z",
+      "side": 1,
+      "message": "This reads a bit awkward to me that the default is return Print. If you can make it return Ignore here and return Print on line 390-393, it will be easier to read, I think.",
+      "range": {
+        "startLine": 397,
+        "startChar": 8,
+        "endLine": 397,
+        "endChar": 41
       },
       "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
