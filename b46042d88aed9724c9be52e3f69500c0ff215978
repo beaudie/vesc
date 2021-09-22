@@ -161,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9c56e46_ca5ded1d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-22T22:14:17Z",
+      "side": 1,
+      "message": "Right, it will call release and get into garbage list. But acquireAndUpdate is still have a pointer to this BufferHelper object and is still accessing it. Now you have a salutation that a already released object still been accessed. Bad, but maybe not fatal yet. Then if another thread comes in and try to collect garbage, since garbage list is per renderer, and it walks the garbage list and notice that GPU is finished. It will end up calling destroy from RendererVk::cleanupGarbage(). This probably will also true with async submission as well.",
+      "parentUuid": "a9cd3315_e4955e05",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8abee2_963ab2ac",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 16
