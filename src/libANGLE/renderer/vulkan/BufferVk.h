@@ -223,6 +223,8 @@ class BufferVk : public BufferImpl
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
+
+    bool mHasValidBufferData;
 };
 
 }  // namespace rx
