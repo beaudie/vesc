@@ -438,7 +438,6 @@ TEST_P(RobustResourceInitTestES3, D3D11RecoverFromStorageBug)
 
     // http://anglebug.com/4929
     // Metal doesn't support robust resource init with compressed textures yet.
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     static constexpr uint8_t img_8x8_rgb_dxt1[] = {
         0xe0, 0x07, 0x00, 0xf8, 0x11, 0x10, 0x15, 0x00, 0x1f, 0x00, 0xe0,
@@ -1908,7 +1907,6 @@ TEST_P(RobustResourceInitTestES3, CompressedSubImage)
 
     // http://anglebug.com/4929
     // Metal doesn't support robust resource init with compressed textures yet.
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr int width     = 8;
     constexpr int height    = 8;
@@ -2031,7 +2029,6 @@ TEST_P(RobustResourceInitTest, SurfaceInitializedAfterSwap)
     ANGLE_SKIP_TEST_IF(!hasRobustSurfaceInit());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
 
     EGLint swapBehaviour = 0;
     ASSERT_TRUE(eglQuerySurface(getEGLWindow()->getDisplay(), getEGLWindow()->getSurface(),
@@ -2305,10 +2302,8 @@ TEST_P(RobustResourceInitTestES3, BlitDepthStencilAfterClearBuffer)
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
     // http://anglebug.com/4919
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsMetal());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     constexpr GLsizei kSize = 16;
 

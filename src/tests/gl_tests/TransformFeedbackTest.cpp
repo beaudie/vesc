@@ -1028,7 +1028,6 @@ TEST_P(TransformFeedbackTest, MultiContext)
     ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan());
 
     // Flaky on Metal. http://anglebug.com/5713
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     EGLint contextAttributes[] = {
         EGL_CONTEXT_MAJOR_VERSION_KHR,
@@ -2259,7 +2258,6 @@ TEST_P(TransformFeedbackTest, BufferOutOfMemory)
     ANGLE_SKIP_TEST_IF(IsOpenGL());
 
     // TODO: http://anglebug.com/5345: fails consistently on Mac FYI GPU ASAN Release bot
-    ANGLE_SKIP_TEST_IF(IsMetal() && (IsIntel() || IsAMD()));
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);

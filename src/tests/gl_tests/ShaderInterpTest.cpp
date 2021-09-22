@@ -103,7 +103,6 @@ TEST_P(ShaderInterpTest, Flat)
     ANGLE_SKIP_TEST_IF(IsVulkan());
 
     // http://anglebug.com/5232. Metal doesn't support last provoking vertex yet.
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     const char *vertSrc = R"(#version 300 es
 precision highp float;
