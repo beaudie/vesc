@@ -16,6 +16,47 @@
       "message": "I haven\u0027t addressed all the feedback yet, but this patch moves to tracking the setup calls by *range* during MEC, rather than explicitly tracking at each call site.\n\nI don\u0027t think the test failure is related to this change.",
       "revId": "dda70b6543d7a0a234d87d5bc9c9c8a1c7cbbd06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ff049a2_7f61e3dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T13:03:46Z",
+      "side": 1,
+      "message": "Looks much cleaner. Let\u0027s move forward and address the nits / style comments, I don\u0027t think this is far off.",
+      "parentUuid": "4f7a89a9_78d2fb3f",
+      "revId": "dda70b6543d7a0a234d87d5bc9c9c8a1c7cbbd06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06e46e2f_84207951",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T13:03:46Z",
+      "side": 1,
+      "message": "instead of adding this guy, can you make ResourceIDToSetupCallsMap a typed PackedEnumMap?",
+      "range": {
+        "startLine": 333,
+        "startChar": 6,
+        "endLine": 333,
+        "endChar": 32
+      },
+      "revId": "dda70b6543d7a0a234d87d5bc9c9c8a1c7cbbd06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
