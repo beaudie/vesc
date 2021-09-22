@@ -89,6 +89,7 @@ class TOutputGLSLBase : public TIntermTraverser
 
     sh::GLenum getShaderType() const { return mShaderType; }
     bool isHighPrecisionSupported() const { return mHighPrecisionSupported; }
+    TString getIndentPrefix(int extraIndentDepth = 0);
 
   private:
     void declareInterfaceBlockLayout(const TType &type);
@@ -112,6 +113,7 @@ class TOutputGLSLBase : public TIntermTraverser
     bool mHighPrecisionSupported;
 
     ShCompileOptions mCompileOptions;
+    TVector<TString> mIndentPrefixCache;
 };
 
 void WritePragma(TInfoSinkBase &out, ShCompileOptions compileOptions, const TPragma &pragma);

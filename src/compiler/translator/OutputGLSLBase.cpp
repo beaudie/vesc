@@ -374,6 +374,16 @@ const char *TOutputGLSLBase::mapQualifierToString(TQualifier qualifier)
     return sh::getQualifierString(qualifier);
 }
 
+TString TOutputGLSLBase::getIndentPrefix(int extraIndentation)
+{
+    int indentDepth = std::max(0, getCurrentBlockDepth() + extraIndentation);
+    while (static_cast<int>(mIndentPrefixCache.size()) < indentDepth + 1)
+    {
+        mIndentPrefixCache.push_back(TString(mIndentPrefixCache.size() * 2, ' '));
+    }
+    return mIndentPrefixCache[indentDepth];
+}
+
 void TOutputGLSLBase::writeVariableType(const TType &type,
                                         const TSymbol *symbol,
                                         bool isFunctionArgument)
@@ -788,11 +798,13 @@ bool TOutputGLSLBase::visitIfElse(Visit visit, TIntermIfElse *node)
     node->getCondition()->traverse(this);
     out << ")\n";
 
+    out << getIndentPrefix();
     visitCodeBlock(node->getTrueBlock());
 
     if (node->getFalseBlock())
     {
-        out << "else\n";
+        out << getIndentPrefix() << "else\n";
+        out << getIndentPrefix();
         visitCodeBlock(node->getFalseBlock());
     }
     return false;
@@ -835,6 +847,9 @@ bool TOutputGLSLBase::visitBlock(Visit visit, TIntermBlock *node)
     {
         TIntermNode *curNode = *iter;
         ASSERT(curNode != nullptr);
+
+        out << getIndentPrefix();
+
         curNode->traverse(this);
 
         if (isSingleStatement(curNode))
@@ -844,7 +859,7 @@ bool TOutputGLSLBase::visitBlock(Visit visit, TIntermBlock *node)
     // Scope the blocks except when at the global scope.
     if (getCurrentTraversalDepth() > 0)
     {
-        out << "}\n";
+        out << getIndentPrefix(-1) << "}\n";
     }
     return false;
 }
@@ -1136,6 +1151,7 @@ void TOutputGLSLBase::declareStruct(const TStructure *structure)
     const TFieldList &fields = structure->fields();
     for (size_t i = 0; i < fields.size(); ++i)
     {
+        out << getIndentPrefix(1);
         const TField *field    = fields[i];
         const TType &fieldType = *field->type();
         if (writeVariablePrecision(fieldType.getPrecision()))
@@ -1153,7 +1169,7 @@ void TOutputGLSLBase::declareStruct(const TStructure *structure)
         }
         out << ";\n";
     }
-    out << "}";
+    out << getIndentPrefix() << "}";
 }
 
 void TOutputGLSLBase::declareInterfaceBlockLayout(const TType &type)
