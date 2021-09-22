@@ -16,6 +16,23 @@
       "message": "I wasn\u0027t sure what to do about `getIndentPrefix`. The simplest but inefficient thing is to return `std::string(indentDepth * 2, \u0027 \u0027)` but that builds a prefix string every time. There\u0027s also the issue that I\u0027m returning TString so there\u0027s a copy on return. Can\u0027t return a reference because they might get moved based on TVector\u003cTString\u003e. Could change it to TVector\u003cTString*\u003e but then I need to manually free them. Or is there a shared_ptr or something to track them? Sorry, have not cross that part of the code yet.\n\nAnyway, happy the change anything. Just put up a CL so there\u0027s someone concrete to make changes to.\n\nBTW: I only tested a few shaders but it seems to work except for switch statements end up\n\n  switch(..) {\n    case ..:\n    code\n    code\n    case ..:\n    code\n    code\n    default:\n    code\n    code\n  }\n  \nI looked into fixing that but switch is not common in shaders and it didn\u0027t seem worth possibly breaking GLSL output or extra effort. Looked how EmitMetal does it but it uses TIntermRebuild not TIntermTraverser so not really applicable.",
       "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac2dcd9_7cd810f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T23:52:56Z",
+      "side": 1,
+      "message": "Can you add before/after examples to the commit msg?",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
