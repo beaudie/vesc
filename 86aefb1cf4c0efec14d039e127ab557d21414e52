@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "796a01df_b2b3564a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T20:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c17492b_b6df85da",
+      "range": {
+        "startLine": 1486,
+        "startChar": 0,
+        "endLine": 1488,
+        "endChar": 0
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be2be00f_ebd39168",
@@ -264,6 +288,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5493ab3d_7eefbf23",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3624,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T20:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37d2a309_deae2a90",
+      "range": {
+        "startLine": 3621,
+        "startChar": 0,
+        "endLine": 3624,
+        "endChar": 96
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6338e5b2_54b2d06e",
@@ -277,6 +325,30 @@
       "writtenOn": "2021-09-16T13:16:27Z",
       "side": 1,
       "message": "same here, avoid calling context-\u003egetShareGroup(), just pass around the necessary data. I\u0027m wondering if we should remove getFrameCaptureShared() to avoid this pattern.",
+      "range": {
+        "startLine": 5414,
+        "startChar": 16,
+        "endLine": 5414,
+        "endChar": 70
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90f5c14b_01bd9d82",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5414,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T20:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6338e5b2_54b2d06e",
       "range": {
         "startLine": 5414,
         "startChar": 16,
@@ -347,6 +419,30 @@
       "writtenOn": "2021-09-16T13:16:27Z",
       "side": 1,
       "message": "maybe it would be better to use member functions than mutable accessors.",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 90
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50383f9e_49c332aa",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-22T20:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03fc9c83_a5e2c2a7",
       "range": {
         "startLine": 465,
         "startChar": 0,
