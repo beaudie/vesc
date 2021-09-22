@@ -880,13 +880,10 @@ TEST_P(DepthStencilFormatsTest, VerifyDepthStencilUploadData)
     ANGLE_SKIP_TEST_IF(IsWindows() && IsVulkan() && IsAMD());
 
     // http://anglebug.com/4908
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsMetal());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     bool shouldHaveTextureSupport = (IsGLExtensionEnabled("GL_OES_packed_depth_stencil") &&
                                      IsGLExtensionEnabled("GL_OES_depth_texture")) ||

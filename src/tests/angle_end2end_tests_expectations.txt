@@ -83,38 +83,15 @@
 // Mac
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8Index/* = SKIP
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8IndexSmallUpdates/* = SKIP
-6096 MAC METAL : GLSLTest_ES3.InitGlobalComplexConstant/* = SKIP
-6060 MAC METAL : BlitFramebufferTest.OOBWrite/* = SKIP
 6124 MAC OPENGL : GLSLTestLoops.*ContinueInSwitch/* = SKIP
 6144 MAC OPENGL : BlitFramebufferTest.BlitDepthStencilPixelByPixel/* = SKIP
 6236 MAC OPENGL : BufferDataTestES3.DrawWithNotCallingBufferData/* = SKIP
-1227129 MAC METAL : StateChangeTestES3.SamplerMetadataUpdateOnSetProgram/* = SKIP
 772651 MAC NVIDIA OPENGL : GLSLTest.VectorScalarDivideAndAddInLoop/* = SKIP
 772651 MAC NVIDIA OPENGL : GLSLTest.VectorScalarMultiplyAndAddInLoop/* = SKIP
-6318 MAC METAL : EGLBlobCacheTest.FragmentOutputLocationKey/* = SKIP
 6347 MAC OPENGL : FramebufferTestWithFormatFallback.R5G5B5A1_TexImage/* = SKIP
 6347 MAC OPENGL : FramebufferTestWithFormatFallback.R5G5B5A1_CopyTexImage/* = SKIP
 6347 MAC OPENGL : FramebufferTestWithFormatFallback.R5G5B5A1_CubeTexImage/* = SKIP
 6347 MAC OPENGL : FramebufferTestWithFormatFallback.R4G4B4A4_OutOfRangeStagedUpdateReformated/* = SKIP
-6386 MAC METAL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectOrder/ES3_Metal_DirectMetalGen = SKIP
-6386 MAC METAL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectShortCircuit/ES3_Metal_DirectMetalGen = SKIP
-6387 MAC METAL : GLSLTest_ES3.ValidIndexClampES300/ES3_Metal_DirectMetalGen = SKIP
-
-// Failures from Transform Feedback Enablement. Passes on BigSur
-6407 MAC NVIDIA METAL : TransformFeedbackTest.OptimizedVaryings/ES3_Metal_DirectMetalGen = SKIP
-6415 MAC INTEL METAL : CompressedTextureBPTCTest.Test/RGB_BPTC_SIGNED_FLOAT__ES3_Metal_DirectMetalGen = SKIP
-
-6389 MAC METAL : RobustResourceInitTestES3.BlitDepthStencilAfterClearBuffer/ES3_Metal = SKIP
-
-// Direct Metal does not yet implement vertex attribute aliasing
-// Attribute aliasing is only allowed in GLSL ES 1.0 but disallowed by WebGL
-// and GLSL ES 3.00 so it's a low priority to fix.
-6297 MAC METAL : VertexAttributeTest.AliasingMatrixAttribLocations/ES2_Metal_DirectMetalGen = SKIP
-6297 MAC METAL : VertexAttributeTest.AliasingMatrixAttribLocations/ES3_Metal_DirectMetalGen = SKIP
-6297 MAC METAL : VertexAttributeTest.AliasingVectorAttribLocations/ES2_Metal_DirectMetalGen = SKIP
-6297 MAC METAL : VertexAttributeTest.AliasingVectorAttribLocations/ES3_Metal_DirectMetalGen = SKIP
-6297 MAC METAL : VertexAttributeTest.AliasingVectorAttribLocationsDifferingPrecisions/ES2_Metal_DirectMetalGen = SKIP
-6297 MAC METAL : VertexAttributeTest.AliasingVectorAttribLocationsDifferingPrecisions/ES3_Metal_DirectMetalGen = SKIP
 
 // Old Macs can't run these and there's apparently no way to filter the old Macs
 // from running these tests at the moment.

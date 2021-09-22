@@ -1202,7 +1202,6 @@ TEST_P(GLSLTest_ES3, GLVertexIDIntegerTextureDrawArrays)
     // http://anglebug.com/4092
     ANGLE_SKIP_TEST_IF(isSwiftshader());
     // http://anglebug.com/5232
-    ANGLE_SKIP_TEST_IF(IsMetal());
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
     // TODO(anglebug.com/5491): Failing on iOS, probably related to the ARM Mac failure above.
@@ -1996,7 +1995,6 @@ TEST_P(GLSLTest, MaxVaryingVec3AndOneFloat)
 TEST_P(GLSLTest, MaxVaryingVec3ArrayAndOneFloatArray)
 {
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -2034,7 +2032,6 @@ TEST_P(GLSLTest, MaxVaryingVec2Arrays)
     ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
 
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -3396,7 +3393,6 @@ TEST_P(GLSLTest_ES3, UnaryMinusOperatorSignedInt)
     // Test times out on dual-GPU MacBook Pros that don't show up as
     // IsIntel(); skip on all Metal for now.
     // See also http://anglebug.com/6174 .
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr char kVS[] =
         "#version 300 es\n"
@@ -3449,7 +3445,6 @@ TEST_P(GLSLTest_ES3, UnaryMinusOperatorUnsignedInt)
     // Test times out on dual-GPU MacBook Pros that don't show up as
     // IsIntel(); skip on all Metal for now.
     // See also http://anglebug.com/6174 .
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr char kVS[] =
         "#version 300 es\n"
