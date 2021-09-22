@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9cd3315_e4955e05",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-22T21:45:26Z",
+      "side": 1,
+      "message": "\u003e There is a possibility that during acquireBufferHelper() call, buffer gets released. \n\nreleaseInFlightBuffers() and ReleaseBufferListToRenderer() will only collect garbage, it doesn\u0027t actually destroy any objects.\n\nWhat path leads to the vkBuffer being destroyed?",
+      "parentUuid": "ed5b2f2e_f1d875fd",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8abee2_963ab2ac",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 16
