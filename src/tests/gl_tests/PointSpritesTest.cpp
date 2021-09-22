@@ -485,7 +485,6 @@ TEST_P(PointSpritesTest, PointSizeAboveMaxIsClamped)
 
     // TODO(hqle): Metal on macbook also has problem with drawing point outside framebuffer.
     // http://anglebug.com/4135
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     // TODO(anglebug.com/5491)
     ANGLE_SKIP_TEST_IF(IsIOS() && IsOpenGLES());
