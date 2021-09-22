@@ -197,6 +197,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67f8e691_c3ad0691",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-22T23:21:06Z",
+      "side": 1,
+      "message": "Right, but this also affects synchronous submission mode as well though. If you have gdb stopped right between acquireBufferHelper and copyFromBuffer, and you have another thread comes in do a submission, you will have exact bug. But anyway, you only need one reason to make a fix :-)",
+      "parentUuid": "86ee9155_43e5f2f9",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8abee2_963ab2ac",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 16
