@@ -47,7 +47,6 @@ TEST_P(OcclusionQueriesTest, IsOccluded)
                        !IsGLExtensionEnabled("GL_EXT_occlusion_query_boolean"));
 
     // http://anglebug.com/5400
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsMetal());
 
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -95,7 +94,6 @@ TEST_P(OcclusionQueriesTest, IsNotOccluded)
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsVulkan());
 
     // http://anglebug.com/5400
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsMetal());
 
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -133,7 +131,6 @@ TEST_P(OcclusionQueriesTest, ClearNotCounted)
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
     // http://anglebug.com/5307
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsNVIDIA());
 
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -233,7 +230,6 @@ TEST_P(OcclusionQueriesTest, CopyNotCounted)
     ANGLE_SKIP_TEST_IF(IsD3D());
 
     // http://anglebug.com/5100
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsNVIDIA());
 
     GLQueryEXT query;
 
@@ -268,7 +264,6 @@ TEST_P(OcclusionQueriesTestES3, BlitNotCounted)
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsVulkan());
 
     // http://anglebug.com/5443
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsMetal() && IsNVIDIA());
 
     constexpr GLuint kSize = 64;
 
@@ -433,11 +428,9 @@ TEST_P(OcclusionQueriesTest, MultiQueries)
 
     // http://anglebug.com/4925
     // http://anglebug.com/5400
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsMetal());
 
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     GLQueryEXT query[5];
 
@@ -619,7 +612,6 @@ TEST_P(OcclusionQueriesTest, MultiContext)
                        GetParam() == ES3_D3D11());
 
     // http://anglebug.com/5400
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsMetal());
 
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

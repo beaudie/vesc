@@ -995,7 +995,6 @@ TEST_P(ColorMaskForDrawBuffersTest, ScissoredClear)
 TEST_P(ColorMaskForDrawBuffersTest, Blit)
 {
     // http://anglebug.com/5284
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     ANGLE_SKIP_TEST_IF(!setupTest());
     setupColorMaskForDrawBuffersTest();
