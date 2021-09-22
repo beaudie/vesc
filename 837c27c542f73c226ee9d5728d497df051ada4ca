@@ -16,6 +16,24 @@
       "message": "Why is updateCachedElementLimit() gated behind isBufferAccessValidationEnabled()?\n\nShould updateVertexElementLimitsImpl() have ASSERT(isBufferAccessValidationEnabled()) so it\u0027s call to getCachedElementLimit() returns a good value?",
       "revId": "837c27c542f73c226ee9d5728d497df051ada4ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0655c92c_4b9c366c",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T13:28:40Z",
+      "side": 1,
+      "message": "updateVertexElementLimitsImpl does have that ASSERT.\n\nthe element limits are only used when we manually validate buffer accesses. e.g. for WebGL with robust buffer access disabled. It\u0027s expensive so it pays to avoid it when possible.",
+      "parentUuid": "42136a53_fb336511",
+      "revId": "837c27c542f73c226ee9d5728d497df051ada4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
