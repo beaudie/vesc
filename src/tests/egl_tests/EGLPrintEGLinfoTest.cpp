@@ -11,6 +11,11 @@
 
 #include "common/string_utils.h"
 #include "test_utils/ANGLETest.h"
+#include "test_utils/runner/TestSuite.h"
+
+#if defined(ANGLE_HAS_RAPIDJSON)
+#    include "common/serializer/JsonSerializer.h"
+#endif  // defined(ANGLE_HAS_RAPIDJSON)
 
 using namespace angle;
 
@@ -100,12 +105,39 @@ TEST_P(EGLPrintEGLinfoTest, PrintGLInfo)
     std::cout << "\tShader: " << GetGLString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
     std::cout << "\tExtensions:" << std::endl;
-    for (auto extension : ParseExtensions(GetGLString(GL_EXTENSIONS)))
+
+    const std::vector<std::string> extensions = ParseExtensions(GetGLString(GL_EXTENSIONS));
+
+    for (const std::string &extension : extensions)
     {
         std::cout << "\t\t" << extension << std::endl;
     }
 
     std::cout << std::endl;
+
+#if defined(ANGLE_HAS_RAPIDJSON)
+    JsonSerializer json;
+    json.addCString("Vendor", GetGLString(GL_VENDOR));
+    json.addCString("Version", GetGLString(GL_VERSION));
+    json.addCString("Renderer", GetGLString(GL_RENDERER));
+    json.addCString("ShaderLanguageVersion", GetGLString(GL_SHADING_LANGUAGE_VERSION));
+    json.addVectorOfStrings("Extensions", extensions);
+
+    constexpr size_t kBufferSize = 1000;
+    std::array<char, kBufferSize> buffer;
+    std::time_t timeNow = std::time(nullptr);
+    std::strftime(buffer.data(), buffer.size(), "%B %e, %Y", std::localtime(&timeNow));
+    json.addCString("DateRecorded", buffer.data());
+
+    angle::TestSuite *testSuite    = angle::TestSuite::GetInstance();
+    const std::string artifactPath = testSuite->addTestArtifact("glinfo.json");
+
+    {
+        std::vector<uint8_t> jsonData = json.getData();
+        SaveFileHelper saveFile(artifactPath);
+        saveFile.write(jsonData.data(), jsonData.size());
+    }
+#endif  // defined(ANGLE_HAS_RAPIDJSON)
 }
 
 #define QUERY_HELPER(enumValue, enumString, stream)                                    \
