@@ -410,7 +410,6 @@ TEST_P(CopyTexImageTest, CopyTexSubImageFromCubeMap)
 TEST_P(CopyTexImageTest, CopyTexSubImageToNonCubeCompleteDestination)
 {
     // TODO(hqle): Find what wrong with NVIDIA GPU. http://anglebug.com/4137
-    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsMetal());
 
     constexpr GLsizei kCubeMapFaceCount = 6;
 

@@ -3169,7 +3169,6 @@ TEST_P(FramebufferTest_ES3, SampleFromAttachedTextureWithDifferentLODAndFBOSwitc
 TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithBeyondMaxLevel)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;
@@ -3219,7 +3218,6 @@ TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithBeyondMaxLeve
 TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithSubImageWithBeyondMaxLevel)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;
@@ -3275,7 +3273,6 @@ TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithSubImageWithB
 TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithBellowBaseLevelLOD)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLuint kLevel0Size = 4;
     constexpr GLuint kLevel1Size = kLevel0Size / 2;
@@ -3331,7 +3328,6 @@ TEST_P(FramebufferTest_ES3, RenderAndInvalidateImmutableTextureWithBellowBaseLev
 TEST_P(FramebufferTest_ES3, RenderImmutableTextureWithSubImageWithBeyondMaxLevel)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     // Set up program to sample from specific lod level.
     GLProgram textureLodProgram;
@@ -3406,7 +3402,6 @@ TEST_P(FramebufferTest_ES3, RenderImmutableTextureWithSubImageWithBeyondMaxLevel
 TEST_P(FramebufferTest_ES3, RenderSampleDepthTextureWithExcludedLevel)
 {
     // ToDo: https://issuetracker.google.com/181800403
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     // Set up program to copy depth texture's value to color.red.
     constexpr char kVS[] = R"(precision mediump float;
@@ -3609,7 +3604,7 @@ TEST_P(FramebufferTest_ES3, ChangeAttachmentThenInvalidateAndDraw)
 TEST_P(FramebufferTest_ES3, AttachmentsWithUnequalDimensions)
 {
     // TODO: https://anglebug.com/5866
-    ANGLE_SKIP_TEST_IF(IsD3D() || IsMetal());
+    ANGLE_SKIP_TEST_IF(IsD3D());
 
     constexpr GLsizei kSizeLarge = 32;
     constexpr GLsizei kSizeSmall = 16;
