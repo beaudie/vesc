@@ -50,6 +50,24 @@
       "message": "One missing requirement is the Image needs to transition to SHARED_LAYOUT before first use. - This is not done.",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9be4c0d_eedc4d28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-09-22T19:37:37Z",
+      "side": 1,
+      "message": "Spec says:\n\"After acquiring the shared presentable image, the application must transition it to the VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR layout prior to it being used. After this initial transition, any image usage that was requested during swapchain creation can be performed on the image without layout transitions being performed.\"\n\nIf you have guidance where and how best to do this - it would be greatly appreciated.",
+      "parentUuid": "3dbe6cb6_2bb69490",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
