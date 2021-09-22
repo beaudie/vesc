@@ -72,6 +72,7 @@
           'angle_deqp_egl_tests',
           '--use-angle=metal',
           '--bot-mode',
+          '--max-failures=1000',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -445,6 +446,7 @@
           '--use-angle=metal',
           # Flakiness on multiple configs. http://anglebug.com/6019
           '--flaky-retries=2',
+          '--max-failures=1000',
         ],
         'desktop_args': [
           '--bot-mode',
