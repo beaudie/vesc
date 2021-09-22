@@ -406,7 +406,6 @@ TEST_P(MultisampledRenderToTextureTest, FramebufferCompleteness)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
 
     // Checking that Renderbuffer and texture2d having different number of samples results
     // in a FRAMEBUFFER_INCOMPLETE_MULTISAMPLE
@@ -490,7 +489,6 @@ TEST_P(MultisampledRenderToTextureTest, FramebufferCompletenessSmallSampleCount)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
 
     // A sample count of '2' can be rounded up to '4' on some systems (e.g., ARM+Android).
     GLsizei samples = 2;
@@ -1258,7 +1256,6 @@ TEST_P(MultisampledRenderToTextureTest, DrawCopyThenBlend)
 TEST_P(MultisampledRenderToTextureTest, RenderbufferDrawCopyThenBlend)
 {
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     drawCopyThenBlendCommon(true);
 }
@@ -1358,7 +1355,6 @@ TEST_P(MultisampledRenderToTextureTest, ClearDrawCopyThenBlendSameProgram)
 TEST_P(MultisampledRenderToTextureTest, RenderbufferClearDrawCopyThenBlendSameProgram)
 {
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     clearDrawCopyThenBlendSameProgramCommon(true);
 }
@@ -1374,7 +1370,6 @@ TEST_P(MultisampledRenderToTextureES3Test,
     ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsVulkan());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     constexpr GLsizei kSize = 64;
 
@@ -1767,10 +1762,8 @@ void MultisampledRenderToTextureES3Test::drawCopyDrawAttachDepthStencilClearThen
 TEST_P(MultisampledRenderToTextureES3Test, DrawCopyDrawAttachDepthStencilClearThenDraw)
 {
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsMetal() && IsAMD());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     drawCopyDrawAttachDepthStencilClearThenDrawCommon(false);
 }
@@ -2094,7 +2087,6 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferDepthStencilClearDrawCopy
     ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsVulkan());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     constexpr GLsizei kSize = 64;
 
@@ -2192,7 +2184,6 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferDepthStencilDrawCopyClear
     ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsVulkan());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     constexpr GLsizei kSize = 64;
 
@@ -2542,7 +2533,6 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferDrawThenBlitDepthStencilO
     ANGLE_SKIP_TEST_IF(IsD3D());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     constexpr GLsizei kSize = 64;
 
@@ -2697,7 +2687,6 @@ TEST_P(MultisampledRenderToTextureTest, DepthReadWriteToggleWithStartedRenderPas
     ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsVulkan());
 
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     constexpr GLsizei kSize = 64;
 
@@ -2992,7 +2981,6 @@ TEST_P(MultisampledRenderToTextureES3Test, ColorAttachments0And3)
 TEST_P(MultisampledRenderToTextureES3Test, RenderbufferColorAttachments0And3)
 {
     // Test failure introduced by Apple's changes (anglebug.com/5505)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsMetal());
 
     colorAttachments0And3Common(true);
 }

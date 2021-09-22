@@ -4,9 +4,6 @@
 
 // See README.md for format.
 
-// Globally disable Metal testing for now
-4235 METAL : dEQP-EGL.* = SKIP
-
 // Only Vulkan and D3D11 support multithreading
 3916 OPENGL : dEQP-EGL.functional.sharing.gles2.multithread.* = SKIP
 3916 OPENGL : dEQP-EGL.functional.multithread.* = SKIP
@@ -247,3 +244,7 @@
 5665 NEXUS5X : dEQP-EGL.functional.surfaceless_context.rgb565_depth_stencil = SKIP
 5665 NEXUS5X : dEQP-EGL.functional.surfaceless_context.rgb565_no_depth_stencil = SKIP
 5665 NEXUS5X : dEQP-EGL.functional.surfaceless_context.rgb888_no_depth_stencil = SKIP
+
+// Metal
+
+

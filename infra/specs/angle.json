@@ -1761,7 +1761,8 @@
         "args": [
           "angle_deqp_egl_tests",
           "--use-angle=metal",
-          "--bot-mode"
+          "--bot-mode",
+          "--max-failures=1000"
         ],
         "merge": {
           "script": "//scripts/angle_deqp_test_merge.py"
@@ -1879,6 +1880,7 @@
           "angle_deqp_gles3_tests",
           "--use-angle=metal",
           "--flaky-retries=2",
+          "--max-failures=1000",
           "--bot-mode"
         ],
         "merge": {
@@ -2000,7 +2002,8 @@
         "args": [
           "angle_deqp_egl_tests",
           "--use-angle=metal",
-          "--bot-mode"
+          "--bot-mode",
+          "--max-failures=1000"
         ],
         "merge": {
           "script": "//scripts/angle_deqp_test_merge.py"
@@ -2118,6 +2121,7 @@
           "angle_deqp_gles3_tests",
           "--use-angle=metal",
           "--flaky-retries=2",
+          "--max-failures=1000",
           "--bot-mode"
         ],
         "merge": {
@@ -2237,7 +2241,8 @@
         "args": [
           "angle_deqp_egl_tests",
           "--use-angle=metal",
-          "--bot-mode"
+          "--bot-mode",
+          "--max-failures=1000"
         ],
         "merge": {
           "script": "//scripts/angle_deqp_test_merge.py"
@@ -2347,6 +2352,7 @@
           "angle_deqp_gles3_tests",
           "--use-angle=metal",
           "--flaky-retries=2",
+          "--max-failures=1000",
           "--bot-mode"
         ],
         "merge": {
@@ -2460,7 +2466,8 @@
         "args": [
           "angle_deqp_egl_tests",
           "--use-angle=metal",
-          "--bot-mode"
+          "--bot-mode",
+          "--max-failures=1000"
         ],
         "merge": {
           "script": "//scripts/angle_deqp_test_merge.py"
@@ -2570,6 +2577,7 @@
           "angle_deqp_gles3_tests",
           "--use-angle=metal",
           "--flaky-retries=2",
+          "--max-failures=1000",
           "--bot-mode"
         ],
         "merge": {
