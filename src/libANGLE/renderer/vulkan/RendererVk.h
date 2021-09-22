@@ -334,6 +334,11 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    ANGLE_INLINE bool isBusy()
+    {
+        return getLastSubmittedQueueSerial() > getLastCompletedQueueSerial();
+    }
+
     egl::Display *getDisplay() const { return mDisplay; }
 
     VkResult getLastPresentResult(VkSwapchainKHR swapchain)

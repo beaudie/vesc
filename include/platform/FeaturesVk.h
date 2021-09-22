@@ -342,6 +342,14 @@ struct FeaturesVk : FeatureSetBase
         "Allocate a shadow buffer for GL buffer objects to reduce glMap* latency.", &members,
         "http://anglebug.com/4339"};
 
+    // When we have to clone a buffer instead of wait for buffer to finish, we have to preserve
+    // buffer content. In that case, we have choice to use CPU or GPU to do data copy. Set this to
+    // true will pick CPU when possible.
+    Feature preferCPUWhenPreservingBufferData = {
+        "preferCPUWhenPreservingBufferData", FeatureCategory::VulkanFeatures,
+        "Use CPU to do copy when preserving buffer data.", &members,
+        "http://issuetracker.google.com/200067929"};
+
     // Persistently map buffer memory until destroy, saves on map/unmap IOCTL overhead
     // for buffers that are updated frequently.
     Feature persistentlyMappedBuffers = {
