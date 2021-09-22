@@ -33,6 +33,29 @@
       "message": "Can you add before/after examples to the commit msg?",
       "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee71e134_e0be4af3",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T23:53:29Z",
+      "side": 1,
+      "message": "nit: suggest you codify this as a constant with indent width",
+      "range": {
+        "startLine": 382,
+        "startChar": 73,
+        "endLine": 382,
+        "endChar": 74
+      },
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
