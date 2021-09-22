@@ -22,6 +22,30 @@
       },
       "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dfd9364_693c2a18",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-22T17:27:17Z",
+      "side": 1,
+      "message": "The identifiers are all like `SYNC-HAZARD-READ_AFTER_WRITE`, so pretty broad. I didn\u0027t notice any better way to identify the messages than their contents.",
+      "parentUuid": "9b01f6cb_52066f6e",
+      "range": {
+        "startLine": 342,
+        "startChar": 5,
+        "endLine": 345,
+        "endChar": 45
+      },
+      "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
