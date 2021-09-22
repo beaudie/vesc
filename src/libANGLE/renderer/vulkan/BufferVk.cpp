@@ -874,6 +874,20 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     bool updateRegionBeforeSubData = mHasValidBufferData && (offset > 0);
     bool updateRegionAfterSubData  = mHasValidBufferData && (offsetAfterSubdata < bufferSize);
 
+    // If buffer is host visible and GPU is done writing it, we use CPU to do copy. We need to save
+    // source buffer pointer before acquire new buffer.
+    uint8_t *srcMapPtrBeforeSubData = nullptr;
+    uint8_t *srcMapPtrAfterSubData  = nullptr;
+    if ((updateRegionBeforeSubData || updateRegionAfterSubData) && src->isHostVisible() &&
+        !src->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
+    {
+        uint8_t *mapPointer = nullptr;
+        ANGLE_TRY(src->mapWithOffset(contextVk, &mapPointer, static_cast<size_t>(mBufferOffset)));
+        ASSERT(mapPointer);
+        srcMapPtrBeforeSubData = mapPointer + mBufferOffset;
+        srcMapPtrAfterSubData  = mapPointer + mBufferOffset + offsetAfterSubdata;
+    }
+
     ANGLE_TRY(acquireBufferHelper(contextVk, bufferSize, false));
     ANGLE_TRY(updateBuffer(contextVk, data, updateSize, offset));
 
@@ -882,12 +896,29 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
 
     if (updateRegionBeforeSubData)
     {
-        copyRegions.push_back({0, mBufferOffset, offset});
+        if (srcMapPtrBeforeSubData && mBuffer->isHostVisible())
+        {
+            ANGLE_TRY(directUpdate(contextVk, srcMapPtrBeforeSubData,
+                                   static_cast<size_t>(mBufferOffset), 0));
+        }
+        else
+        {
+            copyRegions.push_back({0, mBufferOffset, offset});
+        }
     }
+
     if (updateRegionAfterSubData)
     {
-        copyRegions.push_back({offsetAfterSubdata, mBufferOffset + offsetAfterSubdata,
-                               (bufferSize - offsetAfterSubdata)});
+        size_t copySize = bufferSize - offsetAfterSubdata;
+        if (srcMapPtrAfterSubData && mBuffer->isHostVisible())
+        {
+            ANGLE_TRY(directUpdate(contextVk, srcMapPtrAfterSubData, copySize, offsetAfterSubdata));
+        }
+        else
+        {
+            copyRegions.push_back(
+                {offsetAfterSubdata, mBufferOffset + offsetAfterSubdata, copySize});
+        }
     }
 
     if (!copyRegions.empty())
