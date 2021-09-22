@@ -498,6 +498,30 @@
       },
       "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dca3dce_721ac282",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T23:06:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "84260799_166f1be7",
+      "range": {
+        "startLine": 582,
+        "startChar": 29,
+        "endLine": 582,
+        "endChar": 50
+      },
+      "revId": "86aefb1cf4c0efec14d039e127ab557d21414e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
