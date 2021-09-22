@@ -379,7 +379,6 @@ TEST_P(WebGL2ReadOutsideFramebufferTest, CopyTexSubImage3D)
 {
     // TODO(hqle): Metal doesn't implement 3D texture yet.
     // http://anglebug.com/4136 (ES2 renderer is mistakenly included in this test)
-    ANGLE_SKIP_TEST_IF(IsMetal());
     // http://anglebug.com/4092
     ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D9() || IsD3D11());
     // Robust CopyTexSubImage3D behaviour is not implemented on OpenGL.
