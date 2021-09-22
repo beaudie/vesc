@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcfe94b4_b50c465a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T13:19:20Z",
+      "side": 1,
+      "message": "maybe mention the change to CommandPool with CommandProcessor.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 12
+      },
+      "revId": "df93885a301e13fb1ad5110b1000b50caf57964a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4247b8f_266c0575",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-22T13:19:20Z",
+      "side": 1,
+      "message": "should this be a unique_ptr?",
+      "range": {
+        "startLine": 1357,
+        "startChar": 20,
+        "endLine": 1357,
+        "endChar": 40
+      },
+      "revId": "df93885a301e13fb1ad5110b1000b50caf57964a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
