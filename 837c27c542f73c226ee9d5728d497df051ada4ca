@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42136a53_fb336511",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-22T00:28:17Z",
+      "side": 1,
+      "message": "Why is updateCachedElementLimit() gated behind isBufferAccessValidationEnabled()?\n\nShould updateVertexElementLimitsImpl() have ASSERT(isBufferAccessValidationEnabled()) so it\u0027s call to getCachedElementLimit() returns a good value?",
+      "revId": "837c27c542f73c226ee9d5728d497df051ada4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
