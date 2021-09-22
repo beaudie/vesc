@@ -189,7 +189,7 @@ class BufferVk : public BufferImpl
                               size_t offset,
                               BufferNotificationPolicy notificationPolicy);
     void release(ContextVk *context);
-    void markConversionBuffersDirty();
+    void dataUpdated();
 
     angle::Result acquireBufferHelper(ContextVk *contextVk,
                                       size_t sizeInBytes,
@@ -231,6 +231,8 @@ class BufferVk : public BufferImpl
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
+
+    bool mHasValidData;
 };
 
 }  // namespace rx
