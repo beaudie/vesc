@@ -179,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86ee9155_43e5f2f9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-22T22:51:41Z",
+      "side": 1,
+      "message": "Ok, right, getting on the list at all is bad, since we won\u0027t pull it back off as part of the next retain() call.   Sort of anyway.\n\nLooking at releaseInFlightBuffers(), it adds the released buffer to RendererVk::mSharedGarbage, which is only emptied by cleanupGarbage():\n\n    angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)\n    {\n        std::lock_guard\u003cstd::mutex\u003e lock(mGarbageMutex);\n\n        for (auto garbageIter \u003d mSharedGarbage.begin(); garbageIter !\u003d mSharedGarbage.end();)\n        {\n            // Possibly \u0027counter\u0027 should be always zero when we add the object to garbage.\n            vk::SharedGarbage \u0026garbage \u003d *garbageIter;\n            if (garbage.destroyIfComplete(this, lastCompletedQueueSerial))\n            {\n                garbageIter \u003d mSharedGarbage.erase(garbageIter);\n            }\n            \nThe important part there is the destroyIfComplete():\n\n    bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSerial)\n    {\n        if (mLifetime.isCurrentlyInUse(completedSerial))\n            return false;\n            \nSo, if acquireBufferHelper() adds the buffer to RendererVk::mSharedGarbage, copyFromBuffer() will retain it and mark it currently in use.   Unfortunately, that only solves the case for the single-threaded version.   For the async CommandProcessor case, I think you\u0027re correct that there\u0027s a race condition here, since the garbage could be processed while acquireAndUpdate() is being worked on.\n\nI\u0027ll make a CL that retainReadOnly()\u0027s \u0027src\u0027 with a comment explaining why it needs to be before acquireBufferHelper().",
+      "parentUuid": "f9c56e46_ca5ded1d",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8abee2_963ab2ac",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 16
