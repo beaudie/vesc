@@ -16,6 +16,23 @@
       "message": "PTAL folks. I added Geoff/Jonah as reviewers but other folks feel free to review as well, or instead of Geoff or Jonah. Can always tackle improvements/more data/new features as follow-up tasks.",
       "revId": "608d353b080a7c85adcf1e0e10f306a38301bfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "058c9908_c54525dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-23T15:19:00Z",
+      "side": 1,
+      "message": "Also, I could use some help going through and catching the broken extension links. The broken links to GLES extensions need to be added to \"_LINK_OVERRIDES\", the missing ANGLE extension links need to have tracking bugs so we draft these specs at some point.",
+      "revId": "608d353b080a7c85adcf1e0e10f306a38301bfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
