@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4db8fac_cde7846f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-23T20:36:13Z",
+      "side": 1,
+      "message": "LGTM. I guess the src\u003d\u003ddst case, it is okay to retain twice, once for readOnly and then retain for ReadWrite?",
+      "revId": "21def51a195570861fe8b720e60d1f00784c3594",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
