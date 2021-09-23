@@ -34,6 +34,64 @@
       "parentUuid": "ba8a46c0_4142f100",
       "revId": "a9bf50689bc4564eb2ce115e0958b1373af33f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ceae985_32bc89fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T14:56:42Z",
+      "side": 1,
+      "message": "LGTM. This does seem to be fixing a bug. I can easily trigger a VVL error with `./hello_triangle --use-angle\u003dvulkan` when resizing the window before this change, but not after it.\n\nThe way to trigger the error is to resize the window such that width is increased and height is decreased (or vice versa) which produces this sort of error:\n\n    RendererVk.cpp:364 (DebugUtilsMessenger): [ VUID-VkSwapchainCreateInfoKHR-imageExtent-01274 ] Validation Error: [ VUID-VkSwapchainCreateInfoKHR-imageExtent-01274 ] Object 0: handle \u003d 0x55f88f76f338, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0x7cd0911d | vkCreateSwapchainKHR() called with imageExtent \u003d (898,816), which is outside the bounds returned by vkGetPhysicalDeviceSurfaceCapabilitiesKHR(): currentExtent \u003d (897,816), minImageExtent \u003d (897,816), maxImageExtent \u003d (897,816). The Vulkan spec states: imageExtent must be between minImageExtent and maxImageExtent, inclusive, where minImageExtent and maxImageExtent are members of the VkSurfaceCapabilitiesKHR structure returned by vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface (https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#VUID-VkSwapchainCreateInfoKHR-imageExtent-01274)\n                            Object: 0x55f88f76f338 (type \u003d Device(3))\n\nIt seems that the relevant EGL tests don\u0027t resize the window as such (they probably only increment in size)",
+      "revId": "a9bf50689bc4564eb2ce115e0958b1373af33f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d5f4bdc_ec9047ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T14:56:42Z",
+      "side": 1,
+      "message": "There are EGL tests that resize the window, but they probably don\u0027t exercise all the different ways the window could be resized.",
+      "parentUuid": "2479d1c8_33adc6d1",
+      "revId": "a9bf50689bc4564eb2ce115e0958b1373af33f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa250c34_22433da7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T14:56:42Z",
+      "side": 1,
+      "message": "nit: unnecessary parentheses are unnecessary",
+      "range": {
+        "startLine": 1624,
+        "startChar": 23,
+        "endLine": 1624,
+        "endChar": 24
+      },
+      "revId": "a9bf50689bc4564eb2ce115e0958b1373af33f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
