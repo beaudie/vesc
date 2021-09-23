@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "559e205c_0e84b85d",
+        "filename": "src/tests/perf_tests/TexturesPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-23T15:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2aa527f_684ec1a7",
+      "range": {
+        "startLine": 80,
+        "startChar": 12,
+        "endLine": 80,
+        "endChar": 29
+      },
+      "revId": "11d2803fee433a5295ddeb6016e515e813590d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8722ad80_31f82aa0",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-23T15:13:20Z",
       "side": 1,
       "message": "nit: This comment could be updated since it refers directly to a parameter value that may not be fixed.",
+      "range": {
+        "startLine": 116,
+        "startChar": 23,
+        "endLine": 116,
+        "endChar": 27
+      },
+      "revId": "11d2803fee433a5295ddeb6016e515e813590d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b1066a_597d70ee",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-23T15:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8722ad80_31f82aa0",
       "range": {
         "startLine": 116,
         "startChar": 23,
@@ -101,6 +149,30 @@
       "side": 1,
       "message": "Including a comment explaining what this block is doing would be helpful too.",
       "parentUuid": "4b33adad_32acb249",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 45
+      },
+      "revId": "11d2803fee433a5295ddeb6016e515e813590d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe85205_83d076b1",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-23T15:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0011c123_d1863ed3",
       "range": {
         "startLine": 154,
         "startChar": 0,
