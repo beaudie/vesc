@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31df863a_097ae524",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:26:22Z",
+      "side": 1,
+      "message": "Re: getIndentPrefix\n\nHow about something like this:\n\n    namespace {\n    constexpr char kIndent \u003d \"                    \"; // 10x2 spaces\n    }  // anonymous namespace\n\n    const char *getIndentPrefix(int extraLevel)\n    {\n        int level \u003d std::min(10, getCurrentBlockDepth() + extraLevel);\n        ASSERT(level \u003e\u003d 0);\n        return kIndent + (10 - level) * 2;\n    }\n\nThen you stop indenting after 10 levels, but that should be reasonable. You can always choose a larger max indent than 10.\n\nBenefits are no allocation, no string construction etc. There is a minimal storage of 21 bytes and getting the indent is only a few instructions.",
+      "parentUuid": "7e0eb397_215da488",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee71e134_e0be4af3",
         "filename": "src/compiler/translator/OutputGLSLBase.cpp",
         "patchSetId": 1
@@ -54,6 +72,57 @@
         "endLine": 382,
         "endChar": 74
       },
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a00b7b70_56bffa9d",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:26:22Z",
+      "side": 1,
+      "message": "Needs getIndentPrefix(-1)",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b73c3dfc_d09e7b5d",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:26:22Z",
+      "side": 1,
+      "message": "To fix the `case` indentation, you can do:\n\n    out \u003c\u003c getIndentPrefix(curNode-\u003egetAsCaseNode() ? -1 : 0);",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36b22bcb_d37cea62",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:26:22Z",
+      "side": 1,
+      "message": "Needs getIndentPrefix()",
       "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
