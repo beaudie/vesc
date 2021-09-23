@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba29e1db_0655f9a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-23T21:52:55Z",
+      "side": 1,
+      "message": "I think this is about ready! The last test that\u0027s failing is RobustResourceInitialization for depth textures, though it appears to be working correctly in GPU Traces.",
+      "revId": "12da225abf98e726d94d8589cca7abd87c7b0241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
