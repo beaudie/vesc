@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99a58d77_267937de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T18:06:01Z",
+      "side": 1,
+      "message": "Perfect, thanks for fixing these.",
+      "revId": "fb8b9a68944a2778178b97abe8bd7b2621b26d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8005668d_709c8c43",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T18:06:01Z",
+      "side": 1,
+      "message": "suggest `invalidProgram`.",
+      "range": {
+        "startLine": 2180,
+        "startChar": 15,
+        "endLine": 2180,
+        "endChar": 29
+      },
+      "revId": "fb8b9a68944a2778178b97abe8bd7b2621b26d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
