@@ -16,6 +16,24 @@
       "message": "LGTM. I guess the src\u003d\u003ddst case, it is okay to retain twice, once for readOnly and then retain for ReadWrite?",
       "revId": "21def51a195570861fe8b720e60d1f00784c3594",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cfcbc86_1725132c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-23T20:58:28Z",
+      "side": 1,
+      "message": "Yeah, it should be safe.   All we care about here is making sure src isn\u0027t garbage collected before we call copyFromBuffer() with the \"correct\" retain calls.   An extra retain call just means an extra release() call later, but it won\u0027t be freed until the counters finally hit zero.   I don\u0027t think trying to get the exact retain call counts here is worth any special  handling, since these aren\u0027t the \"real\" retain calls anyway.",
+      "parentUuid": "c4db8fac_cde7846f",
+      "revId": "21def51a195570861fe8b720e60d1f00784c3594",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
