@@ -22,6 +22,30 @@
       },
       "revId": "ddf7ac9422a6d33a0a4fc1497ad5c4a67470fc03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf1fa295_e5381164",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T18:14:23Z",
+      "side": 1,
+      "message": "I made it a template specifically for this to be optimized out.\n\nWith an ANGLE secondary CB build, I checked with a debug build, and the function is empty, so it\u0027s optimized out even in a debug build. It\u0027s hard to find anything given all the inlining that\u0027s going on with this class.\n\nNote that the \u003ctrue\u003e variant of this template is never instantiated in a build with ANGLE\u0027s secondary CB, so the cost (both in terms of binary size and this if) is only paid in a build with Vulkan secondary CBs. If there\u0027s something to optimize, we can think of doing that if we ever want to officially support the Vulkan secondary CB build, WDYT?",
+      "parentUuid": "32577526_878c0a99",
+      "range": {
+        "startLine": 401,
+        "startChar": 1,
+        "endLine": 407,
+        "endChar": 5
+      },
+      "revId": "ddf7ac9422a6d33a0a4fc1497ad5c4a67470fc03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
