@@ -215,6 +215,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1111c3cb_c5359049",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:10:00Z",
+      "side": 1,
+      "message": "Good catch Charlie. Tim, it should be ok to just add this line then:\n\n    src-\u003eretainReadOnly(\u0026contextVk-\u003egetResourceUseList());\n\nThe problem would probably be more obvious if somebody ever gets around to landing this change: https://chromium-review.googlesource.com/c/angle/angle/+/2832002",
+      "parentUuid": "67f8e691_c3ad0691",
+      "revId": "b46042d88aed9724c9be52e3f69500c0ff215978",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8abee2_963ab2ac",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 16
