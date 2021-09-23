@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7aa8c5d_11c3159f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-23T21:26:53Z",
+      "side": 1,
+      "message": "I tried the EGLSurfaceTest.ResizeWindow* tests.  As I mentioned in our 1-on-1, my recollection was that the windows don\u0027t really get resized on Android.  It\u0027s true with these tests as well as with the dEQP tests.  I tried before-after, and got the same result before-after:\n\n- ResizeWindow passes\n- ResizeWindowWithDraw fails in a way that shows that the window size stays the same\n\nBTW, the last test queries the width and height of the window, but doesn\u0027t check whether the queried values are what\u0027s desired.  I filed Monorail bug 6433 for fix-it week.",
+      "parentUuid": "1ceae985_32bc89fe",
+      "revId": "a9bf50689bc4564eb2ce115e0958b1373af33f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa250c34_22433da7",
@@ -84,6 +102,30 @@
       "writtenOn": "2021-09-23T14:56:42Z",
       "side": 1,
       "message": "nit: unnecessary parentheses are unnecessary",
+      "range": {
+        "startLine": 1624,
+        "startChar": 23,
+        "endLine": 1624,
+        "endChar": 24
+      },
+      "revId": "a9bf50689bc4564eb2ce115e0958b1373af33f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b012956_ba2dc757",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-23T21:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa250c34_22433da7",
       "range": {
         "startLine": 1624,
         "startChar": 23,
