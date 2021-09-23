@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1cda538_08f28fbd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3236,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-23T20:18:55Z",
+      "side": 1,
+      "message": "nit: mCommandBufferRecyclerMutex",
+      "range": {
+        "startLine": 3236,
+        "startChar": 38,
+        "endLine": 3236,
+        "endChar": 71
+      },
+      "revId": "7da5599160f2cf776294ab7fccf3f1257f024eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5020cdf_4e5cebf4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-23T20:18:55Z",
+      "side": 1,
+      "message": "This looks little awkward, where you\u0027re giving mCommandBuffer to the renderer, but then using it again in initializeCommandBuffer().   I think it would be better to use a pointer in this case, to remove the ambiguity here.",
+      "range": {
+        "startLine": 945,
+        "startChar": 0,
+        "endLine": 946,
+        "endChar": 48
+      },
+      "revId": "7da5599160f2cf776294ab7fccf3f1257f024eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdcc9edf_7650165c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-23T20:18:55Z",
+      "side": 1,
+      "message": "Should this be a member of CommandBuffer, so the relationship between the two doesn\u0027t need to be stated like this?",
+      "revId": "7da5599160f2cf776294ab7fccf3f1257f024eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
