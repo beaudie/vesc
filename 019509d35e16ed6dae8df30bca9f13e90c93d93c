@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe93af9c_9d436d02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-23T18:14:14Z",
+      "side": 1,
+      "message": "Great! done",
+      "parentUuid": "31df863a_097ae524",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee71e134_e0be4af3",
         "filename": "src/compiler/translator/OutputGLSLBase.cpp",
         "patchSetId": 1
@@ -66,6 +84,30 @@
       "writtenOn": "2021-09-22T23:53:29Z",
       "side": 1,
       "message": "nit: suggest you codify this as a constant with indent width",
+      "range": {
+        "startLine": 382,
+        "startChar": 73,
+        "endLine": 382,
+        "endChar": 74
+      },
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a204ce7e_e11f9f5f",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-23T18:14:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee71e134_e0be4af3",
       "range": {
         "startLine": 382,
         "startChar": 73,
@@ -95,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c435c1c3_463c61c0",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-23T18:14:14Z",
+      "side": 1,
+      "message": "Is this needed? See example in commit msg.",
+      "parentUuid": "a00b7b70_56bffa9d",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b73c3dfc_d09e7b5d",
         "filename": "src/compiler/translator/OutputGLSLBase.cpp",
         "patchSetId": 1
@@ -106,6 +166,24 @@
       "writtenOn": "2021-09-23T15:26:22Z",
       "side": 1,
       "message": "To fix the `case` indentation, you can do:\n\n    out \u003c\u003c getIndentPrefix(curNode-\u003egetAsCaseNode() ? -1 : 0);",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f72ff724_3508d110",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-23T18:14:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b73c3dfc_d09e7b5d",
       "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -123,6 +201,24 @@
       "writtenOn": "2021-09-23T15:26:22Z",
       "side": 1,
       "message": "Needs getIndentPrefix()",
+      "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5be16ae_b7ccc9b6",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-23T18:14:14Z",
+      "side": 1,
+      "message": "Is this needed? See example in commit msg.",
+      "parentUuid": "36b22bcb_d37cea62",
       "revId": "019509d35e16ed6dae8df30bca9f13e90c93d93c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
