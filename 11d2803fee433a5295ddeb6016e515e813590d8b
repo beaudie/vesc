@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b33adad_32acb249",
+        "filename": "src/tests/perf_tests/VertexArrayPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:00:02Z",
+      "side": 1,
+      "message": "nit: helper for duplicate code would be nice",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 45
+      },
+      "revId": "11d2803fee433a5295ddeb6016e515e813590d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
