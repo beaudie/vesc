@@ -16,6 +16,23 @@
       "message": "To match the code style and changes from the new TorusBufferStorage sample, I update the old Torus samples.",
       "revId": "c83083025f64c3e611e3654b6f62036caf72c91f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e054dc0d_0b730b8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-23T15:15:40Z",
+      "side": 1,
+      "message": "LGTM, thanks for maintaining these.",
+      "revId": "c83083025f64c3e611e3654b6f62036caf72c91f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
