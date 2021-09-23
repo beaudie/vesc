@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47841793_8b618211",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:50:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcfe94b4_b50c465a",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 12
+      },
+      "revId": "df93885a301e13fb1ad5110b1000b50caf57964a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4247b8f_266c0575",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-22T13:19:20Z",
       "side": 1,
       "message": "should this be a unique_ptr?",
+      "range": {
+        "startLine": 1357,
+        "startChar": 20,
+        "endLine": 1357,
+        "endChar": 40
+      },
+      "revId": "df93885a301e13fb1ad5110b1000b50caf57964a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d9eee4b_e68f23df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-23T15:50:44Z",
+      "side": 1,
+      "message": "It wasn\u0027t when it lived in RendererVk, and changing that needs more work.\n\nHow about keeping this refactoring simpler and defer that to a follow up?",
+      "parentUuid": "b4247b8f_266c0575",
       "range": {
         "startLine": 1357,
         "startChar": 20,
