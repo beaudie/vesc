@@ -760,6 +760,8 @@ ANGLE_INLINE void CommandBuffer<IsSecondary>::blitImage(const Image &srcImage,
 template <bool IsSecondary>
 ANGLE_INLINE VkResult CommandBuffer<IsSecondary>::begin(const VkCommandBufferBeginInfo &info)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandBuffer::begin");
+
     ASSERT(this->valid());
     ASSERT(mSize == 0);
     return vkBeginCommandBuffer(this->mHandle, &info);
@@ -776,6 +778,8 @@ ANGLE_INLINE VkResult CommandBuffer<IsSecondary>::end()
 template <bool IsSecondary>
 ANGLE_INLINE VkResult CommandBuffer<IsSecondary>::reset()
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandBuffer::reset");
+
     ASSERT(this->valid());
     mSize = 0;
     return vkResetCommandBuffer(this->mHandle, 0);
