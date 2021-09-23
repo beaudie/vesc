@@ -33,6 +33,92 @@
       "message": "Also, I could use some help going through and catching the broken extension links. The broken links to GLES extensions need to be added to \"_LINK_OVERRIDES\", the missing ANGLE extension links need to have tracking bugs so we draft these specs at some point.",
       "revId": "608d353b080a7c85adcf1e0e10f306a38301bfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c078204a_ddda6ca7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-23T17:44:37Z",
+      "side": 1,
+      "message": "Looks cool! One thing:\nSince it\u0027s manually updated, it\u0027s likely that some bots artifacts will be out of date. How feasible is it to add a test that fails if the bot name\u0027s json doesn\u0027t match the json artifact from the test? Probably would get messy with bot names, not wanting to include every bot, etc. Just an idea",
+      "revId": "608d353b080a7c85adcf1e0e10f306a38301bfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "894ebdea_545ff92b",
+        "filename": "doc/SupportedExtensions.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-23T17:44:37Z",
+      "side": 1,
+      "message": "Can you re-order this so it\u0027s clear:\nStep 1: Run tests on bot, copy output to new/existing json\nStep 2: Modify script if necessary and run code generation",
+      "range": {
+        "startLine": 270,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 65
+      },
+      "revId": "608d353b080a7c85adcf1e0e10f306a38301bfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30dfb3a3_9756e208",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-23T17:44:37Z",
+      "side": 1,
+      "message": "nit: Oddly named function. maybe getTestArtifactPath or something that is more clear that this function does not actually write out an artifact",
+      "range": {
+        "startLine": 137,
+        "startChar": 48,
+        "endLine": 137,
+        "endChar": 63
+      },
+      "revId": "608d353b080a7c85adcf1e0e10f306a38301bfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58ff0cb1_2b61cf1d",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-23T17:44:37Z",
+      "side": 1,
+      "message": "Can this be conditioned on if the arg --render-test-output-dir is set? That way a default run of this test doesn\u0027t leave artifacts and we have to be explicit. Up to you, would appreciate your input on this",
+      "range": {
+        "startLine": 140,
+        "startChar": 7,
+        "endLine": 143,
+        "endChar": 0
+      },
+      "revId": "608d353b080a7c85adcf1e0e10f306a38301bfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
