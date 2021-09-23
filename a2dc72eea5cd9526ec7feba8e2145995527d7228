@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b92636d_755d3135",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-23T15:17:06Z",
+      "side": 1,
+      "message": "I know this is first pass, but this is mostly the same as captureMappedBufferSnapshot, can be refactored to eliminate duplication.",
+      "range": {
+        "startLine": 5561,
+        "startChar": 1,
+        "endLine": 5576,
+        "endChar": 84
+      },
+      "revId": "a2dc72eea5cd9526ec7feba8e2145995527d7228",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
