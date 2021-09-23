@@ -16,6 +16,23 @@
       "message": "I exposed the IsGLExtensionEnabled function and moved out all state initialization out of the draw function. Also cached unit vectors. To be more explicit, the sync call now happens after writing to the mapped buffer.",
       "revId": "b22fe2e221fb43cb0a1911eb25dcfdc762c785f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bd04230_9275b69a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-23T15:22:02Z",
+      "side": 1,
+      "message": "re-lgtm",
+      "revId": "b22fe2e221fb43cb0a1911eb25dcfdc762c785f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
