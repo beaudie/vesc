@@ -182,6 +182,30 @@
       },
       "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde1f186_68b4953b",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T16:37:29Z",
+      "side": 1,
+      "message": "Moving to shared constants would be fine with me.  The relationship between the files isn\u0027t entirely clear to me.",
+      "parentUuid": "b805d462_7da2df1a",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
