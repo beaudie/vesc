@@ -158,6 +158,30 @@
       },
       "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b805d462_7da2df1a",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T16:24:38Z",
+      "side": 1,
+      "message": "Cody: we shouldn\u0027t try to share code with wgl_utils, which is a part of the GL back-end. I\u0027m fine with de-duping within this file.",
+      "parentUuid": "d40912b9_ddd864cc",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
