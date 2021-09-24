@@ -2569,6 +2569,15 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+    // Before redefining the image for any reason, check to see if it's about to go through mipmap
+    // generation.  In that case, drop every staged change for the subsequent mips after base, and
+    // make sure the image is created with the complete mip chain.
+    bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
+    if (isGenerateMipmap)
+    {
+        prepareForGenerateMipmap(contextVk);
+    }
+
     VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
     VkImageCreateFlags oldCreateFlags = mImageCreateFlags;
 
@@ -2590,15 +2599,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (mRequiresMutableStorage)
     {
         mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
-    }
-
-    // Before redefining the image for any reason, check to see if it's about to go through mipmap
-    // generation.  In that case, drop every staged change for the subsequent mips after base, and
-    // make sure the image is created with the complete mip chain.
-    bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
-    if (isGenerateMipmap)
-    {
-        prepareForGenerateMipmap(contextVk);
     }
 
     // For immutable texture, base level does not affect allocation. Only usage flags are. If usage
@@ -2626,8 +2626,8 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     // It is possible for the image to have a single level (because it doesn't use mipmapping),
-    // then have more levels defined in it and mipmapping enabled.  In that case, the image needs
-    // to be recreated.
+    // then have more levels defined in it and mipmapping enabled.  In that case, the image needs to
+    // be recreated.
     bool isMipmapEnabledByMinFilter = false;
     if (!isGenerateMipmap && mImage && mImage->valid() &&
         dirtyBits.test(gl::Texture::DIRTY_BIT_MIN_FILTER))
