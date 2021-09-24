@@ -2638,8 +2638,8 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     // It is possible for the image to have a single level (because it doesn't use mipmapping),
-    // then have more levels defined in it and mipmapping enabled.  In that case, the image needs
-    // to be recreated.
+    // then have more levels defined in it and mipmapping enabled.  In that case, the image needs to
+    // be recreated.
     bool isMipmapEnabledByMinFilter = false;
     if (!isGenerateMipmap && mImage && mImage->valid() &&
         dirtyBits.test(gl::Texture::DIRTY_BIT_MIN_FILTER))
