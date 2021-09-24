@@ -93,6 +93,23 @@
       },
       "revId": "3ed13d7e3662f2d3b29adb1ee026d4d0a237793f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0120086a_0ae5bca6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-24T18:06:28Z",
+      "side": 1,
+      "message": "nit: This naming makes it sound like we only want to notify when the storage changes, which acquireBufferHelper() would check for.   Instead, the caller already knows the storage is changing which is why they are indicating the notification needs to be performed.\n\nThis would be better as just: Notify.",
+      "revId": "3ed13d7e3662f2d3b29adb1ee026d4d0a237793f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
