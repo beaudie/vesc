@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37783787_41f2db95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T23:51:13Z",
+      "side": 1,
+      "message": "2) Comment added.\n\nI tested this with several more apps (Clash of Clans, RAID: Shadow Legends) and I think we\u0027re good.\n\nThe ProgramBinary issue I mentioned was because I left on enableProgramBinaryForCapture, which is designed to be used with apps that *insist* on using ProgramBinary.  This changed the behavior of previous apps we\u0027ve traced, some of which submit bad binaries and just expect the link to fail.  I\u0027ve got a couple of fixes queued up to address that, in case it happens again.",
+      "parentUuid": "cf6a2f2e_8cc4e6ac",
+      "revId": "8189886cfefd98d3959409c70225c417d4f6c94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1795a75_0b9b3e2f",
