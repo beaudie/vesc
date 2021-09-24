@@ -16,6 +16,52 @@
       "message": "Need feedback please",
       "revId": "ae2f292265ae4ef24d6b3dad36ffab7241721874",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "884ab953_4483af21",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T19:15:38Z",
+      "side": 1,
+      "message": "nit: can make it easier for the reader by saying `the VK_KHR_shared_presentable_images extension`",
+      "range": {
+        "startLine": 593,
+        "startChar": 28,
+        "endLine": 593,
+        "endChar": 62
+      },
+      "revId": "ae2f292265ae4ef24d6b3dad36ffab7241721874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e7487ea_b3a33c22",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T19:15:38Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 80,
+        "startChar": 50,
+        "endLine": 80,
+        "endChar": 56
+      },
+      "revId": "ae2f292265ae4ef24d6b3dad36ffab7241721874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

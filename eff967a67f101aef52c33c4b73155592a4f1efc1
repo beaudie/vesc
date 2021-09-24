@@ -86,6 +86,24 @@
       "parentUuid": "f9be4c0d_eedc4d28",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13cd0ab7_cddfa03b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T19:15:38Z",
+      "side": 1,
+      "message": "We can add a new `vk::ImageLayout` entry for that, and make sure image layout transitions from that layout are turned into execution barriers only.",
+      "parentUuid": "c0147f9b_1b5d55b3",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
