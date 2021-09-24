@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0228a20f_5046b5c3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T15:07:38Z",
+      "side": 1,
+      "message": "Usually every message site has an ID. To avoid exactly this code here. Please feel free to file a github issue or shoot them an email.",
+      "parentUuid": "2218238a_9d0d1d2e",
+      "range": {
+        "startLine": 342,
+        "startChar": 5,
+        "endLine": 345,
+        "endChar": 45
+      },
+      "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ca11a9d_e26f89ed",
