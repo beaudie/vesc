@@ -16,6 +16,24 @@
       "message": "Added shared constants used in both PIXELFORMATDESCRIPTOR and std::vector\u003cint\u003e pixelFormatAttribs.\nAdded comment and removed unused preservedSwap parameter.",
       "revId": "943e96e6e0cc64072fe129c0056c8382130aaeda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85b4041a_f489a3bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T17:00:13Z",
+      "side": 1,
+      "message": "LGTM, thank you Lubosz.",
+      "parentUuid": "34050b1c_24135667",
+      "revId": "943e96e6e0cc64072fe129c0056c8382130aaeda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
