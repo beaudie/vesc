@@ -62,6 +62,54 @@
       },
       "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f947f631_4b84f75f",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-24T16:14:18Z",
+      "side": 1,
+      "message": "The defaults are taken from GetDefaultPixelFormatAttributes in wgl_utils.cpp. I should add this as a comment. We also have parameters in ConfigParameters like depthBits and stencilBits that could be used here, even though I am not sure if they would translate that easily from EGL.",
+      "parentUuid": "bb777106_8c20e0c6",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ae46ae0_880ef3bc",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-09-24T16:14:18Z",
+      "side": 1,
+      "message": "The only reason is that GetDefaultPixelFormatAttributes from wgl_utils.cpp also exposes that parameter, which is always set to false. I can ignore it an always set WGL_SWAP_UNDEFINED_ARB for WGL_SWAP_METHOD_ARB.",
+      "parentUuid": "b1bf151f_d7a4e080",
+      "range": {
+        "startLine": 61,
+        "startChar": 85,
+        "endLine": 61,
+        "endChar": 98
+      },
+      "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
