@@ -68,6 +68,24 @@
       "parentUuid": "3dbe6cb6_2bb69490",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0147f9b_1b5d55b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T18:20:25Z",
+      "side": 1,
+      "message": "Hm, it\u0027s a bit tricky, because it means that internally the ImageHelper needs to know if this is a \"mutable\" image, transition once, then ignore all following image transitions. It\u0027s like a weird form of GENERAL. It\u0027ll interact with all of the image layout ImageHelper APIs. Having a lot of testing with validation layer checks would be recommended. ANGLE calls the image layout APIs throughout, we might need to rethink it to support this usage, not sure.",
+      "parentUuid": "f9be4c0d_eedc4d28",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
