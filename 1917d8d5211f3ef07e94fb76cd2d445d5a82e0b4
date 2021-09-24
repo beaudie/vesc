@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2218238a_9d0d1d2e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T14:42:29Z",
+      "side": 1,
+      "message": "I\u0027ll think about it. The message is very ... procedural, and the only way I see for the ids to be unique is if you encode the message itself in the id.",
+      "parentUuid": "850a4b59_748cbede",
+      "range": {
+        "startLine": 342,
+        "startChar": 5,
+        "endLine": 345,
+        "endChar": 45
+      },
+      "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ca11a9d_e26f89ed",
@@ -102,6 +126,30 @@
       "writtenOn": "2021-09-22T19:02:30Z",
       "side": 1,
       "message": "This reads a bit awkward to me that the default is return Print. If you can make it return Ignore here and return Print on line 390-393, it will be easier to read, I think.",
+      "range": {
+        "startLine": 397,
+        "startChar": 8,
+        "endLine": 397,
+        "endChar": 41
+      },
+      "revId": "1917d8d5211f3ef07e94fb76cd2d445d5a82e0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4ab381_cc98c7a8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T14:42:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ca11a9d_e26f89ed",
       "range": {
         "startLine": 397,
         "startChar": 8,
