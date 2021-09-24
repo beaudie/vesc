@@ -143,11 +143,14 @@ size_t GetPreferredDynamicBufferInitialSize(RendererVk *renderer,
     return initialSize;
 }
 
-ANGLE_INLINE bool SubDataSizeMeetsThreshold(size_t subDataSize, size_t bufferSize)
+ANGLE_INLINE bool ShouldAllocateNewMemoryForUpdate(ContextVk *contextVk,
+                                                   size_t subDataSize,
+                                                   size_t bufferSize)
 {
     // A sub data update with size > 50% of buffer size meets the threshold
     // to acquire a new BufferHelper from the pool.
-    return subDataSize > (bufferSize / 2);
+    return contextVk->getRenderer()->getFeatures().preferCPUForBufferSubData.enabled ||
+           subDataSize > (bufferSize / 2);
 }
 
 ANGLE_INLINE bool IsUsageDynamic(gl::BufferUsage usage)
@@ -962,8 +965,8 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
         // acquireAndUpdate over stagedUpdate. This could happen when app calls glBufferData with
         // same size and we will try to reuse the existing buffer storage.
         if (!mBuffer->isExternalBuffer() &&
-            (!mHasValidData ||
-             SubDataSizeMeetsThreshold(size, static_cast<size_t>(mState.getSize()))))
+            (!mHasValidData || ShouldAllocateNewMemoryForUpdate(
+                                   contextVk, size, static_cast<size_t>(mState.getSize()))))
         {
             ANGLE_TRY(acquireAndUpdate(contextVk, data, size, offset, notificationPolicy));
         }
