@@ -200,6 +200,24 @@
       "parentUuid": "0120086a_0ae5bca6",
       "revId": "3ed13d7e3662f2d3b29adb1ee026d4d0a237793f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec625881_148950da",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-24T20:57:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cf8fb0aa_2ad6c3b1",
+      "revId": "3ed13d7e3662f2d3b29adb1ee026d4d0a237793f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
