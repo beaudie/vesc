@@ -2625,6 +2625,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, allocateNonZeroMemory, false);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, shadowBuffers, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferCPUForBufferSubData, /*isARM*/ IsAndroid());
 
     ANGLE_FEATURE_CONDITION(&mFeatures, preferCPUWhenPreservingBufferData, IsAndroid());
 
