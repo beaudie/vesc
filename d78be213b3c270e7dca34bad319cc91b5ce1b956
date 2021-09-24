@@ -110,6 +110,30 @@
       },
       "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "110b1ded_e448db94",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T16:22:08Z",
+      "side": 1,
+      "message": "Don\u0027t they mirror the pixel format values above? Suggest you take the numeric values and make them constants used in both places in this file. I wouldn\u0027t worry about wgl_utils.cpp though.",
+      "parentUuid": "f947f631_4b84f75f",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
