@@ -319,8 +319,6 @@ void Buffer::onDataChanged()
 
     // Notify when data changes.
     onStateChange(angle::SubjectMessage::ContentsChanged);
-
-    mImpl->onDataChanged();
 }
 
 angle::Result Buffer::getIndexRange(const gl::Context *context,
