@@ -16,6 +16,29 @@
       "message": "Shabi PTAL, you are the ANGLE weird test expert.",
       "revId": "a6510cb40d494c60a3a9b3b7c43f92e7b677bdc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0a0d53d_726e0792",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T19:36:44Z",
+      "side": 1,
+      "message": "You know what\u0027s broken? VulkanClearTest, DepthStencilTest and VertexAttributeTest, all of which have this code:\n\n    void overrideFeaturesVk(FeaturesVk *featuresVk) override\n    {\n        featuresVk-\u003eoverrideFeatures({\"force_fallback_format\"}, true);\n    }\n\nIf you feel adventurous, do mind fixing those (in a separate CL)? You could use this new WithForceVulkanFallbackFormat() and remove overrideFeaturesVk().",
+      "range": {
+        "startLine": 326,
+        "startChar": 28,
+        "endLine": 326,
+        "endChar": 53
+      },
+      "revId": "a6510cb40d494c60a3a9b3b7c43f92e7b677bdc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
