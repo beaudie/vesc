@@ -2619,6 +2619,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, allocateNonZeroMemory, false);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, shadowBuffers, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferCPUForBufferDataSubData, isARM);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, persistentlyMappedBuffers, true);
 
