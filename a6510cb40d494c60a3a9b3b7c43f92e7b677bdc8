@@ -63,6 +63,30 @@
       },
       "revId": "a6510cb40d494c60a3a9b3b7c43f92e7b677bdc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7535fcc7_2c5d4395",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T19:46:23Z",
+      "side": 1,
+      "message": "Done. anglebug.com/6435",
+      "parentUuid": "93d2e54b_0ef36eaa",
+      "range": {
+        "startLine": 326,
+        "startChar": 28,
+        "endLine": 326,
+        "endChar": 53
+      },
+      "revId": "a6510cb40d494c60a3a9b3b7c43f92e7b677bdc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
