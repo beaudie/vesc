@@ -2007,8 +2007,7 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
                               layerCount);
     }
 
-    return respecifyImageStorageAndLevels(contextVk, mImage->getFirstAllocatedLevel(), baseLevel,
-                                          maxLevel);
+    return respecifyImageStorage(contextVk);
 }
 
 angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
