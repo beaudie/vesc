@@ -34,6 +34,24 @@
       "parentUuid": "f5af3ba8_10b33a74",
       "revId": "4ef203e1c691ff6ac7f1813567bc86d5d1ff4f78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80635dd_2a0f4748",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T15:08:44Z",
+      "side": 1,
+      "message": "It would be nice to have the traces document which extensions they use. It will require some validation reworking to record which extensions the app requires.",
+      "parentUuid": "31dcbe36_0fa44f70",
+      "revId": "4ef203e1c691ff6ac7f1813567bc86d5d1ff4f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
