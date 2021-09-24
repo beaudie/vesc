@@ -107,6 +107,17 @@ class VertexArrayState final : angle::NonCopyable
     AttributesMask mCachedInvalidMappedArrayBuffer;
 };
 
+class VertexArrayBufferContentsObservers final : angle::NonCopyable
+{
+  public:
+    VertexArrayBufferContentsObservers(VertexArray *vertexArray);
+    void enableForBuffer(Buffer *buffer, uint32_t bufferIndex);
+    void disableForBuffer(Buffer *buffer, uint32_t bufferIndex);
+
+  private:
+    VertexArray *mVertexArray;
+};
+
 class VertexArray final : public angle::ObserverInterface,
                           public LabeledObject,
                           public angle::Subject
@@ -399,6 +410,7 @@ class VertexArray final : public angle::ObserverInterface,
 
     mutable IndexRangeCache mIndexRangeCache;
     bool mBufferAccessValidationEnabled;
+    VertexArrayBufferContentsObservers mContentsObservers;
 };
 
 }  // namespace gl
