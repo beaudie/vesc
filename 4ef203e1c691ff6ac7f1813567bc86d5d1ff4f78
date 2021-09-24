@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5af3ba8_10b33a74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T14:13:04Z",
+      "side": 1,
+      "message": "LGTM, although it is kind of awkward to have both implicit and explicit extension requirements.  There\u0027s no quick way to know if any of the traces require EGL extensions.  I know we\u0027re moving in the direction of having them automatically generated, so this will be okay in the long run.  Jamie, is the plan to have those extensions show up as meta data at some point?",
+      "revId": "4ef203e1c691ff6ac7f1813567bc86d5d1ff4f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
