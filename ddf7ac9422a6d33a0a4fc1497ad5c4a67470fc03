@@ -70,6 +70,30 @@
       },
       "revId": "ddf7ac9422a6d33a0a4fc1497ad5c4a67470fc03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ce581b4_4ad3892a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T18:08:26Z",
+      "side": 1,
+      "message": "Sorry, I mean \"ANGLE\" primaries.",
+      "parentUuid": "4b881894_5fb5082e",
+      "range": {
+        "startLine": 401,
+        "startChar": 1,
+        "endLine": 407,
+        "endChar": 5
+      },
+      "revId": "ddf7ac9422a6d33a0a4fc1497ad5c4a67470fc03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
