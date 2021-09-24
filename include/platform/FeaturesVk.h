@@ -350,6 +350,15 @@ struct FeaturesVk : FeatureSetBase
         "Use CPU to do copy when preserving buffer data.", &members,
         "http://issuetracker.google.com/200067929"};
 
+    // When we update buffer data we usually face a choice to either clone a buffer and copy the
+    // data or stage a buffer update and use the GPU to do the copy. For some GPUs, a performance
+    // penalty to use the GPU to do copies. Setting this flag to true will always try to create a
+    // new buffer and use the CPU to copy data when possible.
+    Feature preferCPUForBufferSubData = {
+        "preferCPUForBufferSubData", FeatureCategory::VulkanFeatures,
+        "Prefer use CPU to do bufferSubData instead of staged update.", &members,
+        "http://issuetracker.google.com/200067929"};
+
     // Persistently map buffer memory until destroy, saves on map/unmap IOCTL overhead
     // for buffers that are updated frequently.
     Feature persistentlyMappedBuffers = {
