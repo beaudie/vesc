@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43b8d05e_c2876cfa",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-24T22:00:41Z",
+      "side": 0,
+      "message": "Since these are being removed in this patch, please update the struct in ContextMtl.h to match because otherwise Metal\u0027s debug layers will complain. See gman@\u0027s patch in https://chromium-review.googlesource.com/c/angle/angle/+/3163861 . (Actually I\u0027m not 100% sure about this - these constants appeared unreferenced. Is there another place the interface between the API and shaders is defined? Let\u0027s sync up with Gregg on Slack.)",
+      "revId": "eb1d5ca5e932677904769232bba23b0a4f8074b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4ad9cbe_85fcf34f",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-24T22:00:41Z",
+      "side": 0,
+      "message": "Why were these checks removed? Can they be put back?",
+      "revId": "eb1d5ca5e932677904769232bba23b0a4f8074b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
