@@ -19,6 +19,7 @@ namespace gl
 namespace
 {
 constexpr angle::SubjectIndex kImplementationSubjectIndex = 0;
+constexpr size_t kNoContentsObserver                      = std::numeric_limits<size_t>::max();
 }  // anonymous namespace
 
 BufferState::BufferState()
@@ -145,6 +146,8 @@ angle::Result Buffer::bufferDataImpl(Context *context,
         return angle::Result::Stop;
     }
 
+    bool wholeBuffer = size == mState.mSize;
+
     mIndexRangeCache.clear();
     mState.mUsage                = usage;
     mState.mSize                 = size;
@@ -152,7 +155,14 @@ angle::Result Buffer::bufferDataImpl(Context *context,
     mState.mStorageExtUsageFlags = flags;
 
     // Notify when storage changes.
-    onStateChange(angle::SubjectMessage::SubjectChanged);
+    if (wholeBuffer)
+    {
+        onContentsChange();
+    }
+    else
+    {
+        onStateChange(angle::SubjectMessage::SubjectChanged);
+    }
 
     return angle::Result::Continue;
 }
@@ -165,7 +175,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
 {
     if (mState.isMapped())
     {
-        // Per the OpenGL ES 3.0 spec, buffers are implicity unmapped when a call to
+        // Per the OpenGL ES 3.0 spec, buffers are implicitly unmapped when a call to
         // BufferData happens on a mapped buffer:
         //
         //     If any portion of the buffer object is mapped in the current context or any context
@@ -388,26 +398,39 @@ void Buffer::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessa
     onStateChange(message);
 }
 
+size_t Buffer::findContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex) const
+{
+    for (size_t observerIndex = 0; observerIndex < mContentsObservers.size(); ++observerIndex)
+    {
+        const ContentsObserver &observer = mContentsObservers[observerIndex];
+        if (observer.vertexArray == vertexArray && observer.bufferIndex == bufferIndex)
+        {
+            return observerIndex;
+        }
+    }
+
+    return kNoContentsObserver;
+}
+
 void Buffer::addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex)
 {
-    mContentsObservers.push_back({vertexArray, bufferIndex});
+    if (findContentsObserver(vertexArray, bufferIndex) == kNoContentsObserver)
+    {
+        mContentsObservers.push_back({vertexArray, bufferIndex});
+    }
 }
 
 void Buffer::removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex)
 {
-    for (size_t observerIndex = 0; observerIndex < mContentsObservers.size(); ++observerIndex)
+    size_t foundObserver = findContentsObserver(vertexArray, bufferIndex);
+    if (foundObserver != kNoContentsObserver)
     {
-        ContentsObserver &observer = mContentsObservers[observerIndex];
-        if (observer.vertexArray == vertexArray && observer.bufferIndex == bufferIndex)
+        size_t lastObserverIndex = mContentsObservers.size() - 1;
+        if (foundObserver != lastObserverIndex)
         {
-            size_t lastObserverIndex = mContentsObservers.size() - 1;
-            if (observerIndex != lastObserverIndex)
-            {
-                observer = mContentsObservers[lastObserverIndex];
-            }
-            mContentsObservers.pop_back();
-            return;
+            mContentsObservers[foundObserver] = mContentsObservers[lastObserverIndex];
         }
+        mContentsObservers.pop_back();
     }
 }
 
