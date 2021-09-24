@@ -2296,12 +2296,12 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     ASSERT(mState.hasBeenBoundAsAttachment());
+
     ANGLE_TRY(ensureRenderable(contextVk));
 
     if (!mImage->valid())
     {
-        // Immutable texture must already have a valid image
-        ASSERT(!mState.getImmutableFormat());
+        // We may reach here even with immutable texture due to switching to renderable formats
         const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
         ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
                             format.getActualImageFormatID(getRequiredImageAccess()),
@@ -3337,13 +3337,12 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
     // CPU.
     ANGLE_TRY(mImage->reformatStagedUpdate(contextVk, previousActualFormatID, actualFormatID));
 
-    // Make sure we update mImageUsage bits
+    // Make sure we update mImageUsageFlags bits
     ANGLE_TRY(ensureImageAllocated(contextVk, format));
 
     ANGLE_TRY(respecifyImageStorage(contextVk));
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
-    return refreshImageViews(contextVk);
+    return angle::Result::Continue;
 }
 
 // Return true if image's format does not match the actual format
