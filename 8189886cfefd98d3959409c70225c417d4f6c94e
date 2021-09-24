@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8eaa9a1_8d377a03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T05:28:28Z",
+      "side": 1,
+      "message": "1) Confirmed using Lubosz\u0027s upgraded Torus GLES2 sample which only calls UseProgram once at the beginning.  Also confirmed that if I remove the MarkResourceIDActive from CaptureMidExecutionSetup (ref), the capture is broken and the program is not captured.\n\n2) I tested with our command_and_conquer trace which uses PPO. I had to make one adjustment for it to work correctly, so this was good to check.  Specifically, I added a MarkResourceIDActive when creating ProgramPipelines in MEC.\n\nI also tested generally with Genshin Impact and that worked.  Shared setup went from ~320,000 lines to ~54,000, an ~83% reduction.\n\nI\u0027ll do more testing before landing to make sure this is solid.  My target app just updated and I seem to be running into ProgramBinary issues. :(",
+      "parentUuid": "39921cb1_0fcb02ba",
+      "revId": "8189886cfefd98d3959409c70225c417d4f6c94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1795a75_0b9b3e2f",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 5
@@ -36,6 +54,53 @@
         "startChar": 22,
         "endLine": 1216,
         "endChar": 64
+      },
+      "revId": "8189886cfefd98d3959409c70225c417d4f6c94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "172d2f86_dc0a8fb0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T05:28:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1795a75_0b9b3e2f",
+      "range": {
+        "startLine": 1216,
+        "startChar": 22,
+        "endLine": 1216,
+        "endChar": 64
+      },
+      "revId": "8189886cfefd98d3959409c70225c417d4f6c94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6e26cad_8f98c4db",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3529,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T05:28:28Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 3529,
+        "startChar": 12,
+        "endLine": 3529,
+        "endChar": 32
       },
       "revId": "8189886cfefd98d3959409c70225c417d4f6c94e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -64,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cf88d78_b9dc2189",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6638,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T05:28:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe0a6dce_e6cb5706",
+      "range": {
+        "startLine": 6638,
+        "startChar": 4,
+        "endLine": 6638,
+        "endChar": 67
+      },
+      "revId": "8189886cfefd98d3959409c70225c417d4f6c94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edd2b7f0_ca07042d",
@@ -77,6 +166,30 @@
       "writtenOn": "2021-09-22T23:06:59Z",
       "side": 1,
       "message": "nit: I don\u0027t think you need to std::move for gl::Range.. it\u0027s pretty much a value type.",
+      "range": {
+        "startLine": 6643,
+        "startChar": 45,
+        "endLine": 6643,
+        "endChar": 49
+      },
+      "revId": "8189886cfefd98d3959409c70225c417d4f6c94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ed12ee1_409415c0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-24T05:28:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edd2b7f0_ca07042d",
       "range": {
         "startLine": 6643,
         "startChar": 45,
