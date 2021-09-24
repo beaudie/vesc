@@ -52,6 +52,24 @@
       "parentUuid": "ae92a5de_b3b579ca",
       "revId": "598b5ed8e11c5739f2d141c3d7ca37eb5e3eeb19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59989c3c_6bb3920d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T19:39:22Z",
+      "side": 1,
+      "message": "ARM\u0027s errors were few, and had 1 or 2 root causes. They haven\u0027t got back to me regarding whether they fixed them in their driver, or not, but once the change lands there would be more pressure to fix them on either side.\n\nIMG, we\u0027ll find out on Monday.",
+      "parentUuid": "9aa7c5d4_b9f0f969",
+      "revId": "598b5ed8e11c5739f2d141c3d7ca37eb5e3eeb19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
