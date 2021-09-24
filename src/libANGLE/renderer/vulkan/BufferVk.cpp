@@ -401,9 +401,11 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+    const bool wholeSize = size == static_cast<size_t>(mState.getSize());
+
     // BufferData call is re-specifying the entire buffer
     // Release and init a new mBuffer with this new size
-    if (size != static_cast<size_t>(mState.getSize()))
+    if (!wholeSize)
     {
         // Release and re-create the memory and buffer.
         release(contextVk);
@@ -444,8 +446,11 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
 
     if (data)
     {
-        ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, 0,
-                              BufferNotificationPolicy::DoNotNotify));
+        // Treat full-buffer updates as SubData calls. This means using the notify policy.
+        BufferNotificationPolicy policy = wholeSize ? BufferNotificationPolicy::OnStorageChange
+                                                    : BufferNotificationPolicy::DoNotNotify;
+
+        ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, 0, policy));
     }
 
     return angle::Result::Continue;
