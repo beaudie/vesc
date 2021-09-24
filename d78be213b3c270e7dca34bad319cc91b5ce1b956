@@ -206,6 +206,30 @@
       },
       "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a83a0b4_3496f691",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T16:45:27Z",
+      "side": 1,
+      "message": "wgl_utils.cpp lives in src/libANGLE/renderer/gl/wgl . This file is in util/windows. Neither can see the other, and there\u0027s no common code path right now for \"only WGL things\". It\u0027s a bit out of scope for this change to define such a sharing relationship.",
+      "parentUuid": "bde1f186_68b4953b",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "d78be213b3c270e7dca34bad319cc91b5ce1b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
