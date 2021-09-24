@@ -104,6 +104,24 @@
       "parentUuid": "c0147f9b_1b5d55b3",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40a3b2b6_3e213a3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-09-24T20:54:02Z",
+      "side": 1,
+      "message": "I did notice that, I was thinking to add ImageLayout::SharedPresent right after ImageLayout::Present. But where to put the barrier call? I have no clue at this time.\n\nI am supposing that UNDEFINED-\u003eSharedPresent would likely do nothing? After that it just stays that way, which I guess anywhere else it might change and we needed to do something?\n\nWhile the tests are not failing, And I can see logs that say \"Not Supported\u0027 and other logs that just list the dEQP-EGL...render_buffer.* test, I haven\u0027t had a log that says - extension enabled (from by debug messages), transitioned to single image mode (from debug messages), and passed. So I\u0027m not sure if the tests are actually running, or if running and skipping without a message.\n\nThe lack of transition doesn\u0027t seem to cause issue so far, but maybe tests are not fully ran.",
+      "parentUuid": "13cd0ab7_cddfa03b",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
