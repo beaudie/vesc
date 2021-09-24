@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a2fda2d_0978d6ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-24T18:21:41Z",
+      "side": 1,
+      "message": "Please re-ping when you\u0027re ready to land this Shabi.",
+      "revId": "598b5ed8e11c5739f2d141c3d7ca37eb5e3eeb19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
