@@ -2191,7 +2191,7 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
     {
         ASSERT((mImage->getFirstAllocatedLevel() == gl::LevelIndex(0)) ||
                (mImage->getFirstAllocatedLevel() == baseLevel));
-        releaseImage(contextVk);
+        // releaseImage(contextVk);
         return angle::Result::Continue;
     }
 
@@ -2579,12 +2579,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         mRequiresMutableStorage = true;
     }
 
-    // Create a new image if used as attachment for the first time.
-    if (mState.hasBeenBoundAsAttachment())
-    {
-        ANGLE_TRY(ensureRenderable(contextVk));
-    }
-
     // If we're handling dirty srgb decode/override state, we may have to reallocate the image with
     // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT. Vulkan requires this bit to be set in order to use
     // imageviews with a format that does not match the texture's internal format.
@@ -2596,6 +2590,14 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (mRequiresMutableStorage)
     {
         mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+    }
+
+    // Create a new image if used as attachment for the first time. This must called before
+    // prepareForGenerateMipmap since this changes the format which prepareForGenerateMipmap replies
+    // on.
+    if (mState.hasBeenBoundAsAttachment())
+    {
+        ANGLE_TRY(ensureRenderable(contextVk));
     }
 
     // Before redefining the image for any reason, check to see if it's about to go through mipmap
