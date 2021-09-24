@@ -170,7 +170,17 @@ class Buffer final : public RefCountObject<BufferID>,
     // angle::ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    void addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+    void removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+
   private:
+    // Some Vertex Array Objects track buffer data updates.
+    struct ContentsObserver
+    {
+        VertexArray *vertexArray = nullptr;
+        uint32_t bufferIndex     = 0;
+    };
+
     angle::Result bufferDataImpl(Context *context,
                                  BufferBinding target,
                                  const void *data,
@@ -183,10 +193,13 @@ class Buffer final : public RefCountObject<BufferID>,
                                          GLsizeiptr size,
                                          GLbitfield flags);
 
+    void onContentsChange();
+
     BufferState mState;
     rx::BufferImpl *mImpl;
     angle::ObserverBinding mImplObserver;
 
+    angle::FastVector<ContentsObserver, angle::kMaxFixedObservers> mContentsObservers;
     mutable IndexRangeCache mIndexRangeCache;
 };
 
