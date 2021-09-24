@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95904f58_22fb29fb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T02:13:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1cda538_08f28fbd",
+      "range": {
+        "startLine": 3236,
+        "startChar": 38,
+        "endLine": 3236,
+        "endChar": 71
+      },
+      "revId": "7da5599160f2cf776294ab7fccf3f1257f024eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5020cdf_4e5cebf4",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d0992e1_1abf5ed4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T02:13:24Z",
+      "side": 1,
+      "message": "But that\u0027s exactly the intention; you hand off the object to someone else, then reinitialize it for another purpose. Here is an analogous example that should be familiar:\n\n    v.resize(M);\n    use(v);\n    give_to_someone(std::move(v));\n    // reinitialize v for its next use\n    v.resize(N);\n    use(v);\n\nDoes the above look less awkward now? `std::move` here is a strong signal that the object\u0027s content is going away (i.e. it\u0027s being de-initialized). Passing a pointer doesn\u0027t make it as clear.",
+      "parentUuid": "e5020cdf_4e5cebf4",
+      "range": {
+        "startLine": 945,
+        "startChar": 0,
+        "endLine": 946,
+        "endChar": 48
+      },
+      "revId": "7da5599160f2cf776294ab7fccf3f1257f024eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdcc9edf_7650165c",
@@ -60,6 +108,24 @@
       "writtenOn": "2021-09-23T20:18:55Z",
       "side": 1,
       "message": "Should this be a member of CommandBuffer, so the relationship between the two doesn\u0027t need to be stated like this?",
+      "revId": "7da5599160f2cf776294ab7fccf3f1257f024eb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c79ad54d_bf7842bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-24T02:13:24Z",
+      "side": 1,
+      "message": "No. `CommandBuffer` is an alias of either SecondaryCommandBuffer (where CommandPool is not applicable) or the wrapper class vk::CommandBuffer (which is just a wrapper and we don\u0027t add logic to it).",
+      "parentUuid": "fdcc9edf_7650165c",
       "revId": "7da5599160f2cf776294ab7fccf3f1257f024eb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
