@@ -3340,9 +3340,8 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
     ANGLE_TRY(ensureImageAllocated(contextVk, format));
 
     ANGLE_TRY(respecifyImageStorage(contextVk));
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
-    return refreshImageViews(contextVk);
+    return angle::Result::Continue;
 }
 
 // Return true if image's format does not match the actual format
