@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e151820d_14ac6d67",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-25T02:31:51Z",
+      "side": 1,
+      "message": "Please remove this",
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
