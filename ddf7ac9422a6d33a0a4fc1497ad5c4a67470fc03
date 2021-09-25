@@ -94,6 +94,30 @@
       },
       "revId": "ddf7ac9422a6d33a0a4fc1497ad5c4a67470fc03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66174861_7640c6fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-25T03:00:29Z",
+      "side": 1,
+      "message": "\u003e Is the function empty or is there a blank space where the function call should be?\n\nThe function is empty, but that was from a debug build. In a release build, there\u0027s so much inlining I couldn\u0027t find any trace of any of these functions.\n\nLet me take a look actually. I recently noticed that when SecondaryCommandBuffer replays the commands, it calls `vkCmd*` directly and doesn\u0027t use the wrapper. It means that for the most part, the subset of commands the primary variant and the secondary variant record are disjoint. There shouldn\u0027t be many duplicates then. Mind you, this also means that the template is not realistically generating any duplicate code.\n\nIf I apply this ++mSize a bit less zealously (i.e. only on draw calls, which is what we really care about when looking at the size), then most functions can be implemented in a parent class (that\u0027s used by the primary CB, and doesn\u0027t include draw/dispatch), and the child class wraps the rest and would be used only by secondary CBs.\n\nStay tuned.",
+      "parentUuid": "8ce581b4_4ad3892a",
+      "range": {
+        "startLine": 401,
+        "startChar": 1,
+        "endLine": 407,
+        "endChar": 5
+      },
+      "revId": "ddf7ac9422a6d33a0a4fc1497ad5c4a67470fc03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
