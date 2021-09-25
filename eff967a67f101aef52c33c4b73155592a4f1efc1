@@ -122,6 +122,24 @@
       "parentUuid": "13cd0ab7_cddfa03b",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beb8de1d_3008d298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-25T02:12:17Z",
+      "side": 1,
+      "message": "So the barrier-related data go in vk_helpers.cpp in kImageMemoryBarrierData. You should add an entry for ImageLayout::SharedPresent in there. Then you should add a layout transition in the code to that layout.\n\nYou said:\n\n\u003e After this initial transition, any image usage that was requested during swapchain creation can be performed on the image without layout transitions being performed\n\nI have a question here. Is that saying that `SHARED_PRESENT` works for all usage, but also other layouts work? Or is it saying that the image *must* stay in `SHARED_PRESENT`? The former case is easy, and means that ImageLayout::Present and ImageLayout::SharedPresent can be pretty much treated the same. The latter case would require some special-casing in a few places in code that manipulate ImageHelper::mCurrentLayout, ideally such that it\u0027s not a mess.",
+      "parentUuid": "40a3b2b6_3e213a3c",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
