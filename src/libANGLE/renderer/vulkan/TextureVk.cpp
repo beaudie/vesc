@@ -1993,6 +1993,7 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
 
     if (!respecifyImage)
     {
+#if 0
         // Don't need to respecify the texture; but do need to update which vkImageView's are
         // served up by ImageViewHelper
 
@@ -2005,6 +2006,9 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
         return initImageViews(contextVk, mImage->getActualFormat(),
                               baseLevelDesc.format.info->sized, maxLevel - baseLevel + 1,
                               layerCount);
+#else
+        return angle::Result::Continue;
+#endif
     }
 
     ASSERT(baseLevel == gl::LevelIndex(mState.getEffectiveBaseLevel()));
