@@ -158,6 +158,24 @@
       "parentUuid": "beb8de1d_3008d298",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b414f45_c4410817",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T21:20:55Z",
+      "side": 1,
+      "message": "Ok then, when you add `ImageLayout::SharedPresent`, you could try something like this:\n\n     bool ImageHelper::updateLayoutAndBarrier(Context *context,\n                                              VkImageAspectFlags aspectMask,\n                                              ImageLayout newLayout,\n                                              PipelineBarrier *barrier)\n     {\n+        // Once you transition to ImageLayout::SharedPresent, you never transition out of it.\n+        if (mCurrentLayout \u003d\u003d ImageLayout::SharedPresent)\n+        {\n+            newLayout \u003d ImageLayout::SharedPresent;\n+        }\n         bool barrierModified \u003d false;\n         if (newLayout \u003d\u003d mCurrentLayout)\n\nYou can also add an ASSERT in ImageHelper::barrierImpl like this:\n\n    // Make sure we never transition out of SharedPresent\n    ASSERT(mCurrentLayout !\u003d ImageLayout::SharedPresent || newLayout \u003d\u003d ImageLayout::SharedPresent)\n\nYou might need to adjust a few ASSERTs elsewhere too, for example where ImageHelper::clearColor ASSERTs that the layout is TransferDst, it can now also be ImageLayout::SharedPresent.",
+      "parentUuid": "7437137e_4a01fea5",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
