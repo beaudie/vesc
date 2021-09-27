@@ -101,6 +101,7 @@
 6525 MAC METAL : GLSLTest.EmbeddedStructUniformArray/* = SKIP
 6525 MAC NVIDIA METAL : GLSLTest.VectorScalarDivideAndAddInLoop/* = SKIP
 6525 MAC NVIDIA METAL : GLSLTest.VectorScalarMultiplyAndAddInLoop/* = SKIP
+6347 MAC OPENGL : FramebufferTestWithFormatFallback.R5G5B5A1_TexImageAndBaseLevelChange/* = SKIP
 
 // Failures from Transform Feedback Enablement. Passes on BigSur
 6407 MAC NVIDIA METAL : TransformFeedbackTest.OptimizedVaryings/ES3_Metal = SKIP
