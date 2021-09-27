@@ -1111,13 +1111,16 @@ class FramebufferTestWithFormatFallback : public ANGLETest
     }
 
     void texImageFollowedByFBORead(GLenum internalFormat, GLenum type);
+    void texImageFollowedByBaseLevelChangeAndFBORead(GLenum internalFormat, GLenum type);
     void blitCopyFollowedByFBORead(GLenum internalFormat, GLenum type);
     void copyTexImageFollowedBySampling(GLenum internalFormat, GLenum type);
     void cubeTexImageFollowedByFBORead(GLenum internalFormat, GLenum type);
     GLushort convertGLColorToUShort(GLenum internalFormat, const GLColor &color);
-    static constexpr GLsizei kTexWidth  = 16;
-    static constexpr GLsizei kTexHeight = 16;
-    static constexpr GLsizei kMaxLevel  = 4;
+    static constexpr GLsizei kTexWidth      = 16;
+    static constexpr GLsizei kTexHeight     = 16;
+    static constexpr GLsizei kMaxLevel      = 4;
+    const GLColor kMipColors[kMaxLevel + 1] = {GLColor::red, GLColor::green, GLColor::blue,
+                                               GLColor::magenta, GLColor::cyan};
 };
 
 GLushort FramebufferTestWithFormatFallback::convertGLColorToUShort(GLenum internalFormat,
@@ -1161,24 +1164,109 @@ void FramebufferTestWithFormatFallback::texImageFollowedByFBORead(GLenum interna
 
     const GLColor kColor = GLColor::blue;
 
+    GLenum minFilters[] = {GL_NEAREST, GL_LINEAR_MIPMAP_LINEAR};
+    for (GLenum minFilter : minFilters)
+    {
+        for (int loop = 0; loop < 4; loop++)
+        {
+            GLTexture texture;
+            glBindTexture(GL_TEXTURE_2D, texture);
+            const GLushort u16Color = convertGLColorToUShort(internalFormat, kColor);
+            std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
+            if (loop == 0 || loop == 2)
+            {
+                glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA,
+                             type, pixels.data());
+            }
+            else
+            {
+                glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, kTexWidth, kTexHeight);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTexWidth, kTexHeight, GL_RGBA, type,
+                                pixels.data());
+            }
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+            if (loop >= 2)
+            {
+                // Draw quad using texture
+                glUseProgram(program);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, texture);
+                glClearColor(0, 0, 0, 1);
+                glClear(GL_COLOR_BUFFER_BIT);
+                glUniform1f(lodLocation, 0);
+                drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+                EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 0, 0, 255, 255);
+                ASSERT_GL_NO_ERROR();
+            }
+
+            // Change minFilter
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+
+            // attach blue texture to FBO
+            GLFramebuffer fbo;
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+            EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+            EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColor.R, kColor.G, kColor.B, kColor.A);
+            ASSERT_GL_NO_ERROR();
+        }
+    }
+}
+TEST_P(FramebufferTestWithFormatFallback, R5G5B5A1_TexImage)
+{
+    texImageFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
+}
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_TexImage)
+{
+    texImageFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
+}
+
+void FramebufferTestWithFormatFallback::texImageFollowedByBaseLevelChangeAndFBORead(
+    GLenum internalFormat,
+    GLenum type)
+{
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Texture2DLod(), essl3_shaders::fs::Texture2DLod());
+    GLint textureLocation = glGetUniformLocation(program, essl3_shaders::Texture2DUniform());
+    ASSERT_NE(-1, textureLocation);
+    GLint lodLocation = glGetUniformLocation(program, essl3_shaders::LodUniform());
+    ASSERT_NE(-1, lodLocation);
+
     for (int loop = 0; loop < 4; loop++)
     {
         GLTexture texture;
         glBindTexture(GL_TEXTURE_2D, texture);
-        const GLushort u16Color = convertGLColorToUShort(internalFormat, kColor);
-        std::vector<GLushort> pixels(kTexWidth * kTexHeight, u16Color);
         if (loop == 0 || loop == 2)
         {
-            glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, kTexWidth, kTexHeight, 0, GL_RGBA, type,
-                         pixels.data());
+            GLsizei texWidth  = kTexWidth;
+            GLsizei texHeight = kTexHeight;
+            for (int lod = 0; lod <= kMaxLevel; lod++)
+            {
+                const GLushort u16Color = convertGLColorToUShort(internalFormat, kMipColors[lod]);
+                std::vector<GLushort> pixels(texWidth * texHeight, u16Color);
+                glTexImage2D(GL_TEXTURE_2D, lod, internalFormat, texWidth, texHeight, 0, GL_RGBA,
+                             type, pixels.data());
+                texWidth >>= 1;
+                texHeight >>= 1;
+            }
         }
         else
         {
-            glTexStorage2D(GL_TEXTURE_2D, 1, internalFormat, kTexWidth, kTexHeight);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTexWidth, kTexHeight, GL_RGBA, type,
-                            pixels.data());
+            glTexStorage2D(GL_TEXTURE_2D, 5, internalFormat, kTexWidth, kTexHeight);
+            GLsizei texWidth  = kTexWidth;
+            GLsizei texHeight = kTexHeight;
+            for (int lod = 0; lod <= kMaxLevel; lod++)
+            {
+                const GLushort u16Color = convertGLColorToUShort(internalFormat, kMipColors[lod]);
+                std::vector<GLushort> pixels(texWidth * texHeight, u16Color);
+                glTexSubImage2D(GL_TEXTURE_2D, lod, 0, 0, texWidth, texHeight, GL_RGBA, type,
+                                pixels.data());
+                texWidth >>= 1;
+                texHeight >>= 1;
+            }
         }
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         if (loop >= 2)
@@ -1195,22 +1283,30 @@ void FramebufferTestWithFormatFallback::texImageFollowedByFBORead(GLenum interna
             ASSERT_GL_NO_ERROR();
         }
 
-        // attach blue texture to FBO
-        GLFramebuffer fbo;
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
-        EXPECT_PIXEL_EQ(kTexWidth / 2, kTexHeight / 2, kColor.R, kColor.G, kColor.B, kColor.A);
-        ASSERT_GL_NO_ERROR();
+        // Change base level
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+
+        // attach texture to FBO and verify color
+        for (int lod = 1; lod <= kMaxLevel; lod++)
+        {
+            GLFramebuffer fbo;
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture,
+                                   lod);
+            EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+            EXPECT_PIXEL_EQ(0, 0, kMipColors[lod].R, kMipColors[lod].G, kMipColors[lod].B,
+                            kMipColors[lod].A);
+            ASSERT_GL_NO_ERROR();
+        }
     }
 }
-TEST_P(FramebufferTestWithFormatFallback, R5G5B5A1_TexImage)
+TEST_P(FramebufferTestWithFormatFallback, R5G5B5A1_TexImageAndBaseLevelChange)
 {
-    texImageFollowedByFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
+    texImageFollowedByBaseLevelChangeAndFBORead(GL_RGB5_A1, GL_UNSIGNED_SHORT_5_5_5_1);
 }
-TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_TexImage)
+TEST_P(FramebufferTestWithFormatFallback, R4G4B4A4_TexImageAndBaseLevelChange)
 {
-    texImageFollowedByFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
+    texImageFollowedByBaseLevelChangeAndFBORead(GL_RGBA4, GL_UNSIGNED_SHORT_4_4_4_4);
 }
 
 // Test texture format fallback while it has staged updates and then do copyTexImage2D and followed
