@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37693b26_cc18b0d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-27T18:58:37Z",
+      "side": 1,
+      "message": "shabi, as a follow-up, could you define this class always, and just replace the using command with this class? I am not sure if you saw my comments - I think Gerrit ate them or something. I suggest we avoid code in #ifdefs.",
+      "range": {
+        "startLine": 193,
+        "startChar": 6,
+        "endLine": 193,
+        "endChar": 35
+      },
+      "revId": "dc99db91403c240bbd51e01cab1ac7680ec9b780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
