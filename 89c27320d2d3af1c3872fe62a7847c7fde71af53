@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23174bf4_6c7cbc2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T21:09:38Z",
+      "side": 1,
+      "message": "PTAL. I ended up having to wrap everything and add the ++mSize because there are a number of places we need the answer to the query \"empty()\", and some times all the command buffer has is a pipeline barrier, or some such thing. Some functions are not wrapped, like bindXYZ because they are always accompanied by a draw call. In fact, what\u0027s bound is undone at the end of the command buffer, so we can\u0027t meaningfully have a command buffer that only binds things.\n\nAside from the excessive wrapping, the user-side code does look much nicer now.",
+      "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
