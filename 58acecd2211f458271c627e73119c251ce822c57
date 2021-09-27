@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06aecc2e_eda7dc0c",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T18:25:22Z",
+      "side": 1,
+      "message": "Call `mContentsObservers.remove_and_permute()`?",
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a44c931_428550ce",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T18:25:22Z",
+      "side": 1,
+      "message": "Ideally you would have an implementation that treats VertexArrays and Textures the same; less chance of bugs and consistent performance between the two.",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 19
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d807ce5_a743430c",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T18:25:22Z",
+      "side": 1,
+      "message": "IIUC, the VAO is now twice observing the buffer, right? Why isn\u0027t this removed in the same place it\u0027s removed from the other observer list?",
+      "range": {
+        "startLine": 139,
+        "startChar": 20,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "128b0351_cc3f45ff",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7028,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T18:25:22Z",
+      "side": 1,
+      "message": "nit:\n\n    ... \u003d {1, 1, 1, 1, 0, 0, 0, 0};",
+      "range": {
+        "startLine": 7019,
+        "startChar": 36,
+        "endLine": 7028,
+        "endChar": 0
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
