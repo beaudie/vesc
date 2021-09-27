@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00cc7a8d_34b0d615",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-27T18:35:33Z",
+      "side": 1,
+      "message": "Don\u0027t want to keep this in limbo forever so going to proactively approve any reasonable solution.",
+      "revId": "fab83d67150cd3c7c76986903df5df0005624215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

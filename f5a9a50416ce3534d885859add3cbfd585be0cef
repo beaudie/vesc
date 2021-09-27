@@ -16,6 +16,24 @@
       "message": "@Jamie, how do you like the new version?",
       "revId": "f5a9a50416ce3534d885859add3cbfd585be0cef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b576df29_e6766b33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-27T18:35:33Z",
+      "side": 1,
+      "message": "I\u0027d prefer having minimal #ifdefs to avoiding the template. Maybe you can always compile this version with some ANGLE_MAYBE_UNUSED and selective \"using\" typedefs? I was imagining an inheritance thing but other schemes could work.",
+      "parentUuid": "c7788b1e_ae84b51d",
+      "revId": "f5a9a50416ce3534d885859add3cbfd585be0cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
