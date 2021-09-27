@@ -22,6 +22,30 @@
       },
       "revId": "dc99db91403c240bbd51e01cab1ac7680ec9b780",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec822ce4_522377b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T19:17:41Z",
+      "side": 1,
+      "message": "Sure, I\u0027ll do that in the next change. Yes, gerrit showed me two empty messages, I thought you had something then deleted it.",
+      "parentUuid": "37693b26_cc18b0d3",
+      "range": {
+        "startLine": 193,
+        "startChar": 6,
+        "endLine": 193,
+        "endChar": 35
+      },
+      "revId": "dc99db91403c240bbd51e01cab1ac7680ec9b780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
