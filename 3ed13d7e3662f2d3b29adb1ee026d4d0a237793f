@@ -144,6 +144,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd6ca1a_b53a8c42",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T15:01:20Z",
+      "side": 1,
+      "message": "Ack\n\nDid I not +2?",
+      "parentUuid": "d5b43425_c9f60943",
+      "range": {
+        "startLine": 433,
+        "startChar": 81,
+        "endLine": 433,
+        "endChar": 92
+      },
+      "revId": "3ed13d7e3662f2d3b29adb1ee026d4d0a237793f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf78cf7c_356a928e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-27T15:01:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d5b43425_c9f60943",
+      "range": {
+        "startLine": 433,
+        "startChar": 81,
+        "endLine": 433,
+        "endChar": 92
+      },
+      "revId": "3ed13d7e3662f2d3b29adb1ee026d4d0a237793f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27552b8a_32fb5f05",
