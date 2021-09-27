@@ -140,6 +140,24 @@
       "parentUuid": "40a3b2b6_3e213a3c",
       "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7437137e_4a01fea5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-09-27T20:21:23Z",
+      "side": 1,
+      "message": "My interpretation is that it transitions once to SHARED_PRESENT and stays there.",
+      "parentUuid": "beb8de1d_3008d298",
+      "revId": "eff967a67f101aef52c33c4b73155592a4f1efc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
