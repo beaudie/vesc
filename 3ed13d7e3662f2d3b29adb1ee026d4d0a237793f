@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5b43425_c9f60943",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-27T14:58:03Z",
+      "side": 1,
+      "message": "Shabi and I chatted offline and agree it\u0027s likely there\u0027s no bug here because of the existing notifications in gl::Buffer.\n\nShabi are there any other issues left to resolve before landing this?",
+      "parentUuid": "e7f232b6_29635eb6",
+      "range": {
+        "startLine": 433,
+        "startChar": 81,
+        "endLine": 433,
+        "endChar": 92
+      },
+      "revId": "3ed13d7e3662f2d3b29adb1ee026d4d0a237793f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "27552b8a_32fb5f05",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
