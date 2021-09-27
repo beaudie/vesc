@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f8b92a3_85b2553d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "This was done, but had one more comment.",
+      "parentUuid": "fb7ce497_855fc451",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "380be452_d7d5fe74",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Please remove this paragraph; gman@ handled this in a different CL.",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1848f72c_920a1167",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Still needs to be done.",
+      "parentUuid": "380be452_d7d5fe74",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec394d4f_c5975125",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Still an open question.",
+      "parentUuid": "e3d56417_521f0192",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "431e4b38_e1045896",
         "filename": "/COMMIT_MSG",
         "patchSetId": 10
@@ -65,6 +119,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Left several comments below about the skips which were added for these tests in a previous version of this CL. Please try un-skipping these tests and let\u0027s see how they\u0027re doing with the latest code and fixes.",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87afb57f_c37dac30",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Sounds like these will all be unskipped, so resolving this.",
+      "parentUuid": "431e4b38_e1045896",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +154,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Please revise / remove this paragraph - it\u0027s no longer correct.",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9d68be4_747875b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Still needs to be done.",
+      "parentUuid": "7d248ace_ddd03e3a",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77a0bd79_7b46acbc",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "960f71a5_50be5971",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8d92fe9_a970fdf0",
@@ -154,6 +262,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fedbae9_a341fd9c",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a2ad6c0_adf58d8e",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23a31c06_a2978396",
@@ -167,6 +293,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Reference anglebug.com/6395.",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "847d8815_26b3944e",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23a31c06_a2978396",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -188,6 +332,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e1990c3_587a5166",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcb908a7_b0ec64a1",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4114c19_227612e6",
@@ -201,6 +363,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this workaround still needed? If not, let\u0027s remove it in this CL.",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc3f0c9b_21f632ba",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4114c19_227612e6",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
