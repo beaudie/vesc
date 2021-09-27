@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b15bc37_505e0df9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "Nice, thanks Kyle!",
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e151820d_14ac6d67",
@@ -71,6 +88,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b21f9b7_1d8f305a",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AstHelpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "FYI, from https://chromium.googlesource.com/angle/angle/+/HEAD/doc/CodingStandard.md\n\"{DO} avoid use of default arguments.\"\n\nLooks like the only 3 call sites are above in AddExplicitTypeCasts.cpp, you can just update the signature to add this arg.\n\nSame for below",
+      "range": {
+        "startLine": 148,
+        "startChar": 27,
+        "endLine": 148,
+        "endChar": 62
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7cf3b33_09730095",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "nit: Same note about default arguments.",
+      "range": {
+        "startLine": 267,
+        "startChar": 37,
+        "endLine": 268,
+        "endChar": 68
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2033e346_b44be37b",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ProgramPrelude.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "nit: Same note about default arguments.",
+      "range": {
+        "startLine": 83,
+        "startChar": 23,
+        "endLine": 84,
+        "endChar": 54
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15faf866_a8b7be19",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 11
@@ -82,6 +168,144 @@
       "writtenOn": "2021-09-27T19:36:42Z",
       "side": 1,
       "message": "Monteray -\u003e Monterey",
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6cc07d_6030584a",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "If this is true you can remove this and the above comment",
+      "range": {
+        "startLine": 662,
+        "startChar": 7,
+        "endLine": 662,
+        "endChar": 66
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81849e3b_720b39b0",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "nit: Same note about default arguments",
+      "range": {
+        "startLine": 113,
+        "startChar": 16,
+        "endLine": 113,
+        "endChar": 63
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3b7c8f0_f522024e",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "nit: anglebug.com/6395",
+      "range": {
+        "startLine": 626,
+        "startChar": 12,
+        "endLine": 626,
+        "endChar": 29
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e764a63_ee6d53c3",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "This seems to have been removed in https://chromium-review.googlesource.com/c/angle/angle/+/2820179",
+      "range": {
+        "startLine": 1407,
+        "startChar": 8,
+        "endLine": 1410,
+        "endChar": 0
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67b59e57_9ccf7af7",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "Seems unnecessary now, can remove the commented entry",
+      "range": {
+        "startLine": 526,
+        "startChar": 4,
+        "endLine": 528,
+        "endChar": 37
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1609e113_6bdae72f",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-27T20:16:49Z",
+      "side": 1,
+      "message": "Can you update these skips to a line in angle_end2end_tests_expectations.txt (remove the redundant condition) :\n6395 MAC METAL : RobustResourceInitTestES3.BlitDepthStencilAfterClearBuffer/* \u003d SKIP",
+      "range": {
+        "startLine": 2307,
+        "startChar": 0,
+        "endLine": 2311,
+        "endChar": 34
+      },
       "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
