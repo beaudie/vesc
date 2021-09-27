@@ -51,6 +51,46 @@
       "parentUuid": "fb0ef11f_a2395ddc",
       "revId": "b7a2bac38109b92de7be743125ecf9104c6c0aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c9b92a8_fa152662",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-27T19:54:08Z",
+      "side": 1,
+      "message": "It looks a little weird that this a static function while FrameCaptureShared::markResourceSetupCalls() is not, since they seem very similar in terms of functionality.   It seems this is working around the fact that CaptureMidExecutionSetup() is static also, and doesn\u0027t have access to a FrameCaptureShared instance.\n\nIt\u0027s a bit of a tangent, but it\u0027s starting to feel like CaptureMidExecutionSetup() should just be a member of FrameCaptureShared, since it\u0027s only called from there, passes in a lot of FrameCaptureShared members anyway, and leads to these weird splits to workaround accessibility issues.",
+      "revId": "b7a2bac38109b92de7be743125ecf9104c6c0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f141cbb_bd12b9ff",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-27T19:54:08Z",
+      "side": 1,
+      "message": "nit: \"Mark\" isn\u0027t very descriptive of what\u0027s actually being done.   I suggest something like: recordResourceSetupCalls() or markResourceSetupCallsInactive().",
+      "range": {
+        "startLine": 3086,
+        "startChar": 28,
+        "endLine": 3086,
+        "endChar": 50
+      },
+      "revId": "b7a2bac38109b92de7be743125ecf9104c6c0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
