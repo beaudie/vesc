@@ -158,6 +158,9 @@
 6116 ANDROID GLES : GLSLTestLoops.ForNoCondition/* = SKIP
 6237 ANDROID GLES : BufferDataTestES3.DrawWithNotCallingBufferData/* = SKIP
 
+// Unimplemented fallback path for when format is not renderable or AHB hasn't specified the GPU_FRAMEBUFFER usage.
+6151 ANDROID VULKAN : ImageTestES3.RGBXAHBImportNoFramebufferUsage/* = SKIP
+
 // Nexus 5X expectations.
 6149 NEXUS5X GLES : GLSLTest_ES31.StructAndArrayEqualOperator/* = SKIP
 6193 NEXUS5X GLES : GLSLTest_ES31.BuiltInsWithOutParameters/* = SKIP
