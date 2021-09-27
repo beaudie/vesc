@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "318da2d9_901ff54c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-27T23:29:47Z",
+      "side": 1,
+      "message": "Agree in general, didn\u0027t tackle it in this CL.",
+      "parentUuid": "7c9b92a8_fa152662",
+      "revId": "b7a2bac38109b92de7be743125ecf9104c6c0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f141cbb_bd12b9ff",
@@ -83,6 +101,30 @@
       "writtenOn": "2021-09-27T19:54:08Z",
       "side": 1,
       "message": "nit: \"Mark\" isn\u0027t very descriptive of what\u0027s actually being done.   I suggest something like: recordResourceSetupCalls() or markResourceSetupCallsInactive().",
+      "range": {
+        "startLine": 3086,
+        "startChar": 28,
+        "endLine": 3086,
+        "endChar": 50
+      },
+      "revId": "b7a2bac38109b92de7be743125ecf9104c6c0aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8fb72fd_f36682b9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-27T23:29:47Z",
+      "side": 1,
+      "message": "SGTM, thanks for the suggestion.  I went with markResourceSetupCallsInactive.",
+      "parentUuid": "7f141cbb_bd12b9ff",
       "range": {
         "startLine": 3086,
         "startChar": 28,
