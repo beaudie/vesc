@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c22a4a3e_56f5f84f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-27T16:29:27Z",
+      "side": 1,
+      "message": "CC\u0027ing Jamie since he just enabled this feature to stabilize frame capture output. Since it\u0027s just inactive outputs,  it shouldn\u0027t affect anything.",
+      "revId": "badb94106b3dcae2582127e52e6b9d0f46fe9d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
