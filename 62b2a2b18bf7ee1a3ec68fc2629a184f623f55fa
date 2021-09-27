@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77d2f814_f7776e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-27T12:32:24Z",
+      "side": 1,
+      "message": "LGTM but I wouldn\u0027t be surprised if this flushed out some hard-to-repro bugs in configs that aren\u0027t on the CQ.",
+      "revId": "62b2a2b18bf7ee1a3ec68fc2629a184f623f55fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
