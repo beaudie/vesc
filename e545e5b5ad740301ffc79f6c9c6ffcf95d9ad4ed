@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a62bbe38_0764b55d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-09-28T20:49:36Z",
+      "side": 1,
+      "message": "I think I got all you recommended.\nWhere to add the barrier call seems the last item?",
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
