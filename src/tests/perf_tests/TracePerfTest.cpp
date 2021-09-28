@@ -666,6 +666,7 @@ bool FindRootTraceTestDataPath(char *testDataDirOut, size_t maxDataDirLen)
 TracePerfTest::TracePerfTest(const TracePerfParams &params)
     : ANGLERenderTest("TracePerf", params, "ms"), mParams(params), mStartFrame(0), mEndFrame(0)
 {
+    INFO() << "Yuxin Debug: entering TracePerfTest";
     // TODO: http://anglebug.com/4533 This fails after the upgrade to the 26.20.100.7870 driver.
     if (IsWindows() && IsIntel() && mParams.isVulkan() && traceNameIs("manhattan_10"))
     {
@@ -1081,6 +1082,16 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     if (traceNameIs("nier_reincarnation"))
     {
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+    }
+
+    if (traceNameIs("mini_world"))
+    {
+        // TODO: http://anglebug.com/6443 Vulkan Test failure on Pixel4XL due to vulkan validation
+        // error VUID-vkDestroyBuffer-buffer-00922
+        if (IsQualcomm() && mParams.isVulkan())
+        {
+            mSkipTest = true;
+        }
     }
 
     ASSERT(mParams.surfaceType == SurfaceType::Window || gEnableAllTraceTests);

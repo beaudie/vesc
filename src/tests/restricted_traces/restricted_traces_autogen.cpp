@@ -73,6 +73,7 @@
 #include "marvel_contest_of_champions/marvel_contest_of_champions_capture_context1.h"
 #include "messenger_lite/messenger_lite_capture_context1.h"
 #include "minecraft/minecraft_capture_context1.h"
+#include "mini_world/mini_world_capture_context2.h"
 #include "mobile_legends/mobile_legends_capture_context1.h"
 #include "nba2k20_800/nba2k20_800_capture_context1.h"
 #include "nier_reincarnation/nier_reincarnation_capture_context2.h"
@@ -121,7 +122,7 @@ namespace trace_angle
 {
 namespace
 {
-constexpr size_t kNumTraces = 104;
+constexpr size_t kNumTraces = 105;
 struct TracePair
 {
     const char name[kTraceInfoMaxNameLen];
@@ -1470,6 +1471,7 @@ constexpr TracePair kTraceInfos[kNumTraces] = {
       false,
       false,
       false}},
+    {"mini_world", {}},
     {"mobile_legends",
      {"mobile_legends",
       mobile_legends::kReplayContextClientMajorVersion,
