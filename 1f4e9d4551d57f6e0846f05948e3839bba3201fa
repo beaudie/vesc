@@ -43,6 +43,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "338ab03d_9534af38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T18:57:55Z",
+      "side": 1,
+      "message": "There is a bug in this change, and it\u0027s that when the GPU writes data to the buffer the contents are not marked valid. Regression test could be as such:\n\n- Create buffer and give it nullptr so it would be marked invalid\n- Bind it as storage buffer (test 1) or image buffer (test 2)\n- Have a compute shader write to it\n- Update the buffer such that the acquireAndUpdate path is taken and there is a before and after region that would need copying (this would not be done because of this bug)\n- Readback the buffer and observe that the before and after update regions are garbage.",
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24922d2f_1f67445e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T18:57:55Z",
+      "side": 1,
+      "message": "If the buffer is in use by the GPU, that should be an indication that the content is valid (otherwise what\u0027s the point of using the buffer? Also note the bug I mentioned in another comment). While technically you can\u0027t ASSERT it, I don\u0027t think this bit here is useful in any realistic way.",
+      "range": {
+        "startLine": 925,
+        "startChar": 14,
+        "endLine": 925,
+        "endChar": 33
+      },
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d834135_967427a3",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 4
@@ -54,6 +94,30 @@
       "writtenOn": "2021-09-28T18:33:18Z",
       "side": 1,
       "message": "nit: you can call this mHasValidData since it\u0027s not possible for the Buffer to hold non-Buffer data\n\nAlso, what about making this a member of BufferHelper instead?",
+      "range": {
+        "startLine": 227,
+        "startChar": 9,
+        "endLine": 227,
+        "endChar": 28
+      },
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d75f58c6_bdaa1faa",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T18:57:55Z",
+      "side": 1,
+      "message": "+1 to moving to BufferHelper. Could later be used to optimize barriers probably for other users.",
+      "parentUuid": "7d834135_967427a3",
       "range": {
         "startLine": 227,
         "startChar": 9,
