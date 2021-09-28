@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95cdb253_9dc37941",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T18:35:56Z",
+      "side": 1,
+      "message": "Same question if there\u0027s a microbench in BufferSubData.cpp that could demonstrate this perf improvement.",
+      "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3822ace_ff393300",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T18:35:56Z",
+      "side": 1,
+      "message": "grammar nit: (articles)\n\nthe buffer, the GPU, the CPU, the copy, the source buffer pointer, we acquire, a new buffer.\n\nLMK if you\u0027d prefer I give grammar nits offline.",
+      "range": {
+        "startLine": 882,
+        "startChar": 14,
+        "endLine": 882,
+        "endChar": 21
+      },
+      "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
