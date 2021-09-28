@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "77fb8b10_6de54b6a",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T13:52:26Z",
+      "side": 1,
+      "message": "nit: please correct tabs... if you want you can also add json to _IMPLEMENTATION_AND_HEADER_EXTENSIONS in PRESUBMIT.py to catch this (would be better done in a split CL)",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "dd0c593777b8b1a23bbdfff516c6c508e0894481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e99dd1c4_e4accef6",
