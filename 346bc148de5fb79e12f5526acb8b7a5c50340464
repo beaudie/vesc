@@ -16,6 +16,46 @@
       "message": "PTAL.. one last change to go in before the retrace. This one I think will need to go in right before I land the retrace to prevent complications.",
       "revId": "346bc148de5fb79e12f5526acb8b7a5c50340464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba4b2d03_d39c3cb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-28T17:26:47Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "346bc148de5fb79e12f5526acb8b7a5c50340464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01fdd29b_8a314527",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-28T17:26:47Z",
+      "side": 1,
+      "message": "Can this one can be removed too?",
+      "range": {
+        "startLine": 42,
+        "startChar": 40,
+        "endLine": 42,
+        "endChar": 48
+      },
+      "revId": "346bc148de5fb79e12f5526acb8b7a5c50340464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
