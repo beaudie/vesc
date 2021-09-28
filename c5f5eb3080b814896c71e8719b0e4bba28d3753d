@@ -33,6 +33,29 @@
       "message": "Yuly, if this lands, I\u0027ll need to change the expectations file quickly to avoid issues, since this CL breaks some tests while fixing other tests.",
       "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22f8bc70_338b460f",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-09-28T13:16:04Z",
+      "side": 1,
+      "message": "Oh, I actually see where the RGB \u003c-\u003e BGR issue is. The requested format here is GL_RGB. If we don\u0027t specify an RGB format here as the internal format (GL_RGBX8_ANGLEX), then staging updates start failing, because external copy texture operations will happen in RGBA, so we need in internal RGB format (as opposed to BGR) to avoid issues.\n\nBUT the IOSurface actually contains data in BGRA format. In releaseTexImage, we can easily solve that by doing a readback to BGRA. But in bindTexImage, we actually need to perform a format conversion in this case in order to read the input data properly. Is there a way to \"stage\" a format conversion?",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 72
+      },
+      "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
