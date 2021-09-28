@@ -16,6 +16,408 @@
       "message": "Here\u0027s a first-pass take on documenting suppressions.  I\u0027m sure it can improved, but it\u0027s a start.",
       "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "356ba9f5_1e2b0d97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "Hey Ian, please don\u0027t be alarmed about the number of comments. It\u0027s really great you\u0027re contributing to the process docs, because our team has a lack of them, and the doc is a good starting point.",
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7477ccc8_b25e9090",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "Rather than a document just on test failures, it would be great if we could generalize this to ANGLE Testing \u0026 Processes.\n\nAlso could you wrap the lines to 80 or 100 characters to main it easier to review \u0026 maintain?",
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a1c4564_55101166",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: suggest \"Suppressing\" for a more present tense, same with the other titles.",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49616f7c_82c1a9b9",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: You can also avoid the passive tense, and omit a lot of the domain-specific terms by rephrasing this as \n\nWe run a large number of tests on ANGLE CLs, both in ANGLE standalone and Chromium configurations, pre- and post- commit.",
+      "range": {
+        "startLine": 3,
+        "startChar": 44,
+        "endLine": 3,
+        "endChar": 119
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f84ee4d_d113e863",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "I\u0027d suggest you omit this section for brevity, and instead include bullet points below for the important actions to take. If you want to include a section on timeouts below please make it its own item.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "236ddf03_f11ba14e",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: suggest you replace all instances of \"VVL\" with \"Vulkan Validation\", VVL is a bit opaque",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfd605d6_3d3b5d66",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "Please include a mention of the vulkan-deps roller and how we test with ToT Vulkan tools/SDK.\n\nPlease also include a mention that we often run into Vulkan Validation Layer bugs as well, because we test with ToT tools and run many more integration tests than the LunarG devs.\n\nI\u0027d also reword this to emphasize as a process when encountering a broken VVL roll, the procedure is to file a bug then suppress the new validation errors. The target reader is an ANGLE wrangler for the purposes of this action. ANGLE wranglers aren\u0027t expected to resolve the error, or diagnose a bug upstream, bug this is welcome as extra credit.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 417
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc57c2b5_001d2753",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "File a bug at anglebug.com/new (line)",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bfcab4b_18069593",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: trim trailing whitespace",
+      "range": {
+        "startLine": 15,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49823ee0_735600f1",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: back-ticks (`RendererVk.cpp`) also you can hard-link the file in the repo if you want using a relative link (../src/libANGLE/etc)",
+      "range": {
+        "startLine": 16,
+        "startChar": 234,
+        "endLine": 16,
+        "endChar": 250
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3ac851a_c262d5ce",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: please link to a hard rev using gitles instead of code search:\n\nhttps://chromium.googlesource.com/angle/angle/+/20be5bed84f184175a273042a4d1f49d20bfe3f0\n\n(navigate to the file/line).\n\nThis ensures the link won\u0027t become out-of-date.",
+      "range": {
+        "startLine": 16,
+        "startChar": 51,
+        "endLine": 16,
+        "endChar": 224
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc10c57e_b403fc58",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: please include a back-link to dEQP.md.",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 7
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b65a2b94_4b386129",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: angle_end2end_tests",
+      "range": {
+        "startLine": 27,
+        "startChar": 2,
+        "endLine": 27,
+        "endChar": 10
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa231b0_52a308e1",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: please link in the tree (relative link)",
+      "range": {
+        "startLine": 28,
+        "startChar": 50,
+        "endLine": 28,
+        "endChar": 82
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "704c34f0_fae7a967",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "wording nit: The file format is the same as for the...",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 39
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a41cae75_1d253ccb",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: \"WebGL conformance tests\"",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71c077a_3dc7844c",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "nit: files, there\u0027s also a \"2\". please mention as well.",
+      "range": {
+        "startLine": 31,
+        "startChar": 21,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c299184_7154b1ad",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T21:57:48Z",
+      "side": 1,
+      "message": "Is editing from CodeSearch an option? It\u0027s not a process I\u0027d ever use or could recommend. What do other folks think? I\u0027d recommend checking out Chromium.",
+      "range": {
+        "startLine": 31,
+        "startChar": 165,
+        "endLine": 31,
+        "endChar": 195
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
