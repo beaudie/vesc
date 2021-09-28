@@ -45,6 +45,8 @@ constexpr size_t kInitialTraceEventBufferSize = 50000;
 constexpr double kMilliSecondsPerSecond       = 1e3;
 constexpr double kMicroSecondsPerSecond       = 1e6;
 constexpr double kNanoSecondsPerSecond        = 1e9;
+constexpr int kMinSamplesForTrim              = 3;
+constexpr char kMeanMemoryMetric[]            = ".mean_memory";
 
 struct TraceCategory
 {
@@ -437,6 +439,11 @@ double ANGLEPerfTest::printResults()
             retValue = secondsPerIteration * kNanoSecondsPerSecond;
         }
         mReporter->AddResult(clockNames[i], retValue);
+
+        // Output histogram JSON set format if enabled.
+        TestSuite::GetInstance()->addHistogramSample(mName + mBackend + clockNames[i], mStory,
+                                                     secondsPerIteration * kMilliSecondsPerSecond,
+                                                     "msBestFitFormat_smallerIsBetter");
     }
 
     if (gVerboseLogging)
@@ -456,12 +463,35 @@ double ANGLEPerfTest::printResults()
         mReporter->AddResult(".total_steps", static_cast<size_t>(mTotalNumStepsPerformed));
     }
 
-    // Output histogram JSON set format if enabled.
-    double secondsPerStep = elapsedTimeSeconds[0] / static_cast<double>(mTrialNumStepsPerformed);
-    double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
-    TestSuite::GetInstance()->addHistogramSample(mName + mBackend, mStory,
-                                                 secondsPerIteration * kMilliSecondsPerSecond,
-                                                 "msBestFitFormat_smallerIsBetter");
+    if (!mProcessMemoryUsageBytesSamples.empty())
+    {
+        if (mProcessMemoryUsageBytesSamples.size() >= kMinSamplesForTrim)
+        {
+            std::sort(mProcessMemoryUsageBytesSamples.begin(),
+                      mProcessMemoryUsageBytesSamples.end());
+            mProcessMemoryUsageBytesSamples.pop_back();
+            mProcessMemoryUsageBytesSamples.erase(mProcessMemoryUsageBytesSamples.begin());
+            ASSERT(!mProcessMemoryUsageBytesSamples.empty());
+        }
+
+        // Compute mean.
+        uint64_t sum = std::accumulate(mProcessMemoryUsageBytesSamples.begin(),
+                                       mProcessMemoryUsageBytesSamples.end(), 0ull);
+        double meanBytes =
+            static_cast<double>(sum) / static_cast<double>(mProcessMemoryUsageBytesSamples.size());
+        double meanKB = meanBytes / 1024.0;
+
+        perf_test::MetricInfo metricInfo;
+        if (!mReporter->GetMetricInfo(kMeanMemoryMetric, &metricInfo))
+        {
+            mReporter->RegisterImportantMetric(kMeanMemoryMetric, "kb");
+        }
+        mReporter->AddResult(".mean_memory", meanKB);
+
+        TestSuite::GetInstance()->addHistogramSample(mName + mBackend + kMeanMemoryMetric, mStory,
+                                                     meanKB, "kb_smallerIsBetter");
+    }
+
     return retValue;
 }
 
@@ -930,6 +960,13 @@ void ANGLERenderTest::step()
             EXPECT_EQ(static_cast<GLenum>(GL_NO_ERROR), glGetError());
         }
 #endif  // defined(ANGLE_ENABLE_ASSERTS)
+
+        // Sample system memory
+        uint64_t processMemoryUsageBytes = GetProcessMemoryUsageBytes();
+        if (processMemoryUsageBytes)
+        {
+            mProcessMemoryUsageBytesSamples.push_back(processMemoryUsageBytes);
+        }
     }
 
     endInternalTraceEvent("step");

@@ -110,4 +110,10 @@ Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType sear
 {
     return new UwpLibrary(libraryName, searchType);
 }
+
+uint64_t GetProcessMemoryUsageBytes()
+{
+    // Not available on UWP.
+    return 0;
+}
 }  // namespace angle

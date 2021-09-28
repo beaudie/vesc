@@ -88,6 +88,8 @@ bool IsDebuggerAttached();
 
 // Calls system APIs to break into the debugger.
 void BreakDebugger();
+
+uint64_t GetProcessMemoryUsageBytes();
 }  // namespace angle
 
 #endif  // COMMON_SYSTEM_UTILS_H_

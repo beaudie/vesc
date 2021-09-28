@@ -122,6 +122,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     int mIterationsPerStep;
     bool mRunning;
     std::vector<double> mTestTrialResults;
+    std::vector<uint64_t> mProcessMemoryUsageBytesSamples;
 };
 
 enum class SurfaceType
