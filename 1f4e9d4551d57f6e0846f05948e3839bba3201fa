@@ -60,6 +60,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d5e792c_1baa2e96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-28T20:28:28Z",
+      "side": 1,
+      "message": "I believe in this case, BufferVk::onDataChanged() will get called which calls markConversionBuffersDirty(). That is why I set mHasValidData to true in markConversionBuffersDirty(). Essentially this is implemented on top of the vertex data conversion code path. If this is broken, it means our data conversion code path has a bug.",
+      "parentUuid": "338ab03d_9534af38",
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24922d2f_1f67445e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 4
@@ -71,6 +89,30 @@
       "writtenOn": "2021-09-28T18:57:55Z",
       "side": 1,
       "message": "If the buffer is in use by the GPU, that should be an indication that the content is valid (otherwise what\u0027s the point of using the buffer? Also note the bug I mentioned in another comment). While technically you can\u0027t ASSERT it, I don\u0027t think this bit here is useful in any realistic way.",
+      "range": {
+        "startLine": 925,
+        "startChar": 14,
+        "endLine": 925,
+        "endChar": 33
+      },
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9ff73b8_e81f8ed0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-28T20:28:28Z",
+      "side": 1,
+      "message": "That is exact this CL try to fix. mHasValidBufferData is tracking BufferVK has valid data or not, it is not tracking mBuffer has valid data or not. As I described in the CL description, if someone called glBufferData with null pointer and the same size, we will simply return, (which means we will try to reuse mBuffer storage for new in coming data). In this case mBuffer could still GPU busy (and has valid data in it), but BufferVk no longer has valid data in it. If we have to allocate a new buffer, we do not have to preserve the data in mBuffer. So this essenticially goes back to the point that mHasValidBufferData belongs to BufferVk, not BufferHelper. It is different from ImageHelper\u0027s mHasDefinedContent.",
+      "parentUuid": "24922d2f_1f67445e",
       "range": {
         "startLine": 925,
         "startChar": 14,
@@ -118,6 +160,30 @@
       "side": 1,
       "message": "+1 to moving to BufferHelper. Could later be used to optimize barriers probably for other users.",
       "parentUuid": "7d834135_967427a3",
+      "range": {
+        "startLine": 227,
+        "startChar": 9,
+        "endLine": 227,
+        "endChar": 28
+      },
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbbd8ff4_fd5e5f2e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-28T20:28:28Z",
+      "side": 1,
+      "message": "There are a few problems. 1) BufferHelper maybe shared due to suballocation. And this will be even a bigger problem if we want to suballocate from a global pool with same BufferHelper object (if we want to have better descriptor set cache hit etc). And 2) This really is tracking BufferVK has valid data or not, not BufferHelper. We are reusing mBuffer storage when glBufferData is called with the same size. mBuffer still have valid data and mayboe not even queue submitted, but BufferVk no longer has valid data. (Also see the other comment bellow).",
+      "parentUuid": "d75f58c6_bdaa1faa",
       "range": {
         "startLine": 227,
         "startChar": 9,
