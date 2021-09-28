@@ -207,6 +207,13 @@ class Resource11Base : angle::NonCopyable
         UpdateDebugNameWithD3D();
     }
 
+    void setLabels(const char *name, const std::string *label)
+    {
+        internalDebugName = name;
+        khrDebugName      = label;
+        UpdateDebugNameWithD3D();
+    }
+
     void set(T *object)
     {
         ASSERT(!valid());

@@ -2290,12 +2290,24 @@ HRESULT SetDebugName(ID3D11DeviceChild *resource,
 {
     // Prepend ANGLE to separate names from other components in the same process.
     std::string d3dName = "ANGLE";
-    if (internalName)
+    bool isNameNotEmpty = false;
+    if (internalName && internalName[0] != '\0')
+    {
         d3dName += std::string("_") + internalName;
-    if (khrDebugName)
+        isNameNotEmpty = true;
+    }
+    if (khrDebugName && !khrDebugName->empty())
+    {
         d3dName += std::string("_") + *khrDebugName;
-    return resource->SetPrivateData(WKPDID_D3DDebugObjectName, static_cast<UINT>(d3dName.size()),
-                                    d3dName.c_str());
+        isNameNotEmpty = true;
+    }
+    // If both internalName and khrDebugName are empty, avoid sending the string to d3d.
+    if (isNameNotEmpty)
+    {
+        return resource->SetPrivateData(WKPDID_D3DDebugObjectName,
+                                        static_cast<UINT>(d3dName.size()), d3dName.c_str());
+    }
+    return 0;
 }
 
 // Keep this in cpp file where it has visibility of Renderer11.h, otherwise calling
