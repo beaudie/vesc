@@ -19,6 +19,9 @@ If you're not an ANGLE team member, you can contact us on the public ANGLE proje
 **Note**: It's highly recommend that all wranglers install the [Chromium Flake Linker][Flaker]
 extension for inspecting bot builds. It'll save you a lot of time.
 
+**Note**: If you need to suppress test failures (e.g. to keep an auto-roller unblocked), see
+[Suppress Test Failures](https://chromium.googlesource.com/angle/angle/+/main/doc/SuppressTestFailures.md).
+
 [Flaker]: https://chrome.google.com/webstore/detail/flake-linker/boamnmbgmfnobomddmenbaicodgglkhc
 
 ## Task 1: Monitor ANGLE CI and Try Testers
