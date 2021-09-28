@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8bbf0152_df90e5a0",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T15:37:46Z",
+      "side": 1,
+      "message": "The code would behave correctly in that scenario. The invariant is: after an \"add\", there\u0027s exactly one contents observer {vertexArray, bufferIndex}, and after \"remove\" there\u0027s exactly zero.",
+      "parentUuid": "81f37cc0_440132d9",
+      "revId": "368032a25ad8b151740390cead056e175efe0357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76973601_180ec725",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 7
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-28T14:58:31Z",
       "side": 1,
       "message": "Should the policy decision be moved down to BufferVk::setDataImpl? There are different paths there, and feels like the `mBuffer-\u003eisCurrentlyInUse()` case and the else case would need a separate policy?\n\nI\u0027m afraid I\u0027m losing my grip over what these notifications mean...",
+      "revId": "368032a25ad8b151740390cead056e175efe0357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7102491_ac91af7d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T15:37:46Z",
+      "side": 1,
+      "message": "I could rename it. The notification basically indicates if the buffer update is a respecification or if it\u0027s a contents update. So it might be easier to process if it was a \"BufferCommand::Respecification\" or \"BufferCommand::SubData\" or something like that. To answer your first question: I\u0027m pretty sure it\u0027s correct like this. I do agree it\u0027s getting harder to track.",
+      "parentUuid": "76973601_180ec725",
       "revId": "368032a25ad8b151740390cead056e175efe0357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
