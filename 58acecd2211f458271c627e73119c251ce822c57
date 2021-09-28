@@ -83,6 +83,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af7ee446_d1688beb",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T14:38:57Z",
+      "side": 1,
+      "message": "Oh I see, vertex arrays do format conversion which makes them special, was that it?",
+      "parentUuid": "d4e3bba1_e4293c08",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 19
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d807ce5_a743430c",
@@ -120,6 +144,30 @@
       "side": 1,
       "message": "Yes, for contents notifications they\u0027re duplicated for buffers where we watch the contents.\n\nI\u0027m not totally sure what you\u0027re asking - are you asking why we don\u0027t explicitly remove the Observer that watches the non-contents Subject here? It\u0027s automatically handled in the ObserverBinding class, in the object destructor. The contents observer can\u0027t use this class because of type conflicts.\n\nI added a comment.",
       "parentUuid": "9d807ce5_a743430c",
+      "range": {
+        "startLine": 139,
+        "startChar": 20,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0cab943_33a3ba3f",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T14:38:57Z",
+      "side": 1,
+      "message": "Ack. (C++ runs code behind your back)",
+      "parentUuid": "2989b327_cecd82c1",
       "range": {
         "startLine": 139,
         "startChar": 20,
