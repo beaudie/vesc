@@ -16,6 +16,23 @@
       "message": "PTAL. Have an upstream Chrome patch to surpress the failure here https://chromium-review.googlesource.com/c/chromium/src/+/3187670",
       "revId": "c3d73fac431d254080903f0163f440fbe99db241",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c6085e_7e7931d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-28T04:01:26Z",
+      "side": 1,
+      "message": "Let\u0027s try CQ\u0027ing again now that https://chromium-review.googlesource.com/c/chromium/src/+/3187670 has landed (thanks Yuly for your help!).\n",
+      "revId": "c3d73fac431d254080903f0163f440fbe99db241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
