@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1e6b47ad_0090562d",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T14:19:36Z",
+      "side": 1,
+      "message": "Ack - just be mindful that if you upload a new patch sets your edits via the Web UI will be overwritten.",
+      "parentUuid": "8f808a46_83226018",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "dd0c593777b8b1a23bbdfff516c6c508e0894481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e99dd1c4_e4accef6",
         "filename": "src/libANGLE/renderer/d3d/d3d11/texture_format_data.json",
         "patchSetId": 2
