@@ -16,6 +16,23 @@
       "message": "This CL fixes 14 tests while breaking 11 tests, so it\u0027s a net positive of 3 more tests passing. Also, instead of crashes, the new failures are all pixel differences. A few of them are clearly missing RGB \u003c-\u003e BGR conversion somewhere (see conformance/canvas/webgl-to-2d-canvas.html, for example), but I\u0027m still unsure where this issue is.\nThis also makes the code spec compliant regarding Vulkan, where the IOSurface object is no longer treated as a generic blob of memory (which it isn\u0027t, it has properties like planes, row pitch, etc).\nAll in all, despite a delta of only 3 more tests passing, I think the change is a net positive.\n",
       "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3360f7da_ec32d32e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-09-28T12:32:21Z",
+      "side": 1,
+      "message": "Yuly, if this lands, I\u0027ll need to change the expectations file quickly to avoid issues, since this CL breaks some tests while fixing other tests.",
+      "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
