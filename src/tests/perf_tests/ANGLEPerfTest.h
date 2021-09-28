@@ -106,8 +106,11 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     virtual void saveScreenshot(const std::string &screenshotName) {}
     virtual void computeGPUTime() {}
 
-    double printResults();
     void calibrateStepsToRun(RunLoopPolicy policy);
+
+    void processResults();
+    void processClockResult(const char *metric, double resultSeconds);
+    void processMemoryResult(const char *metric, uint64_t resultKB);
 
     std::string mName;
     std::string mBackend;
@@ -122,6 +125,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     int mIterationsPerStep;
     bool mRunning;
     std::vector<double> mTestTrialResults;
+    std::vector<uint64_t> mProcessMemoryUsageKBSamples;
 };
 
 enum class SurfaceType
