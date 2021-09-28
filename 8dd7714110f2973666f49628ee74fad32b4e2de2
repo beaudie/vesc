@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd279f5_40139dc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T16:56:17Z",
+      "side": 1,
+      "message": "My question is: how does this work for all the other objects which allow create-on-bind? Is it broken for everything?",
+      "revId": "8dd7714110f2973666f49628ee74fad32b4e2de2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
