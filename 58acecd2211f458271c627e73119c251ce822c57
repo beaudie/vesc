@@ -107,6 +107,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e4abc02_6e4b2a07",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T14:41:10Z",
+      "side": 1,
+      "message": "Yep, exactly.",
+      "parentUuid": "af7ee446_d1688beb",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 19
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d807ce5_a743430c",
