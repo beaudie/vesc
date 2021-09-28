@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2d082e8_9984207c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-28T20:40:34Z",
+      "side": 1,
+      "message": "If the buffer is on VRAM, then yes, the GPU copy maybe preferred. But this is only applying to a host visible memory, which  is system memory, there is no advantage to have GPU to do copy if src and dst are both system memory and host visible (GPU actually will be at disadvantage because it has to do across the PCIE bus and has to compete with other essential bus traffic).\n\nThe other CL has a preference because we have a choice between having GPU do copy versus having CPU to do copy and the advantage is actually very controversial, because if we choose CPU code path, we may use more memory and copy more data. That is why it is protected by preference and only enabled on a given GPU where we think the trade off is worth it. The choice we are making in this CL, the exact amount of data is been copied and uses the same amount of memory, its just use CPU or GPU to do the copy.",
+      "parentUuid": "3b9aa60f_1e608544",
+      "range": {
+        "startLine": 12,
+        "startChar": 62,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "95cdb253_9dc37941",
