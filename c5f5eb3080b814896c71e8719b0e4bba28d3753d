@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00c14700_a552be0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T14:32:55Z",
+      "side": 1,
+      "message": "Question for you Charlie",
+      "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22f8bc70_338b460f",
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "\u003e Is there a way to \"stage\" a format conversion?\n\n@Charlie just did that!\n\n\u003e The requested format here is GL_RGB ... BUT the IOSurface actually contains data in BGRA format\n\nNot really familiar with the logic here, but if the real format is BGRA, could all your problems be solved by simply specifying GL_BGRX8_ANGLEX (if it exists, or something like that) instead of GL_RGBX8_ANGLEX?\n\nI\u0027m not really sure what it means to \"request\" a format with the actual format being something else.",
       "parentUuid": "22f8bc70_338b460f",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 72
+      },
+      "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1917d8c_308806d9",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T14:32:55Z",
+      "side": 1,
+      "message": "CC @Charlie for real this time",
+      "parentUuid": "b79974a7_8427e0de",
       "range": {
         "startLine": 46,
         "startChar": 4,
