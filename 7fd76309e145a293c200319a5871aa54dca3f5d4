@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "498c1ca3_44a6ce94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T17:06:18Z",
+      "side": 1,
+      "message": "Latest patch re-adds the skip for GLSLTest_ES3.GLVertexIDIntegerTextureDrawArrays/ES3_Metal. This test passes in macOS 12.0 due to the increased point size fix, but fails in 11.x. ",
+      "revId": "7fd76309e145a293c200319a5871aa54dca3f5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
