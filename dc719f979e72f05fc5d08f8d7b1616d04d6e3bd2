@@ -36,6 +36,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e03c6459_1134b23f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T18:38:29Z",
+      "side": 1,
+      "message": "Because this is not currently tested on CQ, would like to see IsAndroid instead of isARM.",
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d014f14_1bb7d356",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T18:38:29Z",
+      "side": 1,
+      "message": "grammar nits:\n\nthe GPU, For some GPUs, a performance penalty, the GPU, copies, Setting, the CPU.",
+      "range": {
+        "startLine": 346,
+        "startChar": 45,
+        "endLine": 346,
+        "endChar": 49
+      },
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2697ba8_c6a2f830",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T18:38:29Z",
+      "side": 1,
+      "message": "nit: preferCPUForBufferSubData (DataSubData redundant)",
+      "range": {
+        "startLine": 349,
+        "startChar": 12,
+        "endLine": 349,
+        "endChar": 42
+      },
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04379bd7_c78a798b",
@@ -54,6 +117,29 @@
         "startChar": 18,
         "endLine": 146,
         "endChar": 43
+      },
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97c18106_4c063128",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2622,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T18:38:29Z",
+      "side": 1,
+      "message": "seems like IsAndroid is a better bet, right?",
+      "range": {
+        "startLine": 2622,
+        "startChar": 71,
+        "endLine": 2622,
+        "endChar": 76
       },
       "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
