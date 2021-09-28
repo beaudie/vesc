@@ -215,6 +215,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc5b9f96_3e225c55",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "space",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddf0c278_7fd5f021",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "no space",
+      "range": {
+        "startLine": 15,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49823ee0_735600f1",
         "filename": "doc/SuppressTestFailures.md",
         "patchSetId": 1
@@ -261,6 +307,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b27b39c7_d3f3e1bf",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "This link would be impervious to the line moving\nhttps://chromium.googlesource.com/angle/angle.git/+/8f8ca06dfb903fcc8517c69142c46c05e618f40d/src/libANGLE/renderer/vulkan/RendererVk.cpp#129",
+      "range": {
+        "startLine": 16,
+        "startChar": 51,
+        "endLine": 16,
+        "endChar": 223
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc10c57e_b403fc58",
         "filename": "doc/SuppressTestFailures.md",
         "patchSetId": 1
@@ -300,6 +369,29 @@
         "startChar": 2,
         "endLine": 27,
         "endChar": 10
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a007333_1b84feb0",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "Jamie recently added a TIMEOUT support.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 0
       },
       "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -415,6 +507,122 @@
         "startChar": 165,
         "endLine": 31,
         "endChar": 195
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecf9ee5f_f56a58e1",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "I also recommend checking out Chromium.\nExpectation files have presubmit checks for conflicting expectations.\nWhen you upload a CL from a local checkout, it will run the presubmit tests locally, which is much faster than waiting for the presubmit trybot to fail and would also not waste CQ resources.",
+      "parentUuid": "3c299184_7154b1ad",
+      "range": {
+        "startLine": 31,
+        "startChar": 165,
+        "endLine": 31,
+        "endChar": 195
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d188ec8c_f9c54569",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "There is also https://source.chromium.org/chromium/chromium/src/+/main:content/test/gpu/gpu_tests/test_expectations/webgl2_conformance_expectations.txt\n\nNote that WebGL2 suite also runs WebGL1 tests, so when suppressing WebGL1 failures it makes sense to update both files.",
+      "range": {
+        "startLine": 31,
+        "startChar": 9,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13e941d2_b0a040f5",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "Worth mentioning that you can find the relevant tags if you search for \"tags\" in the failed Swarming task.\nE.g.\nhttps://chromium-swarm.appspot.com/task?id\u003d56473f87d0633e10\nThe following expectations condition tags were generated [\u0027android-marshmallow\u0027, \u0027android-Nexus-5X\u0027, \u0027mobile\u0027, \u0027angle-opengles\u0027, \u0027android-chromium\u0027, \u0027webgl-version-1\u0027, \u0027no-asan\u0027, u\u0027qualcomm\u0027, \u0027skia-renderer-gl\u0027, \u0027passthrough\u0027, \u0027no-swiftshader-gl\u0027, \u0027android\u0027, \u0027android-not-webview\u0027, u\u0027qualcomm-Adreno-(TM)-418\u0027]",
+      "range": {
+        "startLine": 34,
+        "startChar": 39,
+        "endLine": 34,
+        "endChar": 71
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aab3c508_c40ab361",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "fails consistently or flakes often",
+      "range": {
+        "startLine": 36,
+        "startChar": 36,
+        "endLine": 36,
+        "endChar": 48
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bc3bb54_b0680b45",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T22:40:46Z",
+      "side": 1,
+      "message": "Skip should be used sparingly. Crashing test is normally not a problem - the browser is restarted afterwards and other tests can continue.\nI think Skip should only be used for catastrophic failures which bring down the machine, like BSOD on Windows due to TDRs.\nAnother case is multiple crashing or hanging tests, since these cause test suite execution to be delayed by 5 minutes each.\nThird scenario is a test, which maybe even passes, but which has side-effects and causes a test that runs after it to fail.\nOtherwise, Failure is enough. Since tests with Failure expectation still run, we are able to detect when they start passing unexpectedly, something that we can\u0027t do with Skipped tests.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 40
       },
       "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
