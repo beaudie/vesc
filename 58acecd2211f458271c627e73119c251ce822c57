@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8145eabc_1827b887",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T14:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06aecc2e_eda7dc0c",
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a44c931_428550ce",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-09-27T18:25:22Z",
       "side": 1,
       "message": "Ideally you would have an implementation that treats VertexArrays and Textures the same; less chance of bugs and consistent performance between the two.",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 19
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e3bba1_e4293c08",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T14:20:10Z",
+      "side": 1,
+      "message": "Why would Textures care about the contents of a bound buffer? My current assumption is that Textures never need to be updated when buffer contents change. Recall our prior conversation about Texture Buffers and how they were getting dirtied too often.",
+      "parentUuid": "0a44c931_428550ce",
       "range": {
         "startLine": 180,
         "startChar": 8,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2989b327_cecd82c1",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T14:20:10Z",
+      "side": 1,
+      "message": "Yes, for contents notifications they\u0027re duplicated for buffers where we watch the contents.\n\nI\u0027m not totally sure what you\u0027re asking - are you asking why we don\u0027t explicitly remove the Observer that watches the non-contents Subject here? It\u0027s automatically handled in the ObserverBinding class, in the object destructor. The contents observer can\u0027t use this class because of type conflicts.\n\nI added a comment.",
+      "parentUuid": "9d807ce5_a743430c",
+      "range": {
+        "startLine": 139,
+        "startChar": 20,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "128b0351_cc3f45ff",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 5
@@ -77,6 +143,30 @@
       "writtenOn": "2021-09-27T18:25:22Z",
       "side": 1,
       "message": "nit:\n\n    ... \u003d {1, 1, 1, 1, 0, 0, 0, 0};",
+      "range": {
+        "startLine": 7019,
+        "startChar": 36,
+        "endLine": 7028,
+        "endChar": 0
+      },
+      "revId": "58acecd2211f458271c627e73119c251ce822c57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b251c888_a6c5032e",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7028,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T14:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "128b0351_cc3f45ff",
       "range": {
         "startLine": 7019,
         "startChar": 36,

@@ -33,6 +33,24 @@
       "message": "Is there any validation you can do that the new buffer data is being used?",
       "revId": "ed2cc7458eed4d902f295d4141f5adbdf83a103c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bdfd8f4_b86a83d7",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7048,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-28T14:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45fa7ac3_9005ad7b",
+      "revId": "ed2cc7458eed4d902f295d4141f5adbdf83a103c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
