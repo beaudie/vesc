@@ -4796,8 +4796,8 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
                            resolveImage.getIntendedFormatID(), resolveImage.getActualFormatID(),
                            samples, kMultisampledUsageFlags, kMultisampledCreateFlags,
                            ImageLayout::Undefined, nullptr, resolveImage.getFirstAllocatedLevel(),
-                           resolveImage.getLevelCount(), resolveImage.getLayerCount(),
-                           isRobustResourceInitEnabled, nullptr, hasProtectedContent));
+                           1, resolveImage.getLayerCount(), isRobustResourceInitEnabled, nullptr,
+                           hasProtectedContent));
 
     const VkMemoryPropertyFlags kMultisampledMemoryFlags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
