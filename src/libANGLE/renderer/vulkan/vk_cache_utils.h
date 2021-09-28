@@ -1202,6 +1202,15 @@ class DescriptorSetDesc
         append32BitValue(static_cast<uint32_t>(value));
     }
 
+    void streamOut(std::ostream &ostr) const
+    {
+        for (uint32_t word : mPayload)
+        {
+            ostr << word << ", ";
+        }
+        ostr << "\n";
+    }
+
   private:
     void setBufferSerial(size_t wordOffset,
                          size_t wordStride,
