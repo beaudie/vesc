@@ -160,6 +160,54 @@
       },
       "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef4ab8aa_6e3eef89",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2622,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-28T20:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97c18106_4c063128",
+      "range": {
+        "startLine": 2622,
+        "startChar": 71,
+        "endLine": 2622,
+        "endChar": 76
+      },
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc6893b_a857bdd2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2622,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-28T20:44:35Z",
+      "side": 1,
+      "message": "Because if we pick this code path, we may end up copying more bytes (see SubDataSizeMeetsThreshold() ), so it is not clear QC or other mobile GPUs will see benefit with this or not. So it is really per GPU architecture, not platform.",
+      "parentUuid": "97c18106_4c063128",
+      "range": {
+        "startLine": 2622,
+        "startChar": 71,
+        "endLine": 2622,
+        "endChar": 76
+      },
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
