@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cfffd13_7e04b474",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-28T16:51:18Z",
+      "side": 1,
+      "message": "What you could do for a smooth transition is:\n1. Disable newly failing tests\n2. Roll Chromium into ANGLE\n3. Land this CL\n4. Enable newly passing tests\nBut since mac-swangle-chromium[-try]-x64 isn\u0027t on critical path, it should be OK to make it red temporarily if you don\u0027t want to bother with the above.",
+      "parentUuid": "3360f7da_ec32d32e",
+      "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22f8bc70_338b460f",
