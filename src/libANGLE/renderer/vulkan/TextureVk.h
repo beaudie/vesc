@@ -469,6 +469,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                       bool baseLevelChanged,
                                       bool maxLevelChanged);
 
+    angle::Result syncStateCommon(ContextVk *contextVk, bool isGenerateMipmap);
+
     bool isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) const;
 
     bool shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
