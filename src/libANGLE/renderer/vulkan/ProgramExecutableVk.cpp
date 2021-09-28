@@ -1613,6 +1613,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
         }
         else
         {
+            shaderBuffersDesc.streamOut(std::cout);
             ANGLE_TRY(allocateShaderResourcesDescriptorSet(contextVk, resourceUseList,
                                                            &shaderBuffersDesc));
         }
