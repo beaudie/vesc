@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4ae6d40_3a2fc924",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb7ce497_855fc451",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "380be452_d7d5fe74",
@@ -66,6 +84,24 @@
       "writtenOn": "2021-09-27T19:36:42Z",
       "side": 1,
       "message": "Still needs to be done.",
+      "parentUuid": "380be452_d7d5fe74",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8fb8efb_bce6b77a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "380be452_d7d5fe74",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -106,6 +142,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "092987d7_4141cd45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "You already got it (https://bugs.webkit.org/show_bug.cgi?id\u003d230107). I\u0027ll add it .",
+      "parentUuid": "e3d56417_521f0192",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "431e4b38_e1045896",
@@ -136,6 +190,24 @@
       "writtenOn": "2021-09-27T19:36:42Z",
       "side": 1,
       "message": "Sounds like these will all be unskipped, so resolving this.",
+      "parentUuid": "431e4b38_e1045896",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "685d57e9_b73f0e3e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "431e4b38_e1045896",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -178,6 +250,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9fc2bbc4_205c0fd2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7d248ace_ddd03e3a",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7f908b0e_3c378714",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -189,6 +279,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Great work Kyle bringing this up to date and getting it passing more tests!\n\nA few comments before approving. Hoping Gregg or Jonah can help provide a second review - maybe after these comments are addressed.\n\nFor my own reference - I reviewed up to Patch Set 10 so far.\n",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f34c4dc_20ed0d55",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e151820d_14ac6d67",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -228,6 +336,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2209c542_cbd539bc",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "960f71a5_50be5971",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8d92fe9_a970fdf0",
@@ -241,6 +367,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Change to anglebug.com/6395 .",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f0bd3f6_761e164a",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8d92fe9_a970fdf0",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -273,6 +417,24 @@
         "id": 1105344
       },
       "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a2ad6c0_adf58d8e",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91f7f252_adaf8024",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "2a2ad6c0_adf58d8e",
@@ -315,6 +477,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bdbc10e_e8316bb6",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23a31c06_a2978396",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcb908a7_b0ec64a1",
@@ -343,6 +523,24 @@
         "id": 1105344
       },
       "writtenOn": "2021-09-27T19:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcb908a7_b0ec64a1",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fdcb9d5_01767f12",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "dcb908a7_b0ec64a1",
@@ -402,6 +600,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca1ddfa_6e29c15f",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98b06deb_11bb93e6",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28bf9956_92e251d6",
@@ -415,6 +631,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this still happening? Can you try removing the skip entry?",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0b13e9e_75e4b4ed",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28bf9956_92e251d6",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -436,6 +670,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3042893c_d67bf5cf",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5644,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "933f59a2_72ed48d8",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e639b949_a548883f",
@@ -449,6 +701,30 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this still happening? Can you try removing the skip entry?",
+      "range": {
+        "startLine": 5754,
+        "startChar": 22,
+        "endLine": 5754,
+        "endChar": 23
+      },
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b25a2e_738d8d63",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5754,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e639b949_a548883f",
       "range": {
         "startLine": 5754,
         "startChar": 22,
@@ -482,6 +758,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddcb9df0_6323c4d7",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbd31406_7e476798",
+      "range": {
+        "startLine": 528,
+        "startChar": 23,
+        "endLine": 528,
+        "endChar": 30
+      },
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e34d174_fe341fb9",
@@ -499,6 +799,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "349cecd0_9320c346",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3036,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e34d174_fe341fb9",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b240e34_545dc9c4",
@@ -512,6 +830,30 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this still happening? Can you try removing the skip entry?",
+      "range": {
+        "startLine": 229,
+        "startChar": 23,
+        "endLine": 229,
+        "endChar": 30
+      },
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab223ce_2a12d13f",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b240e34_545dc9c4",
       "range": {
         "startLine": 229,
         "startChar": 23,
@@ -545,6 +887,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ad8875_a3ec8030",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81afd0e7_220d3af5",
+      "range": {
+        "startLine": 293,
+        "startChar": 23,
+        "endLine": 293,
+        "endChar": 30
+      },
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6055894b_207b1905",
@@ -558,6 +924,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this still happening? Can you try removing the skip entry?",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "460c7779_a259fdd6",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6055894b_207b1905",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -579,6 +963,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb12f627_61593bb2",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5aa5cdc_7d2d7aa7",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c1a77fd_25341fe2",
@@ -592,6 +994,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this still happening? Can you try removing the skip entry?",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ffd2be_07ecabc9",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c1a77fd_25341fe2",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -630,6 +1050,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3248a2cf_5c1f3389",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b214277_389a61b3",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5d29f34_199fe733",
@@ -643,6 +1081,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this still happening? Can you try removing the skip entry?",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcd91b60_92fffb6b",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5d29f34_199fe733",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -664,6 +1120,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fbdac00_437523e7",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6b51234_0602f68e",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d13bb78_9043f14d",
@@ -681,6 +1155,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcc87018_c904673d",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d13bb78_9043f14d",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed9b9bf9_5eef67e2",
@@ -694,6 +1186,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 1,
       "message": "Is this still happening? Can you try removing the skip entry?",
+      "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfc73034_15c01b22",
+        "filename": "src/tests/gl_tests/UniformTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed9b9bf9_5eef67e2",
       "revId": "a6321e65bee21d4e4117a4109c9f42a3382cd125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

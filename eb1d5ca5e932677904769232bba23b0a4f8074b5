@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab74d394_f6c80ae6",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "43b8d05e_c2876cfa",
+      "revId": "eb1d5ca5e932677904769232bba23b0a4f8074b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4ad9cbe_85fcf34f",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-24T22:00:41Z",
       "side": 0,
       "message": "Why were these checks removed? Can they be put back?",
+      "revId": "eb1d5ca5e932677904769232bba23b0a4f8074b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09d04c80_dfc9f8bb",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "f4ad9cbe_85fcf34f",
       "revId": "eb1d5ca5e932677904769232bba23b0a4f8074b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

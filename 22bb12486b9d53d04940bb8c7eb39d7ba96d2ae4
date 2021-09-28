@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef862ef0_dafffe7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-09-28T00:32:47Z",
+      "side": 1,
+      "message": "Finally found the reply button 😊\nAddressed comments in newest patch.\n",
+      "revId": "22bb12486b9d53d04940bb8c7eb39d7ba96d2ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
