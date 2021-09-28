@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0c81078d_425cf65c",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-09-28T14:24:11Z",
+      "side": 1,
+      "message": "Yes, I also made the modification locally. It\u0027s just faster to do the edit than to re-upload when the change is small.",
+      "parentUuid": "1e6b47ad_0090562d",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "dd0c593777b8b1a23bbdfff516c6c508e0894481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e99dd1c4_e4accef6",
         "filename": "src/libANGLE/renderer/d3d/d3d11/texture_format_data.json",
         "patchSetId": 2
