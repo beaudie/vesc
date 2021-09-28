@@ -16,6 +16,23 @@
       "message": "If this needs to be gl_PointSize \u003d 1000.0 there should probably be a comment as to why it\u0027s okay given the spec doesn\u0027t require it.\n",
       "revId": "52312fd381d589f9e0bdfd8025cb8cda34c2f52e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c47e7418_e84ea0bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-28T23:02:58Z",
+      "side": 1,
+      "message": "Seems fine to me. lgtm\n\nWonder whether the test should query the max point size advertised by the implementation and use something larger than 1.0 if it claims support.\n\n",
+      "revId": "52312fd381d589f9e0bdfd8025cb8cda34c2f52e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
