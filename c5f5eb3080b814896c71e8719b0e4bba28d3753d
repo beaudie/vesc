@@ -121,6 +121,30 @@
       },
       "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f62c96d_539fb416",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-09-28T14:48:05Z",
+      "side": 1,
+      "message": "About using GL_BGRX8_ANGLEX, that doesn\u0027t work, because the expected internal format here, when specifying { GL_RGB, GL_UNSIGNED_BYTE } is going to be GL_RGBA8. If I use GL_BGRX8_ANGLEX, then the internal format becomes GL_BGRA8, and any staged update from copy operations, for example, fail to get applied because the actual formats don\u0027t match:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d6578",
+      "parentUuid": "c1917d8c_308806d9",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 72
+      },
+      "revId": "c5f5eb3080b814896c71e8719b0e4bba28d3753d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
