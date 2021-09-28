@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49d949a9_7fe67ad2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-09-28T23:57:13Z",
+      "side": 1,
+      "message": "Please also include a blurb about how KHR labels are no longer dropped on the floor due to this change.",
+      "range": {
+        "startLine": 10,
+        "startChar": 50,
+        "endLine": 11,
+        "endChar": 47
+      },
+      "revId": "cc1b0fbdfa52928b83ba8188427901cb4e14785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58533cc3_0cc98bcb",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-09-28T23:57:13Z",
+      "side": 1,
+      "message": "To avoid double negatives, consider renaming the variable to sendNameToD3D (which starts as false and becomes true) or isNameEmpty (which starts as true and becomes false).",
+      "range": {
+        "startLine": 2293,
+        "startChar": 9,
+        "endLine": 2293,
+        "endChar": 23
+      },
+      "revId": "cc1b0fbdfa52928b83ba8188427901cb4e14785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
