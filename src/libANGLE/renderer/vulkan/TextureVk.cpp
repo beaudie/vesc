@@ -2007,8 +2007,6 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
                               layerCount);
     }
 
-    ASSERT(baseLevel == gl::LevelIndex(mState.getEffectiveBaseLevel()));
-    ASSERT(maxLevel == gl::LevelIndex(mState.getEffectiveMaxLevel()));
     return respecifyImageStorage(contextVk);
 }
 
@@ -2555,29 +2553,8 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
     }
 }
 
-angle::Result TextureVk::syncState(const gl::Context *context,
-                                   const gl::Texture::DirtyBits &dirtyBits,
-                                   gl::Command source)
+angle::Result TextureVk::syncStateCommon(ContextVk *contextVk, bool isGenerateMipmap)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-
-    // If this is a texture buffer, release buffer views.  There's nothing else to sync.  The
-    // image must already be deleted, and the sampler reset.
-    if (mState.getBuffer().get() != nullptr)
-    {
-        ASSERT(mImage == nullptr);
-
-        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
-
-        const VkDeviceSize offset = bufferBinding.getOffset();
-        const VkDeviceSize size   = gl::GetBoundBufferAvailableSize(bufferBinding);
-
-        mBufferViews.release(renderer);
-        mBufferViews.init(renderer, offset, size);
-        return angle::Result::Continue;
-    }
-
     VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
     VkImageCreateFlags oldCreateFlags = mImageCreateFlags;
 
@@ -2612,7 +2589,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // Before redefining the image for any reason, check to see if it's about to go through mipmap
     // generation.  In that case, drop every staged change for the subsequent mips after base, and
     // make sure the image is created with the complete mip chain.
-    bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
     if (isGenerateMipmap)
     {
         prepareForGenerateMipmap(contextVk);
@@ -2627,9 +2603,39 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags))
     {
         ANGLE_TRY(respecifyImageStorage(contextVk));
-        oldUsageFlags  = mImageUsageFlags;
-        oldCreateFlags = mImageCreateFlags;
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::syncState(const gl::Context *context,
+                                   const gl::Texture::DirtyBits &dirtyBits,
+                                   gl::Command source)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // If this is a texture buffer, release buffer views.  There's nothing else to sync.  The
+    // image must already be deleted, and the sampler reset.
+    if (mState.getBuffer().get() != nullptr)
+    {
+        ASSERT(mImage == nullptr);
+
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
+
+        const VkDeviceSize offset = bufferBinding.getOffset();
+        const VkDeviceSize size   = gl::GetBoundBufferAvailableSize(bufferBinding);
+
+        mBufferViews.release(renderer);
+        mBufferViews.init(renderer, offset, size);
+        return angle::Result::Continue;
+    }
+
+    VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
+    VkImageCreateFlags oldCreateFlags = mImageCreateFlags;
+    bool isGenerateMipmap             = source == gl::Command::GenerateMipmap;
+
+    ANGLE_TRY(syncStateCommon(contextVk, isGenerateMipmap));
 
     // Set base and max level before initializing the image
     bool baseLevelChanged = dirtyBits.test(gl::Texture::DIRTY_BIT_BASE_LEVEL);
@@ -2637,9 +2643,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (maxLevelChanged || baseLevelChanged)
     {
         ANGLE_TRY(updateBaseMaxLevels(contextVk, baseLevelChanged, maxLevelChanged));
-
-        // Updating levels could have respecified the storage, recapture mImageCreateFlags
-        oldCreateFlags = mImageCreateFlags;
     }
 
     // It is possible for the image to have a single level (because it doesn't use mipmapping),
@@ -2656,9 +2659,8 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // If generating mipmaps and the image needs to be recreated (not full-mip already, or changed
     // usage flags), make sure it's recreated.
     if (isGenerateMipmap && mImage && mImage->valid() &&
-        (oldUsageFlags != mImageUsageFlags ||
-         (!mState.getImmutableFormat() &&
-          mImage->getLevelCount() != getMipLevelCount(ImageMipLevels::FullMipChain))))
+        (!mState.getImmutableFormat() &&
+         mImage->getLevelCount() != getMipLevelCount(ImageMipLevels::FullMipChain)))
     {
         ASSERT(mOwnsImage);
         // Immutable texture is not expected to reach here. The usage flag change should have
