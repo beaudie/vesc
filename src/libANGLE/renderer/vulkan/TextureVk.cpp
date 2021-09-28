@@ -1957,7 +1957,8 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
     ASSERT(baseLevelChanged || maxLevelChanged);
 
     gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
-    gl::LevelIndex maxLevel(mState.getEffectiveMaxLevel());
+    gl::LevelIndex maxLevel(mState.getMipmapMaxLevel());
+    uint32_t levelCount;
     ASSERT(baseLevel <= maxLevel);
 
     if (!mImage->valid())
@@ -1979,16 +1980,22 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
         // number of mip levels. We don't need to respecify an image.
         ASSERT(!baseLevelChanged || baseLevel >= mImage->getFirstAllocatedLevel());
         ASSERT(!maxLevelChanged || maxLevel < gl::LevelIndex(mImage->getLevelCount()));
-    }
-    else if (!baseLevelChanged && (maxLevel <= mImage->getLastAllocatedLevel()))
-    {
-        // With a valid image, check if only changing the maxLevel to a subset of the texture's
-        // actual number of mip levels
-        ASSERT(maxLevelChanged);
+        levelCount = mState.getImmutableLevels();
     }
     else
     {
-        respecifyImage = true;
+        levelCount = getMipLevelCount(ImageMipLevels::EnabledLevels);
+        if (gl::LevelIndex(mState.getEffectiveBaseLevel()) == mImage->getFirstAllocatedLevel() &&
+            (levelCount <= mImage->getLevelCount()))
+        {
+            // With a valid image, check if only changing the maxLevel to a subset of the texture's
+            // actual number of mip levels
+            ASSERT(maxLevelChanged);
+        }
+        else
+        {
+            respecifyImage = true;
+        }
     }
 
     if (!respecifyImage)
@@ -2003,8 +2010,7 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
         uint32_t layerCount =
             mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
         return initImageViews(contextVk, mImage->getActualFormat(),
-                              baseLevelDesc.format.info->sized, maxLevel - baseLevel + 1,
-                              layerCount);
+                              baseLevelDesc.format.info->sized, levelCount, layerCount);
     }
 
     return respecifyImageStorage(contextVk);
@@ -2295,7 +2301,32 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
     ASSERT(mState.hasBeenBoundAsAttachment());
 
-    ANGLE_TRY(ensureRenderable(contextVk));
+    bool respecify = false;
+    ANGLE_TRY(syncStateCommon(contextVk, false, &respecify));
+
+    // Check if we need respecify due to base/max level change
+    if (!respecify && mImage->valid() && !mState.getImmutableFormat())
+    {
+        if (gl::LevelIndex(mState.getEffectiveBaseLevel()) != mImage->getFirstAllocatedLevel())
+        {
+            respecify = true;
+        }
+
+        if (getMipLevelCount(ImageMipLevels::EnabledLevels) > mImage->getLevelCount())
+        {
+            respecify = true;
+        }
+    }
+
+    // Respecify the image if it's changed in usage, or if any of its levels are redefined and no
+    // update to base/max levels were done (otherwise the above call would have already taken care
+    // of this).  Note that if both base/max and image usage are changed, the image is recreated
+    // twice, which incurs unnecessary copies.  This is not expected to be happening in real
+    // applications.
+    if (respecify || mRedefinedLevels.any())
+    {
+        ANGLE_TRY(respecifyImageStorage(contextVk));
+    }
 
     if (!mImage->valid())
     {
@@ -2544,29 +2575,10 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
     }
 }
 
-angle::Result TextureVk::syncState(const gl::Context *context,
-                                   const gl::Texture::DirtyBits &dirtyBits,
-                                   gl::Command source)
+angle::Result TextureVk::syncStateCommon(ContextVk *contextVk,
+                                         bool isGenerateMipmap,
+                                         bool *respecify)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-
-    // If this is a texture buffer, release buffer views.  There's nothing else to sync.  The
-    // image must already be deleted, and the sampler reset.
-    if (mState.getBuffer().get() != nullptr)
-    {
-        ASSERT(mImage == nullptr);
-
-        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
-
-        const VkDeviceSize offset = bufferBinding.getOffset();
-        const VkDeviceSize size   = gl::GetBoundBufferAvailableSize(bufferBinding);
-
-        mBufferViews.release(renderer);
-        mBufferViews.init(renderer, offset, size);
-        return angle::Result::Continue;
-    }
-
     VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
     VkImageCreateFlags oldCreateFlags = mImageCreateFlags;
 
@@ -2601,10 +2613,14 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // Before redefining the image for any reason, check to see if it's about to go through mipmap
     // generation.  In that case, drop every staged change for the subsequent mips after base, and
     // make sure the image is created with the complete mip chain.
-    bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
     if (isGenerateMipmap)
     {
         prepareForGenerateMipmap(contextVk);
+    }
+
+    if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags)
+    {
+        *respecify = true;
     }
 
     // For immutable texture, base level does not affect allocation. Only usage flags are. If usage
@@ -2612,13 +2628,42 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // better performance wise. Otherwise, we will try to preserve base level by calling
     // stageSelfAsSubresourceUpdates and then later on find out the mImageUsageFlags changed and the
     // whole thing has to be respecified.
-    if (mState.getImmutableFormat() &&
-        (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags))
+    if (mState.getImmutableFormat() && *respecify)
     {
         ANGLE_TRY(respecifyImageStorage(contextVk));
-        oldUsageFlags  = mImageUsageFlags;
-        oldCreateFlags = mImageCreateFlags;
+        *respecify = false;
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::syncState(const gl::Context *context,
+                                   const gl::Texture::DirtyBits &dirtyBits,
+                                   gl::Command source)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // If this is a texture buffer, release buffer views.  There's nothing else to sync.  The
+    // image must already be deleted, and the sampler reset.
+    if (mState.getBuffer().get() != nullptr)
+    {
+        ASSERT(mImage == nullptr);
+
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
+
+        const VkDeviceSize offset = bufferBinding.getOffset();
+        const VkDeviceSize size   = gl::GetBoundBufferAvailableSize(bufferBinding);
+
+        mBufferViews.release(renderer);
+        mBufferViews.init(renderer, offset, size);
+        return angle::Result::Continue;
+    }
+
+    bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
+    bool respecify        = false;
+
+    ANGLE_TRY(syncStateCommon(contextVk, isGenerateMipmap, &respecify));
 
     // Set base and max level before initializing the image
     bool baseLevelChanged = dirtyBits.test(gl::Texture::DIRTY_BIT_BASE_LEVEL);
@@ -2626,9 +2671,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     if (maxLevelChanged || baseLevelChanged)
     {
         ANGLE_TRY(updateBaseMaxLevels(contextVk, baseLevelChanged, maxLevelChanged));
-
-        // Updating levels could have respecified the storage, recapture mImageCreateFlags
-        oldCreateFlags = mImageCreateFlags;
     }
 
     // It is possible for the image to have a single level (because it doesn't use mipmapping),
@@ -2645,9 +2687,8 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // If generating mipmaps and the image needs to be recreated (not full-mip already, or changed
     // usage flags), make sure it's recreated.
     if (isGenerateMipmap && mImage && mImage->valid() &&
-        (oldUsageFlags != mImageUsageFlags ||
-         (!mState.getImmutableFormat() &&
-          mImage->getLevelCount() != getMipLevelCount(ImageMipLevels::FullMipChain))))
+        (respecify || (!mState.getImmutableFormat() &&
+                       mImage->getLevelCount() != getMipLevelCount(ImageMipLevels::FullMipChain))))
     {
         ASSERT(mOwnsImage);
         // Immutable texture is not expected to reach here. The usage flag change should have
@@ -2669,8 +2710,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     // of this).  Note that if both base/max and image usage are changed, the image is recreated
     // twice, which incurs unnecessary copies.  This is not expected to be happening in real
     // applications.
-    if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
-        mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
+    if (respecify || mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
     {
         ANGLE_TRY(respecifyImageStorage(contextVk));
     }
