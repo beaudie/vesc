@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38b1e758_fc2a9078",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-28T18:31:07Z",
+      "side": 1,
+      "message": "On my device, aliexpress goes from 3.2394 ms before these three CLs to 3.0116 ms after the CLs. Still more than native driver. I think we still ahve some barrier issues that needs to look into.",
+      "parentUuid": "71f7f6e4_cff5637d",
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04379bd7_c78a798b",
