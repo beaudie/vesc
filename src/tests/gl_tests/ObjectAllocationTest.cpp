@@ -31,6 +31,17 @@ TEST_P(ObjectAllocationTest, BindFramebufferBeforeGen)
     EXPECT_GL_NO_ERROR();
 }
 
+// Make sure that hen a frame buffer is not generated but bound directly,
+// then it is also be deleted by specifying the same ID
+TEST_P(ObjectAllocationTest, BindFramebufferBeforeGenAndDelete)
+{
+    GLuint fboID = 1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboID);
+    EXPECT_GL_NO_ERROR();
+    glDeleteFramebuffers(1, &fboID);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that we don't re-allocate a bound framebuffer ID, other pattern.
 TEST_P(ObjectAllocationTest, BindFramebufferAfterGen)
 {
@@ -46,6 +57,18 @@ TEST_P(ObjectAllocationTest, BindFramebufferAfterGen)
     EXPECT_NE(2u, secondFBOs[1]);
     glDeleteFramebuffers(2, secondFBOs);
 
+    EXPECT_GL_NO_ERROR();
+}
+
+// Buffers can be created on the fly by calling glBindBuffer, so
+// check that the calll doesn't fail that the buffer is also deleted
+TEST_P(ObjectAllocationTest, BindBufferBeforeGenAndDelete)
+{
+    GLuint id = 1;
+    glBindBuffer(GL_ARRAY_BUFFER, id);
+    EXPECT_GL_NO_ERROR();
+    swapBuffers();
+    glDeleteBuffers(1, &id);
     EXPECT_GL_NO_ERROR();
 }
 
