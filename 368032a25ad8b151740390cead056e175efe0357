@@ -16,6 +16,40 @@
       "message": "One more after this (for map/unmap).",
       "revId": "368032a25ad8b151740390cead056e175efe0357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81f37cc0_440132d9",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T14:58:31Z",
+      "side": 1,
+      "message": "It looks like this is guarding against the VAO getting bound to the buffer multiple times. In that case, shouldn\u0027t ContentObserver be reference counted?\n\nIn other words,  if `addContentsObserver` is called twice, would `removeContentsObserver` also be called twice? If so, what happens in the following case?\n\n- addContentsObserver(vao1, k)\n- addContentsObserver(vao1, k)\n- removeContentsObserver(vao1, k)\n- Update buffer, vao1 is no longer observing it\n- Draw call, vao1 is stale?\n- removeContentsObserver(vao1, k)\n\nOr is that impossible?",
+      "revId": "368032a25ad8b151740390cead056e175efe0357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76973601_180ec725",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-28T14:58:31Z",
+      "side": 1,
+      "message": "Should the policy decision be moved down to BufferVk::setDataImpl? There are different paths there, and feels like the `mBuffer-\u003eisCurrentlyInUse()` case and the else case would need a separate policy?\n\nI\u0027m afraid I\u0027m losing my grip over what these notifications mean...",
+      "revId": "368032a25ad8b151740390cead056e175efe0357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
