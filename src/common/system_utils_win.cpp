@@ -168,5 +168,4 @@ std::string GetRootDirectory()
 {
     return "C:\\";
 }
-
 }  // namespace angle
