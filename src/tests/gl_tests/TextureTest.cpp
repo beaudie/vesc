@@ -4532,6 +4532,7 @@ TEST_P(Texture2DBaseMaxTestES3, Fuzz545ImmutableTexRenderFeedback)
 
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    int loop = 0;
 
     const GLuint texs[] = {immutTex, mutTex};
     for (const GLuint tex : texs)
@@ -4618,6 +4619,7 @@ TEST_P(Texture2DBaseMaxTestES3, Fuzz545ImmutableTexRenderFeedback)
                             }
 
                             // -
+                            loop++;
                             EXPECT_GLENUM_EQ(expectStatus,
                                              glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
