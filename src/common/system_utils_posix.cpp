@@ -12,16 +12,20 @@
 #include <iostream>
 
 #include <dlfcn.h>
+#include <inttypes.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+#include "common/string_utils.h"
+
 #ifdef ANGLE_PLATFORM_FUCHSIA
 #    include <zircon/process.h>
 #    include <zircon/syscalls.h>
 #else
 #    include <sys/resource.h>
 #endif
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
 namespace angle
 {
@@ -227,4 +231,34 @@ double GetCurrentProcessCpuTime()
 #endif
 }
 
+uint64_t GetProcessMemoryUsageKB()
+{
+    FILE *file = fopen("/proc/self/status", "r");
+
+    if (!file)
+    {
+        return 0;
+    }
+
+    const char *kSearchString           = "VmRSS:";
+    constexpr size_t kMaxLineSize       = 100;
+    std::array<char, kMaxLineSize> line = {};
+
+    uint64_t kb = 0;
+
+    while (fgets(line.data(), line.size(), file) != nullptr)
+    {
+        if (strncmp(line.data(), kSearchString, strlen(kSearchString)) == 0)
+        {
+            std::vector<std::string> strings;
+            SplitStringAlongWhitespace(line.data(), &strings);
+
+            sscanf(strings[1].c_str(), "%" SCNu64, &kb);
+            break;
+        }
+    }
+    fclose(file);
+
+    return kb;
+}
 }  // namespace angle

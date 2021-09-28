@@ -8,6 +8,7 @@
 #include "common/FastVector.h"
 #include "system_utils.h"
 
+#include <psapi.h>
 #include <windows.h>
 #include <array>
 
@@ -127,5 +128,13 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
 Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
 {
     return new Win32Library(libraryName, searchType);
+}
+
+uint64_t GetProcessMemoryUsageKB()
+{
+    PROCESS_MEMORY_COUNTERS_EX pmc;
+    ::GetProcessMemoryInfo(::GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS *>(&pmc),
+                           sizeof(pmc));
+    return static_cast<uint64_t>(pmc.PrivateUsage) / 1024ull;
 }
 }  // namespace angle
