@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7652dae2_b091c6c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-28T21:15:24Z",
+      "side": 1,
+      "message": "Here\u0027s a first-pass take on documenting suppressions.  I\u0027m sure it can improved, but it\u0027s a start.",
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
