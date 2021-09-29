@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "887a5a8c_5435abb9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-29T19:48:29Z",
+      "side": 1,
+      "message": "Please remove this last obsolete paragraph (\"git commit --amend\", delete it, and \"git cl upload\") - thanks.",
+      "revId": "8c95e84ed0ab33fa372a4dd896bc0f66e9a79a17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "cb5a2655_0e08bb9c",
@@ -14,6 +31,23 @@
       "writtenOn": "2021-09-29T18:30:36Z",
       "side": 1,
       "message": "note: the unrelated Android test flake is being tracked in https://crbug.com/1254029 .\n",
+      "revId": "8c95e84ed0ab33fa372a4dd896bc0f66e9a79a17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5633e71e_ae532d47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-29T19:48:29Z",
+      "side": 1,
+      "message": "lgtm - great work Kyle persisting with this CL! One tiny comment about the commit message.\n",
       "revId": "8c95e84ed0ab33fa372a4dd896bc0f66e9a79a17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
