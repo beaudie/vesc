@@ -33,6 +33,24 @@
       "message": "I\u0027m definitely not a GLES1 expert, so I\u0027m happy if you say it fixes things.   Presumably once the Zillow trace lands, that\u0027ll be the regression test for this fix in the future.",
       "revId": "72415650dbc5d0b7d6d119ae6f8dad6aedb5c329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26d8a494_55931ace",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T15:14:30Z",
+      "side": 1,
+      "message": "The retrace test could server as a regression test but it\u0027s pretty slow.",
+      "parentUuid": "d1d5851f_69057c91",
+      "revId": "72415650dbc5d0b7d6d119ae6f8dad6aedb5c329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
