@@ -16,6 +16,63 @@
       "message": "PTAL. I ended up having to wrap everything and add the ++mSize because there are a number of places we need the answer to the query \"empty()\", and some times all the command buffer has is a pipeline barrier, or some such thing. Some functions are not wrapped, like bindXYZ because they are always accompanied by a draw call. In fact, what\u0027s bound is undone at the end of the command buffer, so we can\u0027t meaningfully have a command buffer that only binds things.\n\nAside from the excessive wrapping, the user-side code does look much nicer now.",
       "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fadd51ff_8065cab6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T21:41:42Z",
+      "side": 1,
+      "message": "Do we expect commandBuffersToReset to be empty in the ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS case?   If not, then I think it would be better to move the\n\n  #if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS\n\nCheck from CommandBatch::resetSecondaryCommandBuffers() to here, to avoid doing this work for the case where the list is never going to be processed anyway.\n\nIf it\u0027s not expected to be empty, what happens to these CommandBuffers?",
+      "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16ecc061_4c52dc1b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T21:41:42Z",
+      "side": 1,
+      "message": "It would be nicer to be able to SafeDelete() delete this to prevent any use-after-free errors. That would require passing in a **commandBuffer so the pointer can be modified, so I\u0027ll leave it up to you if that makes sense here.",
+      "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5871668_52643279",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T21:41:42Z",
+      "side": 1,
+      "message": "Does emplace_back work/help here?",
+      "range": {
+        "startLine": 2045,
+        "startChar": 36,
+        "endLine": 2045,
+        "endChar": 45
+      },
+      "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
