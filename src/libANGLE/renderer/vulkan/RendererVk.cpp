@@ -3088,6 +3088,8 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     }
     resourceUseLists.clear();
 
+    mCommandsSubmittedCondition.notify_all();
+
     return angle::Result::Continue;
 }
 

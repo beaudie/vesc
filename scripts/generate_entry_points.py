@@ -793,8 +793,9 @@ TEMPLATE_SOURCES_INCLUDES = """\
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/capture/capture_{header_version}_autogen.h"
 #include "libANGLE/capture/gl_enum_utils.h"
-#include "libANGLE/validation{validation_header_version}.h"
 #include "libANGLE/entry_points_utils.h"
+#include "libANGLE/global_mutex.h"
+#include "libANGLE/validation{validation_header_version}.h"
 #include "libGLESv2/global_state.h"
 
 using namespace gl;
@@ -835,6 +836,8 @@ TEMPLATE_DESKTOP_GL_SOURCE_INCLUDES = """\
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/capture/gl_enum_utils.h"
+#include "libANGLE/entry_points_utils.h"
+#include "libANGLE/global_mutex.h"
 #include "libANGLE/validationEGL.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES1.h"
@@ -844,7 +847,6 @@ TEMPLATE_DESKTOP_GL_SOURCE_INCLUDES = """\
 #include "libANGLE/validationES32.h"
 #include "libANGLE/validationESEXT.h"
 #include "libANGLE/validationGL{}_autogen.h"
-#include "libANGLE/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
 
 using namespace gl;
@@ -859,6 +861,7 @@ EGL_SOURCE_INCLUDES = """\
 #include "libGLESv2/entry_points_egl_autogen.h"
 
 #include "libANGLE/entry_points_utils.h"
+#include "libANGLE/global_mutex.h"
 #include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/egl_stubs_autogen.h"
 #include "libGLESv2/global_state.h"
@@ -876,6 +879,7 @@ EGL_EXT_SOURCE_INCLUDES = """\
 #include "libGLESv2/entry_points_egl_ext_autogen.h"
 
 #include "libANGLE/entry_points_utils.h"
+#include "libANGLE/global_mutex.h"
 #include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/egl_ext_stubs_autogen.h"
 #include "libGLESv2/global_state.h"

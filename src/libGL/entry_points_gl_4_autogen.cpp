@@ -14,6 +14,7 @@
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/capture/gl_enum_utils.h"
 #include "libANGLE/entry_points_utils.h"
+#include "libANGLE/global_mutex.h"
 #include "libANGLE/validationEGL.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES1.h"

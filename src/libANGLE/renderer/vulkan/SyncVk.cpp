@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/global_mutex.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 
@@ -146,14 +147,32 @@ angle::Result SyncHelper::clientWait(Context *context,
             ANGLE_TRY(contextVk->flushImpl(nullptr));
         }
     }
-    else
+
+    // If the sync object still doesn't have a valid Serial, then it (presumably) hasn't been
+    // flushed by the other context that created it.
+    if (!mUse.getSerial().valid())
     {
+        std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalMutex());
+        std::condition_variable_any &commandsSubmittedCondition =
+            renderer->getCommandsSubmittedCondition();
+
+        // The global mutex was locked previously in EGL_ClientWaitSync(), so we need to unlock it
+        // here to get the mutex count to 0, which will allow another thread to acquire it and
+        // (potentially) call glFlush().
+        egl::GetGlobalMutex().unlock();
+
+        auto nano = std::chrono::nanoseconds(1);
+        commandsSubmittedCondition.wait_for(lock, timeout * nano,
+                                            [this] { return mUse.getSerial().valid(); });
+
+        // This thread is now guaranteed to already have locked egl::GetGlobalMutex() once, due to
+        // the condition variable, but it needs to be locked once more so that it's held until
+        // EGL_ClientWaitSync() releases it entirely.
+        egl::GetGlobalMutex().lock();
+
         if (!mUse.getSerial().valid())
         {
-            // The sync object wasn't flushed before waiting, so the wait will always necessarily
-            // time out.
-            WARN() << "clientWaitSync called without flushing sync object and/or a valid context "
-                      "active.";
+            // Timed out waiting for the sync object to be flushed.
             *outResult = VK_TIMEOUT;
             return angle::Result::Continue;
         }
