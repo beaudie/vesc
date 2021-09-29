@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e82690f7_476898f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-09-29T21:29:55Z",
+      "side": 1,
+      "message": "Change LGTM sans one remaining issue.",
+      "revId": "628a09d686b44d66848c872f5e4222db40d28bf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6476313_4ed63bf6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-09-29T21:29:55Z",
+      "side": 1,
+      "message": "0 \u003d\u003e S_OK.",
+      "range": {
+        "startLine": 2310,
+        "startChar": 11,
+        "endLine": 2310,
+        "endChar": 12
+      },
+      "revId": "628a09d686b44d66848c872f5e4222db40d28bf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
