@@ -2,7 +2,7 @@
   "src/tests/restricted_traces/.gitignore":
     "c8b0333727f016662c591b81b681ada5",
   "src/tests/restricted_traces/gen_restricted_traces.py":
-    "6748acf6499a7a2632ac8a0416c2ef66",
+    "241d7eb3d8322ff67f44b84f8a06a4cf",
   "src/tests/restricted_traces/restricted_traces.json":
     "42ec13a62a17ebbc534f776b5a1ec8a4",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
