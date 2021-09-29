@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f0a4dd3_2c221200",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T02:33:01Z",
+      "side": 1,
+      "message": "Nice work.\n\nIs EGL worth opening a bug for at some point too, or does that rely too much on the underlying driver to be interesting?",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488d87b2_e266a980",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T02:33:01Z",
+      "side": 1,
+      "message": "I think it would be helpful to add \"Android 10\" here too (or whichever version you gathered the data with). This lets people ctrl-f for \"Android\", as well as adds a bit of versioning to the OS, since we will likely support different extensions as time goes on and more Vulkan is added to Android.",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afdbe50d_f8a6b505",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T02:33:01Z",
+      "side": 1,
+      "message": "Please add a comment with something like:\n  \"\u0026#10004\" -\u003e Checkmark\n  \"\u0026#10060\" -\u003e Crossmark (X)\n  \nAlso, what do these look like in an IDE or a terminal (e.g., vi or emacs)?   Rather than HTML, would it be more portable to use unicode?",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
