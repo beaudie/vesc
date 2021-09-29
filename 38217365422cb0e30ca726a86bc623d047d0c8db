@@ -18,6 +18,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a2938da_788c58ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T14:10:23Z",
+      "side": 1,
+      "message": "Filed http://anglebug.com/6465",
+      "parentUuid": "8f0a4dd3_2c221200",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "647990b1_023adcd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T14:10:23Z",
+      "side": 1,
+      "message": "Tim, PTAL",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "488d87b2_e266a980",
@@ -35,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a076907_9ed1aaf2",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T14:10:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "488d87b2_e266a980",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afdbe50d_f8a6b505",
@@ -48,6 +101,42 @@
       "writtenOn": "2021-09-29T02:33:01Z",
       "side": 1,
       "message": "Please add a comment with something like:\n  \"\u0026#10004\" -\u003e Checkmark\n  \"\u0026#10060\" -\u003e Crossmark (X)\n  \nAlso, what do these look like in an IDE or a terminal (e.g., vi or emacs)?   Rather than HTML, would it be more portable to use unicode?",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "348c0727_54f0e641",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T14:10:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afdbe50d_f8a6b505",
+      "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74e1adb0_b5c37757",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T14:10:23Z",
+      "side": 1,
+      "message": "Done\n\nUnicode didn\u0027t work when I tried it previously because of Python issues, so I ended up with the literals.",
+      "parentUuid": "afdbe50d_f8a6b505",
       "revId": "38217365422cb0e30ca726a86bc623d047d0c8db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
