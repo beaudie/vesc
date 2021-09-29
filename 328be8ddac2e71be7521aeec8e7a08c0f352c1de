@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c652221_ab443bd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T14:26:09Z",
+      "side": 1,
+      "message": "Shabi, PTAL, I updated the naming of the enum.",
+      "revId": "328be8ddac2e71be7521aeec8e7a08c0f352c1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
