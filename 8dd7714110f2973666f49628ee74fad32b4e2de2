@@ -52,6 +52,24 @@
       "parentUuid": "a54048e4_04dc91a3",
       "revId": "8dd7714110f2973666f49628ee74fad32b4e2de2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5cc4477_6372c360",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-09-29T15:47:32Z",
+      "side": 1,
+      "message": "From the man pages it seems that it can only happen for buffers, FBOs, and Renderbuffers. E.g. for textures it is written \"You must use glGenTextures to generate a set of new texture names.\" [1]. In the GLES 3.0 spec it formulated a bit different, but to me it seems to indicate the same thing. In summary, I think that the three types handled in this and the next CL are all that need to be handled.\n\nI would also prefer it when the map would be updated after a bind call, but so far I didn\u0027t really find a nice way of doing it.\n\n[1] https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glBindTexture.xhtml",
+      "parentUuid": "fc5d8646_60f15a60",
+      "revId": "8dd7714110f2973666f49628ee74fad32b4e2de2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
