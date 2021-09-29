@@ -237,22 +237,15 @@ jq ".traces = (.traces + [\"$LABEL $VERSION\"] | unique)" restricted_traces.json
 
 ## Run code auto-generation
 
-We use two scripts to update the test harness so it will compile and run the new trace:
+The [`gen_restricted_traces`](gen_restricted_traces.py) script auto-generates entries
+in our checkout dependencies to sync restricted trace data on checkout. To trigger
+code generation run the following from the angle root folder:
 ```
-python ./gen_restricted_traces.py
-cd ../../..
 python ./scripts/run_code_generation.py
 ```
 After this you should be able to `git diff` and see your new trace added to the harness files:
 ```
-$ git diff --stat
- scripts/code_generation_hashes/restricted_traces.json     | 12 +++++++-----
- src/tests/restricted_traces/.gitignore                    |  2 ++
- src/tests/restricted_traces/restricted_traces.json        |  1 +
- src/tests/restricted_traces/restricted_traces_autogen.cpp | 19 +++++++++++++++++++
- src/tests/restricted_traces/restricted_traces_autogen.gni |  1 +
- src/tests/restricted_traces/restricted_traces_autogen.h   |  1 +
- 6 files changed, 31 insertions(+), 5 deletions(-)
+FIXME: redo this
 ```
 Note the absence of the traces themselves listed above.  They are automatically .gitignored since
 they won't be checked in directly to the repo.
@@ -264,7 +257,7 @@ be done by Googlers with write access to the trace CIPD prefix. If you need writ
 someone listed in the `OWNERS` file.
 
 ```
-sync_restricted_traces_to_cipd.py
+./sync_restricted_traces_to_cipd.py
 ```
 
 ## Upload your CL
@@ -276,3 +269,52 @@ git cl upload
 ```
 
 You're now ready to run your new trace on CI!
+
+# Upgrading existing traces
+
+With tracer updates sometimes we want to re-run tracing to upgrade the trace file format or to
+take advantage of new tracer improvements. The [`retrace_restricted_traces`](retrace_restricted_traces.py)
+script allows us to re-run tracing using [SwiftShader](https://swiftshader.googlesource.com/SwiftShader)
+on a desktop machine. As of writing we require re-tracing on a Windows machine because of size
+limitations with a Linux app window.
+
+## 1. Back up existing traces
+
+This will save the original traces in a temporary folder if you need to revert to the prior trace format:
+
+```
+./src/tests/restricted_traces/retrace_restricted_traces backup retrace-backups "*"
+```
+
+At any time you can revert the trace files by running:
+
+```
+./src/tests/restricted_traces/retrace_restricted_traces restore retrace-backups "*"
+```
+
+## 2. Retrace a sample app with validation enabled
+
+First we'll retrace a single app to verify the workflow is intact. Please
+ensure you replace the specified variables with paths that work on your
+configuration and checkout:
+
+```
+export TRACE_GN_PATH=out/Debug
+export TRACE_NAME=trex_200
+./src/tests/restricted_traces/retrace_restricted_traces upgrade $TRACE_GN_PATH retrace-wip -f $TRACE_NAME --validation --limit 3
+```
+
+The `--validation` flag will turn on additional validation checks in the
+trace. The `--limit 3` flag forces a maximum of 3 frames of tracing so the
+test will run more quickly. The trace will end up in the `retrace-wip`
+folder.
+
+## 3. Rebuild with the new trace
+
+First update the existing copy of the trace with the new trace:
+
+```
+./src/tests/restricted_traces/retrace_restricted_traces validate retrace-wip $TRACE_NAME
+autoninja -C $TRACE_GN_PATH
+./$TRACE_GN_PATH/angle_perftests --gtest_filter=TracePerfTest.Run/vulkan_swiftshader_$TRACE_NAME --enable-all-trace-tests --validation
+```

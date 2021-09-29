@@ -15,6 +15,8 @@ import json
 import logging
 import os
 import re
+import shutil
+import stat
 import subprocess
 import sys
 
@@ -28,10 +30,16 @@ DEFAULT_LOG_LEVEL = 'info'
 # Currently this is just the set of default framebuffer surface config bits.
 METADATA_KEYWORDS = ['kDefaultFramebuffer']
 
+EXIT_SUCCESS = 0
+EXIT_FAILURE = 1
+
+
+def get_script_dir():
+    return os.path.dirname(sys.argv[0])
+
 
 def src_trace_path(trace):
-    script_dir = os.path.dirname(sys.argv[0])
-    return os.path.join(script_dir, trace)
+    return os.path.join(get_script_dir(), trace)
 
 
 def context_header(trace, trace_path):
@@ -105,51 +113,98 @@ def path_contains_header(path):
     return False
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('gn_path', help='GN build path')
-    parser.add_argument('out_path', help='Output directory')
-    parser.add_argument('-f', '--filter', help='Trace filter. Defaults to all.', default='*')
-    parser.add_argument('-l', '--log', help='Logging level.', default=DEFAULT_LOG_LEVEL)
-    parser.add_argument(
-        '--no-swiftshader',
-        help='Trace against native Vulkan.',
-        action='store_true',
-        default=False)
-    parser.add_argument(
-        '-n',
-        '--no-overwrite',
-        help='Skip traces which already exist in the out directory.',
-        action='store_true')
-    parser.add_argument(
-        '--validation', help='Enable state serialization validation calls.', action='store_true')
-    parser.add_argument(
-        '--validation-expr',
-        help='Validation expression, used to add more validation checkpoints.')
-    parser.add_argument(
-        '--limit',
-        '--frame-limit',
-        type=int,
-        help='Limits the number of captured frames to produce a shorter trace than the original.')
-    args, extra_flags = parser.parse_known_args()
+def chmod_directory(directory, perm):
+    assert os.path.isdir(directory)
+    for file in os.listdir(directory):
+        fn = os.path.join(directory, file)
+        os.chmod(fn, perm)
 
-    logging.basicConfig(level=args.log.upper())
 
-    script_dir = os.path.dirname(sys.argv[0])
+def ensure_rmdir(directory):
+    if os.path.isdir(directory):
+        chmod_directory(directory, stat.S_IWRITE)
+        shutil.rmtree(directory)
 
-    # Load trace names
-    with open(os.path.join(script_dir, DEFAULT_TEST_JSON)) as f:
-        traces = json.loads(f.read())
 
-    traces = [trace.split(' ')[0] for trace in traces['traces']]
+def copy_trace_folder(old_path, new_path):
+    logging.info('Copying folder %s -> %s' % (old_path, new_path))
+    ensure_rmdir(new_path)
+    shutil.copytree(old_path, new_path)
 
-    binary = os.path.join(args.gn_path, DEFAULT_TEST_SUITE)
+
+def backup_traces(args, traces):
+    for trace in fnmatch.filter(traces, args.traces):
+        trace_path = src_trace_path(trace)
+        trace_backup_path = os.path.join(args.backup_path, trace)
+        copy_trace_folder(trace_path, trace_backup_path)
+
+
+# TODO(jmadill): Remove this once migrated. http://anglebug.com/5133
+def run_code_generation():
+    python_binary = 'py.exe' if os.name == 'nt' else 'python3'
+    angle_dir = os.path.join(get_script_dir(), '..', '..', '..')
+    gen_path = os.path.join(angle_dir, 'scripts', 'run_code_generation.py')
+    subprocess.check_call([python_binary, gen_path])
+
+
+def restore_traces(args, restore_path, traces):
+    for trace in fnmatch.filter(traces, args.traces):
+        trace_path = src_trace_path(trace)
+        trace_backup_path = os.path.join(restore_path, trace)
+        if not os.path.isdir(trace_backup_path):
+            logging.error('Trace folder not found at %s' % trace_backup_path)
+        else:
+            copy_trace_folder(trace_backup_path, trace_path)
+    # TODO(jmadill): Remove this once migrated. http://anglebug.com/5133
+    angle_dir = os.path.join(get_script_dir(), '..', '..', '..')
+    json_path = os.path.join(angle_dir, 'scripts', 'code_generation_hashes',
+                             'restricted_traces.json')
+    if os.path.exists(json_path):
+        os.unlink(json_path)
+    run_code_generation()
+
+
+def run_autoninja(args):
+    autoninja_binary = 'autoninja'
     if os.name == 'nt':
-        binary += '.exe'
+        autoninja_binary += '.bat'
+
+    autoninja_args = [autoninja_binary, '-C', args.gn_path, args.test_suite]
+    logging.debug('Calling %s' % ' '.join(autoninja_args))
+    subprocess.check_call(autoninja_args)
+
+
+def run_test_suite(args, trace, max_steps, additional_args=[], additional_env={}):
+    trace_binary = os.path.join(args.gn_path, args.test_suite)
+    if os.name == 'nt':
+        trace_binary += '.exe'
+
+    renderer = 'vulkan' if args.no_swiftshader else 'vulkan_swiftshader'
+    trace_filter = '--gtest_filter=TracePerfTest.Run/%s_%s' % (renderer, trace)
+    run_args = [
+        trace_binary,
+        trace_filter,
+        '--max-steps-performed',
+        str(max_steps),
+    ] + additional_args
+    if not args.no_swiftshader:
+        run_args += ['--enable-all-trace-tests']
+
+    env = {**os.environ.copy(), **additional_env}
+    env_string = ' '.join(['%s=%s' % item for item in additional_env.items()])
+    if env_string:
+        env_string += ' '
+
+    logging.info('%s%s' % (env_string, ' '.join(run_args)))
+    subprocess.check_call(run_args, env=env)
+
+
+def upgrade_traces(args, traces):
+    run_autoninja(args)
 
     failures = []
 
-    for trace in fnmatch.filter(traces, args.filter):
+    for trace in fnmatch.filter(traces, args.traces):
         logging.debug('Tracing %s' % trace)
 
         trace_path = os.path.abspath(os.path.join(args.out_path, trace))
@@ -172,7 +227,7 @@ def main():
             'ANGLE_CAPTURE_LABEL': trace,
             'ANGLE_CAPTURE_OUT_DIR': trace_path,
             'ANGLE_CAPTURE_FRAME_START': '2',
-            'ANGLE_CAPTURE_FRAME_END': str(num_frames + 1),
+            'ANGLE_CAPTURE_FRAME_END': str(max_steps + 1),
         }
         if args.validation:
             additional_env['ANGLE_CAPTURE_VALIDATION'] = '1'
@@ -181,26 +236,13 @@ def main():
             additional_env['ANGLE_FEATURE_OVERRIDES_ENABLED'] = 'forceInitShaderOutputVariables'
         if args.validation_expr:
             additional_env['ANGLE_CAPTURE_VALIDATION_EXPR'] = args.validation_expr
+        if args.no_trim:
+            additional_env['ANGLE_CAPTURE_TRIM_ENABLED'] = '0'
 
-        env = {**os.environ.copy(), **additional_env}
+        additional_args = ['--retrace-mode']
 
-        renderer = 'vulkan' if args.no_swiftshader else 'vulkan_swiftshader'
-
-        trace_filter = '--gtest_filter=TracePerfTest.Run/%s_%s' % (renderer, trace)
-        run_args = [
-            binary,
-            trace_filter,
-            '--retrace-mode',
-            '--max-steps-performed',
-            str(max_steps),
-            '--enable-all-trace-tests',
-        ]
-
-        print('Capturing "%s" (%d frames)...' % (trace, num_frames))
-        logging.debug('Running "%s" with environment: %s' %
-                      (' '.join(run_args), str(additional_env)))
         try:
-            subprocess.check_call(run_args, env=env)
+            run_test_suite(args, trace, max_steps, additional_args, additional_env)
 
             header_file = context_header(trace, trace_path)
 
@@ -217,9 +259,102 @@ def main():
     if failures:
         print('The following traces failed to re-trace:\n')
         print('\n'.join(['  ' + trace for trace in failures]))
-        return 1
+        return EXIT_FAILURE
 
-    return 0
+    return EXIT_SUCCESS
+
+
+def validate_traces(args, traces):
+    restore_traces(args, args.out_path, traces)
+    run_autoninja(args)
+
+    additional_args = ['--validation']
+
+    for trace in fnmatch.filter(traces, args.traces):
+        num_frames = get_num_frames(trace)
+        max_steps = min(args.limit, num_frames) if args.limit else num_frames
+        run_test_suite(args, trace, max_steps, additional_args)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-l', '--log', help='Logging level.', default=DEFAULT_LOG_LEVEL)
+    parser.add_argument(
+        '--test-suite',
+        help='Test Suite. Default is %s' % DEFAULT_TEST_SUITE,
+        default=DEFAULT_TEST_SUITE)
+    parser.add_argument(
+        '--no-swiftshader',
+        help='Trace against native Vulkan.',
+        action='store_true',
+        default=False)
+
+    subparsers = parser.add_subparsers(dest='command', required=True, help='Command to run.')
+
+    backup_parser = subparsers.add_parser(
+        'backup', help='Copies trace contents into a saved folder.')
+    backup_parser.add_argument('backup_path', help='Path to backup to.')
+    backup_parser.add_argument('traces', help='Traces to back up. Supports fnmatch expressions.')
+
+    restore_parser = subparsers.add_parser(
+        'restore', help='Copies traces from a saved folder to the trace folder.')
+    restore_parser.add_argument('backup_path', help='Path the traces were saved.')
+    restore_parser.add_argument('traces', help='Traces to restore. Supports fnmatch expressions.')
+
+    upgrade_parser = subparsers.add_parser(
+        'upgrade', help='Re-trace existing traces, upgrading the format.')
+    upgrade_parser.add_argument('gn_path', help='GN build path')
+    upgrade_parser.add_argument('out_path', help='Output directory')
+    upgrade_parser.add_argument(
+        '-f', '--traces', '--filter', help='Trace filter. Defaults to all.', default='*')
+    upgrade_parser.add_argument(
+        '-n',
+        '--no-overwrite',
+        help='Skip traces which already exist in the out directory.',
+        action='store_true')
+    upgrade_parser.add_argument(
+        '--validation', help='Enable state serialization validation calls.', action='store_true')
+    upgrade_parser.add_argument(
+        '--validation-expr',
+        help='Validation expression, used to add more validation checkpoints.')
+    upgrade_parser.add_argument(
+        '--limit',
+        '--frame-limit',
+        type=int,
+        help='Limits the number of captured frames to produce a shorter trace than the original.')
+    upgrade_parser.add_argument(
+        '--no-trim', action='store_true', help='Disables trace trimming. Useful for validation.')
+
+    validate_parser = subparsers.add_parser(
+        'validate', help='Runs the an updated test suite with validation enabled.')
+    validate_parser.add_argument('gn_path', help='GN build path')
+    validate_parser.add_argument('out_path', help='Path to the upgraded trace folder.')
+    validate_parser.add_argument(
+        'traces', help='Traces to validate. Supports fnmatch expressions.')
+    validate_parser.add_argument(
+        '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
+
+    args, extra_flags = parser.parse_known_args()
+
+    logging.basicConfig(level=args.log.upper())
+
+    # Load trace names
+    with open(os.path.join(get_script_dir(), DEFAULT_TEST_JSON)) as f:
+        traces = json.loads(f.read())
+
+    traces = [trace.split(' ')[0] for trace in traces['traces']]
+
+    if args.command == 'backup':
+        return backup_traces(args, traces)
+    elif args.command == 'restore':
+        return restore_traces(args, args.backup_path, traces)
+    elif args.command == 'upgrade':
+        return upgrade_traces(args, traces)
+    elif args.command == 'validate':
+        return validate_traces(args, traces)
+    else:
+        logging.fatal('Unknown command: %s' % args.command)
+        return EXIT_FAILURE
 
 
 if __name__ == '__main__':
