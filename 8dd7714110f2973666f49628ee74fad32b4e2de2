@@ -16,6 +16,24 @@
       "message": "My question is: how does this work for all the other objects which allow create-on-bind? Is it broken for everything?",
       "revId": "8dd7714110f2973666f49628ee74fad32b4e2de2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a54048e4_04dc91a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-09-29T09:00:12Z",
+      "side": 1,
+      "message": "I guess it\u0027s broken for all objects that can be created without calling a glGen or glCreate function, but have a resource mapping table, but TBH I don\u0027t know which object types that are. It seems textures must be created with Gen, but buffers can be created on the fly. I\u0027ve updated the patch to also test and handle buffers.",
+      "parentUuid": "6fd279f5_40139dc6",
+      "revId": "8dd7714110f2973666f49628ee74fad32b4e2de2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
