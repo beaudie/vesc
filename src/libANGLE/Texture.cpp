@@ -2371,4 +2371,17 @@ void Texture::onBindAsImageTexture()
     }
 }
 
+angle::Result Texture::getAttachmentRenderTarget(const Context *context,
+                                                 GLenum binding,
+                                                 const ImageIndex &imageIndex,
+                                                 GLsizei samples,
+                                                 rx::FramebufferAttachmentRenderTarget **rtOut)
+{
+    if (hasAnyDirtyBit())
+    {
+        ANGLE_TRY(syncState(context, Command::Other));
+    }
+    return mTexture->getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
+}
+
 }  // namespace gl

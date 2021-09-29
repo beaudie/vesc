@@ -222,11 +222,11 @@ class FramebufferAttachmentObject : public angle::Subject, public angle::Observe
     virtual InitState initState(const ImageIndex &imageIndex) const              = 0;
     virtual void setInitState(const ImageIndex &imageIndex, InitState initState) = 0;
 
-    angle::Result getAttachmentRenderTarget(const Context *context,
-                                            GLenum binding,
-                                            const ImageIndex &imageIndex,
-                                            GLsizei samples,
-                                            rx::FramebufferAttachmentRenderTarget **rtOut) const;
+    virtual angle::Result getAttachmentRenderTarget(const Context *context,
+                                                    GLenum binding,
+                                                    const ImageIndex &imageIndex,
+                                                    GLsizei samples,
+                                                    rx::FramebufferAttachmentRenderTarget **rtOut);
 
     angle::Result initializeContents(const Context *context, const ImageIndex &imageIndex);
 

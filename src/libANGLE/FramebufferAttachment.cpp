@@ -294,7 +294,7 @@ angle::Result FramebufferAttachmentObject::getAttachmentRenderTarget(
     GLenum binding,
     const ImageIndex &imageIndex,
     GLsizei samples,
-    rx::FramebufferAttachmentRenderTarget **rtOut) const
+    rx::FramebufferAttachmentRenderTarget **rtOut)
 {
     return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, samples,
                                                           rtOut);

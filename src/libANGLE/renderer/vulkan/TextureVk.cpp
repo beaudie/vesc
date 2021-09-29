@@ -2303,17 +2303,8 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     ASSERT(mState.hasBeenBoundAsAttachment());
-    ANGLE_TRY(ensureRenderable(contextVk));
-
-    if (!mImage->valid())
-    {
-        // Immutable texture must already have a valid image
-        ASSERT(!mState.getImmutableFormat());
-        const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
-        ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
-                            format.getActualImageFormatID(getRequiredImageAccess()),
-                            ImageMipLevels::EnabledLevels));
-    }
+    ASSERT(mImage->valid());
+    ASSERT(mRequiredImageAccess == vk::ImageAccess::Renderable);
 
     const bool hasRenderToTextureEXT =
         contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled;
