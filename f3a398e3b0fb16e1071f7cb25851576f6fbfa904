@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "f3a398e3b0fb16e1071f7cb25851576f6fbfa904",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7f33db0_ab28b3bd",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T16:50:46Z",
+      "side": 1,
+      "message": "nit: you can make all these ASSERT.. ANGLE can\u0027t really continue in the face of GL errors usually.",
+      "range": {
+        "startLine": 3243,
+        "startChar": 4,
+        "endLine": 3243,
+        "endChar": 22
+      },
+      "revId": "f3a398e3b0fb16e1071f7cb25851576f6fbfa904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
