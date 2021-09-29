@@ -16,6 +16,23 @@
       "message": "Tim, PTAL when you have a chance.",
       "revId": "6d1eb6c30c56a64dbd859ada3942a546e745ebe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b1fd748_64f9b249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T00:49:04Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6d1eb6c30c56a64dbd859ada3942a546e745ebe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
