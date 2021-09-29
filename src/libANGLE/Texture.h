@@ -631,6 +631,12 @@ class Texture final : public RefCountObject<TextureID>,
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    angle::Result getAttachmentRenderTarget(const Context *context,
+                                            GLenum binding,
+                                            const ImageIndex &imageIndex,
+                                            GLsizei samples,
+                                            rx::FramebufferAttachmentRenderTarget **rtOut) override;
+
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 

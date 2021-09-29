@@ -40,6 +40,7 @@ enum class Command
     GenerateMipmap,
     ReadPixels,
     TexImage,
+    GetAttachmentRenderTarget,
     Other
 };
 
