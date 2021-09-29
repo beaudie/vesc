@@ -16,6 +16,23 @@
       "message": "Merging fix to M95 (branch 4638)",
       "revId": "cc74de0b9c0760c741119400b9dd4190ad194cee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbbca60a_ce9c35cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T13:47:14Z",
+      "side": 1,
+      "message": "Please use the dots -\u003e submit to land cherry-picks.",
+      "revId": "cc74de0b9c0760c741119400b9dd4190ad194cee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
