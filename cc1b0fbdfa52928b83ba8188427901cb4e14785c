@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d92defc5_cddbdea7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T13:21:05Z",
+      "side": 1,
+      "message": "nit: can you update these to use mMember naming?",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 46
+      },
+      "revId": "cc1b0fbdfa52928b83ba8188427901cb4e14785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58533cc3_0cc98bcb",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 1
@@ -37,6 +60,30 @@
       "writtenOn": "2021-09-28T23:57:13Z",
       "side": 1,
       "message": "To avoid double negatives, consider renaming the variable to sendNameToD3D (which starts as false and becomes true) or isNameEmpty (which starts as true and becomes false).",
+      "range": {
+        "startLine": 2293,
+        "startChar": 9,
+        "endLine": 2293,
+        "endChar": 23
+      },
+      "revId": "cc1b0fbdfa52928b83ba8188427901cb4e14785c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82f482a4_756857cc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T13:21:05Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "58533cc3_0cc98bcb",
       "range": {
         "startLine": 2293,
         "startChar": 9,
