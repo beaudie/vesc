@@ -72,6 +72,17 @@ TEST_P(ObjectAllocationTest, BindBufferBeforeGenAndDelete)
     EXPECT_GL_NO_ERROR();
 }
 
+TEST_P(ObjectAllocationTest, BindRenderbufferBeforeGenAndDelete)
+{
+    GLuint id = 1;
+    glBindRenderbuffer(GL_RENDERBUFFER, id);
+    // glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 10, 10);
+    EXPECT_GL_NO_ERROR();
+    swapBuffers();
+    glDeleteRenderbuffers(1, &id);
+    EXPECT_GL_NO_ERROR();
+}
+
 }  // anonymous namespace
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ObjectAllocationTest);
