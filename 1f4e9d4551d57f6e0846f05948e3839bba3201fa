@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c49ea479_c9530d04",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2298,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T02:14:56Z",
+      "side": 0,
+      "message": "Why are these unmap calls being removed?   Is the assumption that it\u0027s up to the caller to call glUnmapBuffer(), so these should be unnecessary?",
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
