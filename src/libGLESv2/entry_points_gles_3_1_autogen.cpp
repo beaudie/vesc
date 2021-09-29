@@ -16,6 +16,7 @@
 #include "libANGLE/capture/capture_gles_3_1_autogen.h"
 #include "libANGLE/capture/gl_enum_utils.h"
 #include "libANGLE/entry_points_utils.h"
+#include "libANGLE/global_mutex.h"
 #include "libANGLE/validationES31.h"
 #include "libGLESv2/global_state.h"
 

@@ -7,8 +7,10 @@
 
 #include "platform/FeaturesVk.h"
 #include "test_utils/ANGLETest.h"
+#include "test_utils/MultiThreadSteps.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
+#include "util/test_utils.h"
 
 #include <atomic>
 #include <mutex>
@@ -763,6 +765,132 @@ TEST_P(MultithreadingTest, NoFlushNoContextReturnsTimeout)
     thread.join();
 
     EXPECT_EGL_TRUE(eglDestroySyncKHR(dpy, sync));
+}
+
+// Test that waiting on sync object that hasn't been flushed yet, but is later flushed by another
+// thread, correctly returns when the fence is signalled without a timeout.
+TEST_P(MultithreadingTest, CreateFenceThreadAClientWaitSyncThreadBDelayedFlush)
+{
+    // Must be after the eglMakeCurrent() so renderer string is initialized.
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension() || !hasGLSyncExtension());
+
+    EGLWindow *window = getEGLWindow();
+    EGLDisplay dpy    = window->getDisplay();
+    EGLConfig config  = window->getConfig();
+    std::vector<EGLSurface> surfaces;
+    std::vector<EGLContext> contexts;
+    constexpr EGLint kPBufferSize = 256;
+    // Initialize the pbuffer and context
+    EGLint pbufferAttributes[] = {
+        EGL_WIDTH, kPBufferSize, EGL_HEIGHT, kPBufferSize, EGL_NONE, EGL_NONE,
+    };
+
+    // Create 2 surfaces, one for each thread
+    surfaces.emplace_back(eglCreatePbufferSurface(dpy, config, pbufferAttributes));
+    surfaces.emplace_back(eglCreatePbufferSurface(dpy, config, pbufferAttributes));
+    EXPECT_EGL_SUCCESS();
+    // Create 2 shared contexts, one for each thread
+    contexts.emplace_back(window->createContext(EGL_NO_CONTEXT));
+    EXPECT_NE(EGL_NO_CONTEXT, contexts[0]);
+    contexts.emplace_back(window->createContext(contexts[0]));
+    EXPECT_NE(EGL_NO_CONTEXT, contexts[1]);
+    // Sync object
+    EGLSyncKHR sync = EGL_NO_SYNC_KHR;
+
+    // Synchronization tools to ensure the two threads are interleaved as designed by this test.
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        Thread0Clear,
+        Thread1CreateFence,
+        Thread0ClientWaitSync,
+        Thread1Flush,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    std::thread thread0 = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surfaces[0], surfaces[0], contexts[0]));
+
+        // Do work.
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Wait for thread 1 to clear.
+        threadSynchronization.nextStep(Step::Thread0Clear);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread1CreateFence));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
+        // Wait on the sync object, but do *not* flush it, since the other thread will flush.
+        constexpr GLuint64 kTimeout = 2'000'000'000;  // 1 second
+        threadSynchronization.nextStep(Step::Thread0ClientWaitSync);
+        ASSERT_EQ(EGL_CONDITION_SATISFIED_KHR, eglClientWaitSyncKHR(dpy, sync, 0, kTimeout));
+
+        // Clean up
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+    });
+
+    std::thread thread1 = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        // Wait for thread 0 to clear.
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0Clear));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surfaces[1], surfaces[1], contexts[1]));
+
+        // Do work.
+        glClearColor(0.0, 1.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        sync = eglCreateSyncKHR(dpy, EGL_SYNC_FENCE_KHR, nullptr);
+        EXPECT_NE(sync, EGL_NO_SYNC_KHR);
+
+        // Wait for the thread 0 to eglClientWaitSyncKHR().
+        threadSynchronization.nextStep(Step::Thread1CreateFence);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0ClientWaitSync));
+
+        // Wait a little to give thread 1 time to wait on the sync object before flushing it.
+        angle::Sleep(500);
+        glFlush();
+
+        // Clean up
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
+        threadSynchronization.nextStep(Step::Finish);
+    });
+
+    thread0.join();
+    thread1.join();
+
+    // Clean up
+    for (auto &surface : surfaces)
+    {
+        if (surface != EGL_NO_SURFACE)
+        {
+            eglDestroySurface(dpy, surface);
+        }
+    }
+    for (auto &context : contexts)
+    {
+        if (context != EGL_NO_CONTEXT)
+        {
+            eglDestroyContext(dpy, context);
+        }
+    }
+
+    ASSERT_NE(currentStep, Step::Abort);
 }
 
 // TODO(geofflang): Test sharing a program between multiple shared contexts on multiple threads

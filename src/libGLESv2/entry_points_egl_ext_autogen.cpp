@@ -11,6 +11,7 @@
 #include "libGLESv2/entry_points_egl_ext_autogen.h"
 
 #include "libANGLE/entry_points_utils.h"
+#include "libANGLE/global_mutex.h"
 #include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/egl_ext_stubs_autogen.h"
 #include "libGLESv2/global_state.h"

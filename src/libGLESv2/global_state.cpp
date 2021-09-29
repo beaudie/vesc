@@ -9,10 +9,10 @@
 #include "libGLESv2/global_state.h"
 
 #include "common/debug.h"
-#include "common/platform.h"
 #include "common/system_utils.h"
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/Thread.h"
+#include "libANGLE/global_mutex.h"
 #include "libGLESv2/resource.h"
 
 #include <atomic>
@@ -21,10 +21,6 @@ namespace egl
 {
 namespace
 {
-ANGLE_REQUIRE_CONSTANT_INIT std::atomic<angle::GlobalMutex *> g_Mutex(nullptr);
-static_assert(std::is_trivially_destructible<decltype(g_Mutex)>::value,
-              "global mutex is not trivially destructible");
-
 ANGLE_REQUIRE_CONSTANT_INIT gl::Context *g_LastContext(nullptr);
 static_assert(std::is_trivially_destructible<decltype(g_LastContext)>::value,
               "global last context is not trivially destructible");
@@ -53,29 +49,9 @@ Thread *AllocateCurrentThread()
 
     return gCurrentThread;
 }
-
-void AllocateMutex()
-{
-    if (g_Mutex == nullptr)
-    {
-        std::unique_ptr<angle::GlobalMutex> newMutex(new angle::GlobalMutex());
-        angle::GlobalMutex *expected = nullptr;
-        if (g_Mutex.compare_exchange_strong(expected, newMutex.get()))
-        {
-            newMutex.release();
-        }
-    }
-}
-
 }  // anonymous namespace
 
 thread_local Thread *gCurrentThread = nullptr;
-
-angle::GlobalMutex &GetGlobalMutex()
-{
-    AllocateMutex();
-    return *g_Mutex;
-}
 
 gl::Context *GetGlobalLastContext()
 {
