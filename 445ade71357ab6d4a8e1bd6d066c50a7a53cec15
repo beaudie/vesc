@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6a60f12_ce5e80a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-29T20:43:27Z",
+      "side": 1,
+      "message": "nit: The title makes it sound like this is a generic fix-it-all change. I suggest something more accurate like\n\n    Set the viewport missing from a few tests",
+      "revId": "445ade71357ab6d4a8e1bd6d066c50a7a53cec15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
