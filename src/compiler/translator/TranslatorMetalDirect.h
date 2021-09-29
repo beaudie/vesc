@@ -127,8 +127,10 @@ class TranslatorMetalReflection
     }
     void reset()
     {
-        hasUBOs      = false;
-        hasFlatInput = false;
+        hasUBOs       = false;
+        hasFlatInput  = false;
+        hasAtan       = false;
+        hasInvariance = false;
         originalNames.clear();
         samplerBindings.clear();
         textureBindings.clear();
@@ -136,8 +138,10 @@ class TranslatorMetalReflection
         uniformBufferBindings.clear();
     }
 
-    bool hasUBOs      = false;
-    bool hasFlatInput = false;
+    bool hasUBOs       = false;
+    bool hasFlatInput  = false;
+    bool hasAtan       = false;
+    bool hasInvariance = false;
 
   private:
     originalNamesMap originalNames;

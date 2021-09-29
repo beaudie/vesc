@@ -82,7 +82,6 @@ class GenMetalTraverser : public TIntermTraverser
                       Sink &out,
                       IdGen &idGen,
                       const PipelineStructs &pipelineStructs,
-                      const Invariants &invariants,
                       SymbolEnv &symbolEnv,
                       TSymbolTable *symbolTable);
 
@@ -183,7 +182,6 @@ class GenMetalTraverser : public TIntermTraverser
     Sink &mOut;
     const TCompiler &mCompiler;
     const PipelineStructs &mPipelineStructs;
-    const Invariants &mInvariants;
     SymbolEnv &mSymbolEnv;
     IdGen &mIdGen;
     int mIndentLevel                  = -1;
@@ -214,14 +212,12 @@ GenMetalTraverser::GenMetalTraverser(const TCompiler &compiler,
                                      Sink &out,
                                      IdGen &idGen,
                                      const PipelineStructs &pipelineStructs,
-                                     const Invariants &invariants,
                                      SymbolEnv &symbolEnv,
                                      TSymbolTable *symbolTable)
     : TIntermTraverser(true, false, false),
       mOut(out),
       mCompiler(compiler),
       mPipelineStructs(pipelineStructs),
-      mInvariants(invariants),
       mSymbolEnv(symbolEnv),
       mIdGen(idGen),
       mMainUniformBufferIndex(symbolTable->getDefaultUniformsBindingIndex()),
@@ -779,9 +775,12 @@ void GenMetalTraverser::emitPostQualifier(const EmitVariableDeclarationConfig &e
                                           const VarDecl &decl,
                                           const TQualifier qualifier)
 {
+    bool isInvariant = false;
     switch (qualifier)
     {
         case TQualifier::EvqPosition:
+            isInvariant = decl.type().isInvariant();
+            ABSL_FALLTHROUGH_INTENDED;
         case TQualifier::EvqFragCoord:
             mOut << " [[position]]";
             break;
@@ -815,14 +814,13 @@ void GenMetalTraverser::emitPostQualifier(const EmitVariableDeclarationConfig &e
             break;
     }
 
-    const bool isInvariant =
-        (decl.isField() ? mInvariants.contains(decl.field())
-                        : mInvariants.contains(decl.variable())) &&
-        (qualifier == TQualifier::EvqPosition || qualifier == TQualifier::EvqFragCoord);
-
     if (isInvariant)
     {
         mOut << " [[invariant]]";
+
+        TranslatorMetalReflection *reflection =
+            ((sh::TranslatorMetalDirect *)&mCompiler)->getTranslatorMetalReflection();
+        reflection->hasInvariance = true;
     }
 }
 
@@ -1985,6 +1983,12 @@ bool GenMetalTraverser::visitAggregate(Visit, TIntermAggregate *aggregateNode)
     else
     {
         const TOperator op = aggregateNode->getOp();
+        if (op == EOpAtan)
+        {
+            TranslatorMetalReflection *reflection =
+                ((sh::TranslatorMetalDirect *)&mCompiler)->getTranslatorMetalReflection();
+            reflection->hasAtan = true;
+        }
         switch (op)
         {
             case TOperator::EOpCallFunctionInAST:
@@ -2215,7 +2219,6 @@ bool GenMetalTraverser::visitBlock(Visit, TIntermBlock *blockNode)
 
 bool GenMetalTraverser::visitGlobalQualifierDeclaration(Visit, TIntermGlobalQualifierDeclaration *)
 {
-    UNREACHABLE();  // RewriteGlobalQualifierDecls should have been called before this.
     return false;
 }
 
@@ -2441,7 +2444,6 @@ bool sh::EmitMetal(TCompiler &compiler,
                    TIntermBlock &root,
                    IdGen &idGen,
                    const PipelineStructs &pipelineStructs,
-                   const Invariants &invariants,
                    SymbolEnv &symbolEnv,
                    const ProgramPreludeConfig &ppc,
                    TSymbolTable *symbolTable)
@@ -2501,8 +2503,7 @@ bool sh::EmitMetal(TCompiler &compiler,
 #else
         TInfoSinkBase &outWrapper = out;
 #endif
-        GenMetalTraverser gen(compiler, outWrapper, idGen, pipelineStructs, invariants, symbolEnv,
-                              symbolTable);
+        GenMetalTraverser gen(compiler, outWrapper, idGen, pipelineStructs, symbolEnv, symbolTable);
         root.traverse(&gen);
     }
 
