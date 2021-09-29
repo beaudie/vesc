@@ -70,6 +70,24 @@
       "parentUuid": "fc5d8646_60f15a60",
       "revId": "8dd7714110f2973666f49628ee74fad32b4e2de2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bff1beee_ad1c8d77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T15:56:00Z",
+      "side": 1,
+      "message": "From the GLES 2.0 spec:\n\nA texture object is created by binding an unused name to TEXTURE_2D or\nTEXTURE_CUBE_MAP\n\nIt\u0027s more the exception rather than the rule that objects must be created with a specific call. e.g. programs and shaders, and I believe queries. Can you switch to another task? I\u0027ll talk this over with Cody/Tim.",
+      "parentUuid": "d5cc4477_6372c360",
+      "revId": "8dd7714110f2973666f49628ee74fad32b4e2de2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
