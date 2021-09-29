@@ -16,6 +16,23 @@
       "message": "Merging fix to M94 (branch 4606)",
       "revId": "9f749d673ac589c4728d5af7582e8f5a4884fb68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee07e1ab_7352f425",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T13:47:39Z",
+      "side": 1,
+      "message": "Please submit manually as for the others. CQ won\u0027t work.",
+      "revId": "9f749d673ac589c4728d5af7582e8f5a4884fb68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
