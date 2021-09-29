@@ -414,6 +414,11 @@ class RendererVk : angle::NonCopyable
                                                             uint64_t format,
                                                             uint32_t *descriptorCountOut);
 
+    std::condition_variable_any &getCommandsSubmittedCondition()
+    {
+        return mCommandsSubmittedCondition;
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -570,6 +575,8 @@ class RendererVk : angle::NonCopyable
 
     // Use thread pool to compress cache data.
     std::shared_ptr<rx::WaitableCompressEvent> mCompressEvent;
+
+    std::condition_variable_any mCommandsSubmittedCondition;
 };
 
 }  // namespace rx

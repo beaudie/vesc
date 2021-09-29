@@ -111,7 +111,7 @@ class ScopedSyncCurrentContextFromThread
 }  // namespace egl
 
 #define ANGLE_SCOPED_GLOBAL_LOCK() \
-    std::lock_guard<angle::GlobalMutex> globalMutexLock(egl::GetGlobalMutex())
+    std::unique_lock<angle::GlobalMutex> globalMutexLock(egl::GetGlobalMutex())
 
 namespace gl
 {
