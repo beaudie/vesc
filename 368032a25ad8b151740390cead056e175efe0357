@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84975418_611212af",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T01:02:37Z",
+      "side": 1,
+      "message": "nit: getContentsObserverIndex(), since this isn\u0027t returning the ContentsObserver itself.",
+      "range": {
+        "startLine": 401,
+        "startChar": 15,
+        "endLine": 401,
+        "endChar": 35
+      },
+      "revId": "368032a25ad8b151740390cead056e175efe0357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "81f37cc0_440132d9",
         "filename": "src/libANGLE/Buffer.cpp",
         "patchSetId": 7
