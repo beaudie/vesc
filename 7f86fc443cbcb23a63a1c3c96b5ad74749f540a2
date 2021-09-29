@@ -16,6 +16,24 @@
       "message": "How much did the perf tests improve eventually?",
       "revId": "7f86fc443cbcb23a63a1c3c96b5ad74749f540a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c30981dc_6e348e73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-29T14:26:26Z",
+      "side": 1,
+      "message": "The microbenchmark that ARM contributed sped up by at least one order of magnitude, maybe 2. Somewhere between 10x and 100x. I\u0027ll ping ARM to retest on the real app once this lands. Unfortunately Black Desert still isn\u0027t traceable so I didn\u0027t test myself with the trace.",
+      "parentUuid": "39377541_771f99e3",
+      "revId": "7f86fc443cbcb23a63a1c3c96b5ad74749f540a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
