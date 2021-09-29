@@ -16,6 +16,80 @@
       "message": "Didn\u0027t implement the fallback path for the moment. Shouldn\u0027t be too complicated, so I\u0027ll deal with it if there are ever any users.",
       "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bb6bc9d_e1dd4c82",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T22:26:41Z",
+      "side": 1,
+      "message": "Unrelated to this CL, but it looks a little odd seeing the VS called getFullScreenQuad_vert(), when this is really drawing a single giant triangle.",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaee9e4b_daf57307",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6707,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T22:26:41Z",
+      "side": 1,
+      "message": "Why not?   Why aren\u0027t all channels defined at this point, and when will they be?",
+      "range": {
+        "startLine": 6706,
+        "startChar": 41,
+        "endLine": 6707,
+        "endChar": 49
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "571707ff_00f7d3f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T22:26:41Z",
+      "side": 1,
+      "message": "Worth a note/assert that we never emulate the R channel?",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7cda28f_22a0a2e9",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2669,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T22:26:41Z",
+      "side": 1,
+      "message": "nit: Please add a comment to these checks stating that the emulated alpha is expected to be 1 or 255.",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
