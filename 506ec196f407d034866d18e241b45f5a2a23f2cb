@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c9b028d_f77188f4",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a1c4564_55101166",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49616f7c_82c1a9b9",
@@ -88,6 +112,30 @@
       "writtenOn": "2021-09-28T21:57:48Z",
       "side": 1,
       "message": "nit: You can also avoid the passive tense, and omit a lot of the domain-specific terms by rephrasing this as \n\nWe run a large number of tests on ANGLE CLs, both in ANGLE standalone and Chromium configurations, pre- and post- commit.",
+      "range": {
+        "startLine": 3,
+        "startChar": 44,
+        "endLine": 3,
+        "endChar": 119
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13c8de24_28dc9e86",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49616f7c_82c1a9b9",
       "range": {
         "startLine": 3,
         "startChar": 44,
@@ -121,6 +169,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6820594_ecc2df33",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done, except that I\u0027m going to keep sub-section headings so that the document had more paragraphs and isn\u0027t a sea of bullets:-)",
+      "parentUuid": "3f84ee4d_d113e863",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb13d7f0_8971508f",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f84ee4d_d113e863",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "236ddf03_f11ba14e",
@@ -144,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5620a057_7df50189",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "236ddf03_f11ba14e",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfd605d6_3d3b5d66",
@@ -157,6 +277,30 @@
       "writtenOn": "2021-09-28T21:57:48Z",
       "side": 1,
       "message": "Please include a mention of the vulkan-deps roller and how we test with ToT Vulkan tools/SDK.\n\nPlease also include a mention that we often run into Vulkan Validation Layer bugs as well, because we test with ToT tools and run many more integration tests than the LunarG devs.\n\nI\u0027d also reword this to emphasize as a process when encountering a broken VVL roll, the procedure is to file a bug then suppress the new validation errors. The target reader is an ANGLE wrangler for the purposes of this action. ANGLE wranglers aren\u0027t expected to resolve the error, or diagnose a bug upstream, bug this is welcome as extra credit.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 417
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e994cd2_190dffee",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "I reworked it, hopefully closer to what you\u0027d like.  PTAL",
+      "parentUuid": "bfd605d6_3d3b5d66",
       "range": {
         "startLine": 13,
         "startChar": 0,
@@ -259,6 +403,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c625feea_ba3b92a2",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddf0c278_7fd5f021",
+      "range": {
+        "startLine": 15,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17b61726_36b997a9",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc5b9f96_3e225c55",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49823ee0_735600f1",
@@ -328,6 +520,78 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c2f690f_193148bb",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3ac851a_c262d5ce",
+      "range": {
+        "startLine": 16,
+        "startChar": 51,
+        "endLine": 16,
+        "endChar": 224
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c606e156_641de90f",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b27b39c7_d3f3e1bf",
+      "range": {
+        "startLine": 16,
+        "startChar": 51,
+        "endLine": 16,
+        "endChar": 223
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0d68c24_6652937b",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49823ee0_735600f1",
+      "range": {
+        "startLine": 16,
+        "startChar": 234,
+        "endLine": 16,
+        "endChar": 250
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc10c57e_b403fc58",
@@ -341,6 +605,30 @@
       "writtenOn": "2021-09-28T21:57:48Z",
       "side": 1,
       "message": "nit: please include a back-link to dEQP.md.",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 7
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456e7d93_d1b3c0cb",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc10c57e_b403fc58",
       "range": {
         "startLine": 22,
         "startChar": 2,
@@ -397,6 +685,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "afe4dfa4_3b2ce0fe",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b65a2b94_4b386129",
+      "range": {
+        "startLine": 27,
+        "startChar": 2,
+        "endLine": 27,
+        "endChar": 10
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa231b0_52a308e1",
@@ -443,6 +755,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3310d6c_234d9cc8",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "704c34f0_fae7a967",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 39
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a41cae75_1d253ccb",
@@ -456,6 +792,30 @@
       "writtenOn": "2021-09-28T21:57:48Z",
       "side": 1,
       "message": "nit: \"WebGL conformance tests\"",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f25c7294_1e760320",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a41cae75_1d253ccb",
       "range": {
         "startLine": 30,
         "startChar": 2,
@@ -561,6 +921,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "719c89c6_345d5722",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Geoff showed me how to do this.  It was a good option while working from my Windows laptop, which has an ANGLE-only build tree.  It was my primary motivation for doing this CL.\n\nI\u0027ll work on this (from my gLinux laptop) tomorrow.\n\nIs it worth mentioning this at all?",
+      "parentUuid": "ecf9ee5f_f56a58e1",
+      "range": {
+        "startLine": 31,
+        "startChar": 165,
+        "endLine": 31,
+        "endChar": 195
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8ae4ce3_5746be2d",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Thanks.  I\u0027ll have to do this tomorrow.",
+      "parentUuid": "d188ec8c_f9c54569",
+      "range": {
+        "startLine": 31,
+        "startChar": 9,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13e941d2_b0a040f5",
         "filename": "doc/SuppressTestFailures.md",
         "patchSetId": 1
@@ -605,6 +1013,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d31b863b_a21fa56f",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aab3c508_c40ab361",
+      "range": {
+        "startLine": 36,
+        "startChar": 36,
+        "endLine": 36,
+        "endChar": 48
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bc3bb54_b0680b45",
@@ -618,6 +1050,30 @@
       "writtenOn": "2021-09-28T22:40:46Z",
       "side": 1,
       "message": "Skip should be used sparingly. Crashing test is normally not a problem - the browser is restarted afterwards and other tests can continue.\nI think Skip should only be used for catastrophic failures which bring down the machine, like BSOD on Windows due to TDRs.\nAnother case is multiple crashing or hanging tests, since these cause test suite execution to be delayed by 5 minutes each.\nThird scenario is a test, which maybe even passes, but which has side-effects and causes a test that runs after it to fail.\nOtherwise, Failure is enough. Since tests with Failure expectation still run, we are able to detect when they start passing unexpectedly, something that we can\u0027t do with Skipped tests.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79906d13_3fcf7eb7",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T00:57:15Z",
+      "side": 1,
+      "message": "I did a simple change, and will look at this more in the morning",
+      "parentUuid": "7bc3bb54_b0680b45",
       "range": {
         "startLine": 37,
         "startChar": 0,
