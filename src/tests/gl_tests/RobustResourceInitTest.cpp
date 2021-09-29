@@ -2294,12 +2294,83 @@ TEST_P(RobustResourceInitTest, CopyTexImageToOffsetCubeMap)
     EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::red);
 }
 
+namespace
+{
+
+void checkRectColor(int x, int y, int width, int height, const GLColor &color)
+{
+    std::vector<GLColor> data(width * height);
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+
+    for (int py = 0; py < height; ++py)
+    {
+        for (int px = 0; px < width; ++px)
+        {
+            int index = py * width + px;
+            if (data[index] != color)
+            {
+                // Stop on first failure.
+                ASSERT_EQ(data[index], color) << " at pixel " << px + x << ", " << py + y;
+                return;
+            }
+        }
+    }
+}
+
+}  // namespace
+
+TEST_P(RobustResourceInitTestES3, CheckDepthStencilRenderbufferIsCleared)
+{
+    ANGLE_SKIP_TEST_IF(!hasRobustSurfaceInit());
+
+    GLRenderbuffer colorRb;
+    GLFramebuffer fb;
+    GLRenderbuffer depthStencilRb;
+
+    // Make a framebuffer with RGBA + DEPTH_STENCIL
+    glBindRenderbuffer(GL_RENDERBUFFER, colorRb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kWidth, kHeight);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, depthStencilRb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, kWidth, kHeight);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRb);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              depthStencilRb);
+    ASSERT_GL_NO_ERROR();
+
+    // Render a quad at Z = 1.0 with depth test on and depth function set to GL_EQUAL.
+    // If the depth buffer is not cleared to 1.0 this will fail
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_EQUAL);
+
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 1.0f, 1.0f, true);
+    checkRectColor(0, 0, kWidth, kHeight, GLColor::green);
+
+    // Render with stencil test on and stencil function set to GL_EQUAL
+    // If the stencil is not zero this will fail.
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_EQUAL, 0, 0xFF);
+
+    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 1.0f, 1.0f, true);
+    checkRectColor(0, 0, kWidth, kHeight, GLColor::red);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that blit between two depth/stencil buffers after glClearBufferfi works.  The blit is done
 // once expecting robust resource init value, then clear is called with the same value as the robust
 // init, and blit is done again.  This triggers an optimization in the Vulkan backend where the
 // second clear is no-oped.
 TEST_P(RobustResourceInitTestES3, BlitDepthStencilAfterClearBuffer)
 {
+    ANGLE_SKIP_TEST_IF(!hasRobustSurfaceInit());
+
     // http://anglebug.com/5301
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
 
