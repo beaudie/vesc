@@ -56,6 +56,30 @@
       },
       "revId": "346bc148de5fb79e12f5526acb8b7a5c50340464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7a73fdf_fbbd673d",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-29T02:58:59Z",
+      "side": 1,
+      "message": "Tested this out.  Filenames look good:\n\n myapp.angledata.gz\n myapp.json\n myapp_context1.cpp\n myapp_context1.h\n myapp_context1_frame001.cpp\n myapp_context1_frame002.cpp\n myapp_context1_frame003.cpp\n myapp_context1_frame004.cpp\n myapp_context1_frame005.cpp\n myapp_context1_frame006.cpp\n myapp_context1_frame007.cpp\n myapp_context1_frame008.cpp\n myapp_context1_frame009.cpp\n myapp_context1_frame010.cpp\n myapp_shared.cpp\n\nAnd uses of capture are mostly gone from the files:\n\n $ $ grep -ri capture\n myapp.json:        \"CaptureRevision\": 16816,\n $\n \nSo I don\u0027t know where this one comes into play.",
+      "parentUuid": "01fdd29b_8a314527",
+      "range": {
+        "startLine": 42,
+        "startChar": 40,
+        "endLine": 42,
+        "endChar": 48
+      },
+      "revId": "346bc148de5fb79e12f5526acb8b7a5c50340464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
