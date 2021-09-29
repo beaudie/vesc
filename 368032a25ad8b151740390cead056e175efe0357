@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ddf62dc2_bcf6ce3e",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-29T16:47:08Z",
+      "side": 1,
+      "message": "I\u0027d prefer getContentsObserverIndex(), since this function isn\u0027t returning an iterator or pointer to the element.",
+      "parentUuid": "4d3da9c7_3095d05b",
+      "range": {
+        "startLine": 401,
+        "startChar": 15,
+        "endLine": 401,
+        "endChar": 35
+      },
+      "revId": "368032a25ad8b151740390cead056e175efe0357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "81f37cc0_440132d9",
         "filename": "src/libANGLE/Buffer.cpp",
         "patchSetId": 7
