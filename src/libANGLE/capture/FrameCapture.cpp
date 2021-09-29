@@ -585,8 +585,10 @@ void WriteResourceIDPointerParamReplay(DataTracker *dataTracker,
         }
         switch (resourceIDType)
         {
-            case ResourceIDType::Framebuffer:
             case ResourceIDType::Buffer:
+            case ResourceIDType::Framebuffer:
+            case ResourceIDType::Renderbuffer:
+
                 header << "(g" << name << "Map2[" << id.value << "] ? g" << name << "Map2["
                        << id.value << "]  : " << id.value << ")";
                 break;
@@ -6928,7 +6930,8 @@ void WriteParamValueReplay<ParamType::TRenderbufferID>(std::ostream &os,
                                                        const CallCapture &call,
                                                        gl::RenderbufferID value)
 {
-    os << "gRenderbufferMap2[" << value.value << "]";
+    os << "(gRenderbufferMap2[" << value.value << "] ? gRenderbufferMap2[" << value.value
+       << "] : " << value.value << ")";
 }
 
 template <>
