@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6466580_ba6bff00",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Generalizing sounds great, but beyond what I\u0027m trying to do now.  Sounds like a good fix-it week activity (I filed bug 6470 and assigned myself, but feel free to take it if you\u0027d like).\n\nI wrapped the lines.",
+      "parentUuid": "7477ccc8_b25e9090",
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a1c4564_55101166",
@@ -451,6 +469,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70392c91_c5965867",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc57c2b5_001d2753",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f08cb81_5843fb2a",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bfcab4b_18069593",
+      "range": {
+        "startLine": 15,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49823ee0_735600f1",
@@ -709,6 +775,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c694ee6d_2d1c03b2",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a007333_1b84feb0",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 0
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa231b0_52a308e1",
@@ -722,6 +812,30 @@
       "writtenOn": "2021-09-28T21:57:48Z",
       "side": 1,
       "message": "nit: please link in the tree (relative link)",
+      "range": {
+        "startLine": 28,
+        "startChar": 50,
+        "endLine": 28,
+        "endChar": 82
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef0419a8_4517377d",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fa231b0_52a308e1",
       "range": {
         "startLine": 28,
         "startChar": 50,
@@ -967,6 +1081,102 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36694737_dcef8663",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a71c077a_3dc7844c",
+      "range": {
+        "startLine": 31,
+        "startChar": 21,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb359fde_8370074e",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a71c077a_3dc7844c",
+      "range": {
+        "startLine": 31,
+        "startChar": 21,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a946dce5_6b0b1acd",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b8ae4ce3_5746be2d",
+      "range": {
+        "startLine": 31,
+        "startChar": 9,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc78cf5e_27ad2721",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "I changed it to talk about editing from within a Chromium source check-out, with the possibility of editing from CodeSearch.  I just mentioned the directory (like for dEQP).",
+      "parentUuid": "719c89c6_345d5722",
+      "range": {
+        "startLine": 31,
+        "startChar": 165,
+        "endLine": 31,
+        "endChar": 195
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13e941d2_b0a040f5",
@@ -980,6 +1190,30 @@
       "writtenOn": "2021-09-28T22:40:46Z",
       "side": 1,
       "message": "Worth mentioning that you can find the relevant tags if you search for \"tags\" in the failed Swarming task.\nE.g.\nhttps://chromium-swarm.appspot.com/task?id\u003d56473f87d0633e10\nThe following expectations condition tags were generated [\u0027android-marshmallow\u0027, \u0027android-Nexus-5X\u0027, \u0027mobile\u0027, \u0027angle-opengles\u0027, \u0027android-chromium\u0027, \u0027webgl-version-1\u0027, \u0027no-asan\u0027, u\u0027qualcomm\u0027, \u0027skia-renderer-gl\u0027, \u0027passthrough\u0027, \u0027no-swiftshader-gl\u0027, \u0027android\u0027, \u0027android-not-webview\u0027, u\u0027qualcomm-Adreno-(TM)-418\u0027]",
+      "range": {
+        "startLine": 34,
+        "startChar": 39,
+        "endLine": 34,
+        "endChar": 71
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8b43aa_039770b1",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "PTAL at how I word it.",
+      "parentUuid": "13e941d2_b0a040f5",
       "range": {
         "startLine": 34,
         "startChar": 39,
@@ -1074,6 +1308,30 @@
       "side": 1,
       "message": "I did a simple change, and will look at this more in the morning",
       "parentUuid": "7bc3bb54_b0680b45",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d10b96f5_a9f2cd4d",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-09-29T22:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79906d13_3fcf7eb7",
       "range": {
         "startLine": 37,
         "startChar": 0,
