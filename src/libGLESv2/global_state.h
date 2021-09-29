@@ -13,12 +13,10 @@
 #include "libANGLE/Debug.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/features.h"
-
-#include <mutex>
+#include "libANGLE/global_mutex.h"
 
 namespace angle
 {
-using GlobalMutex = std::recursive_mutex;
 
 //  - TLS_SLOT_OPENGL and TLS_SLOT_OPENGL_API: These two aren't used by bionic
 //    itself, but allow the graphics code to access TLS directly rather than
@@ -91,7 +89,6 @@ class Thread;
 
 extern thread_local Thread *gCurrentThread;
 
-angle::GlobalMutex &GetGlobalMutex();
 gl::Context *GetGlobalLastContext();
 void SetGlobalLastContext(gl::Context *context);
 Thread *GetCurrentThread();
@@ -111,7 +108,7 @@ class ScopedSyncCurrentContextFromThread
 }  // namespace egl
 
 #define ANGLE_SCOPED_GLOBAL_LOCK() \
-    std::lock_guard<angle::GlobalMutex> globalMutexLock(egl::GetGlobalMutex())
+    std::unique_lock<angle::GlobalMutex> globalMutexLock(egl::GetGlobalMutex())
 
 namespace gl
 {
@@ -164,19 +161,6 @@ static ANGLE_INLINE void DirtyContextIfNeeded(Context *context)
 }
 
 #endif
-
-ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(Context *context)
-{
-#if defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)
-    auto lock = std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex());
-
-    DirtyContextIfNeeded(context);
-    return lock;
-#else
-    return context->isShared() ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex())
-                               : std::unique_lock<angle::GlobalMutex>();
-#endif
-}
 
 }  // namespace gl
 
