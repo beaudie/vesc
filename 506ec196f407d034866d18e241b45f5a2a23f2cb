@@ -1388,6 +1388,30 @@
       },
       "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20215e36_91234d3a",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-09-30T22:55:23Z",
+      "side": 1,
+      "message": "I think Jamie has meant that RetryOnFailure is often upgraded to Failure.\nIf so, I agree that Failure should be used most often, Skip for catastrophic failures and Retry for rare flakes.",
+      "parentUuid": "7f37cd8b_7b06c49b",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "506ec196f407d034866d18e241b45f5a2a23f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
