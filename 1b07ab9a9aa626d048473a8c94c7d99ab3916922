@@ -73,6 +73,30 @@
       },
       "revId": "1b07ab9a9aa626d048473a8c94c7d99ab3916922",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ed99d30_b053493c",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-30T13:52:09Z",
+      "side": 1,
+      "message": "That\u0027s what the test does, I assumed it has a reason. Maybe it wants to make sure deletion doesn\u0027t cause a problem?\n\nI\u0027ll keep it as-is if you don\u0027t mind, this change is not a functional change.",
+      "parentUuid": "ccb1a57d_caf548ac",
+      "range": {
+        "startLine": 3990,
+        "startChar": 0,
+        "endLine": 3991,
+        "endChar": 26
+      },
+      "revId": "1b07ab9a9aa626d048473a8c94c7d99ab3916922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
