@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "747b7390_92d926de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2021-09-30T16:53:06Z",
+      "side": 1,
+      "message": "Verified Cuttlefish passes android.hardware.nativehardware.cts.AHardwareBufferNativeTests#SingleLayer_ColorTest_CpuWriteColorGpuRead_R8G8B8X8_UNORM with this.",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f1f5de8_c630592a",
