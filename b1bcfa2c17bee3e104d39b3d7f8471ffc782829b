@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2296e6bb_f694904d",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T20:19:29Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you can\u0027t serialize width/height/format/etc if the pixels are undefined. Can you clarify?",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 771,
+        "endChar": 67
+      },
+      "revId": "b1bcfa2c17bee3e104d39b3d7f8471ffc782829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
