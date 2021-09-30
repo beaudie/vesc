@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "91ab8bb2_a969f440",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-30T21:50:17Z",
+      "side": 1,
+      "message": "Is it worth linking to https://www.khronos.org/registry/webgl/specs/latest/1.0/#4.1 just for clarity?",
+      "revId": "8cdd6ce3d518779328e9b5a17f7722f60109587d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a24462f3_df518a32",
@@ -14,6 +31,40 @@
       "writtenOn": "2021-09-30T16:59:06Z",
       "side": 1,
       "message": "no idea what the wording should be but thought I\u0027d post something for direction. Also, want to double check that that depth textures and the depth portion of a depth/stencil are required to be cleared to 1 not 0?",
+      "revId": "8cdd6ce3d518779328e9b5a17f7722f60109587d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11dfceb7_c0653d3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-30T21:50:17Z",
+      "side": 1,
+      "message": "lgtm\n\nHoping that this doesn\u0027t cause problems for ANGLE\u0027s backends.\n",
+      "revId": "8cdd6ce3d518779328e9b5a17f7722f60109587d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "181469ba_31f6952f",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-09-30T21:50:17Z",
+      "side": 1,
+      "message": "Add Version 5, specifying that depth buffers are cleared to 1.0?",
       "revId": "8cdd6ce3d518779328e9b5a17f7722f60109587d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
