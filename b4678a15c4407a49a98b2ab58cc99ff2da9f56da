@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f1f5de8_c630592a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:06:31Z",
+      "side": 1,
+      "message": "nit: ANGLE_VK_CHECK",
+      "range": {
+        "startLine": 2144,
+        "startChar": 0,
+        "endLine": 2150,
+        "endChar": 5
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9bb6bc9d_e1dd4c82",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 1
@@ -37,6 +60,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1bbf8715_20bbe791",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5227,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:06:31Z",
+      "side": 1,
+      "message": "nit: suggest ANGLE_VK_CHECK as well.",
+      "range": {
+        "startLine": 5223,
+        "startChar": 0,
+        "endLine": 5227,
+        "endChar": 5
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aaee9e4b_daf57307",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -48,6 +94,30 @@
       "writtenOn": "2021-09-29T22:26:41Z",
       "side": 1,
       "message": "Why not?   Why aren\u0027t all channels defined at this point, and when will they be?",
+      "range": {
+        "startLine": 6706,
+        "startChar": 41,
+        "endLine": 6707,
+        "endChar": 49
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89cc1927_f0f0a452",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6707,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:06:31Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "aaee9e4b_daf57307",
       "range": {
         "startLine": 6706,
         "startChar": 41,
