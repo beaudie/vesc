@@ -16,6 +16,184 @@
       "message": "Finished rework.  PTAL",
       "revId": "f730971eeddf6676d068a291e2013f07585adffa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56bd3a94_5f98ab8b",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "I\u0027d suggest renaming this to TestingAndProcesses.md so we don\u0027t have to rename it later and change the links.",
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a31b85e_9fae0a27",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "I suggest we renaming \"Suppressing\" to \"Handling\" to encompass both the act of suppressing failures and the general triage process.\n\nSame for all the other titles.",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 14
+      },
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "076b1c16_1e637284",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "nit: \"and update test expectations files\".\n\nJust to make it clear we\u0027re talking about changing files and not human expectations.",
+      "range": {
+        "startLine": 9,
+        "startChar": 62,
+        "endLine": 9,
+        "endChar": 74
+      },
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e580b8a7_ccf35a93",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "nit: can you back link to the autoroll.skia.org page?",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 28
+      },
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5bf4663_405dcae5",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "please resolve TODO before landing.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 16
+      },
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36392345_e224ac26",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "can you split these into separate \"##\" sections? Each is pretty distinct.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 23
+      },
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "888c6c35_831cb5ca",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "wording suggestion:\n\n - The expectations files are hosted in the chromium/src repository under `content/test/gpu/gpu_tests/test_expectations` (link to https://chromium.googlesource.com/chromium/src/+/refs/heads/main/content/test/gpu/gpu_tests/test_expectations/)",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 91
+      },
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51264cc5_a1a6c738",
+        "filename": "doc/SuppressTestFailures.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:24:47Z",
+      "side": 1,
+      "message": "Suggest re-wording this as follows:\n\n- You have two options for making changes to the expectations files:\n\n  1. For trivial edits, you can edit the expectations files via Chromium Code Search (link to cs.chromium.org):\n  \n  2. Otherwise please check out the code (link to https://chromium.googlesource.com/chromium/src/+/HEAD/docs/get_the_code.md) and upload a CL (link to https://chromium.googlesource.com/chromium/src/+/refs/heads/main/docs/contributing.md#Creating-a-change)",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 0
+      },
+      "revId": "f730971eeddf6676d068a291e2013f07585adffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
