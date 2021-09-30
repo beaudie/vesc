@@ -764,11 +764,14 @@ void SerializeRenderbufferState(JsonSerializer *json,
                                 const gl::RenderbufferState &renderbufferState)
 {
     GroupScope wg(json, "State");
-    json->addScalar("Width", renderbufferState.getWidth());
-    json->addScalar("Height", renderbufferState.getHeight());
-    SerializeGLFormat(json, renderbufferState.getFormat());
-    json->addScalar("Samples", renderbufferState.getSamples());
-    json->addCString("InitState", InitStateToString(renderbufferState.getInitState()));
+    if (renderbufferState.getInitState() == gl::InitState::Initialized)
+    {
+        json->addScalar("Width", renderbufferState.getWidth());
+        json->addScalar("Height", renderbufferState.getHeight());
+        json->addScalar("Samples", renderbufferState.getSamples());
+        json->addCString("InitState", InitStateToString(renderbufferState.getInitState()));
+        SerializeGLFormat(json, renderbufferState.getFormat());
+    }
 }
 
 Result SerializeRenderbuffer(const gl::Context *context,
@@ -782,26 +785,35 @@ Result SerializeRenderbuffer(const gl::Context *context,
 
     if (renderbuffer->initState(gl::ImageIndex()) == gl::InitState::Initialized)
     {
-        const gl::InternalFormat &format = *renderbuffer->getFormat().info;
 
-        const gl::Extents size(renderbuffer->getWidth(), renderbuffer->getHeight(), 1);
-        gl::PixelPackState packState;
-        packState.alignment = 1;
+        if (renderbuffer->getWidth() * renderbuffer->getHeight() > 0)
+        {
+            const gl::InternalFormat &format = *renderbuffer->getFormat().info;
 
-        GLenum readFormat = renderbuffer->getImplementationColorReadFormat(context);
-        GLenum readType   = renderbuffer->getImplementationColorReadType(context);
+            const gl::Extents size(renderbuffer->getWidth(), renderbuffer->getHeight(), 1);
+            gl::PixelPackState packState;
+            packState.alignment = 1;
 
-        GLuint bytes   = 0;
-        bool computeOK = format.computePackUnpackEndByte(readType, size, packState, false, &bytes);
-        ASSERT(computeOK);
+            GLenum readFormat = renderbuffer->getImplementationColorReadFormat(context);
+            GLenum readType   = renderbuffer->getImplementationColorReadType(context);
 
-        MemoryBuffer *pixelsPtr = nullptr;
-        ANGLE_CHECK_GL_ALLOC(const_cast<gl::Context *>(context),
-                             scratchBuffer->getInitialized(bytes, &pixelsPtr, 0));
+            GLuint bytes = 0;
+            bool computeOK =
+                format.computePackUnpackEndByte(readType, size, packState, false, &bytes);
+            ASSERT(computeOK);
 
-        ANGLE_TRY(renderbuffer->getImplementation()->getRenderbufferImage(
-            context, packState, nullptr, readFormat, readType, pixelsPtr->data()));
-        json->addBlob("Pixels", pixelsPtr->data(), pixelsPtr->size());
+            MemoryBuffer *pixelsPtr = nullptr;
+            ANGLE_CHECK_GL_ALLOC(const_cast<gl::Context *>(context),
+                                 scratchBuffer->getInitialized(bytes, &pixelsPtr, 0));
+
+            ANGLE_TRY(renderbuffer->getImplementation()->getRenderbufferImage(
+                context, packState, nullptr, readFormat, readType, pixelsPtr->data()));
+            json->addBlob("Pixels", pixelsPtr->data(), pixelsPtr->size());
+        }
+        else
+        {
+            json->addCString("Pixels", "no pixels");
+        }
     }
     else
     {
