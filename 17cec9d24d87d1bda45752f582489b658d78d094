@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "876bbfba_f05d9499",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-09-30T23:24:55Z",
+      "side": 1,
+      "message": "I really don\u0027t know Metal yet so I have no idea if this is correct. Hopefully one of you reviewers knows or can ask someone else who does. My fiction is I found a sample online and it showed connecting the same texture to both depthAttachment and stencilAttachment on the RenderPassDescriptor where as when I stepped through ANGLE it was only attaching to the depthAttachment. Changing that made both the old test, RobustResourceInitTestES3.BlitDepthStencilAfterClearBuffer, and the new test I added, pass",
+      "revId": "17cec9d24d87d1bda45752f582489b658d78d094",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
