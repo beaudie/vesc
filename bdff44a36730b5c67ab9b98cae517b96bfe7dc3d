@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a0e77c0_ad0ce11f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-30T19:17:47Z",
+      "side": 1,
+      "message": "\u003e I guess I should ask - did you consider any alternative designs?\n\nI didn\u0027t come up with any other designs, but you can take a look at Samsung\u0027s CL for an alternative:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3165687\n\nThis approach is better to me, since it avoids the polling.\n\nThe biggest issue to work around is that the global mutex needs to be released so another thread can call glFlush().   I\u0027m open to any other ideas you may have though.",
+      "parentUuid": "790aeb04_8b21be9c",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5b200d7_ba61fcf3",
@@ -67,6 +85,24 @@
       "writtenOn": "2021-09-30T17:17:10Z",
       "side": 1,
       "message": "The mutex is already locked here by the front-end, and this is doubly locking it (which works as the mutex is recursive). But basically the unlock() below is just undoing the lock here, and doesn\u0027t unlock the front-end. It\u0027s the `wait_for` that does the second unlock.\n\nWhat you can do here is to add an std::defer_lock_t to the constructor, and remove the unlock() before `wait_for`.\n\n`wait_for` also requires the lock, so the `lock` after that call is unnecessary, and so is the unlock done by the constructor here.\n\nYou can probably just pass `egl::GetGlobalMutex()` straight to `wait_for` and that\u0027s it.",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d43d1d03_ffcddb2e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-09-30T19:17:47Z",
+      "side": 1,
+      "message": "\u003e What you can do here is to add an std::defer_lock_t to the constructor, and remove the unlock() before `wait_for`.\n\nI haven\u0027t seen std::defer_lock_t before, so I\u0027ll have to read up more on that and play around with it.\n\n\u003e `wait_for` also requires the lock, so the `lock` after that call is unnecessary, and so is the unlock done by the constructor here.\n\u003e You can probably just pass `egl::GetGlobalMutex()` straight to `wait_for` and that\u0027s it.\n\nAh, interesting, that would be nice if it works and we don\u0027t need to create a new lock that unlocks when it goes out of scope.   I\u0027ll try giving that a shot.",
+      "parentUuid": "b5b200d7_ba61fcf3",
       "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
