@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aebb1024_a0defcab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-30T23:57:35Z",
+      "side": 1,
+      "message": "+1 with Jamie\u0027s concern. I think we should not try to unlock global mutex lock in the vulkan backend. What if someone comes in destroy context while you unlock? A safer way is to return the call back to front end with special return flag and let front end do the unlock and try to call into back end again if needed, I think.",
+      "parentUuid": "7a0e77c0_ad0ce11f",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5b200d7_ba61fcf3",
