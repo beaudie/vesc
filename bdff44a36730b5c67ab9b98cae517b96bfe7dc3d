@@ -34,6 +34,41 @@
       "parentUuid": "b7a4032f_87d2504e",
       "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "790aeb04_8b21be9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-30T17:17:10Z",
+      "side": 1,
+      "message": "Cleanliness aside, I like the idea of the backend unlocking the mutex. We have a few places that \"wait\" on something, and if we are careful enough, we may be able to do this kind of thing more often and let threads work more in parallel.",
+      "parentUuid": "58e243e4_750e76cc",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b200d7_ba61fcf3",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-09-30T17:17:10Z",
+      "side": 1,
+      "message": "The mutex is already locked here by the front-end, and this is doubly locking it (which works as the mutex is recursive). But basically the unlock() below is just undoing the lock here, and doesn\u0027t unlock the front-end. It\u0027s the `wait_for` that does the second unlock.\n\nWhat you can do here is to add an std::defer_lock_t to the constructor, and remove the unlock() before `wait_for`.\n\n`wait_for` also requires the lock, so the `lock` after that call is unnecessary, and so is the unlock done by the constructor here.\n\nYou can probably just pass `egl::GetGlobalMutex()` straight to `wait_for` and that\u0027s it.",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
