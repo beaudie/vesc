@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c64be78_a9b7bcc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-09-30T15:15:26Z",
+      "side": 1,
+      "message": "I was thinking the check would go in WriteCppReplayFunctionWithParts when deciding to write out, but this should be equivalent.",
+      "revId": "81998d80f1191bdf83fbb077d84f086c9e37b936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
