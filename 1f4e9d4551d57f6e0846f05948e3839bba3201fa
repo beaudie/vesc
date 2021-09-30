@@ -16,6 +16,24 @@
       "message": "Why are these unmap calls being removed?   Is the assumption that it\u0027s up to the caller to call glUnmapBuffer(), so these should be unnecessary?",
       "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f3f6d3_581fe30a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2298,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-09-30T17:11:31Z",
+      "side": 0,
+      "message": "This is removed because in acquireAndUPdate, we map it first and then call acquireBufferHelper, which may end up come to here. But we are still using the pointer, so we can not do unmap here. It will still get unmapped when buffer itself gets released.",
+      "parentUuid": "c49ea479_c9530d04",
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
