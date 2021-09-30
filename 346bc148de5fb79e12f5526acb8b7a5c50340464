@@ -104,6 +104,30 @@
       },
       "revId": "346bc148de5fb79e12f5526acb8b7a5c50340464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae78b949_437b02dc",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-09-30T14:08:57Z",
+      "side": 1,
+      "message": "Ended up working out the GN stuff so this can land earlier.\n\nDone.",
+      "parentUuid": "7d02b42f_b9a7e71a",
+      "range": {
+        "startLine": 42,
+        "startChar": 40,
+        "endLine": 42,
+        "endChar": 48
+      },
+      "revId": "346bc148de5fb79e12f5526acb8b7a5c50340464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
