@@ -171,6 +171,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c4c4e2a_3a82e733",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AstHelpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-30T14:48:42Z",
+      "side": 1,
+      "message": "Looks like this fix is missing from the latest PS",
+      "parentUuid": "400a0d9d_c0e10ce0",
+      "range": {
+        "startLine": 148,
+        "startChar": 27,
+        "endLine": 148,
+        "endChar": 62
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7cf3b33_09730095",
         "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
         "patchSetId": 11
@@ -206,6 +230,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "a7cf3b33_09730095",
+      "range": {
+        "startLine": 267,
+        "startChar": 37,
+        "endLine": 268,
+        "endChar": 68
+      },
+      "revId": "2c85f1955b3e6d38ce5f3af8a28121dd6ef99ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1db7bc42_307b816e",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-09-30T14:48:42Z",
+      "side": 1,
+      "message": "Looks like this fix is missing from the latest PS",
+      "parentUuid": "1aee48d6_cf494c52",
       "range": {
         "startLine": 267,
         "startChar": 37,
