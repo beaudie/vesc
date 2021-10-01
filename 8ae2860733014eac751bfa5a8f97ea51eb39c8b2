@@ -16,6 +16,23 @@
       "message": "Tests LGTM",
       "revId": "8ae2860733014eac751bfa5a8f97ea51eb39c8b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f7eed4_076e197f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-01T18:02:09Z",
+      "side": 1,
+      "message": "LGTM, great fix Gregg. Attaching the stencil to both slots is correct if, and only if the depth and stencil pixel formats are the same, and the pixel format is a combined (D32S8 for instance) format. \n\nI think this should work with the D32X8 formats as well, though it may be worth testing. ",
+      "revId": "8ae2860733014eac751bfa5a8f97ea51eb39c8b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
