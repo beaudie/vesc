@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8dcb8618_04260155",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T04:09:01Z",
+      "side": 1,
+      "message": "The reason I didn\u0027t do that is to get the UNIMPLEMENTED log before dying. In fact, maybe we should even return angle::Result::Continue? Like it\u0027s better not to clear alpha than die (when we know some vendors do it either).\n\nWDYT?",
+      "parentUuid": "0f1f5de8_c630592a",
+      "range": {
+        "startLine": 2144,
+        "startChar": 0,
+        "endLine": 2150,
+        "endChar": 5
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9bb6bc9d_e1dd4c82",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 1
@@ -71,6 +95,24 @@
       "writtenOn": "2021-09-29T22:26:41Z",
       "side": 1,
       "message": "Unrelated to this CL, but it looks a little odd seeing the VS called getFullScreenQuad_vert(), when this is really drawing a single giant triangle.",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bda5a88_5df1c327",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T04:09:01Z",
+      "side": 1,
+      "message": "Well, how the quad is rendered is an implementation detail, but yeah, that\u0027s a relic from the time the full screen draw actually used two triangles.",
+      "parentUuid": "9bb6bc9d_e1dd4c82",
       "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +130,30 @@
       "writtenOn": "2021-09-30T14:06:31Z",
       "side": 1,
       "message": "nit: suggest ANGLE_VK_CHECK as well.",
+      "range": {
+        "startLine": 5223,
+        "startChar": 0,
+        "endLine": 5227,
+        "endChar": 5
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eaa3724_cd781f78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T04:09:01Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "1bbf8715_20bbe791",
       "range": {
         "startLine": 5223,
         "startChar": 0,
@@ -145,6 +211,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08e723a2_f6546148",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6707,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T04:09:01Z",
+      "side": 1,
+      "message": "Good question. I wrote this based on the assumption that technically this path could be taken for any image with emulated format (not just external ones), and they initially don\u0027t have defined contents.\n\nI went to check, and your question led to a bugfix. In ImageHelper::initExternal is where we set contents defined for external images, but that was decided based on the layout. However, the layout _can_ be Undefined for external images while the contents are defined. See anglebug.com/6460\n\nI fixed ImageHelper::initExternal to set contents defined for all external images. So to answer your question, that\u0027s where it\u0027s decided. This code is not clearing any channel that\u0027s actually interesting to the application, that\u0027s why it doesn\u0027t setContentDefined.",
+      "parentUuid": "aaee9e4b_daf57307",
+      "range": {
+        "startLine": 6706,
+        "startChar": 41,
+        "endLine": 6707,
+        "endChar": 49
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "571707ff_00f7d3f5",
@@ -162,6 +252,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9deb03b4_95e49748",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7653,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T04:09:01Z",
+      "side": 1,
+      "message": "Done (added ASSERT here and in hasEmulatedImageChannels)",
+      "parentUuid": "571707ff_00f7d3f5",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a3f315_a97f8320",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7653,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T04:09:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "571707ff_00f7d3f5",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7cda28f_22a0a2e9",
@@ -175,6 +301,24 @@
       "writtenOn": "2021-09-29T22:26:41Z",
       "side": 1,
       "message": "nit: Please add a comment to these checks stating that the emulated alpha is expected to be 1 or 255.",
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c3699eb_d6ddeff8",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2669,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T04:09:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7cda28f_22a0a2e9",
       "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
