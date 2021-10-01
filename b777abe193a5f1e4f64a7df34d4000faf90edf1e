@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41a13edf_34eb559a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-01T15:04:18Z",
+      "side": 1,
+      "message": "Looks like we should only add the [] if the uniform block is an array... ",
+      "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
