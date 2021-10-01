@@ -325,6 +325,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c63c7cb1_72420e37",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T16:45:20Z",
+      "side": 1,
+      "message": "Sure, but I\u0027m not talking about ARM here.   I\u0027m referring to this logic in general.   The 50% threshold applies to every buffer, regardless of size, which could introduce more overhead for small buffers.\n\nAgain, not entirely related to this CL, I just thought it was worth a quick discussion to see if it\u0027s worth pursuing.",
+      "parentUuid": "6693a2c2_2fa8f91c",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 42
+      },
+      "revId": "dc719f979e72f05fc5d08f8d7b1616d04d6e3bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "97c18106_4c063128",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
