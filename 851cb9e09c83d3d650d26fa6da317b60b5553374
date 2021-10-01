@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1b12bc67_fb39ecf9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-01T18:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17ad920b_8d2d8716",
+      "revId": "851cb9e09c83d3d650d26fa6da317b60b5553374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "02ef9f79_1e8bc69a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "Yes. That\u0027s assuming that pointer is not going to be used after ModifyCommon, which the delete suggests here. If it should be used, then the delete is a bug.",
       "parentUuid": "999c34f4_9447ceb7",
+      "revId": "851cb9e09c83d3d650d26fa6da317b60b5553374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cd97270_01261e08",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ModifyStruct.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-01T18:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d894c87_7bd564d4",
       "revId": "851cb9e09c83d3d650d26fa6da317b60b5553374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
