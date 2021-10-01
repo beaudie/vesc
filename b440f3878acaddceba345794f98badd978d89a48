@@ -51,6 +51,59 @@
       "message": "Needs a rebase!",
       "revId": "b440f3878acaddceba345794f98badd978d89a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2364a3ac_ce6ce093",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-01T20:27:32Z",
+      "side": 1,
+      "message": "Next patch coming.",
+      "revId": "b440f3878acaddceba345794f98badd978d89a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33de9a18_a7bd3888",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-01T20:27:32Z",
+      "side": 1,
+      "message": "Yes, coming. We just sync\u0027d",
+      "parentUuid": "963bebbd_870d98d9",
+      "revId": "b440f3878acaddceba345794f98badd978d89a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa0451d_affe8950",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-01T20:27:32Z",
+      "side": 1,
+      "message": "Just a thought. I figured by the calls to finish or vkDeviceWaitIdle () {which is just a debug tool to be sure flushed} would be finished and the commands in the recycler recycled.\n\nWait for next upload, we are sync\u0027n now. I cleaned up duplicates and other code.\n\nLook at commit #3: https://chromium-review.googlesource.com/c/angle/angle/+/3174323\nAnd specifically look at SurfaceVk and vk_helpers where I do a OneOffCommand to copy Image-Buffer. Anything missing? I checked every other use of OneOffCommands and included the same elements - getCommandBufferOneOff, add Image Barrier for layout, call copy, queueSubmitOneOff, finishToSerial. Looks like it should work.\n\nMy test dies:\nglClear to Green\nlockSurface\nget bitmap pointer (the buffer is always black)\nfill buffer with red\nunlockSurface (which should write red back.)\nglReadPixels (says surface is still green instead of red)",
+      "parentUuid": "e226e809_b8930732",
+      "revId": "b440f3878acaddceba345794f98badd978d89a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
