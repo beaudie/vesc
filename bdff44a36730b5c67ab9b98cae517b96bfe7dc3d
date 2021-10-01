@@ -164,6 +164,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "10c82f5a_2f2bf5b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-01T18:03:04Z",
+      "side": 1,
+      "message": "\u003e Didn\u0027t you add code to issue a flush at every endRP? \nThat is only for ARM though (for now). I don\u0027t think we should do that for non-tiler GPUs in general, especially desktop GPUs.",
+      "parentUuid": "a7337944_c4d2e48c",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5b200d7_ba61fcf3",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
