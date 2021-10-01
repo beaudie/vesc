@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56958f1a_788b5cb8",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-01T12:57:51Z",
+      "side": 1,
+      "message": "I don\u0027t know what logging situation you\u0027re thinking of, but a failed CHECK will log to the debug callback, which is generally where output messages should go. I\u0027m fine if you want switch it from Stop to Continue instead, you could skip the CHECK in that case.",
+      "parentUuid": "8dcb8618_04260155",
+      "range": {
+        "startLine": 2144,
+        "startChar": 0,
+        "endLine": 2150,
+        "endChar": 5
+      },
+      "revId": "b4678a15c4407a49a98b2ab58cc99ff2da9f56da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9bb6bc9d_e1dd4c82",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 1
