@@ -16,6 +16,110 @@
       "message": "I think I got all you recommended.\nWhere to add the barrier call seems the last item?",
       "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7782a569_8c5e50f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T14:47:34Z",
+      "side": 1,
+      "message": "There is one more place that needs updating. `ImageHelper::setCurrentImageLayout` can change the layout of the image, for example `CommandBufferHelper::finalizeColorImageLayout` can set the layout to Present! Please make sure that `ImageHelper::setCurrentImageLayout` also ignores the layout change if the layout is PresentShared.\n\nI\u0027m surprised this is not caught be validation, unless there is none for it. You should be able to verify that this is being tested by looking at the render pass description being used in one of the tests and see that the final layout of the color attachment is PRESENT. That happens when the `mImageOptimizeForPresent-\u003esetCurrentImageLayout` path is taken in `CommandBufferHelper::finalizeColorImageLayout` (which you can put a breakpoint/log on and make sure happens in some test). If no test triggers this, please add one.",
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edcd05c7_fc6f874a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T14:47:34Z",
+      "side": 1,
+      "message": "How about firing a one-off command buffer in `WindowSurfaceVk::acquireNextSwapchainImage` to do the layout transition?",
+      "parentUuid": "a62bbe38_0764b55d",
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b196cbfa_cc0b4e8c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T14:47:34Z",
+      "side": 1,
+      "message": "nit: no need for this, it\u0027s done as part of `\u003d {}`. Please clean up the `surfaceInfo2.pNext \u003d nullptr` and `surfaceCaps2.pNext \u003d nullptr` lines above too.",
+      "range": {
+        "startLine": 604,
+        "startChar": 12,
+        "endLine": 604,
+        "endChar": 53
+      },
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7387969f_85069c0c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T14:47:34Z",
+      "side": 1,
+      "message": "This is not correct actually. Since the image stays in this layout for _every_ usage, then both the src and dst access masks should specify every access! These should say:\n\n    // Transition to: all reads and writes must happen after barrier.\n    VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT,\n    // Transition from: all writes must finish before barrier.\n    VK_ACCESS_MEMORY_WRITE_BIT,",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 14
+      },
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5db4c0ee_8666270c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4929,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T14:47:34Z",
+      "side": 1,
+      "message": "nit: could you please update this to say GENERAL or SHARED_PRESENT?",
+      "range": {
+        "startLine": 4929,
+        "startChar": 65,
+        "endLine": 4929,
+        "endChar": 72
+      },
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
