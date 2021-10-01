@@ -45,6 +45,30 @@
       },
       "revId": "6e728c055db50360711481e3c1c03f3682df5054",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9426894a_201c8213",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-01T20:46:00Z",
+      "side": 1,
+      "message": "\u003e Well we let the GPU use these buffers for everything, so if there\u0027s really a bandwidth issue due the buffer being host-visible, that\u0027s a bigger problem that needs solving.\n\u003e\nThat is why for buffer that we think does not get frequent update (i.e, static use) we put it in device local memory. For buffers that we think are frequent updated (i.e, dynamic update) we put it in system memory and made it host visible, so that we can use CPU to update it directly \n \n\u003e But also I don\u0027t think this is a given: \"there is no advantage to have GPU to do copy\". A dedicated DMA doing the copy over PCIe, vs the CPU doing the copy by looping, it\u0027s not clear to me which would be faster. Also, is the PCIe argument even valid on UMA architectures?\n\u003e \n\u003e Perhaps there should be a size check here too? Like if the copy is small, ok CPU may be fine, but I highly doubt that\u0027s true if the copy size is big.\n\u003e \n\u003e TL;DR, I\u0027d like to see a size limit for the CPU copy (even if a purely arbitrary constant), and some feature to decide the behavior, to make it easier in the future to play around with this.\n\nHow about I add a feature flag to limit this to android to end this conversation?",
+      "parentUuid": "415b5cef_206e7fc6",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 12
+      },
+      "revId": "6e728c055db50360711481e3c1c03f3682df5054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
