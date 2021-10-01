@@ -146,6 +146,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7337944_c4d2e48c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T17:58:46Z",
+      "side": 1,
+      "message": "\u003e IMO the correct fix is return call all the way back to front end and unlock the global mutex lock and wait there without the global mutex lock.\n\nThat works, I don\u0027t disagree with that. But:\n\n\u003e Have SyncHelper::initialize issue flush immediately will fix the bug, but its  heavy handed.\n\nDidn\u0027t you add code to issue a flush at every endRP? How\u0027s this suddenly too much? Note that it could be merged with the flush of the endRP at the beginning of this function (like tell that endRP not to flush, because I\u0027ll do it just after recording one more command).\n\nUnless the RP is already closed, there is actually no extra flush, just the flush is delayed by one command.",
+      "parentUuid": "b6233803_ea4385be",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5b200d7_ba61fcf3",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
