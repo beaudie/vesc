@@ -122,6 +122,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e57aabdb_1f5771d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-01T23:34:50Z",
+      "side": 1,
+      "message": "Right, I see what you mean now. I have added  renderer-\u003eisBusy() check now.",
+      "parentUuid": "f3991dfe_4117b35e",
+      "range": {
+        "startLine": 12,
+        "startChar": 62,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "95cdb253_9dc37941",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -239,6 +263,24 @@
       "side": 1,
       "message": "directUpdate is map/unmap the destination buffer, not the source buffer. The unmap will occur when it gets released. Also see my reply in the other comment in vk_helpers.cpp",
       "parentUuid": "93ea8fc3_cb0fe847",
+      "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f500ac2b_1ed868f6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-01T23:34:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d11bd923_688c6404",
       "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
