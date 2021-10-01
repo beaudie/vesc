@@ -97,6 +97,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f1b7dfa5_6addc395",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-01T22:24:30Z",
+      "side": 1,
+      "message": "Looks good, thanks Yuxin.",
+      "parentUuid": "b7ff8a1e_305fa98e",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7688490f_1be45576",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
