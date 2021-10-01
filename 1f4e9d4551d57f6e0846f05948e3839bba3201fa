@@ -102,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a20253bb_425cc9fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T19:44:06Z",
+      "side": 1,
+      "message": "Ok I see that `MarkShaderStorageUsage` calls `onDataChanged` for storage buffers. This is missing for image buffers though.\n\nCould you please add the requested tests? That would prove the correctness of this change for SSBOs, and if image buffers are broken, it\u0027s ok to file a bug and do a follow up IMO, as it\u0027s a front-end bug.",
+      "parentUuid": "9d5e792c_1baa2e96",
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24922d2f_1f67445e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 4
@@ -137,6 +155,30 @@
       "side": 1,
       "message": "That is exact this CL try to fix. mHasValidBufferData is tracking BufferVK has valid data or not, it is not tracking mBuffer has valid data or not. As I described in the CL description, if someone called glBufferData with null pointer and the same size, we will simply return, (which means we will try to reuse mBuffer storage for new in coming data). In this case mBuffer could still GPU busy (and has valid data in it), but BufferVk no longer has valid data in it. If we have to allocate a new buffer, we do not have to preserve the data in mBuffer. So this essenticially goes back to the point that mHasValidBufferData belongs to BufferVk, not BufferHelper. It is different from ImageHelper\u0027s mHasDefinedContent.",
       "parentUuid": "24922d2f_1f67445e",
+      "range": {
+        "startLine": 925,
+        "startChar": 14,
+        "endLine": 925,
+        "endChar": 33
+      },
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bd606b9_8861a620",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T19:44:06Z",
+      "side": 1,
+      "message": "Oh I see. I\u0027d definitely add this information on the variable declaration (in the header) to make it clear \"what\" has valid data.\n\nIt doesn\u0027t help that the comment here is referring to everything as \"buffer\"s. You could make this comment clearer too:\n\n        // If bufferVk does not have any valid data, which means there is no data needs to be copied\n        // from old bufferHelper to new bufferHelper when we acquire a new bufferHelper, we also favor\n        // acquireAndUpdate over stagedUpdate. This could happen when app calls glBufferData with\n        // same size and we will try to reuse the existing buffer storage.",
+      "parentUuid": "e9ff73b8_e81f8ed0",
       "range": {
         "startLine": 925,
         "startChar": 14,
