@@ -117,8 +117,6 @@
 6180 : ObjectAllocationTest.BindFramebufferBeforeGen/ES3_Vulkan_SwiftShader = FAIL
 6180 : RobustResourceInitTestES3.BindTexImage/ES3_Vulkan_SwiftShader = FAIL
 6180 : TransformFeedbackTest.MultiContext/ES3_Vulkan_SwiftShader = FAIL
-6180 : UniformBufferTest.BlockArrayContainingArrayOfStructs/ES3_Vulkan_SwiftShader = FAIL
-6180 : UniformBufferTest.ManyBlocks/ES3_Vulkan_SwiftShader = FAIL
 
 # Skip because crashes
 6313 : CopyTextureTestES3.InvalidateBlitThenBlend1000Layers/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
