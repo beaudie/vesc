@@ -16,6 +16,24 @@
       "message": "@shahbaz, observation:\n\nI stepped through all the code and I find one odd thing, in the RendererVk there is mPendingOneOffCommands which collects the OneOff ComamndBuffers - and it is collecting the 2 I create, but they should be flushed?, one after LockSurface and one after UnlockSurface.  I see no code releasing/flushing/poping them off except when RendererVk destroys. So that doesn\u0027t seem right. Is there something to call to cause them to be executed? ",
       "revId": "b440f3878acaddceba345794f98badd978d89a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e226e809_b8930732",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:02:56Z",
+      "side": 1,
+      "message": "`mPendingOneOffCommands` looks like a recycler. `queueSubmitOneOff` should take care of the submission.\n\nDo you see anything failing, or was this just a thought?",
+      "parentUuid": "43152d49_99f7b9b2",
+      "revId": "b440f3878acaddceba345794f98badd978d89a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
