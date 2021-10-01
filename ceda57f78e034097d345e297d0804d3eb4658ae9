@@ -173,6 +173,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b11aa3ca_d98128dd",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-01T22:58:49Z",
+      "side": 1,
+      "message": "I think this might be the change that Cody talked about: https://chromium-review.googlesource.com/c/angle/angle/+/3140218. I checked my trace folder, there is a mini_world.json file there. Tests so far don\u0027t report any issues, so I am guessing it\u0027s fine, but I am going to read Jamie\u0027s changelist to confirm.",
+      "parentUuid": "06e5343d_30da2ec6",
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "182f41c2_b1270d6e",
         "filename": "src/tests/restricted_traces/restricted_traces_autogen.gni",
         "patchSetId": 5
