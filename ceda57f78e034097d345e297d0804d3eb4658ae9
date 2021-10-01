@@ -228,6 +228,30 @@
       },
       "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c6a0353_9558b3ff",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 3804,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T23:01:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "182f41c2_b1270d6e",
+      "range": {
+        "startLine": 3804,
+        "startChar": 0,
+        "endLine": 3804,
+        "endChar": 35
+      },
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
