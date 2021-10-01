@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3991dfe_4117b35e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T18:23:15Z",
+      "side": 1,
+      "message": "\u003e You reach acquireAndUpdate() function because the buffer is currently in use by GPU. So you know for sure GPU is busy ATM.\n\nThat\u0027s not necessarily true.   The \"buffer is currently in use by GPU\" flag is set once the buffer is retained, not when the command is submitted and the GPU is actively using the buffer.   So, there is a period of time when a buffer can be used in a command buffer that will eventually be submitted and thus is already \"in use\", but the GPU hasn\u0027t actually started working on it yet.",
+      "parentUuid": "7a77b41f_25ff2693",
+      "range": {
+        "startLine": 12,
+        "startChar": 62,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "95cdb253_9dc37941",
