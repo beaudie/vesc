@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12debe3e_a6c88d2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-01T20:29:43Z",
+      "side": 1,
+      "message": "Can you move this line down towards the bottom, just above Bug: ?\nYou should be able to use the gerrit interface to do that, no need to re-upload.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 51
+      },
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ece0d234_e7d54fc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-01T20:29:43Z",
+      "side": 1,
+      "message": "Can you move this down to the Bug section as well to ensure your update is applied correctly? i.e.:\n\nBug: angleproject:6443",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7688490f_1be45576",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-01T20:29:43Z",
+      "side": 1,
+      "message": "LGTM, Yuxin.  Nice work!  Just a couple of update requests on your CL message.",
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
