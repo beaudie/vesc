@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5d2f58e_796afe30",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T23:01:38Z",
+      "side": 1,
+      "message": "nit: maybe add a TODO to make `flushCommandsAndEndRenderPass` not implicitly vkQueueSubmit because there\u0027d be one here.",
+      "revId": "77e59bec42243d7c8c5c7f81d7bc13a80e477c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
