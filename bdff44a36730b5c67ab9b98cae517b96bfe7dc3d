@@ -182,6 +182,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8661f5d_1cb3e08c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T18:56:05Z",
+      "side": 1,
+      "message": "Not sure if an extra flush on a desktop GPU is really an issue we should worry about.",
+      "parentUuid": "10c82f5a_2f2bf5b1",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5b200d7_ba61fcf3",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
