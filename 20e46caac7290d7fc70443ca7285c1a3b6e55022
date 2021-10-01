@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee08522_ed3fba56",
+        "filename": "doc/ExtensionSupport.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-01T19:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4bf33d8_0801497a",
+      "range": {
+        "startLine": 290,
+        "startChar": 5,
+        "endLine": 291,
+        "endChar": 80
+      },
+      "revId": "20e46caac7290d7fc70443ca7285c1a3b6e55022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0efb236b_fe4a7cee",
