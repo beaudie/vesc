@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc1db5e3_5cc7cdfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T01:31:58Z",
+      "side": 1,
+      "message": "Not sure how it\u0027s possible for anyone to delete the context, given that it\u0027s current on the calling thread, but the concern is valid that once you get back from the wait, everything could have changed, so all the call stack should make sure it\u0027s not using stale data. That\u0027s probably going to be very error prone. So I take it back, I no longer like the idea! Samsung\u0027s CL seems to be doing the same though, doesn\u0027t it?\n\nSo here\u0027s an idea. We know that the caller necessarily has the command that signals the fence/event recorded, it might just be that the recorded command lives in another ContextVk, right?\n\nSo, how about in `SyncHelper::initialize`, we add a call to `contextVk-\u003eflushOutsideRenderPassCommands()`? (well that\u0027s private, so through the `on*SyncHelperInitialize` calls) Then we know that the command that signals the sync object lives in RendererVk (or rather in the PrimaryCommandBuffer waiting to be submitted). The significance here is that then we can say:\n\n        if (!mUse.getSerial().valid())\n        {\n            ANGLE_TRY(renderer-\u003esubmitFrame(...));\n        }\n        ASSERT(mUse.getSerial().valid());\n\nHow about that?",
+      "parentUuid": "aebb1024_a0defcab",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5b200d7_ba61fcf3",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
