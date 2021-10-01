@@ -62,6 +62,23 @@
       "message": "LGTM, Yuxin.  Nice work!  Just a couple of update requests on your CL message.",
       "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8484ec5_5a475f58",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T20:45:44Z",
+      "side": 1,
+      "message": "I\u0027m concerned about this.   Why isn\u0027t there any JSON info for this trace?\n\n@Jamie: Any ideas what went wrong here?",
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
