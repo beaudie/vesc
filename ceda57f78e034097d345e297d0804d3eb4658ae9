@@ -207,6 +207,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce54bd3_f8031685",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-01T23:41:52Z",
+      "side": 1,
+      "message": "I think in Jamie\u0027s change, we will skip outputting trace info if we are using json meta data: https://chromium-review.googlesource.com/c/angle/angle/+/3140218/14/src/tests/restricted_traces/gen_restricted_traces.py#234. If I comment out the block: if json_metadata_exists(trace), \"mini_world\" block will contain the same information as the other games listed in the restricted_traces_autogen.cpp.\n\nBut we can wait for Jamie to confirm if the empty block here is indeed as expected.",
+      "parentUuid": "8d8edda9_2b88ccf0",
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "182f41c2_b1270d6e",
