@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bea583b_388a8107",
+        "filename": "doc/TestingAndProcesses.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-01T22:48:01Z",
+      "side": 1,
+      "message": "FYI ... This opens the correct directory in CodeSearch.  Just need to select the file and then press the edit button.",
+      "range": {
+        "startLine": 78,
+        "startChar": 26,
+        "endLine": 78,
+        "endChar": 128
+      },
+      "revId": "79cb0dca4317102f78ba26643c38485d5b1ad505",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
