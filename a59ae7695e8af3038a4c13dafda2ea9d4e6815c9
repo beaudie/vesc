@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcb0df03_d58fb405",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T03:54:19Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 105,
+        "startChar": 42,
+        "endLine": 105,
+        "endChar": 43
+      },
+      "revId": "a59ae7695e8af3038a4c13dafda2ea9d4e6815c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aad539c6_b71941b9",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T03:54:19Z",
+      "side": 1,
+      "message": "Not sure if you want to say \"sampled\" here. Depth textures are not a thing in GLES2 (i.e. WebGL1), right? How about:\n\n\u003e For depth components the clear value is 1.0\n\nBe it for depth comparison or sampling, it\u0027s always 1.0, so no reason to mention either. WDYT?",
+      "range": {
+        "startLine": 105,
+        "startChar": 32,
+        "endLine": 105,
+        "endChar": 39
+      },
+      "revId": "a59ae7695e8af3038a4c13dafda2ea9d4e6815c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a84aa15d_685c3ef7",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T03:54:19Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 149,
+        "startChar": 32,
+        "endLine": 149,
+        "endChar": 39
+      },
+      "revId": "a59ae7695e8af3038a4c13dafda2ea9d4e6815c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
