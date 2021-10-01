@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "765f360a_5b8641d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-01T22:01:53Z",
+      "side": 1,
+      "message": "Thank you Cody, I moved this line to the new location you suggested.",
+      "parentUuid": "12debe3e_a6c88d2e",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 51
+      },
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ece0d234_e7d54fc1",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-01T20:29:43Z",
       "side": 1,
       "message": "Can you move this down to the Bug section as well to ensure your update is applied correctly? i.e.:\n\nBug: angleproject:6443",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ff8a1e_305fa98e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-01T22:01:53Z",
+      "side": 1,
+      "message": "I moved the bug link to the bug section, too. I also modified the validation error description. Please let me know if the CL description looks good now. Thank you!",
+      "parentUuid": "ece0d234_e7d54fc1",
       "range": {
         "startLine": 12,
         "startChar": 0,
