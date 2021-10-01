@@ -108,14 +108,8 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEglSyncObject)
     commandBuffer->setEvent(mEvent.getHandle(), VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
     retain(&contextVk->getResourceUseList());
 
-    if (isEglSyncObject)
-    {
-        contextVk->onEGLSyncHelperInitialize();
-    }
-    else
-    {
-        contextVk->onSyncHelperInitialize();
-    }
+    // Submit the commands, so the sync object has a valid serial when it's waited on later.
+    ANGLE_TRY(contextVk->flushImpl(nullptr));
 
     return angle::Result::Continue;
 }
@@ -137,30 +131,19 @@ angle::Result SyncHelper::clientWait(Context *context,
         return angle::Result::Continue;
     }
 
-    // We defer (ignore) flushes, so it's possible that the glFence's signal operation is pending
-    // submission.
-    if (contextVk)
+    // We always flush when a sync object is created, so they should always have a valid Serial
+    // when being waited on.
+    if (!mUse.getSerial().valid())
     {
-        if (flushCommands || usedInRecordedCommands())
-        {
-            ANGLE_TRY(contextVk->flushImpl(nullptr));
-        }
-    }
-    else
-    {
-        if (!mUse.getSerial().valid())
-        {
-            // The sync object wasn't flushed before waiting, so the wait will always necessarily
-            // time out.
-            WARN() << "clientWaitSync called without flushing sync object and/or a valid context "
-                      "active.";
-            *outResult = VK_TIMEOUT;
-            return angle::Result::Continue;
-        }
+        // The sync object wasn't flushed before waiting, so the wait will always necessarily
+        // time out.
+        WARN() << "clientWaitSync called without flushing sync object and/or a valid context "
+                  "active.";
+        *outResult = VK_TIMEOUT;
+        return angle::Result::Continue;
     }
 
     // If timeout is zero, there's no need to wait, so return timeout already.
-    // Do this after (possibly) flushing, since some apps/tests/traces are relying on this behavior.
     if (timeout == 0)
     {
         *outResult = VK_TIMEOUT;
@@ -469,12 +452,7 @@ angle::Result SyncVk::serverWait(const gl::Context *context, GLbitfield flags, G
 angle::Result SyncVk::getStatus(const gl::Context *context, GLint *outResult)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    if (contextVk->getShareGroupVk()->isSyncObjectPendingFlush())
-    {
-        ANGLE_TRY(contextVk->flushImpl(nullptr));
-    }
-
-    bool signaled = false;
+    bool signaled        = false;
     ANGLE_TRY(mSyncHelper.getStatus(contextVk, &signaled));
 
     *outResult = signaled ? GL_SIGNALED : GL_UNSIGNALED;
