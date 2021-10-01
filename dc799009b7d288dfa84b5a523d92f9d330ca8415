@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c40577_e30cc4fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T19:28:55Z",
+      "side": 1,
+      "message": "FWIW, the bots are good at detecting that there\u0027s no change, and nothing should be done. See for example: https://ci.chromium.org/ui/p/angle/builders/try/linux-clang-rel/24847/overview\n\nIt\u0027s still a waste, definitely, but not as big a waste as you\u0027d think. Of course CQ+1 is useless on a doc change, so yes, no need to do that.",
+      "parentUuid": "5f9938f8_82223467",
+      "revId": "dc799009b7d288dfa84b5a523d92f9d330ca8415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef3067df_d38c7579",
