@@ -16,6 +16,24 @@
       "message": "Nice work Jonah triaging the remaining failures.\n\nThere are still quite a lot, and I\u0027m concerned that by losing the DirectMetalGen suffix on the test names, we\u0027ll lose the ability to easily understand what are regressions compared to the SPIR-V backend.\n\nWhat would you think about the following approach?\n\n1) Change ANGLE_TEST_INSTANTIATE for the dEQP test suites, starting with dEQP/ES2, to additionally run the direct-to-Metal tests.\n\n2) Burn down those failures to a relatively small number.\n\n3) Make the switch at that point.\n\nIs this feasible? Do the dEQP tests instantiate backends in the same way angle_end2end_tests do?\n\nA couple of other suggestions:\n\nA) Would it be possible to add an \"IsDirectToMetal()\" or \"IsSPIRVMetal()\" predicate? It looks like that would allow a substantial number of tests to be turned on right now with the direct-to-Metal backend; that would be ideal.\n\nB) When making the Metal test expectation changes, could they be done in the same place in the various files? In this CL they move, which makes it difficult to do side-by-side comparisons.\n\nThanks in advance for your thoughts on these.\n",
       "revId": "f426381417c69c6a0f8097c1892ddd8850f073b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dd323eb_6fdc0fb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-01T19:15:11Z",
+      "side": 1,
+      "message": "I\u0027m a bit less concerned about tracking the difference between SPIRV and direct Metal, just because SPIRV isn\u0027t actually a shipped option yet either. I think it\u0027s worth it from a maintenance standpoint to push to switch over to the new backend.\n\nThe number of end2end, dEQP-EGL, and dEQP-GLES2 failures seem pretty reasonable and don\u0027t look like much regression. I also think there will be a significant number of tests fixed by the latest 3 or 4 patches by Kyle. But we can wait and see for that.\n\nIt\u0027s definitely possible to add IsDirectToMetal() and IsSPIRVMetal() if we decide to keep testing both paths.\n\nI can try to organize the suppressions better to make the diff easier to parse.",
+      "parentUuid": "0fea94aa_26cf2ccd",
+      "revId": "f426381417c69c6a0f8097c1892ddd8850f073b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
