@@ -102,6 +102,24 @@
       "parentUuid": "af2d290c_84398913",
       "revId": "851cb9e09c83d3d650d26fa6da317b60b5553374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "999c34f4_9447ceb7",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ModifyStruct.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-01T18:07:28Z",
+      "side": 1,
+      "message": "What to do about innermostField\u0027s constructor then? Pass \u0026setType if it was a local variable?",
+      "parentUuid": "8d894c87_7bd564d4",
+      "revId": "851cb9e09c83d3d650d26fa6da317b60b5553374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
