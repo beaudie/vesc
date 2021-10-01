@@ -119,6 +119,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a726ed8_0f7cc08c",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T17:43:38Z",
+      "side": 1,
+      "message": "Ack. I think it\u0027s pretty clear that a 0x01 byte and 1.0 float are not the same thing 😊",
+      "parentUuid": "512c2e02_cf741185",
+      "range": {
+        "startLine": 105,
+        "startChar": 32,
+        "endLine": 105,
+        "endChar": 39
+      },
+      "revId": "a59ae7695e8af3038a4c13dafda2ea9d4e6815c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a84aa15d_685c3ef7",
