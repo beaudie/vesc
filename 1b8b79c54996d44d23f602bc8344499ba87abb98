@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "738b3e8e_2b7a2d69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-01T01:49:52Z",
+      "side": 1,
+      "message": "Thanks for revising; looks good to me. Couple of tiny additional comments.\n",
+      "revId": "1b8b79c54996d44d23f602bc8344499ba87abb98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ec102dd_38d87549",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewritePipelines.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-01T01:49:52Z",
+      "side": 1,
+      "message": "Small typo in your login :)",
+      "revId": "1b8b79c54996d44d23f602bc8344499ba87abb98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
