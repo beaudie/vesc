@@ -79,6 +79,47 @@
       "message": "I\u0027m concerned about this.   Why isn\u0027t there any JSON info for this trace?\n\n@Jamie: Any ideas what went wrong here?",
       "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06e5343d_30da2ec6",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-01T21:36:17Z",
+      "side": 1,
+      "message": "I think a change landed that keeps them in a separate file now.  See ref for where the json for this trace is.",
+      "parentUuid": "b8484ec5_5a475f58",
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "182f41c2_b1270d6e",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 3804,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-01T21:36:17Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 3804,
+        "startChar": 0,
+        "endLine": 3804,
+        "endChar": 35
+      },
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
