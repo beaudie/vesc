@@ -128,6 +128,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6233803_ea4385be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-01T16:53:36Z",
+      "side": 1,
+      "message": "\u003eNot sure how it\u0027s possible for anyone to delete the context, given that it\u0027s current on the calling thread\nI thought the EGL sync object doe snot require caller on the context thread? But anyway, fence might get deleted etc. And we should not crash in those cases.\n\nHave SyncHelper::initialize issue flush immediately will fix the bug, but its  heavy handed. One of the main point of sync object is to able to track it\u0027s completion without issue a glFlush. As a temporary workaround that is okay, but I think longer term we do need to avoid flush at SyncHelper::initialize time, and then we will have to go back to this bug to redo a fix, which will go back to this discussion again.\n\nI just looked at Samsung\u0027s fix, they also unlock the global lock, so not good either. IMO the correct fix is return call all the way back to front end and unlock the global mutex lock and wait there without the global mutex lock.",
+      "parentUuid": "9b630d62_ec4411b6",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5b200d7_ba61fcf3",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
