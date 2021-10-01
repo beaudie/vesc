@@ -290,6 +290,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a795941_4a0e07e9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T18:26:55Z",
+      "side": 1,
+      "message": "Ah, yeah, if we\u0027re going to direct update, then they both need to be host visible.",
+      "parentUuid": "5b7e0686_53bf4a09",
+      "range": {
+        "startLine": 904,
+        "startChar": 38,
+        "endLine": 904,
+        "endChar": 62
+      },
+      "revId": "41c0ec9d0d1140a66a5cecf081145da71e7ba310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db7819c4_e06e88c8",
