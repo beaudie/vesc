@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97de7948_970f1e09",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "What is this 8? Is pixel size being returned in bits here? If so, can you name this constant like:\n\n    constexpr EGLint kBitsPerByte \u003d 8;\n\njust to make it clear what the 8 is.",
+      "range": {
+        "startLine": 780,
+        "startChar": 30,
+        "endLine": 780,
+        "endChar": 33
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc8dbdae_932a07e0",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "These look like they belong to the validation code.",
+      "range": {
+        "startLine": 790,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 5
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f5cbfa6_1c11f693",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "nit: just `return` here.",
+      "range": {
+        "startLine": 816,
+        "startChar": 4,
+        "endLine": 816,
+        "endChar": 22
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45a07b54_d725822d",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "Also looks like it belongs to the validation code",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 827,
+        "endChar": 5
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21828dd8_fe89408b",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "nit: If you move this up, you can directly `return mImplementation-\u003eunlockSurface(...)`.",
+      "range": {
+        "startLine": 831,
+        "startChar": 0,
+        "endLine": 832,
+        "endChar": 28
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4669562e_b9d21db3",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "nit: isSurfaceLocked (or just isLocked)",
+      "range": {
+        "startLine": 152,
+        "startChar": 9,
+        "endLine": 152,
+        "endChar": 22
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ada88b12_085609bd",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "nit: isCurrentOnAnyContext",
+      "range": {
+        "startLine": 153,
+        "startChar": 9,
+        "endLine": 153,
+        "endChar": 26
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aea3a0af_23fb7f5f",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "nit: mIsCurrentOnAnyContext?\n\n@geoff, doesn\u0027t the surface already have this information?",
+      "range": {
+        "startLine": 272,
+        "startChar": 9,
+        "endLine": 272,
+        "endChar": 17
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecbdb382_c8f948d2",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T20:14:49Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 120,
+        "startChar": 27,
+        "endLine": 120,
+        "endChar": 28
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
