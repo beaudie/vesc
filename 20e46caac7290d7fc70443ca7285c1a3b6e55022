@@ -33,6 +33,121 @@
       "message": "Nice",
       "revId": "20e46caac7290d7fc70443ca7285c1a3b6e55022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4bf33d8_0801497a",
+        "filename": "doc/ExtensionSupport.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-01T18:25:01Z",
+      "side": 1,
+      "message": "Doesn\u0027t render well, I guess because of the newline between ] and (",
+      "range": {
+        "startLine": 290,
+        "startChar": 5,
+        "endLine": 291,
+        "endChar": 80
+      },
+      "revId": "20e46caac7290d7fc70443ca7285c1a3b6e55022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0efb236b_fe4a7cee",
+        "filename": "scripts/update_extension_data.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-01T18:25:01Z",
+      "side": 1,
+      "message": "unused",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 46
+      },
+      "revId": "20e46caac7290d7fc70443ca7285c1a3b6e55022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14d79843_9d7883d2",
+        "filename": "scripts/update_extension_data.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-01T18:25:01Z",
+      "side": 1,
+      "message": "If there are several info files, the last one will overwrite the previous ones?\nIf this is expected, then please remove the \"for\" loop and just use the last file directly.",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 53
+      },
+      "revId": "20e46caac7290d7fc70443ca7285c1a3b6e55022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0644ca3d_f021dd42",
+        "filename": "scripts/update_extension_data.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-01T18:25:01Z",
+      "side": 1,
+      "message": "I think several builds can have the same hash, if something like expectation file changed between the two builds, but not the actual code (I think the task will be deduped in this case).\nCould you maybe look for a more efficient way to filter out tasks, so that only those corresponding to the build you\u0027re interested in will be examined?",
+      "range": {
+        "startLine": 169,
+        "startChar": 75,
+        "endLine": 169,
+        "endChar": 90
+      },
+      "revId": "20e46caac7290d7fc70443ca7285c1a3b6e55022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "410842c4_e219af67",
+        "filename": "scripts/update_extension_data.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-01T18:25:01Z",
+      "side": 1,
+      "message": "Makes sense to me to call \"name_device(gpu, device_type), name_os(bot_os, device_os)\" here and pass only 2 args to update_json instead of 4.",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 0
+      },
+      "revId": "20e46caac7290d7fc70443ca7285c1a3b6e55022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
