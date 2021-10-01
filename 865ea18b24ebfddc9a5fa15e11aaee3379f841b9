@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b6edd37_619fca3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-01T18:59:25Z",
+      "side": 1,
+      "message": "Thanks for looking over the script in detail Yuly. I didn\u0027t act super decisively on all the notes but hopefully we can proceed anyway.",
+      "revId": "865ea18b24ebfddc9a5fa15e11aaee3379f841b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
