@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c857e1ea_6579ee47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T16:26:13Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "8ea6c95c17a513dae94073b394ba0f42453b9ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff6c8cd_07ff5996",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T16:26:13Z",
+      "side": 1,
+      "message": "nit:\n\n  // Reset the flag since the buffer contents are being reinitialized. If the\n  // caller passed in data to fill the buffer, the flag will be updated when the\n  // data is copied to the buffer.",
+      "range": {
+        "startLine": 398,
+        "startChar": 68,
+        "endLine": 398,
+        "endChar": 70
+      },
+      "revId": "8ea6c95c17a513dae94073b394ba0f42453b9ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
