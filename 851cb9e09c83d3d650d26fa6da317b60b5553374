@@ -84,6 +84,24 @@
       "message": "Is it common to delete these temporaries? I thought all compiler data structures came out of the pool allocator, so they didn\u0027t need to be explicitly deleted.",
       "revId": "851cb9e09c83d3d650d26fa6da317b60b5553374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d894c87_7bd564d4",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ModifyStruct.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-01T03:56:41Z",
+      "side": 1,
+      "message": "Yeap, don\u0027t delete. If there won\u0027t be any references to it, just use a local variable instead of new.",
+      "parentUuid": "af2d290c_84398913",
+      "revId": "851cb9e09c83d3d650d26fa6da317b60b5553374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
