@@ -49,6 +49,78 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "512c2e02_cf741185",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-01T15:45:38Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure what to put here. My point is `glTexImage2D(.... someDepthFormat, ....... bytes[0x01, 0x01, ...])` is wrong. 0x01 is not a depth value of 1.0   The value that actually has to be put in memory so that the depth buffer is interpreted as 1.0 is what I\u0027m trying to say.  For now changed to \"the value that is interpreted as 1.0\"",
+      "parentUuid": "aad539c6_b71941b9",
+      "range": {
+        "startLine": 105,
+        "startChar": 32,
+        "endLine": 105,
+        "endChar": 39
+      },
+      "revId": "a59ae7695e8af3038a4c13dafda2ea9d4e6815c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bdc1840_3498b36f",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-01T15:45:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aad539c6_b71941b9",
+      "range": {
+        "startLine": 105,
+        "startChar": 32,
+        "endLine": 105,
+        "endChar": 39
+      },
+      "revId": "a59ae7695e8af3038a4c13dafda2ea9d4e6815c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98430c60_e055726e",
+        "filename": "extensions/ANGLE_robust_resource_initialization.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-01T15:45:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcb0df03_d58fb405",
+      "range": {
+        "startLine": 105,
+        "startChar": 42,
+        "endLine": 105,
+        "endChar": 43
+      },
+      "revId": "a59ae7695e8af3038a4c13dafda2ea9d4e6815c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a84aa15d_685c3ef7",
         "filename": "extensions/ANGLE_robust_resource_initialization.txt",
         "patchSetId": 3
