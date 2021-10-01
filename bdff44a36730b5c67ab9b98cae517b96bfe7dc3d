@@ -200,6 +200,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe1c4752_6d0033ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T19:58:08Z",
+      "side": 1,
+      "message": "I think this is what\u0027s being described.   It fixes the Swappy issue with com.nextwave.wcc2.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3200274",
+      "parentUuid": "b8661f5d_1cb3e08c",
+      "revId": "bdff44a36730b5c67ab9b98cae517b96bfe7dc3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5b200d7_ba61fcf3",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
