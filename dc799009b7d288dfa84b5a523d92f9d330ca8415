@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f9938f8_82223467",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-01T18:32:16Z",
+      "side": 1,
+      "message": "Just a note that these documentation updates don\u0027t need CQ run on them until the CQ+2 to submit them.   Please avoid it to prevent wasting resources.",
+      "revId": "dc799009b7d288dfa84b5a523d92f9d330ca8415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f46c4c39_4b012144",
