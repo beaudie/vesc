@@ -1319,7 +1319,7 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
     gl::Format glFormat(internalFormat);
     ANGLE_TRY(initImageViews(contextVk, format.getActualImageFormat(getRequiredImageAccess()),
                              glFormat.info->sized, static_cast<uint32_t>(levels),
-                             mImage->getLayerCount()));
+                             getImageViewLayerCount()));
 
     return angle::Result::Continue;
 }
@@ -1374,7 +1374,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
 
     ASSERT(type != gl::TextureType::CubeMap);
     ANGLE_TRY(initImageViews(contextVk, format.getActualImageFormat(getRequiredImageAccess()),
-                             image->getFormat().info->sized, 1, 1));
+                             image->getFormat().info->sized, 1, getImageViewLayerCount()));
 
     // Transfer the image to this queue if needed
     uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
@@ -1998,13 +1998,9 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
 
         // Update the current max level in ImageViewHelper
         const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
-        // We use a special layer count here to handle EGLImages. They might only be
-        // looking at one layer of a cube or 2D array texture.
-        uint32_t layerCount =
-            mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
         return initImageViews(contextVk, mImage->getActualFormat(),
                               baseLevelDesc.format.info->sized, maxLevel - baseLevel + 1,
-                              layerCount);
+                              getImageViewLayerCount());
     }
 
     return respecifyImageStorageAndLevels(contextVk, mImage->getFirstAllocatedLevel(), baseLevel,
@@ -3273,17 +3269,22 @@ vk::ImageOrBufferViewSubresourceSerial TextureVk::getBufferViewSerial() const
     return mBufferViews.getSerial();
 }
 
-angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
+uint32_t TextureVk::getImageViewLayerCount() const
 {
     // We use a special layer count here to handle EGLImages. They might only be
     // looking at one layer of a cube or 2D array texture.
-    uint32_t layerCount = mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
+    return mState.getType() == gl::TextureType::_2D || mState.getType() == gl::TextureType::External
+               ? 1
+               : mImage->getLayerCount();
+}
 
+angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
+{
     getImageViews().release(contextVk->getRenderer());
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
     ANGLE_TRY(initImageViews(contextVk, mImage->getActualFormat(), baseLevelDesc.format.info->sized,
-                             mImage->getLevelCount(), layerCount));
+                             mImage->getLevelCount(), getImageViewLayerCount()));
 
     // Let any Framebuffers know we need to refresh the RenderTarget cache.
     onStateChange(angle::SubjectMessage::SubjectChanged);
