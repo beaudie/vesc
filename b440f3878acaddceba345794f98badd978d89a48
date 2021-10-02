@@ -121,6 +121,24 @@
       "message": "Local fast forward delayed, can\u0027t upload until conflicts resolved.\n\nI think glClear() is doing something weird. I use it to pre-fill a surface with color. But I think, even with glFinish() after glClear(), it doesn\u0027t change the Image immediately. Then later after unlockSurface, glReadPixels causes a finish and the glColor happens maybe after my copyBufferToImage?\nIf I remove glClear, then the test writes to buffer, then buffer to Image happens, and glReadPixels gets the written color.\n\n",
       "revId": "b440f3878acaddceba345794f98badd978d89a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fd394c8_42b41ea4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:29:57Z",
+      "side": 1,
+      "message": "Another victim of deferred clears!\n\nClears get deferred, so that they would be done potentially as a loadOp when the render pass starts. You need to call `ImageHelper::flushStagedUpdates` before reading/writing to the image.",
+      "parentUuid": "c64f1fbc_e7069abc",
+      "revId": "b440f3878acaddceba345794f98badd978d89a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
