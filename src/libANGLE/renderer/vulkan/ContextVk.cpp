@@ -5630,8 +5630,16 @@ uint32_t ContextVk::getCurrentViewCount() const
     return mDrawFramebuffer->getRenderPassDesc().viewCount();
 }
 
-angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
+angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queueSubmit)
 {
+    // Set dirty bits if render pass was open (and thus will be closed).
+    if (mRenderPassCommands->started())
+    {
+        mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
+        // Restart at subpass 0.
+        mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
+    }
+
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
     ASSERT(mOutsideRenderPassCommands->empty());
@@ -5693,7 +5701,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
 
-    if (mHasDeferredFlush)
+    if (mHasDeferredFlush && queueSubmit == QueueSubmitType::PerformQueueSubmit)
     {
         // If we have deferred glFlush call in the middle of renderpass, flush them now.
         ANGLE_TRY(flushImpl(nullptr));
@@ -5704,20 +5712,12 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl()
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass()
 {
-    bool isRenderPassStarted = mRenderPassCommands->started();
+    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit);
+}
 
-    ANGLE_TRY(flushCommandsAndEndRenderPassImpl());
-
-    // Set dirty bits if render pass was open (and thus has been closed).
-    if (isRenderPassStarted)
-    {
-        mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
-
-        // Restart at subpass 0.
-        mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
-    }
-
-    return angle::Result::Continue;
+angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutQueueSubmit()
+{
+    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::SkipQueueSubmit);
 }
 
 angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
@@ -5725,7 +5725,7 @@ angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirty
 {
     ASSERT(mRenderPassCommands->started());
 
-    ANGLE_TRY(flushCommandsAndEndRenderPassImpl());
+    ANGLE_TRY(flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit));
 
     // Set dirty bits that need processing on new render pass on the dirty bits iterator that's
     // being processed right now.
