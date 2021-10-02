@@ -225,6 +225,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4581cbd_ca94c50e",
+        "filename": "src/tests/restricted_traces/restricted_traces_autogen.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-02T01:44:21Z",
+      "side": 1,
+      "message": "It\u0027s fine to go ahead and land this, since the bots are happy.",
+      "parentUuid": "9ce54bd3_f8031685",
+      "revId": "ceda57f78e034097d345e297d0804d3eb4658ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "182f41c2_b1270d6e",
