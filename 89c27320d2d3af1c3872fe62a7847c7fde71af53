@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b46982b_d3dead49",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T03:01:01Z",
+      "side": 1,
+      "message": "It\u0027s expected to be empty. I\u0027d rather not add more `#if`s than necessary TBH. If the cost of two swaps here is a concern, `commandBuffersToReset` could be turned into a class with an empty implementation `#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS`, but that seems a bit overkill.",
+      "parentUuid": "fadd51ff_8065cab6",
+      "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "16ecc061_4c52dc1b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-29T21:41:42Z",
       "side": 1,
       "message": "It would be nicer to be able to SafeDelete() delete this to prevent any use-after-free errors. That would require passing in a **commandBuffer so the pointer can be modified, so I\u0027ll leave it up to you if that makes sense here.",
+      "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10a4ae57_08dacc0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T03:01:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16ecc061_4c52dc1b",
       "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +101,30 @@
       "writtenOn": "2021-09-29T21:41:42Z",
       "side": 1,
       "message": "Does emplace_back work/help here?",
+      "range": {
+        "startLine": 2045,
+        "startChar": 36,
+        "endLine": 2045,
+        "endChar": 45
+      },
+      "revId": "89c27320d2d3af1c3872fe62a7847c7fde71af53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "684ee58c_153ac6b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T03:01:01Z",
+      "side": 1,
+      "message": "They would be the same thing in this case.",
+      "parentUuid": "e5871668_52643279",
       "range": {
         "startLine": 2045,
         "startChar": 36,
