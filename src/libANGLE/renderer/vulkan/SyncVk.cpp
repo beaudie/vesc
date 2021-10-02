@@ -88,8 +88,8 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEglSyncObject)
     ASSERT(!mEvent.valid());
 
     // Break the current render pass to ensure the proper ordering of the sync object in the
-    // commands.
-    ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
+    // commands. The queue submit is skipped here, since it'll be done later.
+    ANGLE_TRY(contextVk->flushCommandsAndEndRenderPassWithoutQueueSubmit());
 
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = renderer->getDevice();
