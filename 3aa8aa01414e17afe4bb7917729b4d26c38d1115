@@ -1,0 +1,227 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4949a04d_9daeab96",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "No need for `mLockBufferHelper` to be a pointer, and you can get rid of these allocations and frees. You could instead then do:\n\n    if (mLockBufferHelper.valid())\n        mLockBufferHelper.destroy(...);",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 5
+      },
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a82831_e6abbea1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "Should this be something like `getHeight() * rowStride`? Probably `ImageHelper::CalculateBufferInfo` can be used to calculate `rowStride`.\n\nYou can try to have your tests use odd width/height sizes to make a potential issue here more prominent.",
+      "range": {
+        "startLine": 453,
+        "startChar": 39,
+        "endLine": 453,
+        "endChar": 88
+      },
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b611a62c_c4e66557",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "You can surround this with `if (!mLockBufferHelper.valid()))` and remove the destroy() call from unlock. So the buffer is not recreated every frame.\n\nThe same with WindowSurfaceVk, except there should be a destroy when the swapchain is recreated too.\n\nYou would also not need to destroy() the buffer on every error below and can safely use ANGLE_TRY() like usual.",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 470,
+        "endChar": 89
+      },
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eb08372_84d9fd4c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "Logically the map() should be done after the copy below.",
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9672aa62_592448f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3596,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "Instead, make `mapImpl` take a `Context` (that\u0027s `vk::Context`, but `vk::` is redundant here). It\u0027s not using any particular features of ContextVk.",
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c32d9396_023b8c68",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3685,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "Same with this, make `BufferHelper::init` take `Context` instead of `ContextVk`.",
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60bca064_32e2695a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "nit: directly return instead",
+      "range": {
+        "startLine": 7138,
+        "startChar": 5,
+        "endLine": 7138,
+        "endChar": 14
+      },
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8309e3a_451c578f",
+        "filename": "src/tests/egl_tests/EGLContextCompatibilityTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "Remember to uncomment before submission",
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcd39764_402e7a64",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "Why skip?",
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c67fe4b9_daab77aa",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "nit: feel free to just say `0, 1, 0, 1`, everyone knows that\u0027s green! Same with other tests below",
+      "range": {
+        "startLine": 260,
+        "startChar": 17,
+        "endLine": 260,
+        "endChar": 87
+      },
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7101eaa6_e86f74be",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:22:02Z",
+      "side": 1,
+      "message": "typo: extra with",
+      "range": {
+        "startLine": 363,
+        "startChar": 19,
+        "endLine": 363,
+        "endChar": 23
+      },
+      "revId": "3aa8aa01414e17afe4bb7917729b4d26c38d1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
