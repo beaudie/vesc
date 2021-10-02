@@ -2660,12 +2660,13 @@ TEST_P(Texture2DTest, TextureKHRDebugLabelWithCopyTexImage2D)
 {
     GLTexture texture2D;
     glBindTexture(GL_TEXTURE_2D, texture2D);
-    // Create a texture and copy into, to initialize storage object.
-    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 32, 32, 0);
 
     // Set KHR Debug Label.
-    const std::string &label = "TestKHR.DebugLabel";
+    std::string label = "TestKHR.DebugLabel";
     glObjectLabelKHR(GL_TEXTURE, texture2D, -1, label.c_str());
+
+    // Create a texture and copy into, to initialize storage object.
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 32, 32, 0);
 
     std::vector<char> labelBuf(label.length() + 1);
     GLsizei labelLengthBuf = 0;
