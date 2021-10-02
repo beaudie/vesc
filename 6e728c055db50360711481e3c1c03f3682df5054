@@ -117,6 +117,30 @@
       },
       "revId": "6e728c055db50360711481e3c1c03f3682df5054",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "344e4f5e_1c51a8f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-02T02:39:27Z",
+      "side": 1,
+      "message": "One last request here, please add a threshold constant (which you can arbitrarily set as you like for now) so that either of the before and after copies are only done on the CPU if the amount of data \u003c threshold, so that heavy copies end up on the GPU.",
+      "parentUuid": "1e13c04c_50132547",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 12
+      },
+      "revId": "6e728c055db50360711481e3c1c03f3682df5054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
