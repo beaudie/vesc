@@ -33,6 +33,42 @@
       "message": "Small typo in your login :)",
       "revId": "1b8b79c54996d44d23f602bc8344499ba87abb98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a83afe0_20936415",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewritePipelines.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-04T20:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ec102dd_38d87549",
+      "revId": "1b8b79c54996d44d23f602bc8344499ba87abb98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e471fe86_b969d65d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-04T20:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f05be0f9_60c5e335",
+      "revId": "1b8b79c54996d44d23f602bc8344499ba87abb98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

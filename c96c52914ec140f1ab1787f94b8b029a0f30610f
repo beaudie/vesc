@@ -39,6 +39,30 @@
       },
       "revId": "c96c52914ec140f1ab1787f94b8b029a0f30610f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94dd3c69_018e139b",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/SeparateCompoundExpressions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-04T20:56:02Z",
+      "side": 1,
+      "message": "In this case, I think this was a bug specifically on our side.  I filed https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6518 for historical tracking",
+      "parentUuid": "d97f685f_3c46e64a",
+      "range": {
+        "startLine": 219,
+        "startChar": 8,
+        "endLine": 219,
+        "endChar": 57
+      },
+      "revId": "c96c52914ec140f1ab1787f94b8b029a0f30610f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
