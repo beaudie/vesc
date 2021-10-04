@@ -64,8 +64,7 @@ View the [Dev setup instructions](doc/DevSetup.md).
 ## Contributing
 
 * Join our [Google group](https://groups.google.com/group/angleproject) to keep up to date.
-* Join us on IRC in the #ANGLEproject channel on FreeNode.
-* Join us on [Slack](https://chromium.slack.com) in the #angle channel.
+* Join us on [Slack](https://chromium.slack.com) in the #angle channel. For Googlers, please follow the [instructions](https://docs.google.com/document/d/1wWmRm-heDDBIkNJnureDiRO7kqcRouY2lSXlO6N2z6M/edit?usp=sharing) to use your google or chromium email to join the slack channel.
 * [File bugs](http://anglebug.com/new) in the [issue tracker](https://bugs.chromium.org/p/angleproject/issues/list) (preferably with an isolated test-case).
 * [Choose an ANGLE branch](doc/ChoosingANGLEBranch.md) to track in your own project.
 
@@ -77,11 +76,11 @@ View the [Dev setup instructions](doc/DevSetup.md).
 * Use ANGLE's [coding standard](doc/CodingStandard.md).
 * Learn how to [build ANGLE for Chromium development](doc/BuildingAngleForChromiumDevelopment.md).
 * Get help on [debugging ANGLE](doc/DebuggingTips.md).
-* Go through [ANGLE's orientation](doc/Orientation.md) and sift through [starter projects](doc/Starter-Projects.md).
+* Go through [ANGLE's orientation](doc/Orientation.md) and sift through [starter projects](https://bugs.chromium.org/p/angleproject/issues/list?q=Hotlist%3DStarterBug).
 
 
 * Read about WebGL on the [Khronos WebGL Wiki](http://khronos.org/webgl/wiki/Main_Page).
-* Learn about implementation details in the [OpenGL Insights chapter on ANGLE](http://www.seas.upenn.edu/~pcozzi/OpenGLInsights/OpenGLInsights-ANGLE.pdf) and this [ANGLE presentation](https://drive.google.com/file/d/0Bw29oYeC09QbbHoxNE5EUFh0RGs/view?usp=sharing).
+* Learn about the initial ANGLE implementation details in the [OpenGL Insights chapter on ANGLE](http://www.seas.upenn.edu/~pcozzi/OpenGLInsights/OpenGLInsights-ANGLE.pdf) (this is not the most up-to-date ANGLE implementation details, it is listed here for historical reference only) and this [ANGLE presentation](https://drive.google.com/file/d/0Bw29oYeC09QbbHoxNE5EUFh0RGs/view?usp=sharing).
 * Learn about the past, present, and future of the ANGLE implementation in [this presentation](https://docs.google.com/presentation/d/1CucIsdGVDmdTWRUbg68IxLE5jXwCb2y1E9YVhQo0thg/pub?start=false&loop=false).
 * Watch a [short presentation](https://youtu.be/QrIKdjmpmaA) on the Vulkan back-end.
 * Track the [dEQP test conformance](doc/dEQP-Charts.md)
