@@ -3971,6 +3971,39 @@ void QueryProgramPipelineiv(const Context *context,
             break;
         }
 
+        case GL_TESS_CONTROL_SHADER:
+        {
+            // the name of the current program object for the fragment shader type of the program
+            // pipeline object is returned in params
+            *params = 0;
+            if (programPipeline)
+            {
+                const Program *program = programPipeline->getShaderProgram(ShaderType::TessControl);
+                if (program)
+                {
+                    *params = program->id().value;
+                }
+            }
+            break;
+        }
+
+        case GL_TESS_EVALUATION_SHADER:
+        {
+            // the name of the current program object for the fragment shader type of the program
+            // pipeline object is returned in params
+            *params = 0;
+            if (programPipeline)
+            {
+                const Program *program =
+                    programPipeline->getShaderProgram(ShaderType::TessEvaluation);
+                if (program)
+                {
+                    *params = program->id().value;
+                }
+            }
+            break;
+        }
+
         case GL_COMPUTE_SHADER:
         {
             // the name of the current program object for the compute shader type of the program
