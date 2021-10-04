@@ -16,6 +16,23 @@
       "message": "Aditya: is there a regression test you can add to angle_end2end_tests that would trip this when compiled with ASAN?",
       "revId": "742f5b2c8207362a8c58701044b400a6bb92ebdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7599f807_14f1f534",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1337473
+      },
+      "writtenOn": "2021-10-04T15:22:11Z",
+      "side": 1,
+      "message": "Thanks for the fix! However, to me it seems preferable to change:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/d3d/TextureStorage.h;drc\u003d2e2aee0550b8ff482c0329bad62f71c49407d40a;l\u003d92\nfrom std::string\u0026 to std::string.\n\nOtherwise this remains a fragile API and other people could elsewhere pass in strings with insufficient lifetime, which will result in variants of this bug existing in the future.\n\nThe google C++ style guide would prefer that you do this for exactly this reason:\nhttps://google.github.io/styleguide/cppguide.html#Inputs_and_Outputs\n\"Avoid defining functions that require a const reference parameter to outlive the call, because const reference parameters bind to temporaries. Instead, find a way to eliminate the lifetime requirement (for example, by copying the parameter), or pass it by const pointer and document the lifetime and non-null requirements.\"\n\nI don\u0027t know whether that formally applies to ANGLE, but it seems like good practice irrespective.",
+      "revId": "742f5b2c8207362a8c58701044b400a6bb92ebdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
