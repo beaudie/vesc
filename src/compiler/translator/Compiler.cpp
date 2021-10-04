@@ -937,10 +937,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     }
 
     // Built-in function emulation needs to happen after validateLimitations pass.
-    // TODO(jmadill): Remove global pool allocator.
-    GetGlobalPoolAllocator()->lock();
     initBuiltInFunctionEmulator(&mBuiltInFunctionEmulator, compileOptions);
-    GetGlobalPoolAllocator()->unlock();
     mBuiltInFunctionEmulator.markBuiltInFunctionsForEmulation(root);
 
     if ((compileOptions & SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS) != 0)
