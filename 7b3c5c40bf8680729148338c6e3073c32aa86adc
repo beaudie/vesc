@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "388ee909_7df6f173",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-04T23:14:42Z",
+      "side": 1,
+      "message": "PTAL\n\nIgnore the linux-swangle-try-tot-swiftshader-x64 failures.   It took 2 tries for me to realize it was supposed to be linux-swangle-try-tot-angle-x64 before I did a full CQ run.",
+      "revId": "7b3c5c40bf8680729148338c6e3073c32aa86adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
