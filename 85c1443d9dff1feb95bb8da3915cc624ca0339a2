@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0b90cb8_30d1952d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-04T16:55:37Z",
+      "side": 1,
+      "message": "Regarding the thread in chat, can you update the expectations to suppress the failures/crash I saw in the paste I sent you?",
+      "revId": "85c1443d9dff1feb95bb8da3915cc624ca0339a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
