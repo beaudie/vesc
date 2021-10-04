@@ -22,6 +22,30 @@
       },
       "revId": "b1bcfa2c17bee3e104d39b3d7f8471ffc782829b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "081ef932_950df418",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-10-04T11:57:22Z",
+      "side": 1,
+      "message": "Yeah, that was probably a leftover from when I was testing the patch. I\u0027ve removed that part and added an ES2 test that triggers the capture crash that is fixed here.",
+      "parentUuid": "2296e6bb_f694904d",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 771,
+        "endChar": 67
+      },
+      "revId": "b1bcfa2c17bee3e104d39b3d7f8471ffc782829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
