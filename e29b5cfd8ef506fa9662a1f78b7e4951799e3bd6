@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "697c54e4_d39e8249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-04T01:19:49Z",
+      "side": 1,
+      "message": "Ack regarding no improvement. Maybe just keep this around until we notice an extra submission. I\u0027m fine with landing it too.",
+      "revId": "e29b5cfd8ef506fa9662a1f78b7e4951799e3bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1ecbcc8_2f173723",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5636,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-04T01:19:49Z",
+      "side": 1,
+      "message": "There is a change in behavior here. The below commands used to be set after the RP flush, but now they are being done before.\n\nI don\u0027t remember if there was a reason for that.",
+      "revId": "e29b5cfd8ef506fa9662a1f78b7e4951799e3bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
