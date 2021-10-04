@@ -16,6 +16,24 @@
       "message": "nit: maybe add a TODO to make `flushCommandsAndEndRenderPass` not implicitly vkQueueSubmit because there\u0027d be one here.",
       "revId": "77e59bec42243d7c8c5c7f81d7bc13a80e477c3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c776649_39cf755a",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-04T00:22:19Z",
+      "side": 1,
+      "message": "It\u0027s done here, but doesn\u0027t seem to be reducing the number of queue submits:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3200673\n\nAGI shows Asphalt 9 goes from 18 to 21 queue submits per frame, so I\u0027ll need to dig into that some more to try and find out what\u0027s going wrong.",
+      "parentUuid": "b5d2f58e_796afe30",
+      "revId": "77e59bec42243d7c8c5c7f81d7bc13a80e477c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

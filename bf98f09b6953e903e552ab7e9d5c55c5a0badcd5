@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c353a990_350f2731",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-04T00:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c30eca65_f7dba47b",
+      "revId": "bf98f09b6953e903e552ab7e9d5c55c5a0badcd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51400c7b_da6225bc",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-02T02:25:13Z",
       "side": 1,
       "message": "According to the above comment, this whole `if` doesn\u0027t make sense anymore, right? Should this just turn into an ASSERT?",
+      "revId": "bf98f09b6953e903e552ab7e9d5c55c5a0badcd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bb3a7b4_58315ce3",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-04T00:22:19Z",
+      "side": 1,
+      "message": "Yup.   I wanted to see what CQ said about all the other changes before tossing that in also, so I know where to look if there are any failures.",
+      "parentUuid": "51400c7b_da6225bc",
       "revId": "bf98f09b6953e903e552ab7e9d5c55c5a0badcd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
