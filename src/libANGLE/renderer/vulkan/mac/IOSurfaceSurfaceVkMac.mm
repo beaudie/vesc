@@ -155,9 +155,9 @@ egl::Error IOSurfaceSurfaceVkMac::bindTexImage(const gl::Context *context,
 
     size_t width             = IOSurfaceGetWidthOfPlane(mIOSurface, mPlane);
     size_t height            = IOSurfaceGetHeightOfPlane(mIOSurface, mPlane);
+    size_t alignment         = IOSurfaceAlignProperty(kIOSurfaceBytesPerRow, 1);
     size_t rowLengthInPixels = IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) /
                                IOSurfaceGetBytesPerElementOfPlane(mIOSurface, mPlane);
-    VkDeviceSize alignment = renderer->getMinImportedHostPointerAlignment();
 
     gl::PixelUnpackState pixelUnpack;
     pixelUnpack.alignment   = static_cast<GLint>(alignment);
