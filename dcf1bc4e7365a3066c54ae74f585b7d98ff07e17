@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d58260e3_356130d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-04T18:35:37Z",
+      "side": 1,
+      "message": "does this change how the script works? or just changes the name and makes it work with dev? if any change please include an example of the old vs new syntax.",
+      "revId": "dcf1bc4e7365a3066c54ae74f585b7d98ff07e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6f8ed01d_20fc26a0",
@@ -14,6 +31,23 @@
       "writtenOn": "2021-10-04T18:22:58Z",
       "side": 1,
       "message": "I\u0027d appreciate it if you gave the script a try to make sure I didn\u0027t break it on Windows.",
+      "revId": "dcf1bc4e7365a3066c54ae74f585b7d98ff07e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b1bf0a3_599195c6",
+        "filename": "scripts/update_angle_in_installed_unstable_chromium.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-04T18:35:37Z",
+      "side": 1,
+      "message": "nit: name too long, maybe update_chrome_angle.py\n\nno need for super descriptive file name, the help message can provide the context.",
       "revId": "dcf1bc4e7365a3066c54ae74f585b7d98ff07e17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
