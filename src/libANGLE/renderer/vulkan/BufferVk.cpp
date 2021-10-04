@@ -872,8 +872,8 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     vk::BufferHelper *src          = mBuffer;
     size_t bufferSize              = static_cast<size_t>(mState.getSize());
     size_t offsetAfterSubdata      = (offset + updateSize);
-    bool updateRegionBeforeSubData = (offset > 0);
-    bool updateRegionAfterSubData  = (offsetAfterSubdata < bufferSize);
+    bool updateRegionBeforeSubData = false;  //(offset > 0);
+    bool updateRegionAfterSubData  = false;  //(offsetAfterSubdata < bufferSize);
 
     // It's possible for acquireBufferHelper() to garbage collect the original (src) buffer before
     // copyFromBuffer() has a chance to retain it, so retain it now. This may end up
