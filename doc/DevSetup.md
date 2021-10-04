@@ -14,6 +14,7 @@ On all platforms:
    * Required to download dependencies (with gclient), generate build files (with GN), and compile ANGLE (with ninja).
    * Ensure `depot_tools` is in your path as it provides ninja for compilation.
  * For Googlers, run `download_from_google_storage --config` to login to Google Storage.
+ * `curl` to obtain the commit message hook.
 
 On Windows:
 
@@ -36,12 +37,14 @@ On MacOS:
 ### Getting the source
 
 ```
-git clone https://chromium.googlesource.com/angle/angle
+git clone https://chromium.googlesource.com/angle/angle && (cd angle && f=`git rev-parse --git-dir`/hooks/commit-msg ; mkdir -p $(dirname $f) ; curl -Lo $f https://chromium-review.googlesource.com/tools/hooks/commit-msg ; chmod +x $f)
 cd angle
 python scripts/bootstrap.py
 gclient sync
 git checkout main
 ```
+
+You may just issue `git clone https://chromium.googlesource.com/angle/angle` if you aren't contributing code back. However, we recommend cloning with the commit message hook in all cases.
 
 On Linux only, you need to install all the necessary dependencies before going further by running this command:
 ```
