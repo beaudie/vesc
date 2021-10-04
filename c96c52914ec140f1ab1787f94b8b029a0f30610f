@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ddf8030_4acac30a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-04T19:29:27Z",
+      "side": 1,
+      "message": "LGTM once you address the couple comments!",
+      "revId": "c96c52914ec140f1ab1787f94b8b029a0f30610f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d97f685f_3c46e64a",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/SeparateCompoundExpressions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-04T19:29:27Z",
+      "side": 1,
+      "message": "Can you follow up with a TODO(anglebug) that points to this webkit issue like Ken suggested below?",
+      "range": {
+        "startLine": 219,
+        "startChar": 8,
+        "endLine": 219,
+        "endChar": 57
+      },
+      "revId": "c96c52914ec140f1ab1787f94b8b029a0f30610f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
