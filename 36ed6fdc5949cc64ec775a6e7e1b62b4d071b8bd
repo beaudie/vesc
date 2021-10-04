@@ -16,6 +16,41 @@
       "message": "Green Linux run:\n\nhttps://ci.chromium.org/swarming/task/56644a051a1f1e10?server\u003dchromium-swarm.appspot.com\n\nYuly any idea what I\u0027d need to do to replace GPU \u003cnone\u003e with SwiftShader?",
       "revId": "36ed6fdc5949cc64ec775a6e7e1b62b4d071b8bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "068780b2_d35a223c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-04T17:03:36Z",
+      "side": 1,
+      "message": "I think this comes from Swarming dimensions and is generated here:\nhttps://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;l\u003d2238\nSince this would apply to all bots, not just GPU, I\u0027m not sure how we can safely change this.",
+      "parentUuid": "a27ce595_bc4a9055",
+      "revId": "36ed6fdc5949cc64ec775a6e7e1b62b4d071b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b9308f4_50cedade",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-04T17:03:36Z",
+      "side": 1,
+      "message": "Could you explain the benefits of maintaining standalone SwANGLE?\nI want to understand if this would be a good use of our resources.",
+      "revId": "36ed6fdc5949cc64ec775a6e7e1b62b4d071b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
