@@ -75,7 +75,6 @@
 #include "minecraft/minecraft_capture_context1.h"
 #include "mobile_legends/mobile_legends_capture_context1.h"
 #include "nba2k20_800/nba2k20_800_capture_context1.h"
-#include "nier_reincarnation/nier_reincarnation_capture_context2.h"
 #include "one_punch_man/one_punch_man_capture_context1.h"
 #include "plants_vs_zombies_2/plants_vs_zombies_2_capture_context1.h"
 #include "pokemon_go/pokemon_go_capture_context2.h"
@@ -121,7 +120,7 @@ namespace trace_angle
 {
 namespace
 {
-constexpr size_t kNumTraces = 104;
+constexpr size_t kNumTraces = 103;
 struct TracePair
 {
     const char name[kTraceInfoMaxNameLen];
@@ -1501,28 +1500,6 @@ constexpr TracePair kTraceInfos[kNumTraces] = {
       nba2k20_800::kReplayDrawSurfaceWidth,
       nba2k20_800::kReplayDrawSurfaceHeight,
       kDefaultReplayDrawSurfaceColorSpace,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      false,
-      false,
-      false,
-      false,
-      false}},
-    {"nier_reincarnation",
-     {"nier_reincarnation",
-      nier_reincarnation::kReplayContextClientMajorVersion,
-      nier_reincarnation::kReplayContextClientMinorVersion,
-      nier_reincarnation::kReplayFrameStart,
-      nier_reincarnation::kReplayFrameEnd,
-      nier_reincarnation::kReplayDrawSurfaceWidth,
-      nier_reincarnation::kReplayDrawSurfaceHeight,
-      nier_reincarnation::kReplayDrawSurfaceColorSpace,
       0,
       0,
       0,
