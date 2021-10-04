@@ -1078,11 +1078,6 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         }
     }
 
-    if (traceNameIs("nier_reincarnation"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("mini_world"))
     {
         // TODO: http://anglebug.com/6443 Vulkan Test failure on Pixel4XL due to vulkan validation
