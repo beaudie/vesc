@@ -16,6 +16,24 @@
       "message": "Looks like we should only add the [] if the uniform block is an array... ",
       "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7a93c2_586dfeec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-10-04T14:22:28Z",
+      "side": 1,
+      "message": "With that you would get the same blockID for all array elements, which is not correct. \n\nI\u0027m a bit puzzled by the failures though: Because this change is only relevant for replaying at least half of the failures we see above should not be the result of it because they are with  angle_perftests which shouldn\u0027t be affected by this change, right?",
+      "parentUuid": "41a13edf_34eb559a",
+      "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
