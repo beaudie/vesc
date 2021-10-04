@@ -30,34 +30,29 @@ class Traverser : public TIntermTraverser
                                        TIntermNode *root,
                                        const TSymbolTable &symbolTable,
                                        int ShaderVersion,
-                                       SpecConst *specConst,
-                                       const DriverUniform *driverUniforms);
+                                       SpecConst *specConst);
 
   private:
     Traverser(TSymbolTable *symbolTable,
               ShCompileOptions compileOptions,
               int shaderVersion,
-              SpecConst *specConst,
-              const DriverUniform *driverUniforms);
+              SpecConst *specConst);
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
 
     const TSymbolTable *symbolTable = nullptr;
     const int shaderVersion;
-    SpecConst *mRotationSpecConst        = nullptr;
-    const DriverUniform *mDriverUniforms = nullptr;
-    bool mUsePreRotation                 = false;
+    SpecConst *mRotationSpecConst = nullptr;
+    bool mUsePreRotation          = false;
 };
 
 Traverser::Traverser(TSymbolTable *symbolTable,
                      ShCompileOptions compileOptions,
                      int shaderVersion,
-                     SpecConst *specConst,
-                     const DriverUniform *driverUniforms)
+                     SpecConst *specConst)
     : TIntermTraverser(true, false, false, symbolTable),
       symbolTable(symbolTable),
       shaderVersion(shaderVersion),
       mRotationSpecConst(specConst),
-      mDriverUniforms(driverUniforms),
       mUsePreRotation((compileOptions & SH_ADD_PRE_ROTATION) != 0)
 {}
 
@@ -67,11 +62,10 @@ bool Traverser::Apply(TCompiler *compiler,
                       TIntermNode *root,
                       const TSymbolTable &symbolTable,
                       int shaderVersion,
-                      SpecConst *specConst,
-                      const DriverUniform *driverUniforms)
+                      SpecConst *specConst)
 {
     TSymbolTable *pSymbolTable = const_cast<TSymbolTable *>(&symbolTable);
-    Traverser traverser(pSymbolTable, compileOptions, shaderVersion, specConst, driverUniforms);
+    Traverser traverser(pSymbolTable, compileOptions, shaderVersion, specConst);
     root->traverse(&traverser);
     return traverser.updateTree(compiler, root);
 }
@@ -108,22 +102,10 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
     {
         rotatedXY = mRotationSpecConst->getFragRotationMultiplyFlipXY();
         mulOp     = EOpVectorTimesMatrix;
-        if (!rotatedXY)
-        {
-            TIntermTyped *fragRotation = mDriverUniforms->getFragRotationMatrixRef();
-            offsetNode = new TIntermBinary(EOpVectorTimesMatrix, offsetNode, fragRotation);
-
-            rotatedXY = mDriverUniforms->getFlipXYRef();
-            mulOp     = EOpMul;
-        }
     }
     else
     {
         rotatedXY = mRotationSpecConst->getFlipXY();
-        if (!rotatedXY)
-        {
-            rotatedXY = mDriverUniforms->getFlipXYRef();
-        }
     }
 
     TIntermBinary *correctedOffset = new TIntermBinary(mulOp, offsetNode, rotatedXY);
@@ -147,8 +129,7 @@ bool RewriteInterpolateAtOffset(TCompiler *compiler,
                                 TIntermNode *root,
                                 const TSymbolTable &symbolTable,
                                 int shaderVersion,
-                                SpecConst *specConst,
-                                const DriverUniform *driverUniforms)
+                                SpecConst *specConst)
 {
     // interpolateAtOffset is only valid in GLSL 3.0 and later.
     if (shaderVersion < 300)
@@ -156,8 +137,7 @@ bool RewriteInterpolateAtOffset(TCompiler *compiler,
         return true;
     }
 
-    return Traverser::Apply(compiler, compileOptions, root, symbolTable, shaderVersion, specConst,
-                            driverUniforms);
+    return Traverser::Apply(compiler, compileOptions, root, symbolTable, shaderVersion, specConst);
 }
 
 }  // namespace sh

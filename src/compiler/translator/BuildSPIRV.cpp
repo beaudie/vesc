@@ -1344,13 +1344,7 @@ spirv::IdRef SPIRVBuilder::getIntConstant(int32_t value)
 
 spirv::IdRef SPIRVBuilder::getFloatConstant(float value)
 {
-    union
-    {
-        float f;
-        uint32_t u;
-    } asUint;
-    asUint.f = value;
-    return getBasicConstantHelper(asUint.u, EbtFloat, &mFloatConstants);
+    return getBasicConstantHelper(GetFloatBitPattern(value), EbtFloat, &mFloatConstants);
 }
 
 spirv::IdRef SPIRVBuilder::getNullConstant(spirv::IdRef typeId)

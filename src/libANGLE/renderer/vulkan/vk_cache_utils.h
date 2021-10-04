@@ -46,6 +46,8 @@ enum class DescriptorSetIndex : uint32_t
     EnumCount = InvalidEnum,
 };
 
+struct SpecializationConstants;
+
 namespace vk
 {
 class DynamicDescriptorPool;
@@ -1546,7 +1548,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                            const vk::ShaderModule *geometryModule,
                                            const vk::ShaderModule *tessControlModule,
                                            const vk::ShaderModule *tessEvaluationModule,
-                                           const vk::SpecializationConstants &specConsts,
+                                           const SpecializationConstants &specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
                                            vk::PipelineHelper **pipelineOut)
@@ -1579,7 +1581,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                  const vk::ShaderModule *geometryModule,
                                  const vk::ShaderModule *tessControlModule,
                                  const vk::ShaderModule *tessEvaluationModule,
-                                 const vk::SpecializationConstants &specConsts,
+                                 const SpecializationConstants &specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);

@@ -195,6 +195,18 @@ inline bool IsMaskFlagSet(T mask, T flag)
     return (mask & flag) == flag;
 }
 
+inline uint32_t GetFloatBitPattern(float value)
+{
+    union
+    {
+        float f;
+        uint32_t u;
+    } asUint;
+
+    asUint.f = value;
+    return asUint.u;
+}
+
 inline const char *MakeStaticString(const std::string &str)
 {
     // On the heap so that no destructor runs on application exit.

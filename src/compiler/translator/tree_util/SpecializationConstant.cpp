@@ -267,8 +267,7 @@ SpecConst::SpecConst(TSymbolTable *symbolTable, ShCompileOptions compileOptions,
     }
 
     // Mark SpecConstUsage::Rotation unconditionally.  gl_Position is always rotated.
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) != 0 &&
-        (mCompileOptions & SH_ADD_PRE_ROTATION) != 0)
+    if ((mCompileOptions & SH_ADD_PRE_ROTATION) != 0)
     {
         mUsageBits.set(vk::SpecConstUsage::Rotation);
     }
@@ -349,10 +348,6 @@ TIntermSymbol *SpecConst::getFlipRotation()
 
 TIntermTyped *SpecConst::getMultiplierXForDFdx()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     mUsageBits.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdx, 0, 1, getFlipRotation());
@@ -360,10 +355,6 @@ TIntermTyped *SpecConst::getMultiplierXForDFdx()
 
 TIntermTyped *SpecConst::getMultiplierYForDFdx()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     mUsageBits.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdx, 1, 1, getFlipRotation());
@@ -371,10 +362,6 @@ TIntermTyped *SpecConst::getMultiplierYForDFdx()
 
 TIntermTyped *SpecConst::getMultiplierXForDFdy()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     mUsageBits.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdy, 0, 1, getFlipRotation());
@@ -382,10 +369,6 @@ TIntermTyped *SpecConst::getMultiplierXForDFdy()
 
 TIntermTyped *SpecConst::getMultiplierYForDFdy()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     mUsageBits.set(vk::SpecConstUsage::Rotation);
     return CreateFloatArrayWithRotationIndex(kRotatedFlipXYForDFdy, 1, 1, getFlipRotation());
@@ -393,81 +376,48 @@ TIntermTyped *SpecConst::getMultiplierYForDFdy()
 
 TIntermTyped *SpecConst::getPreRotationMatrix()
 {
-    if (!(mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT))
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::Rotation);
     return GenerateMat2x2ArrayWithIndex(kPreRotationMatrices, getFlipRotation());
 }
 
 TIntermTyped *SpecConst::getFragRotationMatrix()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::Rotation);
     return GenerateMat2x2ArrayWithIndex(kFragRotationMatrices, getFlipRotation());
 }
 
 TIntermTyped *SpecConst::getHalfRenderAreaRotationMatrix()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::Rotation);
     return GenerateMat2x2ArrayWithIndex(kHalfRenderAreaRotationMatrices, getFlipRotation());
 }
 
 TIntermTyped *SpecConst::getFlipXY()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     return CreateVec2ArrayWithIndex(kFlipXYValue, 1.0, getFlipRotation());
 }
 
 TIntermTyped *SpecConst::getNegFlipXY()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     return CreateVec2ArrayWithIndex(kFlipXYValue, -1.0, getFlipRotation());
 }
 
 TIntermTyped *SpecConst::getFlipY()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     return CreateFloatArrayWithRotationIndex(kFlipXYValue, 1, 1, getFlipRotation());
 }
 
 TIntermTyped *SpecConst::getNegFlipY()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
     mUsageBits.set(vk::SpecConstUsage::YFlip);
     return CreateFloatArrayWithRotationIndex(kFlipXYValue, 1, -1, getFlipRotation());
 }
 
 TIntermTyped *SpecConst::getFragRotationMultiplyFlipXY()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
-
     constexpr Mat2x2EnumMap kFragRotationMultiplyFlipXY = {
         {{vk::SurfaceRotation::Identity,
           CalcFragRotationMultiplyFlipXY(vk::SurfaceRotation::Identity)},
@@ -519,11 +469,6 @@ TIntermSymbol *SpecConst::getDrawableHeight()
 
 TIntermBinary *SpecConst::getHalfRenderArea()
 {
-    if ((mCompileOptions & SH_USE_SPECIALIZATION_CONSTANT) == 0)
-    {
-        return nullptr;
-    }
-
     // vec2 drawableSize(drawableWidth, drawableHeight)
     auto vec2Type = new TType(EbtFloat, 2);
     TIntermSequence widthHeightArgs;

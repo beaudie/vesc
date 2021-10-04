@@ -1322,12 +1322,12 @@ void InitializeSpecializationInfo(
                 break;
             case sh::vk::SpecializationConstantId::DrawableWidth:
                 (*specializationEntriesOut)[id].offset =
-                    offsetof(vk::SpecializationConstants, drawableWidth);
+                    offsetof(SpecializationConstants, drawableWidth);
                 (*specializationEntriesOut)[id].size = sizeof(specConsts.drawableWidth);
                 break;
             case sh::vk::SpecializationConstantId::DrawableHeight:
                 (*specializationEntriesOut)[id].offset =
-                    offsetof(vk::SpecializationConstants, drawableHeight);
+                    offsetof(SpecializationConstants, drawableHeight);
                 (*specializationEntriesOut)[id].size = sizeof(specConsts.drawableHeight);
                 break;
             default:
@@ -3577,7 +3577,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     const vk::ShaderModule *geometryModule,
     const vk::ShaderModule *tessControlModule,
     const vk::ShaderModule *tessEvaluationModule,
-    const vk::SpecializationConstants &specConsts,
+    const SpecializationConstants &specConsts,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)

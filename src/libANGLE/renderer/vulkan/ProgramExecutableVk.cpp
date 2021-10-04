@@ -75,6 +75,7 @@ bool ValidateTransformedSpirV(const gl::ShaderBitSet &linkedShaderStages,
         options.transformPositionToVulkanClipSpace = true;
         options.removeDebugInfo                    = true;
         options.isTransformFeedbackStage           = shaderType == lastPreFragmentStage;
+        options.transformSpecConsts                = true;
 
         angle::spirv::Blob transformed;
         if (GlslangWrapperVk::TransformSpirV(options, variableInfoMap, spirvBlobs[shaderType],
@@ -217,6 +218,21 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     {
         options.preRotation = static_cast<SurfaceRotation>(optionBits.surfaceRotation);
         options.transformPositionToVulkanClipSpace = optionBits.enableDepthCorrection;
+    }
+
+    if (contextVk->getFeatures().resolveSpecConstsBeforePipelineCreation)
+    {
+        options.transformSpecConsts = true;
+
+        // TODO: set spec consts.  lineRasterEmulation and surfaceRotation are already available,
+        // but drawWidth/drawHeight aren't.  Also need to create a map of programs keyed by
+        // width/height (not just optionBits) as now each invocation with a different width/height
+        // is a different program.
+        // TODO: don't set spec consts in the pipeline desc / at creation time
+        options.lineRasterEmulation = ;
+        options.surfaceRotation     = ;
+        options.drawableWidth       = ;
+        options.drawableHeight      = ;
     }
 
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(options, variableInfoMap, originalSpirvBlob,

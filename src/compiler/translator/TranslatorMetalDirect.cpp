@@ -289,29 +289,15 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
                                                 TIntermBlock *root,
                                                 TIntermSequence *insertSequence,
                                                 TSymbolTable *symbolTable,
-                                                SpecConst *specConst,
-                                                const DriverUniformMetal *driverUniforms)
+                                                SpecConst *specConst)
 {
     TIntermTyped *flipXY = specConst->getFlipXY();
-    if (!flipXY)
-    {
-        flipXY = driverUniforms->getFlipXYRef();
-    }
-
     TIntermBinary *pivot = specConst->getHalfRenderArea();
-    if (!pivot)
-    {
-        pivot = driverUniforms->getHalfRenderAreaRef();
-    }
 
     TIntermTyped *fragRotation = nullptr;
     if ((compileOptions & SH_ADD_PRE_ROTATION) != 0)
     {
         fragRotation = specConst->getFragRotationMatrix();
-        if (!fragRotation)
-        {
-            fragRotation = driverUniforms->getFragRotationMatrixRef();
-        }
     }
 
     const TVariable *fragCoord = static_cast<const TVariable *>(
@@ -413,7 +399,7 @@ ANGLE_NO_DISCARD bool AddFragDataDeclaration(TCompiler &compiler, TIntermBlock &
 
 ANGLE_NO_DISCARD bool EmulateInstanceID(TCompiler &compiler,
                                         TIntermBlock &root,
-                                        DriverUniform &driverUniforms)
+                                        DriverUniformMetal &driverUniforms)
 {
     TIntermBinary *emuInstanceID = driverUniforms.getEmulatedInstanceId();
     const TVariable *instanceID  = BuiltInVariable::gl_InstanceIndex();
@@ -988,11 +974,7 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
 
         if (usesPointCoord)
         {
-            TIntermTyped *flipNegXY = specConst->getNegFlipXY();
-            if (!flipNegXY)
-            {
-                flipNegXY = driverUniforms->getNegFlipXYRef();
-            }
+            TIntermTyped *flipNegXY     = specConst->getNegFlipXY();
             TIntermConstantUnion *pivot = CreateFloatNode(0.5f, EbpMedium);
             TIntermTyped *fragRotation  = nullptr;
             if (!RotateAndFlipBuiltinVariable(this, root, GetMainSequence(root), flipNegXY,
@@ -1007,7 +989,7 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         if (usesFragCoord)
         {
             if (!InsertFragCoordCorrection(this, compileOptions, root, GetMainSequence(root),
-                                           &getSymbolTable(), specConst, driverUniforms))
+                                           &getSymbolTable(), specConst))
             {
                 return false;
             }
@@ -1017,7 +999,7 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         }
 
         if (!RewriteDfdy(this, compileOptions, root, getSymbolTable(), getShaderVersion(),
-                         specConst, driverUniforms))
+                         specConst))
         {
             return false;
         }
@@ -1097,7 +1079,7 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
 
     if (getShaderType() == GL_VERTEX_SHADER)
     {
-        auto negFlipY = driverUniforms->getNegFlipYRef();
+        TIntermTyped *negFlipY = specConst->getNegFlipY();
 
         if (mEmulatedInstanceID)
         {

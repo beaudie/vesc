@@ -617,29 +617,15 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
                                                 TIntermBlock *root,
                                                 TIntermSequence *insertSequence,
                                                 TSymbolTable *symbolTable,
-                                                SpecConst *specConst,
-                                                const DriverUniform *driverUniforms)
+                                                SpecConst *specConst)
 {
     TIntermTyped *flipXY = specConst->getFlipXY();
-    if (!flipXY)
-    {
-        flipXY = driverUniforms->getFlipXYRef();
-    }
-
     TIntermBinary *pivot = specConst->getHalfRenderArea();
-    if (!pivot)
-    {
-        pivot = driverUniforms->getHalfRenderAreaRef();
-    }
 
     TIntermTyped *fragRotation = nullptr;
     if ((compileOptions & SH_ADD_PRE_ROTATION) != 0)
     {
         fragRotation = specConst->getFragRotationMatrix();
-        if (!fragRotation)
-        {
-            fragRotation = driverUniforms->getFragRotationMatrixRef();
-        }
     }
     const TVariable *fragCoord = static_cast<const TVariable *>(
         symbolTable->findBuiltIn(ImmutableString("gl_FragCoord"), compiler->getShaderVersion()));
@@ -788,7 +774,7 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     if (!usesFragCoord)
     {
         if (!InsertFragCoordCorrection(compiler, compileOptions, root, emulationSequence,
-                                       symbolTable, specConst, driverUniforms))
+                                       symbolTable, specConst))
         {
             return false;
         }
@@ -1101,20 +1087,12 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
 
             if (usesPointCoord)
             {
-                TIntermTyped *flipNegXY = specConst->getNegFlipXY();
-                if (!flipNegXY)
-                {
-                    flipNegXY = driverUniforms->getNegFlipXYRef();
-                }
+                TIntermTyped *flipNegXY     = specConst->getNegFlipXY();
                 TIntermConstantUnion *pivot = CreateFloatNode(0.5f, EbpMedium);
                 TIntermTyped *fragRotation  = nullptr;
                 if (usePreRotation)
                 {
                     fragRotation = specConst->getFragRotationMatrix();
-                    if (!fragRotation)
-                    {
-                        fragRotation = driverUniforms->getFragRotationMatrixRef();
-                    }
                 }
                 if (!RotateAndFlipBuiltinVariable(this, root, GetMainSequence(root), flipNegXY,
                                                   &getSymbolTable(),
@@ -1127,20 +1105,12 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
 
             if (useSamplePosition)
             {
-                TIntermTyped *flipXY = specConst->getFlipXY();
-                if (!flipXY)
-                {
-                    flipXY = driverUniforms->getFlipXYRef();
-                }
+                TIntermTyped *flipXY        = specConst->getFlipXY();
                 TIntermConstantUnion *pivot = CreateFloatNode(0.5f, EbpMedium);
                 TIntermTyped *fragRotation  = nullptr;
                 if (usePreRotation)
                 {
                     fragRotation = specConst->getFragRotationMatrix();
-                    if (!fragRotation)
-                    {
-                        fragRotation = driverUniforms->getFragRotationMatrixRef();
-                    }
                 }
                 if (!RotateAndFlipBuiltinVariable(this, root, GetMainSequence(root), flipXY,
                                                   &getSymbolTable(),
@@ -1154,7 +1124,7 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
             if (usesFragCoord)
             {
                 if (!InsertFragCoordCorrection(this, compileOptions, root, GetMainSequence(root),
-                                               &getSymbolTable(), specConst, driverUniforms))
+                                               &getSymbolTable(), specConst))
                 {
                     return false;
                 }
@@ -1171,13 +1141,13 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
             }
 
             if (!RewriteDfdy(this, compileOptions, root, getSymbolTable(), getShaderVersion(),
-                             specConst, driverUniforms))
+                             specConst))
             {
                 return false;
             }
 
             if (!RewriteInterpolateAtOffset(this, compileOptions, root, getSymbolTable(),
-                                            getShaderVersion(), specConst, driverUniforms))
+                                            getShaderVersion(), specConst))
             {
                 return false;
             }
@@ -1353,23 +1323,10 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
 
     SpecConst specConst(&getSymbolTable(), compileOptions, getShaderType());
 
-    if ((compileOptions & SH_USE_SPECIALIZATION_CONSTANT) != 0)
+    DriverUniform driverUniforms(DriverUniformMode::InterfaceBlock);
+    if (!translateImpl(sink, root, compileOptions, perfDiagnostics, &specConst, &driverUniforms))
     {
-        DriverUniform driverUniforms(DriverUniformMode::InterfaceBlock);
-        if (!translateImpl(sink, root, compileOptions, perfDiagnostics, &specConst,
-                           &driverUniforms))
-        {
-            return false;
-        }
-    }
-    else
-    {
-        DriverUniformExtended driverUniformsExt(DriverUniformMode::InterfaceBlock);
-        if (!translateImpl(sink, root, compileOptions, perfDiagnostics, &specConst,
-                           &driverUniformsExt))
-        {
-            return false;
-        }
+        return false;
     }
 
 #if defined(ANGLE_ENABLE_DIRECT_SPIRV_GENERATION)

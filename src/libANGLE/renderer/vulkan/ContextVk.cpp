@@ -84,22 +84,6 @@ struct GraphicsDriverUniforms
 static_assert(sizeof(GraphicsDriverUniforms) % (sizeof(uint32_t) * 4) == 0,
               "GraphicsDriverUniforms should 16bytes aligned");
 
-// TODO: http://issuetracker.google.com/173636783 Once the bug is fixed, we should remove this.
-struct GraphicsDriverUniformsExtended
-{
-    GraphicsDriverUniforms common;
-
-    // Used to flip gl_FragCoord (both .xy for Android pre-rotation; only .y for desktop)
-    std::array<float, 2> halfRenderArea;
-    std::array<float, 2> flipXY;
-    std::array<float, 2> negFlipXY;
-    std::array<int32_t, 2> padding;
-
-    // Used to pre-rotate gl_FragCoord for swapchain images on Android (a mat2, which is padded to
-    // the size of two vec4's).
-    std::array<float, 8> fragRotation;
-};
-
 struct ComputeDriverUniforms
 {
     // Atomic counter buffer offsets with the same layout as in GraphicsDriverUniforms.
@@ -190,32 +174,6 @@ bool IsRenderPassStartedAndUsesImage(const vk::CommandBufferHelper &renderPassCo
 {
     return renderPassCommands.started() && renderPassCommands.usesImageInRenderPass(image);
 }
-
-// When an Android surface is rotated differently than the device's native orientation, ANGLE must
-// rotate gl_Position in the last pre-rasterization shader and gl_FragCoord in the fragment shader.
-// Rotation of gl_Position is done in SPIR-V.  The following are the rotation matrices for the
-// fragment shader.
-//
-// Note: these are mat2's that are appropriately padded (4 floats per row).
-using PreRotationMatrixValues = std::array<float, 8>;
-constexpr angle::PackedEnumMap<rx::SurfaceRotation,
-                               PreRotationMatrixValues,
-                               angle::EnumSize<rx::SurfaceRotation>()>
-    kFragRotationMatrices = {
-        {{rx::SurfaceRotation::Identity, {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
-         {rx::SurfaceRotation::Rotated90Degrees,
-          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
-         {rx::SurfaceRotation::Rotated180Degrees,
-          {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
-         {rx::SurfaceRotation::Rotated270Degrees,
-          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
-         {rx::SurfaceRotation::FlippedIdentity, {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
-         {rx::SurfaceRotation::FlippedRotated90Degrees,
-          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
-         {rx::SurfaceRotation::FlippedRotated180Degrees,
-          {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
-         {rx::SurfaceRotation::FlippedRotated270Degrees,
-          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}}}};
 
 bool IsRotatedAspectRatio(SurfaceRotation rotation)
 {
@@ -3903,16 +3861,9 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     updateSurfaceRotationDrawFramebuffer(glState);
     updateSurfaceRotationReadFramebuffer(glState);
 
-    if (getFeatures().forceDriverUniformOverSpecConst.enabled)
-    {
-        invalidateDriverUniforms();
-    }
-    else
-    {
-        // Force update mGraphicsPipelineDesc
-        mCurrentGraphicsPipeline = nullptr;
-        invalidateCurrentGraphicsPipeline();
-    }
+    // Force update mGraphicsPipelineDesc
+    mCurrentGraphicsPipeline = nullptr;
+    invalidateCurrentGraphicsPipeline();
 
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     if (executable && executable->hasTransformFeedbackOutput() &&
@@ -3984,11 +3935,7 @@ void ContextVk::updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageB
         isViewportFlipEnabledForDrawFBO() && (usageBits.test(sh::vk::SpecConstUsage::YFlip) ||
                                               !getFeatures().supportsNegativeViewport.enabled);
 
-    // usageBits are only set when specialization constants are used.  With gl_Position pre-rotation
-    // handled by the SPIR-V transformer, we need to have this information even when the driver
-    // uniform path is taken to pre-rotate everything else.
-    const bool programUsesRotation = usageBits.test(sh::vk::SpecConstUsage::Rotation) ||
-                                     getFeatures().forceDriverUniformOverSpecConst.enabled;
+    const bool programUsesRotation = usageBits.test(sh::vk::SpecConstUsage::Rotation);
 
     // If program is not using rotation at all, we force it to use the Identity or FlippedIdentity
     // slot to improve the program cache hit rate
@@ -4728,80 +4675,17 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
                                                            DirtyBits dirtyBitMask)
 {
     // Allocate a new region in the dynamic buffer.
-    bool useGraphicsDriverUniformsExtended = getFeatures().forceDriverUniformOverSpecConst.enabled;
     uint8_t *ptr;
     bool newBuffer;
     GraphicsDriverUniforms *driverUniforms;
     size_t driverUniformSize;
 
-    if (useGraphicsDriverUniformsExtended)
-    {
-        driverUniformSize = sizeof(GraphicsDriverUniformsExtended);
-    }
-    else
-    {
-        driverUniformSize = sizeof(GraphicsDriverUniforms);
-    }
+    driverUniformSize = sizeof(GraphicsDriverUniforms);
 
     ANGLE_TRY(allocateDriverUniforms(driverUniformSize, &mDriverUniforms[PipelineType::Graphics],
                                      &ptr, &newBuffer));
 
-    if (useGraphicsDriverUniformsExtended)
-    {
-        float halfRenderAreaWidth =
-            static_cast<float>(mDrawFramebuffer->getState().getDimensions().width) * 0.5f;
-        float halfRenderAreaHeight =
-            static_cast<float>(mDrawFramebuffer->getState().getDimensions().height) * 0.5f;
-
-        float flipX = 1.0f;
-        float flipY = -1.0f;
-        // Y-axis flipping only comes into play with the default framebuffer (i.e. a swapchain
-        // image). For 0-degree rotation, an FBO or pbuffer could be the draw framebuffer, and so we
-        // must check whether flipY should be positive or negative.  All other rotations, will be to
-        // the default framebuffer, and so the value of isViewportFlipEnabledForDrawFBO() is assumed
-        // true; the appropriate flipY value is chosen such that gl_FragCoord is positioned at the
-        // lower-left corner of the window.
-        switch (mCurrentRotationDrawFramebuffer)
-        {
-            case SurfaceRotation::Identity:
-                flipX = 1.0f;
-                flipY = isViewportFlipEnabledForDrawFBO() ? -1.0f : 1.0f;
-                break;
-            case SurfaceRotation::Rotated90Degrees:
-                ASSERT(isViewportFlipEnabledForDrawFBO());
-                flipX = 1.0f;
-                flipY = 1.0f;
-                std::swap(halfRenderAreaWidth, halfRenderAreaHeight);
-                break;
-            case SurfaceRotation::Rotated180Degrees:
-                ASSERT(isViewportFlipEnabledForDrawFBO());
-                flipX = -1.0f;
-                flipY = 1.0f;
-                break;
-            case SurfaceRotation::Rotated270Degrees:
-                ASSERT(isViewportFlipEnabledForDrawFBO());
-                flipX = -1.0f;
-                flipY = -1.0f;
-                break;
-            default:
-                UNREACHABLE();
-                break;
-        }
-
-        GraphicsDriverUniformsExtended *driverUniformsExt =
-            reinterpret_cast<GraphicsDriverUniformsExtended *>(ptr);
-        driverUniformsExt->halfRenderArea = {halfRenderAreaWidth, halfRenderAreaHeight};
-        driverUniformsExt->flipXY         = {flipX, flipY};
-        driverUniformsExt->negFlipXY      = {flipX, -flipY};
-        memcpy(&driverUniformsExt->fragRotation,
-               &kFragRotationMatrices[mCurrentRotationDrawFramebuffer],
-               sizeof(PreRotationMatrixValues));
-        driverUniforms = &driverUniformsExt->common;
-    }
-    else
-    {
-        driverUniforms = reinterpret_cast<GraphicsDriverUniforms *>(ptr);
-    }
+    driverUniforms = reinterpret_cast<GraphicsDriverUniforms *>(ptr);
 
     gl::Rectangle glViewport = mState.getViewport();
     if (isRotatedAspectRatioForDrawFBO())

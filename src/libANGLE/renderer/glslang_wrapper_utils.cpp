@@ -1423,6 +1423,73 @@ void SpirvIDDiscoverer::writePendingDeclarations(spirv::Blob *blobOut)
                          spirv::LiteralContextDependentNumber(kFloatHalfAsUint));
 }
 
+// Helper class that transforms specialization constants into normal constants.
+class SpirvSpecConstResolver final : angle::NonCopyable
+{
+  public:
+    SpirvSpecConstResolver(const SpecializationConstants &specConsts) : mSpecConsts(specConsts) {}
+
+    TransformationState transformSpecConstantFalse(spirv::IdRef typeId,
+                                                   spirv::IdRef id,
+                                                   spirv::Blob *blobOut);
+    TransformationState transformSpecConstant(spirv::IdRef typeId,
+                                              spirv::IdRef id,
+                                              spirv::LiteralInteger value,
+                                              spirv::Blob *blobOut);
+
+  private:
+    const SpecializationConstants &mSpecConsts;
+};
+
+TransformationState SpirvSpecConstResolver::transformSpecConstantFalse(spirv::IdRef typeId,
+                                                                       spirv::IdRef id,
+                                                                       spirv::Blob *blobOut)
+{
+    // There is only one boolean specialization constant at the moment.
+    ASSERT(id == static_cast<uint32_t>(sh::vk::SpecializationConstantId::LineRasterEmulation));
+
+    // Change OpSpecConstantFalse to OpConstantFalse or OpConstantTrue
+    if (mSpecConsts.lineRasterEmulation)
+    {
+        spirv::WriteConstantTrue(blobOut, typeId, id);
+    }
+    else
+    {
+        spirv::WriteConstantFalse(blobOut, typeId, id);
+    }
+
+    return TransformationState::Transformed;
+}
+
+TransformationState SpirvSpecConstResolver::transformSpecConstant(spirv::IdRef typeId,
+                                                                  spirv::IdRef id,
+                                                                  spirv::LiteralInteger value,
+                                                                  spirv::Blob *blobOut)
+{
+    // Replace OpSpecConstant with OpConstant with the right value.
+    switch (id)
+    {
+        case static_cast<uint32_t>(sh::vk::SpecializationConstantId::SurfaceRotation):
+            spirv::WriteConstant(blobOut, typeId, id,
+                                 spirv::LiteralInteger(mSpecConsts.surfaceRotation));
+            break;
+        case static_cast<uint32_t>(sh::vk::SpecializationConstantId::DrawableWidth):
+            spirv::WriteConstant(
+                blobOut, typeId, id,
+                spirv::LiteralInteger(GetFloatBitPattern(mSpecConsts.drawableWidth)));
+            break;
+        case static_cast<uint32_t>(sh::vk::SpecializationConstantId::DrawableHeight):
+            spirv::WriteConstant(
+                blobOut, typeId, id,
+                spirv::LiteralInteger(GetFloatBitPattern(mSpecConsts.drawableHeight)));
+            break;
+        default:
+            UNREACHABLE();
+    }
+
+    return TransformationState::Transformed;
+}
+
 // Helper class that trims input and output gl_PerVertex declarations to remove inactive builtins.
 class SpirvPerVertexTrimmer final : angle::NonCopyable
 {
@@ -2871,6 +2938,7 @@ class SpirvTransformer final : public SpirvTransformerBase
                      spirv::Blob *spirvBlobOut)
         : SpirvTransformerBase(spirvBlobIn, variableInfoMap, spirvBlobOut),
           mOptions(options),
+          mSpecConstResolver(options.specConsts),
           mXfbCodeGenerator(options.isTransformFeedbackEmulated),
           mPositionTransformer(options)
     {}
@@ -2909,6 +2977,8 @@ class SpirvTransformer final : public SpirvTransformerBase
     TransformationState transformReturn(const uint32_t *instruction);
     TransformationState transformVariable(const uint32_t *instruction);
     TransformationState transformExecutionMode(const uint32_t *instruction);
+    TransformationState transformSpecConstantFalse(const uint32_t *instruction);
+    TransformationState transformSpecConstant(const uint32_t *instruction);
 
     // Helpers:
     void visitTypeHelper(spirv::IdResult id, spirv::IdRef typeId);
@@ -2927,7 +2997,7 @@ class SpirvTransformer final : public SpirvTransformerBase
     SpirvIDDiscoverer mIds;
 
     // Transformation state:
-
+    SpirvSpecConstResolver mSpecConstResolver;
     SpirvPerVertexTrimmer mPerVertexTrimmer;
     SpirvInactiveVaryingRemover mInactiveVaryingRemover;
     SpirvVaryingPrecisionFixer mVaryingPrecisionFixer;
@@ -3122,6 +3192,12 @@ void SpirvTransformer::transformInstruction()
                 break;
             case spv::OpExecutionMode:
                 transformationState = transformExecutionMode(instruction);
+                break;
+            case spv::OpSpecConstantFalse:
+                transformationState = transformSpecConstantFalse(instruction);
+                break;
+            case spv::OpSpecConstant:
+                transformationState = transformSpecConstant(instruction);
                 break;
             default:
                 break;
@@ -3671,6 +3747,33 @@ TransformationState SpirvTransformer::transformExecutionMode(const uint32_t *ins
     {
         // Drop the instruction.
         return TransformationState::Transformed;
+    }
+    return TransformationState::Unchanged;
+}
+
+TransformationState SpirvTransformer::transformSpecConstantFalse(const uint32_t *instruction)
+{
+    spirv::IdResultType typeId;
+    spirv::IdResult id;
+    spirv::ParseSpecConstantFalse(instruction, &typeId, &id);
+
+    if (mOptions.transformSpecConsts)
+    {
+        return mSpecConstResolver.transformSpecConstantFalse(typeId, id, mSpirvBlobOut);
+    }
+    return TransformationState::Unchanged;
+}
+
+TransformationState SpirvTransformer::transformSpecConstant(const uint32_t *instruction)
+{
+    spirv::IdResultType typeId;
+    spirv::IdResult id;
+    spirv::LiteralInteger value;
+    spirv::ParseSpecConstant(instruction, &typeId, &id, &value);
+
+    if (mOptions.transformSpecConsts)
+    {
+        return mSpecConstResolver.transformSpecConstant(typeId, id, value, mSpirvBlobOut);
     }
     return TransformationState::Unchanged;
 }

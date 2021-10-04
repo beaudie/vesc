@@ -11,6 +11,7 @@
 
 #include <functional>
 
+#include "GLSLANG/ShaderLang.h"
 #include "common/spirv/spirv_types.h"
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/renderer_utils.h"
@@ -25,6 +26,19 @@ constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
     {gl::ShaderType::Fragment, sh::vk::kDefaultUniformsNameFS},
     {gl::ShaderType::Compute, sh::vk::kDefaultUniformsNameCS},
 };
+
+// The specialization constants used by the shader.  Normally, these are passed to Vulkan when
+// creating the pipeline, but the SPIR-V transformer can optionally replace them with constants on
+// slow drivers or metal SPIR-V.
+ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+struct SpecializationConstants final
+{
+    uint32_t lineRasterEmulation;  // Boolean value
+    uint32_t surfaceRotation;
+    float drawableWidth;
+    float drawableHeight;
+};
+ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
 struct GlslangProgramInterfaceInfo
 {
@@ -61,6 +75,9 @@ struct GlslangSpirvOptions
     bool removeDebugInfo                      = false;
     bool isTransformFeedbackStage             = false;
     bool isTransformFeedbackEmulated          = false;
+
+    SpecializationConstants specConsts = {};
+    bool transformSpecConsts           = false;
 };
 
 struct UniformBindingInfo final

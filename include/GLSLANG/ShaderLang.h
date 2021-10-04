@@ -316,8 +316,7 @@ const ShCompileOptions SH_ADD_PRE_ROTATION = UINT64_C(1) << 52;
 
 const ShCompileOptions SH_FORCE_SHADER_PRECISION_HIGHP_TO_MEDIUMP = UINT64_C(1) << 53;
 
-// Allow compiler to use specialization constant to do pre-rotation and y flip.
-const ShCompileOptions SH_USE_SPECIALIZATION_CONSTANT = UINT64_C(1) << 54;
+// Bit 54 is available.
 
 // Ask compiler to generate Vulkan transform feedback emulation support code.
 const ShCompileOptions SH_ADD_VULKAN_XFB_EMULATION_SUPPORT_CODE = UINT64_C(1) << 55;

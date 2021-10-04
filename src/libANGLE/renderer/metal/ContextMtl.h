@@ -494,11 +494,10 @@ class ContextMtl : public ContextImpl, public mtl::Context
         float depthRange[4];
 
         // Metal specific
-        float halfRenderArea[2];
-        float flipXY[2];
-        float negFlipXY[2];
         uint32_t emulatedInstanceID;
         uint32_t coverageMask;
+
+        uint32_t padding[2];
     };
 
     struct DefaultAttribute

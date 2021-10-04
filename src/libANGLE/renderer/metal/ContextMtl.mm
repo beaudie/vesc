@@ -2231,15 +2231,6 @@ angle::Result ContextMtl::handleDirtyDriverUniforms(const gl::Context *context,
     mDriverUniforms.viewport[2] = glViewport.width;
     mDriverUniforms.viewport[3] = glViewport.height;
 
-    mDriverUniforms.halfRenderArea[0] =
-        static_cast<float>(mDrawFramebuffer->getState().getDimensions().width) * 0.5f;
-    mDriverUniforms.halfRenderArea[1] =
-        static_cast<float>(mDrawFramebuffer->getState().getDimensions().height) * 0.5f;
-    mDriverUniforms.flipXY[0]    = 1.0f;
-    mDriverUniforms.flipXY[1]    = mDrawFramebuffer->flipY() ? -1.0f : 1.0f;
-    mDriverUniforms.negFlipXY[0] = mDriverUniforms.flipXY[0];
-    mDriverUniforms.negFlipXY[1] = -mDriverUniforms.flipXY[1];
-
     // gl_ClipDistance
     mDriverUniforms.enabledClipDistances = mState.getEnabledClipDistances().bits();
 
@@ -2265,6 +2256,9 @@ angle::Result ContextMtl::handleDirtyDriverUniforms(const gl::Context *context,
         coverageMask = sampleMask & (~coverageMask);
     }
     mDriverUniforms.coverageMask = coverageMask;
+
+    mDriverUniforms.padding[0] = 0;
+    mDriverUniforms.padding[1] = 0;
 
     ANGLE_TRY(
         fillDriverXFBUniforms(drawCallFirstVertex, verticesPerInstance, /** skippedInstances */ 0));

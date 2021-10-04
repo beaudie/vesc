@@ -2664,9 +2664,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsShaderFloat16,
                             mShaderFloat16Int8Features.shaderFloat16 == VK_TRUE);
 
-    // http://issuetracker.google.com/173636783 Qualcomm driver appears having issues with
-    // specialization constant
-    ANGLE_FEATURE_CONDITION(&mFeatures, forceDriverUniformOverSpecConst,
+    // http://issuetracker.google.com/173636783 Qualcomm driver is slow with specialization
+    // constants
+    ANGLE_FEATURE_CONDITION(&mFeatures, resolveSpecConstsBeforePipelineCreation,
                             isQualcomm && mPhysicalDeviceProperties.driverVersion <
                                               kPixel4DriverWithWorkingSpecConstSupport);
 

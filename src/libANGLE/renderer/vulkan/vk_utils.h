@@ -896,16 +896,6 @@ class Recycler final : angle::NonCopyable
     std::vector<T> mObjectFreeList;
 };
 
-ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
-struct SpecializationConstants final
-{
-    VkBool32 lineRasterEmulation;
-    uint32_t surfaceRotation;
-    float drawableWidth;
-    float drawableHeight;
-};
-ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
-
 template <typename T>
 using SpecializationConstantMap = angle::PackedEnumMap<sh::vk::SpecializationConstantId, T>;
 

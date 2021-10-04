@@ -35,8 +35,7 @@ ANGLE_NO_DISCARD bool RewriteDfdy(TCompiler *compiler,
                                   TIntermNode *root,
                                   const TSymbolTable &symbolTable,
                                   int shaderVersion,
-                                  SpecConst *specConst,
-                                  const DriverUniform *driverUniforms);
+                                  SpecConst *specConst);
 
 }  // namespace sh
 

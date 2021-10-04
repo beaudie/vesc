@@ -32,13 +32,6 @@ constexpr const char kXfbBufferOffsets[]       = "xfbBufferOffsets";
 constexpr const char kAcbBufferOffsets[]       = "acbBufferOffsets";
 constexpr const char kDepthRange[]             = "depthRange";
 constexpr const char kNumSamples[]             = "numSamples";
-constexpr const char kHalfRenderArea[]         = "halfRenderArea";
-constexpr const char kFlipXY[]                 = "flipXY";
-constexpr const char kNegFlipXY[]              = "negFlipXY";
-constexpr const char kPreRotation[]            = "preRotation";
-constexpr const char kFragRotation[]           = "fragRotation";
-constexpr const char kEmulatedInstanceId[]     = "emulatedInstanceID";
-constexpr const char kCoverageMask[]           = "coverageMask";
 
 }  // anonymous namespace
 
@@ -259,85 +252,6 @@ TIntermBinary *DriverUniform::getDepthRangeReservedFieldRef() const
 TIntermBinary *DriverUniform::getNumSamplesRef() const
 {
     return createDriverUniformRef(kNumSamples);
-}
-
-//
-// Class DriverUniformExtended
-//
-TFieldList *DriverUniformExtended::createUniformFields(TSymbolTable *symbolTable)
-{
-    TFieldList *driverFieldList = DriverUniform::createUniformFields(symbolTable);
-
-    constexpr size_t kNumGraphicsDriverUniformsExt = 7;
-    constexpr std::array<const char *, kNumGraphicsDriverUniformsExt>
-        kGraphicsDriverUniformNamesExt = {{kHalfRenderArea, kFlipXY, kNegFlipXY,
-                                           kEmulatedInstanceId, kCoverageMask, kFragRotation,
-                                           kPreRotation}};
-
-    const std::array<TType *, kNumGraphicsDriverUniformsExt> kDriverUniformTypesExt = {{
-        new TType(EbtFloat, EbpHigh, EvqGlobal, 2),
-        new TType(EbtFloat, EbpLow, EvqGlobal, 2),
-        new TType(EbtFloat, EbpLow, EvqGlobal, 2),
-        new TType(EbtUInt, EbpHigh, EvqGlobal),
-        new TType(EbtUInt, EbpHigh, EvqGlobal),
-        new TType(EbtFloat, EbpLow, EvqGlobal, 2, 2),
-        new TType(EbtFloat, EbpLow, EvqGlobal, 2, 2),
-    }};
-
-    for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniformsExt; ++uniformIndex)
-    {
-        TField *driverUniformField =
-            new TField(kDriverUniformTypesExt[uniformIndex],
-                       ImmutableString(kGraphicsDriverUniformNamesExt[uniformIndex]), TSourceLoc(),
-                       SymbolType::AngleInternal);
-        driverFieldList->push_back(driverUniformField);
-    }
-
-    return driverFieldList;
-}
-
-TIntermBinary *DriverUniformExtended::getFlipXYRef() const
-{
-    return createDriverUniformRef(kFlipXY);
-}
-
-TIntermBinary *DriverUniformExtended::getNegFlipXYRef() const
-{
-    return createDriverUniformRef(kNegFlipXY);
-}
-
-TIntermSwizzle *DriverUniformExtended::getNegFlipYRef() const
-{
-    // Create a swizzle to "negFlipXY.y"
-    TIntermBinary *negFlipXY    = createDriverUniformRef(kNegFlipXY);
-    TVector<int> swizzleOffsetY = {1};
-    TIntermSwizzle *negFlipY    = new TIntermSwizzle(negFlipXY, swizzleOffsetY);
-    return negFlipY;
-}
-
-TIntermBinary *DriverUniformExtended::getPreRotationMatrixRef() const
-{
-    return createDriverUniformRef(kPreRotation);
-}
-
-TIntermBinary *DriverUniformExtended::getFragRotationMatrixRef() const
-{
-    return createDriverUniformRef(kFragRotation);
-}
-
-TIntermBinary *DriverUniformExtended::getHalfRenderAreaRef() const
-{
-    return createDriverUniformRef(kHalfRenderArea);
-}
-
-TIntermBinary *DriverUniformExtended::getEmulatedInstanceId() const
-{
-    return createDriverUniformRef(kEmulatedInstanceId);
-}
-
-TIntermBinary *DriverUniformExtended::getCoverageMask() const
-{
-    return createDriverUniformRef(kCoverageMask);
 }
 
 }  // namespace sh

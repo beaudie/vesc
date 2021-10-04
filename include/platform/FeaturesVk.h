@@ -519,12 +519,14 @@ struct FeaturesVk : FeatureSetBase
                                      "Direct translation to SPIR-V.", &members,
                                      "http://anglebug.com/4889"};
 
-    // Whether we should use driver uniforms over specialization constants for some shader
-    // modifications like yflip and rotation.
-    Feature forceDriverUniformOverSpecConst = {
-        "forceDriverUniformOverSpecConst", FeatureCategory::VulkanWorkarounds,
-        "Forces using driver uniforms instead of specialization constants.", &members,
-        "http://issuetracker.google.com/173636783"};
+    // Whether we should resolve specialization constants before passing the SPIR-V to the driver.
+    // Some drivers are pathologically slow when presented with shaders with specialization
+    // constants.
+    Feature resolveSpecConstsBeforePipelineCreation = {
+        "resolveSpecConstsBeforePipelineCreation", FeatureCategory::VulkanWorkarounds,
+        "Makes sure specialization constants are turned into constants before pipeline creation to "
+        "work around slow implementations.",
+        &members, "http://issuetracker.google.com/173636783"};
 
     // Whether non-conformant configurations and extensions should be exposed.  When an extension is
     // in development, or a GLES version is not supported on a device, we may still want to expose

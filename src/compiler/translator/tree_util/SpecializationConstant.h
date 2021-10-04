@@ -40,6 +40,7 @@ class SpecConst
     TIntermTyped *getFlipXY();
     TIntermTyped *getNegFlipXY();
     TIntermTyped *getFlipY();
+    TIntermTyped *getNegFlipY();
     TIntermTyped *getFragRotationMultiplyFlipXY();
 
     // Half render area
@@ -50,7 +51,6 @@ class SpecConst
 
   private:
     TIntermSymbol *getFlipRotation();
-    TIntermTyped *getNegFlipY();
     TIntermSymbol *getDrawableWidth();
     TIntermSymbol *getDrawableHeight();
     TIntermTyped *getHalfRenderAreaRotationMatrix();
