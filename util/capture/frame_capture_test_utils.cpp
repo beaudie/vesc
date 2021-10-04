@@ -92,17 +92,38 @@ bool LoadTraceInfoFromJSON(const std::string &traceName,
     traceInfoOut->frameStart                = meta["FrameStart"].GetInt();
     traceInfoOut->drawSurfaceHeight         = meta["DrawSurfaceHeight"].GetInt();
     traceInfoOut->drawSurfaceWidth          = meta["DrawSurfaceWidth"].GetInt();
-    traceInfoOut->drawSurfaceColorSpace     = meta["DrawSurfaceColorSpace"].GetInt();
 
-    traceInfoOut->displayPlatformType = meta["DisplayPlatformType"].GetInt();
-    traceInfoOut->displayDeviceType   = meta["DisplayDeviceType"].GetInt();
+    // TODO(http://anglebug.com/5133): Drop the int versions after conversion
+    if (meta["DrawSurfaceColorSpace"].IsString())
+    {
+        angle::HexStringToUInt(meta["DrawSurfaceColorSpace"].GetString(),
+                               &traceInfoOut->drawSurfaceColorSpace);
+        angle::HexStringToUInt(meta["DisplayPlatformType"].GetString(),
+                               &traceInfoOut->displayPlatformType);
+        angle::HexStringToUInt(meta["DisplayDeviceType"].GetString(),
+                               &traceInfoOut->displayDeviceType);
 
-    traceInfoOut->configRedBits     = meta["ConfigRedBits"].GetInt();
-    traceInfoOut->configGreenBits   = meta["ConfigGreenBits"].GetInt();
-    traceInfoOut->configBlueBits    = meta["ConfigBlueBits"].GetInt();
-    traceInfoOut->configAlphaBits   = meta["ConfigAlphaBits"].GetInt();
-    traceInfoOut->configDepthBits   = meta["ConfigDepthBits"].GetInt();
-    traceInfoOut->configStencilBits = meta["ConfigStencilBits"].GetInt();
+        angle::HexStringToInt(meta["ConfigRedBits"].GetString(), &traceInfoOut->configRedBits);
+        angle::HexStringToInt(meta["ConfigGreenBits"].GetString(), &traceInfoOut->configGreenBits);
+        angle::HexStringToInt(meta["ConfigBlueBits"].GetString(), &traceInfoOut->configBlueBits);
+        angle::HexStringToInt(meta["ConfigAlphaBits"].GetString(), &traceInfoOut->configAlphaBits);
+        angle::HexStringToInt(meta["ConfigDepthBits"].GetString(), &traceInfoOut->configDepthBits);
+        angle::HexStringToInt(meta["ConfigStencilBits"].GetString(),
+                              &traceInfoOut->configStencilBits);
+    }
+    else
+    {
+        traceInfoOut->drawSurfaceColorSpace = meta["DrawSurfaceColorSpace"].GetInt();
+        traceInfoOut->displayPlatformType   = meta["DisplayPlatformType"].GetInt();
+        traceInfoOut->displayDeviceType     = meta["DisplayDeviceType"].GetInt();
+
+        traceInfoOut->configRedBits     = meta["ConfigRedBits"].GetInt();
+        traceInfoOut->configGreenBits   = meta["ConfigGreenBits"].GetInt();
+        traceInfoOut->configBlueBits    = meta["ConfigBlueBits"].GetInt();
+        traceInfoOut->configAlphaBits   = meta["ConfigAlphaBits"].GetInt();
+        traceInfoOut->configDepthBits   = meta["ConfigDepthBits"].GetInt();
+        traceInfoOut->configStencilBits = meta["ConfigStencilBits"].GetInt();
+    }
 
     traceInfoOut->isBinaryDataCompressed = meta["IsBinaryDataCompressed"].GetBool();
     traceInfoOut->areClientArraysEnabled = meta["AreClientArraysEnabled"].GetBool();

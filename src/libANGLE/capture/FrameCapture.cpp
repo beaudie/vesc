@@ -6037,31 +6037,31 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     json.addScalar("CaptureRevision", ANGLE_REVISION);
     json.addScalar("ContextClientMajorVersion", context->getClientMajorVersion());
     json.addScalar("ContextClientMinorVersion", context->getClientMinorVersion());
-    json.addScalar("DisplayPlatformType", displayAttribs.getAsInt(EGL_PLATFORM_ANGLE_TYPE_ANGLE));
-    json.addScalar("DisplayDeviceType",
-                   displayAttribs.getAsInt(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE));
+    json.addHexValue("DisplayPlatformType", displayAttribs.getAsInt(EGL_PLATFORM_ANGLE_TYPE_ANGLE));
+    json.addHexValue("DisplayDeviceType",
+                     displayAttribs.getAsInt(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE));
     json.addScalar("FrameStart", 1);
     json.addScalar("FrameEnd", frameCount);
     json.addScalar("DrawSurfaceWidth", surfaceParams.extents.width);
     json.addScalar("DrawSurfaceHeight", surfaceParams.extents.height);
-    json.addScalar("DrawSurfaceColorSpace", ToEGLenum(surfaceParams.colorSpace));
+    json.addHexValue("DrawSurfaceColorSpace", ToEGLenum(surfaceParams.colorSpace));
     if (config)
     {
-        json.addScalar("ConfigRedBits", config->redSize);
-        json.addScalar("ConfigGreenBits", config->greenSize);
-        json.addScalar("ConfigBlueBits", config->blueSize);
-        json.addScalar("ConfigAlphaBits", config->alphaSize);
-        json.addScalar("ConfigDepthBits", config->depthSize);
-        json.addScalar("ConfigStencilBits", config->stencilSize);
+        json.addHexValue("ConfigRedBits", config->redSize);
+        json.addHexValue("ConfigGreenBits", config->greenSize);
+        json.addHexValue("ConfigBlueBits", config->blueSize);
+        json.addHexValue("ConfigAlphaBits", config->alphaSize);
+        json.addHexValue("ConfigDepthBits", config->depthSize);
+        json.addHexValue("ConfigStencilBits", config->stencilSize);
     }
     else
     {
-        json.addScalar("ConfigRedBits", EGL_DONT_CARE);
-        json.addScalar("ConfigGreenBits", EGL_DONT_CARE);
-        json.addScalar("ConfigBlueBits", EGL_DONT_CARE);
-        json.addScalar("ConfigAlphaBits", EGL_DONT_CARE);
-        json.addScalar("ConfigDepthBits", EGL_DONT_CARE);
-        json.addScalar("ConfigStencilBits", EGL_DONT_CARE);
+        json.addHexValue("ConfigRedBits", EGL_DONT_CARE);
+        json.addHexValue("ConfigGreenBits", EGL_DONT_CARE);
+        json.addHexValue("ConfigBlueBits", EGL_DONT_CARE);
+        json.addHexValue("ConfigAlphaBits", EGL_DONT_CARE);
+        json.addHexValue("ConfigDepthBits", EGL_DONT_CARE);
+        json.addHexValue("ConfigStencilBits", EGL_DONT_CARE);
     }
     json.addBool("IsBinaryDataCompressed", mCompression);
     json.addBool("AreClientArraysEnabled", glState.areClientArraysEnabled());

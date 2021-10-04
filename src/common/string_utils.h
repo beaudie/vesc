@@ -46,6 +46,7 @@ std::string GetPrefix(const std::string &input, size_t offset, const char *delim
 std::string GetPrefix(const std::string &input, size_t offset, char delimiter);
 
 bool HexStringToUInt(const std::string &input, unsigned int *uintOut);
+bool HexStringToInt(const std::string &input, int *intOut);
 
 bool ReadFileToString(const std::string &path, std::string *stringOut);
 

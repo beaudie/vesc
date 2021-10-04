@@ -135,7 +135,7 @@ std::string GetPrefix(const std::string &input, size_t offset, char delimiter)
     return input.substr(offset, match - offset);
 }
 
-bool HexStringToUInt(const std::string &input, unsigned int *uintOut)
+bool CheckValidHex(const std::string &input)
 {
     unsigned int offset = 0;
 
@@ -150,8 +150,30 @@ bool HexStringToUInt(const std::string &input, unsigned int *uintOut)
         return false;
     }
 
+    return true;
+}
+
+bool HexStringToUInt(const std::string &input, unsigned int *uintOut)
+{
+    if (!CheckValidHex(input))
+    {
+        return false;
+    }
+
     std::stringstream inStream(input);
     inStream >> std::hex >> *uintOut;
+    return !inStream.fail();
+}
+
+bool HexStringToInt(const std::string &input, int *intOut)
+{
+    if (!CheckValidHex(input))
+    {
+        return false;
+    }
+
+    std::stringstream inStream(input);
+    inStream >> std::hex >> *intOut;
     return !inStream.fail();
 }
 
