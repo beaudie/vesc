@@ -3529,12 +3529,14 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                         glState.getBlendColor());
                 break;
             case gl::State::DIRTY_BIT_BLEND_FUNCS:
-                mGraphicsPipelineDesc->updateBlendFuncs(&mGraphicsPipelineTransition,
-                                                        glState.getBlendStateExt());
+                mGraphicsPipelineDesc->updateBlendFuncs(
+                    &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                    mDrawFramebuffer->getState().getColorAttachmentsMask());
                 break;
             case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
-                mGraphicsPipelineDesc->updateBlendEquations(&mGraphicsPipelineTransition,
-                                                            glState.getBlendStateExt());
+                mGraphicsPipelineDesc->updateBlendEquations(
+                    &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                    mDrawFramebuffer->getState().getColorAttachmentsMask());
                 break;
             case gl::State::DIRTY_BIT_COLOR_MASK:
                 updateColorMasks(glState.getBlendStateExt());
@@ -3693,8 +3695,20 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     // triggered at endRenderPass time.
                     mHasDeferredFlush = true;
                 }
+
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
-                mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
+
+                // Clear the blend funcs/equations for color attachment indices that no longer
+                // exist.
+                if (mDrawFramebuffer)
+                {
+                    mGraphicsPipelineDesc->clearBlendFuncsAndEquations(
+                        &mGraphicsPipelineTransition,
+                        mDrawFramebuffer->getState().getColorAttachmentsMask(),
+                        drawFramebuffer->getState().getColorAttachmentsMask());
+                }
+
+                mDrawFramebuffer = vk::GetImpl(drawFramebuffer);
                 mDrawFramebuffer->setReadOnlyDepthFeedbackLoopMode(false);
                 updateFlipViewportDrawFramebuffer(glState);
                 updateSurfaceRotationDrawFramebuffer(glState);
