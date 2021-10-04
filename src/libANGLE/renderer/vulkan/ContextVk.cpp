@@ -3204,14 +3204,30 @@ SurfaceRotation ContextVk::getRotationReadFramebuffer() const
     return mCurrentRotationReadFramebuffer;
 }
 
-void ContextVk::updateColorMasks(const gl::BlendStateExt &blendStateExt)
+void ContextVk::updateColorMasks()
 {
+    const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
+
     mClearColorMasks = blendStateExt.mColorMask;
 
     FramebufferVk *framebufferVk = vk::GetImpl(mState.getDrawFramebuffer());
     mGraphicsPipelineDesc->updateColorWriteMasks(&mGraphicsPipelineTransition, mClearColorMasks,
                                                  framebufferVk->getEmulatedAlphaAttachmentMask(),
                                                  framebufferVk->getState().getEnabledDrawBuffers());
+}
+
+void ContextVk::updateBlendFuncsAndEquations()
+{
+    const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
+
+    FramebufferVk *framebufferVk        = vk::GetImpl(mState.getDrawFramebuffer());
+    mDrawFramebufferColorAttachmentMask = framebufferVk->getState().getEnabledDrawBuffers();
+
+    mGraphicsPipelineDesc->updateBlendFuncs(&mGraphicsPipelineTransition, blendStateExt,
+                                            mDrawFramebufferColorAttachmentMask);
+
+    mGraphicsPipelineDesc->updateBlendEquations(&mGraphicsPipelineTransition, blendStateExt,
+                                                mDrawFramebufferColorAttachmentMask);
 }
 
 void ContextVk::updateSampleMaskWithRasterizationSamples(const uint32_t rasterizationSamples)
@@ -3534,15 +3550,17 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                         glState.getBlendColor());
                 break;
             case gl::State::DIRTY_BIT_BLEND_FUNCS:
-                mGraphicsPipelineDesc->updateBlendFuncs(&mGraphicsPipelineTransition,
-                                                        glState.getBlendStateExt());
+                mGraphicsPipelineDesc->updateBlendFuncs(
+                    &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                    mDrawFramebuffer->getState().getColorAttachmentsMask());
                 break;
             case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
-                mGraphicsPipelineDesc->updateBlendEquations(&mGraphicsPipelineTransition,
-                                                            glState.getBlendStateExt());
+                mGraphicsPipelineDesc->updateBlendEquations(
+                    &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                    mDrawFramebuffer->getState().getColorAttachmentsMask());
                 break;
             case gl::State::DIRTY_BIT_COLOR_MASK:
-                updateColorMasks(glState.getBlendStateExt());
+                updateColorMasks();
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
                 mGraphicsPipelineDesc->updateAlphaToCoverageEnable(
@@ -3698,6 +3716,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     // triggered at endRenderPass time.
                     mHasDeferredFlush = true;
                 }
+
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
                 mDrawFramebuffer->setReadOnlyDepthFeedbackLoopMode(false);
@@ -3707,7 +3726,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane());
-                updateColorMasks(glState.getBlendStateExt());
+                updateColorMasks();
                 updateRasterizationSamples(mDrawFramebuffer->getSamples());
                 updateRasterizerDiscardEnabled(
                     mState.isQueryActive(gl::QueryType::PrimitivesGenerated));
@@ -3717,6 +3736,16 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                        isYFlipEnabledForDrawFBO());
                 updateScissor(glState);
                 updateDepthStencil(glState);
+
+                // Clear the blend funcs/equations for color attachment indices that no longer
+                // exist.
+                gl::DrawBufferMask newColorAttachmentMask =
+                    mDrawFramebuffer->getState().getColorAttachmentsMask();
+                mGraphicsPipelineDesc->resetBlendFuncsAndEquations(
+                    &mGraphicsPipelineTransition, mDrawFramebufferColorAttachmentMask,
+                    newColorAttachmentMask);
+                mDrawFramebufferColorAttachmentMask = newColorAttachmentMask;
+
                 mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
                 onDrawFramebufferRenderPassDescChange(mDrawFramebuffer, nullptr);
                 break;
