@@ -826,6 +826,9 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     RendererVk *renderer = contextVk->getRenderer();
 
     ANGLE_TRY(source->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    // Make sure the destination is initialized as well, so we correctly handle any necessary
+    // reformatting.
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
     const angle::Format &srcIntendedFormat = source->getImage().getIntendedFormat();
     angle::FormatID srcFormatID            = source->getImage().getActualFormatID();
@@ -2283,10 +2286,10 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     ASSERT(imageIndex.getLevelIndex() >= 0);
+    ASSERT(mState.hasBeenBoundAsAttachment());
 
     ContextVk *contextVk = vk::GetImpl(context);
 
-    ASSERT(mState.hasBeenBoundAsAttachment());
     ANGLE_TRY(ensureRenderable(contextVk));
 
     if (!mImage->valid())
