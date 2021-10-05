@@ -51,6 +51,24 @@
       "message": "Could you explain the benefits of maintaining standalone SwANGLE?\nI want to understand if this would be a good use of our resources.",
       "revId": "36ed6fdc5949cc64ec775a6e7e1b62b4d071b8bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c78eaf32_dd9e2f1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-05T18:47:34Z",
+      "side": 1,
+      "message": "Offline summary -\n\nsrc-side maintenance of the test suites\nslightly better perf\nallows not checking out ANGLE traces in chromium\n\n\nYuly\u0027s thoughts here: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6496#c5",
+      "parentUuid": "0b9308f4_50cedade",
+      "revId": "36ed6fdc5949cc64ec775a6e7e1b62b4d071b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
