@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3afef870_18491ed1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-05T23:08:58Z",
+      "side": 1,
+      "message": "do you want to add a skip or expected fail for\n\ndEQP.GLES2/functional_attribute_location_bind_aliasing*\n\n?",
+      "revId": "8fcb90bfd8d14b45bb0a4185625da3dcf6f1b0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08914ac6_96f85335",

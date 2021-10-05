@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1739fff_da495676",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-05T23:08:58Z",
+      "side": 0,
+      "message": "how about this line?  Or would you prefer to do that separately? I actually get less errors on intel (44) vs amd (88)",
+      "revId": "831f017e89d2c7cdd6031b6a0ec052b52f5fee27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
