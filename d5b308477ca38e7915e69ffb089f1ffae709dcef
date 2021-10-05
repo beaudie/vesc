@@ -33,6 +33,24 @@
       "message": "LGTM, is this warning useful? We should consider filing a bug with LunarG to remove it.",
       "revId": "d5b308477ca38e7915e69ffb089f1ffae709dcef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3313727_009a5de1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T17:46:31Z",
+      "side": 1,
+      "message": "Per the github commit, they\u0027ve seen issues with layers removing devices on some platforms, so there\u0027s impetus for the warning.",
+      "parentUuid": "d9505bed_724d5c52",
+      "revId": "d5b308477ca38e7915e69ffb089f1ffae709dcef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
