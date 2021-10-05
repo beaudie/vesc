@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0e3414_dd777cbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-05T17:42:13Z",
+      "side": 1,
+      "message": "Geoff/Jonah, can we scrap this workaround now? See issue for more details.",
+      "revId": "70256aedf31f4e4a6229c954440742dcd5ff9d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
