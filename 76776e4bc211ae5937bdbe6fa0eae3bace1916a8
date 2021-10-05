@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "01112723_899141c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-10-05T07:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "458ab7ef_3bd84de4",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 9
+      },
+      "revId": "76776e4bc211ae5937bdbe6fa0eae3bace1916a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "46fe4dd3_8ee3ef87",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2021-10-04T16:36:03Z",
       "side": 1,
       "message": "Should this be \"Swap so\"?  Sentence makes sense if so.",
+      "range": {
+        "startLine": 63,
+        "startChar": 7,
+        "endLine": 63,
+        "endChar": 14
+      },
+      "revId": "76776e4bc211ae5937bdbe6fa0eae3bace1916a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2736f7_6f597ca4",
+        "filename": "src/tests/gl_tests/ObjectAllocationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-10-05T07:45:04Z",
+      "side": 1,
+      "message": "rephrased.",
+      "parentUuid": "c1267056_5faff28e",
       "range": {
         "startLine": 63,
         "startChar": 7,
