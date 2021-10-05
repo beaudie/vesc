@@ -156,6 +156,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea048139_eee4681b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-05T00:43:04Z",
+      "side": 1,
+      "message": "deqp has tests covering this. See https://chromium-review.googlesource.com/c/angle/angle/+/2553171/3.\n\nAnyway, I added two tests here in separate CL https://chromium-review.googlesource.com/c/angle/angle/+/2553171.",
+      "parentUuid": "64fd3048_5b2aee38",
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24922d2f_1f67445e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 4
