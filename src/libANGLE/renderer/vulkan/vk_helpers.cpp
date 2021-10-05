@@ -548,22 +548,6 @@ VkPipelineStageFlags GetImageLayoutDstStageMask(Context *context,
     return transition.dstStageMask & context->getRenderer()->getSupportedVulkanPipelineStageMask();
 }
 
-VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
-{
-    switch (textureType)
-    {
-        case gl::TextureType::CubeMap:
-        case gl::TextureType::CubeMapArray:
-            return VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
-
-        case gl::TextureType::_3D:
-            return VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT;
-
-        default:
-            return 0;
-    }
-}
-
 void HandlePrimitiveRestart(ContextVk *contextVk,
                             gl::DrawElementsType glIndexType,
                             GLsizei indexCount,
@@ -816,6 +800,22 @@ bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
 // This is an arbitrary max. We can change this later if necessary.
 uint32_t DynamicDescriptorPool::mMaxSetsPerPool           = 16;
 uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier = 2;
+
+VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
+{
+    switch (textureType)
+    {
+        case gl::TextureType::CubeMap:
+        case gl::TextureType::CubeMapArray:
+            return VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+
+        case gl::TextureType::_3D:
+            return VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT;
+
+        default:
+            return 0;
+    }
+}
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
 {
@@ -6092,6 +6092,48 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::prependStageSubresourceUpdateAndGetData(
+    ContextVk *contextVk,
+    size_t allocationSize,
+    const gl::ImageIndex &imageIndex,
+    const gl::Extents &glExtents,
+    const gl::Offset &offset,
+    uint8_t **destData,
+    DynamicBuffer *stagingBufferOverride,
+    angle::FormatID formatID)
+{
+    VkBuffer bufferHandle;
+    VkDeviceSize stagingOffset = 0;
+
+    DynamicBuffer *stagingBuffer = stagingBufferOverride ? stagingBufferOverride : &mStagingBuffer;
+    size_t alignment             = mStagingBuffer.getAlignment();
+    ANGLE_TRY(stagingBuffer->allocateWithAlignment(contextVk, allocationSize, alignment, destData,
+                                                   &bufferHandle, &stagingOffset, nullptr));
+
+    gl::LevelIndex updateLevelGL(imageIndex.getLevelIndex());
+
+    VkBufferImageCopy copy               = {};
+    copy.bufferOffset                    = stagingOffset;
+    copy.bufferRowLength                 = glExtents.width;
+    copy.bufferImageHeight               = glExtents.height;
+    copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.mipLevel       = updateLevelGL.get();
+    copy.imageSubresource.baseArrayLayer = imageIndex.hasLayer() ? imageIndex.getLayerIndex() : 0;
+    copy.imageSubresource.layerCount     = imageIndex.getLayerCount();
+
+    // Note: Only support color now
+    ASSERT((mActualFormatID == angle::FormatID::NONE) ||
+           (getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT));
+
+    gl_vk::GetOffset(offset, &copy.imageOffset);
+    gl_vk::GetExtent(glExtents, &copy.imageExtent);
+
+    prependSubresourceUpdate(updateLevelGL,
+                             SubresourceUpdate(stagingBuffer->getCurrentBuffer(), copy, formatID));
+
+    return angle::Result::Continue;
+}
+
 angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     const gl::Context *context,
     const gl::ImageIndex &index,
@@ -6859,6 +6901,35 @@ bool ImageHelper::hasStagedUpdatesInLevels(gl::LevelIndex levelStart, gl::LevelI
         if (!levelUpdates->empty())
         {
             return true;
+        }
+    }
+    return false;
+}
+
+bool ImageHelper::hasStagedUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
+                                                       gl::LevelIndex levelEnd,
+                                                       angle::FormatID formatID) const
+{
+    for (gl::LevelIndex level = levelStart; level < levelEnd; ++level)
+    {
+        const std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(level);
+        if (levelUpdates == nullptr)
+        {
+            continue;
+        }
+
+        for (const SubresourceUpdate &update : *levelUpdates)
+        {
+            if (update.updateSource == UpdateSource::Buffer &&
+                update.data.buffer.formatID != formatID)
+            {
+                return true;
+            }
+            if (update.updateSource == UpdateSource::Image &&
+                update.data.image.formatID != formatID)
+            {
+                return true;
+            }
         }
     }
     return false;
