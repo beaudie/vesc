@@ -48,6 +48,7 @@ class BlobCache;
 
 namespace rx
 {
+class Context;
 class DisplayVk;
 class FramebufferVk;
 
