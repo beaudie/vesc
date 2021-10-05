@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3df40e88_d9506c77",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6055,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T03:12:31Z",
+      "side": 1,
+      "message": "That\u0027s a good point.  I was a little hyperfocused on the -1, which still an unfortunate value compared to EGL_DONT_CARE, even if they are equivalent.  The primary targets for this CL are the other enum values.  I\u0027ll drop the Config*Bits changes.",
+      "parentUuid": "59966784_37d04b55",
+      "range": {
+        "startLine": 6050,
+        "startChar": 0,
+        "endLine": 6055,
+        "endChar": 67
+      },
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a1ee646a_4999862e",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
