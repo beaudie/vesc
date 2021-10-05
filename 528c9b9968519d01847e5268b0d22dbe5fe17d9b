@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37b9d420_5c222867",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-10-05T15:06:21Z",
+      "side": 1,
+      "message": "Looks like this fixes 1 test after all:\nconformance/textures/misc/texture-corner-case-videos.html",
+      "revId": "528c9b9968519d01847e5268b0d22dbe5fe17d9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fdce3e0_84f17211",
