@@ -80,6 +80,30 @@
       },
       "revId": "528c9b9968519d01847e5268b0d22dbe5fe17d9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11d26808_a2ffd6e7",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-10-05T18:32:07Z",
+      "side": 1,
+      "message": "I\u0027ll leave it as is for now. Should this become an issue somehow, we can revisit.",
+      "parentUuid": "c6115561_126c8709",
+      "range": {
+        "startLine": 178,
+        "startChar": 30,
+        "endLine": 178,
+        "endChar": 48
+      },
+      "revId": "528c9b9968519d01847e5268b0d22dbe5fe17d9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
