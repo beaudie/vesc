@@ -3069,6 +3069,7 @@ template <VkFormatFeatureFlags VkFormatProperties::*features>
 VkFormatFeatureFlags RendererVk::getFormatFeatureBits(angle::FormatID formatID,
                                                       const VkFormatFeatureFlags featureBits) const
 {
+    ASSERT(formatID != angle::FormatID::NONE);
     VkFormatProperties &deviceProperties = mFormatProperties[formatID];
 
     if (deviceProperties.bufferFeatures == kInvalidFormatFeatureFlags)
@@ -3082,6 +3083,7 @@ VkFormatFeatureFlags RendererVk::getFormatFeatureBits(angle::FormatID formatID,
         }
 
         VkFormat vkFormat = vk::GetVkFormatFromFormatID(formatID);
+        ASSERT(vkFormat != VK_FORMAT_UNDEFINED);
 
         // Otherwise query the format features and cache it.
         vkGetPhysicalDeviceFormatProperties(mPhysicalDevice, vkFormat, &deviceProperties);
@@ -3545,6 +3547,29 @@ angle::Result RendererVk::getFormatDescriptorCountForExternalFormat(ContextVk *c
 
     ANGLE_VK_UNREACHABLE(contextVk);
     return angle::Result::Stop;
+}
+
+angle::Result RendererVk::getSampleCountsForVkFormat(vk::Context *context,
+                                                     VkFormat format,
+                                                     VkImageType imageType,
+                                                     VkImageUsageFlags usage,
+                                                     VkImageCreateFlags imageCreateFlags,
+                                                     VkSampleCountFlags *sampleCountsOut)
+{
+    if (mVkFormatSampleCountMap.count(format) == 0)
+    {
+        VkImageFormatProperties imageFormatProperties = {};
+
+        ANGLE_VK_TRY(context, vkGetPhysicalDeviceImageFormatProperties(
+                                  mPhysicalDevice, format, imageType, VK_IMAGE_TILING_OPTIMAL,
+                                  usage, imageCreateFlags, &imageFormatProperties));
+
+        mVkFormatSampleCountMap[format] = imageFormatProperties.sampleCounts;
+    }
+
+    ASSERT(sampleCountsOut);
+    *sampleCountsOut = mVkFormatSampleCountMap[format];
+    return angle::Result::Continue;
 }
 
 vk::MemoryReport::MemoryReport()

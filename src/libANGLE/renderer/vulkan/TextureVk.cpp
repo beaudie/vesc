@@ -25,6 +25,8 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -902,7 +904,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     uint8_t *destData = nullptr;
     ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
         contextVk, destinationAllocationSize, stagingIndex, stagingExtents, stagingOffset,
-        &destData, contextStagingBuffer, dstFormatID));
+        &destData, contextStagingBuffer, dstFormatID, vk::StageSubresourceOrdering::Append));
 
     // Source and dst data is tightly packed
     GLuint srcDataRowPitch = sourceBox.width * srcTextureFormat.pixelBytes;
@@ -1167,7 +1169,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        ANGLE_TRY(flushImageStagedUpdates(contextVk));
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
@@ -2133,11 +2135,13 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
         size_t dstBufferSize = sourceBox.width * sourceBox.height * sourceBox.depth *
                                dstFormat.pixelBytes * layerCount;
 
-        // Allocate memory in the destination texture for the copy/conversion
+        // Allocate memory in the destination texture for the copy/conversion. Prepend the staged
+        // update, since the original image data should be applied to the new image before any
+        // pending staged updates so those staged updates aren't overwritten.
         uint8_t *dstData = nullptr;
         ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
             contextVk, dstBufferSize, index, mImage->getLevelExtents(levelVk), gl::kOffsetZero,
-            &dstData, nullptr, dstFormat.id));
+            &dstData, nullptr, dstFormat.id, vk::StageSubresourceOrdering::Prepend));
 
         // Source and destination data is tightly packed
         GLuint srcDataRowPitch = sourceBox.width * srcFormat.pixelBytes;
@@ -2919,6 +2923,27 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         mImageCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
     }
 
+    // If the format is not renderable, the sample count needs to be limited to what the samplable
+    // format supports, rather than framebufferColorSampleCounts which only limits renderable
+    // formats.
+    const vk::Format &format = getBaseLevelFormat(renderer);
+    if (actualImageFormatID != format.getActualImageFormatID(vk::ImageAccess::Renderable))
+    {
+        VkImageCreateFlags imageCreateFlags =
+            vk::GetImageCreateFlags(mState.getType()) | mImageCreateFlags;
+        VkImageType imageType           = gl_vk::GetImageType(mState.getType());
+        VkSampleCountFlags sampleCounts = VK_SAMPLE_COUNT_FLAG_BITS_MAX_ENUM;
+        ANGLE_TRY(renderer->getSampleCountsForVkFormat(
+            contextVk, format.getActualImageVkFormat(mRequiredImageAccess), imageType,
+            mImageUsageFlags, imageCreateFlags, &sampleCounts));
+        // kSupportedSampleCounts does not include VK_SAMPLE_COUNT_1_BIT, so GetMaxSampleCount() may
+        // return 0 if the format does not support multisampling. See the declaration of
+        // kSupportedSampleCounts for the full details.
+        GLuint maxSampleCount =
+            std::max(static_cast<int>(vk_gl::GetMaxSampleCount(sampleCounts)), 1);
+        samples = std::min(samples, static_cast<GLint>(maxSampleCount));
+    }
+
     bool imageFormatListEnabled = false;
     ANGLE_TRY(mImage->initExternal(contextVk, mState.getType(), vkExtent, intendedImageFormatID,
                                    actualImageFormatID, samples, mImageUsageFlags,
@@ -3092,7 +3117,7 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
             contextVk, mipAllocationSize,
             gl::ImageIndex::MakeFromType(mState.getType(), currentMipLevel.get(), layer),
             mipLevelExtents, gl::Offset(), &destData, contextVk->getStagingBuffer(),
-            sourceFormat.id));
+            sourceFormat.id, vk::StageSubresourceOrdering::Append));
 
         // Generate the mipmap into that new buffer
         sourceFormat.mipGenerationFunction(
@@ -3307,6 +3332,40 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
     // First try to convert any staged buffer updates from old format to new format using
     // CPU.
     ANGLE_TRY(mImage->reformatStagedUpdate(contextVk, previousActualFormatID, actualFormatID));
+
+    if (!mImage->valid())
+    {
+        // Immutable texture must already have a valid image
+        ASSERT(!mState.getImmutableFormat());
+        // If we have staged updates and they were encoded with different format, we need to flush
+        // out these staged updates. The respecifyImageStorage should handle reading back the
+        // flushed data and re-stage it with the new format.
+        angle::FormatID intendedFormatID = format.getIntendedFormatID();
+
+        gl::LevelIndex levelGLStart, levelGLEnd;
+        ImageMipLevels mipLevels;
+        if (mState.getImmutableFormat())
+        {
+            levelGLStart = gl::LevelIndex(0);
+            levelGLEnd   = gl::LevelIndex(mState.getImmutableLevels());
+            mipLevels    = ImageMipLevels::FullMipChain;
+        }
+        else
+        {
+            levelGLStart = gl::LevelIndex(mState.getEffectiveBaseLevel());
+            levelGLEnd =
+                gl::LevelIndex(levelGLStart + getMipLevelCount(ImageMipLevels::EnabledLevels));
+            mipLevels = ImageMipLevels::EnabledLevels;
+        }
+
+        if (mImage->hasStagedUpdatesWithMismatchedFormat(levelGLStart, levelGLEnd, actualFormatID))
+        {
+            angle::FormatID sampleOnlyFormatID =
+                format.getActualImageFormatID(vk::ImageAccess::SampleOnly);
+
+            ANGLE_TRY(initImage(contextVk, intendedFormatID, sampleOnlyFormatID, mipLevels));
+        }
+    }
 
     // Make sure we update mImageUsage bits
     ANGLE_TRY(ensureImageAllocated(contextVk, format));

@@ -1430,6 +1430,8 @@ enum class ImageLayout
     EnumCount = InvalidEnum,
 };
 
+VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType);
+
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout);
 
 // How the ImageHelper object is being used by the renderpass
@@ -1459,6 +1461,12 @@ bool CanCopyWithTransfer(RendererVk *renderer,
                          VkImageTiling srcTilingMode,
                          angle::FormatID dstFormatID,
                          VkImageTiling dstTilingMode);
+
+enum class StageSubresourceOrdering
+{
+    Prepend,
+    Append
+};
 
 class ImageHelper final : public Resource, public angle::Subject
 {
@@ -1765,14 +1773,16 @@ class ImageHelper final : public Resource, public angle::Subject
                                          const Format &vkFormat,
                                          ImageAccess access);
 
-    angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
-                                                   size_t allocationSize,
-                                                   const gl::ImageIndex &imageIndex,
-                                                   const gl::Extents &glExtents,
-                                                   const gl::Offset &offset,
-                                                   uint8_t **destData,
-                                                   DynamicBuffer *stagingBufferOverride,
-                                                   angle::FormatID formatID);
+    angle::Result stageSubresourceUpdateAndGetData(
+        ContextVk *contextVk,
+        size_t allocationSize,
+        const gl::ImageIndex &imageIndex,
+        const gl::Extents &glExtents,
+        const gl::Offset &offset,
+        uint8_t **destData,
+        DynamicBuffer *stagingBufferOverride,
+        angle::FormatID formatID,
+        StageSubresourceOrdering stageSubresourceOrdering);
 
     angle::Result stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
                                                         const gl::ImageIndex &index,
@@ -1996,6 +2006,9 @@ class ImageHelper final : public Resource, public angle::Subject
     angle::Result reformatStagedUpdate(ContextVk *contextVk,
                                        angle::FormatID srcFormatID,
                                        angle::FormatID dstFormatID);
+    bool hasStagedUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
+                                              gl::LevelIndex levelEnd,
+                                              angle::FormatID formatID) const;
 
   private:
     enum class UpdateSource
