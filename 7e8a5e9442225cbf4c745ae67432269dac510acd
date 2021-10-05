@@ -69,6 +69,24 @@
       "message": "Ah, I guess since this is just for enum values, it\u0027s probably okay. I don\u0027t think we need access to these values in Python. I agree storing the enum strings would be the best option, if we had EGL enum handling.",
       "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b965b6d9_0f3a5397",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T22:36:34Z",
+      "side": 1,
+      "message": "Thanks Jamie.  I have changes for adding enum strings directly to the JSON, but saw no good way to convert them back.  I\u0027ll upload that for posterity.",
+      "parentUuid": "a32aba3d_028cb873",
+      "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
