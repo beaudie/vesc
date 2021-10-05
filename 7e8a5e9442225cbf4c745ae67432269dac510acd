@@ -16,6 +16,24 @@
       "message": "I would prefer storing these as numeric values. If that\u0027s not possible, I\u0027d kind of prefer not to land this CL. They get parsed both in C++ and in GN, and GN doesn\u0027t have very fancy parsing capability.",
       "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2121a8f_37aadeeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T14:23:06Z",
+      "side": 1,
+      "message": "Where does GN parse this?  I tested it locally with new traces and they checked out.",
+      "parentUuid": "fb235d2c_bd95ac13",
+      "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
