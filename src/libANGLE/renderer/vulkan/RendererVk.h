@@ -48,6 +48,7 @@ class BlobCache;
 
 namespace rx
 {
+class Context;
 class DisplayVk;
 class FramebufferVk;
 
@@ -442,6 +443,13 @@ class RendererVk : angle::NonCopyable
                                                             uint64_t format,
                                                             uint32_t *descriptorCountOut);
 
+    angle::Result getSampleCountsForVkFormat(vk::Context *context,
+                                             VkFormat format,
+                                             VkImageType imageType,
+                                             VkImageUsageFlags usage,
+                                             VkImageCreateFlags imageCreateFlags,
+                                             VkSampleCountFlags *sampleCountsOut);
+
     VkDeviceSize getMaxCopyBytesUsingCPUWhenPreservingBufferData() const
     {
         return mMaxCopyBytesUsingCPUWhenPreservingBufferData;
@@ -579,6 +587,7 @@ class RendererVk : angle::NonCopyable
     SamplerCache mSamplerCache;
     SamplerYcbcrConversionCache mYuvConversionCache;
     angle::HashMap<VkFormat, uint32_t> mVkFormatDescriptorCountMap;
+    angle::HashMap<VkFormat, VkSampleCountFlags> mVkFormatSampleCountMap;
     vk::ActiveHandleCounter mActiveHandleCounts;
 
     // Tracks resource serials.
