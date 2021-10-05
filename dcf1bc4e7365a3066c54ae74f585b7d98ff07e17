@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9135713_86c31b87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-05T01:28:19Z",
+      "side": 1,
+      "message": "Shouldn\u0027t, unless I introduced a bug.\n\nOnly difference is that I removed the part where backup of the files being overwritten are taken. I used to have that in my script too, until I realized it\u0027s both useless and wrong. It\u0027s useless because you don\u0027t normally use that installation for other purposes, and if you do it\u0027s easy to recover (just reinstall). It\u0027s wrong because tomorrow when chrome updates those backups are out of date and prevent new ones from being backed up anyway.",
+      "parentUuid": "d58260e3_356130d1",
+      "revId": "dcf1bc4e7365a3066c54ae74f585b7d98ff07e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6f8ed01d_20fc26a0",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-04T18:35:37Z",
       "side": 1,
       "message": "nit: name too long, maybe update_chrome_angle.py\n\nno need for super descriptive file name, the help message can provide the context.",
+      "revId": "dcf1bc4e7365a3066c54ae74f585b7d98ff07e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c413364d_1aac92e5",
+        "filename": "scripts/update_angle_in_installed_unstable_chromium.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-05T01:28:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b1bf0a3_599195c6",
       "revId": "dcf1bc4e7365a3066c54ae74f585b7d98ff07e17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
