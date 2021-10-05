@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f0b6c7e_a4e76121",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-10-05T12:55:46Z",
+      "side": 1,
+      "message": "I forgot that IOsurfaces coming from video don\u0027t respect the provided alignment 😕\nI\u0027ll write a function to figure out the alignment rather than use the one provided by the IOSurface settings directly.",
+      "revId": "7254a88707faa7f3c119df498a0819f19bce63ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
