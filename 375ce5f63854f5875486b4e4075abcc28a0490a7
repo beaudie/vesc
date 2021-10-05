@@ -16,6 +16,23 @@
       "message": "Green run of collective CLs can be found here",
       "revId": "375ce5f63854f5875486b4e4075abcc28a0490a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36dc3103_6b6811c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-05T23:51:47Z",
+      "side": 1,
+      "message": "+a few folks working on the direct-to-Metal backend\n\nThe DirectMetalGen failures look real rather than strange flakes - let us know if help is needed investigating them.\n",
+      "revId": "375ce5f63854f5875486b4e4075abcc28a0490a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
