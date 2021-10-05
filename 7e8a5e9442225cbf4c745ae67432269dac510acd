@@ -34,6 +34,24 @@
       "parentUuid": "fb235d2c_bd95ac13",
       "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55940850_e576efe1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-05T14:26:01Z",
+      "side": 1,
+      "message": "We land after the retrace. Although I don\u0027t think that GN looks at the metadata, just the context number and file lists. All the same I\u0027d prefer if we didn\u0027t have to do fancy string parsing to get the numeric values in Python or C++.",
+      "parentUuid": "b2121a8f_37aadeeb",
+      "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
