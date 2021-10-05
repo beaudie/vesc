@@ -2627,6 +2627,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, shadowBuffers, false);
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferCPUForBufferSubData, IsAndroid() /*isARM*/);
+
     // On android, we usually are GPU limited, we try to use CPU to do data copy when other
     // conditions are the same. Set to zero will use GPU to do copy.
     mMaxCopyBytesUsingCPUWhenPreservingBufferData =
