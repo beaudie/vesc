@@ -41,6 +41,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c59984b_2b11975a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-05T23:55:27Z",
+      "side": 1,
+      "message": "LGTM with Shabi\u0027s comments addressed.",
+      "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84c9d4cd_e493953b",
@@ -60,6 +77,23 @@
         "endLine": 3,
         "endChar": 36
       },
+      "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37b452fa_a433d8b5",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-05T23:55:27Z",
+      "side": 1,
+      "message": "nit: Remove extra whitespace.",
       "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
