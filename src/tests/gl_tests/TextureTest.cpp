@@ -8592,9 +8592,6 @@ TEST_P(Texture2DTestES3, SingleTextureMultipleSamplers)
 // samples the cubemap using a direction vector (1,1,1).
 TEST_P(TextureCubeTestES3, SpecifyAndSampleFromBaseLevel1)
 {
-    // Check http://anglebug.com/2155.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
-
     constexpr char kVS[] =
         R"(#version 300 es
         precision mediump float;
