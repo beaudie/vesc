@@ -162,15 +162,20 @@ bool CanCopyWithDraw(RendererVk *renderer,
                      const angle::FormatID srcFormatID,
                      VkImageTiling srcTilingMode,
                      const angle::FormatID dstFormatID,
-                     VkImageTiling destTilingMode)
+                     VkImageTiling dstTilingMode,
+                     VkImageUsageFlags dstImageUsageFlags)
 {
     // Checks that the formats in copy by drawing have the appropriate feature bits
     bool srcFormatHasNecessaryFeature = vk::FormatHasNecessaryFeature(
         renderer, srcFormatID, srcTilingMode, VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT);
     bool dstFormatHasNecessaryFeature = vk::FormatHasNecessaryFeature(
-        renderer, dstFormatID, destTilingMode, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
+        renderer, dstFormatID, dstTilingMode, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
+    bool dstImageUsageHasNecessaryFlags =
+        (dstImageUsageFlags & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) ==
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    return srcFormatHasNecessaryFeature && dstFormatHasNecessaryFeature;
+    return srcFormatHasNecessaryFeature && dstFormatHasNecessaryFeature &&
+           dstImageUsageHasNecessaryFlags;
 }
 
 bool CanGenerateMipmapWithCompute(RendererVk *renderer,
@@ -773,7 +778,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
 
     // If it's possible to perform the copy with a draw call, do that.
     if (CanCopyWithDraw(renderer, srcActualFormatID, srcTilingMode, dstActualFormatID,
-                        destTilingMode))
+                        destTilingMode, mImageUsageFlags))
     {
         // Layer count can only be 1 as the source is a framebuffer.
         ASSERT(offsetImageIndex.getLayerCount() == 1);
@@ -848,8 +853,10 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     }
 
     // If it's possible to perform the copy with a draw call, do that.
-    if (CanCopyWithDraw(renderer, srcFormatID, srcTilingMode, dstFormatID, dstTilingMode))
+    if (CanCopyWithDraw(renderer, srcFormatID, srcTilingMode, dstFormatID, dstTilingMode,
+                        mImageUsageFlags))
     {
+        ANGLE_TRY(ensureRenderable(contextVk));
         return copySubImageImplWithDraw(
             contextVk, offsetImageIndex, dstOffset, dstVkFormat, sourceLevelGL, sourceBox, false,
             unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha, &source->getImage(),
@@ -1167,7 +1174,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        ANGLE_TRY(flushImageStagedUpdates(contextVk));
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
@@ -1177,6 +1184,9 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
             const vk::ImageView *destView;
             ANGLE_TRY(getLevelLayerImageView(contextVk, level, baseLayer + layerIndex, &destView));
 
+            // The destination texture must be renderable.
+            ASSERT((mImageUsageFlags & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) ==
+                   VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
             ANGLE_TRY(utilsVk.copyImage(contextVk, mImage, destView, srcImage, srcView, params));
         }
     }
@@ -2088,11 +2098,11 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
     // with draw path is that in the multiple level/layer case, we have to do copy in a loop.
     // Currently copySubImageImplWithDraw() calls ensureImageInitalized which forces flush out
     // staged updates that we just staged inside the loop which is wrong.
-    if (levelCount == 1 && layerCount == 1)
+    if (levelCount == 1 && layerCount == 1 &&
+        CanCopyWithDraw(renderer, mImage->getActualFormatID(), mImage->getTilingMode(),
+                        format.getActualImageFormatID(getRequiredImageAccess()), getTilingMode(),
+                        mImageUsageFlags))
     {
-        ASSERT(CanCopyWithDraw(renderer, mImage->getActualFormatID(), mImage->getTilingMode(),
-                               format.getActualImageFormatID(getRequiredImageAccess()),
-                               getTilingMode()));
         vk::LevelIndex levelVk(0);
         gl::LevelIndex sourceLevelGL = mImage->toGLLevel(levelVk);
         gl::Box sourceBox(gl::kOffsetZero, mImage->getLevelExtents(levelVk));
@@ -2172,7 +2182,6 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
     if (!mImage->valid())
     {
         ASSERT(!mRedefinedLevels.any());
-        return angle::Result::Continue;
     }
 
     // Recreate the image to reflect new base or max levels.
@@ -2270,10 +2279,10 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     ASSERT(imageIndex.getLevelIndex() >= 0);
+    ASSERT(mState.hasBeenBoundAsAttachment());
 
     ContextVk *contextVk = vk::GetImpl(context);
 
-    ASSERT(mState.hasBeenBoundAsAttachment());
     ANGLE_TRY(ensureRenderable(contextVk));
 
     if (!mImage->valid())
