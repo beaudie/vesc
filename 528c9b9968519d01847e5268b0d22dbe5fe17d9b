@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fdce3e0_84f17211",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-05T13:55:37Z",
+      "side": 1,
+      "message": "Do these properties change? If not, can this be called once in init instead of on each bind?",
+      "range": {
+        "startLine": 178,
+        "startChar": 30,
+        "endLine": 178,
+        "endChar": 48
+      },
+      "revId": "528c9b9968519d01847e5268b0d22dbe5fe17d9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
