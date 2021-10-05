@@ -52,6 +52,23 @@
       "parentUuid": "b2121a8f_37aadeeb",
       "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a32aba3d_028cb873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-05T14:29:16Z",
+      "side": 1,
+      "message": "Ah, I guess since this is just for enum values, it\u0027s probably okay. I don\u0027t think we need access to these values in Python. I agree storing the enum strings would be the best option, if we had EGL enum handling.",
+      "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
