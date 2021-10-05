@@ -79,6 +79,30 @@
       },
       "revId": "049a34e6274f4b919c5c6a284e33acc092d582d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59e350a7_d1885924",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/FormatTables.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-05T17:41:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48d8b68f_821ad591",
+      "range": {
+        "startLine": 3,
+        "startChar": 24,
+        "endLine": 3,
+        "endChar": 26
+      },
+      "revId": "049a34e6274f4b919c5c6a284e33acc092d582d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
