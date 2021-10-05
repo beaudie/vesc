@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1746701e_4671ba7c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6055,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T03:37:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3df40e88_d9506c77",
+      "range": {
+        "startLine": 6050,
+        "startChar": 0,
+        "endLine": 6055,
+        "endChar": 67
+      },
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1ee646a_4999862e",
@@ -88,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03367a84_372afd5d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6064,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T03:37:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1ee646a_4999862e",
+      "range": {
+        "startLine": 6059,
+        "startChar": 0,
+        "endLine": 6064,
+        "endChar": 61
+      },
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8058de3b_e07fef6e",
@@ -101,6 +149,42 @@
       "writtenOn": "2021-10-05T03:02:06Z",
       "side": 1,
       "message": "Based on my other comments, I think you can drop the HexStringToInt() now.",
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b13c213_9b49c007",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T03:37:47Z",
+      "side": 1,
+      "message": "Done, although to clarify, this comment is regarding the the dual support here.  Once this lands and the traces are all updated, the GetInt versions can go away.  I updated the comment to clarify.",
+      "parentUuid": "8058de3b_e07fef6e",
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af76bde6_5c115471",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T03:37:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8058de3b_e07fef6e",
       "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
