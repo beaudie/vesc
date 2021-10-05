@@ -3050,6 +3050,7 @@ template <VkFormatFeatureFlags VkFormatProperties::*features>
 VkFormatFeatureFlags RendererVk::getFormatFeatureBits(angle::FormatID formatID,
                                                       const VkFormatFeatureFlags featureBits) const
 {
+    ASSERT(formatID != angle::FormatID::NONE);
     VkFormatProperties &deviceProperties = mFormatProperties[formatID];
 
     if (deviceProperties.bufferFeatures == kInvalidFormatFeatureFlags)
@@ -3063,6 +3064,7 @@ VkFormatFeatureFlags RendererVk::getFormatFeatureBits(angle::FormatID formatID,
         }
 
         VkFormat vkFormat = vk::GetVkFormatFromFormatID(formatID);
+        ASSERT(vkFormat != VK_FORMAT_UNDEFINED);
 
         // Otherwise query the format features and cache it.
         vkGetPhysicalDeviceFormatProperties(mPhysicalDevice, vkFormat, &deviceProperties);
