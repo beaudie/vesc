@@ -2283,11 +2283,9 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     ASSERT(imageIndex.getLevelIndex() >= 0);
+    ASSERT(mState.hasBeenBoundAsAttachment());
 
     ContextVk *contextVk = vk::GetImpl(context);
-
-    ASSERT(mState.hasBeenBoundAsAttachment());
-    ANGLE_TRY(ensureRenderable(contextVk));
 
     if (!mImage->valid())
     {
@@ -2298,6 +2296,8 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                             format.getActualImageFormatID(getRequiredImageAccess()),
                             ImageMipLevels::EnabledLevels));
     }
+
+    ANGLE_TRY(ensureRenderable(contextVk));
 
     const bool hasRenderToTextureEXT =
         contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled;
