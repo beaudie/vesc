@@ -8023,11 +8023,6 @@ T UNorm(double value)
 // Test rendering a depth texture with mipmaps.
 TEST_P(Texture2DTestES3, DepthTexturesWithMipmaps)
 {
-    // TODO(cwallez) this is failing on Intel Win7 OpenGL.
-    // TODO(zmo) this is faling on Win Intel HD 530 Debug.
-    // http://anglebug.com/1706
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsOpenGL());
-
     // Seems to fail on AMD D3D11. Possibly driver bug. http://anglebug.com/3342
     ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsD3D11());
 
