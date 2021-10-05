@@ -10,6 +10,7 @@
 
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/load_functions_table.h"
 #include "libANGLE/renderer/load_texture_border_functions_table.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
@@ -153,6 +154,15 @@ void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *
         testFunction = HasNonFilterableTextureFormatSupport;
     }
 
+    // Intel isn't entirely honest about its support for R8G8B8_UNORM, so force the fallback.
+    const VkPhysicalDeviceProperties &vkPhysicalDeviceProperties =
+        renderer->getPhysicalDeviceProperties();
+    bool isIntel = IsIntel(vkPhysicalDeviceProperties.vendorID);
+    if (isIntel && format.id == angle::FormatID::R8G8B8_UNORM)
+    {
+        skip = 1;
+    }
+
     int i = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo), testFunction);
     mActualSampleOnlyImageFormatID = info[i].format;
     mImageInitializerFunction      = info[i].initializer;
@@ -177,7 +187,17 @@ void Format::initBufferFallback(RendererVk *renderer,
 {
     {
         size_t skip = renderer->getFeatures().forceFallbackFormat.enabled ? 1 : 0;
-        int i       = FindSupportedFormat(renderer, info, skip, compressedStartIndex,
+
+        // Intel isn't entirely honest about its support for R8G8B8_UNORM, so force the fallback.
+        const VkPhysicalDeviceProperties &vkPhysicalDeviceProperties =
+            renderer->getPhysicalDeviceProperties();
+        bool isIntel = IsIntel(vkPhysicalDeviceProperties.vendorID);
+        if (isIntel && info[0].format == angle::FormatID::R8G8B8_UNORM)
+        {
+            skip = 1;
+        }
+
+        int i = FindSupportedFormat(renderer, info, skip, compressedStartIndex,
                                     HasFullBufferFormatSupport);
 
         mActualBufferFormatID         = info[i].format;
@@ -248,17 +268,28 @@ void FormatTable::initialize(RendererVk *renderer,
         format.initialize(renderer, intendedAngleFormat);
         format.mIntendedFormatID = intendedFormatID;
 
+        if (!format.valid())
+        {
+            continue;
+        }
+
+        if (intendedAngleFormat.isBlock)
+        {
+            outCompressedTextureFormats->push_back(format.mIntendedGLFormat);
+        }
+
+        if (format.mActualSampleOnlyImageFormatID == angle::FormatID::NONE)
+        {
+            // No sample-able or render-able formats, so nothing left to do.
+            continue;
+        }
+
         if (format.mActualRenderableImageFormatID == angle::FormatID::NONE)
         {
             // If renderable format was not set, it means there is no fallback format for
             // renderable. We populate this the same formatID as sampleOnly formatID so that
             // getActualFormatID() will be simpler.
             format.mActualRenderableImageFormatID = format.mActualSampleOnlyImageFormatID;
-        }
-
-        if (!format.valid())
-        {
-            continue;
         }
 
         gl::TextureCaps textureCaps;
@@ -286,11 +317,6 @@ void FormatTable::initialize(RendererVk *renderer,
                 format.mRenderableTextureLoadFunctions = GetLoadFunctionsMap(
                     format.mIntendedGLFormat, format.mActualRenderableImageFormatID);
             }
-        }
-
-        if (intendedAngleFormat.isBlock)
-        {
-            outCompressedTextureFormats->push_back(format.mIntendedGLFormat);
         }
     }
 }
