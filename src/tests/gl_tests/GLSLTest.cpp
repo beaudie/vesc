@@ -7453,9 +7453,6 @@ void main()
 // Test that a constant struct inside an expression is handled correctly.
 TEST_P(GLSLTest_ES3, ConstStructInsideExpression)
 {
-    // Incorrect output color was seen on Android. http://anglebug.com/2226
-    ANGLE_SKIP_TEST_IF(IsAndroid() && !IsNVIDIA() && IsOpenGLES());
-
     constexpr char kFS[] = R"(#version 300 es
 
 precision highp float;
