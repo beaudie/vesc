@@ -34,6 +34,24 @@
       "parentUuid": "94ead426_7c6a28d0",
       "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3b59621_66c5ba13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-05T17:47:35Z",
+      "side": 1,
+      "message": "I don\u0027t recall. Maybe I was just simplifying it?",
+      "parentUuid": "a5e02789_96a31054",
+      "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
