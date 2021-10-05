@@ -69,6 +69,42 @@
       "message": "Actually, why does it matter if a pack buffer is bound? Gert can you include some more context in the issue subject, like the compile error? That would help us verify this is the best fix.",
       "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2495c365_17e3fa32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T20:39:19Z",
+      "side": 1,
+      "message": "This seems fine locally.  I don\u0027t really see much of a difference in the resulting frames.  Maybe the pointer types affected aren\u0027t used a lot.  Probably can rely on the regression suite for this.",
+      "parentUuid": "b3b59621_66c5ba13",
+      "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8acef7a_a34040f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-05T20:39:19Z",
+      "side": 1,
+      "message": "Some background here would be good.  +2\u0027ing for timezone friendly reviews though.",
+      "parentUuid": "600b4bdc_0de5d2ad",
+      "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
