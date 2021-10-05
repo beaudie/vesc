@@ -85,15 +85,12 @@
 // Mac
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8Index/* = SKIP
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8IndexSmallUpdates/* = SKIP
-6096 MAC METAL : GLSLTest_ES3.InitGlobalComplexConstant/* = SKIP
-6060 MAC METAL : BlitFramebufferTest.OOBWrite/* = SKIP
 6124 MAC OPENGL : GLSLTestLoops.*ContinueInSwitch/* = SKIP
 6144 MAC OPENGL : BlitFramebufferTest.BlitDepthStencilPixelByPixel/* = SKIP
 6236 MAC OPENGL : BufferDataTestES3.DrawWithNotCallingBufferData/* = SKIP
 1227129 MAC METAL : StateChangeTestES3.SamplerMetadataUpdateOnSetProgram/* = SKIP
 772651 MAC NVIDIA OPENGL : GLSLTest.VectorScalarDivideAndAddInLoop/* = SKIP
 772651 MAC NVIDIA OPENGL : GLSLTest.VectorScalarMultiplyAndAddInLoop/* = SKIP
-6318 MAC METAL : EGLBlobCacheTest.FragmentOutputLocationKey/* = SKIP
 6347 MAC OPENGL : FramebufferTestWithFormatFallback.R5G5B5A1_TexImage/* = SKIP
 6347 MAC OPENGL : FramebufferTestWithFormatFallback.R5G5B5A1_CopyTexImage/* = SKIP
 6347 MAC OPENGL : FramebufferTestWithFormatFallback.R5G5B5A1_CubeTexImage/* = SKIP
@@ -102,7 +99,6 @@
 
 // Failures from Transform Feedback Enablement. Passes on BigSur
 6407 MAC NVIDIA METAL : TransformFeedbackTest.OptimizedVaryings/ES3_Metal_DirectMetalGen = SKIP
-6415 MAC INTEL METAL : CompressedTextureBPTCTest.Test/RGB_BPTC_SIGNED_FLOAT__ES3_Metal_DirectMetalGen = SKIP
 
 // Direct Metal does not yet implement vertex attribute aliasing
 // Attribute aliasing is only allowed in GLSL ES 1.0 but disallowed by WebGL
@@ -116,7 +112,6 @@
 
 // Old Macs can't run these and there's apparently no way to filter the old Macs
 // from running these tests at the moment.
-6390 MAC INTEL METAL : BufferDataTestES3.MapInvalidateThenBufferSubData/ES3_Metal_DirectMetalGen = SKIP
 6390 MAC NVIDIA METAL : GLSLTest_ES3.DynamicIndexingOfSwizzledLValuesShouldWork/ES3_Metal_DirectMetalGen = SKIP
 6390 MAC NVIDIA METAL : GLSLTest_ES3.WriteIntoDynamicIndexingOfSwizzledVector/ES3_Metal_DirectMetalGen = SKIP
 6390 MAC NVIDIA METAL : PointSpritesTest.PointCoordRegressionTest/ES2_Metal_DirectMetalGen = SKIP
@@ -131,14 +126,11 @@
 6390 MAC INTEL METAL : UniformBlockWithOneLargeArrayMemberTest.SharedSameBufferWithOtherOne/ES3_Metal_DirectMetalGen = SKIP
 6390 MAC INTEL METAL : UniformBlockWithOneLargeArrayMemberTest.TwoUniformBlocksInSameProgram/ES3_Metal_DirectMetalGen = SKIP
 6390 MAC INTEL METAL : UniformBlockWithOneLargeArrayMemberTest.TwoUniformBlocksInDiffProgram/ES3_Metal_DirectMetalGen = SKIP
-6390 MAC NVIDIA METAL : UniformBlockWithOneLargeArrayMemberTest.MemberTypeIsMixStructMat4AndFloat/ES3_Metal_DirectMetalGen = SKIP
-6390 MAC NVIDIA METAL : UniformBlockWithOneLargeArrayMemberTest.MemberTypeIsStructAndInstanced/ES3_Metal_DirectMetalGen = SKIP
-6390 MAC NVIDIA METAL : UniformBlockWithOneLargeArrayMemberTest.MemberTypeIsStructAndInstancedArray/ES3_Metal_DirectMetalGen = SKIP
-6390 MAC NVIDIA METAL : UniformBlockWithOneLargeArrayMemberTest.TwoUniformBlocksInDiffProgram/ES3_Metal_DirectMetalGen = SKIP
-6390 MAC NVIDIA METAL : UniformBlockWithOneLargeArrayMemberTest.TwoUniformBlocksInSameProgram/ES3_Metal_DirectMetalGen = SKIP
-6418 MAC NVIDIA METAL : UniformBlockWithOneLargeArrayMemberTest.SharedSameBufferWithOtherOne/ES3_Metal_DirectMetalGen = SKIP
-6390 MAC APPLE METAL : UniformBlockWithOneLargeArrayMemberTest.MemberTypeIsMatrixAndInstanced/ES3_Metal_DirectMetalGen = SKIP
-6390 MAC APPLE METAL : UniformBlockWithOneLargeArrayMemberTest.MemberTypeIsStructAndInstancedArray/ES3_Metal_DirectMetalGen = SKIP
+6390 MAC INTEL METAL : CompressedTextureASTCTest.Test/SRGB8_ALPHA8_ASTC_8x8__ES2_Metal = SKIP
+
+// NVIDIA Metal failures
+6390 MAC NVIDIA METAL : BlitFramebufferTest.BlitDepthStencilPixelByPixel/ES3_Metal_NoStencilOutput = SKIP
+6390 MAC NVIDIA METAL : BuiltinVariableVertexIdTest.LineLoop/ES3_Metal = SKIP
 
 // D3D
 6432 WIN D3D9 : GLSLTest.HandleExcessiveLoopBug/* = SKIP
