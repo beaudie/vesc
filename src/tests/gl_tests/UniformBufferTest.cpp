@@ -1144,11 +1144,6 @@ TEST_P(UniformBufferTest, UniformBlockInstanceReservedOpenGLName)
 // together with uniform blocks.
 TEST_P(UniformBufferTest, Std140UniformBlockInstanceWithNestedStructsContainingVec3s)
 {
-    // Got incorrect test result on non-NVIDIA Android - the alpha channel was not set correctly
-    // from the second vector, possibly the platform doesn't implement std140 packing right?
-    // http://anglebug.com/2217
-    ANGLE_SKIP_TEST_IF(IsAndroid() && !IsNVIDIA());
-
     constexpr char kFS[] =
         R"(#version 300 es
 
