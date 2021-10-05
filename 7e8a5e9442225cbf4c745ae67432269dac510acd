@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb235d2c_bd95ac13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-05T11:34:05Z",
+      "side": 1,
+      "message": "I would prefer storing these as numeric values. If that\u0027s not possible, I\u0027d kind of prefer not to land this CL. They get parsed both in C++ and in GN, and GN doesn\u0027t have very fancy parsing capability.",
+      "revId": "7e8a5e9442225cbf4c745ae67432269dac510acd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
