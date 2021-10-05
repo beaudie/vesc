@@ -22,6 +22,30 @@
       },
       "revId": "528c9b9968519d01847e5268b0d22dbe5fe17d9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6115561_126c8709",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-10-05T14:15:48Z",
+      "side": 1,
+      "message": "It could. I was debating if adding a new class member was worth it to save a few shifts and ands, which probably don\u0027t cost much. You guys can choose and I\u0027ll make the change if necessary.",
+      "parentUuid": "7fdce3e0_84f17211",
+      "range": {
+        "startLine": 178,
+        "startChar": 30,
+        "endLine": 178,
+        "endChar": 48
+      },
+      "revId": "528c9b9968519d01847e5268b0d22dbe5fe17d9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
