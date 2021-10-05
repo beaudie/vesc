@@ -10,8 +10,6 @@
 
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
-#include "image_util/copyimage.h"
-#include "image_util/generatemip.h"
 #include "image_util/loadimage.h"
 
 using namespace angle;
@@ -2829,6 +2827,7 @@ angle::FormatID GetFormatIDFromVkFormat(VkFormat vkFormat)
             return angle::FormatID::S8_UINT;
 
         default:
+            UNREACHABLE();
             return angle::FormatID::NONE;
     }
 }
