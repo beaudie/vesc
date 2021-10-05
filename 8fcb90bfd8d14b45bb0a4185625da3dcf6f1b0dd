@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f8f2efe_ac97064f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-05T23:57:25Z",
+      "side": 1,
+      "message": "Sure, will do. For now we can ignore those failures and get a picture if there are flakes on the other bots.",
+      "parentUuid": "a27f58fd_4c645bb7",
+      "revId": "8fcb90bfd8d14b45bb0a4185625da3dcf6f1b0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08914ac6_96f85335",
