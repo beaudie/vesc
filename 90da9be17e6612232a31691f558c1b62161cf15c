@@ -16,6 +16,69 @@
       "message": "Tackled this as part of ANGLE Fix-It week.",
       "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59966784_37d04b55",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6055,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-05T03:02:06Z",
+      "side": 1,
+      "message": "I think these are normally decimal, especially when looking at formats like GL_RGBA32F (decimal 32, rather than 0x20), so they should remain addScalar().",
+      "range": {
+        "startLine": 6050,
+        "startChar": 0,
+        "endLine": 6055,
+        "endChar": 67
+      },
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ee646a_4999862e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6064,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-05T03:02:06Z",
+      "side": 1,
+      "message": "EGL_DONT_CARE is defined as \u0027-1\u0027, so these can remain addScalar():\n\n  #define EGL_DONT_CARE                     EGL_CAST(EGLint,-1)",
+      "range": {
+        "startLine": 6059,
+        "startChar": 0,
+        "endLine": 6064,
+        "endChar": 61
+      },
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8058de3b_e07fef6e",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-05T03:02:06Z",
+      "side": 1,
+      "message": "Based on my other comments, I think you can drop the HexStringToInt() now.",
+      "revId": "90da9be17e6612232a31691f558c1b62161cf15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
