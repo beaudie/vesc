@@ -6559,9 +6559,6 @@ TEST_P(GLSLTest_ES3, VaryingMatrices)
 // This test covers passing a struct containing a sampler as a function argument.
 TEST_P(GLSLTest, StructsWithSamplersAsFunctionArg)
 {
-    // Shader failed to compile on Nexus devices. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsAdreno() && IsOpenGLES());
-
     const char kFragmentShader[] = R"(precision mediump float;
 struct S { sampler2D samplerMember; };
 uniform S uStruct;
@@ -6605,9 +6602,6 @@ void main()
 // This test covers passing a struct containing a sampler as a function argument.
 TEST_P(GLSLTest, StructsWithSamplersAsFunctionArgWithPrototype)
 {
-    // Shader failed to compile on Android. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
-
     const char kFragmentShader[] = R"(precision mediump float;
 struct S { sampler2D samplerMember; };
 uniform S uStruct;
@@ -6651,9 +6645,6 @@ void main()
 // This test covers passing an array of structs containing samplers as a function argument.
 TEST_P(GLSLTest, ArrayOfStructsWithSamplersAsFunctionArg)
 {
-    // Shader failed to compile on Nexus devices. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsAdreno() && IsOpenGLES());
-
     constexpr char kFS[] =
         "precision mediump float;\n"
         "struct S\n"
@@ -6702,9 +6693,6 @@ TEST_P(GLSLTest, ArrayOfStructsWithSamplersAsFunctionArg)
 // This test covers passing a struct containing an array of samplers as a function argument.
 TEST_P(GLSLTest, StructWithSamplerArrayAsFunctionArg)
 {
-    // Shader failed to compile on Nexus devices. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsAdreno() && IsOpenGLES());
-
     constexpr char kFS[] =
         "precision mediump float;\n"
         "struct S\n"
@@ -6753,9 +6741,6 @@ TEST_P(GLSLTest, StructWithSamplerArrayAsFunctionArg)
 // This test covers passing nested structs containing a sampler as a function argument.
 TEST_P(GLSLTest, NestedStructsWithSamplersAsFunctionArg)
 {
-    // Shader failed to compile on Nexus devices. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsAdreno() && IsOpenGLES());
-
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
 
@@ -6807,9 +6792,6 @@ void main()
 // This test covers passing a compound structs containing a sampler as a function argument.
 TEST_P(GLSLTest, CompoundStructsWithSamplersAsFunctionArg)
 {
-    // Shader failed to compile on Nexus devices. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsAdreno() && IsOpenGLES());
-
     const char kFragmentShader[] = R"(precision mediump float;
 struct S { sampler2D samplerMember; bool b; };
 uniform S uStruct;
@@ -6859,9 +6841,6 @@ void main()
 // This test covers passing nested compound structs containing a sampler as a function argument.
 TEST_P(GLSLTest, NestedCompoundStructsWithSamplersAsFunctionArg)
 {
-    // Shader failed to compile on Nexus devices. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsAdreno() && IsOpenGLES());
-
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
 
@@ -6927,9 +6906,6 @@ void main()
 // Same as the prior test but with reordered struct members.
 TEST_P(GLSLTest, MoreNestedCompoundStructsWithSamplersAsFunctionArg)
 {
-    // Shader failed to compile on Nexus devices. http://anglebug.com/2114
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsAdreno() && IsOpenGLES());
-
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
     ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
 
