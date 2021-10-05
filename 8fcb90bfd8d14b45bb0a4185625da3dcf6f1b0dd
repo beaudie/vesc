@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a27f58fd_4c645bb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-05T23:55:50Z",
+      "side": 1,
+      "message": "Unfortunately the first mac-rel run failed on the (aging) NVIDIA MacBook Pros with a large number of timeouts, so there\u0027s not much point retrying this on mac-rel multiple times.\n\nI\u0027ve spot-checked the other few recent angle_end2end_tests failures on this bot:\nhttps://chromium-swarm.appspot.com/bot?id\u003dbuild160-b4\n\nbut they all basically look real - not like random flakes.\n\nI\u0027d suggest putting back in place all of the test skips on Mac/NVIDIA for the time being. They can be investigated further later, perhaps after the OS on those MacBook Pros is updated. (+ynovikov - I\u0027m not sure whether this is planned)\n",
+      "revId": "8fcb90bfd8d14b45bb0a4185625da3dcf6f1b0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08914ac6_96f85335",
