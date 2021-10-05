@@ -2183,12 +2183,18 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
         ASSERT((mImage->getFirstAllocatedLevel() == gl::LevelIndex(0)) ||
                (mImage->getFirstAllocatedLevel() == baseLevel));
         ASSERT(!mRedefinedLevels.any());
-        return angle::Result::Continue;
+        // Immutable texture must already have a valid image
+        ASSERT(!mState.getImmutableFormat());
+        const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
+        ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
+                            format.getActualImageFormatID(getRequiredImageAccess()),
+                            ImageMipLevels::EnabledLevels));
     }
+    ASSERT(mImage->valid());
 
     // Recreate the image to reflect new base or max levels.
     // First, flush any pending updates so we have good data in the current mImage
-    if (mImage->valid() && mImage->hasStagedUpdatesInAllocatedLevels())
+    if (mImage->hasStagedUpdatesInAllocatedLevels())
     {
         ANGLE_TRY(flushImageStagedUpdates(contextVk));
     }
@@ -2283,10 +2289,10 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     ASSERT(imageIndex.getLevelIndex() >= 0);
+    ASSERT(mState.hasBeenBoundAsAttachment());
 
     ContextVk *contextVk = vk::GetImpl(context);
 
-    ASSERT(mState.hasBeenBoundAsAttachment());
     ANGLE_TRY(ensureRenderable(contextVk));
 
     if (!mImage->valid())
