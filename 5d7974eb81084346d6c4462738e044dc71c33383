@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b7484c8_f5976736",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T11:46:01Z",
+      "side": 1,
+      "message": "I\u0027d prefer we solve this in ANGLE by not issuing commands that allocate \u003e available heap size. WDYT?",
+      "revId": "5d7974eb81084346d6c4462738e044dc71c33383",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
