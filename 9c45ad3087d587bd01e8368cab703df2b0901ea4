@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d6ea296_5f27cd1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T19:21:17Z",
+      "side": 1,
+      "message": "Sunny, here\u0027s the other part of optimizing blend state setting. Could you please confirm that this actually improves the driver overhead benchmark (and by how much)? Thanks!",
+      "revId": "9c45ad3087d587bd01e8368cab703df2b0901ea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
