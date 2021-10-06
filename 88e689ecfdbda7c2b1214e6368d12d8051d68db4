@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99a6f0aa_3d9ab889",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2666,
+      "author": {
+        "id": 1000193
+      },
+      "writtenOn": "2021-10-06T23:35:27Z",
+      "side": 1,
+      "message": "Am I wrong for also seeing this as a dangerous reference?\n\n\"const std::string \u0026label \u003d\" means you end up creating a temporary std::string from the const char*, then bind to that temporary. By the time of line 2666, `label` should be invalidated.\n\nThis might not be triggering ASAN because it\u0027s in the same stack frame and there\u0027s no other stack usage, but this seems unsafe, and perhaps worthy of a code audit? This particurlaly comes in to play later (line 2677)\n\nI could be reading things totally wrong though, but I\u0027ve just learned to be wary of references-from-const-char*",
+      "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
