@@ -188,9 +188,6 @@ TEST_P(GeometryShaderTest, CombinedResourceLimits)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_geometry_shader"));
 
-    // See http://anglebug.com/2261.
-    ANGLE_SKIP_TEST_IF(IsAndroid());
-
     const std::map<GLenum, int> limits = {{GL_MAX_UNIFORM_BUFFER_BINDINGS, 48},
                                           {GL_MAX_COMBINED_UNIFORM_BLOCKS, 36},
                                           {GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, 64}};
