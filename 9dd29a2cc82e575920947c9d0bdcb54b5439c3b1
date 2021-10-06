@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e625e9b3_f2829bb6",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T18:11:06Z",
+      "side": 1,
+      "message": "nit: please wrap to 100 characters",
+      "range": {
+        "startLine": 34,
+        "startChar": 44,
+        "endLine": 34,
+        "endChar": 57
+      },
+      "revId": "9dd29a2cc82e575920947c9d0bdcb54b5439c3b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
