@@ -69,6 +69,24 @@
       "parentUuid": "eef869df_a4b62acd",
       "revId": "b8a20c6207d3f3de9e2a7e98751486632f23711e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c3d91fb_0b680f26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-06T17:02:35Z",
+      "side": 1,
+      "message": "The second patch currently won\u0027t work on SwS, as it does not implement VK_KHR_get_surface_capabilities2.\nWe could skip the color space enumeration and always fail if VK_KHR_get_surface_capabilities2 is not available a color space other than VK_COLOR_SPACE_SRGB_NONLINEAR_KHR is requested.",
+      "parentUuid": "5e9902e3_74c10c05",
+      "revId": "b8a20c6207d3f3de9e2a7e98751486632f23711e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
