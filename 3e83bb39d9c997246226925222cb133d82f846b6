@@ -22,6 +22,30 @@
       },
       "revId": "3e83bb39d9c997246226925222cb133d82f846b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24fe7122_d960c670",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-06T15:10:15Z",
+      "side": 1,
+      "message": "Done, also took a pass at documenting two that had no description.",
+      "parentUuid": "121aebe6_240794f6",
+      "range": {
+        "startLine": 648,
+        "startChar": 3,
+        "endLine": 660,
+        "endChar": 2
+      },
+      "revId": "3e83bb39d9c997246226925222cb133d82f846b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
