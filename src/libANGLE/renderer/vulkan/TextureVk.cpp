@@ -432,6 +432,13 @@ bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
 {
     ASSERT(mImage);
 
+    // If we do not have storage yet, there is no good reason to immediately do the copy, so just
+    // stage it. Note that immutable tetxure will have a valid storgae.
+    if (!mImage->valid())
+    {
+        return true;
+    }
+
     // If update is outside the range of image levels, it must be staged.
     if (!IsTextureLevelInAllocatedImage(*mImage, textureLevelIndexGL))
     {
@@ -472,8 +479,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     // immediately.
     vk::DynamicBuffer *stagingBuffer = nullptr;
     if (!mOwnsImage || mState.getImmutableFormat() ||
-        (mImage->valid() &&
-         !shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
+        (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
                                vkFormat.getActualImageFormatID(getRequiredImageAccess()))))
     {
         stagingBuffer = contextVk->getStagingBuffer();
@@ -793,8 +799,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
 
     // Use context's staging buffer if possible
     vk::DynamicBuffer *contextStagingBuffer = nullptr;
-    if (mImage->valid() &&
-        !shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()), destActualFormatID))
+    if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()), destActualFormatID))
     {
         contextStagingBuffer = contextVk->getStagingBuffer();
     }
@@ -895,8 +900,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 
     // Use context's staging buffer if possible
     vk::DynamicBuffer *contextStagingBuffer = nullptr;
-    if (mImage->valid() &&
-        !shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()), destFormatID))
+    if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()), destFormatID))
     {
         contextStagingBuffer = contextVk->getStagingBuffer();
     }
@@ -996,8 +1000,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
     bool isSelfCopy = mImage == srcImage;
 
     // If destination is valid, copy the source directly into it.
-    if (mImage->valid() &&
-        !shouldUpdateBeStaged(level, destFormat.getActualImageFormatID(getRequiredImageAccess())) &&
+    if (!shouldUpdateBeStaged(level, destFormat.getActualImageFormatID(getRequiredImageAccess())) &&
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
@@ -1167,8 +1170,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
             .colorEncoding;
 
     // If destination is valid, copy the source directly into it.
-    if (mImage->valid() &&
-        !shouldUpdateBeStaged(level, destFormat.getActualImageFormatID(getRequiredImageAccess())) &&
+    if (!shouldUpdateBeStaged(level, destFormat.getActualImageFormatID(getRequiredImageAccess())) &&
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
@@ -1962,12 +1964,6 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
 
     if (!mImage->valid())
     {
-        // Track the levels in our ImageHelper
-        if (!mState.getImmutableFormat())
-        {
-            mImage->setFirstAllocatedLevel(baseLevel);
-        }
-
         // No further work to do, let staged updates handle the new levels
         return angle::Result::Continue;
     }
@@ -2249,11 +2245,6 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
         // Release the current image so that it will be recreated with the correct number of mip
         // levels, base level, and max level.
         releaseImage(contextVk);
-
-        if (!mState.getImmutableFormat())
-        {
-            mImage->setFirstAllocatedLevel(baseLevel);
-        }
     }
 
     mImage->retain(&contextVk->getResourceUseList());
