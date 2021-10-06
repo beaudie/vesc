@@ -121,7 +121,7 @@ constexpr uint8_t kImageCopy_frag_00000021[] = {
 // #extension GL_EXT_samplerless_texture_functions : require
 //
 // layout(set = 0, binding = 0)uniform texture3D src;
-// layout(location = 0)out ivec4 dest;
+// layout(location = 0)out ivec4 dst;
 //
 // layout(push_constant)uniform PushConstants {
 //
@@ -226,5 +226,5 @@ constexpr uint8_t kImageCopy_frag_00000021[] = {
 //         }
 //     }
 //
-//     dest = destValue;
+//     dst = destValue;
 // }
