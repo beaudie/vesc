@@ -562,14 +562,6 @@ angle::Result InitMappableDeviceMemory(Context *context,
                                        int value,
                                        VkMemoryPropertyFlags memoryPropertyFlags);
 
-angle::Result AllocateBufferMemory(Context *context,
-                                   VkMemoryPropertyFlags requestedMemoryPropertyFlags,
-                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                   const void *extraAllocationInfo,
-                                   Buffer *buffer,
-                                   DeviceMemory *deviceMemoryOut,
-                                   VkDeviceSize *sizeOut);
-
 angle::Result AllocateImageMemory(Context *context,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
