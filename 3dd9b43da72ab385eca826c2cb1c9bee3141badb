@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "700bd663_986aabe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-06T00:11:58Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "3dd9b43da72ab385eca826c2cb1c9bee3141badb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dac17bc_54bc114a",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-06T00:11:58Z",
+      "side": 1,
+      "message": "nit: To better fit in with the other types of classes like this, I think a better name would be:\n  ScopedRefCountObject",
+      "range": {
+        "startLine": 59,
+        "startChar": 6,
+        "endLine": 59,
+        "endChar": 28
+      },
+      "revId": "3dd9b43da72ab385eca826c2cb1c9bee3141badb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d4a707e_82141876",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-06T00:11:58Z",
+      "side": 1,
+      "message": "typo: respecification",
+      "range": {
+        "startLine": 1781,
+        "startChar": 65,
+        "endLine": 1781,
+        "endChar": 81
+      },
+      "revId": "3dd9b43da72ab385eca826c2cb1c9bee3141badb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
