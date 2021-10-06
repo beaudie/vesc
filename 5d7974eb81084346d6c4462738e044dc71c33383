@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dcbc1e7_4136daa4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2021-10-06T14:31:10Z",
+      "side": 1,
+      "message": "That\u0027s not an entirely safe assumption. The spec states that:\n\n\"Some platforms allow overallocation into other heaps. The overallocation behavior can be specified through the VK_AMD_memory_overallocation_behavior extension.\"\n\nEven without such extension, the driver\u0027s allocation logic may only work as expected and generate an OOM when the allocation size is less than or equal to the heap size.",
+      "range": {
+        "startLine": 22,
+        "startChar": 11,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "5d7974eb81084346d6c4462738e044dc71c33383",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5b7484c8_f5976736",
@@ -32,6 +55,41 @@
       "side": 1,
       "message": "We do that already as best we can: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d3663\n\nThe problem is that you can only know the *real* size to allocate after a call to vkGetBufferMemoryRequirements (because the driver might, as is the case with swiftshader, add a few bytes to the size), and that\u0027s when you should issue OOM. That\u0027s in the middle of VMA code.",
       "parentUuid": "5b7484c8_f5976736",
+      "revId": "5d7974eb81084346d6c4462738e044dc71c33383",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63d94e3a_a0fedc0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2021-10-06T14:31:10Z",
+      "side": 1,
+      "message": "If this is a VMA bug, could you report it so it can be fixed upstream?",
+      "parentUuid": "9c902596_6164c1fa",
+      "revId": "5d7974eb81084346d6c4462738e044dc71c33383",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00101ee0_04313a36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2021-10-06T14:31:10Z",
+      "side": 1,
+      "message": "I think this is fine as a workaround, but the root cause would still have to be addressed at some point:",
       "revId": "5d7974eb81084346d6c4462738e044dc71c33383",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
