@@ -759,22 +759,22 @@ void ExtendRenderPassInvalidateArea(const gl::Rectangle &invalidateArea, gl::Rec
 bool CanCopyWithTransferForCopyImage(RendererVk *renderer,
                                      ImageHelper *srcImage,
                                      VkImageTiling srcTilingMode,
-                                     ImageHelper *destImage,
-                                     VkImageTiling destTilingMode)
+                                     ImageHelper *dstImage,
+                                     VkImageTiling dstTilingMode)
 {
     // Neither source nor destination formats can be emulated for copy image through transfer,
     // unless they are emulated with the same format!
     bool isFormatCompatible =
-        (!srcImage->hasEmulatedImageFormat() && !destImage->hasEmulatedImageFormat()) ||
-        srcImage->getActualFormatID() == destImage->getActualFormatID();
+        (!srcImage->hasEmulatedImageFormat() && !dstImage->hasEmulatedImageFormat()) ||
+        srcImage->getActualFormatID() == dstImage->getActualFormatID();
 
     // If neither formats are emulated, GL validation ensures that pixelBytes is the same for both.
     ASSERT(!isFormatCompatible ||
-           srcImage->getActualFormat().pixelBytes == destImage->getActualFormat().pixelBytes);
+           srcImage->getActualFormat().pixelBytes == dstImage->getActualFormat().pixelBytes);
 
     return isFormatCompatible &&
            CanCopyWithTransfer(renderer, srcImage->getActualFormatID(), srcTilingMode,
-                               destImage->getActualFormatID(), destTilingMode);
+                               dstImage->getActualFormatID(), dstTilingMode);
 }
 
 void ReleaseBufferListToRenderer(RendererVk *renderer, BufferHelperPointerVector *buffers)
@@ -835,15 +835,15 @@ bool FormatHasNecessaryFeature(RendererVk *renderer,
 bool CanCopyWithTransfer(RendererVk *renderer,
                          angle::FormatID srcFormatID,
                          VkImageTiling srcTilingMode,
-                         angle::FormatID destFormatID,
-                         VkImageTiling destTilingMode)
+                         angle::FormatID dstFormatID,
+                         VkImageTiling dstTilingMode)
 {
     // Checks that the formats in the copy transfer have the appropriate tiling and transfer bits
-    bool isTilingCompatible           = srcTilingMode == destTilingMode;
+    bool isTilingCompatible           = srcTilingMode == dstTilingMode;
     bool srcFormatHasNecessaryFeature = FormatHasNecessaryFeature(
         renderer, srcFormatID, srcTilingMode, VK_FORMAT_FEATURE_TRANSFER_SRC_BIT);
     bool dstFormatHasNecessaryFeature = FormatHasNecessaryFeature(
-        renderer, destFormatID, destTilingMode, VK_FORMAT_FEATURE_TRANSFER_DST_BIT);
+        renderer, dstFormatID, dstTilingMode, VK_FORMAT_FEATURE_TRANSFER_DST_BIT);
 
     return isTilingCompatible && srcFormatHasNecessaryFeature && dstFormatHasNecessaryFeature;
 }
@@ -5827,7 +5827,7 @@ angle::Result ImageHelper::reformatStagedUpdate(ContextVk *contextVk,
 {
     const angle::Format &srcFormat = angle::Format::Get(srcFormatID);
     const angle::Format &dstFormat = angle::Format::Get(dstFormatID);
-    const gl::InternalFormat &destFormatInfo =
+    const gl::InternalFormat &dstFormatInfo =
         gl::GetSizedInternalFormatInfo(dstFormat.glInternalFormat);
 
     for (std::vector<SubresourceUpdate> &levelUpdates : mSubresourceUpdates)
@@ -5869,8 +5869,8 @@ angle::Result ImageHelper::reformatStagedUpdate(ContextVk *contextVk,
 
                 CopyImageCHROMIUM(srcData, srcDataRowPitch, srcFormat.pixelBytes, srcDataDepthPitch,
                                   pixelReadFunction, dstData, dstDataRowPitch, dstFormat.pixelBytes,
-                                  dstDataDepthPitch, pixelWriteFunction, destFormatInfo.format,
-                                  destFormatInfo.componentType, copy.imageExtent.width,
+                                  dstDataDepthPitch, pixelWriteFunction, dstFormatInfo.format,
+                                  dstFormatInfo.componentType, copy.imageExtent.width,
                                   copy.imageExtent.height, copy.imageExtent.depth, false, false,
                                   false);
 
