@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba4e179c_4e57ce40",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T19:43:41Z",
+      "side": 1,
+      "message": "It is possible to link to the \"getting started\" section, if you define an anchor it works better. Anyway, non-blocking, you can add if you want. See here for an example:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/ANGLEWrangling.md;l\u003d96?q\u003danglewrangling.md\u0026ss\u003dchromium",
+      "range": {
+        "startLine": 48,
+        "startChar": 102,
+        "endLine": 48,
+        "endChar": 118
+      },
+      "revId": "6193f57e015c88b74b6844123eeb72c4f23ff2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
