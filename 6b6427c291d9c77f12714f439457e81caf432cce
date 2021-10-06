@@ -22,6 +22,30 @@
       },
       "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6bcdba5_e7693d99",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T01:00:44Z",
+      "side": 1,
+      "message": "See the section referenced above. Despite the above quote, the spec says (for external images):\n\n\u003e Applications may also add resources to such a set after the content of the existing set members has been defined without making the content undefined by creating a new image with the initial layout VK_IMAGE_LAYOUT_UNDEFINED and binding it to the same region of external memory as the existing images.\n\u003e \n\u003e Note\n\u003e \n\u003e Because layout transitions apply to all identical images aliasing the same region of external memory, the actual layout of the memory backing a new image as well as an existing image with defined content will not be undefined. Such an image is not usable until it acquires ownership of its memory from the existing owner. Therefore, the layout specified as part of this transition will be the true initial layout of the image. The undefined layout specified when creating it is a placeholder to simplify valid usage requirements.\n\nThat basically says that UNDEFINED is just a placeholder for external images.",
+      "parentUuid": "1e11ef6a_78f965e0",
+      "range": {
+        "startLine": 318,
+        "startChar": 12,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
