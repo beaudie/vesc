@@ -1962,12 +1962,6 @@ angle::Result TextureVk::updateBaseMaxLevels(ContextVk *contextVk,
 
     if (!mImage->valid())
     {
-        // Track the levels in our ImageHelper
-        if (!mState.getImmutableFormat())
-        {
-            mImage->setFirstAllocatedLevel(baseLevel);
-        }
-
         // No further work to do, let staged updates handle the new levels
         return angle::Result::Continue;
     }
@@ -2249,11 +2243,6 @@ angle::Result TextureVk::respecifyImageStorageAndLevels(ContextVk *contextVk,
         // Release the current image so that it will be recreated with the correct number of mip
         // levels, base level, and max level.
         releaseImage(contextVk);
-
-        if (!mState.getImmutableFormat())
-        {
-            mImage->setFirstAllocatedLevel(baseLevel);
-        }
     }
 
     mImage->retain(&contextVk->getResourceUseList());

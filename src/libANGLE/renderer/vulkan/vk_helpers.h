@@ -1877,8 +1877,11 @@ class ImageHelper final : public Resource, public angle::Subject
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
-    gl::LevelIndex getFirstAllocatedLevel() const { return mFirstAllocatedLevel; }
-    void setFirstAllocatedLevel(gl::LevelIndex firstLevel);
+    gl::LevelIndex getFirstAllocatedLevel() const
+    {
+        ASSERT(valid());
+        return mFirstAllocatedLevel;
+    }
     gl::LevelIndex getLastAllocatedLevel() const;
     LevelIndex toVkLevel(gl::LevelIndex levelIndexGL) const;
     gl::LevelIndex toGLLevel(LevelIndex levelIndexVk) const;
