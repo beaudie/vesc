@@ -87,6 +87,24 @@
       "parentUuid": "5e9902e3_74c10c05",
       "revId": "b8a20c6207d3f3de9e2a7e98751486632f23711e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1127e4af_97c72579",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T17:14:22Z",
+      "side": 1,
+      "message": "When would we fail if an app requests sRGB and it\u0027s unavailable on the device?",
+      "parentUuid": "7c3d91fb_0b680f26",
+      "revId": "b8a20c6207d3f3de9e2a7e98751486632f23711e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
