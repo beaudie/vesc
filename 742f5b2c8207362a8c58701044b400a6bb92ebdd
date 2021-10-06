@@ -51,6 +51,60 @@
       "parentUuid": "7599f807_14f1f534",
       "revId": "742f5b2c8207362a8c58701044b400a6bb92ebdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c095a920_1ab2f50e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-10-06T21:49:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d788714_329549bf",
+      "revId": "742f5b2c8207362a8c58701044b400a6bb92ebdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c11244f6_3c392d2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-10-06T21:49:00Z",
+      "side": 1,
+      "message": "Thanks Adrian for the tip.",
+      "parentUuid": "3d788714_329549bf",
+      "revId": "742f5b2c8207362a8c58701044b400a6bb92ebdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5efb85c_a89ca5cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-10-06T21:49:00Z",
+      "side": 1,
+      "message": "@Jamie, now that we have converted to store a copy instead of reference, do we need a regression test? If we do, I can work on it as part of another CL. 😊",
+      "parentUuid": "1890e815_0bd03e44",
+      "revId": "742f5b2c8207362a8c58701044b400a6bb92ebdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
