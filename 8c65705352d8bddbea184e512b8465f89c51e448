@@ -34,6 +34,24 @@
       "parentUuid": "01ce911a_3942df10",
       "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52f4eea0_8195a7b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1178685
+      },
+      "writtenOn": "2021-10-06T22:13:16Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t see angle_deqp_gles3_metal_tests suite in test results, only angle_end2end_tests?\n\nThis is expected. The additional grouping key doesn\u0027t affect expected tests. I\u0027ll try to make the additional rule clearer in the UI.",
+      "parentUuid": "53cec7d9_227023e8",
+      "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
