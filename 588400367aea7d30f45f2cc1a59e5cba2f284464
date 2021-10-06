@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7556133_c08825b4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T16:38:49Z",
+      "side": 1,
+      "message": "where is this method defined?",
+      "range": {
+        "startLine": 570,
+        "startChar": 23,
+        "endLine": 570,
+        "endChar": 53
+      },
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9957802c_9b936cef",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T16:38:49Z",
+      "side": 1,
+      "message": "I suggest we don\u0027t use incomplete, it was a mistake to introduce it. We\u0027ll have to look at the specs to determine how we could predict this behaviour and handle it if we end up in this unexpected situation. The WSI part of Vulkan is a bit of a mess, and doesn\u0027t let you map GLES / EGL well.",
+      "range": {
+        "startLine": 808,
+        "startChar": 12,
+        "endLine": 808,
+        "endChar": 45
+      },
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
