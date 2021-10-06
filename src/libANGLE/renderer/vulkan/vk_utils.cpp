@@ -184,28 +184,6 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
     return angle::Result::Continue;
 }
 
-template <typename T>
-angle::Result AllocateBufferOrImageMemory(vk::Context *context,
-                                          VkMemoryPropertyFlags requestedMemoryPropertyFlags,
-                                          VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                          const void *extraAllocationInfo,
-                                          T *bufferOrImage,
-                                          vk::DeviceMemory *deviceMemoryOut,
-                                          VkDeviceSize *sizeOut)
-{
-    // Call driver to determine memory requirements.
-    VkMemoryRequirements memoryRequirements;
-    bufferOrImage->getMemoryRequirements(context->getDevice(), &memoryRequirements);
-
-    ANGLE_TRY(AllocateAndBindBufferOrImageMemory(
-        context, requestedMemoryPropertyFlags, memoryPropertyFlagsOut, memoryRequirements,
-        extraAllocationInfo, nullptr, bufferOrImage, deviceMemoryOut));
-
-    *sizeOut = memoryRequirements.size;
-
-    return angle::Result::Continue;
-}
-
 // Unified layer that includes full validation layer stack
 constexpr char kVkKhronosValidationLayerName[]  = "VK_LAYER_KHRONOS_validation";
 constexpr char kVkStandardValidationLayerName[] = "VK_LAYER_LUNARG_standard_validation";
@@ -588,19 +566,6 @@ angle::Result InitMappableDeviceMemory(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result AllocateBufferMemory(Context *context,
-                                   VkMemoryPropertyFlags requestedMemoryPropertyFlags,
-                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                   const void *extraAllocationInfo,
-                                   Buffer *buffer,
-                                   DeviceMemory *deviceMemoryOut,
-                                   VkDeviceSize *sizeOut)
-{
-    return AllocateBufferOrImageMemory(context, requestedMemoryPropertyFlags,
-                                       memoryPropertyFlagsOut, extraAllocationInfo, buffer,
-                                       deviceMemoryOut, sizeOut);
-}
-
 angle::Result AllocateImageMemory(Context *context,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
@@ -609,8 +574,17 @@ angle::Result AllocateImageMemory(Context *context,
                                   DeviceMemory *deviceMemoryOut,
                                   VkDeviceSize *sizeOut)
 {
-    return AllocateBufferOrImageMemory(context, memoryPropertyFlags, memoryPropertyFlagsOut,
-                                       extraAllocationInfo, image, deviceMemoryOut, sizeOut);
+    // Call driver to determine memory requirements.
+    VkMemoryRequirements memoryRequirements;
+    image->getMemoryRequirements(context->getDevice(), &memoryRequirements);
+
+    ANGLE_TRY(AllocateAndBindBufferOrImageMemory(
+        context, memoryPropertyFlags, memoryPropertyFlagsOut, memoryRequirements,
+        extraAllocationInfo, nullptr, image, deviceMemoryOut));
+
+    *sizeOut = memoryRequirements.size;
+
+    return angle::Result::Continue;
 }
 
 angle::Result AllocateImageMemoryWithRequirements(
