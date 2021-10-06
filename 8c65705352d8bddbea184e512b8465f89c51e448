@@ -52,6 +52,24 @@
       "parentUuid": "53cec7d9_227023e8",
       "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41198a89_f371c48e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-06T22:19:02Z",
+      "side": 1,
+      "message": "I think these failures were unexpected?\nUnexpected Failures:\n* dEQP.GLES3/functional_texture_filtering_2d_array_formats_rgb9_e5_linear_mipmap_linear\n* dEQP.GLES3/functional_texture_filtering_2d_array_formats_rgb9_e5_nearest_mipmap_linear",
+      "parentUuid": "52f4eea0_8195a7b6",
+      "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
