@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf847a3_5a0c3225",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/gen/FullScreenTri.vert.00000000.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T18:13:07Z",
+      "side": 1,
+      "message": "looks like you still need to delete the old generated shader?",
+      "revId": "d88e528983bb4afaf34f33dd029077229ba9bde2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
