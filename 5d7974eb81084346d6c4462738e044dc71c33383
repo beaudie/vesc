@@ -16,6 +16,24 @@
       "message": "I\u0027d prefer we solve this in ANGLE by not issuing commands that allocate \u003e available heap size. WDYT?",
       "revId": "5d7974eb81084346d6c4462738e044dc71c33383",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c902596_6164c1fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T14:00:23Z",
+      "side": 1,
+      "message": "We do that already as best we can: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d3663\n\nThe problem is that you can only know the *real* size to allocate after a call to vkGetBufferMemoryRequirements (because the driver might, as is the case with swiftshader, add a few bytes to the size), and that\u0027s when you should issue OOM. That\u0027s in the middle of VMA code.",
+      "parentUuid": "5b7484c8_f5976736",
+      "revId": "5d7974eb81084346d6c4462738e044dc71c33383",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
