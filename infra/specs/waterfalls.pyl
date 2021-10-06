@@ -91,6 +91,7 @@
         ],
         'test_suites': {
           'gtest_tests': 'swangle_gtests',
+          'isolated_scripts': 'swangle_isolated_scripts',
         },
       },
       'mac-amd': {
@@ -176,6 +177,7 @@
         ],
         'test_suites': {
           'gtest_tests': 'swangle_gtests',
+          'isolated_scripts': 'swangle_isolated_scripts',
         },
       },
       'win7-x64-nvidia': {
