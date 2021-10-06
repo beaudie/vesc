@@ -83,7 +83,6 @@ enum ShShaderOutput
 // The Compile options type is defined in ShaderVars.h, to allow ANGLE to import the ShaderVars
 // header without needing the ShaderLang header. This avoids some conflicts with glslang.
 
-const ShCompileOptions SH_VALIDATE               = 0;
 const ShCompileOptions SH_VALIDATE_LOOP_INDEXING = UINT64_C(1) << 0;
 const ShCompileOptions SH_INTERMEDIATE_TREE      = UINT64_C(1) << 1;
 const ShCompileOptions SH_OBJECT_CODE            = UINT64_C(1) << 2;
@@ -646,8 +645,6 @@ void Destruct(ShHandle handle);
 // source code.
 // numStrings: Specifies the number of elements in shaderStrings array.
 // compileOptions: A mask containing the following parameters:
-// SH_VALIDATE: Validates shader to ensure that it conforms to the spec
-//              specified during compiler construction.
 // SH_VALIDATE_LOOP_INDEXING: Validates loop and indexing in the shader to
 //                            ensure that they do not exceed the minimum
 //                            functionality mandated in GLSL 1.0 spec,
