@@ -63,6 +63,7 @@ def IsWindows():
 
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_TEST_PREFIX = 'TracePerfTest.Run/vulkan_'
+SWIFTSHADER_TEST_PREFIX = 'TracePerfTest.Run/vulkan_swiftshader_'
 DEFAULT_SCREENSHOT_PREFIX = 'angle_vulkan_'
 DEFAULT_BATCH_SIZE = 5
 DEFAULT_LOG = 'info'
@@ -207,7 +208,10 @@ def get_skia_gold_keys(args, env):
 
     with common.temporary_file() as tempfile_path:
         binary = get_binary_name('angle_system_info_test')
-        if run_wrapper(args, [binary, '--vulkan', '-v'], env, tempfile_path):
+        sysinfo_args = [binary, '--vulkan', '-v']
+        if args.swiftshader:
+            sysinfo_args.append('--swiftshader')
+        if run_wrapper(args, sysinfo_args, env, tempfile_path):
             raise Exception('Error getting system info.')
 
         filter = Filter()
@@ -331,8 +335,9 @@ def _get_batches(traces, batch_size):
         yield traces[i:i + batch_size]
 
 
-def _get_gtest_filter_for_batch(batch):
-    expanded = ['%s%s' % (DEFAULT_TEST_PREFIX, trace) for trace in batch]
+def _get_gtest_filter_for_batch(args, batch):
+    prefix = SWIFTSHADER_TEST_PREFIX if args.swiftshader else DEFAULT_TEST_PREFIX
+    expanded = ['%s%s' % (prefix, trace) for trace in batch]
     return '--gtest_filter=%s' % ':'.join(expanded)
 
 
@@ -371,13 +376,14 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                     if iteration > 0:
                         logging.info('Test run failed, running retry #%d...' % iteration)
 
-                    gtest_filter = _get_gtest_filter_for_batch(batch)
+                    gtest_filter = _get_gtest_filter_for_batch(args, batch)
                     cmd = [
                         args.test_suite,
                         gtest_filter,
                         '--render-test-output-dir=%s' % screenshot_dir,
                         '--one-frame-only',
                         '--verbose-logging',
+                        '--enable-all-trace-tests',
                     ] + extra_flags
                     batch_result = PASS if run_wrapper(args, cmd, env,
                                                        tempfile_path) == 0 else FAIL
@@ -421,7 +427,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--isolated-script-test-output', type=str)
     parser.add_argument('--isolated-script-test-perf-output', type=str)
-    parser.add_argument('--isolated-script-test-filter', type=str)
+    parser.add_argument('-f', '--isolated-script-test-filter', '--filter', type=str)
     parser.add_argument('--test-suite', help='Test suite to run.', default=DEFAULT_TEST_SUITE)
     parser.add_argument('--render-test-output-dir', help='Directory to store screenshots')
     parser.add_argument('--xvfb', help='Start xvfb.', action='store_true')
@@ -444,6 +450,7 @@ def main():
         default=DEFAULT_BATCH_SIZE)
     parser.add_argument(
         '-l', '--log', help='Log output level. Default is %s.' % DEFAULT_LOG, default=DEFAULT_LOG)
+    parser.add_argument('--swiftshader', help='Test with SwiftShader.', action='store_true')
 
     add_skia_gold_args(parser)
 

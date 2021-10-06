@@ -251,7 +251,8 @@ bool ScopedVkLoaderEnvironment::setCustomExtensionsEnvironment()
                                               strstr.str().c_str());
 }
 
-void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
+void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDeviceProperties,
+                          const std::vector<VkPhysicalDevice> &physicalDevices,
                           vk::ICD preferredICD,
                           VkPhysicalDevice *physicalDeviceOut,
                           VkPhysicalDeviceProperties *physicalDevicePropertiesOut)
@@ -262,7 +263,7 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 
     for (const VkPhysicalDevice &physicalDevice : physicalDevices)
     {
-        vkGetPhysicalDeviceProperties(physicalDevice, physicalDevicePropertiesOut);
+        pGetPhysicalDeviceProperties(physicalDevice, physicalDevicePropertiesOut);
         if (filter(*physicalDevicePropertiesOut))
         {
             *physicalDeviceOut = physicalDevice;
@@ -273,7 +274,7 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 
     // Fall back to first device.
     *physicalDeviceOut = physicalDevices[0];
-    vkGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
+    pGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
 }
 
 }  // namespace vk
