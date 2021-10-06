@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27a52bec_62752a25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T20:13:35Z",
+      "side": 1,
+      "message": "Thanks for fixing this.\n\nThis is definitely one of those things that can be greatly simplified once we get rid of glslang.",
+      "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9860e96_da116b2a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T20:13:35Z",
+      "side": 1,
+      "message": "This comment seems stale",
+      "range": {
+        "startLine": 1319,
+        "startChar": 89,
+        "endLine": 1320,
+        "endChar": 38
+      },
+      "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
