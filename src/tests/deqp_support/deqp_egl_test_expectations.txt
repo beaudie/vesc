@@ -247,3 +247,11 @@
 5665 NEXUS5X : dEQP-EGL.functional.surfaceless_context.rgb565_depth_stencil = SKIP
 5665 NEXUS5X : dEQP-EGL.functional.surfaceless_context.rgb565_no_depth_stencil = SKIP
 5665 NEXUS5X : dEQP-EGL.functional.surfaceless_context.rgb888_no_depth_stencil = SKIP
+
+6528 PIXEL4ORXL GLES : dEQP-EGL.functional.image.render_multiple_contexts.gles2_android_native_s8_stencil_buffer = SKIP
+6528 PIXEL4ORXL GLES : dEQP-EGL.functional.image.modify.android_native_s8_renderbuffer_clear_stencil = SKIP
+6528 PIXEL4ORXL GLES : dEQP-EGL.functional.get_frame_timestamps.* = FAIL
+6528 PIXEL4ORXL GLES : dEQP-EGL.functional.image.create.gles3_android_native_array_rgb565_texture_array = FAIL
+6528 PIXEL4ORXL GLES : dEQP-EGL.functional.image.create.gles3_android_native_array_rgb8_texture_array = FAIL
+6528 PIXEL4ORXL GLES : dEQP-EGL.functional.image.create.gles3_android_native_array_rgba8_texture_array = FAIL
+6528 PIXEL4ORXL GLES : dEQP-EGL.functional.wide_color.* = FAIL
