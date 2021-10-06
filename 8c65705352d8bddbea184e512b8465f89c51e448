@@ -16,6 +16,24 @@
       "message": "Not sure what this will do, but LGTM.",
       "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53cec7d9_227023e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-06T19:52:05Z",
+      "side": 1,
+      "message": "This should change the default results view\nfrom https://ci.chromium.org/ui/p/angle/builders/try/mac-rel/23688/test-results\nto https://ci.chromium.org/ui/p/angle/builders/try/mac-rel/23688/test-results?groupby\u003dstatus%2Cv.test_suite\n\nHowever, looks like something else is broken, since I don\u0027t see angle_deqp_gles3_metal_tests suite in test results, only angle_end2end_tests?",
+      "parentUuid": "01ce911a_3942df10",
+      "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
