@@ -73,7 +73,7 @@
       'gn_args': 'target_os="android"',
     },
     'angle': {
-      'gn_args': 'build_angle_gles1_conform_tests=true is_component_build=true',
+      'gn_args': 'build_angle_gles1_conform_tests=true is_component_build=true treat_warnings_as_errors=false',
     },
     'opencl': {
       'gn_args': 'angle_enable_cl=true',
