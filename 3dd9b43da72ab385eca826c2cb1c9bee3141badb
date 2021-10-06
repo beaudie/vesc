@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "454fe3e7_6bb8d17c",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T02:52:58Z",
+      "side": 1,
+      "message": "That sounds like it also adds a ref on init, but this class only releases. Also weird that Scoped* itself would be passed to a function as an out parameter.\n\nThe name sounds weird, but is more accurate than Scoped* IMO",
+      "parentUuid": "9dac17bc_54bc114a",
+      "range": {
+        "startLine": 59,
+        "startChar": 6,
+        "endLine": 59,
+        "endChar": 28
+      },
+      "revId": "3dd9b43da72ab385eca826c2cb1c9bee3141badb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d4a707e_82141876",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 2
