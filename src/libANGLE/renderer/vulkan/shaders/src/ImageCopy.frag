@@ -45,7 +45,7 @@
 #endif
 
 layout(set = 0, binding = 0) uniform SRC_RESOURCE(SRC_RESOURCE_NAME) src;
-layout(location = 0) out DestType dest;
+layout(location = 0) out DestType dst;
 
 layout(push_constant) uniform PushConstants {
     // Translation from source to destination coordinates.
@@ -178,7 +178,7 @@ void main()
 #if DestIsFloat
     if (params.destIsSRGB)
     {
-        // If dest is sRGB, then export will perform a linear->sRGB transformation.  We need to
+        // If dst is sRGB, then export will perform a linear->sRGB transformation.  We need to
         // preemptively undo that so the values will be exported unchanged.This is done to avoid
         // creating a non-sRGB view of the texture, which would require recreating it with the
         // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT flag.
@@ -189,7 +189,7 @@ void main()
     }
 #endif
 
-    // If dest is luminance/alpha, it's implemented with R or RG.  Do the appropriate swizzle.
+    // If dst is luminance/alpha, it's implemented with R or RG.  Do the appropriate swizzle.
     if (params.destHasLuminance)
     {
         destValue.rg = destValue.ra;
@@ -215,5 +215,5 @@ void main()
         }
     }
 
-    dest = destValue;
+    dst = destValue;
 }

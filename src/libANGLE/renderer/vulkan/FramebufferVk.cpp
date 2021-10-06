@@ -930,20 +930,20 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         srcFramebufferVk->getDepthStencilRenderTarget()->getImageForCopy().getSamples() > 1;
     const bool isResolve = isColorResolve || isDepthStencilResolve;
 
-    bool srcFramebufferFlippedY  = contextVk->isViewportFlipEnabledForReadFBO();
-    bool destFramebufferFlippedY = contextVk->isViewportFlipEnabledForDrawFBO();
+    bool srcFramebufferFlippedY = contextVk->isViewportFlipEnabledForReadFBO();
+    bool dstFramebufferFlippedY = contextVk->isViewportFlipEnabledForDrawFBO();
 
     gl::Rectangle sourceArea = sourceAreaIn;
     gl::Rectangle destArea   = destAreaIn;
 
-    // Note: GLES (all 3.x versions) require source and dest area to be identical when
+    // Note: GLES (all 3.x versions) require source and destination area to be identical when
     // resolving.
     ASSERT(!isResolve ||
            (sourceArea.x == destArea.x && sourceArea.y == destArea.y &&
             sourceArea.width == destArea.width && sourceArea.height == destArea.height));
 
-    gl::Rectangle srcFramebufferDimensions  = srcFramebufferVk->getNonRotatedCompleteRenderArea();
-    gl::Rectangle destFramebufferDimensions = getNonRotatedCompleteRenderArea();
+    gl::Rectangle srcFramebufferDimensions = srcFramebufferVk->getNonRotatedCompleteRenderArea();
+    gl::Rectangle dstFramebufferDimensions = getNonRotatedCompleteRenderArea();
 
     // If the destination is flipped in either direction, we will flip the source instead so that
     // the destination area is always unflipped.
@@ -961,18 +961,18 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     // different parts of the code.  These first adjustments are for whether or not to flip the
     // y-axis, and to note the overall rotation (regardless of whether it is the source or
     // destination that is rotated).
-    SurfaceRotation srcFramebufferRotation  = contextVk->getRotationReadFramebuffer();
-    SurfaceRotation destFramebufferRotation = contextVk->getRotationDrawFramebuffer();
-    SurfaceRotation rotation                = SurfaceRotation::Identity;
+    SurfaceRotation srcFramebufferRotation = contextVk->getRotationReadFramebuffer();
+    SurfaceRotation dstFramebufferRotation = contextVk->getRotationDrawFramebuffer();
+    SurfaceRotation rotation               = SurfaceRotation::Identity;
     // Both the source and destination cannot be rotated (which would indicate both are the default
     // framebuffer (i.e. swapchain image).
     ASSERT((srcFramebufferRotation == SurfaceRotation::Identity) ||
-           (destFramebufferRotation == SurfaceRotation::Identity));
+           (dstFramebufferRotation == SurfaceRotation::Identity));
     EarlyAdjustFlipYForPreRotation(srcFramebufferRotation, &rotation, &srcFramebufferFlippedY);
-    EarlyAdjustFlipYForPreRotation(destFramebufferRotation, &rotation, &destFramebufferFlippedY);
+    EarlyAdjustFlipYForPreRotation(dstFramebufferRotation, &rotation, &dstFramebufferFlippedY);
 
-    // First, clip the source area to framebuffer.  That requires transforming the dest area to
-    // match the clipped source.
+    // First, clip the source area to framebuffer.  That requires transforming the destination area
+    // to match the clipped source.
     gl::Rectangle absSourceArea = sourceArea.removeReversal();
     gl::Rectangle clippedSourceArea;
     if (!gl::ClipRectangle(srcFramebufferDimensions, absSourceArea, &clippedSourceArea))
@@ -985,21 +985,21 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     gl::Rectangle srcClippedDestArea;
     if (isResolve)
     {
-        // Source and dest areas are identical in resolve (except rotate it, if appropriate).
+        // Source and destination areas are identical in resolve (except rotate it, if appropriate).
         srcClippedDestArea = clippedSourceArea;
-        AdjustBlitAreaForPreRotation(destFramebufferRotation, clippedSourceArea,
-                                     destFramebufferDimensions, &srcClippedDestArea);
+        AdjustBlitAreaForPreRotation(dstFramebufferRotation, clippedSourceArea,
+                                     dstFramebufferDimensions, &srcClippedDestArea);
     }
     else if (clippedSourceArea == absSourceArea)
     {
-        // If there was no clipping, keep dest area as is (except rotate it, if appropriate).
+        // If there was no clipping, keep destination area as is (except rotate it, if appropriate).
         srcClippedDestArea = destArea;
-        AdjustBlitAreaForPreRotation(destFramebufferRotation, destArea, destFramebufferDimensions,
+        AdjustBlitAreaForPreRotation(dstFramebufferRotation, destArea, dstFramebufferDimensions,
                                      &srcClippedDestArea);
     }
     else
     {
-        // Shift dest area's x0,y0,x1,y1 by as much as the source area's got shifted (taking
+        // Shift destination area's x0,y0,x1,y1 by as much as the source area's got shifted (taking
         // stretching into account).  Note that double is used as float doesn't have enough
         // precision near the end of int range.
         double x0Shift = std::round((clippedSourceArea.x - absSourceArea.x) / stretch[0]);
@@ -1028,29 +1028,29 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         srcClippedDestArea.height = y1 - srcClippedDestArea.y;
 
         // Rotate srcClippedDestArea if the destination is rotated
-        if (destFramebufferRotation != SurfaceRotation::Identity)
+        if (dstFramebufferRotation != SurfaceRotation::Identity)
         {
             gl::Rectangle originalSrcClippedDestArea = srcClippedDestArea;
-            AdjustBlitAreaForPreRotation(destFramebufferRotation, originalSrcClippedDestArea,
-                                         destFramebufferDimensions, &srcClippedDestArea);
+            AdjustBlitAreaForPreRotation(dstFramebufferRotation, originalSrcClippedDestArea,
+                                         dstFramebufferDimensions, &srcClippedDestArea);
         }
     }
 
-    // If framebuffers are flipped in Y, flip the source and dest area (which define the
+    // If framebuffers are flipped in Y, flip the source and destination area (which define the
     // transformation regardless of clipping), as well as the blit area (which is the clipped
-    // dest area).
+    // destination area).
     if (srcFramebufferFlippedY)
     {
         sourceArea.y      = srcFramebufferDimensions.height - sourceArea.y;
         sourceArea.height = -sourceArea.height;
     }
-    if (destFramebufferFlippedY)
+    if (dstFramebufferFlippedY)
     {
-        destArea.y      = destFramebufferDimensions.height - destArea.y;
+        destArea.y      = dstFramebufferDimensions.height - destArea.y;
         destArea.height = -destArea.height;
 
         srcClippedDestArea.y =
-            destFramebufferDimensions.height - srcClippedDestArea.y - srcClippedDestArea.height;
+            dstFramebufferDimensions.height - srcClippedDestArea.y - srcClippedDestArea.height;
     }
 
     bool flipX = sourceArea.isReversedX() != destArea.isReversedX();
@@ -1058,10 +1058,10 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
     // GLES doesn't allow flipping the parameters of glBlitFramebuffer if performing a resolve.
     ASSERT(!isResolve ||
-           (flipX == false && flipY == (srcFramebufferFlippedY != destFramebufferFlippedY)));
+           (flipX == false && flipY == (srcFramebufferFlippedY != dstFramebufferFlippedY)));
 
-    // Again, transfer the destination flip to source, so dest is unflipped.  Note that destArea
-    // was not reversed until the final possible Y-flip.
+    // Again, transfer the destination flip to source, so destination is unflipped.  Note that
+    // destArea was not reversed until the final possible Y-flip.
     ASSERT(!destArea.isReversedX());
     sourceArea = sourceArea.flip(false, destArea.isReversedY());
     destArea   = destArea.removeReversal();
@@ -1077,14 +1077,14 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         AdjustDimensionsAndFlipForPreRotation(srcFramebufferRotation, &srcFramebufferDimensions,
                                               &flipX, &flipY);
     }
-    SurfaceRotation rememberDestFramebufferRotation = destFramebufferRotation;
+    SurfaceRotation rememberDestFramebufferRotation = dstFramebufferRotation;
     if (srcFramebufferRotation == SurfaceRotation::Rotated90Degrees)
     {
-        destFramebufferRotation = rotation;
+        dstFramebufferRotation = rotation;
     }
-    AdjustBlitAreaForPreRotation(destFramebufferRotation, destAreaOld, destFramebufferDimensions,
+    AdjustBlitAreaForPreRotation(dstFramebufferRotation, destAreaOld, dstFramebufferDimensions,
                                  &destArea);
-    destFramebufferRotation = rememberDestFramebufferRotation;
+    dstFramebufferRotation = rememberDestFramebufferRotation;
 
     // Clip the destination area to the framebuffer size and scissor.  Note that we don't care
     // about the source area anymore.  The offset translation is done based on the original source
@@ -1129,7 +1129,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // If there was no clipping and the format capabilities allow us, use Vulkan's builtin blit.
         // The reason clipping is prohibited in this path is that due to rounding errors, it would
         // be hard to guarantee the image stretching remains perfect.  That also allows us not to
-        // have to transform back the dest clipping to source.
+        // have to transform back the destination clipping to source.
         //
         // Non-identity pre-rotation cases do not use Vulkan's builtin blit.
         //
