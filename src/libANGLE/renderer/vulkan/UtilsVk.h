@@ -84,10 +84,10 @@ class UtilsVk : angle::NonCopyable
     {
         size_t vertexCount;
         const angle::Format *srcFormat;
-        const angle::Format *destFormat;
+        const angle::Format *dstFormat;
         size_t srcStride;
         size_t srcOffset;
-        size_t destOffset;
+        size_t dstOffset;
     };
 
     struct ClearFramebufferParameters
@@ -116,7 +116,7 @@ class UtilsVk : angle::NonCopyable
         // |srcOffset| and |dstIndexBufferOffset| define the original blit/resolve offsets, possibly
         // flipped.
         int srcOffset[2];
-        int destOffset[2];
+        int dstOffset[2];
         // Amount to add to x and y axis for certain rotations
         int rotatedOffsetFactor[2];
         // |stretch| is SourceDimension / DestDimension used to transfer dst coordinates to source.
@@ -149,7 +149,7 @@ class UtilsVk : angle::NonCopyable
     {
         int srcOffset[2];
         int srcExtents[2];
-        int destOffset[2];
+        int dstOffset[2];
         int srcMip;
         int srcLayer;
         int srcHeight;
@@ -158,10 +158,10 @@ class UtilsVk : angle::NonCopyable
         bool srcPremultiplyAlpha;
         bool srcUnmultiplyAlpha;
         bool srcFlipY;
-        bool destFlipY;
+        bool dstFlipY;
         SurfaceRotation srcRotation;
         GLenum srcColorEncoding;
-        GLenum destColorEncoding;
+        GLenum dstColorEncoding;
     };
 
     struct CopyImageBitsParameters
@@ -189,7 +189,7 @@ class UtilsVk : angle::NonCopyable
     struct GenerateMipmapParameters
     {
         uint32_t srcLevel;
-        uint32_t destLevelCount;
+        uint32_t dstLevelCount;
     };
 
     struct UnresolveParameters
@@ -217,16 +217,16 @@ class UtilsVk : angle::NonCopyable
     angle::Result convertLineLoopIndexIndirectBuffer(
         ContextVk *contextVk,
         vk::BufferHelper *srcIndirectBuffer,
-        vk::BufferHelper *destIndirectBuffer,
-        vk::BufferHelper *destIndexBuffer,
+        vk::BufferHelper *dstIndirectBuffer,
+        vk::BufferHelper *dstIndexBuffer,
         vk::BufferHelper *srcIndexBuffer,
         const ConvertLineLoopIndexIndirectParameters &params);
 
     angle::Result convertLineLoopArrayIndirectBuffer(
         ContextVk *contextVk,
         vk::BufferHelper *srcIndirectBuffer,
-        vk::BufferHelper *destIndirectBuffer,
-        vk::BufferHelper *destIndexBuffer,
+        vk::BufferHelper *dstIndirectBuffer,
+        vk::BufferHelper *dstIndexBuffer,
         const ConvertLineLoopArrayIndirectParameters &params);
 
     angle::Result convertVertexBuffer(ContextVk *contextVk,
@@ -262,7 +262,7 @@ class UtilsVk : angle::NonCopyable
 
     angle::Result copyImage(ContextVk *contextVk,
                             vk::ImageHelper *dst,
-                            const vk::ImageView *destView,
+                            const vk::ImageView *dstView,
                             vk::ImageHelper *src,
                             const vk::ImageView *srcView,
                             const CopyImageParameters &params);
@@ -278,7 +278,7 @@ class UtilsVk : angle::NonCopyable
                                  vk::ImageHelper *src,
                                  const vk::ImageView *srcLevelZeroView,
                                  vk::ImageHelper *dst,
-                                 const GenerateMipmapDestLevelViews &destLevelViews,
+                                 const GenerateMipmapDestLevelViews &dstLevelViews,
                                  const vk::Sampler &sampler,
                                  const GenerateMipmapParameters &params);
 
@@ -290,7 +290,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result cullOverlayWidgets(ContextVk *contextVk,
                                      vk::BufferHelper *enabledWidgetsBuffer,
                                      vk::ImageHelper *dst,
-                                     const vk::ImageView *destView,
+                                     const vk::ImageView *dstView,
                                      const OverlayCullParameters &params);
 
     angle::Result drawOverlay(ContextVk *contextVk,
@@ -301,7 +301,7 @@ class UtilsVk : angle::NonCopyable
                               vk::ImageHelper *culledWidgets,
                               const vk::ImageView *culledWidgetsView,
                               vk::ImageHelper *dst,
-                              const vk::ImageView *destView,
+                              const vk::ImageView *dstView,
                               const OverlayDrawParameters &params);
 
     InternalShaderPerfCounters getAndResetObjectPerfCounters();
@@ -350,7 +350,7 @@ class UtilsVk : angle::NonCopyable
         uint32_t outputCount      = 0;
         uint32_t componentCount   = 0;
         uint32_t srcOffset        = 0;
-        uint32_t destOffset       = 0;
+        uint32_t dstOffset        = 0;
         uint32_t Ns               = 0;
         uint32_t Bs               = 0;
         uint32_t Ss               = 0;
@@ -377,20 +377,20 @@ class UtilsVk : angle::NonCopyable
         ImageCopyShaderParams();
 
         // Structure matching PushConstants in ImageCopy.frag
-        int32_t srcOffset[2]             = {};
-        int32_t destOffset[2]            = {};
-        int32_t srcMip                   = 0;
-        int32_t srcLayer                 = 0;
-        uint32_t flipX                   = 0;
-        uint32_t flipY                   = 0;
-        uint32_t premultiplyAlpha        = 0;
-        uint32_t unmultiplyAlpha         = 0;
-        uint32_t destHasLuminance        = 0;
-        uint32_t destIsAlpha             = 0;
-        uint32_t srcIsSRGB               = 0;
-        uint32_t destIsSRGB              = 0;
-        uint32_t destDefaultChannelsMask = 0;
-        uint32_t rotateXY                = 0;
+        int32_t srcOffset[2]            = {};
+        int32_t dstOffset[2]            = {};
+        int32_t srcMip                  = 0;
+        int32_t srcLayer                = 0;
+        uint32_t flipX                  = 0;
+        uint32_t flipY                  = 0;
+        uint32_t premultiplyAlpha       = 0;
+        uint32_t unmultiplyAlpha        = 0;
+        uint32_t dstHasLuminance        = 0;
+        uint32_t dstIsAlpha             = 0;
+        uint32_t srcIsSRGB              = 0;
+        uint32_t dstIsSRGB              = 0;
+        uint32_t dstDefaultChannelsMask = 0;
+        uint32_t rotateXY               = 0;
     };
 
     union BlitResolveOffset
@@ -423,7 +423,7 @@ class UtilsVk : angle::NonCopyable
         int32_t srcLayer         = 0;
         int32_t srcWidth         = 0;
         int32_t blitArea[4]      = {};
-        int32_t destPitch        = 0;
+        int32_t dstPitch         = 0;
         uint32_t flipX           = 0;
         uint32_t flipY           = 0;
         uint32_t rotateXY        = 0;
