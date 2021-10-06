@@ -84,23 +84,22 @@ uint32_t GetConvertVertexFlags(const UtilsVk::ConvertVertexParameters &params)
     bool srcIsFloat     = params.srcFormat->isFloat();
     bool srcIsHalfFloat = params.srcFormat->isVertexTypeHalfFloat();
 
-    bool destIsSint      = params.destFormat->isSint();
-    bool destIsUint      = params.destFormat->isUint();
-    bool destIsSnorm     = params.destFormat->isSnorm();
-    bool destIsUnorm     = params.destFormat->isUnorm();
-    bool destIsFloat     = params.destFormat->isFloat();
-    bool destIsHalfFloat = params.destFormat->isVertexTypeHalfFloat();
+    bool dstIsSint      = params.dstFormat->isSint();
+    bool dstIsUint      = params.dstFormat->isUint();
+    bool dstIsSnorm     = params.dstFormat->isSnorm();
+    bool dstIsUnorm     = params.dstFormat->isUnorm();
+    bool dstIsFloat     = params.dstFormat->isFloat();
+    bool dstIsHalfFloat = params.dstFormat->isVertexTypeHalfFloat();
 
     // Assert on the types to make sure the shader supports its.  These are based on
     // ConvertVertex_comp::Conversion values.
-    ASSERT(!destIsSint || srcIsSint);    // If destination is sint, src must be sint too
-    ASSERT(!destIsUint || srcIsUint);    // If destination is uint, src must be uint too
-    ASSERT(!srcIsFixed || destIsFloat);  // If source is fixed, dst must be float
+    ASSERT(!dstIsSint || srcIsSint);    // If destination is sint, src must be sint too
+    ASSERT(!dstIsUint || srcIsUint);    // If destination is uint, src must be uint too
+    ASSERT(!srcIsFixed || dstIsFloat);  // If source is fixed, dst must be float
 
     // One of each bool set must be true
     ASSERT(srcIsSint || srcIsUint || srcIsSnorm || srcIsUnorm || srcIsFixed || srcIsFloat);
-    ASSERT(destIsSint || destIsUint || destIsSnorm || destIsUnorm || destIsFloat ||
-           destIsHalfFloat);
+    ASSERT(dstIsSint || dstIsUint || dstIsSnorm || dstIsUnorm || dstIsFloat || dstIsHalfFloat);
 
     // We currently don't have any big-endian devices in the list of supported platforms.  The
     // shader is capable of supporting big-endian architectures, but the relevant flag (IsBigEndian)
@@ -111,23 +110,23 @@ uint32_t GetConvertVertexFlags(const UtilsVk::ConvertVertexParameters &params)
 
     uint32_t flags = 0;
 
-    if (srcIsHalfFloat && destIsHalfFloat)
+    if (srcIsHalfFloat && dstIsHalfFloat)
     {
         // Note that HalfFloat conversion uses the same shader as Uint.
         flags = ConvertVertex_comp::kUintToUint;
     }
-    else if ((srcIsSnorm && destIsSnorm) || (srcIsUnorm && destIsUnorm))
+    else if ((srcIsSnorm && dstIsSnorm) || (srcIsUnorm && dstIsUnorm))
     {
         // Do snorm->snorm and unorm->unorm copies using the uint->uint shader.  Currently only
         // supported for same-width formats, so it's only used when adding channels.
-        ASSERT(params.srcFormat->redBits == params.destFormat->redBits);
+        ASSERT(params.srcFormat->redBits == params.dstFormat->redBits);
         flags = ConvertVertex_comp::kUintToUint;
     }
-    else if (srcIsSint && destIsSint)
+    else if (srcIsSint && dstIsSint)
     {
         flags = ConvertVertex_comp::kSintToSint;
     }
-    else if (srcIsUint && destIsUint)
+    else if (srcIsUint && dstIsUint)
     {
         flags = ConvertVertex_comp::kUintToUint;
     }
@@ -377,8 +376,8 @@ void CalculateBlitOffset(const UtilsVk::BlitResolveParameters &params, float off
     int srcOffsetFactorX = params.flipX ? -1 : 1;
     int srcOffsetFactorY = params.flipY ? -1 : 1;
 
-    offset[0] = params.destOffset[0] * params.stretch[0] - params.srcOffset[0] * srcOffsetFactorX;
-    offset[1] = params.destOffset[1] * params.stretch[1] - params.srcOffset[1] * srcOffsetFactorY;
+    offset[0] = params.dstOffset[0] * params.stretch[0] - params.srcOffset[0] * srcOffsetFactorX;
+    offset[1] = params.dstOffset[1] * params.stretch[1] - params.srcOffset[1] * srcOffsetFactorY;
 }
 
 void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_t offset[2])
@@ -387,8 +386,8 @@ void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_
     int srcOffsetFactorY = params.flipY ? -1 : 1;
 
     // There's no stretching in resolve.
-    offset[0] = params.destOffset[0] - params.srcOffset[0] * srcOffsetFactorX;
-    offset[1] = params.destOffset[1] - params.srcOffset[1] * srcOffsetFactorY;
+    offset[0] = params.dstOffset[0] - params.srcOffset[0] * srcOffsetFactorX;
+    offset[1] = params.dstOffset[1] - params.srcOffset[1] * srcOffsetFactorY;
 }
 
 // Sets the appropriate settings in the pipeline for the shader to output stencil.  Requires the
@@ -1784,8 +1783,8 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
     shaderParams.Ns = params.srcFormat->channelCount;
     shaderParams.Bs = params.srcFormat->pixelBytes / params.srcFormat->channelCount;
     shaderParams.Ss = static_cast<uint32_t>(params.srcStride);
-    shaderParams.Nd = params.destFormat->channelCount;
-    shaderParams.Bd = params.destFormat->pixelBytes / params.destFormat->channelCount;
+    shaderParams.Nd = params.dstFormat->channelCount;
+    shaderParams.Bd = params.dstFormat->pixelBytes / params.dstFormat->channelCount;
     shaderParams.Sd = shaderParams.Nd * shaderParams.Bd;
     // The component size is expected to either be 1, 2 or 4 bytes.
     ASSERT(4 % shaderParams.Bs == 0);
@@ -1799,7 +1798,7 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
     // fit in a 4-byte value.  Note that this value is also the invocation size of the shader.
     shaderParams.outputCount = UnsignedCeilDivide(shaderParams.componentCount, shaderParams.Ed);
     shaderParams.srcOffset   = static_cast<uint32_t>(params.srcOffset);
-    shaderParams.destOffset  = static_cast<uint32_t>(params.destOffset);
+    shaderParams.dstOffset   = static_cast<uint32_t>(params.dstOffset);
 
     bool isSrcA2BGR10 =
         params.srcFormat->vertexAttribType == gl::VertexAttribType::UnsignedInt2101010 ||
@@ -1829,17 +1828,17 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
         case ConvertVertex_comp::kUintToUint:
             // For integers, alpha should take a value of 1.  However, uint->uint is also used to
             // add channels to RGB snorm, unorm and half formats.
-            if (params.destFormat->isSnorm())
+            if (params.dstFormat->isSnorm())
             {
                 // See case ConvertVertex_comp::kSnormToFloat below.
                 shaderParams.srcEmulatedAlpha = srcValueMask >> 1;
             }
-            else if (params.destFormat->isUnorm())
+            else if (params.dstFormat->isUnorm())
             {
                 // See case ConvertVertex_comp::kUnormToFloat below.
                 shaderParams.srcEmulatedAlpha = srcValueMask;
             }
-            else if (params.destFormat->isVertexTypeHalfFloat())
+            else if (params.dstFormat->isVertexTypeHalfFloat())
             {
                 shaderParams.srcEmulatedAlpha = gl::Float16One;
             }
@@ -2552,7 +2551,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     shaderParams.invSrcExtent[1] = 1.0f / params.srcExtents[1];
     shaderParams.srcLayer        = params.srcLayer;
     shaderParams.srcWidth        = params.srcExtents[0];
-    shaderParams.destPitch       = bufferRowLengthInUints;
+    shaderParams.dstPitch        = bufferRowLengthInUints;
     shaderParams.blitArea[0]     = params.blitArea.x;
     shaderParams.blitArea[1]     = params.blitArea.y;
     shaderParams.blitArea[2]     = params.blitArea.width;
@@ -2717,41 +2716,41 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
 
     ImageCopyShaderParams shaderParams;
     shaderParams.flipX            = 0;
-    shaderParams.flipY            = params.srcFlipY || params.destFlipY;
+    shaderParams.flipY            = params.srcFlipY || params.dstFlipY;
     shaderParams.premultiplyAlpha = params.srcPremultiplyAlpha;
     shaderParams.unmultiplyAlpha  = params.srcUnmultiplyAlpha;
-    shaderParams.destHasLuminance = dstIntendedFormat.luminanceBits > 0;
-    shaderParams.destIsAlpha      = dstIntendedFormat.isLUMA() && dstIntendedFormat.alphaBits > 0;
-    shaderParams.destDefaultChannelsMask =
+    shaderParams.dstHasLuminance  = dstIntendedFormat.luminanceBits > 0;
+    shaderParams.dstIsAlpha       = dstIntendedFormat.isLUMA() && dstIntendedFormat.alphaBits > 0;
+    shaderParams.dstDefaultChannelsMask =
         GetFormatDefaultChannelMask(dst->getIntendedFormat(), dst->getActualFormat());
-    shaderParams.srcMip        = params.srcMip;
-    shaderParams.srcLayer      = params.srcLayer;
-    shaderParams.srcOffset[0]  = params.srcOffset[0];
-    shaderParams.srcOffset[1]  = params.srcOffset[1];
-    shaderParams.destOffset[0] = params.destOffset[0];
-    shaderParams.destOffset[1] = params.destOffset[1];
-    shaderParams.rotateXY      = 0;
+    shaderParams.srcMip       = params.srcMip;
+    shaderParams.srcLayer     = params.srcLayer;
+    shaderParams.srcOffset[0] = params.srcOffset[0];
+    shaderParams.srcOffset[1] = params.srcOffset[1];
+    shaderParams.dstOffset[0] = params.dstOffset[0];
+    shaderParams.dstOffset[1] = params.dstOffset[1];
+    shaderParams.rotateXY     = 0;
 
-    shaderParams.srcIsSRGB  = params.srcColorEncoding == GL_SRGB;
-    shaderParams.destIsSRGB = params.destColorEncoding == GL_SRGB;
+    shaderParams.srcIsSRGB = params.srcColorEncoding == GL_SRGB;
+    shaderParams.dstIsSRGB = params.dstColorEncoding == GL_SRGB;
 
     // If both src and dst are sRGB, and there is no alpha multiplication/division necessary, then
     // the shader can work with sRGB data and pretend they are linear.
-    if (shaderParams.srcIsSRGB && shaderParams.destIsSRGB && !shaderParams.premultiplyAlpha &&
+    if (shaderParams.srcIsSRGB && shaderParams.dstIsSRGB && !shaderParams.premultiplyAlpha &&
         !shaderParams.unmultiplyAlpha)
     {
-        shaderParams.srcIsSRGB  = false;
-        shaderParams.destIsSRGB = false;
+        shaderParams.srcIsSRGB = false;
+        shaderParams.dstIsSRGB = false;
     }
 
-    ASSERT(!(params.srcFlipY && params.destFlipY));
+    ASSERT(!(params.srcFlipY && params.dstFlipY));
     if (params.srcFlipY)
     {
         // If viewport is flipped, the shader expects srcOffset[1] to have the
         // last row's index instead of the first's.
         shaderParams.srcOffset[1] = params.srcHeight - params.srcOffset[1] - 1;
     }
-    else if (params.destFlipY)
+    else if (params.dstFlipY)
     {
         // If image is flipped during copy, the shader uses the same code path as above,
         // with srcOffset being set to the last row's index instead of the first's.
@@ -2818,8 +2817,8 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     pipelineDesc.setRasterizationSamples(dst->getSamples());
 
     gl::Rectangle renderArea;
-    renderArea.x      = params.destOffset[0];
-    renderArea.y      = params.destOffset[1];
+    renderArea.x      = params.dstOffset[0];
+    renderArea.y      = params.dstOffset[1];
     renderArea.width  = params.srcExtents[0];
     renderArea.height = params.srcExtents[1];
     if ((params.srcRotation == SurfaceRotation::Rotated90Degrees) ||
@@ -3026,7 +3025,7 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     // fit in a 4-byte value.  Note that this value is also the invocation size of the shader.
     shaderParams.outputCount  = UnsignedCeilDivide(shaderParams.componentCount, shaderParams.Ed);
     shaderParams.srcOffset    = 0;
-    shaderParams.destOffset   = 0;
+    shaderParams.dstOffset    = 0;
     shaderParams.isSrcHDR     = 0;
     shaderParams.isSrcA2BGR10 = 0;
 
@@ -3131,7 +3130,7 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     GenerateMipmapShaderParams shaderParams;
     shaderParams.invSrcExtent[0] = 1.0f / srcExtents.width;
     shaderParams.invSrcExtent[1] = 1.0f / srcExtents.height;
-    shaderParams.levelCount      = params.destLevelCount;
+    shaderParams.levelCount      = params.dstLevelCount;
 
     uint32_t flags = GetGenerateMipmapFlags(contextVk, src->getActualFormat());
 

@@ -165,7 +165,7 @@ constexpr uint8_t kConvertVertex_comp_00000005[] = {
 //     uint componentCount;
 //
 //     uint srcOffset;
-//     uint destOffset;
+//     uint dstOffset;
 //
 //     uint Ns;
 //     uint Bs;
@@ -190,7 +190,7 @@ constexpr uint8_t kConvertVertex_comp_00000005[] = {
 //
 // uint getDestinationComponentOffset(uint vertex, uint component)
 // {
-//     return vertex * params . Sd + component * params . Bd + params . destOffset;
+//     return vertex * params . Sd + component * params . Bd + params . dstOffset;
 // }
 //
 // uint getShiftBits(uint offset, uint B)
@@ -286,7 +286,7 @@ constexpr uint8_t kConvertVertex_comp_00000005[] = {
 // void storeDestinationComponents(uint valueAsUint)
 // {
 //
-//     destData[gl_GlobalInvocationID . x + params . destOffset / 4]= valueAsUint;
+//     destData[gl_GlobalInvocationID . x + params . dstOffset / 4]= valueAsUint;
 // }
 //
 // void main()

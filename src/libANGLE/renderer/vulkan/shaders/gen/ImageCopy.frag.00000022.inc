@@ -127,7 +127,7 @@ constexpr uint8_t kImageCopy_frag_00000022[] = {
 // layout(push_constant)uniform PushConstants {
 //
 //     ivec2 srcOffset;
-//     ivec2 destOffset;
+//     ivec2 dstOffset;
 //     int srcMip;
 //     int srcLayer;
 //
@@ -137,13 +137,13 @@ constexpr uint8_t kImageCopy_frag_00000022[] = {
 //     bool premultiplyAlpha;
 //     bool unmultiplyAlpha;
 //
-//     bool destHasLuminance;
-//     bool destIsAlpha;
+//     bool dstHasLuminance;
+//     bool dstIsAlpha;
 //
 //     bool srcIsSRGB;
-//     bool destIsSRGB;
+//     bool dstIsSRGB;
 //
-//     int destDefaultChannelsMask;
+//     int dstDefaultChannelsMask;
 //     bool rotateXY;
 // } params;
 //
@@ -162,9 +162,9 @@ constexpr uint8_t kImageCopy_frag_00000022[] = {
 //
 // void main()
 // {
-//     ivec2 destSubImageCoords = ivec2(gl_FragCoord . xy)- params . destOffset;
+//     ivec2 dstSubImageCoords = ivec2(gl_FragCoord . xy)- params . dstOffset;
 //
-//     ivec2 srcSubImageCoords = destSubImageCoords;
+//     ivec2 srcSubImageCoords = dstSubImageCoords;
 //
 //     if(params . flipX)
 //     {
@@ -200,32 +200,32 @@ constexpr uint8_t kImageCopy_frag_00000022[] = {
 //
 //     srcValue *= 255.0;
 //
-//            uvec4 destValue = uvec4(srcValue);
+//            uvec4 dstValue = uvec4(srcValue);
 //
-//     if(params . destHasLuminance)
+//     if(params . dstHasLuminance)
 //     {
-//         destValue . rg = destValue . ra;
+//         dstValue . rg = dstValue . ra;
 //     }
-//     else if(params . destIsAlpha)
+//     else if(params . dstIsAlpha)
 //     {
-//         destValue . r = destValue . a;
+//         dstValue . r = dstValue . a;
 //     }
 //     else
 //     {
-//         int defaultChannelsMask = params . destDefaultChannelsMask;
+//         int defaultChannelsMask = params . dstDefaultChannelsMask;
 //         if((defaultChannelsMask & 2)!= 0)
 //         {
-//             destValue . g = 0;
+//             dstValue . g = 0;
 //         }
 //         if((defaultChannelsMask & 4)!= 0)
 //         {
-//             destValue . b = 0;
+//             dstValue . b = 0;
 //         }
 //         if((defaultChannelsMask & 8)!= 0)
 //         {
-//             destValue . a = 1;
+//             dstValue . a = 1;
 //         }
 //     }
 //
-//     dst = destValue;
+//     dst = dstValue;
 // }
