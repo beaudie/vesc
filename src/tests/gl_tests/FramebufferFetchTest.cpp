@@ -8,6 +8,7 @@
 //   EXT_shader_framebuffer_fetch_non_coherent extensions.
 //
 
+#include "common/debug.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
@@ -316,6 +317,7 @@ class FramebufferFetchES31 : public ANGLETest
                     return k310NonCoherentDifferent4AttachmentFS2;
             }
         }
+        UNREACHABLE();
     }
 
     void render(GLuint coordLoc, GLboolean needsFramebufferFetchBarrier)
