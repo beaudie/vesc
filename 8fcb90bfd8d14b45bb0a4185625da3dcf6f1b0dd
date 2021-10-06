@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f8be9a_5e8db6d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-06T00:10:59Z",
+      "side": 1,
+      "message": "FYI, filed http://anglebug.com/6524 about GLSLTest.EmbeddedStructUniformArray/ES3_Metal_DirectMetalGen flakes/failures. That test should probably be skipped on NVIDIA, though it sounds like it\u0027s buggy on all GPU types.",
+      "parentUuid": "1f8f2efe_ac97064f",
+      "revId": "8fcb90bfd8d14b45bb0a4185625da3dcf6f1b0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08914ac6_96f85335",
