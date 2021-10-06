@@ -53,6 +53,8 @@ bool IsQualcomm();
 bool IsSwiftshaderDevice();
 bool IsIntelUHD630Mobile();
 
+bool Is64Bit();
+
 // Compiler configs.
 inline bool IsASan()
 {
