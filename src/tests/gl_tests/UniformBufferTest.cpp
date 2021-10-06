@@ -1449,9 +1449,6 @@ void main()
   fragColor = color;
 })";
 
-    // http://anglebug.com/2287
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA() && IsDesktopOpenGL());
-
     ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFragmentShader);
 
     glBindAttribLocation(program, 0, essl3_shaders::PositionAttrib());
