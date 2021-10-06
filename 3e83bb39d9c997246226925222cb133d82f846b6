@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "121aebe6_240794f6",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T13:52:49Z",
+      "side": 1,
+      "message": "While you\u0027re here, could you please move these descriptions up to where the symbols are defined, and change the comment to say this?\n\n    compileOptions: A mask of compile options defined above.",
+      "range": {
+        "startLine": 648,
+        "startChar": 3,
+        "endLine": 660,
+        "endChar": 2
+      },
+      "revId": "3e83bb39d9c997246226925222cb133d82f846b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
