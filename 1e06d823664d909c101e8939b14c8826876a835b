@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7ed156a_1a128568",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-06T18:11:57Z",
+      "side": 1,
+      "message": "I\u0027d like to keep these pretty simple without curl \u0026 tricks to get the code.. is there a way you can link to the ContributingCode.md document instead of duplicating the instructions here?",
+      "revId": "1e06d823664d909c101e8939b14c8826876a835b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
