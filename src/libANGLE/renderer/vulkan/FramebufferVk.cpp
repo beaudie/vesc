@@ -936,7 +936,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     gl::Rectangle sourceArea = sourceAreaIn;
     gl::Rectangle destArea   = destAreaIn;
 
-    // Note: GLES (all 3.x versions) require source and dest area to be identical when
+    // Note: GLES (all 3.x versions) require source and dst area to be identical when
     // resolving.
     ASSERT(!isResolve ||
            (sourceArea.x == destArea.x && sourceArea.y == destArea.y &&
@@ -971,7 +971,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     EarlyAdjustFlipYForPreRotation(srcFramebufferRotation, &rotation, &srcFramebufferFlippedY);
     EarlyAdjustFlipYForPreRotation(destFramebufferRotation, &rotation, &destFramebufferFlippedY);
 
-    // First, clip the source area to framebuffer.  That requires transforming the dest area to
+    // First, clip the source area to framebuffer.  That requires transforming the dst area to
     // match the clipped source.
     gl::Rectangle absSourceArea = sourceArea.removeReversal();
     gl::Rectangle clippedSourceArea;
@@ -985,21 +985,21 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     gl::Rectangle srcClippedDestArea;
     if (isResolve)
     {
-        // Source and dest areas are identical in resolve (except rotate it, if appropriate).
+        // Source and dst areas are identical in resolve (except rotate it, if appropriate).
         srcClippedDestArea = clippedSourceArea;
         AdjustBlitAreaForPreRotation(destFramebufferRotation, clippedSourceArea,
                                      destFramebufferDimensions, &srcClippedDestArea);
     }
     else if (clippedSourceArea == absSourceArea)
     {
-        // If there was no clipping, keep dest area as is (except rotate it, if appropriate).
+        // If there was no clipping, keep dst area as is (except rotate it, if appropriate).
         srcClippedDestArea = destArea;
         AdjustBlitAreaForPreRotation(destFramebufferRotation, destArea, destFramebufferDimensions,
                                      &srcClippedDestArea);
     }
     else
     {
-        // Shift dest area's x0,y0,x1,y1 by as much as the source area's got shifted (taking
+        // Shift dst area's x0,y0,x1,y1 by as much as the source area's got shifted (taking
         // stretching into account).  Note that double is used as float doesn't have enough
         // precision near the end of int range.
         double x0Shift = std::round((clippedSourceArea.x - absSourceArea.x) / stretch[0]);
@@ -1036,9 +1036,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         }
     }
 
-    // If framebuffers are flipped in Y, flip the source and dest area (which define the
+    // If framebuffers are flipped in Y, flip the source and dst area (which define the
     // transformation regardless of clipping), as well as the blit area (which is the clipped
-    // dest area).
+    // dst area).
     if (srcFramebufferFlippedY)
     {
         sourceArea.y      = srcFramebufferDimensions.height - sourceArea.y;
@@ -1060,7 +1060,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     ASSERT(!isResolve ||
            (flipX == false && flipY == (srcFramebufferFlippedY != destFramebufferFlippedY)));
 
-    // Again, transfer the destination flip to source, so dest is unflipped.  Note that destArea
+    // Again, transfer the destination flip to source, so dst is unflipped.  Note that destArea
     // was not reversed until the final possible Y-flip.
     ASSERT(!destArea.isReversedX());
     sourceArea = sourceArea.flip(false, destArea.isReversedY());
@@ -1129,7 +1129,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // If there was no clipping and the format capabilities allow us, use Vulkan's builtin blit.
         // The reason clipping is prohibited in this path is that due to rounding errors, it would
         // be hard to guarantee the image stretching remains perfect.  That also allows us not to
-        // have to transform back the dest clipping to source.
+        // have to transform back the dst clipping to source.
         //
         // Non-identity pre-rotation cases do not use Vulkan's builtin blit.
         //
