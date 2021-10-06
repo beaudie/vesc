@@ -1306,8 +1306,7 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
 
     const vk::Format &format = renderer->getFormat(internalFormat);
 
-    setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0,
-                   gl::LevelIndex(0), true);
+    setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
 
     ANGLE_TRY(memoryObjectVk->createImage(contextVk, type, levels, internalFormat, size, offset,
                                           mImage, createFlags, usageFlags));
@@ -1367,8 +1366,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
 
     const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
     setImageHelper(contextVk, imageVk->getImage(), imageVk->getImageTextureType(), format,
-                   imageVk->getImageLevel().get(), imageVk->getImageLayer(),
-                   gl::LevelIndex(mState.getEffectiveBaseLevel()), false);
+                   imageVk->getImageLevel().get(), imageVk->getImageLayer(), false);
 
     ASSERT(type != gl::TextureType::CubeMap);
     ANGLE_TRY(initImageViews(contextVk, format.getActualImageFormat(getRequiredImageAccess()),
@@ -1497,8 +1495,7 @@ angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Fo
 {
     if (mImage == nullptr)
     {
-        setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0,
-                       gl::LevelIndex(0), true);
+        setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
     }
     else
     {
@@ -1522,7 +1519,6 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
                                const vk::Format &format,
                                uint32_t imageLevelOffset,
                                uint32_t imageLayerOffset,
-                               gl::LevelIndex imageBaseLevel,
                                bool selfOwned)
 {
     ASSERT(mImage == nullptr);
@@ -2271,8 +2267,7 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
     // eglBindTexImage can only be called with pbuffer (offscreen) surfaces
     OffscreenSurfaceVk *offscreenSurface = GetImplAs<OffscreenSurfaceVk>(surface);
     setImageHelper(contextVk, offscreenSurface->getColorAttachmentImage(), mState.getType(), format,
-                   surface->getMipmapLevel(), 0, gl::LevelIndex(mState.getEffectiveBaseLevel()),
-                   false);
+                   surface->getMipmapLevel(), 0, false);
 
     ASSERT(mImage->getLayerCount() == 1);
     gl::Format glFormat(internalFormat);
