@@ -73,6 +73,30 @@
       },
       "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa852640_64e945fe",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2021-10-06T20:31:31Z",
+      "side": 1,
+      "message": "writeOutputPrologue() currently does not have a way of dealing with gl_Position if it is part of the gl_out block, am not sure if this is a problem so I just wanted it noted",
+      "parentUuid": "b9860e96_da116b2a",
+      "range": {
+        "startLine": 1319,
+        "startChar": 89,
+        "endLine": 1320,
+        "endChar": 38
+      },
+      "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
