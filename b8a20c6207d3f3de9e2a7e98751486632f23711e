@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c6e6cbb_45cf651c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-06T16:35:15Z",
+      "side": 1,
+      "message": "The feature was introduced in 942d91520aa849728fa5c4d2cc3042687128859e requireing the VK_EXT_swapchain_colorspace extension.\nThe requirement was increased to also require VK_KHR_image_format_list in 15d5965d77c5a4c23fedb22dd35837312d39e563, which was later removed again in 96dd515aa4244332c8426bac586b286a114f8357.\n\nIn this patch I am proposing to remove the dependency on VK_EXT_swapchain_colorspace to allow the case of using a sRGB color space, which was defined in VK_KHR_surface. In addition the color spaces from VK_EXT_swapchain_colorspace need to be enumerated using VK_KHR_get_surface_capabilities2, which is done in the next patch in this series.",
+      "revId": "b8a20c6207d3f3de9e2a7e98751486632f23711e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
