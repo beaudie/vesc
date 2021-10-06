@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c3f7129_f7d0736b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-06T21:16:48Z",
+      "side": 1,
+      "message": "TBR to unblock ANGLE roll into Chromium.",
+      "revId": "3bf33dca3db0148f15c17087d25e9701dc767d2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
