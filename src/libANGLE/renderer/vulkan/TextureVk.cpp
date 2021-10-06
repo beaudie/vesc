@@ -906,7 +906,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
         contextVk, destinationAllocationSize, stagingIndex, stagingExtents, stagingOffset,
         &destData, contextStagingBuffer, destFormatID));
 
-    // Source and dest data is tightly packed
+    // Source and dst data is tightly packed
     GLuint sourceDataRowPitch = sourceBox.width * sourceTextureFormat.pixelBytes;
     GLuint destDataRowPitch   = sourceBox.width * destTextureFormat.pixelBytes;
 
@@ -2148,7 +2148,7 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
             contextVk, dstBufferSize, index, mImage->getLevelExtents(levelVk), gl::kOffsetZero,
             &dstData, nullptr, dstFormat.id));
 
-        // Source and dest data is tightly packed
+        // Source and destination data is tightly packed
         GLuint srcDataRowPitch = sourceBox.width * srcFormat.pixelBytes;
         GLuint dstDataRowPitch = sourceBox.width * dstFormat.pixelBytes;
 

@@ -15,7 +15,7 @@
 //    - Image clear: Used by FramebufferVk::clearWithDraw().
 //    - Image copy: Used by TextureVk::copySubImageImplWithDraw().
 //    - Image copy bits: Used by ImageHelper::CopyImageSubData() to perform bitwise copies between
-//      RGB formats where at least one of src and dest use RGBA as fallback.
+//      RGB formats where at least one of src and dst use RGBA as fallback.
 //    - Color blit/resolve: Used by FramebufferVk::blit() to implement blit or multisample resolve
 //      on color images.
 //    - Depth/Stencil blit/resolve: Used by FramebufferVk::blit() to implement blit or multisample
@@ -119,7 +119,7 @@ class UtilsVk : angle::NonCopyable
         int destOffset[2];
         // Amount to add to x and y axis for certain rotations
         int rotatedOffsetFactor[2];
-        // |stretch| is SourceDimension / DestDimension used to transfer dest coordinates to source.
+        // |stretch| is SourceDimension / DestDimension used to transfer dst coordinates to source.
         float stretch[2];
         // |srcExtents| is used to normalize source coordinates for sampling.
         int srcExtents[2];
@@ -204,7 +204,7 @@ class UtilsVk : angle::NonCopyable
     static uint32_t GetGenerateMipmapMaxLevels(ContextVk *contextVk);
 
     angle::Result convertIndexBuffer(ContextVk *contextVk,
-                                     vk::BufferHelper *dest,
+                                     vk::BufferHelper *dst,
                                      vk::BufferHelper *src,
                                      const ConvertIndexParameters &params);
     angle::Result convertIndexIndirectBuffer(ContextVk *contextVk,
@@ -230,7 +230,7 @@ class UtilsVk : angle::NonCopyable
         const ConvertLineLoopArrayIndirectParameters &params);
 
     angle::Result convertVertexBuffer(ContextVk *contextVk,
-                                      vk::BufferHelper *dest,
+                                      vk::BufferHelper *dst,
                                       vk::BufferHelper *src,
                                       const ConvertVertexParameters &params);
 
@@ -257,18 +257,18 @@ class UtilsVk : angle::NonCopyable
                                                    const BlitResolveParameters &params);
 
     angle::Result clearImage(ContextVk *contextVk,
-                             vk::ImageHelper *dest,
+                             vk::ImageHelper *dst,
                              const ClearImageParameters &params);
 
     angle::Result copyImage(ContextVk *contextVk,
-                            vk::ImageHelper *dest,
+                            vk::ImageHelper *dst,
                             const vk::ImageView *destView,
                             vk::ImageHelper *src,
                             const vk::ImageView *srcView,
                             const CopyImageParameters &params);
 
     angle::Result copyImageBits(ContextVk *contextVk,
-                                vk::ImageHelper *dest,
+                                vk::ImageHelper *dst,
                                 vk::ImageHelper *src,
                                 const CopyImageBitsParameters &params);
 
@@ -277,7 +277,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result generateMipmap(ContextVk *contextVk,
                                  vk::ImageHelper *src,
                                  const vk::ImageView *srcLevelZeroView,
-                                 vk::ImageHelper *dest,
+                                 vk::ImageHelper *dst,
                                  const GenerateMipmapDestLevelViews &destLevelViews,
                                  const vk::Sampler &sampler,
                                  const GenerateMipmapParameters &params);
@@ -289,7 +289,7 @@ class UtilsVk : angle::NonCopyable
     // Overlay utilities.
     angle::Result cullOverlayWidgets(ContextVk *contextVk,
                                      vk::BufferHelper *enabledWidgetsBuffer,
-                                     vk::ImageHelper *dest,
+                                     vk::ImageHelper *dst,
                                      const vk::ImageView *destView,
                                      const OverlayCullParameters &params);
 
@@ -300,7 +300,7 @@ class UtilsVk : angle::NonCopyable
                               const vk::ImageView *fontView,
                               vk::ImageHelper *culledWidgets,
                               const vk::ImageView *culledWidgetsView,
-                              vk::ImageHelper *dest,
+                              vk::ImageHelper *dst,
                               const vk::ImageView *destView,
                               const OverlayDrawParameters &params);
 
@@ -537,7 +537,7 @@ class UtilsVk : angle::NonCopyable
 
     // Set up descriptor set and call dispatch.
     angle::Result convertVertexBufferImpl(ContextVk *contextVk,
-                                          vk::BufferHelper *dest,
+                                          vk::BufferHelper *dst,
                                           vk::BufferHelper *src,
                                           uint32_t flags,
                                           vk::CommandBuffer *commandBuffer,
