@@ -88,6 +88,24 @@
       "parentUuid": "41198a89_f371c48e",
       "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19cadffe_368bf05d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-06T22:29:04Z",
+      "side": 1,
+      "message": "Used to work for angle_deqp_egl_metal_tests in\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-rel/23552/test-results?sortby\u003dstatus%2Cv.test_suite%2Cname%2Cv.gpu\u0026groupby\u003dstatus%2Cv.test_suite\n\nI\u0027m not aware of any differences in result reporting by angle_deqp_egl_metal_tests and angle_deqp_gles3_metal_tests, so looks like a recent regression.",
+      "parentUuid": "04192624_7d6c6438",
+      "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
