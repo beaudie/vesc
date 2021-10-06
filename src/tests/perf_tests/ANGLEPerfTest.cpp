@@ -770,6 +770,10 @@ void ANGLERenderTest::SetUp()
         }
     }
 
+    if (mTestParams.trackGpuTime && IsGLExtensionRequestable("GL_EXT_disjoint_timer_query"))
+    {
+        glRequestExtensionANGLE("GL_EXT_disjoint_timer_query");
+    }
     mIsTimestampQueryAvailable = IsGLExtensionEnabled("GL_EXT_disjoint_timer_query");
 
     if (!areExtensionPrerequisitesFulfilled())
