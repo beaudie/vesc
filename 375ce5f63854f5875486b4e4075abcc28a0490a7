@@ -33,6 +33,24 @@
       "message": "+a few folks working on the direct-to-Metal backend\n\nThe DirectMetalGen failures look real rather than strange flakes - let us know if help is needed investigating them.\n",
       "revId": "375ce5f63854f5875486b4e4075abcc28a0490a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ca52603_6ef05969",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-06T01:03:49Z",
+      "side": 1,
+      "message": "That\u0027s coming from this change up the CL chain: https://chromium-review.googlesource.com/c/angle/angle/+/3204590\n\nThe failing test is a new one introduced by that change, so it\u0027s not a regression (just something we never tested)",
+      "parentUuid": "36dc3103_6b6811c2",
+      "revId": "375ce5f63854f5875486b4e4075abcc28a0490a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
