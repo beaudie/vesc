@@ -70,6 +70,24 @@
       "parentUuid": "52f4eea0_8195a7b6",
       "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04192624_7d6c6438",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1178685
+      },
+      "writtenOn": "2021-10-06T22:25:49Z",
+      "side": 1,
+      "message": "You are right. I think somehow tests in angle_deqp_gles3_metal_tests are not reported to ResultDB.",
+      "parentUuid": "41198a89_f371c48e",
+      "revId": "8c65705352d8bddbea184e512b8465f89c51e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
