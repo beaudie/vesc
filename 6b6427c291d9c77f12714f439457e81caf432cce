@@ -46,6 +46,30 @@
       },
       "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a973035d_f2bededc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-06T18:49:12Z",
+      "side": 1,
+      "message": "My understanding is that glWaitSemaphoreEXT will end up doing the ownership transition which vulkan driver will treat undefined as preinitialized since driver can assume you have previous data in the memory for memory ownership transfer. But if no one ever called ownership transition, for example, if someone created AHB and initialized with data. Then it create EGLImage out of it, and use it without glWaitSemaphoreEXT call. With this CL we are going to transit from undefined to another layout, vulkan driver may decide to skip FBC if the new layout is for rendering, since previous layout is undefined. If it is preinitialized, then it knows that it has to preserve data and will try to go through compression. Not sure if we already have a test for this.\n\nWhat\u0027s the harm to keep it using preinitalized? Is there any benefit to use undefined instead of preinitialized?",
+      "parentUuid": "d6bcdba5_e7693d99",
+      "range": {
+        "startLine": 318,
+        "startChar": 12,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
