@@ -1457,8 +1457,8 @@ bool FormatHasNecessaryFeature(RendererVk *renderer,
 bool CanCopyWithTransfer(RendererVk *renderer,
                          angle::FormatID srcFormatID,
                          VkImageTiling srcTilingMode,
-                         angle::FormatID destFormatID,
-                         VkImageTiling destTilingMode);
+                         angle::FormatID dstFormatID,
+                         VkImageTiling dstTilingMode);
 
 class ImageHelper final : public Resource, public angle::Subject
 {

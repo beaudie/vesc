@@ -192,10 +192,10 @@ void AdjustBlitResolveParametersForResolve(const gl::Rectangle &sourceArea,
                                            const gl::Rectangle &destArea,
                                            UtilsVk::BlitResolveParameters *params)
 {
-    params->srcOffset[0]  = sourceArea.x;
-    params->srcOffset[1]  = sourceArea.y;
-    params->destOffset[0] = destArea.x;
-    params->destOffset[1] = destArea.y;
+    params->srcOffset[0] = sourceArea.x;
+    params->srcOffset[1] = sourceArea.y;
+    params->dstOffset[0] = destArea.x;
+    params->dstOffset[1] = destArea.y;
 
     if (sourceArea.isReversedX())
     {
@@ -210,12 +210,12 @@ void AdjustBlitResolveParametersForResolve(const gl::Rectangle &sourceArea,
     if (destArea.isReversedX())
     {
         ASSERT(destArea.x > 0);
-        --params->destOffset[0];
+        --params->dstOffset[0];
     }
     if (destArea.isReversedY())
     {
         ASSERT(destArea.y > 0);
-        --params->destOffset[1];
+        --params->dstOffset[1];
     }
 }
 
@@ -236,7 +236,7 @@ void AdjustBlitResolveParametersForPreRotation(SurfaceRotation framebufferAngle,
             std::swap(params->flipX, params->flipY);
             if (srcFramebufferAngle == framebufferAngle)
             {
-                std::swap(params->destOffset[0], params->destOffset[1]);
+                std::swap(params->dstOffset[0], params->dstOffset[1]);
                 std::swap(params->stretch[0], params->stretch[1]);
             }
             break;
@@ -1103,8 +1103,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     UtilsVk::BlitResolveParameters commonParams;
     commonParams.srcOffset[0]           = sourceArea.x;
     commonParams.srcOffset[1]           = sourceArea.y;
-    commonParams.destOffset[0]          = destArea.x;
-    commonParams.destOffset[1]          = destArea.y;
+    commonParams.dstOffset[0]           = destArea.x;
+    commonParams.dstOffset[1]           = destArea.y;
     commonParams.rotatedOffsetFactor[0] = std::abs(sourceArea.width);
     commonParams.rotatedOffsetFactor[1] = std::abs(sourceArea.height);
     commonParams.stretch[0]             = static_cast<float>(stretch[0]);
@@ -1456,8 +1456,8 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
     resolveRegion.srcOffset.z                   = 0;
     resolveRegion.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     resolveRegion.dstSubresource.layerCount     = 1;
-    resolveRegion.dstOffset.x                   = params.destOffset[0];
-    resolveRegion.dstOffset.y                   = params.destOffset[1];
+    resolveRegion.dstOffset.x                   = params.dstOffset[0];
+    resolveRegion.dstOffset.y                   = params.dstOffset[1];
     resolveRegion.dstOffset.z                   = 0;
     resolveRegion.extent.width                  = params.srcExtents[0];
     resolveRegion.extent.height                 = params.srcExtents[1];
