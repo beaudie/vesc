@@ -567,6 +567,8 @@ egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
     }
 }
 
+static VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace);
+
 angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 {
     RendererVk *renderer = displayVk->getRenderer();
@@ -762,6 +764,50 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
     VkFormat nativeFormat    = format.getActualRenderableImageVkFormat();
+
+    if (renderer->getFeatures().supportsSurfaceCapabilities2Extension.enabled)
+    {
+        VkColorSpaceKHR colorSpace = MapEglColorSpaceToVkColorSpace(
+            static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
+
+        bool surfaceFormatFound = false;
+
+        VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo2 = {
+            .sType   = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR,
+            .pNext   = nullptr,
+            .surface = mSurface};
+
+        uint32_t surfaceFormatCount2;
+
+        ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceFormats2KHR(
+                                    physicalDevice, &surfaceInfo2, &surfaceFormatCount2, nullptr));
+
+        std::vector<VkSurfaceFormat2KHR> surfaceFormats2(surfaceFormatCount2);
+        for (VkSurfaceFormat2KHR &surfaceFormat2 : surfaceFormats2)
+        {
+            surfaceFormat2.sType = VK_STRUCTURE_TYPE_SURFACE_FORMAT_2_KHR;
+        }
+        ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceFormats2KHR(physicalDevice, &surfaceInfo2,
+                                                                      &surfaceFormatCount2,
+                                                                      surfaceFormats2.data()));
+
+        for (VkSurfaceFormat2KHR &surfaceFormat2 : surfaceFormats2)
+        {
+            if (surfaceFormat2.surfaceFormat.format == nativeFormat &&
+                surfaceFormat2.surfaceFormat.colorSpace == colorSpace)
+            {
+                surfaceFormatFound = true;
+            }
+        }
+
+        // If a non-linear colorspace was requested but the non-linear colorspace is
+        // not supported in combination with the vulkan surface format, treat it as a non-fatal
+        // error
+        if (!surfaceFormatFound)
+        {
+            return angle::Result::Incomplete;
+        }
+    }
 
     if (surfaceFormatCount == 1u && surfaceFormats[0].format == VK_FORMAT_UNDEFINED)
     {
