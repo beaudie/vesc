@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5200c4fa_70240b5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T14:40:45Z",
+      "side": 1,
+      "message": "Could you please make sure kHalfRenderAreaRotationMatrices can be removed? That\u0027s in src/compiler/translator/tree_util/SpecializationConstant.cpp (see the comment there)\n\nThat\u0027s what the bug is all about!",
+      "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
