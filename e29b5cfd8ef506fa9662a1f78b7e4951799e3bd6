@@ -33,6 +33,24 @@
       "message": "There is a change in behavior here. The below commands used to be set after the RP flush, but now they are being done before.\n\nI don\u0027t remember if there was a reason for that.",
       "revId": "e29b5cfd8ef506fa9662a1f78b7e4951799e3bd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba2c6113_8be8ad34",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5636,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-07T19:17:00Z",
+      "side": 1,
+      "message": "Yeah, this is one that I wasn\u0027t entirely sure about.\n\nThe dirty bits are only cleared in setupDraw(), so I think it should be fine to set them here (and CQ appears to agree).   As always, there\u0027s certainly a chance I\u0027m missing something though.",
+      "parentUuid": "f1ecbcc8_2f173723",
+      "revId": "e29b5cfd8ef506fa9662a1f78b7e4951799e3bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
