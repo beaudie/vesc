@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a144663_467bb5f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-07T01:26:25Z",
+      "side": 1,
+      "message": "This is functionally the same, right?\nI was wondering if some changes were needed due to other things which were changed in crrev.com/c/3206255, like header placement.",
+      "revId": "bcd6112de66d7e7a0569db99e2f4813ccb881952",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
