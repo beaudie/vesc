@@ -446,14 +446,9 @@ bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
         return true;
     }
 
-    vk::LevelIndex imageLevelIndexVk = mImage->toVkLevel(textureLevelIndexGL);
-
-    // Can't have more than 32 mips for the foreseeable future.
-    ASSERT(imageLevelIndexVk < vk::LevelIndex(32));
-
     // Otherwise, it can only be directly applied to the image if the level is not previously
     // incompatibly redefined.
-    return mRedefinedLevels.test(imageLevelIndexVk.get());
+    return mRedefinedLevels.test(textureLevelIndexGL.get());
 }
 
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
@@ -1629,8 +1624,7 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
             // corresponding bit should clear.
             if (isInAllocatedImage)
             {
-                vk::LevelIndex levelIndexVk = mImage->toVkLevel(levelIndexGL);
-                mRedefinedLevels.set(levelIndexVk.get(), !isCompatibleRedefinition);
+                mRedefinedLevels.set(levelIndexGL.get(), !isCompatibleRedefinition);
             }
 
             bool isUpdateToSingleLevelImage =
@@ -2072,13 +2066,16 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
                                                  const vk::Format &format,
                                                  gl::TexLevelMask skipLevelsMask)
 {
+    ASSERT(mImage->valid());
     RendererVk *renderer = contextVk->getRenderer();
 
     const uint32_t levelCount = mImage->getLevelCount();
     const uint32_t layerCount = mImage->getLayerCount();
 
     // Nothing to do if every level must be skipped
-    if ((~skipLevelsMask & gl::TexLevelMask(angle::BitMask<uint32_t>(levelCount))).none())
+    gl::TexLevelMask::value_type levelsMask = angle::BitMask<uint32_t>(levelCount)
+                                              << mImage->getFirstAllocatedLevel().get();
+    if ((~skipLevelsMask & gl::TexLevelMask(levelsMask)).none())
     {
         return angle::Result::Continue;
     }
@@ -2087,7 +2084,6 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
                        "Copying data due to texture format fallback");
 
     // Make sure the source is initialized and it's staged updates are flushed.
-    ASSERT(mImage->valid());
     ANGLE_TRY(flushImageStagedUpdates(contextVk));
 
     const angle::Format &srcFormat = mImage->getActualFormat();
@@ -2115,7 +2111,8 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
 
     for (vk::LevelIndex levelVk(0); levelVk < vk::LevelIndex(levelCount); ++levelVk)
     {
-        if (skipLevelsMask.test(levelVk.get()))
+        gl::LevelIndex levelGL = mImage->toGLLevel(levelVk);
+        if (skipLevelsMask.test(levelGL.get()))
         {
             continue;
         }
@@ -2492,36 +2489,28 @@ RenderTargetVk *TextureVk::getMultiLayerRenderTarget(ContextVk *contextVk,
 
 void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
 {
-    // Remove staged updates to the range that's being respecified (which is all the mips except
-    // mip 0).
-    gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel() + 1);
+    gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
     gl::LevelIndex maxLevel(mState.getMipmapMaxLevel());
 
-    mImage->removeStagedUpdates(contextVk, baseLevel, maxLevel);
+    // Remove staged updates to the range that's being respecified (which is all the mips except
+    // baseLevel).
+    gl::LevelIndex firstGeneratedLevel = baseLevel + 1;
+    mImage->removeStagedUpdates(contextVk, firstGeneratedLevel, maxLevel);
 
-    // These levels are no longer incompatibly defined if they previously were.  The
-    // corresponding bits in mRedefinedLevels should be cleared.  Note that the texture may be
-    // simultaneously rebased, so mImage->getBaseLevel() and getEffectiveBaseLevel() may be
-    // different.
     static_assert(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS < 32,
                   "levels mask assumes 32-bits is enough");
-    gl::TexLevelMask::value_type levelsMask = angle::BitMask<uint32_t>(maxLevel + 1 - baseLevel);
-
-    gl::LevelIndex imageAllocatedLevel = mImage->getFirstAllocatedLevel();
-    if (imageAllocatedLevel > baseLevel)
-    {
-        levelsMask >>= imageAllocatedLevel - baseLevel;
-    }
-    else
-    {
-        levelsMask <<= baseLevel - imageAllocatedLevel;
-    }
-
-    mRedefinedLevels &= gl::TexLevelMask(~levelsMask);
+    // Generate bitmask for [baseLevel, maxLevel]. `+1` because bitMask takes `the number of bits`
+    // but levels are start counting form 0
+    gl::TexLevelMask::value_type levelsMask = angle::BitMask<uint32_t>(maxLevel.get() + 1);
+    levelsMask &= ~angle::BitMask<uint32_t>(baseLevel.get() + 1);
+    // Remove [baseLevel, maxLevel] from mRedefinedLevels. These levels are no longer incompatibly
+    // defined if they previously were.  The corresponding bits in mRedefinedLevels should be
+    // cleared.
+    mRedefinedLevels &= ~gl::TexLevelMask(levelsMask);
 
     // If generating mipmap and base level is incompatibly redefined, the image is going to be
     // recreated.  Don't try to preserve the other mips.
-    if (mRedefinedLevels.test(0))
+    if (!mState.getImmutableFormat() && mRedefinedLevels.test(baseLevel.get()))
     {
         releaseImage(contextVk);
     }
