@@ -97,6 +97,30 @@
       },
       "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ac43c8c_034ca607",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T20:40:28Z",
+      "side": 1,
+      "message": "Oh I see, is it that you are checking the id directly instead of using `isOutputPerVertex`?\n\nRegarding writeOutputPrologue(), it should definitely skip all the work for modifying gl_Position for TCS. Could you fix this comment and if, and instead make sure writeOutputPrologue() doesn\u0027t do anything related to gl_Position for TCS? That function checks this:\n\n    if (!transformPosition \u0026\u0026 !isXfbExtensionStage)\n\nAnd both of these variables should be false for TCS (so it *already* should be skipping the work on TCS), which one is incorrect?",
+      "parentUuid": "aa852640_64e945fe",
+      "range": {
+        "startLine": 1319,
+        "startChar": 89,
+        "endLine": 1320,
+        "endChar": 38
+      },
+      "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
