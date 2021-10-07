@@ -16,6 +16,24 @@
       "message": "Am I wrong for also seeing this as a dangerous reference?\n\n\"const std::string \u0026label \u003d\" means you end up creating a temporary std::string from the const char*, then bind to that temporary. By the time of line 2666, `label` should be invalidated.\n\nThis might not be triggering ASAN because it\u0027s in the same stack frame and there\u0027s no other stack usage, but this seems unsafe, and perhaps worthy of a code audit? This particurlaly comes in to play later (line 2677)\n\nI could be reading things totally wrong though, but I\u0027ve just learned to be wary of references-from-const-char*",
       "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc7e3e16_4fd0493b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2666,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-10-07T00:44:58Z",
+      "side": 1,
+      "message": "Thanks Ryan. Please correct me if my understanding is wrong here, but when you say label will be invalidated, does that mean the value would be null? If so, I debugged and stepped through the code and the label value persisted throughout the scope of the test.\n\nTo write this test, I referred a previously written test where the label value was used as ref:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/gl_tests/DebugTest.cpp;l\u003d502?q\u003dDebugTest.cpp\u0026ss\u003dchromium\n\nBut because having ref triggered this ASAN bug, this could easily changed to const string instead.",
+      "parentUuid": "99a6f0aa_3d9ab889",
+      "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
