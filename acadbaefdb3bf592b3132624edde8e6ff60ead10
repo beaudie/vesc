@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e9a17d_da5dc11a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T16:16:38Z",
+      "side": 1,
+      "message": "What do you think of this? I didn\u0027t find any evidence in the traces that this helps reduce pipelines. It might in real apps, or it might not.\n\nWhen both depth test and write are dirty, it does avoid updateRenderPassDepthStencilAccess() being called twice, so it might be a super tiny win.\n\nShould we land or ignore?",
+      "revId": "acadbaefdb3bf592b3132624edde8e6ff60ead10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
