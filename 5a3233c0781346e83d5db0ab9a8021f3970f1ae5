@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc5bf90_e69c85ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-07T00:24:22Z",
+      "side": 1,
+      "message": "I noticed the ViewportTests (see end of ViewportTest.cpp) are not run on metal. Any idea why? Made me curious what other tests are not running (have not yet checked). I don\u0027t know if they should be turned on in this CL or not but noticed other tests being turned on.",
+      "revId": "5a3233c0781346e83d5db0ab9a8021f3970f1ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
