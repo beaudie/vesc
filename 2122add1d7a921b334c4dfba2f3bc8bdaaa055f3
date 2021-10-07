@@ -16,6 +16,24 @@
       "message": "LGTM, still a few more if you want to tackle them and then squash the commits?\n\n~/code/angle/src/libANGLE/renderer/vulkan$ git grep dest | grep -vE \u0027destroy|destruct|destination\u0027 | wc -l\n245\n",
       "revId": "2122add1d7a921b334c4dfba2f3bc8bdaaa055f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a7e95b4_1edceae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-07T23:24:55Z",
+      "side": 1,
+      "message": "Right, these are where the source was also using source***, so right now they are actually matches each other. If I change dest*** to dst, then I will also have to change source*** to src.",
+      "parentUuid": "093cc494_fd53abd6",
+      "revId": "2122add1d7a921b334c4dfba2f3bc8bdaaa055f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
