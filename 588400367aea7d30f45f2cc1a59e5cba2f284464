@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e350f1b_4bce5a6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:57:10Z",
+      "side": 1,
+      "message": "Drive by",
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7556133_c08825b4",
@@ -67,6 +84,46 @@
         "startChar": 23,
         "endLine": 570,
         "endChar": 53
+      },
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39bf47ae_76e5d45a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:57:10Z",
+      "side": 1,
+      "message": "Could you please turn this into a helper? This function is already quite large",
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "608bfa2a_4ffb3ce7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:57:10Z",
+      "side": 1,
+      "message": "nit: we do `surfaceInfo2 \u003d {};` followed by setting the fields individually (excluding pNext, which is already by \u003d{})\n\nIIRC that\u0027s because of msvc, which is the reason we can\u0027t have nice things.",
+      "range": {
+        "startLine": 775,
+        "startChar": 0,
+        "endLine": 778,
+        "endChar": 32
       },
       "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
