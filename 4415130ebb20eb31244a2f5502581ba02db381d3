@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47963b19_87c23c0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T14:38:47Z",
+      "side": 1,
+      "message": "LGTM with Jamie\u0027s concern addressed. It looks Incomplete was already in use in this code, so this change is not strictly making things worse",
+      "revId": "4415130ebb20eb31244a2f5502581ba02db381d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
