@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b0d6438_83b5c1ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-07T23:42:12Z",
+      "side": 1,
+      "message": "Re-verified that the latest patch set fixes the Aquarium and tdl.js examples.\n\nHaving some difficulty reproducing their behavior in a WebGL conformance test, but will continue working on that in parallel to landing this.\n",
+      "revId": "125b538c9cf237b2a0323978a881b08bddb36022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
