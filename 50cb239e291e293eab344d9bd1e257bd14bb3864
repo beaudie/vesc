@@ -16,6 +16,23 @@
       "message": "Ready to review. I\u0027ll still potentially catch a few more flakes before landing but this should be close to the final expectations list.",
       "revId": "50cb239e291e293eab344d9bd1e257bd14bb3864",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e465d4fd_5c4c7d06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-07T17:40:07Z",
+      "side": 1,
+      "message": "lgtm! Great work figuring out these difficult test expectations changes!\n",
+      "revId": "50cb239e291e293eab344d9bd1e257bd14bb3864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
