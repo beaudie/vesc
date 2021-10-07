@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "9b172286868fbd44f4873285d6fe1958b66f0b07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ea01b21_33ff3167",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-07T01:49:21Z",
+      "side": 1,
+      "message": "drive-by LGTM",
+      "revId": "9b172286868fbd44f4873285d6fe1958b66f0b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13f890e2_96da2524",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3976,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-07T01:49:21Z",
+      "side": 1,
+      "message": "tessellation control",
+      "range": {
+        "startLine": 3976,
+        "startChar": 62,
+        "endLine": 3976,
+        "endChar": 70
+      },
+      "revId": "9b172286868fbd44f4873285d6fe1958b66f0b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "362b384d_291e260a",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3992,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-07T01:49:21Z",
+      "side": 1,
+      "message": "tessellation evaluation",
+      "range": {
+        "startLine": 3992,
+        "startChar": 62,
+        "endLine": 3992,
+        "endChar": 70
+      },
+      "revId": "9b172286868fbd44f4873285d6fe1958b66f0b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
