@@ -16,6 +16,24 @@
       "message": "Can you use \"EnsureGLExtensionEnabled\" from test_utils?",
       "revId": "5ad3d44ccffdb0483bf0f33ca85ab3cacf93cec8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f0dc96a_d12205ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T14:24:10Z",
+      "side": 1,
+      "message": "Nice, done.",
+      "parentUuid": "daad61d5_e3ad15b3",
+      "revId": "5ad3d44ccffdb0483bf0f33ca85ab3cacf93cec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
