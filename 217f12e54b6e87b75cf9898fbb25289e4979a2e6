@@ -123,6 +123,24 @@
       "parentUuid": "e96d4a71_c98701ae",
       "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a4f48a0_a10f77b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-10-07T22:30:04Z",
+      "side": 1,
+      "message": "Latest notes:\n\n1. drawableSize seems to be getting the correct values at runtime (w \u003d 2 h \u003d 1)\n2. If I change flipXY in the Flipped270 case from -1, -1 to 1, 1 I almost get the intended result after making half render area consistent; only the red channel is flipped. However, 1, -1 and -1, 1 seem to make it output garbage again.\n3. The key calculation is in TranslatorVulkan.cpp RotateAndFlipBuiltinVariable. (fragRotmatrix * origFragCoord - pivot) * flipXY + pivot.\n4. Ruled out pivot being wrong. flipXY might be wrong. Or fragRotMatrix is wrong.",
+      "parentUuid": "19e4be5e_74b3ad4f",
+      "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
