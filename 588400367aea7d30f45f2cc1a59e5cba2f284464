@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93019ff5_cb468247",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-07T14:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "762063d8_4c1d8cc6",
+      "range": {
+        "startLine": 570,
+        "startChar": 23,
+        "endLine": 570,
+        "endChar": 53
+      },
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39bf47ae_76e5d45a",
@@ -106,6 +130,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ca34a44_7337d515",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-07T14:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39bf47ae_76e5d45a",
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "608bfa2a_4ffb3ce7",
@@ -119,6 +161,30 @@
       "writtenOn": "2021-10-07T01:57:10Z",
       "side": 1,
       "message": "nit: we do `surfaceInfo2 \u003d {};` followed by setting the fields individually (excluding pNext, which is already by \u003d{})\n\nIIRC that\u0027s because of msvc, which is the reason we can\u0027t have nice things.",
+      "range": {
+        "startLine": 775,
+        "startChar": 0,
+        "endLine": 778,
+        "endChar": 32
+      },
+      "revId": "588400367aea7d30f45f2cc1a59e5cba2f284464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6bd849f_73959339",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-07T14:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "608bfa2a_4ffb3ce7",
       "range": {
         "startLine": 775,
         "startChar": 0,
