@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb37a753_c3581dee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-10-07T21:17:35Z",
+      "side": 1,
+      "message": "Fixed the wording of the description to reflect the changes done to the test.",
+      "parentUuid": "01023dde_36fd792a",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d16a13a9_33ed0e3e",
@@ -114,6 +138,24 @@
       "side": 1,
       "message": "So, the issue is explained a bit more in https://abseil.io/tips/101 and https://abseil.io/tips/107 in terms of lifetime extension.\n\nYou could just write\n\n  std::string label \u003d \"TestKHR.DebugLabel\"\n  \nWhich has the same number of allocations, but is unambiguously safe 😊\n\nThe issue here is the non-polymorphic type conversions mentioned in 107 making this quite subtle. This specific case ends up being safe, but only through careful reasoning - because you happen to be using a constant string (the \"TestKHR.DebugLabel\"), the compiler is giving you guaranteed lifetime, and because tip 101 #8, your temporary std::string() is getting lifetime extended. This is, however, all very subtle, are requires care reasoning through it, which is why it raises eyebrows.",
       "parentUuid": "fc7e3e16_4fd0493b",
+      "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fa518c3_a37f197f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2666,
+      "author": {
+        "id": 1512662
+      },
+      "writtenOn": "2021-10-07T21:17:35Z",
+      "side": 1,
+      "message": "Thanks Ryan for the detailed explanation. Fixed. :)",
+      "parentUuid": "a728e0d9_b5beb866",
       "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
