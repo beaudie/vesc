@@ -16,6 +16,46 @@
       "message": "Was originally intended for other bug but good candidate for fixit since it is general cleanup.",
       "revId": "d240d48c2b6a3e6baf101fa6f457240e835483df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce0bca9_4f2ff104",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:30:29Z",
+      "side": 1,
+      "message": "Drive by stamp of approval",
+      "revId": "d240d48c2b6a3e6baf101fa6f457240e835483df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "778d31ab_e8705fde",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2594,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:30:29Z",
+      "side": 1,
+      "message": "typo: relies",
+      "range": {
+        "startLine": 2594,
+        "startChar": 93,
+        "endLine": 2594,
+        "endChar": 100
+      },
+      "revId": "d240d48c2b6a3e6baf101fa6f457240e835483df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

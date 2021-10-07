@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f8ee5b4_c5b5c04a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:30:29Z",
+      "side": 0,
+      "message": "This function also does this:\n\n    onStateChange(angle::SubjectMessage::SubjectChanged);\n    mRedefinedLevels.reset();\n\nI presume the notification is not necessary, since the image isn\u0027t valid anyway. Could you add an ASSERT(!mRedefinedLevels.any()) to make that call was also unnecessary? If the ASSERT fires, we can just add that mRedefinedLevels.reset() here.",
+      "revId": "f43607d25afd46b18e29d25e89cf0729cbd19eab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
