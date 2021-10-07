@@ -6425,7 +6425,9 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
 
 {
     // Nothing to do if every level must be skipped
-    if ((~skipLevelsMask & gl::TexLevelMask(angle::BitMask<uint32_t>(levelCount))).none())
+    gl::TexLevelMask::value_type levelsMask = angle::BitMask<uint32_t>(levelCount)
+                                              << mFirstAllocatedLevel.get();
+    if ((~skipLevelsMask & gl::TexLevelMask(levelsMask)).none())
     {
         return;
     }
@@ -6469,7 +6471,8 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
     // Stage updates from the previous image.
     for (LevelIndex levelVk(0); levelVk < LevelIndex(levelCount); ++levelVk)
     {
-        if (skipLevelsMask.test(levelVk.get()))
+        gl::LevelIndex levelGL = toGLLevel(levelVk);
+        if (skipLevelsMask.test(levelGL.get()))
         {
             continue;
         }
@@ -6652,7 +6655,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             // them. This can happen when recreating an image that has been partially incompatibly
             // redefined, in which case only updates to the levels that haven't been redefined
             // should be flushed.
-            if (areUpdateLayersOutsideRange || skipLevelsMask.test(updateMipLevelVk.get()))
+            if (areUpdateLayersOutsideRange || skipLevelsMask.test(updateMipLevelGL.get()))
             {
                 updatesToKeep.emplace_back(std::move(update));
                 continue;
@@ -7013,7 +7016,7 @@ void ImageHelper::removeSupersededUpdates(ContextVk *contextVk, gl::TexLevelMask
         }
 
         // If level is skipped (because incompatibly redefined), don't remove any of its updates.
-        if (skipLevelsMask.test(levelVk.get()))
+        if (skipLevelsMask.test(levelGL.get()))
         {
             continue;
         }
