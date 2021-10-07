@@ -33,6 +33,24 @@
       "message": "Regression test or suppression lift would be welcome.",
       "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd51c36e_7701eba5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-07T17:29:01Z",
+      "side": 1,
+      "message": "See https://issuetracker.google.com/174066134.\n\nThe reason this fix makes all bots green without lift any test is because this code path is no longer been used except older QC driver.\n\n    // http://issuetracker.google.com/173636783 Qualcomm driver appears having issues with\n    // specialization constant\n    ANGLE_FEATURE_CONDITION(\u0026mFeatures, forceDriverUniformOverSpecConst,\n                            isQualcomm \u0026\u0026 mPhysicalDeviceProperties.driverVersion \u003c\n                                              kPixel4DriverWithWorkingSpecConstSupport);\n\nAll other drivers (which means all bots) are not using this code path any more, they are using specialization constant code path. The equivalent fix should be in this file\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/compiler/translator/tree_util/SpecializationConstant.cpp#65\n\nAnd line #100 as well.\n\nAnd if you fix this, you should see the deqp test that frank cited in the bug description fail.",
+      "parentUuid": "fa884ed9_a0b1bce5",
+      "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
