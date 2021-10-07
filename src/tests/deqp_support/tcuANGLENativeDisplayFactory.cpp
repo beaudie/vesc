@@ -66,8 +66,8 @@ destType bitCast(sourceType source)
 
 enum
 {
-    DEFAULT_SURFACE_WIDTH  = 400,
-    DEFAULT_SURFACE_HEIGHT = 300,
+    DEFAULT_SURFACE_WIDTH  = 2,
+    DEFAULT_SURFACE_HEIGHT = 1,
 };
 
 constexpr eglu::NativeDisplay::Capability kDisplayCapabilities =

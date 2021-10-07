@@ -629,6 +629,8 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     uint32_t width  = mSurfaceCaps.currentExtent.width;
     uint32_t height = mSurfaceCaps.currentExtent.height;
 
+    fprintf(stderr, "%s: base surface caps %u %u\n", __func__, width, height);
+
     // TODO(jmadill): Support devices which don't support copy. We use this for ReadPixels.
     ANGLE_VK_CHECK(displayVk,
                    (mSurfaceCaps.supportedUsageFlags & kSurfaceVkColorImageUsageFlags) ==
@@ -712,14 +714,17 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     // Set emulated pre-transform if any emulated prerotation features are set.
     if (renderer->getFeatures().emulatedPrerotation90.enabled)
     {
+        fprintf(stderr, "%s: VK_SURFACE_TRANSFORM_ROTATE_90\n", __func__);
         mEmulatedPreTransform = VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR;
     }
     else if (renderer->getFeatures().emulatedPrerotation180.enabled)
     {
+        fprintf(stderr, "%s: VK_SURFACE_TRANSFORM_ROTATE_180\n", __func__);
         mEmulatedPreTransform = VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR;
     }
     else if (renderer->getFeatures().emulatedPrerotation270.enabled)
     {
+        fprintf(stderr, "%s: VK_SURFACE_TRANSFORM_ROTATE_270\n", __func__);
         mEmulatedPreTransform = VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR;
     }
 
