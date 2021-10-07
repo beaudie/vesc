@@ -1037,6 +1037,7 @@ void DisplayMtl::initializeFeatures()
 #if ANGLE_ENABLE_METAL_SPIRV
     defaultDirectToMetal = false;
 #endif
+    // Testing.
     ANGLE_FEATURE_CONDITION((&mFeatures), directMetalGeneration, defaultDirectToMetal);
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
