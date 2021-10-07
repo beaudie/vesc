@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcef7ea2_6ca708d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-07T20:01:40Z",
+      "side": 1,
+      "message": "Paul, I think we can abandon this one now.  At this point, makes sense to do a new Facebook trace, or hold off on new app (as opposed to game) traces until someone can champion them.",
+      "revId": "67b316df19ab47e3aa2e2be543c17b54f092b17b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
