@@ -130,9 +130,6 @@ class DynamicBuffer : angle::NonCopyable
     // After a sequence of writes, call flush to ensure the data is visible to the device.
     angle::Result flush(ContextVk *contextVk);
 
-    // After a sequence of writes, call invalidate to ensure the data is visible to the host.
-    angle::Result invalidate(ContextVk *contextVk);
-
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
 
@@ -889,25 +886,18 @@ class BufferHelper final : public ReadWriteResource
                                  uint32_t regionCount,
                                  const VkBufferCopy *copyRegions);
 
-    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
-    {
-        return mMemory.map(contextVk, mSize, ptrOut);
-    }
-
-    angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
-    {
-        uint8_t *mapBufPointer;
-        ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
-        *ptrOut = mapBufPointer + offset;
-        return angle::Result::Continue;
-    }
-
+    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut, VkDeviceSize size);
+    angle::Result mapWithOffset(ContextVk *contextVk,
+                                uint8_t **ptrOut,
+                                VkDeviceSize offset,
+                                VkDeviceSize size);
     void unmap(RendererVk *renderer);
 
-    // After a sequence of writes, call flush to ensure the data is visible to the device.
+    // After a sequence of host writes, call flush to ensure the data is visible to the device.
     angle::Result flush(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
 
-    // After a sequence of writes, call invalidate to ensure the data is visible to the host.
+    // After a sequence of device writes, call invalidate to ensure the data is visible to the host.
+    // This is automatically done on map*().
     angle::Result invalidate(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
 
     void changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *commandBuffer);
