@@ -16,6 +16,23 @@
       "message": "lgtm\n\nThank you Kyle for so quickly tracking this down!\n",
       "revId": "7eb39222f463a3e8381bef9b56efeefe66253bf8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ee7c6d_b56d1336",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-10-07T22:10:23Z",
+      "side": 1,
+      "message": "This was the only use of blitWriteMaskArray. Since it\u0027s not actually needed, please consider removing it from the ColorBlitParams struct altogether.",
+      "revId": "7eb39222f463a3e8381bef9b56efeefe66253bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
