@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "01023dde_36fd792a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2021-10-07T20:02:25Z",
+      "side": 1,
+      "message": "@Shahbaz, glObjectLabelKHR is part of a Khronos extension. ANGLE\u0027s implementation copies the string out of the label parameter before the function returns control to the caller. The regressing change screwed up how the copy was managed internally by ANGLE, and this CL fixes that.\n\nThe sentence in the description which you highlighted refers to the test code which changed so the code for the bug could be revealed. I think this could be better explained in the description.",
+      "parentUuid": "bfb72eaa_5b78fa07",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d16a13a9_33ed0e3e",
