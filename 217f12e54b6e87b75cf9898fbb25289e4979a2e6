@@ -105,6 +105,24 @@
       "parentUuid": "90255835_7a5d96cd",
       "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e4be5e_74b3ad4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-10-07T20:45:24Z",
+      "side": 1,
+      "message": "Getting very interesting results for 270 vs 90 in the 2x1 case:\n\n```\n90:\n\niterate: ref img colr at x y 0 0 would be 0.250000 0.500000 0.375000 1.000000\niterate: ref img colr at x y 1 0 would be 0.750000 0.500000 0.625000 1.000000\nintThresholdCompare: result at 0 0 is 0.250980 0.498039 0.376471 1.000000\nintThresholdCompare: result at 1 0 is 0.749020 0.498039 0.623529 1.000000\n\n270:\n\niterate: ref img colr at x y 0 0 would be 0.250000 0.500000 0.375000 1.000000\niterate: ref img colr at x y 1 0 would be 0.750000 0.500000 0.625000 1.000000\nintThresholdCompare: result at 0 0 is 0.000000 1.000000 0.376471 1.000000\nintThresholdCompare: pixel at 0 0 not ok\nintThresholdCompare: result at 1 0 is 0.250980 1.000000 0.623529 1.000000\nintThresholdCompare: pixel at 1 0 not ok\n```",
+      "parentUuid": "e96d4a71_c98701ae",
+      "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
