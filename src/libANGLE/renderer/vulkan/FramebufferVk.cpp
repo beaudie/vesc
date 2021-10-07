@@ -119,7 +119,7 @@ void EarlyAdjustFlipYForPreRotation(SurfaceRotation blitAngleIn,
             break;
         case SurfaceRotation::Rotated270Degrees:
             *blitAngleOut = SurfaceRotation::Rotated270Degrees;
-            *blitFlipYOut = false;
+            *blitFlipYOut = true;
             break;
         default:
             UNREACHABLE();
@@ -724,6 +724,7 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
                                         gl::Buffer *packBuffer,
                                         void *pixels)
 {
+    fprintf(stderr, "FramebufferVk::%s: call\n", __func__);
     // Clip read area to framebuffer.
     const gl::Extents &fbSize = getState().getReadPixelsAttachment(format)->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);

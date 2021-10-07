@@ -62,11 +62,26 @@ constexpr Mat2x2EnumMap kHalfRenderAreaRotationMatrices = {
     {{vk::SurfaceRotation::Identity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
      {vk::SurfaceRotation::Rotated90Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
      {vk::SurfaceRotation::Rotated180Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
-     {vk::SurfaceRotation::Rotated270Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+     {vk::SurfaceRotation::Rotated270Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
+     // {vk::SurfaceRotation::Rotated270Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
      {vk::SurfaceRotation::FlippedIdentity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
      {vk::SurfaceRotation::FlippedRotated90Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
      {vk::SurfaceRotation::FlippedRotated180Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
-     {vk::SurfaceRotation::FlippedRotated270Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}}}};
+     {vk::SurfaceRotation::FlippedRotated270Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}}}};
+// {vk::SurfaceRotation::FlippedRotated270Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}}}};
+/*
+ *      {{vk::SurfaceRotation::Identity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+ *            {vk::SurfaceRotation::Rotated90Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
+ *                  {vk::SurfaceRotation::Rotated180Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+ *                  -     {vk::SurfaceRotation::Rotated270Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+ *                  +     {vk::SurfaceRotation::Rotated270Degrees, {{0.0f, 1.0f, 1.0f, 0.0f}}},
+ *                        {vk::SurfaceRotation::FlippedIdentity, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+ *                              {vk::SurfaceRotation::FlippedRotated90Degrees, {{0.0f, 1.0f, 1.0f,
+ * 0.0f}}}, {vk::SurfaceRotation::FlippedRotated180Degrees, {{1.0f, 0.0f, 0.0f, 1.0f}}},
+ *                                    -     {vk::SurfaceRotation::FlippedRotated270Degrees, {{1.0f,
+ * 0.0f, 0.0f, 1.0f}}}}};
+ *                                    +     {vk::SurfaceRotation::FlippedRotated270Degrees,
+ * {{0.0f, 1.0f, 1.0f, 0.0f}}}}}; */
 
 // Returns mat2(m0, m1, m2, m3)
 TIntermAggregate *CreateMat2x2(const Mat2x2EnumMap &matrix, vk::SurfaceRotation rotation)
@@ -113,7 +128,7 @@ constexpr Vec2EnumMap kFlipXYValue = {
      {vk::SurfaceRotation::FlippedIdentity, {{1.0f, -1.0f}}},
      {vk::SurfaceRotation::FlippedRotated90Degrees, {{1.0f, 1.0f}}},
      {vk::SurfaceRotation::FlippedRotated180Degrees, {{-1.0f, 1.0f}}},
-     {vk::SurfaceRotation::FlippedRotated270Degrees, {{-1.0f, -1.0f}}}}};
+     {vk::SurfaceRotation::FlippedRotated270Degrees, {{-1.0f, 1.0f}}}}};
 
 // Returns [[flipX*m0+flipY*m1]  [flipX*m2+flipY*m3]] where [m0 m1] is the first column of
 // kFragRotation matrix and [m2 m3] is the second column of kFragRotation matrix.

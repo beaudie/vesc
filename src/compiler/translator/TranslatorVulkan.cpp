@@ -250,6 +250,80 @@ ANGLE_NO_DISCARD bool RotateAndFlipBuiltinVariable(TCompiler *compiler,
     return compiler->validateAST(root);
 }
 
+// Replaces a builtin variable with a version that is rotated and corrects the X and Y coordinates.
+ANGLE_NO_DISCARD bool RotateAndFlipBuiltinVariable2(TCompiler *compiler,
+                                                    TIntermBlock *root,
+                                                    TIntermSequence *insertSequence,
+                                                    TIntermTyped *flipXY,
+                                                    TSymbolTable *symbolTable,
+                                                    const TVariable *builtin,
+                                                    const ImmutableString &flippedVariableName,
+                                                    TIntermTyped *pivot,
+                                                    TIntermTyped *fragRotation)
+{
+    // Create a symbol reference to 'builtin'.
+    TIntermSymbol *builtinRef = new TIntermSymbol(builtin);
+
+    // Create a swizzle to "builtin.xy"
+    TVector<int> swizzleOffsetXY = {0, 1};
+    TIntermSwizzle *builtinXY    = new TIntermSwizzle(builtinRef, swizzleOffsetXY);
+
+    // Create a symbol reference to our new variable that will hold the modified builtin.
+    TType *type = new TType(builtin->getType());
+    type->setQualifier(EvqGlobal);
+    type->setPrimarySize(static_cast<unsigned char>(builtin->getType().getNominalSize()));
+    TVariable *replacementVar =
+        new TVariable(symbolTable, flippedVariableName, type, SymbolType::AngleInternal);
+    DeclareGlobalVariable(root, replacementVar);
+    TIntermSymbol *flippedBuiltinRef = new TIntermSymbol(replacementVar);
+
+    // Use this new variable instead of 'builtin' everywhere.
+    if (!ReplaceVariable(compiler, root, builtin, replacementVar))
+    {
+        return false;
+    }
+
+    // Create the expression "(builtin.xy * fragRotation)"
+    TIntermTyped *rotatedXY;
+    if (fragRotation)
+    {
+        rotatedXY = new TIntermBinary(EOpMatrixTimesVector, fragRotation, builtinXY);
+    }
+    else
+    {
+        // No rotation applied, use original variable.
+        rotatedXY = builtinXY;
+    }
+
+    // Create the expression "(builtin.xy - pivot) * flipXY + pivot
+    TIntermBinary *removePivot = new TIntermBinary(EOpSub, rotatedXY, pivot);
+    TIntermBinary *inverseXY   = new TIntermBinary(EOpMul, removePivot, flipXY);
+
+    TIntermBinary *plusPivotNoOffset = new TIntermBinary(EOpAdd, inverseXY, pivot->deepCopy());
+
+    auto vec2Type = new TType(EbtFloat, 2);
+    TIntermSequence vec2Args;
+    vec2Args.push_back(CreateFloatNode(1.0, EbpLow));
+    vec2Args.push_back(CreateFloatNode(0.0, EbpLow));
+    TIntermAggregate *offsetXy = TIntermAggregate::CreateConstructor(*vec2Type, &vec2Args);
+    TIntermBinary *plusPivot   = new TIntermBinary(EOpAdd, plusPivotNoOffset, offsetXy);
+
+    // Create the corrected variable and copy the value of the original builtin.
+    TIntermBinary *assignment =
+        new TIntermBinary(EOpAssign, flippedBuiltinRef, builtinRef->deepCopy());
+
+    // Create an assignment to the replaced variable's .xy.
+    TIntermSwizzle *correctedXY =
+        new TIntermSwizzle(flippedBuiltinRef->deepCopy(), swizzleOffsetXY);
+    TIntermBinary *assignToY = new TIntermBinary(EOpAssign, correctedXY, plusPivot);
+
+    // Add this assigment at the beginning of the main function
+    insertSequence->insert(insertSequence->begin(), assignToY);
+    insertSequence->insert(insertSequence->begin(), assignment);
+
+    return compiler->validateAST(root);
+}
+
 TIntermSequence *GetMainSequence(TIntermBlock *root)
 {
     TIntermFunctionDefinition *main = FindMain(root);
@@ -643,8 +717,10 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
     }
     const TVariable *fragCoord = static_cast<const TVariable *>(
         symbolTable->findBuiltIn(ImmutableString("gl_FragCoord"), compiler->getShaderVersion()));
-    return RotateAndFlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable,
-                                        fragCoord, kFlippedFragCoordName, pivot, fragRotation);
+    // return RotateAndFlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable,
+    //                                     fragCoord, kFlippedFragCoordName, pivot, fragRotation);
+    return RotateAndFlipBuiltinVariable2(compiler, root, insertSequence, flipXY, symbolTable,
+                                         fragCoord, kFlippedFragCoordName, pivot, fragRotation);
 }
 
 // This block adds OpenGL line segment rasterization emulation behind a specialization constant

@@ -2809,7 +2809,10 @@ void SpirvPositionTransformer::preRotateXY(const SpirvIDDiscoverer &ids,
             }
             break;
         case SurfaceRotation::Rotated90Degrees:
+            fprintf(stderr, "%s: rot 90\n", __func__);
+            ABSL_FALLTHROUGH_INTENDED;
         case SurfaceRotation::FlippedRotated90Degrees:
+            fprintf(stderr, "%s: flip rot 90\n", __func__);
             // [ 0  1]   [x]
             // [-1  0] * [y]
             *rotatedXIdOut = yId;
@@ -2826,7 +2829,10 @@ void SpirvPositionTransformer::preRotateXY(const SpirvIDDiscoverer &ids,
             spirv::WriteFNegate(blobOut, ids.floatId(), *rotatedYIdOut, yId);
             break;
         case SurfaceRotation::Rotated270Degrees:
+            fprintf(stderr, "%s: rot 270\n", __func__);
+            ABSL_FALLTHROUGH_INTENDED;
         case SurfaceRotation::FlippedRotated270Degrees:
+            fprintf(stderr, "%s: flip rot 270\n", __func__);
             // [ 0 -1]   [x]
             // [ 1  0] * [y]
             *rotatedXIdOut = SpirvTransformerBase::GetNewId(blobOut);

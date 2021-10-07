@@ -216,6 +216,7 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     if (isLastPreFragmentStage)
     {
         options.preRotation = static_cast<SurfaceRotation>(optionBits.surfaceRotation);
+        fprintf(stderr, "%s: pre rotation: %d\n", __func__, options.preRotation);
         options.transformPositionToVulkanClipSpace = optionBits.enableDepthCorrection;
     }
 
@@ -877,6 +878,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     // update drawable width/height specialization constant. It will go through desc matching and if
     // spec constant does not match, it will recompile pipeline program.
     const vk::PackedExtent &dimensions = desc.getDrawableSize();
+    fprintf(stderr, "%s: drawable w h %d %d\n", __func__, dimensions.width, dimensions.height);
     shaderProgram->setSpecializationConstant(sh::vk::SpecializationConstantId::DrawableWidth,
                                              dimensions.width);
     shaderProgram->setSpecializationConstant(sh::vk::SpecializationConstantId::DrawableHeight,

@@ -270,6 +270,8 @@ void RotateRectangle(const SurfaceRotation rotation,
             UNREACHABLE();
             break;
     }
+    fprintf(stderr, "%s: res x y w h %d %d %d %d\n", __func__, outgoing->x, outgoing->y,
+            outgoing->width, outgoing->height);
 }
 
 PackPixelsParams::PackPixelsParams()
