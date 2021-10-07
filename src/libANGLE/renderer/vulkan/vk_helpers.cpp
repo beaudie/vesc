@@ -536,6 +536,15 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
 };
 // clang-format on
 
+bool IsHostVisibleButNotCoherent(VkMemoryPropertyFlags memoryPropertyFlags)
+{
+    constexpr VkMemoryPropertyFlags kHostVisibleAndCoherent =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    constexpr VkMemoryPropertyFlags kHostVisibleOnly = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+
+    return (memoryPropertyFlags & kHostVisibleAndCoherent) == kHostVisibleOnly;
+}
+
 VkPipelineStageFlags GetImageLayoutSrcStageMask(Context *context,
                                                 const ImageMemoryBarrierData &transition)
 {
@@ -2254,7 +2263,7 @@ angle::Result DynamicBuffer::allocateWithAlignment(ContextVk *contextVk,
     {
         ASSERT(mHostVisible);
         uint8_t *mappedMemory;
-        ANGLE_TRY(mBuffer->map(contextVk, &mappedMemory));
+        ANGLE_TRY(mBuffer->map(contextVk, &mappedMemory, mBuffer->getSize()));
         *ptrOut = mappedMemory + mNextAllocationOffset;
     }
 
@@ -2274,18 +2283,6 @@ angle::Result DynamicBuffer::flush(ContextVk *contextVk)
         ASSERT(mBuffer != nullptr);
         ANGLE_TRY(mBuffer->flush(contextVk->getRenderer(), mLastFlushOrInvalidateOffset,
                                  mNextAllocationOffset - mLastFlushOrInvalidateOffset));
-        mLastFlushOrInvalidateOffset = mNextAllocationOffset;
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result DynamicBuffer::invalidate(ContextVk *contextVk)
-{
-    if (mHostVisible && (mNextAllocationOffset > mLastFlushOrInvalidateOffset))
-    {
-        ASSERT(mBuffer != nullptr);
-        ANGLE_TRY(mBuffer->invalidate(contextVk->getRenderer(), mLastFlushOrInvalidateOffset,
-                                      mNextAllocationOffset - mLastFlushOrInvalidateOffset));
         mLastFlushOrInvalidateOffset = mNextAllocationOffset;
     }
     return angle::Result::Continue;
@@ -3804,6 +3801,24 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::map(ContextVk *contextVk, uint8_t **ptrOut, VkDeviceSize size)
+{
+    ANGLE_TRY(invalidate(contextVk->getRenderer(), 0, size));
+    return mMemory.map(contextVk, mSize, ptrOut);
+}
+
+angle::Result BufferHelper::mapWithOffset(ContextVk *contextVk,
+                                          uint8_t **ptrOut,
+                                          VkDeviceSize offset,
+                                          VkDeviceSize size)
+{
+    uint8_t *mapBufPointer;
+    ANGLE_TRY(invalidate(contextVk->getRenderer(), offset, size));
+    ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
+    *ptrOut = mapBufPointer + offset;
+    return angle::Result::Continue;
+}
+
 void BufferHelper::unmap(RendererVk *renderer)
 {
     mMemory.unmap(renderer);
@@ -3811,9 +3826,7 @@ void BufferHelper::unmap(RendererVk *renderer)
 
 angle::Result BufferHelper::flush(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size)
 {
-    bool hostVisible  = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-    bool hostCoherent = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-    if (hostVisible && !hostCoherent)
+    if (IsHostVisibleButNotCoherent(mMemoryPropertyFlags))
     {
         mMemory.flush(renderer, mMemoryPropertyFlags, offset, size);
     }
@@ -3822,9 +3835,7 @@ angle::Result BufferHelper::flush(RendererVk *renderer, VkDeviceSize offset, VkD
 
 angle::Result BufferHelper::invalidate(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size)
 {
-    bool hostVisible  = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-    bool hostCoherent = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-    if (hostVisible && !hostCoherent)
+    if (IsHostVisibleButNotCoherent(mMemoryPropertyFlags))
     {
         mMemory.invalidate(renderer, mMemoryPropertyFlags, offset, size);
     }
@@ -7414,10 +7425,6 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     // Triggers a full finish.
     // TODO(jmadill): Don't block on asynchronous readback.
     ANGLE_TRY(contextVk->finishImpl());
-
-    // The buffer we copied to needs to be invalidated before we read from it because its not been
-    // created with the host coherent bit.
-    ANGLE_TRY(stagingBuffer->invalidate(contextVk));
 
     if (packPixelsParams.packBuffer)
     {

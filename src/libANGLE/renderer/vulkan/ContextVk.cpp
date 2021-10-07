@@ -2747,11 +2747,10 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
         // We have instanced vertex attributes that need to be emulated for Vulkan.
-        // invalidate any cache and map the buffer so that we can read the indirect data.
+        // Map the buffer so that we can read the indirect data.
         // Mapping the buffer will cause a flush.
-        ANGLE_TRY(currentIndirectBuf->invalidate(mRenderer, 0, sizeof(VkDrawIndirectCommand)));
         uint8_t *buffPtr;
-        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr));
+        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr, sizeof(VkDrawIndirectCommand)));
         const VkDrawIndirectCommand *indirectData =
             reinterpret_cast<VkDrawIndirectCommand *>(buffPtr + currentIndirectBufOffset);
 
@@ -2801,12 +2800,10 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
         // We have instanced vertex attributes that need to be emulated for Vulkan.
-        // invalidate any cache and map the buffer so that we can read the indirect data.
+        // Map the buffer so that we can read the indirect data.
         // Mapping the buffer will cause a flush.
-        ANGLE_TRY(
-            currentIndirectBuf->invalidate(mRenderer, 0, sizeof(VkDrawIndexedIndirectCommand)));
         uint8_t *buffPtr;
-        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr));
+        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr, sizeof(VkDrawIndexedIndirectCommand)));
         const VkDrawIndexedIndirectCommand *indirectData =
             reinterpret_cast<VkDrawIndexedIndirectCommand *>(buffPtr + currentIndirectBufOffset);
 
