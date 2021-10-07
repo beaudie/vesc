@@ -70,6 +70,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ad37044_89355c61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-07T14:07:32Z",
+      "side": 1,
+      "message": "Check if good.",
+      "parentUuid": "7782a569_8c5e50f7",
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "527b0c90_396f37d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-07T14:07:32Z",
+      "side": 1,
+      "message": "barrierImpl is private. So either use the CommandBufferHelper, or I create a new function like recordWriteBarrier, but use a OneOff commandBuffer in ImageHelper::,",
+      "parentUuid": "edcd05c7_fc6f874a",
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b196cbfa_cc0b4e8c",
@@ -83,6 +119,30 @@
       "writtenOn": "2021-10-01T14:47:34Z",
       "side": 1,
       "message": "nit: no need for this, it\u0027s done as part of `\u003d {}`. Please clean up the `surfaceInfo2.pNext \u003d nullptr` and `surfaceCaps2.pNext \u003d nullptr` lines above too.",
+      "range": {
+        "startLine": 604,
+        "startChar": 12,
+        "endLine": 604,
+        "endChar": 53
+      },
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a2cf676_41ad9065",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-07T14:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b196cbfa_cc0b4e8c",
       "range": {
         "startLine": 604,
         "startChar": 12,
@@ -116,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63f96350_b408c3ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-07T14:07:32Z",
+      "side": 1,
+      "message": "thx. I didn\u0027t really understand the fields.",
+      "parentUuid": "7387969f_85069c0c",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 14
+      },
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5db4c0ee_8666270c",
@@ -129,6 +213,30 @@
       "writtenOn": "2021-10-01T14:47:34Z",
       "side": 1,
       "message": "nit: could you please update this to say GENERAL or SHARED_PRESENT?",
+      "range": {
+        "startLine": 4929,
+        "startChar": 65,
+        "endLine": 4929,
+        "endChar": 72
+      },
+      "revId": "e545e5b5ad740301ffc79f6c9c6ffcf95d9ad4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f52df7_45876a4e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4929,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-07T14:07:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5db4c0ee_8666270c",
       "range": {
         "startLine": 4929,
         "startChar": 65,
