@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daad61d5_e3ad15b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-07T12:06:50Z",
+      "side": 1,
+      "message": "Can you use \"EnsureGLExtensionEnabled\" from test_utils?",
+      "revId": "5ad3d44ccffdb0483bf0f33ca85ab3cacf93cec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
