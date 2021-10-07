@@ -87,6 +87,24 @@
       "parentUuid": "90255835_7a5d96cd",
       "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e96d4a71_c98701ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-10-07T20:35:39Z",
+      "side": 1,
+      "message": "Thanks for the tips---test fails after editing spec constants cpp. Passes again if I set the render target width and height to 4, fails if width 4 and height 2.",
+      "parentUuid": "90255835_7a5d96cd",
+      "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
