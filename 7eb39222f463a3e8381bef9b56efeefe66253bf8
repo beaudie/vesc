@@ -33,6 +33,24 @@
       "message": "This was the only use of blitWriteMaskArray. Since it\u0027s not actually needed, please consider removing it from the ColorBlitParams struct altogether.",
       "revId": "7eb39222f463a3e8381bef9b56efeefe66253bf8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cc615f0_5eb45949",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-07T22:25:16Z",
+      "side": 1,
+      "message": "Fair point. The now-constant array could go into ColorBlitUtils; it\u0027s still needed as an argument to RenderPassDesc::populateRenderPipelineOutputDesc.",
+      "parentUuid": "86ee7c6d_b56d1336",
+      "revId": "7eb39222f463a3e8381bef9b56efeefe66253bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
