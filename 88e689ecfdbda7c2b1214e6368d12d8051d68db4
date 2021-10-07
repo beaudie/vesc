@@ -3,6 +3,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bfb72eaa_5b78fa07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:25:21Z",
+      "side": 1,
+      "message": "If this is not mandated by the spec, then it\u0027s not a requirement ANGLE should be enforcing. If the test is per spec and fails with this change, changing the test is not the right thing to do!",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d16a13a9_33ed0e3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T01:25:21Z",
+      "side": 1,
+      "message": "Drive by comment",
+      "revId": "88e689ecfdbda7c2b1214e6368d12d8051d68db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "99a6f0aa_3d9ab889",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 3
