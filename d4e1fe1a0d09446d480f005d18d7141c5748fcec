@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "d4e1fe1a0d09446d480f005d18d7141c5748fcec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3ca2de9_53bd2155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-07T18:03:10Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with this, but it seems reasonable.",
+      "revId": "d4e1fe1a0d09446d480f005d18d7141c5748fcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
