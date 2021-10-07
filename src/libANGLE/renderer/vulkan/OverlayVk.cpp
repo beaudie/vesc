@@ -104,7 +104,7 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
                                         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
 
     uint8_t *fontData;
-    ANGLE_TRY(fontDataBuffer.get().map(contextVk, &fontData));
+    ANGLE_TRY(fontDataBuffer.get().map(contextVk, &fontData, fontDataBuffer.get().getSize()));
 
     mState.initFontData(fontData);
 
@@ -174,7 +174,8 @@ angle::Result OverlayVk::cullWidgets(ContextVk *contextVk)
 
     // Fill the buffer with coordinate information from enabled widgets.
     uint8_t *enabledWidgets;
-    ANGLE_TRY(enabledWidgetsBuffer.get().map(contextVk, &enabledWidgets));
+    ANGLE_TRY(enabledWidgetsBuffer.get().map(contextVk, &enabledWidgets,
+                                             enabledWidgetsBuffer.get().getSize()));
 
     gl::Extents presentImageExtents(mPresentImageExtent.width, mPresentImageExtent.height, 1);
     mState.fillEnabledWidgetCoordinates(presentImageExtents, enabledWidgets);
@@ -265,8 +266,8 @@ angle::Result OverlayVk::onPresent(ContextVk *contextVk,
 
     uint8_t *textData;
     uint8_t *graphData;
-    ANGLE_TRY(textDataBuffer.get().map(contextVk, &textData));
-    ANGLE_TRY(graphDataBuffer.get().map(contextVk, &graphData));
+    ANGLE_TRY(textDataBuffer.get().map(contextVk, &textData, textDataBuffer.get().getSize()));
+    ANGLE_TRY(graphDataBuffer.get().map(contextVk, &graphData, graphDataBuffer.get().getSize()));
 
     gl::Extents presentImageExtents(mPresentImageExtent.width, mPresentImageExtent.height, 1);
     mState.fillWidgetData(presentImageExtents, textData, graphData);

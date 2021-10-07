@@ -599,31 +599,29 @@ angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
 
 angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk, VkDeviceSize offset, void **mapPtr)
 {
-    vk::BufferHelper *previousBuffer = nullptr;
-    VkDeviceSize previousOffset      = 0;
+    vk::BufferHelper *previousBuffer  = mBuffer;
+    const VkDeviceSize previousOffset = mBufferOffset;
+    const VkDeviceSize size           = static_cast<VkDeviceSize>(getSize());
 
     ++contextVk->getPerfCounters().buffersGhosted;
 
     // If we are creating a new buffer because the GPU is using it as read-only, then we
     // also need to copy the contents of the previous buffer into the new buffer, in
     // case the caller only updates a portion of the new buffer.
-    previousBuffer = mBuffer;
-    previousOffset = mBufferOffset;
-    ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()),
+    ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(size),
                                   BufferUpdateType::ContentsUpdate));
 
     // Before returning the new buffer, map the previous buffer and copy its entire
     // contents into the new buffer.
     uint8_t *previousBufferMapPtr = nullptr;
     uint8_t *newBufferMapPtr      = nullptr;
-    ANGLE_TRY(previousBuffer->mapWithOffset(contextVk, &previousBufferMapPtr,
-                                            static_cast<size_t>(previousOffset)));
     ANGLE_TRY(
-        mBuffer->mapWithOffset(contextVk, &newBufferMapPtr, static_cast<size_t>(mBufferOffset)));
+        previousBuffer->mapWithOffset(contextVk, &previousBufferMapPtr, previousOffset, size));
+    ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &newBufferMapPtr, mBufferOffset, size));
 
     ASSERT(previousBuffer->isCoherent());
     ASSERT(mBuffer->isCoherent());
-    memcpy(newBufferMapPtr, previousBufferMapPtr, static_cast<size_t>(mState.getSize()));
+    memcpy(newBufferMapPtr, previousBufferMapPtr, static_cast<size_t>(size));
 
     previousBuffer->unmap(contextVk->getRenderer());
     // Return the already mapped pointer with the offset adjustment to avoid the call to unmap().
@@ -671,7 +669,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         {
             // If the buffer is host visible, map and return.
             ANGLE_TRY(mBuffer->mapWithOffset(contextVk, reinterpret_cast<uint8_t **>(mapPtr),
-                                             static_cast<size_t>(mBufferOffset + offset)));
+                                             mBufferOffset + offset, length));
         }
         else
         {
@@ -820,8 +818,7 @@ angle::Result BufferVk::directUpdate(ContextVk *contextVk,
 {
     uint8_t *mapPointer = nullptr;
 
-    ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &mapPointer,
-                                     static_cast<size_t>(mBufferOffset) + offset));
+    ANGLE_TRY(mBuffer->mapWithOffset(contextVk, &mapPointer, mBufferOffset + offset, size));
     ASSERT(mapPointer);
 
     memcpy(mapPointer, data, size);
@@ -899,8 +896,8 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
         {
             uint8_t *mapPointer = nullptr;
             // src buffer will be recycled (or released and unmapped) by acquireBufferHelper
-            ANGLE_TRY(
-                src->mapWithOffset(contextVk, &mapPointer, static_cast<size_t>(mBufferOffset)));
+            ANGLE_TRY(src->mapWithOffset(contextVk, &mapPointer, static_cast<size_t>(mBufferOffset),
+                                         bufferSize));
             ASSERT(mapPointer);
             srcMapPtrBeforeSubData = mapPointer + mBufferOffset;
             srcMapPtrAfterSubData  = mapPointer + mBufferOffset + offsetAfterSubdata;
