@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1057cbac_84e4797e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-07T19:50:04Z",
+      "side": 1,
+      "message": "Do let me know if the code needs any further explanation: Most of my issues were an off-by-one error when creating draw commands for single primitives. The second issue I faced was when reusing an index buffer, restart indices would provide ranges outside of the original draw command (Hence the \u0027max\u0027) count now.",
+      "revId": "e0b7491e28fc8fa362e4b171f308cbb4f0f190d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
