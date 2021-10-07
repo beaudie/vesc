@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c1e9bea_ac5dc012",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-07T20:59:24Z",
+      "side": 1,
+      "message": "typo: Primitive",
+      "revId": "e0b7491e28fc8fa362e4b171f308cbb4f0f190d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1057cbac_84e4797e",
@@ -14,6 +31,23 @@
       "writtenOn": "2021-10-07T19:50:04Z",
       "side": 1,
       "message": "Do let me know if the code needs any further explanation: Most of my issues were an off-by-one error when creating draw commands for single primitives. The second issue I faced was when reusing an index buffer, restart indices would provide ranges outside of the original draw command (Hence the \u0027max\u0027) count now.",
+      "revId": "e0b7491e28fc8fa362e4b171f308cbb4f0f190d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31cd803e_4fc90578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-07T20:59:24Z",
+      "side": 1,
+      "message": "lgtm\n\nNow that Jonah\u0027s switch to the direct-to-Metal backend by default has landed, the CQ should test this well on all platforms.\n",
       "revId": "e0b7491e28fc8fa362e4b171f308cbb4f0f190d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
