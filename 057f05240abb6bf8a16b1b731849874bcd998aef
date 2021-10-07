@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d68c5cd_78987fa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T17:59:20Z",
+      "side": 1,
+      "message": "The +1 you didn\u0027t ask for",
+      "revId": "057f05240abb6bf8a16b1b731849874bcd998aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81282e03_2c4be9d0",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T17:59:20Z",
+      "side": 1,
+      "message": "nit: Could you also fix this typo?",
+      "range": {
+        "startLine": 472,
+        "startChar": 3,
+        "endLine": 472,
+        "endChar": 10
+      },
+      "revId": "057f05240abb6bf8a16b1b731849874bcd998aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
