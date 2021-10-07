@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9e140bb_f53c3000",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-07T22:08:44Z",
+      "side": 1,
+      "message": "Just realized there is a follow up that addresses some of my feedback.  Why did you submit them separately?",
+      "revId": "f8fe71a8753eb414aa93567bbfe39411433b51fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed0aa2d2_0284c421",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-07T22:08:44Z",
+      "side": 1,
+      "message": "These could be srcDataRowPitch and dstDataRowPitch to conform to the spirit of your CL, and the change to the comment.",
+      "range": {
+        "startLine": 911,
+        "startChar": 11,
+        "endLine": 911,
+        "endChar": 27
+      },
+      "revId": "f8fe71a8753eb414aa93567bbfe39411433b51fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "305aae01_a5a09d9b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-07T22:08:44Z",
+      "side": 1,
+      "message": "If you change one, might as well change both, `src and dst`, or `Source and destination`",
+      "range": {
+        "startLine": 2152,
+        "startChar": 11,
+        "endLine": 2152,
+        "endChar": 17
+      },
+      "revId": "f8fe71a8753eb414aa93567bbfe39411433b51fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c3282d9_70b545c6",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-07T22:08:44Z",
+      "side": 1,
+      "message": "The comment doesn\u0027t match the source now.  I\u0027d say leave it as is or change all the variables to dst, like dstIsFloat.",
+      "range": {
+        "startLine": 98,
+        "startChar": 26,
+        "endLine": 98,
+        "endChar": 37
+      },
+      "revId": "f8fe71a8753eb414aa93567bbfe39411433b51fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
