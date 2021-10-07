@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ae8901f_2e90f30d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-07T20:04:47Z",
+      "side": 1,
+      "message": "I don\u0027t mind adding these tests on Pixel 4 in parallel to N5X.\nHowever, I don\u0027t think we should be removing these tests from N5X as long as Chromium supports it, which should be a couple more years.\nSince Chrome on Android is going to use ANGLE with passthrough CMD, I think it\u0027s important to detect failures on older GLES drivers earlier and implement workarounds as needed.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "d4e1fe1a0d09446d480f005d18d7141c5748fcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4e80183e_8941d8b2",
@@ -31,6 +54,29 @@
       "writtenOn": "2021-10-07T18:03:10Z",
       "side": 1,
       "message": "I\u0027m not familiar with this, but it seems reasonable.",
+      "revId": "d4e1fe1a0d09446d480f005d18d7141c5748fcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c28bc450_436c1954",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-07T20:04:47Z",
+      "side": 1,
+      "message": "Other suites don\u0027t have it, so let\u0027s be consistent and remove here, too.",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 10
+      },
       "revId": "d4e1fe1a0d09446d480f005d18d7141c5748fcec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
