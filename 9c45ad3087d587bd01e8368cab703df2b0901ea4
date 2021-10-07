@@ -123,6 +123,30 @@
       },
       "revId": "9c45ad3087d587bd01e8368cab703df2b0901ea4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632f93e9_de3ea8e8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T15:19:39Z",
+      "side": 1,
+      "message": "That\u0027s updating this cached value when the framebuffer\u0027s draw buffers have changed (instead of a new one being bound).\n\nWe can talk about it in GVC if you prefer",
+      "parentUuid": "82cb160c_ff6d8a65",
+      "range": {
+        "startLine": 1129,
+        "startChar": 23,
+        "endLine": 1129,
+        "endChar": 58
+      },
+      "revId": "9c45ad3087d587bd01e8368cab703df2b0901ea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
