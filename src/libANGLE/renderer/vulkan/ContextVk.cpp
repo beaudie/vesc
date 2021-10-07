@@ -4771,7 +4771,6 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
                 ASSERT(isViewportFlipEnabledForDrawFBO());
                 flipX = 1.0f;
                 flipY = 1.0f;
-                std::swap(halfRenderAreaWidth, halfRenderAreaHeight);
                 break;
             case SurfaceRotation::Rotated180Degrees:
                 ASSERT(isViewportFlipEnabledForDrawFBO());
