@@ -13,6 +13,9 @@
 #include <array>
 #include <vector>
 
+// To avoid conflicts with the macro from the Windows SDK...
+#undef GetCurrentTime
+
 namespace angle
 {
 
