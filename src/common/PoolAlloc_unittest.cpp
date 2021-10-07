@@ -50,7 +50,6 @@ TEST(PoolAllocatorTest, Interface)
     poolAllocator.popAll();
 }
 
-#if !defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS)
 // Verify allocations are correctly aligned for different alignments
 class PoolAllocatorAlignmentTest : public testing::TestWithParam<int>
 {};
@@ -74,7 +73,18 @@ TEST_P(PoolAllocatorAlignmentTest, Alignment)
 
 INSTANTIATE_TEST_SUITE_P(,
                          PoolAllocatorAlignmentTest,
-                         testing::Values(2, 4, 8, 16, 32, 64, 128),
-                         testing::PrintToStringParamName());
+                         testing::Values(2,
+                                         4,
+                                         8,
+                                         16,
+                                         32
+// The following configurations crash on windows when guard blocks are
+// enabled.  http://anglebug.com/6536
+#if !defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS) || !defined(ANGLE_PLATFORM_WINDOWS)
+                                         ,
+                                         64,
+                                         128
 #endif
+                                         ),
+                         testing::PrintToStringParamName());
 }  // namespace angle
