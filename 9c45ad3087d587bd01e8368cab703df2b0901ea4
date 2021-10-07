@@ -75,6 +75,30 @@
       },
       "revId": "9c45ad3087d587bd01e8368cab703df2b0901ea4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "814c5132_25186843",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T14:33:27Z",
+      "side": 1,
+      "message": "Didn\u0027t find any. Originally I used to take this out of `mDrawFramebuffer`, but that caused crashes when running tests back-to-back because `mDrawFramebuffer` can get stale (i.e. it\u0027s not nullptr, but points to deleted object). ContextVk::syncState on DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING is the one updating it, which is when this value is needed, but mDrawFramebuffer at that point is unreliable.\n\nAny suggestions?",
+      "parentUuid": "1b2dcfa9_37de0ae8",
+      "range": {
+        "startLine": 1129,
+        "startChar": 23,
+        "endLine": 1129,
+        "endChar": 58
+      },
+      "revId": "9c45ad3087d587bd01e8368cab703df2b0901ea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
