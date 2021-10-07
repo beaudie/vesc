@@ -37,6 +37,8 @@
 
 # ES2
 
+6538 : AddMockTextureNoRenderTargetTest.NoProgramOutputWorkaround/ES2_Vulkan_SwiftShader = FAIL
+
 6266 : ContextLostSkipValidationTest.LostNoErrorGetProgram/ES2_Vulkan = FAIL
 6266 : ContextLostTest.ParallelCompileReadyQuery/ES2_Vulkan = FAIL
 
