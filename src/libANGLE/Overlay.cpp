@@ -18,6 +18,9 @@
 
 #include <numeric>
 
+// To avoid conflicts with the macro from the Windows SDK...
+#undef GetCurrentTime
+
 namespace gl
 {
 namespace

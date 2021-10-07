@@ -14,6 +14,9 @@
 
 #include <string>
 
+// To avoid conflicts with the macro from the Windows SDK...
+#undef GetCurrentTime
+
 namespace angle
 {
 std::string GetExecutableName();

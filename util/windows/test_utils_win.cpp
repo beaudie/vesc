@@ -19,6 +19,9 @@
 #include "anglebase/no_destructor.h"
 #include "common/angleutils.h"
 
+// To avoid conflicts with the macro from the Windows SDK...
+#undef DeleteFile
+
 namespace angle
 {
 namespace
