@@ -1453,9 +1453,6 @@ TEST_P(BlitFramebufferTest, MultisampleDepthClear)
 // Test resolving a multisampled stencil buffer.
 TEST_P(BlitFramebufferTest, MultisampleStencil)
 {
-    // Incorrect rendering results seen on AMD Windows OpenGL. http://anglebug.com/2486
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsWindows());
-
     // http://anglebug.com/5106
     ANGLE_SKIP_TEST_IF(IsMetal() && IsIntel() && IsOSX());
 
@@ -1516,9 +1513,6 @@ TEST_P(BlitFramebufferTest, MultisampleStencil)
 // Test resolving a multisampled stencil buffer with scissor.
 TEST_P(BlitFramebufferTest, ScissoredMultisampleStencil)
 {
-    // Incorrect rendering results seen on AMD Windows OpenGL. http://anglebug.com/2486
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsWindows());
-
     // Fails verifying that the middle pixel is red. http://anglebug.com/3496
     ANGLE_SKIP_TEST_IF((IsIntel() || IsAMD()) && IsOSX());
 
