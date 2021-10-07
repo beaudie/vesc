@@ -22,6 +22,30 @@
       },
       "revId": "212f4592dc1a5e8b9c15f6149ba0f625a730a2b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c1273e0_1d28accc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-07T19:09:42Z",
+      "side": 1,
+      "message": "Yep, here: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6081\nProbably only a couple weeks out once we\u0027re sure this is stable",
+      "parentUuid": "70c60a9a_2c90e308",
+      "range": {
+        "startLine": 11,
+        "startChar": 39,
+        "endLine": 12,
+        "endChar": 65
+      },
+      "revId": "212f4592dc1a5e8b9c15f6149ba0f625a730a2b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
