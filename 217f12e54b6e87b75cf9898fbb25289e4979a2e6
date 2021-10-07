@@ -51,6 +51,24 @@
       "parentUuid": "fa884ed9_a0b1bce5",
       "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90255835_7a5d96cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-07T18:56:43Z",
+      "side": 1,
+      "message": "Do we use newer QC drivers now? I thought our Pixel bots where still taking this path. Should we remove the workaround then?",
+      "parentUuid": "dd51c36e_7701eba5",
+      "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
