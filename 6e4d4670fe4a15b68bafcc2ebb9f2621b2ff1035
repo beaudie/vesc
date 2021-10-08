@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cfde0d3_e036917c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-08T21:19:34Z",
+      "side": 1,
+      "message": "Shabi, PTAL at SYNC-HAZARD-WRITE_AFTER_WRITE suppressions.",
+      "revId": "6e4d4670fe4a15b68bafcc2ebb9f2621b2ff1035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
