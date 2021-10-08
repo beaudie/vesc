@@ -16,6 +16,63 @@
       "message": "Another clean up and add assertions (I still remember Tim asked this when reviewing the original CL)",
       "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99eb78f8_d7997270",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T16:58:43Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 436,
+        "startChar": 63,
+        "endLine": 436,
+        "endChar": 70
+      },
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbd5ef69_8fcdedff",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T16:58:43Z",
+      "side": 1,
+      "message": "Unrelated to this CL, but:\n\nThis looks problematic, especially with Shabi\u0027s recent changes to attempt to destroy objects immediately (crrev.com/c/2832002).   It looks like there\u0027s a gap where the image could be destroyed before it\u0027s retained in copyAndStageImageData().   Or, does the !mOwnsImage protect us from that, implying that someone else still has a reference to it?",
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f07c5afb_d65aeb8e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4765,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T16:58:43Z",
+      "side": 1,
+      "message": "Why did you make this change?   It\u0027s still functionally the same.",
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
