@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64c1e0e1_ed648e19",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3954,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-08T15:41:56Z",
+      "side": 1,
+      "message": "Please pull this out into a helper (you know, CamelCase, anonymous namespace at top of the file) and pass the shader type in. It\u0027s duplicated in every case below.\n\nAlso while apparently not tested, this is obviously missing for GS too, so please add that as well.",
+      "range": {
+        "startLine": 3944,
+        "startChar": 0,
+        "endLine": 3954,
+        "endChar": 13
+      },
+      "revId": "9b172286868fbd44f4873285d6fe1958b66f0b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13f890e2_96da2524",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 1
