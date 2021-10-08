@@ -16,6 +16,24 @@
       "message": "Used in https://chromium.googlesource.com/chromium/src/+/85b0bd07c2597f03beeefb8b33fcfcee47dc6937/gpu/command_buffer/service/shader_translator_cache_unittest.cc#26",
       "revId": "701e8892f45e6f416dcbb0d23a155d346d0280fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3502957_57fc3e54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-08T14:34:06Z",
+      "side": 1,
+      "message": "Shabi, a few options to fix this:\n - Migrate the test to SH_VALIDATE_AST\n - re-introduce SH_VALIDATE as SH_NOOP and update test\n - convert the test to use `0` instead of `SH_VALIDATE`",
+      "parentUuid": "c0a2329a_95706bec",
+      "revId": "701e8892f45e6f416dcbb0d23a155d346d0280fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
