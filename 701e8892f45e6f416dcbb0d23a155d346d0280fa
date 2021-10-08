@@ -34,6 +34,24 @@
       "parentUuid": "c0a2329a_95706bec",
       "revId": "701e8892f45e6f416dcbb0d23a155d346d0280fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94dbd608_c064678c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-08T15:45:50Z",
+      "side": 1,
+      "message": "SH_VALIDATE doesn\u0027t do anything. Just remove it from Chromium.",
+      "parentUuid": "a3502957_57fc3e54",
+      "revId": "701e8892f45e6f416dcbb0d23a155d346d0280fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
