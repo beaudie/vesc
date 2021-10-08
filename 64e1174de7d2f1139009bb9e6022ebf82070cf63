@@ -84,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "debcaa1e_1ecf5a9b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-08T18:07:00Z",
+      "side": 1,
+      "message": "From what I read, looks like releaseImage does not actually release anything if mOwnsImage is false.",
+      "parentUuid": "cbd5ef69_8fcdedff",
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f07c5afb_d65aeb8e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
