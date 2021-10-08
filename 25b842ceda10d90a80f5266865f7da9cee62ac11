@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7995dc74_4dedaf10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-08T20:19:50Z",
+      "side": 1,
+      "message": "With your change landed this change becomes much simpler and less fragile. Worth landing?",
+      "revId": "25b842ceda10d90a80f5266865f7da9cee62ac11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
