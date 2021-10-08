@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "002afc05_4d289b8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-08T15:26:25Z",
+      "side": 1,
+      "message": "Geoff: Can you confirm you\u0027re OK with removing dEQP / GLES testing on the Nexus 5x? See commit message.. this config is completely obsolete and we still have WebGL testing.",
+      "revId": "984ca6321ce0655b1b4e79a4df52296ea7f37798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
