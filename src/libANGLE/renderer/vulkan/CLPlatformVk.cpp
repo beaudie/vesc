@@ -98,7 +98,8 @@ const std::string &CLPlatformVk::GetVersionString()
 {
     static const angle::base::NoDestructor<const std::string> sVersion(
         "OpenCL " + std::to_string(CL_VERSION_MAJOR(GetVersion())) + "." +
-        std::to_string(CL_VERSION_MINOR(GetVersion())) + " ANGLE " ANGLE_VERSION_STRING);
+        std::to_string(CL_VERSION_MINOR(GetVersion())) + " ANGLE " +
+        angle::GetANGLEVersionString());
     return *sVersion;
 }
 
