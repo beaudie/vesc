@@ -661,6 +661,9 @@ action("angle_commit_id") {
   script = "src/commit_id.py"
   outputs = [ _commit_id_output_file ]
 
+  # TODO(jmadill): Enable visibility rule. http://anglebug.com/2551
+  # visibility = [ ":angle_version" ]
+
   # Add git as a dependency if it is available.
   if (angle_enable_commit_id &&
       exec_script("src/commit_id.py", [ "check" ], "value") == 1) {
@@ -692,7 +695,11 @@ action("angle_commit_id") {
 }
 
 angle_source_set("angle_version") {
-  sources = [ "src/common/angle_version.h" ]
+  sources = [
+    "src/common/angle_version.cpp",
+    "src/common/angle_version.h",
+    "src/common/angle_version_defines.h",
+  ]
   public_deps = [ ":angle_commit_id" ]
 }
 
