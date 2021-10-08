@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5d37845_503015fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-10-08T22:44:57Z",
+      "side": 1,
+      "message": "This also passes all 6 variations run on CF with SwANGLE with\n   \n   \n   ./cts-tradefed run cts -m CtsDeqpTestCases -t dEQP-GLES3.functional.shaders.builtin_variable.fragcoord_xyz",
+      "revId": "5083101d8a8ea5231fa056bc36a0e5ba8433a2ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
