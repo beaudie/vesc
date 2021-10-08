@@ -190,6 +190,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d4e2080_b3780f88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-08T00:42:43Z",
+      "side": 1,
+      "message": "\u003eIf you think you found a bug in existing code with image buffer, you should file bug.\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6545",
+      "parentUuid": "01619ab0_db30eb95",
+      "revId": "1f4e9d4551d57f6e0846f05948e3839bba3201fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24922d2f_1f67445e",
