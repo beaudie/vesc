@@ -16,6 +16,24 @@
       "message": "This one turns out revealing another optimization opportunity that we missed. Because we sub-allocate buffer from dynamicBuffer, you may end up sharing the same BufferHelper object with previous allocation. But the tracking of GPU progress is only on BufferHelper granularity. This means when we check if GPU is busy or not, that answer is wrong (it may return true when it shoule be false). This does not affect correctness, but will cause us get into slower code path for mapBuffer/subData etc. The correct fix I believe is to track GPU queueSerial on sub-allocations, that will not just fix this issue, but also will reduce the memory usage. But lets tackle that issue in the sub-allocator in future CLs. For now, the easy/quick fix I did here is to track if BufferVk is been used by anyone since last time we allocate storage or not.",
       "revId": "a526632f7f116b9ba4338063e7987eca2395fcfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09a6929e_9d5d65aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T17:02:53Z",
+      "side": 1,
+      "message": "Can you open a bug to track this, if you haven\u0027t already?",
+      "parentUuid": "24439e86_f13eb0f5",
+      "revId": "a526632f7f116b9ba4338063e7987eca2395fcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
