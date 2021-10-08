@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5363692a_88d1488e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T16:41:04Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4fc318ea142e5e1816f4588eeb9efca601182ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3aedbb4_3aa5cb67",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T16:41:04Z",
+      "side": 1,
+      "message": "Move \u0027sourceLevelGL\u0027 declaration here.",
+      "revId": "4fc318ea142e5e1816f4588eeb9efca601182ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c09da45_2b27ba0a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2503,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T16:41:04Z",
+      "side": 1,
+      "message": "typo: from",
+      "range": {
+        "startLine": 2503,
+        "startChar": 37,
+        "endLine": 2503,
+        "endChar": 41
+      },
+      "revId": "4fc318ea142e5e1816f4588eeb9efca601182ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01843025_ad757343",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2507,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-08T16:41:04Z",
+      "side": 1,
+      "message": "nit: (baseLevel, maxLevel]\n\nReplace the \"[\" with \"(\" since we aren\u0027t including the base level.",
+      "range": {
+        "startLine": 2507,
+        "startChar": 14,
+        "endLine": 2507,
+        "endChar": 35
+      },
+      "revId": "4fc318ea142e5e1816f4588eeb9efca601182ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
