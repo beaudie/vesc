@@ -52,6 +52,24 @@
       "parentUuid": "a3502957_57fc3e54",
       "revId": "701e8892f45e6f416dcbb0d23a155d346d0280fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4dc38fe_624687d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-08T16:34:29Z",
+      "side": 1,
+      "message": "Remove what.  The test?  Use of the flag?\n\nThe compile options are a parameter passed in to some unit tests, so they have to have some value.  I can use zero:\n\n - ShCompileOptions driver_bug_workarounds \u003d SH_VALIDATE;\n + ShCompileOptions driver_bug_workarounds \u003d 0;\n\nOr we could do something like this:\n\n - ShCompileOptions driver_bug_workarounds \u003d SH_VALIDATE;\n + ShCompileOptions driver_bug_workarounds \u003d SH_NONE;\n\nI would actually lean toward the latter, since there is a need to initialize the value to something.",
+      "parentUuid": "94dbd608_c064678c",
+      "revId": "701e8892f45e6f416dcbb0d23a155d346d0280fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
