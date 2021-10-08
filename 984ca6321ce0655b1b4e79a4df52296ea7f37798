@@ -16,6 +16,23 @@
       "message": "Geoff: Can you confirm you\u0027re OK with removing dEQP / GLES testing on the Nexus 5x? See commit message.. this config is completely obsolete and we still have WebGL testing.",
       "revId": "984ca6321ce0655b1b4e79a4df52296ea7f37798",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "727f6f27_57597d44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-08T21:56:08Z",
+      "side": 1,
+      "message": "This also removes angle_end2end_tests and angle_unittests on Nexus 5X.\nPlease first remove these in Chromium.\nangle_end2end_tests from https://luci-milo.appspot.com/p/chromium/builders/ci/Android%20FYI%20Release%20%28Nexus%205X%29\nangle_unittests from https://ci.chromium.org/p/chromium/builders/luci.chromium.ci/Marshmallow%2064%20bit%20Tester\nhttps://ci.chromium.org/p/chromium/builders/ci/android-arm64-proguard-rel\nhttps://ci.chromium.org/p/chromium/builders/ci/android-code-coverage\nhttps://ci.chromium.org/p/chromium/builders/ci/android-marshmallow-arm64-rel\nhttps://ci.chromium.org/p/chromium/builders/try/android-marshmallow-arm64-rel\nhttps://ci.chromium.org/p/chromium/builders/try/android-marshmallow-arm64-rel-rts\n\nOtherwise LGTM.",
+      "revId": "984ca6321ce0655b1b4e79a4df52296ea7f37798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
