@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad36fbba_1ecc4762",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-08T18:03:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99eb78f8_d7997270",
+      "range": {
+        "startLine": 436,
+        "startChar": 63,
+        "endLine": 436,
+        "endChar": 70
+      },
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbd5ef69_8fcdedff",
@@ -71,6 +95,24 @@
       "writtenOn": "2021-10-08T16:58:43Z",
       "side": 1,
       "message": "Why did you make this change?   It\u0027s still functionally the same.",
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16354a1e_26465165",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4765,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-08T18:03:52Z",
+      "side": 1,
+      "message": "Because I added an assertion in the getActualVkFormat() function, but here the image is initialized after this call, so I have to avoid use the API call to avoid assertion.",
+      "parentUuid": "f07c5afb_d65aeb8e",
       "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
