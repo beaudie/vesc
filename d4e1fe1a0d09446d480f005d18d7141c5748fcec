@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "df48f978_e8a18e7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-08T15:13:34Z",
+      "side": 1,
+      "message": "I\u0027ve got the go ahead from Geoff to remove them. We won\u0027t be deploying GLES, just WebGL, so in order to \"test what we ship\" we should only test WebGL.",
+      "parentUuid": "6ae8901f_2e90f30d",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "d4e1fe1a0d09446d480f005d18d7141c5748fcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4e80183e_8941d8b2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -71,6 +95,30 @@
       "writtenOn": "2021-10-07T20:04:47Z",
       "side": 1,
       "message": "Other suites don\u0027t have it, so let\u0027s be consistent and remove here, too.",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 10
+      },
+      "revId": "d4e1fe1a0d09446d480f005d18d7141c5748fcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4de1844b_e776619b",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-08T15:13:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c28bc450_436c1954",
       "range": {
         "startLine": 153,
         "startChar": 0,
