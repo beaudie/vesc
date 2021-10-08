@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "980e6b2b_aff3488a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-08T16:40:51Z",
+      "side": 1,
+      "message": "Maybe a different name for DeleteFile?",
+      "revId": "a06970bf02819aa8ed0b0ed7a8606d53dc2a9761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1305850_4879a812",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-08T16:40:51Z",
+      "side": 1,
+      "message": "DeleteSystemFile might be a confusing name since it makes it sound like it is for deleting system files, rather than a system function for deleting files. Maybe SystemDeleteFile? Although that is clunky in a different way.\n\nYou could call it DeleteFileA, since that is what it ultimately calls on Windows, but I\u0027m not thrilled with that name.",
+      "revId": "a06970bf02819aa8ed0b0ed7a8606d53dc2a9761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
