@@ -141,6 +141,24 @@
       "parentUuid": "19e4be5e_74b3ad4f",
       "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "995e5de0_a1eec054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-10-08T18:19:02Z",
+      "side": 1,
+      "message": "Latest notes 2:\n\nScratch the above, maybe since drawablearea doesn\u0027t change on rotation we should keep identity for the half render area rotation matrix",
+      "parentUuid": "3a4f48a0_a10f77b7",
+      "revId": "217f12e54b6e87b75cf9898fbb25289e4979a2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
