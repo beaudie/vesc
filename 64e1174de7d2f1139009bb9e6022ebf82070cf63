@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d196e713_9a2bab26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-08T00:30:25Z",
+      "side": 1,
+      "message": "Another clean up and add assertions (I still remember Tim asked this when reviewing the original CL)",
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
