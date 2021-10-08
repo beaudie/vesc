@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a500a936_2387a725",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-08T16:18:06Z",
+      "side": 1,
+      "message": "Can you move these suppressions to angle_end2end_tests_suppressions.txt?",
+      "revId": "b03c47538657aa5b64a302d5a9bfe92e18bf2342",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
