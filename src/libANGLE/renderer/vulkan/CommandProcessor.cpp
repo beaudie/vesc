@@ -766,6 +766,82 @@ angle::Result CommandProcessor::flushRenderPassCommands(Context *context,
                                              renderPassCommands);
 }
 
+// AsyncVulkanObjectDestroyer implementation.
+
+AsyncVulkanObjectDestroyer::AsyncVulkanObjectDestroyer(RendererVk *renderer)
+    : mTerminateThread(false), mRendererVk(renderer)
+{}
+
+AsyncVulkanObjectDestroyer::~AsyncVulkanObjectDestroyer() = default;
+
+angle::Result AsyncVulkanObjectDestroyer::init()
+{
+    mVulkanObjectDestroyerThread = std::thread(&AsyncVulkanObjectDestroyer::processTasks, this);
+
+    return angle::Result::Continue;
+}
+
+void AsyncVulkanObjectDestroyer::destroy()
+{
+    terminateWorkerThread();
+    if (mVulkanObjectDestroyerThread.joinable())
+    {
+        mVulkanObjectDestroyerThread.join();
+    }
+}
+
+void AsyncVulkanObjectDestroyer::enqueueVkSurfaceHandle(VkSurfaceKHR &vkSurfaceHandle)
+{
+    // Grab the worker mutex before updating shared data.
+    std::unique_lock<std::mutex> containerLock(mWorkerThreadMutex);
+    mVkSurfaceHandles.push_back(vkSurfaceHandle);
+    mStateChangeCondition.notify_one();
+}
+
+void AsyncVulkanObjectDestroyer::terminateWorkerThread()
+{
+    // Grab the worker mutex before updating shared data.
+    std::lock_guard<std::mutex> terminateThreadLock(mWorkerThreadMutex);
+    mTerminateThread = true;
+    mStateChangeCondition.notify_one();
+}
+
+void AsyncVulkanObjectDestroyer::processTasks()
+{
+    bool exitThread = false;
+    while (!exitThread)
+    {
+        // Grab the worker mutex before reading shared data.
+        std::unique_lock<std::mutex> containerLock(mWorkerThreadMutex);
+        while (mVkSurfaceHandles.empty() && !mTerminateThread)
+        {
+            // Wait for a state change
+            mStateChangeCondition.wait(containerLock);
+        }
+        exitThread = mTerminateThread;
+        std::vector<VkSurfaceKHR> vkSurfaceHandles(std::move(mVkSurfaceHandles));
+        containerLock.unlock();
+
+        if (!vkSurfaceHandles.empty())
+        {
+            destroyVkSurfaceHandles(vkSurfaceHandles);
+        }
+    }
+}
+
+void AsyncVulkanObjectDestroyer::destroyVkSurfaceHandles(
+    std::vector<VkSurfaceKHR> &vkSurfaceHandles)
+{
+    VkInstance instance = mRendererVk->getInstance();
+    for (const VkSurfaceKHR &vkSurface : vkSurfaceHandles)
+    {
+        vkDestroySurfaceKHR(instance, vkSurface, nullptr);
+    }
+    vkSurfaceHandles.clear();
+
+    return;
+}
+
 // CommandQueue implementation.
 CommandQueue::CommandQueue() : mCurrentQueueSerial(mQueueSerialFactory.generate()) {}
 

@@ -937,6 +937,7 @@ RendererVk::RendererVk()
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
       mCommandProcessor(this),
+      mAsyncVulkanObjectDestroyer(this),
       mSupportedVulkanPipelineStageMask(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -982,6 +983,7 @@ void RendererVk::onDestroy(vk::Context *context)
             mCommandQueue.destroy(context);
         }
     }
+    mAsyncVulkanObjectDestroyer.destroy();
 
     // Assigns an infinite "last completed" serial to force garbage to delete.
     (void)cleanupGarbage(Serial::Infinite());
@@ -2118,6 +2120,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         ANGLE_TRY(mCommandQueue.init(displayVk, graphicsQueueMap));
     }
+    ANGLE_TRY(mAsyncVulkanObjectDestroyer.init());
 
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Avoid compiler warnings on unused-but-set variables.

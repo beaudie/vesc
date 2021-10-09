@@ -576,6 +576,46 @@ class CommandProcessor : public Context, public CommandQueueInterface
     std::thread mTaskThread;
 };
 
+// Async Vulkan object destroyer
+class AsyncVulkanObjectDestroyer : angle::NonCopyable
+{
+  public:
+    AsyncVulkanObjectDestroyer(RendererVk *renderer);
+    ~AsyncVulkanObjectDestroyer();
+
+    angle::Result init();
+
+    void destroy();
+
+    void enqueueVkSurfaceHandle(VkSurfaceKHR &vkSurfaceHandle);
+
+  private:
+    // Entry point for command processor thread, calls processTasksImpl to do the
+    // work. called by RendererVk::initializeDevice on main thread
+    void processTasks();
+
+    // Called asynchronously from main thread to terminate the worker thread
+    void terminateWorkerThread();
+
+    // Command processor thread, process a task
+    void destroyVkSurfaceHandles(std::vector<VkSurfaceKHR> &vkSurfaceHandles);
+
+    // Flag to indicate whether worker thread needs to be terminated
+    bool mTerminateThread;
+    // Container for all VkSurfaceKHR objects that need to be destroyed
+    std::vector<VkSurfaceKHR> mVkSurfaceHandles;
+    // Mutex protecting mTerminateThread and mVkSurfaceHandles
+    std::mutex mWorkerThreadMutex;
+    // Signal worker thread when there is a change in state -
+    // 1. A VkSurfaceKHR object needs to be destroyed
+    // 2. The worker thread needs to be terminated
+    std::condition_variable mStateChangeCondition;
+
+    // Vulkan object destroyer worker thread.
+    std::thread mVulkanObjectDestroyerThread;
+    RendererVk *mRendererVk;
+};
+
 }  // namespace vk
 
 }  // namespace rx

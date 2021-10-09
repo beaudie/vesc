@@ -447,6 +447,11 @@ class RendererVk : angle::NonCopyable
         return mMaxCopyBytesUsingCPUWhenPreservingBufferData;
     }
 
+    void destroyVkSurfaceHandle(VkSurfaceKHR &vkSurfaceHandle)
+    {
+        mAsyncVulkanObjectDestroyer.enqueueVkSurfaceHandle(vkSurfaceHandle);
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -574,6 +579,9 @@ class RendererVk : angle::NonCopyable
 
     // Async Command Queue
     vk::CommandProcessor mCommandProcessor;
+
+    // Async Vulkan object destroyer
+    vk::AsyncVulkanObjectDestroyer mAsyncVulkanObjectDestroyer;
 
     vk::Allocator mAllocator;
     SamplerCache mSamplerCache;
