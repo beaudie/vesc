@@ -100,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0122868e_5ff573eb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-09T01:42:41Z",
+      "side": 1,
+      "message": "Oops, I was looking at ImageHelper::releaseImage(), not TextureVk::releaseImage().",
+      "parentUuid": "debcaa1e_1ecf5a9b",
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f07c5afb_d65aeb8e",
@@ -131,6 +149,24 @@
       "side": 1,
       "message": "Because I added an assertion in the getActualVkFormat() function, but here the image is initialized after this call, so I have to avoid use the API call to avoid assertion.",
       "parentUuid": "f07c5afb_d65aeb8e",
+      "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2a42134_2f0764c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4765,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-09T01:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "16354a1e_26465165",
       "revId": "64e1174de7d2f1139009bb9e6022ebf82070cf63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
