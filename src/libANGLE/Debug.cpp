@@ -152,7 +152,8 @@ void Debug::insertMessage(GLenum source,
                           gl::LogSeverity logSeverity) const
 {
     std::string messageCopy(message);
-    insertMessage(source, type, id, severity, std::move(messageCopy), logSeverity);
+    insertMessage(source, type, id, severity, std::move(messageCopy), logSeverity,
+                  angle::EntryPoint::GLInvalid);
 }
 
 void Debug::insertMessage(GLenum source,
@@ -160,14 +161,16 @@ void Debug::insertMessage(GLenum source,
                           GLuint id,
                           GLenum severity,
                           std::string &&message,
-                          gl::LogSeverity logSeverity) const
+                          gl::LogSeverity logSeverity,
+                          angle::EntryPoint entryPoint) const
 {
     {
         // output all messages to the debug log
         const char *messageTypeString = GLMessageTypeToString(type);
         const char *severityString    = GLSeverityToString(severity);
         std::ostringstream messageStream;
-        messageStream << "GL " << messageTypeString << ": " << severityString << ": " << message;
+        messageStream << "GL " << messageTypeString << ": " << severityString << ": " << message
+                      << ". From entry point : " << GetEntryPointName(entryPoint);
         switch (logSeverity)
         {
             case gl::LOG_FATAL:

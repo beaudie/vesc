@@ -2768,9 +2768,11 @@ void Context::handleError(GLenum errorCode,
     mErrors.handleError(errorCode, message, file, function, line);
 }
 
-void Context::validationError(GLenum errorCode, const char *message) const
+void Context::validationError(angle::EntryPoint entryPoint,
+                              GLenum errorCode,
+                              const char *message) const
 {
-    const_cast<Context *>(this)->mErrors.validationError(errorCode, message);
+    const_cast<Context *>(this)->mErrors.validationError(entryPoint, errorCode, message);
 }
 
 // Get one of the recorded errors and clear its flag, if any.
@@ -6603,7 +6605,7 @@ GLenum Context::checkFramebufferStatus(GLenum target)
 
 void Context::compileShader(ShaderProgramID shader)
 {
-    Shader *shaderObject = GetValidShader(this, shader);
+    Shader *shaderObject = GetValidShader(this, angle::EntryPoint::GLCompileShader, shader);
     if (!shaderObject)
     {
         return;
@@ -9216,14 +9218,14 @@ void ErrorSet::handleError(GLenum errorCode,
                                                   gl::LOG_WARN);
 }
 
-void ErrorSet::validationError(GLenum errorCode, const char *message)
+void ErrorSet::validationError(angle::EntryPoint entryPoint, GLenum errorCode, const char *message)
 {
     ASSERT(errorCode != GL_NO_ERROR);
     mErrors.insert(errorCode);
 
     mContext->getState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR,
                                                   errorCode, GL_DEBUG_SEVERITY_HIGH, message,
-                                                  gl::LOG_INFO);
+                                                  gl::LOG_INFO, entryPoint);
 }
 
 bool ErrorSet::empty() const
@@ -9357,14 +9359,16 @@ void StateCache::updateBasicDrawElementsError()
 intptr_t StateCache::getBasicDrawStatesErrorImpl(const Context *context) const
 {
     ASSERT(mCachedBasicDrawStatesError == kInvalidPointer);
-    mCachedBasicDrawStatesError = reinterpret_cast<intptr_t>(ValidateDrawStates(context));
+    mCachedBasicDrawStatesError =
+        reinterpret_cast<intptr_t>(ValidateDrawStates(context, angle::EntryPoint::GLInvalid));
     return mCachedBasicDrawStatesError;
 }
 
 intptr_t StateCache::getBasicDrawElementsErrorImpl(const Context *context) const
 {
     ASSERT(mCachedBasicDrawElementsError == kInvalidPointer);
-    mCachedBasicDrawElementsError = reinterpret_cast<intptr_t>(ValidateDrawElementsStates(context));
+    mCachedBasicDrawElementsError = reinterpret_cast<intptr_t>(
+        ValidateDrawElementsStates(context, angle::EntryPoint::GLInvalid));
     return mCachedBasicDrawElementsError;
 }
 
