@@ -53,13 +53,15 @@ class Debug : angle::NonCopyable
                        GLuint id,
                        GLenum severity,
                        const std::string &message,
-                       gl::LogSeverity logSeverity) const;
+                       gl::LogSeverity logSeverity,
+                       angle::EntryPoint entryPoint) const;
     void insertMessage(GLenum source,
                        GLenum type,
                        GLuint id,
                        GLenum severity,
                        std::string &&message,
-                       gl::LogSeverity logSeverity) const;
+                       gl::LogSeverity logSeverity,
+                       angle::EntryPoint entryPoint) const;
 
     void setMessageControl(GLenum source,
                            GLenum type,
@@ -77,8 +79,8 @@ class Debug : angle::NonCopyable
     size_t getNextMessageLength() const;
     size_t getMessageCount() const;
 
-    void pushGroup(GLenum source, GLuint id, std::string &&message);
-    void popGroup();
+    void pushGroup(GLenum source, GLuint id, std::string &&message, angle::EntryPoint entryPoint);
+    void popGroup(angle::EntryPoint entryPoint);
     size_t getGroupStackDepth() const;
 
     // Helper for ANGLE_PERF_WARNING
