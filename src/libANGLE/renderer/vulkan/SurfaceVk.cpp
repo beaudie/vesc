@@ -524,7 +524,6 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = renderer->getDevice();
-    VkInstance instance  = renderer->getInstance();
 
     // flush the pipe.
     (void)renderer->finish(displayVk, mState.hasProtectedContent());
@@ -545,7 +544,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     if (mSurface)
     {
-        vkDestroySurfaceKHR(instance, mSurface, nullptr);
+        renderer->destroyVkSurfaceHandle(mSurface);
         mSurface = VK_NULL_HANDLE;
     }
 
