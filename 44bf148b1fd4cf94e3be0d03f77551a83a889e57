@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3356b807_0dc68e9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-09T00:49:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c2b8803_01502e3a",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "22f32d1f_ebe72e78",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0ce15a4_4d6c6528",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-09T00:49:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84c9d4cd_e493953b",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 36
+      },
+      "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37b452fa_a433d8b5",
@@ -98,6 +146,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f552ab7_4c0f10a0",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-09T00:49:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37b452fa_a433d8b5",
+      "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e25adab_cc2846c1",
@@ -111,6 +177,24 @@
       "writtenOn": "2021-10-05T18:47:36Z",
       "side": 1,
       "message": "Please add one more Future work:\n\n* Implement the Overlay rendering functionality in the front-end to benefit all backends.",
+      "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4755860_d3a68185",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-09T00:49:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e25adab_cc2846c1",
       "revId": "44bf148b1fd4cf94e3be0d03f77551a83a889e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
