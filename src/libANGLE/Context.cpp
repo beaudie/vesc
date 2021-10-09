@@ -2768,9 +2768,11 @@ void Context::handleError(GLenum errorCode,
     mErrors.handleError(errorCode, message, file, function, line);
 }
 
-void Context::validationError(GLenum errorCode, const char *message) const
+void Context::validationError(angle::EntryPoint entryPoint,
+                              GLenum errorCode,
+                              const char *message) const
 {
-    const_cast<Context *>(this)->mErrors.validationError(errorCode, message);
+    const_cast<Context *>(this)->mErrors.validationError(entryPoint, errorCode, message);
 }
 
 // Get one of the recorded errors and clear its flag, if any.
@@ -5950,7 +5952,11 @@ void Context::debugMessageInsert(GLenum source,
                                  const GLchar *buf)
 {
     std::string msg(buf, (length > 0) ? static_cast<size_t>(length) : strlen(buf));
-    mState.getDebug().insertMessage(source, type, id, severity, std::move(msg), gl::LOG_INFO);
+    mState.getDebug().insertMessage(
+        source, type, id, severity, std::move(msg), gl::LOG_INFO,
+        angle::EntryPoint::GLDebugMessageInsert);  // TODO: find a way to distinguish between
+                                                   // GLDebugMessageInsert and
+                                                   // GLDebugMessageInsertKHR
 }
 
 void Context::debugMessageCallback(GLDEBUGPROCKHR callback, const void *userParam)
@@ -5975,7 +5981,10 @@ void Context::pushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLc
 {
     std::string msg(message, (length > 0) ? static_cast<size_t>(length) : strlen(message));
     ANGLE_CONTEXT_TRY(mImplementation->pushDebugGroup(this, source, id, msg));
-    mState.getDebug().pushGroup(source, id, std::move(msg));
+    mState.getDebug().pushGroup(
+        source, id, std::move(msg),
+        angle::EntryPoint::GLPushDebugGroup);  // TODO: Find a way to distinguish between
+                                               // GLPushDebugGroup and GLPushDebugGroupKHR
 }
 
 angle::Result Context::handleNoopDrawEvent()
@@ -5985,7 +5994,9 @@ angle::Result Context::handleNoopDrawEvent()
 
 void Context::popDebugGroup()
 {
-    mState.getDebug().popGroup();
+    mState.getDebug().popGroup(
+        angle::EntryPoint::GLPopDebugGroup);  // TODO: find a way to distinguish between
+                                              // GLPopDebugGroup and GLPopDebugGroupKHR
     ANGLE_CONTEXT_TRY(mImplementation->popDebugGroup(this));
 }
 
@@ -6603,7 +6614,7 @@ GLenum Context::checkFramebufferStatus(GLenum target)
 
 void Context::compileShader(ShaderProgramID shader)
 {
-    Shader *shaderObject = GetValidShader(this, shader);
+    Shader *shaderObject = GetValidShader(this, angle::EntryPoint::GLCompileShader, shader);
     if (!shaderObject)
     {
         return;
@@ -9213,17 +9224,17 @@ void ErrorSet::handleError(GLenum errorCode,
 
     mContext->getState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR,
                                                   errorCode, GL_DEBUG_SEVERITY_HIGH, message,
-                                                  gl::LOG_WARN);
+                                                  gl::LOG_WARN, angle::EntryPoint::GLInvalid);
 }
 
-void ErrorSet::validationError(GLenum errorCode, const char *message)
+void ErrorSet::validationError(angle::EntryPoint entryPoint, GLenum errorCode, const char *message)
 {
     ASSERT(errorCode != GL_NO_ERROR);
     mErrors.insert(errorCode);
 
     mContext->getState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR,
                                                   errorCode, GL_DEBUG_SEVERITY_HIGH, message,
-                                                  gl::LOG_INFO);
+                                                  gl::LOG_INFO, entryPoint);
 }
 
 bool ErrorSet::empty() const
