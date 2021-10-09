@@ -145,6 +145,30 @@
       },
       "revId": "4fc318ea142e5e1816f4588eeb9efca601182ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a13bb1ae_af67b0ec",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2507,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-09T00:38:40Z",
+      "side": 1,
+      "message": "Actually you are right, it is (base, max]. The base is checked bellow, so we can\u0027t remove it here. Fixed.",
+      "parentUuid": "2fbeea08_8a48fea1",
+      "range": {
+        "startLine": 2507,
+        "startChar": 14,
+        "endLine": 2507,
+        "endChar": 35
+      },
+      "revId": "4fc318ea142e5e1816f4588eeb9efca601182ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
