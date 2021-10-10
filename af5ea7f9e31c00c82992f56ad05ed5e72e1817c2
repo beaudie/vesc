@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ccfbd06_5145b636",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T05:41:05Z",
+      "side": 1,
+      "message": "In the future, please prefix the commit title with `Metal: ` so it\u0027s easier to read `git log --oneline`",
+      "revId": "af5ea7f9e31c00c82992f56ad05ed5e72e1817c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
