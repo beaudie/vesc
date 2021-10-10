@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9bb1adc_597fa4af",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 0,
+      "message": "You can keep this ASSERT around with the same comment. Or change it to static_assert(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS \u003c\u003d 32, ...);",
+      "revId": "4c23b817e08f2aa863a356f61c4e2a1443c008d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

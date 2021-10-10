@@ -22,6 +22,30 @@
       },
       "revId": "5fba4be07b1d2fa58426157d07ecece5ae6b8f4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7e870f8_c8605fa7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "Looks like my concern was invalid, gl::LevelIndex cannot be larger than 16 basically. That certainly simplifies things.\n\n\u003e An INVALID_VALUE error is generated if level is negative or greater than the log2 of the maximum texture width, height, or depth.",
+      "parentUuid": "b3a590d4_560a0a6e",
+      "range": {
+        "startLine": 7,
+        "startChar": 52,
+        "endLine": 7,
+        "endChar": 66
+      },
+      "revId": "5fba4be07b1d2fa58426157d07ecece5ae6b8f4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e688951_3a0df96e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "Nice, thanks for noticing this. Definitely makes things clearer.",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f066d860_dd2d4c40",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "nit: can just say:\n\n    gl::TexLevelMask levelsMask(angle::BitMask\u003cuint32_t\u003e(levelCount)\n                     \u003c\u003c mImage-\u003egetFirstAllocatedLevel().get());\n\nAnd then use `levelsMask` below without constructor.",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa45e5fe_ced03e7a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "nit: remove \"are \"",
+      "range": {
+        "startLine": 2502,
+        "startChar": 18,
+        "endLine": 2502,
+        "endChar": 22
+      },
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d09ca08a_3c1f8c12",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "Same comment about making this a gl::TexLevelMask",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "756ae4ed_4d47d5b9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "Could use \"~angle::Bit(baseLevel.get() + 1)\".",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "005495af_a854cda5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2513,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "You should be able to ASSERT !immutable instead inside the if, isn\u0027t that so?",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a2df977_27ac09b4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "nit: if you want to make it perfect, you can create a tiny class around gl::TexLevelMask that takes gl::LevelIndex, so there would never be a mistake with vk::LevelIndex.",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9510384d_d3f215d4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "nit: can just say:\n\n    gl::TexLevelMask levelsMask(angle::BitMask\u003cuint32_t\u003e(levelCount)\n                                              \u003c\u003c mFirstAllocatedLevel.get());\n\nAnd then use `levelsMask` below without constructor.",
+      "range": {
+        "startLine": 6426,
+        "startChar": 0,
+        "endLine": 6427,
+        "endChar": 76
+      },
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcbdc898_8bbabd58",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6479,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:38:17Z",
+      "side": 1,
+      "message": "levelGL here too",
+      "range": {
+        "startLine": 6479,
+        "startChar": 45,
+        "endLine": 6479,
+        "endChar": 63
+      },
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
