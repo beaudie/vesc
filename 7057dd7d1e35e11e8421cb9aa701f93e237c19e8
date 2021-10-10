@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a8df9f_a25d4dcf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:41:52Z",
+      "side": 1,
+      "message": "super nit: s/there is no good reason to/it\u0027s impossible to /",
+      "range": {
+        "startLine": 435,
+        "startChar": 38,
+        "endLine": 435,
+        "endChar": 64
+      },
+      "revId": "7057dd7d1e35e11e8421cb9aa701f93e237c19e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
