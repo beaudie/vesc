@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3a590d4_560a0a6e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-10T04:13:41Z",
+      "side": 1,
+      "message": "What\u0027s the limit on GL levels? The reason I used vk::LevelIndex for this map is that I don\u0027t think you can ensure the bit mask can cover all possible gl::LevelIndex.\n\nFor example, imagine a texture created with `glTexImage2D` with 100 levels, all the same size (and pretend the application uses base/max \u003d 98). How can mRedefinedLevels work in that case?",
+      "range": {
+        "startLine": 7,
+        "startChar": 52,
+        "endLine": 7,
+        "endChar": 66
+      },
+      "revId": "5fba4be07b1d2fa58426157d07ecece5ae6b8f4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
