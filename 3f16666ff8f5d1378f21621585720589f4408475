@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6878ca0_615a7402",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f066d860_dd2d4c40",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa45e5fe_ced03e7a",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-10-10T04:38:17Z",
       "side": 1,
       "message": "nit: remove \"are \"",
+      "range": {
+        "startLine": 2502,
+        "startChar": 18,
+        "endLine": 2502,
+        "endChar": 22
+      },
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "290b2ee3_273e4d8f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2502,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa45e5fe_ced03e7a",
       "range": {
         "startLine": 2502,
         "startChar": 18,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "defdaf0d_1bfb1d85",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d09ca08a_3c1f8c12",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "756ae4ed_4d47d5b9",
@@ -88,6 +148,24 @@
       "writtenOn": "2021-10-10T04:38:17Z",
       "side": 1,
       "message": "Could use \"~angle::Bit(baseLevel.get() + 1)\".",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a6db497_dd0331a7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "756ae4ed_4d47d5b9",
       "revId": "3f16666ff8f5d1378f21621585720589f4408475",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +187,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bde851f9_151be89d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2513,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Good point. Also asserted at the source of mRedefinedLevels where we insert the bit.",
+      "parentUuid": "005495af_a854cda5",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a2df977_27ac09b4",
@@ -122,6 +218,24 @@
       "writtenOn": "2021-10-10T04:38:17Z",
       "side": 1,
       "message": "nit: if you want to make it perfect, you can create a tiny class around gl::TexLevelMask that takes gl::LevelIndex, so there would never be a mistake with vk::LevelIndex.",
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48611c03_7aab2d4d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Agree. but I think we should defer low priority items like these until we have shipped ANGLE. The gl name space and comment should be reasonably enough.",
+      "parentUuid": "7a2df977_27ac09b4",
       "revId": "3f16666ff8f5d1378f21621585720589f4408475",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -149,6 +263,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0363c150_5f05a6dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6427,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9510384d_d3f215d4",
+      "range": {
+        "startLine": 6426,
+        "startChar": 0,
+        "endLine": 6427,
+        "endChar": 76
+      },
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcbdc898_8bbabd58",
@@ -162,6 +300,30 @@
       "writtenOn": "2021-10-10T04:38:17Z",
       "side": 1,
       "message": "levelGL here too",
+      "range": {
+        "startLine": 6479,
+        "startChar": 45,
+        "endLine": 6479,
+        "endChar": 63
+      },
+      "revId": "3f16666ff8f5d1378f21621585720589f4408475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22574386_43bca5ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6479,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:32:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcbdc898_8bbabd58",
       "range": {
         "startLine": 6479,
         "startChar": 45,
