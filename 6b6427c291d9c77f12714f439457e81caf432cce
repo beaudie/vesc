@@ -94,6 +94,30 @@
       },
       "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba160709_e520b298",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T18:29:43Z",
+      "side": 1,
+      "message": "I assume you want to wait until get clarification from Khronos before landing this?  Given that there is no real benefit of using UNDEFINED, but with potential risk (pending clarification), I think we should wait until clarified. Let me know if my understanding is incorrect.",
+      "parentUuid": "1b1b3b1a_f2881e8f",
+      "range": {
+        "startLine": 318,
+        "startChar": 12,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
