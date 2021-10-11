@@ -83,6 +83,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a54652d7_185944a5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T16:30:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d56fa2d5_668ade75",
+      "range": {
+        "startLine": 911,
+        "startChar": 11,
+        "endLine": 911,
+        "endChar": 27
+      },
+      "revId": "f8fe71a8753eb414aa93567bbfe39411433b51fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "305aae01_a5a09d9b",
@@ -167,6 +191,30 @@
       "side": 1,
       "message": "Same as the other comment, this is fixed in next CL.",
       "parentUuid": "4c3282d9_70b545c6",
+      "range": {
+        "startLine": 98,
+        "startChar": 26,
+        "endLine": 98,
+        "endChar": 37
+      },
+      "revId": "f8fe71a8753eb414aa93567bbfe39411433b51fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "650c5e44_f6b8da39",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-11T16:30:51Z",
+      "side": 1,
+      "message": "The next CL is squashed to this one. Marking it as Resolved.",
+      "parentUuid": "e19d36a9_bc3d067f",
       "range": {
         "startLine": 98,
         "startChar": 26,
