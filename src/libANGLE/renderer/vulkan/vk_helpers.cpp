@@ -5692,9 +5692,20 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     // If caller has provided a staging buffer, use it.
     DynamicBuffer *stagingBuffer = stagingBufferOverride ? stagingBufferOverride : &mStagingBuffer;
     size_t alignment             = mStagingBuffer.getAlignment();
-    ANGLE_TRY(stagingBuffer->allocateWithAlignment(contextVk, allocationSize, alignment,
-                                                   &stagingPointer, &bufferHandle, &stagingOffset,
-                                                   nullptr));
+    angle::Result res =
+        stagingBuffer->allocateWithAlignment(contextVk, allocationSize, alignment, &stagingPointer,
+                                             &bufferHandle, &stagingOffset, nullptr);
+    if (res != angle::Result::Continue)
+    {
+        // Flush staged updates and retry on OOM.
+        WARN() << "allocateWithAlignment failed, retrying after flushing staged updates.\n";
+        ANGLE_TRY(flushAllStagedUpdates(contextVk));
+        ANGLE_TRY(contextVk->finishImpl());
+        ANGLE_TRY(stagingBuffer->allocateWithAlignment(contextVk, allocationSize, alignment,
+                                                       &stagingPointer, &bufferHandle,
+                                                       &stagingOffset, nullptr));
+    }
+
     BufferHelper *currentBuffer = stagingBuffer->getCurrentBuffer();
 
     const uint8_t *source = pixels + static_cast<ptrdiff_t>(inputSkipBytes);
