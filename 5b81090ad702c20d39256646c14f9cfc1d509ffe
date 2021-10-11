@@ -105,6 +105,24 @@
       "parentUuid": "600b4bdc_0de5d2ad",
       "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91f6bb8_ca5b23e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-10-11T09:43:21Z",
+      "side": 1,
+      "message": "I\u0027ve added a longish description in the commit message, and the compile error is already in the linked issue.",
+      "parentUuid": "f8acef7a_a34040f2",
+      "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
