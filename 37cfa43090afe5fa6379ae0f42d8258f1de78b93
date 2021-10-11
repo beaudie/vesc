@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d88944c_0596cf8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2021-10-11T21:43:10Z",
+      "side": 1,
+      "message": "Please have a look at it. It addresses peak-mem usage issue on 32bit apps, allowing retry for failed allocation.",
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
