@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3afeae5b_c43a17e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2021-10-12T01:42:47Z",
+      "side": 1,
+      "message": "Ah, I didn\u0027t realize that ANGLE has separate tracker, beside buganizer. Is there any bridge between anglebug and buganizer?",
+      "parentUuid": "a994cd7d_68b756dd",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4d88944c_0596cf8f",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "251d3e84_3796c014",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5696,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2021-10-12T01:42:47Z",
+      "side": 1,
+      "message": "As it is early return path, I was assuming it\u0027s better to catch it (and record additional commands) at higher level. At bufferHelper level I wouldn\u0027t be able to flush updates (so if this is not needed, as suggested below, I will move the logic here, but if it seems to be needed - it will have to stay higher).",
+      "parentUuid": "cd2e96af_0bd4f81f",
+      "range": {
+        "startLine": 5696,
+        "startChar": 23,
+        "endLine": 5696,
+        "endChar": 44
+      },
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "97f6f92c_5ad962c0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -77,6 +125,24 @@
       "writtenOn": "2021-10-12T00:56:49Z",
       "side": 1,
       "message": "I dont think this is needed. The thing actually helping is the finishImpl call, not flushAllStagedUpdates. And this likely is not safe to call flushAllStagedUpdates as well if mave is invalid. Suggest to remove this line of code.",
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77a2a2f8_b4dd5524",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5702,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2021-10-12T01:42:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure what can be unsafe here, as no staging update is provided at the moment, when allocation failed...\nI will experiment with removing this line anyway, and provide outcome here.",
+      "parentUuid": "97f6f92c_5ad962c0",
       "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
