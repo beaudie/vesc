@@ -16,6 +16,24 @@
       "message": "Are we dropping support for FL9.3?",
       "revId": "44bef8ae5ffc616fa200ba06ef75f1abc227b6b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "189d8fdf_ef9d6015",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T19:47:29Z",
+      "side": 1,
+      "message": "We already did some time ago technically.",
+      "parentUuid": "61028bba_a6b5ae70",
+      "revId": "44bef8ae5ffc616fa200ba06ef75f1abc227b6b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
