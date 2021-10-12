@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9813c4b_70d189c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T12:56:09Z",
+      "side": 1,
+      "message": "../../src/libANGLE/Context.cpp(3495): error C2039: \u0027eglImageStorageEXT\u0027: is not a member of \u0027gl::Extensions\u0027\n../../src\\libANGLE/Framebuffer.h(44): note: see declaration of \u0027gl::Extensions\u0027\n\n(on the bots)",
+      "revId": "f8dc56c110b2dc3c4eb23ffcc01480be98090d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "261b1c8e_6ab82bb7",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T12:56:09Z",
+      "side": 1,
+      "message": "nit: can you place this below with the \u0027validate\u0027 functions?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 56
+      },
+      "revId": "f8dc56c110b2dc3c4eb23ffcc01480be98090d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
