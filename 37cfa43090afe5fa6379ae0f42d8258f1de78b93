@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "41e9da5f_b37e7d63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T18:52:17Z",
+      "side": 1,
+      "message": "What app is affected? In particular, is it using mutable (glTexImage*) or immutable textures (glTexStorage*)?\n\nFor the latter, we have this idea: anglebug.com/6354",
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a994cd7d_68b756dd",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
