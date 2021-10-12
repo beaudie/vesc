@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "671fc4b2_465f7e3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T16:40:24Z",
+      "side": 1,
+      "message": "This one is very odd. Merely adding two skipped tests will cause other test to crash in QC driver. My guess is that this is triggering some bugs in the QC driver.",
+      "revId": "de075f0d1e56e91940d66d5ec8f77fd330b276b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
