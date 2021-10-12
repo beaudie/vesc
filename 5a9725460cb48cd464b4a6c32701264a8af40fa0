@@ -20,6 +20,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "124cdfb1_24de6cb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T14:02:14Z",
+      "side": 1,
+      "message": "I haven\u0027t yet looked into fixing end2end tests to actually test async queue. Maybe this fixes it? :D\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3193420",
+      "parentUuid": "d218ad84_65ecc982",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6190c81_6ae38371",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T14:02:14Z",
+      "side": 1,
+      "message": "Are we losing anything in CPU perf by using unordered_map instead of abseil?\n\nI\u0027m assuming the issue is that we are passing the address of RenderPassHelper::mRenderPass to the worker thread. What if instead we copied that? I realize we generally don\u0027t copy wrapped Vulkan objects, but if it\u0027s a cause of inefficiency/bugs, I think we should find a way to do that. We might want to add a \"weak\" class to make it clear who owns the actual Vulkan object.",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14499c4a_c5320fe0",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
