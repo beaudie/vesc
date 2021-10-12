@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2a111ba_bf4cd5c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T00:46:13Z",
+      "side": 1,
+      "message": "Thanks a lot for cleaning up these files!",
+      "revId": "3762093b574e653bb8c95b17183e24f6fa2926ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18624b72_8601e88f",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T00:46:13Z",
+      "side": 1,
+      "message": "Any information on how non-Googlers can join? I was very recently asked this question and I don\u0027t actually know the answer.",
+      "revId": "3762093b574e653bb8c95b17183e24f6fa2926ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
