@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a57b1387_6107499a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T14:52:28Z",
+      "side": 1,
+      "message": "Yeah adding a weak reference class would be the best solution. Maybe in Debug it can keep a back-pointer to the original unique pointer (vk wrapper type) to ensure validity.\n\nIt will add (slight) extra cost to the render pass lookup if we change to unordered_map.",
+      "parentUuid": "f6190c81_6ae38371",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14499c4a_c5320fe0",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
