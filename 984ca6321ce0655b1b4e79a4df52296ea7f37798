@@ -68,6 +68,24 @@
       "message": "Attn Yuly.",
       "revId": "984ca6321ce0655b1b4e79a4df52296ea7f37798",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "378b0f99_b4877e63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-12T18:02:42Z",
+      "side": 1,
+      "message": "OK, since android-marshmallow-arm64-rel runs on rolls into Chromium, this should be fine.",
+      "parentUuid": "f129fa0d_76ec0893",
+      "revId": "984ca6321ce0655b1b4e79a4df52296ea7f37798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
