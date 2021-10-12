@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb335a32_a299e888",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2021-10-12T22:16:15Z",
+      "side": 1,
+      "message": "Application is using glCompressedTexImage2D, unfortunately. I agree that world would be much better if everyone was using just immutable objects ;)",
+      "parentUuid": "41e9da5f_b37e7d63",
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a994cd7d_68b756dd",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -102,6 +120,24 @@
       "writtenOn": "2021-10-11T21:43:10Z",
       "side": 1,
       "message": "Please have a look at it. It addresses peak-mem usage issue on 32bit apps, allowing retry for failed allocation.",
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc3ac40c_3c11573f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2021-10-12T22:16:15Z",
+      "side": 1,
+      "message": "Unfortunately, I was able to reproduce the issue even with this change. It frequency of the problem dropped, but obviously problem is not solved here, probably because we are not flushing all remaining staging updates.",
+      "parentUuid": "4d88944c_0596cf8f",
       "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
