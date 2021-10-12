@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88be74bf_d7b176d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T13:15:15Z",
+      "side": 1,
+      "message": "Thanks for writing this up Yuxin. I have a few comments here (I didn\u0027t see the review until after it landed, sorry) maybe you can fix them in a follow-up?",
+      "revId": "1fa59e56ab709712a32e6a3c4bdd938a7fb166f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1feaefd4_703dbc8f",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T13:15:15Z",
+      "side": 1,
+      "message": "nit: can you wrap lines to 100 or 80 characters for easier maintenance?",
+      "revId": "1fa59e56ab709712a32e6a3c4bdd938a7fb166f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7489c96_63e69220",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T13:15:15Z",
+      "side": 1,
+      "message": "nit: can remove \"a\", or call it \"A generic text widget\".",
+      "range": {
+        "startLine": 21,
+        "startChar": 12,
+        "endLine": 21,
+        "endChar": 14
+      },
+      "revId": "1fa59e56ab709712a32e6a3c4bdd938a7fb166f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "975aa9b3_75d960e0",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T13:15:15Z",
+      "side": 1,
+      "message": "nit: can you add markdown links to all the files?",
+      "range": {
+        "startLine": 28,
+        "startChar": 41,
+        "endLine": 28,
+        "endChar": 56
+      },
+      "revId": "1fa59e56ab709712a32e6a3c4bdd938a7fb166f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08b893f0_90afd600",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T13:15:15Z",
+      "side": 1,
+      "message": "nit: remove \"include\"\n\nAlso add: \"Add more overlay widgets\" and \"Implement automatic widget layout to eliminate absolute positions\"",
+      "range": {
+        "startLine": 70,
+        "startChar": 21,
+        "endLine": 70,
+        "endChar": 28
+      },
+      "revId": "1fa59e56ab709712a32e6a3c4bdd938a7fb166f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
