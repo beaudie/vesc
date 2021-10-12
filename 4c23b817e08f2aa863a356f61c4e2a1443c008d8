@@ -34,6 +34,24 @@
       "parentUuid": "e9bb1adc_597fa4af",
       "revId": "4c23b817e08f2aa863a356f61c4e2a1443c008d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09127f64_c7c8aa59",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T18:26:50Z",
+      "side": 0,
+      "message": "Lol, my present and past selves think alike",
+      "parentUuid": "917cc8bb_d2655195",
+      "revId": "4c23b817e08f2aa863a356f61c4e2a1443c008d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
