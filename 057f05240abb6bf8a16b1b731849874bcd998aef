@@ -39,6 +39,30 @@
       },
       "revId": "057f05240abb6bf8a16b1b731849874bcd998aef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07192e2a_68010918",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T17:20:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81282e03_2c4be9d0",
+      "range": {
+        "startLine": 472,
+        "startChar": 3,
+        "endLine": 472,
+        "endChar": 10
+      },
+      "revId": "057f05240abb6bf8a16b1b731849874bcd998aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
