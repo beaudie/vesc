@@ -123,6 +123,24 @@
       "parentUuid": "f8acef7a_a34040f2",
       "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f90ffbbb_274fe986",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T12:53:22Z",
+      "side": 1,
+      "message": "Thanks for the explanation. It\u0027s a good fix.",
+      "parentUuid": "e91f6bb8_ca5b23e0",
+      "revId": "5b81090ad702c20d39256646c14f9cfc1d509ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
