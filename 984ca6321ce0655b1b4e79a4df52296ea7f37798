@@ -33,6 +33,24 @@
       "message": "This also removes angle_end2end_tests and angle_unittests on Nexus 5X.\nPlease first remove these in Chromium.\nangle_end2end_tests from https://luci-milo.appspot.com/p/chromium/builders/ci/Android%20FYI%20Release%20%28Nexus%205X%29\nangle_unittests from https://ci.chromium.org/p/chromium/builders/luci.chromium.ci/Marshmallow%2064%20bit%20Tester\nhttps://ci.chromium.org/p/chromium/builders/ci/android-arm64-proguard-rel\nhttps://ci.chromium.org/p/chromium/builders/ci/android-code-coverage\nhttps://ci.chromium.org/p/chromium/builders/ci/android-marshmallow-arm64-rel\nhttps://ci.chromium.org/p/chromium/builders/try/android-marshmallow-arm64-rel\nhttps://ci.chromium.org/p/chromium/builders/try/android-marshmallow-arm64-rel-rts\n\nOtherwise LGTM.",
       "revId": "984ca6321ce0655b1b4e79a4df52296ea7f37798",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f129fa0d_76ec0893",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T15:01:24Z",
+      "side": 1,
+      "message": "Would you be alright if I left angle_unittests in these configs? In the highly unlikely event that we regressed this config, we would still detect it on ANGLE rolls into Chromium. It\u0027s somewhat difficult to remove without adding hard-to-maintain exceptions into test_suite_exceptions.pyl. Also it\u0027s a lot more relevant to Chrome because we use the shader translator.\n\nDone on e2e from N5X: https://chromium-review.googlesource.com/c/chromium/src/+/3217233",
+      "parentUuid": "727f6f27_57597d44",
+      "revId": "984ca6321ce0655b1b4e79a4df52296ea7f37798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
