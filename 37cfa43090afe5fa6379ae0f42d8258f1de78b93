@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a994cd7d_68b756dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T00:56:49Z",
+      "side": 1,
+      "message": "You should file a seperate bug for this, this link does not work.",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4d88944c_0596cf8f",
@@ -14,6 +37,46 @@
       "writtenOn": "2021-10-11T21:43:10Z",
       "side": 1,
       "message": "Please have a look at it. It addresses peak-mem usage issue on 32bit apps, allowing retry for failed allocation.",
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd2e96af_0bd4f81f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5696,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T00:56:49Z",
+      "side": 1,
+      "message": "Suggest to catch failure at  allocator.createBuffer() call instead of here https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d3663",
+      "range": {
+        "startLine": 5696,
+        "startChar": 23,
+        "endLine": 5696,
+        "endChar": 44
+      },
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97f6f92c_5ad962c0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5702,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T00:56:49Z",
+      "side": 1,
+      "message": "I dont think this is needed. The thing actually helping is the finishImpl call, not flushAllStagedUpdates. And this likely is not safe to call flushAllStagedUpdates as well if mave is invalid. Suggest to remove this line of code.",
       "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
