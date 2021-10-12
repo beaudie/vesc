@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f7be14a_dbe98546",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T16:00:01Z",
+      "side": 1,
+      "message": "you can use b/202744914 as well.",
+      "parentUuid": "3afeae5b_c43a17e7",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4d88944c_0596cf8f",
@@ -143,6 +167,24 @@
       "side": 1,
       "message": "I\u0027m not sure what can be unsafe here, as no staging update is provided at the moment, when allocation failed...\nI will experiment with removing this line anyway, and provide outcome here.",
       "parentUuid": "97f6f92c_5ad962c0",
+      "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77438f1c_607360c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5702,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T16:00:01Z",
+      "side": 1,
+      "message": "You could already have staged updates there for other levels. But vkImage may not yet allocated. So the flushAllStagedUpdates here may run into assertion/crash. The problem is that the code you added here is not been tested on bots, so you wont expect bots to discover any problem for you.",
+      "parentUuid": "77a2a2f8_b4dd5524",
       "revId": "37cfa43090afe5fa6379ae0f42d8258f1de78b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
