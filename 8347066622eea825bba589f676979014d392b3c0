@@ -33,6 +33,24 @@
       "message": "LGTM",
       "revId": "8347066622eea825bba589f676979014d392b3c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "077834f3_fd05539e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-12T18:25:51Z",
+      "side": 1,
+      "message": "OK, added that in 2nd version of patch.",
+      "parentUuid": "bb6fa473_12f53a56",
+      "revId": "8347066622eea825bba589f676979014d392b3c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
