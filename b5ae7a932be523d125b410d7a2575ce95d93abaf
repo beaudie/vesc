@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b65d11a4_ec7028cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-10-12T23:59:17Z",
+      "side": 1,
+      "message": "There were some merge conflicts in the tests. Resolved them now by reverting test changes, i.e. only non-test changes are included in this cherry-pick.",
+      "revId": "b5ae7a932be523d125b410d7a2575ce95d93abaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
