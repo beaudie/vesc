@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d218ad84_65ecc982",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T12:38:13Z",
+      "side": 1,
+      "message": "Thanks for the fix! Is there a way to add a regression test for this? We can test the async command queue in angle_end2end_tests.",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14499c4a_c5320fe0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T12:38:13Z",
+      "side": 1,
+      "message": "you can take out the #ifdef, if abseil is false this resolves to unordered map. Can you leave a comment about the need for pointer stability?",
+      "range": {
+        "startLine": 1518,
+        "startChar": 0,
+        "endLine": 1525,
+        "endChar": 0
+      },
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
