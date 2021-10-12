@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c2635b_d14d0f1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T12:43:57Z",
+      "side": 1,
+      "message": "nit: usually we explicitly cast non-bool to bool before comparisons.",
+      "range": {
+        "startLine": 2476,
+        "startChar": 88,
+        "endLine": 2476,
+        "endChar": 97
+      },
+      "revId": "e0da51a8b49d0a3974cd3a9daba7797fd578c00d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
