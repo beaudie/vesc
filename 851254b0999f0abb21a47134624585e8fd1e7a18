@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42514115_091a6251",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T01:16:14Z",
+      "side": 1,
+      "message": "TBR. I fixed the VVL bug in https://github.com/KhronosGroup/Vulkan-ValidationLayers/pull/3402",
+      "revId": "851254b0999f0abb21a47134624585e8fd1e7a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
