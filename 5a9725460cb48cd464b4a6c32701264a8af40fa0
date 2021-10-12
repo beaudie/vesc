@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "072a71a4_b4c27dca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T15:03:57Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "340bf3a4_ca0f7a9b",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14499c4a_c5320fe0",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
