@@ -72,6 +72,7 @@ New Tokens
         EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE         0x3205
         EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED            0x3451
         EGL_PLATFORM_ANGLE_NATIVE_PLATFORM_TYPE_ANGLE      0x348F
+        EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX         0x34A8
 
     Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
 
@@ -150,6 +151,12 @@ New Behavior
     it should use. If no display matching the requested type of native platform
     found, EGL_NO_DISPLAY should be returned. if no <attrib_list> is specified
     to eglGetPlatformDisplayEXT, ANGLE is free to make the choice.
+
+    EGL_PLATFORM_ANGLE_PLATFORM_METHODS_ANGLEX specifies a pointer to a
+    struct of user-defined methods that matches the declaration in ANGLE
+    under include/platform/PlatformMethods.h. This is used as a C-style
+    API to perform platform-specific tasks like gathering data or for
+    traces.
 
 Issues
 
