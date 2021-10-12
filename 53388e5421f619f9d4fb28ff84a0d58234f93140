@@ -16,6 +16,24 @@
       "message": "Shabi: can you also remove the PV lines in vulkan_icd.cpp:\n\n    CustomExtension customExtensions[] \u003d {\n\n        {VK_STRUCTURE_TYPE_SAMPLER_FILTERING_PRECISION_GOOGLE,\n         sizeof(VkSamplerFilteringPrecisionGOOGLE)},\n\n        {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT,\n         sizeof(VkPhysicalDeviceProvokingVertexFeaturesEXT)},\n\n        {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_PROPERTIES_EXT,\n         sizeof(VkPhysicalDeviceProvokingVertexPropertiesEXT)},\n\n        {VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT,\n         sizeof(VkPipelineRasterizationProvokingVertexStateCreateInfoEXT)},\n    };\n",
       "revId": "53388e5421f619f9d4fb28ff84a0d58234f93140",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5edf31c_a6bdba1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-12T19:35:26Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "594a1c2b_e3fd3bfe",
+      "revId": "53388e5421f619f9d4fb28ff84a0d58234f93140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
