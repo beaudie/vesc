@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b761e52_72be1122",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T16:05:07Z",
+      "side": 1,
+      "message": "Split out from the other CL that runs into some very odd crash in qualcomm driver. Minor changes to existing test.",
+      "revId": "7854ae392cba53919d9134c68f5ecd27483b9f2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
