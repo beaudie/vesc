@@ -16,6 +16,201 @@
       "message": "LGTM. Yuly might have an opinion here?",
       "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb343b7_08778807",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "A number of questions, and I think I found a few problems.",
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99c23a2e_09005ff8",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Questions: It looks like this is taking the place of \"android-arm-rel\".  True?  If so, why not replace it with this CL?  Staging (e.g. do this CL, get it going, and then do another CL to remove the old one)?",
+      "range": {
+        "startLine": 31,
+        "startChar": 25,
+        "endLine": 31,
+        "endChar": 44
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93897ef5_1e48960c",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Note: Similarly, this looks like this replaces \"android-arm-dbg\"",
+      "range": {
+        "startLine": 37,
+        "startChar": 25,
+        "endLine": 37,
+        "endChar": 48
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "501431b0_f0b9f0bf",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Question: What does \"trace\" stand mean?",
+      "range": {
+        "startLine": 76,
+        "startChar": 30,
+        "endLine": 76,
+        "endChar": 36
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b8a61a8_b5a3d5d1",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Question: Does it make sense to mention which compiler was used for this?",
+      "range": {
+        "startLine": 147,
+        "startChar": 25,
+        "endLine": 147,
+        "endChar": 34
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5da363_9a8f87f3",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Question: Which compiler?",
+      "range": {
+        "startLine": 169,
+        "startChar": 25,
+        "endLine": 169,
+        "endChar": 39
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bbfbfcc_0072a86e",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Should be \"compile_and_test\"\n\nIs this what the difference is (in this file) between \"android-arm-test\" and \"android-arm-compile\"?",
+      "range": {
+        "startLine": 204,
+        "startChar": 25,
+        "endLine": 204,
+        "endChar": 37
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c114643c_dcb080d1",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 2414,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Should be \"compile_and_test\"",
+      "range": {
+        "startLine": 2414,
+        "startChar": 25,
+        "endLine": 2414,
+        "endChar": 37
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b1e41f7_64abfda4",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 4080,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-12T20:34:45Z",
+      "side": 1,
+      "message": "Why is this repeated from above (~line 2044)\n\nIs it because of the different \"buckets\" (which I don\u0027t understand yet)",
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
