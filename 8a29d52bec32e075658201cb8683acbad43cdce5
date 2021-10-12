@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba47c8c0_b8468fc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T18:27:37Z",
+      "side": 1,
+      "message": "LGTM if this passes the CQ. There are dEQP-GLES2 tests that should turn on from this CL on the try job.",
+      "revId": "8a29d52bec32e075658201cb8683acbad43cdce5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
