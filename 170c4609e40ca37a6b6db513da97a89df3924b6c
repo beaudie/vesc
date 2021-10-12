@@ -233,6 +233,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6e89423_13ec59c7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T21:48:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b92476ef_62638abe",
+      "range": {
+        "startLine": 361,
+        "startChar": 4,
+        "endLine": 361,
+        "endChar": 65
+      },
+      "revId": "170c4609e40ca37a6b6db513da97a89df3924b6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c570e37_79057eb7",
@@ -559,6 +583,30 @@
       "side": 1,
       "message": "`How does calling flushDescriptorSetUpdates() during BufferViewHelper::release() prevent needing to do this tracking?`\nYou are tracking mBufferViewIndices because you are using it at flushDescriptorSetUpdates() call after view been deleted. But if you detect the view is been used by current command buffer, and you call flushDescriptorSetUpdates before deleting view, then the bug is fixed as well. It is better because it avoids tracking mBufferViewIndices.",
       "parentUuid": "3716c2b8_d89dcdd4",
+      "range": {
+        "startLine": 1125,
+        "startChar": 43,
+        "endLine": 1125,
+        "endChar": 61
+      },
+      "revId": "170c4609e40ca37a6b6db513da97a89df3924b6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eaa7360_b460b0a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-12T21:48:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87743e4c_3b9e4bcc",
       "range": {
         "startLine": 1125,
         "startChar": 43,
