@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "340bf3a4_ca0f7a9b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-12T14:53:01Z",
+      "side": 1,
+      "message": "Given that this is a bug fix though we might want to land this first with the small perf regression.",
+      "parentUuid": "a57b1387_6107499a",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14499c4a_c5320fe0",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
