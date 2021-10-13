@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d6c588_b1410868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:32:15Z",
+      "side": 1,
+      "message": "Ah the platform methods... I\u0027d love to remove them all. I\u0027d prefer if you didn\u0027t allocate an enum to them in the sheet actually, and instead just found some enum space no one was using.",
+      "revId": "0cfb956f6cae1e4a93c22d8877784edb3cdca744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
