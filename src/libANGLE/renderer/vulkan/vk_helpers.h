@@ -1672,7 +1672,7 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasEmulatedImageFormat() const { return mActualFormatID != mIntendedFormatID; }
     GLint getSamples() const { return mSamples; }
 
-    ImageSerial getImageSerial() const
+    rx::Serial getImageSerial() const
     {
         ASSERT(valid() && mImageSerial.valid());
         return mImageSerial;
@@ -2084,6 +2084,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // cannot be done at the time the updates were staged, as the image is not created (and thus the
     // extents are not known).
     void removeSupersededUpdates(ContextVk *contextVk, gl::TexLevelMask skipLevelsMask);
+    bool shouldStagedClearDeferred(ContextVk *contextVk, SubresourceUpdate &update) const;
 
     void initImageMemoryBarrierStruct(VkImageAspectFlags aspectMask,
                                       ImageLayout newLayout,
@@ -2213,7 +2214,7 @@ class ImageHelper final : public Resource, public angle::Subject
     angle::FormatID mIntendedFormatID;
     angle::FormatID mActualFormatID;
     GLint mSamples;
-    ImageSerial mImageSerial;
+    rx::Serial mImageSerial;
 
     // Current state.
     ImageLayout mCurrentLayout;

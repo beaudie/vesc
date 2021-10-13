@@ -170,6 +170,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                             const gl::ImageIndex &imageIndex,
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
+    bool doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const override;
 
     angle::Result syncState(const gl::Context *context,
                             const gl::Texture::DirtyBits &dirtyBits,
