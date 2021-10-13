@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f389333_dae4cef2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:52:42Z",
+      "side": 1,
+      "message": "@Shahbaz\nNote, the added flushStagedUpdates2 only returned immediately with nothing to do.\nTo flush the deferred clear, I think we need to be sure its part of the unMakeCurrent when the surface is made uncurrent. This way its part of that context and the surface and put in a known state. I haven\u0027t found the right spot yet.",
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
