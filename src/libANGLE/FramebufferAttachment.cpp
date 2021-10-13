@@ -300,6 +300,11 @@ angle::Result FramebufferAttachmentObject::getAttachmentRenderTarget(
                                                           rtOut);
 }
 
+bool FramebufferAttachmentObject::doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const
+{
+    return getAttachmentImpl()->doesAttachmentRenderTargetMatchWithSerial(serial);
+}
+
 angle::Result FramebufferAttachmentObject::initializeContents(const Context *context,
                                                               const ImageIndex &imageIndex)
 {

@@ -234,7 +234,7 @@ angle::Result RenderbufferVk::copyTextureSubData(const gl::Context *context,
     TextureVk *sourceVk  = vk::GetImpl(srcTexture);
 
     // Make sure the source/destination targets are initialized and all staged updates are flushed.
-    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
     ANGLE_TRY(ensureImageInitialized(context));
 
     return vk::ImageHelper::CopyImageSubData(context, &sourceVk->getImage(), srcLevel, srcX, srcY,

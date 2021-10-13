@@ -200,7 +200,8 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
                 layout = image.getCurrentImageLayout();
             }
 
-            ANGLE_TRY(textureVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+            ANGLE_TRY(
+                textureVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
             ANGLE_TRY(contextVk->onImageReleaseToExternal(image));
             vk::CommandBuffer *commandBuffer;

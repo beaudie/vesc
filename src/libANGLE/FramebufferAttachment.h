@@ -155,6 +155,11 @@ class FramebufferAttachment final
             context, samples, reinterpret_cast<rx::FramebufferAttachmentRenderTarget **>(rtOut));
     }
 
+    // Returns true if the attachment render target matches passed in serial. The actual meaning of
+    // serial is interpreted by backend since the call usually original from the backend and
+    // override by backend.
+    bool doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const;
+
     bool operator==(const FramebufferAttachment &other) const;
     bool operator!=(const FramebufferAttachment &other) const;
 
@@ -228,6 +233,8 @@ class FramebufferAttachmentObject : public angle::Subject, public angle::Observe
                                             GLsizei samples,
                                             rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
+    bool doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const;
+
     angle::Result initializeContents(const Context *context, const ImageIndex &imageIndex);
 
   protected:
@@ -272,6 +279,13 @@ inline angle::Result FramebufferAttachment::getRenderTargetImpl(
     ASSERT(mResource);
     return mResource->getAttachmentRenderTarget(context, mTarget.binding(), mTarget.textureIndex(),
                                                 samples, rtOut);
+}
+
+inline bool FramebufferAttachment::doesAttachmentRenderTargetMatchWithSerial(
+    rx::Serial serial) const
+{
+    ASSERT(mResource);
+    return mResource->doesAttachmentRenderTargetMatchWithSerial(serial);
 }
 
 inline bool FramebufferAttachment::isRenderable(const Context *context) const

@@ -170,6 +170,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                             const gl::ImageIndex &imageIndex,
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
+    bool doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const override;
 
     angle::Result syncState(const gl::Context *context,
                             const gl::Texture::DirtyBits &dirtyBits,
@@ -237,7 +238,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                             const vk::BufferView **viewOut);
 
     // Normally, initialize the image with enabled mipmap level counts.
-    angle::Result ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels);
+    angle::Result ensureImageInitialized(ContextVk *contextVk,
+                                         ImageMipLevels mipLevels,
+                                         bool canDeferClear);
 
     vk::ImageOrBufferViewSubresourceSerial getImageViewSubresourceSerial(
         const gl::SamplerState &samplerState) const;
@@ -455,7 +458,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                          const vk::ImageView **imageViewOut);
 
     // Flush image's staged updates for all levels and layers.
-    angle::Result flushImageStagedUpdates(ContextVk *contextVk);
+    angle::Result flushImageStagedUpdates(ContextVk *contextVk, bool canDeferClear);
 
     const gl::InternalFormat &getImplementationSizedFormat(const gl::Context *context) const;
     const vk::Format &getBaseLevelFormat(RendererVk *renderer) const;

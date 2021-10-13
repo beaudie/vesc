@@ -556,7 +556,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     // If we used context's staging buffer, flush out the updates
     if (stagingBuffer)
     {
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
     }
 
     return angle::Result::Continue;
@@ -656,7 +656,7 @@ angle::Result TextureVk::copyRenderbufferSubData(const gl::Context *context,
 
     // Make sure the source/destination targets are initialized and all staged updates are flushed.
     ANGLE_TRY(sourceVk->ensureImageInitialized(context));
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     return vk::ImageHelper::CopyImageSubData(context, sourceVk->getImage(), srcLevel, srcX, srcY,
                                              srcZ, mImage, dstLevel, dstX, dstY, dstZ, srcWidth,
@@ -681,8 +681,8 @@ angle::Result TextureVk::copyTextureSubData(const gl::Context *context,
     TextureVk *sourceVk  = vk::GetImpl(srcTexture);
 
     // Make sure the source/destination targets are initialized and all staged updates are flushed.
-    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     return vk::ImageHelper::CopyImageSubData(context, &sourceVk->getImage(), srcLevel, srcX, srcY,
                                              srcZ, mImage, dstLevel, dstX, dstY, dstZ, srcWidth,
@@ -709,7 +709,7 @@ angle::Result TextureVk::copyCompressedTexture(const gl::Context *context,
 
     ANGLE_TRY(redefineLevel(context, destIndex, vkFormat, size));
 
-    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     return copySubImageImplWithTransfer(contextVk, destIndex, gl::kOffsetZero, vkFormat,
                                         gl::LevelIndex(sourceLevelGL), 0,
@@ -806,7 +806,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
 
     if (contextStagingBuffer)
     {
-        ANGLE_TRY(flushImageStagedUpdates(contextVk));
+        ANGLE_TRY(flushImageStagedUpdates(contextVk, false));
     }
 
     return angle::Result::Continue;
@@ -825,7 +825,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    ANGLE_TRY(source->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(source->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     const angle::Format &srcIntendedFormat = source->getImage().getIntendedFormat();
     angle::FormatID srcFormatID            = source->getImage().getActualFormatID();
@@ -934,7 +934,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 
     if (contextStagingBuffer)
     {
-        ANGLE_TRY(flushImageStagedUpdates(contextVk));
+        ANGLE_TRY(flushImageStagedUpdates(contextVk, false));
     }
 
     return angle::Result::Continue;
@@ -997,7 +997,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
         access.onImageTransferWrite(level, 1, baseLayer, layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     mImage);
@@ -1167,7 +1167,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
@@ -1659,7 +1659,7 @@ angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "TextureVk::copyImageDataToBufferAndGetData");
 
     // Make sure the source is initialized and it's images are flushed.
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     vk::BufferHelper *copyBuffer                   = nullptr;
     vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
@@ -1730,7 +1730,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     region.imageSubresource.baseArrayLayer = layerIndex;
 
     // Make sure the source is initialized and its images are flushed.
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     vk::CommandBufferAccess access;
     access.onBufferTransferRead(srcBuffer);
@@ -1883,7 +1883,7 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
     }
 
     ASSERT(!mRedefinedLevels.any());
-    return flushImageStagedUpdates(contextVk);
+    return flushImageStagedUpdates(contextVk, false);
 }
 
 angle::Result TextureVk::generateMipmap(const gl::Context *context)
@@ -1899,7 +1899,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
            mImage->getFirstAllocatedLevel() == gl::LevelIndex(mState.getEffectiveBaseLevel()));
 
     // Only staged update here is the robust resource init if any.
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain, false));
 
     vk::LevelIndex baseLevel = mImage->toVkLevel(gl::LevelIndex(mState.getEffectiveBaseLevel()));
     vk::LevelIndex maxLevel  = mImage->toVkLevel(gl::LevelIndex(mState.getMipmapMaxLevel()));
@@ -2079,7 +2079,7 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
                        "Copying data due to texture format fallback");
 
     // Make sure the source is initialized and it's staged updates are flushed.
-    ANGLE_TRY(flushImageStagedUpdates(contextVk));
+    ANGLE_TRY(flushImageStagedUpdates(contextVk, false));
 
     const angle::Format &srcFormat = mImage->getActualFormat();
     const angle::Format &dstFormat = format.getActualImageFormat(getRequiredImageAccess());
@@ -2179,7 +2179,7 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
     // First, flush any pending updates so we have good data in the current mImage
     if (mImage->hasStagedUpdatesInAllocatedLevels())
     {
-        ANGLE_TRY(flushImageStagedUpdates(contextVk));
+        ANGLE_TRY(flushImageStagedUpdates(contextVk, false));
     }
 
     if (!mOwnsImage)
@@ -2342,7 +2342,14 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
+bool TextureVk::doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const
+{
+    return mImage && mImage->valid() && mImage->getImageSerial() == serial;
+}
+
+angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk,
+                                                ImageMipLevels mipLevels,
+                                                bool canDeferClear)
 {
     if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
     {
@@ -2367,10 +2374,10 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLe
         }
     }
 
-    return flushImageStagedUpdates(contextVk);
+    return flushImageStagedUpdates(contextVk, canDeferClear);
 }
 
-angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk)
+angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk, bool canDeferClear)
 {
     ASSERT(mImage->valid());
 
@@ -2378,7 +2385,7 @@ angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk)
 
     return mImage->flushStagedUpdates(
         contextVk, firstLevelGL, firstLevelGL + mImage->getLevelCount(), getNativeImageLayer(0),
-        mImage->getLayerCount(), mRedefinedLevels);
+        mImage->getLayerCount(), mRedefinedLevels, canDeferClear);
 }
 
 void TextureVk::initSingleLayerRenderTargets(ContextVk *contextVk,
@@ -2629,7 +2636,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
 
         // Flush staged updates to the base level of the image.  Note that updates to the rest of
         // the levels have already been discarded through the |removeStagedUpdates| call above.
-        ANGLE_TRY(flushImageStagedUpdates(contextVk));
+        ANGLE_TRY(flushImageStagedUpdates(contextVk, true));
 
         mImage->stageSelfAsSubresourceUpdates(contextVk, 1, {});
 
@@ -2649,8 +2656,9 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     // Initialize the image storage and flush the pixel buffer.
-    ANGLE_TRY(ensureImageInitialized(contextVk, isGenerateMipmap ? ImageMipLevels::FullMipChain
-                                                                 : ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(
+        contextVk, isGenerateMipmap ? ImageMipLevels::FullMipChain : ImageMipLevels::EnabledLevels,
+        isGenerateMipmap ? false : true));
 
     // Mask out the IMPLEMENTATION dirty bit to avoid unnecessary syncs.
     gl::Texture::DirtyBits localBits = dirtyBits;
@@ -3151,7 +3159,7 @@ angle::Result TextureVk::getTexImage(const gl::Context *context,
                                      void *pixels)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     GLint baseLevel = static_cast<int>(mState.getBaseLevel());
     if (level < baseLevel || level >= baseLevel + static_cast<int>(mState.getEnabledLevelCount()))
@@ -3268,7 +3276,7 @@ angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
     mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
 
     ANGLE_TRY(respecifyImageStorage(contextVk));
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     return refreshImageViews(contextVk);
 }
@@ -3312,7 +3320,7 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
     ANGLE_TRY(ensureImageAllocated(contextVk, format));
 
     ANGLE_TRY(respecifyImageStorage(contextVk));
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels, false));
 
     return refreshImageViews(contextVk);
 }
