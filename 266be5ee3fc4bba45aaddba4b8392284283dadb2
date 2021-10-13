@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb5289f3_9ec5279d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:49:52Z",
+      "side": 1,
+      "message": "nit: I\u0027d call this something like \"Add Entry Point name to validation errors\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd782947_4bd80568",
         "filename": "/COMMIT_MSG",
         "patchSetId": 7
@@ -19,6 +42,46 @@
         "startChar": 10,
         "endLine": 12,
         "endChar": 26
+      },
+      "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2797741a_05d35d9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:49:52Z",
+      "side": 1,
+      "message": "What a huge refactor! Nice work.",
+      "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dabae32_7c93a8e1",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:49:52Z",
+      "side": 1,
+      "message": "nit: please keep this one validate_params, and the second use (in capture) capture_params . (I was kinda cheating by re-using validate for the capture use case)",
+      "range": {
+        "startLine": 180,
+        "startChar": 73,
+        "endLine": 180,
+        "endChar": 105
       },
       "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -49,6 +112,76 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7d52a86_ecf1b3e9",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5957,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:49:52Z",
+      "side": 1,
+      "message": "+1, it\u0027s probably not worth fixing.",
+      "parentUuid": "f07d4647_7cda1908",
+      "range": {
+        "startLine": 5957,
+        "startChar": 54,
+        "endLine": 5957,
+        "endChar": 58
+      },
+      "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aafa5a8_bd1551dd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5988,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:49:52Z",
+      "side": 1,
+      "message": "I don\u0027t know if you actually need to pass this to pushGroup or popGroup. It should be implied when you call pop/push you\u0027re calling GLPushDebugGroup/etc.",
+      "range": {
+        "startLine": 5986,
+        "startChar": 48,
+        "endLine": 5988,
+        "endChar": 1
+      },
+      "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d7640e8_96b5a4fc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5999,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:49:52Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5999,
+        "startChar": 49,
+        "endLine": 5999,
+        "endChar": 65
+      },
+      "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7d3b6d8_54dd0ad9",
         "filename": "src/libANGLE/Debug.cpp",
         "patchSetId": 7
@@ -60,6 +193,30 @@
       "writtenOn": "2021-10-13T01:59:33Z",
       "side": 1,
       "message": "Should this be done only if entryPoint !\u003d Invalid?",
+      "range": {
+        "startLine": 173,
+        "startChar": 21,
+        "endLine": 173,
+        "endChar": 82
+      },
+      "revId": "266be5ee3fc4bba45aaddba4b8392284283dadb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "575953f2_f3e11ccf",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:49:52Z",
+      "side": 1,
+      "message": "+1\n\nPlease structure the message like this\n\nif (entryPoint !\u003d invalid)\n{\n   stream \u003c\u003c entryPointName \u003c\u003c \": \";\n}\n\nstrean \u003c\u003c ...",
+      "parentUuid": "a7d3b6d8_54dd0ad9",
       "range": {
         "startLine": 173,
         "startChar": 21,
