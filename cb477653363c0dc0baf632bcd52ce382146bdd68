@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d042f1e_699ef5e3",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "Because of how the CL is split between two repos, it\u0027s a bit safer to leave the CQ untouched while I add the new configs. I\u0027ll ensure they work properly post-commit before putting them on the CQ and removing the current configs. I updated the commit message with a bit more info.",
+      "parentUuid": "99c23a2e_09005ff8",
+      "range": {
+        "startLine": 31,
+        "startChar": 25,
+        "endLine": 31,
+        "endChar": 44
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93897ef5_1e48960c",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-10-12T20:34:45Z",
       "side": 1,
       "message": "Note: Similarly, this looks like this replaces \"android-arm-dbg\"",
+      "range": {
+        "startLine": 37,
+        "startChar": 25,
+        "endLine": 37,
+        "endChar": 48
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d885702d_420d85bd",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "93897ef5_1e48960c",
       "range": {
         "startLine": 37,
         "startChar": 25,
@@ -106,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c876016_82715b77",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "What\u0027s \"stand mean\"?\n\nThe trace is the ANGLE tracer, the capture/replay tool. This isn\u0027t a new config or anything, it\u0027s been there for a while now.",
+      "parentUuid": "501431b0_f0b9f0bf",
+      "range": {
+        "startLine": 76,
+        "startChar": 30,
+        "endLine": 76,
+        "endChar": 36
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b8a61a8_b5a3d5d1",
         "filename": "infra/config/generated/commit-queue.cfg",
         "patchSetId": 1
@@ -117,6 +189,30 @@
       "writtenOn": "2021-10-12T20:34:45Z",
       "side": 1,
       "message": "Question: Does it make sense to mention which compiler was used for this?",
+      "range": {
+        "startLine": 147,
+        "startChar": 25,
+        "endLine": 147,
+        "endChar": 34
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b057d6e_fbb00aa3",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s necessary because it doesn\u0027t communicate anything useful to the user.",
+      "parentUuid": "0b8a61a8_b5a3d5d1",
       "range": {
         "startLine": 147,
         "startChar": 25,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "782d4fa4_c0e53322",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "We use MSVC here, because it\u0027s a Windows UWP specific config. This one didn\u0027t have a compiler name in it before. Any user can see the full info from looking at the GN args.",
+      "parentUuid": "0d5da363_9a8f87f3",
+      "range": {
+        "startLine": 169,
+        "startChar": 25,
+        "endLine": 169,
+        "endChar": 39
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bbfbfcc_0072a86e",
@@ -163,6 +283,30 @@
       "writtenOn": "2021-10-12T20:34:45Z",
       "side": 1,
       "message": "Should be \"compile_and_test\"\n\nIs this what the difference is (in this file) between \"android-arm-test\" and \"android-arm-compile\"?",
+      "range": {
+        "startLine": 204,
+        "startChar": 25,
+        "endLine": 204,
+        "endChar": 37
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "335288b8_1f3a6eab",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "Thanks for catching!\n\n-test runs tests, -compile is compile-only. Right now I don\u0027t think we run tests on Android 32-bit, I had accidentally added an \"arm\" (non-64) tester so I removed that.",
+      "parentUuid": "3bbfbfcc_0072a86e",
       "range": {
         "startLine": 204,
         "startChar": 25,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "393081cb_585e1a45",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 2414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c114643c_dcb080d1",
+      "range": {
+        "startLine": 2414,
+        "startChar": 25,
+        "endLine": 2414,
+        "endChar": 37
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b1e41f7_64abfda4",
@@ -209,6 +377,24 @@
       "writtenOn": "2021-10-12T20:34:45Z",
       "side": 1,
       "message": "Why is this repeated from above (~line 2044)\n\nIs it because of the different \"buckets\" (which I don\u0027t understand yet)",
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f498b002_b2244a87",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 4080,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:28:38Z",
+      "side": 1,
+      "message": "Yes, the top one is \"ci\" and the bottom one is \"try\". It\u0027s one reason these files are autogenerated, they\u0027re quite verbose.",
+      "parentUuid": "3b1e41f7_64abfda4",
       "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
