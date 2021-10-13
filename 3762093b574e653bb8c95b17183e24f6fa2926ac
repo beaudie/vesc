@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a145b2_3e82aada",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-13T00:16:11Z",
+      "side": 1,
+      "message": "Thank you Geoff and Shabi, I added the official documentation link here.",
+      "parentUuid": "02af67f4_7b951507",
+      "revId": "3762093b574e653bb8c95b17183e24f6fa2926ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "792a64eb_b04828e4",
@@ -83,6 +101,30 @@
       "writtenOn": "2021-10-12T14:52:21Z",
       "side": 1,
       "message": "Anyone should be able to view this. I would write \"The charts can be viewed best on the\"",
+      "range": {
+        "startLine": 5,
+        "startChar": 103,
+        "endLine": 5,
+        "endChar": 125
+      },
+      "revId": "3762093b574e653bb8c95b17183e24f6fa2926ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b14590e_cf227b36",
+        "filename": "doc/dEQP-Charts.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-13T00:16:11Z",
+      "side": 1,
+      "message": "Gotcha :) I changed the description as you suggested.",
+      "parentUuid": "792a64eb_b04828e4",
       "range": {
         "startLine": 5,
         "startChar": 103,
