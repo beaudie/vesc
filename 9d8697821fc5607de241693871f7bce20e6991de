@@ -33,6 +33,47 @@
       "message": "re-lgtm",
       "revId": "9d8697821fc5607de241693871f7bce20e6991de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbca7705_c609fddf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-13T16:58:44Z",
+      "side": 1,
+      "message": "This workaround feels hacky, but since it only seems to affect Pixel 2 for now, it should be fine.   \n\nThere isn\u0027t any error checking being done in runTest() after any of the GL calls.   Are any of them generating errors in th CQ output that would signal something is going wrong?\n\nAlso, since this is doing a lot of buffer copy stuff, it would probably be a good idea to run these with ASAN on desktop to see if there are any out of bounds accesses occurring.   It\u0027s possible memory is being corrupted, and only causing issues when things move around and change execution order.",
+      "parentUuid": "3411222a_9a235168",
+      "revId": "9d8697821fc5607de241693871f7bce20e6991de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c1fc67d_52dff6c1",
+        "filename": "src/tests/gl_tests/IndexBufferOffsetTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-13T16:58:44Z",
+      "side": 1,
+      "message": "ASSERT_EQ() is better here, to avoid using the built-in assert().",
+      "range": {
+        "startLine": 166,
+        "startChar": 12,
+        "endLine": 166,
+        "endChar": 18
+      },
+      "revId": "9d8697821fc5607de241693871f7bce20e6991de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
