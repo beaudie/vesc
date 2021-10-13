@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18319764_c9f6c443",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T18:07:01Z",
+      "side": 1,
+      "message": "LGTM, one last suggestion. Feel free to land after you fix.",
+      "revId": "97388c8a0cf193f3c670fcf0d1e98744b20359ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04e25ba0_86c33413",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T18:07:01Z",
+      "side": 1,
+      "message": "we\u0027ll need to update this as well to match \"VulkanRenderPassCount\". Suggestion:\n\nThis counter reports the number of RenderPasses rendered in each vkQueueSubmit call.",
+      "range": {
+        "startLine": 40,
+        "startChar": 24,
+        "endLine": 42,
+        "endChar": 58
+      },
+      "revId": "97388c8a0cf193f3c670fcf0d1e98744b20359ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
