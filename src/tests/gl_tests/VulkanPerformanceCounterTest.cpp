@@ -543,6 +543,97 @@ TEST_P(VulkanPerformanceCounterTest, ReadOnlyDepthStencilFeedbackLoopUsesSingleR
     ASSERT_GL_NO_ERROR();
 }
 
+TEST_P(VulkanPerformanceCounterTest, ReadOnlyDepthFeedbackLoopWithClearAndScissoredDraw)
+{
+    // Feedback loops are only supported on Vulkan.
+    // TODO(jmadill): Make GL extension. http://anglebug.com/4969
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    // http://anglebug.com/6014
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    constexpr GLuint kSize = 16;
+    glViewport(0, 0, kSize, kSize);
+
+    constexpr char kFS[] = R"(precision mediump float;
+varying vec2 v_texCoord;
+uniform sampler2D depth;
+void main()
+{
+    if (abs(texture2D(depth, v_texCoord).x - 0.5) < 0.1)
+    {
+        gl_FragColor = vec4(0, 1, 0, 1);
+    }
+    else
+    {
+        gl_FragColor = vec4(1, 0, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), kFS);
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    GLTexture colorTexture;
+    glBindTexture(GL_TEXTURE_2D, colorTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+
+    GLTexture depthTexture;
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, kSize, kSize, 0, GL_DEPTH_COMPONENT,
+                 GL_UNSIGNED_INT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+
+    ASSERT_GL_NO_ERROR();
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // We expect depth clear will be done in the renderpass loadOp. When defer clear is broken, we
+    // may end up doing clear in texture code path which will be a standalone
+    // vkCmdClearDepthStencilImage operation and rnderpass loadOP becomes Load instead of Clear.
+    uint32_t expectedRenderPassDepthClearCount = counters.depthClears + 1;
+    uint32_t expectedRenderPassDepthLoadCount  = counters.depthLoads;
+
+    // Clear color to blue and depth to 0.5.
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClearDepthf(0.5f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Disable depth. Although this does not remove the feedback loop as defined by the
+    // spec it mimics what gfxbench does in its rendering tests.
+    glDepthMask(false);
+    glDisable(GL_DEPTH_TEST);
+
+    // Verify we can sample the depth texture and get 0.5.  Use a scissor.
+    glScissor(0, 0, kSize / 2, kSize);
+    glEnable(GL_SCISSOR_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5);
+    ASSERT_GL_NO_ERROR();
+
+    // Make sure the scissored region passes the depth test and is changed to green.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, kSize - 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2 - 1, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2 - 1, kSize - 1, GLColor::green);
+
+    // Make sure the region outside the scissor is cleared to blue.
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize - 1, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, kSize - 1, GLColor::blue);
+
+    EXPECT_EQ(expectedRenderPassDepthClearCount, counters.depthClears);
+    EXPECT_EQ(expectedRenderPassDepthLoadCount, counters.depthLoads);
+}
+
 // Tests that common PUBG MOBILE case does not break render pass, and that counts are correct:
 //
 // - Scenario: invalidate, disable, draw
