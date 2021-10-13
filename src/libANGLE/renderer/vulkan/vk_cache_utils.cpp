@@ -1704,11 +1704,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     const PipelineLayout &pipelineLayout,
     const gl::AttributesMask &activeAttribLocationsMask,
     const gl::ComponentTypeMask &programAttribsTypeMask,
-    const ShaderModule *vertexModule,
-    const ShaderModule *fragmentModule,
-    const ShaderModule *geometryModule,
-    const ShaderModule *tessControlModule,
-    const ShaderModule *tessEvaluationModule,
+    const ShaderAndSerialMap &shaders,
     const SpecializationConstants &specConsts,
     Pipeline *pipelineOut) const
 {
@@ -1730,49 +1726,55 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     InitializeSpecializationInfo(specConsts, &specializationEntries, &specializationInfo);
 
     // Vertex shader is always expected to be present.
-    ASSERT(vertexModule != nullptr);
+    const ShaderModule &vertexModule = shaders[gl::ShaderType::Vertex].get().get();
+    ASSERT(vertexModule.valid());
     VkPipelineShaderStageCreateInfo vertexStage = {};
     SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-                               VK_SHADER_STAGE_VERTEX_BIT, vertexModule->getHandle(),
+                               VK_SHADER_STAGE_VERTEX_BIT, vertexModule.getHandle(),
                                specializationInfo, &vertexStage);
     shaderStages.push_back(vertexStage);
 
-    if (tessControlModule)
+    const ShaderModule &tessControlModule = shaders[gl::ShaderType::TessControl].get().get();
+    if (tessControlModule.valid())
     {
         VkPipelineShaderStageCreateInfo tessControlStage = {};
         SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                                    VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT,
-                                   tessControlModule->getHandle(), specializationInfo,
+                                   tessControlModule.getHandle(), specializationInfo,
                                    &tessControlStage);
         shaderStages.push_back(tessControlStage);
     }
 
-    if (tessEvaluationModule)
+    const ShaderModule &tessEvaluationModule = shaders[gl::ShaderType::TessEvaluation].get().get();
+    if (tessEvaluationModule.valid())
     {
         VkPipelineShaderStageCreateInfo tessEvaluationStage = {};
         SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                                    VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT,
-                                   tessEvaluationModule->getHandle(), specializationInfo,
+                                   tessEvaluationModule.getHandle(), specializationInfo,
                                    &tessEvaluationStage);
         shaderStages.push_back(tessEvaluationStage);
     }
 
-    if (geometryModule)
+    const ShaderModule &geometryModule = shaders[gl::ShaderType::Geometry].get().get();
+    if (geometryModule.valid())
     {
         VkPipelineShaderStageCreateInfo geometryStage = {};
         SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-                                   VK_SHADER_STAGE_GEOMETRY_BIT, geometryModule->getHandle(),
+                                   VK_SHADER_STAGE_GEOMETRY_BIT, geometryModule.getHandle(),
                                    specializationInfo, &geometryStage);
         shaderStages.push_back(geometryStage);
     }
 
     // Fragment shader is optional.
     // anglebug.com/3509 - Don't compile the fragment shader if rasterizationDiscardEnable = true
-    if (fragmentModule && !mRasterizationAndMultisampleStateInfo.bits.rasterizationDiscardEnable)
+    const ShaderModule &fragmentModule = shaders[gl::ShaderType::Fragment].get().get();
+    if (fragmentModule.valid() &&
+        !mRasterizationAndMultisampleStateInfo.bits.rasterizationDiscardEnable)
     {
         VkPipelineShaderStageCreateInfo fragmentStage = {};
         SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-                                   VK_SHADER_STAGE_FRAGMENT_BIT, fragmentModule->getHandle(),
+                                   VK_SHADER_STAGE_FRAGMENT_BIT, fragmentModule.getHandle(),
                                    specializationInfo, &fragmentStage);
         shaderStages.push_back(fragmentStage);
     }
@@ -2078,7 +2080,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     dynamicState.pDynamicStates    = dynamicStateList.data();
 
     // tessellation State
-    if (tessControlModule && tessEvaluationModule)
+    if (tessControlModule.valid() && tessEvaluationModule.valid())
     {
         domainOriginState.sType =
             VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO;
@@ -3571,11 +3573,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     const vk::PipelineLayout &pipelineLayout,
     const gl::AttributesMask &activeAttribLocationsMask,
     const gl::ComponentTypeMask &programAttribsTypeMask,
-    const vk::ShaderModule *vertexModule,
-    const vk::ShaderModule *fragmentModule,
-    const vk::ShaderModule *geometryModule,
-    const vk::ShaderModule *tessControlModule,
-    const vk::ShaderModule *tessEvaluationModule,
+    const vk::ShaderAndSerialMap &shaders,
     const vk::SpecializationConstants &specConsts,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
@@ -3589,8 +3587,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
         contextVk->getRenderer()->onNewGraphicsPipeline();
         ANGLE_TRY(desc.initializePipeline(
             contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
-            activeAttribLocationsMask, programAttribsTypeMask, vertexModule, fragmentModule,
-            geometryModule, tessControlModule, tessEvaluationModule, specConsts, &newPipeline));
+            activeAttribLocationsMask, programAttribsTypeMask, shaders, specConsts, &newPipeline));
     }
 
     // The Serial will be updated outside of this query.

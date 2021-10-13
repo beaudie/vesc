@@ -83,11 +83,14 @@ void VulkanPipelineCachePerfTest::step()
     vk::RenderPass rp;
     vk::PipelineLayout pl;
     vk::PipelineCache pc;
-    vk::ShaderModule sm;
+    vk::ShaderAndSerialMap ssm;
     const vk::GraphicsPipelineDesc *desc = nullptr;
     vk::PipelineHelper *result           = nullptr;
     gl::AttributesMask am;
     gl::ComponentTypeMask ctm;
+
+    ssm[gl::ShaderType::Vertex].get().get().setHandle(reinterpret_cast<VkShaderModule>(1));
+    ssm[gl::ShaderType::Fragment].get().get().setHandle(reinterpret_cast<VkShaderModule>(2));
 
     vk::SpecializationConstants defaultSpecConsts{};
 
@@ -95,8 +98,8 @@ void VulkanPipelineCachePerfTest::step()
     {
         for (const auto &hit : mCacheHits)
         {
-            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, ctm, &sm, &sm, nullptr,
-                                     nullptr, nullptr, defaultSpecConsts, hit, &desc, &result);
+            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, ctm, ssm, defaultSpecConsts,
+                                     hit, &desc, &result);
         }
     }
 
@@ -104,8 +107,8 @@ void VulkanPipelineCachePerfTest::step()
          ++missCount, ++mMissIndex)
     {
         const auto &miss = mCacheMisses[mMissIndex];
-        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, ctm, &sm, &sm, nullptr, nullptr,
-                                 nullptr, defaultSpecConsts, miss, &desc, &result);
+        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, ctm, ssm, defaultSpecConsts, miss,
+                                 &desc, &result);
     }
 }
 
