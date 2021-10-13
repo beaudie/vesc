@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fe204dc_77316637",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:37:35Z",
+      "side": 1,
+      "message": "Thanks! A few more small things I noticed.",
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d0a472d_beaea4ef",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:37:35Z",
+      "side": 1,
+      "message": "nit: the last N values",
+      "range": {
+        "startLine": 39,
+        "startChar": 30,
+        "endLine": 39,
+        "endChar": 31
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "311dafe2_af477a15",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:37:35Z",
+      "side": 1,
+      "message": "nit: we no longer have this widget, we\u0027ll need a new example. Maybe \"VulkanRenderPassCount\"?",
+      "range": {
+        "startLine": 39,
+        "startChar": 48,
+        "endLine": 39,
+        "endChar": 70
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62c66b0c_af3d52df",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:37:35Z",
+      "side": 1,
+      "message": "nit: are",
+      "range": {
+        "startLine": 49,
+        "startChar": 13,
+        "endLine": 49,
+        "endChar": 16
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0e922f2_c2561128",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T11:37:35Z",
+      "side": 1,
+      "message": "maybe a better wording is \"to remove the need to specify positions in the overlay widgets JSON\"",
+      "range": {
+        "startLine": 123,
+        "startChar": 38,
+        "endLine": 123,
+        "endChar": 67
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
