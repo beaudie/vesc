@@ -178,6 +178,17 @@ class TextureState final : private angle::NonCopyable
 
     const std::string &getLabel() const { return mLabel; }
 
+    bool isBoundToFramebuffer(rx::Serial framebufferSerial) const
+    {
+        for (size_t index = 0; index < mBoundFramebufferSerials.size(); ++index)
+        {
+            if (mBoundFramebufferSerials[index] == framebufferSerial)
+                return true;
+        }
+
+        return false;
+    }
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -248,6 +259,14 @@ class TextureState final : private angle::NonCopyable
     mutable GLenum mCachedSamplerCompareMode;
     mutable bool mCachedSamplerFormatValid;
     std::string mLabel;
+
+    // We track all the serials of the Framebuffers this texture is attached to. Note that this
+    // allows duplicates because different ranges of a Texture can be bound to the same Framebuffer.
+    // For the purposes of depth-stencil loops, a simple "isBound" check works fine. For color
+    // attachment Feedback Loop checks we then need to check further to see when a Texture is bound
+    // to mulitple bindings that the bindings don't overlap.
+    static constexpr uint32_t kFastFramebufferSerialCount = 8;
+    angle::FastVector<rx::Serial, kFastFramebufferSerialCount> mBoundFramebufferSerials;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
@@ -568,13 +587,7 @@ class Texture final : public RefCountObject<TextureID>,
 
     bool isBoundToFramebuffer(rx::Serial framebufferSerial) const
     {
-        for (size_t index = 0; index < mBoundFramebufferSerials.size(); ++index)
-        {
-            if (mBoundFramebufferSerials[index] == framebufferSerial)
-                return true;
-        }
-
-        return false;
+        return mState.isBoundToFramebuffer(framebufferSerial);
     }
 
     bool isDepthOrStencil() const
@@ -670,14 +683,6 @@ class Texture final : public RefCountObject<TextureID>,
 
     egl::Surface *mBoundSurface;
     egl::Stream *mBoundStream;
-
-    // We track all the serials of the Framebuffers this texture is attached to. Note that this
-    // allows duplicates because different ranges of a Texture can be bound to the same Framebuffer.
-    // For the purposes of depth-stencil loops, a simple "isBound" check works fine. For color
-    // attachment Feedback Loop checks we then need to check further to see when a Texture is bound
-    // to mulitple bindings that the bindings don't overlap.
-    static constexpr uint32_t kFastFramebufferSerialCount = 8;
-    angle::FastVector<rx::Serial, kFastFramebufferSerialCount> mBoundFramebufferSerials;
 
     struct SamplerCompletenessCache
     {

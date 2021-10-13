@@ -549,9 +549,6 @@ TEST_P(VulkanPerformanceCounterTest, ReadOnlyDepthFeedbackLoopWithClearAndScisso
     // TODO(jmadill): Make GL extension. http://anglebug.com/4969
     ANGLE_SKIP_TEST_IF(!IsVulkan());
 
-    // http://anglebug.com/6014
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     const rx::vk::PerfCounters &counters = hackANGLE();
 
     constexpr GLuint kSize = 16;
@@ -600,7 +597,7 @@ void main()
     // may end up doing clear in texture code path which will be a standalone
     // vkCmdClearDepthStencilImage operation and rnderpass loadOP becomes Load instead of Clear.
     uint32_t expectedRenderPassDepthClearCount = counters.depthClears + 1;
-    uint32_t expectedRenderPassDepthLoadCount  = counters.depthLoads;
+    uint32_t expectedRenderPassDepthLoadCount  = counters.depthLoads + 1;
 
     // Clear color to blue and depth to 0.5.
     glClearColor(0.0f, 0.0f, 1.0f, 1.0f);

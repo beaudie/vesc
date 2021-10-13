@@ -1672,7 +1672,7 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasEmulatedImageFormat() const { return mActualFormatID != mIntendedFormatID; }
     GLint getSamples() const { return mSamples; }
 
-    ImageSerial getImageSerial() const
+    rx::Serial getImageSerial() const
     {
         ASSERT(valid() && mImageSerial.valid());
         return mImageSerial;
@@ -1835,7 +1835,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                      gl::LevelIndex levelGLEnd,
                                      uint32_t layerStart,
                                      uint32_t layerEnd,
-                                     gl::TexLevelMask skipLevelsMask);
+                                     gl::TexLevelMask skipLevelsMask,
+                                     bool deferClear);
 
     // Creates a command buffer and flushes all staged updates.  This is used for one-time
     // initialization of resources that we don't expect to accumulate further staged updates, such
@@ -2084,6 +2085,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // cannot be done at the time the updates were staged, as the image is not created (and thus the
     // extents are not known).
     void removeSupersededUpdates(ContextVk *contextVk, gl::TexLevelMask skipLevelsMask);
+    bool shouldStagedClearDeferred(ContextVk *contextVk, SubresourceUpdate &update) const;
 
     void initImageMemoryBarrierStruct(VkImageAspectFlags aspectMask,
                                       ImageLayout newLayout,
@@ -2213,7 +2215,7 @@ class ImageHelper final : public Resource, public angle::Subject
     angle::FormatID mIntendedFormatID;
     angle::FormatID mActualFormatID;
     GLint mSamples;
-    ImageSerial mImageSerial;
+    rx::Serial mImageSerial;
 
     // Current state.
     ImageLayout mCurrentLayout;

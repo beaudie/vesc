@@ -2342,6 +2342,12 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+bool TextureVk::doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const
+{
+    ASSERT(mImage && mImage->valid());
+    return mImage->getImageSerial() == serial;
+}
+
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
     if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
@@ -2378,7 +2384,7 @@ angle::Result TextureVk::flushImageStagedUpdates(ContextVk *contextVk)
 
     return mImage->flushStagedUpdates(
         contextVk, firstLevelGL, firstLevelGL + mImage->getLevelCount(), getNativeImageLayer(0),
-        mImage->getLayerCount(), mRedefinedLevels);
+        mImage->getLayerCount(), mRedefinedLevels, true);
 }
 
 void TextureVk::initSingleLayerRenderTargets(ContextVk *contextVk,
