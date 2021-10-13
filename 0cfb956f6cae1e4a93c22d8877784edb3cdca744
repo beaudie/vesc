@@ -34,6 +34,24 @@
       "parentUuid": "40d6c588_b1410868",
       "revId": "0cfb956f6cae1e4a93c22d8877784edb3cdca744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d9f4250_33def3d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T13:53:14Z",
+      "side": 1,
+      "message": "The point of ANGLEX enums is that they are not allocated from the reserved space, and in fact are not \"real\" enums. I don\u0027t know why we were using an enum from our space, we should be using something like 0x6A##",
+      "parentUuid": "a3c48f74_324f5600",
+      "revId": "0cfb956f6cae1e4a93c22d8877784edb3cdca744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
