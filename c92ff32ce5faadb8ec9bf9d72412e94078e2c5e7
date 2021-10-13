@@ -64,6 +64,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7b853b5_1e3752e0",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-13T18:04:07Z",
+      "side": 1,
+      "message": "I fixed it, thank you :)",
+      "parentUuid": "8d0a472d_beaea4ef",
+      "range": {
+        "startLine": 39,
+        "startChar": 30,
+        "endLine": 39,
+        "endChar": 31
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa7041f_9cc80c40",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-13T18:04:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "311dafe2_af477a15",
+      "range": {
+        "startLine": 39,
+        "startChar": 48,
+        "endLine": 39,
+        "endChar": 70
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62c66b0c_af3d52df",
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aab09f9_e8b0d928",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-13T18:04:07Z",
+      "side": 1,
+      "message": "Done, thank you!",
+      "parentUuid": "62c66b0c_af3d52df",
+      "range": {
+        "startLine": 49,
+        "startChar": 13,
+        "endLine": 49,
+        "endChar": 16
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0e922f2_c2561128",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-10-13T11:37:35Z",
       "side": 1,
       "message": "maybe a better wording is \"to remove the need to specify positions in the overlay widgets JSON\"",
+      "range": {
+        "startLine": 123,
+        "startChar": 38,
+        "endLine": 123,
+        "endChar": 67
+      },
+      "revId": "c92ff32ce5faadb8ec9bf9d72412e94078e2c5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb9a9f42_abd0a14d",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-13T18:04:07Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c0e922f2_c2561128",
       "range": {
         "startLine": 123,
         "startChar": 38,
