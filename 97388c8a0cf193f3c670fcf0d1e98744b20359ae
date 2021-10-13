@@ -39,6 +39,30 @@
       },
       "revId": "97388c8a0cf193f3c670fcf0d1e98744b20359ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ab73fff_1a9a42f8",
+        "filename": "doc/DebugOverlayInVulkanBackend.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-13T22:40:35Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "04e25ba0_86c33413",
+      "range": {
+        "startLine": 40,
+        "startChar": 24,
+        "endLine": 42,
+        "endChar": 58
+      },
+      "revId": "97388c8a0cf193f3c670fcf0d1e98744b20359ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
