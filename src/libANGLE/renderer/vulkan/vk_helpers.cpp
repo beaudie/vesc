@@ -3981,7 +3981,7 @@ void ImageHelper::resetCachedProperties()
     mIntendedFormatID            = angle::FormatID::NONE;
     mActualFormatID              = angle::FormatID::NONE;
     mSamples                     = 1;
-    mImageSerial                 = kInvalidImageSerial;
+    mImageSerial                 = rx::Serial();
     mCurrentLayout               = ImageLayout::Undefined;
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
@@ -4154,7 +4154,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mIntendedFormatID    = intendedFormatID;
     mActualFormatID      = actualFormatID;
     mSamples             = std::max(samples, 1);
-    mImageSerial         = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+    mImageSerial         = context->getRenderer()->generateImageSerial();
     mFirstAllocatedLevel = firstLevel;
     mLevelCount          = mipLevels;
     mLayerCount          = layerCount;
@@ -4283,7 +4283,7 @@ angle::Result ImageHelper::initExternal(Context *context,
 void ImageHelper::releaseImage(RendererVk *renderer)
 {
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
-    mImageSerial = kInvalidImageSerial;
+    mImageSerial = rx::Serial();
 
     setEntireContentUndefined();
 }
@@ -4325,7 +4325,7 @@ void ImageHelper::releaseStagingBuffer(RendererVk *renderer)
 void ImageHelper::resetImageWeakReference()
 {
     mImage.reset();
-    mImageSerial        = kInvalidImageSerial;
+    mImageSerial        = rx::Serial();
     mRotatedAspectRatio = false;
 }
 
@@ -4698,7 +4698,7 @@ void ImageHelper::init2DWeakReference(Context *context,
     mIntendedFormatID   = format.getIntendedFormatID();
     mActualFormatID     = format.getActualRenderableImageFormatID();
     mSamples            = std::max(samples, 1);
-    mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+    mImageSerial        = context->getRenderer()->generateImageSerial();
     mCurrentLayout      = ImageLayout::Undefined;
     mLayerCount         = 1;
     mLevelCount         = 1;
@@ -4745,7 +4745,7 @@ angle::Result ImageHelper::initStaging(Context *context,
     mIntendedFormatID   = intendedFormatID;
     mActualFormatID     = actualFormatID;
     mSamples            = std::max(samples, 1);
-    mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
+    mImageSerial        = context->getRenderer()->generateImageSerial();
     mLayerCount         = layerCount;
     mLevelCount         = mipLevels;
     mUsage              = usage;
@@ -6455,7 +6455,7 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
-    mImageSerial                 = kInvalidImageSerial;
+    mImageSerial                 = rx::Serial();
 
     setEntireContentUndefined();
 
@@ -6545,7 +6545,8 @@ angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contex
         // Otherwise we proceed with a normal update.
     }
 
-    return flushStagedUpdates(contextVk, levelGL, levelGL + 1, layer, layer + layerCount, {});
+    return flushStagedUpdates(contextVk, levelGL, levelGL + 1, layer, layer + layerCount, {},
+                              false);
 }
 
 angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
@@ -6553,7 +6554,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                               gl::LevelIndex levelGLEnd,
                                               uint32_t layerStart,
                                               uint32_t layerEnd,
-                                              gl::TexLevelMask skipLevelsMask)
+                                              gl::TexLevelMask skipLevelsMask,
+                                              bool deferClear)
 {
     if (!hasStagedUpdatesInLevels(levelGLStart, levelGLEnd))
     {
@@ -6658,6 +6660,12 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             if (update.updateSource == UpdateSource::Clear ||
                 update.updateSource == UpdateSource::ClearEmulatedChannelsOnly)
             {
+                if (update.updateSource == UpdateSource::Clear && deferClear &&
+                    shouldStagedClearDeferred(contextVk, update))
+                {
+                    updatesToKeep.emplace_back(std::move(update));
+                    continue;
+                }
                 update.data.clear.levelIndex = updateMipLevelVk.get();
             }
             else if (update.updateSource == UpdateSource::Buffer)
@@ -6801,7 +6809,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
     return flushStagedUpdates(contextVk, mFirstAllocatedLevel, mFirstAllocatedLevel + mLevelCount,
-                              0, mLayerCount, {});
+                              0, mLayerCount, {}, false);
 }
 
 bool ImageHelper::hasStagedUpdatesForSubresource(gl::LevelIndex levelGL,
@@ -7437,6 +7445,56 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
+}
+
+// Return true if this staged clear can be achieved by using clear in the renderpass loadOp
+bool ImageHelper::shouldStagedClearDeferred(ContextVk *contextVk, SubresourceUpdate &update) const
+{
+    ASSERT(update.updateSource == UpdateSource::Clear);
+    gl::Framebuffer *drawFramebuffer = contextVk->getState().getDrawFramebuffer();
+    if (!drawFramebuffer || drawFramebuffer->isDefault())
+    {
+        return false;
+    }
+
+    const gl::FramebufferAttachment *matchedAttachment = nullptr;
+    const gl::FramebufferState &fboState               = drawFramebuffer->getState();
+    for (size_t colorIndexGL : fboState.getEnabledDrawBuffers())
+    {
+        const gl::FramebufferAttachment *colorAttachment =
+            fboState.getColorAttachment(colorIndexGL);
+        if (colorAttachment->doesAttachmentRenderTargetMatchWithSerial(mImageSerial))
+        {
+            matchedAttachment = colorAttachment;
+            break;
+        }
+    }
+
+    if (!matchedAttachment)
+    {
+        const gl::FramebufferAttachment *depthStencilAttachment =
+            fboState.getDepthOrStencilAttachment();
+        if (depthStencilAttachment)
+        {
+            if (depthStencilAttachment->doesAttachmentRenderTargetMatchWithSerial(mImageSerial))
+            {
+                matchedAttachment = depthStencilAttachment;
+            }
+        }
+    }
+
+    if (matchedAttachment)
+    {
+        const gl::ImageIndex &attachmentImageIndex = matchedAttachment->getTextureImageIndex();
+        SubresourceUpdate attachmentClear(update.data.clear.aspectFlags, update.data.clear.value,
+                                          attachmentImageIndex);
+        if (attachmentClear.data.clear == update.data.clear)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // ImageHelper::SubresourceUpdate implementation

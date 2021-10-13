@@ -367,6 +367,7 @@ class RendererVk : angle::NonCopyable
     bool getEnableValidationLayers() const { return mEnableValidationLayers; }
 
     vk::ResourceSerialFactory &getResourceSerialFactory() { return mResourceSerialFactory; }
+    rx::Serial generateImageSerial() { return mImageSerialFactory.generate(); }
 
     void setGlobalDebugAnnotator();
 
@@ -583,6 +584,7 @@ class RendererVk : angle::NonCopyable
 
     // Tracks resource serials.
     vk::ResourceSerialFactory mResourceSerialFactory;
+    rx::SerialFactory mImageSerialFactory;
 
     // Process GPU memory reports
     vk::MemoryReport mMemoryReport;

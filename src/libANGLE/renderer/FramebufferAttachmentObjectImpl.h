@@ -35,6 +35,8 @@ class FramebufferAttachmentObjectImpl : public angle::Subject
                                                     GLsizei samples,
                                                     FramebufferAttachmentRenderTarget **rtOut);
 
+    virtual bool doesAttachmentRenderTargetMatchWithSerial(rx::Serial serial) const;
+
     virtual angle::Result initializeContents(const gl::Context *context,
                                              const gl::ImageIndex &imageIndex);
 };
@@ -48,6 +50,12 @@ inline angle::Result FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
 {
     UNIMPLEMENTED();
     return angle::Result::Stop;
+}
+
+inline bool FramebufferAttachmentObjectImpl::doesAttachmentRenderTargetMatchWithSerial(
+    rx::Serial serial) const
+{
+    return false;
 }
 
 inline angle::Result FramebufferAttachmentObjectImpl::initializeContents(
