@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cabf3b9_b63da69a",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97de7948_970f1e09",
+      "range": {
+        "startLine": 780,
+        "startChar": 30,
+        "endLine": 780,
+        "endChar": 33
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc8dbdae_932a07e0",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-01T20:14:49Z",
       "side": 1,
       "message": "These look like they belong to the validation code.",
+      "range": {
+        "startLine": 790,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 5
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b369fe_8405ac1a",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc8dbdae_932a07e0",
       "range": {
         "startLine": 790,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30bae4ce_ca30be38",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f5cbfa6_1c11f693",
+      "range": {
+        "startLine": 816,
+        "startChar": 4,
+        "endLine": 816,
+        "endChar": 22
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45a07b54_d725822d",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-10-01T20:14:49Z",
       "side": 1,
       "message": "Also looks like it belongs to the validation code",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 827,
+        "endChar": 5
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "440c9f82_12d37eda",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45a07b54_d725822d",
       "range": {
         "startLine": 824,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64c33af6_a8e6b029",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21828dd8_fe89408b",
+      "range": {
+        "startLine": 831,
+        "startChar": 0,
+        "endLine": 832,
+        "endChar": 28
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4669562e_b9d21db3",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-10-01T20:14:49Z",
       "side": 1,
       "message": "nit: isSurfaceLocked (or just isLocked)",
+      "range": {
+        "startLine": 152,
+        "startChar": 9,
+        "endLine": 152,
+        "endChar": 22
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4b34252_ed00e484",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "I thought you guys didn\u0027t like \"isX\" bool functions?",
+      "parentUuid": "4669562e_b9d21db3",
       "range": {
         "startLine": 152,
         "startChar": 9,
@@ -162,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4083174_5561be2c",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ada88b12_085609bd",
+      "range": {
+        "startLine": 153,
+        "startChar": 9,
+        "endLine": 153,
+        "endChar": 26
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aea3a0af_23fb7f5f",
@@ -185,6 +353,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17d2fd71_3d5dcc5e",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Checking makeCurrent() and unMakeCurrent, there is no state change. Just what I added.\nNote that we have no current context, so we can\u0027t check round about through context.",
+      "parentUuid": "aea3a0af_23fb7f5f",
+      "range": {
+        "startLine": 272,
+        "startChar": 9,
+        "endLine": 272,
+        "endChar": 17
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecbdb382_c8f948d2",
@@ -198,6 +390,30 @@
       "writtenOn": "2021-10-01T20:14:49Z",
       "side": 1,
       "message": "const",
+      "range": {
+        "startLine": 120,
+        "startChar": 27,
+        "endLine": 120,
+        "endChar": 28
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a57e46a4_cd83ba03",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:53:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecbdb382_c8f948d2",
       "range": {
         "startLine": 120,
         "startChar": 27,
