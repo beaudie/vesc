@@ -16,6 +16,69 @@
       "message": "Yuly/Ian, PTAL.",
       "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5881fd8b_08a45941",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-13T15:26:00Z",
+      "side": 1,
+      "message": "LGTM with a nit (below).  Thanks, as this improves things!",
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ab5f650_702f89d3",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-13T15:26:00Z",
+      "side": 1,
+      "message": "nit: 2 of these new builder names are \"-test\" and 8 are \"-tests\".  I\u0027m not sure if that is a big deal, but just noticed it.",
+      "range": {
+        "startLine": 338,
+        "startChar": 26,
+        "endLine": 338,
+        "endChar": 31
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f9fb75a_9bd86236",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-13T15:26:00Z",
+      "side": 1,
+      "message": "nit: Another \"-test\"",
+      "range": {
+        "startLine": 2508,
+        "startChar": 26,
+        "endLine": 2508,
+        "endChar": 31
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -176,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d9181d1_d9668497",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-13T15:26:00Z",
+      "side": 1,
+      "message": "Ack, sorry for the extra \"stand\" word.",
+      "parentUuid": "8c876016_82715b77",
+      "range": {
+        "startLine": 76,
+        "startChar": 30,
+        "endLine": 76,
+        "endChar": 36
+      },
+      "revId": "cb477653363c0dc0baf632bcd52ce382146bdd68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b8a61a8_b5a3d5d1",
