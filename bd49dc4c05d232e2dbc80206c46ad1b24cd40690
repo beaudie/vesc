@@ -79,6 +79,213 @@
       },
       "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a080f1d_46598ad4",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "nit: redundant, since compile_and_test is the default",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 42
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39276318_94c1ea59",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "Can you merge this switch with the one above?\nLike, just adding \"or (\"-compile\" in name)\" here and keeping test_mode \u003d \"compile_and_test\" in angle_builder() args does the trick.\n\nThe way code is structured now, it took me a while to figure out why\nangle_builder(\"android-arm-dbg\", debug \u003d True, cpu \u003d \"arm\")\ndoesn\u0027t make android-arm-dbg compile_and_test\n\nIt\u0027s also weird that the reason android-arm-dbg-compile ends up being compile_only is not because of -compile in name, but because of debug \u003d True.\n\nOr are you going to refactor this later?\nCan I see the final version?",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 102
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4801b506_442b8e7e",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "Could you add a comment on each new builder, which old builder it replaces?\nLike, android-arm-compile replaces android-arm-rel, is that correct?",
+      "range": {
+        "startLine": 364,
+        "startChar": 17,
+        "endLine": 364,
+        "endChar": 29
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ad41e1d_ac58ba8b",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "Can\u0027t figure out why do you need compile-only android-arm64-compile if you have android-arm64-test, which is compile-and-test.\nI could understand if android-arm64-test was test-only.\nBut then android-arm64-test won\u0027t need mb config.",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 369,
+        "endChar": 68
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7c808eb_8100df5b",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "ditch",
+      "range": {
+        "startLine": 380,
+        "startChar": 25,
+        "endLine": 380,
+        "endChar": 26
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87a8a8eb_8cad1b97",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "ditch",
+      "range": {
+        "startLine": 385,
+        "startChar": 23,
+        "endLine": 385,
+        "endChar": 24
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6141949_d5715153",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "ditch",
+      "range": {
+        "startLine": 400,
+        "startChar": 23,
+        "endLine": 400,
+        "endChar": 24
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bdf461c_e39d9d20",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "ditch",
+      "range": {
+        "startLine": 403,
+        "startChar": 27,
+        "endLine": 403,
+        "endChar": 28
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92dfb597_e46b2c71",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-13T20:33:06Z",
+      "side": 1,
+      "message": "doesn\u0027t exist",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
