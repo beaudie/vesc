@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9dc2544_d407cd8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-13T23:55:04Z",
+      "side": 1,
+      "message": "Number of things resolved with this new upload.\nLooks good to me if we can resolve the deferred clear, and the need for a vkDeviceWaitIdle before destroying temporary BufferHelper.",
+      "revId": "34b504a7eeae2613a57c51f1f2243ebd90c0432e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
