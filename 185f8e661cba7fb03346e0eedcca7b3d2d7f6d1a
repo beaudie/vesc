@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "779b6a3a_65ff22d2",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T12:01:14Z",
+      "side": 1,
+      "message": "nit: suggest you default init to 0 to be safe",
+      "range": {
+        "startLine": 285,
+        "startChar": 10,
+        "endLine": 285,
+        "endChar": 21
+      },
+      "revId": "185f8e661cba7fb03346e0eedcca7b3d2d7f6d1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b72b09b9_8b23bf50",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-13T12:01:14Z",
+      "side": 1,
+      "message": "please omit this, it\u0027s a ES 3.1 test so the non-EXT version is always availabe.",
+      "range": {
+        "startLine": 936,
+        "startChar": 24,
+        "endLine": 936,
+        "endChar": 44
+      },
+      "revId": "185f8e661cba7fb03346e0eedcca7b3d2d7f6d1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
