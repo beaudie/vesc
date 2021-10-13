@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a1f014b_7d3afb58",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-13T19:07:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f26a5034_54d55348",
+      "range": {
+        "startLine": 904,
+        "startChar": 10,
+        "endLine": 909,
+        "endChar": 80
+      },
+      "revId": "28a5eeecec0484019345dc836ad1b739e340e8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96f0d8d6_fa21ff36",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-13T18:37:18Z",
       "side": 1,
       "message": "nit: can you explain what this means with a comment?",
+      "range": {
+        "startLine": 2644,
+        "startChar": 81,
+        "endLine": 2644,
+        "endChar": 86
+      },
+      "revId": "28a5eeecec0484019345dc836ad1b739e340e8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb213950_c8ab0ca6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-13T19:07:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96f0d8d6_fa21ff36",
       "range": {
         "startLine": 2644,
         "startChar": 81,
