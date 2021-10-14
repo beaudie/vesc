@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a04d78c_04aae918",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-14T15:12:23Z",
+      "side": 1,
+      "message": "Thanks for the fix! I opened anglebug.com/6569 for a potential follow up.",
+      "revId": "85431a87f2f9b6022d543d8c64f22e40b955358c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
