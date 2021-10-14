@@ -104,6 +104,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ffff116_2c83151a",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a080f1d_46598ad4",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 42
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39276318_94c1ea59",
@@ -117,6 +141,30 @@
       "writtenOn": "2021-10-13T20:33:06Z",
       "side": 1,
       "message": "Can you merge this switch with the one above?\nLike, just adding \"or (\"-compile\" in name)\" here and keeping test_mode \u003d \"compile_and_test\" in angle_builder() args does the trick.\n\nThe way code is structured now, it took me a while to figure out why\nangle_builder(\"android-arm-dbg\", debug \u003d True, cpu \u003d \"arm\")\ndoesn\u0027t make android-arm-dbg compile_and_test\n\nIt\u0027s also weird that the reason android-arm-dbg-compile ends up being compile_only is not because of -compile in name, but because of debug \u003d True.\n\nOr are you going to refactor this later?\nCan I see the final version?",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 102
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9318515b_c7733db7",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Yes, I\u0027m going to refactor this later. I\u0027m going to remove this whole block and keep the other block (if \"-test\" in name, etc).",
+      "parentUuid": "39276318_94c1ea59",
       "range": {
         "startLine": 223,
         "startChar": 0,
@@ -152,6 +200,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d7df53f_c54cae55",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Is it OK if I don\u0027t do that? It\u0027s quite a bit of work for a temporary CL, and the commit message has this exact patterning already.",
+      "parentUuid": "4801b506_442b8e7e",
+      "range": {
+        "startLine": 364,
+        "startChar": 17,
+        "endLine": 364,
+        "endChar": 29
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ad41e1d_ac58ba8b",
         "filename": "infra/config/main.star",
         "patchSetId": 2
@@ -163,6 +235,30 @@
       "writtenOn": "2021-10-13T20:33:06Z",
       "side": 1,
       "message": "Can\u0027t figure out why do you need compile-only android-arm64-compile if you have android-arm64-test, which is compile-and-test.\nI could understand if android-arm64-test was test-only.\nBut then android-arm64-test won\u0027t need mb config.",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 369,
+        "endChar": 68
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f42fae4e_420844be",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "I was going to fully duplicate the compile-only configs. I took all the duplicated compile-only configs out for now.",
+      "parentUuid": "6ad41e1d_ac58ba8b",
       "range": {
         "startLine": 369,
         "startChar": 0,
@@ -196,6 +292,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aeb73c0_aee2cf89",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7c808eb_8100df5b",
+      "range": {
+        "startLine": 380,
+        "startChar": 25,
+        "endLine": 380,
+        "endChar": 26
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87a8a8eb_8cad1b97",
@@ -209,6 +329,30 @@
       "writtenOn": "2021-10-13T20:33:06Z",
       "side": 1,
       "message": "ditch",
+      "range": {
+        "startLine": 385,
+        "startChar": 23,
+        "endLine": 385,
+        "endChar": 24
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46e8212b_506e9de3",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87a8a8eb_8cad1b97",
       "range": {
         "startLine": 385,
         "startChar": 23,
@@ -242,6 +386,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa3aed3d_0aea1c7f",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6141949_d5715153",
+      "range": {
+        "startLine": 400,
+        "startChar": 23,
+        "endLine": 400,
+        "endChar": 24
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bdf461c_e39d9d20",
@@ -265,6 +433,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c94602ba_123d897a",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bdf461c_e39d9d20",
+      "range": {
+        "startLine": 403,
+        "startChar": 27,
+        "endLine": 403,
+        "endChar": 28
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92dfb597_e46b2c71",
@@ -278,6 +470,30 @@
       "writtenOn": "2021-10-13T20:33:06Z",
       "side": 1,
       "message": "doesn\u0027t exist",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c96131_9f8bccff",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T14:26:20Z",
+      "side": 1,
+      "message": "Was going to add it, looks like I left it out of main.star. Anyway I\u0027ll do it in another CL.",
+      "parentUuid": "92dfb597_e46b2c71",
       "range": {
         "startLine": 22,
         "startChar": 7,
