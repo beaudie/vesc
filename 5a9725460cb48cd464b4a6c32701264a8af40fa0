@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "58c36deb_1025fe8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-10-14T06:17:16Z",
+      "side": 1,
+      "message": "I think this null pointer issue can be easy to re-produce when running traces with asynccommandqueue.",
+      "parentUuid": "124cdfb1_24de6cb0",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6190c81_6ae38371",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
@@ -174,6 +192,30 @@
       "writtenOn": "2021-10-12T12:38:13Z",
       "side": 1,
       "message": "you can take out the #ifdef, if abseil is false this resolves to unordered map. Can you leave a comment about the need for pointer stability?",
+      "range": {
+        "startLine": 1518,
+        "startChar": 0,
+        "endLine": 1525,
+        "endChar": 0
+      },
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b6c50ad_2a687506",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-10-14T06:17:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14499c4a_c5320fe0",
       "range": {
         "startLine": 1518,
         "startChar": 0,
