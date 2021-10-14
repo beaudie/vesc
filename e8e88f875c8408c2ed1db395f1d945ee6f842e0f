@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3bd24553_ccc313de",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5816,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-14T14:21:23Z",
+      "side": 1,
+      "message": "\u003e Is there a consistent way to know which CBH to allocate from for all of those?\n\nYes, in all cases you (can) know if you are doing the work for a draw or a dispatch call, and you can choose based on that.\n\nAlso, we should probably just go ahead with your current code, and open a bug to look into moving it to CBH later. I suggested it because it seemed cleaner, but we need to measure its effect on CPU perf and memory, sure.",
+      "parentUuid": "82244312_e0f31f24",
+      "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "793fcb58_fb627d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
