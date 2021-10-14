@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "079e3ab6_d8b5574b",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T15:11:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ab5f650_702f89d3",
+      "range": {
+        "startLine": 338,
+        "startChar": 26,
+        "endLine": 338,
+        "endChar": 31
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f9fb75a_9bd86236",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-10-13T15:26:00Z",
       "side": 1,
       "message": "nit: Another \"-test\"",
+      "range": {
+        "startLine": 2508,
+        "startChar": 26,
+        "endLine": 2508,
+        "endChar": 31
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4b22b5e_0b5f5485",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T15:11:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f9fb75a_9bd86236",
       "range": {
         "startLine": 2508,
         "startChar": 26,
