@@ -218,6 +218,29 @@ GPUTestConfig::API GetTestConfigAPIFromRenderer(EGLenum renderer, EGLenum device
             return GPUTestConfig::kAPIUnknown;
     }
 }
+
+bool SetPreferredDeviceEnvironmentVar(const PlatformParameters &param)
+{
+    const char kPreferredDeviceEnvVar[] = "ANGLE_PREFERRED_DEVICE";
+    if (param.eglParameters.displayPowerPreference == EGL_DONT_CARE &&
+        GetEnvironmentVar(kPreferredDeviceEnvVar).empty())
+    {
+        if (IsAMD())
+        {
+            SetEnvironmentVar(kPreferredDeviceEnvVar, "amd");
+        }
+        if (IsNVIDIA())
+        {
+            SetEnvironmentVar(kPreferredDeviceEnvVar, "nvidia");
+        }
+        if (IsIntel())
+        {
+            SetEnvironmentVar(kPreferredDeviceEnvVar, "intel");
+        }
+        return true;
+    }
+    return false;
+}
 }  // anonymous namespace
 
 GLColorRGB::GLColorRGB(const Vector3 &floatColor)
@@ -459,6 +482,7 @@ ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
       mForceNewDisplay(mAlwaysForceNewDisplay),
       mSetUpCalled(false),
       mTearDownCalled(false),
+      mModifiedPreferredDevice(false),
       mCurrentParams(nullptr),
       mFixture(nullptr)
 {
@@ -474,6 +498,10 @@ ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
         withMethods.eglParameters.debugLayersEnabled = false;
 #endif
     }
+
+    // The test harness reads the active GPU from SystemInfo. To ensure this GPU remains the device
+    // selected by ANGLE, we need to set ANGLE_PREFERRED_DEVICE for the test suite.
+    mModifiedPreferredDevice = SetPreferredDeviceEnvironmentVar(params);
 
     if (gEnableRenderDocCapture)
     {
@@ -576,6 +604,12 @@ ANGLETestBase::~ANGLETestBase()
     if (m3DTexturedQuadProgram)
     {
         glDeleteProgram(m3DTexturedQuadProgram);
+    }
+
+    const char kPreferredDeviceEnvVar[] = "ANGLE_PREFERRED_DEVICE";
+    if (mModifiedPreferredDevice && !angle::GetEnvironmentVar(kPreferredDeviceEnvVar).empty())
+    {
+        angle::UnsetEnvironmentVar(kPreferredDeviceEnvVar);
     }
 
     if (!mSetUpCalled)

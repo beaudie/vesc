@@ -245,13 +245,18 @@ class dEQPCaseList
         return mCaseInfoList.size();
     }
 
+    const GPUTestConfig &getTestConfig() const { return mTestConfig; }
+
   private:
     std::vector<CaseInfo> mCaseInfoList;
     size_t mTestModuleIndex;
     bool mInitialized = false;
+    GPUTestConfig mTestConfig;
 };
 
-dEQPCaseList::dEQPCaseList(size_t testModuleIndex) : mTestModuleIndex(testModuleIndex) {}
+dEQPCaseList::dEQPCaseList(size_t testModuleIndex)
+    : mTestModuleIndex(testModuleIndex), mTestConfig()
+{}
 
 void dEQPCaseList::initialize()
 {
@@ -283,12 +288,12 @@ void dEQPCaseList::initialize()
         api = gInitAPI->second;
     }
 
-    GPUTestConfig testConfig = GPUTestConfig(api, gOptions.preRotation);
+    mTestConfig = GPUTestConfig(api, gOptions.preRotation);
 
 #if !defined(ANGLE_PLATFORM_ANDROID)
     // Note: These prints mess up parsing of test list when running on Android.
     std::cout << "Using test config with:" << std::endl;
-    for (uint32_t condition : testConfig.getConditions())
+    for (uint32_t condition : mTestConfig.getConditions())
     {
         const char *name = GetConditionName(condition);
         if (name != nullptr)
@@ -300,7 +305,7 @@ void dEQPCaseList::initialize()
 
     TestSuite *testSuite = TestSuite::GetInstance();
 
-    if (!testSuite->loadTestExpectationsFromFileWithConfig(testConfig,
+    if (!testSuite->loadTestExpectationsFromFileWithConfig(mTestConfig,
                                                            testExpectationsPath.value()))
     {
         Die();
@@ -383,6 +388,32 @@ class dEQPTest : public testing::TestWithParam<size_t>
             return;
         }
 
+        // The test harness reads the active GPU from SystemInfo and uses that for test
+        // expectations. However, some ANGLE backends don't have a concept of an "active" GPU, and
+        // instead use power preference to select GPU. We can use the environment variable
+        // ANGLE_PREFERRED_DEVICE to ensure ANGLE's selected GPU matches the GPU expected for this
+        // test suite.
+        const char kPreferredDeviceEnvVar[] = "ANGLE_PREFERRED_DEVICE";
+        bool resetPreferredDevice           = false;
+        if (GetEnvironmentVar(kPreferredDeviceEnvVar).empty())
+        {
+            const GPUTestConfig::ConditionArray &conditions =
+                GetCaseList().getTestConfig().getConditions();
+            if (conditions[GPUTestConfig::kConditionAMD])
+            {
+                SetEnvironmentVar(kPreferredDeviceEnvVar, "amd");
+            }
+            else if (conditions[GPUTestConfig::kConditionNVIDIA])
+            {
+                SetEnvironmentVar(kPreferredDeviceEnvVar, "nvidia");
+            }
+            else if (conditions[GPUTestConfig::kConditionIntel])
+            {
+                SetEnvironmentVar(kPreferredDeviceEnvVar, "intel");
+            }
+            resetPreferredDevice = true;
+        }
+
         TestSuite *testSuite = TestSuite::GetInstance();
         testSuite->maybeUpdateTestTimeout(caseInfo.mExpectation);
 
@@ -411,6 +442,11 @@ class dEQPTest : public testing::TestWithParam<size_t>
         {
             std::cout << "Test expected to fail but passed!" << std::endl;
             sUnexpectedPasses.push_back(caseInfo.mDEQPName);
+        }
+
+        if (resetPreferredDevice)
+        {
+            UnsetEnvironmentVar(kPreferredDeviceEnvVar);
         }
     }
 
