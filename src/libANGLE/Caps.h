@@ -550,9 +550,6 @@ struct DisplayExtensions
     // EGL_ANDROID_recordable
     bool recordable = false;
 
-    // EGL_ANGLE_power_preference
-    bool powerPreference = false;
-
     // EGL_ANGLE_image_d3d11_texture
     bool imageD3D11Texture = false;
 
@@ -731,6 +728,9 @@ struct ClientExtensions
 
     // EGL_EXT_device_query
     bool deviceQueryEXT = false;
+
+    // EGL_ANGLE_power_preference
+    bool powerPreference = false;
 };
 
 }  // namespace egl

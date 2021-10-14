@@ -1271,7 +1271,6 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANDROID_image_native_buffer",                     imageNativeBuffer,                  &extensionStrings);
     InsertExtensionString("EGL_ANDROID_get_frame_timestamps",                    getFrameTimestamps,                 &extensionStrings);
     InsertExtensionString("EGL_ANDROID_recordable",                              recordable,                         &extensionStrings);
-    InsertExtensionString("EGL_ANGLE_power_preference",                          powerPreference,                    &extensionStrings);
     InsertExtensionString("EGL_ANGLE_image_d3d11_texture",                       imageD3D11Texture,                  &extensionStrings);
     InsertExtensionString("EGL_ANDROID_create_native_client_buffer",             createNativeClientBufferANDROID,    &extensionStrings);
     InsertExtensionString("EGL_ANDROID_get_native_client_buffer",                getNativeClientBufferANDROID,       &extensionStrings);
@@ -1345,6 +1344,7 @@ std::vector<std::string> ClientExtensions::getStrings() const
     InsertExtensionString("EGL_KHR_client_get_all_proc_addresses",            clientGetAllProcAddresses,          &extensionStrings);
     InsertExtensionString("EGL_KHR_debug",                                    debug,                              &extensionStrings);
     InsertExtensionString("EGL_ANGLE_feature_control",                        featureControlANGLE,                &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_power_preference",                       powerPreference,                    &extensionStrings);
     // clang-format on
 
     return extensionStrings;
