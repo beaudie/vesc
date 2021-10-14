@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23777037_1b2a380c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T21:13:26Z",
+      "side": 1,
+      "message": "Done, better to check the tasks.. I don\u0027t want to change the invariant properties of the last submitted serial. I was going to merge all the locks in the future, so we can just take both locks for now.",
+      "parentUuid": "bbc13cbd_67c4e34e",
+      "revId": "1357e31676bbdec33d33a3ab95f54f3e998562aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f214c8a_b49f936b",
@@ -102,6 +120,24 @@
       "writtenOn": "2021-10-14T16:36:38Z",
       "side": 1,
       "message": "Correct me if I\u0027m wrong, but it seems like using CommandProcessor::isBusy could still race, because CommandQueue::mLastSubmittedQueueSerial would only be up-to-date with the most recent CommandProcessorTask that the CommandProcessor has handled. So CommandProcessor::isBusy() could return false while tasks are queued.",
+      "revId": "1357e31676bbdec33d33a3ab95f54f3e998562aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "549fefb8_510781b7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-14T21:13:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f214c8a_b49f936b",
       "revId": "1357e31676bbdec33d33a3ab95f54f3e998562aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
