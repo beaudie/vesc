@@ -316,7 +316,6 @@ class CommandQueueInterface : angle::NonCopyable
                                                   CommandBufferHelper **renderPassCommands) = 0;
 
     virtual Serial getLastCompletedQueueSerial() const = 0;
-    virtual Serial getCurrentQueueSerial() const       = 0;
     virtual bool isBusy() const                        = 0;
 };
 
@@ -375,7 +374,6 @@ class CommandQueue final : public CommandQueueInterface
                                           CommandBufferHelper **renderPassCommands) override;
 
     Serial getLastCompletedQueueSerial() const override;
-    Serial getCurrentQueueSerial() const override;
     bool isBusy() const override;
 
     angle::Result queueSubmit(Context *context,
@@ -525,7 +523,6 @@ class CommandProcessor : public Context, public CommandQueueInterface
                                           CommandBufferHelper **renderPassCommands) override;
 
     Serial getLastCompletedQueueSerial() const override;
-    Serial getCurrentQueueSerial() const override;
     bool isBusy() const override;
 
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
