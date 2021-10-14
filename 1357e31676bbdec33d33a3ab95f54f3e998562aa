@@ -16,6 +16,23 @@
       "message": "Async queue is not being tested, so green run here doesn\u0027t guarantee anything.\n\nI rebased [1] on top of this, hopefully that will turn green. Not a blocker for this change nevertheless.\n\n[1]: https://chromium-review.googlesource.com/c/angle/angle/+/3193420",
       "revId": "1357e31676bbdec33d33a3ab95f54f3e998562aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f214c8a_b49f936b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-14T16:36:38Z",
+      "side": 1,
+      "message": "Correct me if I\u0027m wrong, but it seems like using CommandProcessor::isBusy could still race, because CommandQueue::mLastSubmittedQueueSerial would only be up-to-date with the most recent CommandProcessorTask that the CommandProcessor has handled. So CommandProcessor::isBusy() could return false while tasks are queued.",
+      "revId": "1357e31676bbdec33d33a3ab95f54f3e998562aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
