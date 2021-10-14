@@ -720,7 +720,24 @@ bool IsPlatformAvailable(const PlatformParameters &param)
 
             if (systemInfo)
             {
-                result = IsConfigAllowlisted(*systemInfo, param);
+                result                              = IsConfigAllowlisted(*systemInfo, param);
+                const char kPreferredDeviceEnvVar[] = "ANGLE_PREFERRED_DEVICE";
+                if (param.eglParameters.displayPowerPreference == EGL_DONT_CARE &&
+                    GetEnvironmentVar(kPreferredDeviceEnvVar).empty())
+                {
+                    if (IsAMD())
+                    {
+                        SetEnvironmentVar(kPreferredDeviceEnvVar, "amd");
+                    }
+                    if (IsNVIDIA())
+                    {
+                        SetEnvironmentVar(kPreferredDeviceEnvVar, "nvidia");
+                    }
+                    if (IsIntel())
+                    {
+                        SetEnvironmentVar(kPreferredDeviceEnvVar, "intel");
+                    }
+                }
             }
             else
             {
