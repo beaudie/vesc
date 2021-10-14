@@ -479,11 +479,6 @@ void DisplayCGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup   = true;
     outExtensions->displaySemaphoreShareGroup = true;
 
-    if (mSupportsGPUSwitching)
-    {
-        outExtensions->powerPreference = true;
-    }
-
     DisplayGL::generateExtensions(outExtensions);
 }
 

@@ -908,6 +908,25 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
         UNREACHABLE();
     }
 
+    if (attribMap.contains(EGL_POWER_PREFERENCE_ANGLE))
+    {
+        if (!clientExtensions.powerPreference)
+        {
+            val->setError(EGL_BAD_ATTRIBUTE,
+                          "Attribute EGL_POWER_PREFERENCE_ANGLE "
+                          "requires EGL_ANGLE_power_preference.");
+            return false;
+        }
+        EGLAttrib value = attribMap.get(EGL_POWER_PREFERENCE_ANGLE, 0);
+        if (value != EGL_LOW_POWER_ANGLE && value != EGL_HIGH_POWER_ANGLE)
+        {
+            val->setError(EGL_BAD_ATTRIBUTE,
+                          "EGL_POWER_PREFERENCE_ANGLE must be "
+                          "either EGL_LOW_POWER_ANGLE or EGL_HIGH_POWER_ANGLE.");
+            return false;
+        }
+    }
+
     if (attribMap.contains(EGL_FEATURE_OVERRIDES_ENABLED_ANGLE))
     {
         if (!clientExtensions.featureControlANGLE)
@@ -1867,23 +1886,6 @@ bool ValidateCreateContext(const ValidationContext *val,
                     val->setError(EGL_BAD_ATTRIBUTE,
                                   "EGL_EXTENSIONS_ENABLED_ANGLE must be "
                                   "either EGL_TRUE or EGL_FALSE.");
-                    return false;
-                }
-                break;
-
-            case EGL_POWER_PREFERENCE_ANGLE:
-                if (!display->getExtensions().powerPreference)
-                {
-                    val->setError(EGL_BAD_ATTRIBUTE,
-                                  "Attribute EGL_POWER_PREFERENCE_ANGLE "
-                                  "requires EGL_ANGLE_power_preference.");
-                    return false;
-                }
-                if (value != EGL_LOW_POWER_ANGLE && value != EGL_HIGH_POWER_ANGLE)
-                {
-                    val->setError(EGL_BAD_ATTRIBUTE,
-                                  "EGL_POWER_PREFERENCE_ANGLE must be "
-                                  "either EGL_LOW_POWER_ANGLE or EGL_HIGH_POWER_ANGLE.");
                     return false;
                 }
                 break;

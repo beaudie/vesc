@@ -9,7 +9,7 @@ Name Strings
 Contributors
 
     Kenneth Russell
-
+    
 Contacts
 
     Kenneth Russell, Google Inc. (kbr 'at' google.com)
@@ -20,11 +20,15 @@ Status
 
 Version
 
-    Version 1, April 16, 2019
+    Version 3, Oct 19, 2021
 
 Number
 
     EGL Extension #??
+
+Extension Type
+
+    EGL client extension
 
 Dependencies
 
@@ -52,13 +56,13 @@ New Procedures and Functions
 
 New Tokens
 
-    Accepted as an attribute name in the <*attrib_list> argument to
-    eglCreateContext:
+    Accepted as an attribute name in the <attrib_list> argument to
+    eglGetPlatformDisplayEXT:
 
         EGL_POWER_PREFERENCE_ANGLE  0x3482
 
-    Accepted as an attribute value in the <*attrib_list> argument to
-    eglCreateContext:
+    Accepted as an attribute value in the <attrib_list> argument to
+    eglGetPlatformDisplayEXT:
 
         EGL_LOW_POWER_ANGLE         0x0001
         EGL_HIGH_POWER_ANGLE        0x0002
@@ -67,10 +71,10 @@ Additions to the EGL 1.4 Specification
 
     Add the following to section 3.7.1 "Creating Rendering Contexts":
 
-    EGL_POWER_PREFERENCE_ANGLE indicates whether the context should be
+    EGL_POWER_PREFERENCE_ANGLE indicates whether the display should be
     created on the integrated (low-power) or discrete (high-power) GPU
     on dual-GPU systems. EGL_POWER_PREFERENCE_ANGLE is only a legal
-    context creation attribute when the EGL_ANGLE_power_preference
+    display creation attribute when the EGL_ANGLE_power_preference
     extension is advertised. The valid values for this attribute are
     EGL_LOW_POWER_ANGLE and EGL_HIGH_POWER_ANGLE. If this extension is
     advertised and this context creation attribute is not specified,
@@ -81,20 +85,20 @@ Additions to the EGL 1.4 Specification
     Info.plist in order for this extension to operate as advertised.
 
     eglReleaseHighPowerGPUANGLE, when passed an EGLContext allocated
-    with the EGL_POWER_PREFERENCE_ANGLE context creation attribute set
-    to EGL_HIGH_POWER_ANGLE, will cause that context to release its
-    hold on the high-power GPU.
+    by a display with the EGL_POWER_PREFERENCE_ANGLE display creation
+    attribute set to EGL_HIGH_POWER_ANGLE, will cause that context to
+    release its hold on the high-power GPU.
 
     eglReacquireHighPowerGPUANGLE, when passed an EGLContext allocated
-    with the EGL_POWER_PREFERENCE_ANGLE context creation attribute set
-    to EGL_HIGH_POWER_ANGLE and which was previously released via
-    eglReleaseHighPowerGPUANGLE, will cause that context to reacquire
-    its hold on the high-power GPU.
+    by a display with the EGL_POWER_PREFERENCE_ANGLE display creation
+    attribute set to EGL_HIGH_POWER_ANGLE and which was previously
+    released via eglReleaseHighPowerGPUANGLE, will cause that context
+    to reacquire its hold on the high-power GPU.
 
     eglReleaseHighPowerGPUANGLE and eglReacquireHighPowerGPUANGLE have
-    no effect on contexts that were allocated with the
-    EGL_LOW_POWER_ANGLE preference, or contexts not allocated with
-    either preference.
+    no effect on contexts that were allocated on displays with the
+    EGL_LOW_POWER_ANGLE preference, or contexts created on displays
+    not allocated with either preference.
 
     For either eglReleaseHighPowerGPUANGLE or
     eglReacquireHighPowerGPUANGLE:
@@ -132,3 +136,4 @@ Revision History
       2   June 5, 2020   kbr        Add eglReleaseHighPowerGPUANGLE,
                                       eglReacquireHighPowerGPUANGLE, and
                                       eglHandleGPUSwitchANGLE
+      3   Oct 19, 2021   jonahr     Update to be a client extension
