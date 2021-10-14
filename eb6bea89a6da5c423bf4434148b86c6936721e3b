@@ -16,6 +16,29 @@
       "message": "@Shahbaz\nNote, the added flushStagedUpdates2 only returned immediately with nothing to do.\nTo flush the deferred clear, I think we need to be sure its part of the unMakeCurrent when the surface is made uncurrent. This way its part of that context and the surface and put in a known state. I haven\u0027t found the right spot yet.",
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6f7e07c_119f00fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-14T16:40:02Z",
+      "side": 1,
+      "message": "We should try to refactor as much as possible so this function doesn\u0027t use anything but the renderer. Then we wouldn\u0027t need a `flushStagedUpdates2`. In the worst case, we could have an \"Impl\" function that takes a `vk::Context` and a `ContextVk` and make the ContextVk-dependent stuff be optional, like the perf warnings.\n\nAlternatively, given that only Clear updates are valid here, and given that the image is single level/layer, maybe we should just handle this in a special way, like:\n\n    if (thereIsClearStaged())\n    {\n        ASSERT(noOtherUpdateStaged());\n        memset(buffer, clearColor);\n    }\n    else\n    {\n        getCommandBufferOneOff();\n        doTheCopy();\n        submitOneOff();\n    }",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
