@@ -90,6 +90,7 @@
 6124 MAC OPENGL : GLSLTestLoops.*ContinueInSwitch/* = SKIP
 6144 MAC OPENGL : BlitFramebufferTest.BlitDepthStencilPixelByPixel/* = SKIP
 6236 MAC OPENGL : BufferDataTestES3.DrawWithNotCallingBufferData/* = SKIP
+6570 MAC NVIDIA OPENGL : ClearTest.ChangeFramebufferAttachmentFromRGBAtoRGB/* = SKIP
 772651 MAC NVIDIA OPENGL : GLSLTest.VectorScalarDivideAndAddInLoop/* = SKIP
 772651 MAC NVIDIA OPENGL : GLSLTest.VectorScalarMultiplyAndAddInLoop/* = SKIP
 6318 MAC NVIDIA METAL : EGLBlobCacheTest.FragmentOutputLocationKey/* = SKIP
