@@ -132,6 +132,30 @@
       },
       "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77d28df8_63b0a66f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 7869,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-14T03:10:49Z",
+      "side": 1,
+      "message": "I see. The thing I missed is that pTexelBufferView is actual pointer to the handle, not the handle itself.",
+      "parentUuid": "45f01b95_fad34c8e",
+      "range": {
+        "startLine": 7869,
+        "startChar": 4,
+        "endLine": 7869,
+        "endChar": 43
+      },
+      "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
