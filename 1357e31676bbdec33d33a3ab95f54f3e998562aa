@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d95a7d_817668ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-14T16:41:57Z",
+      "side": 1,
+      "message": "[1] is green now, so double +2",
+      "parentUuid": "db7f2ffb_6a446801",
+      "revId": "1357e31676bbdec33d33a3ab95f54f3e998562aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f214c8a_b49f936b",
