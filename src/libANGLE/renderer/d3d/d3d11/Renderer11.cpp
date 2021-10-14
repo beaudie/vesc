@@ -696,37 +696,73 @@ egl::Error Renderer11::initialize()
 
 HRESULT Renderer11::callD3D11CreateDevice(PFN_D3D11_CREATE_DEVICE createDevice, bool debug)
 {
-    angle::ComPtr<IDXGIAdapter> adapter;
+    angle::ComPtr<IDXGIAdapter> chosenAdapter;
 
     const egl::AttributeMap &attributes = mDisplay->getAttributeMap();
     long high = static_cast<long>(attributes.get(EGL_PLATFORM_ANGLE_D3D_LUID_HIGH_ANGLE, 0));
     unsigned long low =
         static_cast<unsigned long>(attributes.get(EGL_PLATFORM_ANGLE_D3D_LUID_LOW_ANGLE, 0));
 
-    if (high != 0 || low != 0)
+    std::vector<std::pair<angle::ComPtr<IDXGIAdapter>, DXGI_ADAPTER_DESC>> adapters;
     {
         angle::ComPtr<IDXGIFactory1> factory;
         if (SUCCEEDED(CreateDXGIFactory1(IID_PPV_ARGS(&factory))))
         {
-            angle::ComPtr<IDXGIAdapter> temp;
-            for (UINT i = 0; SUCCEEDED(factory->EnumAdapters(i, &temp)); i++)
+            angle::ComPtr<IDXGIAdapter> adapter;
+            for (UINT i = 0; SUCCEEDED(factory->EnumAdapters(i, &adapter)); i++)
             {
                 DXGI_ADAPTER_DESC desc;
-                if (SUCCEEDED(temp->GetDesc(&desc)) && desc.AdapterLuid.HighPart == high &&
-                    desc.AdapterLuid.LowPart == low)
+                if (SUCCEEDED(adapter->GetDesc(&desc)))
                 {
-                    adapter = temp;
-                    break;
+                    adapters.push_back({adapter, desc});
                 }
             }
+        }
+    }
+
+    if (high != 0 || low != 0)
+    {
+        for (const auto &adapter : adapters)
+        {
+            if (adapter.second.AdapterLuid.HighPart == high &&
+                adapter.second.AdapterLuid.LowPart == low)
+            {
+                chosenAdapter = adapter.first;
+                break;
+            }
+        }
+    }
+
+    if (attributes.contains(EGL_POWER_PREFERENCE_ANGLE) && !chosenAdapter && !adapters.empty())
+    {
+        EGLAttrib powerPreference = attributes.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE);
+        // Assume that adapters are always ordered so that the low power one is first
+        switch (powerPreference)
+        {
+            case EGL_LOW_POWER_ANGLE:
+                chosenAdapter = adapters[0].first;
+                break;
+
+            case EGL_HIGH_POWER_ANGLE:
+                chosenAdapter = adapters.size() > 1 && !IsMicrosoft(adapters[1].second.VendorId)
+                                    ? adapters[1].first
+                                    : adapters[0].first;
+                break;
+
+            case EGL_DONT_CARE:
+                break;
+
+            default:
+                UNREACHABLE();
+                break;
         }
     }
 
     // If adapter is not nullptr, the driver type must be D3D_DRIVER_TYPE_UNKNOWN or
     // D3D11CreateDevice will return E_INVALIDARG.
     return createDevice(
-        adapter.Get(), adapter ? D3D_DRIVER_TYPE_UNKNOWN : mRequestedDriverType, nullptr,
-        debug ? D3D11_CREATE_DEVICE_DEBUG : 0, mAvailableFeatureLevels.data(),
+        chosenAdapter.Get(), chosenAdapter ? D3D_DRIVER_TYPE_UNKNOWN : mRequestedDriverType,
+        nullptr, debug ? D3D11_CREATE_DEVICE_DEBUG : 0, mAvailableFeatureLevels.data(),
         static_cast<unsigned int>(mAvailableFeatureLevels.size()), D3D11_SDK_VERSION, &mDevice,
         &(mRenderer11DeviceCaps.featureLevel), &mDeviceContext);
 }
