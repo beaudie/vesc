@@ -22,6 +22,30 @@
       },
       "revId": "e0da51a8b49d0a3974cd3a9daba7797fd578c00d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a760b25c_2bc8fa73",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-14T01:33:47Z",
+      "side": 1,
+      "message": "Ack. depthMask is a bool.",
+      "parentUuid": "40c2635b_d14d0f1a",
+      "range": {
+        "startLine": 2476,
+        "startChar": 88,
+        "endLine": 2476,
+        "endChar": 97
+      },
+      "revId": "e0da51a8b49d0a3974cd3a9daba7797fd578c00d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
