@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb483ad3_e17708e0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-14T16:09:39Z",
+      "side": 0,
+      "message": "So this was a known issue!",
+      "revId": "b30dc00cd03e9eab55ef6ac64bdaac79486d0b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
