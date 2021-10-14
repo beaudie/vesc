@@ -192,6 +192,30 @@
       },
       "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a3852ec_21e9a268",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 7869,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-14T16:13:34Z",
+      "side": 1,
+      "message": "BTW, I believe this pTexelBufferView should also implemented exact same way as mDescriptorBufferInfos. Basically have context owns the storage and add allocDescriptorTexelBufferViews() function and store the handle there. That way it is consistent, and you do not need to flushDescriptorSetUpdates when bufferview gets released. Just want to throw idea here. You don\u0027t have to change it in this CL. Maybe file a bug for future clean ups.",
+      "parentUuid": "77d28df8_63b0a66f",
+      "range": {
+        "startLine": 7869,
+        "startChar": 4,
+        "endLine": 7869,
+        "endChar": 43
+      },
+      "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
