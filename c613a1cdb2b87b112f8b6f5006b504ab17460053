@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d38a16cf_85def0e5",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-14T23:55:07Z",
+      "side": 1,
+      "message": "Why only do this if we\u0027re inside a function body?",
+      "revId": "c613a1cdb2b87b112f8b6f5006b504ab17460053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
