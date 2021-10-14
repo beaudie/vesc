@@ -16,6 +16,29 @@
       "message": "Well, the CQ failed because of another flake. Expanded the suppressions to include those; re-CQ\u0027ing.\n",
       "revId": "a6786e854a7b1614ff03dca4ecd9c1b49b09a2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a8f5324_be45cc2a",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-14T21:58:29Z",
+      "side": 1,
+      "message": "Only SKIP supported in this file.",
+      "range": {
+        "startLine": 105,
+        "startChar": 64,
+        "endLine": 105,
+        "endChar": 68
+      },
+      "revId": "a6786e854a7b1614ff03dca4ecd9c1b49b09a2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
