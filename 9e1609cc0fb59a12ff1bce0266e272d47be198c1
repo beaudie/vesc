@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2cff1d7_a480c8f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-14T17:24:09Z",
+      "side": 1,
+      "message": "LGTM, thanks for making standalone CI-only bots possible!",
+      "revId": "9e1609cc0fb59a12ff1bce0266e272d47be198c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -223,6 +223,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57185237_c3db1b2f",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-14T17:24:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9318515b_c7733db7",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 102
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4801b506_442b8e7e",
@@ -260,6 +284,30 @@
       "side": 1,
       "message": "Is it OK if I don\u0027t do that? It\u0027s quite a bit of work for a temporary CL, and the commit message has this exact patterning already.",
       "parentUuid": "4801b506_442b8e7e",
+      "range": {
+        "startLine": 364,
+        "startChar": 17,
+        "endLine": 364,
+        "endChar": 29
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1530a479_00aaa426",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-14T17:24:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d7df53f_c54cae55",
       "range": {
         "startLine": 364,
         "startChar": 17,
