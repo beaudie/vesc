@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82244312_e0f31f24",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5816,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-14T03:15:27Z",
+      "side": 1,
+      "message": "I also think this better do in context. The reason is that the DS flush are not commands, these are direct calls into driver, so there isn\u0027t good reason to do in command buffers and let async thread do it (which comes with other issues).",
+      "parentUuid": "a2f23328_634b3daf",
+      "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "793fcb58_fb627d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
