@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1f998f5_12f41460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2021-10-14T21:11:31Z",
+      "side": 1,
+      "message": "thanks for working on it!",
+      "revId": "7d6a3d5afe86f513bcd869958896486f7a961328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b85c077a_a148baad",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2021-10-14T21:11:31Z",
+      "side": 1,
+      "message": "so i believe in chrome i should also always check for this extension before using it and enable drdc accordingly. although it seems like this extension will always be enabled.",
+      "range": {
+        "startLine": 49,
+        "startChar": 43,
+        "endLine": 49,
+        "endChar": 75
+      },
+      "revId": "7d6a3d5afe86f513bcd869958896486f7a961328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5cc1ad1_47a5a86e",
