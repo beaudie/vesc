@@ -2061,7 +2061,12 @@ bool ValidateCreateContext(const ValidationContext *val,
                 gl::Version(static_cast<GLuint>(clientMajorVersion),
                             static_cast<GLuint>(clientMinorVersion)))
             {
-                val->setError(EGL_BAD_ATTRIBUTE, "Requested GLES version is not supported.");
+                // Temporary debug code:
+                gl::Version max = display->getMaxSupportedESVersion();
+                val->setError(EGL_BAD_ATTRIBUTE,
+                              "Requested GLES version (%d.%d) is greater than "
+                              "max supported (%d, %d).",
+                              clientMajorVersion, clientMinorVersion, max.major, max.minor);
                 return false;
             }
             break;
@@ -2816,7 +2821,7 @@ bool ValidateCreatePixmapSurface(const ValidationContext *val,
                 break;
 
             default:
-                val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute");
+                val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute: 0x%04X", attribute);
                 return false;
         }
     }
@@ -5282,7 +5287,7 @@ bool ValidateQueryDebugKHR(const ValidationContext *val, EGLint attribute, const
             break;
 
         default:
-            val->setError(EGL_BAD_ATTRIBUTE, "unknown attribute.");
+            val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute: 0x%04X", attribute);
             return false;
     }
 
