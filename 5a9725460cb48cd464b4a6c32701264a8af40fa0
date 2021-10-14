@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6cd50207_fd6f8a76",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-14T04:43:47Z",
+      "side": 1,
+      "message": "I\u0027ll do that. Would you please take care of Jamie\u0027s other comments first?",
+      "parentUuid": "bf60da4c_40ac014e",
+      "revId": "5a9725460cb48cd464b4a6c32701264a8af40fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14499c4a_c5320fe0",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
