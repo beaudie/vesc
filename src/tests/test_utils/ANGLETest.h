@@ -592,6 +592,8 @@ class ANGLETestBase
     bool mSetUpCalled;
     bool mTearDownCalled;
 
+    bool mModifiedPreferredDevice;
+
     // Usually, we use an OS Window per "fixture" (a frontend and backend combination).
     // This allows:
     // 1. Reusing EGL Display on Windows.
