@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2f23328_634b3daf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5816,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-14T02:38:28Z",
+      "side": 1,
+      "message": "It\u0027s an interesting idea.   I do think it would help simplify things, and allowing the async thread to do the vkUpdateDescriptorSets() work would be nice.\n\nThe problem is know which CommandBufferHelper to call: inside or outside RP?   Here is where they are allocated:\n\n    allocDescriptorBufferInfos\n        ContextVk::updateDriverUniformsDescriptorSet (rx::ContextVk)\n        ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateBuffersDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateDefaultUniformsDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet (rx::ProgramExecutableVk)\n        TransformFeedbackVk::initDescriptorSet (rx::TransformFeedbackVk)\n        TransformFeedbackVk::updateDescriptorSet (rx::TransformFeedbackVk)\n\n    allocDescriptorImageInfos\n        ProgramExecutableVk::updateImagesDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateInputAttachmentDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateTexturesDescriptorSet (rx::ProgramExecutableVk)\n\n    allocWriteDescriptorSets\n        ContextVk::updateDriverUniformsDescriptorSet (rx::ContextVk)\n        ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateBuffersDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateDefaultUniformsDescriptorSet (rx::ProgramExecutableVk)\n        TransformFeedbackVk::writeDescriptorSet (rx::TransformFeedbackVk)\n        ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateImagesDescriptorSet (rx::ProgramExecutableVk)(2 usages)\n        ProgramExecutableVk::updateInputAttachmentDescriptorSet (rx::ProgramExecutableVk)\n        ProgramExecutableVk::updateTexturesDescriptorSet (rx::ProgramExecutableVk)\n\nIs there a consistent way to know which CBH to allocate from for all of those?\n\nAnother issue is the memory for the vectors:\n\n    // Storage for vkUpdateDescriptorSets\n    std::vector\u003cVkDescriptorBufferInfo\u003e mDescriptorBufferInfos;\n    std::vector\u003cVkDescriptorImageInfo\u003e mDescriptorImageInfos;\n    std::vector\u003cVkWriteDescriptorSet\u003e mWriteDescriptorSets;\n    \nWe will be reserving space in every CBH, rather than every ContextVk, which will consume more memory (though admittedly, likely not a lot since the structures are fairly small).\n\nI think it\u0027s better to keep them in ContextVk, but let me know what you think.",
+      "parentUuid": "c70f1f7d_b0931984",
+      "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "793fcb58_fb627d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -82,6 +100,30 @@
       "writtenOn": "2021-10-12T21:48:28Z",
       "side": 1,
       "message": "Do you still need this call here? My understanding is that previously you need this because you are patching the DS, which will need to de-reference the view pointer, which is troublesome if view gets released earlier. But with this latest patchset, there is no DS patch up, DS is using handle of the view which will not gets freed until mUse indicates it is GPU complete. So my understanding is that this BufferViewHelper related change is no longer needed?",
+      "range": {
+        "startLine": 7869,
+        "startChar": 4,
+        "endLine": 7869,
+        "endChar": 43
+      },
+      "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45f01b95_fad34c8e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 7869,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-14T02:38:28Z",
+      "side": 1,
+      "message": "Yes, this is still required.   See this comment for the full details:\n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d5706#c7",
+      "parentUuid": "793fcb58_fb627d2e",
       "range": {
         "startLine": 7869,
         "startChar": 4,

@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42df48d5_52dadb55",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-14T02:38:28Z",
+      "side": 1,
+      "message": "N/A",
+      "parentUuid": "39628b2a_d26d14d3",
+      "range": {
+        "startLine": 66,
+        "startChar": 10,
+        "endLine": 66,
+        "endChar": 19
+      },
+      "revId": "edd5c3fab85434e041680ee587e4bfa1d8e16d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69568e92_b446d239",
@@ -135,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bf1f8f1_f6443330",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-14T02:38:28Z",
+      "side": 1,
+      "message": "N/A",
+      "parentUuid": "69568e92_b446d239",
+      "range": {
+        "startLine": 67,
+        "startChar": 6,
+        "endLine": 67,
+        "endChar": 39
+      },
+      "revId": "edd5c3fab85434e041680ee587e4bfa1d8e16d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8ae4390_844e4ab9",
@@ -148,6 +196,30 @@
       "writtenOn": "2021-06-16T15:43:28Z",
       "side": 1,
       "message": "nit: const",
+      "range": {
+        "startLine": 76,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 14
+      },
+      "revId": "edd5c3fab85434e041680ee587e4bfa1d8e16d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08a67ed9_395e78cd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-14T02:38:28Z",
+      "side": 1,
+      "message": "N/A",
+      "parentUuid": "f8ae4390_844e4ab9",
       "range": {
         "startLine": 76,
         "startChar": 9,
