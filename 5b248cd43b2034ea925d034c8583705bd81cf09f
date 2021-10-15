@@ -16,6 +16,23 @@
       "message": "Thanks, I think this is the best approach - yes, it is valid (though unnecessary) to detach shaders after linking the program.\n\nlgtm\n",
       "revId": "5b248cd43b2034ea925d034c8583705bd81cf09f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7350e9f5_106e4791",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T01:32:44Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5b248cd43b2034ea925d034c8583705bd81cf09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
