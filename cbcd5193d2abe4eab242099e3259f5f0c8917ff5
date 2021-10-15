@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "dc7f8666_d93fa152",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T18:05:52Z",
+      "side": 1,
+      "message": "I took care of this.",
+      "parentUuid": "647bc910_2bffaf72",
+      "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f312748e_dba6ea3c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cd6464f_feed6bfc",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T18:05:52Z",
+      "side": 1,
+      "message": "I took care of this.",
+      "parentUuid": "77084806_9cac9eeb",
+      "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04a2c78a_31224745",
@@ -65,6 +101,24 @@
       "writtenOn": "2021-10-15T01:20:43Z",
       "side": 1,
       "message": "Please reference bug 6571 for these and consider doing so for the Mac Intel Metal suppressions just above this block.",
+      "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2caf648c_b6757bae",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T18:05:52Z",
+      "side": 1,
+      "message": "I see you\u0027re handling this in follow-up CL https://chromium-review.googlesource.com/c/angle/angle/+/3224101 .",
+      "parentUuid": "04a2c78a_31224745",
       "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
