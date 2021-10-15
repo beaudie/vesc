@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c83347_57e6b3f8",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-15T19:19:48Z",
+      "side": 1,
+      "message": "nit: this one and win-trace are still in CQ\nMaybe it\u0027s OK for only 2 bots that run only on a subset of CLs.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 7
+      },
+      "revId": "68b77a614d10489327cf45d31d21c288f7b4cc06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
