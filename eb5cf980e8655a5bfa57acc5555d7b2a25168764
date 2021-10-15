@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c6ea9fb_be74cbab",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2140,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-15T19:38:19Z",
+      "side": 1,
+      "message": "Thanks for explanation, totally make sense. I think we can avoid getting into this \n situation with a slight different change in TextureVk::ensureRenderable. See my comment in TextureVk::ensureRenderable for details.",
+      "parentUuid": "76512d68_fb7abad1",
+      "range": {
+        "startLine": 2138,
+        "startChar": 78,
+        "endLine": 2140,
+        "endChar": 77
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c6b05c0_68580b06",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 22
@@ -204,6 +228,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c98c5ff_00d2797b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3334,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-15T19:38:19Z",
+      "side": 1,
+      "message": "And move this after line 3367 \n     else\n     {\n     ANGLE_TRY(mImage-\u003ereformatStagedUpdate(contextVk, previousActualFormatID, actualFormatID));\n     }",
+      "range": {
+        "startLine": 3334,
+        "startChar": 5,
+        "endLine": 3334,
+        "endChar": 87
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5df71ee6_8bc500c4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3367,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-15T19:38:19Z",
+      "side": 1,
+      "message": "I think the better way to do this is call hasStagedUpdatesWithMismatchedFormat() first and change it to hasStagedImageUpdatesWithMismatchedFormat() so that ti will only look for image updates which can\u0027t be handled by reformatStagedUpdate. If this returns true, we call initImage(), and we will *not* call reformatStagedUpdate. We willl let respecifyImageStorage() to hanlde the reformat. reinitImageAsRenderable() will end up flush all staged updates, which matches the image\u0027s actual format and will then go into read back and re-stage code path etc. Else (which means we do not have image updates that needs conversion), we will go through mImage-\u003ereformatStagedUpdate() call. \n\nif (mImage-\u003ehasStagedImageUpdatesWithMismatchedFormat(levelGLStart, levelGLEnd, actualFormatID))\n{\n   angle::FormatID sampleOnlyFormatID \u003d\n                format.getActualImageFormatID(vk::ImageAccess::SampleOnly);\n\n   ANGLE_TRY(initImage(contextVk, intendedFormatID, sampleOnlyFormatID, mipLevels));\n}\nelse\n{\n    ANGLE_TRY(mImage-\u003ereformatStagedUpdate(contextVk, previousActualFormatID, actualFormatID));\n}\n\nI actually was going to provide this suggestion in initial review, but thought it might be harmless, so decided to keep it to myself. If we are going to have to go down the slow path, there really isn\u0027t much benefit to do the staged buffer update using CPU, and mean while make it vulnerable to run into bugs like what you are seeing.",
+      "range": {
+        "startLine": 3361,
+        "startChar": 8,
+        "endLine": 3367,
+        "endChar": 9
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b2869d6_8f261a9f",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 22
@@ -244,6 +314,29 @@
         "startChar": 8,
         "endLine": 265,
         "endChar": 9
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24c1a88_2dfbbd53",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6896,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-15T19:38:19Z",
+      "side": 1,
+      "message": "Remove this",
+      "range": {
+        "startLine": 6892,
+        "startChar": 11,
+        "endLine": 6896,
+        "endChar": 13
       },
       "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
