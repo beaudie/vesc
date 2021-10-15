@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e01231e_7df61b0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2021-10-15T18:50:23Z",
+      "side": 1,
+      "message": "This makes things work -- of note is that they were working before(!), we just weren\u0027t checking for the extension string.",
+      "revId": "b8a10000a476e744dccb7ce78fbb2883a97eb59a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
