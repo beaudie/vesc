@@ -321,6 +321,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6b9fcc7_e387c50b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-15T19:47:55Z",
+      "side": 1,
+      "message": "Thanks for the pointer, very helpful. I think the format is basically only for vertex attributes, but not sample-able. These are still valid format. I am slightly worried that if someone later on add some code to handle this format, for example do similar things for mActualBufferFormatID, it will not work. Seems safer to let it go through the rest of code (is there any harm if we do so?) Or at least add a comment say that this is possible for some formats that only for buffers.",
+      "parentUuid": "35ba234b_020129cf",
+      "range": {
+        "startLine": 261,
+        "startChar": 8,
+        "endLine": 265,
+        "endChar": 9
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f24c1a88_2dfbbd53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 22
