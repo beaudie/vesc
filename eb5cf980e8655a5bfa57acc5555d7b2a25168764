@@ -435,6 +435,30 @@
       },
       "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0e02d6b_2f343a2d",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8976,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-15T20:24:20Z",
+      "side": 1,
+      "message": "I agree it\u0027s peculiar, especially as \"emulated clear\" is an implementation detail, but I\u0027d keep it for the time being to help catch regressions with base level which has otherwise very few tests.",
+      "parentUuid": "77e5974a_53c3b046",
+      "range": {
+        "startLine": 8948,
+        "startChar": 0,
+        "endLine": 8976,
+        "endChar": 0
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

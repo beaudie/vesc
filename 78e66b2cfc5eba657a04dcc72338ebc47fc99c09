@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9dc5394_91817f8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-15T20:24:20Z",
+      "side": 1,
+      "message": "The prepend parameter is messy and ideally I\u0027d like to see it go away. Charlie seems to know how to deal with that, so I\u0027ll let you guys hammer it out.\n\nHave you look to see if this affects perf on any traces? Especially on hardware with samplable but not renderable RGB, the traces that use an RGB framebuffer would now first create an RGB image and then reformat it to RGBA.\n\nOn the other hand, on ARM with renderable RGB you may see a perf win!",
+      "revId": "78e66b2cfc5eba657a04dcc72338ebc47fc99c09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
