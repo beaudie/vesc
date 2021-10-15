@@ -50,6 +50,23 @@
       "message": "On second thought - would you consider adding a test in src/tests/gl_tests/DrawElementsTest.cpp for this?\n",
       "revId": "5b248cd43b2034ea925d034c8583705bd81cf09f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1edeabb_2890aef1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T01:33:33Z",
+      "side": 1,
+      "message": "(deliberately holding off upgrading my +1 to a +2 per the question about a test)\n",
+      "revId": "5b248cd43b2034ea925d034c8583705bd81cf09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
