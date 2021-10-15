@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfddce88_8ef407b4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-15T16:59:10Z",
+      "side": 1,
+      "message": "I like the intention of the comment and the design.  I\u0027m not sure I\u0027m following all of it, and I want it to be easy for everybody to understand in the future.  Let me test my understanding:\n\nANI \u003d vkAcquireNextImageKHR()\nQS \u003d vkQueueSubmit()\nQP \u003d vkQueuePresentKHR()\n\nI\u0027m not sure what \"Wait()\" and \"serial S\u003cletter\u003e\" are.  I think \"Sa\" is one of the elements of mAcquireImageSemaphores (as are \"Sc\" and \"Se\").  True?\n\nI don\u0027t see a serial associated with them.  What does \"serial Sa\" mean?\n\nWhat are \"Sb\", \"Sd\", and \"Sf\"?  Is part of the idea that there may be multiple QS\u0027s per frame, and you need semaphores for each?\n\nI suspect that \"Wait(Sb)\" is ANGLE waiting on a fence (called Sb, but perhaps should be Fa).  True?  I think the idea is that ANGLE is blocking itself so that it isn\u0027t running too far ahead of the GPU/PE.\n\nAlso, is \"Wait(Sb)\" trying to say that it\u0027s waiting for the last QS of a previous frame to finish?",
+      "revId": "f95d9b98ffb8ef7eae87f49d742ce6690d8e97dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27a0faf9_d34b5273",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-15T16:59:10Z",
+      "side": 1,
+      "message": "BTW, there seems to be an implicit assumption that there will be 3 images in the swapchain.  I\u0027ve seen cases where Android\u0027s PE is providing 4 images for FIFO, even though ANGLE asked for 3.  I don\u0027t know why, but I\u0027ve clearly seen it.\n\nFYI ... I also know of cases where Windows will provide 1 image in the swapchain because the PE is copying the image (behind the scenes) after QP.\n\nI think the design will work for all of these cases, but I want to make sure the \"non-initiated to WSI\" don\u0027t assume things:-).",
+      "revId": "f95d9b98ffb8ef7eae87f49d742ce6690d8e97dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

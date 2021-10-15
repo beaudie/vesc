@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e548c277_111a44bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-15T16:59:10Z",
+      "side": 1,
+      "message": "I spent a bit of time on this, trying to look at it from a few different perspectives.  I like this.\n\nAs part of this, I read doc/PresentSemaphores.md.  Nice doc!  The terminology here and there aren\u0027t fully consistent.  Either way, I\u0027d like to follow-up with some suggestions sometime.  It\u0027s a tricky area, and difficult to explain.  I think you\u0027ve done a great job, and I hope my questions/FYI (below) will help.",
+      "revId": "1a6d624bda7d7101e8f116a55187cc8531b3c87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
