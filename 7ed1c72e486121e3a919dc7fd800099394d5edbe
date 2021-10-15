@@ -39,6 +39,30 @@
       },
       "revId": "7ed1c72e486121e3a919dc7fd800099394d5edbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69bed02f_a4292e77",
+        "filename": "util/osx/OSXWindow.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T23:41:50Z",
+      "side": 1,
+      "message": "Thanks for your question. I\u0027ll consider this a TODO since we don\u0027t know whether it\u0027ll work, and should remove it if not; have restructured the comment.",
+      "parentUuid": "c56540eb_9fd76ec7",
+      "range": {
+        "startLine": 717,
+        "startChar": 25,
+        "endLine": 717,
+        "endChar": 42
+      },
+      "revId": "7ed1c72e486121e3a919dc7fd800099394d5edbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
