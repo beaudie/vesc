@@ -16,6 +16,23 @@
       "message": "LGTM, thanks for making standalone CI-only bots possible!",
       "revId": "9e1609cc0fb59a12ff1bce0266e272d47be198c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26554c32_1b67d9f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-10-15T19:09:43Z",
+      "side": 1,
+      "message": "Something that had occurred to me while reviewing the recipe-side CL:\nThis CL adds the new bots to CQ, while keeping the old ones as well.\nWe won\u0027t have enough GCEs for the increase.\nI suggest that we don\u0027t add the new bots to CQ here.\nThen, have a CL that switches the CQ from old bots to new bots.\nAnd finally a CL that removes the old bots.",
+      "revId": "9e1609cc0fb59a12ff1bce0266e272d47be198c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
