@@ -22,6 +22,30 @@
       },
       "revId": "68b77a614d10489327cf45d31d21c288f7b4cc06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1d8d4dd_c187300b",
+        "filename": "infra/config/generated/commit-queue.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-15T19:22:08Z",
+      "side": 1,
+      "message": "Thanks.. I had realized after uploading, fixed in the later patch set.",
+      "parentUuid": "09c83347_57e6b3f8",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 7
+      },
+      "revId": "68b77a614d10489327cf45d31d21c288f7b4cc06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
