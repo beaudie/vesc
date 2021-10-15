@@ -16,6 +16,23 @@
       "message": "lgtm but I don\u0027t think I\u0027m a code OWNER.\n",
       "revId": "ecbc8e7629f50db4a32cd22863ee1bd685d2d006",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ab56e8b_03b73d71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T23:06:02Z",
+      "side": 1,
+      "message": "Looks like there are no conflicts with the earlier CL. CQ\u0027ing.\n",
+      "revId": "ecbc8e7629f50db4a32cd22863ee1bd685d2d006",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
