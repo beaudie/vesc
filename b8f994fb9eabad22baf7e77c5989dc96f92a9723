@@ -34,6 +34,40 @@
       "parentUuid": "6881792c_32d28b92",
       "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b370c6a4_4e7d4c93",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-15T19:17:28Z",
+      "side": 1,
+      "message": "nit: Remove comment",
+      "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a63b3e0_1e061a88",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-15T19:17:28Z",
+      "side": 1,
+      "message": "While you are here, could you please add attribute printf to `setError` to catch the bug here (and a few similar instances)?\n\nIn src/libANGLE/validationEGL.h:\n\n    +    ANGLE_FORMAT_PRINTF(3, 4)\n         void setError(EGLint error, const char *message...) const;",
+      "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
