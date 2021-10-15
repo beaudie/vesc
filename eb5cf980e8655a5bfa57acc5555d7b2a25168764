@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f6760de_7fc28d9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T18:28:13Z",
+      "side": 1,
+      "message": "I opened b/203209672 to add support for VK_FORMAT_R8G8B8_UNORM.",
+      "parentUuid": "3aeed4ab_7144f29c",
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a1067fa_5f513e82",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 22
@@ -31,6 +49,30 @@
       "writtenOn": "2021-10-15T16:41:58Z",
       "side": 1,
       "message": "line 2084 has a flush, so if we have any staged update when we try to prepend, it should comes from this for loop at line 2109, which mans it should be for different level. I am wondering why prepend or append makes any difference here?",
+      "range": {
+        "startLine": 2138,
+        "startChar": 78,
+        "endLine": 2140,
+        "endChar": 77
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76512d68_fb7abad1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T18:28:13Z",
+      "side": 1,
+      "message": "Here is a CL that matches this one exactly, except it uses Append here, rather than Prepend:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3225998\n\nSpecifically, the following test fails:\n  FramebufferTestWithFormatFallback.R4G4B4A4_InCompatibleFormat.\n\nThe test is doing the following:\n\n1. glTexImage2D(RGBA4)\n2. glFramebufferTexture2D() (which is implicitly RGBA8).\n\nThis creates a texture with RGBA4, but then it needs to be reformatted to RGBA8 so it can be bound to the FBO.   The order of operations in ANGLE is:\n\n1. reformatStagedUpdate()\n  - This reformats the staged RGBA4 data to RGBA8.\n2. reinitImageAsRenderable()\n  - flushImageStagedUpdates() on line 2084\n    - This does nothing, since the texture image format is still RGBA4, and the staged updates are RGBA8 (mismatched formats).\n  - Stage an update to copy the old image data to the new image.\n2. Create the new RGBA8 image, flush the staged updates.\n\nAs noted, the flush on line 2084 doesn\u0027t actually do anything in this case, since existing staged updates have already been reformatted from RGBA4 to RGBA8, so they don\u0027t match the format of the source image (still RGBA4 at this point).   Without prepending, we get the following order of staged updates:\n\n1. glTexImage2D()\n2. Old image data (this staged update)\n\nThis means all existing staged updates are lost entirely, since the old image data will always completely overwrite them.   What we need to instead is:\n\n1. Old image data (this staged update)\n2. glTexImage2D()\n\nWhich is achieved by prepending the copy of the old data as a staged update, so it can be applied in the correct order once the new image (with the correct fallback format) is created.",
+      "parentUuid": "6a1067fa_5f513e82",
       "range": {
         "startLine": 2138,
         "startChar": 78,
@@ -90,6 +132,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "370849d8_2c5bbb18",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2945,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T18:28:13Z",
+      "side": 1,
+      "message": "See the test FramebufferTest_ES31.IncompleteMultisampleFixedSampleLocationsTex:\n\n    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTextures[1].get());\n    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGB8, 1, 1, true);\n    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D_MULTISAMPLE,\n                           mTextures[1].get(), 0);\n                           \nIntel supports samplable RGB8 textures, but only single sampled.   Maybe we should special-case glTexStorage2DMultisample() and force it to be renderable, assuming it\u0027s correct that all textures passed to glTexStorage2DMultisample() will need to be renderable?",
+      "parentUuid": "2c6b05c0_68580b06",
+      "range": {
+        "startLine": 2926,
+        "startChar": 0,
+        "endLine": 2945,
+        "endChar": 5
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b2869d6_8f261a9f",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 22
@@ -113,6 +179,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35ba234b_020129cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T18:28:13Z",
+      "side": 1,
+      "message": "See the failures in this CL which changes this from a \u0027continue\u0027 to an UNREACHABLE() and logs the format ID:\n\n  https://chromium-review.googlesource.com/c/angle/angle/+/3225997\n\nWhen mActualSampleOnlyImageFormatID \u003d\u003d angle::FormatID::NONE, we don\u0027t want/need to do any further work, since it\u0027s not a valid format anyway.\n\nOutput from a failed test:\n\n    [ RUN      ] TracePerfTest.Run/vulkan_aliexpress\n    Warning: setpriority failed in StabilizeCPUForBenchmarking. Process will retain default priority: Permission denied\n    WARN: vk_format_utils.cpp:264 (initialize): TIMTIM \u003e\u003e format.mActualSampleOnlyImageFormatID \u003d 0\n    ../../src/tests/perf_tests/ANGLEPerfTest.cpp:1038: Failure\n    Failed\n    Failing test because of unexpected error:\n    vk_format_utils.cpp:266 (initialize):   ! Unreachable reached: initialize(../../src/libANGLE/renderer/vulkan/vk_format_utils.cpp:266)\n\n    FATAL: vk_format_utils.cpp:266 (initialize):    ! Unreachable reached: initialize(../../src/libANGLE/renderer/vulkan/vk_format_utils.cpp:266)\n    angle::PrintStackBacktrace() at crash_handler_posix.cpp:454\n    angle::Handler(int) at crash_handler_posix.cpp:616\n    killpg at ??:?\n    gl::LogMessage::~LogMessage() at debug.cpp:206\n    rx::vk::FormatTable::initialize(rx::RendererVk*, gl::TextureCapsMap*, std::__Cr::vector\u003cunsigned int, std::__Cr::allocator\u003cunsigned int\u003e \u003e*) at vk_format_utils.cpp:266\n    rx::RendererVk::initialize(rx::DisplayVk*, egl::Display*, char const*, char const*) at RendererVk.cpp:1411\n    rx::DisplayVk::initialize(egl::Display*) at DisplayVk.cpp:41\n    rx::DisplayVkXcb::initialize(egl::Display*) at DisplayVkXcb.cpp:?\n    isError at Error.inc:82\n    isError at Error.inc:82\n    EGL_Initialize at entry_points_egl_autogen.cpp:311\n    EGLWindow::initializeDisplay(OSWindow*, angle::Library*, angle::GLESDriverType, EGLPlatformParameters const\u0026) at EGLWindow.cpp:382\n    EGLWindow::initializeGLWithResult(OSWindow*, angle::Library*, angle::GLESDriverType, EGLPlatformParameters const\u0026, ConfigParameters const\u0026) at ??:?\n    ANGLERenderTest::SetUp() at ANGLEPerfTest.cpp:748\n    testing::Test::Run() at gtest.cc:2704\n    testing::TestInfo::Run() at gtest.cc:2888\n    testing::TestSuite::Run() at gtest.cc:3040\n    testing::internal::UnitTestImpl::RunAllTests() at gtest.cc:5898\n    testing::UnitTest::Run() at gtest.cc:5464\n    RUN_ALL_TESTS at gtest.h:2492\n    main at angle_perftests_main.cpp:27",
+      "parentUuid": "9b2869d6_8f261a9f",
+      "range": {
+        "startLine": 261,
+        "startChar": 8,
+        "endLine": 265,
+        "endChar": 9
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "10f9d5fe_2a922861",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 22
@@ -124,6 +214,30 @@
       "writtenOn": "2021-10-15T12:52:29Z",
       "side": 1,
       "message": "I suggest we just remove this test, it seems like it\u0027s not written according to the GL spec.",
+      "range": {
+        "startLine": 8948,
+        "startChar": 0,
+        "endLine": 8976,
+        "endChar": 0
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23ad4641_14dce8a6",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8976,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T18:28:13Z",
+      "side": 1,
+      "message": "@Shabi - Any objects to removing this test?   Or is there a modification you\u0027d like to make for it?",
+      "parentUuid": "10f9d5fe_2a922861",
       "range": {
         "startLine": 8948,
         "startChar": 0,
