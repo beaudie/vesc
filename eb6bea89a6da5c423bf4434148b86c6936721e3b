@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7ad2309_f430ecc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-15T16:27:51Z",
+      "side": 1,
+      "message": "Question for Shahbaz.",
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6f7e07c_119f00fa",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-10-14T16:40:02Z",
       "side": 1,
       "message": "We should try to refactor as much as possible so this function doesn\u0027t use anything but the renderer. Then we wouldn\u0027t need a `flushStagedUpdates2`. In the worst case, we could have an \"Impl\" function that takes a `vk::Context` and a `ContextVk` and make the ContextVk-dependent stuff be optional, like the perf warnings.\n\nAlternatively, given that only Clear updates are valid here, and given that the image is single level/layer, maybe we should just handle this in a special way, like:\n\n    if (thereIsClearStaged())\n    {\n        ASSERT(noOtherUpdateStaged());\n        memset(buffer, clearColor);\n    }\n    else\n    {\n        getCommandBufferOneOff();\n        doTheCopy();\n        submitOneOff();\n    }",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2323712_fe3b05c8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-15T16:27:51Z",
+      "side": 1,
+      "message": "@Shahbaz.\nI removed any checks with early return from flushStagedUpdates2, but still no clear.\nI\u0027m hesitant to do a CPU blit to the buffer - extra work. But that may have to happen. This glClear no draw, might actually be a small corner case. \n\nI\u0027m wondering about putting the equivalent of glReadPixels(0,0,1,1) at makeUncurrent IFF, a clear is pending, provided I can detect pending clear (uncurrent should cause a implicit flush anyways). This will cause the flush, and should be more efficient, event with staging buffer for readpixels (1 pixel). What do you think? pitfalls? Worth trying before blit?\n\nI\u0027m going to add initializing Surface with a texture contents to one for the test cases, to get that scenario.",
+      "parentUuid": "a6f7e07c_119f00fa",
       "range": {
         "startLine": 7166,
         "startChar": 20,
