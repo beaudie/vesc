@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "647bc910_2bffaf72",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T01:20:43Z",
+      "side": 1,
+      "message": "Please start description with \"Metal: \" per an earlier request from Shabi on one other CL (you might not have seen it).\n\nPlease also add some mention of the Intel suppressions being added / updated, and reference those bugs as requested below.",
+      "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f312748e_dba6ea3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T01:20:43Z",
+      "side": 1,
+      "message": "lgtm with a couple of small requests.\n",
+      "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77084806_9cac9eeb",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T01:20:43Z",
+      "side": 1,
+      "message": "Please reference:\n\nBug: angleproject:6466\n\nin the CL description too.",
+      "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a2c78a_31224745",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T01:20:43Z",
+      "side": 1,
+      "message": "Please reference bug 6571 for these and consider doing so for the Mac Intel Metal suppressions just above this block.",
+      "revId": "cbcd5193d2abe4eab242099e3259f5f0c8917ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
