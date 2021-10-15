@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e411d6_46a27ec0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T23:32:42Z",
+      "side": 1,
+      "message": "PTAL. This is a guess at a workaround for the random test crashes seen both in angle_end2end_tests and the dEQP tests.\n",
+      "revId": "7ed1c72e486121e3a919dc7fd800099394d5edbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
