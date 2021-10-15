@@ -33,6 +33,23 @@
       "message": "LGTM",
       "revId": "5b248cd43b2034ea925d034c8583705bd81cf09f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65b34d51_82a96b24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T01:33:02Z",
+      "side": 1,
+      "message": "On second thought - would you consider adding a test in src/tests/gl_tests/DrawElementsTest.cpp for this?\n",
+      "revId": "5b248cd43b2034ea925d034c8583705bd81cf09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
