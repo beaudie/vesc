@@ -236,7 +236,7 @@ class WindowSurfaceVk : public SurfaceVk
                                         const vk::RenderPass &compatibleRenderPass,
                                         vk::Framebuffer **framebufferOut);
 
-    vk::Semaphore getAcquireImageSemaphore();
+    const vk::Semaphore *getAndResetAcquireImageSemaphore();
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() const
     {
@@ -328,9 +328,29 @@ class WindowSurfaceVk : public SurfaceVk
 
     std::vector<impl::SwapchainImage> mSwapchainImages;
     std::vector<angle::ObserverBinding> mSwapchainImageBindings;
-    vk::Semaphore mAcquireImageSemaphore;
     uint32_t mCurrentSwapchainImageIndex;
 
+    // Given that the CPU is throttled after a number of swaps, there is an upper bound to the
+    // number of semaphores that are used to acquire swapchain images, and that is
+    // kSwapHistorySize+1:
+    //
+    //     Frame i:     ANI ... QS (serial Sa) ... Wait(..) QS (serial Sb) QP
+    //     Frame i+1:   ANI ... QS (serial Sc) ... Wait(..) QS (serial Sd) QP
+    //     Frame i+2:   ANI ... QS (serial Se) ... Wait(Sb) QS (serial Sf) QP
+    //
+    // In frame i+2 (2 is kSwapHistorySize), ANGLE waits on Sa which means that the semaphore used
+    // for Frame i's ANI can be reused (because Sa <= Sb).  Before this wait, there were three
+    // acquire semaphores in use corresponding to frames i, i+1 and i+2.  Frame i+3 can reuse the
+    // semaphore of frame i.
+    angle::CircularBuffer<vk::Semaphore, impl::kSwapHistorySize + 1> mAcquireImageSemaphores;
+    // A pointer to mAcquireImageSemaphores.  This is set when an image is acquired and is waited on
+    // by the next submission (which uses this image), at which point it is reset so future
+    // submissions don't wait on it until the next acquire.
+    const vk::Semaphore *mAcquireImageSemaphore;
+
+    // There is no direct signal from Vulkan regarding when a Present semaphore can be be reused.
+    // During window resizing when swapchains are recreated every frame, the number of in-flight
+    // present semaphores can grow indefinitely.  See doc/PresentSemaphores.md.
     vk::Recycler<vk::Semaphore> mPresentSemaphoreRecycler;
 
     // Depth/stencil image.  Possibly multisampled.
