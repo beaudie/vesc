@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72bdba24_d7fb19dc",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-15T20:24:53Z",
+      "side": 1,
+      "message": "\u003e I suspect that \"Wait(Sb)\" is ANGLE waiting on a fence (called Sb, but perhaps should be Fa).  True?\n\u003e Yes. For every QS there is a fence and ANGLE identifies the fence (and other stuff) corresponding to the QS with a serial. So yes Sa and Fa are really the same thing. Wait is vkWaitForFences.\n\nOkay, I thought \"S\u003cletter\u003e\" was a semaphore:\n  - This is a comment about a CircularBuffer of semaphores:-)\n  - SN is a semaphore in the .md file\n\nFor this relatively-brief comment (that mentions the .md file), I suggest use F\u003cletter\u003e here, talk about waiting on fences, and avoid discussion of serials.\n\nBTW, it would be good to add a discussion of serials to the .md file sometime, but it can complicate the brief encodings (S* \u003d\u003d semaphore or serial?) you came up with.",
+      "parentUuid": "da4b5cc2_ba133dd2",
+      "revId": "f95d9b98ffb8ef7eae87f49d742ce6690d8e97dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "27a0faf9_d34b5273",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 3
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Ack. I recall all these from our conversations a few years back :)\n\nI don\u0027t believe any of the docs or comments are particularly tied to the swapchain having any number of images. In truth, the swapchain could have 1000 images but it only ping pongs between 0 and 1, or even just return 0 all the time, so the algorithms should be ready to deal with 2 image or 1 image swapchains already.\n\n\u003e there seems to be an implicit assumption that there will be 3 images in the swapchain.\n\nMaybe used as an example in the doc, but if you have any specific place where this assumption is made, do let me know and I\u0027ll update the comment.",
       "parentUuid": "27a0faf9_d34b5273",
+      "revId": "f95d9b98ffb8ef7eae87f49d742ce6690d8e97dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9f74d8b_f523d82c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-15T20:24:53Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t believe any of the docs or comments are particularly tied\n\nAgreed",
+      "parentUuid": "2f6f508f_9f46e8b1",
       "revId": "f95d9b98ffb8ef7eae87f49d742ce6690d8e97dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
