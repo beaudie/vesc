@@ -207,6 +207,7 @@ ProgramMtl::DefaultUniformBlock::~DefaultUniformBlock() = default;
 
 ProgramMtl::ProgramMtl(const gl::ProgramState &state)
     : ProgramImpl(state),
+      mProgramHasFlatAttributes(false),
       mShadowCompareModes(),
       mMetalRenderPipelineCache(this),
       mAuxBufferPool(nullptr)
@@ -397,23 +398,30 @@ angle::Result ProgramMtl::linkImplDirect(const gl::Context *glContext,
     return angle::Result::Continue;
 }
 
-bool ProgramMtl::programHasFlatAttributes() const
+void ProgramMtl::linkUpdateHasFlatAttributes()
 {
+    mProgramHasFlatAttributes = false;
+
     const auto &programInputs = mState.getProgramInputs();
     for (auto &attribute : programInputs)
     {
         if (attribute.interpolation == sh::INTERPOLATION_FLAT)
-            return true;
+        {
+            mProgramHasFlatAttributes = true;
+            return;
+        }
     }
+
     const auto &flatVaryings =
         mState.getAttachedShader(gl::ShaderType::Vertex)->getOutputVaryings();
     for (auto &attribute : flatVaryings)
     {
         if (attribute.interpolation == sh::INTERPOLATION_FLAT)
-            return true;
+        {
+            mProgramHasFlatAttributes = true;
+            return;
+        }
     }
-
-    return false;
 }
 
 angle::Result ProgramMtl::linkImpl(const gl::Context *glContext,
@@ -433,6 +441,7 @@ angle::Result ProgramMtl::linkImpl(const gl::Context *glContext,
 #else
     ANGLE_TRY(linkImplDirect(glContext, resources, infoLog));
 #endif
+    linkUpdateHasFlatAttributes();
     return angle::Result::Continue;
 }
 
