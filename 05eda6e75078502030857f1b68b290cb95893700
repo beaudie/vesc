@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b4ca7a6_6e09673c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-15T04:08:42Z",
+      "side": 1,
+      "message": "One of Samsung\u0027s patches. I think it\u0027s supposed to help primarily with async by avoiding queuing unnecessary tasks when the application polls queries a lot.",
+      "revId": "05eda6e75078502030857f1b68b290cb95893700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
