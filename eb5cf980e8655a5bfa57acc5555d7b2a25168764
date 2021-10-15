@@ -156,6 +156,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d9d8fc6_0b25273e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2945,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-15T18:33:38Z",
+      "side": 1,
+      "message": "Yeah, assume any textures that come through TexStorage2DMultisample are going to be renderable. Then you won\u0027t need the special casing IIUC.",
+      "parentUuid": "370849d8_2c5bbb18",
+      "range": {
+        "startLine": 2926,
+        "startChar": 0,
+        "endLine": 2945,
+        "endChar": 5
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b2869d6_8f261a9f",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 22
