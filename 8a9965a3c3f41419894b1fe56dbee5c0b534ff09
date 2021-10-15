@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db0f6961_e7d8b51a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-15T19:29:03Z",
+      "side": 1,
+      "message": "PTAL.. see issue for context. This is a SwANGLE-and-tracer driven issue.",
+      "revId": "8a9965a3c3f41419894b1fe56dbee5c0b534ff09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
