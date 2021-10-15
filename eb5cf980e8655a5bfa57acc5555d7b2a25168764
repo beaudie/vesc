@@ -294,6 +294,30 @@
       },
       "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77e5974a_53c3b046",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8976,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-15T19:20:46Z",
+      "side": 1,
+      "message": "I\u0027m also fine with keeping it, but it\u0027s a bit particular that it has so many very targeted skips that aren\u0027t tied to GL extensions.",
+      "parentUuid": "23ad4641_14dce8a6",
+      "range": {
+        "startLine": 8948,
+        "startChar": 0,
+        "endLine": 8976,
+        "endChar": 0
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
