@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aeed4ab_7144f29c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-15T12:52:29Z",
+      "side": 1,
+      "message": "Can you check if SwS supports this format, and if not, can you file a FR on the SwS component so we get some CQ coverage?",
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c6b05c0_68580b06",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2945,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-15T12:52:29Z",
+      "side": 1,
+      "message": "What does it mean to have a non-renderable multisample texture? Isn\u0027t multisampling pretty much only applicable to renderable targets? I\u0027m wondering if there\u0027s an alternate simpler solution.",
+      "range": {
+        "startLine": 2926,
+        "startChar": 0,
+        "endLine": 2945,
+        "endChar": 5
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f9d5fe_2a922861",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8976,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-15T12:52:29Z",
+      "side": 1,
+      "message": "I suggest we just remove this test, it seems like it\u0027s not written according to the GL spec.",
+      "range": {
+        "startLine": 8948,
+        "startChar": 0,
+        "endLine": 8976,
+        "endChar": 0
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
