@@ -67,6 +67,24 @@
       "message": "We also have to update flat attributes here, when we reload shaders from a cache / binary form.",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7893d7a2_7f351e94",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-15T23:54:33Z",
+      "side": 1,
+      "message": "Does Steven need to serialize / deserialize the new mProgramHasFlatAttributes flag? If so can you point to the code where that needs to be done? Thanks in advance.",
+      "parentUuid": "5624aeed_f1830609",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
