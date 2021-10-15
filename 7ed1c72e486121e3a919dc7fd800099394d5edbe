@@ -16,6 +16,29 @@
       "message": "PTAL. This is a guess at a workaround for the random test crashes seen both in angle_end2end_tests and the dEQP tests.\n",
       "revId": "7ed1c72e486121e3a919dc7fd800099394d5edbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c56540eb_9fd76ec7",
+        "filename": "util/osx/OSXWindow.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T23:38:39Z",
+      "side": 1,
+      "message": "Is this meant to be marked with a TODO, or will it stay around?\n\nAlso, I think we\u0027re supposed to do the full http://anglebug.com/6570 to make it easier to tools to recognize it as a URL.",
+      "range": {
+        "startLine": 717,
+        "startChar": 25,
+        "endLine": 717,
+        "endChar": 42
+      },
+      "revId": "7ed1c72e486121e3a919dc7fd800099394d5edbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
