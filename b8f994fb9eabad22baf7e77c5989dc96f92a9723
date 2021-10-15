@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a981cb8_738860af",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-15T20:50:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b370c6a4_4e7d4c93",
+      "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a63b3e0_1e061a88",
@@ -66,6 +84,24 @@
       "writtenOn": "2021-10-15T19:17:28Z",
       "side": 1,
       "message": "While you are here, could you please add attribute printf to `setError` to catch the bug here (and a few similar instances)?\n\nIn src/libANGLE/validationEGL.h:\n\n    +    ANGLE_FORMAT_PRINTF(3, 4)\n         void setError(EGLint error, const char *message...) const;",
+      "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f313bf9_6755b6ca",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-15T20:50:30Z",
+      "side": 1,
+      "message": "Please tell me more.  What\u0027s the error?  BTW, this line is a clone from a previous CL that modified this file (which I think you were a reviewer of).\n\nI\u0027ve not used ANGLE_FORMAT_PRINTF before.  From what I see, I would think this case would be:\n\n    +    ANGLE_FORMAT_PRINTF(2, 3)\n         void setError(EGLint error, const char *message...) const;\n         \nI\u0027m happy to learn about this.",
+      "parentUuid": "9a63b3e0_1e061a88",
       "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
