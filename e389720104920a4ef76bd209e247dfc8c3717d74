@@ -16,6 +16,40 @@
       "message": "Swapping reviewers with Kyle, I know nothing about metal/\n\nThe test LGTM FWIW, thanks for that.",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24deeaf0_99f66671",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-15T18:10:05Z",
+      "side": 1,
+      "message": "I have ones small fix, Please address this one, and I\u0027d be happy to 2+ this.\nAmazing catch Steven, I was very unfamiliar with this workflow. Thank you 😊\n",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5624aeed_f1830609",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-15T18:10:05Z",
+      "side": 1,
+      "message": "We also have to update flat attributes here, when we reload shaders from a cache / binary form.",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
