@@ -1778,8 +1778,9 @@ void ContextMtl::updateDepthBias(const gl::State &glState)
 // Program has at least one 'flat' attribute
 bool ContextMtl::requiresIndexRewrite(const gl::State &state)
 {
-    return mProgram->hasFlatAttribute() &&
-           (state.getProvokingVertex() == gl::ProvokingVertexConvention::LastVertexConvention);
+
+    return (mProgram && mProgram->hasFlatAttribute() &&
+            (state.getProvokingVertex() == gl::ProvokingVertexConvention::LastVertexConvention));
 }
 
 void ContextMtl::updateDrawFrameBufferBinding(const gl::Context *context)

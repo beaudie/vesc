@@ -405,12 +405,14 @@ bool ProgramMtl::programHasFlatAttributes() const
         if (attribute.interpolation == sh::INTERPOLATION_FLAT)
             return true;
     }
-    const auto &flatVaryings =
-        mState.getAttachedShader(gl::ShaderType::Vertex)->getOutputVaryings();
-    for (auto &attribute : flatVaryings)
+    if (auto vertexShader = mState.getAttachedShader(gl::ShaderType::Vertex))
     {
-        if (attribute.interpolation == sh::INTERPOLATION_FLAT)
-            return true;
+        const auto &flatVaryings = vertexShader->getOutputVaryings();
+        for (auto &attribute : flatVaryings)
+        {
+            if (attribute.interpolation == sh::INTERPOLATION_FLAT)
+                return true;
+        }
     }
 
     return false;
