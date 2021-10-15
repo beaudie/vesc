@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3934520_89a7b864",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T18:53:44Z",
+      "side": 1,
+      "message": "Good cleanup.",
+      "revId": "3d0e007ce482bf69c26ac8bc762c20bd402761ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68126353_77931d4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2830,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-15T18:53:44Z",
+      "side": 1,
+      "message": "Why did you decide to use a lamda, rather than a virtual function in DynamicallyGrowingPool() that\u0027s overridden by DynamicQueryPool/DynamicSemaphorePool/etc.?",
+      "revId": "3d0e007ce482bf69c26ac8bc762c20bd402761ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
