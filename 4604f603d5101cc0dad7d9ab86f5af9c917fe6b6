@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b3bd638_ca44407d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-15T04:11:12Z",
+      "side": 1,
+      "message": "Based on one of Samsung\u0027s changes, though much simpler.",
+      "revId": "4604f603d5101cc0dad7d9ab86f5af9c917fe6b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
