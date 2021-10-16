@@ -193,6 +193,24 @@
       "parentUuid": "57698026_0e01388d",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10b5bfe1_239533f0",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-16T11:00:35Z",
+      "side": 1,
+      "message": "OK. I added a couple things: I added saving/loading of the mProgramHasFlatAttributes variable, and a test to verify that the value is correct across save/load (via draw call results).",
+      "parentUuid": "da84d469_3952fe3b",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
