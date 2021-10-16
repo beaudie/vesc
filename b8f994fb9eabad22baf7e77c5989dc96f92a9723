@@ -158,6 +158,24 @@
       "parentUuid": "8a99084f_561a9b80",
       "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d0c4f33_d4557f63",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-16T00:50:46Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "22e9a7c7_fec14450",
+      "revId": "b8f994fb9eabad22baf7e77c5989dc96f92a9723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
