@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d94d0dd_26085396",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-16T00:38:43Z",
+      "side": 1,
+      "message": "Okay, lets give it a try.",
+      "parentUuid": "71f0886a_42fe6c8a",
+      "range": {
+        "startLine": 3461,
+        "startChar": 68,
+        "endLine": 3461,
+        "endChar": 95
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "271be366_2a8c4390",
@@ -437,6 +461,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd4c57f_507fe915",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-16T00:38:43Z",
+      "side": 1,
+      "message": "The \"no padding added\" quote was wrong, I have since deleted. The default allocator is not well discussed, all I can find is https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/custom_memory_pools.html#linear_algorithm under linear algorithm and the first paragraph.",
+      "parentUuid": "36307b4a_09161342",
+      "range": {
+        "startLine": 152,
+        "startChar": 11,
+        "endLine": 152,
+        "endChar": 39
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd00054f_7ba2fdf5",
@@ -568,6 +616,30 @@
       "side": 1,
       "message": "It is default, as explained in previous comment. linear means different algorithm.",
       "parentUuid": "007ed5d1_a8e396ff",
+      "range": {
+        "startLine": 176,
+        "startChar": 57,
+        "endLine": 176,
+        "endChar": 64
+      },
+      "revId": "2241c786263f1012743033d70bd6aa69fea2ca7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c24fc5_fc00ef93",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-16T00:38:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "163d7691_29cc28e2",
       "range": {
         "startLine": 176,
         "startChar": 57,
