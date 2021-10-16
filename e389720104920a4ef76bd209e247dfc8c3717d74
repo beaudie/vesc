@@ -175,6 +175,24 @@
       "parentUuid": "ed1fa41d_22ae4351",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da84d469_3952fe3b",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-16T08:51:33Z",
+      "side": 1,
+      "message": "Aha, thank you! That makes me much less worried. Now I\u0027ll need to write up some tests.",
+      "parentUuid": "57698026_0e01388d",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
