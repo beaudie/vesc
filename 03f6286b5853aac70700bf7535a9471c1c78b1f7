@@ -243,6 +243,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "83f83bb6_35803c42",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 3585,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-16T01:01:34Z",
+      "side": 1,
+      "message": "There is such a thing as ANGLE_VK_TRY",
+      "parentUuid": "645dba4b_8d2179d1",
+      "range": {
+        "startLine": 3585,
+        "startChar": 7,
+        "endLine": 3585,
+        "endChar": 33
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e01e97d_7074e1a0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 31
