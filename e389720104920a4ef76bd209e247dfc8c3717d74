@@ -139,6 +139,24 @@
       "parentUuid": "08435e62_3a687041",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed1fa41d_22ae4351",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-16T01:54:50Z",
+      "side": 1,
+      "message": "Right, but how does it handle when a binary gets loaded and the binary structure differs (i.e. old version without mProgramHasFlatAttributes serialized, loaded by new ANGLE which tries to deserialize the bool)?",
+      "parentUuid": "4375cb5c_57e8f3d4",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
