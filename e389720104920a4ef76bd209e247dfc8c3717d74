@@ -103,6 +103,24 @@
       "parentUuid": "5624aeed_f1830609",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08435e62_3a687041",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-16T00:17:10Z",
+      "side": 1,
+      "message": "Also I am unfamiliar with the load/save path, and wonder how it handles versioning. If I serialize mProgramHasFlatAttributes in saveShaderInternalInfo/loadShaderInternalInfo, how would it handle loading old binaries? Seems like a risk.",
+      "parentUuid": "0b54ab14_2bb30143",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
