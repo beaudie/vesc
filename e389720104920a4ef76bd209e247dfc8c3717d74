@@ -157,6 +157,24 @@
       "parentUuid": "4375cb5c_57e8f3d4",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57698026_0e01388d",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-16T04:03:54Z",
+      "side": 1,
+      "message": "Currently, the ANGLE git commit is part of the hash so old binaries never get loaded (otherwise we could have never changed anything here ;))\n\nI would love to see a day where ANGLE is able to load old binaries as long as the serialization format hasn\u0027t changed, but either way there is no danger of loading old binaries.",
+      "parentUuid": "ed1fa41d_22ae4351",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
