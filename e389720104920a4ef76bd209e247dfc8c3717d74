@@ -121,6 +121,24 @@
       "parentUuid": "0b54ab14_2bb30143",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4375cb5c_57e8f3d4",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-16T00:59:27Z",
+      "side": 1,
+      "message": "Anything you need post-link needs to be serialized. You can duplicate your test in ProgramBinaryTest.cpp, where you `saveAndLoadProgram()` after deleting shaders, and make sure you can render just fine with the loaded program.",
+      "parentUuid": "08435e62_3a687041",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
