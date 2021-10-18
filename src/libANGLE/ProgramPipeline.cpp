@@ -541,6 +541,23 @@ angle::Result ProgramPipeline::link(const Context *context)
             return angle::Result::Stop;
         }
 
+        Program *fragmentShaderProgram = getShaderProgram(ShaderType::Fragment);
+        if (fragmentShaderProgram)
+        {
+            // We should also be validating image uniforms and SSBOs.
+            const int combinedImageUniforms             = 0;
+            const int combinedShaderStorageBlocks       = 0;
+            const ProgramExecutable &fragmentExecutable = fragmentShaderProgram->getExecutable();
+            if (!mState.mExecutable->linkValidateOutputVariables(
+                    context->getCaps(), context->getExtensions(), context->getClientVersion(),
+                    combinedImageUniforms, combinedShaderStorageBlocks,
+                    fragmentExecutable.getOutputVariables(),
+                    fragmentExecutable.getLinkedShaderVersion(ShaderType::Fragment),
+                    ProgramAliasedBindings(), ProgramAliasedBindings()))
+            {
+                return angle::Result::Continue;
+            }
+        }
         mergedVaryings = GetMergedVaryingsFromLinkingVariables(linkingVariables);
         // If separable program objects are in use, the set of attributes captured is taken
         // from the program object active on the last vertex processing stage.
