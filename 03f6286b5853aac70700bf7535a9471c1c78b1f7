@@ -265,6 +265,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9595d843_01447d92",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 3585,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-18T22:49:06Z",
+      "side": 1,
+      "message": "I changed return type to angle::Result so that I can use the ANGL_TRY, ANGLE_VK_TRY macros.",
+      "parentUuid": "83f83bb6_35803c42",
+      "range": {
+        "startLine": 3585,
+        "startChar": 7,
+        "endLine": 3585,
+        "endChar": 33
+      },
+      "revId": "03f6286b5853aac70700bf7535a9471c1c78b1f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e01e97d_7074e1a0",
