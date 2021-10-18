@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "defa4424_def4adb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:53:09Z",
+      "side": 1,
+      "message": "Just suppress them. We don\u0027t have a way currently to suppress tests based on \"features\". Technically ANGLE should drop to ES2 without that extension, but that would not be productive so we live with this sort of non-conforming state.",
+      "parentUuid": "f5bf9fbe_19ba5f69",
+      "revId": "30145a79e0fd810972a71eb4dd98b743ac43dc48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0315f04_4f9f3d78",
         "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
         "patchSetId": 3
@@ -91,6 +109,30 @@
       "side": 1,
       "message": "Ugh, the ProgramBinaryTest::saveAndLoadProgram function doesn\u0027t exist in class ProgramBinaryES3Test. Should I make that class inherit from ProgramBinaryTest instead of ANGLETest?\n\nAnd will do with the comment.",
       "parentUuid": "f0315f04_4f9f3d78",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 52
+      },
+      "revId": "30145a79e0fd810972a71eb4dd98b743ac43dc48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f2851be_fca3a2ae",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:53:09Z",
+      "side": 1,
+      "message": "Yeap.",
+      "parentUuid": "36913984_7bc4a235",
       "range": {
         "startLine": 238,
         "startChar": 0,
