@@ -1280,6 +1280,8 @@ spirv::IdRef OutputSPIRVTraverser::createComplexConstant(const TType &type,
                                                          spirv::IdRef typeId,
                                                          const spirv::IdRefList &parameters)
 {
+    ASSERT(parameters.size() > 1);
+
     if (type.isMatrix() && !type.isArray())
     {
         // Matrices are constructed from their columns.
@@ -1353,10 +1355,21 @@ spirv::IdRef OutputSPIRVTraverser::createConstructor(TIntermAggregate *node, spi
     // Additionally, array and structs are constructed by OpCompositeConstruct followed by ids of
     // each parameter which must enumerate every individual element / field.
 
-    // In some cases, constructors with constant value are not folded.  That is handled here.
+    // In some cases, constructors with constant value are not folded.  Some transformations may
+    // also produce constructions with constants instead of constants.  These are handled here.
     if (node->hasConstantValue())
     {
-        return createComplexConstant(node->getType(), typeId, parameters);
+        if (!type.isScalar())
+        {
+            return createComplexConstant(node->getType(), typeId, parameters);
+        }
+
+        // If a transformation creates scalar(constant), return the constant as-is.
+        // visitConstantUnion has already cast it to the right type.
+        if (arguments[0]->getAsConstantUnion() != nullptr)
+        {
+            return parameters[0];
+        }
     }
 
     if (type.isArray() || type.getStruct() != nullptr)
