@@ -124,7 +124,8 @@ void ProgramPipelineState::updateExecutableTextures()
     {
         const Program *program = getShaderProgram(shaderType);
         ASSERT(program);
-        mExecutable->setActiveTextureMask(program->getExecutable().getActiveSamplersMask());
+        mExecutable->setActiveTextureMask(mExecutable->getActiveSamplersMask() |
+                                          program->getExecutable().getActiveSamplersMask());
         mExecutable->setActiveImagesMask(mExecutable->getActiveImagesMask() |
                                          program->getExecutable().getActiveImagesMask());
         // Updates mActiveSamplerRefCounts, mActiveSamplerTypes, and mActiveSamplerFormats
@@ -197,15 +198,16 @@ void ProgramPipeline::activeShaderProgram(Program *shaderProgram)
     mState.activeShaderProgram(shaderProgram);
 }
 
-void ProgramPipeline::useProgramStages(const Context *context,
-                                       GLbitfield stages,
-                                       Program *shaderProgram)
+angle::Result ProgramPipeline::useProgramStages(const Context *context,
+                                                GLbitfield stages,
+                                                Program *shaderProgram)
 {
     mState.useProgramStages(context, stages, shaderProgram, &mProgramObserverBindings);
     updateLinkedShaderStages();
-    updateExecutable();
 
     mState.mIsLinked = false;
+
+    return link(context);
 }
 
 void ProgramPipeline::updateLinkedShaderStages()
@@ -487,8 +489,6 @@ void ProgramPipeline::updateHasBooleans()
 
 void ProgramPipeline::updateExecutable()
 {
-    mState.mExecutable->reset();
-
     // Vertex Shader ProgramExecutable properties
     updateExecutableAttributes();
     updateTransformFeedbackMembers();
@@ -526,6 +526,8 @@ angle::Result ProgramPipeline::link(const Context *context)
     ProgramVaryingPacking varyingPacking;
     LinkingVariables linkingVariables(mState);
 
+    mState.mExecutable->reset();
+
     if (!getExecutable().isCompute())
     {
         InfoLog &infoLog = mState.mExecutable->getInfoLog();
@@ -541,6 +543,23 @@ angle::Result ProgramPipeline::link(const Context *context)
             return angle::Result::Stop;
         }
 
+        Program *fragmentShaderProgram = getShaderProgram(ShaderType::Fragment);
+        if (fragmentShaderProgram)
+        {
+            // We should also be validating image uniforms and SSBOs.
+            const int combinedImageUniforms             = 0;
+            const int combinedShaderStorageBlocks       = 0;
+            const ProgramExecutable &fragmentExecutable = fragmentShaderProgram->getExecutable();
+            if (!mState.mExecutable->linkValidateOutputVariables(
+                    context->getCaps(), context->getExtensions(), context->getClientVersion(),
+                    combinedImageUniforms, combinedShaderStorageBlocks,
+                    fragmentExecutable.getOutputVariables(),
+                    fragmentExecutable.getLinkedShaderVersion(ShaderType::Fragment),
+                    ProgramAliasedBindings(), ProgramAliasedBindings()))
+            {
+                return angle::Result::Continue;
+            }
+        }
         mergedVaryings = GetMergedVaryingsFromLinkingVariables(linkingVariables);
         // If separable program objects are in use, the set of attributes captured is taken
         // from the program object active on the last vertex processing stage.
@@ -575,7 +594,11 @@ angle::Result ProgramPipeline::link(const Context *context)
 
     ANGLE_TRY(getImplementation()->link(context, mergedVaryings, varyingPacking));
 
+    mState.mExecutable->mActiveSamplerRefCounts.fill(0);
+    updateExecutable();
+
     mState.mIsLinked = true;
+    onStateChange(angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
 }
@@ -689,16 +712,15 @@ void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::Sub
     switch (message)
     {
         case angle::SubjectMessage::ProgramTextureOrImageBindingChanged:
-            mState.mIsLinked = false;
             mState.mExecutable->mActiveSamplerRefCounts.fill(0);
             mState.updateExecutableTextures();
             break;
+
         case angle::SubjectMessage::ProgramRelinked:
             mState.mIsLinked = false;
-            updateExecutable();
             break;
         case angle::SubjectMessage::SamplerUniformsUpdated:
-            getExecutable().resetCachedValidateSamplersResult();
+            mState.mExecutable->resetCachedValidateSamplersResult();
             break;
         default:
             UNREACHABLE();
