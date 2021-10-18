@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0fe47c3_2e907c24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:51:27Z",
+      "side": 1,
+      "message": "LMLTFY (+10 points if you figure out what this stands for)",
+      "revId": "f4453a70e3866514d3db92f0a89056fddb47b2bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
