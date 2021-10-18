@@ -378,6 +378,18 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    angle::Result ensureNoPendingSubmission(vk::Context *context)
+    {
+        if (mFeatures.asyncCommandQueue.enabled)
+        {
+            return mCommandProcessor.ensureNoPendingSubmission(context);
+        }
+        else
+        {
+            return mCommandQueue.ensureNoPendingSubmission(context);
+        }
+    }
+
     egl::Display *getDisplay() const { return mDisplay; }
 
     VkResult getLastPresentResult(VkSwapchainKHR swapchain)
@@ -594,15 +606,16 @@ class RendererVk : angle::NonCopyable
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
+    // Synchronous Command Queue
     std::mutex mCommandQueueMutex;
     vk::CommandQueue mCommandQueue;
+
+    // Async Command Queue
+    vk::CommandProcessor mCommandProcessor;
 
     // Command buffer pool management.
     std::mutex mCommandBufferRecyclerMutex;
     vk::CommandBufferRecycler mCommandBufferRecycler;
-
-    // Async Command Queue
-    vk::CommandProcessor mCommandProcessor;
 
     vk::BufferMemoryAllocator mBufferMemoryAllocator;
     vk::Allocator mAllocator;
