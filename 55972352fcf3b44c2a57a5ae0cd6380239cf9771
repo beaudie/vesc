@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f766d36e_fccd2fd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-18T22:51:20Z",
+      "side": 1,
+      "message": "This CL won\u0027t, but the next CL should improve VMA fragmentation. I remember you did have some data last time showing VMA fragmentation improved.",
+      "parentUuid": "e9a03e7c_f0208b92",
+      "revId": "55972352fcf3b44c2a57a5ae0cd6380239cf9771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bb3dd9f_836f59aa",
