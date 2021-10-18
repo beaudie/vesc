@@ -62,6 +62,30 @@
       },
       "revId": "f53f86cc0a0b614f74cbe9bc18301cd50fa75cd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b725a6a_886e4c2a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 3357,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-18T21:14:14Z",
+      "side": 1,
+      "message": "Sorry, take back this. I think this is better, keep what you have.",
+      "parentUuid": "32aadeeb_e2a0c5a7",
+      "range": {
+        "startLine": 3357,
+        "startChar": 4,
+        "endLine": 3357,
+        "endChar": 5
+      },
+      "revId": "f53f86cc0a0b614f74cbe9bc18301cd50fa75cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
