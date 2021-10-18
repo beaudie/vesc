@@ -123,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46586a8d_5dc2ae52",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5816,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-18T23:52:16Z",
+      "side": 1,
+      "message": "I\u0027ve opened up angblebug.com/6583: Vulkan: Investigate moving flushDescriptorSetUpdates() to CommandBufferHelper",
+      "parentUuid": "3bd24553_ccc313de",
+      "revId": "e8e88f875c8408c2ed1db395f1d945ee6f842e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "793fcb58_fb627d2e",
