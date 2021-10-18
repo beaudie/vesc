@@ -1943,7 +1943,12 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     mFramebuffer = nullptr;
 
     // Notify the ContextVk to update the pipeline desc.
-    return contextVk->onFramebufferChange(this);
+    if (binding == GL_DRAW_FRAMEBUFFER)
+    {
+        ANGLE_TRY(contextVk->onFramebufferChange(this));
+    }
+
+    return angle::Result::Continue;
 }
 
 void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)

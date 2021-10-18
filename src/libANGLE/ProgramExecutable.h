@@ -356,7 +356,7 @@ class ProgramExecutable final : public angle::Subject
     bool validateSamplers(InfoLog *infoLog, const Caps &caps) const
     {
         // Use the cache if:
-        // - we aren't using an infolog (which gives the full error).
+        // - we aren't using an info log (which gives the full error).
         // - The sample mapping hasn't changed and we've already validated.
         if (infoLog == nullptr && mCachedValidateSamplersResult.valid())
         {
@@ -365,6 +365,9 @@ class ProgramExecutable final : public angle::Subject
 
         return validateSamplersImpl(infoLog, caps);
     }
+
+    ComponentTypeMask getFragmentOutputsTypeMask() const { return mDrawBufferTypeMask; }
+    DrawBufferMask getActiveOutputVariablesMask() const { return mActiveOutputVariablesMask; }
 
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
@@ -401,6 +404,16 @@ class ProgramExecutable final : public angle::Subject
 
     bool validateSamplersImpl(InfoLog *infoLog, const Caps &caps) const;
 
+    bool linkValidateOutputVariables(const Caps &caps,
+                                     const Extensions &extensions,
+                                     const Version &version,
+                                     GLuint combinedImageUniformsCount,
+                                     GLuint combinedShaderStorageBlocksCount,
+                                     const std::vector<sh::ShaderVariable> &outputVariables,
+                                     int fragmentShaderVersion,
+                                     const ProgramAliasedBindings &fragmentOutputLocations,
+                                     const ProgramAliasedBindings &fragmentOutputIndices);
+
     InfoLog mInfoLog;
 
     ShaderBitSet mLinkedGraphicsShaderStages;
@@ -430,6 +443,7 @@ class ProgramExecutable final : public angle::Subject
     // to uniforms.
     std::vector<sh::ShaderVariable> mOutputVariables;
     std::vector<VariableLocation> mOutputLocations;
+    DrawBufferMask mActiveOutputVariablesMask;
     // EXT_blend_func_extended secondary outputs (ones with index 1)
     std::vector<VariableLocation> mSecondaryOutputLocations;
     bool mYUVOutput;
@@ -508,6 +522,10 @@ class ProgramExecutable final : public angle::Subject
     GLenum mTessGenSpacing;
     GLenum mTessGenVertexOrder;
     GLenum mTessGenPointMode;
+
+    // Fragment output variable base types: FLOAT, INT, or UINT.  Ordered by location.
+    std::vector<GLenum> mOutputVariableTypes;
+    ComponentTypeMask mDrawBufferTypeMask;
 
     // Cache for sampler validation
     mutable Optional<bool> mCachedValidateSamplersResult;

@@ -572,6 +572,7 @@ class GraphicsPipelineDesc final
                                      const PipelineLayout &pipelineLayout,
                                      const gl::AttributesMask &activeAttribLocationsMask,
                                      const gl::ComponentTypeMask &programAttribsTypeMask,
+                                     const gl::DrawBufferMask &missingOutputsMask,
                                      const ShaderAndSerialMap &shaders,
                                      const SpecializationConstants &specConsts,
                                      Pipeline *pipelineOut) const;
@@ -1538,6 +1539,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                            const vk::PipelineLayout &pipelineLayout,
                                            const gl::AttributesMask &activeAttribLocationsMask,
                                            const gl::ComponentTypeMask &programAttribsTypeMask,
+                                           const gl::DrawBufferMask &missingOutputsMask,
                                            const vk::ShaderAndSerialMap &shaders,
                                            const vk::SpecializationConstants &specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
@@ -1555,8 +1557,8 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
 
         mCacheStats.miss();
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
-                              activeAttribLocationsMask, programAttribsTypeMask, shaders,
-                              specConsts, desc, descPtrOut, pipelineOut);
+                              activeAttribLocationsMask, programAttribsTypeMask, missingOutputsMask,
+                              shaders, specConsts, desc, descPtrOut, pipelineOut);
     }
 
   private:
@@ -1566,6 +1568,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                  const vk::PipelineLayout &pipelineLayout,
                                  const gl::AttributesMask &activeAttribLocationsMask,
                                  const gl::ComponentTypeMask &programAttribsTypeMask,
+                                 const gl::DrawBufferMask &missingOutputsMask,
                                  const vk::ShaderAndSerialMap &shaders,
                                  const vk::SpecializationConstants &specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
