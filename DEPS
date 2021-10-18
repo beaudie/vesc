@@ -34,7 +34,7 @@ vars = {
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '54930e1ff6ee11cc012dd05d514bec8e43c01151',
+  'chromium_revision': '421b43142f9609e6a8dad796d99f7f3478ceca4a',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -79,7 +79,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '59de2526fa3491a38e7aef9e3c0f4e58f89a51e2',
+  'catapult_revision': '95a9079d7bee0a1426f42f1cd302bae46a34d4b2',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
@@ -119,7 +119,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@3df8a59b75773c41ffcae192391f7c7a50c4a2ed',
+    'url': '{chromium_git}/chromium/src/build.git@18d3f4be442ab80f874217c6bcbfff6f5588cf8d',
     'condition': 'not build_with_chromium',
   },
 
@@ -177,7 +177,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@faf29ca94411f2b18a472a340018dc329ccc5fc1',
+    'url': '{chromium_git}/chromium/src/testing@1cbd90165f1a94e2a38a1a23334c6ea874a54080',
     'condition': 'not build_with_chromium',
   },
 
@@ -566,7 +566,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': '{chromium_git}/chromium/src/tools/mb@eff31362463b3637b25da6ddef62f3aa4587cebc',
+    'url': '{chromium_git}/chromium/src/tools/mb@f63328691530989478443b9b12d5850aeb261325',
     'condition': 'not build_with_chromium',
   },
 
@@ -581,7 +581,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': '{chromium_git}/chromium/src/tools/perf@de168d1b50faa9aff38743d10de3e6d500d2da11',
+    'url': '{chromium_git}/chromium/src/tools/perf@83d86b1e5c2b1fb4219232570949fd44a8fb7fa7',
     'condition': 'not build_with_chromium',
   },
 
