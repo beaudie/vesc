@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5ea217ec_e83610cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105219
+      },
+      "writtenOn": "2021-10-18T16:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95f514cf_6535fada",
+      "revId": "3a080352340bb7f26dd6732279325a88e0d88178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "43a4289b_827a275a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-18T16:41:24Z",
       "side": 1,
       "message": "nit: The old link sends me to the new link, is this really necessary?",
+      "revId": "3a080352340bb7f26dd6732279325a88e0d88178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afed42cc_9df3eb77",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105219
+      },
+      "writtenOn": "2021-10-18T16:47:14Z",
+      "side": 1,
+      "message": "Something changed about security settings for docs shared to \"Anyone with the link\" from @chromium.org accounts, and I get a bunch of emails from people requesting access, which this link should fix.",
+      "parentUuid": "6f35f3a5_9073b89b",
       "revId": "3a080352340bb7f26dd6732279325a88e0d88178",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
