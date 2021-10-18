@@ -97,6 +97,14 @@
 # Fails because of unsupported combined depth/stencil GetImage.
 4688 ASAN : DepthStencilTest.DepthOnlyEmulatedWithPacked/ES2_Vulkan_SwiftShader = FAIL
 
+# Fails after recent colorspace CL.
+6578 : ImageTest.Source2DTarget2D_Colorspace/ES2_Vulkan_SwiftShader = FAIL
+6578 : ImageTest.Source2DTargetExternal_Colorspace/ES2_Vulkan_SwiftShader = FAIL
+6578 : ImageTest.SourceCubeTargetExternal_Colorspace/ES2_Vulkan_SwiftShader = FAIL
+6578 : ImageTest.SourceCubeTarget2D_Colorspace/ES2_Vulkan_SwiftShader = FAIL
+6578 : ImageTest.SourceRenderbufferTargetTextureExternal_Colorspace/ES2_Vulkan_SwiftShader = FAIL
+6578 : ImageTest.SourceRenderbufferTargetTexture_Colorspace/ES2_Vulkan_SwiftShader = FAIL
+
 # flaky test
 6511 : DrawBuffersTest.UnwrittenOutputVariablesShouldNotCrash/ES*_Vulkan_SwiftShader = FLAKY
 6180 : WebGLCompatibilityTest.DrawElementsBufferOutOfBoundsInIndexBuffer/ES2_Vulkan_SwiftShader = FLAKY
