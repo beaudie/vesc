@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5bf9fbe_19ba5f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-18T16:51:07Z",
+      "side": 1,
+      "message": "I did run the tests all locally on a few different machines and they all passed. I\u0027ll add the suppressions for the bots.\n\nAlternatively, I could have it skip the test if the renderer is Vulkan and GL_ANGLE_provoking_vertex is unavailable? I *think* that extension\u0027s presence indicates the backend supports VK_EXT_provoking vertex.",
+      "parentUuid": "e53cb19b_b2ad9b06",
+      "revId": "30145a79e0fd810972a71eb4dd98b743ac43dc48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0315f04_4f9f3d78",
         "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
         "patchSetId": 3
@@ -49,6 +67,30 @@
       "writtenOn": "2021-10-18T13:14:04Z",
       "side": 1,
       "message": "nit: please put the test in the ProgramBinaryES3Test suite so you can remove this.\n\nYou can append the information regarding why `flat` is used to the comment before the test.",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 52
+      },
+      "revId": "30145a79e0fd810972a71eb4dd98b743ac43dc48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36913984_7bc4a235",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-18T16:51:07Z",
+      "side": 1,
+      "message": "Ugh, the ProgramBinaryTest::saveAndLoadProgram function doesn\u0027t exist in class ProgramBinaryES3Test. Should I make that class inherit from ProgramBinaryTest instead of ANGLETest?\n\nAnd will do with the comment.",
+      "parentUuid": "f0315f04_4f9f3d78",
       "range": {
         "startLine": 238,
         "startChar": 0,
