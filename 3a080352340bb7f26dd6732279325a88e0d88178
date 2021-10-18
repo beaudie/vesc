@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95f514cf_6535fada",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:41:24Z",
+      "side": 1,
+      "message": "For the required `Bug:`, I suggest:\n\nBug: anglebug.com/1944",
+      "revId": "3a080352340bb7f26dd6732279325a88e0d88178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43a4289b_827a275a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:41:24Z",
+      "side": 1,
+      "message": "Surprise review!",
+      "revId": "3a080352340bb7f26dd6732279325a88e0d88178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f35f3a5_9073b89b",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:41:24Z",
+      "side": 1,
+      "message": "nit: The old link sends me to the new link, is this really necessary?",
+      "revId": "3a080352340bb7f26dd6732279325a88e0d88178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
