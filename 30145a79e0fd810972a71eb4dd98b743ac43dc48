@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eebb8a7d_4827f420",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-18T18:23:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "defa4424_def4adb6",
+      "revId": "30145a79e0fd810972a71eb4dd98b743ac43dc48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0315f04_4f9f3d78",
@@ -133,6 +151,30 @@
       "side": 1,
       "message": "Yeap.",
       "parentUuid": "36913984_7bc4a235",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 52
+      },
+      "revId": "30145a79e0fd810972a71eb4dd98b743ac43dc48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75daaef1_007a825a",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-18T18:23:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f2851be_fca3a2ae",
       "range": {
         "startLine": 238,
         "startChar": 0,
