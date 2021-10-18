@@ -451,9 +451,6 @@ luci.cq_group(
             builder = "chromium:try/linux-angle-chromium-try",
         ),
         luci.cq_tryjob_verifier(
-            builder = "chromium:try/linux-swangle-try-tot-angle-x64",
-        ),
-        luci.cq_tryjob_verifier(
             builder = "chromium:try/mac-angle-chromium-try",
         ),
         luci.cq_tryjob_verifier(
@@ -461,9 +458,6 @@ luci.cq_group(
         ),
         luci.cq_tryjob_verifier(
             builder = "chromium:try/win-angle-chromium-x86-try",
-        ),
-        luci.cq_tryjob_verifier(
-            builder = "chromium:try/win-swangle-try-tot-angle-x86",
         ),
     ],
 )
