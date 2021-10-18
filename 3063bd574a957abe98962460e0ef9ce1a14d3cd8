@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7385d5ff_b481522a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-18T15:07:14Z",
+      "side": 1,
+      "message": "LGTM - same request, any capture/replay tests we can turn on at the same time, please do.",
+      "revId": "3063bd574a957abe98962460e0ef9ce1a14d3cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
