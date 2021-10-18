@@ -211,6 +211,24 @@
       "parentUuid": "da84d469_3952fe3b",
       "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15142b86_6922a6a3",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-18T21:49:50Z",
+      "side": 1,
+      "message": "If it were to be done anywhere, it would be in saveShaderInternalInfo / loadShaderInternalInfo. I\u0027m not actually 100% sure on what state\u0027s available when we\u0027re doing loadFromBinary.",
+      "parentUuid": "7893d7a2_7f351e94",
+      "revId": "e389720104920a4ef76bd209e247dfc8c3717d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
