@@ -182,6 +182,7 @@ void ProgramExecutable::reset()
     mAtomicCounterBuffers.clear();
     mOutputVariables.clear();
     mOutputLocations.clear();
+    mActiveOutputVariablesMask.reset();
     mSecondaryOutputLocations.clear();
     mYUVOutput = false;
     mSamplerBindings.clear();
@@ -361,6 +362,9 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
         stream->readBool(&locationData.ignored);
         mOutputLocations.push_back(locationData);
     }
+
+    mActiveOutputVariablesMask =
+        gl::DrawBufferMask(stream->readInt<gl::DrawBufferMask::value_type>());
 
     size_t secondaryOutputVarCount = stream->readInt<size_t>();
     ASSERT(getSecondaryOutputLocations().empty());
@@ -578,6 +582,8 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         stream->writeIntOrNegOne(outputVar.index);
         stream->writeBool(outputVar.ignored);
     }
+
+    stream->writeInt(static_cast<int>(mActiveOutputVariablesMask.to_ulong()));
 
     stream->writeInt(getSecondaryOutputLocations().size());
     for (const auto &outputVar : getSecondaryOutputLocations())

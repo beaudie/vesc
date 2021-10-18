@@ -366,6 +366,8 @@ class ProgramExecutable final : public angle::Subject
         return validateSamplersImpl(infoLog, caps);
     }
 
+    DrawBufferMask getActiveOutputVariablesMask() const { return mActiveOutputVariablesMask; }
+
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
     // class declarations and accessing the necessary members with getters/setters.
@@ -430,6 +432,7 @@ class ProgramExecutable final : public angle::Subject
     // to uniforms.
     std::vector<sh::ShaderVariable> mOutputVariables;
     std::vector<VariableLocation> mOutputLocations;
+    DrawBufferMask mActiveOutputVariablesMask;
     // EXT_blend_func_extended secondary outputs (ones with index 1)
     std::vector<VariableLocation> mSecondaryOutputLocations;
     bool mYUVOutput;

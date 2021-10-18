@@ -461,7 +461,7 @@ bool ValidateFragmentShaderColorBufferMaskMatch(const Context *context)
     const Framebuffer *framebuffer = context->getState().getDrawFramebuffer();
 
     auto drawBufferMask     = framebuffer->getDrawBufferMask().to_ulong();
-    auto fragmentOutputMask = program->getActiveOutputVariables().to_ulong();
+    auto fragmentOutputMask = program->getExecutable().getActiveOutputVariablesMask().to_ulong();
 
     return drawBufferMask == (drawBufferMask & fragmentOutputMask);
 }
@@ -471,10 +471,11 @@ bool ValidateFragmentShaderColorBufferTypeMatch(const Context *context)
     const Program *program         = context->getActiveLinkedProgram();
     const Framebuffer *framebuffer = context->getState().getDrawFramebuffer();
 
-    return ValidateComponentTypeMasks(program->getDrawBufferTypeMask().to_ulong(),
-                                      framebuffer->getDrawBufferTypeMask().to_ulong(),
-                                      program->getActiveOutputVariables().to_ulong(),
-                                      framebuffer->getDrawBufferMask().to_ulong());
+    return ValidateComponentTypeMasks(
+        program->getDrawBufferTypeMask().to_ulong(),
+        framebuffer->getDrawBufferTypeMask().to_ulong(),
+        program->getExecutable().getActiveOutputVariablesMask().to_ulong(),
+        framebuffer->getDrawBufferMask().to_ulong());
 }
 
 bool ValidateVertexShaderAttributeTypeMatch(const Context *context)

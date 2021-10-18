@@ -252,7 +252,6 @@ class ProgramState final : angle::NonCopyable
     {
         return mExecutable->getProgramInputs();
     }
-    DrawBufferMask getActiveOutputVariables() const { return mActiveOutputVariables; }
     const std::vector<sh::ShaderVariable> &getOutputVariables() const
     {
         return mExecutable->getOutputVariables();
@@ -394,8 +393,6 @@ class ProgramState final : angle::NonCopyable
     std::vector<BufferVariable> mBufferVariables;
     RangeUI mAtomicCounterUniformRange;
 
-    DrawBufferMask mActiveOutputVariables;
-
     // Fragment output variable base types: FLOAT, INT, or UINT.  Ordered by location.
     std::vector<GLenum> mOutputVariableTypes;
     ComponentTypeMask mDrawBufferTypeMask;
@@ -526,11 +523,6 @@ class Program final : public LabeledObject, public angle::Subject
     GLint getFragDataLocation(const std::string &name) const;
     size_t getOutputResourceCount() const;
     const std::vector<GLenum> &getOutputVariableTypes() const;
-    DrawBufferMask getActiveOutputVariables() const
-    {
-        ASSERT(!mLinkingState);
-        return mState.mActiveOutputVariables;
-    }
 
     // EXT_blend_func_extended
     GLint getFragDataIndex(const std::string &name) const;

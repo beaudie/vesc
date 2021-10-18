@@ -1854,7 +1854,6 @@ void Program::unlink()
     mState.mOutputVariableTypes.clear();
     mState.mDrawBufferTypeMask.reset();
     mState.mYUVOutput = false;
-    mState.mActiveOutputVariables.reset();
     mState.mComputeShaderLocalSize.fill(1);
     mState.mNumViews                      = -1;
     mState.mDrawIDLocation                = -1;
@@ -4116,7 +4115,7 @@ bool Program::linkOutputVariables(const Caps &caps,
     Shader *fragmentShader = mState.mAttachedShaders[ShaderType::Fragment];
 
     ASSERT(mState.mOutputVariableTypes.empty());
-    ASSERT(mState.mActiveOutputVariables.none());
+    ASSERT(mState.mExecutable->mActiveOutputVariablesMask.none());
     ASSERT(mState.mDrawBufferTypeMask.none());
     ASSERT(!mState.mYUVOutput);
 
@@ -4152,8 +4151,8 @@ bool Program::linkOutputVariables(const Caps &caps,
             {
                 mState.mOutputVariableTypes.resize(location + 1, GL_NONE);
             }
-            ASSERT(location < mState.mActiveOutputVariables.size());
-            mState.mActiveOutputVariables.set(location);
+            ASSERT(location < mState.mExecutable->mActiveOutputVariablesMask.size());
+            mState.mExecutable->mActiveOutputVariablesMask.set(location);
             mState.mOutputVariableTypes[location] = VariableComponentType(outputVariable.type);
             ComponentType componentType =
                 GLenumToComponentType(mState.mOutputVariableTypes[location]);
@@ -4175,7 +4174,7 @@ bool Program::linkOutputVariables(const Caps &caps,
         // fragment shader outputs exceeds the implementation-dependent value of
         // MAX_COMBINED_SHADER_OUTPUT_RESOURCES.
         if (combinedImageUniformsCount + combinedShaderStorageBlocksCount +
-                mState.mActiveOutputVariables.count() >
+                mState.mExecutable->mActiveOutputVariablesMask.count() >
             static_cast<GLuint>(caps.maxCombinedShaderOutputResources))
         {
             infoLog
@@ -4697,7 +4696,6 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
         IMPLEMENTATION_MAX_DRAW_BUFFERS * 2 <= 8 * sizeof(uint32_t),
         "All bits of mDrawBufferTypeMask and mActiveOutputVariables can be contained in 32 bits");
     stream.writeInt(static_cast<int>(mState.mDrawBufferTypeMask.to_ulong()));
-    stream.writeInt(static_cast<int>(mState.mActiveOutputVariables.to_ulong()));
 
     stream.writeBool(mState.isYUVOutput());
 
@@ -4716,7 +4714,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
             }
             else
             {
-                // If we dont have an attached shader, which would occur if this program was
+                // If we don't have an attached shader, which would occur if this program was
                 // created via glProgramBinary, pull from our cached copy
                 const angle::ProgramSources &cachedLinkedSources =
                     context->getShareGroup()->getFrameCaptureShared()->getProgramSources(id());
@@ -4806,8 +4804,6 @@ angle::Result Program::deserialize(const Context *context,
                   "All bits of mDrawBufferTypeMask and mActiveOutputVariables types and mask fit "
                   "into 32 bits each");
     mState.mDrawBufferTypeMask = gl::ComponentTypeMask(stream.readInt<uint32_t>());
-    mState.mActiveOutputVariables =
-        gl::DrawBufferMask(stream.readInt<gl::DrawBufferMask::value_type>());
 
     stream.readBool(&mState.mYUVOutput);
 

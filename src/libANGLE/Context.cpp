@@ -317,7 +317,6 @@ bool GetSaveAndRestoreState(const egl::AttributeMap &attribs)
 {
     return (attribs.get(EGL_EXTERNAL_CONTEXT_SAVE_STATE_ANGLE, EGL_FALSE) == EGL_TRUE);
 }
-
 }  // anonymous namespace
 
 #if defined(ANGLE_PLATFORM_APPLE)
