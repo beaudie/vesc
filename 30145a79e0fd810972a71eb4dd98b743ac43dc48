@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e53cb19b_b2ad9b06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T13:45:14Z",
+      "side": 1,
+      "message": "Looks like suppressions are necessary. You might want to give the test a try locally with the Vulkan backend just to be sure there is no bug in the test. In particular, I thought our nvidia/windows bots are recent enough. The test passes on SwiftShader though, so likely it\u0027s ok.\n\nFYI, suppressions go in angle_end2end_tests_expectations.txt",
+      "parentUuid": "22115e86_e59bb909",
+      "revId": "30145a79e0fd810972a71eb4dd98b743ac43dc48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0315f04_4f9f3d78",
