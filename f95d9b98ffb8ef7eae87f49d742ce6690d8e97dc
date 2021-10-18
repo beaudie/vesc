@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c56d8fd6_349d5a38",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T15:22:29Z",
+      "side": 1,
+      "message": "Done. The comment should read better now (also fixed a bug in the comment)\n\nNoted regarding the .md file. I\u0027ll think about it.",
+      "parentUuid": "72bdba24_d7fb19dc",
+      "revId": "f95d9b98ffb8ef7eae87f49d742ce6690d8e97dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27a0faf9_d34b5273",
