@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c8f52b4a_bcaf2857",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-18T23:16:26Z",
+      "side": 1,
+      "message": "The else part is go into VMA directly. The if block (line 964 to 975) is still using dynamic buffer (per BufferVk pool) for situations that the buffer is used as part of descriptorSet cache, since we worry about regression on descriptor set cache misses. I think we will address that in future CL by modifying VMA to not just return DeviceMemory object that it is sub-allocated from, but alos a VkBuffer object it is sub-allocated from.",
+      "parentUuid": "bae9a49e_bd79a4d1",
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e23b22b_1b9fdbe0",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 25
@@ -31,6 +49,30 @@
       "writtenOn": "2021-08-06T19:12:53Z",
       "side": 1,
       "message": "nit: being",
+      "range": {
+        "startLine": 133,
+        "startChar": 29,
+        "endLine": 133,
+        "endChar": 33
+      },
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9444692d_c820bf5a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-18T23:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e23b22b_1b9fdbe0",
       "range": {
         "startLine": 133,
         "startChar": 29,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2e13a2e_37409d67",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-18T23:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd886ada_5c876ced",
+      "range": {
+        "startLine": 316,
+        "startChar": 88,
+        "endLine": 316,
+        "endChar": 95
+      },
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edcf8271_8f9727f0",
@@ -77,6 +143,30 @@
       "writtenOn": "2021-08-06T19:12:53Z",
       "side": 1,
       "message": "nit: being",
+      "range": {
+        "startLine": 317,
+        "startChar": 15,
+        "endLine": 317,
+        "endChar": 19
+      },
+      "revId": "72555ab0b1fa03b6adcaebf6e861848cd3133557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcd5e773_d07f312d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-18T23:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edcf8271_8f9727f0",
       "range": {
         "startLine": 317,
         "startChar": 15,
