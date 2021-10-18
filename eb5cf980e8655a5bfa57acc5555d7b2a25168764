@@ -107,6 +107,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dadeb9e_69117009",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-18T20:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c6ea9fb_be74cbab",
+      "range": {
+        "startLine": 2138,
+        "startChar": 78,
+        "endLine": 2140,
+        "endChar": 77
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c6b05c0_68580b06",
@@ -249,6 +273,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4618db88_7b631474",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3334,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-18T20:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c98c5ff_00d2797b",
+      "range": {
+        "startLine": 3334,
+        "startChar": 5,
+        "endLine": 3334,
+        "endChar": 87
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5df71ee6_8bc500c4",
@@ -262,6 +310,30 @@
       "writtenOn": "2021-10-15T19:38:19Z",
       "side": 1,
       "message": "I think the better way to do this is call hasStagedUpdatesWithMismatchedFormat() first and change it to hasStagedImageUpdatesWithMismatchedFormat() so that ti will only look for image updates which can\u0027t be handled by reformatStagedUpdate. If this returns true, we call initImage(), and we will *not* call reformatStagedUpdate. We willl let respecifyImageStorage() to hanlde the reformat. reinitImageAsRenderable() will end up flush all staged updates, which matches the image\u0027s actual format and will then go into read back and re-stage code path etc. Else (which means we do not have image updates that needs conversion), we will go through mImage-\u003ereformatStagedUpdate() call. \n\nif (mImage-\u003ehasStagedImageUpdatesWithMismatchedFormat(levelGLStart, levelGLEnd, actualFormatID))\n{\n   angle::FormatID sampleOnlyFormatID \u003d\n                format.getActualImageFormatID(vk::ImageAccess::SampleOnly);\n\n   ANGLE_TRY(initImage(contextVk, intendedFormatID, sampleOnlyFormatID, mipLevels));\n}\nelse\n{\n    ANGLE_TRY(mImage-\u003ereformatStagedUpdate(contextVk, previousActualFormatID, actualFormatID));\n}\n\nI actually was going to provide this suggestion in initial review, but thought it might be harmless, so decided to keep it to myself. If we are going to have to go down the slow path, there really isn\u0027t much benefit to do the staged buffer update using CPU, and mean while make it vulnerable to run into bugs like what you are seeing.",
+      "range": {
+        "startLine": 3361,
+        "startChar": 8,
+        "endLine": 3367,
+        "endChar": 9
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50a8c78c_57585d46",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3367,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-18T20:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5df71ee6_8bc500c4",
       "range": {
         "startLine": 3361,
         "startChar": 8,
@@ -345,6 +417,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88a1c05e_cfdd056d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-18T20:19:00Z",
+      "side": 1,
+      "message": "All of the logic being skipped assumes the format is renderable/samplable/texturable - all of which is decided on mActualSampleOnlyImageFormatID.   If someone wants to do something with a buffer containing a format that has `mActualSampleOnlyImageFormatID \u003d angle::FormatID::NONE` and also wants to use things like mTextureLoadFunctions, they\u0027ll need to update this code anyway to call GetLoadFunctionsMap() with mActualBufferFormatID, rather than mActualSampleOnlyImageFormatID.\n\nMy concern with leaving this code as-is, is that it gives the impression something useful is being done here, even though we are essentially doing a no-op over and over.\n\nThere\u0027s already a comment on line 263 stating that we are skipping the rest of the loop due to the format not being sample-able or render-able, but I\u0027ll move it outside the conditional to make it more visible and expand it to mention buffer formats.",
+      "parentUuid": "b6b9fcc7_e387c50b",
+      "range": {
+        "startLine": 261,
+        "startChar": 8,
+        "endLine": 265,
+        "endChar": 9
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f24c1a88_2dfbbd53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 22
@@ -356,6 +452,30 @@
       "writtenOn": "2021-10-15T19:38:19Z",
       "side": 1,
       "message": "Remove this",
+      "range": {
+        "startLine": 6892,
+        "startChar": 11,
+        "endLine": 6896,
+        "endChar": 13
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82da6f4d_8f0df01e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6896,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-18T20:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f24c1a88_2dfbbd53",
       "range": {
         "startLine": 6892,
         "startChar": 11,
@@ -451,6 +571,30 @@
       "side": 1,
       "message": "I agree it\u0027s peculiar, especially as \"emulated clear\" is an implementation detail, but I\u0027d keep it for the time being to help catch regressions with base level which has otherwise very few tests.",
       "parentUuid": "77e5974a_53c3b046",
+      "range": {
+        "startLine": 8948,
+        "startChar": 0,
+        "endLine": 8976,
+        "endChar": 0
+      },
+      "revId": "eb5cf980e8655a5bfa57acc5555d7b2a25168764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f462b3e1_91109395",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8976,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-18T20:19:00Z",
+      "side": 1,
+      "message": "Ack\n\nI\u0027ll keep it for now.",
+      "parentUuid": "e0e02d6b_2f343a2d",
       "range": {
         "startLine": 8948,
         "startChar": 0,
