@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c57c22a4_4436a371",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4817,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-10-18T16:53:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48a3ce1e_21cf27cc",
+      "range": {
+        "startLine": 4817,
+        "startChar": 19,
+        "endLine": 4817,
+        "endChar": 27
+      },
+      "revId": "14625db7c57a848a514f0decc3ae8c299b21fe40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18aa75b2_4892ee19",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-18T16:45:54Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 383,
+        "startChar": 19,
+        "endLine": 383,
+        "endChar": 27
+      },
+      "revId": "14625db7c57a848a514f0decc3ae8c299b21fe40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0e66c9f_af87c35e",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-10-18T16:53:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18aa75b2_4892ee19",
       "range": {
         "startLine": 383,
         "startChar": 19,
