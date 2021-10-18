@@ -567,6 +567,11 @@ GL_APICALL void GL_APIENTRY glImportSemaphoreZirconHandleANGLE(GLuint memory,
 #define GL_SERIALIZED_CONTEXT_STRING_ANGLE 0x96B0
 #endif /* GL_ANGLE_get_serialized_context_string */
 
+#ifndef GL_ANGLE_robust_fragment_shader_output
+#define GL_ANGLE_robust_fragment_shader_output
+#define GL_ROBUST_FRAGMENT_SHADER_OUTPUT_ANGLE 0x96B9
+#endif /* GL_ANGLE_robust_fragment_shader_output */
+
 // clang-format on
 
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_
