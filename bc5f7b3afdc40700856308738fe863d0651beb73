@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09b9d121_64d4ce09",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T20:26:59Z",
+      "side": 1,
+      "message": "Jamie, the comment above this function indicates the desire to make it private. That could have actually been done prior to this change, and this makes it impossible.\n\nAny different way to achieve this? Would you rather I add a parameter to flush that trickles all the way down mCommandProcessor::submitFrame?",
+      "range": {
+        "startLine": 385,
+        "startChar": 37,
+        "endLine": 385,
+        "endChar": 56
+      },
+      "revId": "bc5f7b3afdc40700856308738fe863d0651beb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
