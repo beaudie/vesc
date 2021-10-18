@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e34a172b_f0740cc3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:57:59Z",
+      "side": 1,
+      "message": "My bad, the format is `Bug: angleproject:1944`. I fixed it myself.",
+      "parentUuid": "5ea217ec_e83610cc",
+      "revId": "3a080352340bb7f26dd6732279325a88e0d88178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "43a4289b_827a275a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
