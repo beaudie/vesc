@@ -378,6 +378,18 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    angle::Result ensureNoPendingWork(vk::Context *context)
+    {
+        if (mFeatures.asyncCommandQueue.enabled)
+        {
+            return mCommandProcessor.waitForWorkComplete(context);
+        }
+        else
+        {
+            return angle::Result::Continue;
+        }
+    }
+
     egl::Display *getDisplay() const { return mDisplay; }
 
     VkResult getLastPresentResult(VkSwapchainKHR swapchain)
