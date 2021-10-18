@@ -144,6 +144,11 @@ void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *
     size_t skip                 = renderer->getFeatures().forceFallbackFormat.enabled ? 1 : 0;
     SupportTest testFunction    = HasNonRenderableTextureFormatSupport;
     const angle::Format &format = angle::Format::Get(info[0].format);
+    if (format.isBlock && renderer->getFeatures().transcodeETCtoBC1.enabled)
+    {
+        // For transcode feature.
+        skip = 2;
+    }
     if (format.isInt() || (format.isFloat() && format.redBits >= 32))
     {
         // Integer formats don't support filtering in GL, so don't test for it.

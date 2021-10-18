@@ -588,6 +588,11 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsSurfaceProtectedSwapchains = {
         "supportsSurfaceProtectedSwapchains", FeatureCategory::VulkanFeatures,
         "VkSurface supportsProtected for protected swapchains", &members};
+
+    // Whether ETC textures should be recompressed to DXT/BC format
+    // to avoid keeping them uncompressed.
+    Feature transcodeETCtoBC1 = {"transcodeETCtoBC1", FeatureCategory::VulkanFeatures,
+                                 "Transcode ETC textures to BC1 format", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

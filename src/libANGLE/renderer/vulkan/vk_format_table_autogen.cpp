@@ -863,7 +863,8 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM,
-                     Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>}};
+                     Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>},
+                    {angle::FormatID::BC1_RGB_UNORM_BLOCK, nullptr}};
                 initImageFallback(renderer, kInfo, ArraySize(kInfo));
             }
             mActualBufferFormatID         = angle::FormatID::NONE;
