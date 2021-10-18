@@ -22,6 +22,30 @@
       },
       "revId": "0575c1698380bd87f6357d1624a073de09d54d37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3872bd3_6432f50b",
+        "filename": "src/common/CircularBuffer_unittest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-18T16:48:04Z",
+      "side": 1,
+      "message": "The object that\u0027s passed to the constructor of `buf`; `s(\u0026destructorCount)`",
+      "parentUuid": "9bd05389_fa4b400b",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 0
+      },
+      "revId": "0575c1698380bd87f6357d1624a073de09d54d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
