@@ -34,6 +34,24 @@
       "parentUuid": "41a13edf_34eb559a",
       "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d50cf516_e5f3fe24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T20:23:30Z",
+      "side": 1,
+      "message": "Hm, I was suggesting you only add the array element for array UBOs. And for non-array types you don\u0027t include the [0], which I think is the source of the error. The problem you\u0027re seeing is because angle_perftests runs the trace tests, which uses the trace_fixture.cpp code.",
+      "parentUuid": "3f7a93c2_586dfeec",
+      "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
