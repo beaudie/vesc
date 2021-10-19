@@ -16,6 +16,93 @@
       "message": "Please look at added barrier for setting layout.\nI now see that 1 test platform seems to be running and failing. Little info with that.",
       "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68689f54_aba85814",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:22:54Z",
+      "side": 1,
+      "message": "Barrier LGTM. Looks like Android is the only platform that supports this, and we don\u0027t currently pull the qpa result files from that platform so I can\u0027t tell by just looking at the logs.\n\nAre you able to debug this? Do you need help?",
+      "parentUuid": "18f16b6f_19e31ae0",
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45bcc5dc_e797b111",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:22:54Z",
+      "side": 1,
+      "message": "Use ANGLE_VK_TRY",
+      "range": {
+        "startLine": 1664,
+        "startChar": 12,
+        "endLine": 1664,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8bfa387_088f20a8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:22:54Z",
+      "side": 1,
+      "message": "Use ANGLE_TRY",
+      "range": {
+        "startLine": 1666,
+        "startChar": 12,
+        "endLine": 1666,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ecb5fc0_b6ec0818",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:22:54Z",
+      "side": 1,
+      "message": "nit: you can call this recordWriteBarrierOneOff to mirror the other similar function.",
+      "range": {
+        "startLine": 1824,
+        "startChar": 9,
+        "endLine": 1824,
+        "endChar": 38
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
