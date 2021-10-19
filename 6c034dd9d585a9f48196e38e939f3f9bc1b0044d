@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65399e9f_18fb2466",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-19T23:46:16Z",
+      "side": 1,
+      "message": "I suspect that I am submitting that barrier before the new Image is fully acquired, and I need to add the wait on semaphore for that submit.",
+      "parentUuid": "128b08ee_d5c1da41",
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45bcc5dc_e797b111",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
