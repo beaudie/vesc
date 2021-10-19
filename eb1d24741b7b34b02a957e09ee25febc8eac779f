@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1937805_90e9a210",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:17:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be done after the if below? If it\u0027s not samplable, it shouldn\u0027t be part of the list? I guess that would make the format invalid, but it reads funny this way.",
+      "revId": "eb1d24741b7b34b02a957e09ee25febc8eac779f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "923fc710_5cc360c9",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 8958,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:17:40Z",
+      "side": 1,
+      "message": "For future reference, this variant adds a `_With...` to the test name, so you could have also added this suppression in angle_end2end_test_expectations.txt.",
+      "revId": "eb1d24741b7b34b02a957e09ee25febc8eac779f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
