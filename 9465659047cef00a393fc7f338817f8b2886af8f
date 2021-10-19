@@ -16,6 +16,24 @@
       "message": "Very sorry for the slow review on these Gert... \n\nI haven\u0027t had a chance to dig into this in depth. I had two ideas:\n\n1) we replace Bind calls in the trace with a custom fixture call. the custom call would update the resource map if it detects the bind is a create.\n\n2) the capture harness detects when a bind is a create, and calls the fixture to update the resource map explictly.\n\nor 3) always update the resource map in a bind anyway, which is similar to 1)\n\nWould be good to hear your thoughts \u0026 Cody too.",
       "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66e48f6_4e7edf5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-19T21:18:01Z",
+      "side": 1,
+      "message": "Looking at an example:\n\n    glBindBuffer(GL_ARRAY_BUFFER, gBufferMap2[774]);\n\nIn this case, the app never called Gen, so we\u0027re missing:\n\n    glGenBuffers(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    UpdateBufferID2(774, 0);\n\nMaybe rather than having the map lookup directly in the parameter, we could call a helper that returns it or Gens it:\n\n    glBindBuffer(GL_ARRAY_BUFFER, GetBuffer(774));\n\nWhich is a fixture entry like:\n\n    GLint GetBuffer(GLint buffer)\n    {\n        if (!gBufferMap2.contains(buffer))\n        {\n            glGenBuffers(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n            UpdateBufferID2(buffer, 0);\n        }\n        return gBufferMap2[buffer];\n    }",
+      "parentUuid": "179fa931_42ccc82b",
+      "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
