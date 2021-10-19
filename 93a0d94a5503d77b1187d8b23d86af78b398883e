@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f09f4f1e_2fd0c020",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-19T21:48:56Z",
+      "side": 1,
+      "message": "+16 passing tests on AMD configs. ",
+      "revId": "93a0d94a5503d77b1187d8b23d86af78b398883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
