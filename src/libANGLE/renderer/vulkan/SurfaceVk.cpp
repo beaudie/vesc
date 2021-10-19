@@ -942,6 +942,7 @@ static VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
     {
         case EGL_NONE:
         case EGL_GL_COLORSPACE_LINEAR:
+            return VK_COLOR_SPACE_BT709_LINEAR_EXT;
         case EGL_GL_COLORSPACE_SRGB_KHR:
         case EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT:
             return VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
