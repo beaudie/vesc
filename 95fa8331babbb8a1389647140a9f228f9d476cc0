@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3863a3ab_717211e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-10-19T20:21:26Z",
+      "side": 1,
+      "message": "LGTM but I will not be surprised if this is reverted due to some broken content!",
+      "revId": "95fa8331babbb8a1389647140a9f228f9d476cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
