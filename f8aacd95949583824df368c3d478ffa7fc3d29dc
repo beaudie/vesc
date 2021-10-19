@@ -34,6 +34,24 @@
       "parentUuid": "44b6a3e4_152039d1",
       "revId": "f8aacd95949583824df368c3d478ffa7fc3d29dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eb18e1f_6a16c8a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T19:46:48Z",
+      "side": 1,
+      "message": "I was hoping it did. What\u0027s the point of having these bots available in the ANGLE CQ then?\n\nAnyway, cc_unittests is already green (in case it did apply). If it didn\u0027t, we\u0027ll find out in the next roll.",
+      "parentUuid": "9eeea9af_32193b15",
+      "revId": "f8aacd95949583824df368c3d478ffa7fc3d29dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
