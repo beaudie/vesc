@@ -16,6 +16,23 @@
       "message": "Shabi, PTAL as wrangler.",
       "revId": "2e6c0418428bc66da28f65170e61f977e398e4fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c7e722_01dca56c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T13:25:22Z",
+      "side": 1,
+      "message": "Going to skip review process for this one. Please feel free to leave follow-up comments.",
+      "revId": "2e6c0418428bc66da28f65170e61f977e398e4fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
