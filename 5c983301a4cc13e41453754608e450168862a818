@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c2c9cb_aabe960f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T20:16:26Z",
+      "side": 1,
+      "message": "LGTM, but please ping me back if you cannot do the suggested refactors.",
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b121829_8013f243",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T20:16:26Z",
+      "side": 1,
+      "message": "you shouldn\u0027t need to use pointers, all the types are usable with move operations (or should be if they aren\u0027t)",
+      "range": {
+        "startLine": 1122,
+        "startChar": 13,
+        "endLine": 1122,
+        "endChar": 23
+      },
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e487bc79_e708748c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T20:16:26Z",
+      "side": 1,
+      "message": "nit: suggest you clarify that this is a setter not a query, either \"onDynamicBufferPoolUse\" or \"onUsedAsDescriptorCacheKey\" or something like that\n\nactually reading the CL more, I suggest you name this mUsedInDescriptorSet and onUsedInDescriptorSet()",
+      "range": {
+        "startLine": 136,
+        "startChar": 9,
+        "endLine": 136,
+        "endChar": 36
+      },
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22c9c15c_f41f5919",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T20:16:26Z",
+      "side": 1,
+      "message": "Most types in ANGLE are RAII and don\u0027t use indirection. It would be nice to avoid the indirection and keep this a simple type. Can you change DynamicBuffer to be as efficient as using a pointer when it\u0027s used by-value?",
+      "range": {
+        "startLine": 235,
+        "startChar": 4,
+        "endLine": 235,
+        "endChar": 51
+      },
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
