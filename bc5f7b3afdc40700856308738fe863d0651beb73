@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6dac4cb_7b0982e3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T12:36:10Z",
+      "side": 1,
+      "message": "The end-design is going to make the API for async / sync command queue the same. So pretend you can\u0027t check the asyncCommandQueue feature, and you have to go through the virtual CommandQueueInterface class. One solution is to make a no-op method in the sync CommandQueue.",
+      "parentUuid": "09b9d121_64d4ce09",
+      "range": {
+        "startLine": 385,
+        "startChar": 37,
+        "endLine": 385,
+        "endChar": 56
+      },
+      "revId": "bc5f7b3afdc40700856308738fe863d0651beb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb1fbb5d_56984e7d",
         "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
         "patchSetId": 2
