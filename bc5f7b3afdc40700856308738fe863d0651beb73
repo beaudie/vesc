@@ -39,6 +39,24 @@
       "message": "How bad is it to just do a finishToSerial() here instead?",
       "revId": "bc5f7b3afdc40700856308738fe863d0651beb73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5eb285a_93116784",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T01:34:42Z",
+      "side": 1,
+      "message": "Pretty bad. We just made a submission, so that\u0027s effectively a vkQueueWaitIdle in the middle of the mixed GL-Vulkan rendering.",
+      "parentUuid": "cb1fbb5d_56984e7d",
+      "revId": "bc5f7b3afdc40700856308738fe863d0651beb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
